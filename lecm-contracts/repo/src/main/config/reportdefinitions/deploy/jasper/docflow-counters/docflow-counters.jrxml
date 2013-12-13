@@ -4,10 +4,10 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.contracts.reports.DSProviderDocflowStatusCounters"/>
-	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
-			<conditionExpression><![CDATA[($V{REPORT_COUNT}%2 == 0) && false]]></conditionExpression>
-			<style backcolor="#E2DFD6"/>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
 	<parameter name="dateReg_lo" class="java.util.Date" isForPrompting="false"/>
@@ -125,13 +125,13 @@
 			<textField isStretchWithOverflow="true" evaluationTime="Page" pattern="" isBlankWhenNull="true">
 				<reportElement uuid="8a0773d5-f6b8-4b79-9625-0b895e8835bb" stretchType="RelativeToTallestObject" x="0" y="0" width="397" height="25" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" spacingBefore="2" spacingAfter="2" tabStopWidth="20"/>
 				</textElement>
 				<textFieldExpression><![CDATA[( ($P{dateReg_lo} == null)
 	&& ($P{dateReg_hi} == null)
 ) ? ""
-:	"Период"
+:	"Дата регистрации"
 	+ (($P{dateReg_lo} == null) ? "" : " с "+ (new SimpleDateFormat("dd.MM.yyyy")).format($P{dateReg_lo}))
 	+ (($P{dateReg_hi} == null) ? "" : " по "+ (new SimpleDateFormat("dd.MM.yyyy")).format($P{dateReg_hi}))]]></textFieldExpression>
 			</textField>

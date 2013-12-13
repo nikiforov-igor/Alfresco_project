@@ -4,10 +4,10 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.contracts.reports.DSProviderContractsDeltaById"/>
-	<style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
 		<conditionalStyle>
-			<conditionExpression><![CDATA[($V{REPORT_COUNT}%2 == 0) && false]]></conditionExpression>
-			<style backcolor="#E2DFD6"/>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
 	<style name="table">
@@ -154,7 +154,7 @@
 		<band height="30" splitType="Stretch">
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" stretchType="RelativeToTallestObject" x="395" y="0" width="160" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="b8fc6c50-c272-4fda-86c8-c18a502c3205" style="styleOdd" stretchType="RelativeToTallestObject" x="395" y="0" width="160" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -169,7 +169,7 @@
 				<textFieldExpression><![CDATA[$F{col_Item.Status}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" stretchType="RelativeToTallestObject" x="295" y="0" width="100" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="7fe3fbca-e8e2-431c-b0d1-35a9f6eba3e9" style="styleOdd" stretchType="RelativeToTallestObject" x="295" y="0" width="100" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -184,7 +184,7 @@
 				<textFieldExpression><![CDATA[$F{col_Item.StatusDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" stretchType="RelativeToTallestObject" x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="16d04a8b-5f73-4f50-b514-aa24b6a8f501" style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="69" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -199,7 +199,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" stretchType="RelativeToTallestObject" x="69" y="0" width="226" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" style="styleOdd" stretchType="RelativeToTallestObject" x="69" y="0" width="226" height="30" isPrintWhenDetailOverflows="true"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
