@@ -112,12 +112,14 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				var editFormLink = document.createElement("a");
-				editFormLink.title = scope.msg("title.forms.edit");
-				Dom.addClass(editFormLink, "edit-form");
-				editFormLink.innerHTML = "&nbsp;";
-				editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id").replace("_", ":");
-				el.appendChild(editFormLink);
+				if (oRecord.getData("isActive")) {
+					var editFormLink = document.createElement("a");
+					editFormLink.title = scope.msg("title.forms.edit");
+					Dom.addClass(editFormLink, "edit-form");
+					editFormLink.innerHTML = "&nbsp;";
+					editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id").replace("_", ":");
+					el.appendChild(editFormLink);
+				}
 			};
 		},
 
@@ -125,12 +127,14 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				var editStatemachineLink = document.createElement("a");
-				editStatemachineLink.title = scope.msg("title.statemachine.edit");
-				Dom.addClass(editStatemachineLink, "edit-statemachine");
-				editStatemachineLink.innerHTML = "&nbsp;";
-				editStatemachineLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
-				el.appendChild(editStatemachineLink);
+				if (oRecord.getData("isActive")) {
+					var editStatemachineLink = document.createElement("a");
+					editStatemachineLink.title = scope.msg("title.statemachine.edit");
+					Dom.addClass(editStatemachineLink, "edit-statemachine");
+					editStatemachineLink.innerHTML = "&nbsp;";
+					editStatemachineLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
+					el.appendChild(editStatemachineLink);
+				}
 			};
 		},
 
