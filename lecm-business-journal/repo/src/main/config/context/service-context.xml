@@ -152,8 +152,18 @@
         </persistenceAdapter>
     </amq:broker>
 
+    <bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+        <property name="backOffMultiplier" value="3" />
+        <property name="initialRedeliveryDelay" value="5000" />
+        <property name="maximumRedeliveries" value="-1" />
+        <property name="queue" value="*" />
+        <property name="redeliveryDelay" value="5000" />
+        <property name="useExponentialBackOff" value="true" />
+        <property name="maximumRedeliveryDelay" value="1800000" />
+    </bean>
+
     <bean id="brokerConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-          p:brokerURL="vm://localhost:7001" p:useAsyncSend="true" />
+          p:brokerURL="vm://localhost:7001" p:useAsyncSend="true" p:redeliveryPolicy-ref="redeliveryPolicy"/>
 
     <bean id="jmxConnectionFactory"
           class="org.springframework.jms.connection.SingleConnectionFactory"
@@ -180,10 +190,9 @@
         <property name="useRemote" value="${lecm.business.journal.remote.enable}" />
     </bean>
 
-
     <jms:listener-container container-type="default"
                             connection-factory="jmxConnectionFactory"
-                            acknowledge="auto" transaction-manager="bjJMSTransactionManager">
+                            acknowledge="auto" transaction-manager="bjJMSTransactionManager" >
         <jms:listener destination="bjQueue" ref="jmsBJListener" />
     </jms:listener-container>
 

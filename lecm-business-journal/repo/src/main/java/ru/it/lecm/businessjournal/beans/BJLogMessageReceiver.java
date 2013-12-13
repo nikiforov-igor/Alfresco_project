@@ -14,7 +14,6 @@ import javax.jms.MessageListener;
  */
 public class BJLogMessageReceiver implements MessageListener, InitializingBean {
 
-    private static int counter = 0;
     private LocalBusinessJournalServiceImpl localService;
     private RemoteBusinessJournalServiceImpl remoteService;
     private AbstractBusinessJournalService service;
