@@ -37,6 +37,7 @@
         <script type="text/javascript">
             //variable is used for expanding dashlet. refactor it?
             var documentTasksComponent = null;
+            var errandsComponent = null;
         </script>
         <script type="text/javascript">//<![CDATA[
         (function () {
@@ -50,6 +51,13 @@
                             nodeRef: "${args.nodeRef}",
                             title: "${msg('heading')}"
                         }).setMessages(${messages});
+
+	            errandsComponent = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
+			            {
+				            itemType: "lecm-errands:document",
+				            destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
+				            parentDoc:"${nodeRef}"
+			            }).setMessages(${messages});
             }
 
             YAHOO.util.Event.onDOMReady(init);

@@ -2,15 +2,8 @@
 
 <script type="text/javascript">
     //<![CDATA[
-    var errands;
     (function () {
         function init() {
-            errands = new LogicECM.module.Errands.dashlet.Errands("${id}").setOptions(
-                    {
-                        itemType: "lecm-errands:document",
-                        destination: LogicECM.module.Documents.ERRANDS_SETTINGS.nodeRef,
-                        parentDoc:"${nodeRef}"
-                    }).setMessages(${messages});
             var errandTasks = new LogicECM.module.Errands.Lists("${id}").setOptions(
                 {
                     itemType: "lecm-errands:document",
@@ -40,7 +33,7 @@
        <#if createButton??>
         <#if hasStatemachine && (createButton == "true")>
             <span class="lecm-dashlet-actions">
-                <a id="${id}-action-add" href="javascript:void(0);" onclick="errands.onAddErrandClick()" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
+                <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.onAddErrandClick()" class="add" title="${msg("errandslist.add.errand.tooltip")}">${msg("errandslist.add.errand")}</a>
             </span>
         </#if>
        </#if>
