@@ -17,10 +17,17 @@
 	
 -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:util="http://www.springframework.org/schema/util"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xmlns:amq="http://activemq.apache.org/schema/core"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+						   http://www.springframework.org/schema/jms
+                           http://www.springframework.org/schema/jms/spring-jms.xsd
+                           http://activemq.apache.org/schema/core
+                           http://activemq.apache.org/schema/core/activemq-core.xsd">
 
     <!-- Registration of Business Journal models -->
     <bean id="${groupId}.${artifactId}.businessJournalBootstrap" parent="dictionaryModelBootstrap"
@@ -85,30 +92,101 @@
         </property>
     </bean>
 
-    <bean id="businessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl" parent="baseBean"
+    <bean id="businessJournalServiceFactory" class="ru.it.lecm.businessjournal.beans.BusinessJournalServiceFactory">
+        <property name="localService" ref="localBusinessJournalService" />
+        <property name="remoteService" ref="remoteBusinessJournalService"/>
+        <property name="useRemoteService" value="${lecm.business.journal.remote.enable}" />
+    </bean>
+
+    <bean id="businessJournalService" class="ru.it.lecm.businessjournal.beans.BusinessJournalService" factory-bean="businessJournalServiceFactory" factory-method="getService" depends-on="localBusinessJournalService, remoteBusinessJournalService, ServiceRegistry, repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary, ${groupId}.${artifactId}.businessJournalBootstrap"/>
+
+    <bean id="localBusinessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.LocalBusinessJournalServiceImpl" parent="abstaractBusinessJournalService"
           depends-on="ServiceRegistry, repositoryHelper, serviceOrgstructure, substitudeService, nodeService, transactionService, serviceDictionary, ${groupId}.${artifactId}.businessJournalBootstrap">
-        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="searchService" ref="searchService"/>
+        <property name="businessJournalOnCreateAssocsPolicy"  ref="businessJournalOnCreateAssocsPolicy"/>
+    </bean>
+
+    <bean id="abstaractBusinessJournalService" abstract="true" class="ru.it.lecm.businessjournal.beans.AbstractBusinessJournalService">
+        <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="substituteService" ref="substitudeService"/>
-        <property name="nodeService" ref="nodeService"/>
-	    <property name="transactionService" ref="transactionService"/>
-        <property name="dictionaryService" ref="serviceDictionary"/>
-        <property name="searchService" ref="searchService"/>
-        <property name="personService" ref="personService"/>
         <property name="dicService" ref="dictionaryService"/>
+        <property name="personService" ref="personService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
-        <property name="authService" ref="authenticationService"/>
+        <property name="jmsTemplate" ref="bjJMSTemplate"/>
+        <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="stateMachineService"  ref="stateMachineHelper"/>
-        <property name="businessJournalOnCreateAssocsPolicy"  ref="businessJournalOnCreateAssocsPolicy"/>
-        <property name="threadPoolExecutor" ref="businessJournalAsyncThreadPool"/>
-		<!-- Автоматическое создание каталогов. -->
-		<property name="folders">
-			<map>
-				<entry key="#{BJ_ROOT_ID}" value="#{BJ_ROOT_NAME}"/>
-				<entry key="#{BJ_ARCHIVE_ROOT_ID}" value="#{BJ_ROOT_NAME}/#{BJ_ARCHIVE_ROOT_NAME}"/>
-			</map>
-		</property>
+        <property name="serviceRegistry"  ref="ServiceRegistry"/>
+        <property name="nodeService"  ref="nodeService"/>
+        <property name="transactionService"  ref="transactionService"/>
+        <property name="authService" ref="authenticationService"/>
+        <!-- Автоматическое создание каталогов. -->
+        <property name="folders">
+            <map>
+                <entry key="#{BJ_ROOT_ID}" value="#{BJ_ROOT_NAME}"/>
+                <entry key="#{BJ_ARCHIVE_ROOT_ID}" value="#{BJ_ROOT_NAME}/#{BJ_ARCHIVE_ROOT_NAME}"/>
+            </map>
+        </property>
     </bean>
+
+    <bean id="remoteBusinessJournalClient" class="ru.it.lecm.businessjournal.remote.JaxWsProxy">
+        <property name="serviceInterface" value="ru.it.lecm.businessjournal.remote.BusinessJournalStore"/>
+        <property name="wsdlUrl" value="${lecm.business.journal.remote.url}"/>
+        <property name="namespaceUri" value="http://remote.businessjournal.lecm.it.ru/"/>
+        <property name="serviceName" value="BusinessJournalStoreImplService"/>
+        <property name="portName" value="BusinessJournalStoreImplPort"/>
+        <property name="useRemoteService" value="${lecm.business.journal.remote.enable}" />
+        <property name="lookupServiceOnStartup" value="false" />
+    </bean>
+
+    <bean id="remoteBusinessJournalService" init-method="init" class="ru.it.lecm.businessjournal.beans.RemoteBusinessJournalServiceImpl" parent="abstaractBusinessJournalService">
+        <property name="remoteService" ref="remoteBusinessJournalClient"/>
+    </bean>
+
+    <amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true" dataDirectory="../queue">
+        <amq:transportConnectors>
+            <amq:transportConnector uri="vm://localhost:7001"/>
+        </amq:transportConnectors>
+        <persistenceAdapter>
+            <kahaDB directory="../queue/Kaha"/>
+        </persistenceAdapter>
+    </amq:broker>
+
+    <bean id="brokerConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
+          p:brokerURL="vm://localhost:7001" p:useAsyncSend="true" />
+
+    <bean id="jmxConnectionFactory"
+          class="org.springframework.jms.connection.SingleConnectionFactory"
+          p:targetConnectionFactory-ref="brokerConnectionFactory"
+          />
+
+    <bean id="bjQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="bjQueue"/>
+    </bean>
+
+    <bean id="bjJMSTemplate"
+          class="org.springframework.jms.core.JmsTemplate"
+          p:connectionFactory-ref="jmxConnectionFactory"
+          p:defaultDestination-ref="bjQueue" p:deliveryPersistent="true"/>
+
+    <bean id="bjJMSTransactionManager"
+          class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="jmxConnectionFactory"/>
+    </bean>
+
+    <bean id="jmsBJListener" class="ru.it.lecm.businessjournal.beans.BJLogMessageReceiver">
+        <property name="localService" ref="localBusinessJournalService" />
+        <property name="remoteService" ref="remoteBusinessJournalService" />
+        <property name="useRemote" value="${lecm.business.journal.remote.enable}" />
+    </bean>
+
+
+    <jms:listener-container container-type="default"
+                            connection-factory="jmxConnectionFactory"
+                            acknowledge="auto" transaction-manager="bjJMSTransactionManager">
+        <jms:listener destination="bjQueue" ref="jmsBJListener" />
+    </jms:listener-container>
+
 
     <bean id="businessJournalScript" parent="baseScript" class="ru.it.lecm.businessjournal.script.BusinessJournalWebScriptBean"
           depends-on="businessJournalService">

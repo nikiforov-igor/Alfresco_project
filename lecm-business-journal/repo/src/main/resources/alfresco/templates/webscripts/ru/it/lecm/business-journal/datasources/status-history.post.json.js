@@ -25,9 +25,7 @@ function main() {
             var separator = searchConfig.indexOf("|");
             if (separator != -1) {
                 asc = (searchConfig.substring(separator + 1) == "true");
-                if (searchConfig.indexOf(":") != -1) {
-                    sortColumnName = searchConfig.substring(searchConfig.indexOf(":") + 1, separator);
-                }
+                sortColumnName = searchConfig.substring(0, separator);
             }
         }
 

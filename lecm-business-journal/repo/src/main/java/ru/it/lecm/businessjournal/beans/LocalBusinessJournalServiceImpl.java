@@ -4,9 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -20,52 +18,30 @@ import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.policies.BusinessJournalOnCreateAssocsPolicy;
-import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author dbashmakov
  *         Date: 25.12.12
  *         Time: 10:18
  */
-public class BusinessJournalServiceImpl extends AbstractBusinessJournalService implements BusinessJournalService {
+public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalService implements BusinessJournalService {
 
     private static final String BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS = "business_journal_post_transaction_pending_objects";
 
-    private static final Logger logger = LoggerFactory.getLogger(BusinessJournalServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LocalBusinessJournalServiceImpl.class);
 
     private SearchService searchService;
-    private NodeRef bjRootRef;
-    private NodeRef bjArchiveRef;
-    private LecmPermissionService lecmPermissionService;
-    private StateMachineServiceBean stateMachineService;
     private BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy;
-
-    private ThreadPoolExecutor threadPoolExecutor;
-    private TransactionListener transactionListener;
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
     }
 
-    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-        this.lecmPermissionService = lecmPermissionService;
-    }
-
-    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-        this.stateMachineService = stateMachineService;
-    }
-
     public void setBusinessJournalOnCreateAssocsPolicy(BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy) {
         this.businessJournalOnCreateAssocsPolicy = businessJournalOnCreateAssocsPolicy;
-    }
-
-    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
-        this.threadPoolExecutor = threadPoolExecutor;
     }
 
     @Override
@@ -89,51 +65,40 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
         businessJournalOnCreateAssocsPolicy.setBusinessJournalService(this);
         bjRootRef = getFolder(BJ_ROOT_ID);
         bjArchiveRef = getFolder(BJ_ARCHIVE_ROOT_ID);
-        transactionListener = new BusinessJournalTransactionListener();
     }
 
     @Override
-    public void log(BusinessJournalRecord record) {
-        AlfrescoTransactionSupport.bindListener(this.transactionListener);
-        List<BusinessJournalRecord> pendingActions = AlfrescoTransactionSupport.getResource(BusinessJournalServiceImpl.BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS);
-        if (pendingActions == null) {
-            pendingActions = new ArrayList<BusinessJournalRecord>();
-            AlfrescoTransactionSupport.bindResource(BusinessJournalServiceImpl.BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS, pendingActions);
-        }
-        pendingActions.add(record);
-    }
-
-    private NodeRef createRecord(final Date date, final NodeRef initiator, final NodeRef mainObject, final String mainObjectDescription, final NodeRef eventCategory, final List<String> objects, final String description) {
-        return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+    public void saveToStore(final BusinessJournalRecord record) throws Exception {
+        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
             @Override
             public NodeRef execute() throws Throwable {
-                final NodeRef objectType = getObjectType(mainObject);
+                final NodeRef objectType = getObjectType(record.getMainObject());
 
                 String type;
                 if (objectType != null) {
                     type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
                 } else {
-                    type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
+                    type = nodeService.getType(record.getMainObject()).getPrefixString().replace(":", "_");
                 }
 
                 String category;
-                if (eventCategory != null) {
-                    category = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
+                if (record.getEventCategory() != null) {
+                    category = (String) nodeService.getProperty(record.getEventCategory(), ContentModel.PROP_NAME);
                 } else {
                     category = "unknown";
                 }
 
-                final NodeRef saveDirectoryRef = getSaveFolder(type, category, date);
+                final NodeRef saveDirectoryRef = getSaveFolder(type, category, record.getDate());
 
                 // создаем ноду
                 Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
-                properties.put(PROP_BR_RECORD_DATE, date);
-                properties.put(PROP_BR_RECORD_DESC, description);
-                properties.put(PROP_BR_RECORD_INITIATOR, getInitiatorDescription(initiator));
-                properties.put(PROP_BR_RECORD_MAIN_OBJECT, mainObjectDescription);
-                if (objects != null && objects.size() > 0) {
-                    for (int i = 0; i < objects.size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-                        String description = objects.get(i);
+                properties.put(PROP_BR_RECORD_DATE, record.getDate());
+                properties.put(PROP_BR_RECORD_DESC, record.getRecordDescription());
+                properties.put(PROP_BR_RECORD_INITIATOR, record.getInitiatorText());
+                properties.put(PROP_BR_RECORD_MAIN_OBJECT, record.getMainObjectDescription());
+                if (record.getObjects() != null && record.getObjects().size() > 0) {
+                    for (int i = 0; i < record.getObjects().size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
+                        String description = record.getObjects().get(i).getDescription();
                         properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i + 1)), description);
                     }
                 }
@@ -143,25 +108,25 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
                 NodeRef result = associationRef.getChildRef();
 
                 // создаем ассоциации
-                if (initiator != null) {
-                    nodeService.createAssociation(result, initiator, ASSOC_BR_RECORD_INITIATOR);
+                if (record.getInitiator() != null) {
+                    nodeService.createAssociation(result, record.getInitiator(), ASSOC_BR_RECORD_INITIATOR);
                 }
-                if (mainObject != null) {
-                    nodeService.createAssociation(result, mainObject, ASSOC_BR_RECORD_MAIN_OBJ);
+                if (record.getMainObject() != null) {
+                    nodeService.createAssociation(result, record.getMainObject(), ASSOC_BR_RECORD_MAIN_OBJ);
                 }
 
                 // необязательные
-                if (eventCategory != null) {
-                    nodeService.createAssociation(result, eventCategory, ASSOC_BR_RECORD_EVENT_CAT);
+                if (record.getEventCategory() != null) {
+                    nodeService.createAssociation(result, record.getEventCategory(), ASSOC_BR_RECORD_EVENT_CAT);
                 }
                 if (objectType != null) {
                     nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
                 }
 
-                if (objects != null && objects.size() > 0) {
-                    for (int j = 0; j < objects.size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-                        if (NodeRef.isNodeRef(objects.get(j)) && nodeService.exists(new NodeRef(objects.get(j)))) {
-                            nodeService.createAssociation(result, new NodeRef(objects.get(j)), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j + 1)));
+                if (record.getObjects() != null && record.getObjects().size() > 0) {
+                    for (int j = 0; j < record.getObjects().size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
+                        if (record.getObjects().get(j).getNodeRef() != null && nodeService.exists(record.getObjects().get(j).getNodeRef())) {
+                            nodeService.createAssociation(result, record.getObjects().get(j).getNodeRef(), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j + 1)));
                         }
                     }
                 }
@@ -170,15 +135,6 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
         });
     }
 
-    @Override
-    public NodeRef getBusinessJournalDirectory() {
-        return bjRootRef;
-    }
-
-    @Override
-    public NodeRef getBusinessJournalArchiveDirectory() {
-        return bjArchiveRef;
-    }
 
     private String getSeconObjAssocName(int j) {
         return "bjRecord-secondaryObj" + j + "-assoc";
@@ -705,11 +661,9 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
 
             String initiatorText = (String) nodeService.getProperty(ref, PROP_BR_RECORD_INITIATOR);
 
-
             NodeRef category = new NodeRef((String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-ref")));
 
             NodeRef mainObject = new NodeRef((String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc-ref")));
-
 
             List<AssociationRef> types = nodeService.getTargetAssocs(ref, ASSOC_BR_RECORD_OBJ_TYPE);
             NodeRef objType = null;
@@ -717,11 +671,11 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
                 objType = types.get(0).getTargetRef();
             }
 
-            ArrayList<String> objects = new ArrayList<String>();
+            ArrayList<RecordObject> objects = new ArrayList<RecordObject>();
             for (int i = 1; i <= MAX_SECONDARY_OBJECTS_COUNT; i++) {
                 Object value = nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-secondaryObj" + i));
                 if (value != null) {
-                    objects.add(value.toString());
+                    objects.add(new RecordObject(null, value.toString()));
                 }
             }
             Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
@@ -732,61 +686,6 @@ public class BusinessJournalServiceImpl extends AbstractBusinessJournalService i
             logger.error("Error while BJ record with NodeRef=" + ref + " initializing", e);
         }
         return null;
-    }
-
-    private class BusinessJournalTransactionListener implements TransactionListener {
-
-        @Override
-        public void flush() {
-
-        }
-
-        @Override
-        public void beforeCommit(boolean readOnly) {
-
-        }
-
-        @Override
-        public void beforeCompletion() {
-
-        }
-
-        @Override
-        public void afterCommit() {
-            final List<BusinessJournalRecord> pendingRecords = AlfrescoTransactionSupport.getResource(BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS);
-            if (pendingRecords != null) {
-                Runnable runnable = new Runnable() {
-                    public void run() {
-                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                            @Override
-                            public Void doWork() throws Exception {
-                                return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                    @Override
-                                    public Void execute() throws Throwable {
-                                        for (BusinessJournalRecord record : pendingRecords) {
-                                            try {
-
-                                                // создаем записи
-                                                createRecord(record.getDate(), record.getInitiator(), record.getMainObject(), record.getMainObjectDescription(), record.getEventCategory(), record.getObjects(), record.getRecordDescription());
-                                            } catch (Exception ex) {
-                                                logger.error("Could not create business-journal record", ex);
-                                            }
-                                        }
-                                        return null;
-                                    }
-                                }, false, true);
-                            }
-                        });
-                    }
-                };
-                threadPoolExecutor.execute(runnable);
-            }
-        }
-
-        @Override
-        public void afterRollback() {
-
-        }
     }
 
 }

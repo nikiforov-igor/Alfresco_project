@@ -9,7 +9,7 @@ import org.mozilla.javascript.ScriptableObject;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
-import ru.it.lecm.businessjournal.beans.BusinessJournalServiceImpl;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 
 import java.text.ParseException;
@@ -23,10 +23,10 @@ import java.util.*;
  */
 public class BusinessJournalWebScriptBean extends BaseWebScript {
 
-	private BusinessJournalServiceImpl service;
+	private BusinessJournalService service;
 	private BusinessJournalArchiverSettings archiverSettings;
 
-	public void setService(BusinessJournalServiceImpl service) {
+	public void setService(BusinessJournalService service) {
 		this.service = service;
 	}
 
@@ -222,10 +222,10 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                     record.getDate(),
                     record.getInitiator() != null ? new ScriptNode(record.getInitiator(), serviceRegistry, getScope()) : null,
                     new ScriptNode(record.getMainObject(), serviceRegistry, getScope()),
-                    new ScriptNode(record.getObjectType(), serviceRegistry, getScope()),
+                    record.getObjectType() != null ? new ScriptNode(record.getObjectType(), serviceRegistry, getScope()) : null,
                     record.getMainObjectDescription(),
                     record.getRecordDescription(),
-                    new ScriptNode(record.getEventCategory(), serviceRegistry, getScope()),
+                    record.getEventCategory() != null ? new ScriptNode(record.getEventCategory(), serviceRegistry, getScope()) : null,
                     record.getObjects(),
                     record.isActive());
             scriptRecord.setObjectTypeText(record.getObjectTypeText());

@@ -1,6 +1,7 @@
 package ru.it.lecm.businessjournal.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import ru.it.lecm.businessjournal.beans.RecordObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,14 +23,14 @@ public class BusinessJournalScriptRecord {
     private String objectTypeText;
     private ScriptNode eventCategory;
     private String eventCategoryText;
-    private List<String> objects;
+    private List<RecordObject> objects;
     private String mainObjectDescription;
     private String recordDescription;
     private boolean isActive;
 
     private static SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
 
-    public BusinessJournalScriptRecord(Long nodeId, Date date, ScriptNode initiator, ScriptNode mainObject, ScriptNode objectType, String mainObjectDescription, String recordDescription, ScriptNode eventCategory, List<String> objects, boolean isActive) {
+    public BusinessJournalScriptRecord(Long nodeId, Date date, ScriptNode initiator, ScriptNode mainObject, ScriptNode objectType, String mainObjectDescription, String recordDescription, ScriptNode eventCategory, List<RecordObject> objects, boolean isActive) {
         this.nodeId = nodeId;
         this.date = date;
         this.initiator = initiator;
@@ -74,7 +75,7 @@ public class BusinessJournalScriptRecord {
         return eventCategory;
     }
 
-    public List<String> getObjects() {
+    public List<RecordObject> getObjects() {
         return objects;
     }
 
@@ -87,23 +88,23 @@ public class BusinessJournalScriptRecord {
     }
 
     public String getObject1() {
-        return objects != null && objects.size() > 0 ? objects.get(0) : "";
+        return objects != null && objects.size() > 0 ? objects.get(0).getDescription() : "";
     }
 
     public String getObject2() {
-        return objects != null && objects.size() > 1 ? objects.get(1) : "";
+        return objects != null && objects.size() > 1 ? objects.get(1).getDescription() : "";
     }
 
     public String getObject3() {
-        return objects != null && objects.size() > 2 ? objects.get(2) : "";
+        return objects != null && objects.size() > 2 ? objects.get(2).getDescription() : "";
     }
 
     public String getObject4() {
-        return objects != null && objects.size() > 3 ? objects.get(3) : "";
+        return objects != null && objects.size() > 3 ? objects.get(3).getDescription() : "";
     }
 
     public String getObject5() {
-        return objects != null && objects.size() > 4 ? objects.get(4) : "";
+        return objects != null && objects.size() > 4 ? objects.get(4).getDescription() : "";
     }
 
     public String getInitiatorText() {

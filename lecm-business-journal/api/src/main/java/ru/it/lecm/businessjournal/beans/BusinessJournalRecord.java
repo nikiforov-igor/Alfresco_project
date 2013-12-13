@@ -2,6 +2,7 @@ package ru.it.lecm.businessjournal.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  * Date: 02.12.13
  * Time: 16:11
  */
-public class BusinessJournalRecord {
+public class BusinessJournalRecord implements Serializable {
 
     public enum Field {
         DATE("lecm-busjournal:bjRecord-date"),
@@ -61,11 +62,11 @@ public class BusinessJournalRecord {
     private String objectTypeText;
     private NodeRef eventCategory;
     private String eventCategoryText;
-    private List<String> objects;
+    private List<RecordObject> objects;
     private String recordDescription;
     private boolean isActive = true;
 
-    public BusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, NodeRef objectType, String mainObjectDescription, String recordDescription, NodeRef eventCategory, List<String> objects, boolean isActive) {
+    public BusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, NodeRef objectType, String mainObjectDescription, String recordDescription, NodeRef eventCategory, List<RecordObject> objects, boolean isActive) {
         this.date = date;
         this.initiator = initiator;
         this.mainObject = mainObject;
@@ -77,7 +78,7 @@ public class BusinessJournalRecord {
         this.isActive = isActive;
     }
 
-    public BusinessJournalRecord(Long nodeId, Date date, NodeRef initiator, NodeRef mainObject, NodeRef objectType, String mainObjectDescription, String recordDescription, NodeRef eventCategory, List<String> objects, boolean isActive) {
+    public BusinessJournalRecord(Long nodeId, Date date, NodeRef initiator, NodeRef mainObject, NodeRef objectType, String mainObjectDescription, String recordDescription, NodeRef eventCategory, List<RecordObject> objects, boolean isActive) {
         this.nodeId = nodeId;
         this.date = date;
         this.initiator = initiator;
@@ -118,7 +119,7 @@ public class BusinessJournalRecord {
         return eventCategory;
     }
 
-    public List<String> getObjects() {
+    public List<RecordObject> getObjects() {
         return objects;
     }
 
@@ -131,23 +132,43 @@ public class BusinessJournalRecord {
     }
 
     public String getObject1() {
-        return objects != null && objects.size() > 0 ? objects.get(0) : "";
+        return objects != null && objects.size() > 0 ? objects.get(0).getDescription() : "";
     }
 
     public String getObject2() {
-        return objects != null && objects.size() > 1 ? objects.get(1) : "";
+        return objects != null && objects.size() > 1 ? objects.get(1).getDescription() : "";
     }
 
     public String getObject3() {
-        return objects != null && objects.size() > 2 ? objects.get(2) : "";
+        return objects != null && objects.size() > 2 ? objects.get(2).getDescription() : "";
     }
 
     public String getObject4() {
-        return objects != null && objects.size() > 3 ? objects.get(3) : "";
+        return objects != null && objects.size() > 3 ? objects.get(3).getDescription() : "";
     }
 
     public String getObject5() {
-        return objects != null && objects.size() > 4 ? objects.get(4) : "";
+        return objects != null && objects.size() > 4 ? objects.get(4).getDescription() : "";
+    }
+
+    public NodeRef getObject1Id() {
+        return objects != null && objects.size() > 0 ? objects.get(0).getNodeRef() : null;
+    }
+
+    public NodeRef getObject2Id() {
+        return objects != null && objects.size() > 1 ? objects.get(1).getNodeRef() : null;
+    }
+
+    public NodeRef getObject3Id() {
+        return objects != null && objects.size() > 2 ? objects.get(2).getNodeRef() : null;
+    }
+
+    public NodeRef getObject4Id() {
+        return objects != null && objects.size() > 3 ? objects.get(3).getNodeRef() : null;
+    }
+
+    public NodeRef getObject5Id() {
+        return objects != null && objects.size() > 4 ? objects.get(4).getNodeRef() : null;
     }
 
     public String getObjectTypeText() {
@@ -173,4 +194,5 @@ public class BusinessJournalRecord {
     public void setInitiatorText(String initiatorText) {
         this.initiatorText = initiatorText;
     }
+
 }

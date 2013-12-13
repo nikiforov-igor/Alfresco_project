@@ -24,9 +24,7 @@ function main() {
             var separator = sort.indexOf("|");
             if (separator != -1) {
                 asc = (sort.substring(separator + 1) == "true");
-                if (sort.indexOf(":") != -1) {
-                    sortColumnName = sort.substring(sort.indexOf(":") + 1, separator);
-                }
+                sortColumnName = sort.substring(0, separator);
             }
         }
 

@@ -10,10 +10,13 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jms.core.JmsTemplate;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
 
@@ -24,18 +27,22 @@ import java.util.*;
  */
 public abstract class AbstractBusinessJournalService extends BaseBean {
 
-
+    protected NodeRef bjRootRef;
+    protected NodeRef bjArchiveRef;
+    protected LecmPermissionService lecmPermissionService;
+    protected StateMachineServiceBean stateMachineService;
     private DictionaryBean dictionaryService;
     protected OrgstructureBean orgstructureService;
     private SubstitudeBean substituteService;
     private DictionaryService dicService;
+    private PersonService personService;
+    private JmsTemplate jmsTemplate;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBusinessJournalService.class);
-    private ThreadLocal<BusinessJournalServiceImpl.IgnoredCounter> threadSettings = new ThreadLocal<BusinessJournalServiceImpl.IgnoredCounter>();
-    private PersonService personService;
+    private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
 
 
-    public abstract void log(BusinessJournalRecord record);
+    public abstract void saveToStore(BusinessJournalRecord record) throws Exception;
 
     public void setSubstituteService(SubstitudeBean substituteService) {
         this.substituteService = substituteService;
@@ -47,6 +54,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setDicService(DictionaryService dicService) {
         this.dicService = dicService;
+    }
+
+    public void setJmsTemplate(JmsTemplate jmsTemplate) {
+        this.jmsTemplate = jmsTemplate;
     }
 
     /**
@@ -283,29 +294,31 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
             String recorDescription = fillTemplateString(templateString, holdersMap);
 
             String mainObjectDescription = getObjectDescription(mainObject);
-            List<String> objectsDescription = new ArrayList<String>();
-            if (objects != null && objects.size() > 0) {
-                for (int i = 0; i < objects.size() && i < 5; i++) {
-                    String str = objects.get(i);
-                    String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
-                    objectsDescription.add(objectDescription);
-                }
+            List<RecordObject> objectsDescription = new ArrayList<RecordObject>();
+            if (objects != null && objects.size() > 0) for (int i = 0; i < objects.size() && i < 5; i++) {
+                String str = objects.get(i);
+                NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
+                String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                objectsDescription.add(new RecordObject(nodeRef, objectDescription));
             }
 
             NodeRef objectType = getObjectType(mainObject);
             BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, objectType, mainObjectDescription, recorDescription, category, objectsDescription, true);
 
             //Описание инициатора
-            record.setInitiatorText(getInitiatorDescription(initiator));
+            record.setInitiatorText(getInitiatorDescription(employee));
             //Описание категории
-            record.setEventCategoryText(category != null ? nodeService.getProperty(category, ContentModel.PROP_NAME).toString() : eventCategory);
+            if (category != null) {
+                record.setEventCategoryText(nodeService.getProperty(category, ContentModel.PROP_NAME).toString());
+            }
             //Описание типа
-            record.setObjectTypeText(objectType != null ? nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString() : "");
-            this.log(record);
+            if (objectType != null) {
+                record.setObjectTypeText(nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString());
+            }
+            jmsTemplate.convertAndSend(record);
         } catch (Exception e) {
-            logger.warn("Can not create BJ record", e);
+            logger.error("Error while save business journal record");
         }
-
     }
 
     public void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
@@ -363,6 +376,22 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
+    }
+
+    public NodeRef getBusinessJournalDirectory() {
+        return bjRootRef;
+    }
+
+    public NodeRef getBusinessJournalArchiveDirectory() {
+        return bjArchiveRef;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
     class IgnoredCounter {

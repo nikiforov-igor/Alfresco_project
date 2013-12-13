@@ -43,6 +43,10 @@
 			<id>alfresco-activiti</id>
 			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
 		</repository>
+        <repository>
+			<id>apache-activemq</id>
+			<url>https://repository.apache.org/content/repositories/releases/org/apache/activemq/apache-activemq/</url>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -185,6 +189,11 @@
 				<version>${spring.version}</version>
 				<scope>provided</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 			<dependency>
 				<groupId>net.sf.jasperreports</groupId>
 				<artifactId>jasperreports</artifactId>
@@ -354,6 +363,16 @@
 				<artifactId>cxf-rt-transports-http</artifactId>
 				<version>${apache.cxf.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-all</artifactId>
+                <version>5.9.0</version>
+			</dependency>
+            <dependency>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>xbean-spring</artifactId>
+                <version>3.6</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
