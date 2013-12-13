@@ -27,7 +27,11 @@ if (page.url.args.reportId) {
 
 var PREFERENCE_RE_STATE = "ru.it.lecm.reports-editor.state";
 var prefStr = remote.connect("alfresco").get("/api/people/" + encodeURIComponent(user.id) + "/preferences?pf=" + PREFERENCE_RE_STATE);
-if (prefStr.status == 200) {
-    var stateStr = findValueByDotNotation(eval("(" + prefStr +")"), PREFERENCE_RE_STATE, {});
-    model.preferences = eval("(" + stateStr +")");
+if (prefStr && prefStr.status == 200) {
+    try {
+        var stateStr = findValueByDotNotation(eval("(" + prefStr +")"), PREFERENCE_RE_STATE, {});
+        model.preferences = eval("(" + stateStr +")");
+    } catch (e) {
+        model.preferences = {};
+    }
 }
