@@ -19,9 +19,13 @@
 			</properties>
 		</component>
 		<!-- Menu -->
+		<!--<component>-->
+			<!--<region-id>menu</region-id>-->
+			<!--<url>/lecm/statemachine/editor/menu</url>-->
+		<!--</component>-->
 		<component>
 			<region-id>menu</region-id>
-			<url>/lecm/statemachine/editor/menu</url>
+			<url>/lecm/documentmodel/menu</url>
 		</component>
         <component>
             <region-id>forbidden</region-id>

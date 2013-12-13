@@ -50,7 +50,8 @@
                         <item type="link" id="repository">/console/admin-console/repository</item>
                         <item type="link" id="trashcan">/console/admin-console/trashcan</item>
                         <item type="link" id="users">/console/admin-console/users</item>
-                        <item type="link" id="statemachine">/statemachine</item>
+                        <!--<item type="link" id="statemachine">/statemachine</item>-->
+                        <item type="link" id="doc-model-list">/doc-model-list</item>
                         <item type="link" id="reports-editor">/reports-editor</item>
                         <item type="link" id="more" icon="">/console/admin-console/</item>
                     </container-group>
