@@ -102,7 +102,13 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					editModelLink.title = scope.msg("title.model.edit");
 					Dom.addClass(editModelLink, "edit-model");
 					editModelLink.innerHTML = "&nbsp;";
-					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?formId=edit-model&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
+
+					var formIdParam = "";
+					if (oRecord.getData("isDocument")) {
+						formIdParam = "formId=edit-model";
+					}
+
+					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?" + formIdParam + "&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
 					el.appendChild(editModelLink);
 				}
 			};
@@ -127,7 +133,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("isActive")) {
+				if (oRecord.getData("isActive") && oRecord.getData("isDocument")) {
 					var editStatemachineLink = document.createElement("a");
 					editStatemachineLink.title = scope.msg("title.statemachine.edit");
 					Dom.addClass(editStatemachineLink, "edit-statemachine");

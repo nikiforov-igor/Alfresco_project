@@ -7,6 +7,7 @@ import org.alfresco.service.namespace.QName;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -179,4 +180,6 @@ public interface DocumentService {
      * @return ссылку на сотрудника-автора
      */
     public NodeRef getDocumentAuthor(NodeRef document);
+
+	public Collection<QName> getDocumentSubTypes();
 }

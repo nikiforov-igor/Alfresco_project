@@ -18,6 +18,7 @@ import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -30,6 +31,7 @@ public class ModelsListBeanImpl extends BaseBean {
 	private Repository repository;
 	private ContentService contentService;
 	private NamespaceService namespaceService;
+	private DocumentService documentService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -45,6 +47,10 @@ public class ModelsListBeanImpl extends BaseBean {
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	@Override
@@ -85,7 +91,7 @@ public class ModelsListBeanImpl extends BaseBean {
 
 			Map<String, JSONObject> models = new HashMap<String, JSONObject>();
 
-			Collection<QName> documentSubTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+			Collection<QName> documentSubTypes = documentService.getDocumentSubTypes();
 			if (documentSubTypes != null) {
 				for (QName typeName : documentSubTypes) {
 					TypeDefinition type = dictionaryService.getType(typeName);
@@ -97,47 +103,55 @@ public class ModelsListBeanImpl extends BaseBean {
 						object.put("title", type.getTitle());
 						object.put("description", type.getDescription());
 						object.put("isActive", true);
+						object.put("isDocument", true);
 
 						models.put(modelName, object);
 					}
 				}
-			}
 
-			NodeRef modelRootFolder = getModelsRootFolder();
-			if (modelRootFolder != null) {
-				JSONObject metadata = new JSONObject();
-				metadata.put("parent", modelRootFolder.toString());
-				result.put("metadata", metadata);
+				NodeRef modelRootFolder = getModelsRootFolder();
+				if (modelRootFolder != null) {
+					JSONObject metadata = new JSONObject();
+					metadata.put("parent", modelRootFolder.toString());
+					result.put("metadata", metadata);
 
-				List<ChildAssociationRef> dynamicModelsAssocs = nodeService.getChildAssocs(modelRootFolder);
+					List<ChildAssociationRef> dynamicModelsAssocs = nodeService.getChildAssocs(modelRootFolder);
 
-				for (ChildAssociationRef assoc : dynamicModelsAssocs) {
-					NodeRef child = assoc.getChildRef();
+					for (ChildAssociationRef assoc : dynamicModelsAssocs) {
+						NodeRef child = assoc.getChildRef();
 
-					if (child != null && nodeService.getType(child).equals(ContentModel.TYPE_DICTIONARY_MODEL)) {
-						ContentReader contentReader = contentService.getReader(child, ContentModel.PROP_CONTENT);
-						if (contentReader != null) {
-							M2Model model = M2Model.createModel(contentReader.getContentInputStream());
+						if (child != null && nodeService.getType(child).equals(ContentModel.TYPE_DICTIONARY_MODEL)) {
+							ContentReader contentReader = contentService.getReader(child, ContentModel.PROP_CONTENT);
+							if (contentReader != null) {
+								M2Model model = M2Model.createModel(contentReader.getContentInputStream());
 
-							M2Type m2Type = model.getTypes().get(0);
+								M2Type m2Type = model.getTypes().get(0);
 
-							if (m2Type != null) {
-								String modelName = m2Type.getName();
+								if (m2Type != null) {
+									String modelName = m2Type.getName();
 
+									if (models.containsKey(modelName)) {
+										models.get(modelName).put("nodeRef", child.toString());
+									} else {
+										Serializable modelActive = nodeService.getProperty(child, ContentModel.PROP_MODEL_ACTIVE);
 
-								if (models.containsKey(modelName)) {
-									models.get(modelName).put("nodeRef", child.toString());
-								} else {
-									JSONObject object = new JSONObject();
-									object.put("id", modelName);
-									object.put("nodeRef", child.toString());
-									object.put("title", m2Type.getTitle());
-									object.put("description", m2Type.getDescription());
-									object.put("isActive", false);
+										JSONObject object = new JSONObject();
+										object.put("id", modelName);
+										object.put("nodeRef", child.toString());
+										object.put("title", m2Type.getTitle());
+										object.put("description", m2Type.getDescription());
+										object.put("isActive", modelActive != null && Boolean.TRUE.equals(modelActive));
 
-									models.put(modelName, object);
+										if (modelActive != null && Boolean.TRUE.equals(modelActive)) {
+											object.put("isDocument", false);
+										} else {
+											object.put("isDocument", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(m2Type.getParentName()));
+										}
+
+										models.put(modelName, object);
+									}
+
 								}
-
 							}
 						}
 					}

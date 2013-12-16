@@ -32,10 +32,7 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -580,4 +577,9 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
             return null;
         }
     }
+
+	@Override
+	public Collection<QName> getDocumentSubTypes() {
+		return dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, false);
+	}
 }
