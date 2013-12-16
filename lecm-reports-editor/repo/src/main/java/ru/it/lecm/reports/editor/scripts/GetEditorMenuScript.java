@@ -84,6 +84,18 @@ public class GetEditorMenuScript extends AbstractWebScript {
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "report-custom", label, title, "report-settings?reportId={reportId}", false)
                     );
                 }
+            } else if (childType.equals(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService))) {// список НД
+                Set<QName> type = new HashSet<QName>();
+                type.add(QName.createQName(childType, namespaceService));
+                List<ChildAssociationRef> childNodes = nodeService.getChildAssocs(currentRef, type);
+                for (ChildAssociationRef childNode : childNodes) {
+                    String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
+                    String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_DATA_SOURCE_CODE);
+                    nodes.add(
+                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "report-custom", label, title,
+                                    "reports-editor-source-columns?sourceId=" + childNode.getChildRef().toString(), true)
+                    );
+                }
             } else if (childType.equals("report-custom")) {
                 nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "report-settings?reportId={reportId}", true));
 
@@ -108,11 +120,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
             ref = reportsEditorService.getSourcesRootFolder();
             type = ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "reports-editor-sources", true));
-
-            ref = nodeService.getChildByName(reportsEditorService.getDictionariesRootFolder(), ContentModel.ASSOC_CONTAINS, "Тип провайдера");
-            type = ReportsEditorModel.TYPE_REPORT_PROVIDER.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("providers", ref, type, "Провайдеры отчетов", "Список провайдеров отчетов", "reports-editor-providers", true));
+            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "reports-editor-sources", false));
         }
 
         try {

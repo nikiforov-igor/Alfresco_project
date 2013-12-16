@@ -110,7 +110,6 @@
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
-                    <show id="lecm-rpeditor:reportIsDeployed"/>
                     <show id="lecm-rpeditor:reportCode"/>
                 </field-visibility>
                 <appearance>
@@ -459,6 +458,7 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:dataSourceCode"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -687,7 +687,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
-                    <!--<show id="lecm-rpeditor:dataColumnExpression"/>-->
+                    <show id="lecm-rpeditor:dataColumnExpression"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                 </field-visibility>
                 <appearance>

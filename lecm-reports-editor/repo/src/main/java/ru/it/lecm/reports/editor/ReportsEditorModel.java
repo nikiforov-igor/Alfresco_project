@@ -33,4 +33,6 @@ public class ReportsEditorModel {
     public final static QName PROP_REPORT_DATA_COLUMN_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataColumnCode");
     public final static QName PROP_REPORT_DATA_COLUMN_EXPRESSION = QName.createQName(REPORTS_EDITOR_URI, "dataColumnExpression");
     public final static QName ASSOC_REPORT_DATA_COLUMN_COLUMN_TYPE = QName.createQName(REPORTS_EDITOR_URI, "columnTypeAssoc");
+
+    public final static QName PROP_DATA_SOURCE_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataSourceCode");
 }

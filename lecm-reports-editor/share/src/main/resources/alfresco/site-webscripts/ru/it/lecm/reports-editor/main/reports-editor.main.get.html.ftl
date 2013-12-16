@@ -25,7 +25,7 @@
 
                 splashScreen: null,
 
-                onActionUnDeploy: function (item) {
+                /*onActionUnDeploy: function (item) {
                     var me = this;
                     Alfresco.util.PopupManager.displayPrompt({
                         title: "Уадление отчета",
@@ -81,7 +81,7 @@
                             }
                         ]
                     });
-                },
+                },*/
 
                 onActionDeploy: function (item) {
                     var me = this;
@@ -282,21 +282,7 @@
                                     type: "datagrid-action-link-reports",
                                     id: "onActionDeploy",
                                     permission: "edit",
-                                    label: "${msg("actions.deploy")}",
-                                    evaluator: function (rowData) {
-                                        var itemData = rowData.itemData;
-                                        return !itemData["prop_lecm-rpeditor_reportIsDeployed"].value || itemData["prop_lecm-rpeditor_reportIsDeployed"].value == "false";
-                                    }
-                                },
-                                {
-                                    type: "datagrid-action-link-reports",
-                                    id: "onActionUnDeploy",
-                                    permission: "edit",
-                                    label: "${msg("actions.undeploy")}",
-                                    evaluator: function (rowData) {
-                                        var itemData = rowData.itemData;
-                                        return itemData["prop_lecm-rpeditor_reportIsDeployed"].value || itemData["prop_lecm-rpeditor_reportIsDeployed"].value == "true";
-                                    }
+                                    label: "${msg("actions.deploy")}"
                                 },
                                 {
                                     type: "datagrid-action-link-reports",
