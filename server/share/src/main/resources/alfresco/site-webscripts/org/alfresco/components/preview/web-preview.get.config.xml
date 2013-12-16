@@ -25,7 +25,7 @@
       -->
       <condition thumbnail="pdf">
          <plugin src="pdf">PdfJs</plugin>
-         <plugin src="pdf">Embed</plugin>
+         <!--<plugin src="pdf">Embed</plugin>-->
       </condition>
 
       <!-- Video with posters -->
