@@ -41,12 +41,32 @@
 
 	<bean id="formsEditorScript" parent="baseScript"
 	      class="ru.it.lecm.modelEditor.scripts.FormsEditorWebScriptBean"
-	      depends-on="subscriptionsService">
+	      depends-on="formsEditorService">
 		<property name="extensionName">
 			<value>formsEditor</value>
 		</property>
 		<property name="formsEditorService">
 			<ref bean="formsEditorService"/>
+		</property>
+	</bean>
+
+	<bean id="modelListService" class="ru.it.lecm.modelEditor.beans.ModelsListBeanImpl" parent="baseBean"
+	      depends-on="repositoryHelper, dictionaryService">
+		<property name="repository" ref="repositoryHelper"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="contentService" ref="ContentService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+	<bean id="modelListScript" parent="baseScript"
+	      class="ru.it.lecm.modelEditor.scripts.ModelsListWebScriptBean"
+	      depends-on="modelListService">
+		<property name="extensionName">
+			<value>modelsList</value>
+		</property>
+		<property name="modelListService">
+			<ref bean="modelListService"/>
 		</property>
 	</bean>
 
