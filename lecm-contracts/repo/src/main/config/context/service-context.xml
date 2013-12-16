@@ -67,7 +67,7 @@
 		</property>
 	</bean>
 
-	<bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="modelsToRepositoryLoader"
+	<bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
