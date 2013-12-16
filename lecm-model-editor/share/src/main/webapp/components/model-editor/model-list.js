@@ -117,7 +117,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					editFormLink.title = scope.msg("title.forms.edit");
 					Dom.addClass(editFormLink, "edit-form");
 					editFormLink.innerHTML = "&nbsp;";
-					editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id").replace("_", ":");
+					editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id");
 					el.appendChild(editFormLink);
 				}
 			};
@@ -132,7 +132,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 					editStatemachineLink.title = scope.msg("title.statemachine.edit");
 					Dom.addClass(editStatemachineLink, "edit-statemachine");
 					editStatemachineLink.innerHTML = "&nbsp;";
-					editStatemachineLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id");
+					editStatemachineLink.href = Alfresco.constants.URL_PAGECONTEXT + "statemachine?statemachineId=" + oRecord.getData("id").replace(":", "_");
 					el.appendChild(editStatemachineLink);
 				}
 			};
