@@ -2031,15 +2031,18 @@ div.object-finder .association-auto-complete-selected-item {
 }
 
 div.object-finder .association-auto-complete-selected-item .employee-available,
-div.object-finder .association-auto-complete-selected-item .employee-unavailable {
+div.object-finder .association-auto-complete-selected-item .employee-unavailable,
+div.object-finder .association-auto-complete-selected-item-even .employee-available,
+div.object-finder .association-auto-complete-selected-item-even .employee-unavailable {
     width: 16px;
     height: 16px;
     margin-left: 5px;
     position: absolute;
-    top: 6px;
+	margin-top: 3px;
 }
 
-div.object-finder .association-auto-complete-selected-item .employee-available {
+div.object-finder .association-auto-complete-selected-item .employee-available,
+div.object-finder .association-auto-complete-selected-item-even .employee-available {
     background: url(images/employee-available.png) no-repeat;
 }
 
