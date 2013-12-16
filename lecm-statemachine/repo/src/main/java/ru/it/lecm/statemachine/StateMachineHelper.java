@@ -1088,7 +1088,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             try {
                 process.end();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                //logger.error(e.getMessage(), e);
             }
 
         }
