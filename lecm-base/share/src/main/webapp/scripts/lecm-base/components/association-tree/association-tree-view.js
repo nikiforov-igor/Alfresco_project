@@ -1140,13 +1140,15 @@ LogicECM.module = LogicECM.module || {};
             }
         },
 
-        removeNode: function AssociationTreeViewer_removeNode(event, node)
+        removeNode: function AssociationTreeViewer_removeNode(event, params)
         {
-            delete this.selectedItems[node.nodeRef];
+            delete this.selectedItems[params.node.nodeRef];
             this.singleSelectedItem = null;
             this.updateSelectedItems();
             this.updateAddButtons();
-	        this.updateFormFields();
+	        if (params.updateForms) {
+		        this.updateFormFields();
+	        }
         },
 
         updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
@@ -1181,7 +1183,7 @@ LogicECM.module = LogicECM.module || {};
 				            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            }
 
-	                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: ""}, this);
+	                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
 	            }
             }
         },
@@ -1216,7 +1218,10 @@ LogicECM.module = LogicECM.module || {};
 
         attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(params)
         {
-            YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, params.node, this);
+            YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, {
+	            node: params.node,
+	            updateForms: params.updateForms
+            }, this);
         },
 
         // Updates all form fields
@@ -1257,7 +1262,7 @@ LogicECM.module = LogicECM.module || {};
 				            el.innerHTML
 					            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            }
-			            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
+			            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }
 	            }
 	        }
@@ -1490,7 +1495,10 @@ LogicECM.module = LogicECM.module || {};
 							text: this.msg("button.cancel"),
 							handler: function AssociationTreeView_showEmployeeAutoAnswer_denySelection() {
 								this.destroy();
-								me.removeNode(null, item);
+								me.removeNode(null, {
+									node: item,
+									updateForms: true
+								});
 							}
 						}
 
