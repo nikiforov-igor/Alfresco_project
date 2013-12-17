@@ -1,11 +1,12 @@
 package ru.it.lecm.reports.utils;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -28,6 +29,7 @@ public class ParameterMapper {
     public static final String RANGE_LO_POSTFIX = "_lo";
     public static final String RANGE_HI_POSTFIX = "_hi";
     public static final String IDS_POSTFIX = "_ids";
+    public static final String IDS_TEXT = "_text";
 
     /**
      * Задать параметры из списка. Подразумевается, что параметры имеют названия
@@ -36,11 +38,13 @@ public class ParameterMapper {
      * @param reportDesc ReportDescriptor
      * @param args       Map<String, String>
      */
-    public static Map<String, Object> assignParameters(ReportDescriptor reportDesc, Map<String, String> args, NodeService nodeService) {
+    public static Map<String, Object> assignParameters(ReportDescriptor reportDesc, Map<String, String> args, ServiceRegistry services, SubstitudeBean substituteService) {
         Map<String, Object> argsMap = new HashMap<String, Object>();
         if (args == null || reportDesc == null || reportDesc.getDsDescriptor() == null) {
             return null;
         }
+
+        NodeService nodeService = services.getNodeService();
 
         //добавляем значения по умолчанию
         argsMap.putAll(args);
@@ -146,22 +150,24 @@ public class ParameterMapper {
                                     argsMap.put(argParamName, type.getValueByRealType(!paramValue.isEmpty() ? paramValue : null));
                                 }
 
-                                if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id
-                                    Long node_id = (Long) nodeService.getProperty(new NodeRef(paramValue), ContentModel.PROP_NODE_DBID);
-                                    argsMap.put(argParamName + IDS_POSTFIX, node_id);
+                                if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id и text-content
+                                    argsMap.put(argParamName + IDS_POSTFIX, getId(paramValue, nodeService));
+                                    argsMap.put(argParamName + IDS_TEXT, substituteService.getObjectDescription(new NodeRef(paramValue)));
                                 }
                             } else {
                                 bound = paramValue.split("[,;]");
 
                                 argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null));
 
-                                if (((String[])bound).length > 0) {
-                                    String firstValue = ((String[])bound)[0];
+                                if (((String[]) bound).length > 0) {
+                                    String firstValue = ((String[]) bound)[0];
                                     if (NodeRef.isNodeRef(firstValue)) {
-                                        argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(bound), nodeService));
+                                        List<String> refsList = (List<String>) SupportedTypes.LIST.getValueByRealType(bound);
+                                        argsMap.put(argParamName + IDS_POSTFIX, getIdsList(refsList, nodeService));
+                                        argsMap.put(argParamName + IDS_TEXT, getTextContentsList(refsList, substituteService));
                                     }
                                 } else {
-                                    argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(null), nodeService));
+                                    argsMap.put(argParamName + IDS_POSTFIX, null);
                                 }
                             }
                         }
@@ -186,7 +192,7 @@ public class ParameterMapper {
             } else if (refs.length == 1) {
                 Object refValue = SupportedTypes.STRING.getValueByRealType(refs[0]);
                 argsMap.put(DataSourceDescriptor.COLNAME_ID, refValue);
-                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getId((String)refValue, nodeService));
+                argsMap.put(DataSourceDescriptor.COLNAME_NODE_ID, getId((String) refValue, nodeService));
             }
         }
 
@@ -211,6 +217,21 @@ public class ParameterMapper {
             }
         }
         return nodeIds;
+    }
+
+    static private List<String> getTextContentsList(List<String> refsValue, SubstitudeBean sustituteService) {
+        List<String> texts = null;
+        if (refsValue != null) {
+            texts = new ArrayList<String>();
+            if (!((List) refsValue).isEmpty()) {
+                for (String nodeRef : refsValue) {
+                    if (NodeRef.isNodeRef(nodeRef)) {
+                        texts.add(sustituteService.getObjectDescription(new NodeRef(nodeRef)));
+                    }
+                }
+            }
+        }
+        return texts;
     }
 
     static private Long getId(String refValue, NodeService nodeService) {

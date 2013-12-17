@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
@@ -63,6 +64,7 @@ public class ReportsManagerImpl implements ReportsManager {
      * Service registry
      */
     protected ServiceRegistry serviceRegistry;
+    private SubstitudeBean substitudeService;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
@@ -872,8 +874,10 @@ public class ReportsManagerImpl implements ReportsManager {
 
         // (1) передача параметров из запроса в ReportDescriptor на основании их типов
         // (2) расширение списка пришедших параметров: для диапазонов - добавление крайних значений, для ID - добавить доп поле node_id (для SQL запросов)
-        Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry.getNodeService());
-
+        Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService);
+        if (logger.isInfoEnabled()) {
+            logParameters(paramsMap, String.format("Processing report '%s' with args: \n", reportName));
+        }
         // получение провайдера ...
         final String rType = Utils.coalesce(reportDesc.getReportType().getMnem(), ReportsManagerImpl.DEFAULT_REPORT_TYPE);
         final ReportGenerator reporter = this.getReportGenerators().get(rType);
@@ -882,6 +886,27 @@ public class ReportsManagerImpl implements ReportsManager {
         }
 
         return reporter.produceReport(reportDesc, paramsMap, storage);
+    }
+
+    private static void logParameters(final Map<String, Object> params, final String msg) {
+        final StringBuilder infosb = new StringBuilder();
+        if (msg != null) {
+            infosb.append(msg);
+        }
+        int i = 0;
+        if (params != null) {
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                ++i;
+                final String paramName = entry.getKey();
+                final String value = String.valueOf(entry.getValue());
+                infosb.append(String.format("\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce(value)));
+            }
+        }
+        logger.info(String.format("Call report maker with args count=%d:\n %s", i, infosb.toString()));
+    }
+
+    public void setSubstitudeService(SubstitudeBean substitudeService) {
+        this.substitudeService = substitudeService;
     }
 
     /**

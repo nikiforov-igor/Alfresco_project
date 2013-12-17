@@ -212,7 +212,7 @@
 	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator"
 	 		init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-
+        <property name="substitudeService" ref="substitudeService" />
 		<!-- хранилище отчётов редактора -->
 		<property name="reportEditorDAO" ref="reportEditorDAOBean"/>
 
