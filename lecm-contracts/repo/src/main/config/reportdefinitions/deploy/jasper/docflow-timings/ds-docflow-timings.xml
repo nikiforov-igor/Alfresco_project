@@ -193,9 +193,6 @@
 		<field jrFldName="col_RowTag" queryFldName="customTag" displayName="Данные.Название" />
 		<field jrFldName="col_MeasureTag" queryFldName="col_MeasureTag" displayName="Измерение.Название" />
 
-		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.From" displayName="ДатаРегистрации.С" javaValueClass="java.util.Date" />
-		<field jrFldName="col_DateReg.From" queryFldName="col_DateReg.To" displayName="ДатаРегистрации.По" javaValueClass="java.util.Date" />
-
 		<!-- Далее столбцы это кол-во в соот-щих Статусах (см узлы "statuses")-->
 		<field jrFldName="col_Count1" queryFldName="status1.counter" displayName="Статус1.Кол-во" javaValueClass="java.lang.Integer" />
 		<field jrFldName="col_Count2" queryFldName="status2.counter" displayName="Статус2.Кол-во" javaValueClass="java.lang.Integer" />
