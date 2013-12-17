@@ -104,8 +104,37 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
                 endCalendar.setTime(end);
             }
             XMLGregorianCalendar endDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(endCalendar);
+
+            List<Long> employees = new ArrayList<Long>();
+            if (whoseKey != null && !"".equals(whoseKey)) {
+                switch (WhoseEnum.valueOf(whoseKey.toUpperCase())) {
+                    case MY: {
+                        NodeRef employee = orgstructureService.getCurrentEmployee();
+                        employees.add((Long) nodeService.getProperty(employee, ContentModel.PROP_NODE_DBID));
+                        break;
+                    }
+                    case DEPARTMENT: {
+                        NodeRef boss = orgstructureService.getCurrentEmployee();
+
+                        if (boss != null) {
+                            for (NodeRef employee : orgstructureService.getBossSubordinate(boss)) {
+                                employees.add((Long) nodeService.getProperty(employee, ContentModel.PROP_NODE_DBID));
+                            }
+                            employees.add((Long) nodeService.getProperty(boss, ContentModel.PROP_NODE_DBID));                        }
+                        break;
+                    }
+                    case CONTROL: {
+                        //todo
+                        break;
+                    }
+                    default: {
+
+                    }
+                }
+            }
+
             //Добавить обработку whoseKey и фильтрацию по доступности объекта checkMainObject
-            result = unpack(remoteService.getRecordsByParams(objectTypes, beginDate, endDate, initiators, skipCount, maxItems));
+            result = unpack(remoteService.getRecordsByParams(objectTypes, beginDate, endDate, employees, skipCount, maxItems));
 
             if (checkMainObject != null && checkMainObject) {
                 List<BusinessJournalRecord> filteredResult = new ArrayList<BusinessJournalRecord>();

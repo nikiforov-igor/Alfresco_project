@@ -394,6 +394,13 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         this.stateMachineService = stateMachineService;
     }
 
+    protected static enum WhoseEnum {
+        MY,
+        DEPARTMENT,
+        CONTROL,
+        ALL
+    }
+
     class IgnoredCounter {
 
         private int executed = 0;

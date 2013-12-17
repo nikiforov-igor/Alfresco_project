@@ -49,13 +49,6 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         return bjRootRef;
     }
 
-    private static enum WhoseEnum {
-        MY,
-        DEPARTMENT,
-        CONTROL,
-        ALL
-    }
-
     /**
      * Метод инициализвции сервиса
      * Создает рабочую директорию - если она еще не создана.
