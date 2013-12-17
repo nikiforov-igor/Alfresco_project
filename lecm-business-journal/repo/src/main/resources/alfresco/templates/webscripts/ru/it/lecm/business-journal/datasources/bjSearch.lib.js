@@ -157,6 +157,11 @@ function getSearchResults(params) {
                 for (var i in filterFields) {
                     filter[filterFields[i]] = value;
                 }
+                filter["lecm-busjournal:bjRecord-secondaryObj1-assoc-text-content"] = value;
+                filter["lecm-busjournal:bjRecord-secondaryObj2-assoc-text-content"] = value;
+                filter["lecm-busjournal:bjRecord-secondaryObj3-assoc-text-content"] = value;
+                filter["lecm-busjournal:bjRecord-secondaryObj4-assoc-text-content"] = value;
+                filter["lecm-busjournal:bjRecord-secondaryObj5-assoc-text-content"] = value;
                 total = businessJournal.getRecordsCount(filter, false, showInactive);
                 nodes = businessJournal.getRecords(sort, startIndex, pageSize, filter, false, showInactive);
             } else {
