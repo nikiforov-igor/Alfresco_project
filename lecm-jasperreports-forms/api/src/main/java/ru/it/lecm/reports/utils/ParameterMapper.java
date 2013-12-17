@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
-import ru.it.lecm.reports.api.model.ParameterType.Type;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
@@ -130,49 +129,53 @@ public class ParameterMapper {
 
                     break;
                 }
-                case VALUE:
-                case LIST:
+                case VALUE: {
                     Object bound = null;
                     if (args.containsKey(argParamName)) {
                         final String paramValue = args.get(argParamName);
                         if (paramValue != null) {
-                            if (colDesc.getParameterValue().getType() == Type.VALUE) {
-                                // для простых значений явно зададим один элемент
-                                bound = paramValue;
+                            bound = paramValue;
 
-                                JavaDataType.SupportedTypes type = null;
-                                String destClassName = colDesc.getDataType().getClassName();
-                                if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
-                                    type = JavaDataType.SupportedTypes.findType(destClassName);
-                                }
+                            JavaDataType.SupportedTypes type = null;
+                            String destClassName = colDesc.getDataType().getClassName();
+                            if (!ru.it.lecm.reports.utils.Utils.isStringEmpty(destClassName)) {
+                                type = JavaDataType.SupportedTypes.findType(destClassName);
+                            }
 
-                                if (type != null) {
-                                    argsMap.put(argParamName, type.getValueByRealType(!paramValue.isEmpty() ? paramValue : null));
-                                }
+                            if (type != null) {
+                                argsMap.put(argParamName, type.getValueByRealType(!paramValue.isEmpty() ? paramValue : null));
+                            }
 
-                                if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id и text-content
-                                    argsMap.put(argParamName + IDS_POSTFIX, getId(paramValue, nodeService));
-                                    argsMap.put(argParamName + IDS_TEXT, substituteService.getObjectDescription(new NodeRef(paramValue)));
-                                }
-                            } else {
-                                bound = paramValue.split("[,;]");
-
-                                argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null));
-
-                                if (((String[]) bound).length > 0) {
-                                    String firstValue = ((String[]) bound)[0];
-                                    if (NodeRef.isNodeRef(firstValue)) {
-                                        List<String> refsList = (List<String>) SupportedTypes.LIST.getValueByRealType(bound);
-                                        argsMap.put(argParamName + IDS_POSTFIX, getIdsList(refsList, nodeService));
-                                        argsMap.put(argParamName + IDS_TEXT, getTextContentsList(refsList, substituteService));
-                                    }
-                                } else {
-                                    argsMap.put(argParamName + IDS_POSTFIX, null);
-                                }
+                            if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id и текстовое представление
+                                argsMap.put(argParamName + IDS_POSTFIX, getId(paramValue, nodeService));
+                                argsMap.put(argParamName + IDS_TEXT, substituteService.getObjectDescription(new NodeRef(paramValue)));
                             }
                         }
                     }
-                    colDesc.getParameterValue().setBound1(bound); // единичное значение или String[]
+                    colDesc.getParameterValue().setBound1(bound);
+                    break;
+                }
+                case LIST:
+                    String[] bound = null;
+                    if (args.containsKey(argParamName)) {
+                        final String paramValue = args.get(argParamName);
+                        if (paramValue != null) {
+                            bound = paramValue.split("[,;]");
+                            argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(bound));
+
+                            if (bound.length > 0) {
+                                if (NodeRef.isNodeRef(bound[0])) {
+                                    List<String> refsList = (List<String>) SupportedTypes.LIST.getValueByRealType(bound);
+
+                                    argsMap.put(argParamName + IDS_POSTFIX, getIdsList(refsList, nodeService));
+                                    argsMap.put(argParamName + IDS_TEXT, getTextContentsList(refsList, substituteService));
+                                }
+                            } else {
+                                argsMap.put(argParamName + IDS_POSTFIX, null);
+                            }
+                        }
+                    }
+                    colDesc.getParameterValue().setBound1(bound); //String[]
                     break;
                 default: // непонятный тип - сообщение об ошибке и игнор ...
                     log.error(String.format("Unsupported parameter type '%s' skipped", Utils.coalesce(colDesc.getParameterValue().getType(), "NULL")));
@@ -196,7 +199,7 @@ public class ParameterMapper {
             }
         }
 
-        // аналогично нужно гарантировать колонку с TYPE, когда есть такой параметр или тип задан явно ...
+        // аналогично нужно гарантировать колонку с TYPE, когда есть такой параметр...
         if (args.containsKey(DataSourceDescriptor.COLNAME_TYPE)) {
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
             argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_TYPE)));

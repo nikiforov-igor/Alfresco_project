@@ -86,12 +86,12 @@
 	<groupby.formats>
 		<map>
 			<item key="contractKind">
-				<![CDATA[ {lecm-contract:typeContract-assoc/cm:name}]]>
+				<![CDATA[{lecm-contract:typeContract-assoc/cm:name}]]>
 			</item>
 			<item key="contractKindTag" value="Вид договора" />
 
 			<item key="contractTheme">
-				<![CDATA[ {lecm-contract:subjectContract-assoc/cm:name}]]>
+				<![CDATA[{lecm-contract:subjectContract-assoc/cm:name}]]>
 			</item>
 			<item key="contractThemeTag" value="Тематика договора" />
 
@@ -101,7 +101,7 @@
 			<item key="contractorTag" value="Контрагент" />
 
 			<item key="initiator">
-				<![CDATA[ Инициатор {~AUTHOR} ]]>
+				<![CDATA[{~AUTHOR}]]>
 			</item>
 			<item key="initiatorTag" value="Инициатор" />
 		</map>
