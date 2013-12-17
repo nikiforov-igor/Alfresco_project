@@ -262,7 +262,9 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
                     final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований
 
                     // <!-- дата начала согласования --> у Списка Согласования
-
+                    if (approveListId == null) {
+                        continue;
+                    }
                     final List<ChildAssociationRef> childItems = nodeSrv.getChildAssocs(approveListId, approveQNames.childApproveSet);
                     if (childItems == null || childItems.isEmpty()) {
                         continue;

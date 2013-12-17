@@ -32,7 +32,7 @@
         <offset>0</offset>
         <limit>-1</limit>
         <pgsize>-1</pgsize>
-        <queryText><![CDATA[]]></queryText>
+        <queryText><![CDATA[+TYPE:"lecm-errands:document"]]></queryText>
         <allVersions>true</allVersions>
         <preferedType>lecm-errands:document</preferedType>
         <isMultiRow>true</isMultiRow>

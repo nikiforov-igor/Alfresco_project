@@ -627,12 +627,6 @@ public class LucenePreparedQuery {
                         hasType = bquery.emmitTypeCond(colWithType.getParameterValue().getBound1().toString(), null);
                     }
                 }
-
-                if (!hasType) { // если тп не задан параметрами - пробуем из описателя атрибута ...
-                    if (reportDescriptor.getFlags() != null) {
-                        hasType = bquery.emmitTypeCond(reportDescriptor.getFlags().getSupportedNodeTypes(), null);
-                    }
-                }
             }
 
 			/* по ID/NodeRef ... */
@@ -652,7 +646,7 @@ public class LucenePreparedQuery {
             if (!(hasType || hasId))
                 logger.warn(String.format("None of main parameteres specified: '%s' nor '%s' ", DataSourceDescriptor.COLNAME_TYPE, DataSourceDescriptor.COLNAME_ID));
 
-        } else { // если НД не задан - выборка по документам ...
+        } else { // если НД не задан - выборка по всем документам ...
             bquery.emmitTypeCond(DEFAULT_DOCUMENT_TYPE, null);
         }
     }

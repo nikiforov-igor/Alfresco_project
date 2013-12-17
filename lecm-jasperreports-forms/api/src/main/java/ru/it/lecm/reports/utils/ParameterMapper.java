@@ -152,8 +152,17 @@ public class ParameterMapper {
                                 }
                             } else {
                                 bound = paramValue.split("[,;]");
+
                                 argsMap.put(argParamName, SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null));
-                                argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(!paramValue.isEmpty() ? bound : null), nodeService));
+
+                                if (((String[])bound).length > 0) {
+                                    String firstValue = ((String[])bound)[0];
+                                    if (NodeRef.isNodeRef(firstValue)) {
+                                        argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(bound), nodeService));
+                                    }
+                                } else {
+                                    argsMap.put(argParamName + IDS_POSTFIX, getIdsList((List<String>) SupportedTypes.LIST.getValueByRealType(null), nodeService));
+                                }
                             }
                         }
                     }
@@ -185,10 +194,6 @@ public class ParameterMapper {
         if (args.containsKey(DataSourceDescriptor.COLNAME_TYPE)) {
             ensureDataColumn(reportDesc.getDsDescriptor(), args.get(DataSourceDescriptor.COLNAME_TYPE), DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
             argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(args.get(DataSourceDescriptor.COLNAME_TYPE)));
-        } else if (reportDesc.getFlags() != null && !reportDesc.getFlags().getSupportedNodeTypes().isEmpty()) {
-            String typesStr = StringUtils.collectionToCommaDelimitedString(reportDesc.getFlags().getSupportedNodeTypes());
-            ensureDataColumn(reportDesc.getDsDescriptor(), typesStr, DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.STRING);
-            argsMap.put(DataSourceDescriptor.COLNAME_TYPE, SupportedTypes.LIST.getValueByRealType(typesStr));
         }
 
         return argsMap;

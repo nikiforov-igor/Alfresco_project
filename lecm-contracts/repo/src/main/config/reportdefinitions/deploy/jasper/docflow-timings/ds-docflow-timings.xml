@@ -49,7 +49,7 @@
 		<preferedType>lecm-contract:document</preferedType>
 		<isMultiRow>true</isMultiRow>
 		<isCustom>false</isCustom>
-        <queryText><![CDATA[]]></queryText>
+        <queryText><![CDATA[+TYPE:"lecm-contract:document"]]></queryText>
 	</query.descriptor>
 
 	<!--
