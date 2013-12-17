@@ -37,7 +37,8 @@ public class ReportForm extends FormUIGet {
         d_date,
         d_datetime,
         d_any,
-        d_double
+        d_double,
+        STATUS
     }
 
     private enum RangeableTypes {
@@ -90,7 +91,7 @@ public class ReportForm extends FormUIGet {
         int colnum = 0;
         for (ColumnDescriptor param : params) {
         	colnum++;
-            Field field = generateFieldModel(param, colnum);
+            Field field = generateFieldModel(param, colnum, descriptor);
             if (field != null) {
                 fields.put(param.getColumnName(), field);
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
@@ -113,7 +114,7 @@ public class ReportForm extends FormUIGet {
     	return (s != null && s.trim().length() > 0) ? s : sDefault;
     }
 
-    protected Field generateFieldModel(ColumnDescriptor column, int colnum) {
+    protected Field generateFieldModel(ColumnDescriptor column, int colnum, ReportDescriptor desc) {
         Field field = null;
         try {
             if (column != null) {
@@ -136,7 +137,7 @@ public class ReportForm extends FormUIGet {
                 field.setDataType(dataType);
                 field.setValue("");
 
-                processFieldControl(field, column);
+                processFieldControl(field, column, desc);
             }
         } catch (JSONException je) {
             field = null;
@@ -145,7 +146,7 @@ public class ReportForm extends FormUIGet {
         return field;
     }
 
-    protected void processFieldControl(Field field, ColumnDescriptor column) throws JSONException {
+    protected void processFieldControl(Field field, ColumnDescriptor column, ReportDescriptor desc) throws JSONException {
         FieldControl control = null;
 
         DefaultControlsConfigElement defaultControls = null;
@@ -211,6 +212,19 @@ public class ReportForm extends FormUIGet {
                 List<ControlParam> paramsConfig = defaultControlConfig.getParamsAsList();
                 for (ControlParam param : paramsConfig) {
                     control.getParams().put(param.getName(), param.getValue());
+                }
+
+                if (alfrescoType.toUpperCase().equals(AlfrescoTypes.STATUS.name())) {
+                    String resultedValue = "";
+                    if (desc.getFlags().getSupportedNodeTypes() != null) {
+                        for (String type : desc.getFlags().getSupportedNodeTypes()) {
+                            resultedValue += (type + ",");
+                        }
+                        resultedValue = resultedValue.substring(0, resultedValue.length() - 1);
+                    }
+
+                    control.getParams().put("docType", resultedValue);
+                    control.getParams().put("multiply", String.valueOf(column.getParameterValue().getType().equals(ParameterType.Type.LIST)));
                 }
                 // поддерживается ли множественный выбор? Да, если тип Параметра - Список
                 field.setRepeating(column.getParameterValue().getType().equals(ParameterType.Type.LIST));

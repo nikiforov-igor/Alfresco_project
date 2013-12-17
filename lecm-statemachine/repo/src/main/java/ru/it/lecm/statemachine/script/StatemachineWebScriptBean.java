@@ -222,7 +222,15 @@ public class StatemachineWebScriptBean extends BaseWebScript {
     }
 
     public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
-        List<String> statuses = stateMachineHelper.getStatuses(documentType, includeActive, includeFinal);
+        Set<String> statuses = new HashSet<String>();
+        if (documentType != null && !documentType.isEmpty()) {
+            String[] types = documentType.split(",");
+            for (String type : types) {
+                if (!type.isEmpty()) {
+                    statuses.addAll(stateMachineHelper.getStatuses(type, includeActive, includeFinal));
+                }
+            }
+        }
         return statuses.toArray(new String[statuses.size()]);
     }
 

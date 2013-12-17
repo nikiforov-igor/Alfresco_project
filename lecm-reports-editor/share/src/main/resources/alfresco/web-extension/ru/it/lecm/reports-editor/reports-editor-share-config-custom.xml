@@ -1,15 +1,4 @@
 <alfresco-config>
-    <config>
-        <forms>
-            <default-controls>
-                <type name="STATUS" template="/ru/it/lecm/base-share/components/controls/select-many-with-webscript-values.ftl">
-                    <control-param name="webscriptType">server</control-param>
-                    <control-param name="webscript">lecm/base/types</control-param>
-                    <control-param name="withEmpty">true</control-param>
-                </type>
-            </default-controls>
-        </forms>
-    </config>
     <config evaluator="node-type" condition="lecm-rpeditor:reportDescriptor">
         <forms>
             <form>

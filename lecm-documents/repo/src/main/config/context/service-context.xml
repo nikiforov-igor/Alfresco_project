@@ -582,4 +582,12 @@
 			</map>
 		</constructor-arg>
 	</bean>
+
+    <bean id="listOfUsedBaseDocTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="STATUS" value="Статус"/>
+            </map>
+        </property>
+    </bean>
 </beans>

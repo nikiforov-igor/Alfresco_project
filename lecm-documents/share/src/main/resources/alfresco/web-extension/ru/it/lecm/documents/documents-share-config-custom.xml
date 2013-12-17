@@ -491,6 +491,7 @@
                 <js src="/scripts/grids/doc-members-datagrid.js"/>
                 <js src="/scripts/components/format-packageItems-document.js"/>
 	            <js src="/scripts/documents/tables/lecm-document-table.js"/>
+                <js src="/scripts/lecm-documents/select-status-control.js"/>
             </dependencies>
             <default-controls>
                 <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -505,6 +506,10 @@
 		            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 		            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
 		            <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                </type>
+                <type name="STATUS" template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                    <control-param name="multiply">true</control-param>
+                    <control-param name="withEmpty">true</control-param>
                 </type>
             </default-controls>
         </forms>

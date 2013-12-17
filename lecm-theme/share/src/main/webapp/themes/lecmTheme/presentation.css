@@ -598,8 +598,7 @@ h4 .lighter
     clear: both;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
-.yui-skin-lecmTheme .yui-panel div.form-field select {
+.yui-skin-lecmTheme .yui-panel div.form-field input[type='text']{
     height: 28px;
     padding: 2px;
 }
@@ -1907,7 +1906,7 @@ div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel div.form-field div.selectone-control select,
 .yui-skin-lecmTheme .yui-panel div.form-field input.autocomplete-input[type="text"],
 .yui-skin-lecmTheme .yui-panel div.form-field textarea {
-    min-height: 26px;
+    min-height: 28px;
     max-height: 100px;
     width: 28em;
     margin: 0;
