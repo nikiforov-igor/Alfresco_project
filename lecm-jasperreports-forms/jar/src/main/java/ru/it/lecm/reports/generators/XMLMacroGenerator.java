@@ -9,6 +9,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
+import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
@@ -660,28 +661,37 @@ public class XMLMacroGenerator {
                             break;
                         }
                         case VALUE: {
-                            //TODO учесть что значением может быть NodeRef?
-                            index++;
-                            this.doColumnMacroExpansion(macroKey, colDesc, index);
-                            break;
                         }
                         case LIST: {
                             // добавляем два параметра - обычный + с постфиксом _ids (с заменой типа на List)
                             String className = colDesc.getClassName();
                             String columnName = colDesc.getColumnName();
 
+                            if (!colDesc.getParameterValue().getType().equals(ParameterType.Type.VALUE)) {
+                                colDesc.setClassName(JavaDataType.SupportedTypes.LIST.name());
+                            }
+
                             //(1)
-                            colDesc.setClassName(JavaDataType.SupportedTypes.LIST.name());
                             index++;
                             this.doColumnMacroExpansion(macroKey, colDesc, index);
 
-                            //(2)
-                            colDesc.setColumnName(columnName + ParameterMapper.IDS_POSTFIX);
-                            index++;
-                            this.doColumnMacroExpansion(macroKey, colDesc, index);
+                            if (colDesc.getAlfrescoType() != null && !colDesc.getAlfrescoType().startsWith("d:")) {
+                                //(2)
+                                colDesc.setColumnName(columnName + ParameterMapper.TEXT);
+                                index++;
+                                this.doColumnMacroExpansion(macroKey, colDesc, index);
 
-                            colDesc.setColumnName(columnName);
-                            colDesc.setClassName(className);
+                                if (colDesc.getParameterValue().getType().equals(ParameterType.Type.VALUE)) {
+                                    colDesc.setClassName(JavaDataType.SupportedTypes.LONG.name());
+                                }
+                                colDesc.setColumnName(columnName + ParameterMapper.IDS_POSTFIX);
+                                index++;
+                                this.doColumnMacroExpansion(macroKey, colDesc, index);
+
+                                colDesc.setColumnName(columnName);
+                                colDesc.setClassName(className);
+                            }
+
                             break;
                         }
 

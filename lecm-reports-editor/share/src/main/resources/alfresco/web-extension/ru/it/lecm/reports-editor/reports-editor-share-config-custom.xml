@@ -116,7 +116,6 @@
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:reportTypeAssoc"/>
-                    <show id="lecm-rpeditor:reportCode"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>

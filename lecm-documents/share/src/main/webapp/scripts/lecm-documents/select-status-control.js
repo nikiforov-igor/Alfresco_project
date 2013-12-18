@@ -29,7 +29,7 @@ LogicECM.module.Document = LogicECM.module.Document|| {};
 
         onReady: function SelectMany_onReady() {
             YAHOO.util.Event.on(this.id, "change", this.onSelectChange, this, true);
-            var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/getStatuses?docType={docType}&active=true&final=false";
+            var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/getStatuses?docType={docType}&active=true&final=true";
             url = YAHOO.lang.substitute(url, {
                 docType: this.options.docType ? this.options.docType : ""
             });

@@ -27,10 +27,7 @@
 
 	<prototype-params>
             <macro.body.field>
-                <macro.body.field.case expression="@RDesc.SQLDataSource">
-                    <parameter name="@PARAM.desc.columnName" class="@PARAM.desc.dataType.className" isForPrompting="false"/>
-                </macro.body.field.case>
-                <macro.body.field.case expression="!@RDesc.SQLDataSource"/>
+                <parameter name="@PARAM.desc.columnName" class="@PARAM.desc.dataType.className" isForPrompting="false"/>
             </macro.body.field>
     </prototype-params>
 

@@ -28,7 +28,7 @@ public class ParameterMapper {
     public static final String RANGE_LO_POSTFIX = "_lo";
     public static final String RANGE_HI_POSTFIX = "_hi";
     public static final String IDS_POSTFIX = "_ids";
-    public static final String IDS_TEXT = "_text";
+    public static final String TEXT = "_text";
 
     /**
      * Задать параметры из списка. Подразумевается, что параметры имеют названия
@@ -148,7 +148,7 @@ public class ParameterMapper {
 
                             if (NodeRef.isNodeRef(paramValue)) { // для REF добавляем еще и node_id и текстовое представление
                                 argsMap.put(argParamName + IDS_POSTFIX, getId(paramValue, nodeService));
-                                argsMap.put(argParamName + IDS_TEXT, substituteService.getObjectDescription(new NodeRef(paramValue)));
+                                argsMap.put(argParamName + TEXT, substituteService.getObjectDescription(new NodeRef(paramValue)));
                             }
                         }
                     }
@@ -168,7 +168,7 @@ public class ParameterMapper {
                                     List<String> refsList = (List<String>) SupportedTypes.LIST.getValueByRealType(bound);
 
                                     argsMap.put(argParamName + IDS_POSTFIX, getIdsList(refsList, nodeService));
-                                    argsMap.put(argParamName + IDS_TEXT, getTextContentsList(refsList, substituteService));
+                                    argsMap.put(argParamName + TEXT, getTextContentsList(refsList, substituteService));
                                 }
                             } else {
                                 argsMap.put(argParamName + IDS_POSTFIX, null);
