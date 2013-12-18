@@ -19,6 +19,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.sql.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
@@ -62,6 +63,7 @@ public class DiagnosticUtility {
     //конфиги
     private final static String ALF_HOME = "alf_home";
     private final static String OUTPUT_DIR = "output_dir";
+    private final static String ADMIN_LOGIN = "admin_login";
     private final static String ADMIN_PASSWORD = "admin_password";
 
     //карты с конфигами
@@ -74,6 +76,8 @@ public class DiagnosticUtility {
     private static String currentDirectoryPath = ".";
     private static String resultsDirectory = ".";
     private static boolean isServerAvailable = false;
+    
+    private final static DateFormat dateParser = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
 
     private final static String SALT = "ac19625a23bd1fa61874694464ac9066";
 
@@ -641,8 +645,11 @@ public class DiagnosticUtility {
     private static File getFileFromURL(String alfrescoServiceURL, String resultFileName) {
         HttpClient client = new HttpClient();
         client.getParams().setAuthenticationPreemptive(true);
-
-        Credentials adminCredentials = new UsernamePasswordCredentials("admin", config.get(ADMIN_PASSWORD));
+        String login = config.get(ADMIN_LOGIN);
+        if (login == null || "".equals(login)) {
+            login = "admin";
+        }
+        Credentials adminCredentials = new UsernamePasswordCredentials(login, config.get(ADMIN_PASSWORD));
         client.getState().setCredentials(AuthScope.ANY, adminCredentials);
         String getRecordsScript = concatAfrescoURL() + alfrescoServiceURL;
 
@@ -657,22 +664,23 @@ public class DiagnosticUtility {
         byte[] bytes = new byte[1024];
         File receivedFile = null;
         try {
-            receivedFile = new File(resultFileName);
-            if (!receivedFile.exists()) {
-                receivedFile.createNewFile();
-            }
-
-            out = new BufferedOutputStream(new FileOutputStream(receivedFile));
-
             httpGet.setDoAuthentication(true);
             status = client.executeMethod(httpGet);
-            in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
+            if (status == 200) {
+                receivedFile = new File(resultFileName);
+                if (!receivedFile.exists()) {
+                    receivedFile.createNewFile();
+                }
 
-            int readCount;
-            while ((readCount = in.read(bytes)) > 0) {
-                out.write(bytes, 0, readCount);
+                out = new BufferedOutputStream(new FileOutputStream(receivedFile));
+                in = new BufferedInputStream(httpGet.getResponseBodyAsStream());
+
+                int readCount;
+                while ((readCount = in.read(bytes)) > 0) {
+                    out.write(bytes, 0, readCount);
+                }
+                out.flush();
             }
-            out.flush();
         } catch (IOException e) {
             log.error("", e);
         } finally {
@@ -766,7 +774,7 @@ public class DiagnosticUtility {
     }
 
     private static int sendRequestToURL(HttpClient client, String[] requestURL) {
-        int requestStatus = 503;
+        int requestStatus = 0;
         for (String url : requestURL) {
             log.info("Try connect to URL: {}", url);
             GetMethod httpGet = null;
@@ -928,8 +936,10 @@ public class DiagnosticUtility {
         //Фаза 1 - Получение системных переменных и параметров сервера
         try {
             log.info("Phase 1 - Collecting system information");
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  1 - Collecting system information");
             success = collectSystemInformation();
             log.info("Phase 1 - Collecting system information finished. Phase result is {}", formatStatusString(success));
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  1 - Collecting system information finished. Phase result is " + formatStatusString(success));
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
@@ -937,8 +947,10 @@ public class DiagnosticUtility {
         //Фаза 2 - Сканирование файлов сервера
         try {
             log.info("Phase 2 - Scanning files");
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  2 - Scanning files");
             dataFiles = collectFiles();
             log.info("Phase 2 - Scanning files finished. Phase result is {}", formatStatusString(dataFiles != null));
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  2 - Scanning files finished. Phase result is " + formatStatusString(dataFiles != null));
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
@@ -946,8 +958,10 @@ public class DiagnosticUtility {
         //Фаза 3 - Проверка доступности сервера
         try {
             log.info("Phase 3 - Checking the availability of the server");
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  3 - Checking the availability of the server");
             success = checkServer();
             log.info("Phase 3 - Checking the availability of the server finished. Phase result is {}", formatStatusString(success));
+            System.out.println("[" + dateParser.format(new Date()) + "] Phase  3 - Checking the availability of the server finished. Phase result is " + formatStatusString(success));
         } catch (Exception ex) {
             log.error(ex.getMessage());
         }
@@ -956,32 +970,40 @@ public class DiagnosticUtility {
             //Фаза 4 - Сбор информации из бизнес-журнала
             try {
                 log.info("Phase 4 - Collecting business journal records");
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  4 - Collecting business journal records");
                 bjLogFile = collectBusinessJournalRecords();
                 log.info("Phase 4 - Collecting business journal records. Phase result is {}", formatStatusString(bjLogFile != null));
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  4 - Collecting business journal records. Phase result is " + formatStatusString(bjLogFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
             //Фаза 5 - сбор информации об оргструктуре
             try {
                 log.info("Phase 5 - Collecting orgstructure info");
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  5 - Collecting orgstructure info");
                 orgstructureFile = collectOrgstructureInfo();
                 log.info("Phase 5 - Collecting orgstructure info. Phase result is {}", formatStatusString(orgstructureFile != null));
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  5 - Collecting orgstructure info. Phase result is " + formatStatusString(orgstructureFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
             //Фаза 6 - Диаграмма организации
             try {
                 log.info("Phase 6 - Download organization diagram");
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  6 - Download organization diagram");
                 orgstructureDiagramFile = collectOrgstructureDiagramInfo();
                 log.info("Phase 6 - Download organization diagram. Phase result is {}", formatStatusString(orgstructureDiagramFile != null));
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  6 - Download organization diagram. Phase result is " + formatStatusString(orgstructureDiagramFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
             //Фаза 7 - Дерево прав
             try {
                 log.info("Phase 7 - Download acl tree");
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  7 - Download acl tree");
                 aclTreeFile = collectAclTree();
                 log.info("Phase 7 - Download acl tree. Phase result is {}", formatStatusString(orgstructureDiagramFile != null));
+                System.out.println("[" + dateParser.format(new Date()) + "] Phase  7 - Download acl tree. Phase result is " + formatStatusString(orgstructureDiagramFile != null));
             } catch (Exception ex) {
                 log.error(ex.getMessage());
             }
@@ -989,7 +1011,7 @@ public class DiagnosticUtility {
             log.warn("Server is unavailable. Unable to collect the business journal records and orgstructure info");
         }
 
-        log.info("Last Phase - Encode control log file");
+        System.out.println("[" + dateParser.format(new Date()) + "] Last Phase - Encode control log file");
         controlFile = new File(CONTROL_INFO_FILENAME);
         if (!controlFile.exists()) {
             log.error("Check file paths. Unable to find control file");
