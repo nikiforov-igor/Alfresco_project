@@ -2047,7 +2047,7 @@ div.object-finder .association-auto-complete-selected-item-even .employee-availa
 }
 
 div.object-finder .association-auto-complete-selected-item .employee-unavailable,
-div.object-finder .association-auto-complete-selected-item-event .employee-unavailable {
+div.object-finder .association-auto-complete-selected-item-even .employee-unavailable {
     background: url(images/employee-unavailable.png) no-repeat;
 }
 
