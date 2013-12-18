@@ -54,7 +54,7 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
         logger.info(String.format("Undeploying report '%s' ...", reportCode));
         getReportsManager().unregisterReportDescriptor(reportCode);
         NodeRef report = getReportsManager().getReportEditorDAO().getReportDescriptorNodeByCode(reportCode);
-        if (report != null) {
+        if (report != null && serviceRegistry.getNodeService().exists(report)) {
             serviceRegistry.getNodeService().setProperty(report, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, false);
         }
         logger.warn(String.format("report '%s' undeployed", reportCode));

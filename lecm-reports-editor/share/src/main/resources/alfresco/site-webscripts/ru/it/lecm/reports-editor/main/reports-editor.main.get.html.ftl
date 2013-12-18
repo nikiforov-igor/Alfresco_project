@@ -25,63 +25,65 @@
 
                 splashScreen: null,
 
-                /*onActionUnDeploy: function (item) {
+                onDataItemsDeleted: function DataGrid_onDataItemsDeleted(layer, args) {
+                    var obj = args[1];
                     var me = this;
-                    Alfresco.util.PopupManager.displayPrompt({
-                        title: "Уадление отчета",
-                        text: "Вы действительно хотите удалить отчет из системы?",
-                        buttons: [
-                            {
-                                text: "Да",
-                                handler: function () {
-                                    this.destroy();
-                                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
-                                    sUrl = YAHOO.lang.substitute(sUrl, {
-                                        reportCode: item.itemData["prop_lecm-rpeditor_reportCode"].value
-                                    });
-                                    me._showSplash();
-                                    var callback = {
-                                        success: function (oResponse) {
-                                            oResponse.argument.parent._hideSplash();
-                                            item.itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: false, displayValue: false};
-                                            YAHOO.Bubbling.fire("dataItemUpdated",
-                                                    {
-                                                        item: item,
-                                                        bubblingLabel: me.options.bubblingLabel
-                                                    });
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: "Отчет удален из системы",
-                                                        displayTime: 3
-                                                    });
-                                        },
-                                        failure: function (oResponse) {
-                                            oResponse.argument.parent._hideSplash();
-                                            alert(oResponse.responseText);
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: "При удалении отчета произошла ошибка",
-                                                        displayTime: 3
-                                                    });
-                                        },
-                                        argument: {
-                                            parent: me
-                                        },
-                                        timeout: 30000
+                    if (obj && this._hasEventInterest(obj.bubblingLabel) && (obj.items !== null)){
+                        var recordFound, el,
+                                fnCallback = function(record){
+                                    return function DataGrid_onDataItemsDeleted_anim() {
+                                        this.widgets.dataTable.deleteRow(record);
                                     };
-                                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-                                }
-                            },
-                            {
-                                text: "Нет",
-                                handler: function dlA_onActionDelete_cancel() {
-                                    this.destroy();
-                                },
-                                isDefault: true
+                                };
+
+                        for (var i = 0, ii = obj.items.length; i < ii; i++) {
+                            recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
+                            if (recordFound !== null) {
+                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
+                                sUrl = YAHOO.lang.substitute(sUrl, {
+                                    reportCode: obj.items[i].itemData["prop_lecm-rpeditor_reportCode"].value
+                                });
+                                me._showSplash();
+                                var callback = {
+                                    success: function (oResponse) {
+                                        oResponse.argument.parent._hideSplash();
+                                        obj.items[i].itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: false, displayValue: false};
+                                        YAHOO.Bubbling.fire("dataItemUpdated",
+                                                {
+                                                    item: obj.items[i],
+                                                    bubblingLabel: me.options.bubblingLabel
+                                                });
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "Отчет удален из системы",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    failure: function (oResponse) {
+                                        oResponse.argument.parent._hideSplash();
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "При удалении отчета из системы произошла ошибка",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    argument: {
+                                        parent: me
+                                    },
+                                    timeout: 30000
+                                };
+                                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+
+                                el = this.widgets.dataTable.getTrEl(recordFound);
+                                Alfresco.util.Anim.fadeOut(el,
+                                        {
+                                            callback: fnCallback(recordFound),
+                                            scope: this
+                                        });
                             }
-                        ]
-                    });
-                },*/
+                        }
+                    }
+                },
 
                 onActionDeploy: function (item) {
                     var me = this;
@@ -328,6 +330,55 @@
     var reportForm;
     (function () {
         function init() {
+            var deployFunction = function() {
+                Alfresco.util.PopupManager.displayPrompt({
+                    title: "Регистрация отчета",
+                    text: "Вы действительно хотите добавить отчет в систему?",
+                    buttons: [
+                        {
+                            text: "Да",
+                            handler: function dlA_onActionDeploy() {
+                                this.destroy();
+                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
+                                sUrl = YAHOO.lang.substitute(sUrl, {
+                                    reportDescNode: "${page.url.args.reportId}"
+                                });
+                                var callback = {
+                                    success: function (oResponse) {
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "Отчет зарегистрирован в системе",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    failure: function (oResponse) {
+                                        alert(oResponse.responseText);
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "При регистрации отчета произошла ошибка",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    timeout: 30000
+                                };
+                                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            }
+                        },
+                        {
+                            text: "Нет",
+                            handler: function dlA_onActionDelete_cancel() {
+                                this.destroy();
+                            },
+                            isDefault: true
+                        }
+                    ]
+                });
+            };
+
+            var saveFunction = function() {
+                this.submit();
+            };
+
             var htmlId = "${page.url.args.reportId}".replace("workspace://SpacesStore/", "").replace("-", "");
             Alfresco.util.Ajax.request(
                     {
@@ -340,15 +391,26 @@
                                     ? "subReport": ""),
                             mode: "edit",
                             submitType: "json",
-                            showSubmitButton: "true"
+                            showSubmitButton: "true",
+                            showCancelButton: "true"
                         },
                         successCallback: {
                             fn: function (response) {
                                 var formEl = Dom.get("${id}-reportForm");
                                 formEl.innerHTML = response.serverResponse.responseText;
                                 Dom.setStyle("${id}-footer", "opacity", "1");
+
                                 // Form definition
                                 var form = new Alfresco.forms.Form(htmlId + '-form');
+
+                                if (Dom.get(htmlId + "-form-cancel") !== null) {
+                                    Alfresco.util.createYUIButton(null, "", deployFunction, { label: "${msg("actions.deploy")}", title: "${msg("actions.deploy")}" }, htmlId + "-form-cancel");
+                                }
+
+                                if (Dom.get(htmlId + "-form-submit") !== null) {
+                                    Alfresco.util.createYUIButton(null, "", null, { label: "${msg("actions.save")}", title: "${msg("actions.save")}", type: "submit" }, htmlId + "-form-submit");
+                                }
+
                                 form.ajaxSubmit = true;
                                 form.setAJAXSubmit(true,
                                         {
@@ -356,7 +418,7 @@
                                                 fn: function () {
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
-                                                                text: "Настройки отчета обновлены"
+                                                                text: "Настройки обновлены"
                                                             });
                                                 },
                                                 scope: this
