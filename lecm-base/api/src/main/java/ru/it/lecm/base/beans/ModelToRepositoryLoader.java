@@ -108,24 +108,16 @@ public class ModelToRepositoryLoader implements DictionaryListener {
      * Размещение моделей в репозиторий
      */
     public void init() {
-        AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                    public Object execute() throws Exception {
 
-                        onDictionaryInit();
-                        initMessages();
-                        return null;
-                    }
-                }, false, false);
-                return null;
-            }
-        };
-        AuthenticationUtil.runAsSystem(raw);
+        onDictionaryInit();
+//        initMessages();
+
         register();
     }
 
+    /**
+     * Register with the Dictionary
+     */
     public void register() {
         dictionaryDAO.register(this);
     }
@@ -140,49 +132,69 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         if (modelsRoot == null) {
             return;
         }
-        dictionaryRepositoryBootstrap.init();
-        // register models
-        for (final String bootstrapModel : models) {
-            try {
-                InputStream modelStream = null;
-                try {
-                    modelStream = getClass().getClassLoader().getResourceAsStream(bootstrapModel);
-                    if (modelStream == null) {
-                        throw new DictionaryException("Could not find bootstrap model " + bootstrapModel);
-                    }
-                    M2Model model = M2Model.createModel(modelStream);
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
 
-                    if (model.getTypes() != null && !model.getTypes().isEmpty()) {
-                        String name = model.getTypes().get(0).getName().replace(":", "_");
-                        NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
-                        if (node == null) {
-                            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-                            props.put(ContentModel.PROP_NAME, name);
-
-                            NodeRef newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
-                            ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
-                            modelStream.reset();
-                            contentWriter.putContent(modelStream);
-                            nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
-                            dictionaryDAO.putModel(model);
-                        }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
+                // регистрируем модели
+                for (final String bootstrapModel : models) {
                     try {
-                        if (modelStream != null) {
-                            modelStream.close();
+                        InputStream modelStream = null;
+                        try {
+                            modelStream = getClass().getClassLoader().getResourceAsStream(bootstrapModel);
+                            if (modelStream == null) {
+                                throw new DictionaryException("Could not find bootstrap model " + bootstrapModel);
+                            }
+                            final M2Model model = M2Model.createModel(modelStream);
+                            if (model.getTypes() != null && !model.getTypes().isEmpty()) {
+                                final String name = model.getName().replace(":", "_");
+                                final NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
+                                dictionaryRepositoryBootstrap.onDictionaryInit();   //внесено внутрь цикла для правильного распознавания зависимых моделей
+                                if (node == null) {
+                                    dictionaryDAO.putModel(model);
+                                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                                        public Object execute() throws Exception {
+                                            InputStream contentInputStream = null;
+                                            try {
+                                                contentInputStream = getClass().getClassLoader().getResourceAsStream(bootstrapModel);
+                                                Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+                                                props.put(ContentModel.PROP_NAME, name);
+
+                                                NodeRef newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
+                                                ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
+                                                contentWriter.putContent(contentInputStream);
+                                                nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
+                                            } finally {
+                                                try {
+                                                    if (contentInputStream != null) {
+                                                        contentInputStream.close();
+                                                    }
+                                                } catch (IOException ioe) {
+                                                    logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
+                                                }
+                                            }
+                                            return null;
+                                        }
+                                    }
+                                            , false, false);
+                                }
+                            }
+                        } finally {
+                            try {
+                                if (modelStream != null) {
+                                    modelStream.close();
+                                }
+                            } catch (IOException ioe) {
+                                logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
+                            }
                         }
-                    } catch (IOException ioe) {
-                        logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
+                    } catch (DictionaryException e) {
+                        throw new DictionaryException("Could not import bootstrap model " + bootstrapModel, e);
                     }
                 }
-            } catch (DictionaryException e) {
-                throw new DictionaryException("Could not import bootstrap model " + bootstrapModel, e);
+                return null;
             }
-        }
-
+        });
     }
 
     public void afterDictionaryDestroy() {
