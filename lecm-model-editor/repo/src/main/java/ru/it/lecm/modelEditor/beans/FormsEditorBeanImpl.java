@@ -379,9 +379,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 				xmlw = XMLOutputFactory.newInstance().createXMLStreamWriter(out);
 				xmlw.writeStartElement("alfresco-config");
 
-				for (NodeRef form : forms) {
-					writeForm(xmlw, form, modelName);
-				}
+				writeForms(xmlw, forms, modelName);
 
 				xmlw.writeEndElement();
 			} catch (XMLStreamException e) {
@@ -407,15 +405,38 @@ public class FormsEditorBeanImpl extends BaseBean {
 		return null;
 	}
 
-	private void writeForm(XMLStreamWriter xmlw, NodeRef form, String modelName) throws XMLStreamException {
+	public void writeForms(XMLStreamWriter xmlw, List<NodeRef> forms, String modelName) throws XMLStreamException {
+		Map<String, List<NodeRef>> evaluatorFromGroups = new HashMap<String, List<NodeRef>>();
+		for (NodeRef form : forms) {
+			String evaluator = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
+			if (evaluator != null) {
+				if (!evaluatorFromGroups.containsKey(evaluator)) {
+					evaluatorFromGroups.put(evaluator, new ArrayList<NodeRef>());
+				}
+				evaluatorFromGroups.get(evaluator).add(form);
+			}
+		}
+
+		for (String evaluator: evaluatorFromGroups.keySet()) {
+			xmlw.writeStartElement("config");
+			xmlw.writeAttribute("evaluator", evaluator);
+			xmlw.writeAttribute("condition", modelName);
+			xmlw.writeAttribute("replace", "true");
+
+			xmlw.writeStartElement("forms");
+
+			for (NodeRef form: evaluatorFromGroups.get(evaluator)) {
+				writeForm(xmlw, form);
+			}
+
+			xmlw.writeEndElement();
+			xmlw.writeEndElement();
+		}
+	}
+
+	private void writeForm(XMLStreamWriter xmlw, NodeRef form) throws XMLStreamException {
 		String evaluator = (String) nodeService.getProperty(form, PROP_FORM_EVALUATOR);
 	    if (evaluator != null) {
-		    xmlw.writeStartElement("config");
-		    xmlw.writeAttribute("evaluator", evaluator);
-		    xmlw.writeAttribute("condition", modelName);
-		    xmlw.writeAttribute("replace", "true");
-
-		    xmlw.writeStartElement("forms");
 		    xmlw.writeStartElement("form");
 
 		    String formId = (String) nodeService.getProperty(form, PROP_FORM_ID);
@@ -440,9 +461,6 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 		    writeFieldsVisibility(xmlw, fields);
 		    writeAppearance(xmlw, fields);
-
-		    xmlw.writeEndElement();
-		    xmlw.writeEndElement();
 
 		    xmlw.writeEndElement();
 	    }
