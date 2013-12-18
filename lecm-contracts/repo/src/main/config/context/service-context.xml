@@ -19,7 +19,7 @@
 -->
 <beans>
 
-    <bean id="contracts.LogicEcmContractsTableStructureBootstrap" parent="dictionaryModelBootstrap"
+    <bean id="contracts.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
           depends-on="contracts.LogicEcmContractsDictionariesBootstrap,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,dictionary.LogicEcmDictionaryCurrencyModelBootstrap">
         <property name="models">
             <list>
@@ -40,7 +40,7 @@
 		  documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap,contracts.LogicEcmContractsTableStructureBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-contracts-aspects-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-aspects-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
@@ -51,11 +51,12 @@
 		</property>
 	</bean>
 
-    <bean id="contracts.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+    <bean id="contracts.LogicEcmContractsBootstrap" parent="modelsToRepositoryLoader"
 		  depends-on="contracts.contractsBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
+
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
 			</list>
 		</property>
@@ -67,7 +68,7 @@
 		</property>
 	</bean>
 
-	<bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="modelsToRepositoryLoader"
 	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
