@@ -105,7 +105,7 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
 }
 
 .datagrid .onActionDeploy a {
-    background-image: url("../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
+    background-image: url("/share/res/images/lecm-reports-editor/deploy-report_16.png");
 }
 
 .datagrid .onActionUnDeploy a {
