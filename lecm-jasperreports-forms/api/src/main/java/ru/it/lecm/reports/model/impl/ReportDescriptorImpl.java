@@ -24,8 +24,6 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     @Override
     public ReportType getReportType() {
-        if (this.reportType == null)
-            this.reportType = new ReportType();
         return this.reportType;
     }
 
@@ -45,15 +43,11 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     @Override
     public ReportTemplate getReportTemplate() {
-        if (this.reportTemplate == null)
-            this.reportTemplate = new ReportTemplate();
         return this.reportTemplate;
     }
 
     @Override
     public ReportProviderDescriptor getProviderDescriptor() {
-        if (this.providerDescriptor == null)
-            this.providerDescriptor = new ReportProviderDescriptor();
         return this.providerDescriptor;
     }
 

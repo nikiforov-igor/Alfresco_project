@@ -598,9 +598,14 @@ h4 .lighter
     clear: both;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field input[type='text']{
+.yui-skin-lecmTheme .yui-panel div.form-field input[type='text'],
+.yui-skin-lecmTheme .yui-panel div.form-field select {
     height: 28px;
     padding: 2px;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field select[multiple='multiple'] {
+    height: 100%;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field input[type='checkbox'] {
     vertical-align: middle;

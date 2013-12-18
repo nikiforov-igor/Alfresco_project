@@ -220,7 +220,7 @@ public class XMLMacroGenerator {
 
             // добавление стандартных функций
             destVars.addVar(VNAME_GUID, new GuidAutoValue());
-            destVars.addVar(VNAME_QUERY, new QueryAutoValue(reportDesc.getFlags() != null ? reportDesc.getFlags().getText() : ""));
+            destVars.addVar(VNAME_QUERY, new QueryAutoValue(reportDesc.getFlags() != null && reportDesc.getFlags().getText() != null ? reportDesc.getFlags().getText() : ""));
         }
     }
 

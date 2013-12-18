@@ -156,7 +156,7 @@
                     },
                     onFailure: {
                         fn: function DataGrid_onActionCreate_failure(response) {
-                            alert(response.json.message);
+                            alert(response.serverResponse.responseText);
                             Alfresco.util.PopupManager.displayMessage(
                                 {
                                     text: this.msg("message.save.failure")

@@ -20,6 +20,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.model.impl.ReportDefaultsDesc;
+import ru.it.lecm.reports.model.impl.ReportDescriptorImpl;
 import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
@@ -645,7 +646,7 @@ public class ReportsManagerImpl implements ReportsManager {
             return;
         }
 
-        checkReportDescData(desc);
+        checkReportDescData(desc, desc instanceof ReportDescriptorImpl);
         if (desc instanceof SubReportDescriptorImpl && desc.getReportType().getMnem() == null) {
             return;
         }
@@ -672,9 +673,20 @@ public class ReportsManagerImpl implements ReportsManager {
      * Выполнить проверку данных.
      * <br/>Поднять исключения при неверном или недостаточном заполнении полей описателя отчёта.
      */
-    private void checkReportDescData(ReportDescriptor desc) {
+    private void checkReportDescData(ReportDescriptor desc, boolean checkTemplate) {
         if (desc.getMnem() == null || desc.getMnem().trim().isEmpty()) {
             throw new RuntimeException(String.format("Report descriptor must have mnemo code"));
+        }
+        if (desc.getProviderDescriptor() == null || desc.getProviderDescriptor().getMnem().trim().isEmpty()) {
+            throw new RuntimeException(String.format("Report descriptor must have Provider! Check report settings!"));
+        }
+        if (checkTemplate) {
+            if (desc.getReportTemplate() == null || desc.getReportTemplate().getFileName() == null) {
+                throw new RuntimeException(String.format("Report must have Representation Template! Please select template from dictionary or create new!"));
+            }
+            if (desc.getReportType() == null || desc.getReportType().getMnem() == null) {
+                throw new RuntimeException(String.format("Report must have Report Type! Please check Representation Template and his Type!"));
+            }
         }
     }
 
@@ -806,6 +818,8 @@ public class ReportsManagerImpl implements ReportsManager {
         if (reportDesc == null) {
             return null;
         }
+
+        checkReportDescData(reportDesc, false);
 
         PropertyCheck.mandatory(this, "templateFileDAO", getTemplateFileDAO());
         PropertyCheck.mandatory(this, "reportDefaults", getReportDefaults());
