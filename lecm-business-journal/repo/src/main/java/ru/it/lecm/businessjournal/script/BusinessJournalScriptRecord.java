@@ -28,7 +28,7 @@ public class BusinessJournalScriptRecord {
     private String recordDescription;
     private boolean isActive;
 
-    private static SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss dd.MM.yyyy");
+    private static SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy");
 
     public BusinessJournalScriptRecord(Long nodeId, Date date, ScriptNode initiator, ScriptNode mainObject, ScriptNode objectType, String mainObjectDescription, String recordDescription, ScriptNode eventCategory, List<RecordObject> objects, boolean isActive) {
         this.nodeId = nodeId;
