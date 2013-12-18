@@ -2025,7 +2025,8 @@ div.object-finder .picker-items .addIcon {
     background: transparent url(images/add-item.png) no-repeat center center;
 }
 
-div.object-finder .association-auto-complete-selected-item {
+div.object-finder .association-auto-complete-selected-item,
+div.object-finder .association-auto-complete-selected-item-even {
     position: relative;
 }
 
@@ -2037,7 +2038,7 @@ div.object-finder .association-auto-complete-selected-item-even .employee-unavai
     height: 16px;
     margin-left: 5px;
     position: absolute;
-	margin-top: 3px;
+	top: 6px;
 }
 
 div.object-finder .association-auto-complete-selected-item .employee-available,
@@ -2045,7 +2046,8 @@ div.object-finder .association-auto-complete-selected-item-even .employee-availa
     background: url(images/employee-available.png) no-repeat;
 }
 
-div.object-finder .association-auto-complete-selected-item .employee-unavailable {
+div.object-finder .association-auto-complete-selected-item .employee-unavailable,
+div.object-finder .association-auto-complete-selected-item-event .employee-unavailable {
     background: url(images/employee-unavailable.png) no-repeat;
 }
 
