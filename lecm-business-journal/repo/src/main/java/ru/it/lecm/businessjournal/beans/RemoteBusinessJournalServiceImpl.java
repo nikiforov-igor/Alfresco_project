@@ -203,7 +203,13 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
         List<BusinessJournalRecord> result = new ArrayList<BusinessJournalRecord>();
         try {
             Long id = (Long) nodeService.getProperty(nodeRef, ContentModel.PROP_NODE_DBID);
-            Field sortField = Field.valueOf(BusinessJournalRecord.Field.fromFieldName(sortColumnLocalName).name());
+            Field sortField = null;
+            try {
+                sortField = Field.valueOf(BusinessJournalRecord.Field.fromFieldName(sortColumnLocalName).name());
+            } catch (IllegalArgumentException e) {
+                sortField = Field.DATE;
+                sortAscending = false;
+            }
             result = unpack(remoteService.getHistory(id, sortField, sortAscending, includeSecondary, showInactive));
         } catch (Exception e) {
             logger.error("Cannot execute getHistory because: ", e);

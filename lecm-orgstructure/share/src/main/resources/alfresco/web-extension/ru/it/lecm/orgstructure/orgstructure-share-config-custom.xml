@@ -103,7 +103,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeDelegatedBusinessRoles</control-param>
                         </control>
                     </field>
-                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory">
+                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory" label-id="label.history-control">
                         <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
                     </field>
 					<field id="employee-schedule" set="employeeSchedule">
