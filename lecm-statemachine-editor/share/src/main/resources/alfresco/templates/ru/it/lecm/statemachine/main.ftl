@@ -40,6 +40,7 @@
     <@script type="text/javascript" src="${url.context}/yui/layout/layout.js"></@script>
 
     <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/main.js"></script>
+    <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/menu.js"></script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/editor.css">
 
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/menu.css" />

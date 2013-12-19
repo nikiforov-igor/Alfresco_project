@@ -1,3 +1,4 @@
+<#include "/org/alfresco/components/form/form.get.head.ftl">
 <#if !page.url.args.statemachineId??>
 <br/>
 <#list machines as machine>
