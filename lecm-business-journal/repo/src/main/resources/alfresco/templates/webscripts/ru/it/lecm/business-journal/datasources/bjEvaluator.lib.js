@@ -256,8 +256,8 @@ var BJEvaluator =
 
             } else if (fields[k] == "lecm-busjournal:bjRecord-objType-assoc") {
                 var type = "lecm-busjournal:objectType";
-                var value = record.getObjectType().nodeRef.toString();
-                var displayValue = record.getObjectType().properties["cm:name"];
+                var value = record.getObjectTypeText();
+                var displayValue = record.getObjectTypeText();
 
                 var objData = {
                     type: type,
@@ -270,8 +270,8 @@ var BJEvaluator =
 
             } else if (fields[k] == "lecm-busjournal:bjRecord-evCategory-assoc") {
                 var type = "lecm-busjournal:eventCategory";
-                var value = record.getEventCategory().nodeRef.toString();
-                var displayValue = record.getEventCategory().properties["cm:name"];
+                var value = record.getEventCategoryText();
+                var displayValue = record.getEventCategoryText();
 
                 var objData = {
                     type: type,

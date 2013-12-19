@@ -55,15 +55,15 @@ public class BusinessJournalRecord implements Serializable {
     private Long nodeId;
     private Date date;
     private NodeRef initiator;
-    private String initiatorText;
+    private String initiatorText = "";
     private NodeRef mainObject;
-    private String mainObjectDescription;
+    private String mainObjectDescription = "";
     private NodeRef objectType;
-    private String objectTypeText;
+    private String objectTypeText = "";
     private NodeRef eventCategory;
-    private String eventCategoryText;
+    private String eventCategoryText = "";
     private List<RecordObject> objects;
-    private String recordDescription;
+    private String recordDescription = "";
     private boolean isActive = true;
 
     public BusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, NodeRef objectType, String mainObjectDescription, String recordDescription, NodeRef eventCategory, List<RecordObject> objects, boolean isActive) {
