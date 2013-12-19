@@ -102,12 +102,6 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
 	</query.descriptor>
 
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-		<password>111</password>
-	</cmis.connection>
-
 	<!-- отображаемые значения для кодов для 
 		 результат согласования документа = "lecm-al:approval-list-decision"
 		 locale="RU_RU"

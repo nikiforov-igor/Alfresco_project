@@ -207,8 +207,7 @@
 	<!-- 
 			Менеджер шаблонов отчёта
 	  -->
-	<bean id="reportsManager"
-			class="ru.it.lecm.reports.beans.ReportsManagerImpl"
+	<bean id="reportsManager" class="ru.it.lecm.reports.api.ReportsManager"
 	 		depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator"
 	 		init-method="init">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>

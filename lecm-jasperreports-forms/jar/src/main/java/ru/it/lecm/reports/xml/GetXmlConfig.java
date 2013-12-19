@@ -7,7 +7,6 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.beans.ReportsManagerImpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -54,7 +53,7 @@ public class GetXmlConfig extends AbstractWebScript {
         }
     }
 
-    public void setReportsManager(ReportsManagerImpl reportsManager) {
+    public void setReportsManager(ReportsManager reportsManager) {
         this.reportsManager = reportsManager;
     }
 }

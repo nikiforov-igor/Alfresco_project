@@ -101,9 +101,6 @@ public class ReportMainProducer extends AbstractWebScript {
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
 
         final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
-        if (log.isInfoEnabled()) {
-            logParameters(requestParameters, String.format("Processing report '%s' with args: \n", reportName));
-        }
 
 		/* Вариант "права побоку": построение от имени системы */
         //TODO дыра в системе. По какой-то причине было сделано, чтобы документы попадали в отчет без проверки прав

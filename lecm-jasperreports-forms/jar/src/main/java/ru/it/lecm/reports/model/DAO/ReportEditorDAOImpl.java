@@ -9,9 +9,9 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
-import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.*;
@@ -31,13 +31,13 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     private static final transient Logger log = LoggerFactory.getLogger(ReportEditorDAOImpl.class);
 
     private WKServiceKeeper services;
-    private ReportsManagerImpl reportsManager;
+    private ReportsManager reportsManager;
 
     public WKServiceKeeper getServices() {
         return services;
     }
 
-    public void setReportsManager(ReportsManagerImpl reportsManager) {
+    public void setReportsManager(ReportsManager reportsManager) {
         this.reportsManager = reportsManager;
     }
 

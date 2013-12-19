@@ -42,12 +42,6 @@
 		<queryText><![CDATA[]]></queryText>
 	</query.descriptor>
 
-	<cmis.connection>
-		<url>http://localhost:8080/alfresco/service/cmis</url>
-		<username>admin</username>
-		<password>111</password>
-	</cmis.connection>
-
 	<fields>
 		<!-- Инициатор договора == Автор "lecm-orgstr:employee" -->
 		<field jrFldName="col_Initiator" queryFldName="{{@AUTHOR/lecm-orgstr:employee-short-name}}" displayName="Инициатор" />

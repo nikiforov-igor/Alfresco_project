@@ -14,8 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.URLDecoder;
 
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
-import ru.it.lecm.reports.beans.ReportsManagerImpl;
 import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -92,7 +92,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * используемое значения, когда исходное NULL
      */
     private static final String DEFAULT_NULL_FMT = MACRO_FNAME; // для формата - использовать только название файла
-    private static final String EMPTY_REPORT_TYPE_DIR = ReportsManagerImpl.DEFAULT_REPORT_TYPE; // для пустого типа отчёта
+    private static final String EMPTY_REPORT_TYPE_DIR = ReportsManager.DEFAULT_REPORT_TYPE; // для пустого типа отчёта
     private static final String EMPTY_REPORT_MNEM_DIR = "default"; // для пустой мнемоники (кода) отчёта
 
     private static final transient Logger logger = LoggerFactory.getLogger(FileReportContentDAOBean.class);
@@ -220,7 +220,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
     }
 
     public File makeAbsFilePath(final ReportType rtype, final String mnem, final String fileName) {
-        final String stype = Utils.nonblank((rtype == null) ? ReportsManagerImpl.DEFAULT_REPORT_TYPE : rtype.getMnem(), EMPTY_REPORT_TYPE_DIR);
+        final String stype = Utils.nonblank((rtype == null) ? ReportsManager.DEFAULT_REPORT_TYPE : rtype.getMnem(), EMPTY_REPORT_TYPE_DIR);
         final String smnem = Utils.nonblank(mnem, EMPTY_REPORT_MNEM_DIR);
         final String sname = Utils.nonblank(fileName, "");
 

@@ -228,19 +228,15 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
         }
 
         final String[] simpleNodeTags = srcChildNodeTag.split("/");
-        if (simpleNodeTags == null || simpleNodeTags.length == 0) {
+        if (simpleNodeTags.length == 0) {
             return null;
         }
 
         Object result = null;
         Node curNode = parentNode;
-        for (int i = 0; i < simpleNodeTags.length; i++) {
-            curNode = XmlHelper.findNodeByAttr(curNode, simpleNodeTags[i], null, null);
+        for (String simpleNodeTag : simpleNodeTags) {
+            curNode = XmlHelper.findNodeByAttr(curNode, simpleNodeTag, null, null);
             if (curNode == null) {
-                logger.warn(String.format("XML node '%s' did not contain items deeper than '%s' for full path '%s' -> got as NULL"
-                        , curNode, concat(simpleNodeTags, i)
-                        , concat(simpleNodeTags, simpleNodeTags.length)
-                ));
                 return null;
             }
         }
