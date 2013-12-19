@@ -65,21 +65,11 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
             @Override
             public NodeRef execute() throws Throwable {
-                final NodeRef objectType = getObjectType(record.getMainObject());
+                final NodeRef objectType = record.getObjectType();
 
-                String type;
-                if (objectType != null) {
-                    type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
-                } else {
-                    type = nodeService.getType(record.getMainObject()).getPrefixString().replace(":", "_");
-                }
+                String type = record.getObjectTypeText();
 
-                String category;
-                if (record.getEventCategory() != null) {
-                    category = (String) nodeService.getProperty(record.getEventCategory(), ContentModel.PROP_NAME);
-                } else {
-                    category = "unknown";
-                }
+                String category = record.getEventCategoryText();
 
                 final NodeRef saveDirectoryRef = getSaveFolder(type, category, record.getDate());
 
@@ -101,18 +91,18 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                 NodeRef result = associationRef.getChildRef();
 
                 // создаем ассоциации
-                if (record.getInitiator() != null) {
+                if (record.getInitiator() != null && nodeService.exists(record.getInitiator())) {
                     nodeService.createAssociation(result, record.getInitiator(), ASSOC_BR_RECORD_INITIATOR);
                 }
-                if (record.getMainObject() != null) {
+                if (record.getMainObject() != null && nodeService.exists(record.getMainObject())) {
                     nodeService.createAssociation(result, record.getMainObject(), ASSOC_BR_RECORD_MAIN_OBJ);
                 }
 
                 // необязательные
-                if (record.getEventCategory() != null) {
+                if (record.getEventCategory() != null && nodeService.exists(record.getEventCategory())) {
                     nodeService.createAssociation(result, record.getEventCategory(), ASSOC_BR_RECORD_EVENT_CAT);
                 }
-                if (objectType != null) {
+                if (objectType != null && nodeService.exists(record.getObjectType())) {
                     nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
                 }
 
@@ -654,14 +644,26 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
 
             String initiatorText = (String) nodeService.getProperty(ref, PROP_BR_RECORD_INITIATOR);
 
-            NodeRef category = new NodeRef((String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-ref")));
+            String categoryRef = (String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-ref"));
+            NodeRef category = null;
+            String categoryText = "";
+            if (NodeRef.isNodeRef(categoryRef)) {
+                category = new NodeRef(categoryRef);
+                categoryText = nodeService.getProperty(category, ContentModel.PROP_NAME).toString();
+            }
 
-            NodeRef mainObject = new NodeRef((String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc-ref")));
+            String mainObjectRef = (String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc-ref"));
+            NodeRef mainObject = null;
+            if (NodeRef.isNodeRef(mainObjectRef)) {
+                mainObject = new NodeRef(categoryRef);
+            }
 
             List<AssociationRef> types = nodeService.getTargetAssocs(ref, ASSOC_BR_RECORD_OBJ_TYPE);
             NodeRef objType = null;
+            String typeText = "";
             if (types.size() > 0) {
                 objType = types.get(0).getTargetRef();
+                typeText = nodeService.getProperty(objType, ContentModel.PROP_NAME).toString();
             }
 
             ArrayList<RecordObject> objects = new ArrayList<RecordObject>();
@@ -674,6 +676,8 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
             Boolean isActive = (Boolean) nodeService.getProperty(ref, IS_ACTIVE);
             BusinessJournalRecord record = new BusinessJournalRecord(nodeId, date, initiator, mainObject, objType, mainObjectDescription, filledDescription, category, objects, isActive);
             record.setInitiatorText(initiatorText);
+            record.setEventCategoryText(categoryText);
+            record.setObjectTypeText(typeText);
             return record;
         } catch (Exception e) {
             logger.error("Error while BJ record with NodeRef=" + ref + " initializing", e);

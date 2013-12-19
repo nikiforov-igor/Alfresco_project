@@ -221,7 +221,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                     record.getNodeId(),
                     record.getDate(),
                     record.getInitiator() != null ? new ScriptNode(record.getInitiator(), serviceRegistry, getScope()) : null,
-                    new ScriptNode(record.getMainObject(), serviceRegistry, getScope()),
+                    record.getMainObject() != null ? new ScriptNode(record.getMainObject(), serviceRegistry, getScope()) : null,
                     record.getObjectType() != null ? new ScriptNode(record.getObjectType(), serviceRegistry, getScope()) : null,
                     record.getMainObjectDescription(),
                     record.getRecordDescription(),

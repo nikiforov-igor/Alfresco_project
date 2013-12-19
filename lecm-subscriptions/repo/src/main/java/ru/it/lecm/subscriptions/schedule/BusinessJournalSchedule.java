@@ -220,7 +220,7 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
         subscriptions.addAll(findSubscriptionsToInitiator(initiator));
 
         //При подписке на сотрудника и рабочую группу в нее должны попадать не те записи Б-Ж, в которых данный сотрудник является основным объектом, а те, в которых он является инициатором
-        if (nodeService.exists(mainObject) && !this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
+        if (mainObject != null && nodeService.exists(mainObject) && !this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
             //добавляем подписки на объект
             subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
         }

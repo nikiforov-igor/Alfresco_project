@@ -11,7 +11,7 @@ var result = {
     initiator: record.getInitiatorText(),
     initiatorRef: record.getInitiator()!= null ? record.getInitiator().nodeRef : null,
     mainObject: record.getMainObjectDescription(),
-    mainObjectRef: record.getMainObject().nodeRef,
+    mainObjectRef: record.getMainObject() != null ? record.getMainObject().nodeRef : null,
     object1: record.getObject1(),
     object2: record.getObject2(),
     object3: record.getObject3(),
