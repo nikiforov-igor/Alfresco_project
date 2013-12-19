@@ -33,4 +33,12 @@ public class SubstitudeWebScriptBean extends BaseWebScript {
         return createScriptable(results);
     }
 
+	public String getObjectDescription(String nodeRef) {
+		return service.getObjectDescription(new NodeRef(nodeRef));
+	}
+
+	public String getObjectDescription(ScriptNode node) {
+		return service.getObjectDescription(node.getNodeRef());
+	}
+
 }

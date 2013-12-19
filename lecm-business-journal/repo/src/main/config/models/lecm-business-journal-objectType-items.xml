@@ -34,7 +34,7 @@
                 <property name="cm:name">Сотрудник</property>
                 <property name="lecm-busjournal:objectType-code">EMPLOYEE</property>
                 <property name="lecm-busjournal:objectType-class">lecm-orgstr:employee</property>
-                <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-orgstr:employee-short-name}</property>
                 <property name="lecm-busjournal:objectType-list-template">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</property>
             </item>
             <item name="cm:Должностная позиция" type="lecm-busjournal:objectType">
