@@ -222,6 +222,8 @@
         <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
 
         <property name="repositoryMessagesLocation" ref="customMessagesRepositoryLocation"/>
+
+        <property name="useDefaultModels" value="${lecm.models.useDefaultModels}"/>
     </bean>
 
     <bean id="listOfUsedTypes" class="ru.it.lecm.base.ListOfUsedTypesBean">

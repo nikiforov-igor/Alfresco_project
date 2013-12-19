@@ -32,6 +32,8 @@ import java.util.Map;
 public class ModelToRepositoryLoader implements DictionaryListener {
 
     private static final Logger logger = LoggerFactory.getLogger(ModelToRepositoryLoader.class);
+
+    private boolean useDefaultModels = false;
     private List<String> models = new ArrayList<String>();
     private List<String> messages = new ArrayList<String>();
 
@@ -55,6 +57,11 @@ public class ModelToRepositoryLoader implements DictionaryListener {
 
     private BehaviourFilter behaviourFilter;
     private DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap;
+    private boolean firstRun = true;
+
+    public void setUseDefaultModels(String useDefaultModels) {
+        this.useDefaultModels = Boolean.valueOf(useDefaultModels);
+    }
 
     public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
         this.behaviourFilter = behaviourFilter;
@@ -150,7 +157,7 @@ public class ModelToRepositoryLoader implements DictionaryListener {
                                 final String name = model.getName().replace(":", "_");
                                 final NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
                                 dictionaryRepositoryBootstrap.onDictionaryInit();   //внесено внутрь цикла для правильного распознавания зависимых моделей
-                                if (node == null) {
+                                if (node == null || (firstRun && useDefaultModels)) {
                                     dictionaryDAO.putModel(model);
                                     transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
                                         public Object execute() throws Exception {
@@ -160,10 +167,46 @@ public class ModelToRepositoryLoader implements DictionaryListener {
                                                 Map<QName, Serializable> props = new HashMap<QName, Serializable>();
                                                 props.put(ContentModel.PROP_NAME, name);
 
-                                                NodeRef newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
-                                                ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
-                                                contentWriter.putContent(contentInputStream);
-                                                nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
+                                                NodeRef newNode = null;
+                                                boolean update = false;
+                                                if (node == null) {
+                                                    newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
+                                                    update = true;
+                                                } else {
+                                                    newNode = node;
+                                                    InputStream oldContentInputStream = null;
+                                                    try {
+                                                        ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
+                                                        oldContentInputStream = oldContentReader.getContentInputStream();
+                                                        //сравниваем с имеющейся моделью
+                                                        while (!update) {
+                                                            int newByte = contentInputStream.read();
+                                                            int oldByte = oldContentInputStream.read();
+                                                            update = newByte != oldByte;
+                                                            if (newByte == -1 || oldByte == -1) {
+                                                                break;
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        contentInputStream.reset();
+                                                        try {
+                                                            if (oldContentInputStream != null) {
+                                                                oldContentInputStream.close();
+                                                            }
+                                                        } catch (IOException ioe) {
+                                                            logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
+                                                        }
+                                                    }
+                                                }
+                                                //не обновляем, если нет изменений
+                                                if (update) {
+                                                    ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
+                                                    contentWriter.putContent(contentInputStream);
+                                                    nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
+                                                    if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
+                                                        nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
+                                                    }
+                                                }
                                             } finally {
                                                 try {
                                                     if (contentInputStream != null) {
@@ -195,6 +238,7 @@ public class ModelToRepositoryLoader implements DictionaryListener {
                 return null;
             }
         });
+        firstRun = false;
     }
 
     public void afterDictionaryDestroy() {
