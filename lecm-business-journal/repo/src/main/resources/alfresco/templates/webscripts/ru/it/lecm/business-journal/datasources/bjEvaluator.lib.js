@@ -283,7 +283,10 @@ var BJEvaluator =
                 nodeData[key] = objData;
             } else if (fields[k] == "lecm-busjournal:bjRecord-mainObject-assoc") {
                 var type = "cm:cmobject";
-                var value = record.getMainObject().nodeRef.toString();
+	            var value = "";
+	            if (record.getMainObject().exists()) {
+                    value = record.getMainObject().nodeRef.toString();
+	            }
                 var displayValue = record.getMainObjectDescription();
 
                 var objData = {

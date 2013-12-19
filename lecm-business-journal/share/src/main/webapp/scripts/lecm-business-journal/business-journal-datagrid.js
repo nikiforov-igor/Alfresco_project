@@ -172,10 +172,17 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
             return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
         },
         getDicValueView: function DataGrid_getDicitonaryValueView(nodeRef, displayValue) {
-            if (displayValue.length == 0) {
-                return "";
-            }
-            return "<span><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + nodeRef + "\')\">" + displayValue + "</a></span>";
+            var result = "";
+	        if (displayValue.length > 0) {
+		        result = "<span>";
+	            if (nodeRef != null && nodeRef.length > 0) {
+		            result += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + nodeRef + "\')\">" + displayValue + "</a>";
+		        } else {
+		            result += displayValue;
+	            }
+		        result += "</span>";
+	        }
+            return result;
         },
         getEmployeeView: function DataGrid_getEmployeeView(employeeNodeRef, displayValue) {
             if (displayValue.length == 0 || employeeNodeRef == null || employeeNodeRef.indexOf("://") < 0) {
