@@ -58,6 +58,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="documentService" ref="documentService"/>
+		<property name="lecmModelsService" ref="lecmModelsService"/>
 	</bean>
 
 	<bean id="modelListScript" parent="baseScript"

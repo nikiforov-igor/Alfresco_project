@@ -51,6 +51,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel(), width: 15, maxAutoWidth: 15},
 				{key: "edit-form", label: "", sortable: false, formatter: this._formatEditForm(), width: 15, maxAutoWidth: 15},
 				{key: "edit-statemachine", label: "", sortable: false, formatter: this._formatEditStatemachine(), width: 15, maxAutoWidth: 15},
+				{key: "restore-model", label: "", sortable: false, formatter: this._formatRestoreModel(), width: 15, maxAutoWidth: 15},
 				{key: "delete", label: "", sortable: false, formatter: this._formatDelete(), width: 15, maxAutoWidth: 15}
 			];
 
@@ -110,6 +111,22 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 					editModelLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-model-edit?" + formIdParam + "&nodeRef=" + oRecord.getData("nodeRef") + "&redirect=" + Alfresco.constants.URL_PAGECONTEXT + "doc-model-list";
 					el.appendChild(editModelLink);
+				}
+			};
+		},
+
+		_formatRestoreModel: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				if (oRecord.getData("isRestorable")) {
+					var restoreModelLink = document.createElement("a");
+					restoreModelLink.title = scope.msg("title.model.restore");
+					Dom.addClass(restoreModelLink, "restore-model");
+					restoreModelLink.innerHTML = "&nbsp;";
+
+					restoreModelLink.href = Alfresco.constants.PROXY_URI + "lecm/models/restore?modelName=" + oRecord.getData("modelName");
+					el.appendChild(restoreModelLink);
 				}
 			};
 		},

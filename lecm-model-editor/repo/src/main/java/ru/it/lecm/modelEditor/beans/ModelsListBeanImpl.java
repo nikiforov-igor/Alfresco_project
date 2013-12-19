@@ -16,10 +16,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmModelsService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: AIvkin
@@ -32,6 +36,7 @@ public class ModelsListBeanImpl extends BaseBean {
 	private ContentService contentService;
 	private NamespaceService namespaceService;
 	private DocumentService documentService;
+	private LecmModelsService lecmModelsService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
@@ -53,7 +58,11 @@ public class ModelsListBeanImpl extends BaseBean {
 		this.documentService = documentService;
 	}
 
-	@Override
+    public void setLecmModelsService(LecmModelsService lecmModelsService) {
+        this.lecmModelsService = lecmModelsService;
+    }
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
@@ -104,6 +113,8 @@ public class ModelsListBeanImpl extends BaseBean {
 						object.put("description", type.getDescription());
 						object.put("isActive", true);
 						object.put("isDocument", true);
+						object.put("modelName", type.getModel().getName().toPrefixString());
+						object.put("isRestorable", lecmModelsService.isRestorable(type.getModel().getName().toPrefixString()));
 
 						models.put(modelName, object);
 					}
@@ -147,6 +158,8 @@ public class ModelsListBeanImpl extends BaseBean {
 										} else {
 											object.put("isDocument", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(m2Type.getParentName()));
 										}
+                                        object.put("modelName", model.getName());
+                                        object.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
 
 										models.put(modelName, object);
 									}

@@ -1,28 +1,22 @@
 package ru.it.lecm.base.beans;
 
-import org.alfresco.model.ContentModel;
-import org.alfresco.repo.dictionary.*;
+import org.alfresco.repo.dictionary.DictionaryDAO;
+import org.alfresco.repo.dictionary.DictionaryListener;
+import org.alfresco.repo.dictionary.DictionaryRepositoryBootstrap;
+import org.alfresco.repo.dictionary.RepositoryLocation;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.tenant.TenantAdminService;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.cmr.dictionary.DictionaryException;
-import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.namespace.QName;
-import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Размещает модели данных в репозитории, где они впоследствии подхватываются альфреской
@@ -56,11 +50,19 @@ public class ModelToRepositoryLoader implements DictionaryListener {
     private TransactionService transactionService;
 
     private BehaviourFilter behaviourFilter;
+
     private DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap;
+
+    private LecmModelsService lecmModelsService;
+
     private boolean firstRun = true;
 
     public void setUseDefaultModels(String useDefaultModels) {
         this.useDefaultModels = Boolean.valueOf(useDefaultModels);
+    }
+
+    public void setLecmModelsService(LecmModelsService lecmModelsService) {
+        this.lecmModelsService = lecmModelsService;
     }
 
     public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
@@ -103,6 +105,10 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         this.transactionService = transactionService;
     }
 
+    public void setDictionaryRepositoryBootstrap(DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap) {
+        this.dictionaryRepositoryBootstrap = dictionaryRepositoryBootstrap;
+    }
+
     public void setModels(List<String> models) {
         this.models = models;
     }
@@ -134,106 +140,12 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         if (repositoryModelsLocation == null) {
             return;
         }
-        NodeRef root = nodeService.getRootNode(repositoryModelsLocation.getStoreRef());
-        final NodeRef modelsRoot = resolveQNamePath(root, repositoryModelsLocation.getPathElements());
-        if (modelsRoot == null) {
-            return;
-        }
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
-
                 // регистрируем модели
                 for (final String bootstrapModel : models) {
-                    try {
-                        InputStream modelStream = null;
-                        try {
-                            modelStream = getClass().getClassLoader().getResourceAsStream(bootstrapModel);
-                            if (modelStream == null) {
-                                throw new DictionaryException("Could not find bootstrap model " + bootstrapModel);
-                            }
-                            final M2Model model = M2Model.createModel(modelStream);
-                            if (model.getTypes() != null && !model.getTypes().isEmpty()) {
-                                final String name = model.getName().replace(":", "_");
-                                final NodeRef node = nodeService.getChildByName(modelsRoot, ContentModel.ASSOC_CONTAINS, name);
-                                dictionaryRepositoryBootstrap.onDictionaryInit();   //внесено внутрь цикла для правильного распознавания зависимых моделей
-                                if (node == null || (firstRun && useDefaultModels)) {
-                                    dictionaryDAO.putModel(model);
-                                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                                        public Object execute() throws Exception {
-                                            InputStream contentInputStream = null;
-                                            try {
-                                                contentInputStream = getClass().getClassLoader().getResourceAsStream(bootstrapModel);
-                                                Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-                                                props.put(ContentModel.PROP_NAME, name);
-
-                                                NodeRef newNode = null;
-                                                boolean update = false;
-                                                if (node == null) {
-                                                    newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
-                                                    update = true;
-                                                } else {
-                                                    newNode = node;
-                                                    InputStream oldContentInputStream = null;
-                                                    try {
-                                                        ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
-                                                        oldContentInputStream = oldContentReader.getContentInputStream();
-                                                        //сравниваем с имеющейся моделью
-                                                        while (!update) {
-                                                            int newByte = contentInputStream.read();
-                                                            int oldByte = oldContentInputStream.read();
-                                                            update = newByte != oldByte;
-                                                            if (newByte == -1 || oldByte == -1) {
-                                                                break;
-                                                            }
-                                                        }
-                                                    } finally {
-                                                        contentInputStream.reset();
-                                                        try {
-                                                            if (oldContentInputStream != null) {
-                                                                oldContentInputStream.close();
-                                                            }
-                                                        } catch (IOException ioe) {
-                                                            logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
-                                                        }
-                                                    }
-                                                }
-                                                //не обновляем, если нет изменений
-                                                if (update) {
-                                                    ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
-                                                    contentWriter.putContent(contentInputStream);
-                                                    nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
-                                                    if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
-                                                        nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
-                                                    }
-                                                }
-                                            } finally {
-                                                try {
-                                                    if (contentInputStream != null) {
-                                                        contentInputStream.close();
-                                                    }
-                                                } catch (IOException ioe) {
-                                                    logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
-                                                }
-                                            }
-                                            return null;
-                                        }
-                                    }
-                                            , false, false);
-                                }
-                            }
-                        } finally {
-                            try {
-                                if (modelStream != null) {
-                                    modelStream.close();
-                                }
-                            } catch (IOException ioe) {
-                                logger.warn("Failed to close model input stream for '" + bootstrapModel + "': " + ioe);
-                            }
-                        }
-                    } catch (DictionaryException e) {
-                        throw new DictionaryException("Could not import bootstrap model " + bootstrapModel, e);
-                    }
+                    lecmModelsService.loadModelFromLocation(bootstrapModel, firstRun && useDefaultModels);
                 }
                 return null;
             }
@@ -253,37 +165,5 @@ public class ModelToRepositoryLoader implements DictionaryListener {
 
     }
 
-    protected NodeRef resolveQNamePath(NodeRef rootNodeRef, String[] pathPrefixQNameStrings) {
-        if (pathPrefixQNameStrings.length == 0) {
-            throw new IllegalArgumentException("Path array is empty");
-        }
-        // walk the path
-        NodeRef parentNodeRef = rootNodeRef;
-        for (String pathPrefixQNameString : pathPrefixQNameStrings) {
-            QName pathQName;
-            if (tenantAdminService.isEnabled()) {
-                String[] parts = QName.splitPrefixedQName(pathPrefixQNameString);
-                if ((parts.length == 2) && (parts[0].equals(NamespaceService.APP_MODEL_PREFIX))) {
-                    String pathUriQNameString = String.valueOf(QName.NAMESPACE_BEGIN) + NamespaceService.APP_MODEL_1_0_URI + QName.NAMESPACE_END + parts[1];
 
-                    pathQName = QName.createQName(pathUriQNameString);
-                } else {
-                    pathQName = QName.createQName(pathPrefixQNameString, namespaceService);
-                }
-            } else {
-                pathQName = QName.createQName(pathPrefixQNameString, namespaceService);
-            }
-
-            List<ChildAssociationRef> childAssocRefs = nodeService.getChildAssocs(parentNodeRef, RegexQNamePattern.MATCH_ALL, pathQName);
-            if (childAssocRefs.size() != 1) {
-                return null;
-            }
-            parentNodeRef = childAssocRefs.get(0).getChildRef();
-        }
-        return parentNodeRef;
-    }
-
-    public void setDictionaryRepositoryBootstrap(DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap) {
-        this.dictionaryRepositoryBootstrap = dictionaryRepositoryBootstrap;
-    }
 }

@@ -193,6 +193,13 @@
 		</property>
 	</bean>
 
+	<bean id="webscript.ru.it.lecm.models.restore.get"
+	      class="ru.it.lecm.base.scripts.RestoreModel"
+	      parent="webscript"
+		  depends-on="substitudeService">
+		<property name="lecmModelsService" ref="lecmModelsService"/>
+	</bean>
+
 	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="dictionaryBootstrap">
 		<property name="models">
@@ -207,8 +214,21 @@
 		</property>
 	</bean>
 
+    <bean id="lecmModelsService" class="ru.it.lecm.base.beans.LecmModelsService"
+          depends-on="dictionaryBootstrap">
+        <property name="dictionaryDAO" ref="dictionaryDAO"/>
+        <property name="contentService" ref="ContentService"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="tenantAdminService" ref="tenantAdminService"/>
+        <property name="dictionaryRepositoryBootstrap" ref="dictionaryRepositoryBootstrap"/>
+
+        <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
+    </bean>
+
     <bean id="modelsToRepositoryLoader" class="ru.it.lecm.base.beans.ModelToRepositoryLoader" abstract="true"
-            init-method="init" depends-on="dictionaryBootstrap">
+            init-method="init">
         <property name="dictionaryDAO" ref="dictionaryDAO"/>
         <property name="contentService" ref="ContentService"/>
         <property name="transactionService" ref="transactionService"/>
@@ -222,6 +242,8 @@
         <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
 
         <property name="repositoryMessagesLocation" ref="customMessagesRepositoryLocation"/>
+
+        <property name="lecmModelsService" ref="lecmModelsService"/>
 
         <property name="useDefaultModels" value="${lecm.models.useDefaultModels}"/>
     </bean>
