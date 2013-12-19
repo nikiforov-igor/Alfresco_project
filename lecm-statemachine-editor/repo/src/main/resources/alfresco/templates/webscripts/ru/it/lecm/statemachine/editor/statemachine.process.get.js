@@ -5,6 +5,14 @@ if (statemachineId != null && statemachineId != '') {
 	var machinesFolder = lecmRepository.getHomeRef().childByNamePath("statemachines");
 	if (machinesFolder == null) {
 		machinesFolder = lecmRepository.getHomeRef().createNode("statemachines", "cm:folder", "cm:contains");
+        var typesFolder = machinesFolder.createNode("types", "cm:folder", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:userTransition", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:transitionWorkflow", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:transitionForm", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:transitionFormTrans", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:UserWorkflowEntity", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:StartWorkflowEntity", "cm:contains");
+        typesFolder.createNode(null, "lecm-stmeditor:ScriptActionEntity", "cm:contains");
 	}
 
     machinesFolder.setInheritsPermissions(false);
