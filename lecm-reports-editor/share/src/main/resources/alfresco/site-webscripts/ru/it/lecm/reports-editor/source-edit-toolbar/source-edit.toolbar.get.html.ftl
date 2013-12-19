@@ -65,8 +65,6 @@
     function initEditToolbar() {
         var toolbar = new LogicECM.module.ReportsEditor.EditSourceToolbar("${id}").setMessages(${messages});
         toolbar.setReportId("${page.url.args.reportId}");
-        toolbar.setDataSourceId("${activeSourceId!""}");
-        toolbar.markAsNewSource(!${existInRepo?string});
     }
 
     YAHOO.util.Event.onDOMReady(initEditToolbar);

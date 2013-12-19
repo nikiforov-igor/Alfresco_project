@@ -26,15 +26,9 @@
 
         toolbarButtons: {},
 
-        isNewTemplate: false,
-
         items: [],
 
         doubleClickLock: false,
-
-        markAsNewTemplate: function (isNew) {
-            this.isNewTemplate = isNew;
-        },
 
         setReportId: function (reportId) {
             this.reportId = reportId;
@@ -182,7 +176,7 @@
 
             this.toolbarButtons.newTemplateSaveButton = Alfresco.util.createYUIButton(this, 'newTemplateSaveButton', this._onCopyToRepository,
                 {
-                    disabled: !this.templateId || !this.isNewTemplate
+                    disabled: !this.templateId
                 }, this.id + "-toolbar-newTemplateSaveButton");
 
             // Export Template

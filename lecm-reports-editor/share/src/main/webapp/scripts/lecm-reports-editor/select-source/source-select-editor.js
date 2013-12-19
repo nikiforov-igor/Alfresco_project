@@ -17,7 +17,6 @@
 
     YAHOO.extend(LogicECM.module.ReportsEditor.SelectSourceEditor, Alfresco.component.Base, {
         dataSourceId: null,
-        isNewSource: false,
 
         reportId: null,
 
@@ -30,10 +29,6 @@
         },
 
         groupActions: {},
-
-        markAsNewSource: function (isNew) {
-            this.isNewSource = isNew;
-        },
 
         setDataSourceId: function (dataSourceId) {
             if (dataSourceId && dataSourceId.length > 0) {

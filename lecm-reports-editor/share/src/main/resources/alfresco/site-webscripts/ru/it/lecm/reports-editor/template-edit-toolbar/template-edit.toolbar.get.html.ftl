@@ -42,7 +42,6 @@ function initEditor() {
     reportsEditor.setReportId("${page.url.args.reportId}");
     reportsEditor.setTemplateId("${activeTemplateId!""}");
     reportsEditor.setMessages(${messages});
-    reportsEditor.markAsNewTemplate(!${existInRepo?string});
 }
 YAHOO.util.Event.onDOMReady(initEditor);
 </script>

@@ -143,7 +143,6 @@
             editor.setReportId("${reportId}");
         </#if>
         editor.setDataSourceId("${activeSourceId!""}");
-        editor.markAsNewSource(!${existInRepo?string});
     }
 
     YAHOO.util.Event.onDOMReady(init);

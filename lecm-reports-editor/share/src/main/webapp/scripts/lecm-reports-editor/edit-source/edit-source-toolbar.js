@@ -23,8 +23,6 @@
 
         dataSourceId: null,
 
-        isNewSource: false,
-
         reportId: null,
 
         columnsDataGrid: null,
@@ -47,10 +45,6 @@
 
         doubleClickLock: false,
 
-        markAsNewSource: function (isNew) {
-            this.isNewSource = isNew;
-        },
-
         setDataSourceId: function (dataSourceId) {
             if (dataSourceId && dataSourceId.length > 0) {
                 this.dataSourceId = dataSourceId;
@@ -65,13 +59,15 @@
             var datagrid = args[1].datagrid;
             if (datagrid.options.bubblingLabel == "editSourceColumns") {
                 this.columnsDataGrid = datagrid;
+                this.setDataSourceId(this.columnsDataGrid.datagridMeta.nodeRef);
+
+                this.createSelectDialog();
+                this._initButtons();
+                Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
             }
         },
 
         onReady: function () {
-            this.createSelectDialog();
-            this._initButtons();
-            Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
         },
 
         createSelectDialog: function() {
@@ -123,7 +119,7 @@
                 Alfresco.util.createYUIButton(this, "newColumnButton", this._onNewColumn, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-newColumnButton");
 
             this.toolbarButtons.saveAsButton =
-                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.isNewSource || !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton");
+                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton");
 
             this.toolbarButtons.selectSource =
                 Alfresco.util.createYUIButton(this, "selectSource", this._onSelectSource, {disabled: !this.dataSourceId}, this.id + "-columns-toolbar-selectSource");
