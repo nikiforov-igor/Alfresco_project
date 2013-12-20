@@ -115,21 +115,49 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			};
 		},
 
-		_formatRestoreModel: function () {
-			var scope = this;
+        _formatRestoreModel: function () {
+            var scope = this;
 
-			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("isRestorable")) {
-					var restoreModelLink = document.createElement("a");
-					restoreModelLink.title = scope.msg("title.model.restore");
-					Dom.addClass(restoreModelLink, "restore-model");
-					restoreModelLink.innerHTML = "&nbsp;";
+            return function (el, oRecord, oColumn, oData, oDataTable) {
+                if (oRecord.getData("isRestorable")) {
+                    var restoreModelLink = document.createElement("a");
+                    restoreModelLink.title = scope.msg("title.model.restore");
+                    Dom.addClass(restoreModelLink, "restore-model");
+                    restoreModelLink.innerHTML = "&nbsp;";
 
-					restoreModelLink.href = Alfresco.constants.PROXY_URI + "lecm/models/restore?modelName=" + oRecord.getData("modelName");
-					el.appendChild(restoreModelLink);
-				}
-			};
-		},
+                    restoreModelLink.addEventListener("click", function() {
+                        var config = {
+                            method: "GET",
+                            url: Alfresco.constants.PROXY_URI + "lecm/models/restore?modelName=" + oRecord.getData("modelName"),
+                            successCallback: {
+                                fn: function (response, obj) {
+                                    Alfresco.util.PopupManager.displayMessage({ text: "Модель восстановлена" });
+                                },
+                                scope: this
+                            },
+                            failureCallback: {
+                                fn: function (response, obj) {
+                                    Alfresco.util.PopupManager.displayMessage(
+                                        {
+                                            text: Alfresco.util.message("Ошибка восстановления модели")
+                                        });
+                                },
+                                scope: this
+                            },
+                            dataObj: {
+                                name: oRecord.getData("displayName")
+                            }
+                        };
+
+                        if (confirm('Вы действительно хотите восстановить модель по-умолчанию?')) {
+                            Alfresco.util.Ajax.jsonRequest(config);
+                        }
+
+                    });
+                    el.appendChild(restoreModelLink);
+                }
+            };
+        },
 
 		_formatEditForm: function () {
 			var scope = this;
