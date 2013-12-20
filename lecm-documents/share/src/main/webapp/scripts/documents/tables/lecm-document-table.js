@@ -224,7 +224,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
         doubleClickLock: false,
 
 		addFooter: function() {
-			if (this.tableDataNodeRef != null) {
+			if (this.tableDataNodeRef != null && (this.datagridMeta.searchConfig == null || this.datagridMeta.searchConfig.fullTextSearch == null)) {
 				var sUrl = sUrl = Alfresco.constants.PROXY_URI + "/lecm/document/tables/api/getTotalRows?tableDataRef=" + encodeURIComponent(this.tableDataNodeRef);
 				Alfresco.util.Ajax.jsonGet(
 					{
