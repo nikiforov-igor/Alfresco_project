@@ -21,8 +21,6 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 
     YAHOO.lang.augmentObject(LogicECM.module.FormsEditor.Toolbar.prototype,
         {
-	        rootNode: null,
-
 	        fileUpload: null,
 
             _initButtons: function () {
@@ -38,8 +36,6 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 	            this.toolbarButtons["defaultActive"].downloadButton = Alfresco.util.createYUIButton(this, "downloadConfigButton", this.downloadConfig);
 
 	            this.toolbarButtons["defaultActive"].uploadButton = Alfresco.util.createYUIButton(this, "uploadConfigButton", this.uploadConfig);
-
-	            this.loadRootNode();
             },
 
 	        generateModelForms: function() {
@@ -126,39 +122,10 @@ LogicECM.module.FormsEditor = LogicECM.module.FormsEditor || {};
 								        thumbnails: "doclib"
 							        };
 							        this.fileUpload.show(uploadConfig);
-						        } else if (this.rootNode != null) {
-							        if (this.fileUpload == null) {
-								        this.fileUpload = Alfresco.getFileUploadInstance();
-							        }
-
-							        uploadConfig = {
-								        destination: this.rootNode,
-								        filter: [
-									        {
-										        description: "XML document",
-										        extensions: "*.xml"
-									        }],
-								        mode: this.fileUpload.MODE_SINGLE_UPLOAD,
-								        thumbnails: "doclib"
-							        };
-							        this.fileUpload.show(uploadConfig);
-						        }
-					        },
-					        scope: this
-				        },
-				        failureMessage: "message.failure"
-			        });
-	        },
-
-	        loadRootNode: function() {
-		        Alfresco.util.Ajax.jsonGet(
-			        {
-				        url: Alfresco.constants.PROXY_URI + "/lecm/docforms/deployRoot",
-				        successCallback: {
-					        fn: function (response) {
-						        var oResults = response.json;
-						        if (oResults != null && oResults.nodeRef != null) {
-							        this.rootNode = oResults.nodeRef;
+						        } else {
+							        Alfresco.util.PopupManager.displayMessage({
+								        text: this.msg("message.uploadConfig.notFound")
+							        });
 						        }
 					        },
 					        scope: this

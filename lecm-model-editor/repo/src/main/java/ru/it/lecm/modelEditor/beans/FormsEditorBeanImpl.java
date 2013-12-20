@@ -337,35 +337,23 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * @return true - если формы успешно сгенерированы
 	 */
 	public boolean generateModelForms(final String modelName) {
-		final NodeRef rootFolder = getModelsDeployRootFolder();
-		if (rootFolder != null) {
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-				@Override
-				public Object doWork() throws Exception {
-					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-						@Override
-						public Object execute() throws Throwable {
-							NodeRef existConfig = getModelConfigNode(modelName);
-							if (existConfig != null) {
-								nodeService.removeChild(rootFolder, existConfig);
-							}
-
-							NodeRef configNode = createNode(rootFolder, ContentModel.TYPE_CONTENT, getModelFileName(modelName), null);
-							ContentService contentService = serviceRegistry.getContentService();
-							ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
-
-							if (writer != null) {
-								writer.setEncoding("UTF-8");
-								writer.setMimetype(MimetypeMap.MIMETYPE_XML);
-								writer.putContent(getModelConfig(modelName));
-							}
-							return null;
-						}
-					}, false, true);
-				}
-			});
+		NodeRef configNode = getModelConfigNode(modelName);
+		if (configNode == null) {
+			configNode = createNode(getModelsDeployRootFolder(), ContentModel.TYPE_CONTENT, getModelFileName(modelName), null);
 		}
+		if (!nodeService.hasAspect(configNode, ContentModel.ASPECT_VERSIONABLE)) {
+			nodeService.addAspect(configNode, ContentModel.ASPECT_VERSIONABLE, null);
+		}
+
+		ContentService contentService = serviceRegistry.getContentService();
+		ContentWriter writer = contentService.getWriter(configNode, ContentModel.PROP_CONTENT, true);
+
+		if (writer != null) {
+			writer.setEncoding("UTF-8");
+			writer.setMimetype(MimetypeMap.MIMETYPE_XML);
+			writer.putContent(getModelConfig(modelName));
+		}
+
 		return true;
 	}
 
