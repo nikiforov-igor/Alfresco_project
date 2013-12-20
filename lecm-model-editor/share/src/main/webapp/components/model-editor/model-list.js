@@ -84,7 +84,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("nodeRef") != null) {
+				if (oRecord.getData("nodeRef") != null && !oRecord.getData("isRestorable")) {
 					var deleteLink = document.createElement("a");
 					deleteLink.title = scope.msg("title.model.delete");
 					Dom.addClass(deleteLink, "delete");

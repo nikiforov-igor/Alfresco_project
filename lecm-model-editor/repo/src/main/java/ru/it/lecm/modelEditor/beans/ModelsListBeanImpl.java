@@ -102,21 +102,20 @@ public class ModelsListBeanImpl extends BaseBean {
 
 			Collection<QName> documentSubTypes = documentService.getDocumentSubTypes();
 			if (documentSubTypes != null) {
-				for (QName typeName : documentSubTypes) {
-					TypeDefinition type = dictionaryService.getType(typeName);
+				for (QName typeQName : documentSubTypes) {
+					TypeDefinition type = dictionaryService.getType(typeQName);
 					if (type != null) {
-						String modelName = type.getName().toPrefixString(namespaceService);
+						String typeName = type.getName().toPrefixString(namespaceService);
 
 						JSONObject object = new JSONObject();
-						object.put("id", modelName);
-						object.put("title", type.getTitle());
-						object.put("description", type.getDescription());
+						object.put("id", typeName);
+						object.put("title", type.getModel().getDescription());
 						object.put("isActive", true);
 						object.put("isDocument", true);
 						object.put("modelName", type.getModel().getName().toPrefixString());
 						object.put("isRestorable", lecmModelsService.isRestorable(type.getModel().getName().toPrefixString()));
 
-						models.put(modelName, object);
+						models.put(typeName, object);
 					}
 				}
 
@@ -139,18 +138,17 @@ public class ModelsListBeanImpl extends BaseBean {
 								M2Type m2Type = model.getTypes().get(0);
 
 								if (m2Type != null) {
-									String modelName = m2Type.getName();
+									String typeName = m2Type.getName();
 
-									if (models.containsKey(modelName)) {
-										models.get(modelName).put("nodeRef", child.toString());
+									if (models.containsKey(typeName)) {
+										models.get(typeName).put("nodeRef", child.toString());
 									} else {
 										Serializable modelActive = nodeService.getProperty(child, ContentModel.PROP_MODEL_ACTIVE);
 
 										JSONObject object = new JSONObject();
-										object.put("id", modelName);
+										object.put("id", typeName);
 										object.put("nodeRef", child.toString());
-										object.put("title", m2Type.getTitle());
-										object.put("description", m2Type.getDescription());
+										object.put("title",  model.getDescription());
 										object.put("isActive", modelActive != null && Boolean.TRUE.equals(modelActive));
 
 										if (modelActive != null && Boolean.TRUE.equals(modelActive)) {
@@ -161,7 +159,7 @@ public class ModelsListBeanImpl extends BaseBean {
                                         object.put("modelName", model.getName());
                                         object.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
 
-										models.put(modelName, object);
+										models.put(typeName, object);
 									}
 
 								}
