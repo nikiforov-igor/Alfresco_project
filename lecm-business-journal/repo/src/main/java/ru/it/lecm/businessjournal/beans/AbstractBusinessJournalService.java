@@ -271,54 +271,63 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
                 logger.warn("Main Object not set!");
                 return;
             }
-            IgnoredCounter counter = threadSettings.get();
-            if (counter != null) {
-                if (counter.isIgnored()) {
-                    counter.execute();
-                    return;
-                } else {
-                    counter.execute();
-                }
-            }
-
-
-            NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
-
-            // заполняем карту плейсхолдеров
-            Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
-            // пытаемся получить объект Категория события по ключу
-            NodeRef category = getEventCategoryByCode(eventCategory);
-            // получаем шаблон описания
-            String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
-            // заполняем шаблон данными
-            String recorDescription = fillTemplateString(templateString, holdersMap);
-
-            String mainObjectDescription = getObjectDescription(mainObject);
-            List<RecordObject> objectsDescription = new ArrayList<RecordObject>();
-            if (objects != null && objects.size() > 0) for (int i = 0; i < objects.size() && i < 5; i++) {
-                String str = objects.get(i);
-                NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
-                String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
-                objectsDescription.add(new RecordObject(nodeRef, objectDescription));
-            }
-
-            NodeRef objectType = getObjectType(mainObject);
-            BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, objectType, mainObjectDescription, recorDescription, category, objectsDescription, true);
-
-            //Описание инициатора
-            record.setInitiatorText(getInitiatorDescription(employee));
-            //Описание категории
-            if (category != null) {
-                record.setEventCategoryText(nodeService.getProperty(category, ContentModel.PROP_NAME).toString());
-            }
-            //Описание типа
-            if (objectType != null) {
-                record.setObjectTypeText(nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString());
-            }
-            jmsTemplate.convertAndSend(record);
+            BusinessJournalRecord record = createBusinessJournalRecord(date, initiator, mainObject, eventCategory, defaultDescription, objects);
+            if (record == null) return;
+            sendRecord(record);
         } catch (Exception e) {
             logger.error("Error while save business journal record");
         }
+    }
+
+    public void sendRecord(BusinessJournalRecord record) {
+        jmsTemplate.convertAndSend(record);
+    }
+
+    public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
+        IgnoredCounter counter = threadSettings.get();
+        if (counter != null) {
+            if (counter.isIgnored()) {
+                counter.execute();
+                return null;
+            } else {
+                counter.execute();
+            }
+        }
+
+        NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
+
+        // заполняем карту плейсхолдеров
+        Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
+        // пытаемся получить объект Категория события по ключу
+        NodeRef category = getEventCategoryByCode(eventCategory);
+        // получаем шаблон описания
+        String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
+        // заполняем шаблон данными
+        String recorDescription = fillTemplateString(templateString, holdersMap);
+
+        String mainObjectDescription = getObjectDescription(mainObject);
+        List<RecordObject> objectsDescription = new ArrayList<RecordObject>();
+        if (objects != null && objects.size() > 0) for (int i = 0; i < objects.size() && i < 5; i++) {
+            String str = objects.get(i);
+            NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
+            String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+            objectsDescription.add(new RecordObject(nodeRef, objectDescription));
+        }
+
+        NodeRef objectType = getObjectType(mainObject);
+        BusinessJournalRecord record = new BusinessJournalRecord(date, employee, mainObject, objectType, mainObjectDescription, recorDescription, category, objectsDescription, true);
+
+        //Описание инициатора
+        record.setInitiatorText(getInitiatorDescription(employee));
+        //Описание категории
+        if (category != null) {
+            record.setEventCategoryText(nodeService.getProperty(category, ContentModel.PROP_NAME).toString());
+        }
+        //Описание типа
+        if (objectType != null) {
+            record.setObjectTypeText(nodeService.getProperty(objectType, ContentModel.PROP_NAME).toString());
+        }
+        return record;
     }
 
     public void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {

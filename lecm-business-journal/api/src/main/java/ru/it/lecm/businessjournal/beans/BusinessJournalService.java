@@ -295,4 +295,23 @@ public interface BusinessJournalService {
      */
     List<BusinessJournalRecord> getRecordsAfter(Long lastRecordId);
 
+    /**
+     * Отправка подготовленной записи в хранилище
+     * @param record
+     */
+    public void sendRecord(BusinessJournalRecord record);
+
+    /**
+     * Создание записи бизнес-журнала для отправки его в хранилище
+     *
+     * @param date
+     * @param initiator
+     * @param mainObject
+     * @param eventCategory
+     * @param defaultDescription
+     * @param objects
+     * @return
+     */
+    public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+
 }
