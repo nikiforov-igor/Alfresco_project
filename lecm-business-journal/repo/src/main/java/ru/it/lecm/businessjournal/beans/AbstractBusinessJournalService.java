@@ -271,6 +271,15 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
                 logger.warn("Main Object not set!");
                 return;
             }
+            IgnoredCounter counter = threadSettings.get();
+            if (counter != null) {
+                if (counter.isIgnored()) {
+                    counter.execute();
+                    return;
+                } else {
+                    counter.execute();
+                }
+            }
             BusinessJournalRecord record = createBusinessJournalRecord(date, initiator, mainObject, eventCategory, defaultDescription, objects);
             if (record == null) return;
             sendRecord(record);
@@ -284,16 +293,6 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
-        IgnoredCounter counter = threadSettings.get();
-        if (counter != null) {
-            if (counter.isIgnored()) {
-                counter.execute();
-                return null;
-            } else {
-                counter.execute();
-            }
-        }
-
         NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
 
         // заполняем карту плейсхолдеров
