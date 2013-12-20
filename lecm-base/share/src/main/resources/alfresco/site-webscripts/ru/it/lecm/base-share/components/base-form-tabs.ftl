@@ -33,6 +33,8 @@
         Event = YAHOO.util.Event,
         Selector = YAHOO.util.Selector;
 
+    YAHOO.widget.Tab.prototype.ACTIVE_TITLE = '';
+
     function init() {
         Event.onContentReady("${formId}-tabs", function() {
             var parent = Dom.get("${formId}-fields");

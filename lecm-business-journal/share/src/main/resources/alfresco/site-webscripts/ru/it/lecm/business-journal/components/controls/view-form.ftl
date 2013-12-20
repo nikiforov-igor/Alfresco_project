@@ -22,7 +22,7 @@
 
 <div id="${formId}-tabs" class="yui-navset yui-navset-top">
 <ul class="yui-nav">
-    <li class="selected" title="active">
+    <li class="selected">
         <a href="#tab1">
             <em>Основные сведения</em>
         </a>
@@ -219,6 +219,8 @@
     var Dom = YAHOO.util.Dom,
             Event = YAHOO.util.Event,
             Selector = YAHOO.util.Selector;
+
+    YAHOO.widget.Tab.prototype.ACTIVE_TITLE = '';
 
     function init() {
         Event.onContentReady("${formId}-tabs", function() {
