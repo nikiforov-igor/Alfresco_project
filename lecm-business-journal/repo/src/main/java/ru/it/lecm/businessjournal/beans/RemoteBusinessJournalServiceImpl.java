@@ -206,7 +206,7 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
             Field sortField = null;
             try {
                 sortField = Field.valueOf(BusinessJournalRecord.Field.fromFieldName(sortColumnLocalName).name());
-            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
                 sortField = Field.DATE;
                 sortAscending = false;
             }
