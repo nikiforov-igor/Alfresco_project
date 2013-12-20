@@ -81,14 +81,13 @@
 })();
 //]]></script>
 
-<div class="form-field" style="text-align: right; margin-bottom: 0px;">
+<div class="form-field" style="text-align: left; margin-bottom: 0px;">
    <#if form.mode == "view">
       <div class="viewmode-field">
          <span class="viewmode-label">${field.label?html}:</span>
          <span class="viewmode-value"><#if isTrue>${msg("form.control.checkbox.yes")}<#else>${msg("form.control.checkbox.no")}</#if></span>
       </div>
    <#else>
-		<label for="${fieldHtmlId}">&nbsp;</label>
       <input class="formsCheckBox" id="${fieldHtmlId}" type="checkbox" tabindex="0"  name="${field.name}" <#if field.description??>title="${field.description}"</#if>
              <#if isTrue> value="true" checked="checked"</#if>
              <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>

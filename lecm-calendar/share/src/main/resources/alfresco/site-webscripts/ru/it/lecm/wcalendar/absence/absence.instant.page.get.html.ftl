@@ -13,7 +13,7 @@
 	}
 
 	.instant-absence-content .form-buttons {
-		border-bottom: 0 !important;
+		border: 0 !important;
 	}
 </style>
 
