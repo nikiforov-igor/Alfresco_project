@@ -654,8 +654,8 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
 
             String mainObjectRef = (String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-mainObject-assoc-ref"));
             NodeRef mainObject = null;
-            if (NodeRef.isNodeRef(mainObjectRef)) {
-                mainObject = new NodeRef(categoryRef);
+            if (mainObjectRef != null && !"".equals(mainObjectRef) && NodeRef.isNodeRef(mainObjectRef)) {
+                mainObject = new NodeRef(mainObjectRef);
             }
 
             List<AssociationRef> types = nodeService.getTargetAssocs(ref, ASSOC_BR_RECORD_OBJ_TYPE);
