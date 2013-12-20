@@ -14,6 +14,10 @@
         <namespace uri="http://www.it.ru/logicECM/reports/editor/1.0" prefix="lecm-rpeditor"/>
     </namespaces>
 
+    <constraints>
+        <constraint name="lecm-rpeditor:unique-property-const" type="ru.it.lecm.base.constraint.UniqueLongPropertyConstraint"/>
+    </constraints>
+
     <types>
         <!-- Справочники-->
         <!-- Тип отчета -->
@@ -145,6 +149,9 @@
                     <title>Report Code</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <constraints>
+                        <constraint ref="lecm-rpeditor:unique-property-const"/>
+                    </constraints>
                 </property>
                 <property name="lecm-rpeditor:reportDocType">
                     <title>Report DocType</title>
