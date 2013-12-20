@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-contract-fake:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-	<description>Logic ECM document model</description>
+	<description>Договора (фиктивные)</description>
 	<author>Logic ECM</author>
 	<version>1.0</version>
 	<imports>
@@ -62,16 +62,5 @@
                 <aspect>lecm-table-structure2:table-aspect</aspect>
             </mandatory-aspects>
 		</type>
-		<type name="lecm-contract-fake:importTestDocument">
-			<title>Logic Ecm Import Test Document</title>
-			<parent>lecm-document:base</parent>
-			<properties>
-				<property name="lecm-contract-fake:importTestRegnum">
-					<type>d:text</type>
-				</property>
-			</properties>
-		</type>
 	</types>
-
-
 </model>
