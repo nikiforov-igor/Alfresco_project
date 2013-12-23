@@ -50,6 +50,27 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!-- в будущем у объекта типа связь будут эти свойства -->
+				<!--
+				<property name="lecm-connect:primary-document-removed">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-connect:connected-document-removed">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				-->
 			</properties>
 			<associations>
 				<association name="lecm-connect:primary-document-assoc">
@@ -59,7 +80,7 @@
 					</source>
 					<target>
 						<class>lecm-document:base</class>
-						<mandatory>true</mandatory>
+						<mandatory>true</mandatory><!-- <mandatory>false</mandatory> -->
 						<many>false</many>
 					</target>
 				</association>
@@ -70,7 +91,7 @@
 					</source>
 					<target>
 						<class>lecm-document:base</class>
-						<mandatory>true</mandatory>
+						<mandatory>true</mandatory><!-- <mandatory>false</mandatory> -->
 						<many>false</many>
 					</target>
 				</association>

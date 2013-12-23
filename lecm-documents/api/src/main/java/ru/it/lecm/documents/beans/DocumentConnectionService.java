@@ -44,6 +44,10 @@ public interface DocumentConnectionService {
     public static final QName PROP_CONNECTIONS_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-list");
     public static final QName PROP_CONNECTIONS_WITH_LIST = QName.createQName(DOCUMENT_CONNECTIONS_ASPECT_NAMESPACE_URI, "connections-with-list");
 
+	//в будущем у объекта типа "связь" будут эти свойства
+//	QName PROP_PRIMARY_DOCUMENT_REMOVED = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "primary-document-removed");
+//	QName PROP_CONNECTED_DOCUMENT_REMOVED = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-removed");
+
     public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 
     // ALF-1583

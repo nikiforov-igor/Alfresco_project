@@ -275,7 +275,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                         for (AssociationRef sourceAssoc : targetAssocs) {
                             NodeRef nodeRef = sourceAssoc.getTargetRef();
 
-                            if (lecmPermissionService.hasReadAccess(nodeRef)
+                            if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef)
                                     && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
                                 records.add(rowNodeRef);
                             }

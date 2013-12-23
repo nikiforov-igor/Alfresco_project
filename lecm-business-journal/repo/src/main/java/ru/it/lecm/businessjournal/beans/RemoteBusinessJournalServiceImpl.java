@@ -140,7 +140,9 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
                 List<BusinessJournalRecord> filteredResult = new ArrayList<BusinessJournalRecord>();
                 // проверить доступность основного объекта
                 for (BusinessJournalRecord record : result) {
-                    if (lecmPermissionService.hasReadAccess(record.getMainObject()) && (!stateMachineService.isDraft(record.getMainObject()) || isOwnNode(record.getMainObject()))) {
+					NodeRef mainObject = record.getMainObject();
+                    if (nodeService.exists(mainObject) && lecmPermissionService.hasReadAccess(mainObject)
+							&& (!stateMachineService.isDraft(mainObject) || isOwnNode(mainObject))) {
                         filteredResult.add(record);
                     }
                 }

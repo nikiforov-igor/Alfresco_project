@@ -292,6 +292,14 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         jmsTemplate.convertAndSend(record);
     }
 
+	public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
+		NodeRef person = null;
+        if (personService.personExists(initiator)) {
+            person = personService.getPerson(initiator, false);
+        }
+		return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
+	}
+
     public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
         NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
 

@@ -2,7 +2,6 @@ package ru.it.lecm.documents.policy;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -19,22 +18,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.node.NodeServicePolicies.BeforeCreateNodePolicy;
+import org.alfresco.repo.node.NodeServicePolicies.BeforeDeleteNodePolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies.OnCreateNodePolicy;
 
 /**
  * User: AIvkin
  * Date: 20.02.13
  * Time: 9:52
  */
-public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAssociationPolicy,
-		NodeServicePolicies.BeforeDeleteNodePolicy,
-		NodeServicePolicies.BeforeCreateNodePolicy,
-		NodeServicePolicies.OnCreateNodePolicy {
+public class DocumentConnectionPolicy implements OnCreateAssociationPolicy/*, OnDeleteAssociationPolicy*/, BeforeDeleteNodePolicy, BeforeCreateNodePolicy, OnCreateNodePolicy {
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
-	private DocumentConnectionService documentConnectionService;
 	private BusinessJournalService businessJournalService;
 	private LecmPermissionService lecmPermissionService;
+//	private BehaviourFilter behaviourFilter;
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -52,22 +52,29 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
-	}
+//	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+//		this.behaviourFilter = behaviourFilter;
+//	}
 
 	public final void init() {
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT,
 				new JavaBehaviour(this, "onCreateAssociation"));
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+		policyComponent.bindClassBehaviour(OnCreateNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+		policyComponent.bindClassBehaviour(BeforeDeleteNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "beforeDeleteNode"));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
+		policyComponent.bindClassBehaviour(BeforeCreateNodePolicy.QNAME,
 				DocumentConnectionService.TYPE_CONNECTION, new JavaBehaviour(this, "beforeCreateNode"));
+
+//		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME,
+//				DocumentConnectionService.TYPE_CONNECTION, DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT,
+//				new JavaBehaviour(this, "onDeleteAssociation"));
+//		policyComponent.bindAssociationBehaviour(OnDeleteAssociationPolicy.QNAME,
+//				DocumentConnectionService.TYPE_CONNECTION, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT,
+//				new JavaBehaviour(this, "onDeleteAssociation"));
 	}
 
 	@Override
@@ -80,6 +87,29 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
 			nodeService.addAspect(documentRef, DocumentConnectionService.ASPECT_HAS_CONNECTED_DOCUMENTS, aspectValues);
 		}
 	}
+
+//	@Override
+//	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+//		NodeRef documentRef = nodeAssocRef.getTargetRef();
+//		NodeRef connectionRef = nodeAssocRef.getSourceRef();
+//		QName propDocumentRemoved = null;
+//		if (DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT.isMatch(nodeAssocRef.getTypeQName())) {
+//			propDocumentRemoved = DocumentConnectionService.PROP_PRIMARY_DOCUMENT_REMOVED;
+//		} else if (DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT.isMatch(nodeAssocRef.getTypeQName())) {
+//			propDocumentRemoved = DocumentConnectionService.PROP_CONNECTED_DOCUMENT_REMOVED;
+//		}
+//		String presentString = (String)nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
+//		String dt = new SimpleDateFormat("HH:mm dd.MM.yyyy").format(new Date());
+//		String msg = String.format("Документ %s был удален %s", presentString, dt);
+//		nodeService.setProperty(connectionRef, propDocumentRemoved, msg);
+//		List<AssociationRef> primary = nodeService.getTargetAssocs(connectionRef, DocumentConnectionService.ASSOC_PRIMARY_DOCUMENT);
+//		List<AssociationRef> connected = nodeService.getTargetAssocs(connectionRef, DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT);
+//		if (primary.isEmpty() && connected.isEmpty()) {
+//			behaviourFilter.disableBehaviour(connectionRef);
+//			nodeService.addAspect(connectionRef, ContentModel.ASPECT_TEMPORARY, null);
+//			nodeService.deleteNode(connectionRef);
+//		}
+//	}
 
 	@Override
 	public void beforeDeleteNode(NodeRef nodeRef) {
@@ -153,7 +183,7 @@ public class DocumentConnectionPolicy implements NodeServicePolicies.OnCreateAss
         }
 
 		NodeRef document = null;
-		if (nodeService.getProperty(parentRef, ContentModel.PROP_NAME).equals(this.documentConnectionService.DOCUMENT_CONNECTIONS_ROOT_NAME)) {
+		if (nodeService.getProperty(parentRef, ContentModel.PROP_NAME).equals(DocumentConnectionService.DOCUMENT_CONNECTIONS_ROOT_NAME)) {
 			document = nodeService.getPrimaryParent(parentRef).getParentRef();
 		}
 		if (document != null) {

@@ -181,20 +181,12 @@
     <bean id="documentConnectionsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionsOnCreateAssocsPolicy"
           init-method="init" parent="logicEcmAssociationPolicy"/>
 
-    <bean id="documentConnectionPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionPolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService">
-            <ref bean="nodeService"/>
-        </property>
-	    <property name="businessJournalService">
-		    <ref bean="businessJournalService"/>
-	    </property>
-	    <property name="lecmPermissionService">
-		    <ref bean="lecmPermissionServiceBean"/>
-	    </property>
+    <bean id="documentConnectionPolicy" class="ru.it.lecm.documents.policy.DocumentConnectionPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
+	    <property name="businessJournalService" ref="businessJournalService"/>
+	    <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+		<!--<property name="behaviourFilter" ref="policyBehaviourFilter"/>-->
     </bean>
 
     <bean id="documentAttachmentsService" class="ru.it.lecm.documents.beans.DocumentAttachmentsServiceImpl"
@@ -284,14 +276,10 @@
         <property name="stateMachineBean" ref="stateMachineHelper"/>
     </bean>
 
-    <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy"
-          init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="stateMachineServiceBean">
-            <ref bean="stateMachineHelper"/>
-        </property>
+    <bean id="documentDeletePolicy" class="ru.it.lecm.documents.policy.DocumentDeletePolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="stateMachineServiceBean" ref="stateMachineHelper"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
     <bean id="document.businessJournalDictionaryBootstrap"

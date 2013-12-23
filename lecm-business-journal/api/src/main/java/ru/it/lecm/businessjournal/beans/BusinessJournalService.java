@@ -108,7 +108,7 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-	public void log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+	void log(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
     /**
      * Метод для создания записи бизнеса-журнала
@@ -121,7 +121,7 @@ public interface BusinessJournalService {
      * @param objects    - список дополнительных объектов
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+    void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -133,7 +133,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public void log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+	void log(NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -145,7 +145,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public void log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+	void log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -156,7 +156,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+	void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
     /**
      * Метод для создания записи бизнеса-журнала с текущей датой и игнорированием записи следующего события
@@ -168,7 +168,7 @@ public interface BusinessJournalService {
      * @param ignoreNext    - Игнорировать следующую запись
      * @return ссылка на ноду записи в бизнес журнале
      */
-    public void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext);
+    void log(NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects, boolean ignoreNext);
 
     /**
 	 * Метод для создания записи бизнеса-журнала
@@ -181,7 +181,7 @@ public interface BusinessJournalService {
 	 * @param objects    - список дополнительных объектов
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public void log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) ;
+	void log(Date date, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) ;
 
 	/**
 	 * Метод для создания записи бизнеса-журнала с текущей датой
@@ -191,7 +191,7 @@ public interface BusinessJournalService {
 	 * @param  defaultDescription  - описание события
 	 * @return ссылка на ноду записи в бизнес журнале
 	 */
-	public void log(NodeRef mainObject, String eventCategory, String defaultDescription);
+	void log(NodeRef mainObject, String eventCategory, String defaultDescription);
 	/**
 	 * Метод формирующий описание заданного объекта на основании его типа
 	 * @param object - текущий объект
@@ -230,7 +230,7 @@ public interface BusinessJournalService {
      * @param nodeRef - ссылка на объект
      * @return ссылка на объект справочника или NULL
      */
-    public NodeRef getObjectType(NodeRef nodeRef);
+    NodeRef getObjectType(NodeRef nodeRef);
 
     /**
      * Метод, возвращающий список ссылок на записи бизнес-журнала, сформированные за заданный период
@@ -274,9 +274,9 @@ public interface BusinessJournalService {
      *
      * @return boolean результат выполнения операции
      */
-    public boolean moveRecordToArchive(final Long recordId);
+    boolean moveRecordToArchive(final Long recordId);
 
-    public BusinessJournalRecord getNodeById(Long nodeId);
+    BusinessJournalRecord getNodeById(Long nodeId);
 
     List<BusinessJournalRecord> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, boolean sortAscending);
 
@@ -299,7 +299,7 @@ public interface BusinessJournalService {
      * Отправка подготовленной записи в хранилище
      * @param record
      */
-    public void sendRecord(BusinessJournalRecord record);
+    void sendRecord(BusinessJournalRecord record);
 
     /**
      * Создание записи бизнес-журнала для отправки его в хранилище
@@ -312,6 +312,7 @@ public interface BusinessJournalService {
      * @param objects
      * @return
      */
-    public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
+    BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
+	BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription);
 }
