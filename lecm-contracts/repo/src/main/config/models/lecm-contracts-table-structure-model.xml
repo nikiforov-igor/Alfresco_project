@@ -141,7 +141,7 @@
                     </source>
                     <target>
                         <class>lecm-currency:currency</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>false</many>
                     </target>
                 </association>
