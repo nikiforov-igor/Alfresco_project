@@ -56,7 +56,11 @@
 		<field jrFldName="col_StatusDate" queryFldName="{lecm-document:status-changed-date}" displayName="Дата смены статус"
 				javaValueClass="java.util.Date"/>
 
-		<!-- "Общая сумма по договору": "lecm-contract:totalAmount" 
+		<!-- Дата регистрации договора -->
+		<field jrFldName="col_DateRegContracts" queryFldName="{lecm-contract:dateRegContracts}" displayName="Дата регистрации договора"
+				javaValueClass="java.util.Date"/>
+
+		<!-- "Общая сумма по договору": "lecm-contract:totalAmount"
 			 и "Валюта договора": (assoc) "lecm-contract:currency-assoc" 
 				-> target: "lecm-currency:currency
 		  -->

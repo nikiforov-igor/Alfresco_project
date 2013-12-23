@@ -22,6 +22,9 @@
 	<field name="col_StatusDate" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата смены статус]]></fieldDescription>
 	</field>
+	<field name="col_DateRegContracts" class="java.util.Date">
+		<fieldDescription><![CDATA[Дата регистрации договора]]></fieldDescription>
+	</field>
 	<field name="col_Sum" class="java.lang.Number">
 		<fieldDescription><![CDATA[Сумма договора]]></fieldDescription>
 	</field>
@@ -217,7 +220,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[( ($F{col_DocKind} == null) ? "" : $F{col_DocKind})
 + " № " + (($F{col_Regnum} == null) ? "?" : $F{col_Regnum})
-+ " от "+ (($F{col_DateStart} ==null) ? "?" : msg( "{0,date,short}", $F{col_DateStart}) )]]></textFieldExpression>
++ " от "+ (($F{col_DateRegContracts} ==null) ? "?" : msg( "{0,date,short}", $F{col_DateRegContracts}) )]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement uuid="0c7a2a72-f99a-4b9a-831e-27f245ee4204" x="262" y="5" width="117" height="20"/>
