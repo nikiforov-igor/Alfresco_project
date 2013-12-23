@@ -12,10 +12,10 @@
 
    <plugin-conditions>
 	
-      <condition mimeType="application/pdf">
-         <plugin>PdfJs</plugin>
-         <plugin>Embed</plugin>
-      </condition>
+      <!--<condition mimeType="application/pdf">-->
+         <!--<plugin>PdfJs</plugin>-->
+         <!--<plugin>Embed</plugin>-->
+      <!--</condition>-->
  
       <!--
           Enables the PdfJs viewer for other content which can be transformed to PDF or Embed 
@@ -23,10 +23,10 @@
  
           Note, the OpenOffice transformer must be available on the server for this to work.
       -->
-      <condition thumbnail="pdf">
-         <plugin src="pdf">PdfJs</plugin>
-         <!--<plugin src="pdf">Embed</plugin>-->
-      </condition>
+      <!--<condition thumbnail="pdf">-->
+         <!--<plugin src="pdf">PdfJs</plugin>-->
+         <!--&lt;!&ndash;<plugin src="pdf">Embed</plugin>&ndash;&gt;-->
+      <!--</condition>-->
 
       <!-- Video with posters -->
 
