@@ -125,12 +125,12 @@ public interface ApprovalListService {
 	 * @param bpmPackage
 	 */
 	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
-
 	/**
-	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
+	 * раздать всем участникам процесса согласования права
+	 * LECM_BASIC_PG_Reader
 	 *
 	 * @param employeeRef
-	 * @param documentRef
+	 * @param bpmPackage
 	 */
-	void revokeReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
+	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 }

@@ -331,16 +331,28 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	@Override
 	public void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef) {
+		grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer");
+	}
+
+	@Override
+	public void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
+		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
+		if (Utils.isDocument(documentRef)) {
+			this.grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reader");
+		}
+	}
+
+	private void grantPermissions(final NodeRef employeeRef, final NodeRef documentRef, final String permissionGroup) {
 		if (documentRef != null) {
-			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, "LECM_BASIC_PG_Reviewer");
+			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, permissionGroup);
 			if (member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права
-				LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
+				LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(permissionGroup);
 				lecmPermissionService.grantAccess(pgGranting, documentRef, employeeRef);
 			}
 			if (logger.isTraceEnabled()) {
 				String employeeName = (String) nodeService.getProperty(employeeRef, ContentModel.PROP_NAME);
 				String docName = (String) nodeService.getProperty(documentRef, ContentModel.PROP_NAME);
-				logger.trace("Employee {} has been invited to the document {} with LECM_BASIC_PG_Reviewer permission. ", new Object[]{employeeName, docName});
+				logger.trace("Employee {} has been invited to the document {} with {} permission. ", new Object[]{employeeName, docName, permissionGroup});
 			}
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");
@@ -351,14 +363,13 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	public void revokeReviewerPermissions(NodeRef employeeRef, NodeRef bpmPackage) {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
-			this.revokeReviewerPermissionsInternal(employeeRef, documentRef);
+			this.revokePermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer");
 		}
 	}
 
-	@Override
-	public void revokeReviewerPermissionsInternal(NodeRef employeeRef, NodeRef documentRef) {
+	private void revokePermissions(NodeRef employeeRef, NodeRef documentRef, final String permissionGroup) {
 		if (documentRef != null) {
-			LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup("LECM_BASIC_PG_Reviewer");
+			LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup(permissionGroup);
 			lecmPermissionService.revokeAccess(pgRevoking, documentRef, employeeRef);
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be revoked");
@@ -644,6 +655,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
+		grantReaderPermissions(employeeRef, bpmPackage);
     }
 
 	private Map<String, String> addDecision(final Map<String, String> decisionMap, TaskDecision taskDecision) {
