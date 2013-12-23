@@ -13,7 +13,7 @@ if (connections != null && connections.length > 0) {
 	for (var i = 0; i < connections.length; i++) {
 		if (k < count) {
 			var connectedDocumentAssoc = connections[i].assocs["lecm-connect:connected-document-assoc"];
-			if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 0 && connectedDocumentAssoc[0].exists()) {
+			if (connectedDocumentAssoc != null && connectedDocumentAssoc.length == 1 && connectedDocumentAssoc[0].exists()) {
 				items.push(connections[i]);
 				k++;
 			}
