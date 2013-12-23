@@ -4,7 +4,7 @@
 }
 .yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.price-control div.price-sum span.viewmode-value,
 .yui-skin-lecmTheme .metadata-form-edit form div.set div.price-control div.price-sum input[type=text] {
-    width: 140px;
+    width: 115px;
 }
 .yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-currency,
 .yui-skin-lecmTheme .metadata-form-edit form div.set div.price-control div.price-currency {
@@ -13,7 +13,7 @@
     margin-left: 5px;
 }
 .yui-skin-lecmTheme div.metadata-form div.yui-g div.price-control div.price-currency div.form-field span.viewmode-value {
-    width: 80px;
+    width: 110px;
 }
 .yui-skin-lecmTheme div.metadata-form div.set div.price-control div.price-currency span.viewmode-label,
 .yui-skin-lecmTheme .metadata-form-edit form div.set div.price-control div.price-currency span.viewmode-label,

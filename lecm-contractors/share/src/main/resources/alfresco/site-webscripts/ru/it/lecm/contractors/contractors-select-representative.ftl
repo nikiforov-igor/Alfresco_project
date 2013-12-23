@@ -2,6 +2,10 @@
 <#assign selectId = fieldHtmlId + "-slct">
 <#assign inputId = fieldHtmlId + "-inpt">
 <#assign fieldId = fieldHtmlId + "-fld">
+<#if form.mode == "view">
+    <#assign fieldId = fieldId + "-view-repsesentative">
+</#if>
+
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 

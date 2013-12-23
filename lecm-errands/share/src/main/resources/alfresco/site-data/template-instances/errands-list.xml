@@ -24,7 +24,7 @@
                 <showCreateBtn>true</showCreateBtn>
                 <bubblingLabel>errands</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
-                <createDialogWidth>55em</createDialogWidth>
+                <createDialogWidth>60em</createDialogWidth>
                 <createDialogClass>lecm-errands_document</createDialogClass>
             </properties>
         </component>

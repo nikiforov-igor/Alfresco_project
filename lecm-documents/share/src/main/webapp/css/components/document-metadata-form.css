@@ -104,3 +104,7 @@
 .yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div img {
     margin-right: 3px;
 }
+
+.yui-skin-lecmTheme div[id*="-view-repsesentative"] {
+    margin-left: 25px;
+}
