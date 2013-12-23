@@ -1979,7 +1979,8 @@ div.currentValueDisplay {
 
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible {
-    width: 463px;
+    width: 400px;
+    margin-left:40px;
     padding: 0;
 }
 
