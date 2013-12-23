@@ -375,10 +375,6 @@
                 });
             };
 
-            var saveFunction = function() {
-                this.submit();
-            };
-
             var htmlId = "${page.url.args.reportId}".replace("workspace://SpacesStore/", "").replace("-", "");
             Alfresco.util.Ajax.request(
                     {
@@ -405,11 +401,18 @@
                                 var form = new Alfresco.forms.Form(htmlId + '-form');
 
                                 if (Dom.get(htmlId + "-form-cancel") !== null) {
-                                    Alfresco.util.createYUIButton(null, "", deployFunction, { label: "${msg("actions.deploy")}", title: "${msg("actions.deploy")}" }, htmlId + "-form-cancel");
+                                    Alfresco.util.createYUIButton(null, "",
+                                            deployFunction, { label: "${msg("actions.deploy")}", title: "${msg("actions.deploy")}" }, htmlId + "-form-cancel");
+
+                                   /* Dom.get(htmlId + "-form-cancel").setAttribute('label', "${msg("actions.deploy")}");
+                                    Dom.get(htmlId + "-form-cancel").setAttribute('title', "${msg("actions.deploy")}");
+
+                                    YAHOO.util.Event.on(htmlId + "-form-cancel", 'click', deployFunction, null, this);*/
                                 }
 
                                 if (Dom.get(htmlId + "-form-submit") !== null) {
-                                    Alfresco.util.createYUIButton(null, "", null, { label: "${msg("actions.save")}", title: "${msg("actions.save")}", type: "submit" }, htmlId + "-form-submit");
+                                    Dom.get(htmlId + "-form-submit").setAttribute('label', "${msg("actions.save")}");
+                                    Dom.get(htmlId + "-form-submit").setAttribute('title', "${msg("actions.save")}");
                                 }
 
                                 form.ajaxSubmit = true;
@@ -425,7 +428,8 @@
                                                 scope: this
                                             },
                                             failureCallback: {
-                                                fn: function () {
+                                                fn: function (response) {
+                                                    alert(response.json.message);
                                                     Alfresco.util.PopupManager.displayMessage(
                                                             {
                                                                 text: "Не удалось обновить настройки"

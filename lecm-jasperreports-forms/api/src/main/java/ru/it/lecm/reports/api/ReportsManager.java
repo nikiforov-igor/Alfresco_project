@@ -902,14 +902,14 @@ public class ReportsManager {
             throw new RuntimeException(String.format("Report descriptor must have mnemo code"));
         }
         if (desc.getProviderDescriptor() == null || desc.getProviderDescriptor().getMnem().trim().isEmpty()) {
-            throw new RuntimeException(String.format("Report descriptor must have Provider! Check report settings!"));
+            throw new RuntimeException(String.format("Report '%s' must have Provider! Check report settings!", desc.getMnem()));
         }
         if (checkTemplate) {
             if (desc.getReportTemplate() == null || desc.getReportTemplate().getFileName() == null) {
-                throw new RuntimeException(String.format("Report must have Representation Template! Please select template from dictionary or create new!"));
+                throw new RuntimeException(String.format("Report '%s' must have Representation Template! Please select template from dictionary or create new!", desc.getMnem()));
             }
             if (desc.getReportType() == null || desc.getReportType().getMnem() == null) {
-                throw new RuntimeException(String.format("Report must have Report Type! Please check Representation Template and his Type!"));
+                throw new RuntimeException(String.format("Report '%s' must have Report Type! Please check Representation Template and his Type!", desc.getMnem()));
             }
         }
     }
