@@ -14,6 +14,13 @@ function getDoclist() {
     }
 
     parsedArgs.pathNode = ParseArgs.resolveNode(parsedArgs.nodeRef);
+	if (!parsedArgs.pathNode ) {
+		status.code = 404;
+		status.message = "NodeRef " + parsedArgs.nodeRef + " not found. It maybe deleted or never existed";
+		status.redirect = true;
+		return null;
+	}
+
     parsedArgs.location = Common.getLocation(parsedArgs.pathNode, parsedArgs.libraryRoot);
 
     var favourites = Common.getFavourites(),
