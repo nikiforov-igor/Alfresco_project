@@ -6,7 +6,6 @@
 <script type="text/javascript">//<![CDATA[
 
 function notDefaultSchedule(oData) {
-	debugger;
 	var rowNodeRef,
 		orgNodeRef;
 

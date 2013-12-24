@@ -167,7 +167,7 @@
 					<show id="lecm-sched:type"/>
 				</field-visibility>
 				<appearance>
-					<set id="time-limit" template="/ru/it/lecm/wcalendar/controls/2-column-set-augmented.ftl" appearance="title" label-id="label.schedule.form.set.date-interval" />
+					<set id="time-limit" template="/ru/it/lecm/wcalendar/controls/2-column-set-augmented.ftl" appearance="title" label-id="label.schedule.form.set.date-interval" minimizeSetWidth="true" />
 					<set id="reiteration-rules"  appearance="title" label-id="label.schedule.form.reiteration-rules" />
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.schedule.form.set.work-time" />
 					<field id="lecm-sched:sched-employee-link-assoc" mandatory="true">
@@ -210,12 +210,20 @@
 						</control>
 					</field>
 					<field id="lecm-sched:time-limit-start" label-id="label.schedule.form.set.date-interval.begin" mandatory="true" set="time-limit">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
+							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">8em</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.scheduleLimitValidation"
 										event="keyup" message-id="message.error.schedule.schedule-date-limit-validation.early-end" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:time-limit-end" label-id="label.schedule.form.set.date-interval.end" mandatory="true" set="time-limit">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
+							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">8em</control-param>
+						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.scheduleLimitValidation"
 										event="keyup" message-id="message.error.schedule.schedule-date-limit-validation.early-end" />
@@ -288,16 +296,18 @@
 						</control>
 					</field>
 					<field id="lecm-absence:begin" mandatory="true" set="dates">
-						<control template="/org/alfresco/components/form/controls/date.ftl">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">6em</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur" />
 						</constraint-handlers>
 					</field>
 					<field id="lecm-absence:end" mandatory="true" set="dates">
-						<control template="/org/alfresco/components/form/controls/date.ftl">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">6em</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur" />
@@ -336,16 +346,18 @@
 						<control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
 					</field>
 					<field id="lecm-absence:begin" set="dates">
-						<control template="/org/alfresco/components/form/controls/date.ftl">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">6em</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur"/>
 						</constraint-handlers>
 					</field>
 					<field id="lecm-absence:end" mandatory="true" set="dates">
-						<control template="/org/alfresco/components/form/controls/date.ftl">
+						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
+							<control-param name="dateMaxWidth">6em</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Absence.dateIntervalValidation" event="blur"/>
