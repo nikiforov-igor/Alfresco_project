@@ -114,7 +114,7 @@ public class ModelsListBeanImpl extends BaseBean {
 
 						JSONObject typeObject = new JSONObject();
 						typeObject.put("typeName", typeName);
-						typeObject.put("title", type.getDescription());
+						typeObject.put("title", type.getTitle());
 						typeObject.put("modelName", type.getModel().getName().toPrefixString());
 
 						List<JSONObject> typesList = new ArrayList<JSONObject>();
@@ -169,7 +169,7 @@ public class ModelsListBeanImpl extends BaseBean {
 										for (M2Type type: model.getTypes()) {
 											JSONObject typeObject = new JSONObject();
 											typeObject.put("typeName", type.getName());
-											typeObject.put("title", type.getDescription());
+											typeObject.put("title", type.getTitle());
 											typeObject.put("modelName", model.getName());
 											typesList.add(typeObject);
 										}
