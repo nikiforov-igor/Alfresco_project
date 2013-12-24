@@ -1984,6 +1984,11 @@ div.currentValueDisplay {
     padding: 0;
 }
 
+.yui-skin-lecmTheme .yui-panel div[id*="reportForm"] div.form-field div.autocompleteCurrentValueDisplay,
+.yui-skin-lecmTheme .yui-panel div[id*="reportForm"] div.form-field div.autocompleteCurrentValueDisplayInvisible {
+    margin-left: 0px;
+}
+
 .yui-skin-lecmTheme .yui-panel div.yui-navset div.form-field div.autocompleteCurrentValueDisplay,
 .yui-skin-lecmTheme .yui-panel div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
     width: 28em;
