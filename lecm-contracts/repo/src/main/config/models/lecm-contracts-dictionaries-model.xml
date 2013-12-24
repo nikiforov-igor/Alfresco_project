@@ -13,7 +13,7 @@
 
 	<types>
 		<type name="lecm-contract-dic:contract-type">
-			<title>Logic Ecm Dictionary Contract Type</title>
+			<title>Справочник "Вид договора"</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-contract-dic:contract-type-code">
@@ -36,7 +36,7 @@
 			</properties>
 		</type>
 		<type name="lecm-contract-dic:contract-documents-type">
-			<title>Logic Ecm Dictionary Contract Documents Type</title>
+			<title>Справочник "Вид документа к договору"</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-contract-dic:contract-documents-type-code">
@@ -53,7 +53,7 @@
 
 		<!--todo Нужно будет удалить-->
 		<type name="lecm-contract-dic:contract-subjects">
-			<title>Logic Ecm Dictionary Contract Subjects</title>
+			<title>Справочник "Тематика договора"</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-contract-dic:contract-subjects-code">
@@ -76,7 +76,7 @@
 			</properties>
 		</type>
 		<type name="lecm-contract-dic:delete-reason">
-			<title>Logic Ecm Dictionary Delete Reason</title>
+			<title>Справочник "Причины удаления"</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-contract-dic:delete-reason-code">
@@ -91,7 +91,7 @@
 			</properties>
 		</type>
 		<type name="lecm-contract-dic:reference-data">
-			<title>Logic Ecm Dictionary Reference Data</title>
+			<title>Справочник "Договора-НСИ"</title>
 			<parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<property name="lecm-contract-dic:reference-data-link">
@@ -106,7 +106,7 @@
 			</properties>
 		</type>
         <type name="lecm-contract-dic:stage-status">
-            <title>Logic Ecm Dictionary Reference Data</title>
+            <title>Справочник "Статусы этапов"</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
         </type>
 	</types>

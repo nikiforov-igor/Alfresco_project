@@ -167,6 +167,7 @@
 		    <!--</properties>-->
 	    <!--</type>-->
 	    <type name="lecm-contract-table-structure:stagesTable">
+		    <title>Таблица этапов договора</title>
 		    <parent>lecm-document:tableData</parent>
 		    <overrides>
 			    <property name="lecm-document:tableDataRowType">
