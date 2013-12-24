@@ -105,7 +105,7 @@ LogicECM.module = LogicECM.module || {};
 
 			treeItemType: null,
 
-            maxSearchResults: 100,
+            maxSearchResults: 1000,
 
             treeRoteNodeTitleProperty: "cm:name",
 
