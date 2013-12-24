@@ -194,55 +194,57 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var column = this.getColumn(target);
 			var oRecord = this.getRecord(target);
 			if (column.key == 'delete') {
-				if (oRecord.getData("isActive")) {
-					mySimpleDialog = new YAHOO.widget.SimpleDialog("dlg-" + oRecord.getId(), {
-						width: "20em",
-						fixedcenter: true,
-						modal: true,
-						visible: false,
-						draggable: false,
-						close: false
-					});
+				if (oRecord.getData("nodeRef") != null && !oRecord.getData("isRestorable")) {
+					if (oRecord.getData("isActive")) {
+						mySimpleDialog = new YAHOO.widget.SimpleDialog("dlg-" + oRecord.getId(), {
+							width: "20em",
+							fixedcenter: true,
+							modal: true,
+							visible: false,
+							draggable: false,
+							close: false
+						});
 
-					mySimpleDialog.setHeader("Внимание!");
-					mySimpleDialog.setBody("Нельзя удалить активную модель");
-					mySimpleDialog.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN);
-					mySimpleDialog.cfg.queueProperty("buttons", [
-						{ text: "Ок", handler: function () {
-							this.hide();
-						} }
-					]);
-					mySimpleDialog.render(document.body);
-					mySimpleDialog.show();
-				} else {
-					var config = {
-						method: "DELETE",
-						url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/file/node/" + oRecord.getData("nodeRef").replace(":/", ""),
-						successCallback: {
-							fn: function (response, obj) {
-								if (response.json.message) {
-									Alfresco.util.PopupManager.displayMessage({ text: response.json.message });
-								}
-								this.deleteRow(target);
+						mySimpleDialog.setHeader("Внимание!");
+						mySimpleDialog.setBody("Нельзя удалить активную модель");
+						mySimpleDialog.cfg.setProperty("icon", YAHOO.widget.SimpleDialog.ICON_WARN);
+						mySimpleDialog.cfg.queueProperty("buttons", [
+							{ text: "Ок", handler: function () {
+								this.hide();
+							} }
+						]);
+						mySimpleDialog.render(document.body);
+						mySimpleDialog.show();
+					} else {
+						var config = {
+							method: "DELETE",
+							url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/file/node/" + oRecord.getData("nodeRef").replace(":/", ""),
+							successCallback: {
+								fn: function (response, obj) {
+									if (response.json.message) {
+										Alfresco.util.PopupManager.displayMessage({ text: response.json.message });
+									}
+									this.deleteRow(target);
+								},
+								scope: this
 							},
-							scope: this
-						},
-						failureCallback: {
-							fn: function (response, obj) {
-								Alfresco.util.PopupManager.displayMessage(
-									{
-										text: Alfresco.util.message("Ошибка удаления модели")
-									});
+							failureCallback: {
+								fn: function (response, obj) {
+									Alfresco.util.PopupManager.displayMessage(
+										{
+											text: Alfresco.util.message("Ошибка удаления модели")
+										});
+								},
+								scope: this
 							},
-							scope: this
-						},
-						dataObj: {
-							name: oRecord.getData("displayName")
+							dataObj: {
+								name: oRecord.getData("displayName")
+							}
+						};
+
+						if (confirm('Вы действительно хотите удалить модель?')) {
+							Alfresco.util.Ajax.jsonRequest(config);
 						}
-					};
-
-					if (confirm('Вы действительно хотите удалить модель?')) {
-						Alfresco.util.Ajax.jsonRequest(config);
 					}
 				}
 			} else {
