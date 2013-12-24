@@ -20,10 +20,7 @@ import ru.it.lecm.base.beans.LecmModelsService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -115,6 +112,15 @@ public class ModelsListBeanImpl extends BaseBean {
 						object.put("modelName", type.getModel().getName().toPrefixString());
 						object.put("isRestorable", lecmModelsService.isRestorable(type.getModel().getName().toPrefixString()));
 
+						JSONObject typeObject = new JSONObject();
+						typeObject.put("typeName", typeName);
+						typeObject.put("title", type.getDescription());
+						typeObject.put("modelName", type.getModel().getName().toPrefixString());
+
+						List<JSONObject> typesList = new ArrayList<JSONObject>();
+						typesList.add(typeObject);
+						object.put("types", typesList);
+
 						models.put(typeName, object);
 					}
 				}
@@ -158,6 +164,16 @@ public class ModelsListBeanImpl extends BaseBean {
 										}
                                         object.put("modelName", model.getName());
                                         object.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
+
+										List<JSONObject> typesList = new ArrayList<JSONObject>();
+										for (M2Type type: model.getTypes()) {
+											JSONObject typeObject = new JSONObject();
+											typeObject.put("typeName", type.getName());
+											typeObject.put("title", type.getDescription());
+											typeObject.put("modelName", model.getName());
+											typesList.add(typeObject);
+										}
+										object.put("types", typesList);
 
 										models.put(typeName, object);
 									}

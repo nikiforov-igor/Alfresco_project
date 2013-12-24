@@ -24,6 +24,16 @@
    background: transparent url(/share/res/images/lecm-model-list/statemachine_edit.png) no-repeat scroll center center;
    cursor: pointer;
 }
+.models .yui-dt-liner a.expand
+{
+   background: transparent url(/share/res/images/lecm-model-list/expand.png) no-repeat scroll center center;
+   cursor: pointer;
+}
+.models .yui-dt-liner a.collapse
+{
+   background: transparent url(/share/res/images/lecm-model-list/collapse.png) no-repeat scroll center center;
+   cursor: pointer;
+}
 .models .yui-dt-liner a
 {
    background-position: 0 center;

@@ -46,6 +46,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			// DataTable column defintions
 			var columnDefinitions = [
+				{key: "expand", label: "", sortable: false, formatter: this._formatExpandModel(), width: 15, maxAutoWidth: 15},
 				{key: "title", label: "Модель документа", sortable: false, formatter: this._formatTitle, width: 250, maxAutoWidth: 250},
 				{key: "active", label: "Активна", sortable: false, formatter: this._formatActive, width: 100, maxAutoWidth: 100},
 				{key: "edit-model", label: "", sortable: false, formatter: this._formatEditModel(), width: 15, maxAutoWidth: 15},
@@ -57,7 +58,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			// DataTable definition
 			this.widgets.dataTable = new YAHOO.widget.DataTable(this.id + "-body", columnDefinitions, this.widgets.dataSource);
-			this.widgets.dataTable.subscribe('cellClickEvent', this._deleteRow);
+			this.widgets.dataTable.subscribe('cellClickEvent', this._onClickListener);
 			this.widgets.dataTable.subscribe("dataReturnEvent", function(oArgs) {
 				this.destination = oArgs.response.meta.metadata.parent;
 			}, this);
@@ -70,14 +71,42 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 		},
 
+		_formatExpandModel: function () {
+			var scope = this;
+
+			return function (el, oRecord, oColumn, oData, oDataTable) {
+				if (oRecord.getData("types") != null) {
+					el.innerHTML = "";
+
+					if (oRecord.getData("expanded")) {
+						var collapseLink = document.createElement("a");
+						collapseLink.title = scope.msg("title.model.collapse");
+						Dom.addClass(collapseLink, "collapse");
+						collapseLink.innerHTML = "&nbsp;";
+						el.appendChild(collapseLink);
+					} else {
+						var expandLink = document.createElement("a");
+						expandLink.title = scope.msg("title.model.expand");
+						Dom.addClass(expandLink, "expand");
+						expandLink.innerHTML = "&nbsp;";
+						el.appendChild(expandLink);
+					}
+				}
+			};
+		},
+
 		_formatTitle: function formaterRenderActions(el, oRecord, oColumn, oData, oDataTable) {
 			el.innerHTML = (oRecord.getData("title") || oData);
 		},
 
 		_formatActive: function formaterRenderActive(el, oRecord, oColumn, oData, oDataTable) {
-			var activeElement = document.createElement("span");
-			activeElement.innerHTML = (oRecord.getData("isActive") ? "Да" : "Нет");
-			el.appendChild(activeElement);
+			if (oRecord.getData("isActive") != null) {
+				el.innerHTML = "";
+
+				var activeElement = document.createElement("span");
+				activeElement.innerHTML = (oRecord.getData("isActive") ? "Да" : "Нет");
+				el.appendChild(activeElement);
+			}
 		},
 
 		_formatDelete: function () {
@@ -85,6 +114,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
 				if (oRecord.getData("nodeRef") != null && !oRecord.getData("isRestorable")) {
+					el.innerHTML = "";
+
 					var deleteLink = document.createElement("a");
 					deleteLink.title = scope.msg("title.model.delete");
 					Dom.addClass(deleteLink, "delete");
@@ -99,6 +130,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
 				if (oRecord.getData("nodeRef") != null && oRecord.getData("isDocument")) {
+					el.innerHTML = "";
+
 					var editModelLink = document.createElement("a");
 					editModelLink.title = scope.msg("title.model.edit");
 					Dom.addClass(editModelLink, "edit-model");
@@ -115,6 +148,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
             return function (el, oRecord, oColumn, oData, oDataTable) {
                 if (oRecord.getData("isRestorable")) {
+	                el.innerHTML = "";
+
                     var restoreModelLink = document.createElement("a");
                     restoreModelLink.title = scope.msg("title.model.restore");
                     Dom.addClass(restoreModelLink, "restore-model");
@@ -158,12 +193,14 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			var scope = this;
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
-				if (oRecord.getData("isActive")) {
+				if (oRecord.getData("isActiveModel") && oRecord.getData("typeName")) {
+					el.innerHTML = "";
+
 					var editFormLink = document.createElement("a");
 					editFormLink.title = scope.msg("title.forms.edit");
 					Dom.addClass(editFormLink, "edit-form");
 					editFormLink.innerHTML = "&nbsp;";
-					editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("id");
+					editFormLink.href = Alfresco.constants.URL_PAGECONTEXT + "doc-forms-list?doctype=" + oRecord.getData("typeName");
 					el.appendChild(editFormLink);
 				}
 			};
@@ -174,6 +211,8 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 
 			return function (el, oRecord, oColumn, oData, oDataTable) {
 				if (oRecord.getData("isActive") && oRecord.getData("isDocument")) {
+					el.innerHTML = "";
+
 					var editStatemachineLink = document.createElement("a");
 					editStatemachineLink.title = scope.msg("title.statemachine.edit");
 					Dom.addClass(editStatemachineLink, "edit-statemachine");
@@ -184,7 +223,7 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 			};
 		},
 
-		_deleteRow: function (oArgs) {
+		_onClickListener: function (oArgs) {
 			var target = oArgs.target;
 			var column = this.getColumn(target);
 			var oRecord = this.getRecord(target);
@@ -242,9 +281,40 @@ LogicECM.module.ModelEditor = LogicECM.module.ModelEditor || {};
 						}
 					}
 				}
-			} else {
-				//this.onEventShowCellEditor(oArgs);
+			} else if (column.key == 'expand') {
+				var types = oRecord.getData("types");
+				if (types != null) {
+					var expanded = oRecord.getData("expanded") != null && oRecord.getData("expanded");
+					if (!expanded) {
+						var typeRows = [];
+						for (var i = 0; i < types.length; i++) {
+							typeRows.push({
+								title: types[i].title,
+								typeName: types[i].typeName,
+								isActiveModel: oRecord.getData("isActive"),
+								parentModelName: oRecord.getData("modelName")
+							});
+
+						}
+						this.addRows(typeRows, this.getTrIndex(oArgs.target) + 1);
+					} else {
+						var recordSet = this.getRecordSet();
+						var findedRows = [];
+						for (i = 0; i < recordSet.getLength(); i++) {
+							if (recordSet.getRecord(i).getData("parentModelName") == oRecord.getData("modelName")) {
+								findedRows.push(recordSet.getRecord(i));
+							}
+						}
+
+						for (i = 0; i < findedRows.length; i++) {
+							this.deleteRows(findedRows[i]);
+						}
+					}
+					var itemData = oRecord.getData();
+					itemData.expanded = !expanded;
+					this.updateRow(oRecord, itemData);
+				}
 			}
-		}//_deleteRow
+		}
 	});
 })();
