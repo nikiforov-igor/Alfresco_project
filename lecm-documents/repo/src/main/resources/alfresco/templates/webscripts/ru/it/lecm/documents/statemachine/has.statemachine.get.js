@@ -1,2 +1,8 @@
 var node = search.findNode(args["nodeRef"]);
-model.hasStatemachine = statemachine.hasStatemachine(node);
+if (node) {
+	model.hasStatemachine = statemachine.hasStatemachine(node);
+} else {
+	status.code = 404;
+	status.message = "NodeRef " + args["nodeRef"] + " not found. It maybe deleted or never existed";
+	status.redirect = true;
+}
