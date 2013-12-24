@@ -104,24 +104,24 @@ public class ModelsListBeanImpl extends BaseBean {
 					if (type != null) {
 						String typeName = type.getName().toPrefixString(namespaceService);
 
-						JSONObject object = new JSONObject();
-						object.put("id", typeName);
-						object.put("title", type.getModel().getDescription());
-						object.put("isActive", true);
-						object.put("isDocument", true);
-						object.put("modelName", type.getModel().getName().toPrefixString());
-						object.put("isRestorable", lecmModelsService.isRestorable(type.getModel().getName().toPrefixString()));
+						JSONObject modelObject = new JSONObject();
+						modelObject.put("title", type.getModel().getDescription());
+						modelObject.put("isActive", true);
+						modelObject.put("isDocumentModel", true);
+						modelObject.put("modelName", type.getModel().getName().toPrefixString());
+						modelObject.put("isRestorable", lecmModelsService.isRestorable(type.getModel().getName().toPrefixString()));
 
 						JSONObject typeObject = new JSONObject();
 						typeObject.put("typeName", typeName);
 						typeObject.put("title", type.getTitle());
+						typeObject.put("isDocument", true);
 						typeObject.put("modelName", type.getModel().getName().toPrefixString());
 
 						List<JSONObject> typesList = new ArrayList<JSONObject>();
 						typesList.add(typeObject);
-						object.put("types", typesList);
+						modelObject.put("types", typesList);
 
-						models.put(typeName, object);
+						models.put(typeName, modelObject);
 					}
 				}
 
@@ -141,29 +141,26 @@ public class ModelsListBeanImpl extends BaseBean {
 							if (contentReader != null) {
 								M2Model model = M2Model.createModel(contentReader.getContentInputStream());
 
-								M2Type m2Type = model.getTypes().get(0);
+								M2Type firstType = model.getTypes().get(0);
 
-								if (m2Type != null) {
-									String typeName = m2Type.getName();
-
-									if (models.containsKey(typeName)) {
-										models.get(typeName).put("nodeRef", child.toString());
+								if (firstType != null) {
+									if (models.containsKey(firstType.getName())) {
+										models.get(firstType.getName()).put("nodeRef", child.toString());
 									} else {
 										Serializable modelActive = nodeService.getProperty(child, ContentModel.PROP_MODEL_ACTIVE);
 
-										JSONObject object = new JSONObject();
-										object.put("id", typeName);
-										object.put("nodeRef", child.toString());
-										object.put("title",  model.getDescription());
-										object.put("isActive", modelActive != null && Boolean.TRUE.equals(modelActive));
+										JSONObject modelObject = new JSONObject();
+										modelObject.put("nodeRef", child.toString());
+										modelObject.put("title",  model.getDescription());
+										modelObject.put("isActive", modelActive != null && Boolean.TRUE.equals(modelActive));
 
 										if (modelActive != null && Boolean.TRUE.equals(modelActive)) {
-											object.put("isDocument", false);
+											modelObject.put("isDocumentModel", false);
 										} else {
-											object.put("isDocument", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(m2Type.getParentName()));
+											modelObject.put("isDocumentModel", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(firstType.getParentName()));
 										}
-                                        object.put("modelName", model.getName());
-                                        object.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
+										modelObject.put("modelName", model.getName());
+										modelObject.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
 
 										List<JSONObject> typesList = new ArrayList<JSONObject>();
 										for (M2Type type: model.getTypes()) {
@@ -171,13 +168,17 @@ public class ModelsListBeanImpl extends BaseBean {
 											typeObject.put("typeName", type.getName());
 											typeObject.put("title", type.getTitle());
 											typeObject.put("modelName", model.getName());
+											if (modelActive != null && Boolean.TRUE.equals(modelActive)) {
+												typeObject.put("isDocument", false);
+											} else {
+												typeObject.put("isDocument", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(type.getParentName()));
+											}
 											typesList.add(typeObject);
 										}
-										object.put("types", typesList);
+										modelObject.put("types", typesList);
 
-										models.put(typeName, object);
+										models.put(firstType.getName(), modelObject);
 									}
-
 								}
 							}
 						}
