@@ -20,8 +20,12 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     cursor: pointer;
 }
 
-.datagrid .onActionSelect a {
-    background-image: url("../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
+.datagrid .onActionSelectTemplate a {
+    background-image: url("/share/res/images/lecm-reports-editor/select-template-16.png");
+}
+
+.datagrid .onActionSelectSource a {
+    background-image: url("/share/res/images/lecm-reports-editor/select-source-16.png");
 }
 
 .reports-editor-panel {
@@ -66,7 +70,7 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
  }
 
 .datagrid .onActionAdd a {
-    background-image: url('/share/res/components/images/plus-16.png');
+    background-image: url('/share/res/images/lecm-reports-editor/column-add-16.png');
 }
 
 #bd #lecm-content-main div[id*="reports-editor"] .reports {
@@ -105,7 +109,7 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
 }
 
 .datagrid .onActionDeploy a {
-    background-image: url("/share/res/images/lecm-reports-editor/deploy-report_16.png");
+    background-image: url("/share/res/images/lecm-reports-editor/deploy-report-16.png");
 }
 
 .datagrid .onActionUnDeploy a {
@@ -159,4 +163,17 @@ div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textare
 
 #bd #lecm-content-main #reports-editor-tree {
     margin: 0 5px;
+}
+
+span.insitu-deploy-report
+{
+    background-image: url('/share/res/images/lecm-reports-editor/deploy-report-16.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 16px;
+    margin-left: 16px;
+    opacity: 0;
+    position: absolute;
+    visibility: hidden;
+    width: 16px;
 }

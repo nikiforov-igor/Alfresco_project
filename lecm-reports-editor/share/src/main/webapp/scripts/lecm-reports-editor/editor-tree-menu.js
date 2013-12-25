@@ -15,6 +15,7 @@
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
         this.menuState = null;
+        this.actions = null;
 
         YAHOO.Bubbling.on("newReportCreated", this.onNewReportCreated, this);
         YAHOO.Bubbling.on("dataItemsDeleted", this.onNodeDeleted, this);
@@ -32,6 +33,8 @@
         preferences: null,
 
         menuState: null,
+
+        actions: null,
 
         onReady: function () {
             var menu = this;
@@ -57,6 +60,8 @@
         },
 
         _createTree: function () {
+            this.actions = [];
+
             this.tree = new YAHOO.widget.TreeView(this.id);
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree.bind(this));
@@ -78,6 +83,13 @@
                 this.onCollapse(node);
                 return true;
             }.bind(this));
+
+            this.tree.subscribe('expandComplete', function (node) {
+                this.onExpandComplete(node);
+                return true;
+            }.bind(this));
+
+            this.onExpandComplete(null);
         },
 
         onCollapse: function (oNode) {
@@ -107,6 +119,16 @@
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
 
+        onExpandComplete: function (oNode) {
+            for (var i in this.actions) {
+                Alfresco.util.createInsituEditor(
+                    this.actions[i].context,
+                    this.actions[i].params,
+                    this.actions[i].callback
+                );
+            }
+        },
+
         onNewReportCreated: function (layer, args) {
             var obj = args[1];
             var otree = this;
@@ -119,7 +141,7 @@
             }
         },
 
-        onNodeDeleted:function (layer, args) {
+        onNodeDeleted: function (layer, args) {
             this._loadTree(this.selectedNode, function () {
                 if (this.selectedNode.children.length == 0) {
                     this.selectedNode.isLeaf = true;
@@ -168,6 +190,20 @@
                                     otree.selectedNode = curElement;
                                     otree.tree.onEventToggleHighlight(curElement);
                                 }
+                            }
+                            if (curElement.data.childType == "report-custom") {
+                                otree.actions.push(
+                                    {
+                                        context: curElement.labelElId,
+                                        params: {
+                                            showDelay: 300,
+                                            hideDelay: 300,
+                                            type: "reportActions",
+                                            curElem: curElement,
+                                            reportTree: otree
+                                        },
+                                        callback: null
+                                    });
                             }
                         }
                     }
@@ -244,7 +280,7 @@
             return YAHOO.lang.JSON.stringify(this.menuState);
         },
 
-        _inArray: function(value, array) {
+        _inArray: function (value, array) {
             for (var i = 0; i < array.length; i++) {
                 if (array[i] == value) {
                     return true;
@@ -253,4 +289,97 @@
             return false;
         }
     });
+
+    Alfresco.widget.InsituEditor.reportActions = function (p_params) {
+        this.params = YAHOO.lang.merge({}, p_params);
+
+        // Create icons instances
+        this.deployIcon = new Alfresco.widget.InsituEditorDeployReport(this, p_params);
+        return this;
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditor.reportActions, Alfresco.widget.InsituEditor.textBox,
+        {
+            doShow: function () {
+                if (this.contextStyle === null) {
+                    this.contextStyle = Dom.getStyle(this.params.context, "display");
+                }
+                Dom.setStyle(this.params.context, "display", "none");
+                Dom.setStyle(this.editForm, "display", "inline");
+            },
+
+            doHide: function (restoreUI) {
+                if (restoreUI) {
+                    Dom.setStyle(this.editForm, "display", "none");
+                    Dom.setStyle(this.params.context, "display", this.contextStyle);
+                }
+            },
+
+            _generateMarkup: function () {
+                return;
+            }
+        });
+
+    Alfresco.widget.InsituEditorDeployReport = function (p_editor, p_params) {
+        this.params = YAHOO.lang.merge({}, p_params);
+        this.disabled = p_params.disabled;
+
+        this.editIcon = document.createElement("span");
+        this.editIcon.title = Alfresco.util.encodeHTML(p_params.title);
+        Dom.addClass(this.editIcon, "insitu-deploy-report");
+
+        this.params.context.appendChild(this.editIcon, this.params.context);
+        YAHOO.util.Event.on(this.params.context, "mouseover", this.onContextMouseOver, this);
+        YAHOO.util.Event.on(this.params.context, "mouseout", this.onContextMouseOut, this);
+        YAHOO.util.Event.on(this.editIcon, "mouseover", this.onContextMouseOver, this);
+        YAHOO.util.Event.on(this.editIcon, "mouseout", this.onContextMouseOut, this);
+    };
+
+    YAHOO.extend(Alfresco.widget.InsituEditorDeployReport, Alfresco.widget.InsituEditorIcon,
+        {
+            onIconClick: function (e, obj) {
+                Alfresco.util.PopupManager.displayPrompt({
+                    title: "Регистрация отчета",
+                    text: "Вы действительно хотите добавить отчет в систему?",
+                    buttons: [
+                        {
+                            text: "Да",
+                            handler: function () {
+                                this.destroy();
+                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/deployReport?reportDescNode={reportDescNode}";
+                                sUrl = YAHOO.lang.substitute(sUrl, {
+                                    reportDescNode: obj.params.curElem.data.nodeRef
+                                });
+                                var callback = {
+                                    success: function (oResponse) {
+                                        Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text: "Отчет зарегистрирован в системе",
+                                                displayTime: 3
+                                            });
+                                    },
+                                    failure: function (oResponse) {
+                                        alert(oResponse.responseText);
+                                        Alfresco.util.PopupManager.displayMessage(
+                                            {
+                                                text: "При регистрации отчета произошла ошибка",
+                                                displayTime: 3
+                                            });
+                                    },
+                                    timeout: 30000
+                                };
+                                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            }
+                        },
+                        {
+                            text: "Нет",
+                            handler: function () {
+                                this.destroy();
+                            },
+                            isDefault: true
+                        }
+                    ]
+                });
+            }
+        });
 })();

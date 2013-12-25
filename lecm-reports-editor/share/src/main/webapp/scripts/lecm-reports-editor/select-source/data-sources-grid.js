@@ -8,7 +8,7 @@ YAHOO.lang.extend(LogicECM.module.ReportsEditor.SourcesGrid, LogicECM.module.Bas
 
 YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
 
-    onActionSelect: function (item) {
+    onActionSelectSource: function (item) {
         //выбираем набор данных - копируем его в отчет
         YAHOO.Bubbling.fire("copySourceToReport", {
             dataSourceId: item.nodeRef

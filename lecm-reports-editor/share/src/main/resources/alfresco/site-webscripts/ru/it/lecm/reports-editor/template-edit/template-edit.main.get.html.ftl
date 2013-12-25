@@ -50,7 +50,7 @@
                                     YAHOO.lang.extend (LogicECM.module.ReportsEditor.TemplatesGrid, LogicECM.module.Base.DataGrid);
 
                                     YAHOO.lang.augmentObject (LogicECM.module.ReportsEditor.TemplatesGrid.prototype, {
-                                        onActionSelect: function (item) {
+                                        onActionSelectTemplate: function (item) {
                                             // копируем шаблон в отчет
                                             YAHOO.Bubbling.fire("copyTemplateToReport", {
                                                 templateId: item.nodeRef
@@ -67,7 +67,7 @@
                                                     actions: [
                                                         {
                                                             type:"datagrid-action-link-template-edit",
-                                                            id:"onActionSelect",
+                                                            id:"onActionSelectTemplate",
                                                             permission:"edit",
                                                             label:"${msg("actions.select")}",
                                                             evaluator: function (rowData) {

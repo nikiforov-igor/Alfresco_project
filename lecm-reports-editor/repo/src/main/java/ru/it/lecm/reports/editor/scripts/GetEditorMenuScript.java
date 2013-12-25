@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.xpath.operations.Bool;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class GetEditorMenuScript extends AbstractWebScript {
     public static final String TITLE = "title";
     public static final String LABEL = "label";
     public static final String IS_LEAF = "isLeaf";
+    public static final String REPORT_CUSTOM = "report-custom";
+    public static final String SUBREPORT_CUSTOM = "subreport-custom";
 
     private NodeService nodeService;
     private NamespaceService namespaceService;
@@ -71,7 +74,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
         if (nodeRef != null && NodeRef.isNodeRef(nodeRef)) {
             NodeRef currentRef = new NodeRef(nodeRef);
             if (childType == null || childType.isEmpty()) {
-                childType = "report-custom";
+                childType = "custom";
             }
             if (childType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService))) {// список отчетов
                 Set<QName> type = new HashSet<QName>();
@@ -80,8 +83,9 @@ public class GetEditorMenuScript extends AbstractWebScript {
                 for (ChildAssociationRef childNode : childNodes) {
                     String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+                    Boolean isSub = (Boolean) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
                     nodes.add(
-                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "report-custom", label, title, "report-settings?reportId={reportId}", false)
+                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "", false)
                     );
                 }
             } else if (childType.equals(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService))) {// список НД
@@ -92,11 +96,11 @@ public class GetEditorMenuScript extends AbstractWebScript {
                     String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_DATA_SOURCE_CODE);
                     nodes.add(
-                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "report-custom", label, title,
+                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "source-custom", label, title,
                                     "reports-editor-source-columns?sourceId=" + childNode.getChildRef().toString(), true)
                     );
                 }
-            } else if (childType.equals("report-custom")) {
+            } else if (childType.equals(REPORT_CUSTOM) || childType.equals(SUBREPORT_CUSTOM)) {
                 nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "report-settings?reportId={reportId}", true));
 
                 nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "report-source-edit?reportId={reportId}", true));

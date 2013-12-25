@@ -104,7 +104,7 @@
                                     actions: [
                                         {
                                             type: "datagrid-action-link-${sourceListLabel}",
-                                            id: "onActionSelect",
+                                            id: "onActionSelectSource",
                                             permission: "edit",
                                             label: "${msg("actions.select")}"
                                         }
