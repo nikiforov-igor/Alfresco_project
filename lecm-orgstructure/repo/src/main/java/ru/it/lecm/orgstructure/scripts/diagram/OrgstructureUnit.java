@@ -44,7 +44,7 @@ public class OrgstructureUnit {
         }
 
         Iterator<String> it = employees.iterator();
-        if (it.hasNext()) {
+        if (it.hasNext() && boss != null) {
             result += "<br>";
         }
         while (it.hasNext()) {
