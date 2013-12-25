@@ -373,7 +373,7 @@
     </bean>
 
     <bean id="webscript.ru.it.lecm.business-journal.api.last.bjRecords.get"
-          class="ru.it.lecm.businessjournal.script.ExportLastBJRecords"
+          class="ru.it.lecm.businessjournal.script.ExportBJRecords"
           parent="webscript"
           depends-on="businessJournalService">
         <property name="nodeService">

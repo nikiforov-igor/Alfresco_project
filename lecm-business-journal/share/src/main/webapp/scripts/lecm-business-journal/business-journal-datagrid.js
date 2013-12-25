@@ -191,6 +191,31 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
             return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\',null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
         },
 
+        onExportCsv: function DataGrid__onExportCsv(fileName)
+        {
+            var selectedItems = this.getSelectedItems();
+
+            var form = document.createElement("form");
+            form.enctype = "multipart/form-data";
+            form.action = Alfresco.constants.PROXY_URI + "lecm/business-journal/api/export-records";
+            form.method = "GET";
+
+            var inputTimeZone = document.createElement("input");
+            inputTimeZone.type = "hidden";
+            inputTimeZone.name = "timeZoneOffset";
+            inputTimeZone.value = new Date().getTimezoneOffset();
+            form.appendChild(inputTimeZone);
+
+            for (var i = 0; i < selectedItems.length;i++) {
+                var inputNodeRef = document.createElement("input");
+                inputNodeRef.type = "hidden";
+                inputNodeRef.name = "id";
+                inputNodeRef.value = selectedItems[i].nodeRef;
+                form.appendChild(inputNodeRef);
+            }
+            form.submit();
+        },
+
         onActionDelete: function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
             var timerShowLoadingMessage = null;
             var loadingMessage = null;
