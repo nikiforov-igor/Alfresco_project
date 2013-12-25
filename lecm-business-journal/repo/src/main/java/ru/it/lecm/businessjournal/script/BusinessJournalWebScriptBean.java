@@ -15,6 +15,8 @@ import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author dbashmakov
@@ -119,17 +121,60 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
     private Map<BusinessJournalRecord.Field, String> getFilter(Scriptable filter) {
         HashMap<BusinessJournalRecord.Field, String> result = new HashMap<BusinessJournalRecord.Field, String>();
         if (filter != null) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             Object[] ids = filter.getIds();
             for (Object id1 : ids) {
                 String id = (String) id1;
                 String value = ScriptableObject.getProperty(filter, id).toString();
                 if (id.endsWith("-date-range")) {
                     id = id.replace("-date-range", "");
+                    String[] dates = value.split("\\|");
+                    Date start = new Date(0);
+                    Date end = new Date();
+                    if (!"".equals(dates[0])) {
+                        start = parseDate(dates[0]);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(start);
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        start = calendar.getTime();
+                    }
+                    if (dates.length > 1 && !"".equals(dates[1])) {
+                        end = parseDate(dates[1]);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(end);
+                        calendar.add(Calendar.DAY_OF_MONTH, 1);
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        end = calendar.getTime();
+                    }
+                    value = format.format(start) + "|" + format.format(end);
                 }
                 result.put(BusinessJournalRecord.Field.fromFieldName(id), value);
             }
         }
         return result;
+    }
+
+    private Date parseDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+        Pattern p = Pattern.compile("(\\+|\\-)(\\d+):(\\d+)");
+        Matcher m = p.matcher(date);
+        if (m.find()) {
+            String old = m.group(1) + m.group(2) + ":" + m.group(3);
+            String newValue = m.group(1) + m.group(2) + m.group(3);
+            date = date.replace(old, newValue);
+        }
+        Date result = new Date();
+        try {
+            result = format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+
     }
     private Date getDateFromLong(long longDate) {
         if (longDate != -1) {
