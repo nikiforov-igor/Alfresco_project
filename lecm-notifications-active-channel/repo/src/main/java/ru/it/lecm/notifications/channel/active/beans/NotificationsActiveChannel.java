@@ -118,7 +118,7 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
 	 * @return    true если дата прочтения равна null иначе false
 	 */
 	public boolean isNewNotification(NodeRef ref) {
-		return ref != null && isActiveChannelNotification(ref) && !isArchive(ref) &&
+		return ref != null && nodeService.exists(ref) && !isArchive(ref) && isActiveChannelNotification(ref) &&
 				!((Boolean) nodeService.getProperty(ref, PROP_IS_READ));
 	}
 
