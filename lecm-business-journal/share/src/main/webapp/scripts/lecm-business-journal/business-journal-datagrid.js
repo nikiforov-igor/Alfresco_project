@@ -271,26 +271,10 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                                                 bubblingLabel: this.options.bubblingLabel
                                             });
                                         } else {
-                                            for (var i = 0, ii = response.json.results.length; i < ii; i++) {
-                                                // Reload the node's metadata
-                                                Alfresco.util.Ajax.jsonPost(
-                                                    {
-                                                        url: Alfresco.constants.PROXY_URI + "lecm/base/item/node/" + new Alfresco.util.NodeRef(response.json.results[i].nodeRef).uri,
-                                                        dataObj: this._buildDataGridParams(),
-                                                        successCallback: {
-                                                            fn: function DataGrid_onActionEdit_refreshSuccess(response) {
-                                                                // Fire "itemUpdated" event
-                                                                YAHOO.Bubbling.fire("dataItemUpdated",
-                                                                    {
-                                                                        item: response.json.item,
-                                                                        bubblingLabel: me.options.bubblingLabel
-                                                                    });
-                                                            },
-                                                            scope: this
-                                                        }
-                                                    });
-                                            }
-                                        }
+                                            var obj = {
+                                                datagridMeta: this.datagridMeta
+                                            };
+                                            YAHOO.Bubbling.fire("activeGridChanged", obj);                                        }
                                     } else {
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
