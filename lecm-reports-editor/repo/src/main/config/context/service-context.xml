@@ -162,7 +162,7 @@
           parent="webscript">
         <property name="nodeService" ref="nodeService" />
         <property name="namespaceService" ref="namespaceService" />
-        <property name="preferenceService" ref="preferenceService"/>
+        <!--<property name="preferenceService" ref="preferenceService"/>-->
         <property name="reportsEditorService" ref="reportsEditorService"/>
         <!--<property name="authService" ref="authenticationService"/>-->
     </bean>

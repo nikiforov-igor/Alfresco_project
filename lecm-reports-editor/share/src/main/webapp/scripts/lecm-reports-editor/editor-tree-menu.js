@@ -174,7 +174,8 @@
                                 isLeaf: oResults[nodeIndex].isLeaf,
                                 title: oResults[nodeIndex].title,
                                 redirect: oResults[nodeIndex].redirect,
-                                childType: oResults[nodeIndex].childType
+                                childType: oResults[nodeIndex].childType,
+                                actions:oResults[nodeIndex].actions
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
@@ -191,14 +192,14 @@
                                     otree.tree.onEventToggleHighlight(curElement);
                                 }
                             }
-                            if (curElement.data.childType == "report-custom") {
+                            if (curElement.data.actions &&  curElement.data.actions != "") {
                                 otree.actions.push(
                                     {
                                         context: curElement.labelElId,
                                         params: {
                                             showDelay: 300,
                                             hideDelay: 300,
-                                            type: "reportActions",
+                                            type: curElement.data.actions,
                                             curElem: curElement,
                                             reportTree: otree
                                         },
@@ -235,14 +236,14 @@
             this.tree.onEventToggleHighlight(node);
 
             this.menuState.selected = this._getTextNodeId(node);
-            if (node.data.redirect) {
-                this.menuState.redirectUrl = YAHOO.lang.substitute(node.data.redirect, {
-                    reportId: node.data.nodeRef
-                });
-            }
 
-            var success;
-            if (node.data.redirect) {
+            var success = null;
+            if (node.data.redirect  && !node.data.actions) {
+                if (node.data.redirect && !node.data.actions) {
+                    this.menuState.redirectUrl = YAHOO.lang.substitute(node.data.redirect, {
+                        reportId: node.data.nodeRef
+                    });
+                }
                 success = {
                     fn: function () {
                         var redirectURL = YAHOO.lang.substitute(node.data.redirect, {
@@ -352,6 +353,7 @@
                                 });
                                 var callback = {
                                     success: function (oResponse) {
+                                        obj.params.reportTree._treeNodeSelected(obj.params.curElem);
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
                                                 text: "Отчет зарегистрирован в системе",
@@ -359,6 +361,7 @@
                                             });
                                     },
                                     failure: function (oResponse) {
+                                        obj.params.reportTree._treeNodeSelected(obj.params.curElem);
                                         alert(oResponse.responseText);
                                         Alfresco.util.PopupManager.displayMessage(
                                             {
@@ -375,6 +378,7 @@
                             text: "Нет",
                             handler: function () {
                                 this.destroy();
+                                obj.params.reportTree._treeNodeSelected(obj.params.curElem);
                             },
                             isDefault: true
                         }

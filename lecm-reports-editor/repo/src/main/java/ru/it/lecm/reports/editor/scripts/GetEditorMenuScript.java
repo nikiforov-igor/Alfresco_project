@@ -1,13 +1,11 @@
 package ru.it.lecm.reports.editor.scripts;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.xpath.operations.Bool;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -35,6 +33,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
     public static final String NODE_REF = "nodeRef";
     public static final String REDIRECT = "redirect";
+    public static final String ACTIONS = "actions";
     public static final String ID = "id";
     public static final String CHILD_TYPE = "childType";
     public static final String TITLE = "title";
@@ -45,7 +44,6 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
     private NodeService nodeService;
     private NamespaceService namespaceService;
-    private PreferenceService preferenceService;
     private ReportsEditorService reportsEditorService;
 
     public void setNodeService(NodeService nodeService) {
@@ -54,10 +52,6 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
-    }
-
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
     }
 
     public void setReportsEditorService(ReportsEditorService reportsEditorService) {
@@ -85,7 +79,9 @@ public class GetEditorMenuScript extends AbstractWebScript {
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
                     Boolean isSub = (Boolean) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
                     nodes.add(
-                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "", false)
+                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(),
+                                    !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "report-settings?reportId={reportId}",
+                                    !isSub ? "reportActions" : null, false)
                     );
                 }
             } else if (childType.equals(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService))) {// список НД
@@ -97,34 +93,34 @@ public class GetEditorMenuScript extends AbstractWebScript {
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_DATA_SOURCE_CODE);
                     nodes.add(
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "source-custom", label, title,
-                                    "reports-editor-source-columns?sourceId=" + childNode.getChildRef().toString(), true)
+                                    "reports-editor-source-columns?sourceId=" + childNode.getChildRef().toString(), null, true)
                     );
                 }
             } else if (childType.equals(REPORT_CUSTOM) || childType.equals(SUBREPORT_CUSTOM)) {
-                nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "report-settings?reportId={reportId}", true));
+                nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "report-settings?reportId={reportId}", null, true));
 
-                nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "report-source-edit?reportId={reportId}", true));
+                nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "report-source-edit?reportId={reportId}", null, true));
 
                 String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
                 Set<QName> reportType = new HashSet<QName>();
                 reportType.add(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
                 List<ChildAssociationRef> childReports = nodeService.getChildAssocs(currentRef, reportType);
-                nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "report-subreports?reportId={reportId}", childReports.size() == 0));
+                nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "report-subreports?reportId={reportId}", null, childReports.size() == 0));
 
-                nodes.add(getJSONNode("template", currentRef, "-", "Настройки шаблона представления", null, "report-template-edit?reportId={reportId}", true));
+                nodes.add(getJSONNode("template", currentRef, "-", "Настройки шаблона представления", null, "report-template-edit?reportId={reportId}", null, true));
             }
         } else { // корневой узел
             NodeRef ref = reportsEditorService.getReportsRootFolder();
             String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("reports", ref, type, "Отчеты", "Список дескрипторов отчетов", "reports-editor", false));
+            nodes.add(getJSONNode("reports", ref, type, "Отчеты", "Список дескрипторов отчетов", "reports-editor", null, false));
 
             ref = reportsEditorService.getTemplatesRootFolder();
             type = ReportsEditorModel.TYPE_REPORT_TEMPLATE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("templates", ref, type, "Шаблоны представления", "Список шаблонов представления", "reports-editor-templates", true));
+            nodes.add(getJSONNode("templates", ref, type, "Шаблоны представления", "Список шаблонов представления", "reports-editor-templates", null, true));
 
             ref = reportsEditorService.getSourcesRootFolder();
             type = ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "reports-editor-sources", false));
+            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "reports-editor-sources", null, false));
         }
 
         try {
@@ -136,7 +132,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
         }
     }
 
-    private JSONObject getJSONNode(String id, NodeRef nodeRef, String childType, String label, String title, String redirectPage, boolean isLeaf) {
+    private JSONObject getJSONNode(String id, NodeRef nodeRef, String childType, String label, String title, String redirectPage, String showActions, boolean isLeaf) {
         JSONObject node = new JSONObject();
         try {
             node.put(ID, id);
@@ -148,7 +144,8 @@ public class GetEditorMenuScript extends AbstractWebScript {
             }
             node.put(TITLE, title);
             node.put(IS_LEAF, isLeaf);
-            node.put(REDIRECT, redirectPage);
+            node.put(ACTIONS, showActions != null ? showActions : "");
+            node.put(REDIRECT, redirectPage != null ? redirectPage : "");
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
