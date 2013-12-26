@@ -7,10 +7,9 @@ function getTypes(){
 }
 
 function getReportTemplate(){
-    var typesStr = remote.connect("alfresco").get("/lecm/reports-editor/report-template?reportId=" + page.url.args.reportId);
+    var typesStr = remote.connect("alfresco").get("/lecm/reports-editor/report-template?reportId=" + args.reportId);
     if (typesStr.status == 200) {
-        var template = eval ("(" + typesStr + ")");
-        return template;
+        return eval("(" + typesStr + ")");
     }
     return null;
 }

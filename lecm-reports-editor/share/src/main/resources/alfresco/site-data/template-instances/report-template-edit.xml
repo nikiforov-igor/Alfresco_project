@@ -10,15 +10,5 @@
                 <title>page.lecm.reports-editor.edit-template</title>
             </properties>
         </component>
-        <!-- Content = Toolbar + Form -->
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/reports-editor/template-edit-main</url>
-        </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/reports-editor/template-edit-toolbar</url>
-        </component>
     </components>
 </template-instance>

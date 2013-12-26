@@ -10,9 +10,5 @@
                 <title>page.lecm.reports-editor.report-info</title>
             </properties>
         </component>
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/reports-editor/main</url>
-        </component>
     </components>
 </template-instance>

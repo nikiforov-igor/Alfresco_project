@@ -10,15 +10,5 @@
                 <title>page.lecm.reports-editor.edit-source</title>
             </properties>
         </component>
-        <!-- DataGrid -->
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/reports-editor/source-edit</url>
-        </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/reports-editor/source-edit-toolbar</url>
-        </component>
     </components>
 </template-instance>

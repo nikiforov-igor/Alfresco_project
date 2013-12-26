@@ -39,7 +39,7 @@
                     type: "menu",
                     menu: "reportType-menu",
                     lazyloadmenu: false
-                });
+                }, this.id + "-reportType");
 
             // загрузка начального значения
             if (this.defaultFilter && this.defaultFilter.name && this.defaultFilter.name.length > 0) {

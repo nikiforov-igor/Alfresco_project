@@ -1,12 +1,40 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
+
 <#assign id = args.htmlid>
 
-<#if page.url.args.reportId??>
-<div class="yui-t1" id="re-reports-grid">
-<div id="yui-main-2">
-<div class="yui-b" id="alf-content" style="margin-left: 0;">
-    <@grid.datagrid id=id showViewForm=false>
-        <script type="text/javascript">//<![CDATA[
+<#assign toolbarId = "re-subreports-toolbar-" + id/>
+<div id="${toolbarId}">
+<@comp.baseToolbar toolbarId true false false>
+    <div class="new-row">
+        <span id="${toolbarId}-newElementButton" class="yui-button yui-push-button">
+               <span class="first-child">
+                  <button type="button" title="${msg('label.new-subreport.btn')}">${msg('label.new-subreport.btn')}</button>
+               </span>
+        </span>
+    </div>
+</@comp.baseToolbar>
+</div>
+
+<script type="text/javascript">//<![CDATA[
+function initToolbar() {
+    new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
+        bubblingLabel: "subReports",
+        createFormId: "${args.createFormId!''}",
+        newRowDialogTitle: "label.create-subreport.title"
+    });
+}
+YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
+
+//]]></script>
+
+
+<#assign gridId = "re-subreports-grid" + id />
+<div class="yui-t1" id="${gridId}">
+    <div id="yui-main-2">
+        <div class="yui-b" id="alf-content-${id}" style="margin-left: 0;">
+        <@grid.datagrid id=gridId showViewForm=false>
+            <script type="text/javascript">//<![CDATA[
             var $html = Alfresco.util.encodeHTML,
                     $links = Alfresco.util.activateLinks,
                     $combine = Alfresco.util.combinePaths,
@@ -153,7 +181,7 @@
             }, true);
 
             function createDatagrid() {
-                var datagrid = new LogicECM.module.ReportsEditor.Grid('${id}').setOptions(
+                var datagrid = new LogicECM.module.ReportsEditor.Grid('${gridId}').setOptions(
                         {
                             usePagination: true,
                             useDynamicPagination: true,
@@ -166,37 +194,26 @@
                                     label: "${msg("actions.delete-row")}"
                                 }
                             ],
+                            datagridMeta: {
+                                itemType: "lecm-rpeditor:reportDescriptor",
+                                nodeRef: "${args.reportId}",
+                                datagridFormId: "sub-datagrid",
+                                actionsConfig: {
+                                    fullDelete: true,
+                                    trash: false
+                                },
+                                sort: "cm:name|true"
+                            },
                             bubblingLabel: "subReports",
                             showCheckboxColumn: false
                         }).setMessages(${messages});
 
-                YAHOO.util.Event.onContentReady('${id}', function () {
-                    YAHOO.Bubbling.fire("activeGridChanged", {
-                        datagridMeta: {
-                            itemType: "lecm-rpeditor:reportDescriptor",
-                            nodeRef: "${page.url.args.reportId}",
-                            datagridFormId: "sub-datagrid",
-                            actionsConfig: {
-                                fullDelete: true,
-                                trash: false
-                            },
-                            sort: "cm:name|true"
-                        },
-                        bubblingLabel: "subReports"
-                    });
-                });
+                datagrid.draw();
             }
 
-            function init() {
-                createDatagrid();
-            }
-
-            YAHOO.util.Event.onDOMReady(init);
-        //]]></script>
-    </@grid.datagrid>
+            YAHOO.util.Event.onContentReady("${gridId}", createDatagrid);
+            //]]></script>
+        </@grid.datagrid>
+        </div>
+    </div>
 </div>
-</div>
-</div>
-<#else>
-    <div>${msg("label.unavaiable-page")}</div>
-</#if>

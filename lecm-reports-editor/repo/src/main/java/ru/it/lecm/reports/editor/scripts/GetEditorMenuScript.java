@@ -81,7 +81,7 @@ public class GetEditorMenuScript extends AbstractWebScript {
                     Boolean isSub = isSubValue != null ? (Boolean)isSubValue : Boolean.FALSE;
                     nodes.add(
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(),
-                                    !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "report-settings?reportId={reportId}",
+                                    !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "lecm/reports-editor/report-settings?reportId={reportId}",
                                     !isSub ? "reportActions" : null, false)
                     );
                 }
@@ -94,34 +94,34 @@ public class GetEditorMenuScript extends AbstractWebScript {
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_DATA_SOURCE_CODE);
                     nodes.add(
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "source-custom", label, title,
-                                    "reports-editor-source-columns?sourceId=" + childNode.getChildRef().toString(), null, true)
+                                    "lecm/reports-editor/source-columns?sourceId=" + childNode.getChildRef().toString(), null, true)
                     );
                 }
             } else if (childType.equals(REPORT_CUSTOM) || childType.equals(SUBREPORT_CUSTOM)) {
-                nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "report-settings?reportId={reportId}", null, true));
+                nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "lecm/reports-editor/report-settings?reportId={reportId}", null, true));
 
-                nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "report-source-edit?reportId={reportId}", null, true));
+                nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "lecm/reports-editor/source-edit?reportId={reportId}", null, true));
 
                 String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
                 Set<QName> reportType = new HashSet<QName>();
                 reportType.add(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
                 List<ChildAssociationRef> childReports = nodeService.getChildAssocs(currentRef, reportType);
-                nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "report-subreports?reportId={reportId}", null, childReports.size() == 0));
+                nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "lecm/reports-editor/subreports?reportId={reportId}", null, childReports.size() == 0));
 
-                nodes.add(getJSONNode("template", currentRef, "-", "Настройки шаблона представления", null, "report-template-edit?reportId={reportId}", null, true));
+                nodes.add(getJSONNode("template", currentRef, "-", "Настройки шаблона представления", null, "lecm/reports-editor/template-edit?reportId={reportId}", null, true));
             }
         } else { // корневой узел
             NodeRef ref = reportsEditorService.getReportsRootFolder();
             String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("reports", ref, type, "Отчеты", "Список дескрипторов отчетов", "reports-editor", null, false));
+            nodes.add(getJSONNode("reports", ref, type, "Отчеты", "Список дескрипторов отчетов", "lecm/reports-editor/main", null, false));
 
             ref = reportsEditorService.getTemplatesRootFolder();
             type = ReportsEditorModel.TYPE_REPORT_TEMPLATE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("templates", ref, type, "Шаблоны представления", "Список шаблонов представления", "reports-editor-templates", null, true));
+            nodes.add(getJSONNode("templates", ref, type, "Шаблоны представления", "Список шаблонов представления", "lecm/reports-editor/templates", null, true));
 
             ref = reportsEditorService.getSourcesRootFolder();
             type = ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "reports-editor-sources", null, false));
+            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "lecm/reports-editor/sources", null, false));
         }
 
         try {

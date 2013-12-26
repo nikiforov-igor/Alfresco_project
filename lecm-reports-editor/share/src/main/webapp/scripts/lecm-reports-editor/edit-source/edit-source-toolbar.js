@@ -63,7 +63,7 @@
 
                 this.createSelectDialog();
                 this._initButtons();
-                Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
+                Dom.setStyle(this.id + "-body", "visibility", "visible");
             }
         },
 
@@ -116,15 +116,15 @@
 
         _initButtons: function () {
             this.toolbarButtons.newColumnButton =
-                Alfresco.util.createYUIButton(this, "newColumnButton", this._onNewColumn, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-newColumnButton");
+                Alfresco.util.createYUIButton(this, "newColumnButton", this._onNewColumn, {value: "create", disabled: !this.dataSourceId}, this.id + "-newColumnButton");
 
             this.toolbarButtons.saveAsButton =
-                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.dataSourceId}, this.id + "-columns-toolbar-saveAsButton");
+                Alfresco.util.createYUIButton(this, "saveAsButton", this._onCopySource, {value: "create", disabled: !this.dataSourceId}, this.id + "-saveAsButton");
 
             this.toolbarButtons.selectSource =
-                Alfresco.util.createYUIButton(this, "selectSource", this._onSelectSource, {disabled: !this.dataSourceId}, this.id + "-columns-toolbar-selectSource");
+                Alfresco.util.createYUIButton(this, "selectSource", this._onSelectSource, {disabled: !this.dataSourceId}, this.id + "-selectSource");
 
-            this.groupActions.deleteColumnsBtn = Alfresco.util.createYUIButton(this, "deleteColumnsBtn", this._onDeleteColumns, {disabled: true}, this.id + "-columns-toolbar-deleteColumnsBtn");
+            this.groupActions.deleteColumnsBtn = Alfresco.util.createYUIButton(this, "deleteColumnsBtn", this._onDeleteColumns, {disabled: true}, this.id + "-deleteColumnsBtn");
         },
 
         _onDeleteColumns: function() {

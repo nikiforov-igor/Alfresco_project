@@ -50,7 +50,7 @@
 
         onReady: function () {
             this._initToolbarButtons();
-            Dom.setStyle(this.id + "-toolbar-body", "visibility", "visible");
+            Dom.setStyle(this.id + "-body", "visibility", "visible");
         },
 
         showCreateDialog: function (meta, isCopy) {
@@ -167,17 +167,17 @@
             this.toolbarButtons.newTemplateButton = Alfresco.util.createYUIButton(this, 'newTemplateButton', this._onNewTemplate,
                 {
                     value: 'create'
-                }, this.id + "-toolbar-newTemplateButton");
+                });
 
             this.toolbarButtons.newTemplateFromSourceButton = Alfresco.util.createYUIButton(this, 'newTemplateFromSourceButton', this._onNewTemplateFromSource,
                 {
                     value: 'create'
-                }, this.id + "-toolbar-newTemplateFromSourceButton");
+                });
 
             this.toolbarButtons.newTemplateSaveButton = Alfresco.util.createYUIButton(this, 'newTemplateSaveButton', this._onCopyToRepository,
                 {
                     disabled: !this.templateId
-                }, this.id + "-toolbar-newTemplateSaveButton");
+                });
 
             // Export Template
             this.toolbarButtons.exportTemplateButton = Alfresco.util.createYUIButton(this, "exportTemplateButton", this._onExportTemplate, {});

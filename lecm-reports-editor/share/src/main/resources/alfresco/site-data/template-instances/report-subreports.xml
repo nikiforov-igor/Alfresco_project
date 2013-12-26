@@ -10,23 +10,5 @@
                 <title>page.lecm.reports-subreports</title>
             </properties>
         </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/reports-editor/toolbar</url>
-            <properties>
-                <itemType>lecm-rpeditor:reportDescriptor</itemType>
-                <bubblingLabel>subReports</bubblingLabel>
-                <showSearch>false</showSearch>
-                <showCreateBtn>true</showCreateBtn>
-                <createFormId>subReport</createFormId>
-                <newRowLabel>label.new-subreport.btn</newRowLabel>
-                <newRowDialogTitle>label.create-subreport.title</newRowDialogTitle>
-            </properties>
-        </component>
-        <component>
-            <region-id>content</region-id>
-            <url>/lecm/reports-editor/subreports</url>
-        </component>
     </components>
 </template-instance>

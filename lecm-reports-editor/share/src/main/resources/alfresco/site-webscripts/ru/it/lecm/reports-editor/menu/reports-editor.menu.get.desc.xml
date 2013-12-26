@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>menu</shortname>
-    <description>Returns the reports editor menu.</description>
-    <url>/lecm/reports-editor/menu</url>
-    <format default="html">extension</format>
-    <authentication>user</authentication>
-</webscript>

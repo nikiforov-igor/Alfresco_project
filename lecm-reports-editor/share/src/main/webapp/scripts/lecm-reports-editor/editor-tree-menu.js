@@ -18,7 +18,8 @@
         this.actions = null;
 
         YAHOO.Bubbling.on("newReportCreated", this.onNewReportCreated, this);
-        YAHOO.Bubbling.on("dataItemsDeleted", this.onNodeDeleted, this);
+        YAHOO.Bubbling.on("dataItemCreated", this.onUpdateTree, this);
+        YAHOO.Bubbling.on("dataItemsDeleted", this.onUpdateTree, this);
         return this;
     };
 
@@ -141,7 +142,7 @@
             }
         },
 
-        onNodeDeleted: function (layer, args) {
+        onUpdateTree: function (layer, args) {
             this._loadTree(this.selectedNode, function () {
                 if (this.selectedNode.children.length == 0) {
                     this.selectedNode.isLeaf = true;
@@ -175,7 +176,7 @@
                                 title: oResults[nodeIndex].title,
                                 redirect: oResults[nodeIndex].redirect,
                                 childType: oResults[nodeIndex].childType,
-                                actions:oResults[nodeIndex].actions
+                                actions: oResults[nodeIndex].actions
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
@@ -188,11 +189,10 @@
 
                             if (otree.menuState.selected.length > 0) {
                                 if (otree.menuState.selected == nodeId) {
-                                    otree.selectedNode = curElement;
-                                    otree.tree.onEventToggleHighlight(curElement);
+                                    otree._treeNodeSelected(curElement)
                                 }
                             }
-                            if (curElement.data.actions &&  curElement.data.actions != "") {
+                            if (curElement.data.actions && curElement.data.actions != "") {
                                 otree.actions.push(
                                     {
                                         context: curElement.labelElId,
@@ -238,21 +238,25 @@
             this.menuState.selected = this._getTextNodeId(node);
 
             var success = null;
-            if (node.data.redirect  && !node.data.actions) {
-                if (node.data.redirect && !node.data.actions) {
-                    this.menuState.redirectUrl = YAHOO.lang.substitute(node.data.redirect, {
-                        reportId: node.data.nodeRef
+            if (node.data.redirect && !node.data.actions) {
+                var url = YAHOO.lang.substitute(node.data.redirect, {
+                    reportId: node.data.nodeRef
+                });
+                Alfresco.util.Ajax.request(
+                    {
+                        url: Alfresco.constants.URL_SERVICECONTEXT + url,
+                        dataObj: {
+                            htmlid: Alfresco.util.generateDomId()
+                        },
+                        successCallback: {
+                            fn: function (response) {
+                                var contentEl = Dom.get("alf-content");
+                                contentEl.innerHTML = response.serverResponse.responseText;
+                            }
+                        },
+                        failureMessage: "message.failure",
+                        execScripts: true
                     });
-                }
-                success = {
-                    fn: function () {
-                        var redirectURL = YAHOO.lang.substitute(node.data.redirect, {
-                            reportId: node.data.nodeRef
-                        });
-                        window.location.href = window.location.protocol + "//" + window.location.host +
-                            Alfresco.constants.URL_PAGECONTEXT + redirectURL
-                    }
-                };
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue(), {successCallback: success});
         },

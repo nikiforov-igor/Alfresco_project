@@ -1,5 +1,5 @@
 function getDataSource(){
-    var typesStr = remote.connect("alfresco").get("/lecm/reports-editor/report-source?reportId=" + page.url.args.reportId);
+    var typesStr = remote.connect("alfresco").get("/lecm/reports-editor/report-source?reportId=" + args.reportId);
     if (typesStr.status == 200) {
         return eval("(" + typesStr + ")");
     }
