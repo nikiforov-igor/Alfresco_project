@@ -77,7 +77,8 @@ public class GetEditorMenuScript extends AbstractWebScript {
                 for (ChildAssociationRef childNode : childNodes) {
                     String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-                    Boolean isSub = (Boolean) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
+                    Object isSubValue = nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
+                    Boolean isSub = isSubValue != null ? (Boolean)isSubValue : Boolean.FALSE;
                     nodes.add(
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(),
                                     !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "report-settings?reportId={reportId}",
