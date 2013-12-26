@@ -76,17 +76,17 @@
                     <show id="lecm-contract-table-structure:stages-assoc"/>
 				</field-visibility>
                 <appearance>
-                    <set id="tab1" appearance="" label-id="label.contracts.main" />
+                    <set id="common" appearance="" label-id="label.contracts.main" />
                     <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
-                    <set id="contract-info" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="contract-info" appearance="" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
-                    <set id="counterparty-info-1" parent="tab1" appearance=""/>
-                    <set id="counterparty-info-2" parent="tab1" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="dates" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
-                    <set id="content" appearance="" parent="tab1" />
-                    <set id="registr-info" appearance="" parent="tab1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="other" appearance="" parent="tab1" />
+                    <set id="counterparty-info-1" parent="common" appearance=""/>
+                    <set id="counterparty-info-2" parent="common" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+                    <set id="content" appearance="" parent="common" />
+                    <set id="registr-info" appearance="" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
+                    <set id="other" appearance="" parent="common" />
 
                     <field id="lecm-contract:regNumProject" set="contract-info"/>
                     <field id="lecm-contract:dateRegProjectContracts" set="contract-info"/>
@@ -160,7 +160,7 @@
                     </field>
                     <field id="lecm-contract:locationRegistration" set="registr-info"/>
                     <field id="lecm-contract:locationContract" set="other"/>
-                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="tab1"/>
+                    <field id="lecm-contract-aspect:reasonDelete-assoc" set="common"/>
                     <field id="lecm-contract-table-structure:stages-assoc" set="contract-stages">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-contract-table-structure:name</control-param>
