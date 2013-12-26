@@ -148,7 +148,7 @@
             <amq:transportConnector uri="vm://localhost:7001"/>
         </amq:transportConnectors>
         <persistenceAdapter>
-            <kahaDB directory="../queue/Kaha"/>
+            <kahaDB directory="${dir.root}/queue/Kaha"/>
         </persistenceAdapter>
     </amq:broker>
 
