@@ -275,7 +275,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                         for (AssociationRef sourceAssoc : targetAssocs) {
                             NodeRef nodeRef = sourceAssoc.getTargetRef();
 
-                            if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef)
+                            if (lecmPermissionService.hasReadAccess(nodeRef)
                                     && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
                                 records.add(rowNodeRef);
                             }
@@ -373,27 +373,40 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
             return new ArrayList<NodeRef>();
         }
 
-        List<AssociationRef> sourceAssocs = nodeService.getSourceAssocs(nodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
+        List<NodeRef> records = new ArrayList<NodeRef>(100);
+        ResultSet results = null;
+        String query;
+        SearchParameters sp = new SearchParameters();
+
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
+        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + "\" AND @lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\"";
+        sp.setQuery(query);
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+
+
 
         List<NodeRef> result = new ArrayList<NodeRef>();
-        int index = showSecondary ? MAX_SECONDARY_OBJECTS_COUNT : 0;
 
-        for (int i = -1; i < index; i++) {
-            if (i >= 0) {
-                sourceAssocs = nodeService.getSourceAssocs(nodeRef, QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(i)));
+        for (NodeRef record : records) {
+            if (!showInactive && isArchive(record)) {
+                continue;
             }
-            for (AssociationRef sourceAssoc : sourceAssocs) {
-                NodeRef bjRecordRef = sourceAssoc.getSourceRef();
-                if (!showInactive && isArchive(bjRecordRef)) {
-                    continue;
-                }
-
-                result.add(bjRecordRef);
-            }
+            result.add(record);
         }
 
         return result;
     }
+
 
     @Override
     public List<BusinessJournalRecord> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
