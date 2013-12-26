@@ -4,20 +4,22 @@
 <#assign controlId = gridId + "-cntrl">
 <#assign containerId = gridId + "-container">
 <#assign nodeRef = args.nodeRef/>
-<#assign showCheckBox = false/>
+<#assign showSecondaryCheckBox = false/>
 <#assign dataSource = args.dataSource/>
 
 
 <div class="form-field with-grid history-grid" id="bjHistory-${controlId}">
 
 <#if args.showSecondaryCheckBox?? && args.showSecondaryCheckBox == "true">
-    <#assign showCheckBox = true>
+    <#assign showSecondaryCheckBox = true>
 </#if>
 
-<div class="show-archive-cb-div" style="text-align: right;">
-    <input type="checkbox" class="formsCheckBox" id="${containerId}-cbShowSecondary" onChange="YAHOO.Bubbling.fire('showSecondaryClicked', null)">
-    <label class="checkbox" for="${containerId}-cbShowSecondary">${msg("logicecm.base.show-secondary.label")}</label>
-</div>
+<#if showSecondaryCheckBox>
+	<div class="show-archive-cb-div" style="text-align: right;">
+	    <input type="checkbox" class="formsCheckBox" id="${containerId}-cbShowSecondary" onChange="YAHOO.Bubbling.fire('showSecondaryClicked', null)">
+	    <label class="checkbox" for="${containerId}-cbShowSecondary">${msg("logicecm.base.show-secondary.label")}</label>
+	</div>
+</#if>
 
 <#--uncomment to display "Show Inactive" checkbox-->
 <#--<@grid.datagrid containerId true gridId+"form" showCheckBox>-->
