@@ -379,8 +379,18 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         SearchParameters sp = new SearchParameters();
 
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + "\" AND @lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\"";
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+        query = "TYPE:\"" + TYPE_BR_RECORD.toString() + "\"";
+        if (showSecondary) {
+            query += " AND (@lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
+                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj1\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
+                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj2\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
+                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj3\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
+                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj4\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
+                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj5\\-assoc\\-ref: \"" + nodeRef.toString() + "\")";
+        } else {
+            query += " AND @lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\"";
+        }
         sp.setQuery(query);
         try {
             results = searchService.query(sp);
@@ -393,10 +403,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
             }
         }
 
-
-
         List<NodeRef> result = new ArrayList<NodeRef>();
-
         for (NodeRef record : records) {
             if (!showInactive && isArchive(record)) {
                 continue;
