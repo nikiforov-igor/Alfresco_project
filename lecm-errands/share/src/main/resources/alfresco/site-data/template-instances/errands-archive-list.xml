@@ -55,6 +55,7 @@
                 <linkPage>errands-archive-list</linkPage>
 	            <gridBubblingLabel>errands</gridBubblingLabel>
                 <archiveDocs>true</archiveDocs>
+                <finalDocs>true</finalDocs>
             </properties>
         </component>
         <!-- Filters -->

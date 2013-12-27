@@ -130,7 +130,7 @@
                         dataObj:{
                             docType:"${args.itemType}",
                             active: !("${args.archiveDocs!"false"}" == "true"),
-                            final: ("${args.archiveDocs!"false"}" == "true")
+                            final: ("${args.finalDocs!"false"}" == "true")
                         },
                         successCallback:{
                             fn:function(response){

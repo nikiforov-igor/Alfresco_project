@@ -57,6 +57,7 @@
                 <linkPage>contracts-archive-list</linkPage>
 	            <gridBubblingLabel>contracts</gridBubblingLabel>
                 <archiveDocs>true</archiveDocs>
+                <finalDocs>true</finalDocs>
             </properties>
         </component>
         <!-- Filter -->

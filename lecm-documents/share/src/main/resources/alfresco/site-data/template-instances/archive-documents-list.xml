@@ -48,6 +48,7 @@
 	            <gridBubblingLabel>archive-documents-list</gridBubblingLabel>
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <archiveDocs>true</archiveDocs>
+                <finalDocs>true</finalDocs>
             </properties>
         </component>
         <!-- Filter -->
