@@ -59,6 +59,8 @@
                 <linkPage>contracts-list</linkPage>
 	            <gridBubblingLabel>contracts</gridBubblingLabel>
                 <filterProperty>lecm-statemachine:status</filterProperty>
+                <activeDocs>true</activeDocs>
+                <finalDocs>false</finalDocs>
             </properties>
         </component>
         <!-- Filter -->

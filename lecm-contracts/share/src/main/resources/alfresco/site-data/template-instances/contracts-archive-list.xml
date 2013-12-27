@@ -56,7 +56,7 @@
                 <itemType>lecm-contract:document</itemType>
                 <linkPage>contracts-archive-list</linkPage>
 	            <gridBubblingLabel>contracts</gridBubblingLabel>
-                <archiveDocs>true</archiveDocs>
+                <activeDocs>false</activeDocs>
                 <finalDocs>true</finalDocs>
             </properties>
         </component>

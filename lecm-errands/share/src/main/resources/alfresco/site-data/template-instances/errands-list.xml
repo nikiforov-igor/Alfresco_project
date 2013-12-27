@@ -57,6 +57,8 @@
                 <linkPage>errands-list</linkPage>
 	            <gridBubblingLabel>errands</gridBubblingLabel>
                 <filterProperty>lecm-statemachine:status</filterProperty>
+                <activeDocs>true</activeDocs>
+                <finalDocs>false</finalDocs>
             </properties>
         </component>
         <!-- Filters -->

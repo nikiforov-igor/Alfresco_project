@@ -49,6 +49,8 @@
                 <linkPage>documents-list</linkPage>
 	            <gridBubblingLabel>documents-list</gridBubblingLabel>
                 <filterProperty>lecm-statemachine:status</filterProperty>
+                <activeDocs>true</activeDocs>
+                <finalDocs>false</finalDocs>
             </properties>
         </component>
         <!-- Filter -->

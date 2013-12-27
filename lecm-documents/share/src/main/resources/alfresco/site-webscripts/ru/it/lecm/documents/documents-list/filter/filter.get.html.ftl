@@ -59,7 +59,7 @@
                         url:Alfresco.constants.PROXY_URI_RELATIVE  + "lecm/documents/summary",
                         dataObj:{
                             docType:"${args.itemType}",
-                            archive: ("${args.archiveDocs!"false"}" == "true"),
+                            archive: ("${args.activeDocs!"true"}" == "false"),
                             considerFilter: location.hash.replace(/#(\w+)=/, "")
                         },
                         successCallback:{
@@ -129,7 +129,7 @@
                         url:Alfresco.constants.PROXY_URI_RELATIVE + "lecm/statemachine/getStatuses",
                         dataObj:{
                             docType:"${args.itemType}",
-                            active: !("${args.archiveDocs!"false"}" == "true"),
+                            active: ("${args.activeDocs!"true"}" == "true"),
                             final: ("${args.finalDocs!"false"}" == "true")
                         },
                         successCallback:{

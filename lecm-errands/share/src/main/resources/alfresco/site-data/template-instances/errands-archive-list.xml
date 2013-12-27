@@ -54,7 +54,7 @@
                 <itemType>lecm-errands:document</itemType>
                 <linkPage>errands-archive-list</linkPage>
 	            <gridBubblingLabel>errands</gridBubblingLabel>
-                <archiveDocs>true</archiveDocs>
+                <activeDocs>false</activeDocs>
                 <finalDocs>true</finalDocs>
             </properties>
         </component>
