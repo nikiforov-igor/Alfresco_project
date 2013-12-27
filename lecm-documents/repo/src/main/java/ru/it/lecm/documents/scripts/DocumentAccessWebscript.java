@@ -12,7 +12,6 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 
 public class DocumentAccessWebscript extends DeclarativeWebScript {
@@ -51,21 +50,7 @@ public class DocumentAccessWebscript extends DeclarativeWebScript {
 		} else {
 			//поискать в БЖ запись об удалении
 			List<BusinessJournalRecord> records = businessJournalService.getHistory(nodeRef, null, true, false, false);
-			if (records != null) {
-				boolean removed = false;
-				for (BusinessJournalRecord record : records) {
-					String eventCategory = record.getEventCategoryText();
-					if (EventCategory.DELETE.equals(eventCategory)) {
-						removed = true;
-						break;
-					}
-					if (EventCategory.DELETE_DOCUMENT_ATTACHMENT.equals(eventCategory)) {
-						removed = true;
-						break;
-					}
-				}
-				json.put("removed", removed);
-			}
+			json.put("removed", records != null && records.size() > 0);
 		}
 
 		Map<String, Object> result = new HashMap<String, Object>();
