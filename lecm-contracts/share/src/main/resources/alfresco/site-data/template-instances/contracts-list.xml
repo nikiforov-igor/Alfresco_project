@@ -44,7 +44,7 @@
                 <itemType>lecm-contract:document</itemType>
                 <bubblingLabel>contracts</bubblingLabel>
                 <attributeForShow>lecm-contract:regNumProject</attributeForShow>
-                <excludedColumns>lecm-document:creator-ref</excludedColumns>
+                <excludedColumns>lecm-document:creator-ref,lecm-contract-table-structure:stages-assoc</excludedColumns>
                 <filterProperty>lecm-statemachine:status</filterProperty>
                 <formId>{formId}</formId>
                 <filter>{query}</filter>
