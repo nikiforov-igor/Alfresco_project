@@ -3,5 +3,4 @@
 	<description>Reports Editor Module Main page</description>
 	<url>/lecm/reports-editor/report-settings</url>
 	<format default="html">extension</format>
-	<authentication>user</authentication>
 </webscript>

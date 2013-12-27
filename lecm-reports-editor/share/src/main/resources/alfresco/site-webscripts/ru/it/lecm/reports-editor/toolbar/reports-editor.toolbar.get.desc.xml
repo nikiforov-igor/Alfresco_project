@@ -1,6 +1,0 @@
-<webscript>
-    <shortname>Reports Editor Toolbar</shortname>
-    <description>Reports Editor Toolbar</description>
-    <url>/lecm/reports-editor/toolbar</url>
-    <authentication>user</authentication>
-</webscript>

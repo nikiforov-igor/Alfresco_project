@@ -87,6 +87,7 @@
                                 useDynamicPagination: false,
                                 showExtendSearchBlock: false,
                                 overrideSortingWith: false,
+                                forceSubscribing: true,
                                 editForm: (LogicECM.module.ReportsEditor.REPORT_SETTINGS && LogicECM.module.ReportsEditor.REPORT_SETTINGS.isSQLReport == "true")
                                         ? "sql-provider-column" : "",
                                 actions: [

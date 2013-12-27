@@ -33,6 +33,7 @@
                                         showExtendSearchBlock: false,
                                         showActionColumn: true,
                                         overrideSortingWith: false,
+                                        forceSubscribing: true,
                                         pageSize:10,
                                         actions: [
                                             {
@@ -100,6 +101,7 @@
                                     showExtendSearchBlock: false,
                                     showActionColumn: true,
                                     overrideSortingWith: false,
+                                    forceSubscribing: true,
                                     pageSize:10,
                                     actions: [
                                         {

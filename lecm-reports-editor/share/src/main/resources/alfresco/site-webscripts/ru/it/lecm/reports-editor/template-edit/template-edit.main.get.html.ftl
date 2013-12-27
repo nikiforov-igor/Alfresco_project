@@ -114,6 +114,7 @@
                                     {
                                         usePagination: true,
                                         showExtendSearchBlock: false,
+                                        forceSubscribing: true,
                                         actions: [
                                             {
                                                 type: "datagrid-action-link-template-edit",

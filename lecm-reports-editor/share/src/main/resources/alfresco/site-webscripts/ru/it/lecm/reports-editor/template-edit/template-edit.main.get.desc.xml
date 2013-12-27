@@ -3,5 +3,4 @@
 	<description>Template edit - Main</description>
 	<url>/lecm/reports-editor/template-edit</url>
 	<format default="html">extension</format>
-	<authentication>user</authentication>
 </webscript>

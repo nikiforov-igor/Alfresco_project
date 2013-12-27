@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-	<title>Редактор отчетов - Наборы данных</title>
-	<description>Список Наборов Данных</description>
-	<template-instance>reports-editor-sources</template-instance>
-	<authentication>user</authentication>
-</page>
