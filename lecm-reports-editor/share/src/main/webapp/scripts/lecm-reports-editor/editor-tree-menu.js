@@ -232,33 +232,35 @@
         },
 
         _treeNodeSelected: function (node) {
-            this.selectedNode = node;
-            this.tree.onEventToggleHighlight(node);
+            if ((typeof this.selectedNode  === "undefined" || this.selectedNode === null)|| (this.selectedNode.id != node.id)) {
+                this.selectedNode = node;
+                this.tree.onEventToggleHighlight(node);
 
-            this.menuState.selected = this._getTextNodeId(node);
+                this.menuState.selected = this._getTextNodeId(node);
 
-            var success = null;
-            if (node.data.redirect && !node.data.actions) {
-                var url = YAHOO.lang.substitute(node.data.redirect, {
-                    reportId: node.data.nodeRef
-                });
-                Alfresco.util.Ajax.request(
-                    {
-                        url: Alfresco.constants.URL_SERVICECONTEXT + url,
-                        dataObj: {
-                            htmlid: Alfresco.util.generateDomId()
-                        },
-                        successCallback: {
-                            fn: function (response) {
-                                var contentEl = Dom.get("alf-content");
-                                contentEl.innerHTML = response.serverResponse.responseText;
-                            }
-                        },
-                        failureMessage: "message.failure",
-                        execScripts: true
+                var success = null;
+                if (node.data.redirect) {
+                    var url = YAHOO.lang.substitute(node.data.redirect, {
+                        reportId: node.data.nodeRef
                     });
+                    Alfresco.util.Ajax.request(
+                        {
+                            url: Alfresco.constants.URL_SERVICECONTEXT + url,
+                            dataObj: {
+                                htmlid: Alfresco.util.generateDomId()
+                            },
+                            successCallback: {
+                                fn: function (response) {
+                                    var contentEl = Dom.get("alf-content");
+                                    contentEl.innerHTML = response.serverResponse.responseText;
+                                }
+                            },
+                            failureMessage: "message.failure",
+                            execScripts: true
+                        });
+                }
+                this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue(), {successCallback: success});
             }
-            this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue(), {successCallback: success});
         },
 
         _isNodeExpanded: function (nodeId) {

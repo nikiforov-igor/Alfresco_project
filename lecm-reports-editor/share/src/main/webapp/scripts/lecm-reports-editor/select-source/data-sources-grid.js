@@ -11,7 +11,8 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
     onActionSelectSource: function (item) {
         //выбираем набор данных - копируем его в отчет
         YAHOO.Bubbling.fire("copySourceToReport", {
-            dataSourceId: item.nodeRef
+            dataSourceId: item.nodeRef,
+            bubblingLabel: this.options.bubblingLabel
         });
     },
 
@@ -37,7 +38,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                         nodeRef: nodeRef,
                         sort: "lecm-rpeditor:dataColumnCode|true"
                     },
-                    bubblingLabel: "sourceColumns"
+                    bubblingLabel: this.options.bubblingLabel.replace("sourcesList", "sourceColumns")
                 });
         }
     },
@@ -106,7 +107,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                     nodeRef: selectItem.getData().nodeRef,
                     sort: "lecm-rpeditor:dataColumnCode|true"
                 },
-                bubblingLabel: "sourceColumns"
+                bubblingLabel: this.options.bubblingLabel.replace("sourcesList", "sourceColumns")
             });
     },
 

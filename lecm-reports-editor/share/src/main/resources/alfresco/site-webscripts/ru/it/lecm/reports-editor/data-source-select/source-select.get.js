@@ -28,6 +28,4 @@ function isExistInRepo(testSourceCode){
 var dataSource = getDataSource();
 model.activeSourceId = (dataSource && dataSource.nodeRef) ?  dataSource.nodeRef : null;
 
-model.reportId = args["reportId"];
-
 

@@ -21,7 +21,10 @@
         reportId: null,
 
         sourcesDataGrid: null,
+        sourcesDataGridLabel: null,
+
         columnsDataGrid: null,
+        columnsDataGridLabel: null,
 
         toolbarButtons: {
             "defaultActive": [],
@@ -69,19 +72,25 @@
             this.reportId = reportId;
         },
 
+        setSourcesDataGridLabel: function (label) {
+            this.sourcesDataGridLabel = label;
+        },
+
+        setColumnsDataGridLabel: function (label) {
+            this.columnsDataGridLabel = label;
+        },
+
         onInitDataGrid: function (layer, args) {
             var datagrid = args[1].datagrid;
-            if (datagrid.options.bubblingLabel.indexOf("sourcesList") == 0) {
+            if (datagrid.options.bubblingLabel == this.sourcesDataGridLabel) {
                 this.sourcesDataGrid = datagrid;
-            } else if (datagrid.options.bubblingLabel == "sourceColumns") {
+            } else if (datagrid.options.bubblingLabel == this.columnsDataGridLabel) {
                 this.columnsDataGrid = datagrid;
             }
         },
 
         onReady: function () {
             this._initButtons();
-
-            Dom.setStyle(this.id + "-sources-toolbar-body", "visibility", "visible");
             Dom.setStyle(this.id + "-columns-toolbar-body", "visibility", "visible");
         },
 
@@ -107,7 +116,7 @@
                                 });
                                 //блокируем кнопки - Сохранить как - данный набор уже и так сохранен
                                 YAHOO.Bubbling.fire("refreshButtonState", {
-                                    bubblingLabel: "sourceColumns",
+                                    bubblingLabel: this.columnsDataGridLabel,
                                     disabledButtons: ["activeSourceIsNew"]
                                 });
                                 //if (fireCreateEvent) {
@@ -197,7 +206,7 @@
 
         _copySourceToReport: function (layer, args) {
             var obj = args[1];
-            if ((obj !== null) && (obj.dataSourceId !== null)) {
+            if ((obj !== null) && (obj.dataSourceId !== null) && (obj.bubblingLabel == this.sourcesDataGridLabel)) {
                 if (obj.dataSourceId) {
                     Alfresco.util.Ajax.request(
                         {

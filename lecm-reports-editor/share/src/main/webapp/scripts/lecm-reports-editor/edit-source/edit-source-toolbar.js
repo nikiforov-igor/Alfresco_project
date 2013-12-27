@@ -181,7 +181,7 @@
                     failureCallback: {
                         fn: function () {
                             Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось скопировать шаблон"
+                                text: "Не удалось получить список шаблонов"
                             });
                         }
                     },
