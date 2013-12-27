@@ -98,7 +98,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                     nodeService.createAssociation(result, record.getMainObject(), ASSOC_BR_RECORD_MAIN_OBJ);
                 }
                 if (record.getMainObject() != null && !nodeService.exists(record.getMainObject())) {
-                    nodeService.setProperty(result, ASSOC_BR_RECORD_MAIN_OBJ_REF, record.getMainObject());
+                    nodeService.setProperty(result, ASSOC_BR_RECORD_MAIN_OBJ_REF, record.getMainObject().toString());
                 }
 
                 // необязательные
