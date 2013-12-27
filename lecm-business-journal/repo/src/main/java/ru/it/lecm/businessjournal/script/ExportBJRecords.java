@@ -95,6 +95,7 @@ public class ExportBJRecords extends AbstractWebScript {
             wr.write("Тип");
             wr.write("Категория");
             wr.write("Описание");
+            wr.write("Инициатор");
             if (full) {
                 wr.write("Осн. объект");
                 wr.write("Доп. объект 1");
@@ -142,8 +143,10 @@ public class ExportBJRecords extends AbstractWebScript {
                     reportDescription = reportDescription.replaceAll("</a>", "");
                     wr.write(reportDescription);
 
+                    wr.write(bjRecord.getInitiatorText() != null ? bjRecord.getInitiatorText() : "");
+
                     if (full) {
-                        String mainObject = bjRecord.getMainObject().toString();
+                        String mainObject = bjRecord.getMainObject() != null ? bjRecord.getMainObject().toString() : "";
                         wr.write(mainObject);
 
                         String obj1 = bjRecord.getObject1();
