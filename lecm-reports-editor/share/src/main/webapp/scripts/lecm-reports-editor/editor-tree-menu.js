@@ -232,11 +232,12 @@
         },
 
         _treeNodeSelected: function (node) {
-            if ((typeof this.selectedNode  === "undefined" || this.selectedNode === null)|| (this.selectedNode.id != node.id)) {
+            var nodeId = this._getTextNodeId(node);
+            if ((typeof this.selectedNode  === "undefined" || this.selectedNode === null)|| (this.menuState.selected != nodeId)) {
                 this.selectedNode = node;
                 this.tree.onEventToggleHighlight(node);
 
-                this.menuState.selected = this._getTextNodeId(node);
+                this.menuState.selected = nodeId;
 
                 var success = null;
                 if (node.data.redirect) {
