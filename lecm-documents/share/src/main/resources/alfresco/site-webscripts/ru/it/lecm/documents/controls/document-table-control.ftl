@@ -61,6 +61,12 @@
 				<#if params.deleteMessageFunction??>
 					deleteMessageFunction: "${params.deleteMessageFunction}",
 				</#if>
+				<#if params.editFormTitleMsg??>
+					editFormTitleMsg: "${params.editFormTitleMsg}",
+				</#if>
+			    <#if params.createFormTitleMsg??>
+				    createFormTitleMsg: "${params.createFormTitleMsg}",
+				</#if>
                 showActions: ${showActions?string}
 			});
 })();

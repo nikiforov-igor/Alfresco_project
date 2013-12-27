@@ -44,7 +44,9 @@ LogicECM.module = LogicECM.module || {};
                 externalCreateId: null,
                 refreshAfterCreate: false,
                 showActions: true,
-				deleteMessageFunction: true
+				deleteMessageFunction: true,
+				editFormTitleMsg: "label.edit-row.title",
+				createFormTitleMsg: "label.create-row.title"
 			},
 
             datagrid: null,
@@ -184,7 +186,9 @@ LogicECM.module = LogicECM.module || {};
 						pageSize: this.tableData.pageSize != null && this.tableData.pageSize > 0 ? this.tableData.pageSize : 10,
                         useCookieForSort: false,
                         overrideSortingWith: this.options.isTableSortable,
-                        refreshAfterCreate: this.options.refreshAfterCreate
+                        refreshAfterCreate: this.options.refreshAfterCreate,
+						editFormTitleMsg: this.options.editFormTitleMsg,
+						createFormTitleMsg: this.options.createFormTitleMsg
 					}).setMessages(this.options.messages);
 				}
 

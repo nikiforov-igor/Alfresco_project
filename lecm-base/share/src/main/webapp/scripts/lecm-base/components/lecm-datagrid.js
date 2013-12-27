@@ -306,7 +306,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            editFormWidth: "50em",
 
-                refreshAfterCreate: false
+                refreshAfterCreate: false,
+
+	            editFormTitleMsg: "label.edit-row.title",
+
+	            createFormTitleMsg: "label.create-row.title"
             },
 
             showActionsCount: 3,
@@ -2392,7 +2396,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", this.msg("label.edit-row.title")]
+                        [contId + "_h", this.msg(this.options.editFormTitleMsg)]
                     );
                     if (item.type && item.type != "") {
                         Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
@@ -2482,7 +2486,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     var addMsg = meta.addMessage;
                     var contId = p_dialog.id + "-form-container";
                     Alfresco.util.populateHTML(
-                        [contId + "_h", addMsg ? addMsg : this.msg("label.create-row.title") ]
+                        [contId + "_h", addMsg ? addMsg : this.msg(this.options.createFormTitleMsg) ]
                     );
                     if (meta.itemType && meta.itemType != "") {
                         Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
