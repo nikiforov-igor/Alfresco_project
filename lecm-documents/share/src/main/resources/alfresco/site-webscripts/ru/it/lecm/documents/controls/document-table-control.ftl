@@ -67,6 +67,9 @@
 			    <#if params.createFormTitleMsg??>
 				    createFormTitleMsg: "${params.createFormTitleMsg}",
 				</#if>
+				<#if params.viewFormTitleMsg??>
+					viewFormTitleMsg: "${params.viewFormTitleMsg}",
+				</#if>
                 showActions: ${showActions?string}
 			});
 })();

@@ -310,7 +310,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            editFormTitleMsg: "label.edit-row.title",
 
-	            createFormTitleMsg: "label.create-row.title"
+	            createFormTitleMsg: "label.create-row.title",
+
+	            viewFormTitleMsg: "logicecm.view"
             },
 
             showActionsCount: 3,
@@ -624,7 +626,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         }
 
                                         if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
-                                            html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+                                            html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, \'" + scope.options.viewFormTitleMsg + "\')\">" + columnContent + "</a>";
                                         } else {
                                             html += columnContent;
                                         }

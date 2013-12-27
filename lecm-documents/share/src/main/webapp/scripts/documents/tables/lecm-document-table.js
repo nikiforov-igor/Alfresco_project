@@ -46,7 +46,8 @@ LogicECM.module = LogicECM.module || {};
                 showActions: true,
 				deleteMessageFunction: true,
 				editFormTitleMsg: "label.edit-row.title",
-				createFormTitleMsg: "label.create-row.title"
+				createFormTitleMsg: "label.create-row.title",
+				viewFormTitleMsg: "logicecm.view"
 			},
 
             datagrid: null,
@@ -188,7 +189,8 @@ LogicECM.module = LogicECM.module || {};
                         overrideSortingWith: this.options.isTableSortable,
                         refreshAfterCreate: this.options.refreshAfterCreate,
 						editFormTitleMsg: this.options.editFormTitleMsg,
-						createFormTitleMsg: this.options.createFormTitleMsg
+						createFormTitleMsg: this.options.createFormTitleMsg,
+						viewFormTitleMsg: this.options.viewFormTitleMsg
 					}).setMessages(this.options.messages);
 				}
 
