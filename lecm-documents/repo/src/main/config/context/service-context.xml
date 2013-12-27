@@ -578,4 +578,10 @@
             </map>
         </property>
     </bean>
+
+	<bean parent="webscript" id="webscript.ru.it.lecm.documents.utils.document-access.get" class="ru.it.lecm.documents.scripts.DocumentAccessWebscript">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="businessJournalService" ref="businessJournalService"/>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	</bean>
 </beans>

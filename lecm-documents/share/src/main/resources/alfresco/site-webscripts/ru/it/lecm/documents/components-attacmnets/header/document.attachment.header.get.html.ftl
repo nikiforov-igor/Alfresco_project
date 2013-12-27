@@ -61,7 +61,7 @@
 <#else>
 	<div class="document-header">
 		<div class="status-banner">
-			${msg("banner.not-found")}
+            ${accessMsg}
 		</div>
 	</div>
 </#if>

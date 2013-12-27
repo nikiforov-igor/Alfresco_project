@@ -41,7 +41,24 @@ function main() {
             isAdmin = result.isAdmin;
         }
         model.isAdmin = isAdmin;
-    }
+    } else {
+		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
+		if (accessInfo) {
+			if (accessInfo.exists) {
+				if (!accessInfo.hasReadPermissions) {
+					model.accessMsg = "У вас нет прав на этот документ. Обратитесь к администратору.";
+				}
+			} else {
+				if (accessInfo.removed) {
+					model.accessMsg = "Документ был удален.";
+				} else {
+					model.accessMsg = "Документ не существует.";
+				}
+			}
+		} else {
+			model.accessMsg = "Документ не найден. Он мог быть удален. Или у вас нет прав. Обратитесь к администратору";
+		}
+	}
 }
 
 main();
