@@ -2003,13 +2003,13 @@ a.remove-item {
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span > a,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span > a {
-    max-width: 400px;
+    max-width: 330px;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span.not-person,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span.not-person,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span.not-person,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span.not-person {
-    max-width: 420px;
+    max-width: 330px;
 }
 div.association-auto-complete-selected-item > span.not-person.width100,
 div.association-auto-complete-selected-item-even > span.not-person.width100 {
