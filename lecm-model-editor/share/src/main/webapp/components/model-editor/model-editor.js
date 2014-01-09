@@ -104,14 +104,19 @@ IT.component = IT.component || {};
 		    }); 
 			
 		},//onReady
-		//Инициализация внутренних объектов на сонове полученного контента
+		//Инициализация внутренних объектов на основе полученного контента
 		_initObjects: function() {
 			if(YAHOO.lang.isValue(this.modelObject.model._name)) {
 				this.prop_cm_name = (this.modelObject.model._name.substr(this.modelObject.model._name.indexOf(":")+1,this.modelObject.model._name.length)).replace("Model","");
+				this.prop_model_name = (this.modelObject.model._name.substr(this.modelObject.model._name.indexOf(":")+1,this.modelObject.model._name.length));
+				
+				this.prop_namespace_name = (this.modelObject.model._name.substr(0,this.modelObject.model._name.indexOf(":")));
+				
 				this.description = this.modelObject.model.description;
 				if(YAHOO.lang.isObject(this.modelObject.model.types)) {
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type[0].title
+						this.prop_type_name = (this.modelObject.model.types.type[0]._name.substr(this.modelObject.model.types.type[0]._name.indexOf(":")+1,this.modelObject.model.types.type[0]._name.length));
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type[0]["mandatory-aspects"])) {
 							if(YAHOO.lang.isArray(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect)) {
 								for(var v in this.modelObject.model.types.type[0]["mandatory-aspects"].aspect) {
@@ -129,6 +134,7 @@ IT.component = IT.component || {};
 						}
 					} else if(YAHOO.lang.isObject(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type.title;
+						this.prop_type_name = (this.modelObject.model.types.type._name.substr(this.modelObject.model.types.type._name.indexOf(":")+1,this.modelObject.model.types.type._name.length));
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type["mandatory-aspects"])) {
 							if(YAHOO.lang.isArray(this.modelObject.model.types.type["mandatory-aspects"].aspect)) {
 								for(var v in this.modelObject.model.types.type["mandatory-aspects"].aspect) {
@@ -161,6 +167,8 @@ IT.component = IT.component || {};
 										if(c[i].parameter[p]._name==="presentString") {
 											if(YAHOO.lang.isString(c[i].parameter[p].value)){
 												this.presentString = c[i].parameter[p].value;
+											} else if(YAHOO.lang.isObject(c[i].parameter[p].value)){
+												this.presentString = c[i].parameter[p].value["#cdata"];
 											}
 										}
 									}
@@ -169,6 +177,8 @@ IT.component = IT.component || {};
 									if(c[i].parameter._name==="presentString") {
 										if(YAHOO.lang.isString(c[i].parameter.value)){
 											this.presentString = c[i].parameter.value;
+										} else if(YAHOO.lang.isObject(c[i].parameter.value)){
+											this.presentString = c[i].parameter.value["#cdata"];
 										}
 									}
 								}
@@ -193,24 +203,43 @@ IT.component = IT.component || {};
 								}
 							}
 							//Автор
-							//if(c[i]._name.indexOf(":author-property-constraint")!==-1) {
-							//	if(YAHOO.lang.isArray(c[i].parameter)) {
-							//		for(var p in c[i].parameter) {
-							//			if(c[i].parameter[p]._name==="authorProperty") {
-							//				if(YAHOO.lang.isString(c[i].parameter[p].value)){
-							//					this.authorProperty = c[i].parameter[p].value;
-							//				}
-							//			}
-							//		}
-							//	}
-							//	if(YAHOO.lang.isObject(c[i].parameter)) {
-							//		if(c[i].parameter._name==="authorProperty") {
-							//			if(YAHOO.lang.isString(c[i].parameter.value)){
-							//				this.authorProperty = c[i].parameter.value;
-							//			}
-							//		}
-							//	}
-							//}
+							if(c[i]._name.indexOf(":author-property-constraint")!==-1) {
+								if(YAHOO.lang.isArray(c[i].parameter)) {
+									for(var p in c[i].parameter) {
+										if(c[i].parameter[p]._name==="authorProperty") {
+											if(YAHOO.lang.isString(c[i].parameter[p].value)){
+												this.authorProperty = c[i].parameter[p].value;
+											}
+										}
+									}
+								}
+								if(YAHOO.lang.isObject(c[i].parameter)) {
+									if(c[i].parameter._name==="authorProperty") {
+										if(YAHOO.lang.isString(c[i].parameter.value)){
+											this.authorProperty = c[i].parameter.value;
+										}
+									}
+								}
+							}
+							//Рег номера
+							if(c[i]._name.indexOf(":reg-number-properties-constraint")!==-1) {
+								if(YAHOO.lang.isArray(c[i].parameter)) {
+									for(var p in c[i].parameter) {
+										if(c[i].parameter[p]._name==="regNumbersProperties") {
+											if(YAHOO.lang.isString(c[i].parameter[p].value)){
+												this.regNumbersProperties = c[i].parameter[p].value;
+											}
+										}
+									}
+								}
+								if(YAHOO.lang.isObject(c[i].parameter)) {
+									if(c[i].parameter._name==="regNumbersProperties") {
+										if(YAHOO.lang.isString(c[i].parameter.value)){
+											this.regNumbersProperties = c[i].parameter.value;
+										}
+									}
+								}
+							}
 							//Категории вложений
 							if(c[i]._name.indexOf(":attachment-categories")!==-1) {
 								if(YAHOO.lang.isArray(c[i].parameter)) {
@@ -288,24 +317,43 @@ IT.component = IT.component || {};
 						}
 					}
 					//Автор
-					//if(c._name.indexOf(":author-property-constraint")!==-1) {
-					//	if(YAHOO.lang.isArray(c.parameter)) {
-					//		for(var p in c.parameter) {
-					//			if(c.parameter[p]._name==="authorProperty") {
-					//				if(YAHOO.lang.isString(c.parameter[p].value)){
-					//					this.authorProperty = c.parameter[p].value;
-					//				}
-					//			}
-					//		}
-					//	}
-					//	if(YAHOO.lang.isObject(c.parameter)) {
-					//		if(c.parameter._name==="authorProperty") {
-					//			if(YAHOO.lang.isString(c.parameter.value)){
-					//				this.authorProperty = c.parameter.value;
-					//			}
-					//		}
-					//	}
-					//}
+					if(c._name.indexOf(":author-property-constraint")!==-1) {
+						if(YAHOO.lang.isArray(c.parameter)) {
+							for(var p in c.parameter) {
+								if(c.parameter[p]._name==="authorProperty") {
+									if(YAHOO.lang.isString(c.parameter[p].value)){
+										this.authorProperty = c.parameter[p].value;
+									}
+								}
+							}
+						}
+						if(YAHOO.lang.isObject(c.parameter)) {
+							if(c.parameter._name==="authorProperty") {
+								if(YAHOO.lang.isString(c.parameter.value)){
+									this.authorProperty = c.parameter.value;
+								}
+							}
+						}
+					}
+					//Рег номера
+					if(c._name.indexOf(":reg-number-properties-constraint")!==-1) {
+						if(YAHOO.lang.isArray(c.parameter)) {
+							for(var p in c.parameter) {
+								if(c.parameter[p]._name==="regNumbersProperties") {
+									if(YAHOO.lang.isString(c.parameter[p].value)){
+										this.regNumbersProperties = c.parameter[p].value;
+									}
+								}
+							}
+						}
+						if(YAHOO.lang.isObject(c.parameter)) {
+							if(c.parameter._name==="regNumbersProperties") {
+								if(YAHOO.lang.isString(c.parameter.value)){
+									this.regNumbersProperties = c.parameter.value;
+								}
+							}
+						}
+					}
 					//Категории вложения
 					if(c._name.indexOf(":attachment-categories")!==-1) {
 						if(YAHOO.lang.isArray(c.parameter)) {
@@ -450,10 +498,10 @@ IT.component = IT.component || {};
 		_validate:  function validate_model(field, args, event, form, silent, message) {
 			var month=new Array();
 			month[0]="01";month[1]="02";month[2]="03";month[3]="04";month[4]="05";month[5]="06";month[6]="07";month[7]="08";month[8]="09";month[9]="10";month[10]="11";month[11]="12";
-			var namespace = args.prop_cm_name+"NS";
-			var modelName = args.prop_cm_name+"Model";
+			var namespace = (YAHOO.lang.isString(args.prop_namespace_name) ? args.prop_namespace_name : args.prop_cm_name+"NS");
+			var modelName = (YAHOO.lang.isString(args.prop_model_name) ? args.prop_model_name : args.prop_cm_name+"Model");
 			var modelDescription = args.description;
-			var typeName = args.prop_cm_name;
+			var typeName = (YAHOO.lang.isString(args.prop_type_name) ? args.prop_type_name : args.prop_cm_name);
 			var typeTitle = args.typeTitle;
 			var userName = args.options.currentUser;
 			var modelPublished = new Date();
@@ -537,7 +585,9 @@ IT.component = IT.component || {};
 						_type:"ru.it.lecm.documents.constraints.PresentStringConstraint",
 						parameter: {
 							_name:"presentString",
-							value:args.presentString
+							value: {
+								"#cdata":args.presentString
+							}
 						}
 					});
 				}
@@ -558,6 +608,16 @@ IT.component = IT.component || {};
 						parameter: {
 							_name:"authorProperty",
 							value:args.authorProperty
+						}
+					});
+				}
+				if(args.regNumbersProperties && args.regNumbersProperties.length>0) {
+					args.modelObject.model.constraints.constraint.push({
+						_name:namespace+":reg-number-properties-constraint",
+						_type:"ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint",
+						parameter: {
+							_name:"regNumbersProperties",
+							value:args.regNumbersProperties
 						}
 					});
 				}
@@ -617,7 +677,7 @@ IT.component = IT.component || {};
 				for(var i in records) {
 					var rec = records[i];
 					assoc = {};
-					assoc._name = namespace+":"+(rec.getData("class")||"").replace(":","_");
+					assoc._name = namespace+":"+(rec.getData("_name")||"").replace(":","_");
 					assoc.title = (rec.getData("title")||"");
 					assoc.source = {
 						"mandatory":"false",
@@ -749,22 +809,24 @@ IT.component = IT.component || {};
 				this.attribyteResponseSchema = { fields : [{key : "_id"}, {key : "_name"}, {key : "title"}, {key : "type"}, {key : "mandatory"}, {key : "_enabled"}, {key : "validator"}] };
 				//Ассоциации
 				this.associationsDialogEl = [
-		                            { name: "class", label: "Ассоциация", type:"select", options: dAssociations, showdefault: false },
+				                    { name: "_name", label: "Имя", type:"input" },
 		                            { name: "title", label: "Заголовок", type:"input" },
+		                            { name: "class", label: "Тип", type:"select", options: dAssociations, showdefault: false },
 		                            { name: "mandatory", label: "Обязательная", type:"select", options: [{label:"Да",value:"true"}, {label:"Нет",value:"false"}], value: "false", showdefault: false },
 		                            { name: "many", label: "Множественная", type:"select", options: [{label:"Да",value:"true"}, {label:"Нет",value:"false"}], value: "false", showdefault: false },
 		                        ];
 				for(j in r) {
 					dAssociations.push({label:r[j].title+" - "+r[j].name,value:r[j].name});
 				}
-				this.associationsColumnDefs = [ 
-		                            { className: "viewmode-label", key:"class", label:"Ассоциация", dropdownOptions : dAssociations, formatter: "dropdown", width : 295, maxAutoWidth : 295 },
-		                            { className: "viewmode-label", key:"title", label:"Заголовок", formatter: this._formatText, width : 170, maxAutoWidth : 170 }, 
+				this.associationsColumnDefs = [
+				                    { className: "viewmode-label", key:"_name", label:"Имя", formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key:"title", label:"Заголовок", formatter: this._formatText, width : 170, maxAutoWidth : 170 },
+		                            { className: "viewmode-label", key:"class", label:"Тип", dropdownOptions : dAssociations, formatter: "dropdown", width : 100, maxAutoWidth : 100 },
 		                            { className: "viewmode-label", key:"mandatory", label:"Обязательная", formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
 		                            { className: "viewmode-label", key:"many", label:"Множественная", formatter: this._formatBoolean, width : 100, maxAutoWidth : 100 }, 
 		                            { key : "delete", label : "", formatter:this._formatActions, width : 15, maxAutoWidth : 15 } 
 		                        ];
-				this.associationResponseSchema = { fields : [{key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
+				this.associationResponseSchema = { fields : [{key : "_name"}, {key : "class"}, {key : "title"}, {key : "mandatory"}, {key : "many"}] };
 				
 				if (callback && callback.successCallback) {
 					if (Alfresco.logger.isDebugEnabled()) Alfresco.logger.debug("Model-editor: calling callback");
@@ -947,10 +1009,15 @@ IT.component = IT.component || {};
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Автор
-			//var oSpan = document.createElement("span");
-			//var input = new IT.widget.Input({ name: "authorProperty", label: "<b>Автор</b>", value: (this.authorProperty||""), help:"Автор" });
-			//input.render(oSpan);
-			//Dom.get(this.id+"_title").appendChild(oSpan);
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Input({ name: "authorProperty", label: "<b>Автор</b>", value: (this.authorProperty||""), help:"Автор" });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//Рег номера
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Input({ name: "regNumbersProperties", label: "<b>Рег номера</b>", value: (this.regNumbersProperties||""), help:"Рег номера" });
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
 			
 			//Шаблон строки представления для списка
 			//var oSpan = document.createElement("span");
