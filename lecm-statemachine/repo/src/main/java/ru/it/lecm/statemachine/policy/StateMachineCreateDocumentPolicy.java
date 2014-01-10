@@ -45,7 +45,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
     private static final String STM_POST_TRANSACTION_PENDING_DOCS = "stm_post_transaction_pending_docs";
     private ServiceRegistry serviceRegistry;
-	private PolicyComponent policyComponent;
+    private PolicyComponent policyComponent;
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
     private BusinessJournalService businessJournalService;
@@ -57,28 +57,28 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
+        this.serviceRegistry = serviceRegistry;
+    }
 
-	public void setPolicyComponent(PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
-	}
+    public void setPolicyComponent(PolicyComponent policyComponent) {
+        this.policyComponent = policyComponent;
+    }
 
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         this.businessJournalService = businessJournalService;
     }
 
     public final void init() {
-		logger.debug( "Installing Policy ...");
+        logger.debug("Installing Policy ...");
 
-		PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
-		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+        PropertyCheck.mandatory(this, "serviceRegistry", serviceRegistry);
+        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
         transactionListener = new StateMachineTransactionListener();
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-	}
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, StatemachineModel.TYPE_CONTENT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+    }
 
-	@Override
-	public void onCreateNode(final ChildAssociationRef childAssocRef) {
+    @Override
+    public void onCreateNode(final ChildAssociationRef childAssocRef) {
         final NodeRef docRef = childAssocRef.getChildRef();
         final NodeService nodeService = serviceRegistry.getNodeService();
         //append status aspect to new document
@@ -102,8 +102,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         }
     }
 
-    private class StateMachineTransactionListener implements TransactionListener
-    {
+    private class StateMachineTransactionListener implements TransactionListener {
 
         @Override
         public void flush() {
@@ -129,9 +128,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                 while (!pendingDocs.isEmpty()) {
                     final NodeRef docRef = pendingDocs.remove(0);
                     if (docRef != null) {
-                        final QName type = nodeService.getType(docRef);
-                        List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
-                        final String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
                         Runnable runnable = new Runnable() {
                             public void run() {
                                 AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
@@ -140,6 +136,9 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                         return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                             @Override
                                             public Void execute() throws Throwable {
+                                                final QName type = nodeService.getType(docRef);
+                                                List<String> prefixes = (List<String>) serviceRegistry.getNamespaceService().getPrefixes(type.getNamespaceURI());
+                                                final String stateMashineId = prefixes.get(0) + "_" + type.getLocalName();
                                                 PersonService personService = serviceRegistry.getPersonService();
                                                 NodeRef assigneeNodeRef = personService.getPerson("workflow");
 
@@ -204,7 +203,6 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                 }, currentUser);
                             }
                         };
-
                         threadPoolExecutor.execute(runnable);
                     }
                 }
