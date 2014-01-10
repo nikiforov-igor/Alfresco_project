@@ -532,7 +532,7 @@ public class DiagnosticUtility {
                 File compressedFile = queue.pop();
 
                 String name;
-                if (compressedFile.getAbsolutePath().startsWith(alfrescoRoot.getAbsolutePath())) {
+                if (compressedFile.getAbsolutePath().toLowerCase().startsWith(alfrescoRoot.getAbsolutePath().toLowerCase())) {
                     name = finder.getRelativePath(alfrescoRoot, compressedFile);
                 } else {
                     name = compressedFile.getName();
