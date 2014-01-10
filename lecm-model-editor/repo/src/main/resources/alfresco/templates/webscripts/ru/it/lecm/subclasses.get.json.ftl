@@ -1,3 +1,4 @@
+<#escape x as jsonUtils.encodeJSONString(x)>
 [
 <#list classdefs as classdef>
 {
@@ -7,3 +8,4 @@
 <#if classdef_has_next>,</#if>
 </#list>
 ]
+</#escape>
