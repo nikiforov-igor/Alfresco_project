@@ -123,13 +123,12 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         public void afterCommit() {
             final NodeService nodeService = serviceRegistry.getNodeService();
             final String currentUser = AuthenticationUtil.getFullyAuthenticatedUser();
-            List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(STM_POST_TRANSACTION_PENDING_DOCS);
+            final List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(STM_POST_TRANSACTION_PENDING_DOCS);
             if (pendingDocs != null) {
-                while (!pendingDocs.isEmpty()) {
-                    final NodeRef docRef = pendingDocs.remove(0);
-                    if (docRef != null) {
-                        Runnable runnable = new Runnable() {
-                            public void run() {
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        for  (final NodeRef docRef : pendingDocs) {
+                            if (docRef != null) {
                                 AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
                                     @Override
                                     public Void doWork() throws Exception {
@@ -202,10 +201,10 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                     }
                                 }, currentUser);
                             }
-                        };
-                        threadPoolExecutor.execute(runnable);
+                        }
                     }
-                }
+                };
+                threadPoolExecutor.execute(runnable);
             }
         }
 
