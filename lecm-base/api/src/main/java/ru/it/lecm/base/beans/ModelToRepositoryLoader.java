@@ -2,18 +2,9 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.repo.dictionary.DictionaryDAO;
 import org.alfresco.repo.dictionary.DictionaryListener;
-import org.alfresco.repo.dictionary.DictionaryRepositoryBootstrap;
 import org.alfresco.repo.dictionary.RepositoryLocation;
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.tenant.TenantAdminService;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.NamespaceService;
-import org.alfresco.service.transaction.TransactionService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.extensions.surf.util.I18NUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,33 +16,13 @@ import java.util.List;
  */
 public class ModelToRepositoryLoader implements DictionaryListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(ModelToRepositoryLoader.class);
-
     private boolean useDefaultModels = false;
     private List<String> models = new ArrayList<String>();
     private List<String> messages = new ArrayList<String>();
 
     private RepositoryLocation repositoryModelsLocation;
 
-    private RepositoryLocation repositoryMessagesLocation;
-
     private DictionaryDAO dictionaryDAO = null;
-
-    private ContentService contentService;
-
-    private NodeService nodeService;
-
-    private TenantAdminService tenantAdminService;
-
-    private NamespaceService namespaceService;
-
-    private MessageService messageService;
-
-    private TransactionService transactionService;
-
-    private BehaviourFilter behaviourFilter;
-
-    private DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap;
 
     private LecmModelsService lecmModelsService;
 
@@ -65,48 +36,12 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         this.lecmModelsService = lecmModelsService;
     }
 
-    public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
-        this.behaviourFilter = behaviourFilter;
-    }
-
     public void setRepositoryModelsLocation(RepositoryLocation repositoryModelsLocation) {
         this.repositoryModelsLocation = repositoryModelsLocation;
     }
 
-    public void setRepositoryMessagesLocation(RepositoryLocation repositoryMessagesLocation) {
-        this.repositoryMessagesLocation = repositoryMessagesLocation;
-    }
-
     public void setDictionaryDAO(DictionaryDAO dictionaryDAO) {
         this.dictionaryDAO = dictionaryDAO;
-    }
-
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setTenantAdminService(TenantAdminService tenantAdminService) {
-        this.tenantAdminService = tenantAdminService;
-    }
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
-    }
-
-    public void setMessageService(MessageService messageService) {
-        this.messageService = messageService;
-    }
-
-    public void setTransactionService(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
-
-    public void setDictionaryRepositoryBootstrap(DictionaryRepositoryBootstrap dictionaryRepositoryBootstrap) {
-        this.dictionaryRepositoryBootstrap = dictionaryRepositoryBootstrap;
     }
 
     public void setModels(List<String> models) {
@@ -123,7 +58,7 @@ public class ModelToRepositoryLoader implements DictionaryListener {
     public void init() {
 
         onDictionaryInit();
-//        initMessages();
+        initStaticMessages();
 
         register();
     }
@@ -161,9 +96,15 @@ public class ModelToRepositoryLoader implements DictionaryListener {
 
     }
 
-    public void initMessages() {
-
+    /**
+     * Register the static resource bundles
+     */
+    private void initStaticMessages()
+    {
+        // register messages
+        for (String resourceBundle : messages)
+        {
+            I18NUtil.registerResourceBundle(resourceBundle);
+        }
     }
-
-
 }

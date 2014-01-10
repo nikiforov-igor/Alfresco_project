@@ -230,18 +230,8 @@
     <bean id="modelsToRepositoryLoader" class="ru.it.lecm.base.beans.ModelToRepositoryLoader" abstract="true"
             init-method="init">
         <property name="dictionaryDAO" ref="dictionaryDAO"/>
-        <property name="contentService" ref="ContentService"/>
-        <property name="transactionService" ref="transactionService"/>
-        <property name="namespaceService" ref="namespaceService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="messageService" ref="messageService"/>
-        <property name="tenantAdminService" ref="tenantAdminService"/>
-        <property name="behaviourFilter" ref="policyBehaviourFilter"/>
-        <property name="dictionaryRepositoryBootstrap" ref="dictionaryRepositoryBootstrap"/>
 
         <property name="repositoryModelsLocation" ref="customModelsRepositoryLocation"/>
-
-        <property name="repositoryMessagesLocation" ref="customMessagesRepositoryLocation"/>
 
         <property name="lecmModelsService" ref="lecmModelsService"/>
 
