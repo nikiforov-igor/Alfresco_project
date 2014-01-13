@@ -2847,6 +2847,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        form.appendChild(inputFieldLabel);
 		        }
 
+		        document.body.appendChild(form);
+
 		        form.submit();
 	        },
 
