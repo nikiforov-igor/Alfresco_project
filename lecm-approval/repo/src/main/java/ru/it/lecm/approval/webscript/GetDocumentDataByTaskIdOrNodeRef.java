@@ -71,6 +71,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 			documentURL = approvalListService.wrapperLink(documentRef, presentString, BaseBean.DOCUMENT_LINK_URL);
 		}
 
+		result.put("nodeRef", documentRef.toString());
 		result.put("presentString", presentString);
 		result.put("presentStringWithLink", documentURL);
 
