@@ -52,7 +52,7 @@
 		</tr>
 		</#if>
 		<tr>
-			<td colspan="3"><@formLib.renderField field = form.fields[propName] /></td>
+			<td colspan="3" <#if inViewMode>class="view-name"</#if>><@formLib.renderField field = form.fields[propName] /></td>
 		</tr>
 		<tr>
 			<td colspan="3">

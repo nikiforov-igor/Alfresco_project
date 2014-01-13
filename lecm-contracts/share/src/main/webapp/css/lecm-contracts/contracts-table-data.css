@@ -123,8 +123,6 @@
     vertical-align: top;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-value {
-}
 
 .yui-skin-lecmTheme .yui-panel table.view-stage tr td {
     width: 33%;
@@ -138,14 +136,31 @@
 
 .yui-skin-lecmTheme .yui-panel table.view-stage .price-sum {
     float: left;
-    width: 195px;
+    width: 240px;
 }
 
 .yui-skin-lecmTheme .yui-panel table.view-stage .price-currency .viewmode-label {
     display: none;
 }
 
-.yui-skin-lecmTheme .yui-panel table.view-stage tr.view-stage-dates .viewmode-value {
+.yui-skin-lecmTheme .yui-panel table.view-stage .viewmode-value {
 	width: 200px;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage .view-name div.form-field div.viewmode-field span.viewmode-value {
+    width: 100%;
+    max-width: 615px;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage div.form-field div.viewmode-field span.viewmode-value{
+    border: 1px solid #ccc;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage div.form-field div.richtext span.viewmode-value{
+    width: 100%;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage .price-control .price-sum .viewmode-field span.viewmode-value{
+    width: 120px;
 }
 
