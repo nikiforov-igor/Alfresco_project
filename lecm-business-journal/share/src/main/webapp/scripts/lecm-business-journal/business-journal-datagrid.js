@@ -195,25 +195,13 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
         {
             var selectedItems = this.getSelectedItems();
 
-            var form = document.createElement("form");
-            form.enctype = "multipart/form-data";
-            form.action = Alfresco.constants.PROXY_URI + "lecm/business-journal/api/export-records";
-            form.method = "GET";
-
-            var inputTimeZone = document.createElement("input");
-            inputTimeZone.type = "hidden";
-            inputTimeZone.name = "timeZoneOffset";
-            inputTimeZone.value = new Date().getTimezoneOffset();
-            form.appendChild(inputTimeZone);
-
+	        var url =  Alfresco.constants.PROXY_URI + "lecm/business-journal/api/export-records" +
+		        "?timeZoneOffset=" + encodeURIComponent(new Date().getTimezoneOffset());
             for (var i = 0; i < selectedItems.length;i++) {
-                var inputNodeRef = document.createElement("input");
-                inputNodeRef.type = "hidden";
-                inputNodeRef.name = "id";
-                inputNodeRef.value = selectedItems[i].nodeRef;
-                form.appendChild(inputNodeRef);
+	            url += "&id=" + encodeURIComponent(selectedItems[i].nodeRef);
             }
-            form.submit();
+
+	        window.open(url, "_self");
         },
 
         onActionDelete: function DataGridActions_onActionDelete(p_items, owner, actionsConfig, fnDeleteComplete) {
