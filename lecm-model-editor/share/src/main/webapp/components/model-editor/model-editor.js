@@ -550,8 +550,13 @@ IT.component = IT.component || {};
 							args.modelObject.model.imports["import"].push({"_uri":args.namespaces[n].uri,"_prefix":NS});
 					}
 				}
-				
-				args.modelObject.model.namespaces = {"namespace":{"_uri":"http://www.it.ru/lecm/"+typeName+"/1.0","_prefix":namespace}};
+				var _uri = "http://www.it.ru/lecm/"+typeName+"/1.0";
+				for(var n in args.namespaces) {
+					if(args.namespaces[n].prefix==namespace) {
+						_uri = args.namespaces[n].uri;
+					}
+				}
+				args.modelObject.model.namespaces = {"namespace":{"_uri":_uri,"_prefix":namespace}};
 			}
 			//constraints
 			if(!YAHOO.lang.isObject(args.modelObject.model.constraints)) {
