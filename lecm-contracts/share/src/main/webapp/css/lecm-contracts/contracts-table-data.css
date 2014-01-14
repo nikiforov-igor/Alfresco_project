@@ -31,7 +31,7 @@
 
 /* Создание этапа договора */
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field label {
-    width: 120px;
+    width: 160px;
 }
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field input[type="text"],
 .yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field select,
@@ -161,6 +161,15 @@
 }
 
 .yui-skin-lecmTheme .yui-panel table.view-stage .price-control .price-sum .viewmode-field span.viewmode-value{
+    width: 120px;
+}
+
+
+.edit-stage .form-container .datepicker-icon {
+    margin: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table .price-control div.form-field label{
     width: 120px;
 }
 
