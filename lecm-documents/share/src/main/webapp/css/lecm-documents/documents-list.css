@@ -23,3 +23,7 @@
     background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
 }
 
+#bd #lecm-menu #menu-buttons.documents-menu-buttons span.menu-button span.first-child {
+    height: 68px;
+}
+

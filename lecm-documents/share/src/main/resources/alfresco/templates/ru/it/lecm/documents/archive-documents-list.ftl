@@ -97,18 +97,6 @@
             LogicECM.module.Documents.SETTINGS.defaultKey
             </#if>;
     //]]></script>
-
-    <#if isDocListPage>
-        <style type="text/css">
-            #bd #lecm-menu {
-                width: 0px;
-                margin: 0px;
-            }
-            #bd #lecm-page {
-                margin: 5px 5px 5px 5px;
-            }
-        </style>
-    </#if>
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>

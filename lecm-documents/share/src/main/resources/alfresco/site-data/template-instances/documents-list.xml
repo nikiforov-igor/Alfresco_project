@@ -67,5 +67,14 @@
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>
         </component>
+        <!-- Menu -->
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/documents/documents-list-menu</url>
+            <properties>
+                <itemType>{doctype}</itemType>
+                <selected>list</selected>
+            </properties>
+        </component>
     </components>
 </template-instance>
