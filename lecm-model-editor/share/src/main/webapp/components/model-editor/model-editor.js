@@ -655,7 +655,7 @@ IT.component = IT.component || {};
 						prop._name = namespace+":"+(rec.getData("_name")||"");
 						prop.title = (rec.getData("title")||"");
 						prop.type = (rec.getData("type")||"");
-						prop.mandatory = (rec.getData("mandatory")||"");
+						prop.mandatory = (rec.getData("mandatory")||"false");
 						if(rec.getData("_enabled")==="true") {
 							prop.index = {
 								"_enabled":rec.getData("_enabled"),
