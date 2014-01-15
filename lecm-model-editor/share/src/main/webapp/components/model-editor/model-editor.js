@@ -724,20 +724,18 @@ IT.component = IT.component || {};
 			//validation conditions
 			//if(Dom.get(field.id).value.length > 0) return true;
 			
-			Alfresco.util.Ajax.request({
-				url : Alfresco.constants.URL_SERVICECONTEXT + "config",
-				method : "POST",
-				requestContentType : "application/json",
-				dataObj: args.modelObject,
-				successCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
-	               {
-						
-	               } , scope : this },
-				failureCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
-	               {
-						
-	               }, scope : this }
-			});// request
+			//Alfresco.util.Ajax.request({
+			//	url : Alfresco.constants.URL_SERVICECONTEXT + "config",
+			//	method : "POST",
+			//	requestContentType : "application/json",
+			//	dataObj: args.modelObject,
+			//	successCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
+	        //       {
+	        //       } , scope : this },
+			//	failureCallback : { fn : function GenericFormTool_onLoad_onFormLoaded(response)
+	        //       {
+	        //       }, scope : this }
+			//});// request
 			
 			if(args.widgets.categoriesDataTable.getRecordSet().getLength()>0) return true;
 			if(args.widgets.attributesDataTable.getRecordSet().getLength()>0) return true;
