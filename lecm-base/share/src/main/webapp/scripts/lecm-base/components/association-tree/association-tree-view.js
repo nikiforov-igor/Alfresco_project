@@ -34,7 +34,6 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 
-        this.eventGroup = htmlId;
         this.selectedItems = {};
         this.addItemButtons = {};
         this.searchProperties = {};
@@ -71,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 
 		options:
 		{
+			prefixPickerId: null,
+
             showCreateNewLink: true,
 
             setCurrentValue: true,
@@ -156,23 +157,28 @@ LogicECM.module = LogicECM.module || {};
 		init: function()
 		{
 			this.options.controlId = this.id + '-cntrl';
-			this.options.pickerId = this.id + '-cntrl-picker';
+			if (this.options.prefixPickerId == null) {
+				this.options.prefixPickerId = this.options.controlId;
+			}
+			this.eventGroup = this.options.prefixPickerId;
+
+			this.options.pickerId = this.options.prefixPickerId + '-picker';
 			Dom.setStyle(this.options.pickerId, "display", "block");
 
             // Create button if control is enabled
             if(!this.options.disabled)
             {
                 // Create picker button
-	            var buttonName = Dom.get(this.id + "-cntrl-tree-picker-button").name;
+	            var buttonName = Dom.get(this.options.prefixPickerId + "-tree-picker-button").name;
                 this.widgets.pickerButton =  new YAHOO.widget.Button(
-                            this.id + "-cntrl-tree-picker-button",
+	                this.options.prefixPickerId + "-tree-picker-button",
                             { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
                     );
-	            Dom.get(this.id + "-cntrl-tree-picker-button-button").name = buttonName;
+	            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
 
                 if (this.options.showCreateNewLink) {
                     this.widgets.createNewButton =  new YAHOO.widget.Button(
-                        this.id + "-cntrl-tree-picker-create-new-button",
+	                    this.options.prefixPickerId + "-tree-picker-create-new-button",
                         { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
                         );
                 }
@@ -252,7 +258,7 @@ LogicECM.module = LogicECM.module || {};
                 });
         },
 
-        _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems()
+        _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems(clearCurrentDisplayValue)
         {
             var arrItems = "";
             if (this.options.selectedValue != null)
@@ -269,22 +275,25 @@ LogicECM.module = LogicECM.module || {};
                 var items = response.json.data.items,
                     item;
                 this.selectedItems = {};
-                //this.singleSelectedItem = null;
-                if (!this.options.multipleSelectMode && items[0]) {
-                    this.singleSelectedItem = items[0];
+
+	            this.singleSelectedItem = null;
+                for (var i = 0, il = items.length; i < il; i++) {
+                    item = items[i];
+	                if (item.type == this.options.itemType) {
+                        this.selectedItems[item.nodeRef] = item;
+
+		                if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
+			                this.singleSelectedItem = item;
+		                }
+	                }
                 }
 
-                for (var i = 0, il = items.length; i < il; i++)
-                {
-                    item = items[i];
-                    this.selectedItems[item.nodeRef] = item;
-                }
                 if(!this.options.disabled)
                 {
                     this.updateSelectedItems();
                     this.updateAddButtons();
                 }
-                this.updateFormFields();
+                this.updateFormFields(clearCurrentDisplayValue);
             };
 
             var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
@@ -404,9 +413,9 @@ LogicECM.module = LogicECM.module || {};
         {
             var me = this;
 
-            this.widgets.ok = new YAHOO.widget.Button(this.options.controlId + "-ok",
+            this.widgets.ok = new YAHOO.widget.Button(this.options.prefixPickerId + "-ok",
                 { onclick: { fn: this.onOk, obj: null, scope: this } });
-            this.widgets.cancel = new YAHOO.widget.Button(this.options.controlId + "-cancel",
+            this.widgets.cancel = new YAHOO.widget.Button(this.options.prefixPickerId + "-cancel",
                 { onclick: { fn: this.onCancel, obj: null, scope: this } });
 
             this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
@@ -536,7 +545,7 @@ LogicECM.module = LogicECM.module || {};
 	        if (Dom.get(this.options.controlId + "-selectedItems") != null) {
                 this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
 	        }
-            this._loadSelectedItems();
+            this._loadSelectedItems(true);
 
             Event.preventDefault(e);
         },
@@ -596,7 +605,7 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-                                this._loadSelectedItems();
+                                this._loadSelectedItems(false);
                             }
                         },
                         scope: this
@@ -1183,7 +1192,7 @@ LogicECM.module = LogicECM.module || {};
 				            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            }
 
-	                YAHOO.util.Event.onAvailable("t-" + this.options.controlId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
+	                YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
 	            }
             }
         },
@@ -1213,25 +1222,31 @@ LogicECM.module = LogicECM.module || {};
 	        if (!dopId) {
 		        dopId = "";
 	        }
-            return '<a href="javascript:void(0);" class="remove-item" id="t-' + this.options.controlId + node.nodeRef + dopId + '"></a>';
+            return '<a href="javascript:void(0);" class="remove-item" id="t-' + this.options.prefixPickerId + node.nodeRef + dopId + '"></a>';
         },
 
         attachRemoveClickListener: function AssociationTreeViewer_attachRemoveClickListener(params)
         {
-            YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, {
+            YAHOO.util.Event.on("t-" + this.options.prefixPickerId + params.node.nodeRef + params.dopId, 'click', this.removeNode, {
 	            node: params.node,
 	            updateForms: params.updateForms
             }, this);
         },
 
         // Updates all form fields
-        updateFormFields: function AssociationTreeViewer_updateFormFields()
+        updateFormFields: function AssociationTreeViewer_updateFormFields(clearCurrentDisplayValue)
         {
             // Just element
+	        if (clearCurrentDisplayValue == null) {
+		        clearCurrentDisplayValue = true;
+	        }
+
             var el;
             el = Dom.get(this.options.controlId + "-currentValueDisplay");
 	        if (el != null) {
-	            el.innerHTML = '';
+		        if (clearCurrentDisplayValue) {
+	                el.innerHTML = '';
+		        }
 	            var num = 0;
 	            for (var i in this.selectedItems) {
 	                if (this.options.plane || !this.options.showSelectedItemsPath) {
@@ -1262,7 +1277,7 @@ LogicECM.module = LogicECM.module || {};
 				            el.innerHTML
 					            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            }
-			            YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
+			            YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }
 	            }
 	        }
@@ -1296,14 +1311,16 @@ LogicECM.module = LogicECM.module || {};
                 // Update selectedItems fields in main form to pass them between popup and form
                 el = Dom.get(this.options.controlId + "-selectedItems");
 	            if (el != null) {
-	                el.value = '';
+		            if (clearCurrentDisplayValue) {
+	                    el.value = '';
+		            }
 	                for (i in selectedItems) {
 	                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
 	                }
 	            }
 
-	            if (this.options.setCurrentValue && Dom.get(this.eventGroup) != null) {
-	                Dom.get(this.eventGroup).value = selectedItems.toString();
+	            if (this.options.setCurrentValue && Dom.get(this.id) != null) {
+	                Dom.get(this.id).value = selectedItems.toString();
 	            }
 
 	            if (this.options.mandatory) {
@@ -1401,7 +1418,7 @@ LogicECM.module = LogicECM.module || {};
 									}
 								};
 								this.options.rootNodeRef = oResults.nodeRef;
-								this._loadSelectedItems();
+								this._loadSelectedItems(false);
 							}
 						},
 						scope: this
