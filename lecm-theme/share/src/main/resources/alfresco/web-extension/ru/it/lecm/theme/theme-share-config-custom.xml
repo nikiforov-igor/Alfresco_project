@@ -29,6 +29,7 @@
                         <item type="link" id="doc-journal">/documents-journal</item>
                         <item type="link" id="subscriptions">/subscriptions-to-type</item>
                         <item type="link" id="business-journal">/business-journal</item>
+                        <item type="link" id="incoming-list">/documents-list?doctype=lecm-incoming:document</item>
                         <!--<item type="link" id="errands-list">/errands-list</item>-->
                         <!--<item type="link" id="scaner">/document-scanner</item>-->
                     </container-group>
