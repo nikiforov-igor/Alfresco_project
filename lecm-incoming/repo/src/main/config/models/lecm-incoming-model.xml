@@ -106,28 +106,15 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!-- Получатель (сотрудник) -->
-				<association name="lecm-incoming:recipient-employee-assoc">
+				<!-- Получатель (сотрудник или подразделение) -->
+				<association name="lecm-incoming:recipient-assoc">
                     <title>Получатель</title>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-				<!-- Получатель (подразделение) -->
-				<association name="lecm-incoming:recipient-organization-unit-assoc">
-                    <title>Получатель</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-orgstr:organization-unit</class>
+						<class>cm:cmobject</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
