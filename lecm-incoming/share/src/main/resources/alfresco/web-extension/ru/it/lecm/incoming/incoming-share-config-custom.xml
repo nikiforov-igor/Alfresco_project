@@ -9,6 +9,8 @@
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-incoming:recipient-employee-assoc"/>
+                    <show id="lecm-incoming:recipient-organization-unit-assoc"/>
                 </field-visibility>
             </form>
             <form id="document">
@@ -79,6 +81,8 @@
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-incoming:subject-assoc"/>
+	                <show id="lecm-incoming:recipient-employee-assoc"/>
+	                <show id="lecm-incoming:recipient-organization-unit-assoc"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
