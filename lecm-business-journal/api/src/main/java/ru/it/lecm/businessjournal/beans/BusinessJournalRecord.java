@@ -59,9 +59,9 @@ public class BusinessJournalRecord implements Serializable {
     private NodeRef mainObject;
     private String mainObjectDescription = "";
     private NodeRef objectType;
-    private String objectTypeText = "";
+    private String objectTypeText = "неизвестно";
     private NodeRef eventCategory;
-    private String eventCategoryText = "";
+    private String eventCategoryText = "неизвестно";
     private List<RecordObject> objects;
     private String recordDescription = "";
     private boolean isActive = true;
