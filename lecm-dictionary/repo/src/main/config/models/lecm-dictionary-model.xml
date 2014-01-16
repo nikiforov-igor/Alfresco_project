@@ -86,6 +86,12 @@
         <type name="lecm-dic:hierarchical_dictionary_values">
             <title>Dictionary values</title>
             <parent>cm:folder</parent>
+	        <properties>
+		        <property name="lecm-dic:valueContainsType">
+			        <type>d:text</type>
+			        <mandatory>true</mandatory>
+		        </property>
+	        </properties>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>
             </mandatory-aspects>

@@ -105,13 +105,14 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             var newRootNode = null;
             if (this.rootNode != null) {
                 var newNode = {
-                    label:this.rootNode.title,
-                    description:this.rootNode.description,
-                    nodeRef:this.rootNode.nodeRef,
-                    isLeaf:false,
-                    expanded:true,
-                    type:this.rootNode.type,
-                    renderHidden:true
+                    label: this.rootNode.title,
+                    description: this.rootNode.description,
+                    nodeRef: this.rootNode.nodeRef,
+                    childType: this.rootNode.itemType,
+                    isLeaf: false,
+                    expanded: true,
+                    type: this.rootNode.type,
+                    renderHidden: true
                 };
                 newRootNode = new YAHOO.widget.TextNode(newNode, root);
             } else {
@@ -136,8 +137,6 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          */
         _renderTree:function () {
             this._loadTree(this.selectedNode);
-            this.selectedNode.isLeaf = false;
-            this.selectedNode.expanded = true;
             tree.render();
             this.selectedNode.focus();
             makeDraggable();
@@ -238,13 +237,17 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
                         node.children = [];
+	                    if (node.isLeaf) {
+		                    node.isLeaf = oResults.length == 0
+	                    }
                         for (var nodeIndex in oResults) {
                             var newNode = {
-                                label:oResults[nodeIndex].title,
-                                nodeRef:oResults[nodeIndex].nodeRef,
-                                isLeaf:oResults[nodeIndex].isLeaf,
-                                type:oResults[nodeIndex].type,
-                                renderHidden:true
+                                label: oResults[nodeIndex].title,
+                                nodeRef: oResults[nodeIndex].nodeRef,
+                                isLeaf: oResults[nodeIndex].isLeaf,
+                                type: oResults[nodeIndex].type,
+	                            childType: oResults[nodeIndex].childType,
+                                renderHidden: true
                             };
                             new YAHOO.widget.TextNode(newNode, node);
                         }
@@ -278,41 +281,16 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          */
         _treeNodeSelected:function (node) {
             this.selectedNode = node;
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/type";
-            if (node.data.nodeRef != null) {
-                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-            }
-
-             var callback = {
-                 success:function (oResponse) {
-                     var oResults = eval("(" + oResponse.responseText + ")");
-                     var nodeType = "lecm-dic:hierarchical_dictionary_values";
-                     if (oResults != null) {
-                         for (var nodeIndex in oResults) {
-                             nodeType = oResults[nodeIndex].toString();
-                             if (nodeType=="" || nodeType == null){
-                                 nodeType = "lecm-dic:hierarchical_dictionary_values";
-                             }
-                         }
-                     }
-                     Bubbling.fire("activeGridChanged",
-                         {
-	                         datagridMeta: {
-                                 itemType: nodeType,
-		                         nodeRef: node.data.nodeRef
-                             },
-                             scrollTo: true
-                         });
-	                 YAHOO.Bubbling.fire("hideFilteredLabel");
-                 },
-                 failure:function (oResponse) {
-                     alert("Failed to load type. " + "[" + oResponse.statusText + "]");
-                 },
-                 argument:{
-                 }
-             };
-
-            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            Bubbling.fire("activeGridChanged",
+                {
+                    datagridMeta: {
+                        itemType: node.data.childType,
+                        recreate: true,
+                        nodeRef: node.data.nodeRef
+                    },
+                    scrollTo: true
+                });
+            YAHOO.Bubbling.fire("hideFilteredLabel");
         },
         /**
          * Редактирование элемента дерева в отдельном диалоговом окне
@@ -439,7 +417,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 var parent = dest = me.destNode,
                     src = me.srcNode;
 
-                var dataObj = {childNodeRef:encodeURI(src.data.nodeRef), parentNodeRef:encodeURI(dest.data.nodeRef)};
+                var dataObj = {
+	                childNodeRef:encodeURI(src.data.nodeRef),
+	                parentNodeRef:encodeURI(dest.data.nodeRef)
+                };
 
                 Alfresco.util.Ajax.jsonRequest(
                     {
@@ -535,13 +516,15 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         onDragOver:function (e, id) {
             var tmpTarget = tree.getNodeByElement(Dom.get(id));
 
-            if (this.destNode != tmpTarget) {
-                if (this.destNode) {
-                    Dom.removeClass(this.destNode.getContentEl(), 'dropTarget');
-                }
-                Dom.addClass(tmpTarget.getContentEl(), 'dropTarget');
-                this.destNode = tmpTarget;
-            }
+	        if (tmpTarget.data.childType == this.srcNode.data.type) {
+	            if (this.destNode != tmpTarget) {
+	                if (this.destNode) {
+	                    Dom.removeClass(this.destNode.getContentEl(), 'dropTarget');
+	                }
+	                Dom.addClass(tmpTarget.getContentEl(), 'dropTarget');
+	                this.destNode = tmpTarget;
+	            }
+	        }
         },
 
 	    getTreeNodeDefinition: function(node) {

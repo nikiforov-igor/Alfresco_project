@@ -27,17 +27,15 @@ if (rootNode != null) {
 model.branch = branch;
 
 function addItems(branch, items) {
-	for each(var item in items) {
-		if (item.properties["lecm-dic:active"]) {
-			title = item.getName();
-			type = getNodeType(item);
+	for each(item in items) {
+		if (item.isSubType("lecm-dic:hierarchical_dictionary_values") && item.properties["lecm-dic:active"]) {
 			nodeRef = item.getNodeRef().toString();
 
 			var childs = item.childAssocs[assocType];
 			var activeChildsCount = 0;
 			if (childs != null) {
 				for (var j = 0; j < childs.length; j++) {
-					if (childs[j].properties["lecm-dic:active"]) {
+					if (childs[j].isSubType("lecm-dic:hierarchical_dictionary_values") && childs[j].properties["lecm-dic:active"]) {
 						activeChildsCount++;
 					}
 				}
@@ -45,8 +43,9 @@ function addItems(branch, items) {
 
 			isLeaf = activeChildsCount == 0;
 			branch.push({
-				title: title,
-				type: type,
+				title: substitude.getObjectDescription(item),
+				type: item.typeShort,
+				childType: getHierarchicalDictionaryChildType(item),
 				nodeRef: nodeRef,
 				isLeaf: "" + isLeaf
 			});
@@ -54,8 +53,16 @@ function addItems(branch, items) {
 	}
 }
 
-function getNodeType(node) {
-    var type = node.getTypeShort();
-    type = type.substr(type.lastIndexOf(":") + 1);
+function getHierarchicalDictionaryChildType(node) {
+	var type = node.properties["lecm-dic:valueContainsType"];
+
+	if (type == null || type.length == 0) {
+		while(node.typeShort != "lecm-dic:dictionary"){
+			node = node.parent;
+		}
+		if (node.properties["lecm-dic:type"]!=null){
+			type = node.properties["lecm-dic:type"];
+		}
+	}
 	return type;
 }

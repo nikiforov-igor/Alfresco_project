@@ -799,4 +799,91 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level1">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level1">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level2">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level2">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level3">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level3">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

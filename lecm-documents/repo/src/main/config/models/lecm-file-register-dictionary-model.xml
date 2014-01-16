@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-doc-dic-fr:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM file register dictionary model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
+	</namespaces>
+
+	<types>
+		<type name="lecm-doc-dic-fr:level1">
+			<parent>lecm-dic:hierarchical_dictionary_values</parent>
+			<properties>
+				<property name="lecm-doc-dic-fr:year">
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-doc-dic-fr:level1-note">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-doc-dic-fr:level2</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="lecm-doc-dic-fr:level2">
+			<parent>lecm-dic:hierarchical_dictionary_values</parent>
+			<associations>
+				<association name="lecm-doc-dic-fr:organization-unit-assoc">
+					<source>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-doc-dic-fr:level3</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="lecm-doc-dic-fr:level3">
+			<parent>lecm-dic:plane_dictionary_values</parent>
+			<properties>
+				<property name="lecm-doc-dic-fr:index">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-doc-dic-fr:title">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-doc-dic-fr:storage-period">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-doc-dic-fr:level3-note">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+	</types>
+</model>
