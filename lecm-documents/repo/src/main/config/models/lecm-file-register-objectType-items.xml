@@ -14,6 +14,12 @@
                 <property name="lecm-busjournal:objectType-class">lecm-doc-dic-fr:level2</property>
                 <property name="lecm-busjournal:objectType-template">{lecm-doc-dic-fr:organization-unit-assoc/lecm-orgstr:element-short-name}</property>
             </item>
+	        <item name="cm:Номенклатура дел. Уровень 3" type="lecm-busjournal:objectType">
+                <property name="cm:name">Номенклатура дел. Уровень 3</property>
+                <property name="lecm-busjournal:objectType-code">LECM_FILE_REGISTER_LEVEL3</property>
+                <property name="lecm-busjournal:objectType-class">lecm-doc-dic-fr:level3</property>
+                <property name="lecm-busjournal:objectType-template">{lecm-doc-dic-fr:title}</property>
+            </item>
         </items>
     </item>
 </items>
