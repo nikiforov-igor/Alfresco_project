@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+		<property name="cm:name">Вид документа</property>
+		<property name="lecm-dic:attributeForShow">cm:name</property>
+		<property name="lecm-dic:type">lecm-doc-dic-dt:documentType</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">true</property>
+		<property name="lecm-dic:description">Вид документа</property>
+		<items>
+			<item name="cm:Письмо" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Письмо</property>
+				<property name="lecm-doc-dic-dt:documentType-code">LETTER</property>
+			</item>
+			<item name="cm:Факс" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Факс</property>
+				<property name="lecm-doc-dic-dt:documentType-code">FAX</property>
+			</item>
+		</items>
+	</item>
+</items>

@@ -52,11 +52,15 @@
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-document-dictionaries-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-delivery-method-dictionary-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-doc-type-dictionary-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
 				<value>alfresco/module/${artifactId}/messages/lecm-documents-dictionaries-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-delivery-method-dictionary-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-doc-type-dictionary-model</value>
 			</list>
 		</property>
 	</bean>
@@ -159,6 +163,8 @@
                 <value>alfresco/module/${artifactId}/models/lecm-connection-available-types.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-document-subjects.xml</value>
 	            <value>alfresco/module/${artifactId}/models/lecm-file-register.xml</value>
+	            <value>alfresco/module/${artifactId}/models/lecm-delivery-method.xml</value>
+	            <value>alfresco/module/${artifactId}/models/lecm-document-type.xml</value>
             </list>
         </property>
 	    <property name="createOrUpdateDictionaries">

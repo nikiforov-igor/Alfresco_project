@@ -3,7 +3,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -13,7 +13,7 @@
             </form>
             <form id="document">
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -23,7 +23,7 @@
             </form>
             <form id="document-dashlet">
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -73,7 +73,7 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -102,7 +102,7 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -125,7 +125,7 @@
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
@@ -135,7 +135,7 @@
             </form>
             <form id="statemachine-editable-fields">
                 <field-visibility>
-                    <show id="lecm-incoming:content"/>
+                    <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>

@@ -886,4 +886,48 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-dm:deliveryMethod">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-dm:deliveryMethod">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-dt:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-dt:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>
