@@ -175,6 +175,12 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <!-- Поступившее по каналам -->
+                <property name="lecm-incoming:is-by-channel">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>false</default>
+                </property>
 			</properties>
 			<associations>
 				<!-- Регистратор -->
