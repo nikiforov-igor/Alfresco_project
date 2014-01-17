@@ -145,7 +145,11 @@ LogicECM.module = LogicECM.module || {};
 
             createDialogClass: "",
 
-            clearFormsOnStart: true
+            clearFormsOnStart: true,
+
+			pickerButtonLabel: null,
+
+			pickerButtonTitle: null
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -170,12 +174,22 @@ LogicECM.module = LogicECM.module || {};
             // Create button if control is enabled
             if(!this.options.disabled)
             {
+	            var buttonOptions = {
+		            onclick: {
+			            fn: this.showTreePicker,
+			            obj: null,
+			            scope: this
+		            },
+		            title: this.options.pickerButtonTitle
+	            };
+	            if (this.options.pickerButtonLabel != null) {
+		            buttonOptions.label = this.options.pickerButtonLabel;
+	            }
+
                 // Create picker button
 	            var buttonName = Dom.get(this.options.prefixPickerId + "-tree-picker-button").name;
-                this.widgets.pickerButton =  new YAHOO.widget.Button(
-	                this.options.prefixPickerId + "-tree-picker-button",
-                            { onclick: { fn: this.showTreePicker, obj: null, scope: this } }
-                    );
+                this.widgets.pickerButton =  new YAHOO.widget.Button(this.options.prefixPickerId + "-tree-picker-button", buttonOptions);
+
 	            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
 
                 if (this.options.showCreateNewLink) {

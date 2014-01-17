@@ -115,6 +115,14 @@
         <#if params.firstCreateDialogClass??>
             createDialogClass: "${params.firstCreateDialogClass}",
         </#if>
+        <#if params.firstPickerButtonLabel??>
+	        pickerButtonLabel: "${params.firstPickerButtonLabel}",
+        </#if>
+        <#if params.firstPickerButtonTitle??>
+	        pickerButtonTitle: "${params.firstPickerButtonTitle}",
+        <#elseif params.firstPickerButtonTitleCode??>
+	        pickerButtonTitle: "${msg(params.firstPickerButtonTitleCode)}",
+        </#if>
 	    showSearch: ${firstShowSearch?string},
         plane: ${firstPlane?string},
         currentValue: "${field.value!''}",
@@ -165,6 +173,14 @@
 	    <#--</#if>-->
 	    <#if params.secondCreateDialogClass??>
 		    createDialogClass: "${params.secondCreateDialogClass}",
+	    </#if>
+	    <#if params.secondPickerButtonLabel??>
+		    pickerButtonLabel: "${params.secondPickerButtonLabel}",
+	    </#if>
+	    <#if params.secondPickerButtonTitle??>
+		    pickerButtonTitle: "${params.secondPickerButtonTitle}",
+	    <#elseif params.secondPickerButtonTitleCode??>
+		    pickerButtonTitle: "${msg(params.secondPickerButtonTitleCode)}",
 	    </#if>
 	    <#if renderPickerJSSelectedValue??>
 		    selectedValue: "${renderPickerJSSelectedValue}",
