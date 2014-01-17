@@ -3,11 +3,11 @@
 }
 
 .documents-list-create-dialog-container .from-with-preview .yui-g .yui-u.first {
-	width: 815px;
+	width: 800px;
 }
 
 .from-with-preview .yui-g .yui-u {
-	width: 180px;
+	width: 200px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,
@@ -24,6 +24,20 @@
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
 	width: 130px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.object-finder .current-values {
+	width: 110px;
+}
+
+.from-with-preview div.association-auto-complete-selected-item > span > a,
+.from-with-preview div.association-auto-complete-selected-item-even > span > a {
+	max-width: 60px;
+}
+
+.from-with-preview div.association-auto-complete-selected-item > span.not-person,
+.from-with-preview div.association-auto-complete-selected-item-even > span.not-person {
+	max-width: 80px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
