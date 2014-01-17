@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Типы связи" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:В ответ на" type="lecm-connect-types:connection-type">
+                <property name="cm:name">В ответ на</property>
+                <property name="lecm-connect-types:reverse-name">Имеется ответ</property>
+                <property name="lecm-connect-types:code">inResponseTo</property>
+            </item>
+        </items>
+    </item>
+</items>

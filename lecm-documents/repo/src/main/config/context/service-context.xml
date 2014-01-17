@@ -174,6 +174,15 @@
 	    </property>
     </bean>
 
+	<bean id="documents.LogicEcmConnectionTypesItemsBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="documents.LogicEcmConnectionTypesBootstrap">
+	    <property name="createOrUpdateDictionaries">
+		    <list>
+			    <value>alfresco/module/${artifactId}/models/lecm-connection-types-items.xml</value>
+		    </list>
+	    </property>
+    </bean>
+
     <bean id="documentConnectionService" class="ru.it.lecm.documents.beans.DocumentConnectionServiceImpl"
           depends-on="transactionService, nodeService">
         <property name="transactionService" ref="transactionService"/>
