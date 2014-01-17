@@ -18,7 +18,9 @@ LogicECM.module = LogicECM.module || {};
 
 (function()
 {
-	var Dom = YAHOO.util.Dom;
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		KeyListener = YAHOO.util.KeyListener;
 
 	var $html = Alfresco.util.encodeHTML,
 		$combine = Alfresco.util.combinePaths,
@@ -107,7 +109,9 @@ LogicECM.module = LogicECM.module || {};
 
                 allowedNodesScript: null,
 
-				showSelectedItems: true
+				showSelectedItems: true,
+
+				createDialog: false
 			},
 
 			onReady: function AssociationSearchViewer_onReady()
@@ -128,6 +132,19 @@ LogicECM.module = LogicECM.module || {};
 				// Create button if control is enabled
 				if(!this.options.disabled)
 				{
+					if (this.options.createDialog) {
+						// Create picker button
+						var buttonName = Dom.get(this.options.controlId + "-tree-picker-button").name;
+						this.widgets.pickerButton =  new YAHOO.widget.Button(
+							this.options.controlId + "-tree-picker-button",
+							{ onclick: { fn: this.showTreePicker, obj: null, scope: this } }
+						);
+						Dom.get(this.options.controlId + "-tree-picker-button-button").name = buttonName;
+
+						Dom.setStyle(this.options.pickerId, "display", "block");
+						this.createPickerDialog();
+					}
+
 					this.populateDataWithAllowedScript();
 					this.createSearchDialog();
 					this._loadSearchProperties();
@@ -202,6 +219,9 @@ LogicECM.module = LogicECM.module || {};
 
 					if(!this.options.disabled)
 					{
+						if (this.options.createDialog) {
+							this.updateSelectedItems();
+						}
 						this.updateAddButtons();
 					}
 
@@ -244,6 +264,9 @@ LogicECM.module = LogicECM.module || {};
 					this.selectedItems = {};
 					this.singleSelectedItem = null;
 					if (!this.options.disabled) {
+						if (this.options.createDialog) {
+							this.updateSelectedItems();
+						}
 						this.updateFormFields();
 						this.updateAddButtons();
 					} else {
@@ -605,18 +628,27 @@ LogicECM.module = LogicECM.module || {};
 						this.selectedItems[obj.item.nodeRef] = obj.item;
 						this.singleSelectedItem = obj.item;
 
-						this.updateFormFields();
+						if (this.options.createDialog) {
+							this.updateSelectedItems();
+						} else {
+							this.updateFormFields();
+						}
 						this.updateAddButtons();
 					}
 				}
 			},
 
-			removeNode: function AssociationSearchViewer_removeNode(event, node)
+			removeNode: function AssociationSearchViewer_removeNode(event, params)
 			{
-				delete this.selectedItems[node.nodeRef];
+				delete this.selectedItems[params.node.nodeRef];
 				this.singleSelectedItem = null;
+				if (this.options.createDialog) {
+					this.updateSelectedItems();
+				}
 				this.updateAddButtons();
-				this.updateFormFields();
+				if (params.updateForms) {
+					this.updateFormFields();
+				}
 			},
 
 			getEmployeeView: function (employeeNodeRef, displayValue) {
@@ -649,7 +681,10 @@ LogicECM.module = LogicECM.module || {};
 
 			attachRemoveClickListener: function AssociationSearchViewer_attachRemoveClickListener(params)
 			{
-				YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, params.node, this);
+				YAHOO.util.Event.on("t-" + this.options.controlId + params.node.nodeRef + params.dopId, 'click', this.removeNode, {
+					node: params.node,
+					updateForms: params.updateForms
+				}, this);
 			},
 
 			// Updates all form fields
@@ -680,7 +715,7 @@ LogicECM.module = LogicECM.module || {};
 								el.innerHTML
 									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 							}
-							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c"}, this);
+							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						}
 					}
 				}
@@ -823,6 +858,123 @@ LogicECM.module = LogicECM.module || {};
                 } else {
                     context._createSelectedControls();
                 }
-            }
+            },
+
+			createPickerDialog: function()
+			{
+				this.widgets.ok = new YAHOO.widget.Button(this.options.controlId + "-ok",
+					{ onclick: { fn: this.onOk, obj: null, scope: this } });
+				this.widgets.cancel = new YAHOO.widget.Button(this.options.controlId + "-cancel",
+					{ onclick: { fn: this.onCancel, obj: null, scope: this } });
+
+				this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
+					{
+						width: "500px"
+					});
+				this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
+
+				Dom.addClass(this.options.pickerId, "object-finder");
+			},
+
+			onOk: function(e, p_obj)
+			{
+				Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
+				// Close dialog
+				this.widgets.escapeListener.disable();
+				this.widgets.dialog.hide();
+				this.widgets.pickerButton.set("disabled", false);
+				if (e) {
+					Event.preventDefault(e);
+				}
+				// Update parent form
+				this.updateFormFields();
+
+				if (this.options.fireAction.ok != null) {
+					var fireName = this.options.fireAction.ok.split(",");
+					for (var i in fireName){
+						YAHOO.Bubbling.fire(fireName[i], this);
+					}
+				}
+			},
+
+			onCancel: function(e, p_obj)
+			{
+				Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
+				this.widgets.escapeListener.disable();
+				this.widgets.dialog.hide();
+				if( this.widgets.pickerButton )
+					this.widgets.pickerButton.set("disabled", false);
+				if (e) {
+					Event.preventDefault(e);
+				}
+				if (this.options.fireAction.cancel != null) {
+					var fireName = this.options.fireAction.cancel.split(",");
+					for (var i in fireName){
+						YAHOO.Bubbling.fire(fireName[i], this);
+					}
+				}
+			},
+
+			showTreePicker: function AssociationTreeViewer_showTreePicker(e, p_obj)
+			{
+				if(!this.widgets.dialog) {
+					return;
+				}
+
+				// Enable esc listener
+				if (!this.widgets.escapeListener)
+				{
+					this.widgets.escapeListener = new KeyListener(this.options.pickerId,
+						{
+							keys: KeyListener.KEY.ESCAPE
+						},
+						{
+							fn: function(eventName, keyEvent)
+							{
+								this.onCancel();
+								Event.stopEvent(keyEvent[1]);
+							},
+							scope: this,
+							correctScope: true
+						});
+				}
+				this.widgets.escapeListener.enable();
+
+				// Disable picker button to prevent double dialog call
+				this.widgets.pickerButton.set("disabled", true);
+
+				Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "block");
+				// Show the dialog
+				this.widgets.dialog.show();
+				if (Dom.get(this.options.controlId + "-selectedItems") != null) {
+					this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
+				}
+
+				Event.preventDefault(e);
+			},
+
+			updateSelectedItems: function AssociationTreeViewer_updateSelectedItems() {
+				var items = this.selectedItems;
+				var fieldId = this.options.pickerId + "-selected-elements";
+				Dom.get(fieldId).innerHTML = '';
+				Dom.get(fieldId).className = 'currentValueDisplay';
+
+				var num = 0;
+				for (i in items) {
+					if (this.notShowedSelectedValue[i] == null) {
+						var displayName = this.selectedItems[i].selectedName;
+
+						var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+						if (this.options.itemType == "lecm-orgstr:employee") {
+							Dom.get(fieldId).innerHTML
+								+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+						} else {
+							Dom.get(fieldId).innerHTML
+								+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i]) + '</div>';
+						}
+						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "", updateForms: false}, this);
+					}
+				}
+			}
 		});
 })();

@@ -18,31 +18,36 @@
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field">
-	<#if disabled>
-		<div id="${controlId}" class="viewmode-field">
-			<#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-			<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-			</#if>
-			<span class="viewmode-label">${field.label?html}:</span>
-			<span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
-		</div>
-	<#else>
-		<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-		<div id="${controlId}" class="object-finder">
+<#if disabled>
+	<div id="${controlId}" class="viewmode-field">
+		<#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
+		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
+		</#if>
+		<span class="viewmode-label">${field.label?html}:</span>
+		<span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
+	</div>
+<#else>
+	<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+	<div id="${controlId}" class="object-finder">
+		<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
-			<#if field.disabled == false>
-				<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-				<input type="hidden" id="${controlId}-selectedItems"/>
+		<#if field.disabled == false>
+			<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+			<input type="hidden" id="${controlId}-selectedItems"/>
 
-				<@renderSearchPickerHTML controlId/>
-			</#if>
+			<div id="${controlId}-itemGroupActions" class="show-picker">
+                <span class="tree-picker-button">
+                    <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
+                </span>
+			</div>
 
-			<div id="${controlId}-currentValueDisplay" class="current-values"></div>
+			<@renderSearchPickerDialogHTML controlId/>
+		</#if>
 
-			<div class="clear"></div>
-		</div>
-	</#if>
+		<div class="clear"></div>
+	</div>
+</#if>
 	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
 </div>
 
@@ -61,6 +66,7 @@
 
 
 	new LogicECM.module.AssociationSearchViewer( "${fieldHtmlId}" ).setOptions({
+		createDialog: true,
 		<#if disabled>
 			disabled: true,
 		</#if>
@@ -72,7 +78,7 @@
 		<#elseif field.endpointMandatory??>
 			mandatory: ${field.endpointMandatory?string},
 		</#if>
-		multipleSelectMode: ${field.endpointMany?string},
+			multipleSelectMode: ${field.endpointMany?string},
 
 		<#if field.control.params.nameSubstituteString??>
 			nameSubstituteString: "${field.control.params.nameSubstituteString}",
@@ -89,7 +95,7 @@
 		<#if args.ignoreNodes??>
 			ignoreNodes: "${args.ignoreNodes}".split(","),
 		</#if>
-		currentValue: "${field.value!''}",
+			currentValue: "${field.value!''}",
 		<#if renderPickerJSSelectedValue??>
 			selectedValue: "${renderPickerJSSelectedValue}",
 		</#if>
@@ -109,6 +115,10 @@
 			},
 		</#if>
 		showSelectedItems: ${showSelectedItems?string},
-		itemType: "${field.endpointType}"
+		<#if field.control.params.itemType??>
+			itemType: "${field.control.params.itemType}"
+		<#else>
+			itemType: "${field.endpointType}"
+		</#if>
 	}).setMessages( ${messages} );
 </script>
