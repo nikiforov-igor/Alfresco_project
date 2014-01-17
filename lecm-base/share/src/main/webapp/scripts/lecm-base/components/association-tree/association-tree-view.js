@@ -143,7 +143,9 @@ LogicECM.module = LogicECM.module || {};
 
             allowedNodesScript: null,
 
-            createDialogClass: ""
+            createDialogClass: "",
+
+            clearFormsOnStart: true
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -258,7 +260,7 @@ LogicECM.module = LogicECM.module || {};
                 });
         },
 
-        _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems(clearCurrentDisplayValue)
+        _loadSelectedItems: function AssociationTreeViewer__loadSelectedItems(clearCurrentDisplayValue, updateForms)
         {
             var arrItems = "";
             if (this.options.selectedValue != null)
@@ -293,7 +295,9 @@ LogicECM.module = LogicECM.module || {};
                     this.updateSelectedItems();
                     this.updateAddButtons();
                 }
-                this.updateFormFields(clearCurrentDisplayValue);
+	            if (updateForms) {
+                    this.updateFormFields(clearCurrentDisplayValue);
+                }
             };
 
             var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
@@ -545,7 +549,7 @@ LogicECM.module = LogicECM.module || {};
 	        if (Dom.get(this.options.controlId + "-selectedItems") != null) {
                 this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
 	        }
-            this._loadSelectedItems(true);
+            this._loadSelectedItems(true, false);
 
             Event.preventDefault(e);
         },
@@ -605,7 +609,7 @@ LogicECM.module = LogicECM.module || {};
                                             }
                                         });
                                 }
-                                this._loadSelectedItems(false);
+                                this._loadSelectedItems(this.options.clearFormsOnStart, true);
                             }
                         },
                         scope: this
@@ -1418,7 +1422,7 @@ LogicECM.module = LogicECM.module || {};
 									}
 								};
 								this.options.rootNodeRef = oResults.nodeRef;
-								this._loadSelectedItems(false);
+								this._loadSelectedItems(this.options.clearFormsOnStart, true);
 							}
 						},
 						scope: this

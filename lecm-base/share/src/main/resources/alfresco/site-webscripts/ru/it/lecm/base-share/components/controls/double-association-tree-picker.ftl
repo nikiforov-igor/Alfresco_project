@@ -126,7 +126,8 @@
 	    <#else>
 		    itemType: "${field.endpointType! params.endpointType}",
 	    </#if>
-	    showCreateNewLink: false
+	    showCreateNewLink: false,
+	    clearFormsOnStart: false
     });
     fistControl.setMessages(${messages});
 
@@ -179,6 +180,7 @@
 	    showSearch: ${secondShowSearch?string},
 	    plane: ${secondPlane?string},
 	    currentValue: "${field.value!''}",
+	    clearFormsOnStart: false
     });
     secondControl.setMessages(${messages});
 </script>
