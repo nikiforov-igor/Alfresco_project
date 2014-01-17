@@ -82,6 +82,9 @@
 	<field name="col_RegnumContractor" class="java.lang.String">
 		<fieldDescription><![CDATA[Регистрационный номер контрагента]]></fieldDescription>
 	</field>
+	<field name="col_SignatoryCounterparty" class="java.lang.String">
+		<fieldDescription><![CDATA[Подписант контрагента]]></fieldDescription>
+	</field>
 	<field name="col_RegnumProject" class="java.lang.String">
 		<fieldDescription><![CDATA[Регистрационный номер проекта договора]]></fieldDescription>
 	</field>
@@ -362,9 +365,7 @@
 					<textElement>
 						<font fontName="DejaVu Sans Mono" isBold="false"/>
 					</textElement>
-					<textFieldExpression><![CDATA[( $F{col_Executor.Family} == null ? "" : $F{col_Executor.Family})
-+ ($F{col_Executor.Name} == null ? "" : " " + $F{col_Executor.Name})
-+ ($F{col_Executor.Otchestvo} == null ? "" : " " + $F{col_Executor.Otchestvo})]]></textFieldExpression>
+					<textFieldExpression><![CDATA[( $F{col_SignatoryCounterparty} == null ? "" : $F{col_SignatoryCounterparty})]]></textFieldExpression>
 				</textField>
 			</frame>
 			<frame>

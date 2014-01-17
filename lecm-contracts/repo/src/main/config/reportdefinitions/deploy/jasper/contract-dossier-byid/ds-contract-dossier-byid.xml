@@ -88,6 +88,11 @@
 				jrFldName="col_RegnumContractor"
 				displayName="Регистрационный номер контрагента" javaValueClass="String"/>
 
+		<!-- Подписант контрагента -->
+		<field queryFldName="{lecm-contract:signatoryCounterparty}"
+				jrFldName="col_SignatoryCounterparty"
+				displayName="Подписант контрагента" javaValueClass="String"/>
+
 		<!-- Полное наименование котрагента "lecm-contract:partner-assoc": target "lecm-contractor:contractor-type"
 			и пр атрибуты котрагента
 		  -->
