@@ -47,4 +47,19 @@
             </list>
         </property>
     </bean>
+
+	<bean id="incomingService" class="ru.it.lecm.incoming.beans.IncomingServiceImpl" parent="baseBean"
+	      depends-on="nodeService">
+		<property name="nodeService" ref="nodeService"/>
+		<property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="authService" ref="authenticationService"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
+
+	<bean  id="errandsAttachmentsPolicy" class="ru.it.lecm.incoming.policy.IncomingAttachmentsPolicy"
+	       init-method="init" depends-on="incoming.LogicEcmIncomingBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
 </beans>
