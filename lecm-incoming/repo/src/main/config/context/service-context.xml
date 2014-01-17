@@ -57,10 +57,55 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean  id="errandsAttachmentsPolicy" class="ru.it.lecm.incoming.policy.IncomingAttachmentsPolicy"
+	<bean  id="incomingAttachmentsPolicy" class="ru.it.lecm.incoming.policy.IncomingAttachmentsPolicy"
 	       init-method="init" depends-on="incoming.LogicEcmIncomingBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
+
+    <bean id="incoming.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-incoming:document" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-incoming-default-statemachine.xml" />
+    </bean>
+
+    <bean id="incomingCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-incoming:title</value>
+                <value>lecm-incoming:summaryContent</value>
+                <value>lecm-incoming:is-on-control</value>
+                <value>lecm-incoming:outgoing-number</value>
+                <value>lecm-incoming:outgoing-date</value>
+                <value>lecm-incoming:execution-date</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-incoming:registrator-assoc</value>
+                <value>lecm-incoming:document-type-assoc</value>
+                <value>lecm-incoming:file-register-assoc</value>
+                <value>lecm-incoming:subject-assoc</value>
+                <value>lecm-incoming:delivery-method-assoc</value>
+                <value>lecm-incoming:recipient-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="incomingCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-incoming:document" value-ref="incomingCopySettings"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Для ипользования в роедакторе отчетов-->
+    <bean id="listOfUsedIncomingTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-incoming:document" value="Входящий"/>
+            </map>
+        </property>
+    </bean>
 </beans>
