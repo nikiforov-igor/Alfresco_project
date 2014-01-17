@@ -862,7 +862,7 @@
 
 	<config evaluator="node-type" condition="lecm-stmeditor:statemachine">
 		<forms>
-			<form>
+			<form id="statemachine-editor-edit-statemachine">
 				<field-visibility>
 					<show id="lecm-stmeditor:archiveFolder" force="true"/>
 					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
@@ -891,6 +891,36 @@
                     </field>
                 </appearance>
 			</form>
+            <form id="statemachine-editor-edit-statemachine-finalize-to-unit">
+                <field-visibility>
+                    <show id="lecm-stmeditor:archiveFolder" force="true"/>
+                    <show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
+                    <show id="lecm-stmeditor:staticRolesList" force="true"/>
+                    <show id="lecm-stmeditor:dynamicRolesList" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:archiveFolder" read-only="true"/>
+                    <field id="lecm-stmeditor:archiveFolderAdditional" />
+                    <field id="lecm-stmeditor:staticRolesList">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:static-role-item</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="height">200</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:dynamicRolesList">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:dynamic-role-item</control-param>
+                            <control-param name="allowCreate">true</control-param>
+                            <control-param name="showActions">true</control-param>
+                            <control-param name="height">200</control-param>
+                            <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
             <form id="statemachine-status-fields">
                 <field-visibility>
                     <show id="lecm-stmeditor:statusFields" force="true"/>

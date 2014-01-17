@@ -54,6 +54,9 @@ public interface DocumentService {
 	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
 
 	public static final QName ASPECT_SEMANTIC_ASSIST = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "semanticAssistAspect");
+	public static final QName ASPECT_FINALIZE_TO_UNIT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "finalize-to-unit");
+	public static final QName PROP_IS_SHARED_FOLDER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-shared-folder");
+	public static final QName ASSOC_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "organization-unit-assoc");
 
     public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 

@@ -1,12 +1,5 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -15,9 +8,10 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
-
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
+
+import java.util.*;
 
 public class PolicyUtils {
 
@@ -212,7 +206,22 @@ public class PolicyUtils {
 		return sgOU;
 	}
 
-	/**
+    /**
+     * Получить дексриптор Организации, который используется в методах IOrgStructureNotifiers.
+     * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
+     * ориентированное" описание.
+     * @param orgUnit id узла типа "lecm-orgstr:organization-element"
+     * @param nodeService служба работы с узлами
+     * @return
+     */
+    public static Types.SGOrgUnitPrivate makeOrgUnitPrivatePos(NodeRef orgUnit, NodeService nodeService) {
+        final String orgIdCode = getOrgUnitIdCode(orgUnit, nodeService);
+        final String orgDetails= ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_NAME) + " PRIVATE";
+        final Types.SGOrgUnitPrivate sgOU = (Types.SGOrgUnitPrivate) Types.SGKind.SG_PRIVATE_OU.getSGPos( orgIdCode, orgDetails);
+        return sgOU;
+    }
+
+    /**
 	 * Получить дексриптор руководящей позиции для Организации. Используется в методах IOrgStructureNotifiers.
 	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
 	 * ориентированное" описание.

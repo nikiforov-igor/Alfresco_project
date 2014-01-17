@@ -32,6 +32,9 @@ public interface OrgstructureBean {
 	String POSITIONS_DICTIONARY_NAME = "Должностные позиции";
 	String ROLES_DICTIONARY_NAME = "Роли для рабочих групп";
 	String BUSINESS_ROLES_DICTIONARY_NAME = "Бизнес роли";
+	String DOCUMENT_ROOT_NAME = "Хранилище организации";
+	String ORGANIZATION_UNIT_SHARED_FOLDER_NAME = "Общие документы";
+	String ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME = "Документы подразделения";
 	/**
 	 * идентификатор бизнес роли "Технолог"
 	 */
@@ -50,6 +53,7 @@ public interface OrgstructureBean {
 	QName ASSOC_EMPLOYEE_PERSON = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-person-assoc");
 	QName ASSOC_BUSINESS_ROLE_EMPLOYEE = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-employee-assoc");
 	QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-assoc");
+	QName ASSOC_ORGANIZATION_UNIT_FOLDER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "unit-folder-assoc");
 	QName ASSOC_BUSINESS_ROLE_ORGANIZATION_ELEMENT_MEMBER = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-organization-element-member-assoc");
 	QName PROP_STAFF_LIST_IS_BOSS = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "staff-list-is-boss");
 	QName PROP_EMP_LINK_IS_PRIMARY = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-link-is-primary");

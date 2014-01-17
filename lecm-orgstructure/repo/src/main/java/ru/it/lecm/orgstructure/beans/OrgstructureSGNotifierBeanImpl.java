@@ -1,12 +1,5 @@
 package ru.it.lecm.orgstructure.beans;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -16,7 +9,6 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.policies.PolicyUtils;
 import ru.it.lecm.security.Types;
@@ -25,6 +17,8 @@ import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.Types.SGSuperVisor;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import java.util.*;
 
 public class OrgstructureSGNotifierBeanImpl
 		extends BaseBean
@@ -230,7 +224,10 @@ public class OrgstructureSGNotifierBeanImpl
 		final Types.SGPosition sgOU = PolicyUtils.makeOrgUnitPos(nodeOrgUnit, nodeService);
 		sgNotifier.sgInclude( sgDP, sgOU);
 
-		// Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
+        final Types.SGPosition sgPrivateOU = PolicyUtils.makeOrgUnitPrivatePos(nodeOrgUnit, nodeService);
+        sgNotifier.sgInclude( sgDP, sgPrivateOU);
+
+        // Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (sgMe != null) {
 			/*
@@ -446,7 +443,25 @@ public class OrgstructureSGNotifierBeanImpl
 					, Types.SGKind.SG_SV.getSGPos( nodeOU.getId(), posNodeOU.getDisplayInfo())
 			);
 		}
-	}
+
+        final Types.SGPosition posNodePrivateOU = PolicyUtils.makeOrgUnitPrivatePos(nodeOU, nodeService);
+        sgNotifier.orgNodeCreated( posNodePrivateOU);
+
+		/*
+		 * есть родительский узел по орг-штатной структуре включаем:
+		 *   1) включаем свой SG_OU -> parent(SG_OU)
+		 *   2) родительский Руководящий узел в свой
+		 */
+        if (super.isProperType(parent, OrgstructureBean.TYPE_ORGANIZATION_UNIT)) {
+            final Types.SGPosition posParentOU = PolicyUtils.makeOrgUnitPos(parent, nodeService);
+            // (2) Группа Руководства из родительского подразделения в текущее: SG_SV(parent) -> SG_SV
+            sgNotifier.sgInclude(
+                    Types.SGKind.SG_SV.getSGPos(parent.getId(), posParentOU.getDisplayInfo())
+                    , SGKind.SG_PRIVATE_OU.getSGPos(nodeOU.getId(), posNodePrivateOU.getDisplayInfo())
+            );
+        }
+
+    }
 
 	@Override
 	public void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {
@@ -457,6 +472,7 @@ public class OrgstructureSGNotifierBeanImpl
 		}
 
 		final Types.SGPosition posNodeOU = PolicyUtils.makeOrgUnitPos(nodeOU, nodeService);
+		final Types.SGPosition posNodePrivateOU = PolicyUtils.makeOrgUnitPrivatePos(nodeOU, nodeService);
 
 		/*
 		 * есть родительский узел по орг-штатной структуре включаем:
@@ -469,6 +485,7 @@ public class OrgstructureSGNotifierBeanImpl
 			// (1) SG_OU -> SG_OU(parent)
 			final Types.SGPosition posParentOU = PolicyUtils.makeOrgUnitPos(parent, nodeService);
 			sgNotifier.sgExclude( posNodeOU, posParentOU);
+			sgNotifier.sgExclude( posNodePrivateOU, posParentOU);
 
 			// (2) Группа Руководства из родительского подразделения в текущее: SG_SV(parent) -> SG_SV
 			sgNotifier.sgExclude(
@@ -532,6 +549,7 @@ public class OrgstructureSGNotifierBeanImpl
 			// Активируем БР для Сотрудников
 			for (NodeRef role: ouRoles) {
 				final Types.SGPosition ouPos = PolicyUtils.makeOrgUnitPos(role, nodeService);
+				final Types.SGPosition ouPrivatePos = PolicyUtils.makeOrgUnitPrivatePos(role, nodeService);
 				for (NodeRef employee : employees) {
 					final String userLogin = getEmployeeLogin( employee);
 
@@ -544,9 +562,12 @@ public class OrgstructureSGNotifierBeanImpl
 					final Types.SGPrivateBusinessRole brmePos = Types.SGKind.getSGMyRolePos(employee.getId(), userLogin, ouPos.getDisplayInfo());
 					if (include) {
 						this.sgNotifier.sgInclude( brmePos, ouPos); // BRME -> OU
+						this.sgNotifier.sgInclude( brmePos, ouPrivatePos); // BRME -> OU
 						this.sgNotifier.sgInclude( Types.SGKind.getSGMeOfUser( employee.getId(), userLogin), brmePos); // ME -> BRME
-					} else
+					} else {
 						this.sgNotifier.sgExclude( brmePos, ouPos);
+						this.sgNotifier.sgExclude( brmePos, ouPrivatePos);
+                    }
 				}
 			}
 		}

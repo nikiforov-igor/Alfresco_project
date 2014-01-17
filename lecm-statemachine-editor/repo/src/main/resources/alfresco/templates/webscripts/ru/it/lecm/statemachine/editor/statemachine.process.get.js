@@ -70,7 +70,16 @@ if (statemachineId != null && statemachineId != '') {
 	model.packageNodeRef = statuses.nodeRef.toString();
 	model.versionsNodeRef = version.nodeRef.toString();
 
-	var machineStatuses = statuses.getChildren();
+    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+    var dictionaryService = ctx.getBean("dictionaryService");
+    var namespaceService = ctx.getBean("namespaceService");
+    var modelQName = Packages.org.alfresco.service.namespace.QName.createQName(statemachineId.replace("_", ":"), namespaceService);
+    var aspectQName = Packages.org.alfresco.service.namespace.QName.createQName("lecm-document-aspects:finalize-to-unit", namespaceService);
+    var aspects = dictionaryService.getType(modelQName).getDefaultAspectNames();
+    model.isFinalizeToUnit = aspects.contains(aspectQName);
+
+
+    var machineStatuses = statuses.getChildren();
 	var statuses = [];
 	var endStatus = null;
 

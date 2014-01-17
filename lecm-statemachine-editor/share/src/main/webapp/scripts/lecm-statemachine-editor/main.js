@@ -53,6 +53,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 		packageNodeRef: null,
 		machineNodeRef: null,
 		versionsNodeRef: null,
+        isFinalizeToUnit: null,
 		layout: null,
 		startActionsMenu: null,
 		userActionsMenu: null,
@@ -81,6 +82,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 					oResponse.argument.parent.packageNodeRef = oResults.packageNodeRef;
 					oResponse.argument.parent.machineNodeRef = oResults.machineNodeRef;
                     oResponse.argument.parent.versionsNodeRef = oResults.versionsNodeRef;
+                    oResponse.argument.parent.isFinalizeToUnit = oResults.isFinalizeToUnit;
 					oResponse.argument.parent._drawElements(el, oResults.statuses);
 					var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/diagram?statemachineNodeRef={statemachineNodeRef}&type=diagram";
 					sUrl = YAHOO.lang.substitute(sUrl, {
@@ -579,7 +581,7 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 				itemId: this.machineNodeRef,
 				mode: "edit",
 				submitType: "json",
-				formId: "statemachine-editor-edit-statemachine"
+				formId: this.isFinalizeToUnit ? "statemachine-editor-edit-statemachine-finalize-to-unit" : "statemachine-editor-edit-statemachine"
 			});
 
 			this._showSplash();

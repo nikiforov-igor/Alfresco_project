@@ -1,12 +1,14 @@
 package ru.it.lecm.orgstructure.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.NoSuchPersonException;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -29,6 +31,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     private PersonService personService;
     private DictionaryBean dictionaryService;
     private NodeRef organizationRootRef;
+    private Repository repositoryHelper;
 
     public void setPersonService(PersonService personService) {
         this.personService = personService;
@@ -36,6 +39,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
     }
 
     /**
@@ -87,6 +94,16 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                             final QName nodeTypeQName = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, TYPE_DIRECTORY_PERSONAL_DATA);
                             final ChildAssociationRef ref = nodeService.createNode(organizationRef, assocTypeQName, assocQName, nodeTypeQName, getNamedProps(PERSONAL_DATA_ROOT_NAME));
                             logger.info(String.format("OU Personal Data '%s' created as %s", PERSONAL_DATA_ROOT_NAME, ref.getChildRef()));
+                        }
+
+                        //Основная папка с документами
+                        NodeRef companyHome = repositoryHelper.getCompanyHome();
+                        if (nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, DOCUMENT_ROOT_NAME) == null) {
+                            final QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_ROOT_NAME);
+                            final ChildAssociationRef ref = nodeService.createNode(companyHome, assocTypeQName, assocQName, ContentModel.TYPE_FOLDER, getNamedProps(DOCUMENT_ROOT_NAME));
+                            serviceRegistry.getPermissionService().setInheritParentPermissions(ref.getChildRef(), false);
+                            serviceRegistry.getPermissionService().setPermission(ref.getChildRef(), PermissionService.ALL_AUTHORITIES, PermissionService.CONSUMER, true);
+                            logger.info(String.format("OU Document Data '%s' created as %s", DOCUMENT_ROOT_NAME, ref.getChildRef()));
                         }
 
                         return organizationRef;

@@ -3,6 +3,7 @@
     packageNodeRef: "${packageNodeRef}",
     machineNodeRef: "${machineNodeRef}",
     versionsNodeRef: "${versionsNodeRef}",
+    isFinalizeToUnit: ${isFinalizeToUnit?string},
     statuses: [
     <#list statuses as status>
         <@printStatus status />

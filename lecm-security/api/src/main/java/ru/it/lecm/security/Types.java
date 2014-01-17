@@ -4,7 +4,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 
 
@@ -43,6 +42,7 @@ public final class Types {
 	final static public String SFX_DELIM = "%"; // разделить внутри суффиксов - должен отличаится от разделителя внутри guid (минуса)
 	final static public String PFX_LECM = "_LECM";
 	final static public String SFX_OU  = "$OU"+ SFX_DELIM;   // by id
+	final static public String SFX_PRIVATE_OU  = "$OU_PRIVATE" + SFX_DELIM;   // by id
 	final static public String SFX_DP  = "$DP"+ SFX_DELIM;   // by id
 
 	final static public String SFX_USR = "$ME"+ SFX_DELIM;   // by id
@@ -102,6 +102,7 @@ public final class Types {
 		  SG_ME(SFX_USR, "Private User Point")		// личная группа Сотрудника-пользователя
 		, SG_DP(SFX_DP, "Deputy Position")			// группа Должностной позиции
 		, SG_OU(SFX_OU, "Org Unit")					// группа Подразделения
+		, SG_PRIVATE_OU(SFX_PRIVATE_OU, "Org Unit Private")					// группа Подразделения
 
 		, SG_SV(SFX_SV, "Boss Position")			// группа Руководящая (связана с Подразделением и Должностью)
 		, SG_BR(SFX_BR, "Business Role Point")		// группа бизнес-роли
@@ -157,7 +158,9 @@ public final class Types {
 			}
 			if (this == SG_OU)
 				return new SGOrgUnit(objId, displayName);
-			if (this == SG_SV)
+            if (this == SG_PRIVATE_OU)
+                return new SGOrgUnitPrivate(objId, displayName);
+            if (this == SG_SV)
 				return new SGSuperVisor(objId, displayName);
 			if (this == SG_BR)
 				return new SGBusinessRole(objId, displayName);
@@ -518,7 +521,30 @@ public final class Types {
 
 	}
 
-	/**
+    /**
+     * Индикатор орг-штатной единицы.
+     * название или Id объекта Альфреско можно использовать как super.id
+     */
+    public static class SGOrgUnitPrivate extends SGPosition {
+        private SGOrgUnitPrivate(String orgUnitId) {
+            super( SGKind.SG_PRIVATE_OU, orgUnitId);
+        }
+
+        private SGOrgUnitPrivate(String orgUnitId, String displayName) {
+            super( SGKind.SG_PRIVATE_OU, orgUnitId, displayName);
+        }
+
+        public String getOUId() {
+            return super.getId();
+        }
+
+        public void setOUId(String value) {
+            super.setId(value);
+        }
+
+    }
+
+    /**
 	 * Индикатор Руководящей Позиции
 	 * название или Id соот-щей орг-штатной единицы можно использовать как id
 	 */

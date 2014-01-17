@@ -252,6 +252,21 @@
                     </constraints>
                 </property>
             </properties>
+            <associations>
+                <!--Ссылка на общую папку подразделения -->
+                <association name="lecm-orgstr:unit-folder-assoc">
+                    <title>Shared Folder</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:folder</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
             <mandatory-aspects>
                 <aspect>cm:versionable</aspect>
             </mandatory-aspects>

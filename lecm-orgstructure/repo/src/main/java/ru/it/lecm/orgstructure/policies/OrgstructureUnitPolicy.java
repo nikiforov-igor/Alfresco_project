@@ -1,25 +1,31 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.PermissionService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author dbashmakov
@@ -36,15 +42,17 @@ public class OrgstructureUnitPolicy
 
 	private AuthenticationService authService; // optional
 	private ISchedule scheduleService;
+    private Repository repositoryHelper;
+    private PermissionService permissionService;
 
-	@Override
+    @Override
 	public void init() {
 		PropertyCheck.mandatory(this, CHKNAME_AUTH_SERVICE, authService);
 
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateNode"));
+				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -69,7 +77,7 @@ public class OrgstructureUnitPolicy
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-        NodeRef unit = childAssocRef.getChildRef();
+        final NodeRef unit = childAssocRef.getChildRef();
         NodeRef parent = orgstructureService.getParentUnit(unit);
         if (parent == null) {
             NodeRef root = orgstructureService.getRootUnit();
@@ -79,6 +87,13 @@ public class OrgstructureUnitPolicy
         }
         // оповещение securityService по Департаменту ...
         notifyChangedOU(unit, parent);
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                createOrganizationUnitStore(unit);
+                return null;
+            }
+        });
     }
 
 	public void onUpdateUnitLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -118,11 +133,49 @@ public class OrgstructureUnitPolicy
 		//если подразделение удаляется
 		if (changed && !nowActive) {
 			NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
-			if (schedule != null) {
+			if (schedule != null && nodeService.exists(schedule)) {
 				nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
 				nodeService.deleteNode(schedule);
 			}
-		}
+            //Обновляем папку подразделения
+            List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+            if (shared.size() > 0) {
+                final NodeRef folder = shared.get(0).getTargetRef();
+                final String name = nodeService.getProperty(folder, ContentModel.PROP_NAME).toString();
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                                    @Override
+                                    public NodeRef execute() throws Throwable {
+                                        nodeService.setProperty(folder, ContentModel.PROP_NAME, name + " (Удалено)");
+                                        return null;
+                                    };
+                               }, false, true);
+                    }
+                });
+            }
+        } else {
+            //Обновляем папку подразделения
+            List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+            if (shared.size() > 0) {
+                NodeRef folder = shared.get(0).getTargetRef();
+                nodeService.setProperty(folder, ContentModel.PROP_NAME, after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME));
+                nodeService.setProperty(folder, ContentModel.PROP_TITLE, after.get(OrgstructureBean.PROP_UNIT_CODE));
+                nodeService.setProperty(folder, ContentModel.PROP_DESCRIPTION, after.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
+            } else {
+                if (before.size() > 0) {
+                    createOrganizationUnitStore(nodeRef);
+                    shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+                    if (shared.size() > 0) {
+                        NodeRef folder = shared.get(0).getTargetRef();
+                        nodeService.setProperty(folder, ContentModel.PROP_NAME, after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME));
+                        nodeService.setProperty(folder, ContentModel.PROP_TITLE, after.get(OrgstructureBean.PROP_UNIT_CODE));
+                        nodeService.setProperty(folder, ContentModel.PROP_DESCRIPTION, after.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
+                    }
+                }
+            }
+        }
 	}
 
 	@Override
@@ -146,4 +199,69 @@ public class OrgstructureUnitPolicy
 		final String initiator = authService.getCurrentUserName();
 		businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
 	}
+
+    private void createOrganizationUnitStore(NodeRef unit) {
+        NodeRef parent = orgstructureService.getParentUnit(unit);
+        NodeRef root = orgstructureService.getRootUnit();;
+        List<AssociationRef> sharedFolder = null;
+        if (parent != null) {
+            sharedFolder = nodeService.getTargetAssocs(parent, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+
+            if (sharedFolder.size() == 0) {
+                createOrganizationUnitStore(parent);
+                sharedFolder = nodeService.getTargetAssocs(parent, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+            }
+        }
+
+        //Получаем хранилище
+        NodeRef parentStore = null;
+        if (sharedFolder != null && sharedFolder.size() > 0 && !root.equals(unit)) {
+            parentStore = sharedFolder.get(0).getTargetRef();
+        } else if (root.equals(unit)) {
+            NodeRef companyHome = repositoryHelper.getCompanyHome();
+            parentStore = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
+        }
+
+        String name = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString();
+        String title = nodeService.getProperty(unit, OrgstructureBean.PROP_UNIT_CODE).toString();
+        String description = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME).toString();
+
+        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+        props.put(ContentModel.PROP_NAME, name);
+        props.put(ContentModel.PROP_TITLE, title);
+        props.put(ContentModel.PROP_DESCRIPTION, description);
+        props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+
+        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
+        if (nodeService.getChildByName(parentStore, ContentModel.ASSOC_CONTAINS, name) != null) return;
+        final ChildAssociationRef ref = nodeService.createNode(parentStore, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
+
+        props = new HashMap<QName, Serializable>();
+        props.put(ContentModel.PROP_NAME, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
+        props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+        assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
+        final ChildAssociationRef shared = nodeService.createNode(ref.getChildRef(), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
+        String sharedAuthority = PolicyUtils.makeOrgUnitPos(unit, nodeService).getAlfrescoSuffix();
+        permissionService.setInheritParentPermissions(shared.getChildRef(), false);
+        permissionService.setPermission(shared.getChildRef(), "GROUP_" + sharedAuthority, PermissionService.CONSUMER, true);
+
+        props = new HashMap<QName, Serializable>();
+        props.put(ContentModel.PROP_NAME, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
+        props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+        assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
+        final ChildAssociationRef privateFolder = nodeService.createNode(ref.getChildRef(), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
+        String privateAuthority = PolicyUtils.makeOrgUnitPrivatePos(unit, nodeService).getAlfrescoSuffix();
+        permissionService.setInheritParentPermissions(privateFolder.getChildRef(), false);
+        permissionService.setPermission(privateFolder.getChildRef(), "GROUP_" + privateAuthority, PermissionService.CONSUMER, true);
+
+        nodeService.createAssociation(unit, ref.getChildRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
 }
