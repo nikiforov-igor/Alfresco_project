@@ -13,6 +13,7 @@
         <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
         <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/incoming/1.0" prefix="lecm-incoming"/>
@@ -58,6 +59,15 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-incoming:title">
+                    <title>Заголовок</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <!--Содержание-->
 				<property name="lecm-incoming:summaryContent">
                     <title>Содержание</title>
@@ -95,7 +105,7 @@
                     <title>Исходящий от</title>
                     <type>d:date</type>
                 </property>
-                <!--Исходящий от-->
+                <!--Срок исполнения-->
                 <property name="lecm-incoming:execution-date">
                     <title>Срок исполнения</title>
                     <type>d:date</type>
@@ -189,6 +199,19 @@
                     </source>
                     <target>
                         <class>lecm-doc-dic-dt:documentType</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!--Номенклатура -->
+                <association name="lecm-incoming:file-register-assoc">
+                    <title>Номенклатура дел</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic-fr:level3</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
