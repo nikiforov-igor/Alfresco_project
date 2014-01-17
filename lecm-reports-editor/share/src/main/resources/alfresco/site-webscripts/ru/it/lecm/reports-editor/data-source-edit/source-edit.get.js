@@ -9,7 +9,7 @@ function getDataSource(){
 function createReportDataSource(){
     var connector = remote.connect("alfresco");
     var postBody = {
-        reportId: page.url.args.reportId
+        reportId: args.reportId
     };
     var json = connector.post("/lecm/reports-editor/create-report-source", jsonUtils.toJSONString(postBody), "application/json");
     if (json.status == 200) {
