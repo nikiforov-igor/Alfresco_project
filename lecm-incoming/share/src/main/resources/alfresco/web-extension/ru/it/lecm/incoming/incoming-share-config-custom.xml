@@ -6,10 +6,15 @@
                     <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-incoming:is-not-registered"/>
+                    <show id="lecm-incoming:outgoing-date"/>
+                    <show id="lecm-incoming:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-incoming:document-type-assoc"/>
                     <show id="lecm-incoming:subject-assoc"/>
-	                <show id="lecm-incoming:recipient-assoc"/>
+                    <show id="lecm-incoming:recipient-assoc"/>
+                    <show id="lecm-incoming:delivery-method-assoc"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-incoming:recipient-assoc">
@@ -96,10 +101,15 @@
                     <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-incoming:is-not-registered"/>
+                    <show id="lecm-incoming:outgoing-date"/>
+                    <show id="lecm-incoming:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-incoming:document-type-assoc"/>
                     <show id="lecm-incoming:subject-assoc"/>
 	                <show id="lecm-incoming:recipient-assoc"/>
+	                <show id="lecm-incoming:delivery-method-assoc"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-incoming:recipient-assoc">
@@ -159,10 +169,15 @@
                     <show id="lecm-incoming:summaryContent"/>
                     <show id="lecm-incoming:note"/>
                     <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-incoming:is-not-registered"/>
+                    <show id="lecm-incoming:outgoing-date"/>
+                    <show id="lecm-incoming:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-incoming:document-type-assoc"/>
                     <show id="lecm-incoming:subject-assoc"/>
-	                <show id="lecm-incoming:recipient-assoc"/>
+                    <show id="lecm-incoming:recipient-assoc"/>
+                    <show id="lecm-incoming:delivery-method-assoc"/>
                 </field-visibility>
             </form>
         </forms>
