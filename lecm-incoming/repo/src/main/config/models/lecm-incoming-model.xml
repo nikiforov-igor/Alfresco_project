@@ -289,6 +289,8 @@
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:finalize-to-unit</aspect>
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
+                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
+                <aspect>lecm-document-aspects:has-reg-document-data</aspect>
             </mandatory-aspects>
 		</type>
 	</types>
