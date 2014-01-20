@@ -273,19 +273,6 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!-- В ответ на -->
-				<association name="lecm-incoming:response-to-assoc">
-                    <title>В ответ на</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-document:base</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
 				<!-- Временное хранение ссылок на вложения, загружаемые на форме создания -->
 				<association name="lecm-incoming:attachments-temp-assoc">
 					<source>
@@ -301,6 +288,7 @@
 			</associations>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:finalize-to-unit</aspect>
+                <aspect>lecm-document-aspects:response-to-aspect</aspect>
             </mandatory-aspects>
 		</type>
 	</types>
