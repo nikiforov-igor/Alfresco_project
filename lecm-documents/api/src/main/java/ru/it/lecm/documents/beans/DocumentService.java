@@ -60,6 +60,8 @@ public interface DocumentService {
 
 	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "attachments-temp-assoc");
 
+	public static final QName ASSOC_RESPONSE_TO = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "response-to-assoc");
+
     public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 
     /**

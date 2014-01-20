@@ -626,4 +626,10 @@
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
+
+	<bean  id="documentResponseToPolicy" class="ru.it.lecm.documents.policy.DocumentResponseToPolicy"
+	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentConnectionService" ref="documentConnectionService"/>
+	</bean>
 </beans>

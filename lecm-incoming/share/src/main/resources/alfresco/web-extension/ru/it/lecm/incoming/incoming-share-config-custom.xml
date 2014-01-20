@@ -167,7 +167,7 @@
 				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
 				            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 				            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-				            <control-param name="itemType">lecm-contract:document</control-param>
+				            <control-param name="itemType">lecm-document:base</control-param>
 			            </control>
 		            </field>
 
