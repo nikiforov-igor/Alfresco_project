@@ -119,7 +119,12 @@
             <groupId>org.tinyjee.jgraphx</groupId>
             <artifactId>jgraphx</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>ru.it.lecm.notifications</groupId>
+            <artifactId>notifications-repo-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

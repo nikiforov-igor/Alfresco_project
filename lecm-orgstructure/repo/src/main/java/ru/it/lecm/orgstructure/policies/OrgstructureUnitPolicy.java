@@ -8,9 +8,12 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.rule.Rule;
+import org.alfresco.service.cmr.rule.RuleType;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -222,6 +225,7 @@ public class OrgstructureUnitPolicy
             parentStore = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
         }
 
+        //Создаем основную папку подразделения
         String name = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString();
         String title = nodeService.getProperty(unit, OrgstructureBean.PROP_UNIT_CODE).toString();
         String description = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME).toString();
@@ -236,6 +240,7 @@ public class OrgstructureUnitPolicy
         if (nodeService.getChildByName(parentStore, ContentModel.ASSOC_CONTAINS, name) != null) return;
         final ChildAssociationRef ref = nodeService.createNode(parentStore, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
 
+        //Создаем папку с общими документами
         props = new HashMap<QName, Serializable>();
         props.put(ContentModel.PROP_NAME, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
         props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
@@ -245,6 +250,19 @@ public class OrgstructureUnitPolicy
         permissionService.setInheritParentPermissions(shared.getChildRef(), false);
         permissionService.setPermission(shared.getChildRef(), "GROUP_" + sharedAuthority, PermissionService.CONSUMER, true);
 
+        //Добавляем правило к папке с общими документами
+        Rule rule = new Rule();
+        rule.setTitle("Logic ECM Пассивные рассылки");
+        rule.setDescription("Logic ECM Рассылка уведомлений");
+        rule.applyToChildren(true);
+        rule.setExecuteAsynchronously(false);
+        rule.setRuleDisabled(false);
+        rule.setRuleType(RuleType.INBOUND);
+        Action ruleAction = serviceRegistry.getActionService().createAction("sharedFolderNotificationAction");
+        rule.setAction(ruleAction);
+        serviceRegistry.getRuleService().saveRule(shared.getChildRef(), rule);
+
+        //Создаем папку с документами подразделения
         props = new HashMap<QName, Serializable>();
         props.put(ContentModel.PROP_NAME, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
         props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
@@ -254,6 +272,7 @@ public class OrgstructureUnitPolicy
         permissionService.setInheritParentPermissions(privateFolder.getChildRef(), false);
         permissionService.setPermission(privateFolder.getChildRef(), "GROUP_" + privateAuthority, PermissionService.CONSUMER, true);
 
+        //Создаем ассоциацию подразделения с папкой
         nodeService.createAssociation(unit, ref.getChildRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
     }
 

@@ -295,4 +295,16 @@
             </map>
         </property>
     </bean>
+
+    <bean id="sharedFolderNotificationAction" class="ru.it.lecm.orgstructure.actions.SharedFolderNotificationAction"
+          parent="action-executer">
+        <property name="nodeService" ref="NodeService" />
+        <property name="ignoreLock" value="false" />
+        <property name="notificationService" ref="notificationsService"/>
+        <property name="permissionService" ref="permissionService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="authorityService" ref="authorityService"/>
+        <property name="dictionaryService" ref="dictionaryService" />
+    </bean>
+
 </beans>
