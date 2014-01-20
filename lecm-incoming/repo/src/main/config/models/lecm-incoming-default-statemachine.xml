@@ -3,7 +3,7 @@
     <node>
         <type>statemachine</type>
         <name>lecm-incoming_document</name>
-        <nodeRef>workspace://SpacesStore/795f0e06-1461-4472-badc-1d9a09ea8dfb</nodeRef>
+        <nodeRef>workspace://SpacesStore/a84f88c6-51c3-406f-897e-9ae3524f1c4a</nodeRef>
         <properties>
             <property>
                 <name>archiveFolder</name>
@@ -24,7 +24,7 @@
                     <node>
                         <type>alternative</type>
                         <name>6186b1b1-2b18-4218-b18e-b512824bb24e</name>
-                        <nodeRef>workspace://SpacesStore/cf572840-74e8-4a8e-a653-911858d665c0</nodeRef>
+                        <nodeRef>workspace://SpacesStore/02f95718-c09c-4c82-bffc-ca608fd76808</nodeRef>
                         <properties>
                             <property>
                                 <name>alternativeExpression</name>
@@ -1370,7 +1370,40 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders/>
+                                        <subFolders>
+                                            <subFolder>
+                                                <name>transitions</name>
+                                                <nodes>
+                                                    <node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>bf3e0203-b80d-42db-8b9a-5198db1a2e53</name>
+                                                        <nodeRef>
+                                                            workspace://SpacesStore/e615299f-6062-4e2d-91b5-c77b0089e978
+                                                        </nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value><![CDATA[var doc = bpm_package.children[0];
+var notificationText = "Вам направлен новый документ ";
+notificationText += documentScript.wrapperDocumentLink(doc,"{lecm-incoming:title}");
+
+var recipient = doc.associations["lecm-incoming:recipient-assoc"];
+
+notifications.sendNotificationFromCurrentUser(recipient,notificationText, doc, true);]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value><![CDATA[Уведомление получателю]]></value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
+                                                </nodes>
+                                            </subFolder>
+                                        </subFolders>
                                     </node>
                                     <node>
                                         <type>TimerAction</type>
@@ -1817,6 +1850,34 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
+                                        <subFolders/>
+                                    </node>
+                                </nodes>
+                            </subFolder>
+                            <subFolder>
+                                <name>dynamicRoles</name>
+                                <nodes>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>45a9c57d-7350-42fa-9449-ad311f7027f2</name>
+                                        <nodeRef>workspace://SpacesStore/45a9c57d-7350-42fa-9449-ad311f7027f2</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>INCOMING_RECIPIENT</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
                                         <subFolders/>
                                     </node>
                                 </nodes>
