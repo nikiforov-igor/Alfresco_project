@@ -45,7 +45,12 @@
          </#if>
          <@formLib.renderField field=form.fields[item.id] />
          </div>
-         <#if !item_has_next></div></#if>
+
+	      <#if item_index == 0>
+	        <div class="yui-u">
+	      </#if>
+
+         <#if !item_has_next></div></div></#if>
       </#if>
    </#list>
    

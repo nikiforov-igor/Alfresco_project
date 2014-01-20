@@ -1,49 +1,43 @@
-.from-with-preview .yui-g .yui-u.first {
-	width: 700px;
+.from-with-preview > .yui-g > .yui-u.first {
+	width: 600px;
 }
 
-.documents-list-create-dialog-container .from-with-preview .yui-g .yui-u.first {
-	width: 800px;
+.documents-list-create-dialog-container .from-with-preview > .yui-g > .yui-u.first {
+	width: 600px;
 }
 
-.from-with-preview .yui-g .yui-u {
-	width: 200px;
+.from-with-preview > .yui-g > .yui-u {
+	width: 400px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.viewmode-field span.viewmode-label {
-	width: 100px;
+	width: 190px;
 	text-align: left;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.form-field input[type=text],
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.form-field div.selectone-control select,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview  div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
-	width: 130px;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
-	width: 130px;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.object-finder .current-values {
-	width: 110px;
-}
-
-.from-with-preview div.association-auto-complete-selected-item > span > a,
-.from-with-preview div.association-auto-complete-selected-item-even > span > a {
-	max-width: 60px;
-}
-
-.from-with-preview div.association-auto-complete-selected-item > span.not-person,
-.from-with-preview div.association-auto-complete-selected-item-even > span.not-person {
-	max-width: 80px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
 	margin-left: 0;
 }
 
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block input.autocomplete-input,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field div.object-finder .current-values{
+	width: 145px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field input[type=text]:not(.autocomplete-input),
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field div.selectone-control select,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+	width: 160px;
+	overflow: hidden;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
+	position: absolute;
+	bottom: 15px;
+	right: 0;
+}
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer {
 	text-align: center;
 }

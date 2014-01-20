@@ -11,7 +11,7 @@
 <#macro renderSetWithColumns set>
     <#list set.children as item>
         <#if (item_index % 2) == 0>
-            <div class="yui-g"><div class="yui-u first">
+            <div class="yui-g two-column"><div class="yui-u first">
         <#else>
             <div class="yui-u">
         </#if>
