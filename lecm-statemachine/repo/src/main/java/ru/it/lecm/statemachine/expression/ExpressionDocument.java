@@ -57,6 +57,25 @@ public class ExpressionDocument {
         return null;
     }
 
+    /**
+     * Возвращает тип объекта, на который указывает ассоциация
+     * @param assocName имя ассоциации
+     * @return тип объекта, на который указывает ассоциация или NULL, если пусто
+     */
+    public String assocClass(String assocName) {
+        String assocClazz = null;
+        QName assocTypaName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
+        List<AssociationRef> associationRefs = serviceRegistry.getNodeService().getTargetAssocs(nodeRef, assocTypaName);
+        for (AssociationRef associationRef : associationRefs) {
+            NodeRef assocNodeRef = associationRef.getTargetRef();
+            if (assocNodeRef != null) {
+                assocClazz = serviceRegistry.getNodeService().getType(assocNodeRef).toPrefixString(serviceRegistry.getNamespaceService());
+                break;
+            }
+        }
+        return assocClazz;
+    }
+
     public List<Object> assocAttrs(String assocName, String attributeName) {
         QName assocTypaName = QName.createQName(assocName, serviceRegistry.getNamespaceService());
         QName attributeTypeName = QName.createQName(attributeName, serviceRegistry.getNamespaceService());
