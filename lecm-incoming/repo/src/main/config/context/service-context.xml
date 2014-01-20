@@ -102,4 +102,8 @@
             </map>
         </property>
     </bean>
+
+    <bean id="incomingOnCreateAssocsPolicy" class="ru.it.lecm.incoming.policy.IncomingOnCreateAssocsPolicy"
+          parent="logicEcmAssociationPolicy" init-method="init">
+    </bean>
 </beans>

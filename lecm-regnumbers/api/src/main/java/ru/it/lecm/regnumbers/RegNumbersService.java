@@ -225,5 +225,13 @@ public interface RegNumbersService {
 	 * @param dictionaryTemplateCode код шаблона в справочнике.
 	 * @return ссылка на объект шаблона.
 	 */
-	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode);
+	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
+
+    void registerProject(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException;;
+
+    void registerDocument(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException;;
+
+    void registerProject(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+
+    void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
 }

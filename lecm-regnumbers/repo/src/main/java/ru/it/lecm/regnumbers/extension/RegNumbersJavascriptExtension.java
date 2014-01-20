@@ -164,4 +164,24 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 			throw new WebScriptException(String.format("Error running registration number template code '%s'", dictionaryTemplateCode), ex);
 		}
 	}
+
+    public void registerProject(String dictionaryTemplateCode, ScriptNode documentNode) {
+        try {
+            regNumbersService.registerProject(dictionaryTemplateCode, documentNode.getNodeRef());
+        } catch (TemplateParseException ex) {
+            throw new WebScriptException(String.format("Error parsing registration number template code '%s'", dictionaryTemplateCode), ex);
+        } catch (TemplateRunException ex) {
+            throw new WebScriptException(String.format("Error running registration number template code '%s'", dictionaryTemplateCode), ex);
+        }
+    }
+
+    public void registerDocument(String dictionaryTemplateCode, ScriptNode documentNode) {
+        try {
+            regNumbersService.registerDocument(dictionaryTemplateCode, documentNode.getNodeRef());
+        } catch (TemplateParseException ex) {
+            throw new WebScriptException(String.format("Error parsing registration number template code '%s'", dictionaryTemplateCode), ex);
+        } catch (TemplateRunException ex) {
+            throw new WebScriptException(String.format("Error running registration number template code '%s'", dictionaryTemplateCode), ex);
+        }
+    }
 }

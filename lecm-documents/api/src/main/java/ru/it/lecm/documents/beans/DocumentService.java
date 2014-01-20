@@ -70,7 +70,7 @@ public interface DocumentService {
     public static final QName ASPECT_HAS_REG_DOCUMENT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "has-reg-document-data");
     public static final QName ASSOC_REG_DOCUMENT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "document-reg-attributes-assoc");
 
-    public static final QName TYPE_REG_DATA_ATTRIBUTES = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "reg-data-attributes");
+    public static final QName TYPE_REG_DATA_ATTRIBUTES = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-attributes");
     public static final QName PROP_REG_DATA_DATE = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-date");
     public static final QName PROP_REG_DATA_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
     public static final QName PROP_REG_DATA_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
