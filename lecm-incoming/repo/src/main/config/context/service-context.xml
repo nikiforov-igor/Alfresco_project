@@ -45,6 +45,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-incoming-roles-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-incoming-regnumbers.xml</value>
             </list>
         </property>
     </bean>

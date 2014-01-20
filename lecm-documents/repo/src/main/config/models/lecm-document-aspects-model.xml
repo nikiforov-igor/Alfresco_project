@@ -23,12 +23,12 @@
             <title>Регистрационные данные. Атрибуты</title>
             <parent>cm:cmobject</parent>
             <properties>
-                <property name="lecm-document-aspects:date">
+                <property name="lecm-document-aspects:reg-data-date">
                     <title>Дата регистрации</title>
                     <type>d:date</type>
                 </property>
                 <!-- Регистрационный номер-->
-                <property name="lecm-document-aspects:number">
+                <property name="lecm-document-aspects:reg-data-number">
                     <title>Регистрационный номер</title>
                     <type>d:text</type>
                     <default>Не присвоено</default>
@@ -39,7 +39,7 @@
                     </index>
                 </property>
                 <!-- Зарегистрирован -->
-                <property name="lecm-document-aspects:is-registered">
+                <property name="lecm-document-aspects:reg-data-is-registered">
                     <title>Зарегистрирован</title>
                     <type>d:boolean</type>
                     <default>false</default>
