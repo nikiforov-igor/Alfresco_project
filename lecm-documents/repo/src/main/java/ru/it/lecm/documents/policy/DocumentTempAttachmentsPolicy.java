@@ -1,4 +1,4 @@
-package ru.it.lecm.incoming.policy;
+package ru.it.lecm.documents.policy;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
@@ -13,7 +13,7 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
-import ru.it.lecm.incoming.beans.IncomingServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
 
@@ -22,8 +22,8 @@ import java.util.List;
  * Date: 15.07.13
  * Time: 10:16
  */
-public class IncomingAttachmentsPolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
-	final static protected Logger logger = LoggerFactory.getLogger(IncomingAttachmentsPolicy.class);
+public class DocumentTempAttachmentsPolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
+	final static protected Logger logger = LoggerFactory.getLogger(DocumentTempAttachmentsPolicy.class);
 
 	private PolicyComponent policyComponent;
 	private DocumentAttachmentsService documentAttachmentsService;
@@ -43,7 +43,7 @@ public class IncomingAttachmentsPolicy implements NodeServicePolicies.OnCreateAs
 
 	final public void init() {
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				IncomingServiceImpl.TYPE_INCOMING, IncomingServiceImpl.ASSOC_TEMP_ATTACHMENTS, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DocumentService.TYPE_BASE_DOCUMENT, DocumentService.ASSOC_TEMP_ATTACHMENTS, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	/**

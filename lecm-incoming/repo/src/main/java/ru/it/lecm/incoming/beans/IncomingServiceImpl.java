@@ -14,8 +14,6 @@ public class IncomingServiceImpl extends BaseBean {
 
 	public static final QName TYPE_INCOMING = QName.createQName(INCOMING_NAMESPACE_URI, "document");
 
-	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(INCOMING_NAMESPACE_URI, "attachments-temp-assoc");
-
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;

@@ -99,9 +99,8 @@
     <config evaluator="model-type" condition="lecm-incoming:document">
         <forms>
             <form>
-	            <!--<create-form template="/ru/it/lecm/base-share/components/form-with-preview.ftl"/>-->
                 <field-visibility>
-                    <show id="lecm-incoming:attachments-temp-assoc"/>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
 	                <show id="lecm-incoming:title"/>
                     <show id="lecm-incoming:document-type-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
@@ -132,7 +131,7 @@
 		            <set id="incoming10" parent="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming11" parent="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 
-		            <field id="lecm-incoming:attachments-temp-assoc" set="incoming1">
+		            <field id="lecm-document-aspects:attachments-temp-assoc" set="incoming1">
 			            <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl">
 				            <control-param name="directoryName">Вложения</control-param>
 				            <control-param name="uploadDirectoryPath">{usertemp}</control-param>

@@ -58,6 +58,8 @@ public interface DocumentService {
 	public static final QName PROP_IS_SHARED_FOLDER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-shared-folder");
 	public static final QName ASSOC_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "organization-unit-assoc");
 
+	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "attachments-temp-assoc");
+
     public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 
     /**

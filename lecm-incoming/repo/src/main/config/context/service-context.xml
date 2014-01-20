@@ -57,13 +57,6 @@
 		<property name="transactionService" ref="transactionService"/>
 	</bean>
 
-	<bean  id="incomingAttachmentsPolicy" class="ru.it.lecm.incoming.policy.IncomingAttachmentsPolicy"
-	       init-method="init" depends-on="incoming.LogicEcmIncomingBootstrap">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
-		<property name="nodeService" ref="nodeService"/>
-	</bean>
-
     <bean id="incoming.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-incoming:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-incoming-default-statemachine.xml" />

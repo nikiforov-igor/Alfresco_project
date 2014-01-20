@@ -619,4 +619,11 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 	</bean>
+
+	<bean  id="documentTempAttachmentsPolicy" class="ru.it.lecm.documents.policy.DocumentTempAttachmentsPolicy"
+	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
 </beans>
