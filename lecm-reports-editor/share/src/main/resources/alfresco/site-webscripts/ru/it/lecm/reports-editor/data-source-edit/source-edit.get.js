@@ -24,3 +24,10 @@ if (!(dataSource && dataSource.nodeRef)) {
 }
 
 model.activeSourceId = (dataSource && dataSource.nodeRef) ?  dataSource.nodeRef : null;
+
+if (args.reportId) {
+    var setStr = remote.connect("alfresco").get("/lecm/reports-editor/getReportSettings?reportId=" + args.reportId);
+    if (setStr.status == 200) {
+        model.reportSettings = setStr;
+    }
+}

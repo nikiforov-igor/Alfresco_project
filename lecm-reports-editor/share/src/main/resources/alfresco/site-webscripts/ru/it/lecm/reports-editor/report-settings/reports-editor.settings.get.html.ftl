@@ -8,6 +8,14 @@
     //<![CDATA[
     var reportForm;
     (function () {
+
+        LogicECM.module.ReportsEditor.REPORT_SETTINGS =
+        <#if reportSettings?? >
+        ${reportSettings}
+        <#else>
+        {}
+        </#if>;
+
         function init() {
             var deployFunction = function() {
                 Alfresco.util.PopupManager.displayPrompt({

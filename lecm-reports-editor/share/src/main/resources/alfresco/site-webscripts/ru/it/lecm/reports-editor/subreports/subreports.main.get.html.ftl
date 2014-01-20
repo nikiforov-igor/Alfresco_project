@@ -20,7 +20,7 @@
 function initToolbar() {
     new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
         bubblingLabel: "subReports",
-        createFormId: "${args.createFormId!''}",
+        createFormId: "subReport",
         newRowDialogTitle: "label.create-subreport.title"
     });
 }

@@ -23,13 +23,6 @@
             {}
         </#if>;
 
-    LogicECM.module.ReportsEditor.REPORT_SETTINGS =
-        <#if reportSettings?? >
-            ${reportSettings}
-        <#else>
-            {}
-        </#if>;
-
     function initReportsEditorResizer() {
         var resizer = new LogicECM.module.Base.Resizer('ReportsEditorResizer');
         resizer.setOptions({

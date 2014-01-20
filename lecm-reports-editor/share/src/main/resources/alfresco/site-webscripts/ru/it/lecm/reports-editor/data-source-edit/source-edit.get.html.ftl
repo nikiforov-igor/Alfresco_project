@@ -64,6 +64,15 @@
 </div>
 
 <script type="text/javascript">
+
+    LogicECM.module.ReportsEditor.REPORT_SETTINGS =
+    <#if reportSettings?? >
+    ${reportSettings}
+    <#else>
+    {}
+    </#if>;
+
+
     function initEditToolbar() {
         var toolbar = new LogicECM.module.ReportsEditor.EditSourceToolbar("${toolbarId}").setMessages(${messages});
         toolbar.setReportId("${args.reportId}");
