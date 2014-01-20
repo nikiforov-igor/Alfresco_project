@@ -89,7 +89,8 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > div > input[type=text]:not(.date-entry) {
     width: 675px !important;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > input.formsCheckBox {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.form-field > input.formsCheckBox,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set > div.yui-g > div.yui-u div.form-field > input.formsCheckBox {
     margin-left: 200px;
 }
 

@@ -3,23 +3,53 @@
         <forms>
             <form>
                 <field-visibility>
+	                <show id="lecm-incoming:is-not-registered"/>
+	                <show id="lecm-incoming:is-on-control"/>
+	                <show id="lecm-incoming:execution-date"/>
+	                <show id="lecm-document-aspects:number"/>
+	                <show id="lecm-document-aspects:date"/>
+	                <show id="lecm-incoming:title"/>
+	                <show id="lecm-incoming:document-type-assoc"/>
+	                <show id="lecm-incoming:delivery-method-assoc"/>
+	                <show id="lecm-incoming:outgoing-number"/>
+	                <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-incoming:summaryContent"/>
+	                <show id="lecm-incoming:recipient-assoc"/>
+	                <show id="lecm-incoming:file-register-assoc"/>
+	                <show id="lecm-incoming:subject-assoc"/>
                     <show id="lecm-incoming:note"/>
-                    <show id="lecm-incoming:title"/>
-                    <show id="lecm-incoming:is-on-control"/>
-                    <show id="lecm-incoming:is-not-registered"/>
-                    <show id="lecm-incoming:outgoing-date"/>
-                    <show id="lecm-incoming:execution-date"/>
-                    <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:document-type-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
-                    <show id="lecm-incoming:recipient-assoc"/>
-                    <show id="lecm-incoming:delivery-method-assoc"/>
-                    <show id="lecm-incoming:file-register-assoc"/>
+                    <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
 	            <appearance>
-		            <field id="lecm-incoming:recipient-assoc">
+		            <set id="incoming1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming3"/>
+		            <set id="incoming4" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming5"/>
+                    <set id="incoming6" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming7"/>
+		            <set id="incoming8" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+
+		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
+		            <field id="lecm-incoming:is-on-control" set="incoming1"/>
+		            <field id="lecm-incoming:execution-date" set="incoming1"/>
+
+		            <field id="lecm-document-aspects:number" set="incoming2"/>
+		            <field id="lecm-document-aspects:date" set="incoming2"/>
+
+		            <field id="lecm-incoming:title" set="incoming3"/>
+
+		            <field id="lecm-incoming:document-type-assoc" set="incoming4"/>
+		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4"/>
+
+		            <field id="lecm-incoming:outgoing-number" set="incoming4"/>
+		            <field id="lecm-incoming:outgoing-date" set="incoming4"/>
+
+		            <field id="lecm-incoming:summaryContent" set="incoming5">
+			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+		            </field>
+
+		            <field id="lecm-incoming:recipient-assoc" set="incoming5">
 			            <control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
 				            <control-param name="firstItemType">lecm-orgstr:employee</control-param>
 				            <control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -36,6 +66,15 @@
 				            <control-param name="secondShowSearch">true</control-param>
 			            </control>
 		            </field>
+
+		            <field id="lecm-incoming:file-register-assoc" set="incoming6"/>
+		            <field id="lecm-incoming:subject-assoc" set="incoming6"/>
+
+		            <field id="lecm-incoming:note" set="incoming7">
+			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+		            </field>
+
+		            <field id="lecm-document-aspects:is-shared-folder" set="incoming8"/>
 	            </appearance>
             </form>
             <form id="document">
