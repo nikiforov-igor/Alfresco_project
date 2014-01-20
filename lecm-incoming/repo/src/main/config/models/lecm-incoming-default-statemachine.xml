@@ -804,7 +804,7 @@
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Действие применимо только к регистрируемым документам.]]></value>
+                                                                                    <![CDATA[Действие применимо только к нерегистрируемым документам.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
@@ -1536,7 +1536,41 @@ notifications.sendNotificationFromCurrentUser(recipient,notificationText, doc, t
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>fbc87164-9d14-4fc0-bdbd-bfbfee7e7f3d
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/6f18959a-bb2f-43a6-bd15-b1b8694e9c7e
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие применимо только к нерегистрируемым документам]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[doc.attr("lecm-incoming:is-not-registered")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -4321,7 +4355,7 @@ notifications.sendNotificationFromCurrentUser(recipient,notificationText, doc, t
                                                                             <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
-                                                                                    <![CDATA[Действие применимо только к регистрируемым документам.]]></value>
+                                                                                    <![CDATA[Действие применимо только к нерегистрируемым документам.]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>hideAction</name>
