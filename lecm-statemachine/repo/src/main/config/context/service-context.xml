@@ -265,6 +265,7 @@
     <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>
 
     <bean id="documentExpression" class="ru.it.lecm.statemachine.expression.ExpressionDocument">
+	    <property name="documentService" ref="documentService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="stateMachineHelper" ref="stateMachineHelper"/>

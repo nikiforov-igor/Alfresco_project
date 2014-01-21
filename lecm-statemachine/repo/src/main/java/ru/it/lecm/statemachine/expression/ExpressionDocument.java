@@ -3,11 +3,14 @@ package ru.it.lecm.statemachine.expression;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +25,7 @@ public class ExpressionDocument {
 	private ServiceRegistry serviceRegistry;
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
+	private static DocumentService documentService;
     private static StateMachineHelper stateMachineHelper;
 
     public ExpressionDocument() {
@@ -127,6 +131,33 @@ public class ExpressionDocument {
         return stateMachineHelper.getPreviousStatusName(nodeRef);
     }
 
+	public boolean hasDuplicates(String... props) {
+		NodeService nodeService = serviceRegistry.getNodeService();
+
+		List<QName> types = new ArrayList<QName>();
+		types.add(nodeService.getType(this.nodeRef));
+
+		StringBuilder filters = new StringBuilder();
+
+		if (props != null) {
+			for (String prop: props) {
+				QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
+				Serializable propValue = nodeService.getProperty(this.nodeRef, propQName);
+				if (propValue != null) {
+					if (filters.length() > 0) {
+						filters.append(" AND ");
+					}
+					filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
+							.append(":\"").append(propValue).append("\"");
+				}
+			}
+		}
+
+		List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, filters.toString(), null);
+		documents.remove(this.nodeRef);
+		return documents.size() > 0;
+	}
+
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         ExpressionDocument.documentAttachmentsService = documentAttachmentsService;
     }
@@ -137,5 +168,9 @@ public class ExpressionDocument {
 
 	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
 		ExpressionDocument.stateMachineHelper = stateMachineHelper;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		ExpressionDocument.documentService = documentService;
 	}
 }
