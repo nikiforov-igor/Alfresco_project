@@ -109,4 +109,31 @@
             <ref bean="substitudeService"/>
         </property>
     </bean>
+
+	<bean id="incomingWorkflowBootstrap" parent="workflowDeployer"
+	      depends-on="incoming.LogicEcmIncomingBootstrap,
+				     statemachine.aspects.LogicEcmModelsBootstrap,
+				     ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-incoming-registration.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
+				</props>
+			</list>
+		</property>
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-incoming-workflow-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-incoming-workflow</value>
+			</list>
+		</property>
+		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+	</bean>
 </beans>

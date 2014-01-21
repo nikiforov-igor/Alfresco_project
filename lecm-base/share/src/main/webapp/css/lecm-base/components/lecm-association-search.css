@@ -25,3 +25,15 @@ div.object-finder div.search-picker input[type='text'].search-input {
 .yui-skin-lecmTheme .yui-panel div.form-field div.object-finder div.search-picker {
 	white-space: normal;
 }
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder div.search-picker input[type='text'].search-input {
+	width: 490px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder div.search-picker + .current-values {
+	width: 100%;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder div.search-picker {
+	margin-bottom: 1.3em;
+}
