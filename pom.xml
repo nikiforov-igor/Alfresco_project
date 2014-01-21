@@ -111,6 +111,7 @@
 		<module>lecm-signed-docflow</module>
 		<module>lecm-documents-removal</module>
         <module>lecm-incoming</module>
+        <module>lecm-model-editor</module>
 	</modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
@@ -589,7 +590,6 @@
 		<profile>
 			<id>non-production-modules</id>
 			<modules>
-				<module>lecm-model-editor</module>
 				<module>lecm-semantic-assist</module>
 				<module>lecm-iReferent-integration</module>
 				<module>lecm-experts</module>

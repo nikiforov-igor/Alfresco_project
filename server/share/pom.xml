@@ -242,6 +242,13 @@
             <type>amp</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.model-editor</groupId>
+            <artifactId>model-editor-share</artifactId>
+            <version>${platform.version}</version>
+            <type>amp</type>
+            <scope>runtime</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
@@ -395,13 +402,6 @@
 		<profile>
 			<id>non-production-modules</id>
 			<dependencies>
-				<dependency>
-					<groupId>ru.it.lecm.model-editor</groupId>
-					<artifactId>model-editor-share</artifactId>
-					<version>${platform.version}</version>
-					<type>amp</type>
-					<scope>runtime</scope>
-				</dependency>
 				<dependency>
 					<groupId>ru.it.lecm.br5.semantic</groupId>
 					<artifactId>semantic-assist-share</artifactId>
