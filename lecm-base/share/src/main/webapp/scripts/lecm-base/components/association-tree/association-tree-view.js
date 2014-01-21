@@ -70,6 +70,8 @@ LogicECM.module = LogicECM.module || {};
 
 		options:
 		{
+			// скрывать ли игнорируемые ноды в дереве
+			ignoreNodesInTreeView: true,
 			prefixPickerId: null,
 
             showCreateNewLink: true,
@@ -673,14 +675,16 @@ LogicECM.module = LogicECM.module || {};
                         for (var nodeIndex in oResults) {
                             var nodeRef = oResults[nodeIndex].nodeRef;
                             var ignore = false;
-                            var ignoreNodes = this.argument.context.options.ignoreNodes;
-                            if (ignoreNodes != null) {
-                                for (var i = 0; i < ignoreNodes.length; i++) {
-                                    if (ignoreNodes[i] == nodeRef) {
-                                        ignore = true;
-                                    }
-                                }
-                            }
+							if (this.argument.context.options.ignoreNodesInTreeView) {
+								var ignoreNodes = this.argument.context.options.ignoreNodes;
+								if (ignoreNodes != null) {
+									for (var i = 0; i < ignoreNodes.length; i++) {
+										if (ignoreNodes[i] == nodeRef) {
+											ignore = true;
+										}
+									}
+								}
+							}
 
                             if (!ignore) {
                                 var newNode = {
