@@ -5,4 +5,3 @@
       </div>
    </#if>
 </#list>
-<p style="clear: both; visible:hidden; line-height: 0px; padding: 0; margin: 0;">&nbsp;</p>

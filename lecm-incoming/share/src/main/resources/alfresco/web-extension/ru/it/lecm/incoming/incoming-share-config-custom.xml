@@ -6,8 +6,8 @@
 	                <show id="lecm-incoming:is-not-registered"/>
 	                <show id="lecm-incoming:is-on-control"/>
 	                <show id="lecm-incoming:execution-date"/>
-	                <show id="lecm-document-aspects:number"/>
-	                <show id="lecm-document-aspects:date"/>
+	                <show id="lecm-document-aspects:reg-data-number"/>
+	                <show id="lecm-document-aspects:reg-data-date"/>
 	                <show id="lecm-incoming:title"/>
 	                <show id="lecm-incoming:document-type-assoc"/>
 	                <show id="lecm-incoming:delivery-method-assoc"/>
@@ -34,8 +34,8 @@
 		            <field id="lecm-incoming:is-on-control" set="incoming1"/>
 		            <field id="lecm-incoming:execution-date" set="incoming1"/>
 
-		            <field id="lecm-document-aspects:number" set="incoming2"/>
-		            <field id="lecm-document-aspects:date" set="incoming2"/>
+		            <field id="lecm-document-aspects:reg-data-number" set="incoming2"/>
+		            <field id="lecm-document-aspects:reg-data-date" set="incoming2"/>
 
 		            <field id="lecm-incoming:title" set="incoming3"/>
 

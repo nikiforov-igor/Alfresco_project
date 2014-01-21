@@ -8,9 +8,9 @@
 
 .from-with-preview > .yui-g > .yui-u {
 	width: 405px;
-	height: 540px;
-	overflow-x: hidden;
-	overflow-y: auto;
+	height: 550px;
+	/*overflow-x: hidden;*/
+	/*overflow-y: auto;*/
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,
@@ -38,7 +38,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
 	position: absolute;
-	bottom: 15px;
+	bottom: 0;
 	right: 0;
 }
 
@@ -64,6 +64,43 @@
 .from-with-preview  div.association-auto-complete-selected-item > span.not-person,
 .from-with-preview  div.association-auto-complete-selected-item-even > span.not-person {
 	max-width: 270px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.set > div.form-field > input.formsCheckBox,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.set > div.yui-g > div.yui-u div.form-field > input.formsCheckBox {
+	margin-left: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel .from-with-preview div.form-field {
+	margin-bottom: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > input.date-entry {
+	margin-bottom: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel .from-with-preview div.form-field div.show-picker {
+	margin-bottom: 0;
+}
+
+.from-with-preview .object-finder .current-values {
+	margin-bottom: 0;
+}
+
+.alfresco-share .yui-panel .from-with-preview .bd div.yui-gd,
+.alfresco-share .yui-panel .from-with-preview .bd div.yui-u,
+.alfresco-share .yui-panel .from-with-preview .bd div.form-buttons,
+.alfresco-share .yui-panel .from-with-preview .bd div.bdft {
+	padding: 0 0.3em 0 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.set div.yui-g div.yui-u {
+	padding-bottom: 0;
+	padding-top: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > input.date-entry ~ div.format-info {
+	top: 55px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer {
