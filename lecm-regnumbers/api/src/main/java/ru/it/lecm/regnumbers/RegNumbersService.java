@@ -144,7 +144,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-	 */
+     * @deprecated use registerProject|registerDocument instead
+     */
+    @Deprecated
 	void setDocumentNumber(NodeRef documentNode, QName documentProperty, String templateStr) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -162,7 +164,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-	 */
+     * @deprecated use registerProject|registerDocument instead
+     */
+    @Deprecated
 	void setDocumentNumber(NodeRef documentNode, QName documentProperty, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -180,7 +184,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-	 */
+    * @deprecated use registerProject|registerDocument instead
+    */
+    @Deprecated
 	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, String templateStr) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -198,7 +204,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
+     * @deprecated use registerProject|registerDocument instead
 	 */
+    @Deprecated
 	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -216,7 +224,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
+     * @deprecated use registerProject|registerDocument instead
 	 */
+    @Deprecated
 	void setDocumentNumber(String dictionaryTemplateCode, NodeRef documentNode, String documentPropertyPrefix) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -234,4 +244,8 @@ public interface RegNumbersService {
     void registerProject(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
 
     void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+
+    void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException ;
+
+    void registerDocument(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException ;
 }

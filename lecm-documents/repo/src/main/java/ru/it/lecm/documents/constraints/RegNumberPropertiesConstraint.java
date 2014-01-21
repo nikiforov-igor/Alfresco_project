@@ -6,7 +6,10 @@ import org.alfresco.repo.dictionary.constraint.AbstractConstraint;
  * User: dbashmakov
  * Date: 31.07.13
  * Time: 9:05
+ * @deprecated this class not used in system.
+ * Use ru.it.lecm.documents.beans.DocumentService#getRegNumbersValues(org.alfresco.service.cmr.repository.NodeRef) instead
  */
+@Deprecated
 public class RegNumberPropertiesConstraint extends AbstractConstraint {
 
     private String regNumbersProperties;

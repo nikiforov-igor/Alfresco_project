@@ -599,4 +599,27 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 	public Collection<QName> getDocumentSubTypes() {
 		return dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, false);
 	}
+
+    @Override
+    public NodeRef getDocumentRegData(NodeRef document) {
+        return getRegData(document, false);
+    }
+
+    @Override
+    public NodeRef getDocumentProjectRegData(NodeRef document) {
+        return getRegData(document, true);
+    }
+
+    private NodeRef getRegData(NodeRef document, boolean isProjectData){
+        QName regAspectName = isProjectData ? DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+        QName regAssocName =  isProjectData ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
+
+        if (nodeService.hasAspect(document, regAspectName)) {
+            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(document, regAssocName);
+            if (prDataAssocs != null && !prDataAssocs.isEmpty()) {
+                return prDataAssocs.get(0).getTargetRef();
+            }
+        }
+        return null;
+    }
 }

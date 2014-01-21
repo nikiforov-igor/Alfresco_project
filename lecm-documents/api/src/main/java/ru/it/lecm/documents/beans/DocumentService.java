@@ -22,7 +22,7 @@ public interface DocumentService {
     public static final String DOCUMENT_SUBJECTS_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/1.0";
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "base");
-	public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
+    public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
 
     public static final QName PROP_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "present-string");
     public static final QName PROP_EXT_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ext-present-string");
@@ -50,17 +50,17 @@ public interface DocumentService {
     public static final String PREF_ARCHIVE_DOCUMENTS = "ru.it.lecm.documents.archive";
     public static final String PREF_DOC_LIST_AUTHOR = ".documents-list-docAuthor-filter";
 
-	public static final QName ASPECT_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document");
-	public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
+    public static final QName ASPECT_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document");
+    public static final QName ASSOC_PARENT_DOCUMENT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "parent-document-assoc");
 
-	public static final QName ASPECT_SEMANTIC_ASSIST = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "semanticAssistAspect");
-	public static final QName ASPECT_FINALIZE_TO_UNIT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "finalize-to-unit");
-	public static final QName PROP_IS_SHARED_FOLDER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-shared-folder");
-	public static final QName ASSOC_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "organization-unit-assoc");
+    public static final QName ASPECT_SEMANTIC_ASSIST = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "semanticAssistAspect");
+    public static final QName ASPECT_FINALIZE_TO_UNIT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "finalize-to-unit");
+    public static final QName PROP_IS_SHARED_FOLDER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-shared-folder");
+    public static final QName ASSOC_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "organization-unit-assoc");
 
-	public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "attachments-temp-assoc");
+    public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "attachments-temp-assoc");
 
-	public static final QName ASSOC_RESPONSE_TO = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "response-to-assoc");
+    public static final QName ASSOC_RESPONSE_TO = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "response-to-assoc");
 
     public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 
@@ -80,6 +80,7 @@ public interface DocumentService {
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
+     *
      * @return document rating
      */
     public String getRating(NodeRef documentNodeRef);
@@ -87,6 +88,7 @@ public interface DocumentService {
     /**
      * Метод для получения количества сотрудников, оценивших документ
      * documentNodeRef - document nodeRef
+     *
      * @return persons count
      */
     public Integer getRatedPersonCount(NodeRef documentNodeRef);
@@ -94,6 +96,7 @@ public interface DocumentService {
     /**
      * Метод для получения рейтинга документа, выставленного текущим сотрудником
      * documentNodeRef - document nodeRef
+     *
      * @return my rating of the document
      */
     public Integer getMyRating(NodeRef documentNodeRef);
@@ -102,53 +105,63 @@ public interface DocumentService {
      * Метод для выставления рейтинга документа текущим сотрудником
      * documentNodeRef - document nodeRef
      * rating - rating
+     *
      * @return setted rating
      */
     public Integer setMyRating(NodeRef documentNodeRef, Integer rating);
 
     /**
      * Метод получения аттрибутов документа
+     *
      * @param nodeRef
      * @return attributes
      */
     public Map<QName, Serializable> getProperties(NodeRef nodeRef);
 
-    public NodeRef createDocument(String type, Map<String, String> properties, Map<String,String> association);
+    public NodeRef createDocument(String type, Map<String, String> properties, Map<String, String> association);
 
     public NodeRef editDocument(NodeRef nodeRef, Map<String, String> properties);
 
-	public boolean isDocument(NodeRef ref);
+    public boolean isDocument(NodeRef ref);
 
-    /** Получение пути для корневой папки черновиков для текущего пользователя
+    /**
+     * Получение пути для корневой папки черновиков для текущего пользователя
+     *
      * @return xpath до директории с черновиками
      */
     String getDraftPath();
 
-    /** Получение пути для корневой папки для данного типа документов для текущего пользователя
+    /**
+     * Получение пути для корневой папки для данного типа документов для текущего пользователя
+     *
      * @return xpath до директории
      */
     String getDraftPathByType(QName docType);
 
     /**
      * Получение пути для папки Documents
+     *
      * @return xpath до директории
      */
     String getDocumentsFolderPath();
 
     /**
      * Получение корневой ноды с черновиками
+     *
      * @return NodeRef
      */
     NodeRef getDraftRoot();
 
     /**
      * Получение ноды с черновиками для заданного типа документов
+     *
      * @return NodeRef
      */
     NodeRef getDraftRootByType(QName docType);
 
     /**
      * Получение списка участников для данного типа документов
+     *
      * @return List<NodeRef> - ссылок на сотрудников
      */
     public List<NodeRef> getMembers(QName docType);
@@ -156,9 +169,9 @@ public interface DocumentService {
     /**
      * Поиск документов по разным параметрам
      *
-     * @param docTypes - список QName типов на документы
-     * @param paths - список путей для поиска, формат: app:company_home/cm:Черновики
-     * @param statuses - список статусов, если null то по статусам не фильтрует
+     * @param docTypes       - список QName типов на документы
+     * @param paths          - список путей для поиска, формат: app:company_home/cm:Черновики
+     * @param statuses       - список статусов, если null то по статусам не фильтрует
      * @param sortDefinition - набор полей для сортировки
      * @return List<NodeRef> - ссылки на документы
      */
@@ -167,9 +180,9 @@ public interface DocumentService {
     /**
      * Подсчет количества документов по разным параметрам
      *
-     * @param docTypes - список QName типов на документы
-     * @param paths - список путей для поиска, формат: app:company_home/cm:Черновики
-     * @param statuses - список статусов, если null то по статусам не фильтрует
+     * @param docTypes       - список QName типов на документы
+     * @param paths          - список путей для поиска, формат: app:company_home/cm:Черновики
+     * @param statuses       - список статусов, если null то по статусам не фильтрует
      * @param sortDefinition - набор полей для сортировки
      * @return Integer - количество документов
      */
@@ -177,6 +190,7 @@ public interface DocumentService {
 
     /**
      * Метод для получения папки с черновиками для заданного типа
+     *
      * @return имя папки с черновиками
      */
     public String getDraftRootLabel(QName docType);
@@ -187,24 +201,28 @@ public interface DocumentService {
 
     /**
      * Метод для получения регистрационных номеров документа (номер проекта (если есть) и реального (если есть))
+     *
      * @return список из номеров
      */
     public List<String> getRegNumbersValues(NodeRef document);
 
     /**
      * Метод для получения регистрационного номера проекта документа
+     *
      * @return рег номер проекта или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
      */
     public String getProjectRegNumber(NodeRef document);
 
     /**
      * Метод для получения регистрационного номера  документа
+     *
      * @return рег номер документа или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
      */
     public String getDocumentRegNumber(NodeRef document);
 
     /**
      * Возвращает заголовок документа без проверки на доступ к документу
+     *
      * @param document
      * @return
      */
@@ -212,10 +230,27 @@ public interface DocumentService {
 
     /**
      * Возвращает автора документа
+     *
      * @param document - ссылка на документ
      * @return ссылку на сотрудника-автора
      */
     public NodeRef getDocumentAuthor(NodeRef document);
 
-	public Collection<QName> getDocumentSubTypes();
+    public Collection<QName> getDocumentSubTypes();
+
+    /**
+     * Возвращает рег данные документа
+     *
+     * @param document - ссылка на документ
+     * @return ссылку на объект Рег данные. атрибуты
+     */
+    public NodeRef getDocumentRegData(NodeRef document);
+
+    /**
+     * Возвращает рег данные проекта документа
+     *
+     * @param document - ссылка на документ
+     * @return ссылку на объект Рег данные. атрибуты
+     */
+    public NodeRef getDocumentProjectRegData(NodeRef document);
 }

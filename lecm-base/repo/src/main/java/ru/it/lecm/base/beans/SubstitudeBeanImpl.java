@@ -1,10 +1,8 @@
 package ru.it.lecm.base.beans;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -26,25 +24,91 @@ import java.util.*;
  */
 public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
+    enum PseudoProps {
+        AUTHOR {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef auth = docService.getDocumentAuthor(object);
+                if (auth != null) {
+                    result.add(auth);
+                }
+                return result;
+            }
+        },
+        REGNUM {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) { // пытаемся взять рег данные документа
+                    result.add(number);
+                } else {  // если их нет - берем рег данные проекта документа
+                    number = docService.getDocumentProjectRegData(object);
+                    if (number != null) {
+                        result.add(number);
+                    }
+                }
+                return result;
+            }
+        },
+        PROJECT_REGNUM {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef number = docService.getDocumentProjectRegData(object);
+                if (number != null) {
+                    result.add(number);
+                }
+                return result;
+            }
+        },
+        DOC_REGNUM {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) {
+                    result.add(number);
+                }
+                return result;
+            }
+        };
+
+        public abstract List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService);
+
+        public static PseudoProps findProp(String propName) {
+            if (propName != null) {
+                // поиск точного соот-вия
+                for (PseudoProps v : values()) {
+                    if (propName.equalsIgnoreCase(v.name())) {
+                        return v;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
     public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
     private ServiceRegistry serviceRegistry;
-	private NamespaceService namespaceService;
+    private NamespaceService namespaceService;
     private DictionaryBean dictionaryService;
     private String dateFormat = "yyyy-MM-dd HH:mm";
 
-	final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
+    final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
     private DocumentService documentService;
 
     /**
-	 * Получение заголовка элемента в соответствии с форматной строкой.
-	 * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
-	 *
-	 * @param node         элемент
-	 * @param formatString форматная строка
-	 * @return Заголовок элемента
-	 */
-	@Override
-	public String formatNodeTitle(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
+     * Получение заголовка элемента в соответствии с форматной строкой.
+     * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
+     *
+     * @param node         элемент
+     * @param formatString форматная строка
+     * @return Заголовок элемента
+     */
+    @Override
+    public String formatNodeTitle(final NodeRef node, final String formatString, final String dateFormat, final Integer timeZoneOffset) {
         final AuthenticationUtil.RunAsWork<String> substitudeString = new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
@@ -64,12 +128,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             }
         };
         return AuthenticationUtil.runAsSystem(substitudeString);
-	}
+    }
 
-	@Override
-	public String formatNodeTitle(NodeRef node, String formatString) {
-		return formatNodeTitle(node, formatString, null, null);
-	}
+    @Override
+    public String formatNodeTitle(NodeRef node, String formatString) {
+        return formatNodeTitle(node, formatString, null, null);
+    }
 
     @Override
     public String getObjectDescription(NodeRef object) {
@@ -79,11 +143,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return formatNodeTitle(object, templateString);
     }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
-	}
+    // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return null;
+    }
 
     public String getTemplateStringForObject(NodeRef object) {
         return getTemplateStringForObject(object, false);
@@ -134,31 +198,30 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     }
 
     /**
-	 * Получение значения выражения для элемента.
-	 * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)
-	 * Элементами выражения могут быть:
-	 * - Ссылка на родителя (@see SPLIT_TRANSITIONS_SYMBOL)
-	 * - Source ассоциация (..<Название ассоциации>)
-	 * - Target ассоциация (<Название ассоциации>)
-	 * -Child ассоциация (<Название ассоциации>)
-	 * Последним элементов выражения обязательно должен быть атрибут элемента
-	 * <p/>
-	 * Для ассоциаций можно указать условия.
-	 * Условия должно быть написано сразу после ассоциации, начиная с символа открытия (@see OPEN_EXPRESSIONS_SYMBOL) и заканчивая символом закрытия(@see OPEN_EXPRESSIONS_SYMBOL).
-	 * Условия должно содержать название атрибута и его значения, через знак равенства (@see EQUALS_SYMBOL).
-	 * Условий может быть несколько, в этом случае они должны разделяться специальным символом (@see SPLIT_EXPRESSION_SYMBOL).
-	 *
-	 *
-	 * @param node  элемент
-	 * @param field выражение для элемента (ассоциации, условия и атрибуты)
-	 * @return {Object}
-	 */
-	public Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
-		NodeRef showNode = node;
-		List<NodeRef> showNodes = new ArrayList<NodeRef>();
-		String fieldName;
-		String fieldFormat = null;
-		List<String> transitions = new ArrayList<String>();
+     * Получение значения выражения для элемента.
+     * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)
+     * Элементами выражения могут быть:
+     * - Ссылка на родителя (@see SPLIT_TRANSITIONS_SYMBOL)
+     * - Source ассоциация (..<Название ассоциации>)
+     * - Target ассоциация (<Название ассоциации>)
+     * -Child ассоциация (<Название ассоциации>)
+     * Последним элементов выражения обязательно должен быть атрибут элемента
+     * <p/>
+     * Для ассоциаций можно указать условия.
+     * Условия должно быть написано сразу после ассоциации, начиная с символа открытия (@see OPEN_EXPRESSIONS_SYMBOL) и заканчивая символом закрытия(@see OPEN_EXPRESSIONS_SYMBOL).
+     * Условия должно содержать название атрибута и его значения, через знак равенства (@see EQUALS_SYMBOL).
+     * Условий может быть несколько, в этом случае они должны разделяться специальным символом (@see SPLIT_EXPRESSION_SYMBOL).
+     *
+     * @param node  элемент
+     * @param field выражение для элемента (ассоциации, условия и атрибуты)
+     * @return {Object}
+     */
+    public Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
+        NodeRef showNode = node;
+        List<NodeRef> showNodes = new ArrayList<NodeRef>();
+        String fieldName;
+        String fieldFormat = null;
+        List<String> transitions = new ArrayList<String>();
 
         Object result = "";
 
@@ -169,7 +232,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             field = field.substring(1);
         }
         final boolean isPseudoProp = field.startsWith(PSEUDO_PROPERTY_SYMBOL);
-        if(!isPseudoProp) {
+        if (!isPseudoProp) {
             if (field.contains(SPLIT_TRANSITIONS_SYMBOL)) {
                 int firstIndex = field.indexOf(SPLIT_TRANSITIONS_SYMBOL);
                 transitions.add(field.substring(0, firstIndex));
@@ -184,14 +247,14 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 fieldName = field;
             }
 
-	        if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
-		        String fieldValue = fieldName;
-		    	fieldName = fieldValue.substring(0, field.indexOf(STRING_FORMAT_SYMBOL));
-		    	fieldFormat = fieldValue.substring(field.indexOf(STRING_FORMAT_SYMBOL) + 1, field.length());
-	        }
+            if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
+                String fieldValue = fieldName;
+                fieldName = fieldValue.substring(0, field.indexOf(STRING_FORMAT_SYMBOL));
+                fieldFormat = fieldValue.substring(field.indexOf(STRING_FORMAT_SYMBOL) + 1, field.length());
+            }
 
             for (String el : transitions) {
-	            showNodes.clear();
+                showNodes.clear();
                 Map<String, String> expressions = getExpression(el);
                 if (!expressions.isEmpty()) {
                     el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
@@ -229,23 +292,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (!expressions.isEmpty()) {
                     boolean exist = false;
                     for (NodeRef nodeRef : showNodes) {
-	                    if (!isArchive(nodeRef)) {
-	                        boolean expressionsFalse = false;
-	                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
-	                            Object currentPropertyValue =
-	                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-	                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-	                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
-	                                expressionsFalse = true;
-	                                break;
-	                            }
-	                        }
-	                        if (!expressionsFalse) {
-	                            showNode = nodeRef;
-	                            exist = true;
-	                            break;
-	                        }
-	                    }
+                        if (!isArchive(nodeRef)) {
+                            boolean expressionsFalse = false;
+                            for (Map.Entry<String, String> entry : expressions.entrySet()) {
+                                Object currentPropertyValue =
+                                        nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
+                                if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
+                                        || !currentPropertyValue.toString().equals(entry.getValue())) {
+                                    expressionsFalse = true;
+                                    break;
+                                }
+                            }
+                            if (!expressionsFalse) {
+                                showNode = nodeRef;
+                                exist = true;
+                                break;
+                            }
+                        }
                     }
                     if (!exist) {
                         logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
@@ -253,57 +316,74 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                         break;
                     }
                 } else if (!showNodes.isEmpty()) {
-	                boolean exist = false;
+                    boolean exist = false;
                     for (NodeRef nodeRef : showNodes) {
                         if (!isArchive(nodeRef)) {
                             showNode = nodeRef;
-	                        exist = true;
+                            exist = true;
                         }
                     }
-	                if (!exist) {
-		                logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
-		                showNode = null;
-		                break;
-	                }
+                    if (!exist) {
+                        logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+                        showNode = null;
+                        break;
+                    }
                 } else {
-	                logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
-	                showNode = null;
-	                break;
+                    logger.debug(String.format("Не найдено подходящего результата для [%s] по условиям [%s]", showNode, expressions));
+                    showNode = null;
+                    break;
                 }
             }
         } else {
             fieldName = field;
             field = field.substring(1);
+
+            String fieldCode = "", defaultValue = "";
+
+            if (field.contains("|")) {
+                String[] values = field.split("\\|");
+                fieldCode = values[0];
+                defaultValue = values[1];
+            }
+
+            if (!fieldCode.isEmpty()) {
+                field = fieldCode;
+            }
+
             final List<NodeRef> found = getObjectByPseudoProp(showNode, field);
             showNode = (found != null && found.size() > 0) ? found.get(0) : null;
             if (showNode != null) {
-            	result = getObjectDescription(showNode);
+                result = getObjectDescription(showNode);
+            } else {
+                if (defaultValue != null) {
+                    result = defaultValue;
+                }
             }
         }
 
-		if (showNode != null) {
+        if (showNode != null) {
             if (!fieldName.contains("~")) {
-	            if (fieldName.equals("nodeRef")) {
-		            result = showNode.toString();
-	            } else {
-		            Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-		            if (property != null) {
-			            result = result.toString().isEmpty() ? property : result;
-			            if (result instanceof Date) {
-				            if (timeZoneOffset != null) {
-					            Calendar cal = Calendar.getInstance();
-					            cal.setTime((Date) result);
-					            cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
-					            result = cal.getTime();
-				            }
+                if (fieldName.equals("nodeRef")) {
+                    result = showNode.toString();
+                } else {
+                    Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
+                    if (property != null) {
+                        result = result.toString().isEmpty() ? property : result;
+                        if (result instanceof Date) {
+                            if (timeZoneOffset != null) {
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTime((Date) result);
+                                cal.add(Calendar.MILLISECOND, timeZoneOffset - TimeZone.getDefault().getRawOffset());
+                                result = cal.getTime();
+                            }
 
-				            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
-				            result = dFormat.format(result);
-			            }
-		            } else {
-			            result = "";
-		            }
-	            }
+                            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
+                            result = dFormat.format(result);
+                        }
+                    } else {
+                        result = "";
+                    }
+                }
             }
             if (wrapAsLink && !result.toString().isEmpty()) {
                 SysAdminParams params = serviceRegistry.getSysAdminParams();
@@ -311,129 +391,104 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
                         + result + "</a>";
             }
-		}
+        }
 
-		return result;
-	}
-
-    private NodeRef getDocumentAuthor(NodeRef document) {
-        QName docType = nodeService.getType(document);
-        String authorProp = documentService.getAuthorProperty(docType);
-        String documentCreator = (String) nodeService.getProperty(document, QName.createQName(authorProp, namespaceService));
-	    if (documentCreator != null && !documentCreator.isEmpty()) {
-			return new NodeRef(documentCreator);
-	    } else {
-		    Object creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR);
-		    NodeRef person = serviceRegistry.getPersonService().getPerson(creator.toString(), false);
-		    if (person != null) {
-			    List<AssociationRef> lRefs = nodeService.getSourceAssocs(person, ASSOC_EMPLOYEE_PERSON);
-			    for (AssociationRef lRef : lRefs) {
-				    if (!isArchive(lRef.getSourceRef())) {
-					    return lRef.getSourceRef();
-				    }
-			    }
-		    }
-	    }
-        return null;
+        return result;
     }
 
-	/**
-	 * Получение псевдо свойста или выполнение встроенной функции
-	 * @param object исходный узел
-	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов) 
-	 * @return список узлов после выполнения функции (псевдо-свойства)
-	 */
-	@Override
-	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp) {
-		if (psedudoProp == null)
-			return null;
+    /**
+     * Получение псевдо свойста или выполнение встроенной функции
+     *
+     * @param object      исходный узел
+     * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов)
+     * @return список узлов после выполнения функции (псевдо-свойства)
+     */
+    @Override
+    public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp) {
+       PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
+        if (pseudo != null) {
+            return pseudo.getObjectsByPseudoProp(object, documentService);
+        }
+        return  null;
+    }
 
-		final List<NodeRef> result = new ArrayList<NodeRef>();
+    /**
+     * Получение выражений из форматной строки
+     *
+     * @param str         форматная строка
+     * @param openSymbol  символ открытия выражения
+     * @param closeSymbol символ закрытия выражения
+     * @return список строк с выражениями
+     */
+    public List<String> splitSubstitudeFieldsString(String str, String openSymbol, String closeSymbol) {
+        List<String> results = new ArrayList<String>();
+        if (str.contains(openSymbol) && str.contains(closeSymbol)) {
+            int openIndex = str.indexOf(openSymbol);
+            int closeIndex = str.indexOf(closeSymbol);
+            results.add(str.substring(openIndex + 1, closeIndex));
+            int lastOpenIndex = str.lastIndexOf(openSymbol);
+            int lastCloseIndex = str.lastIndexOf(closeSymbol);
+            while (openIndex != lastOpenIndex && closeIndex != lastCloseIndex) {
+                openIndex = str.indexOf(openSymbol, openIndex + 1);
+                closeIndex = str.indexOf(closeSymbol, closeIndex + 1);
+                results.add(str.substring(openIndex + 1, closeIndex));
+            }
+        }
+        return results;
+    }
 
-		if (AUTHOR.equalsIgnoreCase(psedudoProp)) {
-			final NodeRef auth = getDocumentAuthor(object);
-			if (auth != null)
-				result.add(auth);
-		} // NOTE: here other functions can be implemented
-		return result;
-	}
+    /**
+     * Получение условий
+     *
+     * @param str строка с условием
+     * @return Map <field, value>
+     */
+    public Map<String, String> getExpression(String str) {
+        Map<String, String> expressions = new HashMap<String, String>();
+        int openIndex = str.indexOf(OPEN_EXPRESSIONS_SYMBOL);
+        int closeIndex = str.indexOf(CLOSE_EXPRESSIONS_SYMBOL);
+        if (openIndex > -1 && closeIndex > -1) {
+            String expressionsStr = str.substring(openIndex + 1, closeIndex);
+            if (!expressionsStr.isEmpty() && expressionsStr.contains(EQUALS_SYMBOL)) {
+                int equalsIndex = -1;
+                int endIndex = -1;
+                int lastEqualsIndex = expressionsStr.lastIndexOf(EQUALS_SYMBOL);
+                while (equalsIndex != lastEqualsIndex) {
+                    int oldEndIndex = endIndex;
+                    equalsIndex = expressionsStr.indexOf(EQUALS_SYMBOL, equalsIndex + 1);
+                    endIndex = expressionsStr.indexOf(SPLIT_EXPRESSION_SYMBOL, endIndex + 1);
+                    if (endIndex == -1) {
+                        endIndex = expressionsStr.length();
+                    }
+                    expressions.put(expressionsStr.substring(oldEndIndex + 1, equalsIndex).trim(),
+                            expressionsStr.substring(equalsIndex + 1, endIndex).trim());
+                }
+            }
+        }
+        return expressions;
+    }
 
-	/**
-	 * Получение выражений из форматной строки
-	 *
-	 * @param str         форматная строка
-	 * @param openSymbol  символ открытия выражения
-	 * @param closeSymbol символ закрытия выражения
-	 * @return список строк с выражениями
-	 */
-	public List<String> splitSubstitudeFieldsString(String str, String openSymbol, String closeSymbol) {
-		List<String> results = new ArrayList<String>();
-		if (str.contains(openSymbol) && str.contains(closeSymbol)) {
-			int openIndex = str.indexOf(openSymbol);
-			int closeIndex = str.indexOf(closeSymbol);
-			results.add(str.substring(openIndex + 1, closeIndex));
-			int lastOpenIndex = str.lastIndexOf(openSymbol);
-			int lastCloseIndex = str.lastIndexOf(closeSymbol);
-			while (openIndex != lastOpenIndex && closeIndex != lastCloseIndex) {
-				openIndex = str.indexOf(openSymbol, openIndex + 1);
-				closeIndex = str.indexOf(closeSymbol, closeIndex + 1);
-				results.add(str.substring(openIndex + 1, closeIndex));
-			}
-		}
-		return results;
-	}
+    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
+        this.serviceRegistry = serviceRegistry;
+    }
 
-	/**
-	 * Получение условий
-	 *
-	 * @param str строка с условием
-	 * @return Map <field, value>
-	 */
-	public Map<String, String> getExpression(String str) {
-		Map<String, String> expressions = new HashMap<String, String>();
-		int openIndex = str.indexOf(OPEN_EXPRESSIONS_SYMBOL);
-		int closeIndex = str.indexOf(CLOSE_EXPRESSIONS_SYMBOL);
-		if (openIndex > -1 && closeIndex > -1) {
-			String expressionsStr = str.substring(openIndex + 1, closeIndex);
-			if (!expressionsStr.isEmpty() && expressionsStr.contains(EQUALS_SYMBOL)) {
-				int equalsIndex = -1;
-				int endIndex = -1;
-				int lastEqualsIndex = expressionsStr.lastIndexOf(EQUALS_SYMBOL);
-				while (equalsIndex != lastEqualsIndex) {
-					int oldEndIndex = endIndex;
-					equalsIndex = expressionsStr.indexOf(EQUALS_SYMBOL, equalsIndex + 1);
-					endIndex = expressionsStr.indexOf(SPLIT_EXPRESSION_SYMBOL, endIndex + 1);
-					if (endIndex == -1) {
-						endIndex = expressionsStr.length();
-					}
-					expressions.put(expressionsStr.substring(oldEndIndex + 1, equalsIndex).trim(),
-							expressionsStr.substring(equalsIndex + 1, endIndex).trim());
-				}
-			}
-		}
-		return expressions;
-	}
+    public void init() {
+        namespaceService = getServiceRegistry().getNamespaceService();
+        nodeService = getServiceRegistry().getNodeService();
+    }
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void init() {
-		namespaceService = getServiceRegistry().getNamespaceService();
-		nodeService = getServiceRegistry().getNodeService();
-	}
-
-	public ServiceRegistry getServiceRegistry() {
-		return serviceRegistry;
-	}
+    public ServiceRegistry getServiceRegistry() {
+        return serviceRegistry;
+    }
 
     public void setDateFormat(String dateFormat) {
         this.dateFormat = !dateFormat.equals("${lecm.base.date.format}") ? dateFormat : this.dateFormat;
     }
 
-    public String getDateFormat(){
+    public String getDateFormat() {
         return dateFormat;
     }
+
     /**
      * Метод, возвращающий ссылку на объект справочника "Тип объекта" для заданного объекта
      *
@@ -468,7 +523,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             Object template = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
             return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
         } else if (returnDefauktIfNull) {
-            return forList ?  DEFAULT_OBJECT_TYPE_LIST_TEMPLATE : DEFAULT_OBJECT_TYPE_TEMPLATE;
+            return forList ? DEFAULT_OBJECT_TYPE_LIST_TEMPLATE : DEFAULT_OBJECT_TYPE_TEMPLATE;
         }
         return null;
     }

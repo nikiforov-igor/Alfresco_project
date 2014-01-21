@@ -186,6 +186,16 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
         register(dictionaryTemplateCode,documentNode, onlyReserve, false);
     }
 
+    @Override
+    public void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
+        registerProject(getTemplateString(templateRef), documentNode);
+    }
+
+    @Override
+    public void registerDocument(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
+        registerDocument(getTemplateString(templateRef), documentNode);
+    }
+
     /**
      * Получить регистрационный номер для документа по указанному шаблону и
      * записать его в документа.

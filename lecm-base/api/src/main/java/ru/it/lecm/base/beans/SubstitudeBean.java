@@ -67,6 +67,8 @@ public interface SubstitudeBean {
 	 */
 	final String PSEUDO_PROPERTY_SYMBOL = "~";
 
+    final String DEFAULT_VALUE_SYMBOL = "|";
+
 	final String AUTHOR = "AUTHOR";
 
 	final String DEFAULT_OBJECT_TYPE_TEMPLATE = "{cm:name}";
