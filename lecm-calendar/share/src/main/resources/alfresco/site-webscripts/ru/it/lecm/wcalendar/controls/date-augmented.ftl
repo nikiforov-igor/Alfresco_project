@@ -50,7 +50,7 @@
    <#elseif !multiValued>
       <#if jsDisabled>
          <label for="${fieldHtmlId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-         <input id="${fieldHtmlId}" name="${field.name}" type="text" class="date-entry" value="${field.value?html}" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> style="<#if field.control.params.dateMaxWidth??>max-width: ${field.control.params.dateMaxWidth};"</#if> />
+         <input id="${fieldHtmlId}" name="${field.name}" type="text" class="date-entry" value="${field.value?html}" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> <#if field.control.params.dateMaxWidth??>style="max-width: ${field.control.params.dateMaxWidth};"</#if> />
          <div class="format-info">
             <span class="date-format">${msg("form.control.date-picker.entry.datetime.format.nojs")}</span>
          </div>
@@ -75,7 +75,7 @@
          <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${field.value?html}" />
 
          <label for="${controlId}-date">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-         <input id="${controlId}-date" name="-" type="text" class="date-entry" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> style="<#if field.control.params.dateMaxWidth??>max-width: ${field.control.params.dateMaxWidth};"</#if> />
+         <input id="${controlId}-date" name="-" type="text" class="date-entry" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> <#if field.control.params.dateMaxWidth??>style="max-width: ${field.control.params.dateMaxWidth};"</#if> />
 
          <#if disabled == false>
             <a id="${controlId}-icon"><img src="${url.context}/res/components/form/images/calendar.png" class="datepicker-icon" tabindex="0"/></a>
@@ -84,7 +84,7 @@
          <div id="${controlId}" class="datepicker"></div>
 
          <#if showTime>
-            <input id="${controlId}-time" name="-" type="text" class="time-entry" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> style="<#if field.control.params.dateMaxWidth??>max-width: ${field.control.params.dateMaxWidth};"</#if> />
+            <input id="${controlId}-time" name="-" type="text" class="time-entry" <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"<#else>tabindex="0"</#if> <#if field.control.params.dateMaxWidth??>style="max-width: ${field.control.params.dateMaxWidth};"</#if> />
          </#if>
 
          <@formLib.renderFieldHelp field=field />

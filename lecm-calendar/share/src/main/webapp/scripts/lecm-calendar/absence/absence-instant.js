@@ -27,7 +27,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		instantAbsencePrerequisites: null,
 		showCancellationDialogPrerequisites: null,
 		onReady: function() {
-			this.showCancellationDialogPrerequisites = new Deferred(["isAbscent", "showCancellationPropmt"],
+			this.showCancellationDialogPrerequisites = new Deferred(["isAbsent", "showCancellationPropmt"],
 					{
 						fn: this.showCancelAbsenceDialog,
 						scope: this
@@ -56,7 +56,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 								isAbsent: result.isAbsent
 							});
 							if (Absence.isAbsent) {
-								this.fulfilShowCancellationDialogPrerequisites("isAbscent");
+								this.fulfilShowCancellationDialogPrerequisites("isAbsent");
 							} else {
 								this.showCancellationDialogPrerequisites.expire();
 							}
