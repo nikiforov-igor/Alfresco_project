@@ -696,7 +696,7 @@
                             <control-param name="fullDelete">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-stmeditor:transition-script" >
+                    <field id="lecm-stmeditor:transition-script" label="Скрипт">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
                             <control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
