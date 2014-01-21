@@ -210,6 +210,8 @@
 
         <!-- аспект  для регистрационных данных проекта документа -->
         <aspect name="lecm-document-aspects:has-reg-project-data">
+            <!-- Свойство для поиска по рег номеру! в него сохраняются номера из объекта по ассоциации!
+             Это прописано в справочнике "Типы объектов" для типа Регистрационные данные. Атрибуты-->
             <properties>
                 <property name="lecm-document-aspects:project-reg-attributes-assoc-text-content">
                     <type>d:text</type>

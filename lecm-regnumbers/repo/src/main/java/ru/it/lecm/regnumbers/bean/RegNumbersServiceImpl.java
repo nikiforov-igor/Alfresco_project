@@ -178,52 +178,57 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
     @Override
     public void registerProject(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
-        if (templateDictionary != null && documentNode != null) {
-            if (nodeService.hasAspect(documentNode, DocumentService.ASPECT_HAS_REG_PROJECT_DATA)) {
-                List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(documentNode, DocumentService.ASSOC_REG_PROJECT_DATA);
-                if (prDataAssocs != null && !prDataAssocs.isEmpty())  {
-                    NodeRef projectData = prDataAssocs.get(0).getTargetRef();
-                    if (!onlyReserve) {
-                        nodeService.setProperty(projectData, DocumentService.PROP_REG_DATA_IS_REGISTERED, Boolean.TRUE);
-                    }
-                } else {
-                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-                    properties.put(DocumentService.PROP_REG_DATA_DATE, new Date());
-                    properties.put(DocumentService.PROP_REG_DATA_NUMBER, getNumber(documentNode, templateDictionary));
-                    properties.put(DocumentService.PROP_REG_DATA_IS_REGISTERED, !onlyReserve);
-                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-                    NodeRef regAttributesRef = nodeService.createNode(documentNode, ContentModel.ASSOC_CONTAINS, assocQName,
-                                    DocumentService.TYPE_REG_DATA_ATTRIBUTES, properties).getChildRef();
-
-                    nodeService.createAssociation(documentNode, regAttributesRef, DocumentService.ASSOC_REG_PROJECT_DATA);
-                }
-            }
-        }
+        register(dictionaryTemplateCode, documentNode, onlyReserve, true);
     }
 
     @Override
-    public void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException {
+    public void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
+        register(dictionaryTemplateCode,documentNode, onlyReserve, false);
+    }
+
+    /**
+     * Получить регистрационный номер для документа по указанному шаблону и
+     * записать его в документа.
+     *
+     * @param documentNode ссылка на экземпляр документа, которому необходимо
+     * присвоить номер.
+     * @param onlyReserve флаг нужно ли реально регистрировать документ
+     * или только зарезервировать номер
+     * @param isProjectRegister флаг, происходит ли регистрация проекта документа. Если false - значит регистрируется документ
+     * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+     * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+     * функций. Детали см. в эксепшене.
+     * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+     * неверное имя метода, функции или объекта, неверные параметры функции или
+     * метода. Детали см. в эксепшене.
+     */
+    private void register(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
         NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
         if (templateDictionary != null && documentNode != null) {
-            if (nodeService.hasAspect(documentNode, DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA)) {
-                List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(documentNode, DocumentService.ASSOC_REG_DOCUMENT_DATA);
-                if (prDataAssocs != null && !prDataAssocs.isEmpty())  {
-                    NodeRef projectData = prDataAssocs.get(0).getTargetRef();
-                    if (!onlyReserve) {
-                        nodeService.setProperty(projectData, DocumentService.PROP_REG_DATA_IS_REGISTERED, Boolean.TRUE);
-                    }
-                } else {
-                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-                    properties.put(DocumentService.PROP_REG_DATA_DATE, new Date());
-                    properties.put(DocumentService.PROP_REG_DATA_NUMBER, getNumber(documentNode, templateDictionary));
-                    properties.put(DocumentService.PROP_REG_DATA_IS_REGISTERED, !onlyReserve);
-                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-                    NodeRef regAttributesRef = nodeService.createNode(documentNode, ContentModel.ASSOC_CONTAINS, assocQName,
-                            DocumentService.TYPE_REG_DATA_ATTRIBUTES, properties).getChildRef();
+            QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+            QName regAssocName =  isProjectRegister ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
 
-                    nodeService.createAssociation(documentNode, regAttributesRef, DocumentService.ASSOC_REG_DOCUMENT_DATA);
+            if (!nodeService.hasAspect(documentNode, regAspectName)) {
+                nodeService.addAspect(documentNode, regAspectName, null);
+            }
+
+            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(documentNode, regAssocName);
+            if (prDataAssocs != null && !prDataAssocs.isEmpty()) { // рег данные уже созданы - только изменение флага регистрации
+                if (!onlyReserve) {
+                    nodeService.setProperty(prDataAssocs.get(0).getTargetRef(), DocumentService.PROP_REG_DATA_IS_REGISTERED, Boolean.TRUE);
                 }
+            } else {
+                Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+                properties.put(DocumentService.PROP_REG_DATA_DATE, new Date());
+                properties.put(DocumentService.PROP_REG_DATA_NUMBER, getNumber(documentNode, templateDictionary));
+                properties.put(DocumentService.PROP_REG_DATA_IS_REGISTERED, !onlyReserve);
+
+                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
+
+                NodeRef regAttributesRef = nodeService.createNode(documentNode, ContentModel.ASSOC_CONTAINS, assocQName,
+                        DocumentService.TYPE_REG_DATA_ATTRIBUTES, properties).getChildRef();
+
+                nodeService.createAssociation(documentNode, regAttributesRef, regAssocName);
             }
         }
     }

@@ -75,6 +75,8 @@ public interface DocumentService {
     public static final QName PROP_REG_DATA_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
     public static final QName PROP_REG_DATA_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
 
+    public static final String DEFAULT_REG_NUM = "Не присвоено";
+
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
@@ -183,7 +185,23 @@ public interface DocumentService {
 
     public NodeRef duplicateDocument(NodeRef document);
 
-    public QName[] getRegNumbersProperties(QName docType);
+    /**
+     * Метод для получения регистрационных номеров документа (номер проекта (если есть) и реального (если есть))
+     * @return список из номеров
+     */
+    public List<String> getRegNumbersValues(NodeRef document);
+
+    /**
+     * Метод для получения регистрационного номера проекта документа
+     * @return рег номер проекта или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
+     */
+    public String getProjectRegNumber(NodeRef document);
+
+    /**
+     * Метод для получения регистрационного номера  документа
+     * @return рег номер документа или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
+     */
+    public String getDocumentRegNumber(NodeRef document);
 
     /**
      * Возвращает заголовок документа без проверки на доступ к документу

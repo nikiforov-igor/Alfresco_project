@@ -166,8 +166,22 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
 	}
 
     public void registerProject(String dictionaryTemplateCode, ScriptNode documentNode) {
+        registerProject(dictionaryTemplateCode, documentNode, false);
+    }
+
+    /**
+     * Получить регистрационный номер для документа по указанному шаблону и
+     * записать его как номер проекта
+     *
+     * @param documentNode ссылка на экземпляр документа, которому необходимо
+     * присвоить номер.
+     * @param dictionaryTemplateCode код элемента справочника с шаблоном номера
+     * @param onlyReserve флаг нужно ли реально регистрировать документ
+     * @throws WebScriptException в случае недачной генерации номера.
+     */
+    public void registerProject(String dictionaryTemplateCode, ScriptNode documentNode, boolean onlyReserve) {
         try {
-            regNumbersService.registerProject(dictionaryTemplateCode, documentNode.getNodeRef());
+            regNumbersService.registerProject(dictionaryTemplateCode, documentNode.getNodeRef(), onlyReserve);
         } catch (TemplateParseException ex) {
             throw new WebScriptException(String.format("Error parsing registration number template code '%s'", dictionaryTemplateCode), ex);
         } catch (TemplateRunException ex) {
@@ -176,8 +190,22 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
     }
 
     public void registerDocument(String dictionaryTemplateCode, ScriptNode documentNode) {
+        registerDocument(dictionaryTemplateCode, documentNode, false);
+    }
+
+    /**
+     * Получить регистрационный номер для документа по указанному шаблону и
+     * записать его как номер документа
+     *
+     * @param documentNode ссылка на экземпляр документа, которому необходимо
+     * присвоить номер.
+     * @param dictionaryTemplateCode код элемента справочника с шаблоном номера
+     * @param onlyReserve флаг нужно ли реально регистрировать документ
+     * @throws WebScriptException в случае недачной генерации номера.
+     */
+    public void registerDocument(String dictionaryTemplateCode, ScriptNode documentNode, boolean onlyReserve) {
         try {
-            regNumbersService.registerDocument(dictionaryTemplateCode, documentNode.getNodeRef());
+            regNumbersService.registerDocument(dictionaryTemplateCode, documentNode.getNodeRef(), onlyReserve);
         } catch (TemplateParseException ex) {
             throw new WebScriptException(String.format("Error parsing registration number template code '%s'", dictionaryTemplateCode), ex);
         } catch (TemplateRunException ex) {

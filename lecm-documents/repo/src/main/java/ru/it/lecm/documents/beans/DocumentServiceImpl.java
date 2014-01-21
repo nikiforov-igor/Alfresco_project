@@ -26,7 +26,6 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
-import ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -535,35 +534,53 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         this.copyService = copyService;
     }
 
-    public QName[] getRegNumbersProperties(QName docType) {
-        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(docType.getNamespaceURI(), DocumentService.CONSTRAINT_REG_NUMBERS_PROPERTIES));
-        if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof RegNumberPropertiesConstraint)) {
-            RegNumberPropertiesConstraint rnConstraint = (RegNumberPropertiesConstraint) constraint.getConstraint();
-            String[] props = rnConstraint.getRegNumbersProps();
-            if (props != null) {
-                List<QName> result = new ArrayList<QName>();
-                for (String prop : props) {
-                    if (prop != null && !prop.isEmpty()) {
-                        QName propQName = QName.createQName(prop, namespaceService);
-                        result.add(propQName);
-                    }
-                }
-                return result.toArray(new QName[result.size()]);
-            }
+    @Override
+    public List<String> getRegNumbersValues(NodeRef document) {
+        List<String> resultValues = new ArrayList<String>();
+        String regProjectNumber = getProjectRegNumber(document);
+        if (regProjectNumber != null) {
+            resultValues.add(regProjectNumber);
         }
-        return new QName[]{DocumentService.PROP_DOCUMENT_REGNUM};
+        String regDocNumber = getDocumentRegNumber(document);
+        if (regDocNumber != null) {
+            resultValues.add(regDocNumber);
+        }
+        return resultValues;
+    }
+
+    @Override
+    public String getProjectRegNumber(NodeRef document) {
+        return getRegNumber(document, DocumentService.ASPECT_HAS_REG_PROJECT_DATA, DocumentService.ASSOC_REG_PROJECT_DATA);
+    }
+
+    @Override
+    public String getDocumentRegNumber(NodeRef document) {
+        return getRegNumber(document, DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA, DocumentService.ASSOC_REG_DOCUMENT_DATA);
+    }
+
+    private String getRegNumber(NodeRef document, QName aspectName, QName assocName){
+        if (nodeService.hasAspect(document, aspectName)) {
+            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(document, assocName);
+            if (prDataAssocs != null && !prDataAssocs.isEmpty()) {
+                NodeRef projectData = prDataAssocs.get(0).getTargetRef();
+                return String.valueOf(nodeService.getProperty(projectData, DocumentService.PROP_REG_DATA_NUMBER));
+            } else {
+                return DEFAULT_REG_NUM;
+            }
+        } else {
+            return null;
+        }
     }
 
     @Override
     public String getPresentString(final NodeRef document) {
-        String result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
+        return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
                 Serializable presentString = nodeService.getProperty(document, PROP_PRESENT_STRING);
                 return presentString != null ? presentString.toString() : null;
             }
         });
-        return result;
     }
 
     @Override

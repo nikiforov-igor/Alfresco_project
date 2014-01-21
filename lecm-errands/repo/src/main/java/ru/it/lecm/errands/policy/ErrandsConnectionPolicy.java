@@ -16,6 +16,8 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 
+import java.util.List;
+
 /**
  * User: mshafeev
  * Date: 11.07.13
@@ -83,13 +85,12 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
             documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, "LECM_BASIC_PG_Reader");
         }
 
-        QName[] regNums = documentService.getRegNumbersProperties(nodeService.getType(baseDoc));
-        if (regNums != null && regNums.length > 0) {
+        List<String> regNums = documentService.getRegNumbersValues(baseDoc);
+        if (regNums != null && !regNums.isEmpty()) {
             String regNumberValue = "";
-            for (QName propName : regNums) {
-                Object regNumber = nodeService.getProperty(baseDoc, propName);
-                if (regNumber != null) {
-                    regNumberValue += ((regNumberValue.length() > 0 ? "," : "") + regNumber);
+            for (String number : regNums) {
+                if (number != null) {
+                    regNumberValue += ((regNumberValue.length() > 0 ? "," : "") + number);
                 }
             }
             nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);

@@ -515,12 +515,9 @@ public class ObjectFactory {
         QName type = nodeService.getType(documentRef);
         doc.setTYPE(type.toPrefixString(namespaceService).toUpperCase());
 
-        QName[] props = documentService.getRegNumbersProperties(type);
-        if (props.length > 0) {
-            Object rdataValue = nodeService.getProperty(documentRef, props[0]);
-            if (rdataValue != null) {
-                doc.setREGNUM((String) rdataValue);
-            }
+        String number = documentService.getDocumentRegNumber(documentRef);
+        if (number != null) {
+            doc.setREGNUM(number);
         }
 
         try {
