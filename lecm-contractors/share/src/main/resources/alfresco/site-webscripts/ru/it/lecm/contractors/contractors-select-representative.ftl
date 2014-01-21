@@ -3,7 +3,7 @@
 <#assign inputId = fieldHtmlId + "-inpt">
 <#assign fieldId = fieldHtmlId + "-fld">
 <#if form.mode == "view">
-    <#assign fieldId = fieldId + "-view-repsesentative">
+	<#assign fieldId = fieldId + "-view-repsesentative">
 </#if>
 
 
@@ -11,91 +11,91 @@
 
 <#assign fieldValue=field.value!"">
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
-    <#if context.properties[field.control.params.defaultValueContextProperty]??>
-        <#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
-    <#elseif args[field.control.params.defaultValueContextProperty]??>
-        <#assign fieldValue = args[field.control.params.defaultValueContextProperty]>
-    </#if>
+	<#if context.properties[field.control.params.defaultValueContextProperty]??>
+		<#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
+	<#elseif args[field.control.params.defaultValueContextProperty]??>
+		<#assign fieldValue = args[field.control.params.defaultValueContextProperty]>
+	</#if>
 </#if>
 
 <#if disabled>
 <div id="${fieldId}" class="form-field">
-    <div class="viewmode-field">
-        <#if showViewIncompleteWarning && field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
-        <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-        </#if>
-        <span class="viewmode-label">${field.label?html}:</span>
-        <span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
-    </div>
+	<div class="viewmode-field">
+		<#if showViewIncompleteWarning && field.mandatory && !(fieldValue?is_number) && fieldValue?string == "">
+		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
+		</#if>
+		<span class="viewmode-label">${field.label?html}:</span>
+		<span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
+	</div>
 </div>
 <#else>
 <div id="${fieldId}" class="form-field">
-    <label for="${selectId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+	<label for="${selectId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 
-    <div>
-        <select id="${selectId}" name="${field.name}"></select>
-        <span class="create-new-button">
-            <input type="button" id="${controlId}-add-new-representative-button"/>
-        </span>
-    </div>
+	<div>
+		<select id="${selectId}" name="${field.name}"></select>
+		<span class="create-new-button">
+			<input type="button" id="${controlId}-add-new-representative-button"/>
+		</span>
+	</div>
 
-    <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-    <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+	<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+	<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
 </div>
 </#if>
 <input type="hidden" id="${controlId}" name="${field.name}" value="${field.value?html}"/>
 
 <script>//<![CDATA[
-    (function () {
-        "use strict";
+	(function () {
+		"use strict";
 
-        var globCurrentContractor = null; // Глобальная переменная модуля для сохранения выбранного контрагента.
+		var globCurrentContractor = null; // Глобальная переменная модуля для сохранения выбранного контрагента.
 
-        LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor( fieldHtmlId ) {
+		LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor( fieldHtmlId ) {
 
-            LogicECM.module.SelectRepresentativeForContractor.superclass.constructor.call(this, "LogicECM.module.SelectRepresentativeForContractor", fieldHtmlId, []);
+			LogicECM.module.SelectRepresentativeForContractor.superclass.constructor.call(this, "LogicECM.module.SelectRepresentativeForContractor", fieldHtmlId, []);
 
-        <#if disabled>
-            // FUTURE: PLAY HARD GO PRO!!
-            YAHOO.util.Event.onAvailable( "${controlId}", function() {
-                var currentInputEl = YAHOO.util.Dom.get( "${controlId}" );
+		<#if disabled>
+			// FUTURE: PLAY HARD GO PRO!!
+			YAHOO.util.Event.onAvailable( "${controlId}", function() {
+				var currentInputEl = YAHOO.util.Dom.get( "${controlId}" );
 
-                if (currentInputEl !== null && currentInputEl.value.length > 0) {
-                    Alfresco.util.Ajax.jsonGet({
-                        url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + currentInputEl.value.replace("://", "/"),
-                        successCallback:
-                        {
-                            fn: function (response) {
-                                var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
-                                    properties = response.json.item.node.properties,
-                                    name = this.options.nameSubstituteString,
+				if (currentInputEl !== null && currentInputEl.value.length > 0) {
+					Alfresco.util.Ajax.jsonGet({
+						url: Alfresco.constants.PROXY_URI + "slingshot/doclib2/node/" + currentInputEl.value.replace("://", "/"),
+						successCallback:
+						{
+							fn: function (response) {
+								var currentDisplayValueElement = YAHOO.util.Dom.get( "${controlId}-currentValueDisplay" ),
+									properties = response.json.item.node.properties,
+									name = this.options.nameSubstituteString,
 
-                                    propSubstName,
-                                    prop;
+									propSubstName,
+									prop;
 
-                                for ( prop in properties ) {
-                                    propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
+								for ( prop in properties ) {
+									propSubstName = this.options.openSubstituteSymbol + prop + this.options.closeSubstituteSymbol;
 
-                                    if ( name.indexOf( propSubstName ) != -1 ) {
-                                        name = name.replace( propSubstName, properties[ prop ] );
-                                    }
-                                }
+									if ( name.indexOf( propSubstName ) != -1 ) {
+										name = name.replace( propSubstName, properties[ prop ] );
+									}
+								}
 
-                                currentDisplayValueElement.innerHTML = name;
-                            },
-                            scope: this
-                        }
-                    });
-                }
-            }, this, true);
+								currentDisplayValueElement.innerHTML = name;
+							},
+							scope: this
+						}
+					});
+				}
+			}, this, true);
 
-            return this;
-        </#if>
+			return this;
+		</#if>
 
-            YAHOO.Bubbling.on("${field.control.params.updateOnAction}", this.onUpdateRepresentativesList, this);
+			YAHOO.Bubbling.on("${field.control.params.updateOnAction}", this.onUpdateRepresentativesList, this);
 
 			this._showAddRepresentativeDialog = function(response) {
-                var isPrimaryCheckboxChecked,
+				var isPrimaryCheckboxChecked,
 					templateRequestParams = {
 						itemKind: "type",
 						itemId: "lecm-contractor:link-representative-and-contractor",
@@ -105,83 +105,83 @@
 						ignoreNodes: response.json.join(),
 						showCancelButton: "true"
 					},
-					// Создание формы добавления представителя.
+					// Создание формы добавления адресанта.
 					addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form");
 
-                addRepresentativeForm.setOptions({
-                    width: "50em",
-                    templateUrl: "components/form",
+				addRepresentativeForm.setOptions({
+					width: "50em",
+					templateUrl: "components/form",
 					templateRequestParams: templateRequestParams,
-                    destroyOnHide: true,
-                    doBeforeFormSubmit: {
-                        fn: function() {
-                            isPrimaryCheckboxChecked = YAHOO.util.Dom.get( "${fieldHtmlId}-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry" ).checked;
-                        },
-                        scope: this
-                    },
-                    onSuccess: {
-                        fn: function( response ) {
+					destroyOnHide: true,
+					doBeforeFormSubmit: {
+						fn: function() {
+							isPrimaryCheckboxChecked = YAHOO.util.Dom.get( "${fieldHtmlId}-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry" ).checked;
+						},
+						scope: this
+					},
+					onSuccess: {
+						fn: function( response ) {
 
-                            var addedLinkRef = response.json.persistedObject, // persistedObject это [link-representative-and-contractor], НЕ [representative-type]
-                                fakeObject = {};
+							var addedLinkRef = response.json.persistedObject, // persistedObject это [link-representative-and-contractor], НЕ [representative-type]
+								fakeObject = {};
 
-                            fakeObject[ globCurrentContractor ] = null;
-                            YAHOO.util.Dom.get( "${controlId}" ).value = "";
+							fakeObject[ globCurrentContractor ] = null;
+							YAHOO.util.Dom.get( "${controlId}" ).value = "";
 
-                            if( isPrimaryCheckboxChecked ) {
-                                Alfresco.util.Ajax.request({
-                                    method: "POST",
-                                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/reassign",
-                                    dataObj: { "representativeToAssignAsPrimary": addedLinkRef },
-                                    requestContentType: "application/json",
-                                    responseContentType: "application/json",
-                                    successCallback: {
-                                        fn: function() {
-                                            this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
-                                        },
-                                        scope: this
-                                    },
-                                    failureCallback: {
-                                        fn: function() {
-                                            Alfresco.util.PopupManager.displayMessage({
-                                                text: Alfresco.component.Base.prototype.msg("message.reassign-representative.failure")
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
-                            }
+							if( isPrimaryCheckboxChecked ) {
+								Alfresco.util.Ajax.request({
+									method: "POST",
+									url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/reassign",
+									dataObj: { "representativeToAssignAsPrimary": addedLinkRef },
+									requestContentType: "application/json",
+									responseContentType: "application/json",
+									successCallback: {
+										fn: function() {
+											this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
+										},
+										scope: this
+									},
+									failureCallback: {
+										fn: function() {
+											Alfresco.util.PopupManager.displayMessage({
+												text: Alfresco.component.Base.prototype.msg("message.reassign-representative.failure")
+											});
+										}
+									}
+								});
+							} else {
+								this.onUpdateRepresentativesList( null, [ null, { selectedItems: fakeObject } ], /* force */ true, addedLinkRef );
+							}
 
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: Alfresco.component.Base.prototype.msg("message.add-representative.success")
-                            });
-                        },
-                        scope: this
-                    },
-                    onFailure: {
-                        fn: function() {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: Alfresco.component.Base.prototype.msg("message.add-representative.failure")
-                            });
-                        },
-                        scope: this
-                    }
-                });
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.component.Base.prototype.msg("message.add-representative.success")
+							});
+						},
+						scope: this
+					},
+					onFailure: {
+						fn: function() {
+							Alfresco.util.PopupManager.displayMessage({
+								text: Alfresco.component.Base.prototype.msg("message.add-representative.failure")
+							});
+						},
+						scope: this
+					}
+				});
 
-                addRepresentativeForm.show();
+				addRepresentativeForm.show();
 			};
 
-            this._showAddRepresentativeForm = function() {
-                if( globCurrentContractor === null ) {
-                    window.alert( "Необходимо выбрать контрагента" );
-                    return false;
-                }
+			this._showAddRepresentativeForm = function() {
+				if( globCurrentContractor === null ) {
+					window.alert( "Необходимо выбрать контрагента" );
+					return false;
+				}
 
-                // Спасаем "тонущие" всплывающие сообщения.
-                Alfresco.util.PopupManager.zIndex = 9000;
+				// Спасаем "тонущие" всплывающие сообщения.
+				Alfresco.util.PopupManager.zIndex = 9000;
 
-				//дергаем сервис который получает список представителей, которые связаны с контрагентом
+				//дергаем сервис который получает список адресантов, которые связаны с контрагентом
 				var that = this;
 				Alfresco.util.Ajax.request({
 					method: "GET",
@@ -194,184 +194,201 @@
 					failureCallback: {
 						fn: function () {
 							Alfresco.util.PopupManager.displayMessage({
-								text: "Не удалось получить список представителей, уже привязанных к контрагенту."
+								text: "Не удалось получить список адресантов, уже привязанных к контрагенту."
 							});
 						}
 					}
 				});
-                return true;
+				return true;
 			};
 
-            this.previousSelected = null;
-            this._firstSelected = null;
+			this.previousSelected = null;
+			this._firstSelected = null;
 
-            this.onFormFieldReady = function( that ) {
+			this.onFormFieldReady = function( that ) {
 
-                var addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button", { onclick: { fn: that._showAddRepresentativeForm, scope: that } } );
-                    window.arb = addRepresentativeButton;
+				var addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button", { onclick: { fn: that._showAddRepresentativeForm, scope: that } } );
+					window.arb = addRepresentativeButton;
 
-                addRepresentativeButton.setStyle("margin-left", "9px");
+				addRepresentativeButton.setStyle("margin-left", "9px");
 
-                // Собираем Input-элементы.
-                var currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
-                    addedInputEl = YAHOO.util.Dom.get( "${controlId}-added" ),
-                    removedInputEl = YAHOO.util.Dom.get( "${controlId}-removed" );
+				// Собираем Input-элементы.
+				var currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
+					addedInputEl = YAHOO.util.Dom.get( "${controlId}-added" ),
+					removedInputEl = YAHOO.util.Dom.get( "${controlId}-removed" );
 
-                // Необходимо для распознования "подёргивания".
-                that._firstSelected = currentInputEl.value;
+				// Необходимо для распознования "подёргивания".
+				that._firstSelected = currentInputEl.value;
 
-                YAHOO.util.Event.on("${selectId}", "change", function( /*event, that*/ ) {
+				YAHOO.util.Event.on("${selectId}", "change", function( /*event, that*/ ) {
 
-                    if ( that._firstSelected === this.value ) {
-                        addedInputEl.value = "";
-                        removedInputEl.value = "";
-                    } else {
-                        addedInputEl.value = this.value;
-                        removedInputEl.value = that._firstSelected;
-                    }
+					if ( that._firstSelected === this.value ) {
+						addedInputEl.value = "";
+						removedInputEl.value = "";
+					} else {
+						addedInputEl.value = this.value;
+						removedInputEl.value = that._firstSelected;
+					}
 
-                    currentInputEl.value = this.value;
-                });
-            };
+					currentInputEl.value = this.value;
+				});
+			};
 
-            YAHOO.util.Event.onContentReady( "${fieldId}", this.onFormFieldReady, this );
+			YAHOO.util.Event.onContentReady( "${fieldId}", this.onFormFieldReady, this );
 
-            return this;
-        };
+			return this;
+		};
 
-        YAHOO.extend(LogicECM.module.SelectRepresentativeForContractor, Alfresco.component.Base, {
+		YAHOO.extend(LogicECM.module.SelectRepresentativeForContractor, Alfresco.component.Base, {
 
-            options: {
-                nameSubstituteString: "{lecm-representative:surname} {lecm-representative:firstname}",
+			options: {
+				nameSubstituteString: "{lecm-representative:surname} {lecm-representative:firstname}",
 
-                openSubstituteSymbol:  "{",
-                closeSubstituteSymbol: "}"
-            },
+				openSubstituteSymbol:  "{",
+				closeSubstituteSymbol: "}"
+			},
 
-            previousSelected: null,
-            _firstSelected: null,
+			previousSelected: null,
+			_firstSelected: null,
 
-            onUpdateRepresentativesList: function( type, args, force, representativeToSelect ) {
+			onUpdateRepresentativesList: function( type, args, force, representativeToSelect ) {
 
-                var selectElement = YAHOO.util.Dom.get( "${selectId}" ),
-                    currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
-                    addedInputEl = YAHOO.util.Dom.get( "${controlId}-added" ),
-                    removedInputEl = YAHOO.util.Dom.get( "${controlId}-removed" ),
-                    selectedContractors = Object.keys( args[1].selectedItems ), // Chrome, FF 4+, IE 9+, Safari 5+
+				var selectElement = YAHOO.util.Dom.get( "${selectId}" ),
+					currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
+					addedInputEl = YAHOO.util.Dom.get( "${controlId}-added" ),
+					removedInputEl = YAHOO.util.Dom.get( "${controlId}-removed" ),
+					selectedContractors = Object.keys( args[1].selectedItems ), // Chrome, FF 4+, IE 9+, Safari 5+
 
-                    selectedContractor;
+					selectedContractor;
 
-                if( selectedContractors.length === 0 ) {
+				if( selectedContractors.length === 0 ) {
 
-                    selectElement.options.length = 1; // FUTURE: JSHint-friendly.
-                    selectElement.options[ 0 ] = new Option( "Без представителя...", "", true );
-                    selectElement.disabled = true;
+					selectElement.options.length = 1; // FUTURE: JSHint-friendly.
+					selectElement.options[ 0 ] = new Option( "Без адресанта...", "", true );
+					selectElement.disabled = true;
 
-                    this.previousSelected = null;
+					this.previousSelected = null;
 
-                    // Помечаем к удалению то, что было выбрано. Если у нас уже есть что-то, помеченное к удалению, значит
-                    // мы когда-то сменили контрагента и удалить представителя необходимо только для того, который был
-                    // выбран в самом начале. Проще говоря, кого бы мы не выбрали, удалить нам необходимо только
-                    // предыдущего.
-                    removedInputEl.value = removedInputEl.value || currentInputEl.value;
-                    addedInputEl.value = ""; // Кроме того, если мы что-то добавляли, то теперь отменяем добавление.
-                    currentInputEl.value = "";
-                    globCurrentContractor = null;
+					// Помечаем к удалению то, что было выбрано. Если у нас уже есть что-то, помеченное к удалению, значит
+					// мы когда-то сменили контрагента и удалить адресанта необходимо только для того, который был
+					// выбран в самом начале. Проще говоря, кого бы мы не выбрали, удалить нам необходимо только
+					// предыдущего.
+					removedInputEl.value = removedInputEl.value || currentInputEl.value;
+					addedInputEl.value = ""; // Кроме того, если мы что-то добавляли, то теперь отменяем добавление.
+					currentInputEl.value = "";
+					globCurrentContractor = null;
 
-                    return;
-                }
+					return;
+				}
 
-                selectElement.disabled = false;
-                selectedContractor = globCurrentContractor = selectedContractors[0];
+				selectElement.disabled = false;
+				selectedContractor = globCurrentContractor = selectedContractors[0];
 
-                // Событие на которое мы подписываем этот обработчик вызывается 3+ раз за один "выбор" контрагента, а
-                // заполнять список представителей необходимо только один раз.
-                //
-                // FUTURE: Если YAHOO.util.Dom.get не умеет кэшировать, кэшировать самому (Input-элементы).
-                if( this.previousSelected === selectedContractor ) {
-                    if( !force ) {
-                        return;
-                    }
-                } else {
-                    this.previousSelected = selectedContractor;
-                }
+				// Событие на которое мы подписываем этот обработчик вызывается 3+ раз за один "выбор" контрагента, а
+				// заполнять список адресантов необходимо только один раз.
+				//
+				// FUTURE: Если YAHOO.util.Dom.get не умеет кэшировать, кэшировать самому (Input-элементы).
+				if( this.previousSelected === selectedContractor ) {
+					if( !force ) {
+						return;
+					}
+				} else {
+					this.previousSelected = selectedContractor;
+				}
 
-                Alfresco.util.Ajax.request({
-                    method: "POST",
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/getrepresentatives",
-                    dataObj: { targetContractor: selectedContractor },
-                    requestContentType: "application/json",
-                    responseContentType: "application/json",
-                    successCallback: {
-                        fn: function ( response ) {
-                            var i,
-                                shortName,
-                                mustBeSelected;
+				Alfresco.util.Ajax.request({
+					method: "POST",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/getrepresentatives",
+					dataObj: { targetContractor: selectedContractor },
+					requestContentType: "application/json",
+					responseContentType: "application/json",
+					successCallback: {
+						fn: function ( response ) {
+							var i,
+								shortName,
+								mustBeSelected,
+								wasNotSelected = true,
+								lg = response.json.representatives.length;
 
-                            // Очищаем список.
-                            selectElement.options.length = 1; // FUTURE: JSHint-friendly...
-                            selectElement.options[ 0 ] = new Option( "Без представителя...", "", true, true );
+							// Очищаем список.
+							selectElement.options.length = 1; // FUTURE: JSHint-friendly...
+							selectElement.options[ 0 ] = new Option( "Без адресанта...", "", true, true );
 
-                            for( i = 0; i < response.json.representatives.length; ++i ) {
+							// Если представители отсутствуют.
+							if( lg == 0 ) {
+								addedInputEl.value = "";
+								removedInputEl.value = removedInputEl.value || currentInputEl.value;
+							}
 
-                                // Выбираем основного представителя.
-                                mustBeSelected = false;
+							for( i = 0; i < lg; ++i ) {
 
-                                if( representativeToSelect ) {
-                                    // representativeToSelect это [link-representative-and-contractor], НЕ [representative-type]
-                                    mustBeSelected = response.json.representatives[ i ].linkRef === representativeToSelect;
-                                } else if( currentInputEl.value === "" ) { // Если c сервера ничего не пришло или мы выбрали "Без представителя".
-                                    // То выбираем основного представителя (согласно требованиям).
-                                    mustBeSelected = response.json.representatives[ i ].isPrimary;
-                                } else { // Если c сервера что-то пришло, то мы в Edit-режиме, тогда...
-                                    if( currentInputEl.value === response.json.representatives[ i ].nodeRef ) {
-                                        // Выбираем того, кто "пришёл с сервера".
-                                        mustBeSelected = true;
-                                    }
-                                }
+								// Выбираем основного адресанта.
+								mustBeSelected = false;
 
-                                // Если у нас есть Представитель с ( mustBeSelected === true ), то снимаем выделение с
-                                // первого элемента "Без представителя...".
-                                if( mustBeSelected ) {
-                                    selectElement.options[ 0 ].selected = false;
-                                    selectElement.options[ 0 ].defaultSelected = false;
+								if( representativeToSelect ) {
+									// representativeToSelect это [link-representative-and-contractor], НЕ [representative-type]
+									mustBeSelected = response.json.representatives[ i ].linkRef === representativeToSelect;
+								} else if( currentInputEl.value === "" ) { // Если c сервера ничего не пришло или мы выбрали "Без адресанта".
+									// То выбираем основного адресанта (согласно требованиям).
+									mustBeSelected = response.json.representatives[ i ].isPrimary;
+								} else { // Если c сервера что-то пришло, то мы в Edit-режиме, тогда...
+									if( currentInputEl.value === response.json.representatives[ i ].nodeRef ) {
+										// Выбираем того, кто "пришёл с сервера".
+										mustBeSelected = true;
+									}
+								}
 
-                                    // Обновление Input-элементов из обработчика события 'change' для выпадающего списка.
-                                    // FUTURE: Вынести в отдельный метод.
-                                    if ( this._firstSelected === response.json.representatives[ i ].nodeRef ) {
-                                        addedInputEl.value = "";
-                                        removedInputEl.value = "";
-                                    } else {
-                                        addedInputEl.value = response.json.representatives[ i ].nodeRef;
-                                        removedInputEl.value = this._firstSelected;
-                                    }
+								// Если у нас есть Адресант с ( mustBeSelected === true ), то снимаем выделение с
+								// первого элемента "Без адресанта...".
+								if( mustBeSelected ) {
+									wasNotSelected = false;
 
-                                    currentInputEl.value = response.json.representatives[ i ].nodeRef;
-                                }
+									selectElement.options[ 0 ].selected = false;
+									selectElement.options[ 0 ].defaultSelected = false;
 
-                                shortName = response.json.representatives[ i ].shortName;
-                                selectElement.options[ selectElement.options.length ] = new Option(
-                                    response.json.representatives[ i ].isPrimary ? "[" + shortName + "]" : shortName,
-                                    response.json.representatives[ i ].nodeRef,
-                                    mustBeSelected,
-                                    mustBeSelected
-                                );
-                            }
-                        },
-                        scope: this
-                    },
-                    failureCallback: {
-                        fn: function () {
-                            Alfresco.util.PopupManager.displayMessage({
-                                text: "Не удалось получить список представителей для выбранного контрагента. Обновите страницу." // Alfresco.component.Base.prototype.msg("")
-                            });
-                        }
-                    }
-                });
-            }
-        });
-    })();
+									// Обновление Input-элементов из обработчика события 'change' для выпадающего списка.
+									// FUTURE: Вынести в отдельный метод.
+									if ( this._firstSelected === response.json.representatives[ i ].nodeRef ) {
+										addedInputEl.value = "";
+										removedInputEl.value = "";
+									} else {
+										addedInputEl.value = response.json.representatives[ i ].nodeRef;
+										removedInputEl.value = this._firstSelected;
+									}
 
-    new LogicECM.module.SelectRepresentativeForContractor("${controlId}");
+									currentInputEl.value = response.json.representatives[ i ].nodeRef;
+								}
+
+								shortName = response.json.representatives[ i ].shortName;
+								selectElement.options[ selectElement.options.length ] = new Option(
+									response.json.representatives[ i ].isPrimary ? "[" + shortName + "]" : shortName,
+									response.json.representatives[ i ].nodeRef,
+									mustBeSelected,
+									mustBeSelected
+								);
+							}
+
+							// Если никто из Адресантов не был выбран автоматически, значит - отсутствует Основной контакт,
+							// в этом случае, очищаем всё, что было до этого.
+							if(wasNotSelected) {
+								addedInputEl.value = "";
+								removedInputEl.value = removedInputEl.value || currentInputEl.value;
+							}
+						},
+						scope: this
+					},
+					failureCallback: {
+						fn: function () {
+							Alfresco.util.PopupManager.displayMessage({
+								text: "Не удалось получить список адресантов для выбранного контрагента. Обновите страницу." // Alfresco.component.Base.prototype.msg("")
+							});
+						}
+					}
+				});
+			}
+		});
+	})();
+
+	new LogicECM.module.SelectRepresentativeForContractor("${controlId}");
 //]]>
 </script>
