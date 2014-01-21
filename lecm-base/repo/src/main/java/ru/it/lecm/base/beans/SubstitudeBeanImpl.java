@@ -249,8 +249,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
             if (fieldName.contains(STRING_FORMAT_SYMBOL)) {
                 String fieldValue = fieldName;
-                fieldName = fieldValue.substring(0, field.indexOf(STRING_FORMAT_SYMBOL));
-                fieldFormat = fieldValue.substring(field.indexOf(STRING_FORMAT_SYMBOL) + 1, field.length());
+                fieldName = fieldValue.substring(0, fieldValue.indexOf(STRING_FORMAT_SYMBOL));
+                fieldFormat = fieldValue.substring(fieldValue.indexOf(STRING_FORMAT_SYMBOL) + 1, fieldValue.length());
             }
 
             for (String el : transitions) {

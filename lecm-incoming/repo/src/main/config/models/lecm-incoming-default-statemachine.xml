@@ -3228,7 +3228,7 @@ if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
 }
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
-var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ №<Номер документа> от <Дата документа>";
+var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ № {~REGNUM} от {lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date?dd-MM-yyyy}";
 notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
                                                         </properties>
@@ -3335,7 +3335,7 @@ if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
 }
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
-var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ №<Номер документа> от <Дата документа>";
+var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ № {~REGNUM} от {lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date?dd-MM-yyyy}";
 notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
                                                         </properties>
