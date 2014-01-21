@@ -118,7 +118,7 @@
 			<list>
 				<props>
 					<prop key="engineId">activiti</prop>
-					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-incoming-registration.bpmn20.xml</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-incoming-search-repeats.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
 					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>

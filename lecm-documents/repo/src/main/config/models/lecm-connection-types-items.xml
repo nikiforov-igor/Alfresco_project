@@ -7,6 +7,11 @@
                 <property name="lecm-connect-types:reverse-name">Имеется ответ</property>
                 <property name="lecm-connect-types:code">inResponseTo</property>
             </item>
+	        <item name="cm:Повторный к" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Повторный к</property>
+                <property name="lecm-connect-types:reverse-name">Имеет повторное</property>
+                <property name="lecm-connect-types:code">repeatedTo</property>
+            </item>
         </items>
     </item>
 </items>

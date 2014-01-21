@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/incoming/workflow/searchRepeats/1.0">
+	<process id="incomingSearchRepeats" name="Входящие: поиск повторных">
+		<startEvent id="startSearchRepeats" name="Start" activiti:formKey="lecmIncomingWf:searchRepeats"></startEvent>
+		<endEvent id="endSearchRepeats" name="End"></endEvent>
+		<scriptTask id="searchRepeats" name="Search repeats" scriptFormat="javascript">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string><![CDATA[
+							var document = bpm_package.children[0];
+							if (document != null && lecmIncomingWf_repeatedToDocument != null) {
+								documentConnection.createConnection(document, lecmIncomingWf_repeatedToDocument, "repeatedTo", true);
+							}
+						]]></activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script></script>
+		</scriptTask>
+		<receiveTask id="incomingReceiveTask" name="Receive Task"></receiveTask>
+		<sequenceFlow id="flow1" name="" sourceRef="startSearchRepeats" targetRef="searchRepeats"></sequenceFlow>
+		<sequenceFlow id="flow2" name="" sourceRef="searchRepeats" targetRef="incomingReceiveTask"></sequenceFlow>
+		<sequenceFlow id="flow3" name="" sourceRef="incomingReceiveTask" targetRef="endSearchRepeats"></sequenceFlow>
+	</process>
+</definitions>

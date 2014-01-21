@@ -18,10 +18,10 @@
 	</namespaces>
 
 	<types>
-		<type name="lecmIncomingWf:registration">
+		<type name="lecmIncomingWf:searchRepeats">
 			<parent>bpm:startTask</parent>
 			<associations>
-				<association name="lecmIncomingWf:registrationRepeatableDocument">
+				<association name="lecmIncomingWf:repeatedToDocument">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>

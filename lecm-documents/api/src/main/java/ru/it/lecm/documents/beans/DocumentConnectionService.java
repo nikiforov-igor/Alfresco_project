@@ -50,6 +50,8 @@ public interface DocumentConnectionService {
 
     public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
 
+    public static final String DICTIONARY_VALUE_REPAED_TO = "repeatedTo";
+
     // ALF-1583
     // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
     // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
