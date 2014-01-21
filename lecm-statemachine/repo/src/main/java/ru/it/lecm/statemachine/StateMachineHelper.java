@@ -1121,6 +1121,21 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
+    public void executeScript(String script, String statemachineId) {
+        try {
+            Execution execution = getExecution(statemachineId);
+            if (execution != null) {
+                Map<String, Object> vars =  activitiProcessEngineConfiguration.getRuntimeService().getVariables(execution.getId());
+                WorkflowScript base = new WorkflowScript(vars, activitiProcessEngineConfiguration);
+                base.setScript(new FixedValue(script));
+                base.notify((DelegateExecution) execution);
+            }
+        } catch (Exception e) {
+            logger.error("Error while script execution", e);
+        }
+
+    }
+
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
         ProcessDefinitionEntity processDefinitionEntity = (ProcessDefinitionEntity) ((RepositoryServiceImpl) activitiProcessEngineConfiguration.getRepositoryService()).getDeployedProcessDefinition(processDefinitionId);
@@ -1209,17 +1224,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
 
             if (!"".equals(nextState.getScript())) {
-                try {
-                    Execution execution = getExecution(statemachineId);
-                    if (execution != null) {
-                        Map<String, Object> vars =  activitiProcessEngineConfiguration.getRuntimeService().getVariables(execution.getId());
-                        WorkflowScript base = new WorkflowScript(vars, activitiProcessEngineConfiguration);
-                        base.setScript(new FixedValue(nextState.getScript()));
-                        base.notify((DelegateExecution) execution);
-                    }
-                } catch (Exception e) {
-                    logger.error("Error while script execution", e);
-                }
+                executeScript(nextState.getScript(), statemachineId);
             }
 
             if (!nextState.isForm()) {
@@ -1414,7 +1419,5 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return statuses;
     }
-
-
 
 }
