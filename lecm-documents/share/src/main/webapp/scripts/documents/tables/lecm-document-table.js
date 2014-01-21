@@ -952,7 +952,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                     var rowId = p_dialog.options.onSuccess.rowId;
                     var oDataRow = this.widgets.dataTable.getRecord(rowId);
                     if (oDataRow) {
-                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow-added");
+                        var tempIndexTag = Dom.get(this.id + "-createDetails_prop_lecm-document_indexTableRow");
                         if (tempIndexTag) {
                             var index = eval(oDataRow.getData().itemData["prop_lecm-document_indexTableRow"].value);
                             tempIndexTag.value = index+1;

@@ -1564,34 +1564,7 @@
                     <field id="lecm-contract-table-structure:end-date" />
                 </appearance>
             </form>
-            <form id="addTableRow">
-                <field-visibility>
-                    <show id="lecm-contract-table-structure:name" force="true"/>
-                    <show id="lecm-contract-table-structure:start-date" force="true"/>
-                    <show id="lecm-contract-table-structure:end-date" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-amount" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-currency-assoc" force="true"/>
-                    <show id="lecm-contract-table-structure:stage-comment" force="true"/>
-                    <!--<show id="lecm-contract-table-structure:attachments-temp-assoc" />-->
-                    <show id="lecm-document:indexTableRow" />
 
-                </field-visibility>
-                <appearance>
-                    <!--<field id="lecm-contract-table-structure:attachments-temp-assoc" >-->
-                        <!--<control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">-->
-                            <!--<control-param name="uploadDirectoryPath">{usertemp}</control-param>-->
-                            <!--<control-param name="directoryName">label.contracts.attachments</control-param>-->
-                            <!--<control-param name="showUploadNewVersion">false</control-param>-->
-                        <!--</control>-->
-                    <!--</field>-->
-                    <field id="lecm-document:indexTableRow" >
-                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
-                    </field>
-                    <field id="lecm-contract-table-structure:stage-comment">
-                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
-                    </field>
-                </appearance>
-            </form>
         </forms>
     </config>
 
