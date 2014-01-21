@@ -298,4 +298,13 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.isEditableField(document.getNodeRef(), field);
     }
 
+
+    /**
+     * @param document - документ
+     * @return Имя предыдущего статуса
+     */
+    public String getPreviousStatusName(ScriptNode document) {
+        return stateMachineHelper.getPreviousStatusName(document.getNodeRef());
+    }
+
 }

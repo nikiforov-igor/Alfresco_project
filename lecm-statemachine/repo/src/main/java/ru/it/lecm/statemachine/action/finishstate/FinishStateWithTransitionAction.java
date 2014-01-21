@@ -28,6 +28,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 	private static String PROP_CONDITION_ACCESS = "conditionAccess";
 	private static String PROP_FORM_FOLDER = "formFolder";
 	private static String PROP_FORM_TYPE = "formType";
+	private static String PROP_SCRIPT = "script";
 
 	@Override
 	public void init(Element action, String processId) {
@@ -42,6 +43,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			String formType = null;
 			String variableValue = "";
 			String conditionAccess = "";
+			String script = "";
 			boolean stopSubWorkflows = false;
 			for (Element parameter : parameters) {
 				String name = parameter.attribute("name");
@@ -58,13 +60,15 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 					variableValue = value;
 				} else if (PROP_CONDITION_ACCESS.equalsIgnoreCase(name)) {
 					conditionAccess = value;
-				} else if (StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
+				} else if (PROP_SCRIPT.equalsIgnoreCase(name)) {
+                    script = parameter.getText();
+                } else if (StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS.equalsIgnoreCase(name)) {
                     stopSubWorkflows = Boolean.parseBoolean(value);
 				}
 			}
             Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables, stopSubWorkflows, formType, formFolder);
+			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables, stopSubWorkflows, formType, formFolder, script);
 			states.add(nextState);
 		}
 	}
@@ -90,10 +94,11 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		private Conditions conditionAccess;
 		private String outputVariableName;
 		private String outputVariableValue;
+		private String script;
 		private WorkflowVariables variables;
 		private boolean stopSubWorkflows;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String script) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -104,6 +109,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
             this.stopSubWorkflows = stopSubWorkflows;
             this.formType = formType;
             this.formFolder = formFolder;
+            this.script = script;
         }
 
 		public String getActionId() {
@@ -136,6 +142,10 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 
         public boolean isStopSubWorkflows() {
             return stopSubWorkflows;
+        }
+
+        public String getScript() {
+            return script;
         }
 
         public boolean isForm() {

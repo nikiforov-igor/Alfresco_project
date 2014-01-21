@@ -677,6 +677,7 @@
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
 					<show id="lecm-stmeditor:conditionAccessField" force="true"/>
+					<show id="lecm-stmeditor:transition-script" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionLabel"/>
@@ -693,6 +694,12 @@
                             <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
                             <control-param name="height">100</control-param>
                             <control-param name="fullDelete">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-stmeditor:transition-script" >
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">20</control-param>
+                            <control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
                         </control>
                     </field>
                 </appearance>

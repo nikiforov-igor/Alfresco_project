@@ -109,18 +109,23 @@ public class ExpressionDocument {
 	}
 
 	//Наличие вложения с определенным типом
-	public boolean hasConnectionDocuments(String connectionType, String documentType) {
-		QName documentTypeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-		List<NodeRef> connectedDocuments = documentConnectionService.getConnectedDocuments(nodeRef, connectionType, documentTypeQName);
-		if (connectedDocuments != null) {
-			for (NodeRef document: connectedDocuments) {
-				if (!stateMachineHelper.isFinal(document)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+    public boolean hasConnectionDocuments(String connectionType, String documentType) {
+        QName documentTypeQName = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+        List<NodeRef> connectedDocuments = documentConnectionService.getConnectedDocuments(nodeRef, connectionType, documentTypeQName);
+        if (connectedDocuments != null) {
+            for (NodeRef document: connectedDocuments) {
+                if (!stateMachineHelper.isFinal(document)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Наличие вложения с определенным типом
+    public String getPreviousStatusName() {
+        return stateMachineHelper.getPreviousStatusName(nodeRef);
+    }
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
         ExpressionDocument.documentAttachmentsService = documentAttachmentsService;

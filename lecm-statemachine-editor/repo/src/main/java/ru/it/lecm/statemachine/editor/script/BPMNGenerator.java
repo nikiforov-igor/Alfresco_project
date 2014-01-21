@@ -765,6 +765,15 @@ public class BPMNGenerator {
                 attribute.appendChild(parameter);
             }
 
+            Object transitionScript = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_SCRIPT);
+            if (transitionScript != null) {
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "script");
+                CDATASection cdata = doc.createCDATASection(transitionScript.toString());
+                parameter.appendChild(cdata);
+                attribute.appendChild(parameter);
+            }
+
             Boolean stopSubWorkflows = getStopSubWorkflowsProperty(transition.getChildRef());
             parameter = doc.createElement("lecm:parameter");
             parameter.setAttribute("name", StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS);

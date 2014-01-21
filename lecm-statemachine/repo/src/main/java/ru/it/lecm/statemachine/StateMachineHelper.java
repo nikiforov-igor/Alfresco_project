@@ -4,6 +4,7 @@ import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
@@ -11,6 +12,7 @@ import org.activiti.engine.impl.RepositoryServiceImpl;
 import org.activiti.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
+import org.activiti.engine.impl.el.FixedValue;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.activiti.engine.impl.pvm.process.ActivityImpl;
@@ -43,6 +45,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
+import ru.it.lecm.statemachine.action.script.WorkflowScript;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
@@ -706,7 +709,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public Execution getExecution(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
-        return runtimeService.createExecutionQuery().executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
+        return runtimeService.createProcessInstanceQuery().processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
     }
 
     public static ServiceRegistry getServiceRegistry() {
@@ -1106,6 +1109,17 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
     }
 
+    @Override
+    public String getPreviousStatusName(NodeRef document) {
+        String statemachineId = getStatemachineId(document);
+        HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+        List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().executionId(statemachineId).orderByTaskId().desc().list();
+        String result = null;
+        if (tasks.size() > 1) {
+            result = tasks.get(1).getName();
+        }
+        return result;
+    }
 
     private List<StateMachineAction> getStateMachineActions(String processDefinitionId, String activityId, String onFire) {
         List<StateMachineAction> result = new ArrayList<StateMachineAction>();
@@ -1192,6 +1206,20 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
                 setExecutionParamentersByTaskId(taskId, parameters);
                 nextTransition(taskId);
+            }
+
+            if (!"".equals(nextState.getScript())) {
+                try {
+                    Execution execution = getExecution(statemachineId);
+                    if (execution != null) {
+                        Map<String, Object> vars =  activitiProcessEngineConfiguration.getRuntimeService().getVariables(execution.getId());
+                        WorkflowScript base = new WorkflowScript(vars, activitiProcessEngineConfiguration);
+                        base.setScript(new FixedValue(nextState.getScript()));
+                        base.notify((DelegateExecution) execution);
+                    }
+                } catch (Exception e) {
+                    logger.error("Error while script execution", e);
+                }
             }
 
             if (!nextState.isForm()) {

@@ -123,4 +123,10 @@ public interface StateMachineServiceBean {
      */
     public boolean isEditableField(NodeRef document, String field);
 
+    /**
+     * @param document - документ
+     * @return Имя предыдущего статуса
+     */
+    public String getPreviousStatusName(NodeRef document);
+
 }
