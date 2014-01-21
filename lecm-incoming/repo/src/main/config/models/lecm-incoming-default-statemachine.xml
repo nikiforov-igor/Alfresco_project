@@ -774,13 +774,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только регистратору.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -802,13 +802,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие применимо только к нерегистрируемым документам.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -830,13 +830,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Не выбран получатель. Получателем может быть только сотрудник.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1549,13 +1549,13 @@ notifications.sendNotificationFromCurrentUser(recipient,notificationText, doc, t
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие применимо только к нерегистрируемым документам]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -3232,7 +3232,14 @@ incoming.save();]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[var incoming = bpm_package.children[0];
+var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
+if (recipient != null && recipient.length == 1) {
+    lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
+}
+var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
+var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ №<Номер документа> от <Дата документа>";
+notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -3332,7 +3339,14 @@ incoming.save();]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[var incoming = bpm_package.children[0];
+var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
+if (recipient != null && recipient.length == 1) {
+    lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
+}
+var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
+var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ №<Номер документа> от <Дата документа>";
+notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -4489,13 +4503,13 @@ incoming.save();]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только регистратору.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4517,13 +4531,13 @@ incoming.save();]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Не выбран получатель. Получателем может быть только сотрудник.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -4545,13 +4559,13 @@ incoming.save();]]></value>
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие применимо только к нерегистрируемым документам.]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
