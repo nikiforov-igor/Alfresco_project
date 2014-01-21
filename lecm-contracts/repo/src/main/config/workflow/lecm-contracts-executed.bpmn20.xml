@@ -15,9 +15,11 @@
 
                             var allContractDocuments = contracts.getAllContractDocuments(document);
                             for (i in allContractDocuments) {
-                                allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentExecutedAspect");
-                                allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentExecuted"] = true;
-                                allContractDocuments[i].save();
+                                if (!statemachine.isFinal(allContractDocuments[i].nodeRef)) {
+                                    allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentExecutedAspect");
+                                    allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentExecuted"] = true;
+                                    allContractDocuments[i].save();
+                                }
                             }
 
                             businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", "#initiator зафиксировал(а) факт исполнения договора #mainobject.", []);

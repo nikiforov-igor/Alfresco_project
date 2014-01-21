@@ -15,9 +15,11 @@
 
                             var allContractDocuments = contracts.getAllContractDocuments(document);
                             for (i in allContractDocuments) {
-                                allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
-                                allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
-                                allContractDocuments[i].save();
+                                if (!statemachine.isFinal(allContractDocuments[i].nodeRef)) {
+                                    allContractDocuments[i].addAspect("lecm-contract-aspect:primaryDocumentDeletedAspect");
+                                    allContractDocuments[i].properties["lecm-contract-aspect:primaryDocumentDeleted"] = true;
+                                    allContractDocuments[i].save();
+                                }
                             }
 
 							var logObjects = [];
