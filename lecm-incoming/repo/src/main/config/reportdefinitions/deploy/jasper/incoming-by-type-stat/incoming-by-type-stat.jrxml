@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lecm-onk-incoming-type-stat" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-lecm-onk-incoming-type-stat.xml"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/jasper/lecm-onk-incoming-type-stat/subreports/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="col_DocType" class="java.lang.String">
+		<fieldDescription><![CDATA[Вид документа]]></fieldDescription>
+	</field>
+	<variable name="col_DocType_Count" class="java.lang.Integer" resetType="Group" resetGroup="grp_status" calculation="Count">
+		<variableExpression><![CDATA[$F{col_DocType}]]></variableExpression>
+	</variable>
+	<variable name="col_DocType_Total" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{col_DocType}]]></variableExpression>
+	</variable>
+	<group name="grp_status">
+		<groupExpression><![CDATA[$F{col_DocType}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField>
+					<reportElement uuid="a78e3311-c474-4c27-bb2c-405a42186ba7" mode="Opaque" x="0" y="0" width="271" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{col_DocType} != null && $F{col_DocType} != "" ) ? $F{col_DocType} : "не указан"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="grp_status">
+					<reportElement uuid="144400b9-71d3-4c7f-a10d-75d0e0bc5bc8" x="413" y="0" width="142" height="30"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{col_DocType_Count}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Auto" pattern="#,##0.00 %">
+					<reportElement uuid="0197bbd2-a379-47b1-9026-466055c1a446" x="271" y="0" width="142" height="30"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{col_DocType_Count}.doubleValue())/($V{col_DocType_Total}.doubleValue())]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="98fecca2-e1a2-4978-9cc6-d6d85ac31eb4" mode="Opaque" x="0" y="19" width="271" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Вид документа]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="94509782-c440-40c8-bdad-13f05d0e1047" mode="Opaque" x="413" y="19" width="142" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Количество]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f710bbcc-3ec1-4bff-bcaa-19263f08b8a4" x="0" y="0" width="555" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Статистика по видам входящих документов]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="32838331-e8fe-4141-8f6c-5325809daee0" mode="Opaque" x="271" y="19" width="142" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Процент]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="379" splitType="Stretch">
+			<pie3DChart>
+				<chart theme="default">
+					<reportElement uuid="2374c51c-ec45-443a-becd-8a72550600cc" isPrintRepeatedValues="false" x="0" y="0" width="555" height="366"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{col_DocType}]]></keyExpression>
+					<valueExpression><![CDATA[$V{col_DocType_Count}]]></valueExpression>
+				</pieDataset>
+				<pie3DPlot isShowLabels="true" depthFactor="0.3" isCircular="true" labelFormat="{0} ({2})">
+					<plot/>
+					<itemLabel>
+						<font fontName="DejaVu Sans Mono" isBold="true" isUnderline="false"/>
+					</itemLabel>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>
