@@ -237,15 +237,15 @@ public interface RegNumbersService {
 	 */
 	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
 
-    void registerProject(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException;;
+    void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
 
-    void registerDocument(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException;;
+    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
 
-    void registerProject(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+    void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
 
-    void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
 
     void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException ;
 
-    void registerDocument(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException ;
+    void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException ;
 }

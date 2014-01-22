@@ -13,7 +13,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -178,38 +177,39 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 
     @Override
-    public void registerProject(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException {
-        registerProject(dictionaryTemplateCode, documentNode, false);
+    public void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException {
+        registerProject(documentNode, dictionaryTemplateCode, false);
     }
 
     @Override
-    public void registerDocument(String dictionaryTemplateCode, NodeRef documentNode)  throws TemplateParseException, TemplateRunException{
-        registerDocument(dictionaryTemplateCode, documentNode, false);
+    public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException{
+        registerDocument(documentNode, dictionaryTemplateCode, false);
     }
 
     @Override
-    public void registerProject(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        register(dictionaryTemplateCode, documentNode, onlyReserve, true);
+    public void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
+        register(documentNode, dictionaryTemplateCode, onlyReserve, true);
     }
 
     @Override
-    public void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        register(dictionaryTemplateCode, documentNode, onlyReserve, false);
+    public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
+        register(documentNode, dictionaryTemplateCode, onlyReserve, false);
     }
 
     @Override
     public void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
-        registerProject(getTemplateString(templateRef), documentNode);
+        registerProject(documentNode, getTemplateString(templateRef));
     }
 
     @Override
-    public void registerDocument(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
-        registerDocument(getTemplateString(templateRef), documentNode);
+    public void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException {
+        registerDocument(documentNode, getTemplateString(templateRef));
     }
 
     /**
      * Получить регистрационный номер для документа по указанному шаблону и
      * записать его в документа.
+     *
      *
      * @param documentNode ссылка на экземпляр документа, которому необходимо
      * присвоить номер.
@@ -223,7 +223,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
      * неверное имя метода, функции или объекта, неверные параметры функции или
      * метода. Детали см. в эксепшене.
      */
-    private void register(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
+    private void register(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
         NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
         if (templateDictionary != null && documentNode != null) {
             QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
