@@ -83,6 +83,9 @@
 		<#if field.control.params.rootNodeRef??>
 			rootNodeRef: "${field.control.params.rootNodeRef}",
 		</#if>
+		<#if field.control.params.childrenDataSource??>
+			childrenDataSource: "${field.control.params.childrenDataSource}",
+		</#if>
 		<#if field.control.params.changeItemsFireAction??>
 			changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
 		</#if>

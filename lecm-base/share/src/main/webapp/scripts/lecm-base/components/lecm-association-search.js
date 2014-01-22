@@ -111,7 +111,9 @@ LogicECM.module = LogicECM.module || {};
 
 				showSelectedItems: true,
 
-				createDialog: false
+				createDialog: false,
+
+				childrenDataSource: "lecm/forms/picker"
 			},
 
 			onReady: function AssociationSearchViewer_onReady()
@@ -324,7 +326,7 @@ LogicECM.module = LogicECM.module || {};
 				var me = this;
 
 				// DataSource definition
-				var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/node";
+				var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource;
 				this.widgets.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
 					{
 						responseType: YAHOO.util.DataSource.TYPE_JSON,
@@ -577,7 +579,7 @@ LogicECM.module = LogicECM.module || {};
 				};
 
 				// build the url to call the pickerchildren data webscript
-				var url = this._generateChildrenUrlPath() + this._generateChildrenUrlParams(searchTerm);
+				var url = "/node/children" + this._generateChildrenUrlParams(searchTerm);
 
 				if (Alfresco.logger.isDebugEnabled())
 				{
@@ -594,12 +596,6 @@ LogicECM.module = LogicECM.module || {};
 
 				// the start location is now resolved
 				this.startLocationResolved = true;
-			},
-
-			_generateChildrenUrlPath: function AssociationSearchViewer__generatePickerChildrenUrlPath()
-			{
-				// generate the path portion of the url
-				return "/children";
 			},
 
 			_generateChildrenUrlParams: function AssociationSearchViewer__generatePickerChildrenUrlParams(searchTerm)
