@@ -235,20 +235,27 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.incoming</groupId>
-            <artifactId>incoming-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.model-editor</groupId>
-            <artifactId>model-editor-share</artifactId>
-            <version>${platform.version}</version>
-            <type>amp</type>
-            <scope>runtime</scope>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.incoming</groupId>
+			<artifactId>incoming-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.outgoing</groupId>
+			<artifactId>outgoing-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.model-editor</groupId>
+			<artifactId>model-editor-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -291,20 +291,27 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.incoming</groupId>
-            <artifactId>incoming-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.model-editor</groupId>
-            <artifactId>model-editor-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.incoming</groupId>
+			<artifactId>incoming-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.outgoing</groupId>
+			<artifactId>outgoing-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.model-editor</groupId>
+			<artifactId>model-editor-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -533,7 +540,7 @@
 					</books>
 				</configuration>
 			</plugin>
-	</plugins>
+		</plugins>
 	</build>
 	<reporting>
 		<plugins>
