@@ -144,6 +144,14 @@ public interface DocumentConnectionService {
 	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef);
 
 	/**
+	 * Получение документов, связанных с документом
+	 * @param documentRef Ссылка на документ
+	 * @param checkPermissions проверка прав
+	 * @return Список ссылок на связи
+	 */
+	public List<NodeRef> getConnectionsWithDocument(NodeRef documentRef, Boolean checkPermissions);
+
+	/**
 	 * Создание связи
 	 * @param primaryDocumentNodeRef Ссылка на исходный документ
 	 * @param connectedDocumentNodeRef  Ссылка на целевой документ

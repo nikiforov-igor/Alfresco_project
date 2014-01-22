@@ -35,6 +35,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             doubleClickLock: false,
 
+			graphTreeContainer: null,
+
+			linksContainer: null,
+
 			onReady: function()
 			{
 				this.loadConnectionsFolder();
@@ -64,6 +68,25 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				{
 					Event.addListener(rows[i], "mouseover", this.onEventHighlightRow, {row: rows[i]}, this);
 					Event.addListener(rows[i], "mouseout", this.onEventUnhighlightRow, {row: rows[i]}, this);
+				}
+
+				this.graphTreeContainer = Dom.get(this.id + "-graph-tree");
+				this.linksContainer = Dom.get(this.id + "-connections-list-container");
+
+				var viewButtonGroup = new YAHOO.widget.ButtonGroup(this.id + "-view-mode-button-group");
+				var buttons = viewButtonGroup.getButtons()
+				for (var i = 0; i < buttons.length; i++) {
+					buttons[i].addListener("click", this.viewChanged, this, true);
+				}
+			},
+
+			viewChanged: function(event) {
+				if (event.currentTarget.id === this.id + "-view-mode-radiofield-links") {
+					this.graphTreeContainer.style.display = "none";
+					this.linksContainer.style.display = "block";
+				} else if (event.currentTarget.id === this.id + "-view-mode-radiofield-tree") {
+					this.linksContainer.style.display = "none";
+					this.graphTreeContainer.style.display = "block";
 				}
 			},
 

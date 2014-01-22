@@ -185,6 +185,16 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public Scriptable getConnectionsWithDocument(String documentNodeRef, Boolean checkPermission) {
+		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+		NodeRef documentRef = new NodeRef(documentNodeRef);
+		if (this.nodeService.exists(documentRef)) {
+			List<NodeRef> connections = this.documentConnectionService.getConnectionsWithDocument(documentRef, checkPermission);
+			return createScriptable(connections);
+		}
+		return null;
+	}
+
 	public ScriptNode createConnection(String primaryDocumentNodeRef, String connectedDocumentNodeRef, String typeNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);

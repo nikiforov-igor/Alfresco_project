@@ -9,6 +9,12 @@
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
+
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/yahoo-datatable.css"/>
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree-control.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree.js"></@script>
+
     <#-- IMPORTANT for IE ! -->
     <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,
         при подключении макросом - не работают.

@@ -22,6 +22,8 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
+import static ru.it.lecm.documents.beans.DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT;
 
 /**
  * User: AIvkin
@@ -88,7 +90,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
 		return getDefaultConnectionType(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
 	}
-	
+
 	@Override
 	public NodeRef getDefaultConnectionType(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		return getDefaultConnectionType(primaryDocumentRef, connectedDocumentType, null);
@@ -250,7 +252,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			}
 		} catch (LuceneQueryParserException e) {
 			logger.error("Error while getting exist connection types", e);
-		} catch (Exception e) {
+		} catch (InvalidNodeRefException e) {
 			logger.error("Error while getting exist connection types", e);
 		} finally {
 			if (resultSet != null) {
@@ -402,6 +404,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return null;
 	}
 
+	@Override
 	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType) {
 		return getConnectedDocuments(documentRef, connectionTypeCode, connectedDocumentType, false);
 	}
@@ -486,5 +489,33 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		}
 
 		return results;
+	}
+
+	@Override
+	public List<NodeRef> getConnectionsWithDocument(final NodeRef documentRef, Boolean checkPermissions) {
+		final List<NodeRef> connections = new ArrayList<NodeRef>();
+		if (checkPermissions) {
+			connections.addAll(getConnectionsWithDocument(documentRef));
+		} else {
+			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+				@Override
+				public Void doWork() throws Exception {
+					try {
+						List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
+						if (connectionsAssocRefs != null) {
+							for (AssociationRef assocRef: connectionsAssocRefs) {
+								NodeRef connectionRef = assocRef.getSourceRef();
+								connections.add(connectionRef);
+							}
+						}
+					} catch(InvalidNodeRefException ex) {
+						String msg = String.format("Error while getting connections with document %s. Caused by: %s", documentRef, ex.getMessage());
+						logger.warn(msg);
+					}
+					return null;
+				}
+			});
+		}
+		return connections;
 	}
 }
