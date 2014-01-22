@@ -1,4 +1,4 @@
-function getPickerChildrenItems()
+function getPickerChildrenItems(filter)
 {
 	var argsFilterType = args['filterType'],
 		argsSelectableType = args['selectableType'],
@@ -123,7 +123,7 @@ function getPickerChildrenItems()
 				rootNode = resolveNode(argsRootNode) || businessPlatform.getHomeRef();
 			}
 
-			if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == ""))  {
+			if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == "") && (filter== null || filter == ""))  {
 				var ignoreTypes = null;
 				if (argsFilterType != null)
 				{
@@ -149,6 +149,9 @@ function getPickerChildrenItems()
 
 				var query = getFilterParams(argsSearchTerm, parentXPath);
 				query = addAdditionalFilter(query, argsAdditionalFilter);
+				if (filter != null) {
+					query = addAdditionalFilter(query, filter);
+				}
 
 				// Query the nodes - passing in default sort and result limit parameters
 				if (query !== "")

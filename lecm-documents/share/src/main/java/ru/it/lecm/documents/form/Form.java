@@ -39,10 +39,11 @@ public class Form extends FormUIGet {
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> model = super.executeImpl(req, status, cache);
+	    Map arguments = (Map) ((Map) model.get("form")).get("arguments");
+
         String args = req.getParameter("args");
         if (args != null) {
             try {
-                Map arguments = (Map) ((Map) model.get("form")).get("arguments");
                 JSONObject argsObject = new JSONObject(args);
                 Iterator<String> it = argsObject.keys();
                 while(it.hasNext()) {
@@ -54,6 +55,7 @@ public class Form extends FormUIGet {
                 logger.warn("Cannot parse input arguments");
             }
         }
+	    arguments.put("documentNodeRef", req.getParameter("nodeRef"));
         return model;
     }
 

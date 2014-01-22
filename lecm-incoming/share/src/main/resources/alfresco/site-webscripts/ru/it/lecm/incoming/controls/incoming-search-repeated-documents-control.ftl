@@ -23,6 +23,8 @@
 				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
 				<input type="hidden" id="${controlId}-selectedItems"/>
 
+				<input type="checkbox" id="${controlId}-search-similar">
+				<label for="${controlId}-search-similar" class="checkbox">${msg("label.search.similar")}</label>
 				<@renderSearchPickerHTML controlId/>
 			</#if>
 
@@ -96,6 +98,7 @@
 			},
 		</#if>
 		showSelectedItems: true,
+		documentRef: "${form.arguments.documentNodeRef!""}",
 		itemType: "${field.endpointType}"
 	}).setMessages( ${messages} );
 </script>
