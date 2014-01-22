@@ -12,8 +12,11 @@
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							var document = bpm_package.children[0];
-							if (document != null && lecmIncomingWf_repeatedToDocument != null) {
-								documentConnection.createConnection(document, lecmIncomingWf_repeatedToDocument, "repeatedTo", true);
+							if (document != null) {
+								var repeatToDocument = execution.getVariable("lecmIncomingWf_repeatedToDocument");
+								if (repeatToDocument != null) {
+									documentConnection.createConnection(document, repeatToDocument, "repeatedTo", true);
+								}
 							}
 						]]></activiti:string>
 					</activiti:field>

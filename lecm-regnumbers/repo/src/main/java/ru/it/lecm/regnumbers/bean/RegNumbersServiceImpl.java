@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
@@ -43,6 +44,8 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	private SearchService searchService;
 	private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
+	private DocumentService documentService;
+	private DocumentConnectionService documentConnectionService;
 
 	public final void init() {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
@@ -64,6 +67,14 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
+	}
+
+	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+		this.documentConnectionService = documentConnectionService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	@Override
@@ -183,7 +194,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
     @Override
     public void registerDocument(String dictionaryTemplateCode, NodeRef documentNode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        register(dictionaryTemplateCode,documentNode, onlyReserve, false);
+        register(dictionaryTemplateCode, documentNode, onlyReserve, false);
     }
 
     @Override
@@ -228,9 +239,17 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     nodeService.setProperty(prDataAssocs.get(0).getTargetRef(), DocumentService.PROP_REG_DATA_IS_REGISTERED, Boolean.TRUE);
                 }
             } else {
+	            String regNumber;
+	            NodeRef repeatedDocument = getRepeatedDocument(documentNode);
+	            if (repeatedDocument != null) {
+		            regNumber = getRepeatedNumber(documentNode);
+	            } else {
+		            regNumber = getNumber(documentNode, templateDictionary);
+	            }
+
                 Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
                 properties.put(DocumentService.PROP_REG_DATA_DATE, new Date());
-                properties.put(DocumentService.PROP_REG_DATA_NUMBER, getNumber(documentNode, templateDictionary));
+                properties.put(DocumentService.PROP_REG_DATA_NUMBER, regNumber);
                 properties.put(DocumentService.PROP_REG_DATA_IS_REGISTERED, !onlyReserve);
 
                 QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
@@ -242,4 +261,74 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             }
         }
     }
+
+	private NodeRef getRepeatedDocument(NodeRef documentRef) {
+		QName documentType = nodeService.getType(documentRef);
+		List<NodeRef> connectedDocument = documentConnectionService.getConnectedDocuments(documentRef, DocumentConnectionService.DICTIONARY_VALUE_REPAED_TO, documentType, true);
+
+		if (connectedDocument.size() > 0) {
+			if (connectedDocument.size() > 1) {
+				logger.warn(String.format("Document %s has more than 1 repeated documents", documentRef.toString()));
+			}
+
+			return connectedDocument.get(0);
+		}
+		return null;
+	}
+
+	private String getRepeatedNumber(NodeRef documentRef) {
+		List<NodeRef> connectedDocumentSequence = getAllRepeated(documentRef);
+		Integer maxIndex = connectedDocumentSequence.size()-1;
+		if (maxIndex > 0) {
+			NodeRef originDocumentRef = connectedDocumentSequence.get(maxIndex);
+
+			String originalDocumentRegNumber = documentService.getDocumentRegNumber(originDocumentRef);
+			if (originalDocumentRegNumber != null) {
+				return String.format("%s-(%d)", originalDocumentRegNumber, maxIndex);
+			}
+		}
+		return null;
+	}
+
+	private List<NodeRef> getAllRepeated(NodeRef documentRef) {
+		List<NodeRef> documentsRefs = getConnectionChain(documentRef); //получаем ветку имеющимся методом - нужен оригинальный документ
+
+		NodeRef currentDocumentRef;
+
+		int i = documentsRefs.size() - 1;
+		//обходим дерево повторных документов, добавляя в список (оригинальный документ всегда остается в конце списка)
+		while (i >= 0) {
+			currentDocumentRef = documentsRefs.get(i);
+			List<NodeRef> connectedWithDocumentRefs = documentConnectionService.getConnectedWithDocument(currentDocumentRef, DocumentConnectionService.DICTIONARY_VALUE_REPAED_TO, nodeService.getType(documentRef));
+			for (NodeRef connectedWithDocumentRef : connectedWithDocumentRefs) {
+				if (!documentsRefs.contains(connectedWithDocumentRef)) {
+					documentsRefs.add(i++, connectedWithDocumentRef);
+				}
+			}
+			i--;
+		}
+
+		return documentsRefs;
+	}
+
+	private List<NodeRef> getConnectionChain(NodeRef documentRef) {
+		List<NodeRef> documentsRefs = new ArrayList<NodeRef>();
+
+		NodeRef currentDocumentRef = documentRef;
+		Boolean originIsReached = Boolean.FALSE;
+		while (!originIsReached) {
+			documentsRefs.add(currentDocumentRef);
+			List<NodeRef> connectedDocumentRefs = documentConnectionService.getConnectedDocuments(currentDocumentRef, DocumentConnectionService.DICTIONARY_VALUE_REPAED_TO, nodeService.getType(documentRef));
+			if (connectedDocumentRefs.isEmpty()) {
+				originIsReached = Boolean.TRUE;
+			} else {
+				if (connectedDocumentRefs.size() > 1)
+					logger.warn(String.format("Document %s has more than 1 repeated documents", currentDocumentRef.toString()));
+
+				currentDocumentRef = connectedDocumentRefs.get(0);
+			}
+		}
+
+		return documentsRefs;
+	}
 }

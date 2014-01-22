@@ -182,6 +182,16 @@ public interface DocumentConnectionService {
 	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
 
 	/**
+	 * Получение связанных документов
+	 * @param documentRef Ссылка на документ
+	 * @param connectionTypeCode Код типа связи
+	 * @param connectedDocumentType Тип связанного документа
+	 * @param onlySystem Только системные связи
+	 * @return Связанные документы
+	 */
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
+
+	/**
 	 * Удаление связи
 	 * @param nodeRef Ссылка на связь
 	 */
@@ -193,4 +203,7 @@ public interface DocumentConnectionService {
 
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
+
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType);
 }

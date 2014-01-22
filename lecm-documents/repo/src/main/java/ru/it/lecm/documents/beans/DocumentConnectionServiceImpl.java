@@ -403,6 +403,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	}
 
 	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType) {
+		return getConnectedDocuments(documentRef, connectionTypeCode, connectedDocumentType, false);
+	}
+
+	public List<NodeRef> getConnectedDocuments(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -418,10 +422,57 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 				NodeRef connectionRef = assocRef.getSourceRef();
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+					boolean system =(Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
+					if (onlySystem || system) {
+						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
+						if (connectionType != null && connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
+								&& connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)) {
+							List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTED_DOCUMENT);
+							if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
+								NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
+								if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
+										&& nodeService.getType(connectedDocument).equals(connectedDocumentType)) {
+									results.add(connectedDocument);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return results;
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType) {
+		return getConnectedWithDocument(documentRef, null, connectedDocumentType);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+
+		List<NodeRef> results = new ArrayList<NodeRef>();
+
+		List<NodeRef> connections = getConnectionsWithDocument(documentRef);
+		if (connections != null) {
+			NodeRef connectionType = null;
+
+			if (connectionTypeCode != null) {
+				connectionType = dictionaryService.getDictionaryValueByParam(
+						DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+						DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+						connectionTypeCode);
+			}
+
+			for (NodeRef connectionRef: connections) {
+
+				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
-					if (connectionType != null && connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-							&& connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)) {
-						List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTED_DOCUMENT);
+					if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
+							&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
+						List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
 						if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
 							NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
 							if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
