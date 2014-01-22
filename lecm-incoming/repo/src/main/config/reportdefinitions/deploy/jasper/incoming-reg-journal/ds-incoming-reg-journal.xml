@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="incoming-reg-journal">
+        <l18>
+            <item key="RU_RU" value="Журнал регистрации входящих документов"/>
+        </l18>
+        <type mnem="JASPER">
+            <l18>
+                <item key="RU_RU" value="Jasper"/>
+            </l18>
+        </type>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="PROV_GENERIC_PROVIDER">
+            <l18>
+                <item key="RU_RU" value="genericProvider"/>
+            </l18>
+        </provider>
+        <template filename="incoming-reg-journal.jrxml" mnem="INCOMING_REG_JOURNAL">
+            <l18>
+                <item key="RU_RU" value="123"/>
+            </l18>
+        </template>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU" value="714f3a9a-a8c9-4228-b61a-2154b22f3e0a"/>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
+
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[+TYPE:"lecm-incoming:document"]]></queryText>
+        <allVersions>true</allVersions>
+        <preferedType>lecm-incoming:document</preferedType>
+        <isMultiRow>true</isMultiRow>
+        <isCustom>false</isCustom>
+        <flags/>
+    </query.descriptor>
+
+    <fields>
+        <!-- Parameters-->
+        <field jrFldName="dateReg" order="0" queryFldName="{lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-number}" displayName="Дата регистрации"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
+        <!-- Fields -->
+        <field alfrescoType="d:date" displayName="Дата получения"
+               queryFldName="{cm:created}" javaValueClass="java.util.Date" jrFldName="col_ReceiveDate">
+            <l18>
+                <item key="RU_RU" value="Дата получения"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Рег. номер"
+               queryFldName="{~REGNUM}" jrFldName="col_RegNum">
+            <l18>
+                <item key="RU_RU" value="Рег. номер"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Корреспондент"
+               queryFldName="~Контрагент~" jrFldName="col_Contragent">
+            <l18>
+                <item key="RU_RU" value="Корреспондент"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Исх. номер"
+               queryFldName="{lecm-incoming:outgoing-number}" jrFldName="col_OutNumber">
+            <l18>
+                <item key="RU_RU" value="Исх. номер"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:date" displayName="Исх. дата"
+               queryFldName="{lecm-incoming:outgoing-date}"
+                    javaValueClass="java.util.Date" jrFldName="col_OutDate">
+            <l18>
+                <item key="RU_RU" value="Исх. дата"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Заголовок"
+               queryFldName="{lecm-incoming:title}" jrFldName="col_Title">
+            <l18>
+                <item key="RU_RU" value="Заголовок"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Исполнитель"
+               queryFldName="{lecm-incoming:recipient-assoc/cm:name}" jrFldName="col_Recipient">
+            <l18>
+                <item key="RU_RU" value="Исполнитель"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:date" displayName="Срок исполнения"
+               queryFldName="{lecm-incoming:execution-date}"
+               javaValueClass="java.util.Date" jrFldName="col_ExecDate">
+            <l18>
+                <item key="RU_RU" value="Срок исполнения"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Вид документа"
+               queryFldName="{lecm-incoming:document-type-assoc/cm:name}" jrFldName="col_DocType">
+            <l18>
+                <item key="RU_RU" value="Вид документа"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text" displayName="Статус"
+               queryFldName="{lecm-statemachine:status}" jrFldName="col_Status">
+            <l18>
+                <item key="RU_RU" value="Статус"/>
+            </l18>
+        </field>
+    </fields>
+</ds.config>
