@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 NodeRef folder = createArchivePath(document);
                 nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
             }
+
             Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
             for (AccessPermission permission : permissions) {
                 if (permission.getPosition() == 0) {
@@ -86,6 +88,8 @@ public class ArchiveDocumentAction extends StateMachineAction {
                     getServiceRegistry().getPermissionService().setPermission(document, permission.getAuthority(), "LECM_BASIC_PG_Reader", true);
                 }
             }
+
+            nodeService.setProperty(document, StatemachineModel.PROP_STATUS, status);
 
             try {
                 String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
