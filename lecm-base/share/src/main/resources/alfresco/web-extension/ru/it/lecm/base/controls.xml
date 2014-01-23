@@ -244,9 +244,9 @@
 	            </control>
 	        </field-type>
 
-	        <field-type id="lecm-representative:representative-type" localName="Представитель">
-	            <control id="lecm-representative:representative-type-default-control" template="" localName="Выбор представителя">
-	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Представители</param>
+	        <field-type id="lecm-representative:representative-type" localName="Адресант">
+	            <control id="lecm-representative:representative-type-default-control" template="" localName="Выбор адресанта">
+	            	<param id="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</param>
                     <param id="showCreateNewLink" visible="true" localName="Показывать ссылку создания нового">false</param>
                     <param id="showCreateNewButton" visible="true" localName="Показывать кнопку создания нового">false</param>
                     <param id="nameSubstituteString">{cm:name}</param>

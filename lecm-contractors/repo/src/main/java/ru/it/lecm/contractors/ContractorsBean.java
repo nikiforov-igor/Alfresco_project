@@ -118,13 +118,13 @@ public class ContractorsBean extends BaseBean implements Contractors {
             linkRefs.add(contractorToLinkAssoc.getTargetRef());
         }
 
-        // Получить список всех ассоциаций на представителей.
+        // Получить список всех ассоциаций на адресантов.
         List<Object> representativesList = new ArrayList<Object>();
         List<NodeRef> representativeRefs = new ArrayList<NodeRef>();
         for(NodeRef linkRef : linkRefs) {
             List<AssociationRef> linkToRepresentativeAssocs = nodeService.getTargetAssocs(linkRef, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association"));
 
-            // Получить список всех представителей через ассоциации.
+            // Получить список всех адресантов через ассоциации.
             for(AssociationRef linkToRepresentativeAssoc : linkToRepresentativeAssocs) {
 
                 Map<String, Object> representativeMap = new HashMap<String, Object>();
@@ -148,7 +148,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
 
 	@Override
 	public JSONArray getBusyRepresentatives() {
-		NodeRef representativeDictionary = dictionaryService.getDictionaryByName("Контрагенты Представители");
+		NodeRef representativeDictionary = dictionaryService.getDictionaryByName("Адресанты");
 		List<ChildAssociationRef> dicValues = nodeService.getChildAssocs(representativeDictionary);
 		Set<String> representatives = new HashSet<String>();
 		for (ChildAssociationRef dicValue : dicValues) {

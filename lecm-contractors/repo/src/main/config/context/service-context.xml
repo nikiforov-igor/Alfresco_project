@@ -45,7 +45,9 @@
 
     <!-- Registration of contractor models -->
     <bean id="${groupId}.${artifactId}.contractors-model-bootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+          depends-on="dictionaryBootstrap,
+                      ru.it.lecm.dictionary.dictionary-repo.dictionary,
+                      ru.it.lecm.orgstructure.orgstructure-repo.orgDictionaryBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/contractor-model.xml</value>
@@ -172,7 +174,7 @@
         <property name="types">
             <map>
                 <entry key="lecm-contractor:contractor-type" value="Контрагент"/>
-                <entry key="lecm-representative:representative-type" value="Представитель контрагента"/>
+                <entry key="lecm-representative:representative-type" value="Адресант"/>
                 <entry key="lecm-specialization:specialization-type" value="Специализация контрагента"/>
                 <entry key="lecm-legalform:legalform-type" value="Организационно-правовая форма контрагента"/>
             </map>

@@ -11,6 +11,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.it.ru/lecm/org/structure/docTypes/1.0" prefix="lecm-orgstr-docType"/>
     </imports>
 
     <namespaces>
@@ -214,7 +215,7 @@
                     </target>
                 </association>
 
-                <!-- FK Представитель (через ссылку) -->
+                <!-- FK Адресант (через ссылку) -->
                 <child-association name="lecm-contractor:contractor-to-link-association">
                     <source>
                         <mandatory>true</mandatory>
@@ -248,7 +249,7 @@
                 </property>
             </properties>
             <associations>
-                <!-- Ассоциация с представителем -->
+                <!-- Ассоциация с адресантом -->
                 <association name="lecm-contractor:link-to-representative-association">
                     <source>
                         <mandatory>false</mandatory>
@@ -265,7 +266,7 @@
 
         <type name="lecm-representative:representative-type">
 
-            <title>Representative Type</title>
+            <title>Addresser Type</title>
             <parent>lecm-dic:plane_dictionary_values</parent>
 
             <properties>
@@ -290,39 +291,87 @@
                     <type>d:text</type>
                 </property>
 
-                <!-- Должность -->
-                <property name="lecm-representative:rank">
-                    <title>Rank</title>
+                <!-- Пол -->
+                <property name="lecm-representative:sex">
+                    <title>Sex</title>
                     <type>d:text</type>
                 </property>
 
-                <!-- Комментарии -->
-                <property name="lecm-representative:commments">
-                    <title>Comments</title>
+                <!-- Дата рождения -->
+                <property name="lecm-representative:birthdate">
+                    <title>Birthdate</title>
+                    <type>d:date</type>
+                </property>
+
+                <!-- Номер документа -->
+                <property name="lecm-representative:document-number">
+                    <title>Document Number</title>
                     <type>d:text</type>
                 </property>
 
-                <!-- Рабочий телефон -->
+                <!-- Серия документа -->
+                <property name="lecm-representative:document-series">
+                    <title>Document Series</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Дата выдачи документа -->
+                <property name="lecm-representative:document-issuance-date">
+                    <title>Document's Issuance Date</title>
+                    <type>d:date</type>
+                </property>
+
+                <!-- Телефон -->
                 <property name="lecm-representative:work-phone">
                     <title>Work Phone</title>
                     <type>d:text</type>
                 </property>
 
-                <!-- Мобильный телефон -->
-                <property name="lecm-representative:mobile-phone">
-                    <title>Mobile Phone</title>
+                <!-- Индекс -->
+                <property name="lecm-representative:zip-code">
+                    <title>Zip Code</title>
                     <type>d:text</type>
                 </property>
 
-                <!-- Местоположение -->
-                <property name="lecm-representative:location">
-                    <title>Location</title>
+                <!-- Автономный округ -->
+                <property name="lecm-representative:auto-district">
+                    <title>Autonomous District</title>
                     <type>d:text</type>
                 </property>
 
-                <!-- Факс -->
-                <property name="lecm-representative:fax">
-                    <title>Fax</title>
+                <!-- Область -->
+                <property name="lecm-representative:region">
+                    <title>Region</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Район -->
+                <property name="lecm-representative:area">
+                    <title>Area</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Населенный пункт -->
+                <property name="lecm-representative:settlement">
+                    <title>Settlement</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Улица -->
+                <property name="lecm-representative:street">
+                    <title>Street</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Дом -->
+                <property name="lecm-representative:house-number">
+                    <title>House Number</title>
+                    <type>d:text</type>
+                </property>
+
+                <!-- Квартира -->
+                <property name="lecm-representative:apartment-number">
+                    <title>Apartment Number</title>
                     <type>d:text</type>
                 </property>
 
@@ -332,21 +381,23 @@
                     <type>d:text</type>
                 </property>
 
-                <!-- Skype, ICQ -->
-                <!-- Дополнительные контакты -->
-                <property name="lecm-representative:contacts">
-                    <title>Auxiliary Contacts</title>
-                    <type>d:text</type>
-                </property>
-
-                <!-- Код представителя -->
-                <!-- Код Представителя, используется при синхронизации данного справочника с внешней системой. -->
-                <property name="lecm-representative:representative-code">
-                    <title>Representative Code</title>
-                    <type>d:text</type>
-                </property>
-
             </properties>
+
+            <associations>
+                <!-- Удостоверяющий документ (тип) -->
+                <association name="lecm-representative:representative-to-certifying-document-association">
+                    <title>Certifying Document</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr-docType:documentType</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
 
             <mandatory-aspects>
                 <aspect>cm:versionable</aspect>

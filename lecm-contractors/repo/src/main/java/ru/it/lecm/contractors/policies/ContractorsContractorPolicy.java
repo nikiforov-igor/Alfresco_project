@@ -54,7 +54,7 @@ public class ContractorsContractorPolicy implements NodeServicePolicies.OnUpdate
                 NodeRef currentContractorParentRef = nodeService.getPrimaryParent(contractor).getParentRef();
                 QName currentContractorParentType = nodeService.getType(currentContractorParentRef);
 
-                // Если текущий контрагент является представителем
+                // Если текущий контрагент является адресантом
                 if(currentContractorParentType.equals(Contractors.TYPE_CONTRACTOR)) {
 
                     Serializable currentContractorParentINN = nodeService.getProperty(currentContractorParentRef, Contractors.PROP_CONTRACTOR_INN);

@@ -83,7 +83,7 @@
                         type: "datagrid-action-link-representatives-datagrid",
                         id: "onActionDelete",
                         permission: "delete",
-                        label: "Удалить представителя"//"${msg("actions.delete-row")}"
+                        label: "Удалить адресанта"//"${msg("actions.delete-row")}"
                     }
                 ],
             </#if>
@@ -103,7 +103,7 @@
     };
 
     function _showAddRepresentativeDialog(response) {
-        // Создание формы добавления представителя.
+        // Создание формы добавления адресанта.
         var isPrimaryCheckboxChecked,
             addRepresentativeForm = new Alfresco.module.SimpleDialog("${fieldHtmlId}-add-representative-form"),
             templateRequestParams = {
@@ -183,7 +183,7 @@
         // Спасаем "тонущие" всплывающие сообщения.
         Alfresco.util.PopupManager.zIndex = 9000;
 
-        // Дергаем сервис, который получает список представителей связанных с контрагентом.
+        // Дергаем сервис, который получает список адресантов связанных с контрагентом.
         Alfresco.util.Ajax.request({
             method: "GET",
             url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/contractors/representatives/busy",
@@ -195,7 +195,7 @@
             failureCallback: {
                 fn: function() {
                     Alfresco.util.PopupManager.displayMessage({
-                        text: "Не удалось получить список представителей, уже привязанных к контрагенту."
+                        text: "Не удалось получить список адресантов, уже привязанных к контрагенту."
                     });
                 }
             }

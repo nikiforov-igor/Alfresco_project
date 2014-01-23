@@ -245,7 +245,7 @@
                         <many>false</many>
                     </target>
                 </association>
-                 <!--Представители -->
+                 <!--Адресанты -->
                 <association name="lecm-contract:representative-assoc">
                     <source>
                         <mandatory>false</mandatory>
