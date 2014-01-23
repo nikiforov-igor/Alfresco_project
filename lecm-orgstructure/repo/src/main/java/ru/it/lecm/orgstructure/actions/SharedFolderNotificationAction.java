@@ -44,6 +44,9 @@ public class SharedFolderNotificationAction extends ActionExecuterAbstractBase {
 
     @Override
     protected void executeImpl(Action action, final NodeRef nodeRef) {
+        //Если оповещения отключены ничего не делаем
+        if (!notificationService.isEnablePassiveNotifications()) return;
+
         QName type = nodeService.getType(nodeRef);
         final boolean isContent = isContent(nodeRef);
         if (dictionaryService.isSubClass(type, DocumentService.TYPE_BASE_DOCUMENT) || isContent) {

@@ -186,4 +186,15 @@ public interface NotificationsService {
      * @param dontCheckAccessToObject не проверять доступность объекта получателю
      */
     public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, NodeRef initiatorRef, boolean dontCheckAccessToObject);
+
+    /**
+     * @return Включены или выключены пассивные уведомления
+     */
+    public boolean isEnablePassiveNotifications();
+
+    /**
+     * @return Количество рабочих дней за которое должно высылаться уведомление
+     */
+    public int getSettingsNDays();
+
 }
