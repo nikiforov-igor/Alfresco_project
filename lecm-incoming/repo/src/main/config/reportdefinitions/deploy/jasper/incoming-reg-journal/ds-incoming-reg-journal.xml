@@ -71,7 +71,7 @@
         </field>
 
         <field alfrescoType="d:text" displayName="Корреспондент"
-               queryFldName="~Контрагент~" jrFldName="col_Contragent">
+               queryFldName="{lecm-incoming:sender-assoc/lecm-contractor:fullname}" jrFldName="col_Contragent">
             <l18>
                 <item key="RU_RU" value="Корреспондент"/>
             </l18>
