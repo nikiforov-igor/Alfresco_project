@@ -34,9 +34,11 @@
 
 	<div>
 		<select id="${selectId}" name="${field.name}"></select>
-		<span class="create-new-button">
-			<input type="button" id="${controlId}-add-new-representative-button"/>
-		</span>
+		<div class="show-picker">
+			<span class="create-new-button">
+				<input type="button" id="${controlId}-add-new-representative-button"/>
+			</span>
+		</div>
 	</div>
 
 	<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>

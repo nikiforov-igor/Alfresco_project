@@ -9,8 +9,8 @@
 .from-with-preview > .yui-g > .yui-u {
 	width: 405px;
 	height: 550px;
-	/*overflow-x: hidden;*/
-	/*overflow-y: auto;*/
+	overflow-x: hidden;
+	overflow-y: auto;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,
