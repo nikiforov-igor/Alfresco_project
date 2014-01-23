@@ -14,6 +14,10 @@ public class IncomingServiceImpl extends BaseBean {
 
 	public static final QName TYPE_INCOMING = QName.createQName(INCOMING_NAMESPACE_URI, "document");
 
+    public static final QName ASSOC_RECIPIENT = QName.createQName(INCOMING_NAMESPACE_URI, "recipient-assoc");
+
+    public static final QName PROP_EXECUTION_DATE = QName.createQName(INCOMING_NAMESPACE_URI, "execution-date");
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
