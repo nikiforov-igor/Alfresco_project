@@ -32,8 +32,9 @@
 <div id="${fieldId}" class="form-field">
 	<label for="${selectId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 
-	<div>
+	<div class="object-finder">
 		<select id="${selectId}" name="${field.name}"></select>
+
 		<div class="show-picker">
 			<span class="create-new-button">
 				<input type="button" id="${controlId}-add-new-representative-button"/>
@@ -211,8 +212,6 @@
 
 				var addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button", { onclick: { fn: that._showAddRepresentativeForm, scope: that } } );
 					window.arb = addRepresentativeButton;
-
-				addRepresentativeButton.setStyle("margin-left", "9px");
 
 				// Собираем Input-элементы.
 				var currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),

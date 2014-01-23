@@ -1,4 +1,5 @@
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
 	width: 75%;
 }
 
