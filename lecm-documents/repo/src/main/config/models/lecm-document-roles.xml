@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:СЭД. Технолог" type="lecm-orgstr:business-role">
+                <property name="cm:name">СЭД. Технолог</property>
+                <property name="lecm-orgstr:business-role-identifier">DA_ENGINEER</property><!-- Document Automation Engineer -->
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за настройку работы с документами</property>
+            </item>
+        </items>
+    </item>
+</items>

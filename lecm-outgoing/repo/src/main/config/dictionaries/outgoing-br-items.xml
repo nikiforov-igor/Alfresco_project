@@ -8,8 +8,8 @@
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за регистрацию документов</property>
             </item>
-            <item name="cm:Исходящие. Регистратор динамический" type="lecm-orgstr:business-role">
-                <property name="cm:name">Исходящие. Регистратор динамический</property>
+            <item name="cm:Исходящие. Регистратор документа" type="lecm-orgstr:business-role">
+                <property name="cm:name">Исходящие. Регистратор документа</property>
                 <property name="lecm-orgstr:business-role-identifier">OUTGOING_REGISTRAR_DYNAMIC</property>
                 <property name="lecm-orgstr:business-role-is-dynamic">true</property>
                 <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за регистрацию выбранного экземпляра документа</property>
@@ -25,12 +25,6 @@
                 <property name="lecm-orgstr:business-role-identifier">OUTGOING_SENDER</property>
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за отправку исходящих документов</property>
-            </item>
-            <item name="cm:Исходящие. Технолог" type="lecm-orgstr:business-role">
-                <property name="cm:name">Исходящие. Технолог</property>
-                <property name="lecm-orgstr:business-role-identifier">OUTGOING_ENGINEER</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за настройку работы с документами</property>
             </item>
         </items>
     </item>

@@ -14,7 +14,7 @@
 	<types>
 		<type name="lecm-doc-dic:subjects">
 			<title>Logic Ecm Dictionary Subjects</title>
-			<parent>lecm-dic:plane_dictionary_values</parent>
+			<parent>lecm-dic:hierarchical_dictionary_values</parent>
 			<properties>
 				<property name="lecm-doc-dic:subject-code">
 					<type>d:text</type>
