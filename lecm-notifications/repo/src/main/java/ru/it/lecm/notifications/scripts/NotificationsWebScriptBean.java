@@ -221,4 +221,8 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
 		return service.getCurrentUserDefaultNotificationTypes();
 	}
+
+	public ScriptNode getGlobalSettingsNode() {
+		return new ScriptNode(service.getGlobalSettingsNode(), serviceRegistry, getScope());
+	}
 }

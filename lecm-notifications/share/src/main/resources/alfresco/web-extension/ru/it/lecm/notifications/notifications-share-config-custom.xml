@@ -65,4 +65,26 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="node-type" condition="lecm-notf-settings:global">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-notf-settings:enable-passive"/>
+					<show id="lecm-notf-settings:n-days"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-notf-settings:global">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-notf-settings:enable-passive"/>
+					<show id="lecm-notf-settings:n-days"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

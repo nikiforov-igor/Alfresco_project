@@ -474,6 +474,27 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 		return getEmployeeDefaultNotificationTypes(orgstructureService.getCurrentEmployee());
 	}
 
+
+	public NodeRef getGlobalSettingsNode() {
+		final NodeRef rootFolder = this.getServiceRootFolder();
+		final String settingsObjectName = NOTIFICATIONS_SETTINGS_NODE_NAME;
+
+		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+		if (settings != null) {
+			return settings;
+		} else {
+			return createNode(rootFolder, TYPE_NOTIFICATIONS_GLOBAL_SETTINGS, settingsObjectName, null);
+		}
+	}
+
+	public boolean isEnablePassiveNotifications() {
+		return (Boolean) nodeService.getProperty(getGlobalSettingsNode(), PROP_ENABLE_PASSIVE_NOTIFICATIONS);
+	}
+
+	public int getSettingsNDays() {
+		return (Integer) nodeService.getProperty(getGlobalSettingsNode(), PROP_N_DAYS);
+	}
+
     @Override
 	public void sendNotification(String author, NodeRef object, String textFormatString, List<NodeRef> recipientEmployees, List<String> channels, NodeRef initiatorRef) {
         sendNotification(author, object, textFormatString, recipientEmployees, channels, initiatorRef, false);

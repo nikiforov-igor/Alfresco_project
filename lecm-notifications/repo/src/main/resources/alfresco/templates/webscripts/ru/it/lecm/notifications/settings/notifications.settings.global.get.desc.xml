@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Notifications Module Global Settings Node</shortname>
+	<description>Notifications Module Global Settings Node</description>
+	<url>/lecm/notifications/getGlobalSettings</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction>none</transaction>
+</webscript>

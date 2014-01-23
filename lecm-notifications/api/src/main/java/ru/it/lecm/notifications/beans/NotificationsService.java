@@ -49,6 +49,10 @@ public interface NotificationsService {
 	public static final QName TYPE_NOTIFICATIONS_USER_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "user");
 	public static final QName ASSOC_DEFAULT_NOTIFICATIONS_TYPES = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "default-types-assoc");
 
+	public static final QName TYPE_NOTIFICATIONS_GLOBAL_SETTINGS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "global");
+	public static final QName PROP_ENABLE_PASSIVE_NOTIFICATIONS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "enable-passive");
+	public static final QName PROP_N_DAYS = QName.createQName(NOTIFICATIONS_SETTINGS_NAMESPACE_URI, "n-days");
+
 	public static final String NOTIFICATIONS_SETTINGS_NODE_NAME = "Settings";
 
 	/**
@@ -132,6 +136,12 @@ public interface NotificationsService {
 	 * @return Список ссылок на типы доставки уведомлений
 	 */
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes();
+
+	/**
+	 * Получение глобальных настроек
+	 * @return ссылка на объект настроек
+	 */
+	public NodeRef getGlobalSettingsNode();
 
 	/**
 	 * Отправка уведомления сотрудникам
