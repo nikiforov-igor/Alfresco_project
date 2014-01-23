@@ -76,7 +76,6 @@ public class ArchiveDocumentAction extends StateMachineAction {
                 }
             } else {
                 String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-                nodeService.setProperty(document, QName.createQName("http://www.it.ru/logicECM/statemachine/1.0", "status"), status);
                 NodeRef folder = createArchivePath(document);
                 nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
             }
