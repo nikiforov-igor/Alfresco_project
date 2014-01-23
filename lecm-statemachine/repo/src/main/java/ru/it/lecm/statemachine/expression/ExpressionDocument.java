@@ -131,7 +131,7 @@ public class ExpressionDocument {
         return stateMachineHelper.getPreviousStatusName(nodeRef);
     }
 
-	public boolean hasDuplicates(String... props) {
+	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {
 		NodeService nodeService = serviceRegistry.getNodeService();
 
 		List<QName> types = new ArrayList<QName>();
@@ -154,8 +154,16 @@ public class ExpressionDocument {
 		}
 
 		List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, filters.toString(), null);
-		documents.remove(this.nodeRef);
-		return documents.size() > 0;
+		List<NodeRef> filteredDocuments = new ArrayList<NodeRef>();
+		if (documents != null) {
+			for (NodeRef document: documents) {
+				if (document != this.nodeRef && documentService.getDocumentRegData(document) != null) {
+					filteredDocuments.add(document);
+				}
+			}
+		}
+
+		return filteredDocuments.size() > 0;
 	}
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
