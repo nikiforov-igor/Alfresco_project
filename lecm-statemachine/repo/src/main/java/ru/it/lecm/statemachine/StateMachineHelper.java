@@ -1216,15 +1216,15 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
             }
 
+            if (!"".equals(nextState.getScript())) {
+                executeScript(nextState.getScript(), statemachineId);
+            }
+
             if (!"".equals(nextState.getOutputVariableValue())) {
                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                 parameters.put(nextState.getOutputVariableName(), nextState.getOutputVariableValue());
                 setExecutionParamentersByTaskId(taskId, parameters);
                 nextTransition(taskId);
-            }
-
-            if (!"".equals(nextState.getScript())) {
-                executeScript(nextState.getScript(), statemachineId);
             }
 
             if (!nextState.isForm()) {
