@@ -2,8 +2,6 @@ package ru.it.lecm.notifications.email.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.executer.MailActionExecuter;
-import org.alfresco.repo.model.Repository;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ActionService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -38,19 +36,9 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	public final QName TYPE_NOTIFICATION_EMAIL = QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, "notification");
 	public final QName PROP_EMAIL = QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, "email");
 
-	private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
 	protected NotificationsService notificationsService;
 	private ActionService actionService;
 	private NodeRef rootRef;
-
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
-	public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
-	}
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
@@ -73,7 +61,12 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		String email = (String) nodeService.getProperty(notification.getRecipientRef(), OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 		if (email != null) {
 			createNotification(notification, email);
-			sendEmail(notification, email);
+
+			String subject = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
+			if (subject == null) {
+				subject = "New notification";
+			}
+			sendEmail(subject, notification.getDescription(), email);
 			return true;
 		} else {
 			return false;
@@ -108,20 +101,13 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		return result;
 	}
 
-	/**
-	 * Отправка письма с уведомлением на почту сотрудника
-	 *
-	 * @param notification Атомарное уведомление
-	 * @param email Адрес электронной почты
-	 */
-	private void sendEmail(NotificationUnit notification, String email) {
+	public void sendEmail(String subject, String message, String email) {
 		logger.debug("Sending email to: {}", email);
 		Action mail = actionService.createAction(MailActionExecuter.NAME);
 
 		mail.setParameterValue(MailActionExecuter.PARAM_TO, email);
-		String message = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
-		mail.setParameterValue(MailActionExecuter.PARAM_SUBJECT, message != null ? message : "New notification");
-		mail.setParameterValue(MailActionExecuter.PARAM_HTML, notification.getDescription());
+		mail.setParameterValue(MailActionExecuter.PARAM_SUBJECT, subject);
+		mail.setParameterValue(MailActionExecuter.PARAM_HTML, message);
 		mail.setExecuteAsynchronously(true);
 		actionService.executeAction(mail, null);
 	}

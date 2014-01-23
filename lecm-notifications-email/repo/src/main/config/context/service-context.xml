@@ -33,9 +33,7 @@
 
 	<bean id="notificationEmailChannel" init-method="init" class="ru.it.lecm.notifications.email.beans.NotificationsEmailChannel"
 	      depends-on="ServiceRegistry, nodeService, repositoryHelper, notificationsService, transactionService" parent="baseBean">
-		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="nodeService" ref="nodeService"/>
-		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="actionService" ref="ActionService"/>
 		<property name="transactionService" ref="transactionService"/>
@@ -44,6 +42,16 @@
 			<map>
 				<entry key="#{NOTIFICATIONS_EMAIL_ROOT_ID}" value="#{NOTIFICATIONS_ROOT_NAME}/#{NOTIFICATIONS_EMAIL_ROOT_NAME}"/>
 			</map>
+		</property>
+	</bean>
+
+	<bean id="notificationsEmailScript" parent="baseScript" class="ru.it.lecm.notifications.email.scripts.NotificationsEmailWebScriptBean"
+	      depends-on="notificationEmailChannel">
+		<property name="extensionName">
+			<value>notificationsEmail</value>
+		</property>
+		<property name="notificationsEmailService">
+			<ref bean="notificationEmailChannel"/>
 		</property>
 	</bean>
 </beans>

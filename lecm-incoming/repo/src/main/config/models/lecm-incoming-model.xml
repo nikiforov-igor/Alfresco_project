@@ -321,7 +321,7 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!--Адресаты -->
+				<!--Адресат -->
 				<association name="lecm-incoming:addressee-assoc">
 					<title>Адресат</title>
 					<source>
