@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
@@ -303,9 +304,10 @@ public class ParameterMapper {
 
     /**
      * Получение названия аргумента, который соот-ет параметризации колонки.
+     *
      * @param colDesc колонка, для которой получить название "её" аргумента
      * @return NULL, если колонка не является параметризуемой,
-     *         иначе мнемоника параметра, а если она не задана - название колонки (columnName).
+     * иначе мнемоника параметра, а если она не задана - название колонки (columnName).
      */
     public static String getArgRootName(final ColumnDescriptor colDesc) {
         if (colDesc == null || colDesc.getParameterValue() == null) {
@@ -340,5 +342,45 @@ public class ParameterMapper {
             }
         }
         return result;
+    }
+
+    public static List<Object> getArgsList(final ColumnDescriptor colDesc) {
+        List<Object> result = new ArrayList<Object>();
+
+        if (colDesc == null || colDesc.getParameterValue() == null) {
+            return result;
+        }
+
+        final Object argValue1 = colDesc.getParameterValue().getBound1();
+        if (argValue1 == null) {
+            return result;
+        }
+
+        if (argValue1 instanceof String[]){
+            for (String item : (String[]) argValue1) {
+                if (NodeRef.isNodeRef(item)) {
+                    result.add(new NodeRef(item));
+                } else {
+                    result.add(item);
+                }
+            }
+        } else {
+            result.add(argValue1);
+        }
+
+        final Object argValue2 = colDesc.getParameterValue().getBound2();
+
+        if (argValue2 != null) { // имеет смысл только для диапозонов
+            result.add(argValue2);
+        }
+
+        return result;
+    }
+
+    public static DataFilter.FilterType getFilterType(final ColumnDescriptor colDesc) {
+        if (colDesc == null || colDesc.getParameterValue() == null) {
+            return null;
+        }
+        return DataFilter.FilterType.getFilterByParamType(colDesc.getParameterValue().getType());
     }
 }

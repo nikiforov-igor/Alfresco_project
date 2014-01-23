@@ -188,7 +188,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                         result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
                     }
                 } else if (nameParams.size() == 1) {
-                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset);
+                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
                 }
 
                 return result;
@@ -216,7 +216,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * @param field выражение для элемента (ассоциации, условия и атрибуты)
      * @return {Object}
      */
-    public Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
+    private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset, boolean returnRealTypes) {
         NodeRef showNode = node;
         List<NodeRef> showNodes = new ArrayList<NodeRef>();
         String fieldName;
@@ -364,7 +364,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         if (showNode != null) {
             if (!fieldName.contains("~")) {
                 if (fieldName.equals("nodeRef")) {
-                    result = showNode.toString();
+                    result = returnRealTypes ? showNode : showNode.toString();
                 } else {
                     Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
                     if (property != null) {
@@ -377,23 +377,31 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                                 result = cal.getTime();
                             }
 
-                            DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
-                            result = dFormat.format(result);
+                            if (!returnRealTypes) {
+                                DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
+                                result = dFormat.format(result);
+                            }
                         }
                     } else {
-                        result = "";
+                        result = !returnRealTypes ? "" : null;
                     }
                 }
             }
-            if (wrapAsLink && !result.toString().isEmpty()) {
-                SysAdminParams params = serviceRegistry.getSysAdminParams();
-                String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-                result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
-                        + result + "</a>";
+            if (!returnRealTypes) {
+                if (wrapAsLink && !result.toString().isEmpty()) {
+                    SysAdminParams params = serviceRegistry.getSysAdminParams();
+                    String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+                    result = "<a href=\"" + serverUrl + LINK_URL + "?nodeRef=" + showNode.toString() + "\">"
+                            + result + "</a>";
+                }
             }
         }
 
         return result;
+    }
+
+    private Object getSubstitudeField(NodeRef node, String field, String dateFormat, Integer timeZoneOffset) {
+        return getSubstitudeField(node, field, dateFormat, timeZoneOffset, false);
     }
 
     /**
@@ -405,11 +413,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      */
     @Override
     public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp) {
-       PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
+        PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
         if (pseudo != null) {
             return pseudo.getObjectsByPseudoProp(object, documentService);
         }
-        return  null;
+        return null;
     }
 
     /**
@@ -515,6 +523,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
     /**
      * Метод возвращающий шаблон описание по типу объхекта
+     *
      * @param objectType - ссылка на тип объекта
      * @return сформированное описание или DEFAULT_OBJECT_TYPE_TEMPLATE, если для типа не задан шаблон
      */

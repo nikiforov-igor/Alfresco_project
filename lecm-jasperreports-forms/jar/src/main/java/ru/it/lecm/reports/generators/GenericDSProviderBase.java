@@ -1,8 +1,6 @@
 package ru.it.lecm.reports.generators;
 
 import net.sf.jasperreports.engine.*;
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -15,11 +13,8 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.AssocDataFilter;
-import ru.it.lecm.reports.api.AssocDataFilter.AssocKind;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
@@ -27,9 +22,10 @@ import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.config.JRDSConfigXML;
-import ru.it.lecm.reports.jasper.filter.AssocDataFilterImpl;
+import ru.it.lecm.reports.jasper.filter.DataFilterByLinks;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.jasper.utils.JRUtils;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -201,7 +197,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
         clearSearch();
         loadConfig();
-		/* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
+        /* формирование запроса: параметры выбираются непосредственно из reportDescriptor */
         this.alfrescoQuery = this.buildQuery();
 
         if (logger.isDebugEnabled()) {
@@ -347,39 +343,21 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             return null;
         }
 
-        // TODO: надо разработать фильтр, который смог бы проверять длинные ссылки (DataFilterByLinks)
-        final AssocDataFilterImpl result = new AssocDataFilterImpl(this.getServices().getServiceRegistry());
-
-        final NamespaceService ns = this.getServices().getServiceRegistry().getNamespaceService();
-        final DictionaryService ds = this.getServices().getServiceRegistry().getDictionaryService();
-
         boolean useFilter = false;
+
+        final DataFilterByLinks result = new DataFilterByLinks(getServices().getSubstitudeService());
+
         for (ColumnDescriptor colDesc : this.alfrescoQuery.argsByLinks()) {
-            /*
-             * Example:
-				final QName qnCSubject = QName.createQName( "lecm-doc-dic:subject-code", ns); // Тематика договора, "lecm-contract:subjectContract-assoc"
-				final QName qnAssocCSubject = QName.createQName( "lecm-contract:subjectContract-assoc", ns);
-				result.addAssoc( qnCSubject, qnAssocCSubject, contractSubject, AssocKind.target);
-			 */
             try {
-                QName targetType;
+                DataFilter.FilterType filter;
                 String expression = colDesc.getExpression();
                 if (Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL)
                         && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
-                    if (!expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL)) {
-                        // TODO добавить обработку parent и source ассоциаций, согласно правилам substitudeService
-                        expression = expression.replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
-                        final QName qnAssocType = QName.createQName(expression, ns);
-                        final AssociationDefinition assocDef = ds.getAssociation(qnAssocType);
-                        if (assocDef != null) {
-                            final List<NodeRef> idsTarget = ParameterMapper.getArgAsNodeRef(colDesc);
-                            if (!idsTarget.isEmpty()) {
-                                targetType = assocDef.getTargetClass().getName();
-                                final AssocKind kind = (assocDef.isChild()) ? AssocKind.child : AssocKind.target;
-                                useFilter = true;
-                                result.addAssoc(new AssocDataFilter.AssocDesc(kind, qnAssocType, targetType, idsTarget));
-                            }
-                        }
+                    final List<Object> targetValues = ParameterMapper.getArgsList(colDesc);
+                    if (!targetValues.isEmpty()) {
+                        filter = ParameterMapper.getFilterType(colDesc);
+                        useFilter = true;
+                        result.addFilter(new DataFilter.DataFilterDesc(filter, expression, targetValues));
                     }
                 }
             } catch (Exception ignored) {
@@ -409,8 +387,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
                 if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
                     for (ReportDescriptor subreport : getReportDescriptor().getSubreports()) {
                         if (subreport instanceof SubReportDescriptorImpl) {
-                            final Object stringOrBean = prepareSubReport(docId, (SubReportDescriptorImpl)subreport, resolver);
-                            context.getCurNodeProps().put(getAlfAttrNameByJRKey(((SubReportDescriptorImpl)subreport).getDestColumnName()), stringOrBean);
+                            final Object stringOrBean = prepareSubReport(docId, (SubReportDescriptorImpl) subreport, resolver);
+                            context.getCurNodeProps().put(getAlfAttrNameByJRKey(((SubReportDescriptorImpl) subreport).getDestColumnName()), stringOrBean);
                         }
                     }
                 }
@@ -424,8 +402,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      *
      * @param subreport SubReportDescriptorImpl
      * @return <li> ОДНУ строку, если subreport должен форматироваться (строка будет
-     *         состоять из форматированных всех элементов ассоциированного списка),
-     *         <li> или список бинов List[Object] - по одному на каждую строку
+     * состоять из форматированных всех элементов ассоциированного списка),
+     * <li> или список бинов List[Object] - по одному на каждую строку
      */
     private static Object prepareSubReport(NodeRef docId, SubReportDescriptorImpl subreport, LinksResolver resolver) {
         if (Utils.isStringEmpty(subreport.getSourceListExpression())) {
