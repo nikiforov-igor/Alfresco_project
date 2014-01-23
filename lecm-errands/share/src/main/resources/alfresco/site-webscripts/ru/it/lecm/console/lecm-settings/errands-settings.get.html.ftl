@@ -1,6 +1,6 @@
 <#assign el=args.htmlid?html>
 <script type="text/javascript">//<![CDATA[
-	new LogicECM.ErrandsSettings("${el}").setMessages(${messages});
+	new LogicECM.ErrandsSettings("${el}-body").setMessages(${messages});
 //]]></script>
 
 <div id="${el}-body" class="errands-settings">
@@ -10,5 +10,5 @@
 		</div>
 	</div>
 
-	<div id="${el}-settings"></div>
+	<div id="${el}-body-settings"></div>
 </div>

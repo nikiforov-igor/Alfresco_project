@@ -4,33 +4,14 @@
 
 	LogicECM.NotificationsGlobalSettings = function(htmlId)
 	{
-		this.name = "LogicECM.NotificationsGlobalSettings";
-		LogicECM.NotificationsGlobalSettings.superclass.constructor.call(this, htmlId);
-
-		/* Register this component */
-		Alfresco.util.ComponentManager.register(this);
-
-		/* Load YUI Components */
-		Alfresco.util.YUILoaderHelper.require(["button", "container", "json"], this.onComponentsLoaded, this);
-
-		NotificationsGlobalSettingsPanelHandler = function NotificationsGlobalSettingsPanelHandler()
-		{
-			NotificationsGlobalSettingsPanelHandler.superclass.constructor.call(this, "notifications-settings");
-		};
-
-		YAHOO.extend(NotificationsGlobalSettingsPanelHandler, Alfresco.ConsolePanelHandler, {});
-		new NotificationsGlobalSettingsPanelHandler();
-
+		LogicECM.NotificationsGlobalSettings.superclass.constructor.call(this, "LogicECM.NotificationsGlobalSettings", htmlId, ["container", "json"]);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.NotificationsGlobalSettings, Alfresco.ConsoleTool,
+	YAHOO.extend(LogicECM.NotificationsGlobalSettings, Alfresco.component.Base,
 		{
 			onReady: function ()
 			{
-				// Call super-class onReady() method
-				LogicECM.NotificationsGlobalSettings.superclass.onReady.call(this);
-
 				this.loadSettings();
 			},
 

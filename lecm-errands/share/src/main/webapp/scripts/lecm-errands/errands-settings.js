@@ -1,53 +1,17 @@
 (function()
 {
-	/**
-	 * YUI Library aliases
-	 */
-	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
-		Element = YAHOO.util.Element;
+	var Dom = YAHOO.util.Dom;
 
-	/**
-	 * Alfresco Slingshot aliases
-	 */
-	var $html = Alfresco.util.encodeHTML;
-
-	/**
-	 * ConsoleTrashcan constructor.
-	 *
-	 * @param {String} htmlId The HTML id �of the parent element
-	 * @return {Alfresco.ConsoleTrashcan} The new ConsoleTrashcan instance
-	 * @constructor
-	 */
 	LogicECM.ErrandsSettings = function(htmlId)
 	{
-		this.name = "LogicECM.ErrandsSettings";
-		LogicECM.ErrandsSettings.superclass.constructor.call(this, htmlId);
-
-		/* Register this component */
-		Alfresco.util.ComponentManager.register(this);
-
-		/* Load YUI Components */
-		Alfresco.util.YUILoaderHelper.require(["button", "container", "json"], this.onComponentsLoaded, this);
-
-		ErrandsSettingsPanelHandler = function ErrandsSettingsPanelHandler()
-		{
-			ErrandsSettingsPanelHandler.superclass.constructor.call(this, "errands-settings");
-		};
-
-		YAHOO.extend(ErrandsSettingsPanelHandler, Alfresco.ConsolePanelHandler, {});
-		new ErrandsSettingsPanelHandler();
-
+		LogicECM.ErrandsSettings.superclass.constructor.call(this, "LogicECM.ErrandsSettings", htmlId, ["container", "json"]);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.ErrandsSettings, Alfresco.ConsoleTool,
+	YAHOO.extend(LogicECM.ErrandsSettings, Alfresco.component.Base,
 		{
-			onReady: function ConsoleErrandsSettings_onReady()
+			onReady: function ()
 			{
-				// Call super-class onReady() method
-				LogicECM.ErrandsSettings.superclass.onReady.call(this);
-
 				this.loadSettings();
 			},
 
