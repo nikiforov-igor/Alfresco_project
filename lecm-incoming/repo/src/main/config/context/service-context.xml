@@ -191,6 +191,7 @@
         </property>
         <property name="documentService" ref="documentService"/>
         <property name="calendarBean" ref="WorkCalendarService"/>
+        <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
 </beans>

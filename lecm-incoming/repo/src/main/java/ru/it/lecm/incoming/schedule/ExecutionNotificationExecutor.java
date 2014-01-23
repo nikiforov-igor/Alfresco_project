@@ -73,6 +73,7 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
         Date now = normalizeDate(new Date());
         Date incomingExecutionDate = (Date) nodeService.getProperty(nodeRef, IncomingServiceImpl.PROP_EXECUTION_DATE);
         incomingExecutionDate = normalizeDate(incomingExecutionDate);
+        int days = notificationsService.getSettingsNDays();
         Date workCalendarDate = calendarBean.getNextWorkingDate(now, 5);
 
         String notificationDescription = null;

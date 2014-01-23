@@ -12,6 +12,7 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
@@ -47,6 +48,7 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
     private NodeService nodeService;
     private DocumentService documentService;
     private IWorkCalendar calendarBean;
+    private NotificationsService notificationsService;
 
     public ExecutionNotificationSchedule() {
         super();
@@ -58,6 +60,10 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
 
     public void setScheduler(Scheduler scheduler) {
         this.scheduler = scheduler;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
     }
 
     @Override
@@ -166,7 +172,8 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
         Date start = new Date(0);
 
         Calendar calendar = Calendar.getInstance();
-        Date end = calendarBean.getNextWorkingDate(new Date(), 5);
+        int days =  notificationsService.getSettingsNDays();
+        Date end = calendarBean.getNextWorkingDate(new Date(), days);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR, 0);
@@ -194,4 +201,5 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
         List<NodeRef> incomingDocuments = documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
         return incomingDocuments;
     }
+
 }
