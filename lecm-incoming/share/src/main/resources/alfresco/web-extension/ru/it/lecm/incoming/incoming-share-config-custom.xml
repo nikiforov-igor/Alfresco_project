@@ -319,6 +319,8 @@
                     <show id="lecm-incoming:recipient-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
                     <show id="lecm-incoming:file-register-assoc"/>
+	                <show id="lecm-incoming:sender-assoc"/>
+	                <show id="lecm-incoming:addressee-assoc"/>
                 </field-visibility>
             </form>
         </forms>

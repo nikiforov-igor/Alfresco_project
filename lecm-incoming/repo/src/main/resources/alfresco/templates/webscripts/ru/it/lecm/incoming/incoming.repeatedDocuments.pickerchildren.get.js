@@ -6,6 +6,8 @@ function main() {
 		var document = search.findNode(args["documentRef"]);
 		if (document != null) {
 			filter = addSimilarFilter(filter, document, "lecm-incoming:subject-assoc-ref");
+			filter = addSimilarFilter(filter, document, "lecm-incoming:sender-assoc-ref");
+			filter = addSimilarFilter(filter, document, "lecm-incoming:addressee-assoc-ref");
 		}
 	}
 
