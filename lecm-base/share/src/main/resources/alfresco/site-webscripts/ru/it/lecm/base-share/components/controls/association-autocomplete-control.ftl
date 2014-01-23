@@ -15,6 +15,18 @@
     </#if>
 </#if>
 
+<#if fieldValue?string == "" && field.control.params.selectedItemsFormArgs??>
+	<#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
+	<#list selectedItemsFormArgs as selectedItemsFormArg>
+		<#if form.arguments[selectedItemsFormArg]??>
+			<#if (fieldValue?length > 0)>
+				<#assign fieldValue = fieldValue + ","/>
+			</#if>
+			<#assign fieldValue = fieldValue + form.arguments[selectedItemsFormArg]/>
+		</#if>
+	</#list>
+</#if>
+
 <#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
     <#assign showCreateNewLink = false>
 <#else>
