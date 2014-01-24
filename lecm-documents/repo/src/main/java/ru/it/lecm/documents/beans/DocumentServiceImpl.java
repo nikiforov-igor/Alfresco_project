@@ -599,7 +599,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 	public Collection<QName> getDocumentSubTypes() {
 		Collection<QName> subTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
         subTypes.remove(DocumentService.TYPE_BASE_DOCUMENT);
-        subTypes.remove(DocumentService.TYPE_EDS_DOCUMENT);
         return subTypes;
 	}
 

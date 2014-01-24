@@ -322,6 +322,7 @@
 	                <show id="lecm-incoming:sender-assoc"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
 	                <show id="lecm-document-aspects:is-shared-folder"/>
+                    <show id="lecm-document-aspects:response-to-assoc"/>
                 </field-visibility>
             </form>
         </forms>

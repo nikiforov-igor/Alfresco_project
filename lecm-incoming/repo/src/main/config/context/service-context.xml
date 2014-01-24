@@ -82,6 +82,8 @@
                 <value>lecm-document:subject-assoc</value>
                 <value>lecm-incoming:delivery-method-assoc</value>
                 <value>lecm-incoming:recipient-assoc</value>
+                <value>lecm-incoming:sender-assoc</value>
+                <value>lecm-incoming:addressee-assoc</value>
             </list>
         </property>
     </bean>

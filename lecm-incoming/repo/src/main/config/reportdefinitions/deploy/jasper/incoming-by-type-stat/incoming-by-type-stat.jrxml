@@ -35,7 +35,7 @@
 		<groupExpression><![CDATA[$F{col_DocType}]]></groupExpression>
 		<groupHeader>
 			<band height="30">
-				<textField>
+				<textField isBlankWhenNull="true">
 					<reportElement uuid="a78e3311-c474-4c27-bb2c-405a42186ba7" mode="Opaque" x="0" y="0" width="271" height="30"/>
 					<box leftPadding="10">
 						<pen lineWidth="1.0" lineColor="#78C0D4"/>
@@ -49,7 +49,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[($F{col_DocType} != null && $F{col_DocType} != "" ) ? $F{col_DocType} : "не указан"]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Group" evaluationGroup="grp_status">
+				<textField evaluationTime="Group" evaluationGroup="grp_status" isBlankWhenNull="true">
 					<reportElement uuid="144400b9-71d3-4c7f-a10d-75d0e0bc5bc8" x="413" y="0" width="142" height="30"/>
 					<box>
 						<pen lineWidth="1.0" lineColor="#78C0D4"/>
@@ -63,7 +63,7 @@
 					</textElement>
 					<textFieldExpression><![CDATA[$V{col_DocType_Count}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Auto" pattern="#,##0.00 %">
+				<textField evaluationTime="Auto" pattern="#,##0.00 %" isBlankWhenNull="true">
 					<reportElement uuid="0197bbd2-a379-47b1-9026-466055c1a446" x="271" y="0" width="142" height="30"/>
 					<box>
 						<pen lineWidth="1.0" lineColor="#78C0D4"/>
