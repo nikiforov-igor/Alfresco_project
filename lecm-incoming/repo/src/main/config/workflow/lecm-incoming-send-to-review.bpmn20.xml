@@ -57,7 +57,20 @@
 				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
 								    }
 								} else {
+									var recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWER", true);
 
+									if (recipients.length > 0) {
+							            for (var i = 0; i < recipients.length; i++) {
+							                statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYNAMIC");
+							            }
+
+								        var notificationText = "Поступил документ на рассмотрение ";
+	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
+	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+							        }
+
+			                        var logText = "Документ #mainobject был направлен рассматривающим";
+			                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, []);
 								}
 							}
 						]]></activiti:string>
