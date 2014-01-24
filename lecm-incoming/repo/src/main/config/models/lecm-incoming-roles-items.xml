@@ -32,6 +32,12 @@
                 <property name="lecm-orgstr:business-role-is-dynamic">false</property>
                 <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за первичное рассмотрение входящих документов в подразделении.</property>
             </item>
+	        <item name="cm:Входящие. Рассматривающий. Динамическая роль" type="lecm-orgstr:business-role">
+                <property name="cm:name">Входящие. Рассматривающий. Динамическая роль</property>
+                <property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWER_DYNAMIC</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
+                <property name="lecm-orgstr:business-role-description">.</property>
+            </item>
         </items>
     </item>
 </items>
