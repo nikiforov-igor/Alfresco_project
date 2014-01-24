@@ -209,6 +209,22 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+                <property name="lecm-incoming:recipient-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-incoming:recipient-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
                 <!-- Поступившее по каналам -->
                 <property name="lecm-incoming:is-by-channel">
                     <type>d:boolean</type>
