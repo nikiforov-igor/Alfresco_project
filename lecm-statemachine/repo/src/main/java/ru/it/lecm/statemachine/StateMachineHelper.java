@@ -551,7 +551,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 if (documents.size() > 0) {
                     NodeRef document = documents.get(0).getChildRef();
                     QName propertyName = QName.createQName(variable.getFromValue(), serviceRegistry.getNamespaceService());
-                    value = nodeService.getProperty(document, propertyName).toString();
+                    Object valueObj = nodeService.getProperty(document, propertyName);
+                    if (valueObj != null) {
+                        value = valueObj.toString();
+                    }
                 }
             } else if (variable.getFromType() == WorkflowVariables.Type.VALUE) {
                 value = variable.getFromValue();
