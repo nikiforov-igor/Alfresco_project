@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/incoming/workflow/sendToReview/1.0">
+	<process id="incomingSendToReview" name="Входящие: направить на рассмотрение">
+		<startEvent id="startSendToReview" name="Start" activiti:formKey="lecmIncomingWf:sendToReview"></startEvent>
+		<endEvent id="endSendToReview" name="End"></endEvent>
+		<scriptTask id="sendToReview" name="Send to review" scriptFormat="javascript">
+			<extensionElements>
+				<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+					<activiti:field name="script">
+						<activiti:string><![CDATA[
+							var document = bpm_package.children[0];
+							if (document != null) {
+								<!--var repeatToDocument = execution.getVariable("lecmIncomingWf_repeatedToDocument");-->
+								<!--if (repeatToDocument != null) {-->
+									<!--documentConnection.createConnection(document, repeatToDocument, "repeatedTo", true);-->
+								<!--}-->
+							}
+						]]></activiti:string>
+					</activiti:field>
+				</activiti:executionListener>
+			</extensionElements>
+			<script></script>
+		</scriptTask>
+		<receiveTask id="incomingReceiveTask" name="Receive Task"></receiveTask>
+		<sequenceFlow id="flow1" name="" sourceRef="startSendToReview" targetRef="sendToReview"></sequenceFlow>
+		<sequenceFlow id="flow2" name="" sourceRef="sendToReview" targetRef="incomingReceiveTask"></sequenceFlow>
+		<sequenceFlow id="flow3" name="" sourceRef="incomingReceiveTask" targetRef="endSendToReview"></sequenceFlow>
+	</process>
+</definitions>
