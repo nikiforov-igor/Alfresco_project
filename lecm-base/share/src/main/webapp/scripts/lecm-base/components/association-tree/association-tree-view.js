@@ -1311,7 +1311,9 @@ LogicECM.module = LogicECM.module || {};
                 // Update added fields in main form to be submitted
                 el = Dom.get(this.options.controlId + "-added");
 	            if (el != null) {
-	                el.value = '';
+		            if (clearCurrentDisplayValue) {
+			            el.innerHTML = '';
+		            }
 	                for (i in addItems) {
 	                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
 	                }
