@@ -67,7 +67,7 @@
 </div>
 
 <script type="text/javascript">
-    <#if field.control.params.selectedValueContextProperty??>
+    <#if params.selectedValueContextProperty??>
         <#if context.properties[params.selectedValueContextProperty]??>
             <#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
         <#elseif args[params.selectedValueContextProperty]??>
@@ -76,8 +76,20 @@
             <#assign renderPickerJSSelectedValue = context.properties[params.selectedValueContextProperty]>
         </#if>
     </#if>
-    <#assign optionSeparator="|">
-    <#assign labelSeparator=":">
+    <#if !(renderPickerJSSelectedValue??) && params.selectedItemsFormArgs??>
+	    <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+	    <#list selectedItemsFormArgs as selectedItemsFormArg>
+		    <#if form.arguments[selectedItemsFormArg]??>
+		        <#if !renderPickerJSSelectedValue??>
+			        <#assign renderPickerJSSelectedValue = ""/>
+		        </#if>
+			    <#if (renderPickerJSSelectedValue?length > 0)>
+				    <#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + ","/>
+			    </#if>
+			    <#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + form.arguments[selectedItemsFormArg]/>
+		    </#if>
+	    </#list>
+    </#if>
 
     var fistControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
     fistControl.setOptions({
