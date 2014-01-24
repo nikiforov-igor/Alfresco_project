@@ -186,7 +186,7 @@
 			</associations>
 			<mandatory-aspects>
                 <!--<aspect>lecm-document-aspects:has-reg-document-data</aspect>-->
-				<!--<aspect>lecm-document-aspects:has-reg-project-data</aspect>-->
+				<aspect>lecm-document-aspects:has-reg-project-data</aspect>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
 			</mandatory-aspects>

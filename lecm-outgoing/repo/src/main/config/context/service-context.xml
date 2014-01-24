@@ -26,4 +26,9 @@
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
 					  businessJournalLogEventsPolicy"
 		  p:createOrUpdateDictionaries-ref="outgoing.dictionaries"/>
+
+	<bean id="outgoing.statemachine.bootstrap" parent="defaultStatemachines"
+		  p:statemachineName="lecm-outgoing:document"
+		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
+
 </beans>
