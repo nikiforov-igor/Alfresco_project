@@ -75,7 +75,15 @@ public interface DocumentService {
     public static final QName PROP_REG_DATA_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
     public static final QName PROP_REG_DATA_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
 
+    public static final QName PROP_DOCUMENT_TYPE = QName.createQName(DOCUMENT_NAMESPACE_URI, "doc-type");
+
+    public static final QName ASSOC_SUBJECT= QName.createQName(DOCUMENT_NAMESPACE_URI, "subject-assoc");
+    public static final QName PROP_TITLE = QName.createQName(DOCUMENT_NAMESPACE_URI, "title");
+
     public static final String DEFAULT_REG_NUM = "Не присвоено";
+
+    public static final String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
+    public static final QName TYPE_EDS_DOCUMENT = QName.createQName(EDS_NAMESPACE_URI, "base");
 
     /**
      * Метод для получения рейтинга документа

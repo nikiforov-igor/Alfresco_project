@@ -29,10 +29,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
-import ru.it.lecm.documents.beans.DocumentMembersServiceImpl;
-import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -350,10 +347,17 @@ public class DocumentPolicy extends BaseBean
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
 
-	    NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
-	    if (documentSearchObject != null) {
-		    updateDocumentSearchObject(childAssocRef.getChildRef(), documentSearchObject);
-	    }
+        // заполняем тип
+        final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
+        if (typeDef != null) {
+            typeDef.getTitle();
+            nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
+        }
+
+        NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
+        if (documentSearchObject != null) {
+            updateDocumentSearchObject(childAssocRef.getChildRef(), documentSearchObject);
+        }
     }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/

@@ -20,7 +20,7 @@
 <beans>
     <bean id="incoming.LogicEcmIncomingBootstrap" parent="modelsToRepositoryLoader"
           depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
-          documents.LogicEcmModelsBootstrap,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
+          eds-documents.LogicEcmModelsBootstrap,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, dictionary.LogicEcmDictionaryCurrencyModelBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap">
         <property name="models">
@@ -66,8 +66,8 @@
     <bean id="incomingCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
         <property name="propsToCopy">
             <list>
-                <value>lecm-incoming:title</value>
-                <value>lecm-incoming:summaryContent</value>
+                <value>lecm-document:title</value>
+                <value>lecm-eds-document:summaryContent</value>
                 <value>lecm-incoming:is-on-control</value>
                 <value>lecm-incoming:outgoing-number</value>
                 <value>lecm-incoming:outgoing-date</value>
@@ -77,9 +77,9 @@
         <property name="assocsToCopy">
             <list>
                 <value>lecm-incoming:registrator-assoc</value>
-                <value>lecm-incoming:document-type-assoc</value>
-                <value>lecm-incoming:file-register-assoc</value>
-                <value>lecm-incoming:subject-assoc</value>
+                <value>lecm-eds-document:document-type-assoc</value>
+                <value>lecm-eds-document:file-register-assoc</value>
+                <value>lecm-document:subject-assoc</value>
                 <value>lecm-incoming:delivery-method-assoc</value>
                 <value>lecm-incoming:recipient-assoc</value>
             </list>

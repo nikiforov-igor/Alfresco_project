@@ -16,18 +16,18 @@
 	                <show id="lecm-incoming:execution-date"/>
 	                <show id="lecm-document-aspects:reg-data-number"/>
 	                <show id="lecm-document-aspects:reg-data-date"/>
-	                <show id="lecm-incoming:title"/>
-	                <show id="lecm-incoming:document-type-assoc"/>
+	                <show id="lecm-document:title"/>
+	                <show id="lecm-eds-document:document-type-assoc"/>
 	                <show id="lecm-incoming:delivery-method-assoc"/>
 	                <show id="lecm-incoming:sender-assoc" force="true"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
 	                <show id="lecm-incoming:outgoing-number"/>
 	                <show id="lecm-incoming:outgoing-date"/>
-                    <show id="lecm-incoming:summaryContent"/>
+                    <show id="lecm-eds-document:summaryContent"/>
 	                <show id="lecm-incoming:recipient-assoc"/>
-	                <show id="lecm-incoming:file-register-assoc"/>
-	                <show id="lecm-incoming:subject-assoc"/>
-                    <show id="lecm-incoming:note"/>
+	                <show id="lecm-eds-document:file-register-assoc"/>
+	                <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
 	            <appearance>
@@ -49,9 +49,9 @@
 		            <field id="lecm-document-aspects:reg-data-number" set="incoming2"/>
 		            <field id="lecm-document-aspects:reg-data-date" set="incoming2"/>
 
-		            <field id="lecm-incoming:title" set="incoming3"/>
+		            <field id="lecm-document:title" set="incoming3"/>
 
-		            <field id="lecm-incoming:document-type-assoc" set="incoming4"/>
+		            <field id="lecm-eds-document:document-type-assoc" set="incoming4"/>
 		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4"/>
 
 		            <field id="lecm-incoming:sender-assoc" set="incoming5">
@@ -72,7 +72,7 @@
 		            <field id="lecm-incoming:outgoing-number" set="incoming6"/>
 		            <field id="lecm-incoming:outgoing-date" set="incoming6"/>
 
-		            <field id="lecm-incoming:summaryContent" set="incoming7">
+		            <field id="lecm-eds-document:summaryContent" set="incoming7">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
 
@@ -94,10 +94,10 @@
 			            </control>
 		            </field>
 
-		            <field id="lecm-incoming:file-register-assoc" set="incoming8"/>
-		            <field id="lecm-incoming:subject-assoc" set="incoming8"/>
+		            <field id="lecm-eds-document:file-register-assoc" set="incoming8"/>
+		            <field id="lecm-document:subject-assoc" set="incoming8"/>
 
-		            <field id="lecm-incoming:note" set="incoming9">
+		            <field id="lecm-eds-document:note" set="incoming9">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
 
@@ -106,22 +106,22 @@
             </form>
             <form id="document">
                 <field-visibility>
-                    <show id="lecm-incoming:summaryContent"/>
-                    <show id="lecm-incoming:note"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
             <form id="document-dashlet">
                 <field-visibility>
-                    <show id="lecm-incoming:summaryContent"/>
-                    <show id="lecm-incoming:note"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
             <form id="transfer-right">
@@ -167,8 +167,8 @@
             <form>
                 <field-visibility>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-	                <show id="lecm-incoming:title"/>
-                    <show id="lecm-incoming:document-type-assoc"/>
+	                <show id="lecm-document:title"/>
+                    <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
 	                <show id="lecm-incoming:sender-assoc" force="true"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
@@ -177,10 +177,10 @@
 	                <show id="lecm-incoming:outgoing-number"/>
 	                <show id="lecm-incoming:outgoing-date"/>
 	                <show id="lecm-incoming:outgoing-date"/>
-	                <show id="lecm-incoming:summaryContent"/>
-	                <show id="lecm-incoming:subject-assoc"/>
-	                <show id="lecm-incoming:file-register-assoc"/>
-	                <show id="lecm-incoming:note"/>
+	                <show id="lecm-eds-document:summaryContent"/>
+	                <show id="lecm-document:subject-assoc"/>
+	                <show id="lecm-eds-document:file-register-assoc"/>
+	                <show id="lecm-eds-document:note"/>
 	                <show id="lecm-incoming:execution-date"/>
 	                <show id="lecm-incoming:is-on-control"/>
 	                <show id="lecm-incoming:is-not-registered"/>
@@ -206,8 +206,8 @@
 			            </control>
 		            </field>
 
-		            <field id="lecm-incoming:title" set="incoming3"/>
-		            <field id="lecm-incoming:document-type-assoc" set="incoming4"/>
+		            <field id="lecm-document:title" set="incoming3"/>
+		            <field id="lecm-eds-document:document-type-assoc" set="incoming4"/>
 		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4"/>
 
 		            <field id="lecm-incoming:sender-assoc" set="incoming5">
@@ -257,12 +257,12 @@
 
 		            <field id="lecm-incoming:outgoing-number" set="incoming6"/>
 		            <field id="lecm-incoming:outgoing-date" set="incoming6"/>
-		            <field id="lecm-incoming:summaryContent" set="incoming7">
+		            <field id="lecm-eds-document:summaryContent" set="incoming7">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
-		            <field id="lecm-incoming:subject-assoc" set="incoming8"/>
-		            <field id="lecm-incoming:file-register-assoc" set="incoming8"/>
-		            <field id="lecm-incoming:note" set="incoming9">
+		            <field id="lecm-document:subject-assoc" set="incoming8"/>
+		            <field id="lecm-eds-document:file-register-assoc" set="incoming8"/>
+		            <field id="lecm-eds-document:note" set="incoming9">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
 		            <field id="lecm-incoming:is-on-control" set="incoming10"/>
@@ -272,12 +272,12 @@
             </form>
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-incoming:summaryContent"/>
-                    <show id="lecm-incoming:note"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
             <form id="document-journal">
@@ -295,30 +295,30 @@
             </form>
             <form id="search">
                 <field-visibility>
-                    <show id="lecm-incoming:summaryContent"/>
-                    <show id="lecm-incoming:note"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
             <form id="statemachine-editable-fields">
                 <field-visibility>
-                    <show id="lecm-incoming:summaryContent"/>
-                    <show id="lecm-incoming:note"/>
-                    <show id="lecm-incoming:title"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-document:title"/>
                     <show id="lecm-incoming:is-on-control"/>
                     <show id="lecm-incoming:is-not-registered"/>
                     <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-incoming:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
-                    <show id="lecm-incoming:document-type-assoc"/>
-                    <show id="lecm-incoming:subject-assoc"/>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-incoming:recipient-assoc"/>
                     <show id="lecm-incoming:delivery-method-assoc"/>
-                    <show id="lecm-incoming:file-register-assoc"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-incoming:sender-assoc"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
                 </field-visibility>

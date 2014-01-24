@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-eds-document:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Logic ECM EDS document model</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-eds-document:base">
+            <title>Базовый СЭД документ</title>
+            <parent>lecm-document:base</parent>
+            <properties>
+                <property name="lecm-eds-document:note">
+                    <title>Примечание</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Содержание-->
+                <property name="lecm-eds-document:summaryContent">
+                    <title>Содержание</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-eds-document:document-type-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-eds-document:document-type-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <!--Вид документа -->
+                <association name="lecm-eds-document:document-type-assoc">
+                    <title>Вид документа</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic-dt:documentType</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!--Номенклатура -->
+                <association name="lecm-eds-document:file-register-assoc">
+                    <title>Номенклатура дел</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic-fr:level3</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+            <mandatory-aspects>
+                <aspect>lecm-document-aspects:finalize-to-unit</aspect>
+                <aspect>lecm-document-aspects:has-reg-document-data</aspect>
+                <aspect>lecm-document-aspects:has-reg-project-data</aspect>
+            </mandatory-aspects>
+        </type>
+    </types>
+</model>

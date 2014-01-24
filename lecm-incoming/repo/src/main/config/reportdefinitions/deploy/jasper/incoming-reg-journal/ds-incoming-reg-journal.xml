@@ -93,7 +93,7 @@
         </field>
 
         <field alfrescoType="d:text" displayName="Заголовок"
-               queryFldName="{lecm-incoming:title}" jrFldName="col_Title">
+               queryFldName="{lecm-document:title}" jrFldName="col_Title">
             <l18>
                 <item key="RU_RU" value="Заголовок"/>
             </l18>
@@ -115,7 +115,7 @@
         </field>
 
         <field alfrescoType="d:text" displayName="Вид документа"
-               queryFldName="{lecm-incoming:document-type-assoc/cm:name}" jrFldName="col_DocType">
+               queryFldName="{lecm-eds-document:document-type-assoc/cm:name}" jrFldName="col_DocType">
             <l18>
                 <item key="RU_RU" value="Вид документа"/>
             </l18>

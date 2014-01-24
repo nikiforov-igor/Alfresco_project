@@ -369,7 +369,7 @@
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/84df7700-dddd-4d32-aff5-590856dc55a2</nodeRef>
 										<properties>
 											<property>
@@ -384,7 +384,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/4fb7c347-b282-4eb8-9d8d-56cd5e34ed02</nodeRef>
 										<properties>
 											<property>
@@ -399,7 +399,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/74bdc811-e74e-4c77-bfb4-8a3ba26dc76b</nodeRef>
 										<properties>
 											<property>
@@ -504,7 +504,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/b240c655-6379-4061-8a8f-91c5a0b94e8a</nodeRef>
 										<properties>
 											<property>
@@ -519,7 +519,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/05ad9afe-8de2-4e31-9986-effb8dc62f96</nodeRef>
 										<properties>
 											<property>
@@ -564,7 +564,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/d82ed395-adfd-4cea-bb45-c76f5898f816</nodeRef>
 										<properties>
 											<property>
@@ -1091,7 +1091,7 @@
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/0a088e0d-2166-47b6-bcc7-09db4d98ed85</nodeRef>
 										<properties>
 											<property>
@@ -1106,7 +1106,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/a8caee4d-3642-481d-a352-d06df50d9423</nodeRef>
 										<properties>
 											<property>
@@ -1121,7 +1121,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/54441347-9609-4d60-8d18-408a5e1d2015</nodeRef>
 										<properties>
 											<property>
@@ -1226,7 +1226,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/552ae31e-9cc6-4f9a-a33e-f957b23bc121</nodeRef>
 										<properties>
 											<property>
@@ -1241,7 +1241,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/cec13d2d-5720-4e22-91c3-63626884f387</nodeRef>
 										<properties>
 											<property>
@@ -1286,7 +1286,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/8562a12c-fe9c-4908-aee5-eeffe370009e</nodeRef>
 										<properties>
 											<property>
@@ -1765,7 +1765,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/0d689671-8056-454b-a567-5ddab456546b</nodeRef>
 										<properties>
 											<property>
@@ -1780,7 +1780,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/bb25dc89-17a9-49b7-ab40-6a28623e7955</nodeRef>
 										<properties>
 											<property>
@@ -1795,7 +1795,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/c75ed66d-5444-4ae7-83f2-ff0b53244f83</nodeRef>
 										<properties>
 											<property>
@@ -1900,7 +1900,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/c3bff96a-f5cb-4edf-bf85-2f3eaadacbf3</nodeRef>
 										<properties>
 											<property>
@@ -1915,7 +1915,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/a9912d85-12c4-41d1-a0be-456e5eb05672</nodeRef>
 										<properties>
 											<property>
@@ -1960,7 +1960,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/3f799689-89c7-4e83-8085-46991d936fd9</nodeRef>
 										<properties>
 											<property>
@@ -2293,7 +2293,7 @@ if (addressee != null) {
 															<property>
 																<name>transition-script</name>
 																<value><![CDATA[var incoming = bpm_package.children[0];
-var fileRegister = incoming.assocs["lecm-incoming:file-register-assoc"];
+var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
 if (fileRegister != null && fileRegister.length == 1) {
     var unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
     incoming.createAssociation(unit, "lecm-document-aspects:organization-unit-assoc");
@@ -2569,7 +2569,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/b6d4a1a0-99e6-4555-9029-5472e2d8bd7c</nodeRef>
 										<properties>
 											<property>
@@ -2584,7 +2584,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/ea5c60f0-98e9-4356-9949-3e926bce46c0</nodeRef>
 										<properties>
 											<property>
@@ -2599,7 +2599,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/3179718f-e4b5-46d5-a235-e14f066fc3fe</nodeRef>
 										<properties>
 											<property>
@@ -2704,7 +2704,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/19bee49a-b23a-4f63-98d9-4625c32eb75a</nodeRef>
 										<properties>
 											<property>
@@ -2719,7 +2719,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/43320d7f-87c9-49a5-93d6-e4c223a06b4c</nodeRef>
 										<properties>
 											<property>
@@ -2764,7 +2764,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/2c706c3d-70ab-460b-b358-e563599cf193</nodeRef>
 										<properties>
 											<property>
@@ -3031,7 +3031,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 															<property>
 																<name>transition-script</name>
 																<value><![CDATA[var incoming = bpm_package.children[0];
-var fileRegister = incoming.assocs["lecm-incoming:file-register-assoc"];
+var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
 if (fileRegister != null && fileRegister.length == 1) {
     var unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
     incoming.createAssociation(unit, "lecm-document-aspects:organization-unit-assoc");
@@ -3234,7 +3234,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/73a702fc-11b0-404f-9472-00f4e7c99b54</nodeRef>
 										<properties>
 											<property>
@@ -3249,7 +3249,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/250fb5e4-3d8f-4536-adbd-a38c13b94617</nodeRef>
 										<properties>
 											<property>
@@ -3264,7 +3264,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/0c2004a8-484c-43de-883a-b8b33d3a031d</nodeRef>
 										<properties>
 											<property>
@@ -3369,7 +3369,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/b62bb179-ce42-488f-9c68-8785ebae8810</nodeRef>
 										<properties>
 											<property>
@@ -3384,7 +3384,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/ca9568d2-9f25-4060-a8cb-4d6c40216912</nodeRef>
 										<properties>
 											<property>
@@ -3429,7 +3429,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/487eacd0-ea1f-49b9-a111-a9d0102c84c8</nodeRef>
 										<properties>
 											<property>
@@ -3967,7 +3967,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/e7ae8178-bed2-4e78-bff9-1e51c89c8cd9</nodeRef>
 										<properties>
 											<property>
@@ -3982,7 +3982,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/a3b40c1d-bde6-4da8-8d16-84362ce1def1</nodeRef>
 										<properties>
 											<property>
@@ -3997,7 +3997,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/d6edad28-4bb6-488f-919b-8ed9a5fcdb66</nodeRef>
 										<properties>
 											<property>
@@ -4102,7 +4102,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/c573628c-7cfb-4a28-bd6c-5c1bc6fadac1</nodeRef>
 										<properties>
 											<property>
@@ -4117,7 +4117,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/c79f4572-7d4f-4378-975a-348ce2a508ec</nodeRef>
 										<properties>
 											<property>
@@ -4162,7 +4162,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/345c1e64-4042-48ee-a994-0428616188a7</nodeRef>
 										<properties>
 											<property>
@@ -4429,7 +4429,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 															<property>
 																<name>transition-script</name>
 																<value><![CDATA[var incoming = bpm_package.children[0];
-var fileRegister = incoming.assocs["lecm-incoming:file-register-assoc"];
+var fileRegister = incoming.assocs["lecm-eds-document:file-register-assoc"];
 if (fileRegister != null && fileRegister.length == 1) {
     var unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
     incoming.createAssociation(unit, "lecm-document-aspects:organization-unit-assoc");
@@ -4558,7 +4558,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/43efb616-f30f-4abf-957b-bc4832069acb</nodeRef>
 										<properties>
 											<property>
@@ -4573,7 +4573,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/691fccca-3ba9-43d8-85d4-fffc43217061</nodeRef>
 										<properties>
 											<property>
@@ -4588,7 +4588,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/e9e12c0d-c098-41a4-9f13-135a9dc0c2bb</nodeRef>
 										<properties>
 											<property>
@@ -4693,7 +4693,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/54cb1fc8-f494-40a7-82cf-e4d3eef7e12a</nodeRef>
 										<properties>
 											<property>
@@ -4708,7 +4708,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/2c113fd9-52bc-4dba-b89e-4ae39246c1c8</nodeRef>
 										<properties>
 											<property>
@@ -4753,7 +4753,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/c7709c03-485d-455a-bb2a-43e54931d787</nodeRef>
 										<properties>
 											<property>
@@ -5360,7 +5360,7 @@ incoming.save();]]></value>
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/68199d9f-ec03-42bf-bc85-9f1e8e3b752c</nodeRef>
 										<properties>
 											<property>
@@ -5375,7 +5375,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/ed3adc9a-b2d8-4e05-a441-a96ac0a8182f</nodeRef>
 										<properties>
 											<property>
@@ -5390,7 +5390,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/e826126d-6875-4d29-b1a4-6dae35bfdb14</nodeRef>
 										<properties>
 											<property>
@@ -5495,7 +5495,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/c86ace72-0106-46fc-a2de-148e3595736a</nodeRef>
 										<properties>
 											<property>
@@ -5510,7 +5510,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/c86d694e-687d-4c41-a896-d0f218c24281</nodeRef>
 										<properties>
 											<property>
@@ -5555,7 +5555,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/95b4638b-c913-42a7-bf59-80e5870c807f</nodeRef>
 										<properties>
 											<property>
@@ -5703,7 +5703,7 @@ incoming.save();]]></value>
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/923cdac1-19c0-4385-860b-b5bfed3402f3</nodeRef>
 										<properties>
 											<property>
@@ -5718,7 +5718,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/95c54f97-ee5e-40ca-a984-c620ff950ad2</nodeRef>
 										<properties>
 											<property>
@@ -5733,7 +5733,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/abb096d2-cb3a-48c8-8e1f-10f0f228fb67</nodeRef>
 										<properties>
 											<property>
@@ -5838,7 +5838,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/2f7e6e78-1b87-41d1-8229-f54af334c374</nodeRef>
 										<properties>
 											<property>
@@ -5853,7 +5853,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/cf38a957-da7f-4d76-a73d-95e582e4d12c</nodeRef>
 										<properties>
 											<property>
@@ -5898,7 +5898,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/41d87ca2-15ad-4659-a564-f92a1a71fee8</nodeRef>
 										<properties>
 											<property>
@@ -6018,7 +6018,7 @@ incoming.save();]]></value>
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/fbfede17-59d0-41cd-876d-e50d1f159074</nodeRef>
 										<properties>
 											<property>
@@ -6033,7 +6033,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/58a1de52-2af4-4acf-a4ed-7feac510b68a</nodeRef>
 										<properties>
 											<property>
@@ -6048,7 +6048,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/b5f71825-d522-4809-933d-65364ea4f12c</nodeRef>
 										<properties>
 											<property>
@@ -6153,7 +6153,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/ea2d73c2-b990-4557-9dfe-9b1689cca1e4</nodeRef>
 										<properties>
 											<property>
@@ -6168,7 +6168,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/59466232-fa40-467f-8886-4c8b3fb3f9af</nodeRef>
 										<properties>
 											<property>
@@ -6213,7 +6213,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/09778bb1-3df8-4450-82c2-02bb23d5a7ec</nodeRef>
 										<properties>
 											<property>
@@ -6333,7 +6333,7 @@ incoming.save();]]></value>
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/a66c4a6b-f203-406c-8edf-1a907ba51fcf</nodeRef>
 										<properties>
 											<property>
@@ -6348,7 +6348,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/314a75b4-4819-4d32-be3d-e66dbb3238d0</nodeRef>
 										<properties>
 											<property>
@@ -6363,7 +6363,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/b32b8955-b537-4583-8812-a26af1d8da02</nodeRef>
 										<properties>
 											<property>
@@ -6468,7 +6468,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/a6254094-27a5-4b25-a08f-882066214e19</nodeRef>
 										<properties>
 											<property>
@@ -6483,7 +6483,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/639528da-3982-4d5d-bbeb-258d5d847721</nodeRef>
 										<properties>
 											<property>
@@ -6528,7 +6528,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/26b0e1b2-bd7b-46ae-aaf0-fdced0a1367d</nodeRef>
 										<properties>
 											<property>
@@ -6648,7 +6648,7 @@ incoming.save();]]></value>
 								<nodes>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_summaryContent</name>
+										<name>lecm-eds-document_summaryContent</name>
 										<nodeRef>workspace://SpacesStore/dfc4d5e1-65fd-4a10-96d9-0a980c4e1c41</nodeRef>
 										<properties>
 											<property>
@@ -6663,7 +6663,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_note</name>
+										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/c176d26e-a0ff-4286-88bb-65bfc8a621d0</nodeRef>
 										<properties>
 											<property>
@@ -6678,7 +6678,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_title</name>
+										<name>lecm-document_title</name>
 										<nodeRef>workspace://SpacesStore/e8600e09-af21-4659-a549-d723a912ba10</nodeRef>
 										<properties>
 											<property>
@@ -6783,7 +6783,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_document-type-assoc</name>
+										<name>lecm-eds-document_document-type-assoc</name>
 										<nodeRef>workspace://SpacesStore/899893e4-4397-4444-8964-2d0ae04c945d</nodeRef>
 										<properties>
 											<property>
@@ -6798,7 +6798,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_subject-assoc</name>
+										<name>lecm-document_subject-assoc</name>
 										<nodeRef>workspace://SpacesStore/f245abf5-781b-480a-91ce-30147aee23a7</nodeRef>
 										<properties>
 											<property>
@@ -6843,7 +6843,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_file-register-assoc</name>
+										<name>lecm-eds-document_file-register-assoc</name>
 										<nodeRef>workspace://SpacesStore/ae17dfb3-e3c7-4fbb-87eb-c4766cbe6c6e</nodeRef>
 										<properties>
 											<property>

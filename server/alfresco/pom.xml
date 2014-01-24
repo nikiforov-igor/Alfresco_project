@@ -291,6 +291,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.eds-documents</groupId>
+            <artifactId>eds-documents-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.incoming</groupId>
 			<artifactId>incoming-repo</artifactId>
