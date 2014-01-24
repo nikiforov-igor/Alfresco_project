@@ -321,6 +321,7 @@
                     <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-incoming:sender-assoc"/>
 	                <show id="lecm-incoming:addressee-assoc"/>
+	                <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
             </form>
         </forms>
