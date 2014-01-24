@@ -379,6 +379,8 @@
     <config evaluator="string-compare" condition="Workflow">
         <hidden-workflows>
             <workflow name="activiti$incomingDirectToExecution"/>
+            <workflow name="activiti$incomingSendToReview"/>
+            <workflow name="activiti$incomingSearchRepeats"/>
         </hidden-workflows>
     </config>
 
