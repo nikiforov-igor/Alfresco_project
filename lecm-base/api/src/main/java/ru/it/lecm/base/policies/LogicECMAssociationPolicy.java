@@ -109,6 +109,7 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 			String refValue = nodeAssocRef.getTargetRef().toString();
 			strOldValue = strOldValue.replace(";" + refValue, "");
 			strOldValue = strOldValue.replace(refValue, "");
+            strOldValue = strOldValue.startsWith(";") ? strOldValue.substring(1) : strOldValue;
 			nodeService.setProperty(record, propertyQName, strOldValue);
 		}
 
