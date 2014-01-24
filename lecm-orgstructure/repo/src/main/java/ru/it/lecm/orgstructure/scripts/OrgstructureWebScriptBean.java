@@ -695,6 +695,16 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	}
 
 	/**
+	 * получение списка сотрудников в указанном подразделении
+	 * @param unit подразделение
+	 * @return список сотрудников в подразделении или пустой список
+	 */
+	public Scriptable getEmployeesInUnit(ScriptNode unit) {
+		ParameterCheck.mandatory("unit", unit);
+		return createScriptable(orgstructureService.getOrganizationElementEmployees(unit.getNodeRef()));
+	}
+
+	/**
 	 * получение списка подчиненных для указанного сотрудника
 	 * @param bossRef сотрудник который является руководителем
 	 * @return список подчиненных сотрудника по всем подразделениям.
@@ -983,6 +993,16 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      */
     public boolean hasBusinessRole(String employeeRef, String businessRole) {
         return orgstructureService.isEmployeeHasBusinessRole(new NodeRef(employeeRef), businessRole);
+    }
+
+	/**
+     * Проверяет наличие бизнес-роли у сотрудника
+     * @param employee сотрудник
+     * @param businessRole бизнес роль
+     * @return true если у сотрудника есть бизнесс-роль
+     */
+    public boolean hasBusinessRole(ScriptNode employee, String businessRole) {
+        return orgstructureService.isEmployeeHasBusinessRole(employee.getNodeRef(), businessRole);
     }
 
     /**

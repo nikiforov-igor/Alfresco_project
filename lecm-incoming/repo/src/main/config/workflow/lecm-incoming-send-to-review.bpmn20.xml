@@ -26,10 +26,35 @@
 
 	                                    var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "Документ #mainobject был направлен на рассмотрение сотруднику #initiator";
+				                        var logText = "Документ #mainobject был направлен на рассмотрение сотруднику #object1";
 				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
+								    	var recipients = [];
 
+								    	var allEmployeeInUnit = orgstructure.getEmployeesInUnit(recipient);
+								    	if (allEmployeeInUnit != null) {
+								    	    for (var i = 0; i < allEmployeeInUnit.length; i++) {
+								    	        var employee = allEmployeeInUnit[i];
+								            	if (orgstructure.hasBusinessRole(employee, "INCOMING_REVIEWER_IN_UNIT")) {
+								                	recipients.push(employee);
+								            	}
+								    	    }
+								    	}
+
+								    	if (recipients.length > 0) {
+								    	    for (var i = 0; i < recipients.length; i++) {
+								    	        statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYNAMIC");
+								    	    }
+
+									        var notificationText = "Поступил документ на рассмотрение ";
+		                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
+		                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
+								    	}
+
+								    	var logObjects = [];
+				                        logObjects.push("" + recipient.nodeRef);
+				                        var logText = "Документ #mainobject был направлен на рассмотрение в подразделение #object1";
+				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
 								    }
 								} else {
 
