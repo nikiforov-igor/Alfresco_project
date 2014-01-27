@@ -2,6 +2,8 @@ package ru.it.lecm.businessjournal.beans;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.apache.activemq.command.ActiveMQObjectMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.jms.Message;
@@ -19,6 +21,8 @@ public class BJLogMessageReceiver implements MessageListener, InitializingBean {
     private AbstractBusinessJournalService service;
     private String useRemote;
 
+    private static final Logger logger = LoggerFactory.getLogger(BJLogMessageReceiver.class);
+
     @Override
     public void onMessage(final Message message) {
         try {
@@ -31,7 +35,7 @@ public class BJLogMessageReceiver implements MessageListener, InitializingBean {
                 }
             });
         } catch (Exception e) {
-            throw new RuntimeException("Cannot save bj record", e);
+            logger.error("Cannot save bj record", e);
         }
     }
 
