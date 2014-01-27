@@ -9,6 +9,7 @@
 
     <config evaluator="node-type" condition="lecm-incoming:document">
         <forms>
+            <!-- Форма редатирования-->
             <form>
                 <field-visibility>
 	                <show id="lecm-incoming:is-not-registered"/>
@@ -104,6 +105,7 @@
 		            <field id="lecm-document-aspects:is-shared-folder" set="incoming10"/>
 	            </appearance>
             </form>
+            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -114,6 +116,7 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
+            <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -124,6 +127,7 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
+            <!-- Форма для передачи прав-->
             <form id="transfer-right">
                 <field-visibility>
                     <show id="lecm-document:employee-ref"/>
@@ -146,6 +150,7 @@
                     <field id="lecm-document:deprive-right" label-id="contract.deprive.right" />
                 </appearance>
             </form>
+            <!-- Форма с набором дашлетов на главной странице-->
             <form id="main-page-dashlets">
                 <field-visibility>
                     <show id="line1"/>
@@ -164,6 +169,7 @@
 
     <config evaluator="model-type" condition="lecm-incoming:document">
         <forms>
+            <!-- Форма создания (по умолчанию) -->
             <form>
                 <field-visibility>
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
@@ -270,6 +276,7 @@
 		            <field id="lecm-incoming:execution-date" set="incoming11"/>
 	            </appearance>
             </form>
+            <!-- Форма для табличного представления (набор столбцов)-->
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -280,6 +287,7 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
+            <!-- Форма для базового журнала документов-->
             <form id="document-journal">
                 <field-visibility>
                     <show id="cm:name"/>
@@ -293,6 +301,7 @@
                     <field id="lecm-document:present-string" label=" "/>
                 </appearance>
             </form>
+            <!-- Форма атрибутивного поиска-->
             <form id="search">
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -303,6 +312,7 @@
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
+            <!-- Форма с набором полей, редактируемых в машине состояний-->
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
