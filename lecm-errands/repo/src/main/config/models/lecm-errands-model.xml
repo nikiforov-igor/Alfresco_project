@@ -348,6 +348,12 @@
 					    <constraint ref="lecm-errands:settings-mode-choosing-executors-const"/>
 				    </constraints>
 			    </property>
+			    <!-- Передавать права на документ-основание  -->
+			    <property name="lecm-errands:settings-transfer-rights">
+				    <type>d:boolean</type>
+				    <mandatory>true</mandatory>
+				    <default>false</default>
+			    </property>
 		    </properties>
 	    </type>
 

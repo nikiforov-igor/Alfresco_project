@@ -12,6 +12,11 @@
                 <property name="lecm-connect-types:reverse-name">Имеет повторное</property>
                 <property name="lecm-connect-types:code">repeatedTo</property>
             </item>
+	        <item name="cm:К сведению" type="lecm-connect-types:connection-type">
+                <property name="cm:name">К сведению</property>
+                <property name="lecm-connect-types:reverse-name">К сведению</property>
+                <property name="lecm-connect-types:code">forInformation</property>
+            </item>
         </items>
     </item>
 </items>

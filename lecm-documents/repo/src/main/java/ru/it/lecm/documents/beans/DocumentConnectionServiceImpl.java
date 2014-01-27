@@ -366,12 +366,17 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem) {
+		return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, typeDictionaryElementCode, isSystem, false);
+	}
+
+	@Override
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem, boolean doNotCheckPermission) {
 		NodeRef connectionType = dictionaryService.getDictionaryValueByParam(
-					DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
-					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
-					typeDictionaryElementCode);
+				DocumentConnectionService.DOCUMENT_CONNECTION_TYPE_DICTIONARY_NAME,
+				DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
+				typeDictionaryElementCode);
 		if (connectionType != null) {
-			return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, connectionType, isSystem);
+			return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, connectionType, isSystem, doNotCheckPermission);
 		} else {
 			return null;
 		}
@@ -426,7 +431,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
 					boolean system =(Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
-					if (onlySystem || system) {
+					if (!onlySystem || system) {
 						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 						if (connectionType != null && connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
 								&& connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)) {
@@ -454,6 +459,16 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType) {
+		return getConnectedWithDocument(documentRef, connectionTypeCode, connectedDocumentType, false);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, boolean onlySystem) {
+		return getConnectedWithDocument(documentRef, null, null, false);
+	}
+
+	@Override
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
 		List<NodeRef> results = new ArrayList<NodeRef>();
@@ -472,15 +487,18 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 			for (NodeRef connectionRef: connections) {
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
-					List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
-					if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
-							&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
-						List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
-						if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
-							NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
-							if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
-									&& nodeService.getType(connectedDocument).equals(connectedDocumentType)) {
-								results.add(connectedDocument);
+					boolean system =(Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
+					if (!onlySystem || system) {
+						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
+						if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
+								&& (connectionTypeCode == null || (connectionType != null && connectionTypeAssoc.get(0).getTargetRef().equals(connectionType)))) {
+							List<AssociationRef> connectedDocumentAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_PRIMARY_DOCUMENT);
+							if (connectedDocumentAssoc != null && connectedDocumentAssoc.size() == 1) {
+								NodeRef connectedDocument = connectedDocumentAssoc.get(0).getTargetRef();
+								if (!isArchive(connectedDocument) && this.lecmPermissionService.hasReadAccess(connectedDocument)
+										&& (connectedDocumentType == null || nodeService.getType(connectedDocument).equals(connectedDocumentType))) {
+									results.add(connectedDocument);
+								}
 							}
 						}
 					}

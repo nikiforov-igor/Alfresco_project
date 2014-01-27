@@ -131,6 +131,14 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return ModeChoosingExecutors.UNIT;
     }
 
+	public boolean isTransferRightToBaseDocument() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            return (Boolean) nodeService.getProperty(settings, SETTINGS_PROP_TRANSFER_RIGHT);
+        }
+        return false;
+    }
+
 	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist) {
         final NodeRef rootFolder = this.getServiceRootFolder();
         final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
@@ -452,4 +460,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void setExecutionReport(NodeRef errandRef, String report) {
         nodeService.setProperty(errandRef, PROP_ERRANDS_EXECUTION_REPORT, report);
     }
+
+	public NodeRef getExecutor(NodeRef errand) {
+		return findNodeByAssociationRef(errand, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET);
+	}
+
+	public NodeRef getBaseDocument(NodeRef errand) {
+		List<AssociationRef> assocs = nodeService.getTargetAssocs(errand, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
+		if (assocs != null && assocs.size() > 0) {
+			return assocs.get(0).getTargetRef();
+		}
+		return null;
+	}
 }

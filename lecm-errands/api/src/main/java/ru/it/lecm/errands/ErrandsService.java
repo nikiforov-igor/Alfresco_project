@@ -43,6 +43,7 @@ public interface ErrandsService {
 	public static final QName SETTINGS_PROP_MODE_CHOOSING_EXECUTORS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-mode-choosing-executors");
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION = "ORGANIZATION";
 	public static final String SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_UNIT = "UNIT";
+	public static final QName SETTINGS_PROP_TRANSFER_RIGHT = QName.createQName(ERRANDS_NAMESPACE_URI, "settings-transfer-rights");
 
 	public static final QName USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-without-initiator-approval");
 	public static final QName USER_SETTINGS_ASSOC_DEFAULT_INITIATOR = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings-default-initiator-assoc");
@@ -188,4 +189,14 @@ public interface ErrandsService {
 	 * @param report Отчёт об исполнении
 	 */
 	public void setExecutionReport(NodeRef errandRef, String report);
+
+	/**
+	 * Получение глобальной настройки "Передавать права на документ-основание"
+	 * @return значение настройки
+	 */
+	public boolean isTransferRightToBaseDocument();
+
+	public NodeRef getExecutor(NodeRef errand);
+
+	public NodeRef getBaseDocument(NodeRef errand);
 }

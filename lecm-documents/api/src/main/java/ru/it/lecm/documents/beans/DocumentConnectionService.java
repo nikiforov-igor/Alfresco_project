@@ -49,8 +49,8 @@ public interface DocumentConnectionService {
 //	QName PROP_CONNECTED_DOCUMENT_REMOVED = QName.createQName(DOCUMENT_CONNECTIONS_NAMESPACE_URI, "connected-document-removed");
 
     public static final String DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE = "onBasis";
-
     public static final String DICTIONARY_VALUE_REPAED_TO = "repeatedTo";
+    public static final String DICTIONARY_VALUE_FOR_INFORMATION = "forInformation";
 
     // ALF-1583
     // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
@@ -181,6 +181,16 @@ public interface DocumentConnectionService {
     public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem, boolean doNotCheckPermission);
 
 	/**
+	 * Создание связи
+	 * @param primaryDocumentNodeRef Ссылка на исходный документ
+	 * @param connectedDocumentNodeRef  Ссылка на целевой документ
+	 * @param typeDictionaryElementCode Код элемента справочника для типа связи
+	 * @param doNotCheckPermission не проверять наличие прав на создание связей у текущего пользователя
+	 * @return Ссылка на созданную связь
+	 */
+	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, String typeDictionaryElementCode, boolean isSystem, boolean doNotCheckPermission);
+
+	/**
 	 * Получение связанных документов
 	 * @param documentRef Ссылка на документ
 	 * @param connectionTypeCode Код типа связи
@@ -212,6 +222,8 @@ public interface DocumentConnectionService {
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef);
 	List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType);
 
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType, boolean onlySystem);
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, String connectionTypeCode, QName connectedDocumentType);
 	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, QName connectedDocumentType);
+	public List<NodeRef> getConnectedWithDocument(NodeRef documentRef, boolean onlySystem);
 }
