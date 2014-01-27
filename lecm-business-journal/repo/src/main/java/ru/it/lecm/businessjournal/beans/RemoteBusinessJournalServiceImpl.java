@@ -326,7 +326,7 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
         String mainObjectDescription = record.getMainObjectDescription();
 
         Long mainObjectId = 0L;
-        if (nodeService.exists(record.getMainObject())) {
+        if (record.getMainObject() != null && nodeService.exists(record.getMainObject())) {
             mainObjectId = (Long) nodeService.getProperty(record.getMainObject(), ContentModel.PROP_NODE_DBID);
         }
         String mainObjectStringId = record.getMainObject().toString();
