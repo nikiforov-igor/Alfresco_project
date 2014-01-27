@@ -6,8 +6,9 @@
 
 	<imports>
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
@@ -53,37 +54,7 @@
 		<!-- Исходящее -->
 		<type name="lecm-outgoing:document">
 			<title>Logic Ecm Outgoing Document</title>
-			<parent>lecm-document:base</parent>
-			<properties>
-				<property name="lecm-outgoing:note">
-					<title>Примечание</title>
-					<type>d:text</type>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
-				<property name="lecm-outgoing:title">
-					<title>Заголовок</title>
-					<type>d:text</type>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
-				<property name="lecm-outgoing:summary">
-					<title>Содержание</title>
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
-			</properties>
+			<parent>lecm-eds-document:base</parent>
 			<associations>
 				<association name="lecm-outgoing:author-assoc">
 					<title>Автор</title>
@@ -121,44 +92,6 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!-- В ответ на (связь) -->
-				<!--  -->
-				<association name="lecm-outgoing:document-type-assoc">
-					<title>Вид документа</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-doc-dic-dt:documentType</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-				<association name="lecm-outgoing:file-register-assoc">
-					<title>Номенклатура дел</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-doc-dic-fr:level3</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-				<association name="lecm-outgoing:subject-assoc">
-					<title>Тематика</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-doc-dic:subjects</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
 				<association name="lecm-outgoing:registrar-assoc">
 					<title>Регистратор</title>
 					<source>
@@ -185,10 +118,8 @@
 				</association>
 			</associations>
 			<mandatory-aspects>
-                <!--<aspect>lecm-document-aspects:has-reg-document-data</aspect>-->
-				<aspect>lecm-document-aspects:has-reg-project-data</aspect>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
-                <aspect>lecm-document-aspects:temp-attachments</aspect>
+				<aspect>lecm-document-aspects:temp-attachments</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>
