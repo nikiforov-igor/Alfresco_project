@@ -258,7 +258,7 @@
 					currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
 					addedInputEl = YAHOO.util.Dom.get( "${controlId}-added" ),
 					removedInputEl = YAHOO.util.Dom.get( "${controlId}-removed" ),
-					selectedContractors = Object.keys( args[1].selectedItems ), // Chrome, FF 4+, IE 9+, Safari 5+
+					selectedContractors = Object.keys( args[1].selectedItems ), // IE 9+
 
 					selectedContractor;
 

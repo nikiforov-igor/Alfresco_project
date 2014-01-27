@@ -342,7 +342,7 @@ LogicECM.module = LogicECM.module || {};
                         if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
                             for(i = 0; item = items[i]; i++) {
                                 if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                    items.splice(i, 1);
+                                    items.splice(i--, 1);
                                 }
                             }
                         }

@@ -64,7 +64,10 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder {
     margin-bottom: 0;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field input.autocomplete-input[type="text"],
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.autocompleteCurrentValueDisplayInvisible,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
     width: 80%;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .show-picker,
