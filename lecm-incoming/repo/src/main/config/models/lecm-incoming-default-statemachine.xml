@@ -1717,7 +1717,7 @@ if (recipient != null && recipient.length == 1) {
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
 var notificationText = documentScript.wrapperLink(recipient[0].nodeRef,"{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}");
 notificationText += " просит зарегистрировать ";
-var docTitle = substitude.formatNodeTitle(incoming, "входящий документ {lecm-incoming:document-type-assoc/cm:name} от <Контрагент>")
+var docTitle = substitude.formatNodeTitle(incoming, "входящий документ {lecm-incoming:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/lecm-contractor:fullname}")
 notificationText += documentScript.wrapperDocumentLink(incoming, docTitle);
 notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
