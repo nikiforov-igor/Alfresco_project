@@ -467,7 +467,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/8e661e03-a6f4-40ed-aac1-c5e35678deb0</nodeRef>
                                         <properties>
                                             <property>
@@ -998,7 +998,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/8d7a43a8-cac7-4e64-9050-b0605781ae11</nodeRef>
                                         <properties>
                                             <property>
@@ -1478,7 +1478,7 @@
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/0218cf1a-4163-40cb-a445-67b99f7416fa</nodeRef>
                                         <properties>
                                             <property>
@@ -2076,7 +2076,7 @@ if (partnerAssocs != null && partnerAssocs.length == 1) {
 }
 
 notificationText += ", вид договора {lecm-contract:typeContract-assoc/cm:name}";
-notificationText += ", тематика {lecm-contract:subjectContract-assoc/cm:name}";
+notificationText += ", тематика {lecm-document:subject-assoc/cm:name}";
 notificationText += ", исполнитель ";
 var executor = contract.properties["lecm-document:creator-ref"];
 notificationText += documentScript.wrapperLink(executor, "{lecm-document:creator}");
@@ -2796,7 +2796,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contr
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/e405dcd6-862c-444d-a814-ec33d7fd8640</nodeRef>
                                         <properties>
                                             <property>
@@ -3869,7 +3869,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contr
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/f6a00a2f-2fd0-4c45-a876-6c0bd69a3355</nodeRef>
                                         <properties>
                                             <property>
@@ -4819,7 +4819,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contr
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/ff2c9349-1c3f-4af2-8eea-9c5b604060ce</nodeRef>
                                         <properties>
                                             <property>
@@ -6140,7 +6140,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contr
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/ce8b1be1-8837-4577-9282-f3d15fef618e</nodeRef>
                                         <properties>
                                             <property>
@@ -7244,7 +7244,7 @@ notifications.sendNotificationFromCurrentUser(signers,notificationText, contract
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/455f1635-4932-4d09-8e02-1472bc57b861</nodeRef>
                                         <properties>
                                             <property>
@@ -8287,7 +8287,7 @@ notifications.sendNotificationFromCurrentUser(executors,notificationText, contra
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/b433e2b0-c277-4bc0-9440-017077e9a22e</nodeRef>
                                         <properties>
                                             <property>
@@ -9287,7 +9287,7 @@ contract.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/592715e4-70ea-4c36-b629-9025a7957924</nodeRef>
                                         <properties>
                                             <property>
@@ -10293,7 +10293,7 @@ contract.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/41f833fe-aa76-4e7e-a4bf-d389b73bedad</nodeRef>
                                         <properties>
                                             <property>
@@ -11109,7 +11109,7 @@ contract.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/86e9e46c-7d3b-4dad-8824-b420dc6dbfb5</nodeRef>
                                         <properties>
                                             <property>
@@ -11640,7 +11640,7 @@ contract.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/1503c28e-5e58-4570-9be4-2e3527b21334</nodeRef>
                                         <properties>
                                             <property>
@@ -12120,7 +12120,7 @@ contract.save();
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/ba6e71c0-1309-421c-8dc3-7df76aaf0d23</nodeRef>
                                         <properties>
                                             <property>
@@ -13028,7 +13028,7 @@ notifications.sendNotificationFromCurrentUser(executors,notificationText, contra
                                     </node>
                                     <node>
                                         <type>documentField</type>
-                                        <name>lecm-contract_subjectContract-assoc</name>
+                                        <name>lecm-document_subject-assoc</name>
                                         <nodeRef>workspace://SpacesStore/8bf33d13-d5e3-4933-9e2e-275031181429</nodeRef>
                                         <properties>
                                             <property>

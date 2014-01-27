@@ -91,7 +91,7 @@
 			<item key="contractKindTag" value="Вид договора" />
 
 			<item key="contractTheme">
-				<![CDATA[{lecm-contract:subjectContract-assoc/cm:name}]]>
+				<![CDATA[{lecm-document:subject-assoc/cm:name}]]>
 			</item>
 			<item key="contractThemeTag" value="Тематика договора" />
 
@@ -220,7 +220,7 @@
         </field>
 
         <field alfrescoType="lecm-doc-dic:subjects" order="6" displayName="Тематика договора"
-               javaValueClass="java.lang.String" jrFldName="contractSubject" queryFldName="{lecm-contract:subjectContract-assoc-ref}">
+               javaValueClass="java.lang.String" jrFldName="contractSubject" queryFldName="{lecm-document:subject-assoc-ref}">
             <l18>
                 <item key="RU_RU" value="Тематика договора"/>
             </l18>

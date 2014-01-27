@@ -404,7 +404,7 @@
                 <value>lecm-errands:controller-assoc</value>
                 <value>lecm-errands:coexecutors-assoc</value>
                 <value>lecm-errands:links-assoc</value>
-                <value>lecm-errands:subject-assoc</value>
+                <value>lecm-document:subject-assoc</value>
             </list>
         </property>
         <property name="categoriesToCopy">

@@ -54,7 +54,7 @@
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
-                    <show id="lecm-contract:subjectContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
@@ -100,7 +100,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:subjectContract-assoc" set="contract-info">
+                    <field id="lecm-document:subject-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -203,7 +203,7 @@
             <form id="document">
                 <field-visibility>
                     <show id="lecm-statemachine:status"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-contract:totalAmount"/>
@@ -217,7 +217,7 @@
             <form id="document-dashlet">
                 <field-visibility>
                     <show id="lecm-statemachine:status"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-contract:totalAmount"/>
@@ -291,7 +291,7 @@
 			<form>
                 <field-visibility>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
-                    <show id="lecm-contract:subjectContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
@@ -325,7 +325,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:subjectContract-assoc" set="contract-info">
+                    <field id="lecm-document:subject-assoc" set="contract-info">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -432,7 +432,7 @@
                     <show id="lecm-contract:regNumSystem"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-statemachine:status" force="true"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -444,7 +444,7 @@
                     <field id="lecm-contract:regNumSystem" label-id="contract.regNumber"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
@@ -454,7 +454,7 @@
                 <field-visibility>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
@@ -462,7 +462,7 @@
                 <appearance>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                 </appearance>
             </form>
@@ -472,7 +472,7 @@
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -483,7 +483,7 @@
                     <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -494,7 +494,7 @@
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -505,7 +505,7 @@
                     <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -516,7 +516,7 @@
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
                 </field-visibility>
@@ -525,7 +525,7 @@
                     <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
             </form>
@@ -535,7 +535,7 @@
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -546,7 +546,7 @@
                     <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -557,7 +557,7 @@
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -568,7 +568,7 @@
                     <field id="lecm-contract:dateRegProjectContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -579,7 +579,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -590,7 +590,7 @@
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -601,7 +601,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -613,7 +613,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -624,7 +624,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-contract:endDate"/>
                     <show id="lecm-document:creator"/>
@@ -637,7 +637,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -648,7 +648,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -660,7 +660,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -671,7 +671,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -682,7 +682,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -693,7 +693,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -705,7 +705,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -716,7 +716,7 @@
                     <show id="lecm-contract:dateRegContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-statemachine:status" force="true"/>
@@ -728,7 +728,7 @@
                     <field id="lecm-contract:dateRegContracts" label-id="contract.dateRegProject"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
@@ -740,7 +740,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -753,7 +753,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
@@ -765,7 +765,7 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:startDate"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
@@ -778,7 +778,7 @@
                     <field id="lecm-contract:dateConclusionContracts" label-id="contract.conclusionDate"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-statemachine:status" label-id="contract.status"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
@@ -789,7 +789,7 @@
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:creator-ref"/>
                     <show id="lecm-contract:totalAmountWithCurrency"/>
@@ -799,7 +799,7 @@
                     <field id="lecm-contract:regNumProject" label-id="contract.regProjectNumber"/>
                     <field id="lecm-contract:partner-assoc" label-id="contract.parther"/>
                     <field id="lecm-contract:typeContract-assoc" label-id="contract.type"/>
-                    <field id="lecm-contract:subjectContract-assoc" label-id="contract.subject"/>
+                    <field id="lecm-document:subject-assoc" label-id="contract.subject"/>
                     <field id="lecm-document:creator" label-id="contract.creator"/>
                     <field id="lecm-contract:totalAmountWithCurrency" label-id="contract.totalAmount" substituteString="{lecm-contract:totalAmount} {lecm-contract:currency-assoc/lecm-currency:alphabetic-code}"/>
                 </appearance>
@@ -824,7 +824,7 @@
                     <show id="lecm-contract:regNumContractor"/>
                     <show id="lecm-contract:partner-assoc"/>
                     <show id="lecm-contract:typeContract-assoc"/>
-                    <show id="lecm-contract:subjectContract-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:dateConclusionContracts"/>
@@ -865,7 +865,7 @@
                             <control-param name="mandatory">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:subjectContract-assoc">
+                    <field id="lecm-document:subject-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика
@@ -905,7 +905,7 @@
                     <show id="lecm-contract:regNumProject"/>
                     <show id="lecm-contract:dateRegProjectContracts"/>
                     <show id="lecm-contract:typeContract-assoc" force="true"/>
-                    <show id="lecm-contract:subjectContract-assoc" force="true"/>
+                    <show id="lecm-document:subject-assoc" force="true"/>
                     <show id="lecm-contract:totalAmount" force="true"/>
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:dateConclusionContracts"/>

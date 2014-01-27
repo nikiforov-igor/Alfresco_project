@@ -433,7 +433,7 @@
             <list>
                 <value>lecm-contract:typeContract-assoc</value>
                 <value>lecm-contract:partner-assoc</value>
-                <value>lecm-contract:subjectContract-assoc</value>
+                <value>lecm-document:subject-assoc</value>
                 <value>lecm-contract:representative-assoc</value>
                 <value>lecm-contract:currency-assoc</value>
             </list>
