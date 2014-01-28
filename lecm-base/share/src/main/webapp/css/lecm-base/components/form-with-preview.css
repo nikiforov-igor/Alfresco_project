@@ -38,7 +38,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
 	position: absolute;
-	bottom: 0;
+	bottom: 8px;
 	right: 0;
 }
 
@@ -58,7 +58,7 @@
 
 .from-with-preview  div.association-auto-complete-selected-item > span > a,
 .from-with-preview  div.association-auto-complete-selected-item-even > span > a {
-	max-width: 250px;
+	max-width: 245px;
 }
 
 .from-with-preview  div.association-auto-complete-selected-item > span.not-person,
