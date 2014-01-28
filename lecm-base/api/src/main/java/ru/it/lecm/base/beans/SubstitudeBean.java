@@ -105,10 +105,12 @@ public interface SubstitudeBean {
 	/**
 	 * Получение псевдо свойста или выполнение встроенной функции
 	 * @param object исходный узел
-	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов) 
+	 * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов)
 	 * @return список узлов после выполнения функции (псевдо-свойства)
 	 */
 	public List<NodeRef> getObjectByPseudoProp(NodeRef object, final String psedudoProp);
+
+    public String getFormatStringByPseudoProp(NodeRef object, final String psedudoProp);
 
     String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull);
 

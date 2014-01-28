@@ -98,6 +98,11 @@ public class ProxySubstitudeBean implements SubstitudeBean {
         return (realBean == null) ? null : realBean.getObjectByPseudoProp(object, psedudoProp);
     }
 
+    @Override
+    public String getFormatStringByPseudoProp(NodeRef object, String psedudoProp) {
+        return (realBean == null) ? null : realBean.getFormatStringByPseudoProp(object, psedudoProp);
+    }
+
     /**
      * Функция расширенной обработки. Вызывается когда выражение начинается
      * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно

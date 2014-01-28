@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -35,6 +36,15 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 }
                 return result;
             }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef auth = docService.getDocumentAuthor(object);
+                if (auth != null) {
+                    return (String) services.getNodeService().getProperty(auth, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                }
+                return "";
+            }
         },
         REGNUM {
             @Override
@@ -51,6 +61,20 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 }
                 return result;
             }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) { // пытаемся взять рег данные документа
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                } else {  // если их нет - берем рег данные проекта документа
+                    number = docService.getDocumentProjectRegData(object);
+                    if (number != null) {
+                        return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                    }
+                }
+                return DocumentService.DEFAULT_REG_NUM;
+            }
         },
         PROJECT_REGNUM {
             @Override
@@ -61,6 +85,15 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     result.add(number);
                 }
                 return result;
+            }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef number = docService.getDocumentProjectRegData(object);
+                if (number != null) {
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                }
+                return DocumentService.DEFAULT_REG_NUM;
             }
         },
         DOC_REGNUM {
@@ -73,9 +106,19 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 }
                 return result;
             }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) {
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                }
+                return DocumentService.DEFAULT_REG_NUM;
+            }
         };
 
         public abstract List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService);
+        public abstract String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services);
 
         public static PseudoProps findProp(String propName) {
             if (propName != null) {
@@ -350,10 +393,9 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 field = fieldCode;
             }
 
-            final List<NodeRef> found = getObjectByPseudoProp(showNode, field);
-            showNode = (found != null && found.size() > 0) ? found.get(0) : null;
-            if (showNode != null) {
-                result = getObjectDescription(showNode);
+            final String foundValue = getFormatStringByPseudoProp(showNode, field);
+            if (foundValue != null) {
+                result = foundValue;
             } else {
                 if (defaultValue != null) {
                     result = defaultValue;
@@ -407,6 +449,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     /**
      * Получение псевдо свойста или выполнение встроенной функции
      *
+     *
      * @param object      исходный узел
      * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов)
      * @return список узлов после выполнения функции (псевдо-свойства)
@@ -420,6 +463,14 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return null;
     }
 
+    @Override
+    public String getFormatStringByPseudoProp(NodeRef object, final String psedudoProp) {
+        PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
+        if (pseudo != null) {
+            return pseudo.getFormatStringByPseudoProp(object, documentService, serviceRegistry);
+        }
+        return null;
+    }
     /**
      * Получение выражений из форматной строки
      *
