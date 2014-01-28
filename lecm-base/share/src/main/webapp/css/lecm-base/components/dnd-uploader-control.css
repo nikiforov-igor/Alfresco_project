@@ -1,3 +1,6 @@
+.yui-skin-lecmTheme .yui-panel div.form-field.dnd-uploader {
+	padding-top: 5px;
+}
 .dnd-uploader ul.attachments-list {
     width: 330px;
     min-height: 102px;

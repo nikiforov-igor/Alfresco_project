@@ -126,4 +126,19 @@
 	overflow-x: hidden;
 	text-overflow: ellipsis;
 }
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field {
+	margin-bottom: 5px;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .object-finder .show-picker,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.autocomplete-block div.show-picker {
+	margin-bottom: 0;
+}
+.yui-skin-lecmTheme  .yui-panel.metadata-form-edit .bd .yui-u {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .set {
+	padding-bottom: 0;
+}
 
