@@ -96,6 +96,7 @@
                     <show id="lecm-eds-document:regnum" force="true"/> <!-- регистрационный номер|номер проекта|не присвоено -->
                     <show id="lecm-eds-document:date" force="true"/> <!-- дата создания|дата регистрации -->
 					<show id="lecm-document:creator"/> <!-- автор -->
+					<show id="lecm-document:creator-ref"/>
 					<show id="lecm-document:title"/> <!-- заголовок -->
 					<show id="lecm-statemachine:status"/> <!-- статус -->
 					<show id="lecm-outgoing:recipient" force="true"/> <!-- организация-получатель|адресант -->
