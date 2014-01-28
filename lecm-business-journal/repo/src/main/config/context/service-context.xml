@@ -143,7 +143,7 @@
         <property name="remoteService" ref="remoteBusinessJournalClient"/>
     </bean>
 
-    <amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true" dataDirectory="../queue">
+    <amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true">
         <amq:transportConnectors>
             <amq:transportConnector uri="vm://localhost:7001"/>
         </amq:transportConnectors>
