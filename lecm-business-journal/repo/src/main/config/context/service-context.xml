@@ -163,7 +163,7 @@
     </bean>
 
     <bean id="brokerConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory"
-          p:brokerURL="vm://localhost:7001" p:useAsyncSend="true" p:redeliveryPolicy-ref="redeliveryPolicy"/>
+          p:brokerURL="vm://localhost" p:useAsyncSend="true" p:redeliveryPolicy-ref="redeliveryPolicy" depends-on="broker"/>
 
     <bean id="jmxConnectionFactory"
           class="org.springframework.jms.connection.SingleConnectionFactory"
