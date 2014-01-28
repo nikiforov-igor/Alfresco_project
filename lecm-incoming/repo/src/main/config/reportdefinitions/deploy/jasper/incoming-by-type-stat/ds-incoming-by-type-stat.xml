@@ -62,7 +62,7 @@
         </field>
 
         <field alfrescoType="d:boolean" order="2" displayName="Только на контроле"
-               javaValueClass="java.lang.Boolean" jrFldName="incomingContractOnly" queryFldName="{lecm-incoming:is-on-control}">
+               javaValueClass="java.lang.Boolean" jrFldName="incomingContractOnly" queryFldName="{lecm-document-aspects:is-on-control}">
             <l18>
                 <item key="RU_RU" value="Только на контроле"/>
             </l18>

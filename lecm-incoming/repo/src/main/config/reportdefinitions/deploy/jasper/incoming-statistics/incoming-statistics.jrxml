@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lecm-onk-incoming-type-stat" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lecm-onk-incoming-type-stat" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
-	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
-		<conditionalStyle>
-			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
-			<style backcolor="#D2EAF1"/>
-		</conditionalStyle>
-	</style>
+	<style name="styleOdd" mode="Opaque" backcolor="#D2EAF1"/>
 	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
 	</parameter>
@@ -29,102 +24,13 @@
 	<field name="col_DocKind" class="java.lang.String">
 		<fieldDescription><![CDATA[Тип документа]]></fieldDescription>
 	</field>
-	<variable name="col_DocType_Count" class="java.lang.Integer" resetType="Group" resetGroup="grp_Subject" calculation="Count">
-		<variableExpression><![CDATA[$F{col_DocType}]]></variableExpression>
-	</variable>
-	<variable name="col_DocType_Total" class="java.lang.Integer" resetType="Group" resetGroup="grp_Type" calculation="Count">
-		<variableExpression><![CDATA[$F{col_DocType}]]></variableExpression>
-	</variable>
-	<variable name="col_DocSubject_Count" class="java.lang.Integer" resetType="Group" resetGroup="grp_Subject" calculation="Count">
-		<variableExpression><![CDATA[$F{col_DocSubject}]]></variableExpression>
-	</variable>
-	<variable name="col_DocSubject_Total" class="java.lang.Integer" resetType="Group" resetGroup="grp_Subject" calculation="Count">
-		<variableExpression><![CDATA[$F{col_DocSubject}]]></variableExpression>
-	</variable>
-	<variable name="col_DocKind_Count" class="java.lang.Integer" resetType="Group" resetGroup="grp_Kind" calculation="Count">
-		<variableExpression><![CDATA[$F{col_DocKind}]]></variableExpression>
-	</variable>
-	<group name="grp_Kind">
-		<groupExpression><![CDATA[$F{col_DocKind}]]></groupExpression>
-		<groupHeader>
-			<band height="30">
-				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Kind" isBlankWhenNull="true">
-					<reportElement uuid="a78e3311-c474-4c27-bb2c-405a42186ba7" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="129" height="30"/>
-					<box leftPadding="10">
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
-					</textElement>
-					<textFieldExpression><![CDATA[($F{col_DocKind} != null && $F{col_DocKind} != "" ) ? $F{col_DocKind} : "не указан"]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Kind" isBlankWhenNull="true">
-					<reportElement uuid="7d0d25ca-5adb-4326-8a52-55c687382a41" stretchType="RelativeToTallestObject" x="444" y="0" width="111" height="30"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
-					</textElement>
-					<textFieldExpression><![CDATA[$V{col_DocKind_Count}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="c470ee9c-9ab9-49f8-9acb-a0f7eac11abd" stretchType="RelativeToTallestObject" mode="Opaque" x="129" y="0" width="135" height="30"/>
-					<box leftPadding="10">
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
-					</textElement>
-					<textFieldExpression><![CDATA[""]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="caf9ed39-5869-40e8-b45c-982b94543199" stretchType="RelativeToTallestObject" mode="Opaque" x="264" y="0" width="87" height="30"/>
-					<box leftPadding="10">
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
-					</textElement>
-					<textFieldExpression><![CDATA[""]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-					<reportElement uuid="4a01711f-76f3-44bc-a8f5-851d43eaa140" stretchType="RelativeToTallestObject" mode="Opaque" x="351" y="0" width="93" height="30"/>
-					<box leftPadding="10">
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
-					</textElement>
-					<textFieldExpression><![CDATA[""]]></textFieldExpression>
-				</textField>
-			</band>
-		</groupHeader>
+	<group name="grp_KindTotal">
+		<groupExpression><![CDATA[""]]></groupExpression>
 		<groupFooter>
-			<band height="284">
+			<band height="280">
 				<stackedBar3DChart>
-					<chart isShowLegend="true">
-						<reportElement uuid="af3daa4e-0d06-41e5-b1f0-66878a61410a" x="16" y="11" width="527" height="257">
+					<chart isShowLegend="true" evaluationTime="Group" evaluationGroup="grp_KindTotal">
+						<reportElement uuid="af3daa4e-0d06-41e5-b1f0-66878a61410a" x="13" y="12" width="527" height="257">
 							<property name="net.sf.jasperreports.chart.range.axis.tick.interval" value="1"/>
 							<property name="net.sf.jasperreports.chart.domain.axis.tick.interval" value="1"/>
 						</reportElement>
@@ -133,11 +39,10 @@
 						<chartLegend/>
 					</chart>
 					<categoryDataset>
-						<dataset resetType="Group" resetGroup="grp_Kind"/>
 						<categorySeries>
 							<seriesExpression><![CDATA[( $F{col_DocType} != null && !$F{col_DocType}.equals("") ? $F{col_DocType}: "не указан")]]></seriesExpression>
 							<categoryExpression><![CDATA[$F{col_DocKind}]]></categoryExpression>
-							<valueExpression><![CDATA[$V{col_DocType_Count}]]></valueExpression>
+							<valueExpression><![CDATA[$V{grp_Type_COUNT}]]></valueExpression>
 						</categorySeries>
 					</categoryDataset>
 					<bar3DPlot isShowLabels="true">
@@ -155,6 +60,83 @@
 				</stackedBar3DChart>
 			</band>
 		</groupFooter>
+	</group>
+	<group name="grp_Kind">
+		<groupExpression><![CDATA[$F{col_DocKind}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Kind" isBlankWhenNull="true">
+					<reportElement uuid="a78e3311-c474-4c27-bb2c-405a42186ba7" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="129" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{col_DocKind} != null && $F{col_DocKind} != "" ) ? $F{col_DocKind} : "не указан"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Kind" isBlankWhenNull="true">
+					<reportElement uuid="7d0d25ca-5adb-4326-8a52-55c687382a41" style="styleOdd" stretchType="RelativeToTallestObject" x="444" y="0" width="111" height="30"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{grp_Kind_COUNT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="c470ee9c-9ab9-49f8-9acb-a0f7eac11abd" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="129" y="0" width="135" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="caf9ed39-5869-40e8-b45c-982b94543199" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="264" y="0" width="87" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="4a01711f-76f3-44bc-a8f5-851d43eaa140" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="351" y="0" width="93" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
 	</group>
 	<group name="grp_Subject">
 		<groupExpression><![CDATA[$F{col_DocSubject}]]></groupExpression>
@@ -186,7 +168,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="DejaVu Sans Mono"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$V{col_DocSubject_Count}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$V{grp_Subject_COUNT}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Subject" isBlankWhenNull="true">
 					<reportElement uuid="08eb6525-a55c-4a00-b251-6d8c083ae695" stretchType="RelativeToTallestObject" mode="Opaque" x="129" y="0" width="135" height="30"/>
@@ -214,7 +196,7 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="DejaVu Sans Mono"/>
 					</textElement>
-					<textFieldExpression><![CDATA[($V{col_DocSubject_Count}.doubleValue())/($V{col_DocKind_Count}.doubleValue())]]></textFieldExpression>
+					<textFieldExpression><![CDATA[($V{grp_Subject_COUNT}.doubleValue())/($V{grp_Kind_COUNT}.doubleValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Subject" isBlankWhenNull="true">
 					<reportElement uuid="09c1b027-7b68-4f80-9a6f-96982fcf9584" stretchType="RelativeToTallestObject" x="444" y="0" width="111" height="30"/>

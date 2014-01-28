@@ -31,7 +31,7 @@
         <limit>-1</limit>
         <pgsize>-1</pgsize>
         <queryText><![CDATA[+TYPE:"lecm-eds-document:base"]]></queryText>
-        <querySort>col_DocKind|ASC,col_DocType|ASC,col_DocSubject|ASC</querySort>
+        <querySort>col_DocKind|ASC,col_DocSubject|ASC,col_DocType|ASC</querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-incoming:document</preferedType>
         <isMultiRow>true</isMultiRow>
@@ -62,7 +62,7 @@
         </field>
 
         <field alfrescoType="d:boolean" order="2" displayName="Только на контроле"
-               javaValueClass="java.lang.Boolean" jrFldName="incomingContractOnly" queryFldName="{lecm-incoming:is-on-control}">
+               javaValueClass="java.lang.Boolean" jrFldName="incomingContractOnly" queryFldName="{lecm-document-aspects:is-on-control}">
             <l18>
                 <item key="RU_RU" value="Только на контроле"/>
             </l18>
@@ -78,7 +78,7 @@
             </l18>
         </field>
 
-        <field jrFldName="col_DocSubject" queryFldName="{lecm-document:subject-assoc-text-content}" displayName="Тематика"
+        <field jrFldName="col_DocSubject" queryFldName="{lecm-document:subject-assoc/cm:name}" displayName="Тематика"
                alfrescoType="d:text">
             <l18>
                 <item key="RU_RU" value="Тематика"/>
