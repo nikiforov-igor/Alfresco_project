@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <alfresco-config>
 	<config evaluator="node-type" condition="lecm-outgoing:document">
 		<forms></forms>
@@ -44,7 +43,7 @@
 
 					<!-- outgoing3:full-width-set -->
 					<field id="lecm-document:title" set="outgoing3"/>
-					
+
 					<!-- outgoing4:2-columns-set-with-nested -->
 					<field id="lecm-eds-document:document-type-assoc" set="outgoing4"/>
 					<field id="lecm-outgoing:delivery-method-assoc" set="outgoing4"/>
@@ -91,6 +90,21 @@
 						<control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 					</field>
 				</appearance>
+			</form>
+			<form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-eds-document:regnum" force="true"/> <!-- регистрационный номер|номер проекта|не присвоено -->
+                    <show id="lecm-eds-document:date" force="true"/> <!-- дата создания|дата регистрации -->
+					<show id="lecm-document:creator"/> <!-- автор -->
+					<show id="lecm-document:title"/> <!-- заголовок -->
+					<show id="lecm-statemachine:status"/> <!-- статус -->
+					<show id="lecm-outgoing:recipient" force="true"/> <!-- организация-получатель|адресант -->
+				</field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM|Не присвоено}"/>
+                    <field id="lecm-eds-document:date" label="Дата"/>
+					<show id="lecm-outgoing:recipient" label="Получатель"/>
+                </appearance>
 			</form>
 		</forms>
 	</config>
