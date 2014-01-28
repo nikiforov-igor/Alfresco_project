@@ -143,9 +143,9 @@
         <property name="remoteService" ref="remoteBusinessJournalClient"/>
     </bean>
 
-    <amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true">
+    <amq:broker xmlns="http://activemq.apache.org/schema/core" id="broker" useJmx="false" persistent="true" dataDirectory="${dir.root}/queue">
         <amq:transportConnectors>
-            <amq:transportConnector uri="vm://localhost:7001"/>
+            <amq:transportConnector uri="vm://localhost"/>
         </amq:transportConnectors>
         <persistenceAdapter>
             <kahaDB directory="${dir.root}/queue/Kaha"/>
