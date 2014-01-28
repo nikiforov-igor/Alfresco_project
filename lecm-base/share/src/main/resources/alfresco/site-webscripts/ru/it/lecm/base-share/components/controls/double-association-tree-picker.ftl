@@ -37,7 +37,7 @@
         </div>
     <#else>
         <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-        <div id="${controlId}" class="object-finder">
+        <div id="${controlId}" class="object-finder with-two-buttons">
             <div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
             <#if field.disabled == false>

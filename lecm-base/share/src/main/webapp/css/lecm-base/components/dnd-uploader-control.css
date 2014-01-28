@@ -64,6 +64,7 @@
 	padding: 10px;
 	text-align: center;
 	white-space: normal;
+	margin-bottom: 0;
 }
 .dnd-uploader div.big-uploader-block fieldset legend {
 	color: #666;

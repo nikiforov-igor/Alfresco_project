@@ -34,14 +34,15 @@
 	            <appearance>
 		            <set id="incoming1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming3"/>
+		            <set id="incoming3" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming4" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming5"/>
 		            <set id="incoming6" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming7"/>
-                    <set id="incoming8" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming9"/>
-		            <set id="incoming10" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming7" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+		            <set id="incoming8"/>
+                    <set id="incoming9" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+		            <set id="incoming10" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+		            <set id="incoming11" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 
 		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
 		            <field id="lecm-incoming:is-on-control" set="incoming1"/>
@@ -77,7 +78,7 @@
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
 
-		            <field id="lecm-incoming:recipient-assoc" set="incoming7">
+		            <field id="lecm-incoming:recipient-assoc" set="incoming8">
 			            <control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
 				            <control-param name="firstItemType">lecm-orgstr:employee</control-param>
 				            <control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -99,14 +100,14 @@
 			            </control>
 		            </field>
 
-		            <field id="lecm-eds-document:file-register-assoc" set="incoming8"/>
-		            <field id="lecm-document:subject-assoc" set="incoming8"/>
+		            <field id="lecm-eds-document:file-register-assoc" set="incoming9"/>
+		            <field id="lecm-document:subject-assoc" set="incoming9"/>
 
-		            <field id="lecm-eds-document:note" set="incoming9">
+		            <field id="lecm-eds-document:note" set="incoming10">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
 
-		            <field id="lecm-document-aspects:is-shared-folder" set="incoming10"/>
+		            <field id="lecm-document-aspects:is-shared-folder" set="incoming11"/>
 	            </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->

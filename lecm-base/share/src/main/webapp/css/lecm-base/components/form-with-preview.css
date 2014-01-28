@@ -8,7 +8,7 @@
 
 .from-with-preview > .yui-g > .yui-u {
 	width: 405px;
-	height: 550px;
+	height: 513px;
 	overflow-x: hidden;
 	overflow-y: auto;
 }
@@ -25,7 +25,12 @@
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block input.autocomplete-input,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field div.object-finder .current-values{
-	width: 140px;
+	width: 149px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.object-finder .show-picker,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
+	margin-right: 0;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field input[type=text]:not(.autocomplete-input),

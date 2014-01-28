@@ -1,15 +1,23 @@
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
-	width: 75%;
-}
-
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field input[type=text]:not(.autocomplete-input),
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.selectone-control select,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
-	width: 90%;
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field textarea {
+	width: 650px;
 	overflow: hidden;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block input.autocomplete-input {
-	width: 75%;
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field input[type=text]:not(.autocomplete-input),
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field textarea {
+	width: 387px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
+	width: 350px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 314px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .show-picker {
+	margin-right: 0;
 }
