@@ -414,7 +414,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/83b26804-facc-47bf-96fd-ceb5d139a034</nodeRef>
 										<properties>
 											<property>
@@ -1254,7 +1254,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/adead36d-8b92-4ade-812d-8abd5d49f438</nodeRef>
 										<properties>
 											<property>
@@ -2075,7 +2075,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/b25d59e0-9ff3-484c-b83a-1f7745792aa1</nodeRef>
 										<properties>
 											<property>
@@ -3027,7 +3027,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/92159b55-1087-4a07-b7f0-364b6b09196a</nodeRef>
 										<properties>
 											<property>
@@ -3812,7 +3812,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/5264d910-00c8-41ac-bd05-2204a5918b62</nodeRef>
 										<properties>
 											<property>
@@ -4697,7 +4697,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/fbd6336c-adc9-4578-aeb6-f30f5eae91b6</nodeRef>
 										<properties>
 											<property>
@@ -5380,7 +5380,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/ce72f466-07f9-4e10-8f7d-42c182cde659</nodeRef>
 										<properties>
 											<property>
@@ -6276,7 +6276,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/c22165e2-94e0-45da-a425-756559c42299</nodeRef>
 										<properties>
 											<property>
@@ -6672,7 +6672,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/ef579b71-1621-4b2e-8f67-756450467dad</nodeRef>
 										<properties>
 											<property>
@@ -7017,7 +7017,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/914f12aa-6d77-4134-bcff-1e4715a785a7</nodeRef>
 										<properties>
 											<property>
@@ -7362,7 +7362,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/474638d7-d923-418f-853a-c3b6cb6aef7e</nodeRef>
 										<properties>
 											<property>
@@ -7707,7 +7707,7 @@ incoming.save();]]></value>
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-incoming_is-on-control</name>
+										<name>lecm-document-aspects_is-on-control</name>
 										<nodeRef>workspace://SpacesStore/53f0301a-5bfe-4995-adb9-8ebbd39a932c</nodeRef>
 										<properties>
 											<property>

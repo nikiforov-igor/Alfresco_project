@@ -253,5 +253,17 @@
 				</association>
 			</associations>
 		</aspect>
+
+        <!-- аспект  для контрольных документов (если документ может быть на контроле)-->
+        <aspect name="lecm-document-aspects:on-control-aspect">
+            <properties>
+                <!--На контроле-->
+                <property name="lecm-document-aspects:is-on-control">
+                    <title>На контроле</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
     </aspects>
 </model>

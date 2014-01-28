@@ -13,7 +13,7 @@
             <form>
                 <field-visibility>
 	                <show id="lecm-incoming:is-not-registered"/>
-	                <show id="lecm-incoming:is-on-control"/>
+	                <show id="lecm-document-aspects:is-on-control"/>
 	                <show id="lecm-incoming:execution-date"/>
 	                <show id="lecm-document-aspects:reg-data-number" force="true"/>
 	                <show id="lecm-document-aspects:reg-data-date" force="true"/>
@@ -45,7 +45,7 @@
 		            <set id="incoming11" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 
 		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
-		            <field id="lecm-incoming:is-on-control" set="incoming1"/>
+		            <field id="lecm-document-aspects:is-on-control" set="incoming1"/>
 		            <field id="lecm-incoming:execution-date" set="incoming1"/>
 
 		            <field id="lecm-document-aspects:reg-data-number" set="incoming2">
@@ -120,7 +120,7 @@
 	                <show id="lecm-statemachine:status"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -132,7 +132,7 @@
 	                <show id="lecm-statemachine:status"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -204,7 +204,7 @@
 	                <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-eds-document:note"/>
 	                <show id="lecm-incoming:execution-date"/>
-	                <show id="lecm-incoming:is-on-control"/>
+	                <show id="lecm-document-aspects:is-on-control"/>
 	                <show id="lecm-incoming:is-not-registered"/>
                 </field-visibility>
 	            <appearance>
@@ -287,7 +287,7 @@
 		            <field id="lecm-eds-document:note" set="incoming9">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
-		            <field id="lecm-incoming:is-on-control" set="incoming10"/>
+		            <field id="lecm-document-aspects:is-on-control" set="incoming10"/>
 		            <field id="lecm-incoming:is-not-registered" set="incoming10"/>
 		            <field id="lecm-incoming:execution-date" set="incoming11"/>
 	            </appearance>
@@ -298,7 +298,7 @@
                     <show id="lecm-eds-document:regnum"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -326,7 +326,7 @@
                 <field-visibility>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
-                    <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
@@ -338,7 +338,7 @@
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:title"/>
-                    <show id="lecm-incoming:is-on-control"/>
+                    <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:is-not-registered"/>
                     <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-incoming:execution-date"/>

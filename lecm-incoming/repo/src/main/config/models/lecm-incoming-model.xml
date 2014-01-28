@@ -53,11 +53,6 @@
 			<title>Logic Ecm Incoming Document</title>
 			<parent>lecm-eds-document:base</parent>
 			<properties>
-                <!--На контроле-->
-                <property name="lecm-incoming:is-on-control">
-                    <title>На контроле</title>
-                    <type>d:boolean</type>
-                </property>
                 <!--Нерегистрируемый-->
                 <property name="lecm-incoming:is-not-registered">
                     <title>Нерегистрируемый</title>
@@ -255,6 +250,7 @@
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
+                <aspect>lecm-document-aspects:on-control-aspect</aspect>
             </mandatory-aspects>
 		</type>
 	</types>
