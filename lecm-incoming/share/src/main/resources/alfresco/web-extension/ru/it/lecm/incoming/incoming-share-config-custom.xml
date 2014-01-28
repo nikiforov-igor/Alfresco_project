@@ -284,6 +284,7 @@
             <!-- Форма для табличного представления (набор столбцов)-->
             <form id="datagrid">
                 <field-visibility>
+                    <show id="lecm-eds-document:regnum"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
@@ -291,6 +292,9 @@
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM|Не присвоено}"/>
+                </appearance>
             </form>
             <!-- Форма для базового журнала документов-->
             <form id="document-journal">
