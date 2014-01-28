@@ -113,6 +113,7 @@
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
+	                <show id="lecm-statemachine:status"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
@@ -124,6 +125,7 @@
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
                 <field-visibility>
+	                <show id="lecm-statemachine:status"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-incoming:is-on-control"/>
@@ -131,6 +133,11 @@
                     <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
+	            <appearance>
+		            <field id="lecm-statemachine:status">
+			            <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
+		            </field>
+	            </appearance>
             </form>
             <!-- Форма для передачи прав-->
             <form id="transfer-right">
