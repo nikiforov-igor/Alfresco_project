@@ -50,7 +50,7 @@
 
 		            <field id="lecm-document-aspects:reg-data-number" set="incoming2" label="Регистрационный номер">
 			            <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-				           <control-param name="formatString">{~REGNUM|Не присвоено}</control-param>
+				           <control-param name="formatString">{~REGNUM}</control-param>
 			            </control>
 		            </field>
 		            <field id="lecm-document-aspects:reg-data-date" set="incoming2" label="Дата регистрации">
@@ -126,9 +126,16 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{~REGISTRATOR}</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
@@ -138,13 +145,18 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-statemachine:status">
 			            <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
 		            </field>
+                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{~REGISTRATOR}</control-param>
+                        </control>
+                    </field>
 	            </appearance>
             </form>
             <!-- Форма для передачи прав-->
@@ -304,11 +316,12 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM|Не присвоено}"/>
+                    <field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM}"/>
+                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор" substituteString="{~REGISTRATOR}"/>
                 </appearance>
             </form>
             <!-- Форма для базового журнала документов-->
@@ -332,7 +345,6 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
             </form>
@@ -347,7 +359,6 @@
                     <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-incoming:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-incoming:registrator-assoc"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-incoming:recipient-assoc"/>

@@ -76,7 +76,6 @@
         </property>
         <property name="assocsToCopy">
             <list>
-                <value>lecm-incoming:registrator-assoc</value>
                 <value>lecm-eds-document:document-type-assoc</value>
                 <value>lecm-eds-document:file-register-assoc</value>
                 <value>lecm-document:subject-assoc</value>

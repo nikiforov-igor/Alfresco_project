@@ -25,7 +25,7 @@
     <constraints>
         <constraint name="lecm-incoming:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[Входящий от {cm:created?dd-MM-yyyy}, номер {~REGNUM|Не присвоено}]]></value>
+                <value><![CDATA[Входящий от {cm:created?dd-MM-yyyy}, номер {~REGNUM}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-incoming:attachment-categories" type="LIST">
@@ -78,23 +78,6 @@
                 <property name="lecm-incoming:execution-date">
                     <title>Срок исполнения</title>
                     <type>d:date</type>
-                </property>
-                <!-- системные свойства-->
-                <property name="lecm-incoming:registrator-assoc-ref">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-incoming:registrator-assoc-text-content">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
                 </property>
                 <property name="lecm-incoming:delivery-method-assoc-ref">
                     <type>d:text</type>
@@ -168,19 +151,6 @@
                 </property>
 			</properties>
 			<associations>
-				<!-- Регистратор -->
-				<association name="lecm-incoming:registrator-assoc">
-                    <title>Регистратор</title>
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-orgstr:employee</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
 				<!-- Ссылки -->
 				<association name="lecm-incoming:links-assoc">
 					<source>

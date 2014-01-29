@@ -2,10 +2,10 @@
 
 <model name="lecm-document-aspects:aspects" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 
-	<description>Document aspects</description>
-	<author>ORakovskaya</author>
-	<published>2013-03-12</published>
-	<version>1.0</version>
+    <description>Document aspects</description>
+    <author>ORakovskaya</author>
+    <published>2013-03-12</published>
+    <version>1.0</version>
 
     <imports>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -14,9 +14,9 @@
         <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
     </imports>
 
-	<namespaces>
-		<namespace uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-	</namespaces>
+    <namespaces>
+        <namespace uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+    </namespaces>
 
     <types>
         <type name="lecm-document-aspects:reg-data-attributes">
@@ -45,15 +45,31 @@
                     <default>false</default>
                 </property>
             </properties>
+            <associations>
+                <!-- Регистратор -->
+                <association name="lecm-document-aspects:reg-data-registrator-assoc">
+                    <title>Регистратор</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
         </type>
     </types>
 
-	<aspects>
-		<!--Аспект возможности оценивания (рейтинга)-->
+    <aspects>
+        <!--Аспект возможности оценивания (рейтинга)-->
         <aspect name="lecm-document-aspects:rateable">
             <properties>
                 <property name="lecm-document-aspects:rating">
-                    <type>d:text</type> <!-- хранится строкой для упрощения округления -->
+                    <type>d:text</type>
+                    <!-- хранится строкой для упрощения округления -->
                 </property>
                 <property name="lecm-document-aspects:rated-persons-count">
                     <type>d:int</type>
@@ -118,30 +134,30 @@
                 </association>
             </associations>
         </aspect>
-		<!--аспект для отображения документа на странице document-details для вложения-->
-		<aspect name="lecm-document-aspects:parent-document">
-			<associations>
-				<association name="lecm-document-aspects:parent-document-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-document:base</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
-		</aspect>
-		<aspect name="lecm-document-aspects:semanticAssistAspect">
-			<properties>
-				<property name="lecm-document-aspects:indexInBR5">
-					<type>d:boolean</type>
-					<default>true</default>
-				</property>
-			</properties>
-		</aspect>
+        <!--аспект для отображения документа на странице document-details для вложения-->
+        <aspect name="lecm-document-aspects:parent-document">
+            <associations>
+                <association name="lecm-document-aspects:parent-document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+        <aspect name="lecm-document-aspects:semanticAssistAspect">
+            <properties>
+                <property name="lecm-document-aspects:indexInBR5">
+                    <type>d:boolean</type>
+                    <default>true</default>
+                </property>
+            </properties>
+        </aspect>
         <!-- аспект архивирования документа для подразделения организации -->
         <aspect name="lecm-document-aspects:finalize-to-unit">
             <properties>
@@ -165,20 +181,20 @@
             </associations>
         </aspect>
 
-		<!-- аспект для поля "В ответ на" -->
+        <!-- аспект для поля "В ответ на" -->
         <aspect name="lecm-document-aspects:response-to-aspect">
             <associations>
-	            <association name="lecm-document-aspects:response-to-assoc">
-		            <source>
-			            <mandatory>false</mandatory>
-			            <many>true</many>
-		            </source>
-		            <target>
-			            <class>lecm-document:base</class>
-			            <mandatory>false</mandatory>
-			            <many>false</many>
-		            </target>
-	            </association>
+                <association name="lecm-document-aspects:response-to-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
             </associations>
         </aspect>
         <!-- аспект  для регистрационных данных документа -->
@@ -237,22 +253,22 @@
             </associations>
         </aspect>
 
-		<!-- Временное хранение ссылок на вложения, загружаемые на форме создания -->
-		<aspect name="lecm-document-aspects:temp-attachments">
-			<associations>
-				<association name="lecm-document-aspects:attachments-temp-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>cm:content</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</association>
-			</associations>
-		</aspect>
+        <!-- Временное хранение ссылок на вложения, загружаемые на форме создания -->
+        <aspect name="lecm-document-aspects:temp-attachments">
+            <associations>
+                <association name="lecm-document-aspects:attachments-temp-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
 
         <!-- аспект  для контрольных документов (если документ может быть на контроле)-->
         <aspect name="lecm-document-aspects:on-control-aspect">

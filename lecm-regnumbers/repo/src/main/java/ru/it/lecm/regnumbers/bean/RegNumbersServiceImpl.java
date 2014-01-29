@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
@@ -44,6 +45,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
 	private DocumentService documentService;
+	private OrgstructureBean orgstructureService;
 	private DocumentConnectionService documentConnectionService;
 
 	public final void init() {
@@ -75,6 +77,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	public void setDocumentService(DocumentService documentService) {
 		this.documentService = documentService;
 	}
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
 	@Override
 	public String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException {
@@ -257,6 +263,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                 NodeRef regAttributesRef = nodeService.createNode(documentNode, ContentModel.ASSOC_CONTAINS, assocQName,
                         DocumentService.TYPE_REG_DATA_ATTRIBUTES, properties).getChildRef();
 
+                NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+                if (currentEmployee != null) {
+                    nodeService.createAssociation(regAttributesRef, currentEmployee, DocumentService.ASSOC_REG_DATA_REGISTRATOR);
+                }
                 nodeService.createAssociation(documentNode, regAttributesRef, regAssocName);
             }
         }

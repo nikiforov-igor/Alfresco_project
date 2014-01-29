@@ -3,6 +3,7 @@ package ru.it.lecm.base.beans;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -103,6 +104,39 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     if (regDate != null) {
                         DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
                         return dFormat.format(regDate);
+                    }
+                }
+
+                return "";
+            }
+        },
+        REGISTRATOR {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) { // пытаемся взять рег данные документа
+                    result.add(number);
+                } else {  // если их нет - берем рег данные проекта документа
+                    number = docService.getDocumentProjectRegData(object);
+                    if (number != null) {
+                        result.add(number);
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number == null) {
+                    number = docService.getDocumentProjectRegData(object);
+                }
+                if (number != null) {
+                    List<AssociationRef> regs = services.getNodeService().getTargetAssocs(number, DocumentService.ASSOC_REG_DATA_REGISTRATOR);
+                    if (regs != null && !regs.isEmpty()) {
+                        NodeRef registratorRef = regs.get(0).getTargetRef();
+                        return  (String) services.getNodeService().getProperty(registratorRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                     }
                 }
 

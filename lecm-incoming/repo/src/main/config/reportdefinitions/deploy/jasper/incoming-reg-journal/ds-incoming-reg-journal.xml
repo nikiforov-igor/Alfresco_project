@@ -41,7 +41,7 @@
 
     <fields>
         <!-- Parameters-->
-        <field jrFldName="dateReg" order="0" queryFldName="{lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date}" displayName="Дата регистрации"
+        <field jrFldName="dateReg" order="0" queryFldName="{~REGDATE}" displayName="Дата регистрации"
                javaValueClass="java.util.Date" alfrescoType="d:date">
             <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
                 <l18>

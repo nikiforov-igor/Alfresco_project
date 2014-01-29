@@ -31,7 +31,7 @@
 					<!-- outgoing1:full-width-set -->
 					<field id="lecm-document-aspects:reg-data-number" set="outgoing1">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGNUM|Не присвоено}</control-param>
+							<control-param name="formatString">{~REGNUM}</control-param>
 						</control>
 					</field>
 					<field id="lecm-document-aspects:reg-data-date" set="outgoing1">
@@ -240,7 +240,7 @@
 				<appearance>
 					<field id="lecm-eds-document:regnum" label="Номер">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGNUM|Не присвоено}</control-param>
+							<control-param name="formatString">{~REGNUM}</control-param>
 						</control>
 					</field>
 					<field id="lecm-eds-document:date" label="Дата">

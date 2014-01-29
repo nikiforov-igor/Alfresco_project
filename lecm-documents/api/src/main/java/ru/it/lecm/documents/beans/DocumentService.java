@@ -75,6 +75,7 @@ public interface DocumentService {
     public static final QName PROP_REG_DATA_DATE = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-date");
     public static final QName PROP_REG_DATA_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
     public static final QName PROP_REG_DATA_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
+    public static final QName ASSOC_REG_DATA_REGISTRATOR = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-registrator-assoc");
 
     public static final QName PROP_DOCUMENT_TYPE = QName.createQName(DOCUMENT_NAMESPACE_URI, "doc-type");
 
