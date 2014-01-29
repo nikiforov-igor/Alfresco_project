@@ -66,6 +66,36 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 NodeRef number = docService.getDocumentRegData(object);
                 if (number != null) { // пытаемся взять рег данные документа
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
+                } else {  // если их нет - берем рег данные проекта документа
+                    number = docService.getDocumentProjectRegData(object);
+                    if (number != null) {
+                        return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
+                    }
+                }
+                return DocumentService.DEFAULT_REG_NUM;
+            }
+        },
+        REGDATE {
+            @Override
+            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) { // пытаемся взять рег данные документа
+                    result.add(number);
+                } else {  // если их нет - берем рег данные проекта документа
+                    number = docService.getDocumentProjectRegData(object);
+                    if (number != null) {
+                        result.add(number);
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                NodeRef number = docService.getDocumentRegData(object);
+                if (number != null) { // пытаемся взять рег данные документа
                     return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
                 } else {  // если их нет - берем рег данные проекта документа
                     number = docService.getDocumentProjectRegData(object);
@@ -73,7 +103,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                         return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
                     }
                 }
-                return DocumentService.DEFAULT_REG_NUM;
+                return "";
             }
         },
         PROJECT_REGNUM {
@@ -91,7 +121,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 NodeRef number = docService.getDocumentProjectRegData(object);
                 if (number != null) {
-                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
                 }
                 return DocumentService.DEFAULT_REG_NUM;
             }
@@ -111,7 +141,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 NodeRef number = docService.getDocumentRegData(object);
                 if (number != null) {
-                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
+                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
                 }
                 return DocumentService.DEFAULT_REG_NUM;
             }
