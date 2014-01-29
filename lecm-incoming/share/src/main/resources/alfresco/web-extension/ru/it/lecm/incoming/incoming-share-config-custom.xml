@@ -53,7 +53,11 @@
 				           <control-param name="formatString">{~REGNUM|Не присвоено}</control-param>
 			            </control>
 		            </field>
-		            <field id="lecm-document-aspects:reg-data-date" set="incoming2"/>
+		            <field id="lecm-document-aspects:reg-data-date" set="incoming2">
+			            <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+				           <control-param name="formatString">{~REGDATE}</control-param>
+			            </control>
+		            </field>
 
 		            <field id="lecm-document:title" set="incoming3"/>
 
