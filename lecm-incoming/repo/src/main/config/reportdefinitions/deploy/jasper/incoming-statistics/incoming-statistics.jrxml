@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lecm-onk-incoming-type-stat" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lecm-onk-incoming-type-stat" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -25,13 +25,93 @@
 		<fieldDescription><![CDATA[Тип документа]]></fieldDescription>
 	</field>
 	<variable name="grp_Type_SUM" class="java.lang.Integer" resetType="Group" resetGroup="grp_Kind" incrementType="Group" incrementGroup="grp_Subject" calculation="Sum">
-		<variableExpression><![CDATA[$V{grp_Type_COUNT}]]></variableExpression>
+		<variableExpression><![CDATA[($F{col_DocType} == null || $F{col_DocType} == "") ?  0 : $V{grp_Type_COUNT}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="grp_Type_NULL_SUM" class="java.lang.Integer" resetType="Group" resetGroup="grp_Kind" incrementType="Group" incrementGroup="grp_Subject">
+		<variableExpression><![CDATA[($F{col_DocType} == null || $F{col_DocType} == "") ? $V{grp_Type_NULL_SUM} + 1 :  $V{grp_Type_NULL_SUM} + 0]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="grp_KindTotal">
 		<groupExpression><![CDATA[""]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
+				<staticText>
+					<reportElement uuid="98fecca2-e1a2-4978-9cc6-d6d85ac31eb4" mode="Opaque" x="0" y="0" width="129" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Вид документа]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5ca4745a-603d-4069-b776-1c4b2d0ff0e4" mode="Opaque" x="129" y="0" width="135" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Тематика]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="94509782-c440-40c8-bdad-13f05d0e1047" mode="Opaque" x="264" y="0" width="87" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Количество]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="32838331-e8fe-4141-8f6c-5325809daee0" mode="Opaque" x="351" y="0" width="93" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Проценты]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5331af06-4d7c-4cb3-9b73-4a0664e042ac" mode="Opaque" x="444" y="0" width="111" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Итого по виду документа]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
 		<groupFooter>
 			<band height="280">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
 				<stackedBar3DChart>
 					<chart isShowLegend="true" evaluationTime="Group" evaluationGroup="grp_KindTotal">
 						<reportElement uuid="af3daa4e-0d06-41e5-b1f0-66878a61410a" x="13" y="12" width="527" height="257">
@@ -44,9 +124,9 @@
 					</chart>
 					<categoryDataset>
 						<categorySeries>
-							<seriesExpression><![CDATA[( $F{col_DocType} != null && !$F{col_DocType}.equals("") ? $F{col_DocType}: "не указан")]]></seriesExpression>
+							<seriesExpression><![CDATA[$F{col_DocType} != null && $F{col_DocType} != "" ? $F{col_DocType} : "не указан"]]></seriesExpression>
 							<categoryExpression><![CDATA[$F{col_DocKind}]]></categoryExpression>
-							<valueExpression><![CDATA[$V{grp_Type_SUM}]]></valueExpression>
+							<valueExpression><![CDATA[$F{col_DocType} != null && $F{col_DocType} != "" ? $V{grp_Type_SUM} : $V{grp_Type_NULL_SUM}]]></valueExpression>
 						</categorySeries>
 					</categoryDataset>
 					<bar3DPlot isShowLabels="true">
@@ -69,6 +149,7 @@
 		<groupExpression><![CDATA[$F{col_DocKind}]]></groupExpression>
 		<groupHeader>
 			<band height="30">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
 				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Kind" isBlankWhenNull="true">
 					<reportElement uuid="a78e3311-c474-4c27-bb2c-405a42186ba7" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="129" height="30"/>
 					<box leftPadding="10">
@@ -146,6 +227,7 @@
 		<groupExpression><![CDATA[$F{col_DocSubject}]]></groupExpression>
 		<groupHeader>
 			<band height="30">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
 				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 					<reportElement uuid="ca29a0b9-b01b-45c9-86ad-b939ad0b0e21" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="129" height="30"/>
 					<box leftPadding="10">
@@ -220,38 +302,10 @@
 		</groupHeader>
 	</group>
 	<group name="grp_Type">
-		<groupExpression><![CDATA[$F{col_DocType}]]></groupExpression>
+		<groupExpression><![CDATA[(($F{col_DocType} != null && $F{col_DocType} != "") ? $F{col_DocType} : "_")]]></groupExpression>
 	</group>
 	<title>
-		<band height="70" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="98fecca2-e1a2-4978-9cc6-d6d85ac31eb4" mode="Opaque" x="0" y="40" width="129" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#78C0D4"/>
-					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Вид документа]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="94509782-c440-40c8-bdad-13f05d0e1047" mode="Opaque" x="264" y="40" width="87" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#78C0D4"/>
-					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Количество]]></text>
-			</staticText>
+		<band height="40" splitType="Stretch">
 			<staticText>
 				<reportElement uuid="f710bbcc-3ec1-4bff-bcaa-19263f08b8a4" x="0" y="0" width="555" height="40"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -259,48 +313,20 @@
 				</textElement>
 				<text><![CDATA[Статистический отчет по документам]]></text>
 			</staticText>
-			<staticText>
-				<reportElement uuid="32838331-e8fe-4141-8f6c-5325809daee0" mode="Opaque" x="351" y="40" width="93" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#78C0D4"/>
-					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Проценты]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="5ca4745a-603d-4069-b776-1c4b2d0ff0e4" mode="Opaque" x="129" y="40" width="135" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#78C0D4"/>
-					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Тематика]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="5331af06-4d7c-4cb3-9b73-4a0664e042ac" mode="Opaque" x="444" y="40" width="111" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="1.0" lineColor="#78C0D4"/>
-					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Итого по виду документа]]></text>
-			</staticText>
 		</band>
 	</title>
+	<summary>
+		<band height="50">
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="e22180ba-e2fa-4847-b7f5-71db7d83b125" x="0" y="0" width="555" height="50" forecolor="#FF0000">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfEncoding="Cp1251"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Нет данных, удовлетворяющих выборке"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
 </jasperReport>
