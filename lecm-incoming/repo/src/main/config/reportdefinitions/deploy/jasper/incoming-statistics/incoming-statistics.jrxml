@@ -24,6 +24,10 @@
 	<field name="col_DocKind" class="java.lang.String">
 		<fieldDescription><![CDATA[Тип документа]]></fieldDescription>
 	</field>
+	<variable name="grp_Type_SUM" class="java.lang.Integer" resetType="Group" resetGroup="grp_Kind" incrementType="Group" incrementGroup="grp_Subject" calculation="Sum">
+		<variableExpression><![CDATA[$V{grp_Type_COUNT}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<group name="grp_KindTotal">
 		<groupExpression><![CDATA[""]]></groupExpression>
 		<groupFooter>
@@ -42,7 +46,7 @@
 						<categorySeries>
 							<seriesExpression><![CDATA[( $F{col_DocType} != null && !$F{col_DocType}.equals("") ? $F{col_DocType}: "не указан")]]></seriesExpression>
 							<categoryExpression><![CDATA[$F{col_DocKind}]]></categoryExpression>
-							<valueExpression><![CDATA[$V{grp_Type_COUNT}]]></valueExpression>
+							<valueExpression><![CDATA[$V{grp_Type_SUM}]]></valueExpression>
 						</categorySeries>
 					</categoryDataset>
 					<bar3DPlot isShowLabels="true">
