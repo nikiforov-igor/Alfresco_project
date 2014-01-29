@@ -89,7 +89,8 @@
 			<!-- Форма с набором полей для правой области на карточке документа -->
 			<form id="document">
 				<field-visibility>
-					<show id="lecm-outgoing:contractor-assoc" force="true"/>>											<!-- TODO: Контрагент (Организация или Адресат) -->
+					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
@@ -99,7 +100,8 @@
 			<!-- Форма с набором полей для "Общие сведения" на карточке документа -->
 			<form id="document-dashlet">
 				<field-visibility>
-					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- TODO: Контрагент (Организация или Адресат) -->
+					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-statemachine:status"/>																<!-- Статус -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
@@ -222,7 +224,8 @@
 			<!-- Форма для табличного представления (набор столбцов) -->
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-eds-document:regnum" force="true"/>													<!-- Регистрационный номер | Номер проекта | Не присвоено -->
+					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 					<show id="lecm-eds-document:date" force="true"/>													<!-- Дата создания | Дата регистрации -->
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-document:creator-ref"/>																<!-- Автор Ссылка -->
@@ -235,6 +238,19 @@
 					<field id="lecm-eds-document:date" label="Дата"/>
 					<field id="lecm-outgoing:recipient" label="Получатель"/>
 				</appearance>
+			</form>
+
+			<!-- Форма атрибутивного поиска -->
+			<form id="search">
+				<field-visibility>
+					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
+					<show id="lecm-document-aspects:project-reg-attributes-assoc-text-content"/>						<!-- Номер проекта -->
+					<show id="lecm-document-aspects:document-reg-attributes-assoc-text-content"/>						<!-- Дата регистрации & Регистрационный номер -->
+					<show id="lecm-document:title"/>																	<!-- Заголовок -->
+					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+				</field-visibility>
 			</form>
 		</forms>
 	</config>
