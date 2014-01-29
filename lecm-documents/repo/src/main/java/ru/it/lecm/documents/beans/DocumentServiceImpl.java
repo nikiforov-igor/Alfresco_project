@@ -613,7 +613,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     private NodeRef getRegData(NodeRef document, boolean isProjectData){
-        QName regAspectName = isProjectData ? DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+        QName regAspectName = isProjectData ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
         QName regAssocName =  isProjectData ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
 
         if (nodeService.hasAspect(document, regAspectName)) {
