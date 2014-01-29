@@ -69,6 +69,9 @@ LogicECM.module = LogicECM.module || {};
 								}
 								select.appendChild(option);
 							}
+                            if (this.options.mandatory) {
+                                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+                            }
 						}
 					},
 					scope: this
