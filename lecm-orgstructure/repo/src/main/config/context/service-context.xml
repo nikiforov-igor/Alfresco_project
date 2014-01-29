@@ -305,6 +305,7 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="authorityService" ref="authorityService"/>
         <property name="dictionaryService" ref="dictionaryService" />
+        <property name="publicAction" value="false" />
     </bean>
 
 </beans>

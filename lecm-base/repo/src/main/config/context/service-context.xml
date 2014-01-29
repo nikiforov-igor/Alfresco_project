@@ -95,7 +95,8 @@
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
-	</bean>
+        <property name="publicAction" value="false" />
+    </bean>
 
     <bean id="lecmObjectsService" class="ru.it.lecm.base.beans.LecmObjectsServiceImpl">
         <property name="namespaceService">

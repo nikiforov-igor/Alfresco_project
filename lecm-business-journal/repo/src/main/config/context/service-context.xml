@@ -256,6 +256,7 @@
         <property name="businessJournalService">
             <ref bean="businessJournalService"/>
         </property>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="businessJournalArchiverSettings" class="ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings" init-method="init">

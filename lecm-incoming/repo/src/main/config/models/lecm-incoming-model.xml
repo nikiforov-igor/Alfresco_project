@@ -202,7 +202,7 @@
                     </source>
                     <target>
                         <class>lecm-doc-dic-dm:deliveryMethod</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
@@ -229,7 +229,7 @@
 					</source>
 					<target>
 						<class>lecm-contractor:contractor-type</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>

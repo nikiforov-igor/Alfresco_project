@@ -158,6 +158,7 @@
         <property name="calendarBean" ref="WorkCalendarService"/>
         <property name="incomingService" ref="incomingService"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="incoming.executionNotificationSchedule" class="ru.it.lecm.incoming.schedule.ExecutionNotificationSchedule">
@@ -208,4 +209,46 @@
         <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
+    <bean id="repositoryReceiverExecutor" class="ru.it.lecm.incoming.external.RepositoryExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="repositoryReceiver" ref="incoming.repositoryReceiver"/>
+        <property name="publicAction" value="true" />
+    </bean>
+
+    <bean id="emailRepositoryReceiverExecutor" class="ru.it.lecm.incoming.external.EmailRepositoryExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="repositoryReceiver" ref="incoming.emailRepositoryReceiver"/>
+        <property name="publicAction" value="true" />
+    </bean>
+
+    <bean id="incoming.abstractReceiver" class="ru.it.lecm.incoming.external.AbstractReceiver" abstract="true" init-method="init">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="threadPoolExecutor" ref="repositoryReceiverAsyncThreadPool"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+    </bean>
+
+    <bean id="incoming.emailRepositoryReceiver" class="ru.it.lecm.incoming.external.EmailRepositoryReceiver" parent="incoming.abstractReceiver">
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="contractors" ref="contractorsBean"/>
+        <property name="dictionaryService" ref="serviceDictionary"/>
+    </bean>
+
+    <bean id="incoming.repositoryReceiver" class="ru.it.lecm.incoming.external.RepositoryReceiver" parent="incoming.abstractReceiver"/>
+
+    <bean id="repositoryReceiverAsyncThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+        <property name="poolName">
+            <value>repositoryReceiverAsyncAction</value>
+        </property>
+        <property name="corePoolSize">
+            <value>8</value>
+        </property>
+        <property name="maximumPoolSize">
+            <value>20</value>
+        </property>
+        <property name="threadPriority">
+            <value>1</value>
+        </property>
+    </bean>
 </beans>

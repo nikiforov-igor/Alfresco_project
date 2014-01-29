@@ -259,6 +259,7 @@
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="contractsInitiatorNotificationSchedule" class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
@@ -315,6 +316,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
         <property name="documentTableService" ref="documentTableService"/>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="contractsStageDateNotificationSchedule" class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule">

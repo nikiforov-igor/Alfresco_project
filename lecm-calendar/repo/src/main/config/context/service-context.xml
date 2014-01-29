@@ -133,7 +133,8 @@
 		<property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>
-	</bean>
+        <property name="publicAction" value="false" />
+    </bean>
 	<bean id="absenceStartSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceStartSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
@@ -173,7 +174,8 @@
 		<property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>
-	</bean>
+        <property name="publicAction" value="false" />
+    </bean>
 	<bean id="absenceEndSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceEndSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>
@@ -213,7 +215,8 @@
 		<property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>
-	</bean>
+        <property name="publicAction" value="false" />
+    </bean>
 	<bean id="absenceProlongationSchedule" class="ru.it.lecm.wcalendar.absence.schedule.AbsenceProlongationSchedule" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="transactionMode">
 			<value>ISOLATED_TRANSACTIONS</value>

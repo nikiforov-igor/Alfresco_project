@@ -280,6 +280,7 @@
         <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
@@ -334,6 +335,7 @@
         <property name="errandsService" ref="errandsService"/>
         <property name="notificationsService" ref="notificationsService"/>
         <property name="nodeService" ref="nodeService"/>
+        <property name="publicAction" value="false" />
     </bean>
 
     <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">

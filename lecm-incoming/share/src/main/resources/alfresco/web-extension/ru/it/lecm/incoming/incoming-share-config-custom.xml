@@ -13,10 +13,10 @@
             <form>
                 <field-visibility>
 	                <show id="lecm-incoming:is-not-registered"/>
-	                <show id="lecm-document-aspects:is-on-control"/>
+	                <show id="lecm-incoming:is-on-control"/>
 	                <show id="lecm-incoming:execution-date"/>
-	                <show id="lecm-document-aspects:reg-data-number" force="true"/>
-	                <show id="lecm-document-aspects:reg-data-date" force="true"/>
+	                <show id="lecm-document-aspects:reg-data-number"/>
+	                <show id="lecm-document-aspects:reg-data-date"/>
 	                <show id="lecm-document:title"/>
 	                <show id="lecm-eds-document:document-type-assoc"/>
 	                <show id="lecm-incoming:delivery-method-assoc"/>
@@ -62,9 +62,9 @@
 		            <field id="lecm-document:title" set="incoming3"/>
 
 		            <field id="lecm-eds-document:document-type-assoc" set="incoming4"/>
-		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4"/>
+		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4" mandatory="true"/>
 
-		            <field id="lecm-incoming:sender-assoc" set="incoming5">
+		            <field id="lecm-incoming:sender-assoc" set="incoming5" mandatory="true">
 			            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
 				            <control-param name="changeItemsFireAction">lecm-incoming-addressee-assoc</control-param>
 				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
@@ -109,7 +109,7 @@
 		            </field>
 
 		            <field id="lecm-eds-document:file-register-assoc" set="incoming9"/>
-		            <field id="lecm-document:subject-assoc" set="incoming9"/>
+		            <field id="lecm-document:subject-assoc" set="incoming9" mandatory="true"/>
 
 		            <field id="lecm-eds-document:note" set="incoming10">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
@@ -234,9 +234,9 @@
 
 		            <field id="lecm-document:title" set="incoming3"/>
 		            <field id="lecm-eds-document:document-type-assoc" set="incoming4"/>
-		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4"/>
+		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4" mandatory="true"/>
 
-		            <field id="lecm-incoming:sender-assoc" set="incoming5">
+		            <field id="lecm-incoming:sender-assoc" set="incoming5" mandatory="true">
 			            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
 				            <control-param name="changeItemsFireAction">lecm-incoming-addressee-assoc</control-param>
 				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
@@ -286,7 +286,7 @@
 		            <field id="lecm-eds-document:summaryContent" set="incoming7">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
 		            </field>
-		            <field id="lecm-document:subject-assoc" set="incoming8"/>
+		            <field id="lecm-document:subject-assoc" set="incoming8" mandatory="true"/>
 		            <field id="lecm-eds-document:file-register-assoc" set="incoming8"/>
 		            <field id="lecm-eds-document:note" set="incoming9">
 			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>

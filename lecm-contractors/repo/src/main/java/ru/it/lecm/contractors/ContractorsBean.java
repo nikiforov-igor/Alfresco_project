@@ -107,6 +107,23 @@ public class ContractorsBean extends BaseBean implements Contractors {
     }
 
     @Override
+    public NodeRef getContractor(NodeRef representative) {
+        Map<String, String> result = new HashMap<String, String>();
+        List<AssociationRef> representativeSourceAssocs = nodeService.getSourceAssocs(representative, Contractors.ASSOC_LINK_TO_REPRESENTATIVE);
+        if(representativeSourceAssocs == null || representativeSourceAssocs.isEmpty()) {
+            return null;
+        }
+        AssociationRef sourceAssocRefToLink = representativeSourceAssocs.get(0);
+        NodeRef linkRef = sourceAssocRefToLink.getSourceRef();
+        NodeRef contractorRef = nodeService.getPrimaryParent(linkRef).getParentRef();
+        if(contractorRef != null && TYPE_CONTRACTOR.isMatch(nodeService.getType(contractorRef))) {
+            return contractorRef;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public List<Object> getRepresentatives(NodeRef targetContractor) { // O(n^3)
 
         // Получить список всех ассоциаций на ссылку.
@@ -160,4 +177,9 @@ public class ContractorsBean extends BaseBean implements Contractors {
 		}
 		return new JSONArray(representatives);
 	}
+
+    @Override
+    public NodeRef getRepresentativeByEmail(String email) {
+        return dictionaryService.getRecordByParamValue("Адресанты", PROP_REPRESENTATIVE_EMAIL, email);
+    }
 }

@@ -139,7 +139,8 @@
 		<property name="ignoreLock">
 			<value>false</value>
 		</property>
-	</bean>
+        <property name="publicAction" value="false" />
+    </bean>
 
 	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsOnCreateAssocsPolicy"
 	      init-method="init" parent="logicEcmAssociationPolicy"/>
