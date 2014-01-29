@@ -226,7 +226,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
     private void register(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
         NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
         if (templateDictionary != null && documentNode != null) {
-            QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+            QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
             QName regAssocName =  isProjectRegister ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
 
             if (!nodeService.hasAspect(documentNode, regAspectName)) {
