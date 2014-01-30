@@ -14,8 +14,8 @@
 
 .yui-skin-lecmTheme div.metadata-form div.form-fields,
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set {
-    width: 70em;
-    padding-right: 0;
+    min-width: 69.3em;
+    padding-right: 0.8em;
 }
 .yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-label,
 .yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value {
@@ -49,7 +49,7 @@
     width: 230px;
 }
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
-    width: 695px;
+    width: 687px;
 }
 .yui-skin-lecmTheme div.metadata-form div.form-field {
     float: left;
@@ -103,6 +103,10 @@
 .yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div img,
 .yui-skin-lecmTheme div.metadata-form-edit .form-fields .yui-content .tab-contract-stages .form-field.with-grid .datagrid div.grid td.yui-dt-col-assoc_lecm-contract-table-structure_attachments-temp-assoc div img {
     margin-right: 3px;
+}
+
+.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-common {
+	padding-top: 2em;
 }
 
 /*.yui-skin-lecmTheme div[id*="-view-repsesentative"] {*/

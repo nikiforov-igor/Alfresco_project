@@ -142,3 +142,7 @@
     width: 90px;
 }
 
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields,
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields > div.set {
+	min-width: 0;
+}

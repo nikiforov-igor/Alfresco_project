@@ -82,7 +82,7 @@
                     <set id="contract-info" appearance="" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
-                    <set id="counterparty-info-1" parent="common" appearance=""/>
+                    <set id="counterparty-info-1" parent="common" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="counterparty-info-2" parent="common" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
                     <set id="dates" appearance="" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
                     <set id="content" appearance="" parent="common" />
