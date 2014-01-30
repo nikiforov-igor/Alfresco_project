@@ -72,8 +72,7 @@ abstract public class AbstractReceiver {
         this.serviceRegistry = serviceRegistry;
     }
 
-    private class ReceiverTransactionListener implements TransactionListener
-    {
+    private class ReceiverTransactionListener implements TransactionListener {
 
         @Override
         public void flush() {
@@ -103,7 +102,8 @@ abstract public class AbstractReceiver {
                                 return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                     @Override
                                     public Void execute() throws Throwable {
-                                        for (ExternalIncomingDocument document : pendingCreate) {
+                                        while (!pendingCreate.isEmpty()) {
+                                            final ExternalIncomingDocument document = pendingCreate.remove(0);
                                             NodeRef incoming = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
                                                 @Override
                                                 public NodeRef execute() throws Throwable {
