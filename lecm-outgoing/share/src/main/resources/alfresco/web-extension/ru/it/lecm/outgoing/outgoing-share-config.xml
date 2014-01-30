@@ -238,17 +238,8 @@
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-document:regnum" label="Номер">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGNUM}</control-param>
-						</control>
-					</field>
-					<field id="lecm-eds-document:date" label="Дата">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGDATE}</control-param>
-						</control>
-					</field>
-					<field id="lecm-outgoing:recipient" label="Получатель"/>
+					<field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM}"/>
+					<field id="lecm-eds-document:regdate" label="Дата" substituteString="{~REGDATE}"/>
 				</appearance>
 			</form>
 
@@ -276,6 +267,9 @@
 					<show id="lecm-outgoing:registrar-assoc"/>															<!-- Регистратор -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
+					<show id="lecm-document:title"/>																	<!-- Заголовок -->
+					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
+					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
 				</field-visibility>
 			</form>
 		</forms>
