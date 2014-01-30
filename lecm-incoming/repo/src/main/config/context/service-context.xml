@@ -224,7 +224,6 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
-        <property name="threadPoolExecutor" ref="repositoryReceiverAsyncThreadPool"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
@@ -236,18 +235,4 @@
 
     <bean id="incoming.repositoryReceiver" class="ru.it.lecm.incoming.external.RepositoryReceiver" parent="incoming.abstractReceiver"/>
 
-    <bean id="repositoryReceiverAsyncThreadPool" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
-        <property name="poolName">
-            <value>repositoryReceiverAsyncAction</value>
-        </property>
-        <property name="corePoolSize">
-            <value>8</value>
-        </property>
-        <property name="maximumPoolSize">
-            <value>20</value>
-        </property>
-        <property name="threadPriority">
-            <value>1</value>
-        </property>
-    </bean>
 </beans>
