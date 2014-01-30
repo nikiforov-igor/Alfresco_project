@@ -63,7 +63,8 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     public void init() {
 
         final NodeRef
-                refRoot = getServiceRootFolder(), refTypes = getFolder(RS_FOLDER_REPORT_TYPES_ID), refJasper = getFolder(ReportType.RTYPE_MNEMO_JASPER), refOOffice = getFolder(ReportType.RTYPE_MNEMO_OOFFICE);
+                refRoot = getServiceRootFolder(), refTypes = getFolder(RS_FOLDER_REPORT_TYPES_ID), refJasper = getFolder(ReportType.RTYPE_MNEMO_JASPER), refOOffice = getFolder(ReportType.RTYPE_MNEMO_OOFFICE),
+				refOOCalc = getFolder(ReportType.RTYPE_MNEMO_OOCALC);
 
         logger.info(String.format("Report Content Storage Service initialized as:\n\t%s %s\n\t%s %s\n\t%s %s\n\t%s %s\n\t%s %s"
                 , "Readonly ", isReadonly()
@@ -71,6 +72,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
                 , "\tTypes", refTypes
                 , "\t\tTypes.Jasper", refJasper
                 , "\t\tTypes.OOffice", refOOffice
+				, "\t\tTypes.OOCalc", refOOCalc
         ));
     }
 
@@ -246,10 +248,10 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
         /*
 		 * Иерахия хранения:
 		 *   1. папка службы (как принято для lecm служб)
-		 *      2. папка "Типы отчётов" 
+		 *      2. папка "Типы отчётов"
 		 *         [lev==1] 3. папка конкретного "Типа отчёта" (reportType)
 		 *            [lev==2] 4. папка "Отчёт" (reportMnemo)
-		 *               [lev==3] 5. [Файл/Контент] Название + данные 
+		 *               [lev==3] 5. [Файл/Контент] Название + данные
 		 *                  здесь название файла должно быть уникально для своего отчёта
 		 */
 

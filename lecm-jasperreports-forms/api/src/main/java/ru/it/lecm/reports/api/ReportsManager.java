@@ -487,7 +487,7 @@ public class ReportsManager {
     }
 
     /**
-     * Содать отчёт
+     * Создать отчёт
      *
      * @param reportName код отчёта
      * @param args       параметры

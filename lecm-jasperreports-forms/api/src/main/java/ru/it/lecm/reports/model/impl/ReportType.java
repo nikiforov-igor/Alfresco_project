@@ -21,6 +21,11 @@ public class ReportType extends MnemonicNamedItem implements L18able, Mnemonicab
      */
     final public static String RTYPE_MNEMO_OOFFICE = "OOFFICE";
 
+	/**
+     * Мнемоника для OpenOffice Calc отчётов
+     */
+    final public static String RTYPE_MNEMO_OOCALC = "OOCALC";
+
 	public ReportType() {
 		super();
 	}

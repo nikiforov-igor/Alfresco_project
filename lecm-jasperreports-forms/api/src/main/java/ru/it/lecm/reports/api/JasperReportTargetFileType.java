@@ -14,6 +14,8 @@ public enum JasperReportTargetFileType {
 
 	, ODT( "application/vnd.oasis.opendocument.text", ".odt")
 	, OTT( "application/vnd.oasis.opendocument.text-template", ".ott")
+	, ODS( "application/vnd.oasis.opendocument.spreadsheet", ".ods")
+	, OTS( "application/vnd.oasis.opendocument.spreadsheet-template", ".ots")
 	;
 
 	final private String mimeType, extension;
@@ -51,8 +53,8 @@ public enum JasperReportTargetFileType {
 			aname = aname.trim();
 			for(JasperReportTargetFileType v: values()) {
 				// по совпадению имени,mime типа или расширения - любое из этого уникально...
-				if ( aname.equalsIgnoreCase(v.name()) 
-						|| aname.equalsIgnoreCase(v.extension) 
+				if ( aname.equalsIgnoreCase(v.name())
+						|| aname.equalsIgnoreCase(v.extension)
 						|| aname.equalsIgnoreCase(v.mimeType) )
 					return v;
 			}

@@ -16,6 +16,10 @@
                 <property name="cm:name">OOffice</property>
                 <property name="lecm-rpeditor:reportTypeCode">OOFFICE</property>
             </item>
+            <item name="cm:OOCalc" type="lecm-rpeditor:reportType">
+                <property name="cm:name">OOCalc</property>
+                <property name="lecm-rpeditor:reportTypeCode">OOCALC</property>
+            </item>
         </items>
     </item>
 </items>
