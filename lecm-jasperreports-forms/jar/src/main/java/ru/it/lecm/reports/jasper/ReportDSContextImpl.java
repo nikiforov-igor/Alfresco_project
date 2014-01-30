@@ -149,7 +149,7 @@ public class ReportDSContextImpl implements ReportDSContext {
         return (expression != null) && (expression.length() > 0)
                 && Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна
                 && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
-                && !expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL); // нет символов "/"
+                && !expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) && !expression.contains(SubstitudeBean.PSEUDO_PROPERTY_SYMBOL); // нет символов "/"
     }
 
     // TODO: использовать LinksResolver

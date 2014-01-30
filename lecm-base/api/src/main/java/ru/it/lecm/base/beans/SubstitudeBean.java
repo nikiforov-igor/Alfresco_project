@@ -112,6 +112,8 @@ public interface SubstitudeBean {
 
     public String getFormatStringByPseudoProp(NodeRef object, final String psedudoProp);
 
+    public Object getRealValueByPseudoProp(NodeRef object, final String psedudoProp);
+
     String getTemplateStringForObject(NodeRef object, boolean forList, boolean returnDefaulIfNull);
 
     public Object getNodeFieldByFormat(NodeRef node, String formatString);

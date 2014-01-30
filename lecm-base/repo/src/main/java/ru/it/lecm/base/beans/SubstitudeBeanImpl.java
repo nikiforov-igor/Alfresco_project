@@ -16,6 +16,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -109,6 +110,20 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
                 return "";
             }
+
+
+            @Override
+            public Object getRealTypeValueByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                String dateValue = getFormatStringByPseudoProp(object, docService, services);
+                if (!dateValue.isEmpty()) {
+                    try {
+                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                    } catch (ParseException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+                return null;
+            }
         },
         REGISTRATOR {
             @Override
@@ -136,7 +151,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     List<AssociationRef> regs = services.getNodeService().getTargetAssocs(number, DocumentService.ASSOC_REG_DATA_REGISTRATOR);
                     if (regs != null && !regs.isEmpty()) {
                         NodeRef registratorRef = regs.get(0).getTargetRef();
-                        return  (String) services.getNodeService().getProperty(registratorRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                        return (String) services.getNodeService().getProperty(registratorRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                     }
                 }
 
@@ -160,12 +175,25 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (number != null) {
                     Date regDate = (Date) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
                     if (regDate != null) {
-                        DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
                         return dFormat.format(regDate);
                     }
                 }
 
                 return "";
+            }
+
+            @Override
+            public Object getRealTypeValueByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                String dateValue = getFormatStringByPseudoProp(object, docService, services);
+                if (!dateValue.isEmpty()) {
+                    try {
+                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                    } catch (ParseException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+                return null;
             }
         },
 
@@ -186,12 +214,25 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (number != null) {
                     Date regDate = (Date) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
                     if (regDate != null) {
-                        DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
                         return dFormat.format(regDate);
                     }
                 }
 
                 return "";
+            }
+
+            @Override
+            public Object getRealTypeValueByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                String dateValue = getFormatStringByPseudoProp(object, docService, services);
+                if (!dateValue.isEmpty()) {
+                    try {
+                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                    } catch (ParseException e) {
+                        logger.debug(e.getMessage());
+                    }
+                }
+                return null;
             }
         },
         PROJECT_REGNUM {
@@ -236,7 +277,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         };
 
         public abstract List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService);
+
         public abstract String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services);
+
+        public Object getRealTypeValueByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+            return getFormatStringByPseudoProp(object, docService, services);
+        }
 
         public static PseudoProps findProp(String propName) {
             if (propName != null) {
@@ -248,6 +294,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 }
             }
             return null;
+        }
+
+        private static class Constants {
+            public static final String YYYY_MM_DD = "yyyy-MM-dd";
         }
     }
 
@@ -511,10 +561,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 field = fieldCode;
             }
 
-            final String foundValue = getFormatStringByPseudoProp(showNode, field);
-            if (foundValue != null) {
-                result = foundValue;
+            if (returnRealTypes) {
+                result = getRealValueByPseudoProp(showNode, field);
             } else {
+                result = getFormatStringByPseudoProp(showNode, field);
+            }
+            if (result == null) {
                 if (defaultValue != null) {
                     result = defaultValue;
                 }
@@ -567,7 +619,6 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     /**
      * Получение псевдо свойста или выполнение встроенной функции
      *
-     *
      * @param object      исходный узел
      * @param psedudoProp мнемоника псевдо-свойства или функции (уже без всяких префиксных символов)
      * @return список узлов после выполнения функции (псевдо-свойства)
@@ -586,6 +637,15 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
         if (pseudo != null) {
             return pseudo.getFormatStringByPseudoProp(object, documentService, serviceRegistry);
+        }
+        return null;
+    }
+
+    @Override
+    public Object getRealValueByPseudoProp(NodeRef object, final String psedudoProp) {
+        PseudoProps pseudo = PseudoProps.findProp(psedudoProp);
+        if (pseudo != null) {
+            return pseudo.getRealTypeValueByPseudoProp(object, documentService, serviceRegistry);
         }
         return null;
     }
