@@ -6,9 +6,12 @@
 
 	<bean id="outgoing.statemachine.extension" parent="baseJavaScriptExtension"
 		  class="ru.it.lecm.outgoing.extensions.OutgoingStatemachineJavascriptExtension"
+		  depends-on="outgoing.model.bootstrap"
 		  p:extensionName="outgoingStatemachine"
 		  p:nodeService-ref="nodeService"
 		  p:dictionaryService-ref="dictionaryService"
-		  p:regNumbersService-ref="regNumbersService"/>
+		  p:regNumbersService-ref="regNumbersService"
+		  p:notificationsService-ref="notificationsService"
+		  p:documentService-ref="documentService"/>
 
 </beans>

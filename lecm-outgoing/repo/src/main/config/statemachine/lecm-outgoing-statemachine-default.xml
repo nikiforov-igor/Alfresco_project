@@ -3880,7 +3880,36 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>6d00c1fa-b597-4ab5-b27d-3d783d077a6f</name>
+														<nodeRef>workspace://SpacesStore/1697c5b8-de25-4358-9535-e67440302689</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[outgoingStatemachine.notifyAuthorAboutOutgoingRework(bpm_package);]]>
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[уведомить о направлении на доработку]]>
+																</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>

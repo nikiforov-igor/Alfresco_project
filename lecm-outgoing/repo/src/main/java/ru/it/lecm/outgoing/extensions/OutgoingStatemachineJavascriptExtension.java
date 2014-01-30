@@ -1,7 +1,9 @@
 package ru.it.lecm.outgoing.extensions;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -9,6 +11,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.outgoing.api.OutgoingModel;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
@@ -27,17 +32,27 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 	private NodeService nodeService;
 	private DictionaryService dictionaryService;
 	private RegNumbersService regNumbersService;
+	private NotificationsService notificationsService;
+	private DocumentService documentService;
 
-	public void setNodeService(NodeService nodeService) {
+	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
-	public void setDictionaryService(DictionaryService dictionaryService) {
+	public void setDictionaryService(final DictionaryService dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}
 
-	public void setRegNumbersService(RegNumbersService regNumbersService) {
+	public void setRegNumbersService(final RegNumbersService regNumbersService) {
 		this.regNumbersService = regNumbersService;
+	}
+
+	public void setNotificationsService(final NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
+
+	public void setDocumentService(final DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	/**
@@ -48,7 +63,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 	 * @return null если исходящего не существует. В лог будет написано сообщение об этом
 	 */
 	@Deprecated
-	private NodeRef getOutgoingFromBpmPackage(NodeRef bpmPackage) {
+	private NodeRef getOutgoingFromBpmPackage(final NodeRef bpmPackage) {
 		NodeRef outgoingRef = null;
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
 		if (children != null) {
@@ -73,7 +88,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 	 *
 	 * @param bpmPackage bpm:package исходящего у машины состояний
 	 */
-	public void setOutgoingProjectRegNumber(ActivitiScriptNode bpmPackage) {
+	public void setOutgoingProjectRegNumber(final ActivitiScriptNode bpmPackage) {
 		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
 		try {
 			regNumbersService.registerProject(outgoingRef, OUTGOING_PRJ_TEMPLATE_CODE);
@@ -89,7 +104,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 	 *
 	 * @param bpmPackage bpm:package исходящего у машины состояний
 	 */
-	public void setOutgoingDocumentRegNumber(ActivitiScriptNode bpmPackage) {
+	public void setOutgoingDocumentRegNumber(final ActivitiScriptNode bpmPackage) {
 		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
 		try {
 			regNumbersService.registerDocument(outgoingRef, OUTGOING_DOC_TEMPLATE_CODE);
@@ -98,5 +113,28 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 		} catch (TemplateRunException ex) {
 			logger.error("Error registering ougoing document", ex);
 		}
+	}
+
+	/**
+	 * направить автору исходящего уведомление о доработке документа
+	 *
+	 * @param bpmPackage bpm:package исходящего у машины состояний
+	 */
+	public void notifyAuthorAboutOutgoingRework(final ActivitiScriptNode bpmPackage) {
+		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
+		NodeRef documentAuthorRef = documentService.getDocumentAuthor(outgoingRef);
+		String presentString = (String)nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
+
+		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(documentAuthorRef);
+
+		String description = String.format("Проект документа %s направлен Вам на доработку", presentString);
+
+		Notification notification = new Notification();
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+		notification.setObjectRef(outgoingRef);
+		notification.setRecipientEmployeeRefs(recipients);
+		notificationsService.sendNotification(notification);
 	}
 }
