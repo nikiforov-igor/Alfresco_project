@@ -223,7 +223,6 @@
     <bean id="incoming.abstractReceiver" class="ru.it.lecm.incoming.external.AbstractReceiver" abstract="true" init-method="init">
         <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
-        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 

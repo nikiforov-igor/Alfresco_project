@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.incoming.beans.IncomingServiceImpl;
 
@@ -23,8 +22,6 @@ abstract public class AbstractReceiver {
 
     protected NodeService nodeService;
     private DocumentService documentService;
-    private DocumentAttachmentsService documentAttachmentsService;
-    private static String TRANSACTION_INCOMING_RECEIVER_DATA = "transaction_incoming_receiver_data";
     private ServiceRegistry serviceRegistry;
 
     public void init() {
@@ -66,10 +63,6 @@ abstract public class AbstractReceiver {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
-    }
-
-    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
-        this.documentAttachmentsService = documentAttachmentsService;
     }
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
