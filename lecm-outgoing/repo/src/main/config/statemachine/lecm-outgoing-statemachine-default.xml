@@ -3821,43 +3821,7 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders>
-											<subFolder>
-												<name>transitions</name>
-												<nodes>
-													<node>
-														<type>transition</type>
-														<name>f6533d08-b7a6-478b-8756-f2a50b22699d</name>
-														<nodeRef>workspace://SpacesStore/f05224e8-6e89-4015-aa77-bb40eb0aad55</nodeRef>
-														<properties>
-															<property>
-																<name>stopSubWorkflows</name>
-																<value>
-																	<![CDATA[false]]>
-																</value>
-															</property>
-															<property>
-																<name>transitionExpression</name>
-																<value>
-																	<![CDATA[Направить на подписание]]>
-																</value>
-															</property>
-														</properties>
-														<aspects>
-															<transitionStatusAspect/>
-														</aspects>
-														<associations>
-															<association>
-																<type>transitionStatus</type>
-																<reference>workspace://SpacesStore/b8d117ef-3383-42e6-9a74-03c682e5d6c4</reference>
-															</association>
-														</associations>
-														<roleAssociations/>
-														<subFolders/>
-													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
+										<subFolders/>
 									</node>
 									<node>
 										<type>ScriptAction</type>
@@ -4202,6 +4166,37 @@
 																</nodes>
 															</subFolder>
 														</subFolders>
+													</node>
+													<node>
+														<type>userTransition</type>
+														<name>addf98dd-f6b5-445e-b4a6-11140c5fe6cf</name>
+														<nodeRef>workspace://SpacesStore/90cc8248-6f02-40e6-b8b6-216078d40561</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value>
+																	<![CDATA[Направить на подписание]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>workspace://SpacesStore/b8d117ef-3383-42e6-9a74-03c682e5d6c4</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
 													</node>
 												</nodes>
 											</subFolder>
@@ -6383,7 +6378,40 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>f2d493b8-2b9e-4fc0-a4dd-105600953010</name>
+														<nodeRef>workspace://SpacesStore/8962ce46-d5d0-4b47-a08f-507562619b2c</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[//раздать права регистраторам в зависимости от централизованной/не централизованной регистрации
+outgoingStatemachine.grandPermissionsToRegistrar(bpm_package);
+//разослать уведомления регистраторам
+outgoingStatemachine.notifyAboutOutgoingRegistration(bpm_package);
+]]>
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[направить на регистрацию]]>
+																</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>

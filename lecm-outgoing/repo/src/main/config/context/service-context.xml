@@ -32,4 +32,8 @@
 		  p:statemachineName="lecm-outgoing:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
 
+	<bean id="outgoing.service" parent="baseBean"
+		  class="ru.it.lecm.outgoing.OutgoingServiceImpl"
+		  depends-on="outgoing.model.bootstrap"/>
+
 </beans>

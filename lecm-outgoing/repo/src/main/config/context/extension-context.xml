@@ -12,6 +12,8 @@
 		  p:dictionaryService-ref="dictionaryService"
 		  p:regNumbersService-ref="regNumbersService"
 		  p:notificationsService-ref="notificationsService"
-		  p:documentService-ref="documentService"/>
+		  p:documentService-ref="documentService"
+		  p:stateMachineService-ref="stateMachineHelper"
+		  p:outgoingService-ref="outgoing.service"/>
 
 </beans>

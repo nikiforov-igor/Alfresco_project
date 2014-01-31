@@ -11,13 +11,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.outgoing.api.OutgoingModel;
+import ru.it.lecm.outgoing.api.OutgoingService;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  *
@@ -27,6 +30,11 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 
 	private final static String OUTGOING_PRJ_TEMPLATE_CODE = "OUTGOING_PRJ_NUMBER";
 	private final static String OUTGOING_DOC_TEMPLATE_CODE = "OUTGOING_DOC_NUMBER";
+	/**
+	 * код бизнес роли "Исходящие. Регистратор документа"
+	 * Сотрудник, отвечающий за регистрацию выбранного экземпляра документа
+	 */
+	private final static String OUTGOING_REGISTRAR_DYNAMIC = "OUTGOING_REGISTRAR_DYNAMIC";
 	private final static Logger logger = LoggerFactory.getLogger(OutgoingStatemachineJavascriptExtension.class);
 
 	private NodeService nodeService;
@@ -34,6 +42,8 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 	private RegNumbersService regNumbersService;
 	private NotificationsService notificationsService;
 	private DocumentService documentService;
+	private StateMachineServiceBean stateMachineService;
+	private OutgoingService outgoingService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -53,6 +63,14 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 
 	public void setDocumentService(final DocumentService documentService) {
 		this.documentService = documentService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
+
+	public void setOutgoingService(OutgoingService outgoingService) {
+		this.outgoingService = outgoingService;
 	}
 
 	/**
@@ -124,17 +142,54 @@ public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcess
 		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
 		NodeRef documentAuthorRef = documentService.getDocumentAuthor(outgoingRef);
 		String presentString = (String)nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
+		String outgoingURL = outgoingService.wrapperLink(outgoingRef, presentString, BaseBean.DOCUMENT_LINK_URL);
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(documentAuthorRef);
 
-		String description = String.format("Проект документа %s направлен Вам на доработку", presentString);
+		String description = String.format("Проект документа %s направлен к Вам на доработку", outgoingURL);
 
 		Notification notification = new Notification();
 		notification.setAuthor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
 		notification.setObjectRef(outgoingRef);
 		notification.setRecipientEmployeeRefs(recipients);
+		notificationsService.sendNotification(notification);
+	}
+
+	/**
+	 * раздать потенциальным регистраторам права на Исходящий
+	 * т.е. активировать их динамическую бизнес-роль "Регистратор документа"
+	 * @param bpmPackage
+	 */
+	public void grandPermissionsToRegistrar(final ActivitiScriptNode bpmPackage) {
+		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
+		//TODO: получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
+		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		//активация этим людям нужной роли
+		for (NodeRef registrarRef : registrars) {
+			stateMachineService.grandDynamicRoleForEmployee(outgoingRef, registrarRef, OUTGOING_REGISTRAR_DYNAMIC);
+		}
+	}
+
+	/**
+	 * разослать регистраторам уведомление о том что надо зарегистрировать Исходящий
+	 * @param bpmPackage
+	 */
+	public void notifyAboutOutgoingRegistration(final ActivitiScriptNode bpmPackage) {
+		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
+		String presentString = (String)nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
+		String outgoingURL = outgoingService.wrapperLink(outgoingRef, presentString, BaseBean.DOCUMENT_LINK_URL);
+		//TODO: получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
+		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		//формирование уведомления этим людям
+		String description = String.format("Документ %s поступил к Вам на регистрацию", outgoingURL);
+
+		Notification notification = new Notification();
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+		notification.setObjectRef(outgoingRef);
+		notification.setRecipientEmployeeRefs(registrars);
 		notificationsService.sendNotification(notification);
 	}
 }
