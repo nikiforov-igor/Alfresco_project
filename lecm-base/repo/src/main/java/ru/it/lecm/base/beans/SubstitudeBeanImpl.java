@@ -579,7 +579,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     result = returnRealTypes ? showNode : showNode.toString();
                 } else {
                     Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-                    if (property != null) {
+                    if (property != null && result != null) {
                         result = result.toString().isEmpty() ? property : result;
                         if (result instanceof Date) {
                             if (timeZoneOffset != null) {

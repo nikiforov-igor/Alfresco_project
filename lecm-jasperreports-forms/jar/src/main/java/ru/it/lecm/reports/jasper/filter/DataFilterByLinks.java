@@ -1,6 +1,8 @@
 package ru.it.lecm.reports.jasper.filter;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.utils.Utils;
@@ -14,6 +16,8 @@ import java.util.List;
  * Time: 9:47
  */
 public class DataFilterByLinks implements DataFilter {
+    private static final Logger logger = LoggerFactory.getLogger(DataFilterByLinks.class);
+
     private List<DataFilterDesc> dataLists = new ArrayList<DataFilterDesc>();
     private SubstitudeBean substitudeBean;
 
@@ -40,6 +44,9 @@ public class DataFilterByLinks implements DataFilter {
             Object nodeValue = substitudeBean.getNodeFieldByFormat(id, desc.formatString);
             boolean result = false;
             try {
+                if (logger.isDebugEnabled()){
+                    logger.debug("Filter by Link: Need values - " + desc.values + ", current Value - " + nodeValue);
+                }
                 result = desc.filter.isOk(nodeValue, desc.values);
             } catch (ClassCastException ignored) {
             }

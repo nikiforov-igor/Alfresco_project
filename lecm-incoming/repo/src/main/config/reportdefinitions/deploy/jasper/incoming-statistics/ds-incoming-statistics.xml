@@ -30,7 +30,7 @@
         <offset>0</offset>
         <limit>-1</limit>
         <pgsize>-1</pgsize>
-        <queryText><![CDATA[+TYPE:"lecm-eds-document:base"]]></queryText>
+        <queryText><![CDATA[+TYPE:"lecm-eds-document:base" AND -@lecm\-statemachine\:status:"Черновик"]]></queryText>
         <querySort>col_DocKind|ASC,col_DocSubject|ASC,col_DocType|ASC</querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-incoming:document</preferedType>
