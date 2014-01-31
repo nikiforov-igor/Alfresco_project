@@ -2,194 +2,174 @@ package ru.it.lecm.outgoing.extensions;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
-import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.outgoing.api.OutgoingModel;
-import ru.it.lecm.outgoing.api.OutgoingService;
-import ru.it.lecm.regnumbers.RegNumbersService;
-import ru.it.lecm.regnumbers.template.TemplateParseException;
-import ru.it.lecm.regnumbers.template.TemplateRunException;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 /**
  *
  * @author vmalygin
  */
-public class OutgoingStatemachineJavascriptExtension extends BaseScopableProcessorExtension {
+public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 
-	private final static String OUTGOING_PRJ_TEMPLATE_CODE = "OUTGOING_PRJ_NUMBER";
-	private final static String OUTGOING_DOC_TEMPLATE_CODE = "OUTGOING_DOC_NUMBER";
 	/**
-	 * код бизнес роли "Исходящие. Регистратор документа"
-	 * Сотрудник, отвечающий за регистрацию выбранного экземпляра документа
+	 * код бизнес роли "Исходящие. Отправляющий" Сотрудник, ответственный за отправку исходящих документов
 	 */
-	private final static String OUTGOING_REGISTRAR_DYNAMIC = "OUTGOING_REGISTRAR_DYNAMIC";
+	private final static String OUTGOING_SENDER = "OUTGOING_SENDER";
 	private final static Logger logger = LoggerFactory.getLogger(OutgoingStatemachineJavascriptExtension.class);
 
 	private NodeService nodeService;
-	private DictionaryService dictionaryService;
-	private RegNumbersService regNumbersService;
-	private NotificationsService notificationsService;
 	private DocumentService documentService;
-	private StateMachineServiceBean stateMachineService;
-	private OutgoingService outgoingService;
+	private OrgstructureBean orgstructureService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
-	}
-
-	public void setDictionaryService(final DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
-
-	public void setRegNumbersService(final RegNumbersService regNumbersService) {
-		this.regNumbersService = regNumbersService;
-	}
-
-	public void setNotificationsService(final NotificationsService notificationsService) {
-		this.notificationsService = notificationsService;
 	}
 
 	public void setDocumentService(final DocumentService documentService) {
 		this.documentService = documentService;
 	}
 
-	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-		this.stateMachineService = stateMachineService;
+	public void setOrgstructureService(final OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
-	public void setOutgoingService(OutgoingService outgoingService) {
-		this.outgoingService = outgoingService;
-	}
-
-	/**
-	 * получение исходящего через bpm:package машины состояний
-	 *
-	 * @todo убрать этот метод потому что он скопирован из approval-repo
-	 * @param bpmPackage bpm:package исходящего у машины состояний
-	 * @return null если исходящего не существует. В лог будет написано сообщение об этом
-	 */
-	@Deprecated
-	private NodeRef getOutgoingFromBpmPackage(final NodeRef bpmPackage) {
-		NodeRef outgoingRef = null;
-		List<ChildAssociationRef> children = nodeService.getChildAssocs(bpmPackage);
-		if (children != null) {
-			for (ChildAssociationRef assocRef : children) {
-				NodeRef candidateRef = assocRef.getChildRef();
-				if (dictionaryService.isSubClass(nodeService.getType(candidateRef), OutgoingModel.TYPE_OUTGOING)) {
-					outgoingRef = candidateRef;
-					break;
-				}
-			}
-			if (outgoingRef == null) {
-				logger.error("There is no outgoing document of type {} in statemachine bpm:package");
-			}
-		} else {
-			logger.error("List of statemachine bpm:package children is null");
-		}
-		return outgoingRef;
+	private String getOutgoingURL(final ScriptNode outgoingRef) {
+		String presentString = (String) nodeService.getProperty(outgoingRef.getNodeRef(), DocumentService.PROP_PRESENT_STRING);
+		return wrapperLink(outgoingRef, presentString);
 	}
 
 	/**
-	 * регистрация проекта исходящего
+	 * подговить уведомление Автору исходящего о доработке
+	 * будет подготовлено уведомление с сообщением "Проект документа
+	 * &lt;Вид документа&gt; № &lt;Номер документа&gt; направлен Вам на доработку"
 	 *
-	 * @param bpmPackage bpm:package исходящего у машины состояний
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @return готовое к отправке уведомление
 	 */
-	public void setOutgoingProjectRegNumber(final ActivitiScriptNode bpmPackage) {
-		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
-		try {
-			regNumbersService.registerProject(outgoingRef, OUTGOING_PRJ_TEMPLATE_CODE);
-		} catch (TemplateParseException ex) {
-			logger.error("Error registering ougoing project", ex);
-		} catch (TemplateRunException ex) {
-			logger.error("Error registering ougoing project", ex);
-		}
+	public Notification prepareNotificationAboutRework(final ScriptNode outgoingRef) {
+		String outgoingURL = getOutgoingURL(outgoingRef);
+		String description = String.format("Проект документа %s направлен Вам на доработку", outgoingURL);
+		return prepareNotificationAboutRework(outgoingRef, description);
 	}
 
 	/**
-	 * регистрация документа исходящего
+	 * подговить уведомление Автору исходящего о доработке
 	 *
-	 * @param bpmPackage bpm:package исходящего у машины состояний
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @param description текст сообщения, которое необходимо отправить
+	 * @return готовое к отправке уведомление
 	 */
-	public void setOutgoingDocumentRegNumber(final ActivitiScriptNode bpmPackage) {
-		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
-		try {
-			regNumbersService.registerDocument(outgoingRef, OUTGOING_DOC_TEMPLATE_CODE);
-		} catch (TemplateParseException ex) {
-			logger.error("Error registering ougoing document", ex);
-		} catch (TemplateRunException ex) {
-			logger.error("Error registering ougoing document", ex);
-		}
-	}
-
-	/**
-	 * направить автору исходящего уведомление о доработке документа
-	 *
-	 * @param bpmPackage bpm:package исходящего у машины состояний
-	 */
-	public void notifyAuthorAboutOutgoingRework(final ActivitiScriptNode bpmPackage) {
-		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
-		NodeRef documentAuthorRef = documentService.getDocumentAuthor(outgoingRef);
-		String presentString = (String)nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
-		String outgoingURL = outgoingService.wrapperLink(outgoingRef, presentString, BaseBean.DOCUMENT_LINK_URL);
+	public Notification prepareNotificationAboutRework(final ScriptNode outgoingRef, final String description) {
+		NodeRef documentAuthorRef = documentService.getDocumentAuthor(outgoingRef.getNodeRef());
 
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(documentAuthorRef);
 
-		String description = String.format("Проект документа %s направлен к Вам на доработку", outgoingURL);
-
 		Notification notification = new Notification();
 		notification.setAuthor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
-		notification.setObjectRef(outgoingRef);
+		notification.setObjectRef(outgoingRef.getNodeRef());
 		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notification);
+		return notification;
 	}
 
 	/**
-	 * раздать потенциальным регистраторам права на Исходящий
-	 * т.е. активировать их динамическую бизнес-роль "Регистратор документа"
-	 * @param bpmPackage
+	 * подготовить список регистраторов для последующей раздачи им прав
+	 *
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @return объект Scriptable пригодный для работы из яваскрипта машины состояний
 	 */
-	public void grandPermissionsToRegistrar(final ActivitiScriptNode bpmPackage) {
-		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
+	public Scriptable getRegistrars(final ScriptNode outgoingRef) {
 		//TODO: получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
 		List<NodeRef> registrars = new ArrayList<NodeRef>();
-		//активация этим людям нужной роли
-		for (NodeRef registrarRef : registrars) {
-			stateMachineService.grandDynamicRoleForEmployee(outgoingRef, registrarRef, OUTGOING_REGISTRAR_DYNAMIC);
+		return createScriptable(registrars);
+	}
+
+	/**
+	 * подготовить уведомление регистраторам о том, что надо зарегистрировать Исходящий
+	 * будет подготовлено уведомление с
+	 * сообщением "Документ &lt;Вид документа&gt; № &lt;Номер документа&gt; поступил Вам на регистрацию"
+	 *
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @param registrars js-массив регистраторов который мы получили из скрипта машины состояний
+	 * @return готовое к отправке уведомление
+	 */
+	public Notification prepareNotificationAboutRegistration(final ScriptNode outgoingRef, final Scriptable registrars) {
+		String outgoingURL = getOutgoingURL(outgoingRef);
+		String description = String.format("Документ %s поступил Вам на регистрацию", outgoingURL);
+		return prepareNotificationAboutRegistration(outgoingRef, registrars, description);
+	}
+
+	/**
+	 * подготовить уведомление регистраторам о том, что надо зарегистрировать Исходящий
+	 *
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @param registrars js-массив регистраторов который мы получили из скрипта машины состояний
+	 * @param description текст сообщения, которое необходимо отправить
+	 * @return готовое к отправке уведомление
+	 */
+	public Notification prepareNotificationAboutRegistration(final ScriptNode outgoingRef, final Scriptable registrars, final String description) {
+		Object[] elements = Context.getCurrentContext().getElements(registrars);
+		ArrayList<NodeRef> registrarRefs = new ArrayList<NodeRef>();
+		for (Object element : elements) {
+			if (element instanceof NativeJavaObject) {
+				NativeJavaObject object = (NativeJavaObject) element;
+				ScriptNode registrar = (ScriptNode) object.unwrap();
+				registrarRefs.add(registrar.getNodeRef());
+			} else {
+				logger.warn("{} is not a ScriptNode in registrars array!", element);
+			}
 		}
-	}
-
-	/**
-	 * разослать регистраторам уведомление о том что надо зарегистрировать Исходящий
-	 * @param bpmPackage
-	 */
-	public void notifyAboutOutgoingRegistration(final ActivitiScriptNode bpmPackage) {
-		NodeRef outgoingRef = getOutgoingFromBpmPackage(bpmPackage.getNodeRef());
-		String presentString = (String)nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
-		String outgoingURL = outgoingService.wrapperLink(outgoingRef, presentString, BaseBean.DOCUMENT_LINK_URL);
-		//TODO: получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
-		List<NodeRef> registrars = new ArrayList<NodeRef>();
-		//формирование уведомления этим людям
-		String description = String.format("Документ %s поступил к Вам на регистрацию", outgoingURL);
 
 		Notification notification = new Notification();
 		notification.setAuthor(AuthenticationUtil.getSystemUserName());
 		notification.setDescription(description);
-		notification.setObjectRef(outgoingRef);
-		notification.setRecipientEmployeeRefs(registrars);
-		notificationsService.sendNotification(notification);
+		notification.setObjectRef(outgoingRef.getNodeRef());
+		notification.setRecipientEmployeeRefs(registrarRefs);
+		return notification;
+	}
+
+	/**
+	 * подготовить уведомление отправителям о том, что надо отправить Исходящий документ
+	 * будет подготовлено уведомление
+	 * с сообщением "На отправку поступил документ &lt;Вид документа&gt; № &lt;Номер документа&gt;"
+	 *
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @return готовое к отправке уведомление
+	 */
+	public Notification prepareNotificationAboutSending(final ScriptNode outgoingRef) {
+		String outgoingURL = getOutgoingURL(outgoingRef);
+		String description = String.format("На отправку поступил документ %s", outgoingURL);
+		return prepareNotificationAboutSending(outgoingRef, description);
+	}
+
+	/**
+	 * подготовить уведомление отправителям о том, что надо отправить Исходящий документ
+	 *
+	 * @param outgoingRef ссылка на исходящее из машины состояний
+	 * @param description текст сообщения, которое необходимо отправить
+	 * @return готовое к отправке уведомление
+	 */
+	public Notification prepareNotificationAboutSending(final ScriptNode outgoingRef, final String description) {
+		//получаем список сотрудников включенных в статическую роль "Отправляющий" с учетом делегирования
+		List<NodeRef> senders = orgstructureService.getEmployeesByBusinessRole(OUTGOING_SENDER, true);
+
+		Notification notification = new Notification();
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(description);
+		notification.setObjectRef(outgoingRef.getNodeRef());
+		notification.setRecipientEmployeeRefs(senders);
+		return notification;
 	}
 }

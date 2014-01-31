@@ -859,7 +859,9 @@
 															<property>
 																<name>actionScript</name>
 																<value>
-																	<![CDATA[outgoingStatemachine.setOutgoingProjectRegNumber(bpm_package);
+																	<![CDATA[var outgoing = stm_document;
+regnumbers.registerDocument(outgoing, "OUTGOING_PRJ_NUMBER");
+outgoing.save();
 ]]>
 																</value>
 															</property>
@@ -3856,7 +3858,10 @@
 															<property>
 																<name>actionScript</name>
 																<value>
-																	<![CDATA[outgoingStatemachine.notifyAuthorAboutOutgoingRework(bpm_package);]]>
+																	<![CDATA[var outgoing = stm_document,
+    notification = prepareNotificationAboutRework(outgoing);
+notifications.sendNotification(notification);
+]]>
 																</value>
 															</property>
 															<property>
@@ -6390,10 +6395,22 @@
 															<property>
 																<name>actionScript</name>
 																<value>
-																	<![CDATA[//раздать права регистраторам в зависимости от централизованной/не централизованной регистрации
-outgoingStatemachine.grandPermissionsToRegistrar(bpm_package);
-//разослать уведомления регистраторам
-outgoingStatemachine.notifyAboutOutgoingRegistration(bpm_package);
+																	<![CDATA[var i,
+    outgoing = stm_document, //исходящий документ
+    registrars = outgoingStatemachine.getRegistrars(outgoing),//получение списка регистраторов по документу
+    registrarsCount = registrars.length,
+    notification;
+
+//раздаем права регистраторам
+for(i = 0; i < registrarsCount; ++i) {
+    statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "OUTGOING_REGISTRAR_DYNAMIC");
+}
+
+//подготавливаем уведомление
+notification = outgoingStatemachine.prepareNotificationAboutRegistration(outgoing, registrars);
+
+//рассылаем уведомление
+notifications.sendNotification(notification);
 ]]>
 																</value>
 															</property>
@@ -7924,7 +7941,39 @@ outgoingStatemachine.notifyAboutOutgoingRegistration(bpm_package);
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>0a76922f-4923-4373-8834-5ffde950389c</name>
+														<nodeRef>workspace://SpacesStore/85eab613-71f9-46c7-9530-f0ed812d3196</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[var outgoing = stm_document,
+    notification = outgoingStatemachine.prepareNotificationAboutSending(outgoing);
+notifications.sendNotification(notification);
+]]>
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[уведомить об отправке]]>
+																</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>

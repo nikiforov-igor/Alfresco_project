@@ -175,6 +175,12 @@
 				<artifactId>spring-webscripts</artifactId>
 				<version>${spring.surf.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.springframework</groupId>
+						<artifactId>spring-webmvc</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.alfresco</groupId>

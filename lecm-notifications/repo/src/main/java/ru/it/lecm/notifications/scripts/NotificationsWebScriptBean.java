@@ -48,6 +48,14 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	}
 
 	/**
+	 * отправка заранее подготовленного уведомления
+	 * @param notification - объект уведомления, который был где-то заранее создан и готов к отправке
+	 */
+	public void sendNotification(final Notification notification) {
+		service.sendNotification(notification);
+	}
+
+	/**
 	 * Отправка уведомлений
 	 *
 	 * @param json - JSON с параметрами уведомления

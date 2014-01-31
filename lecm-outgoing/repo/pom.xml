@@ -30,8 +30,8 @@
 			<artifactId>alfresco-data-model</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,12 +43,6 @@
 			<version>${platform.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.regnumbers</groupId>
-			<artifactId>lecm-regnumbers-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
 			<artifactId>notifications-repo-api</artifactId>
 			<version>${platform.version}</version>
@@ -57,12 +51,6 @@
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.statemachine</groupId>
-			<artifactId>statemachine-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
