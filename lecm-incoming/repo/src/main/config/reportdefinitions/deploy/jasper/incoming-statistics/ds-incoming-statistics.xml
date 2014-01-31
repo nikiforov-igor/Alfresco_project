@@ -54,7 +54,7 @@
             </parameter>
         </field>
 
-        <field jrFldName="incomingSubject" order="1" queryFldName="{lecm-document:subject-assoc-ref}" displayName="Тематика входящего"
+        <field jrFldName="incomingSubject" order="1" queryFldName="{lecm-document:subject-assoc-ref}" displayName="Тематика"
                javaValueClass="java.lang.String" alfrescoType="lecm-doc-dic:subjects">
             <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
                 <l18> <item key="RU_RU" value="Список"/> </l18>
