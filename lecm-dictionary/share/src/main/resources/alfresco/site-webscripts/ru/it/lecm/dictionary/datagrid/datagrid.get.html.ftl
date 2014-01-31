@@ -4,7 +4,7 @@
 <#assign bubblingLabel = "dictionaries-datagrid">
 
 <#assign plane = false/>
-<#if page.url.args.plane?? && page.url.args.plane == "true">
+<#if args.plane?? && args.plane == "true">
     <#assign plane = true/>
 </#if>
 
@@ -63,7 +63,7 @@ function createDatagrid(rootNode) {
 }
 
 function loadDictionary() {
-    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${page.url.args.dic!''}");
+    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent("${args.dictionaryName}");
 
     var callback = {
         success: function (oResponse) {

@@ -56,6 +56,7 @@
                         <!--<item type="link" id="statemachine">/statemachine</item>-->
                         <item type="link" id="doc-model-list">/doc-model-list</item>
                         <item type="link" id="reports-editor">/reports-editor</item>
+                        <item type="link" id="arm-settings">/arm-settings</item>
                         <item type="link" id="more" icon="">/console/admin-console/</item>
                     </container-group>
                 </item>

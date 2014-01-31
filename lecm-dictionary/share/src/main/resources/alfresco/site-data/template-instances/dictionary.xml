@@ -5,6 +5,9 @@
 		<component>
 			<region-id>tree</region-id>
 			<url>/lecm/dictionary/tree</url>
+			<properties>
+				<dictionaryName>{dic}</dictionaryName>
+			</properties>
 		</component>
 		<!-- Title -->
 		<component>
@@ -28,6 +31,10 @@
         <component>
             <region-id>datagrid</region-id>
             <url>/lecm/dictionary/datagrid</url>
+	        <properties>
+		        <plane>{plane}</plane>
+		        <dictionaryName>{dic}</dictionaryName>
+	        </properties>
         </component>
 		<!-- Menu -->
 		<component>
