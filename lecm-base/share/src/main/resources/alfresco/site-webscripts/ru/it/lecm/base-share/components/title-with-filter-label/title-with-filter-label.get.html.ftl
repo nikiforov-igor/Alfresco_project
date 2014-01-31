@@ -12,6 +12,8 @@
 <#assign title = msg("page.documents-list")/>
 <#if msg(titleKey) != titleKey>
     <#assign title =  msg(titleKey)/>
+<#else>
+	<#assign title =  titleKey/>
 </#if>
 <div class="page-title theme-bg-color-1 theme-border-1" id="title-with-filter-label">
 	<h1 class="theme-color-3">
