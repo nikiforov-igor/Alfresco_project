@@ -53,7 +53,7 @@
 	<types>
 		<!-- Исходящее -->
 		<type name="lecm-outgoing:document">
-			<title>Logic Ecm Outgoing Document</title>
+			<title>Исходящий</title>
 			<parent>lecm-eds-document:base</parent>
 			<associations>
 				<association name="lecm-outgoing:contractor-assoc">
