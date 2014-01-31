@@ -4,6 +4,7 @@
         <forms>
             <dependencies>
                 <js src="/scripts/lecm-business-journal/business-journal-datagrid.js"/>
+                <js src="/scripts/lecm-business-journal/business-journal-settingsgrid.js"/>
             </dependencies>
         </forms>
     </config>
@@ -47,6 +48,7 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-busjournal:eventCategory-on"/>
                     <!--<show id="lecm-busjournal:eventCategory-code"/>-->
                 </field-visibility>
             </form>
@@ -59,13 +61,18 @@
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-busjournal:eventCategory-code"/>
+                    <show id="lecm-busjournal:eventCategory-on"/>
                 </field-visibility>
             </form>
             <form id="datagrid">
                 <field-visibility>
+                    <show id="lecm-busjournal:eventCategory-on"/>
                     <show id="cm:name"/>
                     <show id="lecm-busjournal:eventCategory-code"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="info.name" />
+                </appearance>
             </form>
         </forms>
     </config>

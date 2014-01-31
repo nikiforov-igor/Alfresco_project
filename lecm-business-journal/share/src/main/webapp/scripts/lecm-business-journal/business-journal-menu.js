@@ -51,11 +51,18 @@ LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
                 disabled: !LogicECM.module.BusinessJournal.IS_ENGINEER
             });
 
-            var onSettingsClick = function (e) {
+            var onArchiverSettingsClick = function (e) {
                 window.location.href = window.location.protocol + "//" + window.location.host +
-                    Alfresco.constants.URL_PAGECONTEXT + "business-journal-settings";
+                    Alfresco.constants.URL_PAGECONTEXT + "business-journal-archiver-settings";
             };
-            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-settingsBtn", onSettingsClick, {
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-archiver-settingsBtn", onArchiverSettingsClick, {
+                disabled: !LogicECM.module.BusinessJournal.IS_ENGINEER
+            });
+            var onLoggerSettingsClick = function (e) {
+                window.location.href = window.location.protocol + "//" + window.location.host +
+                    Alfresco.constants.URL_PAGECONTEXT + "business-journal-logger-settings";
+            };
+            this.widgets.recordsButton = Alfresco.util.createYUIButton(this, "bj-logger-settingsBtn", onLoggerSettingsClick, {
                 disabled: !LogicECM.module.BusinessJournal.IS_ENGINEER
             });
         }

@@ -13,5 +13,6 @@
 <@comp.baseMenu>
     <!-- добавить кнопки сюда-->
 	<@comp.baseMenuButton "bj-summary" msg('lecm.business-journal.records.btn') args.selected/>
-	<@comp.baseMenuButton "bj-settings" msg('lecm.business-journal.archive-settings.btn') args.selected/>
+	<@comp.baseMenuButton "bj-archiver-settings" msg('lecm.business-journal.archive-settings.btn') args.selected/>
+	<@comp.baseMenuButton "bj-logger-settings" msg('lecm.business-journal.logger-settings.btn') args.selected/>
 </@comp.baseMenu>

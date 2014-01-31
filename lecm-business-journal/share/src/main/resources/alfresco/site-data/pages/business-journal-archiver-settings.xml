@@ -2,6 +2,6 @@
 <page>
     <title>Настройки автоматического архивирования</title>
     <description>Настройки автоматического архивирования</description>
-    <template-instance>business-journal-settings</template-instance>
+    <template-instance>business-journal-archiver-settings</template-instance>
     <authentication>user</authentication>
 </page>

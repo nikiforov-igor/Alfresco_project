@@ -15,8 +15,12 @@ import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiverSettings;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * @author dbashmakov
@@ -271,4 +275,18 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         }
     }
 
+    public Boolean switchLogging(JSONArray nodeRefs, String turnOn) {
+        //Object[] nodeRefs = Context.getCurrentContext().getElements(scriptableNodeRefs);
+        for (int i=0; i<nodeRefs.length(); i++) {
+            try {
+                String nodeRef = nodeRefs.getJSONObject(i).getString("nodeRef");
+                Boolean turnOnBool = Boolean.parseBoolean(turnOn);
+                serviceRegistry.getNodeService().setProperty(new NodeRef(nodeRef), BusinessJournalService.PROP_EVENT_CAT_ON, turnOnBool);
+            } catch (JSONException ex) {
+                Logger.getLogger(BusinessJournalWebScriptBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
+    }
+    
 }

@@ -83,6 +83,12 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-busjournal:eventCategory-on">
+                    <title>On</title>
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>true</default>
+                </property>
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-dic:aspect_active</aspect>

@@ -88,6 +88,18 @@
                 <property name="cm:name">Исключение роли</property>
                 <property name="lecm-busjournal:eventCategory-code">REMOVE_GROUP_ROLE</property>
             </item>
+            <item name="cm:Успешный вход" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Успешный вход</property>
+                <property name="lecm-busjournal:eventCategory-code">LOGIN_SUCCESS</property>
+            </item>
+            <item name="cm:Выход" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Выход</property>
+                <property name="lecm-busjournal:eventCategory-code">LOGOUT</property>
+            </item>
+            <item name="cm:Неудачная попытка входа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Неудачная попытка входа</property>
+                <property name="lecm-busjournal:eventCategory-code">LOGIN_FAILED</property>
+            </item>
         </items>
     </item>
 </items>
