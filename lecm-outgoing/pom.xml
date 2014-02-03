@@ -11,7 +11,7 @@
 	<groupId>ru.it.lecm.outgoing</groupId>
 	<artifactId>outgoing</artifactId>
 	<packaging>pom</packaging>
-	<name>Logic ECM Outgoing Module</name>
+	<name>Logic ECM Outgoing</name>
 
 	<modules>
 		<module>api</module>

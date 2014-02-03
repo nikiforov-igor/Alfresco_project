@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>outgoing-repo-api</artifactId>
-	<name>Logic ECM Outgoing Module Repo API</name>
+	<name>Logic ECM Outgoing Repo API</name>
 
 	<dependencies>
 		<dependency>

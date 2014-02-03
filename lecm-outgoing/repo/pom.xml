@@ -11,7 +11,7 @@
 
 	<artifactId>outgoing-repo</artifactId>
 	<packaging>amp</packaging>
-	<name>Logic ECM Outgoing Module Repo</name>
+	<name>Logic ECM Outgoing Repo</name>
 	<!--
 		need to list these as a provided so that Maven doesn't download them
 		and include them in the AMP, they are provided by Alfresco
