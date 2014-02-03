@@ -18,7 +18,7 @@
 	    <div id="yui-main-2">
 	        <div class="yui-b" id="alf-content">
 				<@region id="toolbar" scope="template" />
-	            <@region id="datagrid" scope="template" />
+	            <@region id="main-form" scope="template" />
 	        </div>
 	    </div>
 	    <div id="alf-filters">

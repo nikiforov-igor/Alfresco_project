@@ -135,10 +135,21 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         /**
          * Перерисовка дерева
          */
-        _renderTree:function () {
-            this._loadTree(this.selectedNode);
+        _renderTree:function (layer, args) {
+	        var refreshParent = args[1] != null && args[1].refreshParent;
+	        var selectParent = args[1] != null && args[1].selectParent;
+
+	        if (refreshParent) {
+		        this._loadTree(this.selectedNode.parent);
+	        } else {
+                this._loadTree(this.selectedNode);
+	        }
             tree.render();
-            this.selectedNode.focus();
+	        if (selectParent) {
+		        this._treeNodeSelected(this.selectedNode.parent);
+		        tree.onEventToggleHighlight(this.selectedNode);
+	        }
+	        this.selectedNode.focus();
             makeDraggable();
         },
         /**

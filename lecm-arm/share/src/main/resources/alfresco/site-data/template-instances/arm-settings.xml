@@ -21,16 +21,16 @@
 		<!-- Toolbar -->
 		<component>
 			<region-id>toolbar</region-id>
-			<url>/lecm/dictionary/toolbar</url>
+			<url>/lecm/arm/toolbar</url>
 			<properties>
 				<pagination>true</pagination>
 				<dictionaryName>Настройки АРМ</dictionaryName>
 			</properties>
 		</component>
-		<!-- Datagrid -->
+		<!-- Edit -->
 		<component>
-			<region-id>datagrid</region-id>
-			<url>/lecm/dictionary/datagrid</url>
+			<region-id>main-form</region-id>
+			<url>/lecm/arm/editNode</url>
 			<properties>
 				<plane>false</plane>
 				<dictionaryName>Настройки АРМ</dictionaryName>
