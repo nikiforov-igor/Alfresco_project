@@ -5,7 +5,9 @@
 	<version>1.0</version>
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/arm/1.0" prefix="lecm-arm"/>
@@ -15,6 +17,7 @@
 		<type name="lecm-arm:arm">
 			<parent>lecm-dic:hierarchical_dictionary_values</parent>
 			<properties>
+				<!--Код-->
 				<property name="lecm-arm:code">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -24,6 +27,7 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!--Выбран по умолчанию-->
 				<property name="lecm-arm:use-by-default">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -43,12 +47,222 @@
 		</type>
 
 		<type name="lecm-arm:accordion">
+			<parent>lecm-arm:base-node</parent>
+			<associations>
+				<!-- Бизнес роли -->
+				<association name="lecm-arm:business-roles-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:business-role</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+
+				<!-- Запрос -->
+				<association name="lecm-arm:accordion-query-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-arm:static-query</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-arm:node</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="lecm-arm:node">
+			<parent>lecm-arm:base-node</parent>
+			<associations>
+				<!-- Запрос -->
+				<association name="lecm-arm:node-query-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-arm:base-query</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-arm:node</default>
+				</property>
+			</overrides>
+		</type>
+
+		<type name="lecm-arm:base-node">
 			<parent>lecm-dic:hierarchical_dictionary_values</parent>
-			<!--<overrides>-->
-				<!--<property name="lecm-dic:valueContainsType">-->
-					<!--<default>lecm-doc-dic-fr:level3</default>-->
-				<!--</property>-->
-			<!--</overrides>-->
+			<properties>
+				<!--Отображаемые типы-->
+				<property name="lecm-arm:types">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Фильтры-->
+				<property name="lecm-arm:filters">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Включить счётчик-->
+				<property name="lecm-arm:counter-enable">
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Счётчик: ограничение-->
+				<property name="lecm-arm:counter-limitation">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Счётчик: описание-->
+				<property name="lecm-arm:counter-description">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<!-- Список колонок -->
+				<association name="lecm-arm:fields-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-arm:field</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<type name="lecm-arm:field">
+			<parent>cm:cmobject</parent>
+			<properties>
+				<!--Имя атрибута-->
+				<property name="lecm-arm:field-name">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Форматная строка-->
+				<property name="lecm-arm:field-format-string">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Включить сортировку-->
+				<property name="lecm-arm:field-sortable">
+					<type>d:boolean</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-arm:base-query">
+			<parent>cm:cmobject</parent>
+			<properties>
+				<!--Поисковый запрос-->
+				<property name="lecm-arm:search-query">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-arm:static-query">
+			<parent>lecm-arm:base-query</parent>
+		</type>
+
+		<type name="lecm-arm:dynamic-query">
+			<parent>lecm-arm:base-query</parent>
+			<properties>
+				<!--Запрос для списка-->
+				<property name="lecm-arm:list-query">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecm-arm:dynamic-dictionary-query">
+			<parent>lecm-arm:base-query</parent>
+			<associations>
+				<!-- Справочник -->
+				<association name="lecm-arm:query-dictionary-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-dic:dictionary</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
 		</type>
 	</types>
 </model>

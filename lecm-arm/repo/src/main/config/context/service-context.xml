@@ -18,7 +18,7 @@
 	
 -->
 <beans>
-	<bean id="arm.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
+	<bean id="arm.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-arm-model.xml</value>

@@ -35,6 +35,14 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<!--<show id="lecm-arm:fields-assoc" force="true"/>-->
+					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:business-roles-assoc" force="true"/>
+					<!--<show id="lecm-arm:accordion-query-assoc" force="true"/>-->
 				</field-visibility>
 			</form>
 		</forms>
@@ -45,11 +53,146 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:business-roles-assoc" force="true"/>
 				</field-visibility>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<!--<show id="lecm-arm:fields-assoc" force="true"/>-->
+					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<!--<show id="lecm-arm:node-query-assoc" force="true"/>-->
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:field">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:field-name" force="true"/>
+					<show id="lecm-arm:field-format-string" force="true"/>
+					<show id="lecm-arm:field-sortable" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:field">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:field-name" force="true"/>
+					<show id="lecm-arm:field-format-string" force="true"/>
+					<show id="lecm-arm:field-sortable" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:static-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:static-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:dynamic-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:list-query" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:dynamic-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:list-query" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:dynamic-dictionary-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:query-dictionary-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:dynamic-dictionary-query">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:query-dictionary-assoc" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
