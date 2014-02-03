@@ -240,4 +240,24 @@ public class RegNumbersJavascriptExtension extends BaseScopableProcessorExtensio
             throw new WebScriptException(String.format("Error running registration number template '%s'", templateStr), ex);
         }
     }
+
+    /**
+     * Проверить, зарегистрирован ли документ
+     *
+     * @param documentNode ссылка на экземпляр документа, который необходимо проверить на регистрацию.
+     * @return зарегистрирован/не зарегистрирован
+     */
+    public boolean isDocumentRegistered(ScriptNode documentNode) {
+        return regNumbersService.isRegistered(documentNode.getNodeRef(), false);
+    }
+
+    /**
+     * Проверить, зарегистрирован ли проект документа
+     *
+     * @param documentNode ссылка на экземпляр документа, который необходимо проверить на регистрацию.
+     * @return зарегистрирован/не зарегистрирован
+     */
+    public boolean isProjectRegistered(ScriptNode documentNode) {
+        return regNumbersService.isRegistered(documentNode.getNodeRef(), true);
+    }
 }

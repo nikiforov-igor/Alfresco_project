@@ -235,17 +235,25 @@ public interface RegNumbersService {
 	 * @param dictionaryTemplateCode код шаблона в справочнике.
 	 * @return ссылка на объект шаблона.
 	 */
-	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
+	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
+    void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;;
+    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+    void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;;
+    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException ;
+    void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException ;
+    void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException;
+
+    /**
+     * Проверить, зарегистрирован ли документ
+     *
+     * @param documentNode ссылка на экземпляр документа, который необходимо проверить на регистрацию.
+     * @return зарегистрирован/не зарегистрирован
+     */
+    boolean isRegistered(NodeRef documentNode, boolean isProject);
 }

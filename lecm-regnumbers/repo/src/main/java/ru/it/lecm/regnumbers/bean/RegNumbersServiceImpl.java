@@ -212,6 +212,20 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
         registerDocument(documentNode, getTemplateString(templateRef));
     }
 
+    @Override
+    public boolean isRegistered(NodeRef documentNode, boolean isProject) {
+        QName regAspectName = isProject ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+        QName regAssocName =  isProject ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
+
+        if (nodeService.hasAspect(documentNode, regAspectName)) {
+            List<AssociationRef> rDataAssocs = nodeService.getTargetAssocs(documentNode, regAssocName);
+            if (!rDataAssocs.isEmpty()) {
+                return (Boolean)nodeService.getProperty(rDataAssocs.get(0).getTargetRef(), DocumentService.PROP_REG_DATA_IS_REGISTERED);
+            }
+        }
+        return false;
+    }
+
     /**
      * Получить регистрационный номер для документа по указанному шаблону и
      * записать его в документа.
