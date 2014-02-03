@@ -440,10 +440,15 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
                 objects,
                 isActive
         );
-        result.setInitiatorText(initiatorText);
-        result.setObjectTypeText(objectTypeText);
-        result.setEventCategoryText(eventCategoryText);
+        if (initiatorText != null) {
+            result.setInitiatorText(initiatorText);
+        }
+        if (objectTypeText != null) {
+            result.setObjectTypeText(objectTypeText);
+        }
+        if (eventCategoryText != null) {
+            result.setEventCategoryText(eventCategoryText);
+        }
         return result;
     }
-
 }

@@ -55,7 +55,7 @@ public class BusinessJournalRecord implements Serializable {
     private Long nodeId;
     private Date date;
     private NodeRef initiator;
-    private String initiatorText = "";
+    private String initiatorText = "Системный агент";
     private NodeRef mainObject;
     private String mainObjectDescription = "";
     private NodeRef objectType;
