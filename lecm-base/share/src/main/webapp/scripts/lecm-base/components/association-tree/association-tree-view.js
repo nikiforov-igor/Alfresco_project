@@ -1312,7 +1312,7 @@ LogicECM.module = LogicECM.module || {};
                 el = Dom.get(this.options.controlId + "-added");
 	            if (el != null) {
 		            if (clearCurrentDisplayValue) {
-			            el.innerHTML = '';
+			            el.value = '';
 		            }
 	                for (i in addItems) {
 	                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
