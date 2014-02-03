@@ -2629,3 +2629,7 @@ div.form-field table.formFieldControlParamsTable {
 .document-preview-cntrol .preview-select {
 	padding-bottom: 10px;
 }
+
+#no_menu_page #bd #lecm-page {
+    margin-left: 5px;
+}

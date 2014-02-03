@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+    <template-type>ru/it/lecm/arm/arm</template-type>
+    <properties>
+        <preferenceKey>ru.it.lecm.arm</preferenceKey>
+    </properties>
+    <components>
+        <!-- Title -->
+        <component>
+            <region-id>title</region-id>
+            <url>/lecm/base/title-with-filter-label</url>
+            <properties>
+                <title>page.title.arm</title>
+                <filteredLabel>page.title.arm</filteredLabel>
+            </properties>
+        </component>
+        <!-- Toolbar -->
+        <component>
+            <region-id>toolbar</region-id>
+            <url>/lecm/arm/toolbar</url>
+            <properties>
+                <itemType>lecm-document:base</itemType>
+                <bubblingLabel>documents-arm</bubblingLabel>
+                <showExSearchBtn>false</showExSearchBtn>
+                <showCreateBtn>false</showCreateBtn>
+                <createDialogWidth>80em</createDialogWidth>
+                <createDialogClass>documents-list-create-dialog-container</createDialogClass>
+            </properties>
+        </component>
+        <!-- Datagrid -->
+        <component>
+            <region-id>documents-grid</region-id>
+            <url>/lecm/arm/documents-grid</url>
+            <properties>
+                <itemType>lecm-document:base</itemType>
+                <bubblingLabel>documents-arm</bubblingLabel>
+            </properties>
+        </component>
+        <!-- Filter -->
+        <component>
+            <region-id>documents-filter</region-id>
+            <url>/lecm/arm/tree</url>
+        </component>
+        <!-- Filter -->
+        <component>
+            <region-id>filters</region-id>
+            <url>/lecm/arm/filters</url>
+        </component>
+        <!-- Forbidden -->
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+        </component>
+    </components>
+</template-instance>
