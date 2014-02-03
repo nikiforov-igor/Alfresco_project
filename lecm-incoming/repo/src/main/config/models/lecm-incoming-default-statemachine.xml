@@ -2830,7 +2830,7 @@ if (fileRegister != null && fileRegister.length == 1) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToType</name>
-                                                                                <value><![CDATA[FIELD]]></value>
+                                                                                <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
