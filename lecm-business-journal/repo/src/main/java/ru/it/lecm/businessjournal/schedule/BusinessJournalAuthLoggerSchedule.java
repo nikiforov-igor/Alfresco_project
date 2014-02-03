@@ -22,6 +22,7 @@ import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.EventCategory;
 
 /**
  *
@@ -176,16 +177,16 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
                             for (String key : values.keySet()) {
                                 logger.debug(key + ": " + values.get(key).toString());
                                 if (key.equals("/authAudit/login/no-error/user")) {
-                                    type = "LOGIN_SUCCESS";
+                                    type = EventCategory.LOGIN_SUCCESS;
                                     login = values.get(key).toString();
                                     text = "Пользователь "+login+" вошёл всистему.";
 
                                 } else if (key.equals("/authAudit/login/error/user")) {
-                                    type = "LOGIN_FAILED";
+                                    type = EventCategory.LOGIN_FAILED;
                                     login = values.get(key).toString();
                                     text = "Неудачная попытка входа. Login="+login;
                                 } else if (key.equals("/authAudit/logout/args/user")) {
-                                    type = "LOGOUT";
+                                    type = EventCategory.LOGOUT;
                                     login = values.get(key).toString();
                                     text = "Пользователь "+login+" завершил сеанс.";
                                 }

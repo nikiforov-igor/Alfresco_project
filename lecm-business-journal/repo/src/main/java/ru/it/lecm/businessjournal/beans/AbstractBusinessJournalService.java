@@ -307,7 +307,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
         // пытаемся получить объект Категория события по ключу
         NodeRef category = getEventCategoryByCode(eventCategory);
-        if (Boolean.FALSE.equals(nodeService.getProperty(category, BusinessJournalService.PROP_EVENT_CAT_ON))) {
+        if (null!=category && Boolean.FALSE.equals(nodeService.getProperty(category, BusinessJournalService.PROP_EVENT_CAT_ON))) {
             return null;
         }
         
