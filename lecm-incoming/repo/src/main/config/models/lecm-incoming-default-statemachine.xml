@@ -1688,7 +1688,7 @@ var recipient = doc.associations["lecm-incoming:recipient-assoc"];
 statemachine.grandDynamicRoleForEmployee(doc, recipient[0], "INCOMING_RECIPIENT");
 
 var notificationText = "Вам направлен новый документ ";
-notificationText += documentScript.wrapperDocumentLink(doc,"{lecm-incoming:title}");
+notificationText += documentScript.wrapperDocumentLink(doc,"{lecm-document:title}");
 
 
 
@@ -2528,7 +2528,7 @@ if (addressee != null) {
 		message += "</b>!<br/>"
 
 		message += "Ваше письмо ";
-		message += incoming.properties["lecm-incoming:title"];
+		message += incoming.properties["lecm-document:title"];
 		message += " от <b>";
 		message += substitude.formatNodeTitle(incoming, "{cm:created?dd-MM-yyyy}");
 		message += "</b> зарегистрировано под номером <b>";
