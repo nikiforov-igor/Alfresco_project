@@ -17,7 +17,7 @@
         <!-- Toolbar -->
         <component>
             <region-id>toolbar</region-id>
-            <url>/lecm/arm/toolbar</url>
+            <url>/lecm/arm/documents-toolbar</url>
             <properties>
                 <itemType>lecm-document:base</itemType>
                 <bubblingLabel>documents-arm</bubblingLabel>
@@ -39,7 +39,7 @@
         <!-- Filter -->
         <component>
             <region-id>documents-filter</region-id>
-            <url>/lecm/arm/tree</url>
+            <url>/lecm/arm/filters-tree</url>
         </component>
         <!-- Filter -->
         <component>

@@ -29,7 +29,7 @@
         }
 
         <#if filter == "" && preferences??>
-            var PREFERENCE = preferenceKey
+            var PREFERENCE = "${preferenceKey}";
             var preference = findValueByDotNotation(${preferences}, PREFERENCE);
             if (preference != null) {
                     window.location = window.location + <#if isDocListPage>"&"<#else>"?"</#if> + preference;
@@ -66,14 +66,14 @@
         </#if>
 
         // настройки из repo
-        LogicECM.module.Documents.ARM_SETTINGS =
+        LogicECM.module.ARM.SETTINGS =
             <#if settings?? >
             ${settings}
             <#else>
             {}
             </#if>;
 
-        LogicECM.module.Documents.ARM_FILTER = "";
+        LogicECM.module.ARM.FILTER = "";
     //]]></script>
 </@>
 <div id="no_menu_page" class="sticky-wrapper">

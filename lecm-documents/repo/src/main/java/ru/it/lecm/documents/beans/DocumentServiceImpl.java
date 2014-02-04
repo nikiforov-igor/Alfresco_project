@@ -244,7 +244,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     public NodeRef getDraftRootByType(QName docType) {
         final NodeRef draftRef = getDraftRoot();
-        final String rootName = getDraftRootLabel(docType);
+        final String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
         NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
 
         if (nodeRef == null) {

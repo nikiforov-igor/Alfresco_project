@@ -1,4 +1,12 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-arm/arm-const.js"/>
+            </dependencies>
+        </forms>
+    </config>
+
 	<config evaluator="node-type" condition="lecm-arm:arm">
 		<forms>
 			<form>
