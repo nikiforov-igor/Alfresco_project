@@ -143,7 +143,7 @@
                 <js src="/scripts/lecm-base/components/lecm-date-picker.js" />
 	            <js src="/scripts/lecm-base/components/lecm-uploader-with-preview-control.js" />
                 <js src="/scripts/lecm-base/components/binder.js" />
-	            <js src="/scripts/lecm-base/components/association-create-control.js" />
+	            <js src="/scripts/lecm-base/components/lecm-association-create-control.js" />
 				<js src="/scripts/knockout.min.js" />
 
 	            <!--Web preview-->

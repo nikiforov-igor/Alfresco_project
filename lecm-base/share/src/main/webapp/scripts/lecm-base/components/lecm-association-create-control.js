@@ -273,10 +273,53 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			removeNode: function (event, params) {
-				delete this.selectedItems[params.node.nodeRef];
-				this.singleSelectedItem = null;
-				if (params.updateForms) {
-					this.updateFormFields();
+				if (params.node != null) {
+					var me = this;
+
+					var fnActionDeleteConfirm = function (nodeRef) {
+						Alfresco.util.Ajax.jsonRequest(
+							{
+								method: Alfresco.util.Ajax.POST,
+								url: Alfresco.constants.PROXY_URI + "lecm/base/action/delete?alf_method=delete",
+								dataObj: {
+									nodeRefs: [nodeRef]
+								},
+								responseContentType: Alfresco.util.Ajax.JSON,
+								successCallback: {
+									fn: function (response) {
+										delete me.selectedItems[nodeRef];
+										me.singleSelectedItem = null;
+										if (params.updateForms) {
+											me.updateFormFields();
+										}
+									}
+								},
+								failureMessage: "message.delete.failure",
+								execScripts: true
+							});
+					};
+
+					Alfresco.util.PopupManager.displayPrompt(
+						{
+							title:this.msg("message.confirm.delete.title"),
+							text: this.msg("message.confirm.delete.description"),
+							buttons:[
+								{
+									text:this.msg("button.delete"),
+									handler:function () {
+										this.destroy();
+										fnActionDeleteConfirm.call(me, params.node.nodeRef);
+									}
+								},
+								{
+									text:this.msg("button.cancel"),
+									handler:function () {
+										this.destroy();
+									},
+									isDefault:true
+								}
+							]
+						});
 				}
 			},
 
