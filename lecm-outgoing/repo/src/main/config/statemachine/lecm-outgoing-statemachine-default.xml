@@ -860,7 +860,7 @@
 																<name>actionScript</name>
 																<value>
 																	<![CDATA[var outgoing = stm_document;
-regnumbers.registerDocument(outgoing, "OUTGOING_PRJ_NUMBER");
+regnumbers.registerProject(outgoing, "OUTGOING_PRJ_NUMBER");
 outgoing.save();
 ]]>
 																</value>
