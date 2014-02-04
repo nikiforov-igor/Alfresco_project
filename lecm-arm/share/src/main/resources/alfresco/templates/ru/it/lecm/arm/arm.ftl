@@ -1,10 +1,15 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader "transitional">
     <#include "/org/alfresco/components/form/form.get.head.ftl">
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-const.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-tree-menu.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/document-list-filters-manager.js"></@script>
+
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/documents-list.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-arm/lecm-arm-documents.css" />
 
     <#assign filter = ""/>
     <#assign formId = ""/>
@@ -40,29 +45,7 @@
             }
         </#if>
 
-        /*// инициализуруем менеджер предустановок фильтров для списка документов
-        var documentFilters = new LogicECM.module.Documents.FiltersManager();
-        <#if docType?? && docType != "" >
-            documentFilters.setOptions({
-                docType: "${docType}"
-            });
-        <#else>
-            documentFilters.setOptions({
-                docType: "lecm-base:document"
-            });
-        </#if>
-        documentFilters.setOptions({
-            isDocListPage: ${isDocListPage?string},
-            archiveDocs: false
-        });
-        LogicECM.module.Documents.filtersManager = documentFilters;*/
-
         <#if queryFilterId?? && queryFilterId != "" && preferences??>
-            /*var PREFERENCE_FILTER = "ru.it.lecm.documents." + (("${docType}" != "") ? "${docType}" : "lecm-base:document").split(":").join("_") + "." + "${queryFilterId}";
-            var preference = findValueByDotNotation(${preferences}, PREFERENCE_FILTER);
-            if (preference != null && preference != "" && location.hash == "") {
-                location.hash = '#filter=' + "${queryFilterId}" + "|" + preference;
-            }*/
         </#if>
 
         // настройки из repo
@@ -74,23 +57,41 @@
             </#if>;
 
         LogicECM.module.ARM.FILTER = "";
+
+        function initArmResizer() {
+            var resizer = new LogicECM.module.Base.Resizer('ArmResizer');
+            resizer.setOptions({
+                initialWidth: 300
+            });
+        }
+
+        YAHOO.util.Event.onDOMReady(initArmResizer);
     //]]></script>
 </@>
-<div id="no_menu_page" class="sticky-wrapper">
+
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
+
+<div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=hasPermission showMenu=false>
     <#if hasPermission>
-        <div class="yui-gc">
-            <div id="main-region" class="yui-u first">
-                <div class="yui-gd grid columnSize2">
-                    <div class="yui-u first column1">
-                        <@region id="documents-filter" scope="template" />
-                    </div>
-                    <div class="yui-u column2">
-                        <@region id="filters" scope="template" />
-                        <@region id="documents-grid" scope="template" />
-                    </div>
+        <div class="yui-t1" id="arm-with-tree">
+            <div id="yui-main-2">
+                <div class="yui-b" style="margin-left: 0" id="alf-content">
+                    <@region id="current-filters" scope="template" />
+                    <@region id="documents-grid" scope="template" />
                 </div>
+            </div>
+            <div id="alf-filters" class="yui-u first column1">
+                <div id="arm-tree" class="ygtv-highlight"></div>
+                <script type="text/javascript">//<![CDATA[
+                (function () {
+                    function initMenu() {
+                        new LogicECM.module.ARM.Tree("arm-tree");
+                    }
+
+                    YAHOO.util.Event.onDOMReady(initMenu);
+                })();
+                //]]></script>
             </div>
         </div>
     <#else>

@@ -51,4 +51,14 @@
 			<ref bean="armService"/>
 		</property>
 	</bean>
+
+    <bean id="webscript.ru.it.lecm.arm.tree-menu.get"
+          class="ru.it.lecm.arm.scripts.TreeMenuScript"
+          parent="webscript">
+        <property name="nodeService" ref="nodeService" />
+        <property name="namespaceService" ref="namespaceService" />
+        <!--<property name="preferenceService" ref="preferenceService"/>-->
+        <property name="service" ref="armService"/>
+        <!--<property name="authService" ref="authenticationService"/>-->
+    </bean>
 </beans>

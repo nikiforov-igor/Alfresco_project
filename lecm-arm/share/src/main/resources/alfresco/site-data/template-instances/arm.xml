@@ -18,14 +18,6 @@
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/arm/documents-toolbar</url>
-            <properties>
-                <itemType>lecm-document:base</itemType>
-                <bubblingLabel>documents-arm</bubblingLabel>
-                <showExSearchBtn>false</showExSearchBtn>
-                <showCreateBtn>false</showCreateBtn>
-                <createDialogWidth>80em</createDialogWidth>
-                <createDialogClass>documents-list-create-dialog-container</createDialogClass>
-            </properties>
         </component>
         <!-- Datagrid -->
         <component>
@@ -38,13 +30,8 @@
         </component>
         <!-- Filter -->
         <component>
-            <region-id>documents-filter</region-id>
-            <url>/lecm/arm/filters-tree</url>
-        </component>
-        <!-- Filter -->
-        <component>
-            <region-id>filters</region-id>
-            <url>/lecm/arm/filters</url>
+            <region-id>current-filters</region-id>
+            <url>/lecm/arm/current-filters</url>
         </component>
         <!-- Forbidden -->
         <component>
