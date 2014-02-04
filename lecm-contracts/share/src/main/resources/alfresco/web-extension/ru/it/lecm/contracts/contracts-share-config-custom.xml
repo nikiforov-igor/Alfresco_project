@@ -1754,6 +1754,8 @@
 			<workflow name="activiti$lecm-contract_document"/>
             <workflow name="activiti$contractsSignContractor"/>
             <workflow name="activiti$addDocSignContractor"/>
+            <workflow name="activiti$contractExecuted"/>
+            <workflow name="activiti$contractAdditionalDocumentCancel"/>
 		</hidden-workflows>
 	</config>
 
