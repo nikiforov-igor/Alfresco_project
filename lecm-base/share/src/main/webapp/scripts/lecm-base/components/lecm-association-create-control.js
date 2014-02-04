@@ -64,7 +64,9 @@ LogicECM.module = LogicECM.module || {};
 
 				createDialogClass: "",
 
-				fullDelete: false
+				fullDelete: false,
+
+				itemTypes: null
 			},
 
 			onReady: function () {
@@ -80,24 +82,74 @@ LogicECM.module = LogicECM.module || {};
 
 				// Create button if control is enabled
 				if (!this.options.disabled) {
-					this.widgets.createNewButton = new YAHOO.widget.Button(
-						this.options.controlId + "-create-new-button",
-						{
-							onclick: {
-								fn: this.showCreateNewItemWindow,
-								obj: null,
-								scope: this
-							}
-						}
-					);
+					this.renderCreateMenu();
 				}
+
 				this._loadSelectedItems();
 			},
 
-			showCreateNewItemWindow: function () {
+			renderCreateMenu: function () {
+					if (this.options.itemTypes != null && this.options.itemTypes.length == 1) {
+						this.widgets.createNewButton = new YAHOO.widget.Button(
+							this.options.controlId + "-create-new-button",
+							{
+								onclick: {
+									fn: this.showCreateDialog,
+									obj: this.options.itemTypes[0],
+									scope: this
+								}
+							}
+						);
+					} else if (this.options.itemTypes.length > 1) {
+						var me = this;
+						Alfresco.util.Ajax.jsonRequest(
+							{
+								url:Alfresco.constants.PROXY_URI + "lecm/base/types/titles",
+								method:Alfresco.util.Ajax.POST,
+								dataObj:{
+									types: this.options.itemTypes
+								},
+								successCallback:{
+									fn:function(response){
+										if (response.json != null && response.json.length > 0) {
+											var menu = [];
+											for (var i = 0; i < response.json.length; i++) {
+												var type = response.json[i];
+												menu.push({
+													text: type.title,
+													value: type.name,
+													onclick: {
+														fn: me.onClickMenuButton,
+														scope: this
+													}
+												});
+											}
+											me.widgets.createNewButton = new YAHOO.widget.Button(
+												me.options.controlId + "-create-new-button",
+												{
+													type: "menu",
+													menu: menu
+												}
+											);
+										}
+									},
+									scope:this
+								},
+								failureMessage: "message.failure"
+							});
+					}
+			},
+
+			onClickMenuButton: function (p_sType, p_aArgs, p_oItem) {
+				this.showCreateDialog(null, p_oItem.value);
+			},
+
+			showCreateDialog: function (e, type) {
 				if (this.doubleClickLock) return;
+
 				this.doubleClickLock = true;
-				var templateRequestParams = this.generateCreateNewParams(this.options.parentNodeRef, this.options.itemType);
+
+				var templateRequestParams = this.generateCreateNewParams(this.options.parentNodeRef, type);
 				templateRequestParams["createNewMessage"] = this.options.createNewMessage;
 
 				new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
@@ -143,12 +195,11 @@ LogicECM.module = LogicECM.module || {};
 					this.singleSelectedItem = null;
 					for (var i = 0, il = items.length; i < il; i++) {
 						item = items[i];
-						if (item.type == this.options.itemType) {
-							this.selectedItems[item.nodeRef] = item;
 
-							if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
-								this.singleSelectedItem = item;
-							}
+						this.selectedItems[item.nodeRef] = item;
+
+						if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
+							this.singleSelectedItem = item;
 						}
 					}
 

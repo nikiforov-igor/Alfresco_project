@@ -30,6 +30,7 @@
                     <input type="button" id="${controlId}-create-new-button" name="-" value=""/>
                 </span>
 			</div>
+			<div id="${controlId}-create-menu"></div>
 		</#if>
 
 		<div class="clear"></div>
@@ -82,10 +83,10 @@
 		<#if renderPickerJSSelectedValue??>
 			selectedValue: "${renderPickerJSSelectedValue}",
 		</#if>
-		<#if field.control.params.itemType??>
-			itemType: "${field.control.params.itemType}"
+		<#if field.control.params.itemTypes??>
+			itemTypes: "${field.control.params.itemTypes}".split(",")
 		<#else>
-			itemType: "${field.endpointType}"
+			itemTypes: ["${field.endpointType}"]
 		</#if>
 	}).setMessages( ${messages} );
 </script>

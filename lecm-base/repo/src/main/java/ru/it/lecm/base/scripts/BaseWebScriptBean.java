@@ -237,4 +237,17 @@ public class BaseWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public String getTypeLabel(String type) {
+		ParameterCheck.mandatory("type", type);
+
+		QName nodeType = QName.createQName(type, namespaceService);
+		if (nodeType != null) {
+			TypeDefinition typeDef = dictionaryService.getType(nodeType);
+			if (typeDef != null) {
+				return  typeDef.getTitle();
+			}
+		}
+		return null;
+	}
 }

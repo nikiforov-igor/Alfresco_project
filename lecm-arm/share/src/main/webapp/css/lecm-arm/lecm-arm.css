@@ -6,3 +6,13 @@
 .arm-metadata div.autocompleteCurrentValueDisplay {
 	margin-top: 10px;
 }
+
+.yui-skin-lecmTheme .arm-metadata .yui-menu-button button {
+	background-image:none;
+}
+
+.yui-skin-lecmTheme .arm-metadata .yui-menu-button {
+	border-color: #ccc;
+	border-style: solid;
+	border-radius: 3px;
+}

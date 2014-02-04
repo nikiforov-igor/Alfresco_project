@@ -129,7 +129,7 @@
 					<field id="lecm-arm:node-query-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:search-query}</control-param>
-							<control-param name="itemType">lecm-arm:static-query</control-param>
+							<control-param name="itemTypes">lecm-arm:static-query,lecm-arm:dynamic-query,lecm-arm:dynamic-dictionary-query</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
