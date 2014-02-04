@@ -1,0 +1,85 @@
+<alfresco-config>
+	<config evaluator="string-compare" condition="activiti$lecmSign">
+		<forms>
+			<form>
+				<!-- TODO: шаблон для формы запуска процесса подписания -->
+				<!-- <create-form template="/ru/it/lecm/approval/form/approval-form.ftl"/> -->
+				<field-visibility>
+					<show id="bpm:workflowDueDate"/>
+					<show id="packageItems"/>
+					<show id="bpm:workflowDescription" />
+				</field-visibility>
+				<appearance>
+					<field id="bpm:workflowDescription">
+						<control template="/ru/it/lecm/documents/controls/workflow/document-present-string-hidden.ftl">
+							<control-param name="leftPartTextCode">ru.it.lecm.workflow.signing.workflowDescription.message</control-param>
+						</control>
+					</field>
+					<field id="bpm:workflowDueDate" mandatory="true">
+						<!-- TODO: валидатор сроков последовательного подписания -->
+						<!--<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
+						</constraint-handlers>-->
+						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="lecmSign:signTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecmSign:presentString" force="true"/>
+					<show id="bpm:dueDate" />
+					<show id="lecmSign:signTaskResult" />
+					<show id="bpm:comment" />
+					<!-- TODO: переназначение задачи подписания -->
+					<!--<show id="reassignScriptField" force="true" />-->
+				</field-visibility>
+				<appearance>
+					<!-- TODO: строка представления для документа в задаче -->
+					<field id="lecmSign:presentString">
+						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
+					</field>
+					<field id="bpm:dueDate" label-id="workflow.field.due">
+						<control template="/org/alfresco/components/form/controls/info.ftl" />
+					</field>
+					<field id="lecmSign:signTaskResult">
+						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
+							<control-param name="options">SIGNED|Подписать#alf#REJECTED|Отклонить</control-param>
+						</control>
+					</field>
+					<!-- TODO: переназначение задачи подписания -->
+					<!--<field id="reassignScriptField">
+						<control template="/ru/it/lecm/approval/controls/reassign-override-script-field.ftl" />
+					</field>-->
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="lecmSign:signing">
+		<forms>
+			<form id="workflow-details">
+				<field-visibility>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="packageItems">
+						<!-- TODO: вспомнить что это такое -->
+						<control template="/ru/it/lecm/approval/controls/package-items-with-approval-list-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+
+</alfresco-config>
