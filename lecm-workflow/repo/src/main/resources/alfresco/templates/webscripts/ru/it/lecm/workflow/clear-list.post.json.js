@@ -1,0 +1,1 @@
+lecmWorkflowService.clearAssigneesList(json);

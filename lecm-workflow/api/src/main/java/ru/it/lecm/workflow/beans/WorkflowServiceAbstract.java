@@ -398,8 +398,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 	 * @param workflowType тип бизнес-процесса
 	 * @return ссылка на папку, куда можно складывать лист результата
 	 */
-	abstract protected NodeRef getOrCreateWorkflowResultFolder(final NodeRef parentRef, final String workflowType) ;
-
+	abstract protected NodeRef getOrCreateWorkflowResultFolder(final NodeRef parentRef, final String workflowType);
 
 	abstract protected void onTaskReassigned(NodeRef oldResultListItemRef, NodeRef newResultItemRef);
 

@@ -234,8 +234,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return result;
 	}
 
-
-
 	@Override
 	public List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType, String concurrency) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
@@ -290,7 +288,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	@Override
 	public AssigneesList getAssigneesListDetail(NodeRef assingeesListRef) {
 		AssigneesList assigneesList = new AssigneesList();
-		assigneesList.setListName((String) nodeService.getProperty(assingeesListRef, ContentModel.PROP_NAME));
+		assigneesList.setListName(getNodeRefName(assingeesListRef));
 
 		List<NodeRef> listItemsNodes = getAssigneesListItems(assingeesListRef);
 
@@ -320,7 +318,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public void clearDueDatesInAssigneesList(NodeRef assigneeListRef) {
 		List<NodeRef> assigneesListItems = getAssigneesListItems(assigneeListRef);
 
-		for (NodeRef assigneesListItemRef: assigneesListItems) {
+		for (NodeRef assigneesListItemRef : assigneesListItems) {
 			setAssigneesListItemDueDate(assigneesListItemRef, null);
 		}
 	}
@@ -381,7 +379,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	@Override
-	public void calculateAssigneesListDates(NodeRef assigneesList, Date dueDate) {
+	public void calculateAssigneesListDueDates(NodeRef assigneesList, Date dueDate) {
 		List<NodeRef> assigneesListItems = getAssigneesListItems(assigneesList);
 
 		if (assigneesListItems.isEmpty()) {
@@ -410,7 +408,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return getAssigneesListsFolder();
 	}
 
-	private NodeRef createAssigneesList(NodeRef parentRef, String workflowType, String concurrency, Map<QName, Serializable> properties) {
+	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final String concurrency, final Map<QName, Serializable> properties) {
 		Map<QName, Serializable> props;
 		NodeRef result;
 		if (properties == null) {
@@ -418,12 +416,20 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		} else {
 			props = properties;
 		}
+
+		props.put(WorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
+
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
 				props.containsKey(ContentModel.PROP_NAME) ? (String) props.get(ContentModel.PROP_NAME) : UUID.randomUUID().toString());
 
 		result = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName,
 				WorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, properties).getChildRef();
 
+		if (concurrency != null) {
+			nodeService.addAspect(result, WorkflowModel.ASPECT_WORKFLOW_CONCURRENCY, new HashMap<QName, Serializable>(){{
+				put(WorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
+			}});
+		}
 		return result;
 	}
 
@@ -431,6 +437,18 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName) {
 		nodeService.setProperty(assigneesListRef, ContentModel.PROP_NAME, assigneesListName);
 		nodeService.removeAspect(assigneesListRef, WorkflowModel.ASPECT_TEMP);
+	}
+
+	@Override
+	public String getNodeRefName(NodeRef nodeRef) {
+		return (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+	}
+
+	@Override
+	public NodeRef getAssigneesListByItem(NodeRef assigneeListItem) {
+		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeListItem, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
+		return assigeesListNodeRef;
 	}
 
 }

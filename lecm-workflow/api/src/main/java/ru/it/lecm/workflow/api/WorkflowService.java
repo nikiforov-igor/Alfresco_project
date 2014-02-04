@@ -88,8 +88,12 @@ public interface WorkflowService {
 	 * @param bpmPackage
 	 */
 	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+
 	NodeRef getWorkflowFolder();
+
 	NodeRef getResultFolder();
+
 	void assignTask(NodeRef assignee, DelegateTask task);
+
 	NodeRef createResultItem(NodeRef approvalListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType);
 }

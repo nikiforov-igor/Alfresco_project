@@ -11,23 +11,23 @@ import ru.it.lecm.workflow.AssigneesList;
  */
 public interface WorkflowAssigneesListService {
 
-	NodeRef getAssigneesListsFolder();
+	NodeRef getAssigneesListsFolder(); // NodeRef getListsFolderRef();
 
-	NodeRef getDefaultAssigneesList(String workflowType, String concurrency);
+	NodeRef getDefaultAssigneesList(String workflowType, String concurrency); // NodeRef getDefaultListFolderRef();
 
-	void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName);
+	void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName); // String save(final JSONObject json);
 
-	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType, String concurrency);
+	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType, String concurrency); // JSONObject getAssigneesLists();
 
-	AssigneesList getAssigneesListDetail(NodeRef assingeesListRef);
+	AssigneesList getAssigneesListDetail(NodeRef assingeesListRef); // JSONObject getListContents(final JSONObject json); (getAssigneesListContents)
 
-	void clearDueDatesInAssigneesList(NodeRef assigneeListRef);
+	void clearDueDatesInAssigneesList(NodeRef assigneeListRef); //void clearDueDates(final JSONObject json);
 
-	void deleteAssigneesList(NodeRef assigneeListRef);
+	void deleteAssigneesList(NodeRef assigneeListRef); // void deleteList(final JSONObject json);
 
-	boolean changeAssigneeOrder(NodeRef assigneeNodeRef, String direction);
+	boolean changeAssigneeOrder(NodeRef assigneeNodeRef, String direction); // JSONObject changeOrder(final JSONObject json);
 
-	void calculateAssigneesListDates(NodeRef assigneeList, Date dueDate);
+	void calculateAssigneesListDueDates(NodeRef assigneeList, Date dueDate); //calculateApprovalDueDate(JSONObject json);
 
 	int getAssigneesListItemOrder(NodeRef listItemNodeRef);
 
@@ -39,7 +39,7 @@ public interface WorkflowAssigneesListService {
 
 	boolean isTempAssigneesList(NodeRef assigneeListRef);
 
-	void clearAssigneesList(NodeRef assigneesListNodeRef);
+	void clearAssigneesList(NodeRef assigneesListNodeRef); // void clearAssigneesList(JSONObject json);
 
 	void setAssigneesListTemp(NodeRef assigneesListRef);
 
@@ -47,6 +47,10 @@ public interface WorkflowAssigneesListService {
 
 	void setAssigneesListItemDueDate(NodeRef assigneeListItem, Date dueDate);
 
-	void setDueDates(NodeRef assigneeListNodeRef, Date workflowDueDate);
+	void setDueDates(NodeRef assigneeListNodeRef, Date workflowDueDate); // void setDueDates(JSONObject json);
+
+	String getNodeRefName(NodeRef nodeRef);
+
+	NodeRef getAssigneesListByItem(NodeRef assigneeListItem);
 
 }
