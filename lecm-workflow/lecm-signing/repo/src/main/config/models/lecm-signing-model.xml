@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecmSign:signingWorkflow" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Workflow model for sequential signing</description>
+	<author>vmalygin</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+		<import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/signing/wokflow/1.0" prefix="lecmSign"/>
+	</namespaces>
+
+	<types>
+		<type name="lecmSign:signing">
+			<parent>bpm:startTask</parent>
+			<associations>
+				<association name="lecmSign:assigneesListAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-workflow:workflow-assignees-list</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+
+		<type name="lecmSign:signTask">
+			<parent>bpm:activitiOutcomeTask</parent>
+			<properties>
+				<property name="lecmSign:signTaskResult">
+					<type>d:text</type>
+					<default>REJECTED</default>
+					<constraints>
+						<constraint name="lecmSign:signTaskResultConstraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>SIGNED</value> <!-- подписано -->
+									<value>REJECTED</value> <!-- отклонено -->
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+			</properties>
+			<overrides>
+				<property name="bpm:packageItemActionGroup">
+					<default>edit_package_item_actions</default>
+				</property>
+				<property name="bpm:outcomePropertyName">
+					<default>{http://www.it.ru/logicECM/model/signing/wokflow/1.0}signTaskResult</default>
+				</property>
+			</overrides>
+		</type>
+	</types>
+</model>

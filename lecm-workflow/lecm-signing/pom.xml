@@ -5,20 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ru.it.lecm</groupId>
-        <artifactId>platform</artifactId>
+        <groupId>ru.it.lecm.workflow</groupId>
+        <artifactId>workflow</artifactId>
         <version>1.1.0</version>
     </parent>
 
-    <groupId>ru.it.lecm.workflow</groupId>
-    <artifactId>workflow</artifactId>
+    <groupId>ru.it.lecm.workflow.signing</groupId>
+    <artifactId>signing</artifactId>
     <packaging>pom</packaging>
-    <name>Logic ECM Workflow</name>
+    <name>Logic ECM Signing</name>
 
     <modules>
-		<module>api</module>
+        <module>api</module>
         <module>repo</module>
         <module>share</module>
-        <module>lecm-signing</module>
     </modules>
 </project>
