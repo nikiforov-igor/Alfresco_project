@@ -18,7 +18,7 @@
                         {
                             type: "datagrid-action-link-${bubblingLabel!'documents'}",
                             id: "onActionEdit",
-                            permission: "edit",
+                            permission: "",
                             label: "${msg("actions.edit")}"
                         },
                         {
