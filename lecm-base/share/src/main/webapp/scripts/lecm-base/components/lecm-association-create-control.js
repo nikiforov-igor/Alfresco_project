@@ -330,12 +330,52 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			getEmployeeView: function (employeeNodeRef, displayValue) {
-				return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+			getDefaultView: function (node) {
+				if (!this.options.disabled) {
+					var result = "<span class='not-person'><a href='javascript:void(0);' id='ed-" +
+						this.options.controlId + node.nodeRef + "'>" +
+						node.selectedName + "</a></span>";
+
+					YAHOO.util.Event.onAvailable("ed-" + this.options.controlId + node.nodeRef, this.attachEditClickListener, node, this);
+					return result;
+				} else {
+					return "<span class='not-person'>" + node.selectedName + "</span>";
+				}
 			},
 
-			getDefaultView: function (displayValue) {
-				return "<span class='not-person'>" + displayValue + "</span>";
+			attachEditClickListener: function (node) {
+				YAHOO.util.Event.on("ed-" + this.options.controlId + node.nodeRef, 'click', this.editNode, node, this);
+			},
+
+			editNode: function (event, node) {
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&fields={fields}";
+				templateUrl = YAHOO.lang.substitute(templateUrl, {
+					itemKind:"node",
+					itemId: node.nodeRef,
+					mode:"edit",
+					submitType:"json",
+					formId: ""
+				});
+				new Alfresco.module.SimpleDialog("arm-element-edit-form").setOptions({
+					width:"50em",
+					templateUrl:templateUrl,
+					actionUrl:null,
+					destroyOnHide:true,
+					doBeforeDialogShow:{
+						fn: function(p_form, p_dialog) {
+							p_dialog.dialog.setHeader(this.msg("dialog.edit.title"));
+
+							Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+						},
+						scope: this
+					},
+					onSuccess:{
+						fn:function (response) {
+							this.addSelectedItem(response.json.persistedObject);
+						},
+						scope:this
+					}
+				}).show();
 			},
 
 			getRemoveButtonHTML: function (node, dopId) {
@@ -360,24 +400,12 @@ LogicECM.module = LogicECM.module || {};
 					el.innerHTML = '';
 					var num = 0;
 					for (var i in this.selectedItems) {
-						var displayName = this.selectedItems[i].selectedName;
-
 						var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 						if (this.options.disabled) {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML += '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
-							} else {
-								el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + '</div>';
-							}
+							el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(this.selectedItems[i]) + ' ' + '</div>';
 						} else {
-							if (this.options.itemType == "lecm-orgstr:employee") {
-								el.innerHTML
-									+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) +
-									(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-							} else {
-								el.innerHTML
-									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
-							}
+							el.innerHTML
+								+= '<div class="' + divClass + '"> ' + this.getDefaultView(this.selectedItems[i]) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						}
 					}
@@ -478,98 +506,6 @@ LogicECM.module = LogicECM.module || {};
 					}
 				}
 				return selectedItems;
-			},
-
-			getEmployeeAbsenceMarkerHTML: function (nodeRef) {
-				var result = '';
-				if (this.employeesAvailabilityInformation) {
-					var employeeData = this.employeesAvailabilityInformation[nodeRef];
-					if (employeeData) {
-						if (employeeData.isEmployeeAbsent) {
-							var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
-							result += ' <span class="employee-unavailable" title="Будет доступен с ' + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear() + '"';
-						} else {
-							result += ' <span class="employee-available"';
-							var nextAbsenceStr = employeeData.nextAbsenceStart;
-							if (nextAbsenceStr) {
-								nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
-								result += 'title="Будет недоступен с ' + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear() + '"';
-							}
-						}
-						result += ">&nbsp;</span>"
-					}
-				}
-				return result;
-
-				function leadingZero(value) {
-					var valueStr = value + "";
-					if (valueStr.length == 1) {
-						return '0' + valueStr;
-					} else {
-						return valueStr;
-					}
-				}
-
-			},
-			getEmployeesAbsenceInformation: function (items) {
-				var requestObj = [];
-				for (var i = 0; i < items.length; i++) {
-					var item = items[i];
-					if (item.type === "lecm-orgstr:employee") {
-						requestObj.push({"nodeRef": item.nodeRef});
-					}
-				}
-
-				if (requestObj.length > 0) {
-					Alfresco.util.Ajax.request({
-						method: "POST",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/absence/getEmployeesAvailabilityInformation",
-						requestContentType: "application/json",
-						responseContentType: "application/json",
-						dataObj: requestObj,
-						successCallback: {
-							fn: function (response) {
-								var result = response.json;
-								this.employeesAvailabilityInformation = result;
-							},
-							scope: this
-						}
-					});
-				}
-			},
-			showEmployeeAutoAnswerPromt: function (item) {
-				var me = this;
-				var nodeRef = item.nodeRef;
-				var autoAnswerText = this.employeesAvailabilityInformation[nodeRef].answerExtended;
-				if (autoAnswerText) {
-					Alfresco.util.PopupManager.displayPrompt({
-						title: this.msg("title.absence.auto-answer.title"),
-						text: autoAnswerText,
-						noEscape: true,
-						close: false,
-						modal: true,
-						buttons: [
-							{
-								text: this.msg("button.ok"),
-								handler: function () {
-									this.destroy();
-								},
-								isDefault: true
-							},
-							{
-								text: this.msg("button.cancel"),
-								handler: function () {
-									this.destroy();
-									me.removeNode(null, {
-										node: item,
-										updateForms: true
-									});
-								}
-							}
-
-						]
-					});
-				}
 			}
 		});
 })();
