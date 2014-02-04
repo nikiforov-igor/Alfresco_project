@@ -189,9 +189,10 @@ function getSearchResults(params) {
             var formQuery = "",
                 formJson = jsonUtils.toObject(formData);
 
+            itemType = formJson.datatype;
+
             // extract form data and generate search query
             var first = true;
-            var useSubCats = false;
             for (var p in formJson) {
                 // retrieve value and check there is someting to search for
                 // currently all values are returned as strings
@@ -305,7 +306,23 @@ function getSearchResults(params) {
         var filter = searchConfig.filter;
         if (formQuery.length > 0 || ftsQuery.length > 0 || formData.length > 0 || fullTextSearchQuery.length > 0) {
             // extract data type for this search - advanced search query is type specific
-            ftsQuery = (formJson.datatype != null && formJson.datatype.length > 0 ? 'TYPE:"' + formJson.datatype + '"' : '') +
+            var typesQuery = "";
+
+            if (itemType != null && itemType.length > 0) {
+                var typesArray = itemType.split(",");
+                var numTypes = typesArray.length;
+
+                for (var count = 0; count < numTypes; count++) {
+                    var type = typesArray[count];
+                    if (type != null && type.length > 0) {
+                        if (typesQuery.length > 0) {
+                            typesQuery += " ";
+                        }
+                        typesQuery += '+TYPE:"' + type + '"'
+                    }
+                }
+            }
+            ftsQuery = (typesQuery.length !== 0  ? '(' + typesQuery + ')' : '(+TYPE:"cm:content" +TYPE:"cm:folder")') +
                 (formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
                 (filter != null && filter.length > 0 ? ' AND (' + filter + ')' : '') +
                 ((filterObj != null && filterObj.query != null && ('' + filterObj.query).length > 0)? ' AND (' + filterObj.query + ')' : '') +
@@ -314,11 +331,6 @@ function getSearchResults(params) {
         }
 
         if (ftsQuery.length !== 0) {
-            // ensure a TYPE is specified - if no add one to remove system objects from result sets
-            if (ftsQuery.indexOf("TYPE:\"") === -1 && ftsQuery.indexOf("TYPE:'") === -1) {
-                ftsQuery += ' AND (+TYPE:"cm:content" +TYPE:"cm:folder")';
-            }
-
             //whether show removed dictionaries
             if (!showInactive) {
                 ftsQuery += ' AND (NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
