@@ -1108,4 +1108,23 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="string-compare" condition="Workflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-errands_document"/>
+            <workflow name="activiti$errandsRequestDueDateChange"/>
+            <workflow name="activiti$errandsRequestCancel"/>
+            <workflow name="activiti$errandsChangeDueDate"/>
+            <workflow name="activiti$errandsInitiatorApprove"/>
+            <workflow name="activiti$errandsInitiatorDecline"/>
+            <workflow name="activiti$errandsExecute"/>
+            <workflow name="activiti$errandsControllerDecline"/>
+            <workflow name="activiti$errandsControllerApprove"/>
+            <workflow name="activiti$errandsCancel"/>
+            <workflow name="activiti$errandsChangeExecutor"/>
+            <workflow name="activiti$errandsChangeController"/>
+            <workflow name="activiti$errandsCreateChildErrand"/>
+            <workflow name="activiti$errandsRemoveDraft"/>
+        </hidden-workflows>
+    </config>
 </alfresco-config>
