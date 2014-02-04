@@ -137,7 +137,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 						Alfresco.util.Ajax.jsonRequest(
 							{
 								method: Alfresco.util.Ajax.POST,
-								url: Alfresco.constants.PROXY_URI + "lecm/base/action/delete?alf_method=delete",
+								url: Alfresco.constants.PROXY_URI + "lecm/base/action/delete?full=true&trash=false&alf_method=delete",
 								dataObj: {
 									nodeRefs: [nodeRef]
 								},

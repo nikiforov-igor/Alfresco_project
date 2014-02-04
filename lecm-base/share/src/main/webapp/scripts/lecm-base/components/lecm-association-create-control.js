@@ -62,7 +62,9 @@ LogicECM.module = LogicECM.module || {};
 				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 				employeeAbsenceMarker: false,
 
-				createDialogClass: ""
+				createDialogClass: "",
+
+				fullDelete: false
 			},
 
 			onReady: function () {
@@ -277,10 +279,15 @@ LogicECM.module = LogicECM.module || {};
 					var me = this;
 
 					var fnActionDeleteConfirm = function (nodeRef) {
+						var url = Alfresco.constants.PROXY_URI + "lecm/base/action/delete?alf_method=delete";
+						if (me.options.fullDelete) {
+							url += "&full=true&trash=false";
+						}
+
 						Alfresco.util.Ajax.jsonRequest(
 							{
 								method: Alfresco.util.Ajax.POST,
-								url: Alfresco.constants.PROXY_URI + "lecm/base/action/delete?alf_method=delete",
+								url: url,
 								dataObj: {
 									nodeRefs: [nodeRef]
 								},

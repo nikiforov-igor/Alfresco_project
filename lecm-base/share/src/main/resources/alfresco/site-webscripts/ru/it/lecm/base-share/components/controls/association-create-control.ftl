@@ -75,6 +75,9 @@
 		<#elseif field.control.params.createNewMessageId??>
 			createNewMessage: "${msg(field.control.params.createNewMessageId)}",
 		</#if>
+		<#if field.control.params.fullDelete??>
+			fullDelete: ${field.control.params.fullDelete},
+		</#if>
 		currentValue: "${field.value!''}",
 		<#if renderPickerJSSelectedValue??>
 			selectedValue: "${renderPickerJSSelectedValue}",
