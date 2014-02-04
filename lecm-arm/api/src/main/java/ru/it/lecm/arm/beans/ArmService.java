@@ -15,17 +15,36 @@ public interface ArmService {
 	public static final String ARM_SETTINGS_DICTIONARY_NAME = "Настройки АРМ";
 
 	public static final String ARM_NAMESPACE_URI = "http://www.it.ru/logicECM/arm/1.0";
-	public static final QName TYPE_ARM = QName.createQName(ARM_NAMESPACE_URI, "arm");
-	public static final QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");
-	public static final QName TYPE_ARM_BASE_NODE = QName.createQName(ARM_NAMESPACE_URI, "base-node");
-	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
 
+	public static final QName TYPE_ARM = QName.createQName(ARM_NAMESPACE_URI, "arm");
 	public static final QName PROP_ARM_CODE = QName.createQName(ARM_NAMESPACE_URI, "code");
+
+	public static final QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");
+	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
 	public static final QName PROP_NODE_TYPES = QName.createQName(ARM_NAMESPACE_URI, "types");
 	public static final QName PROP_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters");
 	public static final QName PROP_COUNTER_ENABLE = QName.createQName(ARM_NAMESPACE_URI, "counter-enable");
 	public static final QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	public static final QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
+	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
+
+	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
+	public static final QName PROP_COLUMN_TITLE = QName.createQName(ARM_NAMESPACE_URI, "field-title");
+	public static final QName PROP_COLUMN_FIELD_NAME = QName.createQName(ARM_NAMESPACE_URI, "field-name");
+	public static final QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
+	public static final QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
+
+
+
+	/**
+	 * проверяет что объект является аккордионом
+	 */
+	public boolean isArmAccordion(NodeRef ref);
+
+	/**
+	 * проверяет что объект является epkjv
+	 */
+	public boolean isArmNode(NodeRef ref);
 
 	/**
 	 * Получение справочника с настройками АРМ
@@ -74,4 +93,11 @@ public interface ArmService {
 	 * @return Объект с настройками счётчика
 	 */
 	public ArmCounter getNodeCounter(NodeRef node);
+
+	/**
+	 * Получение колонок узла
+	 * @param node Узел
+	 * @return Объект с настройками счётчика
+	 */
+	public List<ArmColumn> getNodeColumns(NodeRef node);
 }

@@ -6,7 +6,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -19,6 +18,20 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ARM_ROOT_ID);
+	}
+
+	@Override
+	public boolean isArmAccordion(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ARM_ACCORDION);
+		return isProperType(ref, types);
+	}
+
+	@Override
+	public boolean isArmNode(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ARM_NODE);
+		return isProperType(ref, types);
 	}
 
 	public NodeRef getDictionaryArmSettings() {
@@ -106,5 +119,23 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<ArmColumn> getNodeColumns(NodeRef node) {
+		List<ArmColumn> result = new ArrayList<ArmColumn>();
+		List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, TYPE_ARM_COLUMN, ASSOCIATION_TYPE.TARGET);
+		if (columns != null) {
+			for (NodeRef ref: columns) {
+				ArmColumn column = new ArmColumn();
+				column.setTitle((String) nodeService.getProperty(ref, PROP_COLUMN_TITLE));
+				column.setField((String) nodeService.getProperty(ref, PROP_COLUMN_FIELD_NAME));
+				column.setFormatString((String) nodeService.getProperty(ref, PROP_COLUMN_FORMAT_STRING));
+				column.setSortable((Boolean) nodeService.getProperty(ref, PROP_COLUMN_SORTABLE));
+				result.add(column);
+			}
+		}
+
+		return result;
 	}
 }
