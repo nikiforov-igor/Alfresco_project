@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -26,13 +27,12 @@ public class TreeMenuScript extends AbstractWebScript {
     final private static Logger logger = LoggerFactory.getLogger(TreeMenuScript.class);
 
     public static final String NODE_REF = "nodeRef";
-    public static final String REDIRECT = "redirect";
-    public static final String ACTIONS = "actions";
     public static final String ID = "id";
     public static final String CHILD_TYPE = "childType";
-    public static final String TITLE = "title";
     public static final String LABEL = "label";
     public static final String IS_LEAF = "isLeaf";
+    private static final String FILTER = "filter";
+    private static final String COUNTER = "counterValue";
 
     private NodeService nodeService;
     private NamespaceService namespaceService;
@@ -54,66 +54,31 @@ public class TreeMenuScript extends AbstractWebScript {
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
 
-        nodes.add(getJSONNode("sources", null, "", "Тест", "Тест", "", null, false));
-        /*if (nodeRef != null && NodeRef.isNodeRef(nodeRef)) {
-            NodeRef currentRef = new NodeRef(nodeRef);
-            if (childType == null || childType.isEmpty()) {
-                childType = "custom";
+        String nodeRef = req.getParameter(NODE_REF);
+
+        if (nodeRef == null) {
+            List<NodeRef> roots = service.getRoots();
+            for (NodeRef root : roots) {
+                nodes.add(getJSONNode(root));
             }
-            if (childType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService))) {// список отчетов
-                Set<QName> type = new HashSet<QName>();
-                type.add(QName.createQName(childType, namespaceService));
-                List<ChildAssociationRef> childNodes = nodeService.getChildAssocs(currentRef, type);
-                for (ChildAssociationRef childNode : childNodes) {
-                    String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
-                    String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-                    Object isSubValue = nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
-                    Boolean isSub = isSubValue != null ? (Boolean)isSubValue : Boolean.FALSE;
-                    nodes.add(
-                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(),
-                                    !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "lecm/reports-editor/report-settings?reportId={reportId}",
-                                    !isSub ? "reportActions" : null, false)
-                    );
-                }
-            } else if (childType.equals(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService))) {// список НД
-                Set<QName> type = new HashSet<QName>();
-                type.add(QName.createQName(childType, namespaceService));
-                List<ChildAssociationRef> childNodes = nodeService.getChildAssocs(currentRef, type);
-                for (ChildAssociationRef childNode : childNodes) {
-                    String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
-                    String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_DATA_SOURCE_CODE);
-                    nodes.add(
-                            getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(), "source-custom", label, title,
-                                    "lecm/reports-editor/source-columns?sourceId=" + childNode.getChildRef().toString(), null, true)
-                    );
-                }
-            } else if (childType.equals(REPORT_CUSTOM) || childType.equals(SUBREPORT_CUSTOM)) {
-                nodes.add(getJSONNode("settings", currentRef, "-", "Общие настройки", null, "lecm/reports-editor/report-settings?reportId={reportId}", null, true));
-
-                nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "lecm/reports-editor/source-edit?reportId={reportId}", null, true));
-
-                String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
-                Set<QName> reportType = new HashSet<QName>();
-                reportType.add(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
-                List<ChildAssociationRef> childReports = nodeService.getChildAssocs(currentRef, reportType);
-                nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "lecm/reports-editor/subreports?reportId={reportId}", null, childReports.size() == 0));
-
-                nodes.add(getJSONNode("template", currentRef, "-", "Настройки шаблона представления", null, "lecm/reports-editor/template-edit?reportId={reportId}", null, true));
+            //For Test
+            for (int i = 0; i < 3; i++) {
+                nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Узел " + i , false, "", 0L));
             }
-        } else { // корневой узел
-            NodeRef ref = reportsEditorService.getReportsRootFolder();
-            String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("reports", ref, type, "Отчеты", "Список дескрипторов отчетов", "lecm/reports-editor/main", null, false));
+        } else {
+            if (NodeRef.isNodeRef(nodeRef)) {
+                List<NodeRef> childs = service.getChilds(new NodeRef(nodeRef));
+                for (NodeRef child : childs) {
+                    nodes.add(getJSONNode(child));
+                }
 
-            ref = reportsEditorService.getTemplatesRootFolder();
-            type = ReportsEditorModel.TYPE_REPORT_TEMPLATE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("templates", ref, type, "Шаблоны представления", "Список шаблонов представления", "lecm/reports-editor/templates", null, true));
-
-            ref = reportsEditorService.getSourcesRootFolder();
-            type = ReportsEditorModel.TYPE_REPORT_DATA_SOURCE.toPrefixString(namespaceService);
-            nodes.add(getJSONNode("sources", ref, type, "Шаблоны наборов данных", "Список шаблонов наборов данных", "lecm/reports-editor/sources", null, false));
+            } else {
+                //For Test
+                for (int i = 0; i < 2; i++) {
+                    nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Дочерний Узел " + i , false, "", 0L));
+                }
+            }
         }
-*/
         try {
             res.setContentType("application/json");
             res.setContentEncoding(Charset.defaultCharset().displayName());
@@ -123,23 +88,38 @@ public class TreeMenuScript extends AbstractWebScript {
         }
     }
 
-    private JSONObject getJSONNode(String id, NodeRef nodeRef, String childType, String label, String title, String redirectPage, String showActions, boolean isLeaf) {
-        JSONObject node = new JSONObject();
+    private JSONObject getJSONNode(NodeRef node) {
+        JSONObject result = new JSONObject();
         try {
-            node.put(ID, id);
-            node.put(NODE_REF, nodeRef != null ? nodeRef.toString() : "-");
-            node.put(CHILD_TYPE, childType);
-            node.put(LABEL, label);
-            if (title == null) {
-                title = label;
+            result.put(ID, node.getId());
+            result.put(NODE_REF, node.toString());
+            result.put(CHILD_TYPE, service.getChildTypes(node));
+            result.put(LABEL, nodeService.getProperty(node, ContentModel.PROP_NAME));
+            result.put(IS_LEAF, service.hasChild(node));
+            result.put(FILTER, service.getNodeFilter(node));
+            if (service.isCounterEnable(node)) {
+                result.put(COUNTER, service.getNodeCounterValue(node));
             }
-            node.put(TITLE, title);
-            node.put(IS_LEAF, isLeaf);
-            node.put(ACTIONS, showActions != null ? showActions : "");
-            node.put(REDIRECT, redirectPage != null ? redirectPage : "");
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
-        return node;
+        return result;
+    }
+
+    //TODO for tests only
+    private JSONObject getJSONNode(String id, String nodeRef, String childs, String label, boolean isLeaf, String filter, Long counter) {
+        JSONObject result = new JSONObject();
+        try {
+            result.put(ID, id);
+            result.put(NODE_REF, nodeRef);
+            result.put(CHILD_TYPE, childs);
+            result.put(LABEL, label);
+            result.put(IS_LEAF, isLeaf);
+            result.put(FILTER, filter);
+            result.put(COUNTER, counter);
+        } catch (JSONException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return result;
     }
 }
