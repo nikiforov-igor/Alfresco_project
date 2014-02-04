@@ -56,53 +56,53 @@ public class TreeMenuScript extends AbstractWebScript {
 
         String nodeRef = req.getParameter(NODE_REF);
 
-        if (nodeRef == null) {
-            List<NodeRef> roots = service.getRoots();
-            for (NodeRef root : roots) {
-                nodes.add(getJSONNode(root));
-            }
-            //For Test
-            for (int i = 0; i < 3; i++) {
-                nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Узел " + i , false, "", 0L));
-            }
-        } else {
-            if (NodeRef.isNodeRef(nodeRef)) {
-                List<NodeRef> childs = service.getChilds(new NodeRef(nodeRef));
-                for (NodeRef child : childs) {
-                    nodes.add(getJSONNode(child));
-                }
-
-            } else {
-                //For Test
-                for (int i = 0; i < 2; i++) {
-                    nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Дочерний Узел " + i , false, "", 0L));
-                }
-            }
-        }
-        try {
-            res.setContentType("application/json");
-            res.setContentEncoding(Charset.defaultCharset().displayName());
-            res.getWriter().write(nodes.toString());
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-        }
+//        if (nodeRef == null) {
+//            List<NodeRef> roots = service.getRoots();
+//            for (NodeRef root : roots) {
+//                nodes.add(getJSONNode(root));
+//            }
+//            //For Test
+//            for (int i = 0; i < 3; i++) {
+//                nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Узел " + i , false, "", 0L));
+//            }
+//        } else {
+//            if (NodeRef.isNodeRef(nodeRef)) {
+//                List<NodeRef> childs = service.getChilds(new NodeRef(nodeRef));
+//                for (NodeRef child : childs) {
+//                    nodes.add(getJSONNode(child));
+//                }
+//
+//            } else {
+//                //For Test
+//                for (int i = 0; i < 2; i++) {
+//                    nodes.add(getJSONNode(String.valueOf(i), null, "lecm-document:base", "Дочерний Узел " + i , false, "", 0L));
+//                }
+//            }
+//        }
+//        try {
+//            res.setContentType("application/json");
+//            res.setContentEncoding(Charset.defaultCharset().displayName());
+//            res.getWriter().write(nodes.toString());
+//        } catch (IOException e) {
+//            logger.error(e.getMessage(), e);
+//        }
     }
 
     private JSONObject getJSONNode(NodeRef node) {
         JSONObject result = new JSONObject();
-        try {
-            result.put(ID, node.getId());
-            result.put(NODE_REF, node.toString());
-            result.put(CHILD_TYPE, service.getChildTypes(node));
-            result.put(LABEL, nodeService.getProperty(node, ContentModel.PROP_NAME));
-            result.put(IS_LEAF, service.hasChild(node));
-            result.put(FILTER, service.getNodeFilter(node));
-            if (service.isCounterEnable(node)) {
-                result.put(COUNTER, service.getNodeCounterValue(node));
-            }
-        } catch (JSONException e) {
-            logger.error(e.getMessage(), e);
-        }
+//        try {
+//            result.put(ID, node.getId());
+//            result.put(NODE_REF, node.toString());
+//            result.put(CHILD_TYPE, service.getChildTypes(node));
+//            result.put(LABEL, nodeService.getProperty(node, ContentModel.PROP_NAME));
+//            result.put(IS_LEAF, service.hasChild(node));
+//            result.put(FILTER, service.getNodeFilter(node));
+//            if (service.isCounterEnable(node)) {
+//                result.put(COUNTER, service.getNodeCounterValue(node));
+//            }
+//        } catch (JSONException e) {
+//            logger.error(e.getMessage(), e);
+//        }
         return result;
     }
 

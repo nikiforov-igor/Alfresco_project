@@ -1,11 +1,13 @@
 package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -23,31 +25,86 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ARM_SETTINGS_DICTIONARY_NAME);
 	}
 
-    public List<NodeRef> getRoots() {
-        return new ArrayList<NodeRef>();
-    }
+	@Override
+	public NodeRef getArmByCode(String code) {
+		Set<QName> armTypeSet = new HashSet<QName>(1);
+		armTypeSet.add(TYPE_ARM);
 
-    public List<NodeRef> getChilds(NodeRef node) {
-        return new ArrayList<NodeRef>();
-    }
+		List<ChildAssociationRef> arms = nodeService.getChildAssocs(getDictionaryArmSettings(), armTypeSet);
+		if (arms != null) {
+			for (ChildAssociationRef armAssoc: arms) {
+				if (nodeService.getProperty(armAssoc.getChildRef(), PROP_ARM_CODE).equals(code)) {
+					return armAssoc.getChildRef();
+				}
+			}
+		}
+		return null;
+	}
 
-    public Long getNodeCounterValue(NodeRef node) {
-        return 0L;
-    }
+	@Override
+	public List<NodeRef> getArmAccordions(NodeRef arm) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
 
-    public boolean isCounterEnable(NodeRef node) {
-        return true;
-    }
+		Set<QName> typeSet = new HashSet<QName>(1);
+		typeSet.add(TYPE_ARM_ACCORDION);
+		List<ChildAssociationRef> accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
+		if (accordionsAssocs != null) {
+			for (ChildAssociationRef accordionAssoc: accordionsAssocs) {
+				result.add(accordionAssoc.getChildRef());
+			}
+		}
+		return result;
+	}
 
-    public String getNodeFilter(NodeRef node) {
-        return "";
-    }
+	@Override
+	public List<NodeRef> getChildNodes(NodeRef node) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
 
-    public boolean hasChild(NodeRef node) {
-        return !getChilds(node).isEmpty();
-    }
+		Set<QName> typeSet = new HashSet<QName>(1);
+		typeSet.add(TYPE_ARM_ACCORDION);
+		typeSet.add(TYPE_ARM_NODE);
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
+		if (childAssocs != null) {
+			for (ChildAssociationRef child: childAssocs) {
+				result.add(child.getChildRef());
+			}
+		}
+		return result;
+	}
 
-    public String getChildTypes(NodeRef node) {
-        return "lecm-document:base";
-    }
+	@Override
+	public List<String> getNodeTypes(NodeRef node) {
+		List<String> result = new ArrayList<String>();
+		String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
+		if (types != null) {
+			result.addAll(Arrays.asList(types.split(",")));
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<String> getNodeFilters(NodeRef node) {
+		List<String> result = new ArrayList<String>();
+		String types = (String) nodeService.getProperty(node, PROP_NODE_FILTERS);
+		if (types != null) {
+			result.addAll(Arrays.asList(types.split(",")));
+		}
+
+		return result;
+	}
+
+	@Override
+	public ArmCounter getNodeCounter(NodeRef node) {
+		boolean counterEnable = (Boolean) nodeService.getProperty(node, PROP_COUNTER_ENABLE);
+		if (counterEnable) {
+			ArmCounter result = new ArmCounter();
+			result.setQuery((String) nodeService.getProperty(node, PROP_COUNTER_QUERY));
+			result.setDescription((String) nodeService.getProperty(node, PROP_COUNTER_DESCRIPTION));
+
+			return result;
+		}
+
+		return null;
+	}
 }
