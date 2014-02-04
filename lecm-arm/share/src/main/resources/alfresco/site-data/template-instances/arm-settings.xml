@@ -4,10 +4,7 @@
 	<components>
 		<component>
 			<region-id>tree</region-id>
-			<url>/lecm/dictionary/tree</url>
-			<properties>
-				<dictionaryName>Настройки АРМ</dictionaryName>
-			</properties>
+			<url>/lecm/arm/tree</url>
 		</component>
 		<!-- Title -->
 		<component>
@@ -22,19 +19,11 @@
 		<component>
 			<region-id>toolbar</region-id>
 			<url>/lecm/arm/toolbar</url>
-			<properties>
-				<pagination>true</pagination>
-				<dictionaryName>Настройки АРМ</dictionaryName>
-			</properties>
 		</component>
 		<!-- Edit -->
 		<component>
 			<region-id>main-form</region-id>
 			<url>/lecm/arm/editNode</url>
-			<properties>
-				<plane>false</plane>
-				<dictionaryName>Настройки АРМ</dictionaryName>
-			</properties>
 		</component>
 	</components>
 </template-instance>

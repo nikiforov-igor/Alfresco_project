@@ -61,6 +61,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         rootNode:null,
         doubleClickLock: false,
         options:{
+	        dictionaryName: null,
             templateUrl:null,
             actionUrl:null,
             firstFocus:null,
@@ -70,14 +71,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 scope:window
             }
         },
-        /**
-         * Инициализация начальных парметров при старте
-         * @method init
-         * @param dictionaryName {string} имя справочника
-         */
-        init:function (dictionaryName) {
 
-            this._loadRootNode(dictionaryName);
+        onReady:function () {
+
+            this._loadRootNode();
 
             dragContainer = Dom.get(this.treeContainer).parentNode.appendChild(document.createElement('div'));
             dragTree = new YAHOO.widget.TreeView(dragContainer);
@@ -183,54 +180,28 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         },
         /**
          * Получение корневого узла
-         * @param dictionaryName {string}
          * @private
          */
-        _loadRootNode:function (dictionaryName) {
+        _loadRootNode:function () {
             var me = this;
-
-            if (dictionaryName !== null && dictionaryName !== "") {
-                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(dictionaryName);
-//
-                var callback = {
-                    success:function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null && oResults.nodeRef != null) {
-                            nodeDictionary = oResults.nodeRef;
-                            me.rootNode = oResults;
-                        }
-
-                        me.draw();
-                    },
-                    failure:function (oResponse) {
-	                    alert("Справочник не был загружен. Попробуйте обновить страницу.");
-                    },
-                    argument:{
+            var sUrl = Alfresco.constants.PROXY_URI + "/lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(this.options.dictionaryName);
+            var callback = {
+                success:function (oResponse) {
+                    var oResults = eval("(" + oResponse.responseText + ")");
+                    if (oResults != null && oResults.nodeRef != null) {
+                        nodeDictionary = oResults.nodeRef;
+                        me.rootNode = oResults;
                     }
-                };
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-            } else {
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/folder";
-                if (this.cDoc != null) {
-                    sUrl += "?nodeRef=" + encodeURI(this.cDoc);
+
+                    me.draw();
+                },
+                failure:function (oResponse) {
+                    alert("Справочник не был загружен. Попробуйте обновить страницу.");
+                },
+                argument:{
                 }
-                var callback = {
-                    success:function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null && oResults.nodeRef != null) {
-                            nodeDictionary = oResults.nodeRef;
-                        }
-                        me.draw();
-                    },
-                    failure:function (oResponse) {
-                        alert("Failed to load experts. " + "[" + oResponse.statusText + "]");
-                    },
-                    argument:{
-                    }
-                };
-
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-            }
+            };
+            YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
         /**
          * Получение значений дерева

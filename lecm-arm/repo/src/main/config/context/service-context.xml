@@ -41,4 +41,14 @@
 			</map>
 		</property>
 	</bean>
+
+	<bean id="armScript" parent="baseScript" class="ru.it.lecm.arm.scripts.ArmWebScriptBean"
+	      depends-on="serviceDictionary">
+		<property name="extensionName">
+			<value>arm</value>
+		</property>
+		<property name="armService">
+			<ref bean="armService"/>
+		</property>
+	</bean>
 </beans>

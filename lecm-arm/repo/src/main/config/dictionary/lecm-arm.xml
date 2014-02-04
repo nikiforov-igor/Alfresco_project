@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary">
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary" path="/Business platform/LECM/Сервис АРМ">
 		<property name="cm:name">Настройки АРМ</property>
 		<property name="lecm-dic:attributeForShow">cm:name</property>
 		<property name="lecm-dic:type">lecm-arm:arm</property>

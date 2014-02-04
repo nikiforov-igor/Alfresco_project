@@ -4,9 +4,7 @@
 
 (function() {
 	function init() {
-		new LogicECM.module.Dictionary.Tree("${id}").setOptions({
-			dictionaryName: "${args.dictionaryName}"
-		}).setMessages(${messages});
+		new LogicECM.module.ARM.Tree("${id}").setMessages(${messages});
 	}
 
 	//once the DOM has loaded, we can go ahead and set up our tree:
