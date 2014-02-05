@@ -1,4 +1,12 @@
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-arm/constraints/arm-settings-counter-validator.js"/>
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-arm:arm">
 		<forms>
 			<form>
@@ -7,6 +15,14 @@
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:use-by-default" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -19,6 +35,14 @@
 					<show id="lecm-arm:code" force="true"/>
 					<show id="lecm-arm:use-by-default" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
@@ -49,6 +73,11 @@
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:field-title}</control-param>
 							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:business-roles-assoc">
@@ -85,6 +114,11 @@
 					<show id="lecm-arm:business-roles-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:business-roles-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
@@ -126,6 +160,11 @@
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:node-query-assoc">
 						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:search-query}</control-param>
@@ -149,6 +188,13 @@
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>

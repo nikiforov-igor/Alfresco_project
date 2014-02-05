@@ -37,7 +37,11 @@ LogicECM.module = LogicECM.module || {};
 
 				mode: false,
 
-				defaultValueDataSource: null
+				defaultValueDataSource: null,
+
+				disabledFieldsIfSelect: null,
+
+				disabledFieldsIfNotSelect: null
 			},
 
 			checkboxId: null,
@@ -56,12 +60,14 @@ LogicECM.module = LogicECM.module || {};
 
 			onReady: function ()
 			{
-				if (!this.options.disabled && this.options.mode == "create") {
-					this.checkbox = Dom.get(this.checkboxId);
-					if (this.checkbox) {
+				this.checkbox = Dom.get(this.checkboxId);
+				if (this.checkbox) {
+					if (!this.options.disabled && this.options.mode == "create") {
 						this.loadDefaultValue();
 					}
+					YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
 				}
+				this.onChange();
 			},
 
 			loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
@@ -80,6 +86,27 @@ LogicECM.module = LogicECM.module || {};
 							},
 							failureMessage: "message.failure"
 						});
+				}
+			},
+
+			onChange: function() {
+				var el = Dom.get(this.id);
+				var selected = el.value == "true";
+				if (this.options.disabledFieldsIfNotSelect != null) {
+					for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
+						var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
+						if (field != null) {
+							field.disabled = !selected;
+						}
+					}
+				}
+				if (this.options.disabledFieldsIfSelect != null) {
+					for (i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
+						field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
+						if (field != null) {
+							field.disabled = selected;
+						}
+					}
 				}
 			}
 		});

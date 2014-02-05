@@ -18,7 +18,7 @@
 		</property>
 	</bean>
 
-	<bean id="arm.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap">
+	<bean id="arm.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap, armService">
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionary/lecm-arm.xml</value>

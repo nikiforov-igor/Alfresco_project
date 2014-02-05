@@ -9,6 +9,8 @@
 
 <#assign fieldId=field.id!"">
 
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -20,6 +22,12 @@
 			</#if>
 			<#if field.control.params.defaultValueDataSource??>
 				defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+			</#if>
+			<#if field.control.params.disabledFieldsIfSelect??>
+				disabledFieldsIfSelect: "${field.control.params.disabledFieldsIfSelect}".split(","),
+			</#if>
+			<#if field.control.params.disabledFieldsIfNotSelect??>
+				disabledFieldsIfNotSelect: "${field.control.params.disabledFieldsIfNotSelect}".split(","),
 			</#if>
 				mode: "${form.mode}",
 				fieldId: "${fieldId}"
