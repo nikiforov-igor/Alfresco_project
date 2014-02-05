@@ -4294,8 +4294,10 @@ var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
 if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
 }
+var currentUser =  orgstructure.getCurrentEmployee();
+lecmPermission.revokeDynamicRole(incoming, currentUser, "INCOMING_RECIPIENT");
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
-var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ ";
+var notificationText = documentScript.wrapperLink(currentUser, "{lecm-orgstr:employee-short-name}") + " вернул документ ";
 notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date?dd-MM-yyyy}");
 notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
@@ -4468,8 +4470,10 @@ var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
 if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
 }
-var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
-var notificationText = "{lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name} вернул документ ";
+var currentUser =  orgstructure.getCurrentEmployee();
+lecmPermission.revokeDynamicRole(incoming, currentUser, "INCOMING_RECIPIENT");
+var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWER", true);
+var notificationText = documentScript.wrapperLink(currentUser, "{lecm-orgstr:employee-short-name}") + " вернул документ ";
 notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date?dd-MM-yyyy}");
 notifications.sendNotificationFromCurrentUser(curators, notificationText, incoming);]]></value>
                                                             </property>
