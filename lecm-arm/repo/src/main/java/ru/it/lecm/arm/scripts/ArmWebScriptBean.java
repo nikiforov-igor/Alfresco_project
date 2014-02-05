@@ -1,10 +1,7 @@
 package ru.it.lecm.arm.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.service.cmr.dictionary.AssociationDefinition;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -19,7 +16,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -55,34 +52,27 @@ public class ArmWebScriptBean extends BaseWebScript {
 	public JSONObject getAvailableNodeFields(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
-		Set<PropertyDefinition> allProperties = new HashSet<PropertyDefinition>();
-		Set<AssociationDefinition> allAssociations = new HashSet<AssociationDefinition>();
-
-		addTypeFields(DocumentService.TYPE_BASE_DOCUMENT, allProperties, allAssociations);
+		Set<ClassAttributeDefinition> attributes = new LinkedHashSet<ClassAttributeDefinition>();
+		addTypeFields(DocumentService.TYPE_BASE_DOCUMENT, attributes);
 
 		JSONObject result = new JSONObject();
 		try {
 			JSONArray fieldsJson = new JSONArray();
 
-			for (PropertyDefinition prop: allProperties) {
-				String propName = prop.getName().toPrefixString(namespaceService);
-				if (!propName.endsWith("-ref") && !propName.endsWith("-text-content")) {
+			for (ClassAttributeDefinition attr: attributes) {
+				String attrName = attr.getName().toPrefixString(namespaceService);
+				if (!attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
 					JSONObject propJson = new JSONObject();
-					propJson.put("title", prop.getTitle());
-					propJson.put("name", propName);
-					propJson.put("type", prop.getDataType().getTitle());
+					propJson.put("title", attr.getTitle());
+					propJson.put("name", attrName);
+					if (attr instanceof PropertyDefinition) {
+						propJson.put("type", ((PropertyDefinition) attr).getDataType().getTitle());
+					} else if (attr instanceof AssociationDefinition) {
+						propJson.put("type", ((AssociationDefinition) attr).getTargetClass().getTitle());
+					}
 
 					fieldsJson.put(propJson);
 				}
-			}
-
-			for (AssociationDefinition assoc: allAssociations) {
-				JSONObject assocJson = new JSONObject();
-				assocJson.put("title", assoc.getTitle());
-				assocJson.put("name", assoc.getName().toPrefixString(namespaceService));
-				assocJson.put("type", assoc.getTargetClass().getTitle());
-
-				fieldsJson.put(assocJson);
 			}
 
 			result.put("items", fieldsJson);
@@ -92,15 +82,15 @@ public class ArmWebScriptBean extends BaseWebScript {
 		return result;
 	}
 
-	private void addTypeFields(QName typeQName, Set<PropertyDefinition> properties, Set<AssociationDefinition> associations) {
+	private void addTypeFields(QName typeQName, Set<ClassAttributeDefinition> attributes) {
 		TypeDefinition type = dictionaryService.getType(typeQName);
-		properties.addAll(type.getProperties().values());
-		associations.addAll(type.getAssociations().values());
+		attributes.addAll(type.getProperties().values());
+		attributes.addAll(type.getAssociations().values());
 
 		Collection<QName> subTypes = dictionaryService.getSubTypes(typeQName, false);
 		if (subTypes != null) {
 			for (QName subType: subTypes) {
-				addTypeFields(subType, properties, associations);
+				addTypeFields(subType, attributes);
 			}
 		}
 	}
