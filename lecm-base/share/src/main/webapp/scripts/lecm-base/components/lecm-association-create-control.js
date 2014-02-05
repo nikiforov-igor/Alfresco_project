@@ -22,6 +22,8 @@ LogicECM.module = LogicECM.module || {};
 	LogicECM.module.AssociationCreateControl = function (htmlId) {
 		LogicECM.module.AssociationCreateControl.superclass.constructor.call(this, "AssociationCreateControl", htmlId);
 
+		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemsAdded, this);
+
 		this.selectedItems = {};
 		return this;
 	};
@@ -249,7 +251,15 @@ LogicECM.module = LogicECM.module || {};
 				return result;
 			},
 
-			addSelectedItem: function (nodeRef) {
+
+			onSelectedItemsAdded: function (layer, args) {
+				var obj = args[1];
+				if (obj && obj.id == this.id && obj.nodeRefs != null) {
+			 	    this.addSelectedItem(obj.nodeRefs);
+				}
+			},
+
+			addSelectedItem: function (nodeRefs) {
 				var onSuccess = function (response) {
 					var items = response.json.data.items,
 						item;
@@ -274,13 +284,15 @@ LogicECM.module = LogicECM.module || {};
 
 				};
 
-				if (nodeRef !== "") {
+				if (nodeRefs !== null) {
+					nodeRefs = YAHOO.lang.isArray(nodeRefs) ? nodeRefs : [nodeRefs];
+
 					Alfresco.util.Ajax.jsonRequest(
 						{
 							url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
 							method: "POST",
 							dataObj: {
-								items: nodeRef.split(","),
+								items: nodeRefs,
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								selectedItemsNameSubstituteString: this.options.nameSubstituteString

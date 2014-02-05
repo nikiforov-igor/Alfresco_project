@@ -50,6 +50,12 @@
 		<property name="armService">
 			<ref bean="armService"/>
 		</property>
+		<property name="dictionaryService">
+			<ref bean="dictionaryService"/>
+		</property>
+		<property name="namespaceService">
+			<ref bean="namespaceService"/>
+		</property>
 	</bean>
 
     <bean id="webscript.ru.it.lecm.arm.tree-menu.get"

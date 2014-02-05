@@ -2,6 +2,9 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 
+<#assign aDateTime = .now>
+<#assign addFieldsFormId = controlId + "-addFields-" + aDateTime?iso_utc>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field">
@@ -15,7 +18,7 @@
 	</div>
 <#else>
 	<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-	<div id="${controlId}" class="object-finder">
+	<div id="${controlId}" class="object-finder with-two-buttons">
 
 		<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
@@ -28,8 +31,34 @@
 				<span class="create-new-button">
                     <input type="button" id="${controlId}-create-new-button" name="-" value=""/>
                 </span>
+
+				<span class="create-new-button">
+                    <input type="button" id="${controlId}-add-from-model-button" name="-" value=""/>
+                </span>
 			</div>
+
 			<div id="${controlId}-create-menu"></div>
+
+			<#if !disabled>
+				<div id="${addFieldsFormId}" class="yui-panel">
+					<div id="${addFieldsFormId}-head" class="hd">${msg("logicecm.view")}</div>
+					<div id="${addFieldsFormId}-body" class="bd">
+						<div id="${addFieldsFormId}-content" style="height: 350px;	overflow-y: auto;"></div>
+						<div class="bdft">
+					<span id="${addFieldsFormId}-add" class="yui-button yui-push-button">
+		                <span class="first-child">
+		                    <button type="button" tabindex="1">${msg("button.add")}</button>
+		                </span>
+		            </span>
+		            <span id="${addFieldsFormId}-cancel" class="yui-button yui-push-button">
+		                <span class="first-child">
+		                    <button type="button" tabindex="0">${msg("button.close")}</button>
+		                </span>
+		            </span>
+						</div>
+					</div>
+				</div>
+			</#if>
 		</#if>
 
 		<div class="clear"></div>
@@ -86,6 +115,19 @@
 			itemTypes: "${field.control.params.itemTypes}".split(",")
 		<#else>
 			itemTypes: ["${field.endpointType}"]
+		</#if>
+	}).setMessages( ${messages} );
+
+	new LogicECM.module.ARM.SettingsAddFields("${fieldHtmlId}").setOptions({
+		parentNodeRef: "${form.arguments.itemId}",
+		<#if disabled>
+			disabled: true,
+		</#if>
+
+		addFieldsFormId: "${addFieldsFormId}",
+		currentValue: "${field.value!''}",
+		<#if renderPickerJSSelectedValue??>
+			selectedValue: "${renderPickerJSSelectedValue}",
 		</#if>
 	}).setMessages( ${messages} );
 </script>

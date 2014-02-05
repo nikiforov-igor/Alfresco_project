@@ -2,7 +2,7 @@
 	<config>
 		<forms>
 			<dependencies>
-				<js src="/scripts/lecm-arm/constraints/arm-settings-counter-validator.js"/>
+				<js src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
 			</dependencies>
 		</forms>
 	</config>
@@ -70,7 +70,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:fields-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
+						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:field-title}</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
@@ -155,7 +155,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:fields-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
+						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:field-title}</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
