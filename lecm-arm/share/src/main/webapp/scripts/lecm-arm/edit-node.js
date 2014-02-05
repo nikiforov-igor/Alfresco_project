@@ -35,11 +35,13 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 					var nodeRef = args[1].datagridMeta.nodeRef;
 					var me = this;
 
+					var htmlId = Alfresco.util.generateDomId() + "arm-settings-edit-form";
+
 					Alfresco.util.Ajax.request(
 						{
 							url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 							dataObj: {
-								htmlid: "arm-settings-edit-form",
+								htmlid: htmlId,
 								itemKind:"node",
 								itemId: nodeRef,
 								mode: "edit",
@@ -51,9 +53,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 								fn: function (response) {
 									Dom.get(me.id + "-body").innerHTML = response.serverResponse.responseText;
 
-									Dom.get("arm-settings-edit-form-form-submit").value = me.msg("label.save");
+									Dom.get(htmlId + "-form-submit").value = me.msg("label.save");
 
-									var form = new Alfresco.forms.Form("arm-settings-edit-form-form");
+									var form = new Alfresco.forms.Form(htmlId +  "-form");
 									form.setSubmitAsJSON(true);
 									form.setAJAXSubmit(true,
 										{

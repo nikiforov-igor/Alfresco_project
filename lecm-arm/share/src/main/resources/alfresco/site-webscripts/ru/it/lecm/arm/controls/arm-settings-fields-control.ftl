@@ -1,9 +1,7 @@
 <#include "/org/alfresco/components/component.head.inc">
 
 <#assign controlId = fieldHtmlId + "-cntrl">
-
-<#assign aDateTime = .now>
-<#assign addFieldsFormId = controlId + "-addFields-" + aDateTime?iso_utc>
+<#assign addFieldsFormId = controlId + "-addFields">
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
