@@ -15,7 +15,7 @@
                             var recipientAssoc = execution.getVariable("lecmIncomingWf_recipient");
                             if (recipientAssoc != null) {
                                 statemachine.grandDynamicRoleForEmployee(incoming, recipientAssoc, "INCOMING_RECIPIENT");
-                                var notificationText = "Вам поступил документ " + documentScript.wrapperDocumentLink(incoming, "№ {~REGNUM} от {lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-date?dd-MM-yyyy}");
+                                var notificationText = "Вам поступил документ: " + documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
                                 var recipients = [];
 		                        recipients.push(recipientAssoc.nodeRef.toString());
                                 notifications.sendNotificationFromCurrentUser(recipients, notificationText, incoming);

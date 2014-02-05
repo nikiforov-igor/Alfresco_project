@@ -18,7 +18,7 @@
 								 	if (recipient.typeShort == "lecm-orgstr:employee") {
 								    	statemachine.grandDynamicRoleForEmployee(document, recipient, "INCOMING_REVIEWER_DYNAMIC");
 
-								    	var notificationText = "Вам поступил документ на рассмотрение ";
+								    	var notificationText = "Вам поступил документ на рассмотрение: ";
 	                                    notificationText += documentScript.wrapperDocumentLink(document, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
 	                                    var recipients = [];
 	                                    recipients.push(recipient.nodeRef.toString());
