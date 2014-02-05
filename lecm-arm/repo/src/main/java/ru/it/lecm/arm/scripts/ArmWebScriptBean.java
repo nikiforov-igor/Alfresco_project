@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +18,7 @@ import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,9 +58,7 @@ public class ArmWebScriptBean extends BaseWebScript {
 		Set<PropertyDefinition> allProperties = new HashSet<PropertyDefinition>();
 		Set<AssociationDefinition> allAssociations = new HashSet<AssociationDefinition>();
 
-		TypeDefinition type = dictionaryService.getType(DocumentService.TYPE_BASE_DOCUMENT);
-		allProperties.addAll(type.getProperties().values());
-		allAssociations.addAll(type.getAssociations().values());
+		addTypeFields(DocumentService.TYPE_BASE_DOCUMENT, allProperties, allAssociations);
 
 		JSONObject result = new JSONObject();
 		try {
@@ -90,5 +90,18 @@ public class ArmWebScriptBean extends BaseWebScript {
 			logger.error("Error create jsonObject", e);
 		}
 		return result;
+	}
+
+	private void addTypeFields(QName typeQName, Set<PropertyDefinition> properties, Set<AssociationDefinition> associations) {
+		TypeDefinition type = dictionaryService.getType(typeQName);
+		properties.addAll(type.getProperties().values());
+		associations.addAll(type.getAssociations().values());
+
+		Collection<QName> subTypes = dictionaryService.getSubTypes(typeQName, false);
+		if (subTypes != null) {
+			for (QName subType: subTypes) {
+				addTypeFields(subType, properties, associations);
+			}
+		}
 	}
 }
