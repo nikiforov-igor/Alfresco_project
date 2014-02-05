@@ -2,6 +2,8 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.arm.beans.query.ArmBaseQuery;
+import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public interface ArmService {
 	public static final QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	public static final QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
+	public static final QName ASSOC_NODE_QUERY = QName.createQName(ARM_NAMESPACE_URI, "node-query-assoc");
+	public static final QName ASSOC_ACCORDION_QUERY = QName.createQName(ARM_NAMESPACE_URI, "accordion-query-assoc");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
 	public static final QName PROP_COLUMN_TITLE = QName.createQName(ARM_NAMESPACE_URI, "field-title");
@@ -34,6 +38,14 @@ public interface ArmService {
 	public static final QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
 	public static final QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
 
+	public static final QName TYPE_STATIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "static-query");
+	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
+
+	public static final QName TYPE_DYNAMIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "dynamic-query");
+	public static final QName PROP_LIST_QUERY = QName.createQName(ARM_NAMESPACE_URI, "list-query");
+
+	public static final QName TYPE_DICTIONARY_DYNAMIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "dynamic-dictionary-query");
+	public static final QName ASSOC_DICTIONARY_QUERY = QName.createQName(ARM_NAMESPACE_URI, "query-dictionary-assoc");
 
 
 	/**
@@ -100,4 +112,18 @@ public interface ArmService {
 	 * @return Объект с настройками счётчика
 	 */
 	public List<ArmColumn> getNodeColumns(NodeRef node);
+
+	/**
+	 * Получение запроса для аккордиона
+	 * @param accordion аккордион
+	 * @return статический запрос
+	 */
+	public ArmStaticQuery getAccordionQuery(NodeRef accordion);
+
+	/**
+	 * Получение запроса для узла
+	 * @param node узел
+	 * @return запрос
+	 */
+	public ArmBaseQuery getNodeQuery(NodeRef node);
 }
