@@ -1,8 +1,6 @@
 package ru.it.lecm.workflow.api;
 
 import java.util.Date;
-import java.util.List;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
@@ -20,7 +18,7 @@ public interface WorkflowService {
 	 *
 	 * @return ссылка на новый лист согласования
 	 */
-	NodeRef createResultList(NodeRef bpmPackage, final String documentAttachmentCategoryName, final String approvalType, ActivitiScriptNodeList assigneesList);
+	NodeRef createResultList(final NodeRef bpmPackage, final String documentAttachmentCategoryName, final String approvalType, final ActivitiScriptNodeList assigneesList);
 
 	/**
 	 * раздать всем участникам процесса согласования права
@@ -68,10 +66,6 @@ public interface WorkflowService {
 
 	NodeRef getEmployeeForAssignee(final NodeRef assigneeRef);
 
-	List<NodeRef> createAssigneesList(NodeRef assigneesListNode, DelegateExecution execution);
-
-	void deleteTempAssigneesList(DelegateExecution execution);
-
 	/**
 	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
 	 *
@@ -89,11 +83,7 @@ public interface WorkflowService {
 	 */
 	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 
-	NodeRef getWorkflowFolder();
+	void assignTask(final NodeRef assignee, final DelegateTask task);
 
-	NodeRef getResultFolder();
-
-	void assignTask(NodeRef assignee, DelegateTask task);
-
-	NodeRef createResultItem(NodeRef approvalListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType);
+	NodeRef createResultItem(final NodeRef approvalListRef, final NodeRef employeeRef, final String itemTitle, final Date dueDate, final QName resultItemType);
 }

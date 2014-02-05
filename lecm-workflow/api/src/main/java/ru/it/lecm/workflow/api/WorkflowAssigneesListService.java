@@ -2,6 +2,7 @@ package ru.it.lecm.workflow.api;
 
 import java.util.Date;
 import java.util.List;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.workflow.AssigneesList;
 
@@ -53,4 +54,18 @@ public interface WorkflowAssigneesListService {
 
 	NodeRef getAssigneesListByItem(NodeRef assigneeListItem);
 
+	/**
+	 * Создание рабочей копии списка исполнителей для использования ее в инстансе регламента
+	 * Получение коллекции исполнителей регламента
+	 * @param assigneesListNode изначальный список, на основе которого строится рабочая копия
+	 * @param execution контекст регламента
+	 * @return коллекция исполнителей регламента
+	 */
+	List<NodeRef> createAssigneesListWorkingCopy(NodeRef assigneesListNode, DelegateExecution execution);
+
+	/**
+	 * удаление рабочей копии списка исполнителей
+	 * @param execution контекст регламента
+	 */
+	void deleteAssigneesListWorkingCopy(DelegateExecution execution);
 }

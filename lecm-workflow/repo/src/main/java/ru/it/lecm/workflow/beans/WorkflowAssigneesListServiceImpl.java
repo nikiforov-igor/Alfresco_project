@@ -10,8 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -27,6 +30,7 @@ import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
+import ru.it.lecm.workflow.api.WorkflowFoldersService;
 import ru.it.lecm.workflow.api.WorkflowModel;
 
 /**
@@ -39,6 +43,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	private IWorkCalendar workCalendarService;
 	private ICalendar wCalendarService;
 	private OrgstructureBean orgstructureService;
+	private BehaviourFilter behaviourFilter;
+	private WorkflowFoldersService workflowFoldersService;
+	private CopyService copyService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
@@ -50,6 +57,18 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setWorkflowFoldersService(WorkflowFoldersService workflowFoldersService) {
+		this.workflowFoldersService = workflowFoldersService;
+	}
+
+	public void setCopyService(CopyService copyService) {
+		this.copyService = copyService;
 	}
 
 	private NodeRef getEmployeeFromAssigneeListItem(NodeRef assigneeListItem) {
@@ -74,7 +93,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 				daysModulo, peopleModulo, daysBuffer = 0, peopleBuffer = 0;
 
 		if (daysCount >= peopleCount) {
-			daysPerPeople = (double) daysCount / peopleCount;
+			daysPerPeople = remainingDays / remainingPeople;
 			daysModulo = daysPerPeople % 1;
 
 			for (int i = 0; i < peopleCount; ++i) {
@@ -103,7 +122,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		} else {
 			int curPerson = 0;
 
-			peoplePerDay = (double) peopleCount / daysCount;
+			peoplePerDay = remainingPeople / remainingDays;
 			int peoplePerDayFloored = (int) Math.floor(peoplePerDay);
 			peopleModulo = peoplePerDay % 1;
 
@@ -211,7 +230,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getAssigneesListsFolder() {
-		return getFolder(WorkflowServiceAbstract.WORKFLOW_FOLDER);
+		return workflowFoldersService.getWorkflowFolder();
 	}
 
 	@Override
@@ -390,7 +409,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		Date today = DateUtils.truncate(new Date(), Calendar.DATE);
 
 		long diffDays = (dueDate.getTime() - today.getTime()) / 86400000;
-		int period = Math.round(diffDays / assigneesListItems.size());
+		int period = (int)(diffDays / assigneesListItems.size());
 
 		Date previousDate;
 		Date currentDate;
@@ -451,4 +470,30 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return assigeesListNodeRef;
 	}
 
+	@Override
+	public void deleteAssigneesListWorkingCopy(DelegateExecution execution) {
+		String executionID = execution.getId();
+		NodeRef workingCopyFolderRef = workflowFoldersService.getAssigneesListWorkingCopyFolder();
+		NodeRef workingCopyAssigneesList = nodeService.getChildByName(workingCopyFolderRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, executionID);
+		if (workingCopyAssigneesList != null) {
+			nodeService.deleteNode(workingCopyAssigneesList);
+		}
+	}
+
+	@Override
+	public List<NodeRef> createAssigneesListWorkingCopy(NodeRef assigneesListNode, DelegateExecution execution) {
+		NodeRef workingCopyAssigneesList;
+		NodeRef workingCopyFolderRef = workflowFoldersService.getAssigneesListWorkingCopyFolder();
+		String executionID = execution.getId();
+		QName assocQName = QName.createQName(WorkflowModel.WORKFLOW_NAMESPACE, executionID);
+		behaviourFilter.disableBehaviour(WorkflowModel.TYPE_ASSIGNEE);
+		try {
+			workingCopyAssigneesList = copyService.copyAndRename(assigneesListNode, workingCopyFolderRef, ContentModel.ASSOC_CONTAINS, assocQName, true);
+		} finally {
+			behaviourFilter.enableBehaviour(WorkflowModel.TYPE_ASSIGNEE);
+		}
+		nodeService.setProperty(workingCopyAssigneesList, ContentModel.PROP_NAME, executionID);
+		nodeService.addAspect(workingCopyAssigneesList, ContentModel.ASPECT_TEMPORARY, null);
+		return findNodesByAssociationRef(workingCopyAssigneesList, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, WorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
+	}
 }

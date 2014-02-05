@@ -5,6 +5,16 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-
+	<util:constant id="WORKFLOW_FOLDER" static-field="ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl.WORKFLOW_FOLDER"/>
+	<util:constant id="WORKFLOW_GLOBAL_RESULT_FOLDER" static-field="ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl.WORKFLOW_GLOBAL_RESULT_FOLDER"/>
+	<util:constant id="ASSIGNEES_LISTS_WORKING_COPY_FOLDER" static-field="ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl.ASSIGNEES_LISTS_WORKING_COPY_FOLDER"/>
+	<util:map id="lecm.workflow.folders">
+		<entry key="#{WORKFLOW_FOLDER}" value="Сервис Бизнес процессов"/>
+		<entry key="#{WORKFLOW_GLOBAL_RESULT_FOLDER}" value="Сервис Бизнес процессов/Результаты исполнения"/>
+		<entry key="#{ASSIGNEES_LISTS_WORKING_COPY_FOLDER}" value="Сервис Бизнес процессов/Рабочии копии списков исполнителей"/>
+	</util:map>
+	<bean id="lecm.workflow.folders.bootstrap" parent="baseBean"
+		  class="ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl"
+		  p:folders-ref="lecm.workflow.folders"/>
 
 </beans>
