@@ -1319,18 +1319,18 @@ LogicECM.module = LogicECM.module || {};
 	                }
 	            }
 
+                var selectedItems = this.getSelectedItems();
                 var removedItems = this.getRemovedItems();
 
                 // Update removed fields in main form to be submitted
-                el = Dom.get(this.options.controlId + "-removed");
-	            if (el != null) {
-	                el.value = '';
+                var removedEl = Dom.get(this.options.controlId + "-removed");
+	            if (removedEl != null) {
+                    removedEl.value = '';
 	                for (i in removedItems) {
-	                    el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
+                        removedEl.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
 	                }
 	            }
 
-                var selectedItems = this.getSelectedItems();
 
                 // Update selectedItems fields in main form to pass them between popup and form
                 el = Dom.get(this.options.controlId + "-selectedItems");
@@ -1343,9 +1343,15 @@ LogicECM.module = LogicECM.module || {};
 	                }
 	            }
 
-	            if (this.options.setCurrentValue && Dom.get(this.id) != null) {
-	                Dom.get(this.id).value = selectedItems.toString();
-	            }
+                //убираем selected из removed
+                for (var k in Alfresco.util.arrayToObject(el.value.split(","))) {
+                    removedEl.value = removedEl.value.replace(k + ',', '');
+                    removedEl.value = removedEl.value.replace(k, '');
+                }
+
+                if (this.options.setCurrentValue && Dom.get(this.id) != null) {
+                    Dom.get(this.id).value = el.value;
+                }
 
 	            if (this.options.mandatory) {
 		            YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
