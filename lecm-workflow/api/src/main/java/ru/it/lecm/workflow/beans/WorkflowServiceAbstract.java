@@ -11,6 +11,7 @@ import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
@@ -28,13 +29,13 @@ import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
 import ru.it.lecm.workflow.api.WorkflowModel;
-import ru.it.lecm.workflow.api.WorkflowService;
+import ru.it.lecm.workflow.api.LecmWorkflowService;
 
 /**
  *
  * @author vlevin
  */
-public abstract class WorkflowServiceAbstract extends BaseBean implements WorkflowService {
+public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWorkflowService {
 
 	private final static Logger logger = LoggerFactory.getLogger(WorkflowServiceAbstract.class);
 	public final static String RESULT_ITEM_FORMAT = "Участник %s";
@@ -45,10 +46,10 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 	protected DocumentService documentService;
 	protected DocumentMembersService documentMembersService;
 	protected NotificationsService notificationsService;
-	protected org.alfresco.service.cmr.workflow.WorkflowService workflowService;
+	protected WorkflowService workflowService;
 	protected WorkflowFoldersService workflowFoldersService;
 
-	public void setWorkflowService(org.alfresco.service.cmr.workflow.WorkflowService workflowService) {
+	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
 	}
 
@@ -187,17 +188,11 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 		sendNotification(description, docInfo.getDocumentRef(), recipients);
 	}
 
-	//TODO
 	@Override
-	public void notifyAssigneesDeadline(String processInstanceId, NodeRef bpmPackage) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+	abstract public void notifyAssigneesDeadline(String processInstanceId, NodeRef bpmPackage);
 
-	//TODO
 	@Override
-	public void notifyInitiatorDeadline(String processInstanceId, NodeRef bpmPackage, VariableScope variableScope) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
+	abstract public void notifyInitiatorDeadline(String processInstanceId, NodeRef bpmPackage, VariableScope variableScope);
 
 	//TODO
 	@Override

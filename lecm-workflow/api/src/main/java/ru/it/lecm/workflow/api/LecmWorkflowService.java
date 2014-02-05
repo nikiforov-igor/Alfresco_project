@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
  *
  * @author vlevin
  */
-public interface WorkflowService {
+public interface LecmWorkflowService {
 
 	void assignTask(final NodeRef assignee, final DelegateTask task);
 
