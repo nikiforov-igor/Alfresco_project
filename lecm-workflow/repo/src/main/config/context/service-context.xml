@@ -17,4 +17,36 @@
 		  class="ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl"
 		  p:folders-ref="lecm.workflow.folders"/>
 
+	<util:list id="workflow.models">
+		<value>alfresco/module/${artifactId}/models/lecm-workflow-model</value>
+		<value>alfresco/module/${artifactId}/models/lecm-workflow-result</value>
+	</util:list>
+	<bean id="workflow.model.bootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"
+		  p:models-ref="workflow.models"/>
+
+	<bean id="lecmWorkflowService" abstract="true" parent="baseBean"
+		  class="ru.it.lecm.workflow.beans.WorkflowServiceAbstract"
+		  depends-on="workflow.model.bootstrap"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:documentService-ref="documentService"
+		  p:documentMembersService-ref="documentMembersService"
+		  p:notificationsService-ref="notificationsService"
+		  p:workflowService-ref="WorkflowService"
+		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"/>
+
+	<bean id="workflowAssigneesListService" parent="baseBean"
+		  class="ru.it.lecm.workflow.beans.WorkflowAssigneesListServiceImpl"
+		  p:workCalendarService-ref="WorkCalendarService"
+		  p:wCalendarService-ref="WCalendarService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:behaviourFilter-ref="policyBehaviourFilter"
+		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
+		  p:copyService-ref="copyService"/>
+
+	<bean id="workflowResultListService" parent="baseBean"
+		  class="ru.it.lecm.workflow.beans.WorkflowResultListServiceImpl"
+		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"/>
+
 </beans>

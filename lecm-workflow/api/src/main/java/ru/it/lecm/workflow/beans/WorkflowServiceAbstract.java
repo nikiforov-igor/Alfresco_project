@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -26,7 +25,6 @@ import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.LecmWorkflowService;
 
 /**
