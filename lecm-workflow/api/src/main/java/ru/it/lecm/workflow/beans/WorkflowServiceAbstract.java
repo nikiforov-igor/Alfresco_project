@@ -4,12 +4,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.delegate.DelegateTask;
+import java.util.Map;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -26,6 +25,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
 import ru.it.lecm.workflow.api.WorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowService;
@@ -76,6 +76,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 		this.workflowFoldersService = workflowFoldersService;
 	}
 
+	/*
 	@Override
 	public void assignTask(NodeRef assignee, DelegateTask task) {
 		Date dueDate = task.getDueDate();
@@ -84,23 +85,21 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 			task.setDueDate(dueDate);
 		}
 
-		/*
-		String currentUserName = task.getAssignee();
-		String previousUserName = (String) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_USERNAME);
-
-		if (!currentUserName.equals(previousUserName)) {
-			NodeRef resultListRef = getResultListRef(task);
-			NodeRef resultItemRef = getResultItemByUserName(resultListRef, currentUserName);
-			if (resultItemRef == null) {
-				String newItemTitle = String.format(RESULT_ITEM_FORMAT, currentUserName);
-				createResultItem(resultListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, getResultItemType());
-			}
-			NodeRef oldResultListItemRef = getResultItemByUserName(resultListRef, previousUserName);
-			if (oldResultListItemRef != null) {
-				onTaskReassigned(oldResultListItemRef, resultItemRef);
-			}
-		}
-		*/
+//		String currentUserName = task.getAssignee();
+//		String previousUserName = (String) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_USERNAME);
+//
+//		if (!currentUserName.equals(previousUserName)) {
+//			NodeRef resultListRef = getResultListRef(task);
+//			NodeRef resultItemRef = getResultItemByUserName(resultListRef, currentUserName);
+//			if (resultItemRef == null) {
+//				String newItemTitle = String.format(RESULT_ITEM_FORMAT, currentUserName);
+//				createResultItem(resultListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, getResultItemType());
+//			}
+//			NodeRef oldResultListItemRef = getResultItemByUserName(resultListRef, previousUserName);
+//			if (oldResultListItemRef != null) {
+//				onTaskReassigned(oldResultListItemRef, resultItemRef);
+//			}
+//		}
 
 		DelegateExecution execution = task.getExecution();
 		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
@@ -108,6 +107,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 		grantReviewerPermissions(employeeRef, bpmPackage);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
+	*/
 
 	@Override
 	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
@@ -231,6 +231,16 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements Workfl
 			builder.delete(length - 2, length); //удалить последний ", "
 		}
 		return builder.toString();
+	}
+
+	protected Map<String, String> addDecision(final Map<String, String> decisionMap, WorkflowTaskDecision taskDecision) {
+		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;
+
+		String userName = taskDecision.getUserName();
+		String decision = taskDecision.getDecision();
+
+		currentDecisionMap.put(userName, decision);
+		return currentDecisionMap;
 	}
 
 	abstract protected String getWorkflowStartedMessage(String documentLink, Date dueDate);
