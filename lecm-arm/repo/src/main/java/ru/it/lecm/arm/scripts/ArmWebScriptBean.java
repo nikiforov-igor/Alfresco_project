@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
@@ -53,13 +54,15 @@ public class ArmWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
 		Set<PropertyDefinition> allProperties = new HashSet<PropertyDefinition>();
+		Set<AssociationDefinition> allAssociations = new HashSet<AssociationDefinition>();
 
 		TypeDefinition type = dictionaryService.getType(DocumentService.TYPE_BASE_DOCUMENT);
 		allProperties.addAll(type.getProperties().values());
+		allAssociations.addAll(type.getAssociations().values());
 
 		JSONObject result = new JSONObject();
 		try {
-			JSONArray properiesJson = new JSONArray();
+			JSONArray fieldsJson = new JSONArray();
 
 			for (PropertyDefinition prop: allProperties) {
 				String propName = prop.getName().toPrefixString(namespaceService);
@@ -69,11 +72,20 @@ public class ArmWebScriptBean extends BaseWebScript {
 					propJson.put("name", propName);
 					propJson.put("type", prop.getDataType().getTitle());
 
-					properiesJson.put(propJson);
+					fieldsJson.put(propJson);
 				}
 			}
 
-			result.put("items", properiesJson);
+			for (AssociationDefinition assoc: allAssociations) {
+				JSONObject assocJson = new JSONObject();
+				assocJson.put("title", assoc.getTitle());
+				assocJson.put("name", assoc.getName().toPrefixString(namespaceService));
+				assocJson.put("type", assoc.getTargetClass().getTitle());
+
+				fieldsJson.put(assocJson);
+			}
+
+			result.put("items", fieldsJson);
 		} catch (JSONException e) {
 			logger.error("Error create jsonObject", e);
 		}
