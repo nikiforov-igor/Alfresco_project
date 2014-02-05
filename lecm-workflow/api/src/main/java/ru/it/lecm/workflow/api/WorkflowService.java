@@ -3,9 +3,7 @@ package ru.it.lecm.workflow.api;
 import java.util.Date;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
 
 /**
  *
@@ -13,12 +11,9 @@ import org.alfresco.service.namespace.QName;
  */
 public interface WorkflowService {
 
-	/**
-	 * формирование нового листа согласования, для текущей версии регламента
-	 *
-	 * @return ссылка на новый лист согласования
-	 */
-	NodeRef createResultList(final NodeRef bpmPackage, final String documentAttachmentCategoryName, final String approvalType, final ActivitiScriptNodeList assigneesList);
+	void assignTask(final NodeRef assignee, final DelegateTask task);
+
+	void completeTask(NodeRef assignee, DelegateTask task);
 
 	/**
 	 * раздать всем участникам процесса согласования права
@@ -37,6 +32,23 @@ public interface WorkflowService {
 	 * @param documentRef
 	 */
 	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
+
+	/**
+	 * раздать всем участникам процесса согласования права
+	 * LECM_BASIC_PG_Reader
+	 *
+	 * @param employeeRef
+	 * @param bpmPackage
+	 */
+	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+
+	/**
+	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
+	 *
+	 * @param employeeRef
+	 * @param bpmPackage
+	 */
+	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 
 	void notifyWorkflowStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 
@@ -65,25 +77,4 @@ public interface WorkflowService {
 	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope);
 
 	NodeRef getEmployeeForAssignee(final NodeRef assigneeRef);
-
-	/**
-	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
-	 *
-	 * @param employeeRef
-	 * @param bpmPackage
-	 */
-	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
-
-	/**
-	 * раздать всем участникам процесса согласования права
-	 * LECM_BASIC_PG_Reader
-	 *
-	 * @param employeeRef
-	 * @param bpmPackage
-	 */
-	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
-
-	void assignTask(final NodeRef assignee, final DelegateTask task);
-
-	NodeRef createResultItem(final NodeRef approvalListRef, final NodeRef employeeRef, final String itemTitle, final Date dueDate, final QName resultItemType);
 }
