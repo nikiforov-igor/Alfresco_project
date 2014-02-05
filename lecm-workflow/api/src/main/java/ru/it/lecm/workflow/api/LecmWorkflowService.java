@@ -76,5 +76,5 @@ public interface LecmWorkflowService {
 	 */
 	void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope);
 
-	NodeRef getEmployeeForAssignee(final NodeRef assigneeRef);
+	void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage);
 }

@@ -476,7 +476,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		NodeRef workingCopyFolderRef = workflowFoldersService.getAssigneesListWorkingCopyFolder();
 		NodeRef workingCopyAssigneesList = nodeService.getChildByName(workingCopyFolderRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, executionID);
 		if (workingCopyAssigneesList != null) {
-			nodeService.deleteNode(workingCopyAssigneesList);
+			deleteAssigneesList(workingCopyAssigneesList);
 		}
 	}
 
@@ -493,7 +493,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			behaviourFilter.enableBehaviour(WorkflowModel.TYPE_ASSIGNEE);
 		}
 		nodeService.setProperty(workingCopyAssigneesList, ContentModel.PROP_NAME, executionID);
-		nodeService.addAspect(workingCopyAssigneesList, ContentModel.ASPECT_TEMPORARY, null);
 		return findNodesByAssociationRef(workingCopyAssigneesList, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, WorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
 	}
 }

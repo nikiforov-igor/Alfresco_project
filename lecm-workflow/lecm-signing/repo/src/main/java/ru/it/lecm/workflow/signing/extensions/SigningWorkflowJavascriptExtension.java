@@ -9,6 +9,7 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 
 /**
@@ -18,17 +19,22 @@ import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
 	private SigningWorkflowService signingWorkflowService;
+	private WorkflowAssigneesListService workflowAssigneesListService;
 
 	public void setSigningWorkflowService(final SigningWorkflowService signingWorkflowService) {
 		this.signingWorkflowService = signingWorkflowService;
 	}
 
+	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
+		this.workflowAssigneesListService = workflowAssigneesListService;
+	}
+
 	public void deleteTempAssigneesList(final DelegateExecution execution) {
-		signingWorkflowService.deleteTempAssigneesList(execution);
+		workflowAssigneesListService.deleteAssigneesListWorkingCopy(execution);
 	}
 
 	public ActivitiScriptNodeList createAssigneesList(final ActivitiScriptNode assigneesListNode, final DelegateExecution execution) {
-		List<NodeRef> assigneesList = signingWorkflowService.createAssigneesList(assigneesListNode.getNodeRef(), execution);
+		List<NodeRef> assigneesList = workflowAssigneesListService.createAssigneesListWorkingCopy(assigneesListNode.getNodeRef(), execution);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode: assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));
@@ -41,11 +47,11 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		//TODO: signingWorkflowService.completeTask
-//		signingWorkflowService.completeTask(assignee.getNodeRef(), task);
+		signingWorkflowService.completeTask(assignee.getNodeRef(), task);
 	}
 
 	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {
+		//написать реализацию в SigningWorkflowService
 		signingWorkflowService.notifyAssigneesDeadline(processInstanceId, bpmPackage.getNodeRef());
 		signingWorkflowService.notifyInitiatorDeadline(processInstanceId, bpmPackage.getNodeRef(), variableScope);
 	}
@@ -63,6 +69,7 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
+		//написать реализацию в SigningWorkflowService
 		//TODO:signingWorkflowService.notifyFinalDecision
 //		signingWorkflowService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
 	}

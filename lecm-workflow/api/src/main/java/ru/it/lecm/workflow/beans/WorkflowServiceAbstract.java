@@ -1,7 +1,5 @@
 package ru.it.lecm.workflow.beans;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,7 +37,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 
 	private final static Logger logger = LoggerFactory.getLogger(WorkflowServiceAbstract.class);
 	public final static String RESULT_ITEM_FORMAT = "Участник %s";
-	protected final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+	protected final static String DATE_FORMAT = "dd.MM.yyyy";
 
 	protected OrgstructureBean orgstructureService;
 	protected LecmPermissionService lecmPermissionService;
@@ -186,18 +184,6 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 
 		String description = getWorkflowFinishedMessage(docInfo.getDocumentLink(), decision);
 		sendNotification(description, docInfo.getDocumentRef(), recipients);
-	}
-
-	@Override
-	abstract public void notifyAssigneesDeadline(String processInstanceId, NodeRef bpmPackage);
-
-	@Override
-	abstract public void notifyInitiatorDeadline(String processInstanceId, NodeRef bpmPackage, VariableScope variableScope);
-
-	//TODO
-	@Override
-	public NodeRef getEmployeeForAssignee(NodeRef assigneeRef) {
-		return findNodeByAssociationRef(assigneeRef, WorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 	}
 
 	protected void sendNotification(String message, NodeRef documentRef, List<NodeRef> recipients) {

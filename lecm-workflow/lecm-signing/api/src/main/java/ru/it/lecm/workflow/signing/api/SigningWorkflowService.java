@@ -1,10 +1,11 @@
 package ru.it.lecm.workflow.signing.api;
 
-import ru.it.lecm.workflow.api.WorkflowService;
+import ru.it.lecm.workflow.api.LecmWorkflowService;
 
 /**
  *
  * @author vmalygin
  */
-public interface SigningWorkflowService extends WorkflowService {
+public interface SigningWorkflowService extends LecmWorkflowService {
+
 }
