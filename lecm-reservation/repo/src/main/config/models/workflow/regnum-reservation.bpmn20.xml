@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn"
+			 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+			 typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/regnumReservation">
+  <process id="regnumReservation" name="Зарезервировать регистрационный номер" isExecutable="true">
+    <startEvent id="startevent1" name="Start" activiti:formKey="reservationWf:regnumReservationStart"></startEvent>
+
+    <receiveTask id="receivetask1" name="Receive Task"></receiveTask>
+
+	<serviceTask id="emptyScripttask1" name="Empty Script Task 1" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+		<extensionElements>
+    			<activiti:field name="script">
+    				<activiti:string>//<![CDATA[
+                        var empty = null;
+						//]]>
+    				</activiti:string>
+    			</activiti:field>
+    	</extensionElements>
+	</serviceTask>
+
+    <serviceTask id="searchRegistrarsScripttask" name="Search registrars" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+    			<activiti:field name="script">
+    				<activiti:string>
+    				//<![CDATA[
+							var document = bpm_package.children[0];
+
+							//say proccess is active
+                            var props = [];
+                            props["lecm-reservation-aspects:isReservationRunning"] = true;
+                            document.addAspect("lecm-reservation-aspects:isReservationRunningAspect", props);
+
+							var registrars = reservationWorkflowScript.getReservationDocumentRegistrators(document);
+							var reservateInitiator = reservationWorkflowScript.getCurrentEmployee();
+							execution.setVariableLocal("registrarsList", registrars);
+							execution.setVariableLocal("reservateInitiator", reservateInitiator);
+    				//]]>
+    				</activiti:string>
+    			</activiti:field>
+    	</extensionElements>
+	</serviceTask>
+
+    <userTask id="regnumReservationTask" name="Запрос номера" activiti:assignee="${assignee.properties.userName}" activiti:formKey="reservationWf:regnumReservationTask">
+			<extensionElements>
+				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string>
+			            //<![CDATA[
+							var document = bpm_package.children[0];
+							var isReservate = task.getVariable("reservationWf_isReservate");
+							var comment = task.getVariable("reservationWf_comment");
+							reservationWorkflowScript.regnumReservate(document,isReservate,reservateInitiator.getNodeRef(),comment);
+							execution.setVariable("currentPercent",100);
+
+							//say proccess not active
+							document.save();
+							document.removeAspect("lecm-reservation-aspects:isReservationRunningAspect");
+							//}
+			            //]]>
+						</activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
+			</extensionElements>
+		<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registrarsList}" activiti:elementVariable="assignee">
+			<completionCondition>${currentPercent == 100}</completionCondition>
+		</multiInstanceLoopCharacteristics>
+	</userTask>
+
+    <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="emptyScripttask1"></sequenceFlow>
+	<sequenceFlow id="flow5" sourceRef="emptyScripttask1" targetRef="receivetask1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="receivetask1" targetRef="searchRegistrarsScripttask"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="searchRegistrarsScripttask" targetRef="regnumReservationTask"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="regnumReservationTask" targetRef="endevent1"> </sequenceFlow>
+
+    <endEvent id="endevent1" name="End"></endEvent>
+  </process>
+</definitions>

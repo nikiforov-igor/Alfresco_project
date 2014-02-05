@@ -1,0 +1,52 @@
+<alfresco-config>
+	<config evaluator="string-compare" condition="activiti$regnumReservation">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="warning"/>
+					<show id="packageItems"/>
+				</field-visibility>
+				<appearance>
+					<field id="warning">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.reservation.approveAction</control-param>
+						</control>
+					</field>
+					<field id="packageItems">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="task-type" condition="reservationWf:regnumReservationTask">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="message" />
+					<show id="lecmCustom:presentString" />
+					<show id="reservationWf:isReservate" />
+					<show id="reservationWf:comment" />
+				</field-visibility>
+				<appearance>
+					<field id="message" label-id="upload-workflow.field.message">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.reservation.reservationRequest</control-param>
+						</control>
+					</field>
+					<field id="lecmCustom:presentString">
+						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
+					</field>
+					<field id="reservationWf:isReservate">
+						<control template="/ru/it/lecm/reservation/components/controls/workflow/submit-regnum-reservation-control.ftl" />
+					</field>
+					<field id="reservationWf:comment">
+						<control template="/ru/it/lecm/base-share/components/controls/hidden.ftl" />
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+</alfresco-config>

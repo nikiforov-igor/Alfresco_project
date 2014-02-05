@@ -326,6 +326,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.reservation</groupId>
+			<artifactId>reservation-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>

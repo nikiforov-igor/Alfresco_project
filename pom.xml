@@ -114,6 +114,7 @@
 		<module>lecm-outgoing</module>
 		<module>lecm-model-editor</module>
         <module>lecm-eds-documents</module>
+		<module>lecm-reservation</module>
         <module>lecm-arm</module>
 	</modules>
 	<scm>
