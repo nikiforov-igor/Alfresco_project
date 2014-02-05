@@ -46,17 +46,20 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		return null;
 	}
 
+	@Override
 	public NodeRef getResultListRef(DelegateTask task) {
 		DelegateExecution execution = task.getExecution();
 		return ((ScriptNode) execution.getVariable("resultListRef")).getNodeRef();
 	}
 
+	@Override
 	public NodeRef getResultItemByUserName(NodeRef resultListRef, String userName) {
 		String itemTitle = String.format(RESULT_ITEM_FORMAT, userName);
 
 		return nodeService.getChildByName(resultListRef, ContentModel.ASSOC_CONTAINS, itemTitle);
 	}
 
+	@Override
 	public NodeRef createResultItem(NodeRef approvalListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType) {
 		NodeRef approvalListItemRef;
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
@@ -74,6 +77,7 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		return approvalListItemRef;
 	}
 
+	@Override
 	public void prepareResultList(final NodeRef emptyResultList, final ActivitiScriptNodeList assigneesList, final QName resultItemType) {
 		for (ActivitiScriptNode assignee : assigneesList) {
 			NodeRef assigneeNode = assignee.getNodeRef();
@@ -87,6 +91,7 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		}
 	}
 
+	@Override
 	public NodeRef createResultList(final NodeRef parentRef, final NodeRef bpmPackage, final String documentAttachmentCategoryName, QName resultListType, String resultListName) {
 		String contractDocumentVersion = Utils.getObjectVersion(bpmPackage, documentAttachmentCategoryName);
 		String resultListVersion = Utils.getResultListVersion(contractDocumentVersion, parentRef, resultListName);
@@ -104,6 +109,7 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		return resultListRef;
 	}
 
+	@Override
 	public NodeRef getOrCreateWorkflowResultFolder(NodeRef bpmPackage) {
 		NodeRef workflowResultRoot;
 

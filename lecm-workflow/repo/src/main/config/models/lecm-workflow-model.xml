@@ -117,15 +117,7 @@
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>
-						<constraint name="lecm-workflow:workflow-type-constraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>APPROVAL</value> <!-- Согласоване -->
-									<value>FAMILIARIZATION</value>  <!-- Ознакомление -->
-									<value>SIGNING</value> <!-- Подписание -->
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="lecm-workflow:workflow-type-constraint"/>
 					</constraints>
 				</property>
 			</properties>
@@ -136,16 +128,8 @@
 				<property name="lecm-workflow:workflow-concurrency">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
-					<default>PARALLEL</default>
 					<constraints>
-						<constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>PARALLEL</value> <!-- Параллельный процесс -->
-									<value>SEQUENTIAL</value>  <!-- Последовательный процесс -->
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="lecm-workflow:workflow-concurrency-constraint" />
 					</constraints>
 				</property>
 			</properties>
@@ -171,4 +155,25 @@
 		</aspect>
 
 	</aspects>
+
+	<constraints>
+		<constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PARALLEL</value> <!-- Параллельный процесс -->
+					<value>SEQUENTIAL</value>  <!-- Последовательный процесс -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-workflow:workflow-type-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>APPROVAL</value> <!-- Согласоване -->
+					<value>FAMILIARIZATION</value>  <!-- Ознакомление -->
+					<value>SIGNING</value> <!-- Подписание -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 </model>

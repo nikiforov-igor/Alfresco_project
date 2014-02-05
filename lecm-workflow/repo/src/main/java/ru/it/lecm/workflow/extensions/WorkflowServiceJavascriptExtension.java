@@ -12,6 +12,7 @@ import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
@@ -24,6 +25,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 	private final static DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 	private WorkflowAssigneesListService workflowAssigneesListService;
+	private OrgstructureBean orgstructureService;
 
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
 		this.workflowAssigneesListService = workflowAssigneesListService;
@@ -31,6 +33,10 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 	public NodeRef getAssigneesListsFolder() {
 		return workflowAssigneesListService.getAssigneesListsFolder();
+	}
+
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
 	}
 
 	public NodeRef getDefaultAssigneesList(JSONObject json) {
@@ -255,13 +261,12 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		}
 		workflowAssigneesListService.setDueDates(new NodeRef(assigneeListNodeRefStr), ISO8601DateFormat.parse(workflowDueDateStr));
 	}
-	
-	/*
-		public JSONObject getCurrentEmployeeInfo() {
+
+	public JSONObject getCurrentEmployeeInfo() {
 		JSONObject result = new JSONObject();
 
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		NodeRef currentListsFolder = getListsFolderRef();
+		NodeRef currentListsFolder = workflowAssigneesListService.getAssigneesListsFolder();
 
 		try {
 			result.put("currentEmployeeRef", currentEmployee);
@@ -272,5 +277,5 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 		return result;
 	}
-	*/
+
 }
