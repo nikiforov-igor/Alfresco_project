@@ -32,7 +32,7 @@ import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
-import ru.it.lecm.workflow.api.WorkflowModel;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
@@ -67,7 +67,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	public void assignTask(NodeRef assignee, DelegateTask task) {
 		Date dueDate = task.getDueDate();
 		if (dueDate == null) {
-			dueDate = (Date) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 			task.setDueDate(dueDate);
 		}
 		DelegateExecution execution = task.getExecution();
@@ -80,7 +80,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	@Override
 	public void completeTask(NodeRef assignee, DelegateTask task) {
         String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
-        Date dueDate = (Date) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+        Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
         completeTask(assignee, task, decision, dueDate);
 	}
@@ -94,7 +94,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
         taskDecision.setDecision(decision);
         taskDecision.setStartDate(task.getCreateTime());
         taskDecision.setDueDate(dueDate);
-        taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_USERNAME));
+        taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
 
         Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
         decisionsMap = addDecision(decisionsMap, taskDecision);

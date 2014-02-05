@@ -6,7 +6,7 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vlevin
  */
-public final class WorkflowModel {
+public final class LecmWorkflowModel {
 
 	public final static String WORKFLOW_PREFIX = "lecm-workflow";
 	public final static String WORKFLOW_NAMESPACE = "http://www.it.ru/logicECM/model/workflow/1.0";
@@ -45,6 +45,11 @@ public final class WorkflowModel {
 	 * &lt;association name="lecm-workflow:assignee-employee-assoc"&gt;
 	 */
 	public final static QName ASSOC_ASSIGNEE_EMPLOYEE = QName.createQName(WORKFLOW_NAMESPACE, "assignee-employee-assoc");
+
+	/**
+	 * &lt;association name="lecm-workflow:assignee-organization-element-member-assoc"&gt;
+	 */
+	public final static QName ASSOC_ASSIGNEE_ORG_ELEMENT_MEMBER = QName.createQName(WORKFLOW_NAMESPACE, "assignee-organization-element-member-assoc");
 
 	/**
 	 * &lt;aspect name="lecm-workflow:workflow-route-aspect"&gt;
@@ -96,8 +101,8 @@ public final class WorkflowModel {
 	 */
 	public final static QName PROP_ASSIGNEE_DAYS_TO_COMPLETE = QName.createQName(WORKFLOW_NAMESPACE, "assignee-days-to-complete");
 
-	private WorkflowModel() throws IllegalAccessException {
-		throw new IllegalAccessException("You cannot create any instance of WorkflowModel class.");
+	private LecmWorkflowModel() throws IllegalAccessException {
+		throw new IllegalAccessException("You cannot create any instance of LecmWorkflowModel class.");
 	}
 
 }

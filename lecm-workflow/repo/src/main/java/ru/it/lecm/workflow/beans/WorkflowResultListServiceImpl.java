@@ -22,7 +22,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.WorkflowModel;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import static ru.it.lecm.workflow.beans.WorkflowServiceAbstract.RESULT_ITEM_FORMAT;
@@ -77,9 +77,9 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 	public void prepareResultList(final NodeRef emptyResultList, final ActivitiScriptNodeList assigneesList, final QName resultItemType) {
 		for (ActivitiScriptNode assignee : assigneesList) {
 			NodeRef assigneeNode = assignee.getNodeRef();
-			NodeRef employeeRef = findNodeByAssociationRef(assigneeNode, WorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			Date dueDate = (Date) nodeService.getProperty(assigneeNode, WorkflowModel.PROP_ASSIGNEE_DUE_DATE);
-			String userName = (String) nodeService.getProperty(assigneeNode, WorkflowModel.PROP_ASSIGNEE_USERNAME);
+			NodeRef employeeRef = findNodeByAssociationRef(assigneeNode, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			Date dueDate = (Date) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+			String userName = (String) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);
 
 			String itemTitle = String.format(RESULT_ITEM_FORMAT, userName);
 

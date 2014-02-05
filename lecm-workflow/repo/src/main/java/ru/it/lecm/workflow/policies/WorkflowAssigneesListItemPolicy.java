@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.workflow.api.WorkflowModel;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
@@ -51,18 +51,18 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 		PropertyCheck.mandatory(this, "orgstructureBean", orgstructureBean);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				WorkflowModel.TYPE_ASSIGNEE,
+				LecmWorkflowModel.TYPE_ASSIGNEE,
 				new JavaBehaviour(this, "onCreateNode"));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				WorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE,
+				LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE,
 				new JavaBehaviour(this, "onCreateAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
-				WorkflowModel.TYPE_ASSIGNEE, new JavaBehaviour(this, "beforeDeleteNode"));
+				LecmWorkflowModel.TYPE_ASSIGNEE, new JavaBehaviour(this, "beforeDeleteNode"));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				WorkflowModel.TYPE_ASSIGNEE, WorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE,
+				LecmWorkflowModel.TYPE_ASSIGNEE, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE,
 				new JavaBehaviour(this, "onCreateEmployeeAssociation", NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
@@ -85,22 +85,22 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 
 		NodeRef assigneesList = associationRef.getSourceRef();
 		NodeRef assigneesItem = associationRef.getTargetRef();
-		String concurrency = (String) nodeService.getProperty(assigneesList, WorkflowModel.PROP_WORKFLOW_CONCURRENCY);
+		String concurrency = (String) nodeService.getProperty(assigneesList, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 
 		if (concurrency != null && concurrency.equalsIgnoreCase("SEQUENTIAL")) {
 
-			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesList, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+			List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 			for (AssociationRef targetAssoc : targetAssocs) {
 				NodeRef listItem = targetAssoc.getTargetRef();
 				if (assigneesItem.equals(listItem)) {
 					continue;
 				}
-				int itemOrder = (Integer) nodeService.getProperty(listItem, WorkflowModel.PROP_ASSIGNEE_ORDER);
+				int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 				order = itemOrder > order ? itemOrder : order;
 			}
 			final int finalOrder = order + 1;
-			nodeService.addAspect(assigneesItem, WorkflowModel.ASPECT_ASSIGNEE_ORDER, new HashMap<QName, Serializable>(){{
-				put(WorkflowModel.PROP_ASSIGNEE_ORDER, finalOrder);
+			nodeService.addAspect(assigneesItem, LecmWorkflowModel.ASPECT_ASSIGNEE_ORDER, new HashMap<QName, Serializable>(){{
+				put(LecmWorkflowModel.PROP_ASSIGNEE_ORDER, finalOrder);
 			}});
 
 		}
@@ -111,7 +111,7 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 		NodeRef employeeRef = associationRef.getTargetRef();
 		String userName = orgstructureBean.getEmployeeLogin(employeeRef);
 		if (StringUtils.isNotEmpty(userName)) {
-			nodeService.setProperty(assigneeItemRef, WorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
+			nodeService.setProperty(assigneeItemRef, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
 		}
 	}
 
@@ -126,17 +126,17 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 		List<ChildAssociationRef> parentAssocs = nodeService.getParentAssocs(deletedAssigneesItem);
 		NodeRef assigneesList = parentAssocs.get(0).getParentRef();
 
-		int deletedItemOrder = (Integer) nodeService.getProperty(deletedAssigneesItem, WorkflowModel.PROP_ASSIGNEE_ORDER);
+		int deletedItemOrder = (Integer) nodeService.getProperty(deletedAssigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 
-		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesList, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 		for (AssociationRef targetAssoc : targetAssocs) {
 			NodeRef listItem = targetAssoc.getTargetRef();
 			if (listItem.equals(deletedAssigneesItem)) {
 				continue;
 			}
-			int itemOrder = (Integer) nodeService.getProperty(listItem, WorkflowModel.PROP_ASSIGNEE_ORDER);
+			int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 			if (itemOrder > deletedItemOrder) {
-				nodeService.setProperty(listItem, WorkflowModel.PROP_ASSIGNEE_ORDER, itemOrder - 1);
+				nodeService.setProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, itemOrder - 1);
 			}
 		}
 	}

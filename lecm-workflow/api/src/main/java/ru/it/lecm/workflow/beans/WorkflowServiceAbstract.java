@@ -26,7 +26,7 @@ import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.WorkflowModel;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.LecmWorkflowService;
 
 /**
@@ -80,12 +80,12 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	public void assignTask(NodeRef assignee, DelegateTask task) {
 		Date dueDate = task.getDueDate();
 		if (dueDate == null) {
-			dueDate = (Date) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 			task.setDueDate(dueDate);
 		}
 
 //		String currentUserName = task.getAssignee();
-//		String previousUserName = (String) nodeService.getProperty(assignee, WorkflowModel.PROP_ASSIGNEE_USERNAME);
+//		String previousUserName = (String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);
 //
 //		if (!currentUserName.equals(previousUserName)) {
 //			NodeRef resultListRef = getResultListRef(task);

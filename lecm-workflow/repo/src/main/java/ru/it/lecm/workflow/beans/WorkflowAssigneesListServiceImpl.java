@@ -31,7 +31,7 @@ import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.WorkflowModel;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 
 /**
  *
@@ -72,7 +72,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	private NodeRef getEmployeeFromAssigneeListItem(NodeRef assigneeListItem) {
-		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneeListItem, WorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneeListItem, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
 		if (targetAssocs.isEmpty()) {
 			return null;
 		} else {
@@ -170,7 +170,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	private List<NodeRef> getAssigneesListItems(NodeRef assigneesListNodeRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		List<AssociationRef> listItemsAssocs = nodeService.getTargetAssocs(assigneesListNodeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 		for (AssociationRef listItemAssoc : listItemsAssocs) {
 			result.add(listItemAssoc.getTargetRef());
 		}
@@ -220,12 +220,12 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public int getAssigneesListItemOrder(NodeRef listItemNodeRef) {
-		return (Integer) nodeService.getProperty(listItemNodeRef, WorkflowModel.PROP_ASSIGNEE_ORDER);
+		return (Integer) nodeService.getProperty(listItemNodeRef, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 	}
 
 	@Override
 	public void setAssigneesListItemOrder(NodeRef listItemNodeRef, int order) {
-		nodeService.setProperty(listItemNodeRef, WorkflowModel.PROP_ASSIGNEE_ORDER, order);
+		nodeService.setProperty(listItemNodeRef, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, order);
 	}
 
 	@Override
@@ -270,35 +270,35 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	private List<NodeRef> getAllAssingeesListsForCurrentEmployee() {
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		List<NodeRef> allEmployeeAssigneesList = findNodesByAssociationRef(currentEmployee, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, WorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, ASSOCIATION_TYPE.SOURCE);
+		List<NodeRef> allEmployeeAssigneesList = findNodesByAssociationRef(currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, ASSOCIATION_TYPE.SOURCE);
 		return allEmployeeAssigneesList;
 	}
 
 	@Override
 	public String getAssigneesListWorkflowType(NodeRef assigneesListRef) {
-		return (String) nodeService.getProperty(assigneesListRef, WorkflowModel.PROP_WORKFLOW_TYPE);
+		return (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_TYPE);
 	}
 
 	@Override
 	public String getAssigneesListWorkflowConcurrency(NodeRef assigneesListRef) {
-		return (String) nodeService.getProperty(assigneesListRef, WorkflowModel.PROP_WORKFLOW_CONCURRENCY);
+		return (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 	}
 
 	@Override
 	public boolean isTempAssigneesList(NodeRef assigneesListRef) {
-		return nodeService.hasAspect(assigneesListRef, WorkflowModel.ASPECT_TEMP);
+		return nodeService.hasAspect(assigneesListRef, LecmWorkflowModel.ASPECT_TEMP);
 	}
 
 	@Override
 	public void setAssigneesListTemp(NodeRef assigneesListRef) {
-		nodeService.addAspect(assigneesListRef, WorkflowModel.ASPECT_TEMP, null);
+		nodeService.addAspect(assigneesListRef, LecmWorkflowModel.ASPECT_TEMP, null);
 	}
 
 	@Override
 	public void clearAssigneesList(NodeRef assigneesListNodeRef) {
 		List<NodeRef> listItemsItems = getAssigneesListItems(assigneesListNodeRef);
 		for (NodeRef listItemNodeRef : listItemsItems) {
-			nodeService.removeAssociation(assigneesListNodeRef, listItemNodeRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+			nodeService.removeAssociation(assigneesListNodeRef, listItemNodeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 			nodeService.addAspect(listItemNodeRef, ContentModel.ASPECT_TEMPORARY, null);
 			nodeService.deleteNode(listItemNodeRef);
 		}
@@ -325,12 +325,12 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public Date getAssigneesListItemDueDate(NodeRef assigneeListItem) {
-		return (Date) nodeService.getProperty(assigneeListItem, WorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+		return (Date) nodeService.getProperty(assigneeListItem, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 	}
 
 	@Override
 	public void setAssigneesListItemDueDate(NodeRef assigneeListItem, Date dueDate) {
-		nodeService.setProperty(assigneeListItem, WorkflowModel.PROP_ASSIGNEE_DUE_DATE, dueDate);
+		nodeService.setProperty(assigneeListItem, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE, dueDate);
 	}
 
 	@Override
@@ -354,9 +354,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		boolean stopReordering = false, success;
 
 		currentItemOrder = getAssigneesListItemOrder(assigneeNodeRef);
-		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeNodeRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeNodeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
-		List<AssociationRef> listItemsTargetAssocs = nodeService.getTargetAssocs(assigeesListNodeRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		List<AssociationRef> listItemsTargetAssocs = nodeService.getTargetAssocs(assigeesListNodeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 
 		if ("up".equals(direction)) {
 			if (currentItemOrder == 1) {
@@ -436,17 +436,17 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			props = properties;
 		}
 
-		props.put(WorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
+		props.put(LecmWorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
 				props.containsKey(ContentModel.PROP_NAME) ? (String) props.get(ContentModel.PROP_NAME) : UUID.randomUUID().toString());
 
 		result = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName,
-				WorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, properties).getChildRef();
+				LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, properties).getChildRef();
 
 		if (concurrency != null) {
-			nodeService.addAspect(result, WorkflowModel.ASPECT_WORKFLOW_CONCURRENCY, new HashMap<QName, Serializable>(){{
-				put(WorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
+			nodeService.addAspect(result, LecmWorkflowModel.ASPECT_WORKFLOW_CONCURRENCY, new HashMap<QName, Serializable>(){{
+				put(LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
 			}});
 		}
 		return result;
@@ -455,7 +455,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	@Override
 	public void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName) {
 		nodeService.setProperty(assigneesListRef, ContentModel.PROP_NAME, assigneesListName);
-		nodeService.removeAspect(assigneesListRef, WorkflowModel.ASPECT_TEMP);
+		nodeService.removeAspect(assigneesListRef, LecmWorkflowModel.ASPECT_TEMP);
 	}
 
 	@Override
@@ -465,7 +465,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getAssigneesListByItem(NodeRef assigneeListItem) {
-		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeListItem, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
+		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeListItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
 		return assigeesListNodeRef;
 	}
@@ -474,7 +474,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public void deleteAssigneesListWorkingCopy(DelegateExecution execution) {
 		String executionID = execution.getId();
 		NodeRef workingCopyFolderRef = workflowFoldersService.getAssigneesListWorkingCopyFolder();
-		NodeRef workingCopyAssigneesList = nodeService.getChildByName(workingCopyFolderRef, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, executionID);
+		NodeRef workingCopyAssigneesList = nodeService.getChildByName(workingCopyFolderRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, executionID);
 		if (workingCopyAssigneesList != null) {
 			deleteAssigneesList(workingCopyAssigneesList);
 		}
@@ -485,14 +485,14 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		NodeRef workingCopyAssigneesList;
 		NodeRef workingCopyFolderRef = workflowFoldersService.getAssigneesListWorkingCopyFolder();
 		String executionID = execution.getId();
-		QName assocQName = QName.createQName(WorkflowModel.WORKFLOW_NAMESPACE, executionID);
-		behaviourFilter.disableBehaviour(WorkflowModel.TYPE_ASSIGNEE);
+		QName assocQName = QName.createQName(LecmWorkflowModel.WORKFLOW_NAMESPACE, executionID);
+		behaviourFilter.disableBehaviour(LecmWorkflowModel.TYPE_ASSIGNEE);
 		try {
 			workingCopyAssigneesList = copyService.copyAndRename(assigneesListNode, workingCopyFolderRef, ContentModel.ASSOC_CONTAINS, assocQName, true);
 		} finally {
-			behaviourFilter.enableBehaviour(WorkflowModel.TYPE_ASSIGNEE);
+			behaviourFilter.enableBehaviour(LecmWorkflowModel.TYPE_ASSIGNEE);
 		}
 		nodeService.setProperty(workingCopyAssigneesList, ContentModel.PROP_NAME, executionID);
-		return findNodesByAssociationRef(workingCopyAssigneesList, WorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, WorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
+		return findNodesByAssociationRef(workingCopyAssigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, LecmWorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
 	}
 }
