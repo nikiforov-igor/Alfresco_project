@@ -34,6 +34,8 @@
 		<property name="transactionService" ref="transactionService"/>
 		<property name="authService" ref="authenticationService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="dictionaryService" ref="serviceDictionary"/>
+        <property name="searchService" ref="searchService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -61,10 +63,13 @@
     <bean id="webscript.ru.it.lecm.arm.tree-menu.get"
           class="ru.it.lecm.arm.scripts.TreeMenuScript"
           parent="webscript">
+        <property name="service" ref="armWrapperService"/>
+    </bean>
+
+    <bean id="armWrapperService"
+          class="ru.it.lecm.arm.beans.ArmWrapperServiceImpl">
         <property name="nodeService" ref="nodeService" />
-        <property name="namespaceService" ref="namespaceService" />
-        <!--<property name="preferenceService" ref="preferenceService"/>-->
         <property name="service" ref="armService"/>
-        <!--<property name="authService" ref="authenticationService"/>-->
+        <property name="substitudeService" ref="substitudeService"/>
     </bean>
 </beans>

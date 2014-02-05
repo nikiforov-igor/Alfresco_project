@@ -4,6 +4,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.query.ArmBaseQuery;
 import ru.it.lecm.arm.beans.query.ArmDictionaryDynamicQuery;
@@ -21,7 +22,10 @@ import java.util.*;
  */
 public class ArmServiceImpl extends BaseBean implements ArmService {
 
-	@Override
+    private DictionaryBean dictionaryService;
+    private SearchService searchService;
+
+    @Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ARM_ROOT_ID);
 	}
@@ -137,7 +141,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				column.setTitle((String) nodeService.getProperty(ref, PROP_COLUMN_TITLE));
 				column.setField((String) nodeService.getProperty(ref, PROP_COLUMN_FIELD_NAME));
 				column.setFormatString((String) nodeService.getProperty(ref, PROP_COLUMN_FORMAT_STRING));
-				column.setSortable((Boolean) nodeService.getProperty(ref, PROP_COLUMN_SORTABLE));
+                Object sortableValue = nodeService.getProperty(ref, PROP_COLUMN_SORTABLE);
+                if (sortableValue != null) {
+                    column.setSortable((Boolean) sortableValue);
+                }
 				result.add(column);
 			}
 		}
@@ -172,10 +179,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				} else if (TYPE_DYNAMIC_QUERY.equals(queryType)) {
 					result = new ArmDynamicQuery();
 					((ArmDynamicQuery) result).setListQuery((String) nodeService.getProperty(query, PROP_LIST_QUERY));
+                    ((ArmDynamicQuery) result).setSearchService(searchService);
 				} else if (TYPE_DICTIONARY_DYNAMIC_QUERY.equals(queryType)) {
 					result = new ArmDictionaryDynamicQuery();
 					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_QUERY, DictionaryBean.TYPE_DICTIONARY, ASSOCIATION_TYPE.TARGET);
 					((ArmDictionaryDynamicQuery) result).setDictionary(dictionary);
+                    ((ArmDictionaryDynamicQuery) result).setDictionaryService(dictionaryService);
 				}
 				if (result != null) {
 					result.setSearchQuery((String) nodeService.getProperty(query, PROP_SEARCH_QUERY));
@@ -185,4 +194,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		}
 		return null;
 	}
+
+    public void setDictionaryService(DictionaryBean dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
 }

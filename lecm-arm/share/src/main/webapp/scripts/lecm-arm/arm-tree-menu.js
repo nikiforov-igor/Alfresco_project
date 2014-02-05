@@ -137,12 +137,9 @@
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
             if (node.data.nodeRef != null) {
-                sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
-                if (node.data.childType != null) {
-                    sUrl += "&childType=" + encodeURI(node.data.childType);
-                }
+                sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
             }
 
             var otree = this;
@@ -157,39 +154,29 @@
                                 nodeRef: oResults[nodeIndex].nodeRef,
                                 label: oResults[nodeIndex].label,
                                 isLeaf: oResults[nodeIndex].isLeaf,
-                                title: oResults[nodeIndex].title,
-                                redirect: oResults[nodeIndex].redirect,
                                 childType: oResults[nodeIndex].childType,
-                                actions: oResults[nodeIndex].actions
+                                filters: oResults[nodeIndex].filters,
+                                searchQuery: oResults[nodeIndex].searchQuery,
+                                counterValue: oResults[nodeIndex].counterValue,
+                                not_selectable: oResults[nodeIndex].not_selectable
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
                             curElement.labelElId = curElement.data.id;
                             curElement.id = curElement.data.id;
 
-                            var nodeId = otree._getTextNodeId(curElement);
+                            //var nodeId = otree._getTextNodeId(curElement);
 
-                            curElement.expanded = node.expanded && otree._isNodeExpanded(nodeId);
+                            //curElement.expanded = node.expanded && otree._isNodeExpanded(nodeId);
 
-                            if (otree.menuState.selected.length > 0) {
+                            if (curElement.data.counterValue != null && curElement.data.counterValue != "undefined") {
+                                curElement.label = curElement.label + " (" + curElement.data.counterValue + ")";
+                            }
+                            /*if (otree.menuState.selected.length > 0) {
                                 if (otree.menuState.selected == nodeId) {
                                     otree._treeNodeSelected(curElement)
                                 }
-                            }
-                            if (curElement.data.actions && curElement.data.actions != "") {
-                                otree.actions.push(
-                                    {
-                                        context: curElement.labelElId,
-                                        params: {
-                                            showDelay: 300,
-                                            hideDelay: 300,
-                                            type: curElement.data.actions,
-                                            curElem: curElement,
-                                            reportTree: otree
-                                        },
-                                        callback: null
-                                    });
-                            }
+                            }*/
                         }
                     }
 
@@ -210,7 +197,7 @@
                     node: node,
                     fnLoadComplete: fnLoadComplete
                 },
-                timeout: 10000
+                timeout: 20000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
