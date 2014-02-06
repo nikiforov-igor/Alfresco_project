@@ -78,12 +78,16 @@ public class ExecutionNotificationExecutor extends ActionExecuterAbstractBase {
 
         String notificationDescription = null;
         if (now.after(incomingExecutionDate)) {
-            notificationDescription = "Превышен срок исполнения по документу " + incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+            notificationDescription = "Превышен срок исполнения по документу ";
         } else if (now.equals(incomingExecutionDate) || (incomingExecutionDate.after(now) && (incomingExecutionDate.before(workCalendarDate) || incomingExecutionDate.equals(workCalendarDate)))) {
-            notificationDescription = "Приближается срок исполнения документа " + incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+            notificationDescription = "Приближается срок исполнения документа ";
         }
 
         if (notificationDescription != null) {
+            notificationDescription += incomingService.wrapperLink(nodeRef, nodeService.getProperty(nodeRef, DocumentService.PROP_PRESENT_STRING).toString(), BaseBean.DOCUMENT_LINK_URL);
+            if (nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE) != null) {
+                notificationDescription += ": " + nodeService.getProperty(nodeRef, DocumentService.PROP_TITLE).toString();
+            }
             Notification notification = new Notification();
             if (employeeList.size() > 0) {
                 notification.setRecipientEmployeeRefs(employeeList);
