@@ -1337,12 +1337,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
                     this.datagridMeta.recreate = false; // сброс флага
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                    if (!this.search || this.datagridMeta.recreate) {
                     // initialize Search
-                    this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
-                        showExtendSearchBlock:this.options.showExtendSearchBlock,
-                        maxSearchResults: this.options.maxResults,
-	                    searchFormId: this.options.advSearchFormId
-                    });
+                        this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+                            showExtendSearchBlock:this.options.showExtendSearchBlock,
+                            maxSearchResults: this.options.maxResults,
+	                        searchFormId: this.options.advSearchFormId
+                        });
+                    }
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;
