@@ -187,8 +187,22 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 				if (args[1].datagridMeta != null) {
 					this.node = args[1].datagridMeta;
 
+					this.toolbarButtons["defaultActive"].newRowButton.set("label", "Добавить " + this.getTypeName(this.node.itemType));
+					this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", "Удалить выбранный " + this.getTypeName(this.node.currentItemType));
+
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType == "lecm-arm:arm");
 				}
+			},
+
+			getTypeName: function (type) {
+				if (type == "lecm-arm:arm") {
+					return "АРМ";
+				} else if (type == "lecm-arm:accordion"){
+					return "аккордион";
+				} else if (type == "lecm-arm:node") {
+					return "узел";
+				}
+				return "элемент";
 			}
 		}, true);
 })();

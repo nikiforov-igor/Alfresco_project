@@ -267,6 +267,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 {
                     datagridMeta: {
                         itemType: node.data.childType,
+	                    currentItemType: node.data.type,
                         recreate: true,
                         nodeRef: node.data.nodeRef
                     },
