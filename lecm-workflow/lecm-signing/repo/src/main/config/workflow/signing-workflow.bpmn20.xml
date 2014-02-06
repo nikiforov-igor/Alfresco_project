@@ -68,7 +68,7 @@
 					<activiti:string><![CDATA[
 						var decisionsMap = execution.getVariable("decisionsMap");
 						var finalDecision = signingWorkflow.getFinalDecision(decisionsMap);
-						signingWorkflow.notifyFinalDecision(finalDecision, bpm_package)
+						signingWorkflow.notifySigningFinished(finalDecision, bpm_package);
 						execution.setVariable("isSigned", signingWorkflow.isSigned(finalDecision));
 					]]></activiti:string>
 				</activiti:field>

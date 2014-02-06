@@ -113,9 +113,10 @@
 		<module>lecm-incoming</module>
 		<module>lecm-outgoing</module>
 		<module>lecm-model-editor</module>
-        <module>lecm-eds-documents</module>
+		<module>lecm-eds-documents</module>
 		<module>lecm-reservation</module>
-        <module>lecm-arm</module>
+		<module>lecm-arm</module>
+		<module>lecm-workflow</module>
 	</modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

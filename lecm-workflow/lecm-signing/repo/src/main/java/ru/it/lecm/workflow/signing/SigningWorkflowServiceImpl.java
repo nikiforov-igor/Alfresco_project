@@ -15,7 +15,6 @@ import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -26,7 +25,6 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
@@ -66,33 +64,33 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	public void completeTask(NodeRef assignee, DelegateTask task) {
-        String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
-        Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+		String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
+		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
-        completeTask(assignee, task, decision, dueDate);
+		completeTask(assignee, task, decision, dueDate);
 	}
 
-    private void completeTask(NodeRef assignee, DelegateTask task, String decision, Date dueDate) {
+	private void completeTask(NodeRef assignee, DelegateTask task, String decision, Date dueDate) {
 		DelegateExecution execution = task.getExecution();
-        NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 
-        WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
-        taskDecision.setUserName(task.getAssignee());
-        taskDecision.setDecision(decision);
-        taskDecision.setStartDate(task.getCreateTime());
-        taskDecision.setDueDate(dueDate);
-        taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
+		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
+		taskDecision.setUserName(task.getAssignee());
+		taskDecision.setDecision(decision);
+		taskDecision.setStartDate(task.getCreateTime());
+		taskDecision.setDueDate(dueDate);
+		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
 
-        Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
-        decisionsMap = addDecision(decisionsMap, taskDecision);
-        execution.setVariable("decisionsMap", decisionsMap);
+		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
+		decisionsMap = addDecision(decisionsMap, taskDecision);
+		execution.setVariable("decisionsMap", decisionsMap);
 
 		execution.setVariable("taskDecision", decision);
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
 		grantReaderPermissions(employeeRef, bpmPackage);
-    }
+	}
 
 	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
 		Map<QName, Serializable> props = userTask.getProperties();
@@ -109,25 +107,15 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 			Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
 			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 				fakeProps.put(FAKE_PROP_COMINGSOON, "");
-				Notification notification = new Notification();
-				notification.setAuthor(AuthenticationUtil.getSystemUserName());
 				String template = "Напоминание: Вам необходимо подписать проект документа %s, срок подписания %s";
-				String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-				notification.setDescription(description);
-				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(recipients);
-				notificationsService.sendNotification(notification);
+				String message = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+				sendNotification(message, docInfo.getDocumentRef(), recipients);
 			}
 			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 				fakeProps.put(FAKE_PROP_OVERDUE, "");
-				Notification notification = new Notification();
-				notification.setAuthor(AuthenticationUtil.getSystemUserName());
 				String template = "Внимание: Вы не подписали документ %s, срок подписания %s";
-				String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-				notification.setDescription(description);
-				notification.setObjectRef(docInfo.getDocumentRef());
-				notification.setRecipientEmployeeRefs(recipients);
-				notificationsService.sendNotification(notification);
+				String message = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+				sendNotification(message, docInfo.getDocumentRef(), recipients);
 			}
 			if (!fakeProps.isEmpty()) {
 				workflowService.updateTask(userTask.getId(), fakeProps, null, null);
@@ -168,26 +156,16 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
 				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 					variableScope.setVariable("initiatorComingSoon", "");
-					Notification notification = new Notification();
-					notification.setAuthor(AuthenticationUtil.getSystemUserName());
 					String template = "Напоминание: Вы направили на подписание проект документа %s, срок подписания %s";
-					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-					notification.setDescription(description);
-					notification.setObjectRef(docInfo.getDocumentRef());
-					notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-					notificationsService.sendNotification(notification);
+					String message = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+					sendNotification(message, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 				}
 				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 					variableScope.setVariable("initiatorOverdue", "");
-					Notification notification = new Notification();
-					notification.setAuthor(AuthenticationUtil.getSystemUserName());
 					String people = getIncompleteAssignees(processInstanceId);
 					String template = "Внимание: проект документа %s не подписан в срок %s. Следующие сотрудники не приняли решение: %s";
-					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
-					notification.setDescription(description);
-					notification.setObjectRef(docInfo.getDocumentRef());
-					notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
-					notificationsService.sendNotification(notification);
+					String message = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
+					sendNotification(message, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 				}
 			}
 		} catch (Exception ex) {
@@ -196,12 +174,12 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	}
 
 	@Override
-	public void notifyFinalDecision(final String decisionCode, final NodeRef bpmPackage) {
-		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
+		return "";
+	}
 
-		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(documentService.getDocumentAuthor(docInfo.getDocumentRef()));
-
+	@Override
+	protected String getWorkflowFinishedMessage(String documentLink, String decisionCode) {
 		String decision;
 		if (DecisionResult.SIGNED.name().equals(decisionCode)) {
 			decision = "подписано";
@@ -213,24 +191,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 			decision = "";
 		}
 
-		String description = String.format("Принято решение о документе %s: \"%s\"", docInfo.getDocumentLink(), decision);
-
-		Notification notification = new Notification();
-		notification.setAuthor(AuthenticationUtil.getSystemUserName());
-		notification.setDescription(description);
-		notification.setObjectRef(docInfo.getDocumentRef());
-		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notification);
-	}
-
-	@Override
-	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-	}
-
-	@Override
-	protected String getWorkflowFinishedMessage(String documentLink, String decision) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return String.format("Принято решение о документе %s: \"%s\"", documentLink, decision);
 	}
 
 	@Override

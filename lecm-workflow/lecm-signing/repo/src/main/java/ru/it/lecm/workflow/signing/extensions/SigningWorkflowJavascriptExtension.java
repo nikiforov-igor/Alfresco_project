@@ -68,10 +68,8 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 		return finalDecision;
 	}
 
-	public void notifyFinalDecision(final String decision, final ActivitiScriptNode bpmPackage) {
-		//написать реализацию в SigningWorkflowService
-		//TODO:signingWorkflowService.notifyFinalDecision
-//		signingWorkflowService.notifyFinalDecision(decision, bpmPackage.getNodeRef());
+	public void notifySigningFinished(final String decision, final ActivitiScriptNode bpmPackage) {
+		signingWorkflowService.notifyWorkflowFinished(decision, bpmPackage.getNodeRef());
 	}
 
 	public boolean isSigned(final String finalDecision) {
