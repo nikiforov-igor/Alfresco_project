@@ -71,7 +71,7 @@
 				<appearance>
 					<field id="lecm-arm:fields-assoc">
 						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
-							<control-param name="nameSubstituteString">{lecm-arm:field-title}</control-param>
+							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
@@ -156,7 +156,7 @@
 				<appearance>
 					<field id="lecm-arm:fields-assoc">
 						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
-							<control-param name="nameSubstituteString">{lecm-arm:field-title}</control-param>
+							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>

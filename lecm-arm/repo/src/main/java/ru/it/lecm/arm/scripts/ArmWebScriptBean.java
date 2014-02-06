@@ -63,7 +63,7 @@ public class ArmWebScriptBean extends BaseWebScript {
 				String attrName = attr.getName().toPrefixString(namespaceService);
 				if (!attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
 					JSONObject propJson = new JSONObject();
-					propJson.put("title", attr.getTitle());
+					propJson.put("title", attr.getTitle() != null ? attr.getTitle() : "");
 					propJson.put("name", attrName);
 					if (attr instanceof PropertyDefinition) {
 						propJson.put("type", ((PropertyDefinition) attr).getDataType().getTitle());
