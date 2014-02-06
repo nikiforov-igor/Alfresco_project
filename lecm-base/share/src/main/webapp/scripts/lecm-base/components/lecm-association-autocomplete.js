@@ -141,7 +141,9 @@ LogicECM.module = LogicECM.module || {};
                     for (var i = 0, il = items.length; i < il; i++)
                     {
                         item = items[i];
-                        this.selectedItems[item.nodeRef] = item;
+                        if (item.type == this.options.itemType) {
+                            this.selectedItems[item.nodeRef] = item;
+                        }
                     }
 
                     if (!this.options.disabled) {
