@@ -51,9 +51,7 @@
                                 menu.menuState = YAHOO.lang.JSON.parse(menuPref);
                             } else {
                                 menu.menuState = {
-                                    expanded: "",
-                                    selected: "",
-                                    redirectUrl: "arm"
+                                    selected: ""
                                 };
                             }
                             menu._createTree();
@@ -76,7 +74,7 @@
                 return false;
             }.bind(this));
 
-            this.tree.subscribe('expand', function (node) {
+            /*this.tree.subscribe('expand', function (node) {
                 this.onExpand(node);
                 return true;
             }.bind(this));
@@ -84,7 +82,7 @@
             this.tree.subscribe('collapse', function (node) {
                 this.onCollapse(node);
                 return true;
-            }.bind(this));
+            }.bind(this));*/
         },
 
         onCollapse: function (oNode) {
@@ -160,25 +158,29 @@
                                 childType: oResults[nodeIndex].childType,
                                 filters: oResults[nodeIndex].filters,
                                 searchQuery: oResults[nodeIndex].searchQuery,
-                                counterValue: oResults[nodeIndex].counterValue
+                                counter: oResults[nodeIndex].counter,
+                                counterLimit: oResults[nodeIndex].counterLimit,
+                                counterDesc: oResults[nodeIndex].counterDesc
                             };
 
+                            // добавляем элемент в дерево
                             var curElement = new YAHOO.widget.TextNode(newNode, node);
                             curElement.labelElId = curElement.data.id;
                             curElement.id = curElement.data.id;
 
-                            //var nodeId = otree._getTextNodeId(curElement);
+                            //раскрываем, если этот узел был последним выбранным
+                            var nodeId = otree._getTextNodeId(curElement);
 
-                            //curElement.expanded = node.expanded && otree._isNodeExpanded(nodeId);
+                            curElement.expanded = node.expanded && otree._isNodeExpanded(node.data.id);
 
-                            if (curElement.data.counterValue != null && curElement.data.counterValue != "undefined") {
-                                curElement.label = curElement.label + " (" + curElement.data.counterValue + ")";
-                            }
-                            /*if (otree.menuState.selected.length > 0) {
+                            if (otree.menuState.selected.length > 0) {
                                 if (otree.menuState.selected == nodeId) {
                                     otree._treeNodeSelected(curElement)
                                 }
-                            }*/
+                            }
+
+                            //отрисовка счетчика, если нужно
+                            otree.drawCounterValue(curElement);
                         }
                     }
 
@@ -204,40 +206,73 @@
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
 
-        _treeNodeSelected: function (node) {
-            var nodeId = this._getTextNodeId(node);
-            if ((typeof this.selectedNode  === "undefined" || this.selectedNode === null)|| (this.menuState.selected != nodeId)) {
-                this.selectedNode = node;
-                this.tree.onEventToggleHighlight(node);
-
-                this.menuState.selected = nodeId;
-
-                if (node.data.type == "") {
-                    var success = null;
-                    if (node.data.filter) {
-                        var meta = this.modules.dataGrid.datagridMeta;
-                        meta.itemType = node.data.itemType;
-                        meta.nodeRef = node.data.nodeRef;
-                        meta.searchConfig = {
-                            filter: node.data.filter
-                        };
-                        Bubbling.fire("activeGridChanged",
-                            {
-                                datagridMeta: meta,
-                                bubblingLabel: "documents-arm"
-                            }
-                        );
+        getSearchQuery: function (node, buffer) {
+            if (node) {
+                var query = node.data.searchQuery;
+                if (query && query.length > 0) {
+                    if (!buffer) {
+                        buffer = [];
                     }
-                    //this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue(), {successCallback: success});
+                    buffer.push(query);
                 }
+                return this.getSearchQuery(node.parent, buffer);
+            } else {
+                var resultedQuery = "";
+
+                if (buffer) {
+                    buffer = buffer.reverse();
+
+                    for (var i = 0; i < buffer.length; i++) {
+                        var q = buffer[i];
+                        resultedQuery += "(" + q + ") AND "
+                    }
+                }
+
+                return resultedQuery.length > 4 ?
+                    resultedQuery.substring(0, resultedQuery.length - 4) : resultedQuery;
             }
         },
 
-        _isNodeExpanded: function (nodeId) {
-            if (nodeId && this.menuState.expanded.length > 0) {
-                return this._inArray(nodeId, this.menuState.expanded.split(","));
+        _treeNodeSelected: function (node) {
+            this.selectedNode = node;
+            this.tree.onEventToggleHighlight(node);
+
+            this.menuState.selected = this._getTextNodeId(node);
+
+            if (node) {
+                //получить поисковый запрос
+                var searchQuery = this.getSearchQuery(node);
+                if (searchQuery) {
+                    //отправить запрос в датагрид
+                    //отправить запрос на обновление фильтров
+                }
             }
-            return false;
+            //this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
+        },
+
+        drawCounterValue: function(node) {
+            if (node.data.counter != null && ("" + node.data.counter == "true")) {
+                var searchQuery = this.getSearchQuery(node);
+                if (node.data.counterLimit && node.data.counterLimit.length > 0) {
+                    searchQuery += " AND (" + node.data.counterLimit + ") ";
+                }
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/count/by-query?query=" + searchQuery;
+                var callback = {
+                    success: function (oResponse) {
+                        var oResults = eval("(" + oResponse.responseText + ")");
+                        if (oResults != null) {
+                            var label = node.getLabelEl();
+                            label.innerHTML = node.label + " (" + oResults + ")";
+                        }
+                    },
+                    failure: function (oResponse) {
+                        alert(oResponse);
+                        node.label = node.label + " (" + 0 + ")";
+                    },
+                    timeout: 5000
+                };
+                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+            }
         },
 
         _getTextNodeId: function (node, idsArray) {
@@ -255,6 +290,13 @@
 
         _buildPreferencesValue: function () {
             return YAHOO.lang.JSON.stringify(this.menuState);
+        },
+
+        _isNodeExpanded: function (nodeId) {
+            if (nodeId && this.menuState.selected.length > 0) {
+                return this.menuState.selected.indexOf(nodeId) >= 0;
+            }
+            return false;
         },
 
         _inArray: function (value, array) {

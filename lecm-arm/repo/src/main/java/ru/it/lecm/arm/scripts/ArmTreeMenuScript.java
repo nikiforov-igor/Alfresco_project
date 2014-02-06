@@ -33,7 +33,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     public static final String LABEL = "label";
     public static final String IS_LEAF = "isLeaf";
     private static final String FILTER = "filters";
-    private static final String COUNTER = "counterValue";
+    private static final String COUNTER = "counter";
+    private static final String COUNTER_LIMIT = "counterLimit";
+    private static final String COUNTER_DESC = "counterDesc";
     private static final String NOT_SELECTABLE = "not_selectable";
 
     private ArmWrapperServiceImpl service;
@@ -89,8 +91,10 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 result.put(SEARCH_QUERY, node.getNodeQuery().getSearchQuery());
             }
             result.put(NOT_SELECTABLE, service.isNodeSelectable(node));
-            if (node.getCounter() != null) {//TODO вычислить значение счетчика тут
-                result.put(COUNTER, 0L);
+            if (node.getCounter() != null) {
+                result.put(COUNTER, true);
+                result.put(COUNTER_DESC, node.getCounter().getDescription());
+                result.put(COUNTER_LIMIT, node.getCounter().getQuery());
             }
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);

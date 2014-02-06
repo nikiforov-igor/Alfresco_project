@@ -83,7 +83,7 @@
                     <@region id="documents-grid" scope="template" />
                 </div>
             </div>
-            <div id="alf-filters" class="yui-u first column1">
+            <div id="alf-filters" class="yui-u first column1 tree">
                 <div id="arm-tree" class="ygtv-highlight"></div>
                 <script type="text/javascript">//<![CDATA[
                 (function () {

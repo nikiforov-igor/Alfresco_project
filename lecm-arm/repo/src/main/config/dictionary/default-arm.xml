@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Настройки АРМ" type="lecm-dic:dictionary" path="/Business platform/LECM/Сервис АРМ">
+		<property name="cm:name">Настройки АРМ</property>
+		<property name="lecm-dic:attributeForShow">cm:name</property>
+		<property name="lecm-dic:type">lecm-arm:arm</property>
+		<property name="lecm-dic:active">true</property>
+		<property name="lecm-dic:plane">false</property>
+		<property name="lecm-dic:description">Настройки АРМ</property>
+        <items>
+            <item name="cm:АРМ СЭД 2" type="lecm-arm:arm">
+                <property name="cm:name">АРМ СЭД</property>
+                <property name="lecm-arm:code">SED</property>
+            </item>
+        </items>
+	</item>
+</items>
