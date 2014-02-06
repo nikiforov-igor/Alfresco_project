@@ -277,6 +277,13 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.signing</groupId>
+			<artifactId>signing-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
