@@ -91,7 +91,7 @@ LogicECM.module = LogicECM.module || {};
 
 			onChange: function() {
 				var el = Dom.get(this.id);
-				var selected = el.value == "true";
+				var selected = this.checkbox.checked;
 				if (this.options.disabledFieldsIfNotSelect != null) {
 					for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
 						var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
