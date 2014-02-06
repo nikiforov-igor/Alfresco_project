@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.arm.beans.ArmColumn;
 import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -63,8 +64,16 @@ public class ArmWebScriptBean extends BaseWebScript {
 
 		Collection<QName> availableTypes = new ArrayList<QName>();
 		NodeRef ref = new NodeRef(nodeRef);
+		List<String> existFields = new ArrayList<String>();
 		if (this.nodeService.exists(ref)) {
 			availableTypes = armService.getNodeTypesIncludeInherit(ref);
+
+			List<ArmColumn> exitColumns = armService.getNodeColumns(ref);
+			if (exitColumns != null) {
+				for (ArmColumn column: exitColumns) {
+					existFields.add(column.getField());
+				}
+			}
 		}
 		if (availableTypes.size() == 0) {
 			availableTypes = documentService.getDocumentSubTypes();
@@ -86,7 +95,7 @@ public class ArmWebScriptBean extends BaseWebScript {
 
 			for (ClassAttributeDefinition attr : attributes) {
 				String attrName = attr.getName().toPrefixString(namespaceService);
-				if (!attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
+				if (!existFields.contains(attrName) && !attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
 					JSONObject propJson = new JSONObject();
 					propJson.put("title", attr.getTitle() != null ? attr.getTitle() : "");
 					propJson.put("name", attrName);
