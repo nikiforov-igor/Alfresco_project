@@ -15,9 +15,7 @@ import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: AIvkin
@@ -93,5 +91,18 @@ public class ArmWebScriptBean extends BaseWebScript {
 				addTypeFields(subType, attributes);
 			}
 		}
+	}
+
+	public Map<String, String> getTypes() {
+		Map<String, String> results = new HashMap<String, String>();
+
+		Collection<QName> allTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+		if (allTypes != null) {
+			for (QName type: allTypes) {
+				TypeDefinition typeDef = dictionaryService.getType(type);
+				results.put(type.toPrefixString(namespaceService), typeDef.getTitle());
+			}
+		}
+		return results;
 	}
 }

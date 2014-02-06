@@ -69,6 +69,11 @@
 					<show id="lecm-arm:accordion-query-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:fields-assoc">
 						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
@@ -114,6 +119,11 @@
 					<show id="lecm-arm:business-roles-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:counter-enable">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
@@ -154,6 +164,11 @@
 					<show id="lecm-arm:node-query-assoc" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:fields-assoc">
 						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
@@ -189,6 +204,11 @@
 					<show id="lecm-arm:counter-description" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
 					<field id="lecm-arm:counter-enable">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
