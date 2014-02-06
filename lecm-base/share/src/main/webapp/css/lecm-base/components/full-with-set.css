@@ -2,6 +2,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field textarea {
 	width: 650px;
 	overflow: hidden;
+	overflow-y: auto;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field input[type=text]:not(.autocomplete-input),
