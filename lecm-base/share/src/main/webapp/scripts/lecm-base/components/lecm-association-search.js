@@ -165,7 +165,9 @@ LogicECM.module = LogicECM.module || {};
 									var column = columns[i];
 									if (column.dataType == "text") {
 										this.searchProperties[column.name] = column.name;
-									}
+									} else if (column.type == "association"){
+                                        this.searchProperties[column.name + "-text-content"] = column.name + "-text-content";
+                                    }
 								}
 							},
 							scope: this
