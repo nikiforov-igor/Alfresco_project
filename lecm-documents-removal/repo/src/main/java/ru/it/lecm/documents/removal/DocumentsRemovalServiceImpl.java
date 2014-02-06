@@ -144,7 +144,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 			activities.add(String.format("%s(%s)", workflow.getId(), workflow.getDefinition().getId()));
 		}
 		stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<String>(definitions), null, null);
-		logger.debug("All workflows %s for document %s are stopped", activities, documentRef);
+		logger.debug("All workflows {} for document {} are stopped", activities, documentRef);
 
 		//получаем все вложения отключаем их policy и удаляем
 		List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
@@ -208,7 +208,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		nodeService.deleteNode(documentRef);
 
 		//сообщаем об удалении в бизнес журнал
-		logger.debug("Document %s of type %s successfully purged", documentRef, documentType);
+		logger.debug("Document {} of type {} successfully purged", documentRef, documentType);
 		businessJournalService.sendRecord(record);
 	}
 }
