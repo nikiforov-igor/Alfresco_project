@@ -244,11 +244,11 @@ public class Utils implements ApplicationContextAware {
 	 * @return версия листа согласования, которую можно безбоязненно
 	 * использовать для нового листа
 	 */
-	public static String getResultListVersion(String version, NodeRef parentRef, String resultListName) {
+	public static String getResultListVersion(final String version, final NodeRef parentRef, final String resultListName) {
 		String result;
-		String approvalListName = String.format(resultListName, version);
-		NodeRef approvalListNode = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, approvalListName);
-		if (approvalListNode == null) {
+		String versionedResultListName = String.format(resultListName, version);
+		NodeRef resultListNode = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, versionedResultListName);
+		if (resultListNode == null) {
 			return version;
 		} else {
 			String[] splittedVersion = version.split("\\.");
@@ -267,7 +267,7 @@ public class Utils implements ApplicationContextAware {
 				logger.error("Error in version string: {}", version);
 				return null;
 			}
-			return getResultListVersion(result, parentRef, resultListName);
+			return getResultListVersion(result, parentRef, versionedResultListName);
 		}
 	}
 }

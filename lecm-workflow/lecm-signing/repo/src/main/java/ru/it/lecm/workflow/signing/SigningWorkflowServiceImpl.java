@@ -29,11 +29,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
-import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
-import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
-import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 
@@ -47,20 +44,10 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static Logger logger = LoggerFactory.getLogger(SigningWorkflowServiceImpl.class);
 
-	private WorkflowAssigneesListService assigneesListService;
-	private WorkflowResultListService resultListService;
-	private IWorkCalendar workCalendar;
+	private IWorkCalendar workCalendarService;
 
-	public void setAssigneesListService(WorkflowAssigneesListService assigneesListService) {
-		this.assigneesListService = assigneesListService;
-	}
-
-	public void setResultListService(WorkflowResultListService resultListService) {
-		this.resultListService = resultListService;
-	}
-
-	public void setWorkCalendar(IWorkCalendar workCalendar) {
-		this.workCalendar = workCalendar;
+	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+		this.workCalendarService = workCalendarService;
 	}
 
 	@Override
@@ -114,7 +101,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
 		List<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employee);
-		Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
+		Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(employee, dueDate, -1);
 		Date currentDate = new Date();
 		if (comingSoonDate != null) {
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
@@ -174,7 +161,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 			recipients.add(docInfo.getInitiatorRef());
 			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 			Date dueDate = workflowInstance.getDueDate();
-			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
+			Date comingSoonDate = workCalendarService.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
 			Date currentDate = new Date();
 			if (comingSoonDate != null) {
 				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);

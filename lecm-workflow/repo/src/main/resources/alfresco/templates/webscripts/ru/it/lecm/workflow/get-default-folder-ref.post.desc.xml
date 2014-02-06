@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <webscript>
-    <shortname>Approval Get Default List NodeRef</shortname>
+    <shortname>Workflow Get Default List NodeRef</shortname>
     <description></description>
     <url>/lecm/workflow/getDefaultAssigneesList</url>
     <format default="json"/>

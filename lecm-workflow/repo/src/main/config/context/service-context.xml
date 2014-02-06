@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
@@ -18,8 +19,8 @@
 		  p:folders-ref="lecm.workflow.folders"/>
 
 	<util:list id="workflow.models">
-		<value>alfresco/module/${artifactId}/models/lecm-workflow-model</value>
-		<value>alfresco/module/${artifactId}/models/lecm-workflow-result</value>
+		<value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-workflow-result.xml</value>
 	</util:list>
 	<bean id="workflow.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"

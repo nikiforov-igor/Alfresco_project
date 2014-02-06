@@ -17,6 +17,26 @@
 		<namespace uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PARALLEL</value> <!-- Параллельный процесс -->
+					<value>SEQUENTIAL</value>  <!-- Последовательный процесс -->
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-workflow:workflow-type-constraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>APPROVAL</value> <!-- Согласоване -->
+					<value>REVIEW</value>  <!-- Ознакомление -->
+					<value>SIGNING</value> <!-- Подписание -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<!-- Список участников бизнес-процесса -->
 		<type name="lecm-workflow:workflow-assignees-list">
@@ -30,7 +50,7 @@
 						<many>true</many>
 					</source>
 					<target>
-						<class>cm:object</class>
+						<class>cm:cmobject</class>
 						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
@@ -153,27 +173,6 @@
 				</property>
 			</properties>
 		</aspect>
-
 	</aspects>
-
-	<constraints>
-		<constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>PARALLEL</value> <!-- Параллельный процесс -->
-					<value>SEQUENTIAL</value>  <!-- Последовательный процесс -->
-				</list>
-			</parameter>
-		</constraint>
-		<constraint name="lecm-workflow:workflow-type-constraint" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>APPROVAL</value> <!-- Согласоване -->
-					<value>FAMILIARIZATION</value>  <!-- Ознакомление -->
-					<value>SIGNING</value> <!-- Подписание -->
-				</list>
-			</parameter>
-		</constraint>
-	</constraints>
 
 </model>

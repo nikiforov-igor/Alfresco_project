@@ -8,7 +8,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * @author vlevin
  *
  * {
- * "approvalType": "seq" || "par",
+ * "workflowType": "seq" || "par",
  * "listName": "имя листа согласующих",
  * "listItems": [ {
  * "order": 1,
@@ -46,5 +46,5 @@ public class AssigneesListItem {
 		this.employeeRef = employeeRef;
 	}
 
-	
+
 }

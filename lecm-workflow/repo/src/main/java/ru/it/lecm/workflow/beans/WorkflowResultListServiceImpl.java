@@ -60,21 +60,21 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 	}
 
 	@Override
-	public NodeRef createResultItem(NodeRef approvalListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType) {
-		NodeRef approvalListItemRef;
+	public NodeRef createResultItem(NodeRef resultListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType) {
+		NodeRef resultListItemRef;
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_TITLE, itemTitle);
 		properties.put(ContentModel.PROP_NAME, itemTitle);
 		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_DUE_DATE, dueDate);
 
 		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, itemTitle);
-		approvalListItemRef = nodeService.createNode(approvalListRef, ContentModel.ASSOC_CONTAINS, assocQName, resultItemType, properties).getChildRef();
+		resultListItemRef = nodeService.createNode(resultListRef, ContentModel.ASSOC_CONTAINS, assocQName, resultItemType, properties).getChildRef();
 		if (employeeRef != null) {
 			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
 			targetRefs.add(employeeRef);
-			nodeService.setAssociations(approvalListItemRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE, targetRefs);
+			nodeService.setAssociations(resultListItemRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE, targetRefs);
 		}
-		return approvalListItemRef;
+		return resultListItemRef;
 	}
 
 	@Override

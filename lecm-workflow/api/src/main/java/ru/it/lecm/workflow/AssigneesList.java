@@ -8,7 +8,7 @@ import java.util.List;
  * @author vlevin
  *
  * {
- * "approvalType": "seq" || "par",
+ * "workflowType": "seq" || "par",
  * "listName": "имя листа согласующих",
  * "listItems": [ {
  * "order": 1,

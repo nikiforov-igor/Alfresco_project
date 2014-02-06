@@ -38,14 +38,18 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.activiti</groupId>
 			<artifactId>activiti-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>com.springsource.org.joda.time</artifactId>
+			<version>1.6.2</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
@@ -53,18 +57,11 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
-
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.approval</groupId>
-			<artifactId>approval-repo-api</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
@@ -79,10 +76,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.calendar</groupId>
 			<artifactId>lecm-calendar-repo-api</artifactId>
 			<version>${project.version}</version>
@@ -93,12 +86,6 @@
 			<artifactId>lecm-security-api</artifactId>
 			<version>${project.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.joda</groupId>
-			<artifactId>com.springsource.org.joda.time</artifactId>
-			<version>1.6.2</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>
