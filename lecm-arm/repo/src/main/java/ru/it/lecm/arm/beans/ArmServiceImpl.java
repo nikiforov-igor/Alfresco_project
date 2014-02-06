@@ -121,7 +121,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				}
 			}
 			if (results.size() == 0 && isArmNode(node)) {
-				getNodeTypesIncludeInherit(nodeService.getPrimaryParent(node).getParentRef());
+				results = getNodeTypesIncludeInherit(nodeService.getPrimaryParent(node).getParentRef());
 			}
 		}
 		return results;
