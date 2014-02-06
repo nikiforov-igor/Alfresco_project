@@ -38,7 +38,7 @@
 			<div id="${controlId}-create-menu"></div>
 
 			<#if !disabled>
-				<div id="${addFieldsFormId}" class="yui-panel">
+				<div id="${addFieldsFormId}" class="yui-panel" style="visibility: hidden">
 					<div id="${addFieldsFormId}-head" class="hd">${msg("logicecm.view")}</div>
 					<div id="${addFieldsFormId}-body" class="bd">
 						<div id="${addFieldsFormId}-content" style="height: 350px;	overflow-y: auto;"></div>
