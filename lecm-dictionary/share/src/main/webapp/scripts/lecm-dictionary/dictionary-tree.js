@@ -121,7 +121,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 tree.onEventToggleHighlight(event);
                 return false;
             }.bind(this));
-            tree.subscribe('dblClickEvent', this._editNode.bind(this));
+//            tree.subscribe('dblClickEvent', this._editNode.bind(this));
             tree.render();
 
             if (newRootNode != null) {
