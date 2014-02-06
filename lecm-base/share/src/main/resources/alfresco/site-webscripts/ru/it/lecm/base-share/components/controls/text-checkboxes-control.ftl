@@ -17,6 +17,10 @@
 				<#if field.control.params.dataSource??>
 					dataSource: "${field.control.params.dataSource}",
 				</#if>
+				itemId: "${form.arguments.itemId}",
+				<#if form.destination??>
+					destination: "${form.destination}",
+				</#if>
 				currentValues: "${field.value!''}".split(",")
 			});
 })();

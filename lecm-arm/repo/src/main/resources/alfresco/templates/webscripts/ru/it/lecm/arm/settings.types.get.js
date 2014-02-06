@@ -1,1 +1,1 @@
-model.results = arm.getTypes();
+model.results = arm.getTypes(args["itemId"], args["destination"]);

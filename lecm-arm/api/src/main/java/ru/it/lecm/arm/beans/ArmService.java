@@ -5,6 +5,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.query.ArmBaseQuery;
 import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -91,6 +92,13 @@ public interface ArmService {
 	 * @return Список типов
 	 */
 	public List<String> getNodeTypes(NodeRef node);
+
+	/**
+	 * Получение типов для узла (используя унаследованные типы)
+	 * @param node Узел
+	 * @return Список типов
+	 */
+	public Collection<QName> getNodeTypesIncludeInherit(NodeRef node);
 
 	/**
 	 * Получение фильтров для узла

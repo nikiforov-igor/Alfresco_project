@@ -28,7 +28,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				dataSource: null,
 
-				currentValues: null
+				currentValues: null,
+
+				itemId: null,
+
+				destination: null
 			},
 
 			onReady: function () {
@@ -40,9 +44,13 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 			loadValues: function() {
 				var me = this;
+				var url = Alfresco.constants.PROXY_URI + this.options.dataSource + "?itemId=" + encodeURIComponent(this.options.itemId);
+				if (this.options.destination != null) {
+					url += "&destination=" + encodeURIComponent(this.options.destination);
+				}
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.PROXY_URI + this.options.dataSource,
+						url: url,
 						successCallback: {
 							fn: function (response) {
 								if (response.json != null) {

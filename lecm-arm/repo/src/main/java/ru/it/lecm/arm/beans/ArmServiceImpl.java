@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.query.ArmBaseQuery;
 import ru.it.lecm.arm.beans.query.ArmDictionaryDynamicQuery;
@@ -12,6 +13,7 @@ import ru.it.lecm.arm.beans.query.ArmDynamicQuery;
 import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.*;
 
@@ -24,6 +26,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     private DictionaryBean dictionaryService;
     private SearchService searchService;
+	private NamespaceService namespaceService;
 
     @Override
 	public NodeRef getServiceRootFolder() {
@@ -104,6 +107,24 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public Collection<QName> getNodeTypesIncludeInherit(NodeRef node) {
+		Collection<QName> results = new ArrayList<QName>();
+		if (isArmNode(node) || isArmAccordion(node)) {
+			String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
+			if (types != null && types.length() > 0) {
+				List<String> stringTypes = Arrays.asList(types.split(","));
+				for (String type: stringTypes) {
+					results.add(QName.createQName(type, namespaceService));
+				}
+			}
+			if (results.size() == 0 && isArmNode(node)) {
+				getNodeTypesIncludeInherit(nodeService.getPrimaryParent(node).getParentRef());
+			}
+		}
+		return results;
 	}
 
 	@Override
@@ -202,4 +223,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
     }
+
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
 }

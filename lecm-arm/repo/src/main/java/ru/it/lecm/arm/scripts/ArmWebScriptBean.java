@@ -3,6 +3,7 @@ package ru.it.lecm.arm.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
@@ -28,6 +29,8 @@ public class ArmWebScriptBean extends BaseWebScript {
 	private ArmService armService;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
+	private NodeService nodeService;
+	private DocumentService documentService;
 
 	public void setArmService(ArmService armService) {
 		this.armService = armService;
@@ -39,6 +42,14 @@ public class ArmWebScriptBean extends BaseWebScript {
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	public ScriptNode getDictionaryArmSettings() {
@@ -93,14 +104,26 @@ public class ArmWebScriptBean extends BaseWebScript {
 		}
 	}
 
-	public Map<String, String> getTypes() {
+	public Map<String, String> getTypes(String itemId, String destination) {
 		Map<String, String> results = new HashMap<String, String>();
 
-		Collection<QName> allTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-		if (allTypes != null) {
-			for (QName type: allTypes) {
-				TypeDefinition typeDef = dictionaryService.getType(type);
-				results.put(type.toPrefixString(namespaceService), typeDef.getTitle());
+		NodeRef ref = null;
+		if (itemId != null && NodeRef.isNodeRef(itemId)) {
+			ref = nodeService.getPrimaryParent(new NodeRef(itemId)).getParentRef();
+		} else if (destination != null && NodeRef.isNodeRef(destination)) {
+			ref = new NodeRef(destination);
+		}
+
+		if (ref != null) {
+			Collection<QName> types = armService.getNodeTypesIncludeInherit(ref);
+			if (types == null || types.size() == 0) {
+				types = documentService.getDocumentSubTypes();
+			}
+			if (types != null) {
+				for (QName type: types) {
+					TypeDefinition typeDef = dictionaryService.getType(type);
+					results.put(type.toPrefixString(namespaceService), typeDef.getTitle());
+				}
 			}
 		}
 		return results;

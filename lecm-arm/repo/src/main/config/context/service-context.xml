@@ -36,6 +36,7 @@
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="dictionaryService" ref="serviceDictionary"/>
         <property name="searchService" ref="searchService"/>
+        <property name="namespaceService" ref="namespaceService"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -45,19 +46,15 @@
 	</bean>
 
 	<bean id="armScript" parent="baseScript" class="ru.it.lecm.arm.scripts.ArmWebScriptBean"
-	      depends-on="serviceDictionary">
+	      depends-on="serviceDictionary, armService">
 		<property name="extensionName">
 			<value>arm</value>
 		</property>
-		<property name="armService">
-			<ref bean="armService"/>
-		</property>
-		<property name="dictionaryService">
-			<ref bean="dictionaryService"/>
-		</property>
-		<property name="namespaceService">
-			<ref bean="namespaceService"/>
-		</property>
+		<property name="armService" ref="armService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="namespaceService" ref="namespaceService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="documentService" ref="documentService"/>
 	</bean>
 
     <bean id="webscript.ru.it.lecm.arm.tree-menu.get"
