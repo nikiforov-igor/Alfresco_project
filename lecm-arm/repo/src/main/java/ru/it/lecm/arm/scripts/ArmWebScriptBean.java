@@ -61,14 +61,30 @@ public class ArmWebScriptBean extends BaseWebScript {
 	public JSONObject getAvailableNodeFields(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
+		Collection<QName> availableTypes = new ArrayList<QName>();
+		NodeRef ref = new NodeRef(nodeRef);
+		if (this.nodeService.exists(ref)) {
+			availableTypes = armService.getNodeTypesIncludeInherit(ref);
+		}
+		if (availableTypes.size() == 0) {
+			availableTypes = documentService.getDocumentSubTypes();
+		}
+		Set<QName> listAvailableSet = new LinkedHashSet<QName>();
+		listAvailableSet.add(DocumentService.TYPE_BASE_DOCUMENT);
+		listAvailableSet.addAll(availableTypes);
+
 		Set<ClassAttributeDefinition> attributes = new LinkedHashSet<ClassAttributeDefinition>();
-		addTypeFields(DocumentService.TYPE_BASE_DOCUMENT, attributes);
+		for (QName typeQName : listAvailableSet) {
+			TypeDefinition type = dictionaryService.getType(typeQName);
+			attributes.addAll(type.getProperties().values());
+			attributes.addAll(type.getAssociations().values());
+		}
 
 		JSONObject result = new JSONObject();
 		try {
 			JSONArray fieldsJson = new JSONArray();
 
-			for (ClassAttributeDefinition attr: attributes) {
+			for (ClassAttributeDefinition attr : attributes) {
 				String attrName = attr.getName().toPrefixString(namespaceService);
 				if (!attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
 					JSONObject propJson = new JSONObject();
@@ -91,19 +107,6 @@ public class ArmWebScriptBean extends BaseWebScript {
 		return result;
 	}
 
-	private void addTypeFields(QName typeQName, Set<ClassAttributeDefinition> attributes) {
-		TypeDefinition type = dictionaryService.getType(typeQName);
-		attributes.addAll(type.getProperties().values());
-		attributes.addAll(type.getAssociations().values());
-
-		Collection<QName> subTypes = dictionaryService.getSubTypes(typeQName, false);
-		if (subTypes != null) {
-			for (QName subType: subTypes) {
-				addTypeFields(subType, attributes);
-			}
-		}
-	}
-
 	public Map<String, String> getTypes(String itemId, String destination) {
 		Map<String, String> results = new HashMap<String, String>();
 
@@ -120,7 +123,7 @@ public class ArmWebScriptBean extends BaseWebScript {
 				types = documentService.getDocumentSubTypes();
 			}
 			if (types != null) {
-				for (QName type: types) {
+				for (QName type : types) {
 					TypeDefinition typeDef = dictionaryService.getType(type);
 					results.put(type.toPrefixString(namespaceService), typeDef.getTitle());
 				}
