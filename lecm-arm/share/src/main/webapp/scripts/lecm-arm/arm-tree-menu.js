@@ -140,8 +140,10 @@
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
             if (node.data.nodeRef != null) {
                 sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
+                if (node.data.armNodeRef != null) {
+                    sUrl += "&armNodeRef=" + encodeURI(node.data.armNodeRef);
+                }
             }
-
             var otree = this;
             var callback = {
                 success: function (oResponse) {
@@ -152,13 +154,13 @@
                             var newNode = {
                                 id: oResults[nodeIndex].id,
                                 nodeRef: oResults[nodeIndex].nodeRef,
+                                armNodeRef: oResults[nodeIndex].armNodeRef,
                                 label: oResults[nodeIndex].label,
                                 isLeaf: oResults[nodeIndex].isLeaf,
                                 childType: oResults[nodeIndex].childType,
                                 filters: oResults[nodeIndex].filters,
                                 searchQuery: oResults[nodeIndex].searchQuery,
-                                counterValue: oResults[nodeIndex].counterValue,
-                                not_selectable: oResults[nodeIndex].not_selectable
+                                counterValue: oResults[nodeIndex].counterValue
                             };
 
                             var curElement = new YAHOO.widget.TextNode(newNode, node);

@@ -5,7 +5,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.arm.beans.query.ArmBaseQuery;
+import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.dictionary.beans.DictionaryBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private NodeService nodeService;
     private ArmServiceImpl service;
     private SubstitudeBean substitudeService;
+    private DictionaryBean dictionaryService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -31,6 +34,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public void setSubstitudeService(SubstitudeBean substitudeService) {
         this.substitudeService = substitudeService;
+    }
+
+    public DictionaryBean getDictionaryService() {
+        return dictionaryService;
+    }
+
+    public void setDictionaryService(DictionaryBean dictionaryService) {
+        this.dictionaryService = dictionaryService;
     }
 
     public List<ArmNode> getAccordionsByArmCode(String armCode) {
@@ -47,36 +58,50 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     @Override
-    public List<ArmNode> getChildNodes(NodeRef node) {
+    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef) {
         List<ArmNode> result = new ArrayList<ArmNode>();
 
-        // 1. Дочерние статические элементы
-        List<NodeRef> staticChilds = service.getChildNodes(node);
-        for (NodeRef staticChild : staticChilds) {
-            ArmNode stNode = wrapArmNodeAsObject(staticChild);
-            if (stNode.getNodeQuery() != null) {
-                List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
-                for (ArmNode queriedChild : queriedChilds) {
-                    result.add(queriedChild);
-                }
-            } else {
-                result.add(wrapArmNodeAsObject(staticChild));
+        ArmNode parent = wrapArmNodeAsObject(parentRef);
+
+        // 1. Дочерние статические элементы из настроек ARM
+        NodeRef parentFromArm = null;
+        if (isArmElement(node)) {
+            parentFromArm = node;
+        } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
+            if (service.isArmNode(parent.getNodeRef()) || service.isArmAccordion(parent.getNodeRef())) {
+                parentFromArm = parent.getNodeRef();
             }
-            //result.add(wrapArmNodeAsObject(staticChild));
         }
-        //2. Элементы согласно запросу
-        /*ArmNode armNode = wrapArmNodeAsObject(node);
-        if (armNode.getNodeQuery() != null) {
-            List<ArmNode> queriedChilds = armNode.getNodeQuery().build(this, armNode);
-            for (ArmNode queriedChild : queriedChilds) {
-                result.add(queriedChild);
+
+        if (parentFromArm != null) {
+            List<NodeRef> staticChilds = service.getChildNodes(parentFromArm); // узлы АРМа
+            for (NodeRef staticChild : staticChilds) {
+                ArmNode stNode = wrapArmNodeAsObject(staticChild);
+                if (stNode.getNodeQuery() != null) {
+                    List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
+                    for (ArmNode queriedChild : queriedChilds) {
+                        result.add(queriedChild);
+                    }
+                } else {
+                    result.add(wrapArmNodeAsObject(staticChild));
+                }
             }
-        }*/
+        }
+
+        //2. Добавить реальных дочерних узлов для иерархического справочника!
+        // в остальных случаях у нас не может быть дочерних элементов
+        if (!isArmElement(node) && dictionaryService.isDictionaryValue(node)){
+            List<NodeRef> dicChilds = dictionaryService.getChildren(node);
+            for (NodeRef dicChild : dicChilds) {
+                result.add(wrapAnyNodeAsObject(dicChild, parent));
+            }
+        }
         return result;
     }
 
     public boolean hasChildNodes(ArmNode node) {
-        return !service.getChildNodes(node.getNodeRef()).isEmpty() || (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
+        return !getChildNodes(node.getNodeRef(), node.getArmNodeRef()).isEmpty() ||
+                (node.getNodeQuery() != null && (!(node.getNodeQuery() instanceof ArmStaticQuery) && !node.getNodeQuery().build(this, node).isEmpty()));
     }
 
     @Override
@@ -89,6 +114,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
+        node.setArmNodeRef(nodeRef); // для узла Арм - данное поле дублируется. как так узел Арм - реален
         node.setColumns(service.getNodeColumns(nodeRef));
         node.setAvaiableFilters(service.getNodeFilters(nodeRef));
         node.setCounter(service.getNodeCounter(nodeRef));
@@ -108,6 +134,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle(substitudeService.getObjectDescription(nodeRef));
         node.setNodeRef(nodeRef);
+        node.setArmNodeRef(parentNode.getNodeRef());
         node.setColumns(parentNode.getColumns());
         node.setAvaiableFilters(parentNode.getAvaiableFilters());
         node.setCounter(parentNode.getCounter());
@@ -125,5 +152,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     public String formatQuery(String templateQuery, NodeRef node) {
         //TODO метод для формирования запроса по шаблону
         return templateQuery;
+    }
+
+    private boolean isArmElement(NodeRef node) {
+        return service.isArmNode(node) || service.isArmAccordion(node);
     }
 }

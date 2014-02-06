@@ -14,11 +14,13 @@ import java.util.List;
  */
 public class ArmNode {
     private NodeRef nodeRef;
+    private NodeRef armNodeRef;
     private String title;
     private List<String> types;
     private List<ArmColumn> columns;
     private List<String> avaiableFilters;
     private ArmCounter counter;
+    private boolean hasChilds = false;
 
     private ArmBaseQuery nodeQuery;
 
@@ -91,5 +93,21 @@ public class ArmNode {
 
     public void setNodeQuery(ArmBaseQuery searchQuery) {
         this.nodeQuery = searchQuery;
+    }
+
+    public NodeRef getArmNodeRef() {
+        return armNodeRef;
+    }
+
+    public void setArmNodeRef(NodeRef armNodeRef) {
+        this.armNodeRef = armNodeRef;
+    }
+
+    public boolean isHasChilds() {
+        return hasChilds;
+    }
+
+    public void setHasChilds(boolean hasChilds) {
+        this.hasChilds = hasChilds;
     }
 }

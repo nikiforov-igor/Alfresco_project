@@ -28,6 +28,7 @@ public class ArmDictionaryDynamicQuery extends ArmBaseQuery {
 
     @Override
     public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+        //запрос по справочнику - вернет список корневых объектов
         List<ArmNode> nodes = new ArrayList<ArmNode>();
         //шаблонный запрос из верхнего узла
         List<NodeRef> childrens = dictionaryService.getChildren(getDictionary());
@@ -43,7 +44,7 @@ public class ArmDictionaryDynamicQuery extends ArmBaseQuery {
     public ArmBaseQuery getDuplicate() {
         ArmDictionaryDynamicQuery query =  new ArmDictionaryDynamicQuery();
         query.setDictionaryService(dictionaryService);
-        query.setDictionary(dictionary);
+        //query.setDictionary(dictionary);
         query.setSearchQuery(getSearchQuery());
 
         return query;

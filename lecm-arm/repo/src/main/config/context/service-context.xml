@@ -61,7 +61,7 @@
 	</bean>
 
     <bean id="webscript.ru.it.lecm.arm.tree-menu.get"
-          class="ru.it.lecm.arm.scripts.TreeMenuScript"
+          class="ru.it.lecm.arm.scripts.ArmTreeMenuScript"
           parent="webscript">
         <property name="service" ref="armWrapperService"/>
     </bean>
@@ -71,5 +71,6 @@
         <property name="nodeService" ref="nodeService" />
         <property name="service" ref="armService"/>
         <property name="substitudeService" ref="substitudeService"/>
+        <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 </beans>

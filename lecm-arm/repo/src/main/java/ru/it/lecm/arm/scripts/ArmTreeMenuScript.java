@@ -21,10 +21,11 @@ import java.util.List;
  * Date: 10.12.13
  * Time: 12:49
  */
-public class TreeMenuScript extends AbstractWebScript {
-    final private static Logger logger = LoggerFactory.getLogger(TreeMenuScript.class);
+public class ArmTreeMenuScript extends AbstractWebScript {
+    final private static Logger logger = LoggerFactory.getLogger(ArmTreeMenuScript.class);
 
     public static final String NODE_REF = "nodeRef";
+    public static final String ARM_NODE_REF = "armNodeRef";
     public static final String SEARCH_QUERY = "searchQuery";
     public static final String ARM_CODE = "armCode";
     public static final String ID = "id";
@@ -46,6 +47,7 @@ public class TreeMenuScript extends AbstractWebScript {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
 
         String nodeRef = req.getParameter(NODE_REF);
+        String armNodeRef = req.getParameter(ARM_NODE_REF);
         String armCode = req.getParameter(ARM_CODE);
 
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
@@ -56,7 +58,7 @@ public class TreeMenuScript extends AbstractWebScript {
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
-                List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef));
+                List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 for (ArmNode child : childs) {
                     nodes.add(toJSON(child));
                 }
@@ -76,6 +78,9 @@ public class TreeMenuScript extends AbstractWebScript {
         try {
             result.put(ID, node.getNodeRef().getId());
             result.put(NODE_REF, node.getNodeRef().toString());
+            if (node.getArmNodeRef() != null) {
+                result.put(ARM_NODE_REF, node.getArmNodeRef().toString());
+            }
             result.put(CHILD_TYPE, listToString(node.getTypes()));
             result.put(LABEL, node.getTitle());
             result.put(IS_LEAF, !service.hasChildNodes(node));

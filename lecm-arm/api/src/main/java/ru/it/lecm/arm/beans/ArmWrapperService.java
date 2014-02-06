@@ -21,7 +21,7 @@ public interface ArmWrapperService {
     /**
      * возвращает списко объектов Аккордеон по коду АРма
      */
-    public List<ArmNode> getChildNodes(NodeRef armNode);
+    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
 
     /**
      * проверяет, есть ли у узла дочерние элементы

@@ -103,7 +103,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
                 for (ChildAssociationRef child : children) {
                     NodeRef childRef = child.getChildRef();
-                    if (!isArchive(childRef)) {
+                    if (!isArchive(childRef) && isDictionaryValue(childRef)) {
                         activeChildren.add(childRef);
                     }
                 }
