@@ -38,8 +38,6 @@ import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
  */
 public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implements SigningWorkflowService {
 
-	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
-	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 	private final static Logger logger = LoggerFactory.getLogger(SigningWorkflowServiceImpl.class);
 
 	private IWorkCalendar workCalendarService;
@@ -192,11 +190,6 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		}
 
 		return String.format("Принято решение о документе %s: \"%s\"", documentLink, decision);
-	}
-
-	@Override
-	protected void onTaskReassigned(NodeRef oldResultListItemRef, NodeRef newResultItemRef) {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 	}
 
 	@Override

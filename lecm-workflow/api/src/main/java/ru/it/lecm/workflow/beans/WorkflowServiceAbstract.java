@@ -12,6 +12,8 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -36,6 +38,9 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	private final static Logger logger = LoggerFactory.getLogger(WorkflowServiceAbstract.class);
 	public final static String RESULT_ITEM_FORMAT = "Участник %s";
 	protected final static String DATE_FORMAT = "dd.MM.yyyy";
+
+	protected final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
+	protected final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
 
 	protected OrgstructureBean orgstructureService;
 	protected LecmPermissionService lecmPermissionService;
@@ -225,6 +230,4 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	abstract protected String getWorkflowStartedMessage(String documentLink, Date dueDate);
 
 	abstract protected String getWorkflowFinishedMessage(String documentLink, String decision);
-
-	abstract protected void onTaskReassigned(NodeRef oldResultListItemRef, NodeRef newResultItemRef);
 }
