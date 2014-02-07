@@ -56,18 +56,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.dictionary</groupId>
-			<artifactId>dictionary-repo-api</artifactId>
-			<version>${platform.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
+		</dependency>		<dependency>
 			<groupId>ru.it.lecm.regnumbers</groupId>
 			<artifactId>lecm-regnumbers-repo-api</artifactId>
 			<version>${platform.version}</version>

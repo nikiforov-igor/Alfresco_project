@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xmlns:sec="http://cxf.apache.org/configuration/security"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -11,13 +11,13 @@
 						   http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd">
 
 
-    <bean id="reservation.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-reservation-aspects-model.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="reservation.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-reservation-aspects-model.xml</value>
+			</list>
+		</property>
+	</bean>
 
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
@@ -42,20 +42,17 @@
 		</property>
 	</bean>
 
-    <bean id="reservationWorkflowScript" parent="baseScript" class="ru.it.lecm.reservation.scripts.ReservationWorkflowWebScriptBean"
-          depends-on="documentService">
-        <property name="extensionName">
-            <value>reservationWorkflowScript</value>
-        </property>
-        <property name="documentService" ref="documentService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="dictionaryService" ref="dictionaryService"/>
+	<bean id="reservationWorkflowScript" parent="baseScript"
+		  class="ru.it.lecm.reservation.scripts.ReservationWorkflowWebScriptBean"
+		  depends-on="documentService">
+		<property name="extensionName" value="reservationWorkflowScript"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
 		<property name="regNumbersService" ref="regNumbersService"/>
-        <property name="notificationsService" ref="notificationsService"/>
-        <property name="businessJournalService" ref ="businessJournalService"/>
-    </bean>
+		<property name="notificationsService" ref="notificationsService"/>
+		<property name="businessJournalService" ref ="businessJournalService"/>
+	</bean>
 
 	<bean id="reservation.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap">
 		<property name="createOrUpdateDictionaries">
