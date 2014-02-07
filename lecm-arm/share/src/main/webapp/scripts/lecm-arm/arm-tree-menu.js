@@ -155,7 +155,8 @@
                                 armNodeRef: oResults[nodeIndex].armNodeRef,
                                 label: oResults[nodeIndex].label,
                                 isLeaf: oResults[nodeIndex].isLeaf,
-                                childType: oResults[nodeIndex].childType,
+                                nodeType: oResults[nodeIndex].nodeType,
+                                types: oResults[nodeIndex].types,
                                 filters: oResults[nodeIndex].filters,
                                 searchQuery: oResults[nodeIndex].searchQuery,
                                 counter: oResults[nodeIndex].counter,
@@ -206,30 +207,65 @@
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
 
-        getSearchQuery: function (node, buffer) {
+        getSearchQuery: function (node, andBuffer, orBuffer) {
             if (node) {
                 var query = node.data.searchQuery;
                 if (query && query.length > 0) {
-                    if (!buffer) {
-                        buffer = [];
+                    if (!andBuffer) {
+                        andBuffer = [];
                     }
-                    buffer.push(query);
+                    if (!orBuffer) {
+                        orBuffer = [];
+                    }
+                    if (!node.parent || (node.parent.data.nodeType != node.data.nodeType)) {
+                        if (orBuffer && orBuffer.length > 0) {
+                            var orQuery = "";
+                            for (var i2 = 0; i2 < orBuffer.length; i2++) {
+                                var q2 = orBuffer[i2];
+                                orQuery += q2 + " OR "
+                            }
+                            orQuery = orQuery + query;
+                            andBuffer.push("(" + orQuery + ")");
+
+                            orBuffer = [];
+                        } else {
+                            andBuffer.push("(" + query + ")");
+                        }
+                    } else {
+                        orBuffer.push("(" + query + ")");
+                    }
                 }
-                return this.getSearchQuery(node.parent, buffer);
-            } else {
+                return this.getSearchQuery(node.parent, andBuffer, orBuffer);
+            } else { // уперлись в корневой узел - собираем запрос
                 var resultedQuery = "";
 
-                if (buffer) {
-                    buffer = buffer.reverse();
+                if (andBuffer) {
+                    andBuffer = andBuffer.reverse(); // для удобства дальнейшего чтения запроса в логах
 
-                    for (var i = 0; i < buffer.length; i++) {
-                        var q = buffer[i];
-                        resultedQuery += "(" + q + ") AND "
+                    for (var i1 = 0; i1 < andBuffer.length; i1++) {
+                        var q1 = andBuffer[i1];
+                        resultedQuery += q1 + " AND "
                     }
+
+                    resultedQuery = resultedQuery.length > 4 ?
+                        resultedQuery.substring(0, resultedQuery.length - 4) : resultedQuery;
                 }
 
-                return resultedQuery.length > 4 ?
-                    resultedQuery.substring(0, resultedQuery.length - 4) : resultedQuery;
+                /*if (orBuffer) {
+                    var orQuery = "";
+                    for (var i2 = 0; i2 < orBuffer.length; i2++) {
+                        var q2 = orBuffer[i2];
+                        orQuery += q2 + " OR "
+                    }
+                    orQuery = orQuery.length > 4 ?
+                        orQuery.substring(0, orQuery.length - 4) : orQuery;
+
+                    if (orQuery.length > 0) {
+                        resultedQuery += " (" + orQuery + ") ";
+                    }
+                }*/
+
+                return resultedQuery;
             }
         },
 
