@@ -8,7 +8,8 @@
 <#assign btnsControlId = htmlId + '-buttons-cntrl'>
 <#assign datagridId = htmlId + '-datagrid'>
 
-<#assign workflowType = field.control.params.workflowType>
+<#assign workflowType = field.control.params.workflowType?lower_case>
+<#assign concurrency = field.control.params.concurrency!'user'?lower_case>
 
 <div id='${containerId}'>
 	<div id='${radioWorkflowTypeId}'></div>
@@ -34,7 +35,7 @@
 		 * Используется в evaluator-ах для action-ов - в зависимости от типа экшены либо показываются, либо нет.
 		 * Например, для параллельного процесса порядок не имет значения. См. _initDatagrid!
 		 */
-		this.options.workflowType = 'sequential';
+		this.options.concurrency = 'sequential';
 
 		return this;
 	}
@@ -50,8 +51,8 @@
 			bubblingLabel: this.options.bubblingLabel,
 			datagridMeta: {
 				nodeRef: nodeRef,
-				itemType: 'lecm-al:assignees-item',
-				sort: 'lecm-al:assignees-item-order|true',
+				itemType: 'lecm-workflow:assignee',
+				sort: 'lecm-workflow:assignee-order|true',
 				actionsConfig: {
 					fullDelete: true,
 					trash: false
@@ -123,15 +124,23 @@
 	function WorkflowList(htmlId) {
 		WorkflowList.superclass.constructor.call(this, 'LogicECM.module.WorkflowList', htmlId, null);
 
+		// Инициализируется методом __getDefaultList__
 		this.options.nodeRef = null;
+
+		this.options.concurrency = null;
+		this.options.workflowType = null;
 	}
 
 	YAHOO.lang.extend(WorkflowList, Alfresco.component.Base);
 
 	WorkflowList.prototype._refreshDatagrid = function() {
 		var datagrid = this.widgets.datagrid;
+		var nodeRef = this.options.nodeRef;
+
 		if(datagrid !== null || datagrid !== undefined) {
-			datagrid.refresh(this.options.nodeRef);
+			if(nodeRef !== null || nodeRef !== undefined) {
+				datagrid.refresh(nodeRef);
+			}
 		}
 	};
 
@@ -143,7 +152,7 @@
 			var defaultAssigneesList = response.json.defaultAssigneesList;
 
 			this.options.nodeRef = defaultAssigneesList;
-			this.widgets.datagrid.refresh(defaultAssigneesList);
+			this._refreshDatagrid();
 		}
 
 		function onAjaxFailure() {
@@ -156,7 +165,7 @@
 			method: 'POST',
 			url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/getDefaultAssigneesList',
 			dataObj: {
-				workflowType: '${workflowType}'
+				workflowType: this.options.workflowType.toUpperCase()
 			},
 			successCallback: {
 				fn: onAjaxSuccess,
@@ -180,18 +189,22 @@
 		});
 
 		// Радио-кнопки для типа бизнес-процесса
-		this.widgets.radioWorkflowType = new YAHOO.widget.ButtonGroup({
-			id: 'workflow-type-radio-buttons',
-			name: 'workflow-type-radio-buttons',
-			container: '${radioWorkflowTypeId}'
-		});
+		if(this.options.concurrency === 'user') {
+			this.widgets.radioWorkflowType = new YAHOO.widget.ButtonGroup({
+				id: 'workflow-type-radio-buttons',
+				name: 'workflow-type-radio-buttons',
+				container: '${radioWorkflowTypeId}'
+			});
 
-		this.widgets.radioWorkflowType.addButtons([
-			{ label: 'Последовательное', value: 'sequential', checked: true },
-			{ label: 'Параллельное', value: 'parallel' }
-		]);
+			this.widgets.radioWorkflowType.addButtons([
+				{ label: 'Последовательное', value: 'sequential', checked: true },
+				{ label: 'Параллельное', value: 'parallel' }
+			]);
 
-		this.widgets.radioWorkflowType.getButton(0).setStyle('margin-left', '1px');
+			this.widgets.radioWorkflowType.getButton(0).setStyle('margin-left', '1px');
+
+			this.options.concurrency = 'sequential';
+		}
 
 		// Кнопка 'Добавить сотрудника'
 		this.widgets.btnAddAssignee = new YAHOO.widget.Button({
@@ -234,6 +247,8 @@
 		this.widgets.datagrid = new WorkflowDatagrid('${datagridId}');
 
 		this.widgets.datagrid.setOptions({
+			concurrency: this.options.concurrency,
+
 			bubblingLabel: '${datagridId}-label',
 			usePagination: false,
 			showExtendSearchBlock: false,
@@ -250,7 +265,7 @@
 					permission: 'edit',
 					label: 'Переместить вверх',
 					evaluator: function() {
-						return this.options.workflowType === 'sequential';
+						return this.options.concurrency === 'sequential';
 					}
 				},
 				{
@@ -259,7 +274,7 @@
 					permission: 'edit',
 					label: 'Переместить вниз',
 					evaluator: function() {
-						return this.options.workflowType === 'sequential';
+						return this.options.concurrency === 'sequential';
 					}
 				},
 				{
@@ -337,7 +352,13 @@
 		this.__getDefaultList__();
 	};
 
-	var control = new WorkflowList('${containerId}');
+	var workflowList = new WorkflowList('${containerId}');
+	workflowList.setOptions({
+		concurrency: '${concurrency}',
+		workflowType: '${workflowType}'
+	});
+
+	Alfresco.util.PopupManager.zIndex = 9000;
 
 })();
 </script>
