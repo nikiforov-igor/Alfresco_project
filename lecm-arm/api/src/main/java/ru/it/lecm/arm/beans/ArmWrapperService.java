@@ -11,6 +11,8 @@ import java.util.List;
  * Time: 12:17
  */
 public interface ArmWrapperService {
+    String VALUE_REF = "#value-ref";
+    String VALUE_TEXT = "#value-text";
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма

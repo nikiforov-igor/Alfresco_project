@@ -244,6 +244,14 @@
                 var searchQuery = this.getSearchQuery(node);
                 if (searchQuery) {
                     //отправить запрос в датагрид
+                    YAHOO.Bubbling.fire ("reСreateDatagrid", {
+                        datagridMeta: {
+                            searchConfig: {
+                                filter: searchQuery
+                            }
+                        },
+                        bubblingLabel: "documents-arm"
+                    });
                     //отправить запрос на обновление фильтров
                 }
             }

@@ -36,10 +36,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         this.substitudeService = substitudeService;
     }
 
-    public DictionaryBean getDictionaryService() {
-        return dictionaryService;
-    }
-
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
@@ -106,7 +102,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public boolean isNodeSelectable(ArmNode armNode) {
-        //TODO метод-флаг можно ли выбирать узел
+        //TODO метод-флаг можно ли выбирать узел (нужен ли?)
         return true; //return (armNode.getNodeQuery() != null && armNode.getNodeQuery() instanceof ArmStaticQuery);
     }
 
@@ -150,8 +146,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     public String formatQuery(String templateQuery, NodeRef node) {
-        //TODO метод для формирования запроса по шаблону
-        return templateQuery;
+        String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
+        if (formatedQuery.contains(ArmWrapperService.VALUE_REF)) {
+            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_REF, node.toString());
+        }
+        if (formatedQuery.contains(ArmWrapperService.VALUE_TEXT)) {
+            formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_TEXT, substitudeService.getObjectDescription(node));
+        }
+        return formatedQuery;
     }
 
     private boolean isArmElement(NodeRef node) {
