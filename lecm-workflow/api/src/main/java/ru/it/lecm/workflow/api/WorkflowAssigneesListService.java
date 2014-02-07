@@ -68,4 +68,8 @@ public interface WorkflowAssigneesListService {
 	 * @param execution контекст регламента
 	 */
 	void deleteAssigneesListWorkingCopy(DelegateExecution execution);
+
+	String getAssigneesListItemUserName(NodeRef assigneeListItem);
+
+	NodeRef getEmployeeByAssignee(NodeRef assigneeListItem);
 }

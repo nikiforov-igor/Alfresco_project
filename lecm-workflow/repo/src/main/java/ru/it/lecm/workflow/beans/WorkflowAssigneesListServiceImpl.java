@@ -495,4 +495,16 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		nodeService.setProperty(workingCopyAssigneesList, ContentModel.PROP_NAME, executionID);
 		return findNodesByAssociationRef(workingCopyAssigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, LecmWorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
 	}
+
+	@Override
+	public String getAssigneesListItemUserName(NodeRef assigneeListItem) {
+		return (String) nodeService.getProperty(assigneeListItem, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);
+	}
+
+	@Override
+	public NodeRef getEmployeeByAssignee(NodeRef assigneeListItem) {
+		return findNodeByAssociationRef(assigneeListItem, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+	}
+
+
 }
