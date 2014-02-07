@@ -251,7 +251,7 @@ public class OrgstructureUnitPolicy
         permissionService.setPermission(shared.getChildRef(), "GROUP_" + sharedAuthority, PermissionService.CONSUMER, true);
 
         //Добавляем правило к папке с общими документами
-        Rule rule = new Rule();
+        final Rule rule = new Rule();
         rule.setTitle("Logic ECM Пассивные рассылки");
         rule.setDescription("Logic ECM Рассылка уведомлений");
         rule.applyToChildren(true);
@@ -260,7 +260,15 @@ public class OrgstructureUnitPolicy
         rule.setRuleType(RuleType.INBOUND);
         Action ruleAction = serviceRegistry.getActionService().createAction("sharedFolderNotificationAction");
         rule.setAction(ruleAction);
-        serviceRegistry.getRuleService().saveRule(shared.getChildRef(), rule);
+
+
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                serviceRegistry.getRuleService().saveRule(shared.getChildRef(), rule);
+                return null;
+            }
+        });
 
         //Создаем папку с документами подразделения
         props = new HashMap<QName, Serializable>();
