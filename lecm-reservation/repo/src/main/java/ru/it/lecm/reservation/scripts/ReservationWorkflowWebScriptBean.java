@@ -10,6 +10,7 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.repo.workflow.jscript.JscriptWorkflowInstance;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.notification.NotificationService;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
@@ -96,6 +97,20 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 		}
 	}
 
+	public void regnumReservateEmpty(ScriptNode documentNode, NodeRef reservateInitiator) throws TemplateParseException, TemplateRunException{
+		NodeRef document  = documentNode.getNodeRef();
+		regNumbersService.registerDocument(document, "OUTGOING_DOC_NUMBER", true);
+		List<AssociationRef> regDocDataList = nodeService.getTargetAssocs(document, DocumentService.ASSOC_REG_DOCUMENT_DATA);
+		if (null!=regDocDataList && regDocDataList.size()>0){
+			NodeRef regDocData = regDocDataList.get(0).getTargetRef();
+			nodeService.setProperty(regDocData, DocumentService.PROP_REG_DATA_NUMBER, "\"нет доступных регистраторов\"");
+		}
+		notifyReserveInitiatorAboutEmptyRegistrars(document,reservateInitiator);
+
+		String doumentString = (String) nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING);
+		logger.warn("Нет доступных регистраторов для документа "+doumentString);
+	}
+
 	private void notifyRegistrarsAboutStartReservate(NodeRef document, List<NodeRef> registrars){
 		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
 		String employeeName = java.lang.String.format(
@@ -150,6 +165,21 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 		String bjMessage = "#initiator <a href=\"#\" title=\""+comment+"\">отклонил запрос</a> в резервировании номера документа #mainobject";
 		String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
 		businessJournalService.log(registrarLogin, document, "RESERVATION", bjMessage, null);
+	}
+
+	private void notifyReserveInitiatorAboutEmptyRegistrars(NodeRef document, NodeRef initiator){
+		String documentString = (String) nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING);
+		String notificationMessage = java.lang.String.format(
+			"Нет доступных регистраторов для регистрации документа %s",
+			this.wrapperLink(document.toString(), documentString, "/share/page/document"));
+
+		Notification notification = new Notification();
+		notification.setRecipientEmployeeRefs(Arrays.asList(initiator));
+		notification.setAuthor(AuthenticationUtil.getSystemUserName());
+		notification.setDescription(notificationMessage);
+		notification.setObjectRef(document);
+		notification.setInitiatorRef(null);
+		notificationsService.sendNotification(notification);
 	}
 
 }

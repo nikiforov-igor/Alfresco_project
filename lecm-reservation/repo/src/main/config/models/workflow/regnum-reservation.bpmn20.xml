@@ -40,6 +40,8 @@
     	</extensionElements>
 	</serviceTask>
 
+	<exclusiveGateway id="exclusiveGw" name="Check registars amount" />
+
     <userTask id="regnumReservationTask" name="Запрос номера" activiti:assignee="${assignee.properties.userName}" activiti:formKey="reservationWf:regnumReservationTask">
 			<extensionElements>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
@@ -66,11 +68,36 @@
 		</multiInstanceLoopCharacteristics>
 	</userTask>
 
+	<serviceTask id="emptyRegistrarsList" name="Processing empty registrars list" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+    			<activiti:field name="script">
+    				<activiti:string>
+    				//<![CDATA[
+							var document = bpm_package.children[0];
+							reservationWorkflowScript.regnumReservateEmpty(document,reservateInitiator.getNodeRef());
+							//say proccess not active
+							document.save();
+							document.removeAspect("lecm-reservation-aspects:isReservationRunningAspect");
+    				//]]>
+    				</activiti:string>
+    			</activiti:field>
+    	</extensionElements>
+	</serviceTask>
+
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="emptyScripttask1"></sequenceFlow>
-	<sequenceFlow id="flow5" sourceRef="emptyScripttask1" targetRef="receivetask1"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="receivetask1" targetRef="searchRegistrarsScripttask"></sequenceFlow>
-    <sequenceFlow id="flow3" sourceRef="searchRegistrarsScripttask" targetRef="regnumReservationTask"></sequenceFlow>
-    <sequenceFlow id="flow4" sourceRef="regnumReservationTask" targetRef="endevent1"> </sequenceFlow>
+	<sequenceFlow id="flow2" sourceRef="emptyScripttask1" targetRef="receivetask1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="receivetask1" targetRef="searchRegistrarsScripttask"></sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="searchRegistrarsScripttask" targetRef="exclusiveGw"></sequenceFlow>
+	<sequenceFlow id="flow5" sourceRef="exclusiveGw" targetRef="regnumReservationTask">
+		<conditionExpression xsi:type="tFormalExpression">${registrarsList.size() > 0}</conditionExpression>
+	</sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="exclusiveGw" targetRef="emptyRegistrarsList">
+		<conditionExpression xsi:type="tFormalExpression">${registrarsList.size() == 0}</conditionExpression>
+	</sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="regnumReservationTask" targetRef="endevent1"> </sequenceFlow>
+	<sequenceFlow id="flow8" sourceRef="emptyRegistrarsList" targetRef="endevent1"> </sequenceFlow>
+
+
 
     <endEvent id="endevent1" name="End"></endEvent>
   </process>
