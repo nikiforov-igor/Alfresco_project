@@ -19,12 +19,6 @@
 
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
-        //this.menuState = null;
-        //this.actions = null;
-
-        //YAHOO.Bubbling.on("newReportCreated", this.onNewReportCreated, this);
-        //YAHOO.Bubbling.on("dataItemCreated", this.onUpdateTree, this);
-        //YAHOO.Bubbling.on("dataItemsDeleted", this.onUpdateTree, this);
         return this;
     };
 
@@ -73,65 +67,6 @@
                 this._treeNodeSelected(event.node);
                 return false;
             }.bind(this));
-
-            /*this.tree.subscribe('expand', function (node) {
-                this.onExpand(node);
-                return true;
-            }.bind(this));
-
-            this.tree.subscribe('collapse', function (node) {
-                this.onCollapse(node);
-                return true;
-            }.bind(this));*/
-        },
-
-        onCollapse: function (oNode) {
-            /*var expandedNodesArray = this.menuState.expanded.trim().split(",");
-            var index = expandedNodesArray.indexOf(this._getTextNodeId(oNode));
-            if (index >= 0) {
-                expandedNodesArray.splice(index, 1);
-            }
-
-            this.menuState.expanded = expandedNodesArray.join(",");
-            if (this.menuState.expanded.indexOf(",") == 0) {
-                this.menuState.expanded = this.menuState.expanded.substr(1, this.menuState.expanded.length - 1);
-            }
-
-            this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());*/
-        },
-
-        onExpand: function (oNode) {
-            /*var expandedNodesArray = this.menuState.expanded.trim().split(",");
-            expandedNodesArray.push(this._getTextNodeId(oNode));
-
-            this.menuState.expanded = expandedNodesArray.join(",");
-            if (this.menuState.expanded.indexOf(",") == 0) {
-                this.menuState.expanded = this.menuState.expanded.substr(1, this.menuState.expanded.length - 1);
-            }
-
-            this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());*/
-        },
-
-        onNewReportCreated: function (layer, args) {
-            var obj = args[1];
-            var otree = this;
-            if ((obj !== null) && (obj.reportId !== null)) {
-                var sNode = otree.selectedNode;
-                otree._loadTree(sNode);
-                sNode.isLeaf = false;
-                sNode.expanded = true;
-                otree.tree.render();
-            }
-        },
-
-        onUpdateTree: function (layer, args) {
-            this._loadTree(this.selectedNode, function () {
-                if (this.selectedNode.children.length == 0) {
-                    this.selectedNode.isLeaf = true;
-                    this.selectedNode.expanded = false;
-                }
-                this.tree.render();
-            }.bind(this));
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
@@ -172,7 +107,7 @@
                             //раскрываем, если этот узел был последним выбранным
                             var nodeId = otree._getTextNodeId(curElement);
 
-                            curElement.expanded = node.expanded && otree._isNodeExpanded(node.data.id);
+                            curElement.expanded = node.expanded && otree._isNodeExpanded(curElement.id);
 
                             if (otree.menuState.selected.length > 0) {
                                 if (otree.menuState.selected == nodeId) {
@@ -261,7 +196,7 @@
                     //отправить запрос на обновление фильтров
                 }
             }
-            //this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
+            this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
 
         drawCounterValue: function(node) {
@@ -309,15 +244,6 @@
         _isNodeExpanded: function (nodeId) {
             if (nodeId && this.menuState.selected.length > 0) {
                 return this.menuState.selected.indexOf(nodeId) >= 0;
-            }
-            return false;
-        },
-
-        _inArray: function (value, array) {
-            for (var i = 0; i < array.length; i++) {
-                if (array[i] == value) {
-                    return true;
-                }
             }
             return false;
         }
