@@ -8,7 +8,7 @@
 <#assign btnsControlId = htmlId + '-buttons-cntrl'>
 <#assign datagridId = htmlId + '-datagrid'>
 
-<#assign workflowType = 'SIGNING'>
+<#assign workflowType = field.control.params.workflowType>
 
 <div id='${containerId}'>
 	<div id='${radioWorkflowTypeId}'></div>
