@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
-import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
  *
@@ -71,7 +70,7 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 		NodeRef assigneesList = childAssociationRef.getParentRef();
 		NodeRef assigneesItem = childAssociationRef.getChildRef();
 
-		nodeService.createAssociation(assigneesList, assigneesItem, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_LIST_RESULT_ITEM);
+		nodeService.createAssociation(assigneesList, assigneesItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
 	}
 
 	/**
