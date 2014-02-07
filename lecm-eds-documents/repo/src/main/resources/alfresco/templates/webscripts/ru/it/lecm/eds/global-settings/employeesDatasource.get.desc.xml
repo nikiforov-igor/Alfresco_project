@@ -1,0 +1,9 @@
+<webscript>
+    <shortname>Employees datasource</shortname>
+    <description>Get employees by business role id</description>
+    <url>/lecm/eds/global-settings/api/employeesDatasource</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction allow="readonly">required</transaction>
+    <lifecycle>internal</lifecycle>
+</webscript>

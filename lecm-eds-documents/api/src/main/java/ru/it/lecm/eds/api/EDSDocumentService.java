@@ -1,13 +1,13 @@
-package ru.it.lecm.eds;
+package ru.it.lecm.eds.api;
 
 import org.alfresco.service.namespace.QName;
 
 /**
- * User: dbashmakov
- * Date: 24.01.14
+ * User: dbayandin
+ * Date: 31.01.14
  * Time: 12:48
  */
-public class EDSDocumentService {
+public interface EDSDocumentService {
 
     public static final String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
 

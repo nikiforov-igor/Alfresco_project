@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Potential workers list</shortname>
+    <description>List of Potential workers by business role and organization element</description>
+    <url>/lecm/eds/global-settings/api/getPotentialWorkers</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

@@ -37,9 +37,42 @@
         <dependency>
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-data-model</artifactId>
-            <version>4.0.e</version>
+        </dependency>
+		<dependency>
+		    <groupId>ru.it.lecm.eds-documents</groupId>
+		    <artifactId>eds-documents-repo-api</artifactId>
+		    <version>${project.version}</version>
+	    </dependency>
+	    <dependency>
+		    <groupId>ru.it.lecm.base</groupId>
+		    <artifactId>base-repo-api</artifactId>
+		    <version>${project.version}</version>
+	    </dependency>
+		<dependency>
+            <groupId>ru.it.lecm.dictionary</groupId>
+            <artifactId>dictionary-repo-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
+        <dependency>
+            <groupId>ru.it.lecm.orgstructure</groupId>
+            <artifactId>orgstructure-repo-api</artifactId>
+            <version>1.1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.business-journal</groupId>
+            <artifactId>business-journal-repo-api</artifactId>
+            <version>1.1.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>rhino</groupId>
+            <artifactId>js</artifactId>
+            <version>1.6R7</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

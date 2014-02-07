@@ -1,0 +1,24 @@
+<alfresco-config>
+	<config evaluator="node-type" condition="lecm-eds-globset:potential-role">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-eds-globset:potential-role-business-role-assoc" force="true"/>
+					<show id="lecm-eds-globset:potential-role-employee-assoc" force="true"/>
+					<show id="lecm-eds-globset:potential-role-organization-element-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="model-type" condition="lecm-eds-globset:potential-role">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-eds-globset:potential-role-business-role-assoc" force="true"/>
+					<show id="lecm-eds-globset:potential-role-employee-assoc" force="true"/>
+					<show id="lecm-eds-globset:potential-role-organization-element-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+</alfresco-config>

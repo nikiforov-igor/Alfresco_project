@@ -1,0 +1,32 @@
+package ru.it.lecm.eds.api;
+
+import java.util.Collection;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+
+/**
+ *
+ * @author dbayandin
+ */
+public interface EDSGlobalSettingsService {
+	
+	public static final String GLOBAL_EDS_SETTINGS_FOLDER_NAME = "Глобальные настройки СЭД";
+	public static final String GLOBAL_EDS_SETTINGS_FOLDER_ID = "GLOBAL_EDS_SETTINGS_FOLDER_ID";
+	
+	public static final String POTENTIAL_ROLES_DICTIONARY_NAME = "Потенциальные роли";
+	
+	public final static String GLOBAL_SETTINGS_PREFIX = "lecm-eds-globset";
+	public final static String GLOBAL_SETTINGS_NAMESPACE = "http://www.it.ru/logicECM/eds-global-settings/1.0";
+
+	public final static QName TYPE_POTENTIAL_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role");
+	public final static QName PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc-ref");
+	public final static QName PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc-ref");
+	public final static QName ASSOC_POTENTIAL_ROLE_BUSINESS_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc");
+	public final static QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
+	public final static QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
+
+	public NodeRef getServiceRootFolder();
+
+	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef);
+	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef);
+}
