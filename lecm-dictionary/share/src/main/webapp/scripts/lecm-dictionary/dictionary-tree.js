@@ -137,11 +137,23 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 	        var selectParent = args[1] != null && args[1].selectParent;
 
 	        if (refreshParent) {
-		        this._loadTree(this.selectedNode.parent);
+		        var parent = this.selectedNode.parent;
+		        this._loadTree(parent, function () {
+			        tree.render();
+
+			        var selectedNodeRef = this.selectedNode.data.nodeRef;
+			        for (var i = 0; i < parent.children.length; i++) {
+				        var child = parent.children[i];
+				        if (child.data.nodeRef == selectedNodeRef) {
+					        this.selectedNode = child;
+				        }
+			        }
+
+			        tree.onEventToggleHighlight(this.selectedNode);
+		        }.bind(this));
 	        } else {
                 this._loadTree(this.selectedNode);
 	        }
-            tree.render();
 	        if (selectParent) {
 		        this._treeNodeSelected(this.selectedNode.parent);
 		        tree.onEventToggleHighlight(this.selectedNode);
