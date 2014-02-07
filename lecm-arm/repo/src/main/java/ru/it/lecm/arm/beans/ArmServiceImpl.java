@@ -13,7 +13,6 @@ import ru.it.lecm.arm.beans.query.ArmDynamicQuery;
 import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.*;
 
@@ -102,7 +101,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	public List<String> getNodeTypes(NodeRef node) {
 		List<String> result = new ArrayList<String>();
 		String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
-		if (types != null) {
+		if (types != null && types.length() > 0) {
 			result.addAll(Arrays.asList(types.split(",")));
 		}
 
@@ -131,7 +130,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	public List<String> getNodeFilters(NodeRef node) {
 		List<String> result = new ArrayList<String>();
 		String types = (String) nodeService.getProperty(node, PROP_NODE_FILTERS);
-		if (types != null) {
+		if (types != null && types.length() > 0) {
 			result.addAll(Arrays.asList(types.split(",")));
 		}
 

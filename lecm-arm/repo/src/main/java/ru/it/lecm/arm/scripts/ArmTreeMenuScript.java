@@ -1,8 +1,6 @@
 package ru.it.lecm.arm.scripts;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -39,7 +37,6 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER = "counter";
     private static final String COUNTER_LIMIT = "counterLimit";
     private static final String COUNTER_DESC = "counterDesc";
-    private static final String NOT_SELECTABLE = "not_selectable";
 
     private ArmWrapperServiceImpl service;
 
@@ -83,18 +80,21 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         try {
             result.put(ID, node.getNodeRef().getId());
             result.put(NODE_REF, node.getNodeRef().toString());
+
             if (node.getArmNodeRef() != null) {
                 result.put(ARM_NODE_REF, node.getArmNodeRef().toString());
                 result.put(ARM_NODE_ID, node.getArmNodeRef().getId());
             }
+
             result.put(TYPES, listToString(node.getTypes()));
             result.put(LABEL, node.getTitle());
             result.put(IS_LEAF, !service.hasChildNodes(node));
             result.put(FILTER, node.getAvaiableFilters());
+
             if (node.getNodeQuery() != null) {
                 result.put(SEARCH_QUERY, node.getNodeQuery().getSearchQuery());
             }
-            result.put(NOT_SELECTABLE, service.isNodeSelectable(node));
+
             if (node.getCounter() != null) {
                 result.put(COUNTER, true);
                 result.put(COUNTER_DESC, node.getCounter().getDescription());

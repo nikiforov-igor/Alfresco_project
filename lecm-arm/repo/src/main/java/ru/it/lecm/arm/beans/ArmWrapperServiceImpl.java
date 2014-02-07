@@ -100,12 +100,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 (node.getNodeQuery() != null && (!(node.getNodeQuery() instanceof ArmStaticQuery) && !node.getNodeQuery().build(this, node).isEmpty()));
     }
 
-    @Override
-    public boolean isNodeSelectable(ArmNode armNode) {
-        //TODO метод-флаг можно ли выбирать узел (нужен ли?)
-        return true; //return (armNode.getNodeQuery() != null && armNode.getNodeQuery() instanceof ArmStaticQuery);
-    }
-
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion) {
         ArmNode node = new ArmNode();
         node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
@@ -115,12 +109,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         } else {
             node.setArmNodeRef(nodeRef);
         }
-        node.setColumns(service.getNodeColumns(nodeRef));
-        node.setAvaiableFilters(service.getNodeFilters(nodeRef));
         node.setCounter(service.getNodeCounter(nodeRef));
-        node.setTypes(service.getNodeTypes(nodeRef));
-
         node.setNodeQuery(!isAccordion ? service.getNodeQuery(nodeRef) : service.getAccordionQuery(nodeRef));
+
+        node.setColumns(getNodeColumns(nodeRef));
+        node.setAvaiableFilters(getNodeFilters(nodeRef));
+        node.setTypes(getNodeTypes(nodeRef));
 
         return node;
     }
@@ -162,5 +156,38 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     private boolean isArmElement(NodeRef node) {
         return service.isArmNode(node) || service.isArmAccordion(node);
+    }
+
+    private List<ArmColumn> getNodeColumns(NodeRef node) {
+        List<ArmColumn> nodeColumns = service.getNodeColumns(node);
+        if (nodeColumns.isEmpty()) {
+            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            if (isArmElement(parent)) {
+                return getNodeColumns(parent);
+            }
+        }
+        return nodeColumns;
+    }
+
+    private List<String> getNodeFilters(NodeRef node) {
+        List<String> nodeFilters = service.getNodeFilters(node);
+        if (nodeFilters.isEmpty()) {
+            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            if (isArmElement(parent)) {
+                return getNodeFilters(parent);
+            }
+        }
+        return nodeFilters;
+    }
+
+    private List<String> getNodeTypes(NodeRef node) {
+        List<String> nodeTypes = service.getNodeTypes(node);
+        if (nodeTypes.isEmpty()) {
+            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            if (isArmElement(parent)) {
+                return getNodeTypes(parent);
+            }
+        }
+        return nodeTypes;
     }
 }

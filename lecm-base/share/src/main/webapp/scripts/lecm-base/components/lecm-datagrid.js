@@ -1345,7 +1345,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         });
 
                     } else {
-                        this.search.clear(grid);
+                        this.search.clear(this);
                     }
                     this.datagridMeta.recreate = false; // сброс флага
                 }

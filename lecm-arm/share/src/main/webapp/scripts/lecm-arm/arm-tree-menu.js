@@ -187,6 +187,8 @@
                     //отправить запрос в датагрид
                     YAHOO.Bubbling.fire ("reСreateDatagrid", {
                         datagridMeta: {
+                            //TODO: берем список типов из узла (раскомментировать, когда будет механизм получения колонок)
+                            //itemType: node.data.types,
                             searchConfig: {
                                 filter: searchQuery
                             }

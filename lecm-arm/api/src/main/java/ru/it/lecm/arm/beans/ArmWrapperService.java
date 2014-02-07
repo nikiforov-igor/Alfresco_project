@@ -38,10 +38,5 @@ public interface ArmWrapperService {
 
     public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
 
-    /**
-     * возвращает объект Аккордеон по nodeRef
-     */
-    public boolean isNodeSelectable(ArmNode armNode);
-
     public String formatQuery(String templateQuery, NodeRef node);
 }
