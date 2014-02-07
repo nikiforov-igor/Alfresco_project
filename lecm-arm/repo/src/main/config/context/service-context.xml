@@ -35,7 +35,7 @@
 
 	<bean id="armService" class="ru.it.lecm.arm.beans.ArmServiceImpl" parent="baseBean"
 	      depends-on="ServiceRegistry, nodeService, transactionService">
-		<property name="nodeService" ref="nodeService"/>
+		<property name="nodeService" ref="NodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="authService" ref="authenticationService"/>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
@@ -58,7 +58,7 @@
 		<property name="armService" ref="armService"/>
 		<property name="dictionaryService" ref="dictionaryService"/>
 		<property name="namespaceService" ref="namespaceService"/>
-		<property name="nodeService" ref="nodeService"/>
+		<property name="nodeService" ref="NodeService"/>
 		<property name="documentService" ref="documentService"/>
 	</bean>
 
@@ -70,9 +70,17 @@
 
     <bean id="armWrapperService"
           class="ru.it.lecm.arm.beans.ArmWrapperServiceImpl">
-        <property name="nodeService" ref="nodeService" />
+        <property name="nodeService" ref="NodeService" />
         <property name="service" ref="armService"/>
         <property name="substitudeService" ref="substitudeService"/>
         <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
+
+	<bean id="armAccordionPolicy" class="ru.it.lecm.arm.policy.ArmAccordionPolicy"
+	      init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="permissionService" ref="permissionService"/>
+		<property name="authorityService" ref="authorityService"/>
+		<property name="nodeService" ref="nodeService" />
+	</bean>
 </beans>

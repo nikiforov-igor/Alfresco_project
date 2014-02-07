@@ -32,6 +32,7 @@ public interface ArmService {
 	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
 	public static final QName ASSOC_NODE_QUERY = QName.createQName(ARM_NAMESPACE_URI, "node-query-assoc");
 	public static final QName ASSOC_ACCORDION_QUERY = QName.createQName(ARM_NAMESPACE_URI, "accordion-query-assoc");
+	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
 	public static final QName PROP_COLUMN_TITLE = QName.createQName(ARM_NAMESPACE_URI, "field-title");
