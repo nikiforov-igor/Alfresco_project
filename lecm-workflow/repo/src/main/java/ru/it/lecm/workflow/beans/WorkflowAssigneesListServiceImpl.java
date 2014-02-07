@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
+import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -449,6 +450,10 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 				put(LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
 			}});
 		}
+
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		nodeService.createAssociation(result, currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
+
 		return result;
 	}
 

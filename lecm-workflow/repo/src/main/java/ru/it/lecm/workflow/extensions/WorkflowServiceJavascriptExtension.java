@@ -43,7 +43,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		String workflowType, concurrency;
 		try {
 			workflowType = json.getString("workflowType");
-			concurrency = json.getString("concurrency");
+			concurrency = json.has("concurrency") ? json.getString("concurrency") : null;
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}
