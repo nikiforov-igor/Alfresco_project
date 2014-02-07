@@ -110,7 +110,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
-        node.setArmNodeRef(nodeRef); // для узла Арм - данное поле дублируется. как так узел Арм - реален
+        if (!isAccordion) {
+            node.setArmNodeRef(nodeService.getPrimaryParent(nodeRef).getParentRef()); // для узла Арм - данное поле дублируется. как так узел Арм - реален
+        } else {
+            node.setArmNodeRef(nodeRef);
+        }
         node.setColumns(service.getNodeColumns(nodeRef));
         node.setAvaiableFilters(service.getNodeFilters(nodeRef));
         node.setCounter(service.getNodeCounter(nodeRef));

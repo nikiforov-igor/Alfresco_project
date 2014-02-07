@@ -27,7 +27,7 @@
                         datagridMeta: {
                             itemType: "lecm-document:base",
                             datagridFormId: "datagrid",
-                            nodeRef: LogicECM.module.ARM.SETTINGS.nodeRef,
+                            nodeRef: null,
                             actionsConfig:{
                                 fullDelete:true,
                                 trash: false

@@ -28,11 +28,11 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
     public static final String NODE_REF = "nodeRef";
     public static final String ARM_NODE_REF = "armNodeRef";
+    public static final String ARM_NODE_ID = "armNodeId";
     public static final String SEARCH_QUERY = "searchQuery";
     public static final String ARM_CODE = "armCode";
     public static final String ID = "id";
     public static final String TYPES = "types";
-    public static final String NODE_TYPE = "nodeType";
     public static final String LABEL = "label";
     public static final String IS_LEAF = "isLeaf";
     private static final String FILTER = "filters";
@@ -42,8 +42,6 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String NOT_SELECTABLE = "not_selectable";
 
     private ArmWrapperServiceImpl service;
-    private NodeService nodeService;
-    private NamespaceService namespaceService;
 
     public void setService(ArmWrapperServiceImpl service) {
         this.service = service;
@@ -87,9 +85,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(NODE_REF, node.getNodeRef().toString());
             if (node.getArmNodeRef() != null) {
                 result.put(ARM_NODE_REF, node.getArmNodeRef().toString());
+                result.put(ARM_NODE_ID, node.getArmNodeRef().getId());
             }
             result.put(TYPES, listToString(node.getTypes()));
-            result.put(NODE_TYPE, nodeService.getType(node.getNodeRef()).toPrefixString(namespaceService));
             result.put(LABEL, node.getTitle());
             result.put(IS_LEAF, !service.hasChildNodes(node));
             result.put(FILTER, node.getAvaiableFilters());
@@ -117,13 +115,5 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.append(anArray);
         }
         return result.toString();
-    }
-
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
-
-    public void setNamespaceService(NamespaceService namespaceService) {
-        this.namespaceService = namespaceService;
     }
 }
