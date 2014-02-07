@@ -42,8 +42,6 @@ public interface WorkflowAssigneesListService {
 
 	void clearAssigneesList(NodeRef assigneesListNodeRef); // void clearAssigneesList(JSONObject json);
 
-	void setAssigneesListTemp(NodeRef assigneesListRef);
-
 	Date getAssigneesListItemDueDate(NodeRef assigneeListItem);
 
 	void setAssigneesListItemDueDate(NodeRef assigneeListItem, Date dueDate);

@@ -13,7 +13,6 @@ import java.util.UUID;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
-import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -291,11 +290,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	@Override
-	public void setAssigneesListTemp(NodeRef assigneesListRef) {
-		nodeService.addAspect(assigneesListRef, LecmWorkflowModel.ASPECT_TEMP, null);
-	}
-
-	@Override
 	public void clearAssigneesList(NodeRef assigneesListNodeRef) {
 		List<NodeRef> listItemsItems = getAssigneesListItems(assigneesListNodeRef);
 		for (NodeRef listItemNodeRef : listItemsItems) {
@@ -429,27 +423,22 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final String concurrency, final Map<QName, Serializable> properties) {
-		Map<QName, Serializable> props;
-		NodeRef result;
-		if (properties == null) {
-			props = new HashMap<QName, Serializable>();
-		} else {
-			props = properties;
-		}
+		Map<QName, Serializable> props = (properties == null) ? new HashMap<QName, Serializable>() : properties;
 
 		props.put(LecmWorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
 
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
 				props.containsKey(ContentModel.PROP_NAME) ? (String) props.get(ContentModel.PROP_NAME) : UUID.randomUUID().toString());
 
-		result = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName,
-				LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, properties).getChildRef();
+		NodeRef result = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName,
+				LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, props).getChildRef();
 
 		if (concurrency != null) {
 			nodeService.addAspect(result, LecmWorkflowModel.ASPECT_WORKFLOW_CONCURRENCY, new HashMap<QName, Serializable>(){{
 				put(LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
 			}});
 		}
+		nodeService.addAspect(result, LecmWorkflowModel.ASPECT_TEMP, null);
 
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 		nodeService.createAssociation(result, currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
@@ -498,6 +487,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			behaviourFilter.enableBehaviour(LecmWorkflowModel.TYPE_ASSIGNEE);
 		}
 		nodeService.setProperty(workingCopyAssigneesList, ContentModel.PROP_NAME, executionID);
+		nodeService.removeAspect(workingCopyAssigneesList, LecmWorkflowModel.ASPECT_TEMP);
+
 		return findNodesByAssociationRef(workingCopyAssigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, LecmWorkflowModel.TYPE_ASSIGNEE, ASSOCIATION_TYPE.TARGET);
 	}
 
