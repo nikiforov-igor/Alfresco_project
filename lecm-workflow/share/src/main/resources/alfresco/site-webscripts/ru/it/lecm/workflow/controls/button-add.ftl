@@ -165,7 +165,8 @@
 			method: 'POST',
 			url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/getDefaultAssigneesList',
 			dataObj: {
-				workflowType: this.options.workflowType.toUpperCase()
+				workflowType: this.options.workflowType.toUpperCase(),
+				concurrency: this.options.concurrency.toUpperCase()
 			},
 			successCallback: {
 				fn: onAjaxSuccess,
