@@ -1335,16 +1335,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // DataTable definition
                 var me = this;
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
-                    this.datagridMeta.recreate = false; // сброс флага
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
-//                    if (!this.search || this.datagridMeta.recreate) {
+                    if (!this.search) {
                     // initialize Search
                         this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                             showExtendSearchBlock:this.options.showExtendSearchBlock,
                             maxSearchResults: this.options.maxResults,
 	                        searchFormId: this.options.advSearchFormId
                         });
-//                    }
+
+                    } else {
+                        this.search.clear(grid);
+                    }
+                    this.datagridMeta.recreate = false; // сброс флага
                 }
 
                 var searchConfig = this.datagridMeta.searchConfig;

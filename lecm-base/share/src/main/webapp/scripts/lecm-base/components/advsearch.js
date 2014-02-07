@@ -235,6 +235,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
                 this.renderFormTemplate(this.currentForm, true, e, obj);
+                YAHOO.Bubbling.fire("hideFilteredLabel");
             },
 
             /**
@@ -464,6 +465,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         }
                     }
                 }
+            },
+
+            clear: function ADVSearch_clear(grid) {
+                this.dataTable = grid.widgets.dataTable;
+                this.dataSource = grid.widgets.dataSource;
+                this.dataColumns = grid.datagridColumns;
+                this.bubblingLabel = grid.options.bubblingLabel;
+                this.dataGrid = grid;
+                if (this.currentForm) {
+                    this.renderFormTemplate(this.currentForm, true);
+                }
+                YAHOO.Bubbling.fire("hideFilteredLabel");
             }
         });
 })();
