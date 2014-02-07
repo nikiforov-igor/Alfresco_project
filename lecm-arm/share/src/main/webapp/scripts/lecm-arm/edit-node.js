@@ -78,9 +78,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 			onSuccess: function (response) {
 				if (response && response.json) {
-					YAHOO.Bubbling.fire("itemsListChanged", {
-						refreshParent: true
-					});
+					YAHOO.Bubbling.fire("refreshTreeParentNode");
 					Alfresco.util.PopupManager.displayMessage(
 						{
 							text: this.msg( "message.save.success")

@@ -43,6 +43,9 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
         Bubbling.on("itemsListChanged", this._renderTree, this);
+        Bubbling.on("addTreeItem", this.onAddTreeItem, this);
+        Bubbling.on("deleteSelectedTreeItem", this.onDeleteSelectedTreeItem, this);
+        Bubbling.on("refreshTreeParentNode", this.onRefreshParentNode, this);
         return this;
     };
 
@@ -133,34 +136,78 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          * Перерисовка дерева
          */
         _renderTree:function (layer, args) {
-	        var refreshParent = args[1] != null && args[1].refreshParent;
-	        var selectParent = args[1] != null && args[1].selectParent;
-
-	        if (refreshParent) {
-		        var parent = this.selectedNode.parent;
-		        this._loadTree(parent, function () {
-			        tree.render();
-
-			        var selectedNodeRef = this.selectedNode.data.nodeRef;
-			        for (var i = 0; i < parent.children.length; i++) {
-				        var child = parent.children[i];
-				        if (child.data.nodeRef == selectedNodeRef) {
-					        this.selectedNode = child;
-				        }
-			        }
-
-			        tree.onEventToggleHighlight(this.selectedNode);
-		        }.bind(this));
-	        } else {
-                this._loadTree(this.selectedNode);
-	        }
-	        if (selectParent) {
-		        this._treeNodeSelected(this.selectedNode.parent);
-		        tree.onEventToggleHighlight(this.selectedNode);
-	        }
-	        this.selectedNode.focus();
-            makeDraggable();
+            this._loadTree(this.selectedNode);
         },
+
+	    onAddTreeItem: function (layer, args) {
+		    if (args[1] != null && args[1].nodeRef != null) {
+			    var me = this;
+			    var nodeRef = args[1].nodeRef;
+
+			    var loadTreeComplete = function() {
+				    tree.render();
+
+				    var highliteSelectedNode = function() {
+					    var selectedNode = me.selectedNode;
+					    for (var i = 0; i < selectedNode.children.length; i++) {
+						    var child = selectedNode.children[i];
+						    if (child.data.nodeRef == nodeRef) {
+							    me.selectedNode = child;
+						    }
+					    }
+
+					    me._treeNodeSelected(me.selectedNode);
+					    tree.onEventToggleHighlight(me.selectedNode);
+				    };
+
+				    if (!me.selectedNode.expanded) {
+					    tree.subscribe('expandComplete', function (event) {
+						    tree.unsubscribe("expandComplete");
+						    highliteSelectedNode();
+					    });
+
+					    me.selectedNode.expand();
+				    } else {
+					    highliteSelectedNode();
+				    }
+			    };
+			    this._loadTree(this.selectedNode, loadTreeComplete);
+		    }
+	    },
+
+	    onDeleteSelectedTreeItem: function (layer, args) {
+		    var me = this;
+		    var loadTreeComplete = function() {
+			    me.selectedNode.parent.isLeaf = me.selectedNode.parent.children == 0;
+			    tree.render();
+
+			    me._treeNodeSelected(me.selectedNode.parent);
+			    tree.onEventToggleHighlight(me.selectedNode);
+		    };
+		    this._loadTree(this.selectedNode.parent, loadTreeComplete);
+	    },
+
+	    onRefreshParentNode: function() {
+		    var parent = this.selectedNode.parent;
+		    var me = this;
+
+		    var loadTreeComplete = function() {
+			    tree.render();
+
+			    var selectedNodeRef = me.selectedNode.data.nodeRef;
+			    for (var i = 0; i < parent.children.length; i++) {
+				    var child = parent.children[i];
+				    if (child.data.nodeRef == selectedNodeRef) {
+					    me.selectedNode = child;
+				    }
+			    }
+
+			    tree.onEventToggleHighlight(me.selectedNode);
+		    };
+
+		    this._loadTree(parent, loadTreeComplete);
+	    },
+
         /**
          * Формирование адреса при редактировании или создании элемента дерева
          * @param type {string} тип действия edit - редактирование элемента

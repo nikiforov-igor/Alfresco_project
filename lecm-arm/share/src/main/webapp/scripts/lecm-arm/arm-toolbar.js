@@ -106,7 +106,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 							},
 							onSuccess:{
 								fn:function (response) {
-									YAHOO.Bubbling.fire("itemsListChanged");
+									YAHOO.Bubbling.fire("addTreeItem", {
+										nodeRef: response.json.persistedObject
+									});
 									Alfresco.util.PopupManager.displayMessage(
 										{
 											text: this.msg( "message.save.success")
@@ -144,10 +146,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 								responseContentType: Alfresco.util.Ajax.JSON,
 								successCallback: {
 									fn: function (response) {
-										YAHOO.Bubbling.fire("itemsListChanged", {
-											refreshParent: true,
-											selectParent: true
-										});
+										YAHOO.Bubbling.fire("deleteSelectedTreeItem");
 										Alfresco.util.PopupManager.displayMessage(
 											{
 												text: me.msg( "message.delete.success")
