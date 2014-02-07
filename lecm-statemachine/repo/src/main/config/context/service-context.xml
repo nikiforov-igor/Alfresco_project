@@ -90,6 +90,7 @@
 
 	<bean id="stateMachineHelper" class="ru.it.lecm.statemachine.StateMachineHelper">
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="activitiProcessEngineConfiguration" ref="activitiProcessEngineConfiguration"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentMembersService" ref="documentMembersService"/>

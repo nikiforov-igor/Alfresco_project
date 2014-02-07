@@ -22,6 +22,7 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
@@ -31,6 +32,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.DataTypeDefinition;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -41,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.*;
@@ -73,6 +76,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public static String ACTIVITI_PREFIX = "activiti$";
 
     private static ServiceRegistry serviceRegistry;
+    private Repository repositoryHelper;
     private static AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
     private static OrgstructureBean orgstructureBean;
     private static DocumentMembersService documentMembersService;
@@ -89,6 +93,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         StateMachineHelper.serviceRegistry = serviceRegistry;
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
     }
 
     public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
@@ -319,6 +327,18 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
         }
 //            }
+        }
+
+        TypeDefinition documentTypeQName = serviceRegistry.getDictionaryService().getType(QName.createQName(documentType, serviceRegistry.getNamespaceService()));
+        for (QName qName : documentTypeQName.getDefaultAspectNames()) {
+            if (DocumentService.ASPECT_FINALIZE_TO_UNIT.equals(qName)) {
+                NodeRef companyHome = repositoryHelper.getCompanyHome();
+                NodeRef companyArchive = serviceRegistry.getNodeService().getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
+                if (companyArchive != null) {
+                    folders.add(serviceRegistry.getNodeService().getPath(companyArchive).toPrefixString(getServiceRegistry().getNamespaceService()));
+                }
+                break;
+            }
         }
         return folders;
     }
