@@ -1,0 +1,442 @@
+package ru.it.lecm.approval;
+
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.DelegateTask;
+import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
+import org.apache.commons.lang.time.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.approval.api.ApprovalService;
+import ru.it.lecm.documents.beans.DocumentAttachmentsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.IWorkCalendar;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.alfresco.repo.policy.BehaviourFilter;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
+import org.alfresco.service.cmr.workflow.WorkflowTaskState;
+import ru.it.lecm.approval.api.ApprovalServiceModel;
+import ru.it.lecm.workflow.DocumentInfo;
+import ru.it.lecm.workflow.Utils;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
+import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
+import ru.it.lecm.workflow.api.WorkflowResultListService;
+import ru.it.lecm.workflow.api.WorkflowResultModel;
+import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
+
+/**
+ *
+ * @author vlevin
+ */
+public class ApprovalServiceImpl extends WorkflowServiceAbstract implements ApprovalService {
+
+	private final static Logger logger = LoggerFactory.getLogger(ApprovalServiceImpl.class);
+	private DocumentAttachmentsService documentAttachmentsService;
+	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
+
+	private IWorkCalendar workCalendar;
+	private WorkflowResultListService resultListService;
+	private WorkflowAssigneesListService assigneesListService;
+	private BehaviourFilter behaviourFilter;
+
+	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+		this.documentAttachmentsService = documentAttachmentsService;
+	}
+
+	public void setWorkCalendar(IWorkCalendar workCalendar) {
+		this.workCalendar = workCalendar;
+	}
+
+	public void setResultListService(WorkflowResultListService resultListService) {
+		this.resultListService = resultListService;
+	}
+
+	public void setAssigneesListService(WorkflowAssigneesListService assigneesListService) {
+		this.assigneesListService = assigneesListService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
+	}
+
+	private void logDecision(final NodeRef approvalListRef, final TaskDecision taskDecision) {
+		Date startDate, completionDate;
+		final String comment, decision, userName, commentFileAttachmentCategoryName, documentProjectNumber;
+		final NodeRef commentRef, documentRef, approvalListItemRef;
+		final Map<QName, Serializable> properties;
+
+		startDate = DateUtils.truncate(taskDecision.getStartDate(), Calendar.DATE);
+		completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
+		comment = taskDecision.getComment();
+		decision = taskDecision.getDecision();
+		userName = taskDecision.getUserName();
+		commentRef = taskDecision.getCommentRef();
+		documentRef = taskDecision.getDocumentRef();
+		commentFileAttachmentCategoryName = taskDecision.getCommentFileAttachmentCategoryName();
+		documentProjectNumber = taskDecision.getDocumentProjectNumber();
+
+		approvalListItemRef = resultListService.getResultItemByUserName(approvalListRef, userName);
+
+		properties = nodeService.getProperties(approvalListItemRef);
+
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE, startDate);
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, completionDate);
+		properties.put(ApprovalServiceModel.PROP_APPROVAL_ITEM_COMMENT, comment);
+		properties.put(ApprovalServiceModel.PROP_APPROVAL_ITEM_DECISION, decision);
+
+		nodeService.setProperties(approvalListItemRef, properties);
+
+		if (commentRef != null && documentRef != null && commentFileAttachmentCategoryName != null && documentProjectNumber != null) {
+			NodeRef attachmentCategoryRef = documentAttachmentsService.getCategory(commentFileAttachmentCategoryName, documentRef);
+			if (attachmentCategoryRef != null) {
+				StringBuilder commentFileName = new StringBuilder();
+				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
+				commentFileName.append(", ");
+
+				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date())).append(" + ");
+				commentFileName.append("Согласование сотрудником");
+
+				NodeRef employeeRef = findNodeByAssociationRef(approvalListItemRef, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+
+				if (employeeRef != null) {
+					commentFileName.append(" ").append(nodeService.getProperty(employeeRef, ContentModel.PROP_NAME));
+				}
+
+				String commentFileNameStr = FileNameValidator.getValidFileName(commentFileName.toString());
+
+				if (nodeService.getChildByName(attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentFileNameStr) != null) {
+					int i = 0;
+					do {
+						i++;
+					} while (nodeService.getChildByName(attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentFileNameStr + " " + i) != null);
+					commentFileNameStr += " " + i;
+				}
+
+				final NodeRef commentRefFinal = commentRef;
+				final String commentFileNameFinal = commentFileNameStr;
+				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+				transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public Object execute() throws Throwable {
+						nodeService.setProperty(commentRefFinal, ContentModel.PROP_NAME, commentFileNameFinal);
+						return null;
+					}
+				}, false, true);
+
+				QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameStr);
+				nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
+			}
+
+			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+			targetRefs.add(commentRef);
+			behaviourFilter.disableBehaviour(documentRef);
+			behaviourFilter.disableBehaviour(commentRef);
+			try {
+				nodeService.setAssociations(approvalListItemRef, ApprovalServiceModel.ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
+			} finally {
+				behaviourFilter.enableBehaviour(documentRef);
+				behaviourFilter.enableBehaviour(commentRef);
+			}
+		}
+
+	}
+
+	@Override
+	public void logFinalDecision(final NodeRef approvalListRef, final String finalDecision) {
+		Map<QName, Serializable> properties = nodeService.getProperties(approvalListRef);
+		properties.put(ApprovalServiceModel.PROP_APPROVAL_LIST_DECISION, finalDecision);
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE, new Date());
+		nodeService.setProperties(approvalListRef, properties);
+	}
+
+	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
+		Map<QName, Serializable> props = userTask.getProperties();
+		Date dueDate = (Date) props.get(org.alfresco.repo.workflow.WorkflowModel.PROP_DUE_DATE);
+		String owner = (String) props.get(ContentModel.PROP_OWNER);
+		NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+		List<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(employee);
+		Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
+		Date currentDate = new Date();
+		if (comingSoonDate != null) {
+			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+			Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
+				fakeProps.put(FAKE_PROP_COMINGSOON, "");
+				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				sendNotification(description, docInfo.getDocumentRef(), recipients);
+			}
+			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
+				fakeProps.put(FAKE_PROP_OVERDUE, "");
+				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				sendNotification(description, docInfo.getDocumentRef(), recipients);
+			}
+			if (!fakeProps.isEmpty()) {
+				workflowService.updateTask(userTask.getId(), fakeProps, null, null);
+			}
+		}
+	}
+
+	@Override
+	public void notifyAssigneesDeadline(final String processInstanceId, final NodeRef bpmPackage) {
+		try {
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+
+			WorkflowTaskQuery taskQuery = new WorkflowTaskQuery();
+			taskQuery.setProcessId(processInstanceId);
+			taskQuery.setTaskState(WorkflowTaskState.IN_PROGRESS);
+			List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
+			for (WorkflowTask task : tasks) {
+				logger.trace(task.toString());
+				notifyAssigneeDeadline(task, docInfo);
+			}
+		} catch (Exception ex) {
+			logger.error("Internal error while notifying Assignees", ex);
+		}
+	}
+
+	@Override
+	public void notifyInitiatorDeadline(final String processInstanceId, final NodeRef bpmPackage, final VariableScope variableScope) {
+		try {
+			boolean isDocumentApproval = Utils.isDocument(Utils.getDocumentFromBpmPackage(bpmPackage));
+			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+			Set<NodeRef> recipients = new HashSet<NodeRef>();
+			recipients.add(docInfo.getInitiatorRef());
+			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
+			Date dueDate = workflowInstance.getDueDate();
+			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
+			Date currentDate = new Date();
+			if (comingSoonDate != null) {
+				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
+					variableScope.setVariable("initiatorComingSoon", "");
+					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+				}
+				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
+					variableScope.setVariable("initiatorOverdue", "");
+					String people = getIncompleteAssignees(processInstanceId);
+					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate), people);
+					if (isDocumentApproval) {
+						//получить список кураторов и добавить его в recipients
+						recipients.addAll(Utils.getCurators());
+					}
+					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+				}
+			}
+		} catch (Exception ex) {
+			logger.error("Internal error while notifying initiator and curators", ex);
+		}
+	}
+
+	private NodeRef getOrCreateCustomApprovalFolder(NodeRef parentRef) {
+		NodeRef customApprovalRef = getFolder(parentRef, CUSTOM_APPROVAL_FOLDER_NAME);
+		if (customApprovalRef == null) {
+			customApprovalRef = createFolder(parentRef, CUSTOM_APPROVAL_FOLDER_NAME);
+		}
+		return customApprovalRef;
+	}
+
+	private NodeRef getOrCreateParallelApprovalFolder(NodeRef parentRef) {
+		NodeRef parallelApprovalRef = getFolder(parentRef, PARLLEL_APPROVAL_FOLDER_NAME);
+		if (parallelApprovalRef == null) {
+			parallelApprovalRef = createFolder(parentRef, PARLLEL_APPROVAL_FOLDER_NAME);
+		}
+		return parallelApprovalRef;
+	}
+
+	private NodeRef getOrCreateSequentialApprovalFolder(NodeRef parentRef) {
+		NodeRef parallelApprovalRef = getFolder(parentRef, SEQUENTIAL_APPROVAL_FOLDER_NAME);
+		if (parallelApprovalRef == null) {
+			parallelApprovalRef = createFolder(parentRef, SEQUENTIAL_APPROVAL_FOLDER_NAME);
+		}
+		return parallelApprovalRef;
+	}
+
+	@Override
+	public void completeTask(NodeRef assignee, DelegateTask task) {
+		String decision = (String) task.getVariableLocal("lecmApprove_approveTaskResult");
+		ActivitiScriptNode commentScriptNode = (ActivitiScriptNode) task.getVariableLocal("lecmApprove_approveTaskCommentAssoc");
+		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
+		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+
+		completeTask(assignee, task, decision, commentRef, dueDate);
+	}
+
+	@Override
+	public void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
+		DelegateExecution execution = task.getExecution();
+		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
+
+		// NB! номер документа теперь получается по-другому!
+		String documentProjectNumber = (String) execution.getVariable("documentProjectNumber");
+
+		TaskDecision taskDecision = new TaskDecision();
+		taskDecision.setUserName(task.getAssignee());
+		taskDecision.setDecision(decision);
+		taskDecision.setStartDate(task.getCreateTime());
+		taskDecision.setComment((String) task.getVariableLocal("bpm_comment"));
+		taskDecision.setCommentRef(commentRef);
+		taskDecision.setDocumentRef(Utils.getDocumentFromBpmPackage(bpmPackage));
+		taskDecision.setCommentFileAttachmentCategoryName(commentFileAttachmentCategoryName);
+		taskDecision.setDocumentProjectNumber(documentProjectNumber);
+		taskDecision.setDueDate(dueDate);
+		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
+
+		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
+		decisionsMap = addDecision(decisionsMap, taskDecision);
+		execution.setVariable("decisionsMap", decisionsMap);
+
+		NodeRef approvalListRef = resultListService.getResultListRef(task);
+		logDecision(approvalListRef, taskDecision);
+
+		execution.setVariable("taskDecision", decision);
+
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		revokeReviewerPermissions(employeeRef, bpmPackage);
+		grantReaderPermissions(employeeRef, bpmPackage);
+	}
+
+	private Map<String, String> addDecision(final Map<String, String> decisionMap, TaskDecision taskDecision) {
+		Map<String, String> currentDecisionMap = (decisionMap == null) ? new HashMap<String, String>() : decisionMap;
+
+		String userName = taskDecision.getUserName();
+		String decision = taskDecision.getDecision();
+
+		currentDecisionMap.put(userName, decision);
+		return currentDecisionMap;
+	}
+
+	@Override
+	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
+		String dueDatemessage = dueDate == null ? "(нет)" : dateFormatter.format(dueDate);
+		return String.format("Вам необходимо согласовать документ %s, срок согласования %s", documentLink, dueDatemessage);
+	}
+
+	@Override
+	protected String getWorkflowFinishedMessage(String documentLink, String decision) {
+		String decisionMsg;
+		if (DecisionResult.APPROVED.name().equals(decision)) {
+			decisionMsg = "согласовано";
+		} else if (DecisionResult.APPROVED_WITH_REMARK.name().equals(decision)) {
+			decisionMsg = "согласовано с замечаниями";
+		} else if (DecisionResult.REJECTED.name().equals(decision)) {
+			decisionMsg = "отклонено";
+		} else if (DecisionResult.APPROVED_FORCE.name().equals(decision)) {
+			decisionMsg = "принудительно завершено";
+		} else if (DecisionResult.REJECTED_FORCE.name().equals(decision)) {
+			decisionMsg = "отозвано с согласования";
+		} else if (DecisionResult.NO_DECISION.name().equals(decision)) {
+			decisionMsg = "решение не принято";
+		} else {
+			decisionMsg = "";
+		}
+
+		return String.format("Принято решение о документе %s: \"%s\"", documentLink, decisionMsg);
+
+	}
+
+	private NodeRef getOrCreateApprovalFolder(NodeRef parentRef, String approvalType) {
+		NodeRef result = null;
+		NodeRef approvalRef = getFolder(parentRef, "Согласование");
+		if (approvalRef == null) {
+			approvalRef = createFolder(parentRef, "Согласование");
+		}
+
+		if (APPROVAL_TYPE_PARALLEL.equals(approvalType)) {
+			result = getOrCreateParallelApprovalFolder(approvalRef);
+		} else if (APPROVAL_TYPE_SEQUENTIAL.equals(approvalType)) {
+			result = getOrCreateSequentialApprovalFolder(approvalRef);
+		} else if (APPROVAL_TYPE_CUSTOM.equals(approvalType)) {
+			result = getOrCreateCustomApprovalFolder(approvalRef);
+		}
+		return result;
+	}
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
+
+	@Override
+	public void assignTask(NodeRef assignee, DelegateTask task) {
+		Date dueDate = task.getDueDate();
+		if (dueDate == null) {
+			dueDate = assigneesListService.getAssigneesListItemDueDate(assignee);
+			task.setDueDate(dueDate);
+		}
+
+		String currentUserName = task.getAssignee();
+		String previousUserName = assigneesListService.getAssigneesListItemUserName(assignee);
+
+		if (!currentUserName.equals(previousUserName)) {
+			NodeRef approvalListRef = resultListService.getResultListRef(task);
+			NodeRef approvalListItemRef = resultListService.getResultItemByUserName(approvalListRef, currentUserName);
+			if (approvalListItemRef == null) {
+				String newItemTitle = String.format(ASSEGNEE_ITEM_FORMAT, currentUserName);
+				resultListService.createResultItem(approvalListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, ApprovalServiceModel.TYPE_APPROVAL_ITEM);
+			}
+			NodeRef oldApprovalListItem = resultListService.getResultItemByUserName(approvalListRef, previousUserName);
+			if (oldApprovalListItem != null) {
+				nodeService.setProperty(oldApprovalListItem, ApprovalServiceModel.PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
+				nodeService.setProperty(oldApprovalListItem, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, new Date());
+			}
+		}
+
+		DelegateExecution execution = task.getExecution();
+		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		grantReviewerPermissions(employeeRef, bpmPackage);
+		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
+	}
+
+	@Override
+	public NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, ActivitiScriptNodeList assigneesList) {
+		NodeRef resultListContainer = resultListService.getOrCreateWorkflowResultFolder(bpmPackage);
+		NodeRef approvalFolder = getOrCreateApprovalFolder(resultListContainer, approvalType);
+		NodeRef approvalList = resultListService.createResultList(approvalFolder, bpmPackage, documentAttachmentCategoryName, ApprovalServiceModel.TYPE_APPROVAL_LIST, APPROVAL_LIST_NAME);
+
+		resultListService.prepareResultList(approvalList, assigneesList, ApprovalServiceModel.TYPE_APPROVAL_ITEM);
+
+		return approvalList;
+	}
+
+	@Override
+	public List<NodeRef> createAssigneesList(NodeRef nodeRef, DelegateExecution execution) {
+		return assigneesListService.createAssigneesListWorkingCopy(nodeRef, execution);
+	}
+
+	@Override
+	public void deleteTempAssigneesList(DelegateExecution execution) {
+		assigneesListService.deleteAssigneesListWorkingCopy(execution);
+	}
+
+	@Override
+	public NodeRef getEmployeeForAssignee(NodeRef assignee) {
+		return assigneesListService.getEmployeeByAssignee(assignee);
+	}
+
+}

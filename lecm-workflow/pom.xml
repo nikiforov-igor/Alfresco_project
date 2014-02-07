@@ -20,5 +20,7 @@
         <module>repo</module>
         <module>share</module>
         <module>lecm-signing</module>
+		<module>lecm-review</module>
+		<module>lecm-approval</module>
     </modules>
 </project>
