@@ -205,22 +205,27 @@
                 if (node.data.counterLimit && node.data.counterLimit.length > 0) {
                     searchQuery += " AND (" + node.data.counterLimit + ") ";
                 }
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/count/by-query?query=" + searchQuery;
-                var callback = {
-                    success: function (oResponse) {
-                        var oResults = eval("(" + oResponse.responseText + ")");
-                        if (oResults != null) {
-                            var label = node.getLabelEl();
-                            label.innerHTML = node.label + " (" + oResults + ")";
+
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
+                    dataObj: {
+                        query:searchQuery
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            if (oResponse != null) {
+                                var label = node.getLabelEl();
+                                label.innerHTML = node.label + " (" + oResponse.json + ")";
+                            }
                         }
                     },
-                    failure: function (oResponse) {
-                        alert(oResponse);
-                        node.label = node.label + " (" + 0 + ")";
-                    },
-                    timeout: 5000
-                };
-                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                    failureCallback: {
+                        fn: function () {
+                            node.label = node.label + " (" + 0 + ")";
+                        }
+                    }
+                });
             }
         },
 
