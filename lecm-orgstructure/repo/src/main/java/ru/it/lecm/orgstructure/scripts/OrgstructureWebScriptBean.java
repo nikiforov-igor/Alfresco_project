@@ -1043,6 +1043,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return orgstructureService.isCurrentEmployeeHasBusinessRole(roleId);
 	}
 
+	public boolean isEmployeeHasBusinessRole(ScriptNode employee, String roleId, boolean withDelegation, boolean inheritSubordinatesRoles) {
+		ParameterCheck.mandatory("roleId", roleId);
+		return orgstructureService.isEmployeeHasBusinessRole(employee.getNodeRef(), roleId, withDelegation, inheritSubordinatesRoles);
+	}
+
 	public String getEmployeeLogin(ScriptNode employee) {
 		return orgstructureService.getEmployeeLogin(employee.getNodeRef());
 	}
