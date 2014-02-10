@@ -2633,3 +2633,18 @@ div.form-field table.formFieldControlParamsTable {
 #no_menu_page #bd #lecm-page {
     margin-left: 5px;
 }
+
+.yui-skin-lecmTheme .form-container .incomplete-warning
+{
+    margin-left: auto;
+}
+
+.yui-skin-lecmTheme .form-container .incomplete-warning img
+{
+    display: none;
+}
+
+.yui-skin-lecmTheme .form-container .incomplete-warning .viewmode-label
+{
+    color: red;
+}
