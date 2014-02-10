@@ -52,7 +52,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createErrandDetails");
                 createDetails.setOptions(
                     {
-                        width: "55em",
+                        width: "60em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,
