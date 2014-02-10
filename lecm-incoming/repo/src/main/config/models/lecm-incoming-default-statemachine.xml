@@ -2505,7 +2505,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[var incoming = bpm_package.children[0];
 
-if (orgstructure.isCurrentEmployeeHasBusinessRole("INCOMING_RECORDER") &&
+if (orgstructure.isEmployeeHasBusinessRole(orgstructure.getCurrentEmployee(), "INCOMING_RECORDER", true, true) &&
 !regnumbers.isDocumentRegistered(incoming)) {
 regnumbers.registerDocument(incoming, "INCOMING_NUMBER");
 incoming.save();
