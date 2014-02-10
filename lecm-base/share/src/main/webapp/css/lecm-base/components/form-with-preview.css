@@ -39,6 +39,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
 	width: 160px;
 	overflow: hidden;
+    float: left;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
