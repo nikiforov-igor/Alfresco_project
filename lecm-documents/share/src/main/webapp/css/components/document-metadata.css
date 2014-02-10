@@ -23,3 +23,10 @@ div.association-auto-complete-selected-item > span.not-person,
 div.association-auto-complete-selected-item-even > span.not-person {
     overflow-x: inherit;
 }
+
+.yui-skin-lecmTheme .yui-panel div.form-field div.association-auto-complete-selected-item > span > a
+.yui-skin-lecmTheme .yui-panel div.form-field div.association-auto-complete-selected-item-even > span > a,
+.yui-skin-lecmTheme .yui-panel div.form-field div.association-auto-complete-selected-item > span.not-person,
+.yui-skin-lecmTheme .yui-panel div.form-field div.association-auto-complete-selected-item-even > span.not-person {
+    overflow-x: hidden;
+}
