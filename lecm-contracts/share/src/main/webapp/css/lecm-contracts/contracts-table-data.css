@@ -173,3 +173,7 @@
     width: 120px;
 }
 
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit div.form-field.dnd-uploader > div.uploader-block:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+	margin-left: 170px;
+}
+

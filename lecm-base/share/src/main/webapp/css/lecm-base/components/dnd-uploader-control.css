@@ -29,7 +29,7 @@
 }
 .dnd-uploader div.uploader-block {
     float: left;
-    margin: -12px 0 0 !important;
+    /*margin: -12px 0 0 !important;*/
 }
 .dnd-uploader div.uploader-block fieldset {
     width: 150px;
