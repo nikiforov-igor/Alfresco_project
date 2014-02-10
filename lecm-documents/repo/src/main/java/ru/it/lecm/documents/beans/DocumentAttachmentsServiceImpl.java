@@ -128,32 +128,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
     public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
 	    NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
 	    if (result == null) {
-	        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-	            @Override
-	            public NodeRef doWork() throws Exception {
-	                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-	                    @Override
-	                    public NodeRef execute() throws Throwable {
-	                        NodeRef categoryFolderRef;
-                            categoryFolderRef = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-                            if (categoryFolderRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, category);
-                                QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, category);
-                                ChildAssociationRef associationRef = nodeService.createNode(attachmentRootRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                categoryFolderRef = associationRef.getChildRef();
-                                //не индексируем свойства папки
-                                disableNodeIndex(categoryFolderRef);
-                            }
-	                        return categoryFolderRef;
-	                    }
-	                });
-	            }
-	        };
-		    result = AuthenticationUtil.runAsSystem(raw);
+		    result = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
+		    disableNodeIndex(result);
 	    }
 	    return result;
     }
@@ -244,12 +220,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	@Override
 	public boolean isReadonlyCategory(NodeRef nodeRef) {
-		boolean result = true;
 		NodeRef document = this.getDocumentByCategory(nodeRef);
-		if (document != null) {
-			return this.stateMachineBean.isReadOnlyCategory(document, getCategoryName(nodeRef));
-		}
-		return result;
+		return document == null || this.stateMachineBean.isReadOnlyCategory(document, getCategoryName(nodeRef));
 	}
 
 	@Override

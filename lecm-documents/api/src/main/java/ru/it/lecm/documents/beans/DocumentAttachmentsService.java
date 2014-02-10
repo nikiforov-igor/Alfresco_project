@@ -18,6 +18,9 @@ public interface DocumentAttachmentsService {
 
     public static final String CONSTRAINT_ATTACHMENT_CATEGORIES = "attachment-categories";
 
+	public static final QName TYPE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "attachmentsCategory");
+	public static final QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
+
     /**
      * Получение папки с вложениями для документра
      * @param documentRef Ссылка на документ

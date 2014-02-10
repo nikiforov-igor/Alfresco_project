@@ -102,6 +102,8 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "beforeCreateVersion"));
         policyComponent.bindClassBehaviour(VersionServicePolicies.AfterCreateVersionPolicy.QNAME,
 			    ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "afterCreateVersion", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnMoveNodePolicy.QNAME,
+				ContentModel.TYPE_CONTENT, new JavaBehaviour(this, "onMoveNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
 	public void beforeCreateNode(NodeRef parentRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
@@ -124,6 +126,9 @@ public class DocumentAttachmentsPolicy extends BaseBean {
         if (document != null) {
 	        if (!this.isCreatingWorkingCopy) {
 		        NodeRef attachmentRef = childAssocRef.getChildRef();
+		        NodeRef category = childAssocRef.getParentRef();
+
+		        nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 
 		        // добавляем пользователя добавившего вложение как участника
 		        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
@@ -292,5 +297,25 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
+	}
+
+	public void onMoveNode(ChildAssociationRef oldChildAssocRef, ChildAssociationRef newChildAssocRef) {
+		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(newChildAssocRef);
+		if (document != null) {
+			if (!this.isCreatingWorkingCopy) {
+				NodeRef attachmentRef = newChildAssocRef.getChildRef();
+				NodeRef category = newChildAssocRef.getParentRef();
+
+				nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
+
+				List<String> objects = new ArrayList<String>(1);
+				objects.add(attachmentRef.toString());
+				businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+
+				addParentDocumentAspect(document, attachmentRef);
+			} else {
+				this.isCreatingWorkingCopy = false;
+			}
+		}
 	}
 }

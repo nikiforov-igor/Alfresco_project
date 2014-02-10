@@ -1,0 +1,4 @@
+{
+	"updatedCategories": ${updatedCategories},
+	"createdAssociations": ${createdAssociations}
+}
