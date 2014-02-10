@@ -317,4 +317,6 @@ public interface BusinessJournalService {
     BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
 	BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription);
+    
+    void dropCache();
 }

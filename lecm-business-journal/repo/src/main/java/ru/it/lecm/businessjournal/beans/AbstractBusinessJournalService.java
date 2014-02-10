@@ -21,8 +21,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.util.*;
 
 /**
- * User: pmelnikov
- * Date: 02.12.13
+ * User: pmelnikov 
+ * Date: 02.12.13 
  * Time: 15:54
  */
 public abstract class AbstractBusinessJournalService extends BaseBean {
@@ -37,10 +37,31 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     private DictionaryService dicService;
     private PersonService personService;
     private JmsTemplate jmsTemplate;
+    final private Map<NodeRef, Boolean> logSettingsCache = Collections.synchronizedMap(new HashMap<NodeRef, Boolean>());
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBusinessJournalService.class);
     private ThreadLocal<IgnoredCounter> threadSettings = new ThreadLocal<IgnoredCounter>();
 
+    public void dropCache() {
+        synchronized (logSettingsCache) {
+            logSettingsCache.clear();
+        }
+    }
+
+    public Boolean isEventCategoryOn(NodeRef categoryRef) {
+        Boolean result;
+        synchronized (logSettingsCache) {
+            if (logSettingsCache.containsKey(categoryRef)) {
+                result = logSettingsCache.get(categoryRef);
+            } else {
+                result = (null == categoryRef) || !Boolean.FALSE.equals(nodeService.getProperty(categoryRef, BusinessJournalService.PROP_EVENT_CAT_ON));
+                if (null != categoryRef) {
+                    logSettingsCache.put(categoryRef, result);
+                }
+            }
+        }
+        return result;
+    }
 
     public abstract void saveToStore(BusinessJournalRecord record) throws Exception;
 
@@ -292,13 +313,13 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         jmsTemplate.convertAndSend(record);
     }
 
-	public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
-		NodeRef person = null;
+    public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
+        NodeRef person = null;
         if (personService.personExists(initiator)) {
             person = personService.getPerson(initiator, false);
         }
-		return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
-	}
+        return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
+    }
 
     public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
         NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
@@ -307,10 +328,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         Map<String, String> holdersMap = fillHolders(employee, mainObject, objects);
         // пытаемся получить объект Категория события по ключу
         NodeRef category = getEventCategoryByCode(eventCategory);
-        if (null!=category && Boolean.FALSE.equals(nodeService.getProperty(category, BusinessJournalService.PROP_EVENT_CAT_ON))) {
+        if (!isEventCategoryOn(category)) {
             return null;
         }
-        
+
         // получаем шаблон описания
         String templateString = getTemplateString(getObjectType(mainObject), category, defaultDescription);
         // заполняем шаблон данными
@@ -318,11 +339,13 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
         String mainObjectDescription = getObjectDescription(mainObject);
         List<RecordObject> objectsDescription = new ArrayList<RecordObject>();
-        if (objects != null && objects.size() > 0) for (int i = 0; i < objects.size() && i < 5; i++) {
-            String str = objects.get(i);
-            NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
-            String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
-            objectsDescription.add(new RecordObject(nodeRef, objectDescription));
+        if (objects != null && objects.size() > 0) {
+            for (int i = 0; i < objects.size() && i < 5; i++) {
+                String str = objects.get(i);
+                NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
+                String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+                objectsDescription.add(new RecordObject(nodeRef, objectDescription));
+            }
         }
 
         NodeRef objectType = getObjectType(mainObject);

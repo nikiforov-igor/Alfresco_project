@@ -340,6 +340,16 @@
             <ref bean="businessJournalArchiveSchedule"/>
         </property>
     </bean>
+    
+    <bean id="updateEventCategoryPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalEventCategoryUpdatePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="service">
+            <ref bean="businessJournalService"/>
+        </property>
+    </bean>
 
     <bean id="businessJournalAddHistoryToMainObjectPolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalAddHistoryToMainObjectPolicy"
           init-method="init">
