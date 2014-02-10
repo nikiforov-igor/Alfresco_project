@@ -26,6 +26,9 @@
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"
 		  p:models-ref="workflow.models"/>
 
+	<bean id="workflow.utils" class="ru.it.lecm.workflow.Utils"
+		  depends-on="nodeService dictionaryService serviceOrgstructure versionService documentAttachmentsService"/>
+
 	<bean id="lecmWorkflowService" abstract="true" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.WorkflowServiceAbstract"
 		  depends-on="workflow.model.bootstrap"

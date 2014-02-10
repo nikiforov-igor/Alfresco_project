@@ -16,7 +16,7 @@ public class WorkflowFoldersServiceImpl extends BaseBean implements WorkflowFold
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return  getWorkflowFolder();
+		return getWorkflowFolder();
 	}
 
 	@Override

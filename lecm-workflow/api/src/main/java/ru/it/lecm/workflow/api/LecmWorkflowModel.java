@@ -101,8 +101,19 @@ public final class LecmWorkflowModel {
 	 */
 	public final static QName PROP_ASSIGNEE_DAYS_TO_COMPLETE = QName.createQName(WORKFLOW_NAMESPACE, "assignee-days-to-complete");
 
+	/**
+	 * &lt;constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST"&gt;
+	 * SEQUENTIAL - последовательный процесс
+	 */
+	public final static String CONCURRENCY_SEQ = "SEQUENTIAL";
+
+	/**
+	 * &lt;constraint name="lecm-workflow:workflow-concurrency-constraint" type="LIST"&gt;
+	 * PARALLEL - параллельный процесс
+	 */
+	public final static String CONCURRENCY_PAR = "PARALLEL";
+
 	private LecmWorkflowModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of LecmWorkflowModel class.");
 	}
-
 }
