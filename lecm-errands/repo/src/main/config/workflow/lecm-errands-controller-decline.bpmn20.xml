@@ -34,6 +34,7 @@
 				                        logText += documentScript.wrapperTitle("отклонил", lecmErrandWf_controllerDeclineReason);
 				                        logText += " выполнение поручения: #mainobject.";
 				                        businessJournal.log(document.nodeRef.toString(), "ERRAND_DECLINE", logText, []);
+                                        execution.setVariable("executeResult", "");
 			                        }
 		                        }
 	                        }
