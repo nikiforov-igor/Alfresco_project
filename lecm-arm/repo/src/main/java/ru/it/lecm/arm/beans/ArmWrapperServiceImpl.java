@@ -3,9 +3,8 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
-import ru.it.lecm.arm.beans.query.ArmBaseQuery;
-import ru.it.lecm.arm.beans.query.ArmStaticQuery;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
@@ -97,7 +96,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public boolean hasChildNodes(ArmNode node) {
         return !getChildNodes(node.getNodeRef(), node.getArmNodeRef()).isEmpty() ||
-                (node.getNodeQuery() != null && (!(node.getNodeQuery() instanceof ArmStaticQuery) && !node.getNodeQuery().build(this, node).isEmpty()));
+                (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
     }
 
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion) {
@@ -110,11 +109,16 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             node.setArmNodeRef(nodeRef);
         }
         node.setCounter(service.getNodeCounter(nodeRef));
-        node.setNodeQuery(!isAccordion ? service.getNodeQuery(nodeRef) : service.getAccordionQuery(nodeRef));
+        node.setNodeQuery(!isAccordion ? service.getNodeChildRule(nodeRef) : null);
 
         node.setColumns(getNodeColumns(nodeRef));
         node.setAvaiableFilters(getNodeFilters(nodeRef));
         node.setTypes(getNodeTypes(nodeRef));
+
+	    String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+        if (searchQuery != null) {
+	        node.setSearchQuery(formatQuery(searchQuery, nodeRef));
+        }
 
         return node;
     }
@@ -133,11 +137,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setAvaiableFilters(parentNode.getAvaiableFilters());
         node.setCounter(parentNode.getCounter());
         node.setTypes(parentNode.getTypes());
+	    if (parentNode.getSearchQuery() != null) {
+            node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
+	    }
 
-        ArmBaseQuery parentQuery = parentNode.getNodeQuery();
+        ArmBaseChildRule parentQuery = parentNode.getNodeQuery();
         if (parentQuery != null) {
-            ArmBaseQuery dupQuery = parentQuery.getDuplicate();
-            dupQuery.setSearchQuery(formatQuery(parentQuery.getSearchQuery(), nodeRef));
+            ArmBaseChildRule dupQuery = parentQuery.getDuplicate();
             node.setNodeQuery(dupQuery);
         }
         return node;

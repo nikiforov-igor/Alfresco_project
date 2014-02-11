@@ -1,4 +1,4 @@
-package ru.it.lecm.arm.beans.query;
+package ru.it.lecm.arm.beans.childRules;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
@@ -13,7 +13,7 @@ import java.util.List;
  * Date: 05.02.14
  * Time: 10:00
  */
-public class ArmDictionaryDynamicQuery extends ArmBaseQuery {
+public class ArmDictionaryChildRule extends ArmBaseChildRule {
 	private NodeRef dictionary;
 
     private DictionaryBean dictionaryService;
@@ -41,11 +41,10 @@ public class ArmDictionaryDynamicQuery extends ArmBaseQuery {
     }
 
     @Override
-    public ArmBaseQuery getDuplicate() {
-        ArmDictionaryDynamicQuery query =  new ArmDictionaryDynamicQuery();
+    public ArmBaseChildRule getDuplicate() {
+        ArmDictionaryChildRule query =  new ArmDictionaryChildRule();
         query.setDictionaryService(dictionaryService);
         //query.setDictionary(dictionary);
-        query.setSearchQuery(getSearchQuery());
 
         return query;
     }

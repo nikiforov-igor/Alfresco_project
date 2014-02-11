@@ -7,10 +7,9 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.arm.beans.query.ArmBaseQuery;
-import ru.it.lecm.arm.beans.query.ArmDictionaryDynamicQuery;
-import ru.it.lecm.arm.beans.query.ArmDynamicQuery;
-import ru.it.lecm.arm.beans.query.ArmStaticQuery;
+import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
+import ru.it.lecm.arm.beans.childRules.ArmDictionaryChildRule;
+import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
@@ -191,41 +190,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	}
 
 	@Override
-	public ArmStaticQuery getAccordionQuery(NodeRef accordion) {
-		if (isArmAccordion(accordion)) {
-			NodeRef query = findNodeByAssociationRef(accordion, ASSOC_ACCORDION_QUERY, TYPE_STATIC_QUERY, ASSOCIATION_TYPE.TARGET);
-			if (query != null) {
-				ArmStaticQuery result = new ArmStaticQuery();
-				result.setSearchQuery((String) nodeService.getProperty(query, PROP_SEARCH_QUERY));
-				return result;
-			}
-		}
-
-		return null;
-	}
-
-	@Override
-	public ArmBaseQuery getNodeQuery(NodeRef node) {
+	public ArmBaseChildRule getNodeChildRule(NodeRef node) {
 		if (isArmNode(node)) {
-			List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_QUERY);
+			List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_CHILD_RULE);
 			if (queryAssoc != null && queryAssoc.size() > 0) {
-				ArmBaseQuery result = null;
+				ArmBaseChildRule result = null;
 				NodeRef query = queryAssoc.get(0).getTargetRef();
 				QName queryType = nodeService.getType(query);
-				if (TYPE_STATIC_QUERY.equals(queryType)) {
-					result = new ArmStaticQuery();
-				} else if (TYPE_DYNAMIC_QUERY.equals(queryType)) {
-					result = new ArmDynamicQuery();
-					((ArmDynamicQuery) result).setListQuery((String) nodeService.getProperty(query, PROP_LIST_QUERY));
-                    ((ArmDynamicQuery) result).setSearchService(searchService);
-				} else if (TYPE_DICTIONARY_DYNAMIC_QUERY.equals(queryType)) {
-					result = new ArmDictionaryDynamicQuery();
-					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_QUERY, DictionaryBean.TYPE_DICTIONARY, ASSOCIATION_TYPE.TARGET);
-					((ArmDictionaryDynamicQuery) result).setDictionary(dictionary);
-                    ((ArmDictionaryDynamicQuery) result).setDictionaryService(dictionaryService);
-				}
-				if (result != null) {
-					result.setSearchQuery((String) nodeService.getProperty(query, PROP_SEARCH_QUERY));
+				if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
+					result = new ArmQueryChildRule();
+					((ArmQueryChildRule) result).setListQuery((String) nodeService.getProperty(query, PROP_LIST_QUERY_CHILD_RULE));
+                    ((ArmQueryChildRule) result).setSearchService(searchService);
+				} else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
+					result = new ArmDictionaryChildRule();
+					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, DictionaryBean.TYPE_DICTIONARY, ASSOCIATION_TYPE.TARGET);
+					((ArmDictionaryChildRule) result).setDictionary(dictionary);
+                    ((ArmDictionaryChildRule) result).setDictionaryService(dictionaryService);
 				}
 				return result;
 			}

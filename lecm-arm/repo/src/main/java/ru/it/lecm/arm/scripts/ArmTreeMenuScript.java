@@ -92,7 +92,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(FILTER, node.getAvaiableFilters());
 
             if (node.getNodeQuery() != null) {
-                result.put(SEARCH_QUERY, node.getNodeQuery().getSearchQuery());
+                result.put(SEARCH_QUERY, node.getSearchQuery());
             }
 
             if (node.getCounter() != null) {

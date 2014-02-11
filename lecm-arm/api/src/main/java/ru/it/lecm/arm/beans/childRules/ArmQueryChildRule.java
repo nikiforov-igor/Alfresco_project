@@ -1,4 +1,4 @@
-package ru.it.lecm.arm.beans.query;
+package ru.it.lecm.arm.beans.childRules;
 
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -16,7 +16,7 @@ import java.util.List;
  * Date: 05.02.14
  * Time: 9:59
  */
-public class ArmDynamicQuery extends ArmBaseQuery {
+public class ArmQueryChildRule extends ArmBaseChildRule {
 	private String listQuery;
 
 	public void setListQuery(String listQuery) {
@@ -58,10 +58,9 @@ public class ArmDynamicQuery extends ArmBaseQuery {
     }
 
     @Override
-    public ArmBaseQuery getDuplicate() {
-        ArmDynamicQuery query =  new ArmDynamicQuery();
+    public ArmBaseChildRule getDuplicate() {
+        ArmQueryChildRule query =  new ArmQueryChildRule();
         query.setSearchService(searchService);
-        query.setSearchQuery(getSearchQuery());
         query.setListQuery(listQuery);
 
         return query;

@@ -2,8 +2,7 @@ package ru.it.lecm.arm.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.arm.beans.query.ArmBaseQuery;
-import ru.it.lecm.arm.beans.query.ArmStaticQuery;
+import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,13 +24,13 @@ public interface ArmService {
 	public static final QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");
 	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
 	public static final QName PROP_NODE_TYPES = QName.createQName(ARM_NAMESPACE_URI, "types");
+	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
 	public static final QName PROP_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters");
 	public static final QName PROP_COUNTER_ENABLE = QName.createQName(ARM_NAMESPACE_URI, "counter-enable");
 	public static final QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	public static final QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
-	public static final QName ASSOC_NODE_QUERY = QName.createQName(ARM_NAMESPACE_URI, "node-query-assoc");
-	public static final QName ASSOC_ACCORDION_QUERY = QName.createQName(ARM_NAMESPACE_URI, "accordion-query-assoc");
+	public static final QName ASSOC_NODE_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "node-child-rule-assoc");
 	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
@@ -40,14 +39,11 @@ public interface ArmService {
 	public static final QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
 	public static final QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
 
-	public static final QName TYPE_STATIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "static-query");
-	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
+	public static final QName TYPE_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "query-child-rule");
+	public static final QName PROP_LIST_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "list-query-child-rule");
 
-	public static final QName TYPE_DYNAMIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "dynamic-query");
-	public static final QName PROP_LIST_QUERY = QName.createQName(ARM_NAMESPACE_URI, "list-query");
-
-	public static final QName TYPE_DICTIONARY_DYNAMIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "dynamic-dictionary-query");
-	public static final QName ASSOC_DICTIONARY_QUERY = QName.createQName(ARM_NAMESPACE_URI, "query-dictionary-assoc");
+	public static final QName TYPE_DICTIONARY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "dictionary-child-rule");
+	public static final QName ASSOC_DICTIONARY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "child-rule-dictionary-assoc");
 
 	public static final QName ASPECT_ARM_ORDERED = QName.createQName(ARM_NAMESPACE_URI, "ordered");
 	public static final QName PROP_ARM_ORDER = QName.createQName(ARM_NAMESPACE_URI, "order");
@@ -126,16 +122,9 @@ public interface ArmService {
 	public List<ArmColumn> getNodeColumns(NodeRef node);
 
 	/**
-	 * Получение запроса для аккордиона
-	 * @param accordion аккордион
-	 * @return статический запрос
-	 */
-	public ArmStaticQuery getAccordionQuery(NodeRef accordion);
-
-	/**
 	 * Получение запроса для узла
 	 * @param node узел
 	 * @return запрос
 	 */
-	public ArmBaseQuery getNodeQuery(NodeRef node);
+	public ArmBaseChildRule getNodeChildRule(NodeRef node);
 }

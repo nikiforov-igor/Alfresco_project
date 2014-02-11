@@ -3,7 +3,7 @@ package ru.it.lecm.arm.beans.node;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmColumn;
 import ru.it.lecm.arm.beans.ArmCounter;
-import ru.it.lecm.arm.beans.query.ArmBaseQuery;
+import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 
 import java.util.List;
 
@@ -17,12 +17,13 @@ public class ArmNode {
     private NodeRef armNodeRef;
     private String title;
     private List<String> types;
+	private String searchQuery;
     private List<ArmColumn> columns;
     private List<String> avaiableFilters;
     private ArmCounter counter;
     private boolean hasChilds = false;
 
-    private ArmBaseQuery nodeQuery;
+    private ArmBaseChildRule nodeQuery;
 
     public void setTitle(String title) {
         this.title = title;
@@ -40,7 +41,15 @@ public class ArmNode {
         return types;
     }
 
-    public List<ArmColumn> getColumns() {
+	public String getSearchQuery() {
+		return searchQuery;
+	}
+
+	public void setSearchQuery(String searchQuery) {
+		this.searchQuery = searchQuery;
+	}
+
+	public List<ArmColumn> getColumns() {
         return columns;
     }
 
@@ -87,11 +96,11 @@ public class ArmNode {
         this.nodeRef = nodeRef;
     }
 
-    public ArmBaseQuery getNodeQuery() {
+    public ArmBaseChildRule getNodeQuery() {
         return nodeQuery;
     }
 
-    public void setNodeQuery(ArmBaseQuery searchQuery) {
+    public void setNodeQuery(ArmBaseChildRule searchQuery) {
         this.nodeQuery = searchQuery;
     }
 

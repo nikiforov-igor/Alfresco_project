@@ -61,19 +61,6 @@
 						<many>true</many>
 					</target>
 				</association>
-
-				<!-- Запрос -->
-				<association name="lecm-arm:accordion-query-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-arm:static-query</class>
-						<mandatory>false</mandatory>
-						<many>false</many>
-					</target>
-				</association>
 			</associations>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">
@@ -88,14 +75,14 @@
 		<type name="lecm-arm:node">
 			<parent>lecm-arm:base-node</parent>
 			<associations>
-				<!-- Запрос -->
-				<association name="lecm-arm:node-query-assoc">
+				<!-- Правило построения узлов -->
+				<association name="lecm-arm:node-child-rule-assoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-arm:base-query</class>
+						<class>lecm-arm:base-child-rule</class>
 						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
@@ -113,6 +100,16 @@
 			<properties>
 				<!--Отображаемые типы-->
 				<property name="lecm-arm:types">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!--Поисковый запрос-->
+				<property name="lecm-arm:search-query">
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<index enabled="true">
@@ -227,31 +224,15 @@
 			</properties>
 		</type>
 
-		<type name="lecm-arm:base-query">
+		<type name="lecm-arm:base-child-rule">
 			<parent>cm:cmobject</parent>
-			<properties>
-				<!--Поисковый запрос-->
-				<property name="lecm-arm:search-query">
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
-			</properties>
 		</type>
 
-		<type name="lecm-arm:static-query">
-			<parent>lecm-arm:base-query</parent>
-		</type>
-
-		<type name="lecm-arm:dynamic-query">
-			<parent>lecm-arm:base-query</parent>
+		<type name="lecm-arm:query-child-rule">
+			<parent>lecm-arm:base-child-rule</parent>
 			<properties>
 				<!--Запрос для списка-->
-				<property name="lecm-arm:list-query">
+				<property name="lecm-arm:list-query-child-rule">
 					<type>d:text</type>
 					<mandatory>false</mandatory>
 					<index enabled="true">
@@ -263,11 +244,11 @@
 			</properties>
 		</type>
 
-		<type name="lecm-arm:dynamic-dictionary-query">
-			<parent>lecm-arm:base-query</parent>
+		<type name="lecm-arm:dictionary-child-rule">
+			<parent>lecm-arm:base-child-rule</parent>
 			<associations>
 				<!-- Справочник -->
-				<association name="lecm-arm:query-dictionary-assoc">
+				<association name="lecm-arm:child-rule-dictionary-assoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
