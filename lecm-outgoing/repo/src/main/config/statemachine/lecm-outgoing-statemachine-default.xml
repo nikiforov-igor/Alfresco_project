@@ -985,8 +985,8 @@ outgoing.save();]]>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -1005,15 +1005,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/459e94e9-0e9f-49ea-a45f-f41ee0f23aa8</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -1046,15 +1046,15 @@ outgoing.save();]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[commentFileAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Согласование]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[commentFileAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -1081,15 +1081,15 @@ outgoing.save();]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentProjectNumber]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[lecm-document:present-string]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentProjectNumber]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -1116,15 +1116,15 @@ outgoing.save();]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Исходящее]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -1198,8 +1198,8 @@ outgoing.save();]]>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -1239,6 +1239,41 @@ outgoing.save();]]>
 																				<name>outputFromValue</name>
 																				<value>
 																					<![CDATA[isSigned]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>b0bdcbf7-87aa-4a2f-a236-f7148b72a05d</name>
+																		<nodeRef>workspace://SpacesStore/cb40cdc5-32c2-4bac-93b3-4113bd1cb989</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[Исходящее]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -1313,15 +1348,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/4d5196e3-dedc-4249-a134-07b397072ca2</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -1342,15 +1377,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/902f4de0-891c-49c7-aa01-a984eaaea705</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -2571,15 +2606,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/448b4218-ac70-4ed4-a9c4-bb8eb856922f</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -2600,15 +2635,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/6d2ca917-ed24-4729-911e-7a7f8c0dad67</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -3409,8 +3444,8 @@ outgoing.save();]]>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -3450,6 +3485,41 @@ outgoing.save();]]>
 																				<name>outputFromValue</name>
 																				<value>
 																					<![CDATA[isSigned]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>0ceba03b-15d6-48f4-9d26-c4c4fb521bf3</name>
+																		<nodeRef>workspace://SpacesStore/40bb5cd6-f2a8-4a7b-a940-a6b65f2c3a1a</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[Исходящее]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -3524,15 +3594,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/8226a76b-d3e3-414d-8820-ca03416771a1</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -3553,15 +3623,15 @@ outgoing.save();]]>
 																		<nodeRef>workspace://SpacesStore/c1665d56-7a2f-481f-9f3a-5864b133fc71</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -4358,8 +4428,8 @@ notifications.sendNotification(notification);]]>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -4378,15 +4448,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/ba086176-0025-41e0-8797-272d903b669f</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -4419,15 +4489,15 @@ notifications.sendNotification(notification);]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentProjectNumber]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[lecm-document:present-string]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentProjectNumber]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4454,15 +4524,15 @@ notifications.sendNotification(notification);]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Исходящее]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4489,15 +4559,15 @@ notifications.sendNotification(notification);]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[commentFileAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Согласование]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[commentFileAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4571,8 +4641,8 @@ notifications.sendNotification(notification);]]>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -4612,6 +4682,41 @@ notifications.sendNotification(notification);]]>
 																				<name>outputFromValue</name>
 																				<value>
 																					<![CDATA[isSigned]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>9c5ef67d-588c-4bf6-aaaf-99eb9848360d</name>
+																		<nodeRef>workspace://SpacesStore/cbe48b03-2560-4459-9879-bed781e37acf</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[Исходящее]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4686,15 +4791,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/e4acc110-3a33-4773-b10d-17ba95059f24</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -4715,15 +4820,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/1c8df924-830d-4951-afe5-407a4a98fa5a</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -5488,15 +5593,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/e896b6b6-465e-4d8e-a5bb-c01e3c7de379</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -5517,15 +5622,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/6cf54be7-4eb2-4e93-9194-d560a4fe6c27</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -6393,15 +6498,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/259e8cec-62bf-4e24-82e0-ae541c4fa193</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Номер уже присвоен]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -6422,15 +6527,15 @@ notifications.sendNotification(notification);]]>
 																		<nodeRef>workspace://SpacesStore/1025b3a6-7596-409d-b7fd-ce110f1af735</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Запрос уже выполняется]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
