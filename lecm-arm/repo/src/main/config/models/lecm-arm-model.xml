@@ -80,6 +80,9 @@
 					<default>lecm-arm:node</default>
 				</property>
 			</overrides>
+            <mandatory-aspects>
+                <aspect>lecm-arm:ordered</aspect>
+            </mandatory-aspects>
 		</type>
 
 		<type name="lecm-arm:node">
@@ -173,6 +176,9 @@
 					</target>
 				</association>
 			</associations>
+            <mandatory-aspects>
+                <aspect>lecm-arm:ordered</aspect>
+            </mandatory-aspects>
 		</type>
 
 		<type name="lecm-arm:field">
@@ -275,4 +281,15 @@
 			</associations>
 		</type>
 	</types>
+
+    <aspects>
+        <aspect name="lecm-arm:ordered">
+            <properties>
+                <property name="lecm-arm:order">
+                    <type>d:int</type>
+                    <default>0</default>
+                </property>
+            </properties>
+        </aspect>
+    </aspects>
 </model>

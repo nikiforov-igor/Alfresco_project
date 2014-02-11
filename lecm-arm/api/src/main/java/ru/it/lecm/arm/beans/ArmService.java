@@ -49,6 +49,9 @@ public interface ArmService {
 	public static final QName TYPE_DICTIONARY_DYNAMIC_QUERY = QName.createQName(ARM_NAMESPACE_URI, "dynamic-dictionary-query");
 	public static final QName ASSOC_DICTIONARY_QUERY = QName.createQName(ARM_NAMESPACE_URI, "query-dictionary-assoc");
 
+	public static final QName ASPECT_ARM_ORDERED = QName.createQName(ARM_NAMESPACE_URI, "ordered");
+	public static final QName PROP_ARM_ORDER = QName.createQName(ARM_NAMESPACE_URI, "order");
+
 
 	/**
 	 * проверяет что объект является аккордионом

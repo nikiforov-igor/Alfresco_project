@@ -52,6 +52,7 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
 					<show id="lecm-arm:filters" force="true"/>
@@ -104,6 +105,7 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:filters" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
@@ -142,6 +144,7 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
 					<show id="lecm-arm:filters" force="true"/>
@@ -184,6 +187,7 @@
 			<form>
 				<field-visibility>
 					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:filters" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>

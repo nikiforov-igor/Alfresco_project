@@ -26,6 +26,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private DictionaryBean dictionaryService;
     private SearchService searchService;
 	private NamespaceService namespaceService;
+    private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
+        @Override
+        public int compare(NodeRef o1, NodeRef o2) {
+            Integer order1 = (Integer) nodeService.getProperty(o1, ArmService.PROP_ARM_ORDER);
+            Integer order2 = (Integer) nodeService.getProperty(o2, ArmService.PROP_ARM_ORDER);
+            if (order1 == null && order2 != null) {
+                return -1;
+            } else if (order1 != null && order2 == null) {
+                return 1;
+            } else if (order1 != null) {
+                return order1.compareTo(order2);
+            }
+
+            return 0;
+        }
+    };
 
     @Override
 	public NodeRef getServiceRootFolder() {
@@ -78,6 +94,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				result.add(accordionAssoc.getChildRef());
 			}
 		}
+        Collections.sort(result, comparator);
 		return result;
 	}
 
@@ -94,6 +111,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				result.add(child.getChildRef());
 			}
 		}
+        Collections.sort(result, comparator);
 		return result;
 	}
 
