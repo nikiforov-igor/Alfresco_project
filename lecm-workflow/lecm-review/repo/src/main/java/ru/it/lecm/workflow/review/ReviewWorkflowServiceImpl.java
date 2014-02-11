@@ -220,9 +220,9 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	@Override
 	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = resultListService.getOrCreateWorkflowResultFolder(bpmPackage);
-		NodeRef resultListRoot = getFolder(resultListContainer, documentAttachmentCategoryName);
+		NodeRef resultListRoot = getFolder(resultListContainer, "Ознакомление");
 		if (resultListRoot == null) {
-			resultListRoot = createFolder(resultListContainer, documentAttachmentCategoryName);
+			resultListRoot = createFolder(resultListContainer, "Ознакомление");
 		}
 
 		NodeRef resultList = resultListService.createResultList(resultListRoot, bpmPackage, documentAttachmentCategoryName, WorkflowResultModel.TYPE_WORKFLOW_RESULT_LIST, RESULT_LIST_NAME_FORMAT);
