@@ -1,21 +1,76 @@
+<!-- Форма должна сабмитить
+1. Тип процесса: послед или пар.
+2. нодРефу на текущий список
+-->
+
 <#import '/ru/it/lecm/base-share/components/lecm-datagrid.ftl' as grid/>
 
+<#-- Контейнеры -->
 <#assign htmlId = args.htmlid>
 <#assign containerId = args.htmlid + '-control-container'>
+<#assign dimmerId = args.htmlid + '-dimmer'>
 <#assign btnsAddItemId = htmlId + '-buttons-container'>
 <#assign radioWorkflowTypeId = htmlId + '-radio-container'>
 <#assign menuContainerId = htmlId + '-menu-container'>
+
+<#-- Контролы -->
 <#assign btnsControlId = htmlId + '-buttons-cntrl'>
+
+<#-- Экземпляры -->
+<#assign createListButtonId = htmlId + "-save-list-button">
+<#assign deleteListButtonId = htmlId + "-delete-list-button">
 <#assign datagridId = htmlId + '-datagrid'>
 
-<#assign workflowType = field.control.params.workflowType?lower_case>
-<#assign concurrency = field.control.params.concurrency!'user'?lower_case>
+<#-- SCC -->
+<#assign workflowTypeShareConfig = field.control.params.workflowType?lower_case>
+<#assign concurrencyShareConfig = field.control.params.concurrency!'user'?lower_case>
 
-<div id='${containerId}'>
-	<div id='${radioWorkflowTypeId}'></div>
-	<div id='${btnsAddItemId}'></div>
+<#-- Отправка данных -->
+<#assign concurrencyInputId = htmlId + "-concurrency-input">
+<#assign concurrencyInputName = field.control.params.concurrencyInputName>
+<#assign concurrencyInputInitialValue = (concurrencyShareConfig == 'user') ? string('SEQUENTIAL', concurrencyShareConfig)>
+
+<#assign listNodeRefInput = htmlId + "-workflow-type-input">
+
+
+<div id='${containerId}' class="workflow-list-control-container">
+<#-- Элемент-затемнитель контрола, который показывается на время его инициализации -->
+	<div id="${dimmerId}" class="workflow-list-control-dimmer">
+		<div class="workflow-list-control-dimmer__inner">Пододжите, пожалуйста...</div>
+	</div>
+
+	<div style="margin: 5px 0;">
+		<div class="form-field">
+			<label for="${radioWorkflowTypeId}">NodeRef на папку:</label>
+			<input type="text" id="${listNodeRefInput}" name="${field.name}" value=""/>
+		</div>
+	</div>
+
+	<div style="margin: 5px 0;">
+		<div class="form-field">
+			<label for="${radioWorkflowTypeId}">Тип бизнес-процесса:</label>
+			<span id="${radioWorkflowTypeId}"></span>
+			<input type="hidden" id="${concurrencyInputId}" name="${concurrencyInputName}" value="${concurrencyInputInitialValue}"/>
+		</div>
+	</div>
+
+	<div style="margin: 5px 0;">
+		<div class="form-field">
+			<label for="${menuContainerId}">Список:</label>
+			<span id="${menuContainerId}"></span>
+			<span class="create-new-button">
+				<button id="${createListButtonId}"></button>
+			</span>
+			<span class="delete-button">
+				<button id="${deleteListButtonId}"></button>
+			</span>
+		</div>
+	</div>
+
+	<div id='${btnsAddItemId}' style="margin-bottom: 10px;"></div>
+
 	<div class='form-field with-grid'>
-		<@grid.datagrid datagridId false />
+	<@grid.datagrid datagridId false />
 	</div>
 </div>
 
@@ -44,7 +99,7 @@
 
 	/**
 	 * Метод создаёт событие с bubblingLabel от экземпляра для которого этот метод вызывается, событие заставляет
-	 * датагрид обновится. Кроме того, датагрид получает объект datagridMeta и "начинает играть по новым правилам".
+	 * датагрид обновится. Кроме того, датагрид получает объект datagridMeta и 'начинает играть по новым правилам'.
 	 */
 	WorkflowDatagrid.prototype.refresh = function(nodeRef) {
 		YAHOO.Bubbling.fire('activeGridChanged', {
@@ -124,24 +179,57 @@
 	function WorkflowList(htmlId) {
 		WorkflowList.superclass.constructor.call(this, 'LogicECM.module.WorkflowList', htmlId, null);
 
-		// Инициализируется методом __getDefaultList__
-		this.options.nodeRef = null;
+		var workflowList = this;
 
-		this.options.concurrency = null;
-		this.options.workflowType = null;
+		// Инициализируется методом _initControl
+		workflowList.options.currentListRef = null;
+
+		workflowList.setOptions({
+			concurrency: '${concurrencyShareConfig}',
+			workflowType: '${workflowTypeShareConfig}'
+		});
 	}
 
 	YAHOO.lang.extend(WorkflowList, Alfresco.component.Base);
 
+	/**
+	 * Метод вызывается самым первым, должен сходить на сервер, получить все данные (желательно, за один запрос),
+	 * необходимые для формы и "включить" форму. На время выполнения запроса, контрол должен быть неактивен. На момент
+	 * написания этого комментария был оформлен в виде заглушки с таймаутом.
+	 */
+	WorkflowList.prototype._initControl = function() {
+		function turnOnTheControl() {
+			// На момент написания комментария, тут стоит заглушка, которая вызывается, как будто бы на ajaxSuccess,
+			// получая все данные необходимые для контрола.
+			//
+			// Должны прийти следующие данные:
+			// 1. Списки согласования текущего пользователя и дефолтный тоже;
+			// 2. nodeRef для кнопки создания нового списка (nodeRef указывает на папку, где хранятся списки).
+			this.widgets.datagrid.setOptions({
+			});
+
+			dimmer.style.display = 'none';
+		}
+
+		var dimmer = YAHOO.util.Dom.get('${dimmerId}');
+
+		setTimeout(turnOnTheControl.bind(this), 3000);
+	};
+
 	WorkflowList.prototype._refreshDatagrid = function() {
 		var datagrid = this.widgets.datagrid;
-		var nodeRef = this.options.nodeRef;
+		var nodeRef = this.options.currentListRef;
 
-		if(datagrid !== null || datagrid !== undefined) {
-			if(nodeRef !== null || nodeRef !== undefined) {
+		if (datagrid !== null || datagrid !== undefined) {
+			if (nodeRef !== null || nodeRef !== undefined) {
 				datagrid.refresh(nodeRef);
 			}
 		}
+	};
+
+	WorkflowList.prototype._onConcurrencyChange = function(event) {
+		var newConcurrencyValue = event.newValue;
+		this._setConcurrency(newConcurrencyValue);
 	};
 
 	/**
@@ -150,8 +238,11 @@
 	WorkflowList.prototype.__getDefaultList__ = function() {
 		function onAjaxSuccess(response) {
 			var defaultAssigneesList = response.json.defaultAssigneesList;
+			var listRefInput = YAHOO.util.Dom.get('${listNodeRefInput}');
 
-			this.options.nodeRef = defaultAssigneesList;
+			listRefInput.value = defaultAssigneesList;
+
+			this.options.currentListRef = defaultAssigneesList;
 			this._refreshDatagrid();
 		}
 
@@ -161,6 +252,7 @@
 			});
 		}
 
+		// Получаем nodeRef на временный список, создающийся на основе workflowType и concurrency
 		Alfresco.util.Ajax.jsonRequest({
 			method: 'POST',
 			url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/getDefaultAssigneesList',
@@ -178,24 +270,89 @@
 		});
 	};
 
+	WorkflowList.prototype._onNewAssigneesListButtonClick = function() {
+		if (this.constants.LISTS_FOLDER_REF === null) {
+			return false;
+		}
+
+		this.widgets.addAssigneesListForm = new Alfresco.module.SimpleDialog('-form-add-assignees-list');
+
+		this.widgets.addAssigneesListForm.setOptions({
+			width: '50em',
+			templateUrl: Alfresco.constants.URL_SERVICECONTEXT + this.constants.URL_FORM,
+			templateRequestParams: {
+				itemKind: 'type',
+				itemId: 'lecm-al:assignees-list',
+				destination: this.constants.LISTS_FOLDER_REF,
+				mode: 'create',
+				submitType: 'json',
+				showCancelButton: 'true'
+			},
+			destroyOnHide: true,
+			doBeforeDialogShow: {
+				fn: function(form, simpleDialog) {
+					simpleDialog.dialog.setHeader('Новый список элементов бизнес-процесса');
+				}
+			},
+			onSuccess: {
+				fn: this.fillApprovalListMenu,
+				scope: this
+			},
+			onFailure: {
+				fn: function() {
+					Alfresco.util.PopupManager.displayMessage({
+						text: 'Не удалось создать новый список, попробуйте переоткрыть форму'
+					});
+				},
+				scope: this
+			}
+		});
+
+		this.widgets.addAssigneesListForm.show();
+
+		return true;
+	};
+
 	/**
 	 * Метод создаёт кнопки и привязывает обработчики
 	 */
 	WorkflowList.prototype._initButtons = function() {
-		// Кнопка-список 'Список'
+		// Кнопка 'Список'
 		this.widgets.btnSelectList = new YAHOO.widget.Button({
-			container: '${btnsAddItemId}',
+			container: '${menuContainerId}',
 			type: 'menu',
 			label: 'Выберите список'
 		});
 
+		this.widgets.btnSelectList.setStyle('margin-left', '1px');
+
+		// Кнопка 'Создать новый список'
+		this.widgets.btnCreateList = new YAHOO.widget.Button('${createListButtonId}', {
+			type: 'push',
+			onclick: {
+				//fn: this._onAddAssigneeButtonClick,
+				scope: this
+			}
+		});
+
+		// Кнопка 'Удалить выбранный список'
+		this.widgets.btnCreateList = new YAHOO.widget.Button('${deleteListButtonId}', {
+			type: 'push',
+			onclick: {
+				//fn: this._onAddAssigneeButtonClick,
+				scope: this
+			}
+		});
+
 		// Радио-кнопки для типа бизнес-процесса
-		if(this.options.concurrency === 'user') {
+		if (this.options.concurrency === 'user') {
 			this.widgets.radioWorkflowType = new YAHOO.widget.ButtonGroup({
 				id: 'workflow-type-radio-buttons',
 				name: 'workflow-type-radio-buttons',
 				container: '${radioWorkflowTypeId}'
 			});
+
+			this.widgets.radioWorkflowType.subscribe('valueChange', this._onConcurrencyChange, null, this);
 
 			this.widgets.radioWorkflowType.addButtons([
 				{ label: 'Последовательное', value: 'sequential', checked: true },
@@ -230,6 +387,33 @@
 				scope: this
 			}
 		});
+	};
+
+	WorkflowList.prototype._setConcurrency = function(value) {
+		var workflowList = this;
+		var datagrid = workflowList.widgets.datagrid;
+		var dataTable = datagrid.widgets.dataTable;
+
+		var SEQUENTIAL = { concurrency: 'sequential' };
+		var PARALLEL = { concurrency: 'parallel' };
+
+		var input = YAHOO.util.Dom.get('${concurrencyInputId}');
+
+		if (value === 'user' || value === 'sequential') {
+			input.value = 'SEQUENTIAL';
+
+			workflowList.setOptions(SEQUENTIAL);
+			datagrid.setOptions(SEQUENTIAL);
+			dataTable.showColumn(0);
+			dataTable.showColumn(1);
+		} else {
+			input.value = 'PARALLEL';
+
+			workflowList.setOptions(PARALLEL);
+			datagrid.setOptions(PARALLEL);
+			dataTable.hideColumn(0);
+			dataTable.hideColumn(1);
+		}
 	};
 
 	/**
@@ -312,13 +496,13 @@
 			templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 			templateRequestParams: {
 				itemKind: 'type',
-				itemId: 'lecm-workflow:assignee', // TODO: Переделать
-				destination: this.options.nodeRef,
+				itemId: 'lecm-workflow:assignee',
+				destination: this.options.currentListRef,
 				mode: 'create',
 				submitType: 'json',
 				showCancelButton: 'true'//,
-//				ignoreNodes: this.getCurrentNodeRefs().join(), // TODO: Должен быть мето, который даёт эту строку
-//				allowedNodes: this.constants.ALLOWED_ASSIGNEES.join() // TODO: Должен быть мето, который даёт эту строку
+				//				ignoreNodes: this.getCurrentNodeRefs().join(), // TODO: Должен быть мето, который даёт эту строку
+				//				allowedNodes: this.constants.ALLOWED_ASSIGNEES.join() // TODO: Должен быть мето, который даёт эту строку
 			},
 			destroyOnHide: true,
 			doBeforeDialogShow: {
@@ -347,6 +531,8 @@
 	 * модуль будут загружены и готовы. Так как зависимостей у этого модуля нет, этот метод будет вызван 'на месте'.
 	 */
 	WorkflowList.prototype.onReady = function() {
+		this._initControl();
+
 		this._initButtons();
 		this._initDatagrid();
 
@@ -354,10 +540,6 @@
 	};
 
 	var workflowList = new WorkflowList('${containerId}');
-	workflowList.setOptions({
-		concurrency: '${concurrency}',
-		workflowType: '${workflowType}'
-	});
 
 	Alfresco.util.PopupManager.zIndex = 9000;
 

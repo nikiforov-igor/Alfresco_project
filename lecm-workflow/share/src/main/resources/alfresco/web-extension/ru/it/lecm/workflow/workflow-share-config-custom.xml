@@ -20,6 +20,7 @@
 					<field id="lecm-workflow:fake-workflow-list-1">
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="concurrencyInputName"></control-param>
 `							<!--<control-param name="concurrency"></control-param>&lt;!&ndash; PARALLEL | SEQUENTIAL &ndash;&gt;-->
 						</control>
 					</field>
