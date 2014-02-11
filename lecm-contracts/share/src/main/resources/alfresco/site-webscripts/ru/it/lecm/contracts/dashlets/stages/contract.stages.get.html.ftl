@@ -47,17 +47,18 @@
     })();
     //]]>
 </script>
-
 <div class="dashlet document bordered">
     <div class="title dashlet-title">
         <span>
             <div style="float:left; margin-right: 4px;">Этапы договора</div>
+            <#if canCreate>
             <div class="total-tasks-count">
                 <span class="lecm-dashlet-actions">
                     <a id="${id}-action-add" href="javascript:void(0);" class="add"
                        title="${msg("dashlet.contract.stages.add.tooltip")}">Добавить этап</a>
                 </span>
             </div>
+            </#if>
         </span>
         <span class="lecm-dashlet-actions">
             <a id="${id}-action-expand" href="javascript:void(0);" onclick="documentMetadataComponent.onExpandTab('contract-stages')" class="expand" title="${msg("dashlet.contract.stages.expand.tooltip")}">&nbsp</a>
