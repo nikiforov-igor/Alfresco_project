@@ -149,4 +149,14 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+	public Scriptable getAttachmentsByCategory(ScriptNode category) {
+		ParameterCheck.mandatory("category", category);
+
+		List<NodeRef> attachments = this.documentAttachmentsService.getAttachmentsByCategory(category.getNodeRef());
+		if (attachments != null) {
+			return createScriptable(attachments);
+		}
+		return null;
+	}
 }

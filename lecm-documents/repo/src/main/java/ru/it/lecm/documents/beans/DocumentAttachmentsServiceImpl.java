@@ -6,6 +6,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
@@ -13,8 +14,6 @@ import org.alfresco.service.cmr.version.VersionHistory;
 import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
@@ -30,17 +29,15 @@ import java.util.*;
  * Time: 11:59
  */
 public class DocumentAttachmentsServiceImpl extends BaseBean implements DocumentAttachmentsService {
-    private final static Logger logger = LoggerFactory.getLogger(DocumentAttachmentsServiceImpl.class);
-
-    private DictionaryService dictionaryService;
+	private DictionaryService dictionaryService;
 	private VersionService versionService;
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
 	private BusinessJournalService businessJournalService;
 
-    public void setDictionaryService(DictionaryService dictionaryService) {
-        this.dictionaryService = dictionaryService;
-    }
+	public void setDictionaryService(DictionaryService dictionaryService) {
+		this.dictionaryService = dictionaryService;
+	}
 
 	public void setVersionService(VersionService versionService) {
 		this.versionService = versionService;
@@ -62,108 +59,110 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	public NodeRef getRootFolder(final NodeRef documentRef) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
-        final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
+		final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
 
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-                        if (attachmentsRef == null) {
-                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-                            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+			@Override
+			public NodeRef doWork() throws Exception {
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+						if (attachmentsRef == null) {
+							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
+							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                            properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-                            ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                            attachmentsRef = associationRef.getChildRef();
-                            //не индексируем свойства папки
-                            disableNodeIndex(attachmentsRef);
-                        }
-                        return attachmentsRef;
-                    }
-                });
-            }
-        };
-        return AuthenticationUtil.runAsSystem(raw);
-    }
+							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+							properties.put(ContentModel.PROP_NAME, attachmentsRootName);
+							ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+							attachmentsRef = associationRef.getChildRef();
+							//не индексируем свойства папки
+							disableNodeIndex(attachmentsRef);
+						}
+						return attachmentsRef;
+					}
+				});
+			}
+		};
+		return AuthenticationUtil.runAsSystem(raw);
+	}
 
-    public List<NodeRef> getCategories(final NodeRef documentRef) {
-	    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
+	public List<NodeRef> getCategories(final NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
-        QName type = nodeService.getType(documentRef);
+		QName type = nodeService.getType(documentRef);
 
-        List<String> categories = getCategories(type);
+		List<String> categories = getCategories(type);
 
-        List<NodeRef> result = new ArrayList<NodeRef>();
-        NodeRef attachmentRootRef = getRootFolder(documentRef);
-        for (String category: categories) {
-            NodeRef categoryFolderRef = getCategoryFolder(category, attachmentRootRef);
-            result.add(categoryFolderRef);
-        }
-        return result;
-    }
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		NodeRef attachmentRootRef = getRootFolder(documentRef);
+		for (String category : categories) {
+			NodeRef categoryFolderRef = getCategoryFolder(category, attachmentRootRef);
+			result.add(categoryFolderRef);
+		}
+		return result;
+	}
 
-    @Override
-    public List<String> getCategories(QName documentTypeQName) {
-        List<String> categories = new ArrayList<String>();
+	@Override
+	public List<String> getCategories(QName documentTypeQName) {
+		List<String> categories = new ArrayList<String>();
 
-        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(documentTypeQName.getNamespaceURI(), CONSTRAINT_ATTACHMENT_CATEGORIES));
-        if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof ListOfValuesConstraint)) {
-            ListOfValuesConstraint psConstraint = (ListOfValuesConstraint) constraint.getConstraint();
-            if (psConstraint.getAllowedValues() != null) {
-                categories.addAll(psConstraint.getAllowedValues());
-            }
-        }
+		ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(documentTypeQName.getNamespaceURI(), CONSTRAINT_ATTACHMENT_CATEGORIES));
+		if (constraint != null && constraint.getConstraint() != null && (constraint.getConstraint() instanceof ListOfValuesConstraint)) {
+			ListOfValuesConstraint psConstraint = (ListOfValuesConstraint) constraint.getConstraint();
+			if (psConstraint.getAllowedValues() != null) {
+				categories.addAll(psConstraint.getAllowedValues());
+			}
+		}
 
-        if (categories.size() == 0) {
-            categories.add("Основные");
-        }
-        return categories;
-    }
+		if (categories.size() == 0) {
+			categories.add("Основные");
+		}
+		return categories;
+	}
 
-    public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
-	    NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-	    if (result == null) {
-		    result = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
-		    disableNodeIndex(result);
-	    }
-	    return result;
-    }
+	public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
+		NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+		if (result == null) {
+			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+				@Override
+				public NodeRef doWork() throws Exception {
+					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						@Override
+						public NodeRef execute() throws Throwable {
+							NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
+							disableNodeIndex(categoryRef);
+							return categoryRef;
+						}
+					});
+				}
+			};
+			result = AuthenticationUtil.runAsSystem(raw);
+		}
+		return result;
+	}
 
 	public NodeRef getCategory(final String category, final NodeRef documentRef) {
 		NodeRef attachmentRootRef = getRootFolder(documentRef);
-		return nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-	}
-
-	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef) {
-		NodeRef attachCategoryDir = attachRef.getParentRef();
-		NodeRef attachRootDir = nodeService.getPrimaryParent(attachCategoryDir).getParentRef();
-		if (attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals(DOCUMENT_ATTACHMENTS_ROOT_NAME)) {
-			NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
-			if (document != null) {
-				QName testType = nodeService.getType(document);
-				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					return document;
-				}
-			}
+		NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+		if (isDocumentCategory(result)) {
+			return result;
 		}
 		return null;
 	}
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef) {
-		NodeRef attachRootDir = nodeService.getPrimaryParent(categoryRef).getParentRef();
-		if (attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals(DOCUMENT_ATTACHMENTS_ROOT_NAME)) {
-			NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
-			if (document != null) {
-				QName testType = nodeService.getType(document);
-				Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
-				if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
-					return document;
+		if (isDocumentCategory(categoryRef)) {
+			NodeRef attachRootDir = nodeService.getPrimaryParent(categoryRef).getParentRef();
+			if (attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals(DOCUMENT_ATTACHMENTS_ROOT_NAME)) {
+				NodeRef document = nodeService.getPrimaryParent(attachRootDir).getParentRef();
+				if (document != null) {
+					QName testType = nodeService.getType(document);
+					Collection<QName> subDocumentTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+					if (subDocumentTypes != null && subDocumentTypes.contains(testType)) {
+						return document;
+					}
 				}
 			}
 		}
@@ -171,24 +170,32 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	}
 
 	public String getCategoryName(NodeRef categoryRef) {
-		return (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
+		if (isDocumentCategory(categoryRef)) {
+			return (String) nodeService.getProperty(categoryRef, ContentModel.PROP_NAME);
+		}
+		return null;
 	}
 
 	public NodeRef getDocumentByAttachment(NodeRef attachRef) {
 		if (nodeService.exists(attachRef)) {
-			return getDocumentByAttachment(nodeService.getPrimaryParent(attachRef));
+			NodeRef category = getCategoryByAttachment(attachRef);
+
+			if (category != null) {
+				return getDocumentByCategory(category);
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
 	}
 
 	public NodeRef getCategoryByAttachment(NodeRef attachRef) {
-		NodeRef categoryRef = nodeService.getPrimaryParent(attachRef).getParentRef();
-		NodeRef attachRootDir = nodeService.getPrimaryParent(categoryRef).getParentRef();
-		if (categoryRef != null && attachRootDir != null && nodeService.getProperty(attachRootDir, ContentModel.PROP_NAME).equals(DOCUMENT_ATTACHMENTS_ROOT_NAME)) {
-			return categoryRef;
+		if (nodeService.exists(attachRef)) {
+			return findNodeByAssociationRef(attachRef, ASSOC_CATEGORY_ATTACHMENTS, TYPE_CATEGORY, ASSOCIATION_TYPE.SOURCE);
+		} else {
+			return null;
 		}
-		return null;
 	}
 
 	public String getCategoryNameByAttachment(NodeRef attachRef) {
@@ -203,6 +210,12 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		return getDocumentByAttachment(nodeRef) != null;
 	}
 
+	public boolean isDocumentCategory(NodeRef nodeRef) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_CATEGORY);
+		return isProperType(nodeRef, types);
+	}
+
 	@Override
 	public void deleteAttachment(NodeRef nodeRef) {
 		nodeService.deleteNode(nodeRef);
@@ -211,8 +224,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	@Override
 	public Collection<Version> getAttachmentVersions(NodeRef nodeRef) {
 		VersionHistory history = versionService.getVersionHistory(nodeRef);
-		if (history != null)
-		{
+		if (history != null) {
 			return history.getAllVersions();
 		}
 		return null;
@@ -235,26 +247,29 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		}
 	}
 
-// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
 	}
 
-    public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName) {
-        List<NodeRef> result = new ArrayList<NodeRef>();
-        NodeRef attachments = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, DOCUMENT_ATTACHMENTS_ROOT_NAME);
+	public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName) {
+		NodeRef category = getCategory(categoryName, document);
+		return getAttachmentsByCategory(category);
+	}
 
-        if (attachments != null) {
-            NodeRef category = nodeService.getChildByName(attachments, ContentModel.ASSOC_CONTAINS, categoryName);
-            if (category != null) {
-                List<ChildAssociationRef> children = nodeService.getChildAssocs(category);
-                for (ChildAssociationRef child : children) {
-                    result.add(child.getChildRef());
-                }
-            }
-        }
-        return result;
-    }
+	public List<NodeRef> getAttachmentsByCategory(NodeRef category) {
+		List<NodeRef> results = new ArrayList<NodeRef>();
+		if (isDocumentCategory(category)) {
+			List<AssociationRef> assocs = nodeService.getTargetAssocs(category, ASSOC_CATEGORY_ATTACHMENTS);
+			for (AssociationRef assoc : assocs) {
+				NodeRef attachment = assoc.getTargetRef();
 
+				if (!isArchive(attachment)) {
+					results.add(attachment);
+				}
+			}
+		}
+		return results;
+	}
 }

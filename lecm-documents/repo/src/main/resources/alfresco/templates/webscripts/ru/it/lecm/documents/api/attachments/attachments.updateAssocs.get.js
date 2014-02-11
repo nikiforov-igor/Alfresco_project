@@ -15,7 +15,7 @@ if (allDocuments != null) {
 					category.specializeType("lecm-document:attachmentsCategory");
 					updatedCategories++;
 				}
-				var attachments = documentAttachments.getAttachmentsByCategory(document.nodeRef, category.name);
+				var attachments = categories[i].getChildren();
 
 				if (attachments != null) {
 					for (var k = 0; k < attachments.length; k++) {

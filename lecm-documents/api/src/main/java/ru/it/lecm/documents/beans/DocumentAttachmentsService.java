@@ -76,19 +76,19 @@ public interface DocumentAttachmentsService {
 	 */
 	public void copyAttachmentLog(NodeRef nodeRef, NodeRef parent);
 
-	public NodeRef getDocumentByAttachment(ChildAssociationRef attachRef);
+	public NodeRef getDocumentByAttachment(NodeRef attachRef);
 
 	public NodeRef getDocumentByCategory(NodeRef categoryRef);
 
 	public String getCategoryName(NodeRef categoryRef);
-
-	public NodeRef getDocumentByAttachment(NodeRef attachRef);
 
 	public String getCategoryNameByAttachment(NodeRef attachRef);
 
 	public NodeRef getCategoryByAttachment(NodeRef attachRef);
 
 	public boolean isDocumentAttachment(NodeRef nodeRef);
+
+	public boolean isDocumentCategory(NodeRef nodeRef);
 
     /**
      * Возвращает список вложений определенной категории
@@ -97,4 +97,6 @@ public interface DocumentAttachmentsService {
      * @return
      */
     public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName);
+
+	public List<NodeRef> getAttachmentsByCategory(NodeRef category);
 }

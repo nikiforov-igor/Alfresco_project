@@ -10,7 +10,7 @@ var k = 0;
 if (categories != null) {
 	for (var i = 0; i < categories.length; i++) {
 		if (k <= count || isNaN(count)) {
-			var attachments = categories[i].getChildren();
+			var attachments = documentAttachments.getAttachmentsByCategory(categories[i]);
 			if (attachments != null && (attachments.length > 0 || (showEmptyCategory != null && showEmptyCategory == "true"))) {
 				var showAttachments = [];
 				for (var j = 0; j < attachments.length; j++) {
