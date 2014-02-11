@@ -33,6 +33,5 @@
 	<bean id="signingWorkflowService" parent="lecmWorkflowService"
 		  depends-on="signing.workflow.bootstrap"
 		  class="ru.it.lecm.workflow.signing.SigningWorkflowServiceImpl"
-		  p:nodeService-ref="nodeService"
 		  p:workCalendarService-ref="WorkCalendarService" p:workflowResultListService-ref="workflowResultListService"/>
 </beans>

@@ -42,7 +42,6 @@
 
 	<bean id="workflowAssigneesListService" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.WorkflowAssigneesListServiceImpl"
-		  p:nodeService-ref="nodeService"
 		  p:workCalendarService-ref="WorkCalendarService"
 		  p:wCalendarService-ref="WCalendarService"
 		  p:orgstructureService-ref="serviceOrgstructure"

@@ -32,9 +32,6 @@
 		<property name="documents" value="Documents"/>
 		<property name="drafts" value="Черновики"/>
 		<property name="usertemp" value="temp"/>
-		<!--
-		<property name="" ref=""/>
-		-->
 	</bean>
 
 	<bean id="repositoryStructureHelperJavascriptExtension" class="ru.it.lecm.base.extensions.RepositoryStructureHelperJavascriptExtension" parent="baseJavaScriptExtension">
@@ -46,6 +43,9 @@
 	<bean id="baseBean" class="ru.it.lecm.base.beans.BaseBean" abstract="true">
 		<property name="repositoryStructureHelper" ref="repositoryStructureHelper"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+		<property name="authService" ref="authenticationService"/>
 	</bean>
 
     <bean id="baseScript" class="ru.it.lecm.base.beans.BaseWebScript" abstract="true" parent="baseJavaScriptExtension">
