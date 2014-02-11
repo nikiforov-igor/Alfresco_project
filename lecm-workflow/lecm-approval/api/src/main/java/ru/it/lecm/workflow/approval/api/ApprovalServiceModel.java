@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.api;
+package ru.it.lecm.workflow.approval.api;
 
 import org.alfresco.service.namespace.QName;
 

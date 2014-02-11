@@ -1,4 +1,4 @@
-package ru.it.lecm.approval;
+package ru.it.lecm.workflow.approval;
 
 /**
  *

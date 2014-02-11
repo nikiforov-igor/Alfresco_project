@@ -1,7 +1,6 @@
 package ru.it.lecm.workflow.review.extensions;
 
 import java.util.List;
-import java.util.Map;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -58,7 +57,7 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public ActivitiScriptNode createResultList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName, final ActivitiScriptNodeList assigneesList) {
-		return new ActivitiScriptNode(reviewWorkflowService.createResultList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, assigneesList), serviceRegistry);
+		return new ActivitiScriptNode(reviewWorkflowService.createResultList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, assigneesList.getNodeReferences()), serviceRegistry);
 	}
 
 }

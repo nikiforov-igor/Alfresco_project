@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.webscript;
+package ru.it.lecm.workflow.approval.webscript;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +11,8 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.approval.ApprovalServiceImpl;
-import ru.it.lecm.approval.Utils;
+import ru.it.lecm.workflow.approval.ApprovalServiceImpl;
+import ru.it.lecm.workflow.approval.Utils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 

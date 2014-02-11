@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.extensions;
+package ru.it.lecm.workflow.approval.extensions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,10 +19,11 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.approval.Utils;
-import ru.it.lecm.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.Utils;
+import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
@@ -70,7 +71,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	 * @return ссылку на новый лист согласования
 	 */
 	public ActivitiScriptNode createApprovalList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName, final String approvalType, ActivitiScriptNodeList assigneesList) {
-		NodeRef approvalListRef = approvalService.createApprovalList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, approvalType, assigneesList);
+		NodeRef approvalListRef = approvalService.createApprovalList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, approvalType, assigneesList.getNodeReferences());
 		return new ActivitiScriptNode(approvalListRef, serviceRegistry);
 	}
 
@@ -180,8 +181,8 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalService.assignTask(assignee.getNodeRef(), task);
 	}
 
-	public void completeTask(ActivitiScriptNode assignee, DelegateTask task) {
-		approvalService.completeTask(assignee.getNodeRef(), task);
+	public WorkflowTaskDecision completeTask(ActivitiScriptNode assignee, DelegateTask task) {
+		return approvalService.completeTask(assignee.getNodeRef(), task);
 	}
 
 	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
@@ -202,10 +203,10 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		approvalService.assignTask(employeeRef, task);
 	}
 
-	public void completeTask(DelegateTask task, String decision, ActivitiScriptNode commentScriptNode) {
+	public WorkflowTaskDecision completeTask(DelegateTask task, String decision, ActivitiScriptNode commentScriptNode) {
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
-		approvalService.completeTask(employeeRef, task, decision, commentRef, task.getDueDate());
+		return approvalService.completeTask(employeeRef, task, decision, commentRef, task.getDueDate());
 	}
 
 	public Map<String, String> addDecision(Map<String, String> decisionMap, String userName, String decision) {

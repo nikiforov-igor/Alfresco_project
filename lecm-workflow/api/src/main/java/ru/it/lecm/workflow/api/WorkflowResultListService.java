@@ -1,8 +1,8 @@
 package ru.it.lecm.workflow.api;
 
 import java.util.Date;
+import java.util.List;
 import org.activiti.engine.delegate.DelegateTask;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
@@ -24,6 +24,6 @@ public interface WorkflowResultListService {
 
 	NodeRef getServiceRootFolder();
 
-	void prepareResultList(final NodeRef emptyResultList, final ActivitiScriptNodeList assigneesList, final QName resultItemType);
+	void prepareResultList(final NodeRef emptyResultList, final List<NodeRef> assigneesList, final QName resultItemType);
 
 }

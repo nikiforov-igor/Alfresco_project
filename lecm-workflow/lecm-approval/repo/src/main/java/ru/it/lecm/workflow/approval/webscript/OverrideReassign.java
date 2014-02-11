@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.webscript;
+package ru.it.lecm.workflow.approval.webscript;
 
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -7,7 +7,7 @@ import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
-import ru.it.lecm.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 

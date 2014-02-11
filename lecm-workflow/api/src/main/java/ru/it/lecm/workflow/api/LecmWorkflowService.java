@@ -4,6 +4,7 @@ import java.util.Date;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 
 /**
  *
@@ -13,7 +14,7 @@ public interface LecmWorkflowService {
 
 	void assignTask(final NodeRef assignee, final DelegateTask task);
 
-	void completeTask(NodeRef assignee, DelegateTask task);
+	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task);
 
 	/**
 	 * раздать всем участникам процесса согласования права

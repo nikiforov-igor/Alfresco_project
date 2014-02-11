@@ -7,12 +7,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
@@ -48,8 +45,7 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 
 	@Override
 	public NodeRef getResultListRef(DelegateTask task) {
-		DelegateExecution execution = task.getExecution();
-		return ((ScriptNode) execution.getVariable("resultListRef")).getNodeRef();
+		return ((ScriptNode) task.getVariable("resultListRef")).getNodeRef();
 	}
 
 	@Override
@@ -78,9 +74,8 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 	}
 
 	@Override
-	public void prepareResultList(final NodeRef emptyResultList, final ActivitiScriptNodeList assigneesList, final QName resultItemType) {
-		for (ActivitiScriptNode assignee : assigneesList) {
-			NodeRef assigneeNode = assignee.getNodeRef();
+	public void prepareResultList(final NodeRef emptyResultList, final List<NodeRef> assigneesList, final QName resultItemType) {
+		for (NodeRef assigneeNode : assigneesList) {
 			NodeRef employeeRef = findNodeByAssociationRef(assigneeNode, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			Date dueDate = (Date) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 			String userName = (String) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);

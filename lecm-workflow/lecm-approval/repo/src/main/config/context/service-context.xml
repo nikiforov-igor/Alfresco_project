@@ -54,11 +54,11 @@
 		</property>
 	</bean>
 
-	<util:constant id="APPROVAL_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.APPROVAL_FOLDER"/>
-	<util:constant id="APPROVAL_LIST_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.APPROVAL_LIST_FOLDER"/>
-	<util:constant id="TEMP_ASSIGNEES_LISTS_FOLDER" static-field="ru.it.lecm.approval.ApprovalListServiceImpl.TEMP_ASSIGNEES_LISTS_FOLDER"/>
+	<util:constant id="APPROVAL_FOLDER" static-field="ru.it.lecm.workflow.approval.ApprovalListServiceImpl.APPROVAL_FOLDER"/>
+	<util:constant id="APPROVAL_LIST_FOLDER" static-field="ru.it.lecm.workflow.approval.ApprovalListServiceImpl.APPROVAL_LIST_FOLDER"/>
+	<util:constant id="TEMP_ASSIGNEES_LISTS_FOLDER" static-field="ru.it.lecm.workflow.approval.ApprovalListServiceImpl.TEMP_ASSIGNEES_LISTS_FOLDER"/>
 
-	<bean id="lecm.approval.service" class="ru.it.lecm.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.workflowBootstrap">
+	<bean id="lecm.approval.service" class="ru.it.lecm.workflow.approval.ApprovalListServiceImpl" parent="baseBean" depends-on="lecm.approval.workflowBootstrap">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="transactionService" ref="transactionService"/>
 		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
@@ -81,9 +81,9 @@
 		</property>
 	</bean>
 
-	<bean id="lecm.approval.utils" class="ru.it.lecm.approval.Utils" depends-on="nodeService, dictionaryService, serviceOrgstructure"/>
+	<bean id="lecm.approval.utils" class="ru.it.lecm.workflow.approval.Utils" depends-on="nodeService, dictionaryService, serviceOrgstructure"/>
 
-	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">
+	<bean id="lecm.approval.javascriptExtension" class="ru.it.lecm.workflow.approval.extensions.ApprovalJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="approval"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="personService" ref="personService"/>
@@ -93,7 +93,7 @@
 		<property name="approvalListService" ref="lecm.approval.service"/>
 	</bean>
 
-	<bean id="lecm.approval.javascriptExtension.service" class="ru.it.lecm.approval.extensions.ApprovalServiceJavascriptExtension"
+	<bean id="lecm.approval.javascriptExtension.service" class="ru.it.lecm.workflow.approval.extensions.ApprovalServiceJavascriptExtension"
 		  parent="baseJavaScriptExtension">
 		<property name="extensionName" value="approvalService"/>
 		<property name="authenticationService" ref="authenticationService"/>
@@ -104,25 +104,25 @@
 		<property name="wCalendarService" ref="WCalendarService"/>
 	</bean>
 
-	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
+	<bean id="lecm.approval.ApprovalListItemPolicy" class="ru.it.lecm.workflow.approval.policies.ApprovalListItemPolicy" init-method="init" depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
-	<bean id="lecm.approval.AssigneesListItemPolicy" class="ru.it.lecm.approval.policies.AssigneesListItemPolicy" init-method="init"
+	<bean id="lecm.approval.AssigneesListItemPolicy" class="ru.it.lecm.workflow.approval.policies.AssigneesListItemPolicy" init-method="init"
 		  depends-on="lecm.approval.modelBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
-	<bean id="webscript.ru.it.lecm.approval.GetDocumentDataByTaskIdOrNodeRef.get" class="ru.it.lecm.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
+	<bean id="webscript.ru.it.lecm.workflow.approval.GetDocumentDataByTaskIdOrNodeRef.get" class="ru.it.lecm.workflow.approval.webscript.GetDocumentDataByTaskIdOrNodeRef" parent="webscript">
 		<property name="workflowService" ref="WorkflowService"/>
 		<property name="nodeService" ref="nodeService"/>
 		<property name="approvalListService" ref="lecm.approval.service"/>
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.approval.OverrideReassign.get" class="ru.it.lecm.approval.webscript.OverrideReassign" parent="webscript">
+    <bean id="webscript.ru.it.lecm.workflow.approval.OverrideReassign.get" class="ru.it.lecm.workflow.approval.webscript.OverrideReassign" parent="webscript">
         <property name="workflowService" ref="WorkflowService"/>
         <property name="nodeService" ref="nodeService"/>
         <property name="approvalListService" ref="lecm.approval.service"/>

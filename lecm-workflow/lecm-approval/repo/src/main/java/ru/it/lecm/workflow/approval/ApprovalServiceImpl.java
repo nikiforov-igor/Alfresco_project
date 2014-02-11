@@ -1,4 +1,4 @@
-package ru.it.lecm.approval;
+package ru.it.lecm.workflow.approval;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
@@ -13,13 +13,12 @@ import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,14 +29,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.alfresco.repo.policy.BehaviourFilter;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import ru.it.lecm.approval.api.ApprovalServiceModel;
+import ru.it.lecm.workflow.approval.api.ApprovalServiceModel;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowResultListService;
@@ -52,7 +51,6 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalServiceImpl.class);
 	private DocumentAttachmentsService documentAttachmentsService;
-	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 
 	private IWorkCalendar workCalendar;
 	private WorkflowResultListService resultListService;
@@ -184,12 +182,12 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 			Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
 			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 				fakeProps.put(FAKE_PROP_COMINGSOON, "");
-				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				sendNotification(description, docInfo.getDocumentRef(), recipients);
 			}
 			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 				fakeProps.put(FAKE_PROP_OVERDUE, "");
-				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				sendNotification(description, docInfo.getDocumentRef(), recipients);
 			}
 			if (!fakeProps.isEmpty()) {
@@ -232,13 +230,13 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
 				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 					variableScope.setVariable("initiatorComingSoon", "");
-					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 				}
 				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 					variableScope.setVariable("initiatorOverdue", "");
 					String people = getIncompleteAssignees(processInstanceId);
-					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), dateFormatter.format(dueDate), people);
+					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
 					if (isDocumentApproval) {
 						//получить список кураторов и добавить его в recipients
 						recipients.addAll(Utils.getCurators());
@@ -276,17 +274,17 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	}
 
 	@Override
-	public void completeTask(NodeRef assignee, DelegateTask task) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
 		String decision = (String) task.getVariableLocal("lecmApprove_approveTaskResult");
 		ActivitiScriptNode commentScriptNode = (ActivitiScriptNode) task.getVariableLocal("lecmApprove_approveTaskCommentAssoc");
 		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
-		completeTask(assignee, task, decision, commentRef, dueDate);
+		return completeTask(assignee, task, decision, commentRef, dueDate);
 	}
 
 	@Override
-	public void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
 		DelegateExecution execution = task.getExecution();
 		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
@@ -318,6 +316,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
 		grantReaderPermissions(employeeRef, bpmPackage);
+		return taskDecision;
 	}
 
 	private Map<String, String> addDecision(final Map<String, String> decisionMap, TaskDecision taskDecision) {
@@ -332,7 +331,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	@Override
 	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
-		String dueDatemessage = dueDate == null ? "(нет)" : dateFormatter.format(dueDate);
+		String dueDatemessage = dueDate == null ? "(нет)" : new SimpleDateFormat(DATE_FORMAT).format(dueDate);
 		return String.format("Вам необходимо согласовать документ %s, срок согласования %s", documentLink, dueDatemessage);
 	}
 
@@ -414,7 +413,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	}
 
 	@Override
-	public NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, ActivitiScriptNodeList assigneesList) {
+	public NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = resultListService.getOrCreateWorkflowResultFolder(bpmPackage);
 		NodeRef approvalFolder = getOrCreateApprovalFolder(resultListContainer, approvalType);
 		NodeRef approvalList = resultListService.createResultList(approvalFolder, bpmPackage, documentAttachmentCategoryName, ApprovalServiceModel.TYPE_APPROVAL_LIST, APPROVAL_LIST_NAME);

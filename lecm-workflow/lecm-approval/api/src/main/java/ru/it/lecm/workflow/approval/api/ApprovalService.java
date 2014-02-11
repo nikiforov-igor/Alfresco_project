@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.api;
+package ru.it.lecm.workflow.approval.api;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -7,7 +7,7 @@ import ru.it.lecm.workflow.api.LecmWorkflowService;
 import java.util.Date;
 import java.util.List;
 import org.activiti.engine.delegate.DelegateExecution;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 
 /**
  *
@@ -29,9 +29,9 @@ public interface ApprovalService extends LecmWorkflowService {
 
 	void logFinalDecision(final NodeRef approvalListRef, final String finalDecision);
 
-	void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate);
+	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate);
 
-	NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, ActivitiScriptNodeList assigneesList);
+	NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, List<NodeRef> assigneesList);
 
 	List<NodeRef> createAssigneesList(NodeRef nodeRef, DelegateExecution execution);
 

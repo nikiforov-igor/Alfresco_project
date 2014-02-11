@@ -6,7 +6,7 @@
 		<property name="configService" ref="web.config" />
 		<property name="configs">
 			<list>
-				<value>classpath:alfresco/web-extension/ru/it/lecm/approval/approval-share-config-custom.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-share-config-custom.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -14,7 +14,7 @@
     <bean id="approvalResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
         <property name="resourceBundles">
             <list>
-                <value>alfresco.web-extension.ru.it.lecm.approval.form</value>
+                <value>alfresco.web-extension.ru.it.lecm.workflow.approval.form</value>
             </list>
         </property>
     </bean>

@@ -27,6 +27,8 @@
 					<activiti:string><![CDATA[
 						var assigneesList = signingWorkflow.createAssigneesList(lecmSign_assigneesListAssoc, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
+						var resultListRef = signingWorkflow.createResultList(bpm_package, documentAttachmentCategoryName, lecmSign_Concurrency, assigneesList);
+						execution.setVariable("resultListRef", resultListRef);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
@@ -43,7 +45,9 @@
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							signingWorkflow.completeTask(assignee, task);
+							var taskDecision = signingWorkflow.completeTask(assignee, task);
+							var resultListRef = task.getVariable("resultListRef");
+							signingWorkflow.logDecision(resultListRef, taskDecision);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
@@ -67,9 +71,18 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var decisionsMap = execution.getVariable("decisionsMap");
+						var resultListRef = execution.getVariable("resultListRef");
 						var finalDecision = signingWorkflow.getFinalDecision(decisionsMap);
+						var isSigned = signingWorkflow.isSigned(finalDecision);
+						execution.setVariable("finalDecision", finalDecision);
+						execution.setVariable("isSigned", isSigned);
+						if (isSigned) {
+							signingWorkflow.logFinalDecision(resultListRef, finalDecision);
+						} else {
+							//TODO: удаление результатов подписания, как будто их и не было никогда
+							signingWorkflow.dropSigningResults(resultListRef);
+						}
 						signingWorkflow.notifySigningFinished(finalDecision, bpm_package);
-						execution.setVariable("isSigned", signingWorkflow.isSigned(finalDecision));
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>

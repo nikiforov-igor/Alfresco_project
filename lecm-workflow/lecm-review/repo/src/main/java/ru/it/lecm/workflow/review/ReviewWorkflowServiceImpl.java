@@ -1,7 +1,6 @@
 package ru.it.lecm.workflow.review;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,7 +15,6 @@ import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -43,11 +41,9 @@ import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
  */
 public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implements ReviewWorkflowService {
 
-	private final static String RESULT_FOLDER_NAME = "Ознакомление";
 	private final static String RESULT_LIST_NAME_FORMAT = "Лист ознакомление версии %s";
 	private final static String WORKFLOW_FINISHED_MESSAGE_FORMAT = "Закончено ознакомление с документом %s";
 	private final static String WORKFLOW_STARTED_MESSAGE_FORMAT = "Вам необходимо согласовать документ %s, срок согласования %s";
-	private final static DateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
 	private final static Logger logger = LoggerFactory.getLogger(ReviewWorkflowServiceImpl.class);
 	private WorkflowResultListService resultListService;
 	private WorkflowAssigneesListService assigneesListService;
@@ -67,7 +63,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 
 	@Override
 	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
-		String dueDatemessage = dueDate == null ? "(нет)" : dateFormatter.format(dueDate);
+		String dueDatemessage = (dueDate == null) ? "(нет)" : new SimpleDateFormat(DATE_FORMAT).format(dueDate);
 		return String.format(WORKFLOW_STARTED_MESSAGE_FORMAT, documentLink, dueDatemessage);
 	}
 
@@ -97,14 +93,10 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	}
 
 	@Override
-	public void completeTask(NodeRef assignee, DelegateTask task) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
 		String decision = (String) task.getVariableLocal("lecmReview_reviewTaskResult");
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
-		completeTask(assignee, task, decision, dueDate);
-	}
-
-	private void completeTask(NodeRef assignee, DelegateTask task, String decision, Date dueDate) {
 		DelegateExecution execution = task.getExecution();
 		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 
@@ -126,6 +118,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
 		grantReaderPermissions(employeeRef, bpmPackage);
+		return taskDecision;
 	}
 
 	private void logDecision(final NodeRef resultListRef, final WorkflowTaskDecision taskDecision) {
@@ -177,13 +170,13 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 				fakeProps.put(FAKE_PROP_COMINGSOON, "");
 				String template = "Напоминание: Вам необходимо ознакомиться с документом %s, срок ознакомления %s";
-				String description = String.format(template, docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				sendNotification(description, docInfo.getDocumentRef(), recipients);
 			}
 			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
 				fakeProps.put(FAKE_PROP_OVERDUE, "");
 				String template = "Внимание: Вы не ознакомились с документом %s, срок ознакомления %s";
-				String description = String.format(template, docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+				String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				sendNotification(description, docInfo.getDocumentRef(), recipients);
 			}
 			if (!fakeProps.isEmpty()) {
@@ -208,14 +201,14 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 					variableScope.setVariable("initiatorComingSoon", "");
 					String template = "Напоминание: Вы направили на ознакомление документ %s, срок подписания %s";
-					String description = String.format(template, docInfo.getDocumentLink(), dateFormatter.format(dueDate));
+					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 				}
 				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 					variableScope.setVariable("initiatorOverdue", "");
 					String people = getIncompleteAssignees(processInstanceId);
 					String template = "Внимание: с документом %s не ознакомились в срок %s. Следующие сотрудники не ознакомились: %s";
-					String description = String.format(template, docInfo.getDocumentLink(), dateFormatter.format(dueDate), people);
+					String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
 					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 				}
 			}
@@ -225,11 +218,11 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	}
 
 	@Override
-	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, ActivitiScriptNodeList assigneesList) {
+	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = resultListService.getOrCreateWorkflowResultFolder(bpmPackage);
-		NodeRef resultListRoot = getFolder(resultListContainer, RESULT_FOLDER_NAME);
+		NodeRef resultListRoot = getFolder(resultListContainer, documentAttachmentCategoryName);
 		if (resultListRoot == null) {
-			resultListRoot = createFolder(resultListContainer, RESULT_FOLDER_NAME);
+			resultListRoot = createFolder(resultListContainer, documentAttachmentCategoryName);
 		}
 
 		NodeRef resultList = resultListService.createResultList(resultListRoot, bpmPackage, documentAttachmentCategoryName, WorkflowResultModel.TYPE_WORKFLOW_RESULT_LIST, RESULT_LIST_NAME_FORMAT);

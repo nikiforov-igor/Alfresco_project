@@ -6,7 +6,6 @@
 
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
 	</imports>
@@ -14,6 +13,18 @@
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/model/signing/wokflow/1.0" prefix="lecmSign"/>
 	</namespaces>
+
+	<constraints>
+		<constraint name="lecmSign:signTaskResultConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NO_DECISION</value> <!-- нет решения -->
+					<value>SIGNED</value> <!-- подписано -->
+					<value>REJECTED</value> <!-- отклонено -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
 
 	<types>
 		<type name="lecmSign:signing">
@@ -38,16 +49,9 @@
 			<properties>
 				<property name="lecmSign:signTaskResult">
 					<type>d:text</type>
-					<default>REJECTED</default>
+					<default>NO_DECISION</default>
 					<constraints>
-						<constraint name="lecmSign:signTaskResultConstraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>SIGNED</value> <!-- подписано -->
-									<value>REJECTED</value> <!-- отклонено -->
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="lecmSign:signTaskResultConstraint"/>
 					</constraints>
 				</property>
 			</properties>

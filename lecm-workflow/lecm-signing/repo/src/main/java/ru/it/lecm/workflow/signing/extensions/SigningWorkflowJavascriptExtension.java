@@ -9,6 +9,7 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 
@@ -74,5 +75,21 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
 	public boolean isSigned(final String finalDecision) {
 		return "SIGNED".equals(finalDecision);
+	}
+
+	public void logFinalDecision(final ActivitiScriptNode resultListRef, final String finalDecision) {
+		signingWorkflowService.logFinalDecision(resultListRef.getNodeRef(), finalDecision);
+	}
+
+	public void dropSigningResults(final ActivitiScriptNode resultListRef) {
+		signingWorkflowService.dropSigningResults(resultListRef.getNodeRef());
+	}
+
+	public ActivitiScriptNode createResultList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName, final ActivitiScriptNodeList assigneesList) {
+		return new ActivitiScriptNode(signingWorkflowService.createResultList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, assigneesList.getNodeReferences()), serviceRegistry);
+	}
+
+	public void logDecision(final ActivitiScriptNode resultListRef, final WorkflowTaskDecision taskDecision) {
+		signingWorkflowService.logDecision(resultListRef.getNodeRef(), taskDecision);
 	}
 }

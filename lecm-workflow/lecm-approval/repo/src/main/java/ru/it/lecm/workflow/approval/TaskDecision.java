@@ -1,48 +1,19 @@
-package ru.it.lecm.approval;
+package ru.it.lecm.workflow.approval;
 
-import java.util.Date;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.workflow.WorkflowTaskDecision;
 
 /**
  *
  * @author vlevin
  */
-class TaskDecision {
+class TaskDecision extends WorkflowTaskDecision {
 
-	private String userName;
-	private String decision;
-	private Date startDate;
 	private String comment;
 	private NodeRef commentRef;
 	private NodeRef documentRef;
 	private String commentFileAttachmentCategoryName;
 	private String documentProjectNumber;
-	private Date dueDate;
-	private String previousUserName;
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getDecision() {
-		return decision;
-	}
-
-	public void setDecision(String decision) {
-		this.decision = decision;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
 
 	public String getComment() {
 		return comment;
@@ -82,21 +53,5 @@ class TaskDecision {
 
 	public void setDocumentProjectNumber(String documentProjectNumber) {
 		this.documentProjectNumber = documentProjectNumber;
-	}
-
-	public Date getDueDate() {
-		return dueDate;
-	}
-
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
-
-	public String getPreviousUserName() {
-		return previousUserName;
-	}
-
-	public void setPreviousUserName(String previousUserName) {
-		this.previousUserName = previousUserName;
 	}
 }

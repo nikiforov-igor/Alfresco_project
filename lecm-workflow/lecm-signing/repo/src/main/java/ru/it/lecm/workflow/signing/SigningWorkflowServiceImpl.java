@@ -20,7 +20,6 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
@@ -29,7 +28,10 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
+import ru.it.lecm.workflow.api.WorkflowResultListService;
+import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
+import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 
 /**
@@ -38,12 +40,18 @@ import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
  */
 public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implements SigningWorkflowService {
 
+	private final static String RESULT_LIST_NAME_FORMAT = "Лист подписания версии %s";
 	private final static Logger logger = LoggerFactory.getLogger(SigningWorkflowServiceImpl.class);
 
 	private IWorkCalendar workCalendarService;
+	private WorkflowResultListService workflowResultListService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
+	}
+
+	public void setWorkflowResultListService(WorkflowResultListService workflowResultListService) {
+		this.workflowResultListService = workflowResultListService;
 	}
 
 	@Override
@@ -61,16 +69,11 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	}
 
 	@Override
-	public void completeTask(NodeRef assignee, DelegateTask task) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
 		String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
-		completeTask(assignee, task, decision, dueDate);
-	}
-
-	private void completeTask(NodeRef assignee, DelegateTask task, String decision, Date dueDate) {
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
 		taskDecision.setUserName(task.getAssignee());
@@ -79,15 +82,31 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		taskDecision.setDueDate(dueDate);
 		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
 
-		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
+		Map<String, String> decisionsMap = (Map<String, String>) task.getVariable("decisionsMap");
 		decisionsMap = addDecision(decisionsMap, taskDecision);
-		execution.setVariable("decisionsMap", decisionsMap);
-
-		execution.setVariable("taskDecision", decision);
+		task.setVariable("decisionsMap", decisionsMap);//decisionsMap может быть null, поэтому если она создана, ее надо перезаписать
+		task.setVariable("taskDecision", decision);
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
 		grantReaderPermissions(employeeRef, bpmPackage);
+		return  taskDecision;
+	}
+
+	@Override
+	public void logDecision(final NodeRef resultListRef, final WorkflowTaskDecision taskDecision) {
+		final NodeRef resultListItemRef;
+		final Map<QName, Serializable> properties;
+
+		resultListItemRef = workflowResultListService.getResultItemByUserName(resultListRef, taskDecision.getUserName());
+
+		properties = nodeService.getProperties(resultListItemRef);
+
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE, DateUtils.truncate(taskDecision.getStartDate(), Calendar.DATE));
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
+		properties.put(SigningWorkflowModel.PROP_SIGN_RESULT_ITEM_DECISION, taskDecision.getDecision());
+
+		nodeService.setProperties(resultListItemRef, properties);
 	}
 
 	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
@@ -173,7 +192,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
-		return "";
+		return String.format("Вам необходимо подписать документ %s, срок согласования %s", documentLink, dueDate);
 	}
 
 	@Override
@@ -195,5 +214,30 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return null;
+	}
+
+	@Override
+	public void logFinalDecision(final NodeRef resultListRef, final String finalDecision) {
+		nodeService.setProperty(resultListRef, WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE, new Date());
+		nodeService.setProperty(resultListRef, SigningWorkflowModel.PROP_SIGN_RESULT_LIST_DECISION, finalDecision);
+	}
+
+	@Override
+	public void dropSigningResults(final NodeRef resultListRef) {
+		nodeService.addAspect(resultListRef, ContentModel.ASPECT_TEMPORARY, null);
+		nodeService.deleteNode(resultListRef);
+	}
+
+	@Override
+	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
+		NodeRef resultListContainer = workflowResultListService.getOrCreateWorkflowResultFolder(bpmPackage);
+		NodeRef resultListRoot = getFolder(resultListContainer, documentAttachmentCategoryName);
+		if (resultListRoot == null) {
+			resultListRoot = createFolder(resultListContainer, documentAttachmentCategoryName);
+		}
+
+		NodeRef resultList = workflowResultListService.createResultList(resultListRoot, bpmPackage, documentAttachmentCategoryName, SigningWorkflowModel.TYPE_SIGN_RESULT_LIST, RESULT_LIST_NAME_FORMAT);
+		workflowResultListService.prepareResultList(resultList, assigneesList, SigningWorkflowModel.TYPE_SIGN_RESULT_ITEM);
+		return resultList;
 	}
 }

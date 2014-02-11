@@ -6,9 +6,13 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<util:list id="signing.models">
+		<value>alfresco/module/${artifactId}/models/lecm-signing-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-signing-result-model.xml</value>
+	</util:list>
 	<bean id="signing.model.bootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
-		  p:models="alfresco/module/${artifactId}/models/lecm-signing-model.xml"/>
+		  depends-on="workflow.model.bootstrap"
+		  p:models-ref="signing.models"/>
 
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
@@ -30,5 +34,5 @@
 		  depends-on="signing.workflow.bootstrap"
 		  class="ru.it.lecm.workflow.signing.SigningWorkflowServiceImpl"
 		  p:nodeService-ref="nodeService"
-		  p:workCalendarService-ref="WorkCalendarService"/>
+		  p:workCalendarService-ref="WorkCalendarService" p:workflowResultListService-ref="workflowResultListService"/>
 </beans>

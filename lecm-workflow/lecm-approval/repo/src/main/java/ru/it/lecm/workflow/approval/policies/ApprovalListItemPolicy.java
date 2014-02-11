@@ -1,4 +1,4 @@
-package ru.it.lecm.approval.policies;
+package ru.it.lecm.workflow.approval.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.approval.api.ApprovalServiceModel;
+import ru.it.lecm.workflow.approval.api.ApprovalServiceModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
