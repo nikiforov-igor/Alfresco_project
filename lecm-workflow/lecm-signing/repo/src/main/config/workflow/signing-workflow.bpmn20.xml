@@ -79,7 +79,6 @@
 						if (isSigned) {
 							signingWorkflow.logFinalDecision(resultListRef, finalDecision);
 						} else {
-							//TODO: удаление результатов подписания, как будто их и не было никогда
 							signingWorkflow.dropSigningResults(resultListRef);
 						}
 						signingWorkflow.notifySigningFinished(finalDecision, bpm_package);

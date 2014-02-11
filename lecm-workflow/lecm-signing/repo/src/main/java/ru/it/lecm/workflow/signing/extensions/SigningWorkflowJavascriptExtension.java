@@ -5,6 +5,7 @@ import java.util.Map;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -47,8 +48,8 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 		signingWorkflowService.assignTask(assignee.getNodeRef(), task);
 	}
 
-	public void completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		signingWorkflowService.completeTask(assignee.getNodeRef(), task);
+	public WorkflowTaskDecision completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+		return signingWorkflowService.completeTask(assignee.getNodeRef(), task);
 	}
 
 	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {
