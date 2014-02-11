@@ -1,6 +1,5 @@
 package ru.it.lecm.workflow.extensions;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,8 +21,6 @@ import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
  * @author vlevin
  */
 public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExtension {
-
-	private final static DateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 	private WorkflowAssigneesListService workflowAssigneesListService;
 	private OrgstructureBean orgstructureService;
 
@@ -51,37 +48,56 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		return workflowAssigneesListService.getDefaultAssigneesList(workflowType, concurrency);
 	}
 
-	public void saveAssigneesList(JSONObject json) {
-		String assigneesListRef, assigneesListName;
+	public JSONObject saveAssigneesList(JSONObject json) {
+		String assigneesListRef, assigneesListName, workflowType, concurrency;
+		NodeRef listNode;
+		JSONObject result;
 		try {
-			assigneesListRef = json.getString("assigneesListRef");
-			assigneesListName = json.getString("assigneesListName");
+			assigneesListRef = json.getString("nodeRef");
+			assigneesListName = json.getString("title");
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}
 
-		workflowAssigneesListService.saveAssigneesList(new NodeRef(assigneesListRef), assigneesListName);
+		listNode = new NodeRef(assigneesListRef);
+		workflowType = workflowAssigneesListService.getAssigneesListWorkflowType(listNode);
+		concurrency = workflowAssigneesListService.getAssigneesListWorkflowConcurrency(listNode);
+		workflowAssigneesListService.saveAssigneesList(listNode, assigneesListName);
+		result = getAssigneesLists(workflowType, concurrency);
+
+		return result;
 	}
 
 	/*
 	 {
-	 "defaultListRef": "NodeRef на список по умолчанию",
+	 "defaultList": "NodeRef на список по умолчанию",
+	 "listsFolder": "папка, которая содержит списки участников",
 	 "lists": [ {
-	 "listName": "название списка",
+	 "title": "название списка",
 	 "nodeRef": "NodeRef списка"
 	 }]
 	 }
 	 */
 	public JSONObject getAssigneesLists(JSONObject json) {
-		String workflowType, concurrency;
+		JSONObject result = null;
+		try {
+			String workflowType = json.getString("workflowType");
+			String concurrency = json.getString("concurrency");
+			result = getAssigneesLists(workflowType, concurrency);
+
+		} catch (JSONException ex) {
+			throw new WebScriptException("Error operating JSON", ex);
+		}
+
+		return result;
+	}
+
+	private JSONObject getAssigneesLists(String workflowType, String concurrency) {
 		JSONObject result = new JSONObject();
 		JSONArray listsJSONArray = new JSONArray();
 		try {
-			workflowType = json.getString("workflowType");
-			concurrency = json.getString("concurrency");
-
-			List<NodeRef> assingeesLists = workflowAssigneesListService.getAssingeesListsForCurrentEmployee(workflowType, concurrency);
 			NodeRef defaultList = workflowAssigneesListService.getDefaultAssigneesList(workflowType, concurrency);
+			List<NodeRef> assingeesLists = workflowAssigneesListService.getAssingeesListsForCurrentEmployee(workflowType, concurrency);
 
 			for (NodeRef assigneesListRef : assingeesLists) {
 				String assigneesListName = workflowAssigneesListService.getNodeRefName(assigneesListRef);
@@ -89,7 +105,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 				JSONObject jsonItem = new JSONObject();
 
 				// для каждого строим JSON-объект
-				jsonItem.put("listName", assigneesListName);
+				jsonItem.put("title", assigneesListName);
 				jsonItem.put("nodeRef", assigneesListRef.toString());
 
 				// складываем в json-array
@@ -97,7 +113,8 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 			}
 
 			result.put("lists", listsJSONArray);
-			result.put("defaultListRef", defaultList.toString());
+			result.put("defaultList", defaultList.toString());
+			result.put("listsFolder", workflowAssigneesListService.getAssigneesListsFolder());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
 		}
@@ -142,7 +159,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 				// для каждого из элементов создаем json-объект
 				listItemJSON.put("order", order);
-				listItemJSON.put("dueDate", dueDate != null ? dateParser.format(dueDate) : "");
+				listItemJSON.put("dueDate", dueDate != null ? new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(dueDate) : "");
 				listItemJSON.put("nodeRef", employeeNode);
 				// и складываем его в json-array
 				listItems.put(listItemJSON);
@@ -175,15 +192,22 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		workflowAssigneesListService.clearDueDatesInAssigneesList(listNodeToClear);
 	}
 
-	public void deleteList(final JSONObject json) {
-		String nodeRefStr;
+	public JSONObject deleteList(final JSONObject json) {
+		String nodeRefStr, workflowType, concurrency;
+		JSONObject result;
 		try {
 			nodeRefStr = json.getString("nodeRef");
 		} catch (JSONException ex) {
 			throw new WebScriptException("Insufficient params in JSON", ex);
 		}
+
 		NodeRef listNode = new NodeRef(nodeRefStr);
+		workflowType = workflowAssigneesListService.getAssigneesListWorkflowType(listNode);
+		concurrency = workflowAssigneesListService.getAssigneesListWorkflowConcurrency(listNode);
 		workflowAssigneesListService.deleteAssigneesList(listNode);
+		result = getAssigneesLists(workflowType, concurrency);
+
+		return result;
 	}
 
 	/**
@@ -231,7 +255,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 			throw new WebScriptException("Insufficient params in JSON", ex);
 		}
 		try {
-			dueDate = dateParser.parse(dueDateStr);
+			dueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(dueDateStr);
 		} catch (ParseException ex) {
 			throw new WebScriptException("Invalid date format", ex);
 		}

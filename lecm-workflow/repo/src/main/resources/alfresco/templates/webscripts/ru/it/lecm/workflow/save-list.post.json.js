@@ -1,1 +1,1 @@
-model.items = lecmWorkflowService.saveAssigneesList(json);
+model.jsonResponse = lecmWorkflowService.saveAssigneesList(json);

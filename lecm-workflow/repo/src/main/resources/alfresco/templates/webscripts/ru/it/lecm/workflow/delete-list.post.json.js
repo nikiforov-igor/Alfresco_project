@@ -1,1 +1,1 @@
-lecmWorkflowService.deleteList(json);
+model.jsonResponse = lecmWorkflowService.deleteList(json);

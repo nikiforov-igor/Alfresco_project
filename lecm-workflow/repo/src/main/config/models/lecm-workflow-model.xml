@@ -78,12 +78,12 @@
 			<parent>cm:content</parent>
 			<properties>
 
-				<!-- Срок согласования -->
+				<!-- Срок принятия решения -->
 				<property name="lecm-workflow:assignee-due-date">
 					<type>d:date</type>
 				</property>
 
-				<!-- Имя пользователя согласующего -->
+				<!-- Имя пользователя участника -->
 				<property name="lecm-workflow:userName">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -117,6 +117,10 @@
 					</target>
 				</association>
 			</associations>
+
+			<mandatory-aspects>
+				<aspect>lecm-workflow:assignee-order-aspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<!-- Маршрут -->
@@ -126,8 +130,8 @@
 			<properties>
 				<!-- Заголовок -->
 				<!--<property name="cm:title">-->
-					<!--<type>d:text</type>-->
-					<!--<mandatory>true</mandatory>--><!-- share-config-custom -->
+				<!--<type>d:text</type>-->
+				<!--<mandatory>true</mandatory>--><!-- share-config-custom -->
 				<!--</property>-->
 
 				<!-- На регистрацию -->
@@ -203,7 +207,7 @@
 
 		<aspect name="lecm-workflow:assignee-order-aspect">
 			<properties>
-			<!-- Порядковый номер элемента -->
+				<!-- Порядковый номер элемента -->
 				<property name="lecm-workflow:assignee-order">
 					<type>d:int</type>
 					<mandatory>true</mandatory>

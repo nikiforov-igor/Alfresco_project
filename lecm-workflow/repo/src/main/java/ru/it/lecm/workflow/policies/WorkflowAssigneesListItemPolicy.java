@@ -105,13 +105,8 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 				int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 				order = itemOrder > order ? itemOrder : order;
 			}
-			final int finalOrder = order + 1;
-			nodeService.addAspect(assigneesItem, LecmWorkflowModel.ASPECT_ASSIGNEE_ORDER, new HashMap<QName, Serializable>() {
-				{
-					put(LecmWorkflowModel.PROP_ASSIGNEE_ORDER, finalOrder);
-				}
-			});
 
+			nodeService.setProperty(assigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, order + 1);
 		}
 	}
 
