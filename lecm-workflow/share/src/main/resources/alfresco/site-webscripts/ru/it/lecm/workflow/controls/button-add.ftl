@@ -42,7 +42,7 @@
 	<div style="margin: 5px 0;">
 		<div class="form-field">
 			<label for="${radioWorkflowTypeId}">NodeRef на папку:</label>
-			<input type="text" id="${listNodeRefInput}" name="${field.name}" value=""/>
+			<input type="text" id="${listNodeRefInput}" name="${field.name}_added" value=""/>
 		</div>
 	</div>
 
