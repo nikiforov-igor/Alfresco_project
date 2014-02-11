@@ -27,7 +27,7 @@
 					<activiti:string><![CDATA[
 						var assigneesList = signingWorkflow.createAssigneesList(lecmSign_assigneesListAssoc, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
-						var resultListRef = signingWorkflow.createResultList(bpm_package, documentAttachmentCategoryName, lecmSign_Concurrency, assigneesList);
+						var resultListRef = signingWorkflow.createResultList(bpm_package, documentAttachmentCategoryName, assigneesList);
 						execution.setVariable("resultListRef", resultListRef);
 					]]></activiti:string>
 				</activiti:field>

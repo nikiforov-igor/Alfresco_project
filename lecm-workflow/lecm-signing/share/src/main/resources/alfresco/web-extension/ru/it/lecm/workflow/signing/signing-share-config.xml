@@ -22,7 +22,7 @@
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
 							<control-param name="workflowType">SIGNING</control-param>
 							<control-param name="concurrency">SEQUENTIAL</control-param>
-							<control-param name="concurrencyInputName">lecmSign_Concurrency</control-param>
+							<control-param name="concurrencyInputName">prop_lecmSign_Concurrency</control-param>
 						</control>
 					</field>
 					<field id="packageItems">
