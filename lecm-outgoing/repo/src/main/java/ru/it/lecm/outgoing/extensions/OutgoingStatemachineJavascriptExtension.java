@@ -11,6 +11,7 @@ import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
@@ -45,8 +46,9 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	private String getOutgoingURL(final ScriptNode outgoingRef) {
-		String presentString = (String) nodeService.getProperty(outgoingRef.getNodeRef(), DocumentService.PROP_PRESENT_STRING);
-		return wrapperLink(outgoingRef, presentString);
+		NodeRef outgoingDocumentRef = outgoingRef.getNodeRef();
+		String presentString = (String) nodeService.getProperty(outgoingDocumentRef, DocumentService.PROP_PRESENT_STRING);
+		return wrapperLink(outgoingDocumentRef.toString(), presentString, BaseBean.DOCUMENT_LINK_URL);
 	}
 
 	/**

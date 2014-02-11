@@ -4303,7 +4303,7 @@ outgoing.save();]]>
 																<name>actionScript</name>
 																<value>
 																	<![CDATA[var outgoing = stm_document,
-    notification = prepareNotificationAboutRework(outgoing);
+    notification = outgoingStatemachine.prepareNotificationAboutRework(outgoing);
 notifications.sendNotification(notification);]]>
 																</value>
 															</property>
