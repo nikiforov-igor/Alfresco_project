@@ -36,6 +36,18 @@ LogicECM.module.Incoming = LogicECM.module.Incoming || {};
 			}
 
 			return params;
-		}
+		},
+
+        checkSearchField: function SearchRepeatedDocuments_checkSearchField() {
+            var term = Dom.get(this.options.pickerId + "-searchText").value;
+            if ((term == null || term == "") && !Dom.get(this.options.controlId + "-search-similar").checked) {
+                this.widgets.searchButton.set("disabled", true);
+            } else {
+                this.widgets.searchButton.set("disabled", false);
+            }
+        },
+        extendedInit: function SearchRepeatedDocuments__extendedInit() {
+            Dom.get(this.options.controlId + "-search-similar").onchange = this.checkSearchField.bind(this);
+        }
 	}, true);
 })();

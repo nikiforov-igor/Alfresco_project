@@ -121,6 +121,9 @@ LogicECM.module = LogicECM.module || {};
 				if(!this.options.initialized) {
 					this.options.initialized = true;
 					this.init();
+                    if (this.extendedInit) {
+                        this.extendedInit();
+                    }
 				}
 			},
 
@@ -299,25 +302,28 @@ LogicECM.module = LogicECM.module || {};
 					}, "keydown").enable();
 
 				Dom.addClass(this.options.pickerId, "object-finder");
+                zinput.onkeyup = this.checkSearchField.bind(this);
+                this.checkSearchField();
 			},
 
 
 			onSearch: function(e, obj)
 			{
-//				var nodeRef = this.options.rootNodeRef;
-				var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
-				var searchData = "";
-
-				if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
-					for(var column in this.searchProperties) {
-						searchData += column + ":" + searchTerm + "#";
-					}
-					if (searchData != "") {
-						searchData = searchData.substring(0,(searchData.length)-1);
-					}
-				}
-				this.isSearch = true;
-				this._updateItems(searchData);
+                if (!this.widgets.searchButton.get("disabled")) {
+    //				var nodeRef = this.options.rootNodeRef;
+                    var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
+                    var searchData = "";
+                    if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
+                        for(var column in this.searchProperties) {
+                            searchData += column + ":" + searchTerm + "#";
+                        }
+                        if (searchData != "") {
+                            searchData = searchData.substring(0,(searchData.length)-1);
+                        }
+                    }
+                    this.isSearch = true;
+                    this._updateItems(searchData);
+                }
 				if (obj && obj[1]) {
 					obj[1].preventDefault();
 				}
@@ -973,6 +979,15 @@ LogicECM.module = LogicECM.module || {};
 						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "", updateForms: false}, this);
 					}
 				}
-			}
+			},
+
+            checkSearchField: function AssociationTreeViewer_checkSearchField() {
+                var term = Dom.get(this.options.pickerId + "-searchText").value;
+                if (term == null || term == "") {
+                    this.widgets.searchButton.set("disabled", true);
+                } else {
+                    this.widgets.searchButton.set("disabled", false);
+                }
+            }
 		});
 })();
