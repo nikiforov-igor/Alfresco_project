@@ -134,7 +134,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 	public boolean isTransferRightToBaseDocument() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {
-            return (Boolean) nodeService.getProperty(settings, SETTINGS_PROP_TRANSFER_RIGHT);
+            return Boolean.TRUE.equals(nodeService.getProperty(settings, SETTINGS_PROP_TRANSFER_RIGHT));
         }
         return false;
     }
