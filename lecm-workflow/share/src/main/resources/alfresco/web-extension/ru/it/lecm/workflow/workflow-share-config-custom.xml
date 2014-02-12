@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+				<css src="/css/lecm-workflow/result-list.css" />
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="model-type" condition="lecm-workflow:route">
 		<forms>
 			<form>
@@ -21,15 +29,15 @@
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
 							<control-param name="concurrencyInputName"></control-param>
-`							<!--<control-param name="concurrency"></control-param>&lt;!&ndash; PARALLEL | SEQUENTIAL &ndash;&gt;-->
+							`							<!--<control-param name="concurrency"></control-param>&lt;!&ndash; PARALLEL | SEQUENTIAL &ndash;&gt;-->
 						</control>
 					</field>
 
 					<!-- Второй контрол списков -->
 					<!--<field id="lecm-workflow:fake-workflow-list-2">-->
-						<!--<control template="/ru/it/lecm/workflow/controls/button-add.ftl">-->
-							<!--<control-param name="asdf">zxcv</control-param>-->
-						<!--</control>-->
+					<!--<control template="/ru/it/lecm/workflow/controls/button-add.ftl">-->
+					<!--<control-param name="asdf">zxcv</control-param>-->
+					<!--</control>-->
 					<!--</field>-->
 
 					<field id="lecm-workflow:is-register-after-signed"/>

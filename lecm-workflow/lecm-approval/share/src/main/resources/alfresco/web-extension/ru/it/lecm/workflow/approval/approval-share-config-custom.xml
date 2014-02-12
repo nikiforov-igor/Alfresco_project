@@ -211,7 +211,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-al:approval-list-contains-approval-item">
-						<control template="/ru/it/lecm/workflow/controls/approval-list.ftl">
+						<control template="/ru/it/lecm/workflow/controls/result-list.ftl">
 							<control-param name="itemType">lecm-al:approval-item</control-param>
 						</control>
 					</field>
@@ -242,14 +242,6 @@
 					<field id="lecm-al:approval-item-comment-assoc" label-id="field.comment.file"/>
 				</appearance>
 			</form>
-		</forms>
-	</config>
-
-	<config>
-		<forms>
-			<dependencies>
-				<css src="/css/lecm-approval/contracts-approval-list.css" />
-			</dependencies>
 		</forms>
 	</config>
 

@@ -1,0 +1,9 @@
+.share-form #lecm-result-list-span .form-container .form-fields {
+    padding: 1em 1em 0 !important;
+    width:96%;
+}
+
+.result-list-label, #lecm-result-list-span .viewmode-field .viewmode-value {
+    font-weight: bold;
+}
+
