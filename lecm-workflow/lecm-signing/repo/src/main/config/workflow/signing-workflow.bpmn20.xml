@@ -5,7 +5,17 @@
 			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
+						if (!execution.getVariable("isSigned")) {
+							signingWorkflow.dropSigningResults(resultListRef);
+						}
 						signingWorkflow.deleteTempAssigneesList(execution);
+					]]></activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+			<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+						execution.setVariable("isSigned", false);
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>
@@ -76,11 +86,7 @@
 						var isSigned = signingWorkflow.isSigned(finalDecision);
 						execution.setVariable("finalDecision", finalDecision);
 						execution.setVariable("isSigned", isSigned);
-						if (isSigned) {
-							signingWorkflow.logFinalDecision(resultListRef, finalDecision);
-						} else {
-							signingWorkflow.dropSigningResults(resultListRef);
-						}
+						signingWorkflow.logFinalDecision(resultListRef, finalDecision);
 						signingWorkflow.notifySigningFinished(finalDecision, bpm_package);
 					]]></activiti:string>
 				</activiti:field>

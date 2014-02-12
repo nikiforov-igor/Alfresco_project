@@ -424,7 +424,16 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return getAssigneesListsFolder();
 	}
 
+	private NodeRef createAnonymousAssigneesList(final NodeRef parentRef) {
+		return createAssigneesList(parentRef, "", "", null, true);
+	}
+
 	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final String concurrency, final Map<QName, Serializable> properties) {
+		return createAssigneesList(parentRef, workflowType, concurrency, properties, true);
+	}
+
+
+	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final String concurrency, final Map<QName, Serializable> properties, final boolean isAnonymous) {
 		Map<QName, Serializable> props = (properties == null) ? new HashMap<QName, Serializable>() : properties;
 
 		props.put(LecmWorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
@@ -444,8 +453,10 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		}
 		nodeService.addAspect(result, LecmWorkflowModel.ASPECT_TEMP, null);
 
-		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		nodeService.createAssociation(result, currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
+		if (!isAnonymous) {
+			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+			nodeService.createAssociation(result, currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
+		}
 
 		return result;
 	}
@@ -481,7 +492,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	@Override
 	public List<NodeRef> createAssigneesListWorkingCopy(NodeRef assigneesListNode, DelegateExecution execution) {
 		//создаем новый список во временной папке
-		NodeRef workingCopyAssigneesListNode = createAssigneesList(workflowFoldersService.getAssigneesListWorkingCopyFolder(), "", "", null);
+		NodeRef workingCopyAssigneesListNode = createAnonymousAssigneesList(workflowFoldersService.getAssigneesListWorkingCopyFolder());
 		//копируем навешанные аспекты
 		Set<QName> aspects = nodeService.getAspects(assigneesListNode);
 		for (QName aspect : aspects) {
