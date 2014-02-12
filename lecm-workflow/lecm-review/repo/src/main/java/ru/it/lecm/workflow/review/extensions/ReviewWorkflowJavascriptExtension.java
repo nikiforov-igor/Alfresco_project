@@ -22,8 +22,8 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 		this.reviewWorkflowService = reviewWorkflowService;
 	}
 
-	public void deleteTempAssigneesList(final DelegateExecution execution) {
-		reviewWorkflowService.deleteTempAssigneesList(execution);
+	public void deleteAssigneesListWorkingCopy(final DelegateExecution execution) {
+		reviewWorkflowService.deleteAssigneesListWorkingCopy(execution);
 	}
 
 	public ActivitiScriptNodeList createAssigneesList(final ActivitiScriptNode assigneesListNode, final DelegateExecution execution) {

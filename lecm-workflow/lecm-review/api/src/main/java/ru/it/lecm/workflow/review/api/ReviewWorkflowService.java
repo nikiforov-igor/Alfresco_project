@@ -14,7 +14,7 @@ public interface ReviewWorkflowService extends LecmWorkflowService {
 
 	List<NodeRef> createAssigneesList(NodeRef nodeRef, DelegateExecution execution);
 
-	void deleteTempAssigneesList(DelegateExecution execution);
+	void deleteAssigneesListWorkingCopy(DelegateExecution execution);
 
 	void logWorkflowFinished(NodeRef resultList);
 

@@ -26,4 +26,6 @@ public interface WorkflowResultListService {
 
 	void prepareResultList(final NodeRef emptyResultList, final List<NodeRef> assigneesList, final QName resultItemType);
 
+	void setResultListCompleteDate(final NodeRef resultList, Date finishDate);
+
 }

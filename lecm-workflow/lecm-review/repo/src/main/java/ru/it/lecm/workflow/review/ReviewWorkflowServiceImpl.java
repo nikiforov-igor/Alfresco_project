@@ -41,9 +41,9 @@ import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
  */
 public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implements ReviewWorkflowService {
 
-	private final static String RESULT_LIST_NAME_FORMAT = "Лист ознакомление версии %s";
+	private final static String RESULT_LIST_NAME_FORMAT = "Лист ознакомления версии %s";
 	private final static String WORKFLOW_FINISHED_MESSAGE_FORMAT = "Закончено ознакомление с документом %s";
-	private final static String WORKFLOW_STARTED_MESSAGE_FORMAT = "Вам необходимо согласовать документ %s, срок согласования %s";
+	private final static String WORKFLOW_STARTED_MESSAGE_FORMAT = "Вам необходимо ознакомиться с документом %s, срок ознакомления %s";
 	private final static Logger logger = LoggerFactory.getLogger(ReviewWorkflowServiceImpl.class);
 	private WorkflowResultListService resultListService;
 	private WorkflowAssigneesListService assigneesListService;
@@ -239,13 +239,13 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	}
 
 	@Override
-	public void deleteTempAssigneesList(DelegateExecution execution) {
+	public void deleteAssigneesListWorkingCopy(DelegateExecution execution) {
 		assigneesListService.deleteAssigneesListWorkingCopy(execution);
 	}
 
 	@Override
 	public void logWorkflowFinished(NodeRef resultList) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		resultListService.setResultListCompleteDate(resultList, DateUtils.truncate(new Date(), Calendar.DATE));
 	}
 
 }

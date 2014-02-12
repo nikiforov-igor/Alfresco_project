@@ -127,4 +127,10 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 
 		return workflowResultRoot;
 	}
+
+	@Override
+	public void setResultListCompleteDate(NodeRef resultList, Date finishDate) {
+		nodeService.setProperty(resultList, WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE, finishDate);
+	}
+
 }

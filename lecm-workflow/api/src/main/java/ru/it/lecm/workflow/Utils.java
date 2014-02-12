@@ -233,20 +233,21 @@ public class Utils implements ApplicationContextAware {
 	}
 
 	/**
-	 * Получить версию листа согласования. ПРоверяется наличие листа
-	 * согласования с указанной версией в указанной папке. Если лист с такой
+	 * Получить версию листа результатов. Проверяется наличие листа
+	 * результатов с указанной версией в указанной папке. Если лист с такой
 	 * версией уже есть, то версия инкреминируется. Пример: если есть лист
-	 * согласования с версией 1.5, то будет создан новый с версией 1.5.1. После
+	 * результатов с версией 1.5, то будет создан новый с версией 1.5.1. После
 	 * этого будет создан лист с версией 1.5.2 и т. д.
 	 *
-	 * @param version начальная версия листа согласования.
-	 * @param parentRef каталог с листами согласования
-	 * @return версия листа согласования, которую можно безбоязненно
+	 * @param version начальная версия листа результатов.
+	 * @param parentRef каталог с листами результатов
+	 * @param resultListNameFormat Формат имени листа результатов, в который подставляется версия
+	 * @return версия листа результатов, которую можно безбоязненно
 	 * использовать для нового листа
 	 */
-	public static String getResultListVersion(final String version, final NodeRef parentRef, final String resultListName) {
+	public static String getResultListVersion(final String version, final NodeRef parentRef, final String resultListNameFormat) {
 		String result;
-		String versionedResultListName = String.format(resultListName, version);
+		String versionedResultListName = String.format(resultListNameFormat, version);
 		NodeRef resultListNode = nodeService.getChildByName(parentRef, ContentModel.ASSOC_CONTAINS, versionedResultListName);
 		if (resultListNode == null) {
 			return version;
@@ -267,7 +268,7 @@ public class Utils implements ApplicationContextAware {
 				logger.error("Error in version string: {}", version);
 				return null;
 			}
-			return getResultListVersion(result, parentRef, versionedResultListName);
+			return getResultListVersion(result, parentRef, resultListNameFormat);
 		}
 	}
 }
