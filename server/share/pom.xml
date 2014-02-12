@@ -291,6 +291,13 @@
 			<type>amp</type>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.review</groupId>
+			<artifactId>review-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
