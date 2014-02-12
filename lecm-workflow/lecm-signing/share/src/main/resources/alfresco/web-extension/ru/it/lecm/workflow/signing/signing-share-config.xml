@@ -75,6 +75,7 @@
 					<field id="packageItems">
 						<control template="/ru/it/lecm/workflow/controls/package-items-with-result-list-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
+							<control-param name="resultListType">lecmSignResult:signResultList</control-param>
 						</control>
 					</field>
 				</appearance>

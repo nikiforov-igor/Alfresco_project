@@ -32,14 +32,14 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.PackageItemsFinder = function LECM_PackageItemsFinder(htmlId, currentValueHtmlId)
     {
         LogicECM.module.PackageItemsFinder.superclass.constructor.call(this, htmlId, currentValueHtmlId);
-        this.approvalLists = {};
+        this.resultLists = {};
         return this;
     };
 
     YAHOO.extend(LogicECM.module.PackageItemsFinder, LogicECM.module.ObjectFinder,
         {
 
-            approvalLists: null,
+            resultLists: null,
 
             _createSelectedItemsControls: function ObjectFinder__createSelectedItemsControls()
             {
@@ -267,16 +267,16 @@ LogicECM.module = LogicECM.module || {};
                     var items = eval("("+ response.serverResponse.responseText + ")").data.items,
                         item;
                     this.selectedItems = {};
-                    this.approvalLists = {};
+                    this.resultLists = {};
                     //this.singleSelectedItem = null;
 
                     for (var i = 0, il = items.length; i < il; i++)
                     {
                         item = items[i];
-                        if (item.type != "lecm-al:approval-list")  {
+                        if (item.type != this.options.resultListType)  {
                             this.selectedItems[item.nodeRef] = item;
                         } else {
-                            this.approvalLists[item.nodeRef] = item;
+                            this.resultLists[item.nodeRef] = item;
                         }
                     }
 
@@ -289,7 +289,7 @@ LogicECM.module = LogicECM.module || {};
                 var onFailure = function ObjectFinder__loadSelectedItems_onFailure(response)
                 {
                     this.selectedItems = null;
-                    this.approvalLists = null;
+                    this.resultLists = null;
                 };
 
                 if (arrItems !== "")
@@ -336,7 +336,7 @@ LogicECM.module = LogicECM.module || {};
                 // Check the event is directed towards this instance
                 if ($hasEventInterest(this, args)) {
                     var items = this.selectedItems,
-                        lists = this.approvalLists,
+                        lists = this.resultLists,
                         displayValue = "";
 
                     var item, link;
@@ -409,7 +409,7 @@ LogicECM.module = LogicECM.module || {};
                                 {
                                     url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
                                     dataObj:{
-                                        htmlid:"Approval-List-" + item.nodeRef,
+                                        htmlid:"Result-List-" + item.nodeRef,
                                         itemKind:"node",
                                         itemId:item.nodeRef,
                                         mode:"view"

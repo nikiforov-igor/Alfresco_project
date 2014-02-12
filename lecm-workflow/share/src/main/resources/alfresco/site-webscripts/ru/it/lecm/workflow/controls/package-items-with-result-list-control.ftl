@@ -1,11 +1,14 @@
 <#include "lecm-package-items.picker.inc.ftl" />
 <#assign controlId = fieldHtmlId + "-cntrl">
 
+<#assign resultListType = field.control.params.resultListType!'lecm-workflow-result:workflow-result-list'>
+
 <script type="text/javascript">//<![CDATA[
 (function () {
 <@renderPickerJS field "picker" />
     picker.setOptions(
             {
+				resultListType: "${resultListType}",
                 showActions: false,
                 additionalProperties: "lecm-document:list-present-string",
                 itemType: "cm:content",
