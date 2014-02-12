@@ -1265,15 +1265,44 @@ outgoing.save();]]>
 																				</value>
 																			</property>
 																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[Исходящее]]>
+																				</value>
+																			</property>
+																			<property>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[documentAttachmentCategoryName]]>
 																				</value>
 																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>1ab230d2-8dbd-4877-9ad0-de37ea6be916</name>
+																		<nodeRef>workspace://SpacesStore/dd03fc37-9fa7-4b66-98e9-c0a79ae0a09d</nodeRef>
+																		<properties>
 																			<property>
-																				<name>inputFromValue</name>
+																				<name>conditionErrorMessage</name>
 																				<value>
-																					<![CDATA[Исходящее]]>
+																					<![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[doc.hasCategoryAttachment("Исходящее")]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -3511,15 +3540,15 @@ outgoing.save();]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Исходящее]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4708,15 +4737,15 @@ notifications.sendNotification(notification);]]>
 																				</value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value>
-																					<![CDATA[documentAttachmentCategoryName]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value>
 																					<![CDATA[Исходящее]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[documentAttachmentCategoryName]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -6461,102 +6490,7 @@ notifications.sendNotification(notification);]]>
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders>
-											<subFolder>
-												<name>transitions</name>
-												<nodes>
-													<node>
-														<type>UserWorkflowEntity</type>
-														<name>d2599572-10ce-4e89-9727-715e84e3849f</name>
-														<nodeRef>workspace://SpacesStore/93fb4509-ff5f-4ac2-bee8-f7b73fb4f68c</nodeRef>
-														<properties>
-															<property>
-																<name>workflowId</name>
-																<value>
-																	<![CDATA[activiti$regnumReservation]]>
-																</value>
-															</property>
-															<property>
-																<name>workflowLabel</name>
-																<value>
-																	<![CDATA[Запросить номер]]>
-																</value>
-															</property>
-														</properties>
-														<aspects>
-															<workflowAspect/>
-														</aspects>
-														<associations/>
-														<roleAssociations/>
-														<subFolders>
-															<subFolder>
-																<name>variables</name>
-																<nodes>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>bb0ee03b-e462-4cdf-aa1e-71481fb8d542</name>
-																		<nodeRef>workspace://SpacesStore/259e8cec-62bf-4e24-82e0-ae541c4fa193</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value>
-																					<![CDATA[Номер уже присвоен]]>
-																				</value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
-																				</value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																	<node>
-																		<type>conditionAccess</type>
-																		<name>0e140e80-9985-48c7-a180-1677cdb3dc18</name>
-																		<nodeRef>workspace://SpacesStore/1025b3a6-7596-409d-b7fd-ce110f1af735</nodeRef>
-																		<properties>
-																			<property>
-																				<name>conditionErrorMessage</name>
-																				<value>
-																					<![CDATA[Запрос уже выполняется]]>
-																				</value>
-																			</property>
-																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
-																				<name>condition</name>
-																				<value>
-																					<![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") == null OR !doc.attr("lecm-reservation-aspects:isReservationRunning")]]>
-																				</value>
-																			</property>
-																		</properties>
-																		<aspects/>
-																		<associations/>
-																		<roleAssociations/>
-																		<subFolders/>
-																	</node>
-																</nodes>
-															</subFolder>
-														</subFolders>
-													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
+										<subFolders/>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
