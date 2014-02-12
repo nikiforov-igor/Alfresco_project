@@ -8,6 +8,12 @@
 <#assign showActions = false/>
 <#assign usePagination = false/>
 
+<#if field.control.params.itemType??>
+	<#assign itemType = field.control.params.itemType>
+<#else>
+	<#assign itemType = "lecm-workflow-result:workflow-result-item">
+</#if>
+
 <div class="form-field with-grid" id="${controlId}">
     <label for="${controlId}" style="white-space: nowrap; overflow: visible;">${field.label?html}:</label>
 <@grid.datagrid containerId true "app-list-item-employee-view">
@@ -66,7 +72,7 @@
                 showExtendSearchBlock: false,
                 actions: [],
                 datagridMeta: {
-                    itemType: "lecm-al:approval-item",
+                    itemType: "${itemType}",
                     datagridFormId: "datagrid",
                     nodeRef: "${form.arguments.itemId}"
                 },

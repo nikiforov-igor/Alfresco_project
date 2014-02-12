@@ -17,7 +17,7 @@ function Approval_getPresentString() {
 	var taskIDEscaped = actionElements[actionElements.length - 2];
 	Alfresco.util.Ajax.request({
 		method: "GET",
-		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/GetDocumentDataByTaskId?taskID=" + taskIDEscaped,
+		url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + taskIDEscaped,
 		requestContentType: "application/json",
 		responseContentType: "application/json",
 		successCallback: {

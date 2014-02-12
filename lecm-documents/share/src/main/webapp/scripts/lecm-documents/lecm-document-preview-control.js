@@ -52,7 +52,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				if (this.options.taskId != null) {
 					Alfresco.util.Ajax.request({
 						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/approval/GetDocumentDataByTaskId?taskID=" + this.options.taskId,
+						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.taskId,
 						successCallback: {
 							fn: function (response) {
 								var result = response.json;

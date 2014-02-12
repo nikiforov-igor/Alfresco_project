@@ -21,14 +21,14 @@
 							window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
 
 							Alfresco.util.PopupManager.displayMessage({
-								text: Alfresco.component.Base.prototype.msg("approvalList.report.success")
+								text: Alfresco.component.Base.prototype.msg("workflow.result.report.success")
 							});
 						}
 					},
 					failureCallback: {
 						fn: function ApprovalListPrint_onFailure(response) {
 							Alfresco.util.PopupManager.displayMessage({
-								text: Alfresco.component.Base.prototype.msg("approvalList.report.failure")
+								text: Alfresco.component.Base.prototype.msg("workflow.result.report.failure")
 							});
 						}
 					}

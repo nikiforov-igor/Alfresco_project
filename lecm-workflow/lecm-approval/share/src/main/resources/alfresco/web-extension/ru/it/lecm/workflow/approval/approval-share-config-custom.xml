@@ -158,7 +158,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmApprove:presentString">
-						<control template="/ru/it/lecm/workflow/approval/controls/document-present-string.ftl" />
+						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="bpm:dueDate" label-id="workflow.field.due">
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
@@ -189,7 +189,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
-						<control template="/ru/it/lecm/workflow/approval/controls/package-items-with-approval-list-control.ftl">
+						<control template="/ru/it/lecm/workflow/controls/package-items-with-result-list-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
 						</control>
 					</field>
@@ -211,10 +211,12 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-al:approval-list-contains-approval-item">
-						<control template="/ru/it/lecm/workflow/approval/controls/approval-list.ftl"/>
+						<control template="/ru/it/lecm/workflow/controls/approval-list.ftl">
+							<control-param name="itemType">lecm-al:approval-item</control-param>
+						</control>
 					</field>
 					<field id="lecm-al:printBtn">
-						<control template="/ru/it/lecm/workflow/approval/controls/printListBtn.ftl"/>
+						<control template="/ru/it/lecm/workflow/controls/printListBtn.ftl"/>
 					</field>
 				</appearance>
 			</form>
@@ -327,7 +329,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmCustom:presentString">
-						<control template="/ru/it/lecm/workflow/approval/controls/document-present-string.ftl" />
+						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="bpm:dueDate" label-id="workflow.field.due">
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
@@ -355,7 +357,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="packageItems">
-						<control template="/ru/it/lecm/workflow/approval/controls/package-items-with-approval-list-control.ftl">
+						<control template="/ru/it/lecm/workflow/controls/package-items-with-result-list-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
 						</control>
 					</field>

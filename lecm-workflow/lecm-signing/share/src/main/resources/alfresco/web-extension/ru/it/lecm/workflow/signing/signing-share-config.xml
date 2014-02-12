@@ -52,7 +52,7 @@
 				<appearance>
 					<!-- TODO: строка представления для документа в задаче -->
 					<field id="lecmSign:presentString">
-						<control template="/ru/it/lecm/approval/controls/document-present-string.ftl" />
+						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="lecmSign:documentPreview">
 						<control template="/ru/it/lecm/documents/controls/document-preview-control.ftl" />
@@ -83,7 +83,7 @@
 				<appearance>
 					<field id="packageItems">
 						<!-- TODO: вспомнить что это такое -->
-						<control template="/ru/it/lecm/approval/controls/package-items-with-approval-list-control.ftl">
+						<control template="/ru/it/lecm/workflow/controls/package-items-with-result-list-control.ftl">
 							<control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
 						</control>
 					</field>

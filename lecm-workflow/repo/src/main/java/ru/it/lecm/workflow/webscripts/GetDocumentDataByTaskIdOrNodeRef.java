@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.webscript;
+package ru.it.lecm.workflow.webscripts;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,15 +6,17 @@ import java.util.Map;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.workflow.approval.ApprovalServiceImpl;
-import ru.it.lecm.workflow.approval.Utils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.workflow.Utils;
+import ru.it.lecm.workflow.beans.WorkflowFoldersServiceImpl;
 
 /**
  *
@@ -24,7 +26,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 
 	private WorkflowService workflowService;
 	private NodeService nodeService;
-	private ApprovalServiceImpl approvalListService;
+	private WorkflowFoldersServiceImpl workflowFoldersService;
 	private static final String DOCUMENT_DETAILS_URL = "/share/page/document-details";
 
 	public void setWorkflowService(WorkflowService workflowService) {
@@ -35,8 +37,8 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 		this.nodeService = nodeService;
 	}
 
-	public void setApprovalListService(ApprovalServiceImpl approvalListService) {
-		this.approvalListService = approvalListService;
+	public void setWorkflowFoldersService(WorkflowFoldersServiceImpl workflowFoldersService) {
+		this.workflowFoldersService = workflowFoldersService;
 	}
 
 	@Override
@@ -44,6 +46,7 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 		NodeRef documentRef = null;
 		String documentURL;
 		Map<String, Object> result = new HashMap<String, Object>();
+		JSONObject resultJSON = new JSONObject();
 		String taskID = req.getParameter("taskID");
 		String nodeRefStr = req.getParameter("nodeRef");
 		if ((nodeRefStr == null || nodeRefStr.isEmpty()) && (taskID != null && !taskID.isEmpty())) {
@@ -57,7 +60,6 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 			throw new WebScriptException("Task ID or NodeRef must be supplied");
 		}
 
-
 		if (documentRef == null) {
 			throw new WebScriptException("No document attached");
 		}
@@ -65,15 +67,21 @@ public class GetDocumentDataByTaskIdOrNodeRef extends DeclarativeWebScript {
 		String presentString = (String) nodeService.getProperty(documentRef, DocumentService.PROP_PRESENT_STRING);
 
 		if (presentString == null || presentString.length() == 0) {
-			presentString = "Согласование";
-			documentURL = approvalListService.wrapperLink(documentRef, presentString, DOCUMENT_DETAILS_URL);
+			presentString = "Документ";
+			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, DOCUMENT_DETAILS_URL);
 		} else {
-			documentURL = approvalListService.wrapperLink(documentRef, presentString, BaseBean.DOCUMENT_LINK_URL);
+			documentURL = workflowFoldersService.wrapperLink(documentRef, presentString, BaseBean.DOCUMENT_LINK_URL);
 		}
 
-		result.put("nodeRef", documentRef.toString());
-		result.put("presentString", presentString);
-		result.put("presentStringWithLink", documentURL);
+		try {
+			resultJSON.put("nodeRef", documentRef.toString());
+			resultJSON.put("presentString", presentString);
+			resultJSON.put("presentStringWithLink", documentURL);
+		} catch (JSONException ex) {
+			throw new WebScriptException("Error formin JSON response", ex);
+		}
+
+		result.put("result", resultJSON);
 
 		return result;
 	}
