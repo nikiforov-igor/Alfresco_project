@@ -29,7 +29,7 @@ public final class WorkflowResultModel {
 	/**
 	 * &lt;property name="lecm-workflow-result:workflow-result-list-document-version"&gt;
 	 */
-	public final static QName PROP_WORKFLOW_LIST_DOCUMENT_VERSION = QName.createQName(WORKFLOW_RESULT_NAMESPACE, "workflow-result-list-document-version");
+	public final static QName PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION = QName.createQName(WORKFLOW_RESULT_NAMESPACE, "workflow-result-list-document-version");
 
 	/**
 	 * &lt;child-association name="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc"&gt;

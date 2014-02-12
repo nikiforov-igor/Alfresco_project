@@ -94,8 +94,8 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, localName);
 		properties.put(ContentModel.PROP_TITLE, localName);
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_LIST_DOCUMENT_VERSION, contractDocumentVersion);
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION, contractDocumentVersion);
 		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, localName);
 		NodeRef resultListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, resultListType, properties).getChildRef();
 		//прикрепляем approval list к списку items у документа
