@@ -97,7 +97,7 @@
                                 fullDelete: true
                             }
                         },
-                        dataSource:"lecm/search",
+                        dataSource:"lecm/documents/attachments/datagrid",
                         bubblingLabel: "${containerId}",
 
                         allowCreate: false,

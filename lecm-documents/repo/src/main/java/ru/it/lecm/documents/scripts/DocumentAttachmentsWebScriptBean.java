@@ -160,6 +160,19 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	public Scriptable getAttachmentsByCategory(String categoryRef) {
+		ParameterCheck.mandatory("categoryRef", categoryRef);
+
+		NodeRef ref = new NodeRef(categoryRef);
+		if (this.nodeService.exists(ref)) {
+			List<NodeRef> attachments = this.documentAttachmentsService.getAttachmentsByCategory(ref);
+			if (attachments != null) {
+				return createScriptable(attachments);
+			}
+		}
+		return null;
+	}
+
 	public boolean isInnerAttachment(ScriptNode attachment) {
 		ParameterCheck.mandatory("attachment", attachment);
 		return documentAttachmentsService.isDocumentAttachment(attachment.getNodeRef()) &&
