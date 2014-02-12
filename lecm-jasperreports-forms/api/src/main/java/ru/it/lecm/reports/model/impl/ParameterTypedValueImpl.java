@@ -137,9 +137,19 @@ public class ParameterTypedValueImpl
 	 * Здесь принимается что пустыми будет NULL, + для строковых пустая trim() строка.
 	 */
 	public static boolean isBoundEmpty(Object value) {
-		return (value == null) 
-				|| ( (value instanceof String) && ((String) value).trim().length() == 0)
-		;
+		if ((value == null)
+				|| ( (value instanceof String) && ((String) value).trim().length() == 0)) {
+            return true;
+        }
+        if (value instanceof String[]) {
+            for (int i = 0; i < ((String[]) value).length; i++) {
+                String v = ((String[]) value)[i];
+                if (v == null || v.trim().isEmpty()) {
+                    return true;
+                }
+            }
+        }
+        return false;
 	}
 
 	@Override

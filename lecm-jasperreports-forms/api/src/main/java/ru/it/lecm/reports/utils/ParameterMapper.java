@@ -347,7 +347,7 @@ public class ParameterMapper {
     public static List<Object> getArgsList(final ColumnDescriptor colDesc) {
         List<Object> result = new ArrayList<Object>();
 
-        if (colDesc == null || colDesc.getParameterValue() == null) {
+        if (colDesc == null || colDesc.getParameterValue() == null || colDesc.getParameterValue().isEmpty()) {
             return result;
         }
 
