@@ -15,9 +15,9 @@
                 <item key="RU_RU"><![CDATA[genericProvider]]></item>
             </l18>
         </provider>
-        <template filename="outgoing-signatory (2).jrxml" mnem="outgoing-signatory (2).jrxml-template">
+        <template filename="outgoing-signatory(3).jrxml" mnem="outgoing-signatory(3).jrxml-template">
             <l18>
-                <item key="RU_RU"><![CDATA[outgoing-signatory (2).jrxml-template]]></item>
+                <item key="RU_RU"><![CDATA[outgoing-signatory(3).jrxml-template]]></item>
             </l18>
         </template>
         <datasource.descriptor>
@@ -30,17 +30,17 @@
         <offset>0</offset>
         <limit>-1</limit>
         <pgsize>-1</pgsize>
-        <queryText><![CDATA[{cm:contains/cm:contains/cm:contains/}]]></queryText>
+        <queryText><![CDATA[{cm:contains/cm:contains/cm:contains/lecm-workflow-result:workflow-result-item-employee-assoc/}]]></queryText>
         <querySort/>
         <allVersions>true</allVersions>
-        <preferedType>lecmSignResult:signResultItem</preferedType>
+        <preferedType/>
         <isMultiRow>false</isMultiRow>
         <isCustom>true</isCustom>
         <flags/>
     </query.descriptor>
     <fields>
         <field alfrescoType="d:text" displayName="Подписант"
-            jrFldName="signatory" queryFldName="{cm:title}">
+            jrFldName="signatory" queryFldName="{lecm-orgstr:employee-short-name}">
             <l18>
                 <item key="RU_RU"><![CDATA[Подписант]]></item>
             </l18>

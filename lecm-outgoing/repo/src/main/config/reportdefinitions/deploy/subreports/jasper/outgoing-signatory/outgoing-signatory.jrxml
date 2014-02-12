@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="outgoing-signatory" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9f9dcc95-18a4-455d-b0fe-3f3d1244ebbc">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="outgoing-signatory" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7cf162f4-629a-4fed-b41c-7e1a350dfcb0">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -24,7 +24,7 @@
 	<parameter name="doc-created-date" class="java.util.Date" isForPrompting="false"/>
 	<parameter name="doc-regnumber" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["{cm:contains/cm:contains/cm:contains/}"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["{cm:contains/cm:contains/cm:contains/lecm-workflow-result:workflow-result-item-employee-assoc/}"]]></defaultValueExpression>
 	</parameter>
 	<queryString language="SQL">
 		<![CDATA[$P!{PREPARED_QUERY}]]>
@@ -35,7 +35,7 @@
 	<detail>
 		<band height="26" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="110" height="26" uuid="820a1755-2a17-4cb9-9dec-0a06ac9ee165"/>
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="110" height="26" uuid="48c7af06-1224-4ea3-86d7-a902b6edf64e"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
