@@ -285,7 +285,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void beforeDeleteNode(NodeRef nodeRef) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null && !nodeService.hasAspect(nodeRef, ContentModel.ASPECT_WORKING_COPY)) {
-			onDeleteAttachment(nodeRef, document);
+			onDeleteAttachment(nodeRef, document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 		}
 	}
 
@@ -295,18 +295,18 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 		final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
 		if (document != null) {
-			onDeleteAttachment(attachment, document);
+			onDeleteAttachment(attachment, document, this.documentAttachmentsService.getCategoryName(category));
 		}
 	}
 
-	public void onDeleteAttachment(NodeRef attachment, final NodeRef document) {
+	public void onDeleteAttachment(NodeRef attachment, final NodeRef document, String categoryName) {
 		boolean hasDeletePermission =  this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_CONTENT_DELETE, document);
 		if (!hasDeletePermission) {
 			hasDeletePermission = isOwnNode(attachment) && this.lecmPermissionService.hasPermission(LecmPermissionService.PERM_OWN_CONTENT_DELETE, document);
 		}
 
 		if (hasDeletePermission) {
-			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(attachment));
+			this.stateMachineBean.checkReadOnlyCategory(document, categoryName);
 		} else {
 			throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + attachment);
 		}
