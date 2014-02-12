@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Save potential workers</shortname>
+    <description>Return true if employee NO active absences</description>
+    <url>/lecm/eds/global-settings/api/savePotentialWorkers</url>
+    <format default="json" />
+    <authentication>admin</authentication>
+    <transaction>required</transaction>
+</webscript>

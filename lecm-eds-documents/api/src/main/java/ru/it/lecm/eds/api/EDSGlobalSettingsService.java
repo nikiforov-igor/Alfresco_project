@@ -1,6 +1,7 @@
 package ru.it.lecm.eds.api;
 
 import java.util.Collection;
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
@@ -29,4 +30,7 @@ public interface EDSGlobalSettingsService {
 
 	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef);
 	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef);
+
+	public void savePotentialWorkers(String businessRoleId, NodeRef orgElementRef, List<NodeRef> employeesRefs);
+	public void savePotentialWorkers(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs);
 }

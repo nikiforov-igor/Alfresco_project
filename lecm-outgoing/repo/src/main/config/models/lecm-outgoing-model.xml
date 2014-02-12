@@ -8,6 +8,7 @@
 		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
 		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
@@ -111,5 +112,19 @@
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 			</mandatory-aspects>
 		</type>
+		
+		<type name="lecm-outgoing:settings">
+		    <title>Logic Ecm Outgoing Documents Global Settings</title>
+		    <parent>cm:cmobject</parent>
+		    <properties>
+			    <!-- Режим регистрации -->
+			    <property name="lecm-outgoing:settings-centralized-registration">
+				    <type>d:boolean</type>
+				    <mandatory>true</mandatory>
+				    <default>true</default>
+			    </property>
+		    </properties>
+	    </type>
+		
 	</types>
 </model>

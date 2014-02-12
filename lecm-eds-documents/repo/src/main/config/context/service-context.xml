@@ -36,7 +36,7 @@
 	<util:constant id="GLOBAL_EDS_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.GLOBAL_EDS_SETTINGS_FOLDER_ID"/>
 	<util:constant id="GLOBAL_EDS_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.GLOBAL_EDS_SETTINGS_FOLDER_NAME"/>
 
-	<bean id="edsGlobalSettingsService" class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl" parent="baseBean"
+	<bean id="edsGlobalSettingsService" init-method="init" class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl" parent="baseBean"
 	      depends-on="nodeService, documentService, serviceDictionary">
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>

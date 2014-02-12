@@ -1,5 +1,13 @@
-var businessRoleId = args["businessRole"];
-var organizationElementRef = args["organizationElement"];
-var workersList = edsGlobalSettings.getPotentialWorkers(businessRoleId, organizationElementRef);
-model.employeesList = workersList;
+var businessRoleId = args["businessRole"],
+	organizationElementRef = args["organizationElement"],
+	workersList = edsGlobalSettings.getPotentialWorkers(businessRoleId, organizationElementRef),
+	results = new Array();
+
+for each (var worker in workersList) {
+	results.push(
+		{
+			item: worker
+		});
+}
+model.employeesList = results;
 model.employeesCount = workersList ? workersList.length : 0;

@@ -33,7 +33,18 @@
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
 
 	<bean id="outgoing.service" parent="baseBean"
-		  class="ru.it.lecm.outgoing.OutgoingServiceImpl"
-		  depends-on="outgoing.model.bootstrap"/>
+		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"
+		  depends-on="outgoing.model.bootstrap, edsGlobalSettingsService">
+		<property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="transactionService" ref="transactionService"/>
+	</bean>
 
+	<bean id="outgoing.script" parent="baseScript" class="ru.it.lecm.outgoing.scripts.OutgoingWebScriptBean"
+	      depends-on="outgoing.service">
+		<property name="extensionName">
+			<value>outgoingDocuments</value>
+		</property>
+        <property name="outgoingService" ref="outgoing.service"/>
+	</bean>
 </beans>
