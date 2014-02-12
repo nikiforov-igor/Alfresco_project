@@ -71,13 +71,10 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 	public void onCreateNode(ChildAssociationRef childAssociationRef) {
 		NodeRef assigneesList = childAssociationRef.getParentRef();
 		NodeRef assigneesItem = childAssociationRef.getChildRef();
-
-		List<ChildAssociationRef> assocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
-		if (assocs.isEmpty()) {
-			String assigneeName = (String) nodeService.getProperty(assigneesItem, ContentModel.PROP_NAME);
-			QName qName = QName.createQName(LecmWorkflowModel.WORKFLOW_NAMESPACE, assigneeName);
-			nodeService.addChild(assigneesList, assigneesItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, qName);
-		}
+		
+		String assigneeName = (String) nodeService.getProperty(assigneesItem, ContentModel.PROP_NAME);
+		QName qName = QName.createQName(LecmWorkflowModel.WORKFLOW_NAMESPACE, assigneeName);
+		nodeService.addChild(assigneesList, assigneesItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, qName);
 	}
 
 	/**

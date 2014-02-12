@@ -429,7 +429,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final String concurrency, final Map<QName, Serializable> properties) {
-		return createAssigneesList(parentRef, workflowType, concurrency, properties, true);
+		return createAssigneesList(parentRef, workflowType, concurrency, properties, false);
 	}
 
 
