@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="outgoing-registration">
+        <l18>
+            <item key="RU_RU"><![CDATA[Журнал регистрации исходящих]]></item>
+        </l18>
+        <type mnem="JASPER">
+            <l18>
+                <item key="RU_RU"><![CDATA[Jasper]]></item>
+            </l18>
+        </type>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="PROV_GENERIC_PROVIDER">
+            <l18>
+                <item key="RU_RU"><![CDATA[genericProvider]]></item>
+            </l18>
+        </provider>
+        <template filename="outgoing-registration (9)-18.jrxml" mnem="outgoing-registration (9)-18.jrxml-template">
+            <l18>
+                <item key="RU_RU"><![CDATA[outgoing-registration (9)-18.jrxml-template]]></item>
+            </l18>
+        </template>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU"><![CDATA[f85f681e-a468-4b07-9e17-02b6eb89089a]]></item>
+            </l18>
+        </datasource.descriptor>
+    </report.descriptor>
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[TYPE:"lecm-outgoing:document"]]></queryText>
+        <querySort/>
+        <allVersions>true</allVersions>
+        <preferedType>lecm-outgoing:document</preferedType>
+        <isMultiRow>true</isMultiRow>
+        <isCustom>false</isCustom>
+        <flags/>
+    </query.descriptor>
+    <fields>
+        <field alfrescoType="d:text" displayName="Заголовок"
+            jrFldName="doc-title" queryFldName="{lecm-document:title}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Заголовок]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Адресат"
+            jrFldName="recipient" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:surname} {lecm-outgoing:recipient-assoc/lecm-representative:firstname} {lecm-outgoing:recipient-assoc/lecm-representative:middlename}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Адресат]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Участники"
+            javaValueClass="java.util.List"
+            jrFldName="outgoing-signatory" queryFldName="{{subreport::members}}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Участники]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Статус"
+            jrFldName="doc-status" queryFldName="{lecm-statemachine:status}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Статус]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Автор"
+            jrFldName="doc-creator" queryFldName="{lecm-document:creator}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Автор]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Вид документа"
+            jrFldName="doc-type" queryFldName="{lecm-document:doc-type}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Вид документа]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Дата документа"
+            javaValueClass="java.util.Date" jrFldName="doc-created-date" queryFldName="{cm:created}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Дата документа]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Рег. номер"
+            jrFldName="doc-regnumber" queryFldName="{lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-number}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Рег. номер]]></item>
+            </l18>
+        </field>
+    </fields>
+    <subreports>
+        <subreport destColumnName="outgoing-signatory" name="outgoing-signatory">
+            <sublist.source><![CDATA[{lecm-document:doc-members-assoc/lecm-doc-members:employee-assoc/}]]></sublist.source>
+            <sublist.item>
+                <map>
+                    <item key="employee"><![CDATA[{lecm-orgstr:employee-short-name}]]></item>
+                </map>
+            </sublist.item>
+        </subreport>
+    </subreports>
+</ds.config>

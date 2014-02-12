@@ -109,6 +109,11 @@
 				<directory>src/main/config</directory>
 				<targetPath>alfresco/module/${project.artifactId}</targetPath>
 			</resource>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/config/reportdefinitions</directory>
+				<targetPath>reportdefinitions</targetPath>
+			</resource>
 		</resources>
 	</build>
 </project>

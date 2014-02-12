@@ -36,7 +36,7 @@
 					<prop key="#{ENGINE_ID}">activiti</prop>
 					<prop key="#{LOCATION}">alfresco/module/${artifactId}/models/workflow/regnum-reservation.bpmn20.xml</prop>
 					<prop key="#{MIMETYPE}">text/xml</prop>
-					<prop key="#{REDEPLOY}">true</prop>
+					<prop key="#{REDEPLOY}">${redeploy.process.definitions}</prop>
 				</props>
 			</list>
 		</property>
