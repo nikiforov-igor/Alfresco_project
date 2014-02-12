@@ -1,6 +1,8 @@
 package ru.it.lecm.reservation.scripts;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -15,6 +17,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -35,6 +38,7 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 	private RegNumbersService regNumbersService;
 	private NotificationsService notificationsService;
 	private BusinessJournalService businessJournalService;
+	private EDSGlobalSettingsService edsGlobalSettingsService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -56,10 +60,23 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 		this.businessJournalService = businessJournalService;
 	}
 
+	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
+		this.edsGlobalSettingsService = edsGlobalSettingsService;
+	}
+
 	public ActivitiScriptNodeList getReservationDocumentRegistrators(ScriptNode documentNode) {
 		NodeRef document = documentNode.getNodeRef();
-		//TODO: получать регистраторов через API которое напишет Дима
-		List<NodeRef> registrars = orgstructureService.getEmployeesByBusinessRole("OUTGOING_REGISTRAR", true);
+		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		//получаем текущего пользователя
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		//получаем его основную должностную позицию
+		NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
+		if (primaryStaff != null) {
+			NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+			//получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
+			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers("OUTGOING_REGISTRAR", unit);
+			registrars.addAll(potentialWorkers);
+		}
 		ActivitiScriptNodeList registrarsScriptList = new ActivitiScriptNodeList();
 		for (NodeRef registrar : registrars) {
 			NodeRef userRef = orgstructureService.getPersonForEmployee(registrar);
@@ -100,7 +117,7 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 
 	private void notifyRegistrarsAboutStartReservate(NodeRef document, List<NodeRef> registrars) {
 		NodeRef currentEmp = orgstructureService.getCurrentEmployee();
-		String employeeName = (String) nodeService.getProperty(currentEmp, orgstructureService.PROP_EMPLOYEE_SHORT_NAME);
+		String employeeName = (String) nodeService.getProperty(currentEmp, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 		String documentString = (String) nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING);
 		String template = "%s запросил резервирование номера для документа %s";
 		String employeeUrl = wrapperLink(currentEmp.toString(), employeeName);

@@ -52,6 +52,7 @@
 		<property name="regNumbersService" ref="regNumbersService"/>
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref ="businessJournalService"/>
+		<property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
 	</bean>
 
 	<bean id="reservation.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap">

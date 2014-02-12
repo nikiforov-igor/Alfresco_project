@@ -1,6 +1,7 @@
 package ru.it.lecm.outgoing.extensions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -32,6 +34,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	private NodeService nodeService;
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
+	private EDSGlobalSettingsService edsGlobalSettingsService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -43,6 +46,10 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setOrgstructureService(final OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
+	}
+
+	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
+		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
 
 	private String getOutgoingURL(final ScriptNode outgoingRef) {
@@ -89,12 +96,22 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	/**
 	 * подготовить список регистраторов для последующей раздачи им прав
 	 *
+	 * @param businessRoleId идентификатор бизнес-роли, которая содержит потенциальных регистраторов
 	 * @param outgoingRef ссылка на исходящее из машины состояний
 	 * @return объект Scriptable пригодный для работы из яваскрипта машины состояний
 	 */
-	public Scriptable getRegistrars(final ScriptNode outgoingRef) {
-		//TODO: получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
+	public Scriptable getRegistrars(final String businessRoleId, final ScriptNode outgoingRef) {
 		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		//получаем текущего пользователя
+		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+		//получаем его основную должностную позицию
+		NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
+		if (primaryStaff != null) {
+			NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+			//получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
+			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit);
+			registrars.addAll(potentialWorkers);
+		}
 		return createScriptable(registrars);
 	}
 

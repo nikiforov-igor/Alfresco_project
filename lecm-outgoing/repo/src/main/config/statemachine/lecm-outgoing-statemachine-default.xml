@@ -7142,7 +7142,7 @@ notifications.sendNotification(notification);]]>
 																<value>
 																	<![CDATA[var i,
     outgoing = stm_document, //исходящий документ
-    registrars = outgoingStatemachine.getRegistrars(outgoing),//получение списка регистраторов по документу
+    registrars = outgoingStatemachine.getRegistrars("OUTGOING_REGISTRAR", outgoing),//получение списка регистраторов по документу
     registrarsCount = registrars.length,
     notification;
 
