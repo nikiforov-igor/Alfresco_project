@@ -27,6 +27,13 @@
 		                                  </span>
 		                               </span>
 		                            </div>
+			                        <#--<div class="add-link">-->
+		                               <#--<span id="${el}-${category.nodeRef}-addLink-button" class="yui-button yui-push-button">-->
+		                                  <#--<span class="first-child">-->
+		                                     <#--<button name="addLink">${msg("button.upload.file")}</button>-->
+		                                  <#--</span>-->
+		                               <#--</span>-->
+		                            <#--</div>-->
 		                        </#if>
 	                        </td>
 	                    </tr>
@@ -64,6 +71,7 @@
 			            new LogicECM.DocumentAttachmentsList("${el}-${category.nodeRef}").setOptions(
 			                    {
 			                        nodeRef: "${category.nodeRef}",
+				                    categoryName: "${category.name}",
 				                    path: path,
 				                    showFileFolderLink: ${hasViewAttachmentPerm?string},
 				                    hasAddAttachmentPerm: ${(hasAddAttachmentPerm && !category.isReadOnly)?string},

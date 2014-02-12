@@ -43,7 +43,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     LogicECM.DocumentAttachmentsList = function DocumentAttachmentsList_constructor(htmlId) {
         LogicECM.DocumentAttachmentsList.superclass.constructor.call(this, "LogicECM.DocumentAttachmentsList", htmlId);
 
-        this.dataSourceUrl = $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/documentlibrary/data/doclist/");
+        this.dataSourceUrl = $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/document/data/doclistAttachments/");
         this.renderers = {};
 	    this.showingMoreActions = false;
 	    this.dragEventRefCount = 0;
@@ -154,7 +154,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	            nodeRef: null,
 
-                path: null,
+	            categoryName: null,
 
 	            /**
 	             * Метка для bubbling. Используется для отрисовки датагрида. Следует передать в datagridMeta
@@ -213,6 +213,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			            disabled: false,
 			            value: "CreateChildren"
 		            });
+
+//	            Alfresco.util.createYUIButton(this, "addLink-button", this.onAddLink,
+//		            {
+//			            disabled: false,
+//			            value: "CreateChildren"
+//		            });
 
 	            // DocLib Actions module
 	            this.modules.actions = new Alfresco.module.DoclibActions();
@@ -277,6 +283,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		        };
 		        this.fileUpload.show(multiUploadConfig);
 		        Event.preventDefault(e);
+	        },
+
+	        onAddLink: function() {
+		        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
+		        templateUrl = YAHOO.lang.substitute(templateUrl, {
+			        itemKind: "node",
+			        itemId: this.options.nodeRef,
+			        mode: "edit",
+			        submitType: "json"
+		        });
+
+		        new Alfresco.module.SimpleDialog(this.id + "-addLink").setOptions({
+			        width:"60em",
+			        templateUrl:templateUrl,
+			        actionUrl:null,
+			        destroyOnHide:true,
+			        doBeforeDialogShow:{
+				        fn: function(p_form, p_dialog) {
+					        var fileSpan = '<span class="light">' + "Добавить вложения" + '</span>';
+					        Alfresco.util.populateHTML(
+						        [ p_dialog.id + "-form-container_h", fileSpan]
+					        );
+				        },
+				        scope: this
+			        }
+		        }).show();
 	        },
 
             /**
@@ -531,11 +563,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                             {
                                 return function ()
                                 {
-                                    this.widgets.paginator.setState(
-                                        {
-                                            totalRecords: 0
-                                        });
-                                    this.widgets.paginator.render();
                                     this.widgets.dataTable.set("MSG_ERROR", responseMsg);
                                     this.widgets.dataTable.showTableMessage(responseMsg, YAHOO.widget.DataTable.CLASS_ERROR);
                                 };
@@ -564,46 +591,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
-            /**
-             * Build URI parameter string for doclist JSON data webscript
-             *
-             * @method _buildDocListParams
-             * @param p_obj.page {string} Page number
-             * @param p_obj.pageSize {string} Number of items per page
-             * @param p_obj.path {string} Path to query
-             * @param p_obj.type {string} Filetype to filter: "all", "documents", "folders"
-             * @param p_obj.site {string} Current site
-             * @param p_obj.container {string} Current container
-             * @param p_obj.filter {string} Current filter
-             */
             _buildDocListParams: function DocumentAttachmentsList__buildDocListParams()
             {
-                // Essential defaults
-                var obj =
-                {
-                    path: this.options.path,
-                    type: "documents",
-                    site: "",
-                    container: "documentLibrary",
-                    filter: {
-	                    filterId: "path"
-                    }
-                };
-
                 // Build the URI stem
-                params = YAHOO.lang.substitute("{type}/node/" + this.options.nodeRef.replace(":/", ""),
-                {
-	                type: encodeURIComponent(obj.type)
-                });
-
-                // Filter parameters
-                params += "?filter=" + encodeURIComponent(obj.filter.filterId);
-
-                // Sort parameters
-                params += "&sortAsc=true&sortField=" + encodeURIComponent("cm:name");
+                params = YAHOO.lang.substitute("documents/node/" + this.options.nodeRef.replace(":/", ""));
 
                 // View mode and No-cache
-                params += "&view=browse&noCache=" + new Date().getTime();
+                params += "?view=browse&noCache=" + new Date().getTime();
 
                 return params;
             },
@@ -624,13 +618,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         responseType: YAHOO.util.DataSource.TYPE_JSON,
                         responseSchema:
                         {
-                            resultsList: "items",
-                            metaFields:
-                            {
-                                paginationRecordOffset: "startIndex",
-                                totalRecords: "totalRecords",
-                                totalRecordsUpper : "totalRecordsUpper" // if null then totalRecords is accurate else totalRecords is lower estimate (if -1 upper estimate is unknown)
-                            }
+                            resultsList: "items"
                         }
                     });
 
@@ -686,11 +674,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         MSG_EMPTY: this.msg("message.loading")
                     });
 
-                // Update totalRecords on the fly with value from server
                 this.widgets.dataTable.handleDataReturnPayload = function (oRequest, oResponse, oPayload)
                 {
-                    me.totalRecords = oResponse.meta.totalRecords;
-                    me.totalRecordsUpper = oResponse.meta.totalRecordsUpper;
                     return oResponse.meta;
                 };
 
@@ -1564,8 +1549,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					        // Initialise the target directory as the current path represented by the current rendering of the DocumentList.
 					        // If we determine that the user has actually dropped some files onto the a folder icon (which we're about to check
 					        // for) then we'll change this value to be that of the folder targeted...
-					        var directory = this.options.path,
-						        directoryName = directory.substring(directory.lastIndexOf("/") + 1),
+					        var directoryName = this.options.categoryName,
 						        destination = this.options.nodeRef;
 
 					        // Remove all the highlighting

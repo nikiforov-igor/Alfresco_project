@@ -20,31 +20,31 @@ import java.util.List;
  */
 public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 
-    private DocumentAttachmentsService documentAttachmentsService;
+	private DocumentAttachmentsService documentAttachmentsService;
 
-    protected NodeService nodeService;
+	protected NodeService nodeService;
 
-    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
-        this.documentAttachmentsService = documentAttachmentsService;
-    }
+	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+		this.documentAttachmentsService = documentAttachmentsService;
+	}
 
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
-    public ScriptNode getRootFolder(String documentNodeRef) {
-        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+	public ScriptNode getRootFolder(String documentNodeRef) {
+		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
-        NodeRef documentRef = new NodeRef(documentNodeRef);
+		NodeRef documentRef = new NodeRef(documentNodeRef);
 
-        if (this.nodeService.exists(documentRef)) {
-            NodeRef attachmentsRoot = this.documentAttachmentsService.getRootFolder(documentRef);
-            if (attachmentsRoot != null) {
-                return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
-            }
-        }
-        return null;
-    }
+		if (this.nodeService.exists(documentRef)) {
+			NodeRef attachmentsRoot = this.documentAttachmentsService.getRootFolder(documentRef);
+			if (attachmentsRoot != null) {
+				return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
+			}
+		}
+		return null;
+	}
 
 	public ScriptNode getDocumentByAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
@@ -74,25 +74,25 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-    public Scriptable getCategories(String documentNodeRef) {
-        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+	public Scriptable getCategories(String documentNodeRef) {
+		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
-        NodeRef documentRef = new NodeRef(documentNodeRef);
-        if (this.nodeService.exists(documentRef)) {
-            List<NodeRef> categories = this.documentAttachmentsService.getCategories(documentRef);
-            return createScriptable(categories);
-        }
-        return null;
-    }
+		NodeRef documentRef = new NodeRef(documentNodeRef);
+		if (this.nodeService.exists(documentRef)) {
+			List<NodeRef> categories = this.documentAttachmentsService.getCategories(documentRef);
+			return createScriptable(categories);
+		}
+		return null;
+	}
 
-    public String[] getCategoriesForType(String documentType) {
-        ParameterCheck.mandatory("documentType", documentType);
-        QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-        List<String> categories = this.documentAttachmentsService.getCategories(type);
-        return categories.toArray(new String[categories.size()]);
-    }
+	public String[] getCategoriesForType(String documentType) {
+		ParameterCheck.mandatory("documentType", documentType);
+		QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+		List<String> categories = this.documentAttachmentsService.getCategories(type);
+		return categories.toArray(new String[categories.size()]);
+	}
 
-    public String deleteAttachment(String nodeRef) {
+	public String deleteAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
 		NodeRef ref = new NodeRef(nodeRef);
@@ -158,5 +158,12 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 			return createScriptable(attachments);
 		}
 		return null;
+	}
+
+	public boolean isInnerAttachment(ScriptNode attachment) {
+		ParameterCheck.mandatory("attachment", attachment);
+		return documentAttachmentsService.isDocumentAttachment(attachment.getNodeRef()) &&
+				attachment.getParent() != null &&
+				documentAttachmentsService.isDocumentCategory(attachment.getParent().getNodeRef());
 	}
 }

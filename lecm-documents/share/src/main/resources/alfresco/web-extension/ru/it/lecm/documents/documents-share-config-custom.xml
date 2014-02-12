@@ -541,6 +541,19 @@
         </forms>
     </config>
 
+	<config evaluator="node-type" condition="lecm-document:attachmentsCategory">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document:categoryAttachments"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document:categoryAttachments" label=""/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
     <config evaluator="node-type" condition="lecm-connect-types:connection-type">
         <forms>
             <form>
