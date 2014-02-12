@@ -6,19 +6,6 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var isSigned = execution.getVariable("isSigned");
-						logger.log("################################################################################");
-						logger.log("isSigned: " + isSigned);
-						try {
-							logger.log("typeof isSigned: " + (typeof isSigned));
-						} catch (e) {
-							logger.log("Can't evaluate typeof isSigned");
-						}
-						try {
-							logger.log("isSigned.getClass().getName(): " + isSigned.getClass().getName());
-						} catch (e) {
-							logger.log("Can't evaluate isSigned.getClass().getName()");
-						}
-						logger.log("################################################################################");
 						if (Packages.java.lang.Boolean.FALSE.equals(isSigned)) {
 							signingWorkflow.dropSigningResults(resultListRef);
 						}
