@@ -24,6 +24,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  *
@@ -39,6 +40,7 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 	private NotificationsService notificationsService;
 	private BusinessJournalService businessJournalService;
 	private EDSGlobalSettingsService edsGlobalSettingsService;
+	private StateMachineServiceBean stateMachineService;
 
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
@@ -64,6 +66,10 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
 
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
+
 	public ActivitiScriptNodeList getReservationDocumentRegistrators(ScriptNode documentNode) {
 		NodeRef document = documentNode.getNodeRef();
 		List<NodeRef> registrars = new ArrayList<NodeRef>();
@@ -79,6 +85,7 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 		}
 		ActivitiScriptNodeList registrarsScriptList = new ActivitiScriptNodeList();
 		for (NodeRef registrar : registrars) {
+			stateMachineService.grandDynamicRoleForEmployee(document, registrar, "OUTGOING_REGISTRAR_DYNAMIC");
 			NodeRef userRef = orgstructureService.getPersonForEmployee(registrar);
 			ActivitiScriptNode userScriptNode = new ActivitiScriptNode(userRef, serviceRegistry);
 			registrarsScriptList.add(userScriptNode);
@@ -93,7 +100,7 @@ public class ReservationWorkflowWebScriptBean extends BaseWebScript {
 
 	public void regnumReservate(ScriptNode documentNode, String isReservate, NodeRef reservateInitiator, String comment) throws TemplateParseException, TemplateRunException {
 		NodeRef document = documentNode.getNodeRef();
-		if ("Зарезервировать".equals(isReservate)) {
+		if ("RESERVED".equals(isReservate)) {
 			regNumbersService.registerDocument(document, "OUTGOING_DOC_NUMBER", true);
 			notifyReservateInitiatorAboutSuccess(document, reservateInitiator);
 		} else {

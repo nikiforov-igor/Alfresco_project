@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <model name="reservationWf:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 	<description>Logic ECM Reservation Document workflow model</description>
 	<author>Logic ECM</author>
@@ -9,21 +8,29 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
-		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 	</imports>
 
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/reservation/workflow/1.0" prefix="reservationWf"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="reservationWf:reservateOptions" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>RESERVED</value> <!-- зарезервировать номер для документа -->
+					<value>REJECTED</value> <!-- отказать в резервировании номера -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="reservationWf:regnumReservationStart">
-		   <parent>bpm:startTask</parent>
-		   <mandatory-aspects>
-			  <aspect>reservationWf:assignee</aspect>
-			  <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-		   </mandatory-aspects>
+			<parent>bpm:startTask</parent>
+			<mandatory-aspects>
+				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<type name="reservationWf:regnumReservationTask">
@@ -33,14 +40,7 @@
 					<type>d:text</type>
 					<default>Reservation</default>
 					<constraints>
-						<constraint name="reservationWf:reservateOptions" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>Зарезервировать</value>
-									<value>Отклонить</value>
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="reservationWf:reservateOptions"/>
 					</constraints>
 				</property>
 				<property name="reservationWf:comment">
@@ -53,30 +53,9 @@
 					<default>edit_package_item_actions</default>
 				</property>
 				<property name="bpm:outcomePropertyName">
-					<default>{http://www.alfresco.org/model/reservationWf/1.0}raterOutcome</default>
+					<default>{http://www.it.ru/logicECM/reservation/workflow/1.0}isReservate</default>
 				</property>
 			</overrides>
-			<mandatory-aspects>
-				<aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
-			</mandatory-aspects>
 		</type>
 	</types>
-
-	<aspects>
-		<aspect name="reservationWf:assignee">
-			<associations>
-				<association name="reservationWf:assignee">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-orgstr:employee</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
-		</aspect>
-	</aspects>
 </model>

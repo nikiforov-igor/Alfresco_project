@@ -53,6 +53,7 @@
 		<property name="notificationsService" ref="notificationsService"/>
 		<property name="businessJournalService" ref ="businessJournalService"/>
 		<property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
+		<property name="stateMachineService" ref="stateMachineHelper"/>
 	</bean>
 
 	<bean id="reservation.businessJournalDictionaryBootstrap" parent="lecmDictionaryBootstrap">
