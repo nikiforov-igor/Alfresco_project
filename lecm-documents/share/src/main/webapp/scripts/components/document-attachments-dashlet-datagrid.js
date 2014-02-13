@@ -126,8 +126,15 @@ var $html = Alfresco.util.encodeHTML,
 				} else if (oColumn.field == "prop_cm_versionLabel") {
 					html += "1.0";
 				} else if (oColumn.field == "prop_cm_image") {
-					var icon = Alfresco.util.getFileIcon(oRecord.getData("itemData")["prop_cm_name"].value, "cm:content", 16);
-					html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + icon +"'/>";
+					var src;
+					if (oRecord.getData("isInnerAttachment") == "false") {
+						src = "images/lecm-documents/link_attachment.png";
+						html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + src +"' title='" + grid.msg("title.attachment.isLink") + "'/>";
+					} else {
+						var icon = Alfresco.util.getFileIcon(oRecord.getData("itemData")["prop_cm_name"].value, "cm:content", 16);
+						src = "components/images/filetypes/" + icon;
+						html += "<img src='" + Alfresco.constants.URL_RESCONTEXT + src +"'/>";
+					}
 				}
 			}
 			return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
