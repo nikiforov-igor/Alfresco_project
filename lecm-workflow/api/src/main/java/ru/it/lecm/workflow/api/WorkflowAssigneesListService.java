@@ -14,11 +14,11 @@ public interface WorkflowAssigneesListService {
 
 	NodeRef getAssigneesListsFolder(); // NodeRef getListsFolderRef();
 
-	NodeRef getDefaultAssigneesList(String workflowType, String concurrency); // NodeRef getDefaultListFolderRef();
+	NodeRef getDefaultAssigneesList(String workflowType); // NodeRef getDefaultListFolderRef();
 
 	void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName); // String save(final JSONObject json);
 
-	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType, String concurrency); // JSONObject getAssigneesLists();
+	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType); // JSONObject getAssigneesLists();
 
 	AssigneesList getAssigneesListDetail(NodeRef assingeesListRef); // JSONObject getListContents(final JSONObject json); (getAssigneesListContents)
 
@@ -35,8 +35,6 @@ public interface WorkflowAssigneesListService {
 	void setAssigneesListItemOrder(NodeRef listItemNodeRef, int order);
 
 	String getAssigneesListWorkflowType(NodeRef assigneesListRef);
-
-	String getAssigneesListWorkflowConcurrency(NodeRef assigneesListRef);
 
 	boolean isTempAssigneesList(NodeRef assigneeListRef);
 

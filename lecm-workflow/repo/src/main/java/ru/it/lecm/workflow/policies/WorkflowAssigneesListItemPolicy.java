@@ -71,7 +71,7 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 	public void onCreateNode(ChildAssociationRef childAssociationRef) {
 		NodeRef assigneesList = childAssociationRef.getParentRef();
 		NodeRef assigneesItem = childAssociationRef.getChildRef();
-		
+
 		String assigneeName = (String) nodeService.getProperty(assigneesItem, ContentModel.PROP_NAME);
 		QName qName = QName.createQName(LecmWorkflowModel.WORKFLOW_NAMESPACE, assigneeName);
 		nodeService.addChild(assigneesList, assigneesItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, qName);
@@ -89,22 +89,19 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 
 		NodeRef assigneesList = childAssocRef.getParentRef();
 		NodeRef assigneesItem = childAssocRef.getChildRef();
-		String concurrency = (String) nodeService.getProperty(assigneesList, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 
-		if (LecmWorkflowModel.CONCURRENCY_SEQ.equalsIgnoreCase(concurrency)) {
-
-			List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
-			for (ChildAssociationRef targetAssoc : targetAssocs) {
-				NodeRef listItem = targetAssoc.getChildRef();
-				if (assigneesItem.equals(listItem)) {
-					continue;
-				}
-				int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
-				order = itemOrder > order ? itemOrder : order;
+		List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef targetAssoc : targetAssocs) {
+			NodeRef listItem = targetAssoc.getChildRef();
+			if (assigneesItem.equals(listItem)) {
+				continue;
 			}
-
-			nodeService.setProperty(assigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, order + 1);
+			int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
+			order = itemOrder > order ? itemOrder : order;
 		}
+
+		nodeService.setProperty(assigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, order + 1);
+
 	}
 
 	@Override
@@ -125,21 +122,18 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 	@Override
 	public void beforeDeleteNode(NodeRef deletedAssigneesItem) {
 		NodeRef assigneesList = nodeService.getPrimaryParent(deletedAssigneesItem).getParentRef();
-		String concurrency = (String) nodeService.getProperty(assigneesList, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 
-		if (LecmWorkflowModel.CONCURRENCY_SEQ.equalsIgnoreCase(concurrency)) {
-			int deletedItemOrder = (Integer) nodeService.getProperty(deletedAssigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
+		int deletedItemOrder = (Integer) nodeService.getProperty(deletedAssigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 
-			List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
-			for (ChildAssociationRef targetAssoc : targetAssocs) {
-				NodeRef listItem = targetAssoc.getChildRef();
-				if (listItem.equals(deletedAssigneesItem)) {
-					continue;
-				}
-				int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
-				if (itemOrder > deletedItemOrder) {
-					nodeService.setProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, itemOrder - 1);
-				}
+		List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef targetAssoc : targetAssocs) {
+			NodeRef listItem = targetAssoc.getChildRef();
+			if (listItem.equals(deletedAssigneesItem)) {
+				continue;
+			}
+			int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
+			if (itemOrder > deletedItemOrder) {
+				nodeService.setProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER, itemOrder - 1);
 			}
 		}
 	}

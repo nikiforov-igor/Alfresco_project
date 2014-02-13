@@ -72,16 +72,6 @@ public final class LecmWorkflowModel {
 	public final static QName PROP_WORKFLOW_TYPE = QName.createQName(WORKFLOW_NAMESPACE, "workflow-type");
 
 	/**
-	 * &lt;aspect name="lecm-workflow:workflow-concurrency-aspect"&gt;
-	 */
-	public final static QName ASPECT_WORKFLOW_CONCURRENCY = QName.createQName(WORKFLOW_NAMESPACE, "workflow-concurrency-aspect");
-
-	/**
-	 * &lt;property name="lecm-workflow:workflow-concurrency"&gt;
-	 */
-	public final static QName PROP_WORKFLOW_CONCURRENCY = QName.createQName(WORKFLOW_NAMESPACE, "workflow-concurrency");
-
-	/**
 	 * &lt;aspect name="lecm-workflow:assignee-order-aspect"&gt;
 	 */
 	public final static QName ASPECT_ASSIGNEE_ORDER = QName.createQName(WORKFLOW_NAMESPACE, "assignee-order-aspect");

@@ -37,19 +37,18 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	public NodeRef getDefaultAssigneesList(JSONObject json) {
-		String workflowType, concurrency;
+		String workflowType;
 		try {
 			workflowType = json.getString("workflowType");
-			concurrency = json.has("concurrency") ? json.getString("concurrency") : null;
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}
 
-		return workflowAssigneesListService.getDefaultAssigneesList(workflowType, concurrency);
+		return workflowAssigneesListService.getDefaultAssigneesList(workflowType);
 	}
 
 	public JSONObject saveAssigneesList(JSONObject json) {
-		String assigneesListRef, assigneesListName, workflowType, concurrency;
+		String assigneesListRef, assigneesListName, workflowType;
 		NodeRef listNode;
 		JSONObject result;
 		try {
@@ -61,9 +60,8 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 		listNode = new NodeRef(assigneesListRef);
 		workflowType = workflowAssigneesListService.getAssigneesListWorkflowType(listNode);
-		concurrency = workflowAssigneesListService.getAssigneesListWorkflowConcurrency(listNode);
 		workflowAssigneesListService.saveAssigneesList(listNode, assigneesListName);
-		result = getAssigneesLists(workflowType, concurrency);
+		result = getAssigneesLists(workflowType);
 
 		return result;
 	}
@@ -82,8 +80,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		JSONObject result = null;
 		try {
 			String workflowType = json.getString("workflowType");
-			String concurrency = json.getString("concurrency");
-			result = getAssigneesLists(workflowType, concurrency);
+			result = getAssigneesLists(workflowType);
 
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
@@ -92,12 +89,12 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 		return result;
 	}
 
-	private JSONObject getAssigneesLists(String workflowType, String concurrency) {
+	private JSONObject getAssigneesLists(String workflowType) {
 		JSONObject result = new JSONObject();
 		JSONArray listsJSONArray = new JSONArray();
 		try {
-			NodeRef defaultList = workflowAssigneesListService.getDefaultAssigneesList(workflowType, concurrency);
-			List<NodeRef> assingeesLists = workflowAssigneesListService.getAssingeesListsForCurrentEmployee(workflowType, concurrency);
+			NodeRef defaultList = workflowAssigneesListService.getDefaultAssigneesList(workflowType);
+			List<NodeRef> assingeesLists = workflowAssigneesListService.getAssingeesListsForCurrentEmployee(workflowType);
 
 			for (NodeRef assigneesListRef : assingeesLists) {
 				String assigneesListName = workflowAssigneesListService.getNodeRefName(assigneesListRef);
@@ -193,7 +190,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 	}
 
 	public JSONObject deleteList(final JSONObject json) {
-		String nodeRefStr, workflowType, concurrency;
+		String nodeRefStr, workflowType;
 		JSONObject result;
 		try {
 			nodeRefStr = json.getString("nodeRef");
@@ -203,9 +200,8 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 
 		NodeRef listNode = new NodeRef(nodeRefStr);
 		workflowType = workflowAssigneesListService.getAssigneesListWorkflowType(listNode);
-		concurrency = workflowAssigneesListService.getAssigneesListWorkflowConcurrency(listNode);
 		workflowAssigneesListService.deleteAssigneesList(listNode);
-		result = getAssigneesLists(workflowType, concurrency);
+		result = getAssigneesLists(workflowType);
 
 		return result;
 	}
