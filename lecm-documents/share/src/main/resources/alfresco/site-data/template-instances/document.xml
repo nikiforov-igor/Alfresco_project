@@ -49,6 +49,7 @@
                                <itemId>{nodeRef}</itemId>
                                <mode>view</mode>
                                <submitType>json</submitType>
+                               <formUI>false</formUI>
                                <formId>main-page-dashlets</formId>
                                <showCancelButton>false</showCancelButton>
                                <showSubmitButton>false</showSubmitButton>
