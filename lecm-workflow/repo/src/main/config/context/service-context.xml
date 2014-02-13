@@ -22,9 +22,14 @@
 		<value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-workflow-result.xml</value>
 	</util:list>
+	<util:list id="workflow.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-workflow-result</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-workflow</value>
+	</util:list>
 	<bean id="workflow.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"
-		  p:models-ref="workflow.models"/>
+		  p:models-ref="workflow.models"
+		  p:labels-ref="workflow.labels"/>
 
 	<bean id="workflow.utils" class="ru.it.lecm.workflow.Utils"
 		  depends-on="nodeService dictionaryService serviceOrgstructure versionService documentAttachmentsService"/>

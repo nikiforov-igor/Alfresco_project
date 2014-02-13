@@ -26,9 +26,13 @@
 		<value>alfresco/module/${artifactId}/models/lecm-review-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-review-result-model.xml</value>
 	</util:list>
+	<util:list id="review.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-review-workflow</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-review-result</value>
+	</util:list>
 	<bean id="review.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, workflow.model.bootstrap"
-		  p:models-ref="review.models"/>
+		  p:models-ref="review.models" p:labels-ref="review.labels"/>
 
 	<bean id="reviewWorkflowService" class="ru.it.lecm.workflow.review.ReviewWorkflowServiceImpl"
 		  parent="lecmWorkflowService" depends-on="review.model.bootstrap"

@@ -24,7 +24,7 @@ public final class WorkflowResultModel {
 	/**
 	 * &lt;property name="lecm-workflow-result:workflow-result-list-start-date"&gt;
 	 */
-	public final static QName PROP_WORKFLOW_RESULT_LIST_START_DATE = QName.createQName(WORKFLOW_RESULT_NAMESPACE, ":workflow-result-list-start-date");
+	public final static QName PROP_WORKFLOW_RESULT_LIST_START_DATE = QName.createQName(WORKFLOW_RESULT_NAMESPACE, "workflow-result-list-start-date");
 
 	/**
 	 * &lt;property name="lecm-workflow-result:workflow-result-list-document-version"&gt;

@@ -5,7 +5,9 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
+	<bean id="lecm.approval.modelBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					statemachine.aspects.LogicEcmModelsBootstrap, workflow.model.bootstrap">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-approval-list-model.xml</value>
@@ -23,32 +25,32 @@
 		</property>
 	</bean>
 
-    <bean id="lecm.approval.workflowBootstrap" parent="workflowDeployer" depends-on="lecm.approval.modelBootstrap">
+	<bean id="lecm.approval.workflowBootstrap" parent="workflowDeployer" depends-on="lecm.approval.modelBootstrap">
 		<property name="workflowDefinitions">
 			<list>
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/approval-termination.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/approval-force.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/custom-approval-workflow.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>
 				<props>
 					<prop key="engineId">activiti</prop>
 					<prop key="location">alfresco/module/${artifactId}/workflow/approval-workflow.bpmn20.xml</prop>
 					<prop key="mimetype">text/xml</prop>
-                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
 				</props>
 			</list>
 		</property>
@@ -69,7 +71,7 @@
 		<property name="workflowService" ref="workflowServiceImpl"/>
 		<property name="workCalendar" ref="WorkCalendarService"/>
 		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
-        <property name="documentService" ref="documentService"/>
+		<property name="documentService" ref="documentService"/>
 		<property name="copyService" ref="copyService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter"/>
 		<property name="folders">
@@ -116,11 +118,11 @@
 		<property name="orgstructureBean" ref="serviceOrgstructure"/>
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.workflow.approval.OverrideReassign.get" class="ru.it.lecm.workflow.approval.webscript.OverrideReassign" parent="webscript">
-        <property name="workflowService" ref="WorkflowService"/>
-        <property name="nodeService" ref="nodeService"/>
-        <property name="approvalListService" ref="lecm.approval.service"/>
-        <property name="dictionaryService" ref="dictionaryService"/>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-    </bean>
+	<bean id="webscript.ru.it.lecm.workflow.approval.OverrideReassign.get" class="ru.it.lecm.workflow.approval.webscript.OverrideReassign" parent="webscript">
+		<property name="workflowService" ref="WorkflowService"/>
+		<property name="nodeService" ref="nodeService"/>
+		<property name="approvalListService" ref="lecm.approval.service"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+	</bean>
 </beans>
