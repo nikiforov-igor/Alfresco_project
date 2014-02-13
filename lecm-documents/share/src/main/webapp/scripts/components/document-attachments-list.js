@@ -944,6 +944,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         properties = jsNode.properties,
                         title = "",
                         titleHTML = "",
+                        linkImage = "",
                         version = "";
 
                     if (jsNode.isLink)
@@ -961,6 +962,13 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     if ($isValueSet(record.version) && !jsNode.isContainer && !jsNode.isLink)
                     {
                         version = '<span class="document-version">' + $html(record.version) + '</span>';
+                    }
+
+                    // Link image
+                    if ($isValueSet(record.isInnerAttachment) && record.isInnerAttachment == "false") {
+	                    var src =  Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/link_attachment.png";
+	                    var title = scope.msg("title.attachment.isLink");
+	                    linkImage += "<img src='" + src + "' title='" + title + "'/>";
                     }
 
                     // Locked / Working Copy handling
@@ -1063,10 +1071,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     /* Title */
 	                if (scope.options.showFileFolderLink) {
 		                desc += '<h3 class="filename"><span id="' + filenameId + '">'+ LogicECM.DocumentAttachmentsList.generateFileFolderLinkMarkup(scope, record);
-		                desc += $html(record.displayName) + '</a></span>' + titleHTML + version + '</h3>';
+		                desc += $html(record.displayName) + '</a></span>' + titleHTML + version + linkImage + '</h3>';
 	                } else {
 		                desc += '<h3 class="filename"><span id="' + filenameId + '">';
-		                desc += $html(record.displayName) + '</span>' + titleHTML + version + '</h3>';
+		                desc += $html(record.displayName) + '</span>' + titleHTML + version + linkImage + '</h3>';
 	                }
 
                     /**
