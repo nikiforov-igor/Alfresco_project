@@ -352,20 +352,20 @@ public class ParameterMapper {
         }
 
         final Object argValue1 = colDesc.getParameterValue().getBound1();
-        if (argValue1 == null) {
-            return result;
-        }
-
-        if (argValue1 instanceof String[]){
-            for (String item : (String[]) argValue1) {
-                if (NodeRef.isNodeRef(item)) {
-                    result.add(new NodeRef(item));
-                } else {
-                    result.add(item);
+        if (argValue1 != null) {
+           if (argValue1 instanceof String[]){
+                for (String item : (String[]) argValue1) {
+                    if (NodeRef.isNodeRef(item)) {
+                        result.add(new NodeRef(item));
+                    } else {
+                        result.add(item);
+                    }
                 }
+            } else {
+                result.add(argValue1);
             }
         } else {
-            result.add(argValue1);
+            result.add(null);
         }
 
         final Object argValue2 = colDesc.getParameterValue().getBound2();
