@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import ru.it.lecm.documents.beans.DocumentFilter;
 
 import java.io.Serializable;
@@ -92,7 +93,7 @@ public class AuthorFilter extends DocumentFilter {
                     }
                 }
             } catch (Exception ignored) {
-                logger.warn("Incorrect filter! Filter args:" + args);
+                logger.warn("Incorrect filter! Filter args:" + StringUtils.arrayToCommaDelimitedString(args));
             }
         }
         return query;
