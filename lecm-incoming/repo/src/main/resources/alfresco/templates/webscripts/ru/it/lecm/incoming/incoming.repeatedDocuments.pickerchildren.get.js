@@ -15,7 +15,7 @@ function main() {
 
 	var filteredResults = [];
 	for (var i = 0; i < data.results.length; i++) {
-		if (documentScript.getDocumentRegData(data.results[i].item) != null) {
+		if (documentScript.getDocumentRegNumber(data.results[i].item) != null) {
 			filteredResults.push(data.results[i]);
 		}
 	}

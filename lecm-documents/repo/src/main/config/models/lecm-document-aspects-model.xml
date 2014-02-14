@@ -18,51 +18,6 @@
         <namespace uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
     </namespaces>
 
-    <types>
-        <type name="lecm-document-aspects:reg-data-attributes">
-            <title>Регистрационные данные. Атрибуты</title>
-            <parent>cm:cmobject</parent>
-            <properties>
-                <property name="lecm-document-aspects:reg-data-date">
-                    <title>Дата регистрации</title>
-                    <type>d:date</type>
-                </property>
-                <!-- Регистрационный номер-->
-                <property name="lecm-document-aspects:reg-data-number">
-                    <title>Регистрационный номер</title>
-                    <type>d:text</type>
-                    <default>Не присвоено</default>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <!-- Зарегистрирован -->
-                <property name="lecm-document-aspects:reg-data-is-registered">
-                    <title>Зарегистрирован</title>
-                    <type>d:boolean</type>
-                    <default>false</default>
-                </property>
-            </properties>
-            <associations>
-                <!-- Регистратор -->
-                <association name="lecm-document-aspects:reg-data-registrator-assoc">
-                    <title>Регистратор</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-            </associations>
-        </type>
-    </types>
-
     <aspects>
         <!--Аспект возможности оценивания (рейтинга)-->
         <aspect name="lecm-document-aspects:rateable">
@@ -200,8 +155,39 @@
         <!-- аспект  для регистрационных данных документа -->
         <aspect name="lecm-document-aspects:has-reg-document-data">
             <properties>
-                <property name="lecm-document-aspects:document-reg-attributes-assoc-text-content">
+                <property name="lecm-document-aspects:reg-data-date">
+                    <title>Дата регистрации</title>
+                    <type>d:date</type>
+                </property>
+                <!-- Регистрационный номер-->
+                <property name="lecm-document-aspects:reg-data-number">
+                    <title>Регистрационный номер</title>
                     <type>d:text</type>
+                    <default>Не присвоено</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Зарегистрирован -->
+                <property name="lecm-document-aspects:reg-data-is-registered">
+                    <title>Зарегистрирован</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-document-aspects:registrator-assoc-text-content">
+                    <type>d:text</type>
+                    <default>Не присвоено</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-document-aspects:registrator-assoc-ref">
+                    <type>d:text</type>
+                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -210,13 +196,15 @@
                 </property>
             </properties>
             <associations>
-                <association name="lecm-document-aspects:document-reg-attributes-assoc">
+                <!-- Регистратор -->
+                <association name="lecm-document-aspects:registrator-assoc">
+                    <title>Регистратор</title>
                     <source>
                         <mandatory>false</mandatory>
-                        <many>false</many>
+                        <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-document-aspects:reg-data-attributes</class>
+                        <class>lecm-orgstr:employee</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
@@ -226,11 +214,16 @@
 
         <!-- аспект  для регистрационных данных проекта документа -->
         <aspect name="lecm-document-aspects:has-reg-project-data">
-            <!-- Свойство для поиска по рег номеру! в него сохраняются номера из объекта по ассоциации!
-             Это прописано в справочнике "Типы объектов" для типа Регистрационные данные. Атрибуты-->
             <properties>
-                <property name="lecm-document-aspects:project-reg-attributes-assoc-text-content">
+                <property name="lecm-document-aspects:reg-project-data-date">
+                    <title>Дата регистрации проекта</title>
+                    <type>d:date</type>
+                </property>
+                <!-- Регистрационный номер-->
+                <property name="lecm-document-aspects:reg-project-data-number">
+                    <title>Регистрационный номер проекта</title>
                     <type>d:text</type>
+                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -238,19 +231,6 @@
                     </index>
                 </property>
             </properties>
-            <associations>
-                <association name="lecm-document-aspects:project-reg-attributes-assoc">
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </source>
-                    <target>
-                        <class>lecm-document-aspects:reg-data-attributes</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-            </associations>
         </aspect>
 
         <!-- Временное хранение ссылок на вложения, загружаемые на форме создания -->

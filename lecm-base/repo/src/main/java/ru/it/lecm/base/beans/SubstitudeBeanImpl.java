@@ -3,7 +3,6 @@ package ru.it.lecm.base.beans;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -50,64 +49,22 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         },
         REGNUM {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) { // пытаемся взять рег данные документа
-                    result.add(number);
-                } else {  // если их нет - берем рег данные проекта документа
-                    number = docService.getDocumentProjectRegData(object);
-                    if (number != null) {
-                        result.add(number);
-                    }
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentRegData(object);
+                String number = docService.getDocumentActualNumber(object);
                 if (number != null) { // пытаемся взять рег данные документа
-                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
-                } else {  // если их нет - берем рег данные проекта документа
-                    number = docService.getDocumentProjectRegData(object);
-                    if (number != null) {
-                        return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
-                    }
+                    return number;
                 }
                 return DocumentService.DEFAULT_REG_NUM;
             }
         },
         REGDATE {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) { // пытаемся взять рег данные документа
-                    result.add(number);
-                } else {  // если их нет - берем рег данные проекта документа
-                    number = docService.getDocumentProjectRegData(object);
-                    if (number != null) {
-                        result.add(number);
-                    }
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number == null) {
-                    number = docService.getDocumentProjectRegData(object);
+                Date regDate = docService.getDocumentActualDate(object);
+                if (regDate != null) {
+                    DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    return dFormat.format(regDate);
                 }
-                if (number != null) {
-                    Date regDate = (Date) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
-                    if (regDate != null) {
-                        DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        return dFormat.format(regDate);
-                    }
-                }
-
                 return "";
             }
 
@@ -128,56 +85,31 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         REGISTRATOR {
             @Override
             public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) { // пытаемся взять рег данные документа
-                    result.add(number);
-                } else {  // если их нет - берем рег данные проекта документа
-                    number = docService.getDocumentProjectRegData(object);
-                    if (number != null) {
-                        result.add(number);
-                    }
+                NodeRef registratorRef = docService.getDocumentRegistrator(object);
+                if (registratorRef != null) {
+                    List<NodeRef> list = new ArrayList<NodeRef>();
+                    list.add(registratorRef);
+                    return list;
                 }
-                return result;
+                return null;
             }
 
             @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number == null) {
-                    number = docService.getDocumentProjectRegData(object);
+                NodeRef registratorRef = docService.getDocumentRegistrator(object);
+                if (registratorRef != null) {
+                    return (String) services.getNodeService().getProperty(registratorRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                 }
-                if (number != null) {
-                    List<AssociationRef> regs = services.getNodeService().getTargetAssocs(number, DocumentService.ASSOC_REG_DATA_REGISTRATOR);
-                    if (regs != null && !regs.isEmpty()) {
-                        NodeRef registratorRef = regs.get(0).getTargetRef();
-                        return (String) services.getNodeService().getProperty(registratorRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-                    }
-                }
-
                 return "";
             }
         },
         PROJECT_REGDATE {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentProjectRegData(object);
-                if (number != null) {
-                    result.add(number);
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentProjectRegData(object);
-                if (number != null) {
-                    Date regDate = (Date) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
-                    if (regDate != null) {
-                        DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
-                        return dFormat.format(regDate);
-                    }
+                Date regDate = docService.getProjectRegDate(object);
+                if (regDate != null) {
+                    DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
+                    return dFormat.format(regDate);
                 }
 
                 return "";
@@ -199,24 +131,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
         DOC_REGDATE {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) {
-                    result.add(number);
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) {
-                    Date regDate = (Date) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_DATE);
-                    if (regDate != null) {
-                        DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
-                        return dFormat.format(regDate);
-                    }
+                Date regDate = docService.getDocumentRegDate(object);
+                if (regDate != null) {
+                    DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
+                    return dFormat.format(regDate);
                 }
 
                 return "";
@@ -237,46 +156,28 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         },
         PROJECT_REGNUM {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentProjectRegData(object);
-                if (number != null) {
-                    result.add(number);
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentProjectRegData(object);
+                String number = docService.getProjectRegNumber(object);
                 if (number != null) {
-                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
+                    return number;
                 }
                 return DocumentService.DEFAULT_REG_NUM;
             }
         },
         DOC_REGNUM {
             @Override
-            public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
-                List<NodeRef> result = new ArrayList<NodeRef>();
-                NodeRef number = docService.getDocumentRegData(object);
-                if (number != null) {
-                    result.add(number);
-                }
-                return result;
-            }
-
-            @Override
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
-                NodeRef number = docService.getDocumentRegData(object);
+                String number = docService.getDocumentRegNumber(object);
                 if (number != null) {
-                    return (String) services.getNodeService().getProperty(number, DocumentService.PROP_REG_DATA_NUMBER);
+                    return number ;
                 }
                 return DocumentService.DEFAULT_REG_NUM;
             }
         };
 
-        public abstract List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService);
+        public List<NodeRef> getObjectsByPseudoProp(NodeRef object, DocumentService docService) {
+            return null;  //значение строковое, ноды нет
+        }
 
         public abstract String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services);
 

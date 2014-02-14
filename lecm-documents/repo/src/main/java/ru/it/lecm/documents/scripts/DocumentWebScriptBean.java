@@ -364,17 +364,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public ScriptNode getDocumentRegData(ScriptNode document) {
-		ParameterCheck.mandatory("document", document);
-		if (document != null) {
-			NodeRef regData = documentService.getDocumentRegData(document.getNodeRef());
-			if (regData != null) {
-				return new ScriptNode(regData, serviceRegistry, getScope());
-			}
-		}
-		return null;
-	}
-
 	public String getDocumentRegNumber(ScriptNode document) {
 		ParameterCheck.mandatory("document", document);
 		if (document != null) {

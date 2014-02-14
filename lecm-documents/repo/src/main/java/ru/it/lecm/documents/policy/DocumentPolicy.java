@@ -29,7 +29,10 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.beans.*;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
+import ru.it.lecm.documents.beans.DocumentMembersServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -346,6 +349,7 @@ public class DocumentPolicy extends BaseBean
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
+        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_DATE, new Date());
 
         // заполняем тип
         final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));

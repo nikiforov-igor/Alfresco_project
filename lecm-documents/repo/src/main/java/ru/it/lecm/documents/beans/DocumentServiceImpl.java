@@ -549,27 +549,84 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     @Override
+    public Date getProjectRegDate(NodeRef document) {
+        return getRegDate(document, true);
+    }
+
+    @Override
+    public Date getDocumentRegDate(NodeRef document) {
+        return getRegDate(document, false);
+    }
+
+    @Override
     public String getProjectRegNumber(NodeRef document) {
-        return getRegNumber(document, DocumentService.ASPECT_HAS_REG_PROJECT_DATA, DocumentService.ASSOC_REG_PROJECT_DATA);
+        return getRegNumber(document, true);
     }
 
     @Override
     public String getDocumentRegNumber(NodeRef document) {
-        return getRegNumber(document, DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA, DocumentService.ASSOC_REG_DOCUMENT_DATA);
+        return getRegNumber(document, false);
     }
 
-    private String getRegNumber(NodeRef document, QName aspectName, QName assocName){
-        if (nodeService.hasAspect(document, aspectName)) {
-            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(document, assocName);
-            if (prDataAssocs != null && !prDataAssocs.isEmpty()) {
-                NodeRef projectData = prDataAssocs.get(0).getTargetRef();
-                return String.valueOf(nodeService.getProperty(projectData, DocumentService.PROP_REG_DATA_NUMBER));
-            } else {
-                return DEFAULT_REG_NUM;
-            }
+    @Override
+    public String getDocumentActualNumber(NodeRef document) {
+        Serializable number = nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_REGNUM);
+        if (number != null) {
+            return number.toString();
+        }
+        return null;
+    }
+
+    @Override
+    public Date getDocumentActualDate(NodeRef document) {
+        Serializable regDate = nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_DATE);
+        if (regDate != null) {
+            return (Date) regDate;
+        }
+        return null;
+    }
+
+    @Override
+    public void setDocumentActualNumber(NodeRef document, String number) {
+        nodeService.setProperty(document, DocumentService.PROP_DOCUMENT_REGNUM, number);
+    }
+
+    @Override
+    public void setDocumentActualDate(NodeRef document, Date date) {
+        nodeService.setProperty(document, DocumentService.PROP_DOCUMENT_DATE, date);
+    }
+
+    private String getRegNumber(NodeRef document, boolean getProjectNumber){
+        QName regAspectName = getProjectNumber ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+        QName propNumber = getProjectNumber ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
+        if (nodeService.hasAspect(document, regAspectName)) {
+            return String.valueOf(nodeService.getProperty(document, propNumber));
         } else {
             return null;
         }
+    }
+
+    private Date getRegDate(NodeRef document, boolean getProjectNumber){
+        QName regAspectName = getProjectNumber ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+        QName propDate = getProjectNumber ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
+        if (nodeService.hasAspect(document, regAspectName)) {
+            Serializable regDate = nodeService.getProperty(document, propDate);
+            if (regDate != null) {
+                return (Date) regDate;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public NodeRef getDocumentRegistrator(NodeRef document){
+        if (nodeService.hasAspect(document, DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA)) {
+            List<AssociationRef> refs = nodeService.getTargetAssocs(document, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR);
+            if (refs != null && !refs.isEmpty()) {
+                return refs.get(0).getTargetRef();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -601,27 +658,4 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         subTypes.remove(DocumentService.TYPE_BASE_DOCUMENT);
         return subTypes;
 	}
-
-    @Override
-    public NodeRef getDocumentRegData(NodeRef document) {
-        return getRegData(document, false);
-    }
-
-    @Override
-    public NodeRef getDocumentProjectRegData(NodeRef document) {
-        return getRegData(document, true);
-    }
-
-    private NodeRef getRegData(NodeRef document, boolean isProjectData){
-        QName regAspectName = isProjectData ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
-        QName regAssocName =  isProjectData ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
-
-        if (nodeService.hasAspect(document, regAspectName)) {
-            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(document, regAssocName);
-            if (prDataAssocs != null && !prDataAssocs.isEmpty()) {
-                return prDataAssocs.get(0).getTargetRef();
-            }
-        }
-        return null;
-    }
 }

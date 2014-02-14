@@ -125,42 +125,28 @@
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
-	                <show id="lecm-statemachine:status"/>
-                    <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-statemachine:status"/>
                     <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{~REGISTRATOR}</control-param>
-                        </control>
-                    </field>
-                </appearance>
             </form>
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
                 <field-visibility>
-	                <show id="lecm-statemachine:status"/>
-                    <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-statemachine:status"/>
                     <show id="lecm-document-aspects:is-on-control"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
 	            <appearance>
 		            <field id="lecm-statemachine:status">
 			            <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
 		            </field>
-                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">{~REGISTRATOR}</control-param>
-                        </control>
-                    </field>
 	            </appearance>
             </form>
             <!-- Форма для передачи прав-->
@@ -315,18 +301,15 @@
             <!-- Форма для табличного представления (набор столбцов)-->
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-eds-document:regnum"/>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-document-aspects:reg-data-registrator-assoc"/>
+                    <show id="lecm-document-aspects:registrator-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
-                <appearance>
-                    <field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM}"/>
-                    <field id="lecm-document-aspects:reg-data-registrator-assoc" label="Регистратор" substituteString="{~REGISTRATOR}"/>
-                </appearance>
             </form>
             <!-- Форма для базового журнала документов-->
             <form id="document-journal">
@@ -345,6 +328,8 @@
             <!-- Форма атрибутивного поиска-->
             <form id="search">
                 <field-visibility>
+                    <show id="lecm-document:regnum"/>
+                    <show id="lecm-document:doc-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document-aspects:is-on-control"/>

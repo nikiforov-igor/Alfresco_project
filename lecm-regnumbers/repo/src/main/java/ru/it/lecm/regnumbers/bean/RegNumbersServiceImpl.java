@@ -1,9 +1,7 @@
 package ru.it.lecm.regnumbers.bean;
 
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -21,16 +19,18 @@ import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
-import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -215,12 +215,13 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
     @Override
     public boolean isRegistered(NodeRef documentNode, boolean isProject) {
         QName regAspectName = isProject ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
-        QName regAssocName =  isProject ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
 
         if (nodeService.hasAspect(documentNode, regAspectName)) {
-            List<AssociationRef> rDataAssocs = nodeService.getTargetAssocs(documentNode, regAssocName);
-            if (!rDataAssocs.isEmpty()) {
-                return (Boolean)nodeService.getProperty(rDataAssocs.get(0).getTargetRef(), DocumentService.PROP_REG_DATA_IS_REGISTERED);
+            if (isProject) {
+                Serializable projectNumber = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_PROJECT_NUMBER);
+                return projectNumber != null && !DocumentService.DEFAULT_REG_NUM.equals(projectNumber.toString());
+            } else {
+                return (Boolean)nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED);
             }
         }
         return false;
@@ -244,44 +245,49 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
      * метода. Детали см. в эксепшене.
      */
     private void register(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
+        if (isRegistered(documentNode, isProjectRegister)) {
+            return;
+        }
         NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
         if (templateDictionary != null && documentNode != null) {
             QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
-            QName regAssocName =  isProjectRegister ? DocumentService.ASSOC_REG_PROJECT_DATA : DocumentService.ASSOC_REG_DOCUMENT_DATA;
+            QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
+            QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
+            QName propIsRegistered = isProjectRegister ? null : DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED;
 
             if (!nodeService.hasAspect(documentNode, regAspectName)) {
                 nodeService.addAspect(documentNode, regAspectName, null);
             }
 
-            List<AssociationRef> prDataAssocs = nodeService.getTargetAssocs(documentNode, regAssocName);
-            if (prDataAssocs != null && !prDataAssocs.isEmpty()) { // рег данные уже созданы - только изменение флага регистрации
-                if (!onlyReserve) {
-                    nodeService.setProperty(prDataAssocs.get(0).getTargetRef(), DocumentService.PROP_REG_DATA_IS_REGISTERED, Boolean.TRUE);
+            Serializable number = nodeService.getProperty(documentNode, propNumber);
+            if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
+                //номер уже есть
+                if (propIsRegistered != null && !onlyReserve) {
+                    nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
                 }
             } else {
-	            String regNumber;
-	            NodeRef repeatedDocument = getRepeatedDocument(documentNode);
-	            if (repeatedDocument != null) {
-		            regNumber = getRepeatedNumber(documentNode);
-	            } else {
-		            regNumber = getNumber(documentNode, templateDictionary);
-	            }
-
-                Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-                properties.put(DocumentService.PROP_REG_DATA_DATE, new Date());
-                properties.put(DocumentService.PROP_REG_DATA_NUMBER, regNumber);
-                properties.put(DocumentService.PROP_REG_DATA_IS_REGISTERED, !onlyReserve);
-
-                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
-
-                NodeRef regAttributesRef = nodeService.createNode(documentNode, ContentModel.ASSOC_CONTAINS, assocQName,
-                        DocumentService.TYPE_REG_DATA_ATTRIBUTES, properties).getChildRef();
-
+                //регистрируем
+                String regNumber;
+                NodeRef repeatedDocument = getRepeatedDocument(documentNode);
+                if (repeatedDocument != null) {
+                    regNumber = getRepeatedNumber(documentNode);
+                } else {
+                    regNumber = getNumber(documentNode, templateDictionary);
+                }
+                Date date = new Date();
+                nodeService.setProperty(documentNode, propNumber, regNumber);
+                nodeService.setProperty(documentNode, propDate, date);
+                documentService.setDocumentActualNumber(documentNode, regNumber);
+                documentService.setDocumentActualDate(documentNode, date);
+                if (propIsRegistered != null) {
+                    nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
+                }
                 NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
                 if (currentEmployee != null) {
-                    nodeService.createAssociation(regAttributesRef, currentEmployee, DocumentService.ASSOC_REG_DATA_REGISTRATOR);
+                    List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+                    targetRefs.add(currentEmployee);
+                    nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
                 }
-                nodeService.createAssociation(documentNode, regAttributesRef, regAssocName);
             }
         }
     }

@@ -1,14 +1,9 @@
 package ru.it.lecm.reservation.extensions;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
@@ -25,6 +20,11 @@ import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -111,11 +111,7 @@ public class ReservationWorkflowJavascriptExtension extends BaseWebScript {
 	public void regnumReservateEmpty(ScriptNode documentNode, NodeRef reservateInitiator) throws TemplateParseException, TemplateRunException {
 		NodeRef document = documentNode.getNodeRef();
 		regNumbersService.registerDocument(document, "OUTGOING_DOC_NUMBER", true);
-		List<AssociationRef> regDocDataList = nodeService.getTargetAssocs(document, DocumentService.ASSOC_REG_DOCUMENT_DATA);
-		if (null != regDocDataList && regDocDataList.size() > 0) {
-			NodeRef regDocData = regDocDataList.get(0).getTargetRef();
-			nodeService.setProperty(regDocData, DocumentService.PROP_REG_DATA_NUMBER, "\"нет доступных регистраторов\"");
-		}
+		nodeService.setProperty(document, DocumentService.PROP_REG_DATA_DOC_NUMBER, "\"нет доступных регистраторов\"");
 		notifyReserveInitiatorAboutEmptyRegistrars(document, reservateInitiator);
 
 		String documentString = (String) nodeService.getProperty(document, DocumentService.PROP_PRESENT_STRING);

@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,6 @@ public interface DocumentService {
     public static final String DOCUMENT_DELIVERY_METHOD_NAMESPACE_URI = "http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0";
 
     public static final QName TYPE_BASE_DOCUMENT = QName.createQName(DOCUMENT_NAMESPACE_URI, "base");
-    public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
 
     public static final QName PROP_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "present-string");
     public static final QName PROP_EXT_PRESENT_STRING = QName.createQName(DOCUMENT_NAMESPACE_URI, "ext-present-string");
@@ -66,16 +66,18 @@ public interface DocumentService {
     public static final QName TYPE_DOC_SUBJECT = QName.createQName(DOCUMENT_SUBJECTS_NAMESPACE_URI, "subjects");
 
     public static final QName ASPECT_HAS_REG_PROJECT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "has-reg-project-data");
-    public static final QName ASSOC_REG_PROJECT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "project-reg-attributes-assoc");
 
     public static final QName ASPECT_HAS_REG_DOCUMENT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "has-reg-document-data");
-    public static final QName ASSOC_REG_DOCUMENT_DATA = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "document-reg-attributes-assoc");
 
-    public static final QName TYPE_REG_DATA_ATTRIBUTES = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-attributes");
-    public static final QName PROP_REG_DATA_DATE = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-date");
-    public static final QName PROP_REG_DATA_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
-    public static final QName PROP_REG_DATA_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
-    public static final QName ASSOC_REG_DATA_REGISTRATOR = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-registrator-assoc");
+    public static final QName PROP_DOCUMENT_REGNUM = QName.createQName(DOCUMENT_NAMESPACE_URI, "regnum");
+    public static final QName PROP_DOCUMENT_DATE = QName.createQName(DOCUMENT_NAMESPACE_URI, "doc-date");
+
+    public static final QName PROP_REG_DATA_DOC_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-number");
+    public static final QName PROP_REG_DATA_DOC_DATE = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-date");
+    public static final QName PROP_REG_DATA_PROJECT_NUMBER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-project-data-number");
+    public static final QName PROP_REG_DATA_PROJECT_DATE = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-project-data-date");
+    public static final QName PROP_REG_DATA_DOC_IS_REGISTERED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "reg-data-is-registered");
+    public static final QName ASSOC_REG_DATA_DOC_REGISTRATOR = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "registrator-assoc");
 
     public static final QName PROP_DOCUMENT_TYPE = QName.createQName(DOCUMENT_NAMESPACE_URI, "doc-type");
 
@@ -219,6 +221,20 @@ public interface DocumentService {
     public List<String> getRegNumbersValues(NodeRef document);
 
     /**
+     * Получение даты регистрации проекта
+     * @param document документ
+     * @return дата регистрации проекта, если есть. Иначе NULL
+     */
+    Date getProjectRegDate(NodeRef document);
+
+    /**
+     * Получение даты регистрации документа
+     * @param document документ
+     * @return дата регистрации документа, если есть. Иначе NULL
+     */
+    Date getDocumentRegDate(NodeRef document);
+
+    /**
      * Метод для получения регистрационного номера проекта документа
      *
      * @return рег номер проекта или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
@@ -231,6 +247,31 @@ public interface DocumentService {
      * @return рег номер документа или (Не присвоено, если номера еще нет), либо null, если у документа нет нужного аспекта
      */
     public String getDocumentRegNumber(NodeRef document);
+
+    /**
+     * Получение актуального номера документа
+     * @param document документ
+     * @return регистрационный номер документа, если есть. Иначе регистрационный номер проекта, если есть. Иначе NULL
+     */
+    String getDocumentActualNumber(NodeRef document);
+
+    /**
+     * Получение актуальной даты документа
+     * @param document документ
+     * @return дата регистрации документа, если есть. Иначе дату регистрации проекта, если есть. Иначе NULL
+     */
+    Date getDocumentActualDate(NodeRef document);
+
+    void setDocumentActualNumber(NodeRef document, String number);
+
+    void setDocumentActualDate(NodeRef document, Date date);
+
+    /**
+     * Метод для получения регистратора документа
+     *
+     * @return регистратор документа или null
+     */
+    public NodeRef getDocumentRegistrator(NodeRef document);
 
     /**
      * Возвращает заголовок документа без проверки на доступ к документу
@@ -249,20 +290,4 @@ public interface DocumentService {
     public NodeRef getDocumentAuthor(NodeRef document);
 
     public Collection<QName> getDocumentSubTypes();
-
-    /**
-     * Возвращает рег данные документа
-     *
-     * @param document - ссылка на документ
-     * @return ссылку на объект Рег данные. атрибуты
-     */
-    public NodeRef getDocumentRegData(NodeRef document);
-
-    /**
-     * Возвращает рег данные проекта документа
-     *
-     * @param document - ссылка на документ
-     * @return ссылку на объект Рег данные. атрибуты
-     */
-    public NodeRef getDocumentProjectRegData(NodeRef document);
 }
