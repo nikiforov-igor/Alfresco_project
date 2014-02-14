@@ -3,6 +3,22 @@
 			 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
 			 typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/regnumReservation">
 	<process id="regnumReservation" name="Зарезервировать регистрационный номер" isExecutable="true">
+		<extensionElements>
+			<activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+						reservationWorkflow.setReservationActive(bpm_package, true);
+					]]></activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+						reservationWorkflow.setReservationActive(bpm_package, false);
+					]]></activiti:string>
+				</activiti:field>
+			</activiti:executionListener>
+		</extensionElements>
 		<startEvent id="startevent1" name="Start" activiti:formKey="reservationWf:regnumReservationStart"></startEvent>
 
 		<receiveTask id="receivetask1" name="Receive Task"></receiveTask>
@@ -11,6 +27,7 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
+						//nop
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
@@ -20,14 +37,7 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var document = bpm_package.children[0];
-
-						//say proccess is active
-						var props = [];
-						props["lecm-reservation-aspects:isReservationRunning"] = true;
-						document.addAspect("lecm-reservation-aspects:isReservationRunningAspect", props);
-
-						var registrars = reservationWorkflow.getReservationDocumentRegistrators(document);
+						var registrars = reservationWorkflow.getRegistrars(bpm_package, execution.getVariable("registrarRole"));
 						var reservateInitiator = reservationWorkflow.getCurrentEmployee();
 						execution.setVariableLocal("registrarsList", registrars);
 						execution.setVariableLocal("reservateInitiator", reservateInitiator);
@@ -40,25 +50,31 @@
 
 		<userTask id="regnumReservationTask" name="Запрос на резервирование номера для документа" activiti:assignee="${assignee.properties.userName}" activiti:formKey="reservationWf:regnumReservationTask">
 			<extensionElements>
+				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string><![CDATA[
+							//получаем employee
+							var registrar = orgstructure.getEmployeeByPerson(assignee);
+							//включаем его в динамическую роль регистратора для этого документа
+							statemachine.grandDynamicRoleForEmployee(bpm_package.children[0], registrar, task.getVariable("registrarDynamicRole"));
+							//назначаем задачу
+							reservationWorkflow.assignTask(assignee, task);
+							//высылаем уведомление
+							reservationWorkflow.notifyReservationStarted(bpm_package, registrar);
+						]]></activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							var document = bpm_package.children[0];
-							var isReservate = task.getVariable("reservationWf_isReservate");
-							var comment = task.getVariable("bpm_comment");
-							reservationWorkflow.regnumReservate(document,isReservate,reservateInitiator.getNodeRef(),comment);
-							execution.setVariable("currentPercent",100);
-
-							//say proccess not active
-							document.save();
-							document.removeAspect("lecm-reservation-aspects:isReservationRunningAspect");
-							//}
+							reservationWorkflow.completeTask(assignee, task);
+							reservationWorkflow.notifyReservationFinished(bpm_package, task);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 			</extensionElements>
 			<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registrarsList}" activiti:elementVariable="assignee">
-				<completionCondition>${currentPercent == 100}</completionCondition>
+				<completionCondition>$${"REJECTED" == taskDecision || "RESERVED" == taskDecision}</completionCondition>
 			</multiInstanceLoopCharacteristics>
 		</userTask>
 
@@ -66,11 +82,10 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var document = bpm_package.children[0];
-						reservationWorkflow.regnumReservateEmpty(document,reservateInitiator.getNodeRef());
-						//say proccess not active
-						document.save();
-						document.removeAspect("lecm-reservation-aspects:isReservationRunningAspect");
+						reservationWorkflow.setEmptyRegnum(bpm_package);
+						var reservateInitiator = execution.getVariableLocal("reservateInitiator");
+						var notification = reservationWorkflow.prepareNotificationAboutEmptyRegistrars(bpm_package, reservateInitiator);
+						notifications.sendNotification(notification);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>

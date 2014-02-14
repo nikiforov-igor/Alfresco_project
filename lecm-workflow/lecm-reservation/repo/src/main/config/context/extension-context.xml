@@ -7,14 +7,9 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
 	<bean id="reservation.workflow.extension" parent="baseScript"
-		  class="ru.it.lecm.reservation.extensions.ReservationWorkflowJavascriptExtension"
+		  class="ru.it.lecm.workflow.reservation.extensions.ReservationWorkflowJavascriptExtension"
 		  p:extensionName="reservationWorkflow"
-		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:regNumbersService-ref="regNumbersService"
-		  p:notificationsService-ref="notificationsService"
-		  p:businessJournalService-ref="businessJournalService"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
-		  p:stateMachineService-ref="stateMachineHelper"/>
+		  p:reservationWorkflowService-ref="reservationWorkflowService"/>
 
 </beans>

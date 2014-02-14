@@ -61,6 +61,8 @@ public interface LecmWorkflowService {
 	 */
 	void notifyWorkflowFinished(final String decision, final NodeRef bpmPackage);
 
+	void notifyWorkflowFinished(final NodeRef employeeRef, final String decision, final NodeRef bpmPackage);
+
 	/**
 	 * уведомить согласующих о том что подходит срок согласования
 	 * или о том что согласование просрочено

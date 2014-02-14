@@ -1429,6 +1429,111 @@ outgoing.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>7aaf06a9-be94-42ed-be56-56e0846af0f5</name>
+																		<nodeRef>workspace://SpacesStore/77d07538-77d6-4e1a-936f-bba8c9a9b9df</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>070b760f-d43e-4af4-b68c-66767a68b18e</name>
+																		<nodeRef>workspace://SpacesStore/06df7196-ad7e-4fef-8722-22457bd8bc7f</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR_DYNAMIC]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarDynamicRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>326195f4-a73d-4200-8bd5-5301646eef15</name>
+																		<nodeRef>workspace://SpacesStore/566e7ee0-da9e-44db-a9f3-c28dbac9b14a</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[OUTGOING_DOC_NUMBER]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[regnumTemplateId]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -1882,7 +1987,7 @@ outgoing.save();]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -2687,6 +2792,111 @@ outgoing.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>ec5c1d77-5079-489a-bd98-3baf85c1a0b2</name>
+																		<nodeRef>workspace://SpacesStore/b0635080-aeeb-4e83-aec6-059184ced738</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR_DYNAMIC]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarDynamicRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>a91c444a-bc5d-4fb3-ab4e-d7ee6bdb6f92</name>
+																		<nodeRef>workspace://SpacesStore/c02476e4-2421-4765-b929-22cfdffdd067</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[OUTGOING_DOC_NUMBER]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[regnumTemplateId]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>d7756841-fa4f-417d-a787-3a48e89fef5c</name>
+																		<nodeRef>workspace://SpacesStore/96532843-b5c3-4c25-97cd-bc823332869a</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -3206,7 +3416,7 @@ outgoing.save();]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -3675,6 +3885,111 @@ outgoing.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>e61e3310-3196-4784-bb05-3931a24ef298</name>
+																		<nodeRef>workspace://SpacesStore/10293e13-157b-4b28-ba34-00a2ceaa8b4f</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR_DYNAMIC]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarDynamicRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>e86fe5c3-7603-482c-b4c1-f0d1955a9fc1</name>
+																		<nodeRef>workspace://SpacesStore/5cb4183b-efca-4d2d-807d-1bb6cb2f7405</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[OUTGOING_DOC_NUMBER]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[regnumTemplateId]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>581b29f0-958b-49b3-bf1b-b021d3483bf7</name>
+																		<nodeRef>workspace://SpacesStore/1605a304-c6cd-4d30-8552-8f361d8a82d2</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4128,7 +4443,7 @@ outgoing.save();]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -4872,6 +5187,111 @@ notifications.sendNotification(notification);]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>a48428e4-7e52-4c2b-87dc-0681167aa320</name>
+																		<nodeRef>workspace://SpacesStore/646baf34-54ff-4c7f-9311-5c45c614d5b1</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR_DYNAMIC]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarDynamicRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>cd147af3-40ce-4c3c-837f-1cd708b187bd</name>
+																		<nodeRef>workspace://SpacesStore/33123c05-b1a9-43d5-a306-c4980c29fcc0</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[OUTGOING_DOC_NUMBER]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[regnumTemplateId]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>032b6474-dbd8-404d-8c37-86c4391ebf65</name>
+																		<nodeRef>workspace://SpacesStore/318d2796-f25e-454d-adbf-8a5d5a6fd651</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -5325,7 +5745,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -5666,6 +6086,111 @@ notifications.sendNotification(notification);]]>
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") == null OR !doc.attr("lecm-reservation-aspects:isReservationRunning")]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>3c2605e1-e0cb-45e7-94b6-5151f8ec4ba6</name>
+																		<nodeRef>workspace://SpacesStore/df46b20e-6307-4d31-8b74-1ff1711a2aa7</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR_DYNAMIC]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarDynamicRole]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>ea8593f1-9990-4fb8-bcf2-7ec1b6a1c2ab</name>
+																		<nodeRef>workspace://SpacesStore/37c02e7e-32e1-4cc0-aa55-42a586e358bc</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[OUTGOING_DOC_NUMBER]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[regnumTemplateId]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>7d1bcfb8-3eea-4ead-ad9e-f3124651a0cd</name>
+																		<nodeRef>workspace://SpacesStore/adf3d385-8d18-4eb0-bb19-1cad7279172e</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_REGISTRAR]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[registrarRole]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -6193,7 +6718,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -6937,7 +7462,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -7142,13 +7667,13 @@ notifications.sendNotification(notification);]]>
 																<value>
 																	<![CDATA[var i,
     outgoing = stm_document, //исходящий документ
-    registrars = outgoingStatemachine.getRegistrars("OUTGOING_REGISTRAR", outgoing),//получение списка регистраторов по документу
+    registrars = outgoingStatemachine.getRegistrars("DA_REGISTRAR", outgoing),//получение списка регистраторов по документу
     registrarsCount = registrars.length,
     notification;
 
 //раздаем права регистраторам
 for(i = 0; i < registrarsCount; ++i) {
-    statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "OUTGOING_REGISTRAR_DYNAMIC");
+    statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYNAMIC");
 }
 
 //подготавливаем уведомление
@@ -7731,7 +8256,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -8475,7 +9000,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -9306,7 +9831,7 @@ notifications.sendNotification(notification);]]>
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+												<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -10200,7 +10725,7 @@ notifications.sendNotification(notification);]]>
 						<roleAssociations>
 							<roleAssociation>
 								<type>role-assoc</type>
-								<businessRoleName>OUTGOING_REGISTRAR</businessRoleName>
+								<businessRoleName>DA_REGISTRAR</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>
@@ -10258,7 +10783,7 @@ notifications.sendNotification(notification);]]>
 						<roleAssociations>
 							<roleAssociation>
 								<type>role-assoc</type>
-								<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+								<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>
@@ -10275,7 +10800,7 @@ notifications.sendNotification(notification);]]>
 						<roleAssociations>
 							<roleAssociation>
 								<type>role-assoc</type>
-								<businessRoleName>OUTGOING_REGISTRAR_DYNAMIC</businessRoleName>
+								<businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>

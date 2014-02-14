@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
@@ -61,8 +60,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 			task.setDueDate(dueDate);
 		}
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantReviewerPermissions(employeeRef, bpmPackage);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);

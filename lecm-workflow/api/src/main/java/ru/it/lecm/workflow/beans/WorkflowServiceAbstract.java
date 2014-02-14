@@ -181,9 +181,19 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	@Override
 	public void notifyWorkflowFinished(String decision, NodeRef bpmPackage) {
 		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+		NodeRef employeeRef = documentService.getDocumentAuthor(docInfo.getDocumentRef());
+		notifyWorkflowFinished(employeeRef, decision, docInfo);
+	}
 
+	@Override
+	public void notifyWorkflowFinished(NodeRef employeeRef, String decision, NodeRef bpmPackage) {
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+		notifyWorkflowFinished(employeeRef, decision, docInfo);
+	}
+
+	private void notifyWorkflowFinished(NodeRef employeeRef, String decision, DocumentInfo docInfo) {
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(documentService.getDocumentAuthor(docInfo.getDocumentRef()));
+		recipients.add(employeeRef);
 
 		String description = getWorkflowFinishedMessage(docInfo.getDocumentLink(), decision);
 		sendNotification(description, docInfo.getDocumentRef(), recipients);

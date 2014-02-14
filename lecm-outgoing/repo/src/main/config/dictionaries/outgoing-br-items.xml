@@ -2,18 +2,6 @@
 <items>
 	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
 		<items>
-			<item name="cm:Исходящие. Регистратор" type="lecm-orgstr:business-role">
-				<property name="cm:name">Исходящие. Регистратор</property>
-				<property name="lecm-orgstr:business-role-identifier">OUTGOING_REGISTRAR</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за регистрацию документов</property>
-			</item>
-			<item name="cm:Исходящие. Регистратор документа" type="lecm-orgstr:business-role">
-				<property name="cm:name">Исходящие. Регистратор документа</property>
-				<property name="lecm-orgstr:business-role-identifier">OUTGOING_REGISTRAR_DYNAMIC</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за регистрацию выбранного экземпляра документа</property>
-			</item>
 			<item name="cm:Исходящие. Подписант" type="lecm-orgstr:business-role">
 				<property name="cm:name">Исходящие. Подписант</property>
 				<property name="lecm-orgstr:business-role-identifier">OUTGOING_SIGNER</property>

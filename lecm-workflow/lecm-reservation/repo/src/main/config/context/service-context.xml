@@ -39,4 +39,11 @@
 					  businessJournalLogEventsPolicy"
 		  p:createOrUpdateDictionaries-ref="outgoing.dictionaries"/>
 
+	<bean id="reservationWorkflowService" parent="lecmWorkflowService"
+		  class="ru.it.lecm.workflow.reservation.ReservationWorkflowServiceImpl"
+		  depends-on="reservation.model.bootstrap"
+		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+		  p:regNumbersService-ref="regNumbersService"
+		  p:businessJournalService-ref="businessJournalService"/>
+
 </beans>
