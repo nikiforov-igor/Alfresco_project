@@ -1,64 +1,52 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
-	<bean id="eds-documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	<util:list id="eds.models">
+		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
+	</util:list>
+
+	<util:list id="eds.models.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
+	</util:list>
+
+	<bean id="eds.models.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
-          			  documents.LogicEcmModelsBootstrap">
-        <property name="models">
-            <list>
-                <value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
-            </list>
-        </property>
-        <property name="labels">
-            <list>
-                <value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
-            </list>
-        </property>
-    </bean>
-	
-	<bean id="eds-documents.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+          			  documents.LogicEcmModelsBootstrap"
+		  p:models-ref="eds.models"
+		  p:labels-ref="eds.models.labels"/>
+
+	<util:list id="eds.dictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
+	</util:list>
+
+	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
-					  businessJournalLogEventsPolicy">
-		<property name="dictionaries">
-            <list>
-                <value>alfresco/module/eds-documents-repo/models/lecm-eds-potential-roles.xml</value>
-            </list>
-        </property>
-	</bean>
-	
-	<util:constant id="GLOBAL_EDS_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.GLOBAL_EDS_SETTINGS_FOLDER_ID"/>
-	<util:constant id="GLOBAL_EDS_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.GLOBAL_EDS_SETTINGS_FOLDER_NAME"/>
+					  businessJournalLogEventsPolicy"
+		  p:dictionaries-ref="eds.dictionaries"/>
 
-	<bean id="edsGlobalSettingsService" init-method="init" class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, documentService, serviceDictionary">
-		<property name="nodeService" ref="nodeService"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="namespaceService" ref="namespaceService"/>
-		<property name="dictionaryService" ref="serviceDictionary"/>
-		<property name="folders">
-			<map>
-				<entry key="#{GLOBAL_EDS_SETTINGS_FOLDER_ID}" value="#{GLOBAL_EDS_SETTINGS_FOLDER_NAME}"/>
-			</map>
-		</property>
-	</bean>
-	
-	<bean id="edsGlobalSettingsScript" parent="baseScript" class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
-	      depends-on="nodeService, edsGlobalSettingsService">
-		<property name="extensionName">
-			<value>edsGlobalSettings</value>
-		</property>
-		<property name="edsGlobalSettingsService" ref="edsGlobalSettingsService"/>
-	</bean>
-	
-	<!--policies-->
-	<bean id="edsAssociationPolicy" class="ru.it.lecm.eds.policy.AssociationHandlerPolicy" init-method="init" parent="logicEcmAssociationPolicy"
-		depends-on="eds-documents.LogicEcmModelsBootstrap"/>
+	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_ID"/>
+	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_NAME"/>
+	<util:map id="eds.global-settings.folders">
+		<entry key="#{EDS_GLOBAL_SETTINGS_FOLDER_ID}" value="#{EDS_GLOBAL_SETTINGS_FOLDER_NAME}"/>
+	</util:map>
+
+	<bean id="eds.global-settings.service" init-method="init" class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl" parent="baseBean"
+	      depends-on="nodeService, documentService, serviceDictionary"
+			p:nodeService-ref="nodeService"
+			p:orgstructureService-ref="serviceOrgstructure"
+			p:namespaceService-ref="namespaceService"
+			p:dictionaryService-ref="serviceDictionary"
+			p:transactionService-ref="transactionService"
+			p:folders-ref="eds.global-settings.folders"/>
 	
 </beans>

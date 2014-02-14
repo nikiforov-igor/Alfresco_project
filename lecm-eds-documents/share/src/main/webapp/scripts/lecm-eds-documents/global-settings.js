@@ -2,13 +2,13 @@
 {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.OutgoingDocsSettings = function(htmlId)
+	LogicECM.EdsGlobalSettings = function(htmlId)
 	{
-		LogicECM.OutgoingDocsSettings.superclass.constructor.call(this, "LogicECM.OutgoingDocsSettings", htmlId, ["container", "json"]);
+		LogicECM.EdsGlobalSettings.superclass.constructor.call(this, "LogicECM.EdsGlobalSettings", htmlId, ["container", "json"]);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.OutgoingDocsSettings, Alfresco.component.Base,
+	YAHOO.extend(LogicECM.EdsGlobalSettings, Alfresco.component.Base,
 		{
 			onReady: function ()
 			{
@@ -19,7 +19,7 @@
 				var me = this;
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.PROXY_URI + "lecm/outgoing/getSettingsNode",
+						url: Alfresco.constants.PROXY_URI + "lecm/eds/global-settings/api/getSettingsNode",
 						successCallback: {
 							fn: function (response) {
 								var oResults = eval("(" + response.serverResponse.responseText + ")");
@@ -38,7 +38,7 @@
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 						dataObj: {
-							htmlid: "outgoing-docs-settings-edit-form",
+							htmlid: "eds-global-settings-edit-form",
 							itemKind:"node",
 							itemId: settingsNode,
 							mode: "edit",
@@ -51,9 +51,9 @@
 								var container = Dom.get(me.id + "-settings");
 								container.innerHTML = response.serverResponse.responseText;
 
-								Dom.get("outgoing-docs-settings-edit-form-form-submit").value = me.msg("label.save");
+								Dom.get("eds-global-settings-edit-form-form-submit").value = me.msg("label.save");
 
-								var form = new Alfresco.forms.Form("outgoing-docs-settings-edit-form-form");
+								var form = new Alfresco.forms.Form("eds-global-settings-edit-form-form");
 								form.setSubmitAsJSON(true);
 								form.setAJAXSubmit(true,
 									{

@@ -1,9 +1,9 @@
 <#assign el=args.htmlid?html>
 <script type="text/javascript">//<![CDATA[
-	new LogicECM.OutgoingDocsSettings("${el}-body").setMessages(${messages});
+	new LogicECM.EdsGlobalSettings("${el}-body").setMessages(${messages});
 //]]></script>
 
-<div id="${el}-body" class="outgoing-docs-settings">
+<div id="${el}-body" class="eds-global-settings">
 	<div class="yui-g">
 		<div class="yui-u first">
 			<div class="title">${msg("label.title")}</div>

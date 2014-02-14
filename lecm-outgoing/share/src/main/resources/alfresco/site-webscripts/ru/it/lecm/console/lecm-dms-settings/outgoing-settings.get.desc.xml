@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Admin Console Outgoing docs Settings</shortname>
-  <description>Administration Console - Outgoing docs Settings Tool</description>
-  <url>/components/console/outgoing-docs-settings</url>
-  <family>admin-console</family>
-</webscript>

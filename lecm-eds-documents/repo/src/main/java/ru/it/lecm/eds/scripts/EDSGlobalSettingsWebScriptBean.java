@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,5 +54,9 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
 			}
 			edsGlobalSettingsService.savePotentialWorkers(businessRoleId, orgElementRef, employeesRefs);
 		}
+	}
+	
+	public ScriptNode getSettingsNode() {
+		return new ScriptNode(edsGlobalSettingsService.getSettingsNode(), serviceRegistry, getScope());
 	}
 }

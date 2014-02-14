@@ -16,8 +16,21 @@
     </namespaces>
 
     <types>
+		<type name="lecm-eds-globset:settings">
+		    <title>Logic Ecm Documents Global Settings</title>
+		    <parent>cm:cmobject</parent>
+		    <properties>
+			    <!-- Режим регистрации -->
+			    <property name="lecm-eds-globset:centralized-registration">
+				    <type>d:boolean</type>
+				    <mandatory>true</mandatory>
+				    <default>true</default>
+			    </property>
+		    </properties>
+	    </type>
+		
 		<type name="lecm-eds-globset:potential-role">
-			<title>Logic Ecm Outgoing Documents Potencial Roles</title>
+			<title>Logic Ecm Documents Potencial Roles</title>
 		    <parent>lecm-dic:plane_dictionary_values</parent>
 			<properties>
 				<!--Служебные проперти-->

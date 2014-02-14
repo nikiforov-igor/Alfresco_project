@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -45,7 +48,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(GLOBAL_EDS_SETTINGS_FOLDER_ID);
+		return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
 	}
 	
 	public void init() {
@@ -125,6 +128,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		}
 	}
 	
+	@Override
 	public NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs) {
 		List<NodeRef> unchangedEmployees = new ArrayList<NodeRef>();
 		List<AssociationRef> employeeAssocRefs = nodeService.getTargetAssocs(potentialRoleRef, ASSOC_POTENTIAL_ROLE_EMPLOYEE);
@@ -150,6 +154,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		return potentialRoleRef;
 	}
 	
+	@Override
 	public NodeRef createPotentialRole(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs) {
 		if (employeesRefs.isEmpty() || nodeService.getType(orgElementRef).equals(orgstructureService.TYPE_ORGANIZATION)) {
 			return null;
@@ -171,4 +176,46 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		updatePotentialRolesMap(businessRoleRef.toString(), orgElementRef.toString(), potentialRoleRef);
 		return potentialRoleRef;
 	}
+	
+	@Override
+	public NodeRef getSettingsNode() {
+        final NodeRef rootFolder = getServiceRootFolder();		
+		
+        NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+        if (settings != null) {
+            return settings;
+        } else {
+            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
+                            if (settingsRef == null) {
+                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, EDS_GLOBAL_SETTINGS_NODE_NAME);
+                                QName nodeTypeQName = TYPE_SETTINGS;
+
+                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                                properties.put(ContentModel.PROP_NAME, EDS_GLOBAL_SETTINGS_NODE_NAME);
+                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+                                settingsRef = associationRef.getChildRef();
+                            }
+                            return settingsRef;
+                        }
+                    });
+                }
+            };
+            return AuthenticationUtil.runAsSystem(raw);
+        }
+    }
+
+	public boolean isRegistrationCenralized() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_CENTRALIZED_REGISTRATION);
+        }
+        return false;
+    }
 }

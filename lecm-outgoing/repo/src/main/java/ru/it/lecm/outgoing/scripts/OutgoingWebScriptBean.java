@@ -16,8 +16,4 @@ public class OutgoingWebScriptBean extends BaseWebScript {
 	public void setOutgoingService(OutgoingService outgoingService) {
 		this.outgoingService = outgoingService;
 	}
-	
-	public ScriptNode getSettingsNode() {
-		return new ScriptNode(outgoingService.getSettingsNode(), serviceRegistry, getScope());
-	}
 }

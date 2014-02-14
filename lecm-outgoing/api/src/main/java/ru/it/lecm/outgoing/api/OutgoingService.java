@@ -8,5 +8,4 @@ import org.alfresco.service.cmr.repository.NodeRef;
  */
 public interface OutgoingService {
 	
-	public NodeRef getSettingsNode();
 }
