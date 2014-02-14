@@ -315,7 +315,7 @@
 				<textFieldExpression><![CDATA[$F{doc-regnumber}]]></textFieldExpression>
 			</textField>
 			<subreport isUsingCache="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="485" y="0" width="110" height="26" isPrintWhenDetailOverflows="true" uuid="86891663-9a06-45aa-a6fa-6c09cbf95467"/>
+				<reportElement style="styleOdd" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="485" y="0" width="110" height="26" isPrintWhenDetailOverflows="true" uuid="86891663-9a06-45aa-a6fa-6c09cbf95467"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{outgoing-signatory}, false)]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "outgoing-signatory/outgoing-signatory.jasper"]]></subreportExpression>
 			</subreport>
@@ -334,16 +334,12 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{doc-type}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="485" y="0" width="110" height="26" uuid="1cdc04bb-d30f-4ed2-a286-a95a8cca7ff7"/>
-				<box>
+			<rectangle>
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="485" y="0" width="110" height="26" uuid="a57a732a-5272-4303-8b04-08dbac0dc604"/>
+				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-			</textField>
+				</graphicElement>
+			</rectangle>
 		</band>
 	</detail>
 </jasperReport>

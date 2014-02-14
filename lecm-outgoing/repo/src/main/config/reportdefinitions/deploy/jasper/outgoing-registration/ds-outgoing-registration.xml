@@ -15,9 +15,9 @@
                 <item key="RU_RU"><![CDATA[genericProvider]]></item>
             </l18>
         </provider>
-        <template filename="outgoing-registration (9)-18.jrxml" mnem="outgoing-registration (9)-18.jrxml-template">
+        <template filename="outgoing-registration (9)-2.jrxml" mnem="outgoing-registration (9)-2.jrxml-template">
             <l18>
-                <item key="RU_RU"><![CDATA[outgoing-registration (9)-18.jrxml-template]]></item>
+                <item key="RU_RU"><![CDATA[outgoing-registration (9)-2.jrxml-template]]></item>
             </l18>
         </template>
         <datasource.descriptor>
@@ -91,10 +91,10 @@
     </fields>
     <subreports>
         <subreport destColumnName="outgoing-signatory" name="outgoing-signatory">
-            <sublist.source><![CDATA[{lecm-document:doc-members-assoc/lecm-doc-members:employee-assoc/}]]></sublist.source>
+            <sublist.source><![CDATA[{cm:contains/cm:contains/cm:contains/lecm-workflow-result:workflow-result-item-employee-assoc/}]]></sublist.source>
             <sublist.item>
                 <map>
-                    <item key="employee"><![CDATA[{lecm-orgstr:employee-short-name}]]></item>
+                    <item key="signatory"><![CDATA[{lecm-orgstr:employee-short-name}]]></item>
                 </map>
             </sublist.item>
         </subreport>

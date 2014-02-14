@@ -15,9 +15,9 @@
                 <item key="RU_RU"><![CDATA[genericProvider]]></item>
             </l18>
         </provider>
-        <template filename="outgoing-signatory(3).jrxml" mnem="outgoing-signatory(3).jrxml-template">
+        <template filename="outgoing-signatory(4).jrxml" mnem="outgoing-signatory(4).jrxml-template">
             <l18>
-                <item key="RU_RU"><![CDATA[outgoing-signatory(3).jrxml-template]]></item>
+                <item key="RU_RU"><![CDATA[outgoing-signatory(4).jrxml-template]]></item>
             </l18>
         </template>
         <datasource.descriptor>
