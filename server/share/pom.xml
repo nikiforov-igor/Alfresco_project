@@ -271,7 +271,7 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.reservation</groupId>
+			<groupId>ru.it.lecm.workflow.reservation</groupId>
 			<artifactId>reservation-share</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
