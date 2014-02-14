@@ -258,8 +258,8 @@
 				<field-visibility>
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
-					<show id="lecm-document-aspects:project-reg-attributes-assoc-text-content"/>						<!-- Номер проекта -->
-					<show id="lecm-document-aspects:document-reg-attributes-assoc-text-content"/>						<!-- Дата регистрации & Регистрационный номер -->
+					<show id="lecm-document:regnum"/>						<!-- Номер проекта -->
+					<show id="lecm-document:doc-date"/>						<!-- Дата регистрации & Регистрационный номер -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
