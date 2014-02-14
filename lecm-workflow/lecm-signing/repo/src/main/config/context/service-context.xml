@@ -16,7 +16,8 @@
 	</util:list>
 	<bean id="signing.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="workflow.model.bootstrap"
-		  p:models-ref="signing.models" p:labels-ref="signing.labels"/>
+		  p:models-ref="signing.models"
+		  p:labels-ref="signing.labels"/>
 
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
@@ -37,5 +38,6 @@
 	<bean id="signingWorkflowService" parent="lecmWorkflowService"
 		  depends-on="signing.workflow.bootstrap"
 		  class="ru.it.lecm.workflow.signing.SigningWorkflowServiceImpl"
-		  p:workCalendarService-ref="WorkCalendarService" p:workflowResultListService-ref="workflowResultListService"/>
+		  p:workCalendarService-ref="WorkCalendarService"
+		  p:workflowResultListService-ref="workflowResultListService"/>
 </beans>

@@ -22,5 +22,6 @@
         <module>lecm-signing</module>
 		<module>lecm-review</module>
 		<module>lecm-approval</module>
+        <module>lecm-reservation</module>
     </modules>
 </project>

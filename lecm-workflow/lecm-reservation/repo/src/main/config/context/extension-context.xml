@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<bean id="reservation.workflow.extension" parent="baseScript"
+		  class="ru.it.lecm.reservation.extensions.ReservationWorkflowJavascriptExtension"
+		  p:extensionName="reservationWorkflow"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:regNumbersService-ref="regNumbersService"
+		  p:notificationsService-ref="notificationsService"
+		  p:businessJournalService-ref="businessJournalService"
+		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
+		  p:stateMachineService-ref="stateMachineHelper"/>
+
+</beans>
