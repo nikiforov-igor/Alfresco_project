@@ -467,8 +467,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getAssigneesListByItem(NodeRef assigneeListItem) {
-		List<AssociationRef> assigneesListAssocs = nodeService.getSourceAssocs(assigneeListItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE);
-		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getSourceRef();
+		List<ChildAssociationRef> assigneesListAssocs = nodeService.getParentAssocs(assigneeListItem, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+		NodeRef assigeesListNodeRef = assigneesListAssocs.get(0).getParentRef();
 		return assigeesListNodeRef;
 	}
 

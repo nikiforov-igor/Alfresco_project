@@ -1,7 +1,5 @@
 package ru.it.lecm.workflow.policies;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
