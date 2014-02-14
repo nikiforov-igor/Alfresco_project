@@ -83,7 +83,7 @@
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Рег. номер"
-            jrFldName="doc-regnumber" queryFldName="{lecm-document-aspects:document-reg-attributes-assoc/lecm-document-aspects:reg-data-number}">
+            jrFldName="doc-regnumber" queryFldName="{lecm-document-aspects:reg-data-number}">
             <l18>
                 <item key="RU_RU"><![CDATA[Рег. номер]]></item>
             </l18>
