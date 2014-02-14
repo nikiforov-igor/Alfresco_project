@@ -1420,7 +1420,7 @@ outgoing.save();]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
+																					<![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -2649,7 +2649,7 @@ outgoing.save();]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
+																					<![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -3637,7 +3637,7 @@ outgoing.save();]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
+																					<![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -4834,7 +4834,7 @@ notifications.sendNotification(notification);]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
+																					<![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -5636,7 +5636,7 @@ notifications.sendNotification(notification);]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[doc.assocAttr("lecm-document-aspects:document-reg-attributes-assoc","lecm-document-aspects:reg-data-number")==null]]>
+																					<![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]>
 																				</value>
 																			</property>
 																		</properties>
