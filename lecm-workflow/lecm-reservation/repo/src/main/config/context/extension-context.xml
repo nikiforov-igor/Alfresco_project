@@ -14,7 +14,7 @@
 		  p:regNumbersService-ref="regNumbersService"
 		  p:notificationsService-ref="notificationsService"
 		  p:businessJournalService-ref="businessJournalService"
-		  p:edsGlobalSettingsService-ref="edsGlobalSettingsService"
+		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:stateMachineService-ref="stateMachineHelper"/>
 
 </beans>
