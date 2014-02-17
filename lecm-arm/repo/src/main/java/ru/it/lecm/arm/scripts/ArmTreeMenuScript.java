@@ -91,7 +91,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(IS_LEAF, !service.hasChildNodes(node));
             result.put(FILTER, node.getAvaiableFilters());
 
-            if (node.getNodeQuery() != null) {
+            if (node.getSearchQuery() != null) {
                 result.put(SEARCH_QUERY, node.getSearchQuery());
             }
 

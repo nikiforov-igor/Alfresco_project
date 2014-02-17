@@ -9,9 +9,9 @@ var $siteURL = Alfresco.util.siteURL;
     YAHOO.lang.extend(LogicECM.module.ARM.DataGrid, LogicECM.module.Base.DataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DataGrid.prototype, {
-        doubleClickLock: false,
+        doubleClickLock: false
 
-        getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
+        /*getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
             var html = "";
             // Populate potentially missing parameters
             if (!oRecord) {
@@ -128,7 +128,7 @@ var $siteURL = Alfresco.util.siteURL;
         fnRenderCellImage: function DataGrid_fnRenderCellSelected() {
             var scope = this;
 
-            /**
+            *//**
              * Selector custom datacell formatter
              *
              * @method renderCellSelected
@@ -136,7 +136,7 @@ var $siteURL = Alfresco.util.siteURL;
              * @param oRecord {object}
              * @param oColumn {object}
              * @param oData {object|string}
-             */
+             *//*
             return function DataGrid_renderCellSelected(elCell, oRecord, oColumn, oData) {
                 Dom.setStyle(elCell, "width", oColumn.width + "px");
                 Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
@@ -149,6 +149,6 @@ var $siteURL = Alfresco.util.siteURL;
                 }
                 elCell.innerHTML = html;
             };
-        }
+        }*/
     }, true);
 })();

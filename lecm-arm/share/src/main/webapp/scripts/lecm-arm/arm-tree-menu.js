@@ -207,27 +207,28 @@
                 if (node.data.counterLimit && node.data.counterLimit.length > 0) {
                     searchQuery += " AND (" + node.data.counterLimit + ") ";
                 }
-
-                Alfresco.util.Ajax.jsonRequest({
-                    method: "POST",
-                    url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
-                    dataObj: {
-                        query:searchQuery
-                    },
-                    successCallback: {
-                        fn: function (oResponse) {
-                            if (oResponse != null) {
-                                var label = node.getLabelEl();
-                                label.innerHTML = node.label + " (" + oResponse.json + ")";
+                if (searchQuery.length > 0) {
+                    Alfresco.util.Ajax.jsonRequest({
+                        method: "POST",
+                        url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
+                        dataObj: {
+                            query:searchQuery
+                        },
+                        successCallback: {
+                            fn: function (oResponse) {
+                                if (oResponse != null) {
+                                    var label = node.getLabelEl();
+                                    label.innerHTML = node.label + " (" + oResponse.json + ")";
+                                }
+                            }
+                        },
+                        failureCallback: {
+                            fn: function () {
+                                node.label = node.label + " (" + 0 + ")";
                             }
                         }
-                    },
-                    failureCallback: {
-                        fn: function () {
-                            node.label = node.label + " (" + 0 + ")";
-                        }
-                    }
-                });
+                    });
+                }
             }
         },
 

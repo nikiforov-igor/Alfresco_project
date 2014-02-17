@@ -26,7 +26,7 @@
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
                             itemType: "lecm-document:base",
-                            datagridFormId: "datagrid",
+                            datagridFormId: "datagrid-arm",
                             nodeRef: null,
                             actionsConfig:{
                                 fullDelete:true,

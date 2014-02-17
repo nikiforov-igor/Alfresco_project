@@ -759,6 +759,14 @@
                     <field id="lecm-document:ext-present-string" label=" "/>
                 </appearance>
             </form>
+            <form id="datagrid-arm">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name"/>
+                </appearance>
+            </form>
         </forms>
     </config>
 

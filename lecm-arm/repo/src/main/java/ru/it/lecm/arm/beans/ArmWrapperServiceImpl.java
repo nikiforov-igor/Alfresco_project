@@ -78,7 +78,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                         result.add(queriedChild);
                     }
                 } else {
-                    result.add(wrapArmNodeAsObject(staticChild));
+                    result.add(stNode);
                 }
             }
         }
@@ -117,7 +117,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
 	    String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
-	        node.setSearchQuery(formatQuery(searchQuery, nodeRef));
+	        node.setSearchQuery(searchQuery);
         }
 
         return node;
@@ -140,12 +140,6 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 	    if (parentNode.getSearchQuery() != null) {
             node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
 	    }
-
-        ArmBaseChildRule parentQuery = parentNode.getNodeQuery();
-        if (parentQuery != null) {
-            ArmBaseChildRule dupQuery = parentQuery.getDuplicate();
-            node.setNodeQuery(dupQuery);
-        }
         return node;
     }
 
