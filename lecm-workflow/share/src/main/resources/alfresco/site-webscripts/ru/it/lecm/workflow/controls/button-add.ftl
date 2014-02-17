@@ -149,6 +149,8 @@
 	WorkflowList.prototype._initControl = function() {
 		var dimmer = YAHOO.util.Dom.get('${dimmerId}');
 
+		this.widgets.currentListRefInput = YAHOO.util.Dom.get('${listNodeRefInput}');
+
 		Alfresco.util.Ajax.jsonRequest({
 			method: 'POST',
 			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/getDefaultAssigneesList',
@@ -157,14 +159,11 @@
 				concurrency: this.options.concurrency.toUpperCase()
 			},
 			successCallback: {
-				fn: function(response) {
+				fn: function(r) {
 					debugger;
 
-					var defaultList = response.json.defaultList;
-
-					YAHOO.util.Dom.get('${listNodeRefInput}').value = defaultList;
-
-					this._setCurrentListRef(defaultList);
+					this._setCurrentListRef(r.json.defaultList);
+					this._setCurrentEmployee(r.json.currentEmployee);
 
 					this._initDatagrid();
 					this._updateListsMenu();
@@ -245,6 +244,29 @@
 		this.widgets.dialogSaveList.show();
 	};
 
+	WorkflowList.prototype._getIgnoreNodes = function() {
+		var i;
+
+		var datagrid = this.widgets.datagrid;
+		var dataTable = datagrid.widgets.dataTable;
+		var recordSet = dataTable.getRecordSet();
+		var recordSetLg = recordSet.getLength();
+
+		var result = [];
+
+		result.push(this.options.currentEmployee);
+
+		if (recordSetLg === 0) {
+			return result;
+		}
+
+		for (i = 0; i < recordSetLg; i++) {
+			result.push(recordSet.getRecord(i).getData('itemData')['assoc_lecm-workflow_assignee-employee-assoc'].value);
+		}
+
+		return result;
+	};
+
 	WorkflowList.prototype._saveList = function(title) {
 		var workflowList = this;
 
@@ -271,7 +293,7 @@
 					Alfresco.util.PopupManager.zIndex++;
 
 					// TERNARY? NO!
-					if(response.serverResponse.status === 418) {
+					if (response.serverResponse.status === 418) {
 						text = 'Не удалось сохранить список: список с таким именем уже существует';
 					} else {
 						text = 'Не удалось сохранить список из-за внутренней ошибки сервера';
@@ -447,15 +469,19 @@
 		text = menuItem.cfg.getProperty('text');
 		value = menuItem.value;
 
-		YAHOO.util.Dom.get('${listNodeRefInput}').value = value;
 		this.widgets.btnSelectList.set('label', text);
-		this.options.currentListRef = value;
 
+		this._setCurrentListRef(value);
 		this._refreshDatagrid();
 	};
 
 	WorkflowList.prototype._setCurrentListRef = function(ref) {
 		this.options.currentListRef = ref;
+		this.widgets.currentListRefInput.value = ref;
+	};
+
+	WorkflowList.prototype._setCurrentEmployee = function(ref) {
+		this.options.currentEmployee = ref;
 	};
 
 	/**
@@ -478,8 +504,6 @@
 					workflowList._setCurrentListRef(defaultList);
 					workflowList._updateListsMenu(defaultList);
 					workflowList._refreshDatagrid();
-
-					YAHOO.util.Dom.get('${listNodeRefInput}').value = defaultList;
 				}
 			},
 			failureCallback: {
@@ -490,25 +514,6 @@
 				}
 			}
 		});
-	};
-
-	/**
-	 * Выбирает элемент списка по его value (в нашем случае по nodeRef-е)
-	 */
-	WorkflowList.prototype._selectListItem = function(value) {
-		var i, text;
-		var menu = this.widgets.btnSelectList.getMenu();
-		var items = menu.getItems();
-		var itemsLg = items.length;
-
-		for (i = 0; i < itemsLg; i++) {
-			if (items[i].value === value) {
-				text = items[i].cfg.getProperty('text');
-				this.widgets.btnSelectList.set('label', text);
-				YAHOO.util.Dom.get('${listNodeRefInput}').value = value;
-				break;
-			}
-		}
 	};
 
 	/**
@@ -541,7 +546,7 @@
 
 					for (i = 0; i < listsLg; i++) {
 						// TERNARY? NO!
-						if(lists[i].nodeRef === response.json.defaultList) {
+						if (lists[i].nodeRef === response.json.defaultList) {
 							title = 'Список по умолчанию'
 						} else {
 							title = lists[i].title;
@@ -640,6 +645,9 @@
 	WorkflowList.prototype._onAddAssigneeButtonClick = function(options) {
 		var formId = this.options.concurrency; // 'sequential' || 'parallel'
 
+		var ignoreNodesArray = this._getIgnoreNodes();
+		var ignoreNodesString = ignoreNodesArray.join();
+
 		this.widgets.formAddAssignee = new Alfresco.module.SimpleDialog('${htmlId}-form-add-assignee');
 
 		this.widgets.formAddAssignee.setOptions({
@@ -652,8 +660,8 @@
 				formId: formId,
 				mode: 'create',
 				submitType: 'json',
-				showCancelButton: 'true'//,
-				//				ignoreNodes: this.getCurrentNodeRefs().join(), // TODO: Должен быть мето, который даёт эту строку
+				showCancelButton: 'true',//,
+				ignoreNodes: ignoreNodesString
 				//				allowedNodes: this.constants.ALLOWED_ASSIGNEES.join() // TODO: Должен быть мето, который даёт эту строку
 			},
 			destroyOnHide: true,
