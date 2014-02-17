@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import org.json.JSONObject;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
@@ -20,7 +20,8 @@ import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
  *
  * @author vlevin
  */
-public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExtension {
+public class WorkflowServiceJavascriptExtension extends BaseWebScript {
+
 	private WorkflowAssigneesListService workflowAssigneesListService;
 	private OrgstructureBean orgstructureService;
 
@@ -112,6 +113,7 @@ public class WorkflowServiceJavascriptExtension extends BaseScopableProcessorExt
 			result.put("lists", listsJSONArray);
 			result.put("defaultList", defaultList.toString());
 			result.put("listsFolder", workflowAssigneesListService.getAssigneesListsFolder());
+			result.put("currentEmployee", orgstructureService.getCurrentEmployee().toString());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
 		}

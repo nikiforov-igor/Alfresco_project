@@ -4,7 +4,7 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="workflow.extension" parent="baseJavaScriptExtension"
+	<bean id="workflow.extension" parent="baseScript"
 		  class="ru.it.lecm.workflow.extensions.WorkflowServiceJavascriptExtension"
 		  p:extensionName="lecmWorkflowService"
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
