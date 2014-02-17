@@ -8447,7 +8447,38 @@ notifications.sendNotification(notification);]]>
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>f3ebbbcd-fa9d-4caf-887f-80162bae59d6</name>
+														<nodeRef>workspace://SpacesStore/66fbba34-09e5-4e3e-8fa1-7ec131f666b6</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value>
+																	<![CDATA[var outgoing = stm_document;
+regnumbers.registerDocument(outgoing, "OUTGOING_DOC_NUMBER");
+outgoing.save();]]>
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value>
+																	<![CDATA[Зарегистрировать документ]]>
+																</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
