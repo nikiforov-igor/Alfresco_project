@@ -6,3 +6,9 @@
 #bd #lecm-content-main #arm-tree {
     margin: 0 5px;
 }
+
+.datalist-toolbar .filters span.first-child
+{
+    background: url(/share/res/components/images/add-row-16.png) no-repeat 12px 4px;
+    padding-left: 24px;
+}
