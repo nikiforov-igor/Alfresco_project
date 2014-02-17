@@ -49,6 +49,10 @@ public class ReservationWorkflowJavascriptExtension extends BaseWebScript {
 		return new ActivitiScriptNode(orgstructureService.getCurrentEmployee(), serviceRegistry);
 	}
 
+	public ActivitiScriptNode getEmployeeByPerson(final ActivitiScriptNode personRef) {
+		return new ActivitiScriptNode(orgstructureService.getEmployeeByPerson(personRef.getNodeRef()), serviceRegistry);
+	}
+
 	public void assignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
 		reservationWorkflowService.assignTask(assignee.getNodeRef(), task);
 	}

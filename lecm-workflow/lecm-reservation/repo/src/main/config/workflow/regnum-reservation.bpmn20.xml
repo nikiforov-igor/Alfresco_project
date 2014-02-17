@@ -54,7 +54,7 @@
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							//получаем employee
-							var registrar = orgstructure.getEmployeeByPerson(assignee);
+							var registrar = reservationWorkflow.getEmployeeByPerson(assignee);
 							//включаем его в динамическую роль регистратора для этого документа
 							statemachine.grandDynamicRoleForEmployee(bpm_package.children[0], registrar, task.getVariable("registrarDynamicRole"));
 							//назначаем задачу
@@ -74,7 +74,7 @@
 				</activiti:taskListener>
 			</extensionElements>
 			<multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${registrarsList}" activiti:elementVariable="assignee">
-				<completionCondition>$${"REJECTED" == taskDecision || "RESERVED" == taskDecision}</completionCondition>
+				<completionCondition>${"REJECTED" == taskDecision || "RESERVED" == taskDecision}</completionCondition>
 			</multiInstanceLoopCharacteristics>
 		</userTask>
 
