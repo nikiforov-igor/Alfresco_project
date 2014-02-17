@@ -1,1 +1,2 @@
-model.nodeRef = edsGlobalSettings.getSettingsNode().getNodeRef().toString();
+var settingsNode = edsGlobalSettings.getSettingsNode();
+model.nodeRef = (settingsNode && settingsNode.getNodeRef()) ? settingsNode.getNodeRef().toString() : "";

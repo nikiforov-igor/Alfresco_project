@@ -26,7 +26,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
     }
 	
 	public Scriptable getPotentialWorkers(String businessRoleId, String organizationElementStrRef) {
-		if (organizationElementStrRef == null || businessRoleId == null) {
+		if (organizationElementStrRef == null || !NodeRef.isNodeRef(organizationElementStrRef) || 
+			businessRoleId == null || businessRoleId.isEmpty()) {
 			return null;
 		}
 		NodeRef organizationElementRef = new NodeRef(organizationElementStrRef);
@@ -41,6 +42,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
 		Iterator orgElementIterator = employeesJsonMap.keys();
 		while (orgElementIterator.hasNext()) {
 			String orgElementStrRef = (String)orgElementIterator.next();
+			if (orgElementStrRef == null || !NodeRef.isNodeRef(orgElementStrRef)) continue;
+			
 			NodeRef orgElementRef = new NodeRef(orgElementStrRef);
 			List<NodeRef> employeesRefs = new ArrayList<NodeRef>();
 			JSONObject employees = employeesJsonMap.getJSONObject(orgElementStrRef);
@@ -48,6 +51,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
 				Iterator employeeIterator = employees.keys();
 				while (employeeIterator.hasNext()) {
 					String employeeStrRef = (String)employeeIterator.next();
+					if (employeeStrRef == null || !NodeRef.isNodeRef(employeeStrRef)) continue;
+					
 					NodeRef employeeRef = new NodeRef(employeeStrRef);
 					employeesRefs.add(employeeRef);
 				}

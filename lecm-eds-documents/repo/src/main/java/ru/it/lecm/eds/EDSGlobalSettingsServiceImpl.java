@@ -66,6 +66,10 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 	
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {
+		if (businessRoleId == null || organizationElementStrRef == null || potentialRoleRef == null) {
+			return;
+		}
+		
 		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleId) ? 
 			this.potentialRolesMap.get(businessRoleId) : 
 			new HashMap<String, NodeRef>();
@@ -76,17 +80,18 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	
 	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef) {
 		if (businessRoleId == null || organizationElementRef == null) {
-			return null;
+			return new HashSet<NodeRef>();
 		}
 		NodeRef businessRoleRef = orgstructureService.getBusinessRoleByIdentifier(businessRoleId);
 		return getPotentialWorkers(businessRoleRef, organizationElementRef);
 	}
 	
 	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef) {
-		if (businessRoleRef == null || organizationElementRef == null) {
-			return null;
-		}
 		Set<NodeRef> result = new HashSet<NodeRef>();
+		
+		if (businessRoleRef == null || organizationElementRef == null) {
+			return result;
+		}
 				
 		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ? 
 			this.potentialRolesMap.get(businessRoleRef.toString()) : 
@@ -130,6 +135,9 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	
 	@Override
 	public NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs) {
+		if (potentialRoleRef == null) {
+			return potentialRoleRef;
+		}
 		List<NodeRef> unchangedEmployees = new ArrayList<NodeRef>();
 		List<AssociationRef> employeeAssocRefs = nodeService.getTargetAssocs(potentialRoleRef, ASSOC_POTENTIAL_ROLE_EMPLOYEE);
 		for (AssociationRef employeeAssocRef : employeeAssocRefs) {
@@ -156,9 +164,11 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	
 	@Override
 	public NodeRef createPotentialRole(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs) {
-		if (employeesRefs.isEmpty() || nodeService.getType(orgElementRef).equals(orgstructureService.TYPE_ORGANIZATION)) {
+		if (businessRoleRef == null || orgElementRef == null || employeesRefs == null ||
+			employeesRefs.isEmpty() || nodeService.getType(orgElementRef).equals(orgstructureService.TYPE_ORGANIZATION)) {
 			return null;
 		}
+		
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
 		NodeRef potentialRoleRef = nodeService.createNode(
 			potentialRolesDictionary, 
