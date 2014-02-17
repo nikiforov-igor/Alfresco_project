@@ -142,12 +142,15 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		Object[] elements = Context.getCurrentContext().getElements(registrars);
 		ArrayList<NodeRef> registrarRefs = new ArrayList<NodeRef>();
 		for (Object element : elements) {
-			if (element instanceof NativeJavaObject) {
+			if (element instanceof ScriptNode) {
+				ScriptNode registrar = (ScriptNode) element;
+				registrarRefs.add(registrar.getNodeRef());
+			} else if (element instanceof NativeJavaObject) {
 				NativeJavaObject object = (NativeJavaObject) element;
 				ScriptNode registrar = (ScriptNode) object.unwrap();
 				registrarRefs.add(registrar.getNodeRef());
 			} else {
-				logger.warn("{} is not a ScriptNode in registrars array!", element);
+				logger.warn("{} {} is not a ScriptNode in registrars array!", element.getClass().getName(), element);
 			}
 		}
 
