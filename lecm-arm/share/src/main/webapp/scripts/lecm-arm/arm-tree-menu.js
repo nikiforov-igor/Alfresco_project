@@ -97,7 +97,8 @@
                                 searchQuery: oResults[nodeIndex].searchQuery,
                                 counter: oResults[nodeIndex].counter,
                                 counterLimit: oResults[nodeIndex].counterLimit,
-                                counterDesc: oResults[nodeIndex].counterDesc
+                                counterDesc: oResults[nodeIndex].counterDesc,
+	                            createTypes: oResults[nodeIndex].createTypes
                             };
 
                             // добавляем элемент в дерево
@@ -203,6 +204,10 @@
 	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
 		            datagridMeta: datagridMeta,
 		            bubblingLabel: "documents-arm"
+	            });
+
+	            YAHOO.Bubbling.fire ("updateArmToolbar", {
+		            createTypes: node.data.createTypes
 	            });
 	            //отправить запрос на обновление фильтров
             }

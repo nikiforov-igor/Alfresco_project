@@ -76,6 +76,12 @@
 		    <artifactId>lecm-security-api</artifactId>
 		    <version>${project.version}</version>
 	    </dependency>
+	    <dependency>
+		    <groupId>ru.it.lecm.statemachine</groupId>
+		    <artifactId>statemachine-api</artifactId>
+		    <version>${project.version}</version>
+		    <scope>provided</scope>
+	    </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

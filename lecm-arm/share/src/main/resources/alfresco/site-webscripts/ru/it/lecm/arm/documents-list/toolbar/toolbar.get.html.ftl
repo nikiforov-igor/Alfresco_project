@@ -9,6 +9,13 @@ YAHOO.util.Event.onDOMReady(init);
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <@comp.baseToolbar id true false false>
+<div class="new-row">
+    <span id="${id}-newDocumentButton" class="yui-button yui-push-button">
+       <span class="first-child">
+          <button type="button">${msg("button.new-row")}</button>
+       </span>
+    </span>
+</div>
 <div class="filters">
         <span id="${id}-filtersButton" class="yui-button yui-push-button">
            <span class="first-child">

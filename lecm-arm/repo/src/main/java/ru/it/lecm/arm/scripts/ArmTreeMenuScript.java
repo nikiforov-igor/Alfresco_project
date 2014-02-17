@@ -3,6 +3,7 @@ package ru.it.lecm.arm.scripts;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -17,6 +18,8 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.arm.beans.ArmColumn;
 import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -46,9 +49,13 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER_LIMIT = "counterLimit";
     private static final String COUNTER_DESC = "counterDesc";
 
+	public static final String CREATE_TYPES = "createTypes";
+
     private ArmWrapperServiceImpl service;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
+	private StateMachineServiceBean statemachineService;
+	private DocumentService documentService;
 
     public void setService(ArmWrapperServiceImpl service) {
         this.service = service;
@@ -60,6 +67,14 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
+	}
+
+	public void setStatemachineService(StateMachineServiceBean statemachineService) {
+		this.statemachineService = statemachineService;
+	}
+
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
 	}
 
 	@Override
@@ -119,6 +134,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 result.put(COUNTER_DESC, node.getCounter().getDescription());
                 result.put(COUNTER_LIMIT, node.getCounter().getQuery());
             }
+	        result.put(CREATE_TYPES, getCreateTypes(node));
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
@@ -174,6 +190,27 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 					columnJSON.put("sortable", column.isSortable());
 
 					results.put(columnJSON);
+				}
+			}
+		}
+		return results;
+	}
+
+	private JSONArray getCreateTypes(ArmNode node) throws JSONException {
+		JSONArray results = new JSONArray();
+		List<String> allTypes = node.getTypes();
+		if (allTypes != null) {
+			for (String type: allTypes) {
+				QName typeQName = QName.createQName(type, namespaceService);
+				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
+				if (typeDefinition != null) {
+					if (statemachineService.isStarter(type)) {
+						JSONObject json = new JSONObject();
+						json.put("type", type);
+						json.put("draftFolder", documentService.getDraftRootByType(typeQName));
+						json.put("label", typeDefinition.getTitle());
+						results.put(json);
+					}
 				}
 			}
 		}
