@@ -9,7 +9,6 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
-import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -72,6 +71,29 @@ public class ArchiveDocumentAction extends StateMachineAction {
             if (folder != null) {
                 folder = createAdditionalPath(document, folder);
                 nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+            }
+
+            List<AssociationRef> additionalUnits = nodeService.getTargetAssocs(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC);
+            for (AssociationRef additionalUnit : additionalUnits) {
+                if (!additionalUnit.getTargetRef().equals(unit)) {
+                    List<AssociationRef> additionalFolders = nodeService.getTargetAssocs(additionalUnit.getTargetRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+                    NodeRef additionalFolder = null;
+                    if (isSharedFolder) {
+                        if (additionalFolders.size() > 0) {
+                            additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
+                        }
+                    } else {
+                        if (additionalFolders.size() > 0) {
+                            additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
+                        }
+                    }
+                    additionalFolder = createAdditionalPath(document, additionalFolder);
+                    try {
+                        nodeService.addChild(additionalFolder, document, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(additionalFolder.getId())));
+                    } catch (Exception e) {
+                        System.out.println();
+                    }
+                }
             }
         } else {
             String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
@@ -181,7 +203,7 @@ public class ArchiveDocumentAction extends StateMachineAction {
             for (AccessPermission permission : permissions) {
                 getServiceRegistry().getPermissionService().deletePermission(archiveFolder, permission.getAuthority(), permission.getPermission());
             }
-            getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, PermissionService.READ, true);
+            getServiceRegistry().getPermissionService().setPermission(archiveFolder, AuthenticationUtil.SYSTEM_USER_NAME, "LECM_BASIC_PG_Reader", true);
         }
         archiveFolder = createAdditionalPath(node, archiveFolder);
         return archiveFolder;

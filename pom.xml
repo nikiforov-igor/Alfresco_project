@@ -116,6 +116,7 @@
 		<module>lecm-eds-documents</module>
 		<module>lecm-arm</module>
 		<module>lecm-workflow</module>
+		<module>lecm-internal</module>
 	</modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>

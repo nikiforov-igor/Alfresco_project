@@ -248,7 +248,7 @@ public class OrgstructureUnitPolicy
         final ChildAssociationRef shared = nodeService.createNode(ref.getChildRef(), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
         String sharedAuthority = PolicyUtils.makeOrgUnitPos(unit, nodeService).getAlfrescoSuffix();
         permissionService.setInheritParentPermissions(shared.getChildRef(), false);
-        permissionService.setPermission(shared.getChildRef(), "GROUP_" + sharedAuthority, PermissionService.CONSUMER, true);
+        permissionService.setPermission(shared.getChildRef(), "GROUP_" + sharedAuthority, "LECM_BASIC_PG_Reader", true);
 
         //Добавляем правило к папке с общими документами
         final Rule rule = new Rule();
@@ -278,7 +278,7 @@ public class OrgstructureUnitPolicy
         final ChildAssociationRef privateFolder = nodeService.createNode(ref.getChildRef(), ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
         String privateAuthority = PolicyUtils.makeOrgUnitPrivatePos(unit, nodeService).getAlfrescoSuffix();
         permissionService.setInheritParentPermissions(privateFolder.getChildRef(), false);
-        permissionService.setPermission(privateFolder.getChildRef(), "GROUP_" + privateAuthority, PermissionService.CONSUMER, true);
+        permissionService.setPermission(privateFolder.getChildRef(), "GROUP_" + privateAuthority, "LECM_BASIC_PG_Reader", true);
 
         //Создаем ассоциацию подразделения с папкой
         nodeService.createAssociation(unit, ref.getChildRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);

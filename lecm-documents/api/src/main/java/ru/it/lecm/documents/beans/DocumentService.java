@@ -58,6 +58,7 @@ public interface DocumentService {
     public static final QName ASPECT_FINALIZE_TO_UNIT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "finalize-to-unit");
     public static final QName PROP_IS_SHARED_FOLDER = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "is-shared-folder");
     public static final QName ASSOC_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "organization-unit-assoc");
+    public static final QName ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "additional-organization-unit-assoc");
 
     public static final QName ASSOC_TEMP_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "attachments-temp-assoc");
 
