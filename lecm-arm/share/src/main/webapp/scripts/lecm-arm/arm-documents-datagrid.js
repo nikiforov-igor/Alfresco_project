@@ -1,4 +1,5 @@
-var $siteURL = Alfresco.util.siteURL;
+var $siteURL = Alfresco.util.siteURL,
+	$combine = Alfresco.util.combinePaths;
 
 (function () {
 
@@ -9,7 +10,52 @@ var $siteURL = Alfresco.util.siteURL;
     YAHOO.lang.extend(LogicECM.module.ARM.DataGrid, LogicECM.module.Base.DataGrid);
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DataGrid.prototype, {
-        doubleClickLock: false
+        doubleClickLock: false,
+
+	    populateDataGrid: function DataGrid_populateDataGrid() {
+		    if (!YAHOO.lang.isObject(this.datagridMeta)) {
+			    return;
+		    }
+
+		    this.renderDataGridMeta();
+
+		    if (this.datagridMeta.columns != null) {
+				var columnParam = {
+					json: {
+						columns: this.datagridMeta.columns
+					}
+				}
+			    this.onDataGridColumns(columnParam);
+		    } else {
+			    // Query the visible columns for this list's item type
+			    var configURL = "";
+			    if (this.options.configURL != null) {
+				    configURL = $combine(Alfresco.constants.URL_SERVICECONTEXT, this.options.configURL + "?nodeRef=" + encodeURIComponent(this.options.datagridMeta.nodeRef));
+			    } else {
+				    configURL = $combine(Alfresco.constants.URL_SERVICECONTEXT, "lecm/components/datagrid/config/columns?itemType=" + encodeURIComponent(this.datagridMeta.itemType) + ((this.datagridMeta.datagridFormId != null && this.datagridMeta.datagridFormId != undefined) ? "&formId=" + encodeURIComponent(this.datagridMeta.datagridFormId) : ""));
+			    }
+
+			    Alfresco.util.Ajax.jsonGet(
+				    {
+					    url: configURL,
+					    successCallback:
+					    {
+						    fn: this.onDataGridColumns,
+						    scope: this
+					    },
+					    failureCallback:
+					    {
+						    fn: this._onDataGridFailure,
+						    obj:
+						    {
+							    title: this.msg("message.error.columns.title"),
+							    text: this.msg("message.error.columns.description")
+						    },
+						    scope: this
+					    }
+				    });
+		    }
+	    }
 
         /*getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
             var html = "";

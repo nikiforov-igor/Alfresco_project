@@ -92,6 +92,7 @@
                                 label: oResults[nodeIndex].label,
                                 isLeaf: oResults[nodeIndex].isLeaf,
                                 types: oResults[nodeIndex].types,
+                                columns: oResults[nodeIndex].columns,
                                 filters: oResults[nodeIndex].filters,
                                 searchQuery: oResults[nodeIndex].searchQuery,
                                 counter: oResults[nodeIndex].counter,
@@ -181,22 +182,24 @@
             this.menuState.selected = this._getTextNodeId(node);
 
             if (node) {
-                //получить поисковый запрос
+
+	            var datagridMeta = {};
+
                 var searchQuery = this.getSearchQuery(node);
                 if (searchQuery) {
-                    //отправить запрос в датагрид
-                    YAHOO.Bubbling.fire ("reСreateDatagrid", {
-                        datagridMeta: {
-                            //TODO: берем список типов из узла (раскомментировать, когда будет механизм получения колонок)
-                            //itemType: node.data.types,
-                            searchConfig: {
-                                filter: searchQuery
-                            }
-                        },
-                        bubblingLabel: "documents-arm"
-                    });
-                    //отправить запрос на обновление фильтров
+	                datagridMeta.searchConfig = {
+		                filter: searchQuery
+	                }
                 }
+	            if (node.data.columns != null && node.data.columns.length > 0) {
+		            datagridMeta.columns = node.data.columns
+	            }
+	            //отправитьзапрос в датагрид
+	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
+		            datagridMeta: datagridMeta,
+		            bubblingLabel: "documents-arm"
+	            });
+	            //отправить запрос на обновление фильтров
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },

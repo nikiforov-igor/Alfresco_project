@@ -66,6 +66,8 @@
 		  class="ru.it.lecm.arm.scripts.ArmTreeMenuScript"
 		  parent="webscript">
 		<property name="service" ref="armWrapperService"/>
+		<property name="dictionaryService" ref="dictionaryService"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="armWrapperService"
