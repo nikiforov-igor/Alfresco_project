@@ -23,7 +23,7 @@
 
 <#-- SCC -->
 <#assign workflowTypeShareConfig = field.control.params.workflowType ? lower_case>
-<#assign concurrencyShareConfig = field.control.params.concurrency!'user' ? lower_case>
+<#assign concurrencyShareConfig = (field.control.params.concurrency!'user') ? lower_case>
 
 <#-- Отправка данных -->
 <#assign concurrencyInputId = htmlId + "-concurrency-input">
