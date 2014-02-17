@@ -1,3 +1,1 @@
-{
-    "defaultList": "${defaultList}"
-}
+${jsonResponse}

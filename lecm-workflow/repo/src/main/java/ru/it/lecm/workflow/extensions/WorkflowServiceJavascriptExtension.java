@@ -37,15 +37,18 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		this.orgstructureService = orgstructureService;
 	}
 
-	public NodeRef getDefaultAssigneesList(JSONObject json) {
+	public JSONObject getDefaultAssigneesList(JSONObject json) {
 		String workflowType;
+		JSONObject result = new JSONObject();
 		try {
 			workflowType = json.getString("workflowType");
+			result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(workflowType).toString());
+			result.put("currentEmployee", orgstructureService.getCurrentEmployee().toString());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}
 
-		return workflowAssigneesListService.getDefaultAssigneesList(workflowType);
+		return result;
 	}
 
 	public JSONObject saveAssigneesList(JSONObject json) {
@@ -113,7 +116,6 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 			result.put("lists", listsJSONArray);
 			result.put("defaultList", defaultList.toString());
 			result.put("listsFolder", workflowAssigneesListService.getAssigneesListsFolder());
-			result.put("currentEmployee", orgstructureService.getCurrentEmployee().toString());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
 		}
