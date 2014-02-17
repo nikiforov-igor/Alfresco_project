@@ -32,5 +32,9 @@
 			<region-id>menu</region-id>
 			<url>/lecm/dictionary/all/menu</url>
 		</component>
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+        </component>
 	</components>
 </template-instance>

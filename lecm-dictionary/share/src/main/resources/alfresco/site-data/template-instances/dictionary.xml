@@ -44,5 +44,9 @@
                 <selected>dictionaries</selected>
             </properties>
 		</component>
+        <component>
+            <region-id>forbidden</region-id>
+            <url>/lecm/base/forbidden</url>
+        </component>
 	</components>
 </template-instance>

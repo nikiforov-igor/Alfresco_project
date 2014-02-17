@@ -7,5 +7,9 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <@bpage.basePage>
+<#if isEngineer>
 	<@region id="datagrid" scope="template" />
+<#else>
+    <@region id="forbidden" scope="template"/>
+</#if>
 </@bpage.basePage>
