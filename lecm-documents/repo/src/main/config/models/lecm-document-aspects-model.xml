@@ -163,7 +163,6 @@
                 <property name="lecm-document-aspects:reg-data-number">
                     <title>Регистрационный номер</title>
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -178,7 +177,6 @@
                 </property>
                 <property name="lecm-document-aspects:registrator-assoc-text-content">
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -187,7 +185,6 @@
                 </property>
                 <property name="lecm-document-aspects:registrator-assoc-ref">
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
@@ -223,7 +220,6 @@
                 <property name="lecm-document-aspects:reg-project-data-number">
                     <title>Регистрационный номер проекта</title>
                     <type>d:text</type>
-                    <default>Не присвоено</default>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>
