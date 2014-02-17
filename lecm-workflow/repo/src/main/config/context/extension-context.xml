@@ -7,6 +7,7 @@
 	<bean id="workflow.extension" parent="baseScript"
 		  class="ru.it.lecm.workflow.extensions.WorkflowServiceJavascriptExtension"
 		  p:extensionName="lecmWorkflowService"
-		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
+		  p:orgstructureService-ref="serviceOrgstructure"/>
 
 </beans>
