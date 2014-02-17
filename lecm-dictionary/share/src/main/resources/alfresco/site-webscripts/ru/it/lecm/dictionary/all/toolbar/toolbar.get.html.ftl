@@ -2,6 +2,7 @@
 <#assign importFormId = id + "-import-form">
 <#assign importInfoFormId = id + "-import-info-form">
 <#assign importErrorFormId = id + "-import-error-form">
+<#if isEngineer>
 <script type="text/javascript">//<![CDATA[
 function init() {
 	new LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
@@ -84,3 +85,4 @@ YAHOO.util.Event.onDOMReady(init);
 		</div>
 	</div>
 </div>
+</#if>
