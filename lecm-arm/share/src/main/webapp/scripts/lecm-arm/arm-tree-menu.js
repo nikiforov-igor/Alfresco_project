@@ -192,9 +192,14 @@
 	                }
                 }
 	            if (node.data.columns != null && node.data.columns.length > 0) {
-		            datagridMeta.columns = node.data.columns
+		            datagridMeta.columns = node.data.columns;
+
+                    if (node.data.types != null && node.data.types.length > 0) {
+                        datagridMeta.itemType = node.data.types;
+                    }
 	            }
-	            //отправитьзапрос в датагрид
+
+	            //отправить запрос в датагрид
 	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
 		            datagridMeta: datagridMeta,
 		            bubblingLabel: "documents-arm"
