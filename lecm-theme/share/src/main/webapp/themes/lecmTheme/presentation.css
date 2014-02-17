@@ -2648,3 +2648,33 @@ div.form-field table.formFieldControlParamsTable {
 {
     color: red;
 }
+
+/* Workflow Form - Dimmer */
+.workflow-list-control-container {
+	position: relative;
+	overflow: hidden;
+	clear: both;
+}
+
+.workflow-list-control-dimmer {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	background-color: #000;
+	z-index: 10000;
+	opacity: 0.5;
+	line-height: 100%;
+	color: #fff;
+	cursor: wait;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.workflow-list-control-dimmer__inner {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 45%;
+	font-size: 22px;
+	text-align: center !important;
+}

@@ -1,1 +1,1 @@
-model.defaultAssigneesList = lecmWorkflowService.getDefaultAssigneesList(json).toString();
+model.defaultList = lecmWorkflowService.getDefaultAssigneesList(json).toString();

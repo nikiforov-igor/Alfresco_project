@@ -1,3 +1,3 @@
 {
-    "defaultAssigneesList": "${defaultAssigneesList}"
+    "defaultList": "${defaultList}"
 }
