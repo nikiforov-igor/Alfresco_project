@@ -118,16 +118,6 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
-				<!--Фильтры-->
-				<property name="lecm-arm:filters">
-					<type>d:text</type>
-					<mandatory>false</mandatory>
-					<index enabled="true">
-						<atomic>true</atomic>
-						<stored>false</stored>
-						<tokenised>both</tokenised>
-					</index>
-				</property>
 				<!--Включить счётчик-->
 				<property name="lecm-arm:counter-enable">
 					<type>d:boolean</type>
@@ -161,17 +151,29 @@
 			</properties>
 			<associations>
 				<!-- Список колонок -->
-				<association name="lecm-arm:fields-assoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-arm:field</class>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</target>
-				</association>
+                <association name="lecm-arm:fields-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-arm:field</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
+                <!-- Список фильтров -->
+                <association name="lecm-arm:filters-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-arm:filter</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
 			</associations>
             <mandatory-aspects>
                 <aspect>lecm-arm:ordered</aspect>
@@ -261,6 +263,29 @@
 				</association>
 			</associations>
 		</type>
+        <type name="lecm-arm:filter">
+            <parent>cm:cmobject</parent>
+            <properties>
+                <property name="lecm-arm:filter-code">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <property name="lecm-arm:filter-multiple-select">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-arm:filter-query">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-arm:filter-class">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-arm:filter-values">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
+            </properties>
+        </type>
 	</types>
 
     <aspects>

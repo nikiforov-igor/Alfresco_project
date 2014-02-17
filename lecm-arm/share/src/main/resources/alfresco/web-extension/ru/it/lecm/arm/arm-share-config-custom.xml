@@ -56,7 +56,7 @@
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
-					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
@@ -102,7 +102,7 @@
                     <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
-					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
@@ -143,7 +143,7 @@
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
-					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
@@ -186,7 +186,7 @@
                     <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
-					<show id="lecm-arm:filters" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
@@ -272,4 +272,34 @@
 			</form>
 		</forms>
 	</config>
+
+    <config evaluator="node-type" condition="lecm-arm:filter">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-query" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                    <show id="lecm-arm:filter-values" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-arm:filter">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-query" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                    <show id="lecm-arm:filter-values" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

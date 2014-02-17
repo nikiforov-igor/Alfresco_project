@@ -169,8 +169,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return nodeColumns;
     }
 
-    private List<String> getNodeFilters(NodeRef node) {
-        List<String> nodeFilters = service.getNodeFilters(node);
+    private List<ArmFilter> getNodeFilters(NodeRef node) {
+        List<ArmFilter> nodeFilters = service.getNodeFilters(node);
         if (nodeFilters.isEmpty()) {
             NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
             if (isArmElement(parent)) {

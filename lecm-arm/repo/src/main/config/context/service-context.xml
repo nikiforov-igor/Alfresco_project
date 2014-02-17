@@ -22,6 +22,7 @@
 		<property name="dictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/dictionary/lecm-arm.xml</value>
+				<value>alfresco/module/${artifactId}/dictionary/lecm-arm-filters.xml</value>
 			</list>
 		</property>
 		<property name="createOrUpdateDictionaries">

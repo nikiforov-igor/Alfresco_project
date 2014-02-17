@@ -16,6 +16,7 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.arm.beans.ArmColumn;
+import ru.it.lecm.arm.beans.ArmFilter;
 import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -216,4 +217,22 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		}
 		return results;
 	}
+
+    private JSONArray getFiltersJSON(List<ArmFilter> filters) throws JSONException {
+        JSONArray results = new JSONArray();
+        if (filters != null) {
+            for (ArmFilter filter : filters) {
+                JSONObject filterJSON = new JSONObject();
+                filterJSON.put("name", filter.getTitle());
+                filterJSON.put("code", filter.getCode());
+                filterJSON.put("class", filter.getFilterClass());
+                filterJSON.put("query", filter.getQuery());
+                filterJSON.put("multiple", filter.isMultipleSelect());
+                filterJSON.put("values", filter.getValues());
+
+                results.put(filterJSON);
+            }
+        }
+        return results;
+    }
 }

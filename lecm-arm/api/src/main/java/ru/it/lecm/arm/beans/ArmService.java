@@ -25,11 +25,11 @@ public interface ArmService {
 	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
 	public static final QName PROP_NODE_TYPES = QName.createQName(ARM_NAMESPACE_URI, "types");
 	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
-	public static final QName PROP_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters");
 	public static final QName PROP_COUNTER_ENABLE = QName.createQName(ARM_NAMESPACE_URI, "counter-enable");
 	public static final QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");
 	public static final QName PROP_COUNTER_DESCRIPTION = QName.createQName(ARM_NAMESPACE_URI, "counter-description");
 	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
+	public static final QName ASSOC_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters-assoc");
 	public static final QName ASSOC_NODE_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "node-child-rule-assoc");
 	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 
@@ -48,7 +48,12 @@ public interface ArmService {
 	public static final QName ASPECT_ARM_ORDERED = QName.createQName(ARM_NAMESPACE_URI, "ordered");
 	public static final QName PROP_ARM_ORDER = QName.createQName(ARM_NAMESPACE_URI, "order");
 
-
+    public static final QName TYPE_ARM_FILTER = QName.createQName(ARM_NAMESPACE_URI, "filter");
+    public static final QName PROP_FILTER_CODE = QName.createQName(ARM_NAMESPACE_URI, "filter-code");
+    public static final QName PROP_FILTER_CLASS = QName.createQName(ARM_NAMESPACE_URI, "filter-class");
+    public static final QName PROP_FILTER_VALUES = QName.createQName(ARM_NAMESPACE_URI, "filter-values");
+    public static final QName PROP_FILTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "filter-query");
+    public static final QName PROP_FILTER_MULTIPLE = QName.createQName(ARM_NAMESPACE_URI, "filter-multiple-select");
 	/**
 	 * проверяет что объект является аккордионом
 	 */
@@ -105,7 +110,7 @@ public interface ArmService {
 	 * @param node Узел
 	 * @return Список фильтров
 	 */
-	public List<String> getNodeFilters(NodeRef node);
+	public List<ArmFilter> getNodeFilters(NodeRef node);
 
 	/**
 	 * Получение счётчика узла

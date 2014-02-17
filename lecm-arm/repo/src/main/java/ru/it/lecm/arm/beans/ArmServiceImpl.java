@@ -144,12 +144,32 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	}
 
 	@Override
-	public List<String> getNodeFilters(NodeRef node) {
-		List<String> result = new ArrayList<String>();
-		String types = (String) nodeService.getProperty(node, PROP_NODE_FILTERS);
-		if (types != null && types.length() > 0) {
-			result.addAll(Arrays.asList(types.split(",")));
-		}
+	public List<ArmFilter> getNodeFilters(NodeRef node) {
+		List<ArmFilter> result = new ArrayList<ArmFilter>();
+        List<NodeRef> filters = findNodesByAssociationRef(node, ASSOC_NODE_FILTERS, TYPE_ARM_FILTER, ASSOCIATION_TYPE.TARGET);
+        if (filters != null) {
+            for (NodeRef ref : filters) {
+                ArmFilter filter = new ArmFilter();
+                filter.setTitle((String) nodeService.getProperty(ref, ContentModel.PROP_NAME));
+                filter.setCode((String) nodeService.getProperty(ref, PROP_FILTER_CODE));
+
+                Object multipleValue = nodeService.getProperty(ref, PROP_FILTER_MULTIPLE);
+                if (multipleValue != null) {
+                    filter.setMultipleSelect((Boolean) multipleValue);
+                }
+
+                Object query = nodeService.getProperty(ref, PROP_FILTER_QUERY);
+                if (query != null) {
+                    filter.setQuery((String) query);
+                }
+
+                Object fClass = nodeService.getProperty(ref, PROP_FILTER_CLASS);
+                if (fClass != null) {
+                    filter.setFilterClass((String) fClass);
+                }
+                result.add(filter);
+            }
+        }
 
 		return result;
 	}

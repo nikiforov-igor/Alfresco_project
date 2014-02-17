@@ -25,5 +25,13 @@
 			<region-id>main-form</region-id>
 			<url>/lecm/arm/editNode</url>
 		</component>
+        <component>
+            <region-id>menu</region-id>
+            <url>/lecm/arm/menu</url>
+            <properties>
+                <onHome>true</onHome>
+                <selected>home</selected>
+            </properties>
+        </component>
 	</components>
 </template-instance>
