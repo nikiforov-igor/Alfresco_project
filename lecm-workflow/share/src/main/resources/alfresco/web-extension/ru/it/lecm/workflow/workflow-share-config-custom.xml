@@ -44,6 +44,30 @@
 					<field id="lecm-workflow:is-register-after-signed"/>
 				</appearance>
 			</form>
+
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-workflow:route-to-employee-assoc"/>
+					<show id="lecm-workflow:is-register-after-signed"/>
+				</field-visibility>
+			</form>
+
+			<form id="createNewCommonRouteForm">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-workflow:route-to-employee-assoc"/>
+					<show id="lecm-workflow:is-register-after-signed"/>
+				</field-visibility>
+			</form>
+
+			<form id="createNewPrivateRouteForm">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecm-workflow:route-to-employee-assoc"/>
+					<show id="lecm-workflow:is-register-after-signed"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 

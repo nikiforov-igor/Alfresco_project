@@ -103,6 +103,11 @@ public final class LecmWorkflowModel {
 	 */
 	public final static String CONCURRENCY_PAR = "PARALLEL";
 
+	/**
+	 * &lt;type name="lecm-workflow:route"&gt;
+	 */
+	public final static QName TYPE_ROUTE = QName.createQName(WORKFLOW_NAMESPACE, "route");
+
 	private LecmWorkflowModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of LecmWorkflowModel class.");
 	}

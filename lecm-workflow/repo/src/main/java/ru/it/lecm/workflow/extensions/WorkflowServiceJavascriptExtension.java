@@ -14,6 +14,7 @@ import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 
 /**
@@ -300,6 +301,10 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		}
 
 		return result;
+	}
+
+	public String getRouteType() {
+		return LecmWorkflowModel.TYPE_ROUTE.toPrefixString(serviceRegistry.getNamespaceService());
 	}
 
 }
