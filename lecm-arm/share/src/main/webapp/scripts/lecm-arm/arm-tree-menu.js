@@ -211,7 +211,6 @@
                     datagridMeta.itemType = "lecm-document:base";
                 }
 
-	            //отправить запрос в датагрид
 	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
 		            datagridMeta: datagridMeta,
 		            bubblingLabel: "documents-arm"
@@ -220,7 +219,10 @@
 	            YAHOO.Bubbling.fire ("updateArmToolbar", {
 		            createTypes: node.data.createTypes
 	            });
-	            //отправить запрос на обновление фильтров
+
+                YAHOO.Bubbling.fire ("updateArmFilters", {
+                    filters: node.data.filters
+                });
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
