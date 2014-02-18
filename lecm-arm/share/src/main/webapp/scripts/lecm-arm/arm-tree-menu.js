@@ -194,11 +194,22 @@
                 }
 	            if (node.data.columns != null && node.data.columns.length > 0) {
 		            datagridMeta.columns = node.data.columns;
+	            } else {
+                    datagridMeta.columns = [{
+                        dataType:"text",
+                        formsName:"prop_cm_name",
+                        name:"cm:name",
+                        label:"Имя",
+                        sortable: true,
+                        type:"property"
+                    }];
+                }
 
-                    if (node.data.types != null && node.data.types.length > 0) {
-                        datagridMeta.itemType = node.data.types;
-                    }
-	            }
+                if (node.data.types != null && node.data.types.length > 0) {
+                    datagridMeta.itemType = node.data.types;
+                } else {
+                    datagridMeta.itemType = "lecm-document:base";
+                }
 
 	            //отправить запрос в датагрид
 	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
@@ -220,12 +231,31 @@
                 if (node.data.counterLimit && node.data.counterLimit.length > 0) {
                     searchQuery += " AND (" + node.data.counterLimit + ") ";
                 }
+
+                var types = [];
+                if (node.data.types != null && node.data.types.length > 0) {
+                    types = node.data.types.split(",");
+                } else {
+                    types.push("lecm-document:base");
+                }
+
+                var numTypes = types.length;
+                var typesQuery = "";
+                for (var count = 0; count < numTypes; count++) {
+                    var type = types[count];
+                    if (type != null && type.length > 0) {
+                        if (typesQuery.length > 0) {
+                            typesQuery += " ";
+                        }
+                        typesQuery += '+TYPE:"' + type + '"'
+                    }
+                }
                 if (searchQuery.length > 0) {
                     Alfresco.util.Ajax.jsonRequest({
                         method: "POST",
                         url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
                         dataObj: {
-                            query:searchQuery
+                            query: "(" + typesQuery + ") AND (" + searchQuery + ")"
                         },
                         successCallback: {
                             fn: function (oResponse) {

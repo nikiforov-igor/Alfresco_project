@@ -35,7 +35,7 @@
 
 <script type="text/javascript">//<![CDATA[
 function initToolbar() {
-    new LogicECM.module.Base.Toolbar("${id}").setMessages(${messages}).setOptions({
+    new LogicECM.module.Base.Toolbar('LogicECM.module.Base.Toolbar', "${id}").setMessages(${messages}).setOptions({
         searchButtonsType: "${searchButtonsType?string}",
         bubblingLabel:"${bubblingLabel!''}",
         newRowButtonType: "${newRowBtnType?string}"

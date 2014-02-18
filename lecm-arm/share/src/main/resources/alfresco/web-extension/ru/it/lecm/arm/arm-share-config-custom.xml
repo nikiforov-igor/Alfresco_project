@@ -1,6 +1,16 @@
 <alfresco-config>
-	<config>
+    <config>
 		<forms>
+            <default-controls>
+                <type name="association:lecm-arm:filter" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Фильтры_x0020_АРМ</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="showViewIncompleteWarning">false</control-param>
+                </type>
+            </default-controls>
+
 			<dependencies>
 				<js src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
 			</dependencies>
@@ -279,10 +289,10 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-arm:filter-code" force="true"/>
-                    <show id="lecm-arm:filter-multiple-select" force="true"/>
-                    <show id="lecm-arm:filter-query" force="true"/>
-                    <show id="lecm-arm:filter-class" force="true"/>
                     <show id="lecm-arm:filter-values" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                    <show id="lecm-arm:filter-query" force="true"/>
                 </field-visibility>
             </form>
         </forms>
@@ -294,10 +304,18 @@
                 <field-visibility>
                     <show id="cm:name" force="true"/>
                     <show id="lecm-arm:filter-code" force="true"/>
-                    <show id="lecm-arm:filter-multiple-select" force="true"/>
-                    <show id="lecm-arm:filter-query" force="true"/>
-                    <show id="lecm-arm:filter-class" force="true"/>
                     <show id="lecm-arm:filter-values" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                    <show id="lecm-arm:filter-query" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
                 </field-visibility>
             </form>
         </forms>

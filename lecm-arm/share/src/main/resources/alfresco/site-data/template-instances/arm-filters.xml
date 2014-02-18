@@ -21,6 +21,8 @@
                 <showCreateBtn>true</showCreateBtn>
                 <newRowLabel>label.new-filter.btn</newRowLabel>
                 <newRowDialogTitle>label.create-filter.title</newRowDialogTitle>
+                <showSearchBlock>false</showSearchBlock>
+                <showExSearchBtn>false</showExSearchBtn>
             </properties>
         </component>
         <!-- Datagrid -->
