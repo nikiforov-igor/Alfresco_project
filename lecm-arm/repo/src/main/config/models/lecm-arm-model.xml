@@ -264,7 +264,7 @@
 			</associations>
 		</type>
         <type name="lecm-arm:filter">
-            <parent>cm:cmobject</parent>
+            <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
                 <property name="lecm-arm:filter-code">
                     <type>d:text</type>
