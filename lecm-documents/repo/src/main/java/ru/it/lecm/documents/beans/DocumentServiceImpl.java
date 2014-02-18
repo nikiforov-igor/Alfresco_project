@@ -600,10 +600,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         QName regAspectName = getProjectNumber ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
         QName propNumber = getProjectNumber ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
         if (nodeService.hasAspect(document, regAspectName)) {
-            return String.valueOf(nodeService.getProperty(document, propNumber));
-        } else {
-            return null;
+            Serializable number = nodeService.getProperty(document, propNumber);
+            if (number != null) {
+                return number.toString();
+            }
         }
+        return null;
     }
 
     private Date getRegDate(NodeRef document, boolean getProjectNumber){
