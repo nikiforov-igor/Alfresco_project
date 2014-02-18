@@ -70,8 +70,6 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
-		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
-
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
 		taskDecision.setUserName(task.getAssignee());
 		taskDecision.setDecision(decision);
@@ -84,9 +82,6 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		task.setVariable("decisionsMap", decisionsMap);//decisionsMap может быть null, поэтому если она создана, ее надо перезаписать
 		task.setVariable("taskDecision", decision);
 
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		revokeReviewerPermissions(employeeRef, bpmPackage);
-		grantReaderPermissions(employeeRef, bpmPackage);
 		return  taskDecision;
 	}
 
