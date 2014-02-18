@@ -221,7 +221,10 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                 Serializable projectNumber = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_PROJECT_NUMBER);
                 return projectNumber != null && !DocumentService.DEFAULT_REG_NUM.equals(projectNumber.toString());
             } else {
-                return (Boolean)nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED);
+                Serializable isRegistered = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED);
+                if (isRegistered != null) {
+                    return (Boolean) isRegistered;
+                }
             }
         }
         return false;
