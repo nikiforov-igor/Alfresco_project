@@ -114,6 +114,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setColumns(getNodeColumns(nodeRef));
         node.setAvaiableFilters(getNodeFilters(nodeRef));
         node.setTypes(getNodeTypes(nodeRef));
+        node.setCreateTypes(getNodeCreateTypes(nodeRef));
 
 	    String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
@@ -137,6 +138,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setAvaiableFilters(parentNode.getAvaiableFilters());
         node.setCounter(parentNode.getCounter());
         node.setTypes(parentNode.getTypes());
+        node.setCreateTypes(parentNode.getCreateTypes());
 	    if (parentNode.getSearchQuery() != null) {
             node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
 	    }
@@ -189,5 +191,24 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             }
         }
         return nodeTypes;
+    }
+
+	private List<String> getNodeCreateTypes(NodeRef node) {
+        List<String> results = new ArrayList<String>();
+        results.addAll(service.getNodeTypes(node));
+
+        NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+        if (isArmElement(parent)) {
+	        List<String> parentTypes = getNodeCreateTypes(parent);
+	        if (parentTypes != null) {
+		        for (String type: parentTypes) {
+			        if (!results.contains(type)) {
+				        results.add(type);
+			        }
+		        }
+	        }
+        }
+
+        return results;
     }
 }

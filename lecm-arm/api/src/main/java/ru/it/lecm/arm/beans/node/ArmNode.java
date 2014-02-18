@@ -23,6 +23,7 @@ public class ArmNode {
     private List<ArmFilter> avaiableFilters;
     private ArmCounter counter;
     private boolean hasChilds = false;
+	private List<String> createTypes;
 
     private ArmBaseChildRule nodeQuery;
 
@@ -120,4 +121,12 @@ public class ArmNode {
     public void setHasChilds(boolean hasChilds) {
         this.hasChilds = hasChilds;
     }
+
+	public List<String> getCreateTypes() {
+		return createTypes;
+	}
+
+	public void setCreateTypes(List<String> createTypes) {
+		this.createTypes = createTypes;
+	}
 }

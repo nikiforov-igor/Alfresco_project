@@ -199,7 +199,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
 	private JSONArray getCreateTypes(ArmNode node) throws JSONException {
 		JSONArray results = new JSONArray();
-		List<String> allTypes = node.getTypes();
+		List<String> allTypes = node.getCreateTypes();
 		if (allTypes != null) {
 			for (String type: allTypes) {
 				QName typeQName = QName.createQName(type, namespaceService);

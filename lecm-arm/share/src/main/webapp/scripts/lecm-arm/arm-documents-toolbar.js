@@ -60,7 +60,8 @@
 		            this.id + "-newDocumentButton",
 		            {
 			            type: "menu",
-			            menu: []
+			            menu: [],
+			            disabled: true
 		            }
 	            );
 
@@ -153,8 +154,10 @@
 
 	        onUpdateArmToolbar: function(layer, args) {
 		        var createTypes = args[1].createTypes;
-		        if (createTypes != null && createTypes.length > 0) {
-			        var menu = this.toolbarButtons["defaultActive"].newDocumentButton.getMenu();
+		        var button = this.toolbarButtons["defaultActive"].newDocumentButton;
+		        var menu = button.getMenu();
+		        var hasCreateTypes = createTypes != null && createTypes.length > 0;
+		        if (hasCreateTypes) {
 			        var items = [];
 			        for (var i = 0; i < createTypes.length; i++) {
 				        var type = createTypes[i];
@@ -178,7 +181,11 @@
 			        } else {
 				        menu.itemData = items;
 			        }
+		        } else if (YAHOO.util.Dom.inDocument(menu.element)) {
+			        menu.clearContent();
+			        menu.render();
 		        }
+		        button.set("disabled", !hasCreateTypes);
 	        }
         }, true);
 })();
