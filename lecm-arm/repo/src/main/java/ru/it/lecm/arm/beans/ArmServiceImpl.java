@@ -10,6 +10,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmDictionaryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
+import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
@@ -226,6 +227,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, DictionaryBean.TYPE_DICTIONARY, ASSOCIATION_TYPE.TARGET);
 					((ArmDictionaryChildRule) result).setDictionary(dictionary);
                     ((ArmDictionaryChildRule) result).setDictionaryService(dictionaryService);
+				} else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
+					result = new ArmStatusesChildRule();
+					((ArmStatusesChildRule) result).setRule((String) nodeService.getProperty(query, PROP_STATUSES_RULE));
+
+					String selectedStatuses = (String) nodeService.getProperty(query, PROP_SELECTED_STATUSES);
+					if (selectedStatuses != null) {
+						List<String> selectedStatusesList = new ArrayList<String>();
+						for (String str: selectedStatuses.split(",")) {
+							String status = str.trim();
+							if (status.length() > 0) {
+								selectedStatusesList.add(status);
+							}
+						}
+
+						((ArmStatusesChildRule) result).setSelectedStatuses(selectedStatusesList);
+					}
 				}
 				return result;
 			}

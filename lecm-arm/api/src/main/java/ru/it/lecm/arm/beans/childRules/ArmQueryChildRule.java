@@ -56,13 +56,4 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
 
         return nodes;
     }
-
-    @Override
-    public ArmBaseChildRule getDuplicate() {
-        ArmQueryChildRule query =  new ArmQueryChildRule();
-        query.setSearchService(searchService);
-        query.setListQuery(listQuery);
-
-        return query;
-    }
 }

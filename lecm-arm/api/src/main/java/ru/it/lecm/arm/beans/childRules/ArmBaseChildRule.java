@@ -12,6 +12,4 @@ import java.util.List;
  */
 public abstract class ArmBaseChildRule {
     abstract public List<ArmNode> build(ArmWrapperService service, ArmNode node);
-
-    abstract public ArmBaseChildRule getDuplicate();
 }

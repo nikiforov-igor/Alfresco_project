@@ -45,6 +45,10 @@ public interface ArmService {
 	public static final QName TYPE_DICTIONARY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "dictionary-child-rule");
 	public static final QName ASSOC_DICTIONARY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "child-rule-dictionary-assoc");
 
+	public static final QName TYPE_STATUSES_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "statuses-child-rule");
+	public static final QName PROP_STATUSES_RULE = QName.createQName(ARM_NAMESPACE_URI, "statuses-rule");
+	public static final QName PROP_SELECTED_STATUSES = QName.createQName(ARM_NAMESPACE_URI, "selected-statuses");
+
 	public static final QName ASPECT_ARM_ORDERED = QName.createQName(ARM_NAMESPACE_URI, "ordered");
 	public static final QName PROP_ARM_ORDER = QName.createQName(ARM_NAMESPACE_URI, "order");
 

@@ -40,15 +40,6 @@ public class ArmDictionaryChildRule extends ArmBaseChildRule {
         return nodes;
     }
 
-    @Override
-    public ArmBaseChildRule getDuplicate() {
-        ArmDictionaryChildRule query =  new ArmDictionaryChildRule();
-        query.setDictionaryService(dictionaryService);
-        //query.setDictionary(dictionary);
-
-        return query;
-    }
-
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
