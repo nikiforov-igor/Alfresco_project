@@ -229,7 +229,6 @@
 		<type name="lecm-arm:base-child-rule">
 			<parent>cm:cmobject</parent>
 		</type>
-
 		<type name="lecm-arm:query-child-rule">
 			<parent>lecm-arm:base-child-rule</parent>
 			<properties>
@@ -245,7 +244,6 @@
 				</property>
 			</properties>
 		</type>
-
 		<type name="lecm-arm:dictionary-child-rule">
 			<parent>lecm-arm:base-child-rule</parent>
 			<associations>
@@ -263,6 +261,43 @@
 				</association>
 			</associations>
 		</type>
+		<type name="lecm-arm:statuses-child-rule">
+			<parent>lecm-arm:base-child-rule</parent>
+			<properties>
+				<property name="lecm-arm:statuses-rule">
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+					<constraints>
+						<constraint name="lecm-arm:statuses-rule-constraint" type="LIST">
+							<parameter name="allowedValues">
+								<list>
+									<value>ALL</value>
+									<value>ALL_NOT_ARCHIVE</value>
+									<value>ALL_ARCHIVE</value>
+									<value>SELECTED</value>
+									<value>EXCEPT_SELECTED</value>
+								</list>
+							</parameter>
+						</constraint>
+					</constraints>
+				</property>
+				<property name="lecm-arm:selected-statuses">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</type>
+
         <type name="lecm-arm:filter">
             <parent>lecm-dic:plane_dictionary_values</parent>
             <properties>
