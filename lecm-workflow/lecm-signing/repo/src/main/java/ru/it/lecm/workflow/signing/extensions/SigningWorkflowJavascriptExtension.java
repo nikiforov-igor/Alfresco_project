@@ -19,6 +19,12 @@ import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
  */
 public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
+	/**
+	 * переменная регламента в которой хранится идентификатор
+	 * бизнес роли, через которую будут находится исполнители регламента с учетом делегирования
+	 */
+	private final static String WORKFLOW_ROLE = "workflowRole";
+
 	private SigningWorkflowService signingWorkflowService;
 	private WorkflowAssigneesListService workflowAssigneesListService;
 
@@ -36,6 +42,11 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
 	public ActivitiScriptNodeList createAssigneesList(final ActivitiScriptNode assigneesListNode, final DelegateExecution execution) {
 		List<NodeRef> assigneesList = workflowAssigneesListService.createAssigneesListWorkingCopy(assigneesListNode.getNodeRef(), execution);
+		//у нас есть рабочая копия списка участников процесса подписания
+		//нам надо пробежаться по участникам этого списка, через сервис делегирования найти актуальных исполнителей
+		//актуализировать ассоциацию на сотрудника и userName
+		String workflowRole = (String)execution.getVariable(WORKFLOW_ROLE);
+		assigneesList = workflowAssigneesListService.actualizeAssigneesUsingDelegation(assigneesList, workflowRole);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode: assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));

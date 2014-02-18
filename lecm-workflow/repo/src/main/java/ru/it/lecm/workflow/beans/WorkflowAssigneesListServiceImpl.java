@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.UUID;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
@@ -27,6 +26,7 @@ import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
@@ -46,9 +46,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	private IWorkCalendar workCalendarService;
 	private ICalendar wCalendarService;
 	private OrgstructureBean orgstructureService;
-	private BehaviourFilter behaviourFilter;
 	private WorkflowFoldersService workflowFoldersService;
 	private CopyService copyService;
+	private IDelegation delegationService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
@@ -62,16 +62,16 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		this.orgstructureService = orgstructureService;
 	}
 
-	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
-		this.behaviourFilter = behaviourFilter;
-	}
-
 	public void setWorkflowFoldersService(WorkflowFoldersService workflowFoldersService) {
 		this.workflowFoldersService = workflowFoldersService;
 	}
 
 	public void setCopyService(CopyService copyService) {
 		this.copyService = copyService;
+	}
+
+	public void setDelegationService(IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	private NodeRef getEmployeeFromAssigneeListItem(NodeRef assigneeListItem) {
@@ -526,4 +526,26 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return findNodeByAssociationRef(assigneeListItem, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 	}
 
+	@Override
+	public List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole) {
+		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
+		for (NodeRef assignee : assigneesList) {
+			NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
+			boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+			if (isDelegationActive) {
+				NodeRef effectiveEmployee;
+				if (delegateAll) {
+					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				} else {
+					effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+				}
+				if (effectiveEmployee != null) {
+					nodeService.removeAssociation(assignee, employee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+					nodeService.createAssociation(assignee, effectiveEmployee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+				}
+			}
+		}
+		return assigneesList;
+	}
 }

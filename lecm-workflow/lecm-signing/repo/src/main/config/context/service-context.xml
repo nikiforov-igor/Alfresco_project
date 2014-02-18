@@ -10,7 +10,7 @@
 		<value>alfresco/module/${artifactId}/models/lecm-signing-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-signing-result-model.xml</value>
 	</util:list>
-		<util:list id="signing.labels">
+	<util:list id="signing.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-signing</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-signing-result</value>
 	</util:list>

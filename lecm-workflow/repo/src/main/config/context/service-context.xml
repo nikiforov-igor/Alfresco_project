@@ -50,9 +50,9 @@
 		  p:workCalendarService-ref="WorkCalendarService"
 		  p:wCalendarService-ref="WCalendarService"
 		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:behaviourFilter-ref="policyBehaviourFilter"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
-		  p:copyService-ref="copyService"/>
+		  p:copyService-ref="copyService"
+		  p:delegationService-ref="delegationService"/>
 
 	<bean id="workflowResultListService" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.WorkflowResultListServiceImpl"

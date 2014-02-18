@@ -184,7 +184,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	protected String getWorkflowStartedMessage(String documentLink, Date dueDate) {
-		return String.format("Вам необходимо подписать документ %s, срок согласования %s", documentLink, new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+		return String.format("Вам необходимо подписать документ %s, срок подписания %s", documentLink, new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 	}
 
 	@Override
