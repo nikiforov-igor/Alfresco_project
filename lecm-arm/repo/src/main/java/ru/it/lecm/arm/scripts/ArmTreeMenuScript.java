@@ -112,8 +112,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private JSONObject toJSON(ArmNode node) {
         JSONObject result = new JSONObject();
         try {
-            result.put(ID, node.getNodeRef().getId());
-            result.put(NODE_REF, node.getNodeRef().toString());
+            result.put(ID, node.getNodeRef() != null ? node.getNodeRef().getId() : node.getTitle());
+            result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
 
             if (node.getArmNodeRef() != null) {
                 result.put(ARM_NODE_REF, node.getArmNodeRef().toString());

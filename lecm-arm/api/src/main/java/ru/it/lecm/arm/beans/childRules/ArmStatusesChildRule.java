@@ -1,8 +1,10 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +42,14 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
 
 	@Override
 	public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
-		return null;
+        List<ArmNode> nodes = new ArrayList<ArmNode>();
+        List<String> statuses = getSelectedStatuses();
+        if (statuses != null) {
+            for (String status : statuses) {
+                ArmNode childNode = service.wrapStatusAsObject(status, node);
+                nodes.add(childNode);
+            }
+        }
+        return nodes;
 	}
 }

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface ArmWrapperService {
     String VALUE_REF = "#value-ref";
+    String VALUE = "#value";
     String VALUE_TEXT = "#value-text";
 
     /**
@@ -37,6 +38,8 @@ public interface ArmWrapperService {
     public ArmNode wrapArmNodeAsObject(NodeRef armNode);
 
     public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
+
+    public ArmNode wrapStatusAsObject(String status, ArmNode parent);
 
     public String formatQuery(String templateQuery, NodeRef node);
 }

@@ -85,7 +85,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         //2. Добавить реальных дочерних узлов для иерархического справочника!
         // в остальных случаях у нас не может быть дочерних элементов
-        if (!isArmElement(node) && dictionaryService.isDictionaryValue(node)){
+        if (node != null && !isArmElement(node) && dictionaryService.isDictionaryValue(node)){
             List<NodeRef> dicChilds = dictionaryService.getChildren(node);
             for (NodeRef dicChild : dicChilds) {
                 result.add(wrapAnyNodeAsObject(dicChild, parent));
@@ -145,6 +145,22 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return node;
     }
 
+    @Override
+    public ArmNode wrapStatusAsObject(String status, ArmNode parentNode) {
+        ArmNode node = new ArmNode();
+        node.setTitle(status);
+        node.setNodeRef(null);
+        node.setArmNodeRef(parentNode.getNodeRef());
+        node.setColumns(parentNode.getColumns());
+        node.setAvaiableFilters(parentNode.getAvaiableFilters());
+        node.setCounter(parentNode.getCounter());
+        node.setTypes(parentNode.getTypes());
+        node.setCreateTypes(parentNode.getCreateTypes());
+        node.setSearchQuery("@lecm\\-statemachine\\:status:'" + status + "'");
+        //node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), status));
+        return node;
+    }
+
     public String formatQuery(String templateQuery, NodeRef node) {
         String formatedQuery = substitudeService.formatNodeTitle(node, templateQuery);
         if (formatedQuery.contains(ArmWrapperService.VALUE_REF)) {
@@ -154,6 +170,13 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_TEXT, substitudeService.getObjectDescription(node));
         }
         return formatedQuery;
+    }
+
+    public String formatQuery(String templateQuery, String value) {
+        if (templateQuery.contains(ArmWrapperService.VALUE)) {
+            return templateQuery.replaceAll(ArmWrapperService.VALUE, value);
+        }
+        return templateQuery;
     }
 
     private boolean isArmElement(NodeRef node) {

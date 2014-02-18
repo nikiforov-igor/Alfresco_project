@@ -25,38 +25,44 @@
 	        doubleClickLock: false,
 
             avaiableFilters:[],
+            isNeedUpdate: false,
 
-            _renderFilters: function (filters) {
-                var filtersDiv = Dom.get("filtersBlock-forms");
-                var toolbar = this;
-                Alfresco.util.Ajax.jsonRequest({
-                    method: "POST",
-                    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
-                    dataObj: {
-                        htmlId: Alfresco.util.generateDomId(),
-                        filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
-                    },
-                    successCallback: {
-                        fn: function (oResponse) {
-                            filtersDiv.innerHTML = oResponse.serverResponse.responseText;
-                            if (toolbar.filtersDialog != null) {
-                                toolbar.filtersDialog.show();
+            _renderFilters: function (filters, updateHtml) {
+                if (!updateHtml) {
+                    this.filtersDialog.show();
+                } else {
+                    var filtersDiv = Dom.get("filtersBlock-forms");
+                    var toolbar = this;
+                    Alfresco.util.Ajax.jsonRequest({
+                        method: "POST",
+                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+                        dataObj: {
+                            htmlId: Alfresco.util.generateDomId(),
+                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+                        },
+                        successCallback: {
+                            fn: function (oResponse) {
+                                filtersDiv.innerHTML = oResponse.serverResponse.responseText;
+                                toolbar.isNeedUpdate = false;
+                                if (toolbar.filtersDialog != null) {
+                                    toolbar.filtersDialog.show();
+                                }
                             }
-                        }
-                    },
-                    failureCallback: {
-                        fn: function () {
-                        }
-                    },
-                    scope: this,
-                    execScripts: true
-                });
+                        },
+                        failureCallback: {
+                            fn: function () {
+                            }
+                        },
+                        scope: this,
+                        execScripts: true
+                    });
+                }
             },
 
             onFiltersClick: function () {
                 //отрисовка фильтров в окне
                 this._drawFiltersPanel();
-                this._renderFilters(this.avaiableFilters);
+                this._renderFilters(this.avaiableFilters, this.isNeedUpdate);
             },
 
             onApplyFilterClick: function () {
@@ -211,6 +217,8 @@
                         var filter = filters[i];
                         this.avaiableFilters.push(filter);
                     }
+
+                    this.isNeedUpdate = true;
                 }
             },
 
