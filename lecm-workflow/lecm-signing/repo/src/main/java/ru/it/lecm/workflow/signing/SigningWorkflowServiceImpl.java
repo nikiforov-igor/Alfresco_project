@@ -62,7 +62,6 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		}
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReviewerPermissions(employeeRef, bpmPackage);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
