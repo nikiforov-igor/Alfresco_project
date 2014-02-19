@@ -551,11 +551,15 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
 		    }
 	    },
 
-	    getRowFormater: function(elTr, oRecord) {
-		    if (oRecord.getData("type") == "total") {
-			    YAHOO.util.Dom.addClass(elTr, 'total-row');
+	    getRowFormater: function () {
+		    var scope = this;
+
+		    return function (elTr, oRecord) {
+			    if (oRecord.getData("type") == "total") {
+				    YAHOO.util.Dom.addClass(elTr, 'total-row');
+			    }
+			    return true;
 		    }
-		    return true;
 	    },
 
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {

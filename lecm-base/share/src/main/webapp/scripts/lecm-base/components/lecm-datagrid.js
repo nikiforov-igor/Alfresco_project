@@ -312,7 +312,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            createFormTitleMsg: "label.create-row.title",
 
-	            viewFormTitleMsg: "logicecm.view"
+	            viewFormTitleMsg: "logicecm.view",
+
+	            expandable: false,
+
+	            expandDataSource: "components/form"
             },
 
             showActionsCount: 3,
@@ -486,6 +490,69 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
             },
 
+	        fnRenderCellExpand: function () {
+		        var scope = this;
+
+		        return function (elCell, oRecord, oColumn, oData)
+		        {
+			        Dom.setStyle(elCell, "width", oColumn.width + "px");
+			        Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+			        elCell.innerHTML = '<span id="expand-' + oRecord.getId() + '" class="expand-table-icon">' + (oRecord.getData("expanded") ? '-' : '+') + '</span>';
+
+			        YAHOO.util.Event.onAvailable("expand-" + oRecord.getId(), function () {
+				        YAHOO.util.Event.on("expand-" + oRecord.getId(), 'click', scope.onExpandClick, oRecord, this);
+			        }, null, scope);
+		        };
+	        },
+
+	        onExpandClick: function (e, record) {
+		        var numSelectItem = this.widgets.dataTable.getTrIndex(record.getId());
+		        if (record.getData("expanded")) {
+			        record.setData("expanded", false);
+			        this.widgets.dataTable.deleteRow(numSelectItem + 1);
+		        } else {
+			    	this.onExpand(record);
+		        }
+	        },
+
+	        onExpand: function(record) {
+		        var nodeRef = record.getData("nodeRef");
+		        if (nodeRef != null) {
+			        var me = this;
+			        Alfresco.util.Ajax.request(
+				        {
+					        url: Alfresco.constants.URL_SERVICECONTEXT + me.options.expandDataSource,
+					        dataObj: {
+						        htmlid: this.id + nodeRef,
+						        itemKind: "node",
+						        itemId: nodeRef,
+						        mode: "view"
+					        },
+					        successCallback: {
+						        fn: function(response) {
+							        if (response.serverResponse != null) {
+								    	me.addExpandedRow(record, response.serverResponse.responseText);
+							        }
+						        }
+					        },
+					        failureMessage: "message.failure",
+					        execScripts: true,
+					        scope: this
+				        });
+		        }
+	        },
+
+	        addExpandedRow: function(record, text) {
+		        var numSelectItem = this.widgets.dataTable.getTrIndex(record.getId());
+		        record.setData("expanded", true);
+		        var row = {
+			        fullRowHTML: text
+		        };
+
+		        this.widgets.dataTable.addRow(row, numSelectItem + 1);
+	        },
+
             /**
              * Returns actions custom datacell formatter
              *
@@ -651,9 +718,25 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 };
             },
 
-	        getRowFormater: function(elTr, oRecord) {
-			    return true;
-		    },
+	        getRowFormater: function () {
+		        var scope = this;
+
+		        return function (elTr, oRecord) {
+			        if (oRecord.getData("fullRowHTML")) {
+				        var colCount = scope.datagridColumns.length;
+				        if (scope.options.showCheckboxColumn) {
+					        colCount++;
+				        }
+				        if (scope.options.expandable) {
+					        colCount++;
+				        }
+				        elTr.innerHTML = "<td colspan=" + colCount + ">" + oRecord.getData("fullRowHTML") + "</td>";
+				        return false;
+			        } else {
+				        return true;
+			        }
+		        }
+	        },
 
 	/**
              * Настраиваемый formatter. Следует при необходимости переопределять именно этот метод, а не getCellFormatter в дочерних гридах
@@ -1042,6 +1125,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						width: 16
 					});
 				}
+	            if (this.options.expandable) {
+                    columnDefinitions.push({
+						key: "expand",
+						label: "",
+						sortable: false,
+						formatter: this.fnRenderCellExpand (),
+						width: 16
+					});
+				}
 
                 var inArray = function(value, array) {
                     for (var i = 0; i < array.length; i++) {
@@ -1211,7 +1303,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         "MSG_LOADING" : this.msg("message.loading"),
                         paginator: this.widgets.paginator,
 	                    sortedBy: this.getDatableSortBy(columnDefinitions),
-	                    formatRow: this.getRowFormater
+	                    formatRow: this.getRowFormater()
                     });
 
                 // Обновляем значения totalRecords данными из ответа сервера

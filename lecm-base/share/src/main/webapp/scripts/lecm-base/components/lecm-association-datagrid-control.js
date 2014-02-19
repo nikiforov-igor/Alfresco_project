@@ -139,11 +139,15 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
             }
         },
 
-        getRowFormater: function(elTr, oRecord) {
-            if (oRecord.getData("type") == "total") {
-                YAHOO.util.Dom.addClass(elTr, 'total-row');
-            }
-            return true;
+	    getRowFormater: function () {
+		    var scope = this;
+
+		    return function (elTr, oRecord) {
+	            if (oRecord.getData("type") == "total") {
+	                YAHOO.util.Dom.addClass(elTr, 'total-row');
+	            }
+	            return true;
+		    }
         },
 
         onDataItemCreated: function DataGrid_onDataItemCreated(layer, args) {

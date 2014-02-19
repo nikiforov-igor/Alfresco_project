@@ -98,3 +98,13 @@
 	color: #333;
     font-weight: bold;
 }
+
+.datagrid .expand-table-icon {
+	cursor: pointer;
+	/*font-family:Arial;*/
+	font-size:18px;
+	/*font-weight:normal;*/
+	/*font-style:normal;*/
+	/*text-decoration:none;*/
+	/*color:#333333;*/
+}

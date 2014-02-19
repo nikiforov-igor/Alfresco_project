@@ -368,11 +368,15 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 			}
 		},
 
-		getRowFormater: function(elTr, oRecord) {
-			if (oRecord.getData("type") == "total") {
-				YAHOO.util.Dom.addClass(elTr, 'total-row');
+		getRowFormater: function () {
+			var scope = this;
+
+			return function (elTr, oRecord) {
+				if (oRecord.getData("type") == "total") {
+					YAHOO.util.Dom.addClass(elTr, 'total-row');
+				}
+				return true;
 			}
-			return true;
 		},
 
 		getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
