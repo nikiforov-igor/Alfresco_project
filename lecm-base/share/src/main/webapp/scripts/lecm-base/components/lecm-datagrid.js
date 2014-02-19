@@ -1901,15 +1901,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             {
                 var obj = args[1];
                 if (!obj || this._hasEventInterest(obj.bubblingLabel)){
-                    var page;
-                    if (this.widgets.paginator) {
-                        page = this.widgets.paginator.getCurrentPage();
-                    } else {
-                        page = 0;
-                    }
                     this._updateDataGrid.call(this,
                         {
-                            page: page,
                             filter: obj.filter ? obj.filter : null
                         });
                     Bubbling.fire("itemsListChanged");
@@ -2054,7 +2047,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
 
                 // More Actions menu no longer relevant
-                this.showingMoreActions = false;
+                this.showingMoreActionsshowingMoreActions = false;
 
                 var searchConfig = this.datagridMeta.searchConfig;
                 if (searchConfig) { // Поиск через SOLR

@@ -1,38 +1,3 @@
-/**
- * LogicECM root namespace.
- *
- * @namespace LogicECM
- */
-// Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
-/**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- */
-LogicECM.module = LogicECM.module || {};
-
-
-/**
- * LogicECM Dictionary module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module.Dictionary.Dictionary
- */
-LogicECM.module.ARM = LogicECM.module.ARM || {};
-
-/**
- * Data Lists: Toolbar component.
- *
- * Displays a list of Toolbar
- *
- * @namespace Alfresco
- * @class LogicECM.module.Dictionary.Toolbar
- */
 (function()
 {
 

@@ -28,11 +28,6 @@
                 <bubblingLabel>documents-arm</bubblingLabel>
             </properties>
         </component>
-        <!-- Filter -->
-        <component>
-            <region-id>current-filters</region-id>
-            <url>/lecm/arm/current-filters</url>
-        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>

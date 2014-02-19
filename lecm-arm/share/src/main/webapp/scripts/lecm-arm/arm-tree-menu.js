@@ -6,10 +6,6 @@
  */
 (function () {
 
-    var Dom = YAHOO.util.Dom;
-    var Bubbling = YAHOO.Bubbling;
-    var Event = YAHOO.util.Event;
-
     LogicECM.module.ARM.Tree = function (htmlId) {
         LogicECM.module.ARM.Tree.superclass.constructor.call(
             this,

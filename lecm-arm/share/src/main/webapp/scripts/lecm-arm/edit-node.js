@@ -1,23 +1,3 @@
-/**
- * LogicECM root namespace.
- *
- * @namespace LogicECM
- */
-// Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
-/**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- */
-LogicECM.module = LogicECM.module || {};
-
-LogicECM.module.ARM = LogicECM.module.ARM || {};
-
 (function () {
 	var Dom = YAHOO.util.Dom;
 

@@ -3,6 +3,7 @@
     <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-const.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-tree-menu.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-filters.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/document-list-filters-manager.js"></@script>
 
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
