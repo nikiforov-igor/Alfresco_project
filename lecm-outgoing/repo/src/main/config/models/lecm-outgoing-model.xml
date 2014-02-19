@@ -112,19 +112,6 @@
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 			</mandatory-aspects>
 		</type>
-		
-		<type name="lecm-outgoing:settings">
-		    <title>Logic Ecm Outgoing Documents Global Settings</title>
-		    <parent>cm:cmobject</parent>
-		    <properties>
-			    <!-- Режим регистрации -->
-			    <property name="lecm-outgoing:settings-centralized-registration">
-				    <type>d:boolean</type>
-				    <mandatory>true</mandatory>
-				    <default>true</default>
-			    </property>
-		    </properties>
-	    </type>
-		
+				
 	</types>
 </model>

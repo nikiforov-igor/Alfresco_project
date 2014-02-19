@@ -4,8 +4,6 @@
 			<dependencies>
                 <css src="/css/lecm-base/base-styles.css" />
                 <css src="/css/font-awesome.css" />
-                <js src="/scripts/lecm-eds-documents/components/global-settings/common-script.js" />
-				<js src="/scripts/lecm-eds-documents/components/global-settings/potential-role-tree-picker.js" />
 			</dependencies>
 		</forms>
 	</config>

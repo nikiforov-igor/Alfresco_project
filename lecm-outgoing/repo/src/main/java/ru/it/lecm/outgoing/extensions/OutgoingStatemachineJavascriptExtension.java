@@ -111,7 +111,9 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		if (primaryStaff != null) {
 			NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
 			//получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
-			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit);
+			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.isRegistrationCenralized() ? 
+				orgstructureService.getEmployeesByBusinessRole(businessRoleId) :
+				edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit);
 			registrars.addAll(potentialWorkers);
 		}
 		return createScriptable(registrars);

@@ -92,11 +92,11 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		if (businessRoleRef == null || organizationElementRef == null) {
 			return result;
 		}
-				
+		
 		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ? 
 			this.potentialRolesMap.get(businessRoleRef.toString()) : 
 			new HashMap<String, NodeRef>();
-		
+
 		if (orgElementRoles.containsKey(organizationElementRef.toString())) {
 			NodeRef potentialRoleRef = orgElementRoles.get(organizationElementRef.toString());
 			List<AssociationRef> employeeAssocRefs = nodeService.getTargetAssocs(potentialRoleRef, ASSOC_POTENTIAL_ROLE_EMPLOYEE);
@@ -105,6 +105,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 				if (employeeRef != null) result.add(employeeRef);
 			}
 		}
+
 		return result;
 	}
 
@@ -221,7 +222,8 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         }
     }
 
-	public boolean isRegistrationCenralized() {
+	@Override
+	public Boolean isRegistrationCenralized() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {
             return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_CENTRALIZED_REGISTRATION);

@@ -1,4 +1,15 @@
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+                <css src="/css/lecm-base/base-styles.css" />
+                <css src="/css/font-awesome.css" />
+                <js src="/scripts/lecm-eds-documents/components/global-settings/common-script.js" />
+				<js src="/scripts/lecm-eds-documents/components/global-settings/potential-role-tree-picker.js" />
+			</dependencies>
+		</forms>
+	</config>
+	
 	<config evaluator="node-type" condition="lecm-eds-globset:potential-role">
 		<forms>
 			<form>
@@ -27,11 +38,9 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-eds-globset:centralized-registration"/>
-					<show id="potential-roles"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-globset:centralized-registration" label="Try me!"/>
-					<field id="potential-roles">
+					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
 						<control template="/ru/it/lecm/eds/global-settings/components/controls/potential-role-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
@@ -51,11 +60,9 @@
 			<form>
 				<field-visibility>
 					<show id="lecm-eds-globset:centralized-registration"/>
-					<show id="potential-roles"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-eds-globset:centralized-registration" label="Try me!"/>
-					<field id="potential-roles">
+					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
 						<control template="/ru/it/lecm/eds/global-settings/components/controls/potential-role-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>

@@ -13,6 +13,7 @@
 		LogicECM.module.Eds.GlobalSettings.PotentialRolesTreeViewer.superclass.constructor.call(this, htmlId);
 		YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
 		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
+		YAHOO.Bubbling.on("formSubmit", this.saveAllChanges, this);
 
 		this.selectedItems = {};
 		this.addItemButtons = {};
@@ -37,13 +38,12 @@
 				prefixPickerId: null,
 				showCreateNewLink: true,
 				setCurrentValue: true,
-				createNewMessage: null, //message id по которому будет сформирован заголовок диалогового окна
 				showSearch: true,
 				showSelectedItemsPath: true,
 				changeItemsFireAction: null,
 				selectedValue: null,
 				plane: false,
-				currentValue: "",
+				currentValue: false,
 				// If control is disabled (has effect in 'picker' mode only)
 				disabled: false,
 				// If this form field is mandatory
@@ -61,18 +61,12 @@
 				treeNodeTitleSubstituteString: "",
 				nameSubstituteString: "{cm:name}",
 				selectedItemsNameSubstituteString: null,
-				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 				employeeAbsenceMarker: false,
-				// fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
 				fireAction:
 				{
-					// кнопка addItem + в таблице элемента выбора
 					addItem: null,
-					// кнопка ok при submite
 					ok: null,
-					// кнопка cancel
 					cancel: null,
-					// кнопка поиска
 					find: null
 				},
 				additionalFilter: "",
@@ -85,6 +79,79 @@
 				pickerButtonLabel: null,
 				pickerButtonTitle: null,
 				businessRoleId: ""
+			},
+
+			init: function() {
+				var me = this;
+				this.options.controlId = this.id + '-cntrl';
+				if (this.options.prefixPickerId == null) {
+					this.options.prefixPickerId = this.options.controlId;
+				}
+				this.eventGroup = this.options.prefixPickerId;
+
+				this.options.pickerId = this.options.prefixPickerId + '-picker';
+				Dom.setStyle(this.options.pickerId, "display", "block");
+
+				// Create button if control is enabled
+				if(!this.options.disabled)
+				{
+					// Create picker button
+					var bottonGroup = new YAHOO.widget.ButtonGroup(this.options.prefixPickerId,
+						{
+							name: this.options.prefixPickerId + "-radiofield"
+						}),
+						onButton = new YAHOO.widget.Button(
+							{
+								id: this.options.prefixPickerId + "-on",
+								label: this.msg("label.button.on"),
+								title: this.msg("label.button.on"),
+								type: "radio",
+								checked: this.options.currentValue,
+								value: true,
+								container: this.options.prefixPickerId,
+								onclick: {
+									fn: function(e) {this.updateControlValue(true);},
+									obj: null,
+									scope: this
+								}
+							}),
+						offButton = new YAHOO.widget.Button(
+							{
+								id: this.options.prefixPickerId + "-off",
+								label: this.msg("label.button.off"),
+								title: this.msg("label.button.off"),
+								type: "radio",
+								checked: !this.options.currentValue,
+								value: false,
+								container: this.options.prefixPickerId,
+								onclick: {
+									fn: function(e) {this.updateControlValue(false);},
+									obj: null,
+									scope: this
+								}
+							});
+
+					bottonGroup.addButtons([onButton, offButton]);
+
+					this.populateDataWithAllowedScript();
+					this.fillPickerDialog();
+					this._loadSearchProperties();
+					this.updateControlValue(this.options.currentValue);
+				} else {
+					this.updateViewForm();
+				}
+			},
+
+			updateControlValue: function PotentialRolesTreeViewer_updateControlValue(value) {
+				this.options.currentValue = value;
+				Dom.get(this.id).value = value;
+				this.updatePickerVisibility(!value);
+			},
+
+			updatePickerVisibility: function PotentialRolesTreeViewer_updatePickerVisibility(doShow) {
+				var pickerObj = Dom.get(this.options.pickerId);
+				Dom.setStyle(pickerObj,"display", (doShow) ? "block" : "none");
+				this._loadSelectedItems(true, false);
 			},
 
 			_updateItems: function PotentialRolesTreeViewer__updateItems(nodeRef, searchTerm)
@@ -184,14 +251,9 @@
 
 								var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 
-								if (this.options.itemType == "lecm-orgstr:employee") {
-									Dom.get(fieldId).innerHTML
-										+= '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) +
-										(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
-								} else {
-									Dom.get(fieldId).innerHTML
-										+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
-								}
+								Dom.get(fieldId).innerHTML
+									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ('
+									+ this.getDefaultView(items[i].primaryOrgUnit) + ') ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 
 								YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
 							}
@@ -221,17 +283,6 @@
 					if (items.length > 0) {
 						this.updateSelectedItems();
 					}
-					/*
-					if(!this.options.disabled)
-					{
-						this.updateSelectedItems();
-						this.updateAddButtons();
-					}
-
-					if (updateForms) {
-						this.updateFormFields(clearCurrentDisplayValue);
-					}
-					*/
 				};
 
 				var onFailure = function PotentialRolesTreeViewer_getPotentialWorkers_onFailure(response)
@@ -268,8 +319,6 @@
 							this.selectedEmployeesMap[this.currentNode.data.nodeRef] = {};
 
 						this.selectedEmployeesMap[this.currentNode.data.nodeRef][obj.item.nodeRef] = obj.item;
-						//this.selectedItems[obj.item.nodeRef] = obj.item;
-						//this.singleSelectedItem = obj.item;
 
 						this.updateSelectedItems();
 						this.updateAddButtons();
@@ -299,32 +348,7 @@
 				}
 			},
 
-			onOk: function(e, p_obj)
-			{
-				Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
-				// Close dialog
-				this.widgets.escapeListener.disable();
-				this.widgets.dialog.hide();
-				this.widgets.pickerButton.set("disabled", false);
-				if (e) {
-					Event.preventDefault(e);
-				}
-				// Update parent form
-				this.updateFormFields();
-
-				if(this.options.mandatory) {
-					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-				}
-				if (this.options.fireAction.ok != null) {
-					var fireName = this.options.fireAction.ok.split(",");
-					for (var i in fireName){
-						YAHOO.Bubbling.fire(fireName[i], this);
-					}
-				}
-				this.saveAllChanges();
-			},
-
-			saveAllChanges: function() {
+			saveAllChanges: function(layer, args) {
 				var onSuccess = function PotentialRolesTreeViewer_saveAllChanges_onSuccess(response) {
 					Alfresco.util.PopupManager.displayMessage(
 						{
@@ -339,7 +363,7 @@
 						}
 					);
 				}
-				if (this.options.businessRoleId && this.selectedEmployeesMap) {
+				if (!this.options.currentValue && this.options.businessRoleId && this.selectedEmployeesMap) {
 					Alfresco.util.Ajax.jsonRequest(
 						{
 							url: Alfresco.constants.PROXY_URI + "lecm/eds/global-settings/api/savePotentialWorkers",

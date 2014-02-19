@@ -34,6 +34,24 @@
 
 			loadForm: function(settingsNode) {
 				var me = this;
+				var successCallback = function(response) {
+					var container = Dom.get(me.id + "-settings");
+					container.innerHTML = response.serverResponse.responseText;
+
+					Dom.get("eds-global-settings-edit-form-form-submit").value = me.msg("label.save");
+
+					var form = new Alfresco.forms.Form("eds-global-settings-edit-form-form");
+					form.setSubmitAsJSON(true);
+					form.setAJAXSubmit(true,
+						{
+							successCallback:
+							{
+								fn: me.onSuccess,
+								scope: this
+							}
+						});
+					form.init();
+				}
 				Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
@@ -47,24 +65,7 @@
 							showSubmitButton:"true"
 						},
 						successCallback: {
-							fn: function (response) {
-								var container = Dom.get(me.id + "-settings");
-								container.innerHTML = response.serverResponse.responseText;
-
-								Dom.get("eds-global-settings-edit-form-form-submit").value = me.msg("label.save");
-
-								var form = new Alfresco.forms.Form("eds-global-settings-edit-form-form");
-								form.setSubmitAsJSON(true);
-								form.setAJAXSubmit(true,
-									{
-										successCallback:
-										{
-											fn: me.onSuccess,
-											scope: this
-										}
-									});
-								form.init();
-							}
+							fn: successCallback
 						},
 						failureMessage: "message.failure",
 						execScripts: true
@@ -73,6 +74,8 @@
 
 			onSuccess: function (response)
 			{
+				YAHOO.Bubbling.fire("formSubmit", this);
+
 				if (response && response.json) {
 					window.location.reload(true);
 				} else {

@@ -1,0 +1,25 @@
+.eds-global-settings {
+	margin: 16px 10px 10px;
+}
+
+.eds-global-settings .title {
+	font-size: 123.1%;
+	font-weight: bold;
+	padding-bottom: 0.75em;
+}
+
+.eds-global-settings .object-finder .panel-left,
+.eds-global-settings .object-finder .panel-right,
+.eds-global-settings .object-finder .currentValueDisplay {
+	background-color: white;
+}
+
+.eds-global-settings .object-finder {
+	width: 100%;
+	max-width: 800px;
+}
+
+.eds-global-settings .form-field label,
+.eds-global-settings .form-field .picker-visibility-buttons {
+	display: inline;
+}

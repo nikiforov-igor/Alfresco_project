@@ -64,4 +64,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
 	public ScriptNode getSettingsNode() {
 		return new ScriptNode(edsGlobalSettingsService.getSettingsNode(), serviceRegistry, getScope());
 	}
+	
+	public Boolean isRegistrationCenralized() {
+		return edsGlobalSettingsService.isRegistrationCenralized();
+	}
 }

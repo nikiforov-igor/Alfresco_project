@@ -8,6 +8,15 @@
 <#assign showCreateNewButton = false>
 <#assign showSelectedItemsPath = false>
 
+<#assign isTrue=false>
+<#if field.value??>
+	<#if field.value?is_boolean>
+		<#assign isTrue=field.value>
+	<#elseif field.value?is_string && field.value == "true">
+		<#assign isTrue=true>
+	</#if>
+</#if>
+
 <#if field.control.params.showSearch?? && field.control.params.showSearch == "false">
 	<#assign showSearch = false>
 <#else>
@@ -25,41 +34,53 @@
 <div class="form-field">
     <#if disabled>
         <div id="${controlId}" class="viewmode-field">
-            <#if showViewIncompleteWarning && (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
-            <span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png" title="${msg("form.field.incomplete")}" /><span>
-            </#if>
             <span class="viewmode-label">${field.label?html}:</span>
-            <span id="${controlId}-currentValueDisplay" class="viewmode-value"></span>
+            <span class="viewmode-value"><#if isTrue>${msg("form.control.checkbox.yes")}<#else>${msg("form.control.checkbox.no")}</#if></span>
         </div>
     <#else>
         <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-        <div id="${controlId}" class="object-finder <#if showCreateNewButton>with-two-buttons</#if>">
+        <div id="${controlId}" class="yui-buttongroup picker-visibility-buttons"
+        	<#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
+        </div>
+        <#--<input class="formsCheckBox" id="${controlId}" type="checkbox" tabindex="0" name="-" <#if field.description??>title="${field.description}"</#if>
+             <#if isTrue> value="true" checked="checked"</#if>
+             <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if> />-->
+             <#--onchange='javascript:YAHOO.util.Dom.get("${fieldHtmlId}").value=YAHOO.util.Dom.get("${fieldHtmlId}-entry").checked;'-->
 
-            <div id="${controlId}-currentValueDisplay" class="current-values"></div>
+        <#assign pickerId = controlId + "-picker">
+        <div id="${pickerId}" class="object-finder">
+			<div id="${pickerId}-body" class="bd">
+				<#if showSearch>
+					<div class="yui-gb orgchart-picker-menu">
+						<div id="${pickerId}-searchContainer" class="first yui-skin-sam search">
+							<input type="text" class="search-input" name="-" id="${pickerId}-searchText" value="" maxlength="256" />
+							<span class="search-button"><button id="${pickerId}-searchButton" name="-">&nbsp;</button></span>
+						</div>
+					</div>
+				</#if>
 
-            <#--<#if field.disabled == false>-->
-                <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-                <input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-	            <input type="hidden" id="${controlId}-selectedItems"/>
+				<div><strong>${msg("logicecm.base.elements-for-select")}</strong></div>
+				<div class="yui-g">
+					<#if !plane>
+						<div id="${pickerId}-treeSelector" class="yui-u first panel-left tree">
+							<div id="${pickerId}-groups" class="picker-items ygtv-highlight picker-groups">
+							</div>
+						</div>
+					</#if>
+					<div id="${pickerId}-dataTable" class="<#if !plane>yui-u panel-right<#else>width100</#if>">
+						<div id="${pickerId}-group-members" class="picker-items group-members"></div>
+					</div>
+				</div>
 
-                <div id="${controlId}-itemGroupActions" class="show-picker">
-                    <span class="tree-picker-button">
-                        <input type="button" id="${controlId}-tree-picker-button" name="-" value="..."/>
-                    </span>
-                    <#if showCreateNewButton>
-                        <span class="create-new-button">
-                            <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
-                        </span>
-                    </#if>
-                </div>
-
-                <@renderTreePickerDialogHTML controlId plane showSearch/>
-            <#--</#if>-->
-
+				<div id="${pickerId}-selection">
+					<div><strong>${msg("logicecm.base.selected-elements")}</strong></div>
+					<div id="${pickerId}-selected-elements"></div>
+				</div>
+			</div>
             <div class="clear"></div>
         </div>
     </#if>
-    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${(!isTrue)?string}" />
 </div>
 
 <script type="text/javascript">
@@ -131,7 +152,7 @@
             createDialogClass: "${field.control.params.createDialogClass}",
         </#if>
 	    showSearch: ${showSearch?string},
-        currentValue: "${field.value!''}",
+        currentValue: ${isTrue?string},
         showSelectedItemsPath: ${showSelectedItemsPath?string},
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
 	    <#if field.control.params.fireAction?? && field.control.params.fireAction != "">
@@ -149,7 +170,6 @@
 		    </#list>
 	    },
 	    </#if>
-        //itemType: "lecm-orgstr:employee",
         plane: ${plane?string}
     }).setMessages( ${messages} );
 </script>

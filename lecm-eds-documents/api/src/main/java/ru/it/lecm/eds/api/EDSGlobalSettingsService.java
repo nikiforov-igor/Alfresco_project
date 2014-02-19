@@ -42,4 +42,6 @@ public interface EDSGlobalSettingsService {
 	
 	public NodeRef createPotentialRole(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs);
 	public NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs);
+	
+	public Boolean isRegistrationCenralized();
 }
