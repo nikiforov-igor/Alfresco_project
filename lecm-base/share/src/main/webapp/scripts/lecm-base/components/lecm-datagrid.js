@@ -1454,6 +1454,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.formData) {
+                        if (typeof searchConfig.formData == "string") {
+                            searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
+                        }
                         searchConfig.formData.datatype = this.datagridMeta.itemType;
                     } else {
                         searchConfig.formData = {
@@ -2144,6 +2147,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var searchConfig = this.datagridMeta.searchConfig;
                 if (searchConfig) { // Поиск через SOLR
                     if (searchConfig.formData) {
+                        if (typeof searchConfig.formData == "string") {
+                            searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
+                        }
                         searchConfig.formData.datatype = this.datagridMeta.itemType;
                     } else {
                         searchConfig.formData = {

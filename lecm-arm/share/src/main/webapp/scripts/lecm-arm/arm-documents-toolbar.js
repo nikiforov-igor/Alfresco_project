@@ -69,7 +69,7 @@
                 //update current filters
                 var form = Dom.get('filersForm');
                 if (form) {
-                    YAHOO.Bubbling.fire ("updateCurrentArmFilters", {
+                    YAHOO.Bubbling.fire ("updateCurrentFilters", {
                         filtersData: this._buildFormData(form)
                     });
                 }

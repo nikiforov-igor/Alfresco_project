@@ -43,17 +43,30 @@
             },
 
             onUpdateCurrentFilters: function (layer, args) {
-                var filters = args[1].filters;
-                var hasFilters = filters != null && filters.length > 0;
-                if (hasFilters) {
-                    this.currentFilters = [];
-                    for (var i = 0; i < filters.length; i++) {
-                        var filter = filters[i];
-                        this.currentFilters.push(filter);
+                var filters = args[1].filtersData;
+                if (filters != null) {
+                    //обновим пришедшие
+                    for (var key in filters) {
+                        var filterValue = filters[key];
+                        var indexInCurrent = this._filterInArray(key, this.currentFilters);
+                        if (indexInCurrent < 0) { // еще нет в текущих - добавим
+                            var index = this._filterInArray(key, this.avaiableFilters);
+                            var currentFilter = this.avaiableFilters[index];
+                            currentFilter.curValue = filterValue;
+                            this.currentFilters.push(currentFilter);
+                        } else { // есть в текущих - обновим значение фильтра
+                            this.currentFilters[indexInCurrent].curValue = filterValue;
+                        }
                     }
-
-                } else {
-                    this.currentFilters = [];
+                    //обновим текущие. если фильтр не пришел - значит он удален
+                    //TODO продумать, как удалять фильтры
+                    /*var newCurrentFilters = [];
+                    for (var i = 0; i < this.currentFilters.length; i++) {
+                        var filterKey = this.currentFilters[i].code;
+                        if (filters[filterKey] !== null) {
+                            newCurrentFilters.push(this.currentFilters[i]);
+                        }
+                    }*/
                 }
 
                 var context = this;
@@ -68,7 +81,7 @@
                             if (oResponse) {
                                 YAHOO.Bubbling.fire("activeFiltersChanged", {
                                     bubblingLabel: context.bubblingLabel,
-                                    filterMeta: {
+                                    filtersMeta: {
                                         query: oResponse.json.query
                                     }
                                 });
@@ -89,6 +102,16 @@
                     scope: this,
                     execScripts: true
                 })
+            },
+
+            _filterInArray: function(filterCode, filtersArray) {
+                for (var i = 0; i < filtersArray.length; i++) {
+                    var filter = filtersArray[i];
+                    if (filter.code == filterCode) {
+                        return i;
+                    }
+                }
+                return -1;
             }
         }, true);
 })();
