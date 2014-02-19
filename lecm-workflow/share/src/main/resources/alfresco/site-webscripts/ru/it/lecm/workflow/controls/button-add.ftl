@@ -1,8 +1,3 @@
-<!-- Форма должна сабмитить
-1. Тип процесса: послед или пар.
-2. нодРефу на текущий список
--->
-
 <#import '/ru/it/lecm/base-share/components/lecm-datagrid.ftl' as grid/>
 
 <#-- Контейнеры -->
@@ -17,20 +12,26 @@
 <#assign btnsControlId = htmlId + '-buttons-cntrl'>
 
 <#-- Экземпляры -->
-<#assign saveListButtonId = htmlId + "-save-list-button">
-<#assign deleteListButtonId = htmlId + "-delete-list-button">
+<#assign saveListButtonId = htmlId + '-save-list-button'>
+<#assign deleteListButtonId = htmlId + '-delete-list-button'>
 <#assign datagridId = htmlId + '-datagrid'>
 
 <#-- SCC -->
 <#assign workflowTypeShareConfig = field.control.params.workflowType ? lower_case>
-<#assign concurrencyShareConfig = (field.control.params.concurrency!'user') ? lower_case>
+<#assign concurrencyShareConfig = ((field.control.params.concurrency) ! 'user') ? lower_case>
+<#assign allowedBusinessRoleId = (field.control.params.allowedBusinessRoleId) ! ''>
+
+<#assign shouldInitAllowed = allowedBusinessRoleId ? has_content>
 
 <#-- Отправка данных -->
-<#assign concurrencyInputId = htmlId + "-concurrency-input">
+<#assign concurrencyInputId = htmlId + '-concurrency-input'>
 <#assign concurrencyInputName = field.control.params.concurrencyInputName>
 <#assign concurrencyInputInitialValue = (concurrencyShareConfig == 'user') ? string('SEQUENTIAL', concurrencyShareConfig)>
 
-<#assign listNodeRefInput = htmlId + "-workflow-type-input">
+<#assign listNodeRefInput = htmlId + '-workflow-type-input'>
+
+<#-- Состояния -->
+<#assign controlItemType = args.itemId>
 
 <div id='${containerId}' class="workflow-list-control-container">
 <#-- Элемент-затемнитель контрола, который показывается на время его инициализации -->
@@ -131,21 +132,18 @@
 	function WorkflowList(htmlId) {
 		WorkflowList.superclass.constructor.call(this, 'LogicECM.module.WorkflowList', htmlId, null);
 
-		this.options.currentListRef = null;
-
 		this.setOptions({
+			allowedBusinessRoleId: '${allowedBusinessRoleId}',
+			allowedNodes: [],
 			concurrency: '${concurrencyShareConfig}',
+			controlItemType: '${controlItemType}',
+			currentListRef: null,
 			workflowType: '${workflowTypeShareConfig}'
 		});
 	}
 
 	YAHOO.lang.extend(WorkflowList, Alfresco.component.Base);
 
-	/**
-	 * Метод вызывается самым первым, должен сходить на сервер, получить все данные (желательно, за один запрос),
-	 * необходимые для формы и "включить" форму. На время выполнения запроса, контрол должен быть неактивен. На момент
-	 * написания этого комментария был оформлен в виде заглушки с таймаутом.
-	 */
 	WorkflowList.prototype._initControl = function() {
 		var dimmer = YAHOO.util.Dom.get('${dimmerId}');
 
@@ -267,6 +265,10 @@
 		return result;
 	};
 
+	WorkflowList.prototype._getAllowedNodes = function() {
+		return this.options.allowedNodes;
+	};
+
 	WorkflowList.prototype._saveList = function(title) {
 		var workflowList = this;
 
@@ -307,6 +309,33 @@
 		});
 	};
 
+	WorkflowList.prototype._initAllowedNodes = function() {
+		var workflowList = this;
+
+		if (this.options.allowedBusinessRoleId.length > 0) { // Trim?
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/orgstructure/ds/getEmployeesByBusinessRoleId',
+				dataObj: {
+					businessRoleId: this.options.allowedBusinessRoleId,
+					withDelegation: true
+				},
+				successCallback: {
+					fn: function(response) {
+						workflowList.setOptions({ allowedNodes: response.json.employees });
+					}
+				},
+				failureCallback: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось получить сотрудников бизнес-роли ' + this.options.allowedBusinessRoleId
+						});
+					}
+				}
+			});
+		}
+	};
+
 	/**
 	 * Метод создаёт кнопки и привязывает обработчики
 	 */
@@ -343,26 +372,6 @@
 			}
 		});
 
-		// Радио-кнопки для типа бизнес-процесса
-		if (this.options.concurrency === 'user') {
-			this.widgets.radioWorkflowType = new YAHOO.widget.ButtonGroup({
-				id: 'workflow-type-radio-buttons',
-				name: 'workflow-type-radio-buttons',
-				container: '${radioWorkflowTypeId}'
-			});
-
-			this.widgets.radioWorkflowType.subscribe('valueChange', this._onConcurrencyChange, null, this);
-
-			this.widgets.radioWorkflowType.addButtons([
-				{ label: 'Последовательное', value: 'sequential', checked: true },
-				{ label: 'Параллельное', value: 'parallel' }
-			]);
-
-			this.widgets.radioWorkflowType.getButton(0).setStyle('margin-left', '1px');
-
-			this.options.concurrency = 'sequential';
-		}
-
 		// Кнопка 'Добавить сотрудника'
 		this.widgets.btnAddAssignee = new YAHOO.widget.Button({
 			container: '${buttonsContainerId}',
@@ -387,47 +396,65 @@
 	<#--}-->
 	<#--});-->
 
+		// Радио-кнопки для типа бизнес-процесса
+		if (this.options.concurrency === 'user') {
+			this.widgets.radioWorkflowType = new YAHOO.widget.ButtonGroup({
+				id: 'workflow-type-radio-buttons',
+				name: 'workflow-type-radio-buttons',
+				container: '${radioWorkflowTypeId}'
+			});
+
+			this.widgets.radioWorkflowType.subscribe('valueChange', this._onConcurrencyChange, null, this);
+
+			this.widgets.radioWorkflowType.addButtons([
+				{ label: 'Последовательное', value: 'sequential', checked: true },
+				{ label: 'Параллельное', value: 'parallel' }
+			]);
+
+			this.widgets.radioWorkflowType.getButton(0).setStyle('margin-left', '1px');
+
+			this.options.concurrency = 'sequential';
+		}
+
 		// Кнопка 'Рассчитать сроки согласования'
-		this.widgets.btnAddPosition = new YAHOO.widget.Button({
-			container: '${buttonsContainerId}',
-			type: 'push',
-			label: 'Рассчитать сроки согласования',
-			onclick: {
-				fn: this._onComputeTermsButtonClick,
-				scope: this
+		if (this.options.controlItemType !== 'lecm-workflow:route') {
+			if (this.options.concurrency === 'sequential') {
+				this.widgets.btnComputeTerms = new YAHOO.widget.Button({
+					container: '${buttonsContainerId}',
+					type: 'push',
+					label: 'Рассчитать сроки',
+					onclick: {
+						fn: this._onComputeTermsButtonClick,
+						scope: this
+					}
+				});
 			}
-		});
+		}
 	};
 
 	WorkflowList.prototype._onComputeTermsButtonClick = function() {
-		var currentSelectedListRef = this.widgets.$assigneesListSelectElem.val();
-		var selectedDate = this.widgets.calendar.getSelectedDates()[0];
-
-		if (currentSelectedListRef.indexOf('workspace://') === -1) {
-			return false;
-		}
+		var currentList = this.options.currentListRef;
+		var currentDate = this.widgets.calendar.getSelectedDates()[0];
 
 		Alfresco.util.Ajax.jsonRequest({
 			method: 'POST',
 			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/setDueDates',
 			dataObj: {
-				assigneeListNodeRef: currentSelectedListRef,
-				workflowDueDate: Alfresco.util.toISO8601(selectedDate)
+				assigneeListNodeRef: currentList,
+				workflowDueDate: Alfresco.util.toISO8601(currentDate)
 			},
 			successCallback: {
-				fn: this.refreshDatagrid,
+				fn: this._refreshDatagrid,
 				scope: this
 			},
 			failureCallback: {
 				fn: function() {
 					Alfresco.util.PopupManager.displayMessage({
-						text: 'Не удалось автоматически рассчитать сроки согласования, попробуйте еще раз'
+						text: 'Не удалось рассчитать сроки, попробуйте еще раз'
 					});
 				}
 			}
 		});
-
-		return true;
 	};
 
 	WorkflowList.prototype._setConcurrency = function(value) {
@@ -438,6 +465,8 @@
 		var SEQUENTIAL = { concurrency: 'sequential' };
 		var PARALLEL = { concurrency: 'parallel' };
 
+		var btnComputeTerms = this.widgets.btnComputeTerms;
+
 		var input = YAHOO.util.Dom.get('${concurrencyInputId}');
 
 		if (value === 'user' || value === 'sequential') {
@@ -447,6 +476,10 @@
 			datagrid.setOptions(SEQUENTIAL);
 			dataTable.showColumn(0);
 			dataTable.showColumn(1);
+
+			if (btnComputeTerms !== null && btnComputeTerms !== undefined) {
+				btnComputeTerms.setStyle('display', '');
+			}
 		} else {
 			input.value = 'PARALLEL';
 
@@ -454,6 +487,10 @@
 			datagrid.setOptions(PARALLEL);
 			dataTable.hideColumn(0);
 			dataTable.hideColumn(1);
+
+			if (btnComputeTerms !== null && btnComputeTerms !== undefined) {
+				btnComputeTerms.setStyle('display', 'none');
+			}
 		}
 	};
 
@@ -473,6 +510,31 @@
 
 		this._setCurrentListRef(value);
 		this._refreshDatagrid();
+	};
+
+	WorkflowList.prototype._hookCalendar = function(layer, args) {
+		function getYahooDateString(date) {
+			return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+		}
+
+		var zeroDate, todayDate, restrictedRangeString;
+		var cm = Alfresco.util.ComponentManager;
+
+		YAHOO.Bubbling.unsubscribe('registerValidationHandler', this._hookCalendar);
+
+		if (args[1].fieldId === '${htmlId}_prop_bpm_workflowDueDate-cntrl-date') {
+			zeroDate = new Date(0);
+			todayDate = new Date();
+			restrictedRangeString = getYahooDateString(zeroDate) + '-' + getYahooDateString(todayDate);
+
+			this.widgets.calendar = cm.get('${htmlId}_prop_bpm_workflowDueDate-cntrl').widgets.calendar;
+			this.widgets.calendar.addRenderer(restrictedRangeString, this.widgets.calendar.renderCellStyleHighlight3);
+
+			// Подписываем валидацию на select и deselect, так как в this._initValidation календарь не будет доступен.
+			// Подробнее в this._initValidation.
+			//this.widgets.calendar.selectEvent.subscribe(this.validateForm, this, true);
+			//this.widgets.calendar.deselectEvent.subscribe(this.validateForm, this, true);
+		}
 	};
 
 	WorkflowList.prototype._setCurrentListRef = function(ref) {
@@ -547,7 +609,7 @@
 					for (i = 0; i < listsLg; i++) {
 						// TERNARY? NO!
 						if (lists[i].nodeRef === response.json.defaultList) {
-							title = 'Список по умолчанию'
+							title = 'Список по умолчанию';
 						} else {
 							title = lists[i].title;
 						}
@@ -625,6 +687,7 @@
 			],
 
 			datagridMeta: {
+				datagridFormId: this._getDatagridFormId(),
 				itemType: 'lecm-workflow:assignee',
 				nodeRef: this.options.currentListRef,
 				sort: 'lecm-workflow:assignee-order|true',
@@ -638,15 +701,36 @@
 		this.widgets.datagrid.draw();
 	};
 
+	WorkflowList.prototype._getDatagridFormId = function() {
+		var controlItemType = this.options.controlItemType;
+
+		if (controlItemType === 'lecm-workflow:route') {
+			return 'datagrid-route';
+		}
+
+		return 'datagrid';
+	};
+
+	WorkflowList.prototype._getFormId = function() {
+		var controlItemType = this.options.controlItemType;
+
+		if (controlItemType === 'lecm-workflow:route') {
+			return 'route';
+		}
+
+		return this.options.concurrency;
+	};
+
 	/**
 	 * Обработчик клика по кнопке 'Добавить сотрудника' и 'Добавить должность'
 	 * Показывает форму создания типа, который отображает датагрид. Destination для формы тот же, что у датагрида.
 	 */
 	WorkflowList.prototype._onAddAssigneeButtonClick = function(options) {
-		var formId = this.options.concurrency; // 'sequential' || 'parallel'
-
 		var ignoreNodesArray = this._getIgnoreNodes();
 		var ignoreNodesString = ignoreNodesArray.join();
+
+		var allowedNodesArray = this._getAllowedNodes();
+		var allowedNodesString = allowedNodesArray.join();
 
 		this.widgets.formAddAssignee = new Alfresco.module.SimpleDialog('${htmlId}-form-add-assignee');
 
@@ -657,12 +741,12 @@
 				itemKind: 'type',
 				itemId: 'lecm-workflow:assignee',
 				destination: this.options.currentListRef,
-				formId: formId,
+				formId: this._getFormId(),
 				mode: 'create',
 				submitType: 'json',
-				showCancelButton: 'true',//,
-				ignoreNodes: ignoreNodesString
-				//				allowedNodes: this.constants.ALLOWED_ASSIGNEES.join() // TODO: Должен быть мето, который даёт эту строку
+				showCancelButton: 'true',
+				ignoreNodes: ignoreNodesString,
+				allowedNodes: allowedNodesArray
 			},
 			destroyOnHide: true,
 			doBeforeDialogShow: {
@@ -692,7 +776,10 @@
 	 */
 	WorkflowList.prototype.onReady = function() {
 		this._initButtons();
+		this._initAllowedNodes();
 		this._initControl();
+
+		YAHOO.Bubbling.on('registerValidationHandler', this._hookCalendar, this);
 	};
 
 	var workflowList = new WorkflowList('${containerId}');

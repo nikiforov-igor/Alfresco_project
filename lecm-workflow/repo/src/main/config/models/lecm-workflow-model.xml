@@ -120,6 +120,7 @@
 
 			<mandatory-aspects>
 				<aspect>lecm-workflow:assignee-order-aspect</aspect>
+				<aspect>lecm-workflow:assignee-days-to-complete-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 
