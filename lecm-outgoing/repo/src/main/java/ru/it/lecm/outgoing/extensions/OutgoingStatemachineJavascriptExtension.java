@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.mozilla.javascript.Context;
@@ -18,6 +19,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.outgoing.api.OutgoingModel;
 
 /**
  *
@@ -193,5 +195,26 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		notification.setObjectRef(outgoingRef.getNodeRef());
 		notification.setRecipientEmployeeRefs(senders);
 		return notification;
+	}
+
+	/**
+	 * установить в атрибутах документа ассоциацию на того сотрудника который выполнил регистрацию документа
+	 *
+	 * @param outgoing ссылка на исходящее из машины состояний
+	 * @param employee пользователь который выполнил действие "зарегистрировать" и перевел документ в статус
+	 * "зарегистрирован"
+	 */
+	public void setRegistrar(final ScriptNode outgoing, final ScriptNode employee) {
+		NodeRef outgoingRef = outgoing.getNodeRef();
+		NodeRef employeeRef = employee.getNodeRef();
+		List<AssociationRef> assocs = nodeService.getTargetAssocs(outgoingRef, OutgoingModel.ASSOC_OUTGOING_REGISTRAR);
+		if (assocs.isEmpty()) {
+			nodeService.createAssociation(outgoingRef, employeeRef, OutgoingModel.ASSOC_OUTGOING_REGISTRAR);
+		} else {
+			String presentString = (String) nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
+			String shortname = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+			String template = "Association between document %s[%s] and registrar %s[%s] already exists!";
+			logger.error(String.format(template, outgoingRef.toString(), presentString, employeeRef.toString(), shortname));
+		}
 	}
 }
