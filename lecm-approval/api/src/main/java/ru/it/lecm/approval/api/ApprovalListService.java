@@ -133,4 +133,16 @@ public interface ApprovalListService {
 	 * @param bpmPackage
 	 */
 	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+
+	/**
+	 * актуализация исполнителей бизнес процесса с использованием делегирования
+	 * для каждого участника бизнес процесса проверяется наличие активного делегирования
+	 * если делегирование активно, то вычисляется актуальный исполнитель задачи бизнес процесса
+	 * если определена бизнес роль workflowRole, то исполнитель определяется с ее помощью
+	 * в противном случае актуальный исполнитель вычисляется по отвественному лицу согласно настройкам делегирования
+	 * @param assigneesList список исполнителей бизнес процесса
+	 * @param workflowRole идентификатор бизнес роли по которой получаем актуальных исполнителей
+	 * @return  список исполнителей у которого сотрудники и имена указывают на исполнителей с учетом делегирования
+	 */
+	List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole);
 }

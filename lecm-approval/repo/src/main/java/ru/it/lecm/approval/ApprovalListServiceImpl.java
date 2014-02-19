@@ -31,9 +31,10 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.alfresco.repo.jscript.ScriptNode;
+import ru.it.lecm.delegation.IDelegation;
 
 /**
  *
@@ -47,7 +48,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListServiceImpl.class);
 	private final static QName FAKE_PROP_COMINGSOON = QName.createQName(NamespaceService.ALFRESCO_URI, "comingSoonNotified");
 	private final static QName FAKE_PROP_OVERDUE = QName.createQName(NamespaceService.ALFRESCO_URI, "overdueNotified");
-	private final static DateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
+	private final static String DATE_FORMAT = "dd.MM.yyyy";
 	private OrgstructureBean orgstructureService;
 	private DocumentAttachmentsService documentAttachmentsService;
 	private DocumentMembersService documentMembersService;
@@ -58,6 +59,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
     private DocumentService documentService;
 	private CopyService copyService;
 	private BehaviourFilter behaviourFilter;
+	private IDelegation delegationService;
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
@@ -102,6 +104,10 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setDelegationService(IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	/**
@@ -237,9 +243,9 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		documentRef = taskDecision.getDocumentRef();
 		commentFileAttachmentCategoryName = taskDecision.getCommentFileAttachmentCategoryName();
 		documentProjectNumber = taskDecision.getDocumentProjectNumber();
-		previousUserName = taskDecision.getPreviousUserName();
+//		previousUserName = taskDecision.getPreviousUserName();
 
-		itemTitle = String.format(ASSEGNEE_ITEM_FORMAT, userName);
+//		itemTitle = String.format(ASSEGNEE_ITEM_FORMAT, userName);
 
 		approvalListItemRef = getApprovalListItemByUserName(approvalListRef, userName);
 
@@ -383,7 +389,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		ArrayList<NodeRef> recipients = new ArrayList<NodeRef>();
 		recipients.add(employeeRef);
 
-		String dueDatemessage = dueDate == null ? "(нет)" : DATE_FORMAT.format(dueDate);
+		String dueDatemessage = dueDate == null ? "(нет)" : new SimpleDateFormat(DATE_FORMAT).format(dueDate);
 		String description = String.format("Вам необходимо согласовать документ %s, срок согласования %s", docInfo.getDocumentLink(), dueDatemessage);
 
 		Notification notification = new Notification();
@@ -445,7 +451,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				fakeProps.put(FAKE_PROP_COMINGSOON, "");
 				Notification notification = new Notification();
 				notification.setAuthor(AuthenticationUtil.getSystemUserName());
-				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
 				notification.setRecipientEmployeeRefs(recipients);
@@ -455,7 +461,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				fakeProps.put(FAKE_PROP_OVERDUE, "");
 				Notification notification = new Notification();
 				notification.setAuthor(AuthenticationUtil.getSystemUserName());
-				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 				notification.setDescription(description);
 				notification.setObjectRef(docInfo.getDocumentRef());
 				notification.setRecipientEmployeeRefs(recipients);
@@ -522,7 +528,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 					variableScope.setVariable("initiatorComingSoon", "");
 					Notification notification = new Notification();
 					notification.setAuthor(AuthenticationUtil.getSystemUserName());
-					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate));
+					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 					notification.setDescription(description);
 					notification.setObjectRef(docInfo.getDocumentRef());
 					notification.setRecipientEmployeeRefs(new ArrayList<NodeRef>(recipients));
@@ -533,7 +539,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 					Notification notification = new Notification();
 					notification.setAuthor(AuthenticationUtil.getSystemUserName());
 					String people = getIncompleteAssignees(processInstanceId);
-					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), DATE_FORMAT.format(dueDate), people);
+					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
 					if (isDocumentApproval) {
 						//получить список кураторов и добавить его в recipients
 						recipients.addAll(Utils.getCurators());
@@ -604,7 +610,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		}
 
 		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantReviewerPermissions(employeeRef, bpmPackage);
 		notifyApprovalStarted(employeeRef, dueDate, bpmPackage);
@@ -612,7 +618,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 
 	private NodeRef getApprovalListRef(DelegateTask task) {
 		DelegateExecution execution = task.getExecution();
-		return ((ActivitiScriptNode) execution.getVariable("approvalListRef")).getNodeRef();
+		return ((ScriptNode) execution.getVariable("approvalListRef")).getNodeRef();
 	}
 
 	@Override
@@ -628,7 +634,7 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
     @Override
     public void completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
 		DelegateExecution execution = task.getExecution();
-        NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+        NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
         String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
         String documentProjectNumber = (String) execution.getVariable("documentProjectNumber");
 
@@ -706,5 +712,28 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 		if (tempAssigneesList != null) {
 			nodeService.deleteNode(tempAssigneesList);
 		}
+	}
+
+	@Override
+	public List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole) {
+		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
+		for (NodeRef assignee : assigneesList) {
+			NodeRef employee = findNodeByAssociationRef(assignee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
+			boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+			if (isDelegationActive) {
+				NodeRef effectiveEmployee;
+				if (delegateAll) {
+					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				} else {
+					effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+				}
+				if (effectiveEmployee != null) {
+					nodeService.removeAssociation(assignee, employee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
+					nodeService.createAssociation(assignee, effectiveEmployee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
+				}
+			}
+		}
+		return assigneesList;
 	}
 }

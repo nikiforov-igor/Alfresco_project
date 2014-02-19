@@ -10,7 +10,6 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +22,13 @@ import java.util.*;
 
 public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
 
+	/**
+	 * переменная регламента в которой хранится идентификатор
+	 * бизнес роли, через которую будут находится исполнители регламента с учетом делегирования
+	 */
+	private final static String WORKFLOW_ROLE = "workflowRole";
+
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalJavascriptExtension.class);
-	private PersonService personService;
 	private NodeService nodeService;
 	private ServiceRegistry serviceRegistry;
 	private OrgstructureBean orgstructureService;
@@ -33,10 +37,6 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
-	}
-
-	public void setPersonService(PersonService personService) {
-		this.personService = personService;
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -62,7 +62,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	/**
 	 * формирование нового листа согласования, для текущей версии регламента
 	 *
-	 * @param employeeList список сотрудников, ака согласущие лица
+	 * @param assigneesList список сотрудников, ака согласущие лица
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех
 	 * item-ов workflow
 	 * @param approvalType тип согласования: APPROVAL, SEQUENTIAL, CUSTOM
@@ -196,6 +196,11 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
 		List<NodeRef> assigneesList = approvalListService.createAssigneesList(assigneesListNode.getNodeRef(), execution);
+		//у нас есть рабочая копия списка участников процесса подписания
+		//нам надо пробежаться по участникам этого списка, через сервис делегирования найти актуальных исполнителей
+		//актуализировать ассоциацию на сотрудника и userName
+		String workflowRole = (String)execution.getVariable(WORKFLOW_ROLE);
+		assigneesList = approvalListService.actualizeAssigneesUsingDelegation(assigneesList, workflowRole);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode: assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));
