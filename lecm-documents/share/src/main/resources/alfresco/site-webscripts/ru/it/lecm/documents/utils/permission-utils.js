@@ -25,6 +25,7 @@ const PERM_ACTION_EXEC = "_lecmPerm_ActionExec";
 const PERM_MEMBERS_LIST = "_lecmPerm_MemberList";
 const PERM_MEMBERS_ADD = "_lecmPerm_MemberAdd";
 const PERM_SET_RATE = "_lecmPerm_SetRate";
+const PERM_READ_ATTACHMENT = "_lecmPerm_ReadAttachment";
 
 function hasPermission(nodeRef, permission) {
     if (nodeRef == null || permission == null) {
@@ -71,6 +72,18 @@ function hasStatemachine(nodeRef) {
     if (result.status == 200) {
         var hasStatemachine = eval('(' + result + ')');
         return hasStatemachine;
+    } else {
+        return false;
+    }
+}
+
+function hasReadAttachmentPermission(nodeRef, userId) {
+	var args = 'nodeRef=' + nodeRef + '&aspect=lecm-document-aspects:lecm-attachment' + '&permission=' + PERM_READ_ATTACHMENT + '&user=' + userId;
+    url = '/lecm/documents/isEmpHasPermToReadAttachment?' + args;
+    result = remote.connect("alfresco").get(url);
+    if (result.status == 200) {
+        var hasPermission = eval('(' + result + ')');
+        return hasPermission;
     } else {
         return false;
     }

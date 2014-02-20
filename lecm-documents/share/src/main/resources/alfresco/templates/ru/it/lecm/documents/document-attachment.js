@@ -1,3 +1,5 @@
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+
 function main() {
     model.hasPermission = hasDocumentViewPermission(page.url.args.nodeRef) && hasDocumentAttachmentViewPermission(page.url.args.nodeRef);
 }
@@ -21,7 +23,9 @@ function hasDocumentAttachmentViewPermission(nodeRef) {
 	if (result.status != 200) {
 		return false;
 	}
-	var perm = eval('(' + result + ')');
+	var permContentView = eval('(' + result + ')');
+	var permReadAttachment = hasReadAttachmentPermission(nodeRef,user.id);
+	var perm = permContentView && permReadAttachment;
 	return (("" + perm) ==  "true");
 }
 

@@ -6,8 +6,9 @@ function main() {
     AlfrescoUtil.param("nodeRef");
 	var hasViewListPerm = false;
 
+	var rAttachmentPermission = hasReadAttachmentPermission(model.nodeRef,user.id);
 	var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
-	if (nodeDetails)
+	if (nodeDetails && rAttachmentPermission)
 	{
 		model.item = nodeDetails.item;
 		model.node = nodeDetails.item.node;
@@ -29,7 +30,7 @@ function main() {
 		var accessInfo = DocumentUtils.getNodeAccess(model.nodeRef, user.id);
 		if (accessInfo) {
 			if (accessInfo.exists) {
-				if (!accessInfo.hasReadPermissions) {
+				if (!accessInfo.hasReadPermissions || !rAttachmentPermission) {
 					model.accessMsg = "У вас нет прав на этот документ. Обратитесь к администратору.";
 				}
 			} else {

@@ -704,6 +704,8 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <permissionGroup name="LECM_BASIC_PG_Initiator" allowFullControl="false" expose="false" >
@@ -747,6 +749,8 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
          <!-- <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" /> -->
+
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <permissionGroup name="LECM_BASIC_PG_InputCorrector" allowFullControl="false" expose="false" >
@@ -796,6 +800,8 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <!-- <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" /> -->
+
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <permissionGroup name="LECM_BASIC_PG_Reader" allowFullControl="false" expose="false" >
@@ -884,6 +890,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <!-- Ответственный работчник -->
@@ -928,6 +935,8 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <!-- Работник -->
@@ -972,6 +981,8 @@
          <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+		 <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
       </permissionGroup>
 
       <!-- Рецензент -->
@@ -1061,6 +1072,8 @@
 		   <includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
 		    <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />
 		   <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+			<includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
 	   </permissionGroup>
    </permissionSet>
 

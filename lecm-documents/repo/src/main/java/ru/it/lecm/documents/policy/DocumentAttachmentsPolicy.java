@@ -261,7 +261,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
 
 			//добавим аспект lecm-attachment к файлу вложения
-			//nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
+			nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
 			// добавляем пользователя добавившего вложение как участника
 			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
