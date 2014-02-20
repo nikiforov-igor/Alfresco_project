@@ -222,7 +222,8 @@
 			_generateEmployeesDatasourceUrlParams: function PotentialRolesTreeViewer__generateEmployeesDatasourceUrl(organizationElementRef) {
 				return "?businessRoleId=" + this.options.businessRoleId +
 						"&orgElement=" + organizationElementRef +
-						"&withDelegation=false";
+						"&withDelegation=false" + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+						"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString());
 			},
 
 			updateSelectedItems: function PotentialRolesTreeViewer_updateSelectedItems() {
@@ -252,8 +253,7 @@
 								var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 
 								Dom.get(fieldId).innerHTML
-									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ('
-									+ this.getDefaultView(items[i].primaryOrgUnit) + ') ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 
 								YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
 							}
@@ -292,7 +292,8 @@
 				Alfresco.util.Ajax.jsonRequest(
 					{
 						url: Alfresco.constants.PROXY_URI + "lecm/eds/global-settings/api/getPotentialWorkers?businessRole=" + this.options.businessRoleId +
-						"&organizationElement=" + this.currentNode.data.nodeRef,
+						"&organizationElement=" + this.currentNode.data.nodeRef + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+						"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()),
 						method: "GET",
 						successCallback:
 						{
