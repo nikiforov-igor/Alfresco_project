@@ -1,4 +1,6 @@
 (function () {
+	var Dom = YAHOO.util.Dom;
+
     LogicECM.module.ARM.Filters = function (htmlId) {
         LogicECM.module.ARM.Filters.superclass.constructor.call(this, "LogicECM.module.ARM.Filters", htmlId);
 
@@ -27,7 +29,9 @@
             bubblingLabel: null,
 
             onReady: function () {
-                YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "visible");
+                YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
+	            YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
+	            this.updateCurrentFiltersForm();
             },
 
             onUpdateAvaiableFilters: function (layer, args) {
@@ -109,7 +113,9 @@
                     },
                     scope: this,
                     execScripts: true
-                })
+                });
+
+	            this.updateCurrentFiltersForm()
             },
 
             _filterInArray: function(filterCode, filtersArray) {
@@ -120,6 +126,44 @@
                     }
                 }
                 return -1;
-            }
+            },
+
+	        updateCurrentFiltersForm: function() {
+		        var filtersExist = this.currentFilters.length > 0;
+		        Dom.setStyle(this.id + "-body", "display", filtersExist ? "" : "none");
+
+		        if (filtersExist) {
+			        var currentFiltersConteiner = Dom.get(this.id + "-current-filters");
+			        if (currentFiltersConteiner != null) {
+				        var filtersHTML = "";
+				        for (var i = 0; i < this.currentFilters.length; i++) {
+					        filtersHTML += "<span class='arm-filter-item'>";
+					        filtersHTML += this.currentFilters[i].name;
+					        filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
+					        filtersHTML += "</span>";
+				        }
+				        currentFiltersConteiner.innerHTML = filtersHTML;
+			        }
+		        }
+	        },
+
+	        getRemoveFilterButton: function(filter) {
+		        var id = Dom.generateId();
+		     	var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
+		        YAHOO.util.Event.onAvailable(id, function (filter) {
+			        YAHOO.util.Event.on(id, 'click', this.deleteFilter, filter, this);
+		        }, filter, this);
+		        return result;
+	        },
+
+	        deleteFilter: function(e, filter) {
+		        this.currentFilters.splice(this.currentFilters.indexOf(filter), 1);
+		        this.updateCurrentFiltersForm();
+	        },
+
+	        deleteAllFilters: function() {
+		        this.currentFilters = [];
+		        this.updateCurrentFiltersForm();
+	        }
         }, true);
 })();

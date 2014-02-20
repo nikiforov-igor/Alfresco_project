@@ -5,17 +5,13 @@
 
 <#assign filtersId = "arm-filters-toolbar-" + id/>
 
-<div id="${filtersId}">
+<div id="${filtersId}" class="arm-filters-bar">
 <@comp.baseToolbar filtersId true false false>
     <div>
-        <span id="${filtersId}-deleteAllFilters" class="yui-button yui-push-button">
-            <a href="javascript:void(0);" id="${filtersId}-delete-all-link">${msg("arm.delete.all-filters")}</a>
+        <span class="arm-filters-label">
+	        ${msg("arm.filters.current")} (<a href="javascript:void(0);" id="${filtersId}-delete-all-link">${msg("arm.delete.all-filters")}</a>):
         </span>
-    </div>
-    <div>
-        <span id="${filtersId}-current-filters">
-            Список текущих фильтров
-        </span>
+	    <span id="${filtersId}-current-filters"></span>
     </div>
 </@comp.baseToolbar>
 </div>
