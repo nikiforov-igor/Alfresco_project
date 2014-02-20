@@ -217,7 +217,7 @@
 	            });
 
                 YAHOO.Bubbling.fire ("updateArmFilters", {
-                    filters: node.data.filters
+                    currentNode: node
                 });
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());

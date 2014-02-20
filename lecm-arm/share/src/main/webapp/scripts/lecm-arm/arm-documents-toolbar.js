@@ -209,16 +209,19 @@
 	        },
 
             onUpdateArmFilters: function(layer, args) {
-                var filters = args[1].filters;
-                var hasFilters= filters != null && filters.length > 0;
-                if (hasFilters) {
-                    this.avaiableFilters = [];
-                    for (var i = 0; i < filters.length; i++) {
-                        var filter = filters[i];
-                        this.avaiableFilters.push(filter);
-                    }
+                var currentNode = args[1].currentNode;
+                if (currentNode !== null) {
+                    var filters = currentNode.data.filters;
+                    var hasFilters= filters != null && filters.length > 0;
+                    if (hasFilters) {
+                        this.avaiableFilters = [];
+                        for (var i = 0; i < filters.length; i++) {
+                            var filter = filters[i];
+                            this.avaiableFilters.push(filter);
+                        }
 
-                    this.isNeedUpdate = true;
+                        this.isNeedUpdate = true;
+                    }
                 }
             },
 

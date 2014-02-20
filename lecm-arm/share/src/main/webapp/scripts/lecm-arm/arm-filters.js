@@ -6,6 +6,7 @@
         this.currentFilters = [];
         this.currentQuery = null;
         this.bubblingLabel = null;
+        this.currentNode = null;
 
         YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
         YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
@@ -21,6 +22,8 @@
 
             currentQuery: null,
 
+            currentNode: null,
+
             bubblingLabel: null,
 
             onReady: function () {
@@ -28,17 +31,21 @@
             },
 
             onUpdateAvaiableFilters: function (layer, args) {
-                var filters = args[1].filters;
-                var hasFilters = filters != null && filters.length > 0;
-                if (hasFilters) {
-                    this.avaiableFilters = [];
-                    for (var i = 0; i < filters.length; i++) {
-                        var filter = filters[i];
-                        this.avaiableFilters.push(filter);
-                    }
+                var currentNode = args[1].currentNode;
+                if (currentNode !== null) {
+                    this.currentNode = currentNode;
+                    var filters = currentNode.data.filters;
+                    var hasFilters = filters != null && filters.length > 0;
+                    if (hasFilters) {
+                        this.avaiableFilters = [];
+                        for (var i = 0; i < filters.length; i++) {
+                            var filter = filters[i];
+                            this.avaiableFilters.push(filter);
+                        }
 
-                } else {
-                    this.avaiableFilters = [];
+                    } else {
+                        this.avaiableFilters = [];
+                    }
                 }
             },
 
@@ -74,6 +81,7 @@
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
                     dataObj: {
+                        armNode: YAHOO.lang.JSON.stringify(this.currentNode),
                         filters: YAHOO.lang.JSON.stringify(this.currentFilters)
                     },
                     successCallback: {
