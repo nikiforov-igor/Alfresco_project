@@ -17,6 +17,9 @@
 				<#if field.control.params.dataSource??>
 					dataSource: "${field.control.params.dataSource}",
 				</#if>
+                <#if field.control.params.singleValue??>
+                    singleValue: ${field.control.params.singleValue},
+                </#if>
 				itemId: "${form.arguments.itemId}",
 				<#if form.destination??>
 					destination: "${form.destination}",

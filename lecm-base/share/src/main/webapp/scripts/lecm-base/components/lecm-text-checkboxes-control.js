@@ -32,7 +32,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				itemId: null,
 
-				destination: null
+				destination: null,
+
+                singleValue: false
 			},
 
 			onReady: function () {
@@ -96,6 +98,16 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 			checkboxOnClick: function (event, node) {
 				var checkbox = Dom.get(node.inputId);
 				if (checkbox.checked) {
+                    if (this.options.singleValue) {
+                        var container = document.getElementById(this.checkboxesContainerId);
+                        var checkboxes = container.getElementsByTagName("input");
+                        for (var key in checkboxes) {
+                            if (checkboxes[key].id != node.inputId) {
+                                checkboxes[key].checked = false;
+                            }
+                        }
+                        this.selectedItems = [];
+                    }
 					this.selectedItems[node.value] = node;
 				} else {
 					delete this.selectedItems[node.value];
