@@ -1,7 +1,6 @@
 package ru.it.lecm.arm.scripts;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,11 +9,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.Content;
 import org.springframework.extensions.webscripts.*;
-import ru.it.lecm.arm.beans.filters.DocumentFilter;
+import ru.it.lecm.arm.beans.filters.ArmDocumenstFilter;
+import ru.it.lecm.arm.filters.BaseQueryArmFilter;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * User: dbashmakov
@@ -65,16 +67,55 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
                 for (int i = 0; i < filtersArray.length(); i++) {
                     JSONObject filter = filtersArray.getJSONObject(i);
                     String filterId = (String) filter.get("code");
-                    DocumentFilter filterBean = (DocumentFilter) getApplicationContext().getBean(filterId);
-                    if (filterBean == null) {
-                        throw new Exception("Cannot find bean with ID = " + filterId);
-                    }
-                    String currentValueStr = (String) filter.get("curValue");
+                    if (filterId != null) {
+                        ArmDocumenstFilter filterBean = null;
+                        try {
+                            filterBean = (ArmDocumenstFilter) getApplicationContext().getBean(filterId);
+                        } catch (BeansException ex) {
+                            logger.error(ex.getMessage(), ex);
+                        }
+                        if (filterBean != null) {
+                            List<String> values = new ArrayList<String>();
 
-                    String query = filterBean.getQuery(armNode, Arrays.asList(currentValueStr.split(",")));
-                    if (!query.isEmpty()) {
-                        builder.append("(").append(query).append(")").append(" AND");
-                    }
+                            if (filterBean instanceof BaseQueryArmFilter) {
+                                values.add(filter.has("query") ? (String) filter.get("query") : null);
+                            }
+
+                            if (Boolean.valueOf(String.valueOf(filter.get("multiple"))))  {
+                                Object curValues = filter.get("curValue");
+                                if (curValues instanceof JSONArray) {
+                                    JSONArray currentValueArray = (JSONArray) filter.get("curValue");
+                                    for (int j = 0; j < currentValueArray.length(); j++) {
+                                        String v = (String) currentValueArray.get(j);
+                                        values.add(v);
+                                    }
+                                } else {
+                                    values.addAll(Arrays.asList(((String) curValues).split(",")));
+                                }
+
+                            } else {
+                                String currentValueStr = (String) filter.get("curValue");
+                                values.addAll(Arrays.asList(currentValueStr.split(",")));
+                            }
+
+                            String query = filterBean.getQuery(armNode, values);
+                            if (!query.isEmpty()) {
+                                builder.append("(").append(query).append(")").append(" AND");
+                            }
+                        }
+                    } /*else {
+                        BaseQueryArmFilter filterBean = (BaseQueryArmFilter) getApplicationContext().getBean("baseQueryArmFilter");
+                        String currentValueStr = (String) filter.get("curValue");
+
+                        List<String> values = new ArrayList<String>();
+                        values.add(filter.has("query") ? (String) filter.get("query") : null);
+                        values.addAll(Arrays.asList(currentValueStr.split(",")));
+
+                        String query = filterBean.getQuery(armNode, values);
+                        if (!query.isEmpty()) {
+                            builder.append("(").append(query).append(")").append(" AND");
+                        }
+                    }*/
                 }
                 if (builder.length() > 0) {
                     builder.delete(builder.length() - 4, builder.length());

@@ -93,4 +93,14 @@
 		<property name="authorityService" ref="authorityService"/>
 		<property name="nodeService" ref="nodeService" />
 	</bean>
+
+    <bean id="authorArmFilter" class="ru.it.lecm.arm.filters.AuthorArmFilter">
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="preferenceService" ref="preferenceService"/>
+    </bean>
+
+    <bean id="baseQueryArmFilter" class="ru.it.lecm.arm.filters.BaseQueryArmFilter"/>
 </beans>

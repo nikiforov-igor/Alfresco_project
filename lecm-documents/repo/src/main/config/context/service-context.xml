@@ -532,7 +532,6 @@
     </bean>
 
     <bean id="documentsAuthorFilter" class="ru.it.lecm.documents.filters.AuthorFilter" parent="documentsFilter" init-method="register"/>
-    <bean id="baseQueryFilter" class="ru.it.lecm.documents.filters.AuthorFilter" parent="documentsFilter" init-method="register"/>
 
     <bean id="documentCopySettingsBean" class="ru.it.lecm.documents.beans.DocumentCopySettingsBean" abstract="true"/>
 

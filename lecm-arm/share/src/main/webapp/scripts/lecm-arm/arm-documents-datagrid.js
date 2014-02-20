@@ -31,7 +31,7 @@ var $siteURL = Alfresco.util.siteURL,
                     //обновить данные в гриде! перестраивать саму таблицу не нужно
                     this._setDefaultDataTableErrors(this.widgets.dataTable);
 
-                    if ((this.filtersMeta !== null) && (this.filtersMeta.query !== null) && this.filtersMeta.query.length > 0) {
+                    if ((this.filtersMeta != null) && (this.filtersMeta.query != null) && this.filtersMeta.query.length > 0) {
                         var searchConfig = this.datagridMeta.searchConfig;
                         if (searchConfig == null) {
                             this.datagridMeta.searchConfig = {};

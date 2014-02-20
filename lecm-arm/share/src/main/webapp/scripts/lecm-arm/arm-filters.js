@@ -85,7 +85,7 @@
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
                     dataObj: {
-                        armNode: YAHOO.lang.JSON.stringify(this.currentNode),
+                        armNode: YAHOO.lang.JSON.stringify(this.currentNode.data),
                         filters: YAHOO.lang.JSON.stringify(this.currentFilters)
                     },
                     successCallback: {
