@@ -1116,21 +1116,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             getDataTableColumnDefinitions:function DataGrid_getDataTableColumnDefinitions() {
                 // YUI DataTable column definitions
 				var columnDefinitions = [];
+	            if (this.options.expandable) {
+		            columnDefinitions.push({
+			            key: "expand",
+			            label: "",
+			            sortable: false,
+			            formatter: this.fnRenderCellExpand (),
+			            width: 16
+		            });
+	            }
 				if (this.options.showCheckboxColumn) {
                     columnDefinitions.push({
 						key: "nodeRef",
 						label: "<input type='checkbox' id='" + this.id + "-select-all-records'>",
 						sortable: false,
 						formatter: this.fnRenderCellSelected (),
-						width: 16
-					});
-				}
-	            if (this.options.expandable) {
-                    columnDefinitions.push({
-						key: "expand",
-						label: "",
-						sortable: false,
-						formatter: this.fnRenderCellExpand (),
 						width: 16
 					});
 				}
