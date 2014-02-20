@@ -1168,6 +1168,41 @@ outgoing.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>8c7bfe3b-ad98-4ce2-9bb8-9bcd9b93a864</name>
+																		<nodeRef>workspace://SpacesStore/55a05761-78e9-41ff-a29c-8c9b279b4f7a</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[workflowRole]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_APPROVER]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -1303,6 +1338,41 @@ outgoing.save();]]>
 																				<name>condition</name>
 																				<value>
 																					<![CDATA[doc.hasCategoryAttachment("Исходящее")]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>20832c17-bd49-44e6-a327-f10b5e823584</name>
+																		<nodeRef>workspace://SpacesStore/0c225ade-2d51-44a4-bcc5-7e82913b7a20</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[workflowRole]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_SIGNER]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -3767,6 +3837,41 @@ outgoing.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>9ce8939e-f185-4951-9269-aa57ae897324</name>
+																		<nodeRef>workspace://SpacesStore/59094e3c-4b35-44fb-b620-9d0595a393c7</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[workflowRole]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_SIGNER]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4955,6 +5060,41 @@ notifications.sendNotification(notification);]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>ea16d255-cdb6-412e-a1a9-bfb728ee1d8c</name>
+																		<nodeRef>workspace://SpacesStore/bcc46dc0-786b-4ac0-a4de-de0153892763</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[workflowRole]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_APPROVER]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -5061,6 +5201,41 @@ notifications.sendNotification(notification);]]>
 																				<name>inputToValue</name>
 																				<value>
 																					<![CDATA[documentAttachmentCategoryName]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>inputVariable</type>
+																		<name>27b8d8ec-0b6b-4246-9cb7-fa9dce4ba9da</name>
+																		<nodeRef>workspace://SpacesStore/fb2038ff-72b4-4611-899a-5d109a3c302b</nodeRef>
+																		<properties>
+																			<property>
+																				<name>inputFromType</name>
+																				<value>
+																					<![CDATA[VALUE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToType</name>
+																				<value>
+																					<![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value>
+																					<![CDATA[workflowRole]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>inputFromValue</name>
+																				<value>
+																					<![CDATA[DA_SIGNER]]>
 																				</value>
 																			</property>
 																		</properties>
