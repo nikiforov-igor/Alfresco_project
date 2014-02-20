@@ -1,0 +1,59 @@
+<#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
+<#include "/org/alfresco/components/component.head.inc">
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/lecm-datagrid.js"/>
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-base/components/advsearch.js"></@script>
+<@script type="text/javascript" src="${page.url.context}/res/components/form/date-range.js"></@script>
+<@script type="text/javascript" src="${page.url.context}/res/components/form/number-range.js"></@script>
+<@script type="text/javascript" src="${url.context}/js/documentlibrary-actions.js"></@script>
+<#include "/org/alfresco/components/form/form.get.head.ftl">
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/search/search.css" />
+
+<#assign gridId = "group-actions"/>
+<#assign controlId = gridId + "-cntrl">
+<#assign containerId = gridId + "-container">
+
+<div class="form-field with-grid group-actions-grid" id="group-actions-${controlId}">
+
+<@grid.datagrid containerId false gridId+"form">
+    <script type="text/javascript">//<![CDATA[
+    (function () {
+        YAHOO.util.Event.onDOMReady(function (){
+            var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+                usePagination: true,
+                pageSize: 10,
+                showExtendSearchBlock: true,
+                actions: [
+                        {
+                            type: "datagrid-action-link-group-actions-bubbling-label",
+                            id: "onActionEdit",
+                            permission: "edit",
+                            label: "${msg("actions.edit")}"
+                        },{
+                            type: "datagrid-action-link-group-actions-bubbling-label",
+                            id: "onActionDelete",
+                            permission: "delete",
+                            label: "${msg("actions.delete-row")}"
+                        }
+                ],
+                datagridMeta: {
+                    itemType: "lecm-group-actions:action",
+                    nodeRef: "${nodeRef!""}",
+                    datagridFormId: "datagrid",
+                    actionsConfig: {
+                        fullDelete: "true"
+                    },
+                    sort: "lecm-group-actions:order|ASC"
+                },
+                showActionColumn: true,
+                showCheckboxColumn: false,
+                bubblingLabel: "group-actions-bubbling-label",
+                allowCreate: true
+            });
+            datagrid.draw();
+        });
+
+    })();
+    //]]></script>
+
+</@grid.datagrid>
+</div>

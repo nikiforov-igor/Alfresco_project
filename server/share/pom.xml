@@ -305,6 +305,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.group-actions</groupId>
+            <artifactId>group-actions-share</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 	</dependencies>
 
 	<build>
