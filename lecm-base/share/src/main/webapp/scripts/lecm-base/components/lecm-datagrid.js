@@ -498,7 +498,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        Dom.setStyle(elCell, "width", oColumn.width + "px");
 			        Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
 
-			        elCell.innerHTML = '<span id="expand-' + oRecord.getId() + '" class="expand-table-icon">' + (oRecord.getData("expanded") ? '-' : '+') + '</span>';
+			        elCell.innerHTML = '<span id="expand-' + oRecord.getId() + '" class="expand-table-icon">+</span>';
 
 			        YAHOO.util.Event.onAvailable("expand-" + oRecord.getId(), function () {
 				        YAHOO.util.Event.on("expand-" + oRecord.getId(), 'click', scope.onExpandClick, oRecord, this);
@@ -507,13 +507,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	        },
 
 	        onExpandClick: function (e, record) {
-		        var numSelectItem = this.widgets.dataTable.getTrIndex(record.getId());
-		        if (record.getData("expanded")) {
-			        record.setData("expanded", false);
-			        this.widgets.dataTable.deleteRow(numSelectItem + 1);
+		        var row = this.widgets.dataTable.getRow(record);
+		        if (Dom.hasClass(row, "expanded")) {
+			        this.onCollapse(record);
 		        } else {
 			    	this.onExpand(record);
 		        }
+	        },
+
+	        onCollapse: function (record) {
+		        var row = this.widgets.dataTable.getRow(record);
+		        var nextRow = Dom.getNextSibling(row);
+		        nextRow.parentNode.removeChild(nextRow);
+
+		        Dom.get("expand-" + record.getId()).innerHTML = "+";
+		        Dom.removeClass(row, "expanded");
 	        },
 
 	        onExpand: function(record) {
@@ -544,13 +552,28 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	        },
 
 	        addExpandedRow: function(record, text) {
-		        var numSelectItem = this.widgets.dataTable.getTrIndex(record.getId());
-		        record.setData("expanded", true);
-		        var row = {
-			        fullRowHTML: text
-		        };
+		        var row = this.widgets.dataTable.getRow(record);
+		        Dom.addClass(row, "expanded");
 
-		        this.widgets.dataTable.addRow(row, numSelectItem + 1);
+		        Dom.get("expand-" + record.getId()).innerHTML = "-";
+
+		        var colSpan = this.datagridColumns.length;
+		        if (this.options.showCheckboxColumn) {
+			        colSpan++;
+		        }
+		        if (this.options.expandable) {
+			        colSpan++;
+		        }
+
+		        var newRow = document.createElement('tr');
+		        newRow.className = "expand-row";
+
+		        var newColumn = document.createElement('td');
+		        newColumn.colSpan = colSpan;
+		        newColumn.innerHTML = text;
+		        newRow.appendChild(newColumn);
+
+		        Dom.insertAfter(newRow, row);
 	        },
 
             /**
@@ -722,19 +745,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        var scope = this;
 
 		        return function (elTr, oRecord) {
-			        if (oRecord.getData("fullRowHTML")) {
-				        var colCount = scope.datagridColumns.length;
-				        if (scope.options.showCheckboxColumn) {
-					        colCount++;
-				        }
-				        if (scope.options.expandable) {
-					        colCount++;
-				        }
-				        elTr.innerHTML = "<td colspan=" + colCount + ">" + oRecord.getData("fullRowHTML") + "</td>";
-				        return false;
-			        } else {
-				        return true;
-			        }
+			        return true;
 		        }
 	        },
 
