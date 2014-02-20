@@ -62,6 +62,7 @@ public interface LecmPermissionService {
     final public String  PERM_MEMBERS_LIST = "_lecmPerm_MemberList";
     final public String  PERM_MEMBERS_ADD = "_lecmPerm_MemberAdd";
     final public String  PERM_SET_RATE = "_lecmPerm_SetRate";
+	final public String  PERM_READ_ATTACHMENT = "_lecmPerm_ReadAttachment";
 
     /**
 	 * Получить обозначение группы полномочий по имени, среди зарегистрированных групп.

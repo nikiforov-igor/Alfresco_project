@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension>
+	<modules>
+		<module>
+			<id>Check Document Details Page Permissions</id>
+			<evaluator type="default.extensibility.evaluator"/>
+			<auto-deploy>true</auto-deploy>
+			<components>
+				<!-- Убирает блок preview со страницы document-details если нет разрешений -->
+				<component>
+					<scope>template</scope>
+					<region-id>web-preview</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="web-preview">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.documents.hasReadAttachmentComponent">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<permission>_lecmPerm_ReadAttachment</permission>
+												<aspect>lecm-document-aspects:lecm-attachment</aspect>
+											</params>
+										</evaluator>
+									</evaluators>
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+			</components>
+		</module>
+	</modules>
+</extension>

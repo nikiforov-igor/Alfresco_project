@@ -55,4 +55,12 @@
 			</list>
 		</property>
 	</bean>
+
+	<bean id="evaluators.documents.util" class="ru.it.lecm.documents.evaluators.EvaluatorsUtil">
+		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.hasReadAttachmentComponent" class="ru.it.lecm.documents.evaluators.HasReadAttachmentComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
+	</bean>
 </beans>

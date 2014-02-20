@@ -268,5 +268,9 @@
                 </property>
             </properties>
         </aspect>
+
+		<!-- аспект, который будет являться признаком, что это вложение в lecm-документ-->
+		<aspect name="lecm-document-aspects:lecm-attachment">
+		</aspect>
     </aspects>
 </model>
