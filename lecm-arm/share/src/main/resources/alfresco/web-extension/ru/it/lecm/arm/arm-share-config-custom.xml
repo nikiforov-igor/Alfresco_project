@@ -353,7 +353,7 @@
                     <show id="lecm-arm:filter-code" force="true"/>
                     <show id="lecm-arm:filter-values" force="true"/>
                     <show id="lecm-arm:filter-multiple-select" force="true"/>
-                    <!--<show id="lecm-arm:filter-class" force="true"/>-->
+                    <show id="lecm-arm:filter-class" force="true"/>
                     <show id="lecm-arm:filter-query" force="true"/>
                 </field-visibility>
             </form>
@@ -362,7 +362,7 @@
                     <show id="cm:name" force="true"/>
                     <show id="lecm-arm:filter-code" force="true"/>
                     <show id="lecm-arm:filter-multiple-select" force="true"/>
-                    <!--<show id="lecm-arm:filter-class" force="true"/>-->
+                    <show id="lecm-arm:filter-class" force="true"/>
                 </field-visibility>
             </form>
         </forms>

@@ -21,6 +21,11 @@ var $siteURL = Alfresco.util.siteURL,
 
         filtersMeta: null,
 
+        onActionEdit: function (item){
+            window.location.href = window.location.protocol + "//" + window.location.host +
+                Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
+        },
+
         onActiveFiltersChanged: function (layer, args) {
             var obj = args[1];
             if (obj !== null) {

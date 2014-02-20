@@ -37,9 +37,16 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                     useDynamicPagination:true,
                     pageSize: 20,
                     showExtendSearchBlock: false,
-                    actions: [],
+                    actions: [
+                        {
+                            type: "datagrid-action-link-documents-arm",
+                            id: "onActionEdit",
+                            permission: "",
+                            label: "${msg("actions.edit")}"
+                        }
+                    ],
                     allowCreate: false,
-                    showActionColumn: false,
+                    showActionColumn: true,
                     showCheckboxColumn: true,
                     bubblingLabel: "documents-arm",
 	                expandable: true
