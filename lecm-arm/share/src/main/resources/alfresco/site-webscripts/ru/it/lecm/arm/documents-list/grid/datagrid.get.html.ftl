@@ -45,7 +45,8 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                     allowCreate: false,
                     showActionColumn: false,
                     showCheckboxColumn: true,
-                    bubblingLabel: "documents-arm"
+                    bubblingLabel: "documents-arm",
+	                expandable: true
                 }).setMessages(${messages});
 
                 YAHOO.util.Event.onContentReady ('${id}', function () {
