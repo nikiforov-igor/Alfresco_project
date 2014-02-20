@@ -1,7 +1,14 @@
-var $siteURL = Alfresco.util.siteURL,
-	$combine = Alfresco.util.combinePaths;
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+LogicECM.module = LogicECM.module || {};
+
+LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
+    var $siteURL = Alfresco.util.siteURL,
+        $combine = Alfresco.util.combinePaths;
 
     var Dom = YAHOO.util.Dom,
         Bubbling = YAHOO.Bubbling;
@@ -36,7 +43,7 @@ var $siteURL = Alfresco.util.siteURL,
                     //обновить данные в гриде! перестраивать саму таблицу не нужно
                     this._setDefaultDataTableErrors(this.widgets.dataTable);
 
-                    if ((this.filtersMeta != null) && (this.filtersMeta.query != null) && this.filtersMeta.query.length > 0) {
+                    if ((this.filtersMeta != null) && (this.filtersMeta.query != null)) {
                         var searchConfig = this.datagridMeta.searchConfig;
                         if (searchConfig == null) {
                             this.datagridMeta.searchConfig = {};
@@ -44,7 +51,7 @@ var $siteURL = Alfresco.util.siteURL,
                         }
 
                         var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
-                        updatedSearchConfig.filter = updatedSearchConfig.filter + " AND (" + this.filtersMeta.query + ")";
+                        updatedSearchConfig.filter += (this.filtersMeta.query.length > 0 ? (" AND (" + this.filtersMeta.query + ")") : "");
 
                         var offset = 0;
                         if (this.widgets.paginator){

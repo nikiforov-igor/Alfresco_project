@@ -1,15 +1,17 @@
-/**
- * ARM module.
- *
- * @namespace LogicECM.module.ARM
- * @class LogicECM.module.ARM.Tree
- */
+if (typeof LogicECM == "undefined" || !LogicECM) {
+    var LogicECM = {};
+}
+
+LogicECM.module = LogicECM.module || {};
+
+LogicECM.module.ARM = LogicECM.module.ARM|| {};
+
 (function () {
 
-    LogicECM.module.ARM.Tree = function (htmlId) {
-        LogicECM.module.ARM.Tree.superclass.constructor.call(
+    LogicECM.module.ARM.TreeMenu = function (htmlId) {
+        LogicECM.module.ARM.TreeMenu.superclass.constructor.call(
             this,
-            "LogicECM.module.ARM.Tree",
+            "LogicECM.module.ARM.TreeMenu",
             htmlId,
             ["button", "container", "connection", "json", "selector"]);
 
@@ -18,7 +20,7 @@
         return this;
     };
 
-    YAHOO.extend(LogicECM.module.ARM.Tree, Alfresco.component.Base, {
+    YAHOO.extend(LogicECM.module.ARM.TreeMenu, Alfresco.component.Base, {
 
         PREFERENCE_KEY: "ru.it.lecm.arm.menu-state",
 

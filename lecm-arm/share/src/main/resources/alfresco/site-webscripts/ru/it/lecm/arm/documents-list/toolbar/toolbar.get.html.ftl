@@ -1,10 +1,18 @@
-<#assign id = args.htmlid>
-<script type="text/javascript">//<![CDATA[
-function init() {
-    new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages});
-}
+<#include "/org/alfresco/components/component.head.inc">
+<!-- Data List Toolbar -->
+<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css" />
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-documents-toolbar.js"></@script>
 
-YAHOO.util.Event.onDOMReady(init);
+<#assign id = args.htmlid>
+<script type="text/javascript">
+(function(){
+    function init() {
+        new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages});
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
+//<![CDATA[
 //]]></script>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
@@ -17,7 +25,7 @@ YAHOO.util.Event.onDOMReady(init);
     </span>
 </div>
 <div class="filters">
-        <span id="${id}-filtersButton" class="yui-button yui-push-button">
+        <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
            <span class="first-child">
               <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>
            </span>

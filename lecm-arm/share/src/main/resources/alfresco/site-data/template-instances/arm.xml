@@ -28,6 +28,10 @@
                 <bubblingLabel>documents-arm</bubblingLabel>
             </properties>
         </component>
+        <component>
+            <region-id>documents-tree</region-id>
+            <url>/lecm/arm/documents-tree-menu</url>
+        </component>
         <!-- Forbidden -->
         <component>
             <region-id>forbidden</region-id>
