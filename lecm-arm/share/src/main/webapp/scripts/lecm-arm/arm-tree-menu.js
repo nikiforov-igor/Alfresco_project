@@ -7,6 +7,9 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		Anim = YAHOO.util.Anim;
 
     LogicECM.module.ARM.TreeMenu = function (htmlId) {
         LogicECM.module.ARM.TreeMenu.superclass.constructor.call(
@@ -17,8 +20,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
-
-        //YAHOO.Bubbling.on("updateNodeCounters", this.onUpdateNodeCounters, this);
+	    this.accordionItems = [];
         return this;
     };
 
@@ -34,6 +36,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         menuState: null,
 
+	    shownAccordionItem: null,
+
+	    accordionItems: null,
+
         onReady: function () {
             var menu = this;
             this.preferences.request(this.PREFERENCE_KEY,
@@ -48,15 +54,122 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     selected: ""
                                 };
                             }
-                            menu._createTree();
+                            menu.createAccordion();
                         },
                         scope: this
                     }
                 });
         },
 
-        _createTree: function () {
-            this.tree = new YAHOO.widget.TreeView(this.id);
+	    createAccordion: function() {
+		    var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
+		    var me = this;
+		    var callback = {
+			    success: function (oResponse) {
+				    var oResults = eval("(" + oResponse.responseText + ")");
+				    if (oResults != null) {
+					    me.accordionItems = oResults;
+					    var accordionContent = "";
+					    for (var i = 0; i < me.accordionItems.length; i++) {
+						    accordionContent += me.getAccordionItemHtml(me.accordionItems[i]);
+					    }
+					    Dom.get(me.id + "-headlines").innerHTML = accordionContent;
+					    me.initAccordion();
+				    }
+			    },
+			    failure: function (oResponse) {
+				    Alfresco.util.PopupManager.displayMessage(
+					    {
+						    text:me.msg("message.details.failure") + ": " + oResponse
+					    });
+			    },
+			    scope: this
+		    };
+		    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+	    },
+
+	    getAccordionItemHtml: function(node) {
+			var result = "";
+		    result += "<li><div id='ac-head-" + node.nodeRef +"' class='accordion-head'><span>";
+		    result += node.label;
+		    result += "</span></div><div id='ac-content-" + node.nodeRef + "' class='accordion-content'></div></li>";
+		    return result;
+	    },
+
+	    initAccordion : function() {
+		    if (this.accordionItems != null) {
+			    for (var i = 0; i < this.accordionItems.length; i++) {
+				    var node = this.accordionItems[i];
+				    YAHOO.util.Event.onAvailable("ac-head-" + node.nodeRef, function (obj) {
+					    YAHOO.util.Event.on("ac-head-" + obj.node.nodeRef, 'click', this.onAccordionClick, obj.node, this);
+					    if (obj.forceExpand) {
+						    this.onAccordionClick(null, obj.node);
+					    }
+				    }, {node: node, forceExpand: i == 0}, this);
+			    }
+		    }
+	    },
+
+	    onAccordionClick : function(e, node) {
+		    if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
+			    if (!node.createdTree) {
+				    this._createTree(node);
+				    node.createdTree = true;
+			    }
+			    if (this.shownAccordionItem != null) {
+			        this.collapseAccordion(this.shownAccordionItem);
+			    }
+			    this.expandAccordion(node);
+			    this.shownAccordionItem = node;
+		    }
+	    },
+
+	    expandAccordion: function(node) {
+		    Dom.addClass("ac-head-" + node.nodeRef, "shown");
+		    Dom.addClass("ac-content-" + node.nodeRef, "shown");
+		    var attributes = {
+			    height: {
+				    from: 0,
+				    to: this.getAccordionHeight()
+			    },
+			    opacity: {
+				    from: 0,
+				    to: 1
+			    }
+		    };
+
+		    var anim = new Anim("ac-content-" + node.nodeRef, attributes, .6, YAHOO.util.Easing.backOut);
+		    anim.animate();
+	    },
+
+	    collapseAccordion: function(node) {
+		    Dom.removeClass("ac-head-" + node.nodeRef, "shown");
+		    Dom.removeClass("ac-content-" + node.nodeRef, "shown");
+		    var attributes = {
+			    height: {
+				    from: this.getAccordionHeight(),
+				    to: 0
+			    },
+			    opacity: {
+				    from:1,
+				    to:0
+			    }
+		    };
+		    var anim = new Anim("ac-content-" + node.nodeRef, attributes, .6, YAHOO.util.Easing.easeBoth);
+		    anim.animate();
+	    },
+
+	    getAccordionHeight: function() {
+		    var block = Dom.get('lecm-page');
+		    var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
+
+		    var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
+			    - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
+		    return  h - 80 - 30 * this.accordionItems.length;
+	    },
+
+        _createTree: function (node) {
+            this.tree = new YAHOO.widget.TreeView("ac-content-" + node.nodeRef);
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree.bind(this));
 
@@ -71,6 +184,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 });
             }
             var root = this.tree.getRoot();
+	        root.data.nodeRef  = node.nodeRef;
+	        root.data.armNodeRef  = node.armNodeRef;
             this._loadTree(root);
 
             this.tree.subscribe('clickEvent', function (event) {

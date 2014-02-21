@@ -41,3 +41,27 @@
     background: url('/share/res/images/lecm-arm/filter-16.png') no-repeat 12px 4px;
     padding-left: 24px;
 }
+
+div.arm-tree-menu .arm-accordion div.accordion-head {
+	cursor: pointer;
+	background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;
+	height: 29px;
+	font-size: 13px;
+	font-weight: bold;
+	font-style: normal;
+	color: #333333;
+}
+div.arm-tree-menu .arm-accordion div.accordion-head.shown {
+	cursor: auto;
+}
+div.arm-tree-menu .arm-accordion div.accordion-head span {
+	position: absolute;
+	margin-left: 10px;
+	margin-top: 6px;
+}
+div.arm-tree-menu .arm-accordion div.accordion-content {
+	height: 0;
+	overflow-y: hidden;
+	overflow-x: auto;
+	padding-left: 10px;
+}

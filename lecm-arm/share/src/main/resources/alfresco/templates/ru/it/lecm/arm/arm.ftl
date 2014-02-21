@@ -1,5 +1,6 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader "transitional">
+	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
     <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-filters.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/document-list-filters-manager.js"></@script>
