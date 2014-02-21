@@ -349,12 +349,20 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         typesQuery += '+TYPE:"' + type + '"'
                     }
                 }
+	            if (typesQuery.length > 0) {
+		            if (searchQuery.length > 0) {
+			            searchQuery = "(" + typesQuery + ") AND (" + searchQuery + ")";
+		            } else {
+			            searchQuery = typesQuery;
+		            }
+	            }
+
                 if (searchQuery.length > 0) {
                     Alfresco.util.Ajax.jsonRequest({
                         method: "POST",
                         url: Alfresco.constants.PROXY_URI + "lecm/count/by-query",
                         dataObj: {
-                            query: "(" + typesQuery + ") AND (" + searchQuery + ")"
+                            query: searchQuery
                         },
                         successCallback: {
                             fn: function (oResponse) {
