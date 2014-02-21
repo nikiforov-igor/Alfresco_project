@@ -18,6 +18,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.bubblingLabel = null;
         this.currentNode = null;
 
+        // Preferences service
+        this.preferences = new Alfresco.service.Preferences();
+
+        this.deferredListPopulation = new Alfresco.util.Deferred(["updateArmFilters", "onReady"],
+            {
+                fn: this.updateCurrentFiltersForm,
+                scope: this
+            });
+
         YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
         YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
         return this;
@@ -27,6 +36,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.Filters.prototype,
         {
+            PREFERENCE_KEY: "ru.it.lecm.arm.current-filters",
+
             avaiableFilters: [],
             currentFilters: [],
 
@@ -39,7 +50,29 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             onReady: function () {
                 YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
                 YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
-                this.updateCurrentFiltersForm(false);
+
+                var filters = this;
+                this.preferences.request(this.PREFERENCE_KEY,
+                    {
+                        successCallback: {
+                            fn: function (p_oResponse) {
+                                var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters.PREFERENCE_KEY);
+                                if (filtersPref != null && filtersPref != "") {
+                                    var currentFilters = YAHOO.lang.JSON.parse(filtersPref);
+                                } else {
+                                    var currentFilters = [];
+                                }
+                                filters.deferredListPopulation.fulfil("onReady");
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function (p_oResponse) {
+                                filters.deferredListPopulation.fulfil("onReady");
+                            },
+                            scope: this
+                        }
+                    });
             },
 
             onUpdateAvaiableFilters: function (layer, args) {
@@ -60,7 +93,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         this.avaiableFilters = [];
                     }
                 }
-                //this.updateCurrentFiltersForm(true);
+                this.deferredListPopulation.fulfil("updateArmFilters");
             },
 
             onUpdateCurrentFilters: function (layer, args) {
@@ -104,15 +137,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return -1;
             },
 
-            updateCurrentFiltersForm: function (sendRequestToGrid) {
+            updateCurrentFiltersForm: function () {
                 var context = this;
-                if (sendRequestToGrid) {
                     Alfresco.util.Ajax.jsonRequest({
                         method: "POST",
                         url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
                         dataObj: {
-                            armNode: YAHOO.lang.JSON.stringify(this.currentNode.data),
-                            filters: YAHOO.lang.JSON.stringify(this.currentFilters)
+                            armNode: YAHOO.lang.JSON.stringify((this.currentNode && this.currentNode.data) ? this.currentNode.data : {}),
+                            filters: YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : [])
                         },
                         successCallback: {
                             fn: function (oResponse) {
@@ -130,7 +162,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         failureCallback: {
                             fn: function () {
                                 YAHOO.Bubbling.fire("activeFiltersChanged", {
-                                    bubblingLabel: "documents-arm",
+                                    bubblingLabel: context.bubblingLabel,
                                     filterMeta: {
                                         query: ""
                                     }
@@ -140,7 +172,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         scope: this,
                         execScripts: true
                     });
-                }
                 var filtersExist = this.currentFilters.length > 0;
                 Dom.setStyle(this.id + "-body", "display", filtersExist ? "" : "none");
 

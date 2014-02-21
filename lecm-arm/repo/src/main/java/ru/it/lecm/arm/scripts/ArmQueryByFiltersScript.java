@@ -31,6 +31,7 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
     public static final String MULTIPLE = "multiple";
     public static final String FILTERS = "filters";
     public static final String ARM_NODE = "armNode";
+    public static final String BASE_QUERY_ARM_FILTER = "baseQueryArmFilter";
 
     private static ApplicationContext ctx;
 
@@ -73,44 +74,49 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
                 for (int i = 0; i < filtersArray.length(); i++) {
                     JSONObject filter = filtersArray.getJSONObject(i);
                     String filterId = (String) filter.get(CLASS);
+
+                    ArmDocumenstFilter filterBean = null;
+                    List<String> values = new ArrayList<String>();
+
                     if (filterId != null) {
-                        ArmDocumenstFilter filterBean = null;
                         try {
                             filterBean = (ArmDocumenstFilter) getApplicationContext().getBean(filterId);
                         } catch (BeansException ex) {
                             logger.error(ex.getMessage(), ex);
                         }
-                        if (filterBean != null) {
-                            List<String> values = new ArrayList<String>();
+                    } else { // не задано - берем по умолчанию
+                        filterBean = (BaseQueryArmFilter) getApplicationContext().getBean(BASE_QUERY_ARM_FILTER);
+                    }
 
-                            if (filterBean instanceof BaseQueryArmFilter) {
-                                values.add(filter.has(QUERY) ? (String) filter.get(QUERY) : null);
-                            }
+                    if (filterBean != null) {
+                        if (filterBean instanceof BaseQueryArmFilter) { // для бина с запросом первым параметром пойдет сам запрос
+                            values.add(filter.has(QUERY) ? (String) filter.get(QUERY) : null);
+                        }
 
-                            if (Boolean.valueOf(String.valueOf(filter.get(MULTIPLE))))  {
-                                Object curValues = filter.get(CUR_VALUE);
-                                if (curValues instanceof JSONArray) {
-                                    JSONArray currentValueArray = (JSONArray) filter.get(CUR_VALUE);
-                                    for (int j = 0; j < currentValueArray.length(); j++) {
-                                        String v = (String) currentValueArray.get(j);
-                                        values.add(v);
-                                    }
-                                } else {
-                                    values.addAll(Arrays.asList(((String) curValues).split(",")));
+                        if (Boolean.valueOf(String.valueOf(filter.get(MULTIPLE)))) {
+                            Object curValues = filter.get(CUR_VALUE);
+                            if (curValues instanceof JSONArray) {
+                                JSONArray currentValueArray = (JSONArray) filter.get(CUR_VALUE);
+                                for (int j = 0; j < currentValueArray.length(); j++) {
+                                    String v = (String) currentValueArray.get(j);
+                                    values.add(v);
                                 }
-
                             } else {
-                                String currentValueStr = (String) filter.get(CUR_VALUE);
-                                values.addAll(Arrays.asList(currentValueStr.split(",")));
+                                values.addAll(Arrays.asList(((String) curValues).split(",")));
                             }
 
-                            String query = filterBean.getQuery(armNode, values);
-                            if (!query.isEmpty()) {
-                                builder.append("(").append(query).append(")").append(" AND");
-                            }
+                        } else {
+                            String currentValueStr = (String) filter.get(CUR_VALUE);
+                            values.addAll(Arrays.asList(currentValueStr.split(",")));
+                        }
+
+                        String query = filterBean.getQuery(armNode, values);
+                        if (!query.isEmpty()) {
+                            builder.append("(").append(query).append(")").append(" AND");
                         }
                     }
                 }
+
                 if (builder.length() > 0) {
                     builder.delete(builder.length() - 4, builder.length());
                 }

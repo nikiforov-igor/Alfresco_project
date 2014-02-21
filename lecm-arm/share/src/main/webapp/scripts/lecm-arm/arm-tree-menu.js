@@ -58,6 +58,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree.bind(this));
 
+            if (this.menuState.selected == "") {
+                //нет выбранного узла - сразу отсылаем событие на перерисовку грида
+                YAHOO.Bubbling.fire ("armNodeSelected", {
+                    armNode: null,
+                    bubblingLabel: "documents-arm"
+                });
+                YAHOO.Bubbling.fire ("updateArmFilters", {
+                    currentNode: null
+                });
+            }
             var root = this.tree.getRoot();
             this._loadTree(root);
 
@@ -181,36 +191,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.menuState.selected = this._getTextNodeId(node);
 
             if (node) {
-
-	            var datagridMeta = {};
-
-                var searchQuery = this.getSearchQuery(node);
-                if (searchQuery) {
-	                datagridMeta.searchConfig = {
-		                filter: searchQuery
-	                }
-                }
-	            if (node.data.columns != null && node.data.columns.length > 0) {
-		            datagridMeta.columns = node.data.columns;
-	            } else {
-                    datagridMeta.columns = [{
-                        dataType:"text",
-                        formsName:"prop_cm_name",
-                        name:"cm:name",
-                        label:"Имя",
-                        sortable: true,
-                        type:"property"
-                    }];
-                }
-
-                if (node.data.types != null && node.data.types.length > 0) {
-                    datagridMeta.itemType = node.data.types;
-                } else {
-                    datagridMeta.itemType = "lecm-document:base";
-                }
-
-	            YAHOO.Bubbling.fire ("reСreateDatagrid", {
-		            datagridMeta: datagridMeta,
+	            YAHOO.Bubbling.fire ("armNodeSelected", {
+		            armNode: node,
 		            bubblingLabel: "documents-arm"
 	            });
 
