@@ -165,12 +165,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    },
 
 	    getAccordionHeight: function() {
-		    var block = Dom.get('lecm-page');
-		    var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
-
-		    var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
-			    - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
-		    return  h - 80 - 30 * this.accordionItems.length;
+		    var h = Dom.getY("lecm-content-ft") - Dom.getY(this.id);
+		    return  h - 30 * this.accordionItems.length;
 	    },
 
         _createTree: function (node) {
