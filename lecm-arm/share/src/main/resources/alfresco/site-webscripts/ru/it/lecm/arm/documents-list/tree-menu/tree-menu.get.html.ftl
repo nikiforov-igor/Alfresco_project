@@ -1,4 +1,4 @@
-<#include "/org/alfresco/components/form/form.get.head.ftl">
+<#include "/org/alfresco/components/component.head.inc">
 <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-tree-menu.js"></@script>
 <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
 <@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
