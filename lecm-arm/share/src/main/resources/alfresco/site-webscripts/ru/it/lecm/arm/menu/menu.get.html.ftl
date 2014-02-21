@@ -1,3 +1,6 @@
+<#include "/org/alfresco/components/component.head.inc">
+<@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-menu.js"></@script>
+
 <#assign id = args.htmlid>
 <#assign onHomePage = true/>
 <#if args.onHome??>

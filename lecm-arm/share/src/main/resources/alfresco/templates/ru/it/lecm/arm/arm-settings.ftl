@@ -1,5 +1,14 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <@templateHeader "transitional">
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-arm/lecm-arm.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/base-menu/base-menu.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-arm/lecm-arm-menu.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-dictionary/dictionary-toolbar.css" />
+	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-dictionary/dictionary-tree.css" />
+	<#include "/org/alfresco/components/form/form.get.head.ftl">
+
 	<script type="text/javascript">//<![CDATA[
 		function init() {
 			new LogicECM.module.Base.Resizer('DictionaryResizer');
@@ -7,8 +16,6 @@
 
 		YAHOO.util.Event.onDOMReady(init);
 	//]]></script>
-
-	<#include "/org/alfresco/components/form/form.get.head.ftl">
 </@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
