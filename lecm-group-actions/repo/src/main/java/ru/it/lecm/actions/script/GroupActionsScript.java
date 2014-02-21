@@ -7,14 +7,16 @@ import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.mozilla.javascript.Scriptable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -27,6 +29,8 @@ public class GroupActionsScript extends BaseWebScript {
     private DocumentService documentService;
     private DictionaryService dictionaryService;
     private NamespaceService namespaceService;
+
+    final private static Logger logger = LoggerFactory.getLogger(GroupActionsScript.class);
 
     public ScriptNode getHomeRef() {
         NodeRef home = actionsService.getHomeRef();
@@ -69,6 +73,21 @@ public class GroupActionsScript extends BaseWebScript {
         }
 
         return results;
+    }
+
+    public Scriptable getActiveGroupActions(String jsonItems) {
+        List<NodeRef> forItems = new ArrayList<NodeRef>();
+        try {
+            JSONArray array = new JSONArray(jsonItems);
+            for (int i = 0; i < array.length(); i++) {
+                if (NodeRef.isNodeRef(array.getString(i))) {
+                    forItems.add(new NodeRef(array.getString(i)));
+                }
+            }
+        } catch (JSONException e) {
+            logger.error("Error while parsing input data", e);
+        }
+        return createScriptable(actionsService.getActiveGroupActions(forItems));
     }
 
 }

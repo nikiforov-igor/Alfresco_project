@@ -3,6 +3,8 @@ package ru.it.lecm.actions.bean;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
+import java.util.List;
+
 /**
  * User: pmelnikov
  * Date: 19.02.14
@@ -18,6 +20,11 @@ public interface GroupActionsService {
     public static final QName TYPE_GROUP_ACTION = QName.createQName(NAMESPACE_URI, "action");
 
     public static final QName PROP_FIELDS_REF = QName.createQName(NAMESPACE_URI, "form-fields-ref");
+    public static final QName PROP_TYPE = QName.createQName(NAMESPACE_URI, "type");
+    public static final QName PROP_STATUSES = QName.createQName(NAMESPACE_URI, "statuses");
+    public static final QName PROP_EXPRESSION = QName.createQName(NAMESPACE_URI, "expression");
 
     public NodeRef getHomeRef();
+
+    public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems);
 }

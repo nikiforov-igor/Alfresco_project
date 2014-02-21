@@ -1,11 +1,15 @@
 package ru.it.lecm.actions.bean;
 
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,4 +63,54 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
+
+    @Override
+    public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems) {
+        List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
+        List<NodeRef> actions = new ArrayList<NodeRef>();
+        for (ChildAssociationRef child : children) {
+            actions.add(child.getChildRef());
+        }
+        actions = filterByType(actions, forItems);
+        return actions;
+    }
+
+    private List<NodeRef> filterByType(List<NodeRef> actions, List<NodeRef> items) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        for (NodeRef action : actions) {
+            String type = nodeService.getProperty(action, GroupActionsService.PROP_TYPE).toString();
+            QName typeQName = QName.createQName(type, namespaceService);
+            boolean isRight = true;
+            for (NodeRef item : items) {
+                TypeDefinition typeDef = dictionaryService.getType(typeQName);
+                if (typeDef != null) {
+                    QName itemType = nodeService.getType(item);
+                    if (!itemType.equals(typeQName) || !dictionaryService.isSubClass(itemType, typeQName)) {
+                        isRight = false;
+                        break;
+                    }
+                } else {
+                    if (!nodeService.hasAspect(item, typeQName)) {
+                        isRight = false;
+                        break;
+                    }
+                }
+            }
+            if (isRight) {
+                result.add(action);
+            }
+        }
+        return result;
+    }
+
+    private List<NodeRef> filterByStatuses(List<NodeRef> actions, List<NodeRef> items) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        return result;
+    }
+
+    private List<NodeRef> filterByExpression(List<NodeRef> actions, List<NodeRef> items) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
+        return result;
+    }
+
 }

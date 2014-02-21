@@ -55,4 +55,12 @@
         </div>
     </div>
 </div>
+<div class="group-actions">
+    <span id="${id}-groupActionsButton" class="yui-button yui-push-button">
+       <span class="first-child">
+          <button type="button">${msg("button.group-actions")}</button>
+       </span>
+    </span>
+</div>
+
 </@comp.baseToolbar>

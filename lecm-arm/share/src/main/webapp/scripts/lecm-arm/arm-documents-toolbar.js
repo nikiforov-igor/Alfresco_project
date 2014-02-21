@@ -18,6 +18,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    YAHOO.Bubbling.on("updateArmToolbar", this.onUpdateArmToolbar, this);
 	    YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
+	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
 
@@ -34,6 +35,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             avaiableFilters:[],
             isNeedUpdate: false,
+
+            reloadActionsUpdateTimer: null,
 
             _renderFilters: function (filters, updateHtml) {
                 if (!updateHtml) {
@@ -96,6 +99,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            );
 
                 this.toolbarButtons["defaultActive"].filtersButton = Alfresco.util.createYUIButton(this, "filtersButton", this.onFiltersClick);
+
+                this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
+                    this.id + "-groupActionsButton",
+                    {
+                        type: "menu",
+                        menu: [],
+                        disabled: true
+                    }
+                );
             },
 
             _drawFiltersPanel: function () {
@@ -215,6 +227,78 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		        }
 		        button.set("disabled", !hasCreateTypes);
 	        },
+
+            onCheckDocument: function onCheckDocumentOnDataGrid() {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+                button.set("disabled", true);
+                if (this.reloadActionsUpdateTimer != null) {
+                    clearTimeout(this.reloadActionsUpdateTimer);
+                }
+                this.reloadActionsUpdateTimer = setTimeout(this.onCheckDocumentFinished.bind(this), 1500);
+            },
+
+            onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+                var menu = button.getMenu();
+
+
+                var datagridItems = this.modules.dataGrid.getSelectedItems();
+                var items = []
+                for (var i in datagridItems) {
+                    items.push(datagridItems[i].nodeRef);
+                }
+                var me = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/groupActions/list",
+                    dataObj: {
+                        items: JSON.stringify(items)
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            var json = oResponse.json;
+                            var actionItems = [];
+                            for (var i in json) {
+                                actionItems.push({
+                                    text: json[i],
+                                    value: json[i],
+                                    onclick: {
+                                        fn: me.onGroupActionsClick,
+                                        obj: {
+                                            actionId: json[i],
+                                            items: items
+                                        },
+                                        scope: this
+                                    }
+                                });
+                            }
+                            if (YAHOO.util.Dom.inDocument(menu.element)) {
+                                menu.clearContent();
+                                menu.addItems(actionItems);
+                                menu.render();
+                            } else {
+                                menu.itemData = actionItems;
+                            }
+                            if (actionItems.length == 0) {
+                                button.set("disabled", true);
+                            } else {
+                                button.set("disabled", false);
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
+                alert(p_oItem.actionId);
+                alert(p_oItem.items);
+            },
 
             onUpdateArmFilters: function(layer, args) {
                 var currentNode = args[1].currentNode;
