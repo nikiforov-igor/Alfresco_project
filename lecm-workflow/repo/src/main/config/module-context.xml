@@ -6,6 +6,7 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<import resource="classpath:alfresco/module/${artifactId}/context/service-context.xml"/>
+	<import resource="classpath:alfresco/module/${artifactId}/context/route-context.xml"/>
 	<import resource="classpath:alfresco/module/${artifactId}/context/extension-context.xml"/>
 	<import resource="classpath:alfresco/module/${artifactId}/context/policy-context.xml"/>
 	<import resource="classpath:alfresco/module/${artifactId}/context/webscript-context.xml"/>

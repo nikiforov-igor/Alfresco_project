@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+	<process id="lecmRoute" name="Запуск по маршруту">
+		<startEvent id="start-route" name="Start Route"/>
+		<serviceTask id="empty-task" name="Empty task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+					]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<receiveTask id="receive-task" name="Receive Task"/>
+		<serviceTask id="start-workflow" name="Start Workflow" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+			<extensionElements>
+				<activiti:field name="script">
+					<activiti:string><![CDATA[
+    				//тут будет скрипт подготовки входных параметров того, чего мы запускаем: согласование или подписание
+					]]></activiti:string>
+				</activiti:field>
+			</extensionElements>
+		</serviceTask>
+		<endEvent id="end-route" name="End Route"></endEvent>
+		<sequenceFlow id="start-to-emptyTask" sourceRef="start-route" targetRef="empty-task"></sequenceFlow>
+		<sequenceFlow id="emptyTask-to-receiveTask" sourceRef="empty-task" targetRef="receive-task"></sequenceFlow>
+		<sequenceFlow id="receiveTask-to-startWorkflowTask" sourceRef="receive-task" targetRef="start-workflow"></sequenceFlow>
+		<sequenceFlow id="startWorkflowTask-to-end" sourceRef="start-workflow" targetRef="end-route"></sequenceFlow>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmRoute">
+		<bpmndi:BPMNPlane bpmnElement="lecmRoute" id="BPMNPlane_lecmRoute">
+			<bpmndi:BPMNShape bpmnElement="start-route" id="BPMNShape_start-route">
+				<omgdc:Bounds height="35.0" width="35.0" x="30.0" y="150.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="empty-task" id="BPMNShape_empty-task">
+				<omgdc:Bounds height="55.0" width="105.0" x="120.0" y="140.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="receive-task" id="BPMNShape_receive-task">
+				<omgdc:Bounds height="55.0" width="105.0" x="290.0" y="140.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="start-workflow" id="BPMNShape_start-workflow">
+				<omgdc:Bounds height="55.0" width="105.0" x="460.0" y="140.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="end-route" id="BPMNShape_end-route">
+				<omgdc:Bounds height="35.0" width="35.0" x="640.0" y="150.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

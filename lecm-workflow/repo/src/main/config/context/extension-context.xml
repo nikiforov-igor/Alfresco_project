@@ -10,4 +10,8 @@
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
 
+	<bean id="route.workflow.extension" parent="baseScript"
+		  class="ru.it.lecm.workflow.extensions.RouteWorkflowJavascriptExtension"
+		  p:extensionName="routeWorkflow"/>
+
 </beans>

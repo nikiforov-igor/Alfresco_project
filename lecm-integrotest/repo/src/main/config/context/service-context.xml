@@ -3,8 +3,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:util="http://www.springframework.org/schema/util"
-		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- Registration of models -->
 
@@ -54,7 +54,7 @@
 				<bean class="ru.it.lecm.integrotest.actions.ChkObjExists">
 					<property name="idRefStr" value="lecm-orgstr:business-role;lecm-orgstr:business-role-identifier;Участник" />
 				</bean>
-				
+
 				- Проверка орг-структуры -
 				...
 			</list>
@@ -70,7 +70,7 @@
 				<bean class="ru.it.lecm.integrotest.actions.ChkUserRole">
 					<property name="role" value="Согласующий" />
 					- style: может ли роль содержать других (relaxed, by default) или нет (strict) -
-					<property name="style" value="relaxed" />  
+					<property name="style" value="relaxed" />
 					<property name="users">
 						<list>
 							<value>Согласкин</value>
@@ -100,8 +100,8 @@
 	  -->
 
 	<!-- Поисковый/локационный бин
-		для использования там, где надо NodeRef или id, а имеются только 
-		значения отдельных полей 
+		для использования там, где надо NodeRef или id, а имеются только
+		значения отдельных полей
 	  -->
 	<bean id="finderBean" class="ru.it.lecm.integrotest.beans.FinderBeanImpl" depends-on="searchService, nodeService">
 		<property name="nodeService" ref="nodeService"/>
@@ -117,7 +117,7 @@
 		<!-- вызов фабричного метода получения мап (БР-доступ) и (БР-пользователь)-->
 		<property name="accessMap">
 			<bean class="ru.it.lecm.integrotest.actions.checkers.LecmCheckNodeACL" factory-method="makeBusinessRoleToUserAccessTable">
-				<!-- roleAccessMap: перечисление бизнес-ролей и соот-щих разрешений --> 
+				<!-- roleAccessMap: перечисление бизнес-ролей и соот-щих разрешений -->
 				<constructor-arg type="java.lang.String" value="BR_01:R; BR_02:W; BR_10:DENY; BR_INITIATOR:W"/>
 
 				<!-- roleUsersMap: перечисление бизнес-ролей и соот-щих пользователей
@@ -127,20 +127,20 @@
 			</bean>
 		</property>
 
-		<!-- rwCheckingPropName: Атрибут, используемый для проверки чтения-записи. 
+		<!-- rwCheckingPropName: Атрибут, используемый для проверки чтения-записи.
 			Формат строки в виде для QName: "{type}prop", возможно с короткими именами -->
 		<property name="rwCheckingPropName" value="cm:name" />
 
-		<!-- writeValue: Значение для проверки записи в атрибут rwCheckingPropName 
+		<!-- writeValue: Значение для проверки записи в атрибут rwCheckingPropName
 			Формат строки - в виде для QName "{type}prop", возможно с короткими именами-синонимами -->
 		<property name="writeValue" value="WriteAccess_Test_Value" />
 
 		<!-- (1) nodeRefStr: явное задание проверяемого узла адресной строкой.
-			<property name="nodeRefStr" value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" /> 
+			<property name="nodeRefStr" value="workspace://SpacesStore/f48f2796-da3f-4d6e-bfc4-569726a9f8d0" />
 		  -->
 
 		<!-- (2) Использование поискового бина для загрузки узла:
-			<property name="nodeRef"> 
+			<property name="nodeRef">
 				<bean factory-bean="finderBean" factory-method="findNodeByProp">
 					<constructor-arg type="java.lang.String" value="lecm-orgstr:structure"/>
 					<constructor-arg type="java.lang.String" value="cm:name" />
@@ -150,7 +150,7 @@
 		  -->
 
 
-		<!-- (3) findRef: "typeName", "propName", "value" поисковые параметры узла 
+		<!-- (3) findRef: "typeName", "propName", "value" поисковые параметры узла
 			для случая, когда узел задаётся не напрямую, а запросом:
 		  -->
 		<property name="findRef.nodeType" value="lecm-orgstr:structure" />
@@ -198,7 +198,7 @@
 						Admin: W; dummyUser: -;
 						Согласкин:-; Несогласкин:-; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:-; Тарантино:-; Кэмерон:-; 
+						Руководкин:-; Тарантино:-; Кэмерон:-;
 						Кругман:-; БигБосс:-;
 						ЛаоЦзы:-; МаоЦзеДун:-
 				 "/>
@@ -228,7 +228,7 @@
 						Admin: W; dummyUser: -;
 						Согласкин:-; Несогласкин:-; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:-; Тарантино:-; Кэмерон:-; 
+						Руководкин:-; Тарантино:-; Кэмерон:-;
 						Кругман:-; БигБосс:-;
 						ЛаоЦзы: W; МаоЦзеДун:W
 				 "/>
@@ -255,7 +255,7 @@
 						Admin: W;
 						Согласкин:W; Несогласкин:W; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:W; Тарантино:-; Кэмерон:-; 
+						Руководкин:W; Тарантино:-; Кэмерон:-;
 						Кругман:W; БигБосс:W;
 						ЛаоЦзы:-; МаоЦзеДун:-
 				 "/>
@@ -282,7 +282,7 @@
 						Admin: W;
 						Согласкин:W; Несогласкин:W; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:W; Тарантино:-; Кэмерон:-; 
+						Руководкин:W; Тарантино:-; Кэмерон:-;
 						Кругман:W; БигБосс:W;
 						ЛаоЦзы:R; МаоЦзеДун:R
 				 "/>
@@ -309,7 +309,7 @@
 						Admin: W;
 						Согласкин:R; Несогласкин:R; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:R; Тарантино:W; Кэмерон:-; 
+						Руководкин:R; Тарантино:W; Кэмерон:-;
 						Кругман:W; БигБосс:W;
 						ЛаоЦзы:-; МаоЦзеДун:-
 				 "/>
@@ -336,7 +336,7 @@
 						Admin: W;
 						Согласкин:R; Несогласкин:R; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:R; Тарантино:W; Кэмерон:-; 
+						Руководкин:R; Тарантино:W; Кэмерон:-;
 						Кругман:W; БигБосс:W;
 						ЛаоЦзы:R; МаоЦзеДун:R
 				 "/>
@@ -363,7 +363,7 @@
 						Admin: W;
 						Согласкин:R; Несогласкин:R; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:R; Тарантино:-; Кэмерон:-; 
+						Руководкин:R; Тарантино:-; Кэмерон:-;
 						Кругман:R; БигБосс:R;
 						ЛаоЦзы:-; МаоЦзеДун:-
 				 "/>
@@ -390,7 +390,7 @@
 						Admin: W;
 						Согласкин:R; Несогласкин:R; Пупкин:-;
 						Медведкин:-; Началов:-; Зачиналов:-;
-						Руководкин:R; Тарантино:-; Кэмерон:-; 
+						Руководкин:R; Тарантино:-; Кэмерон:-;
 						Кругман:R; БигБосс:R;
 						ЛаоЦзы:-; МаоЦзеДун:-
 				 "/>
@@ -576,7 +576,7 @@
 				<ref local="chkDocACL_Approv2" />
 
 				<!-- двигаем Согласование -> Подписание
-					от имени Согласкина 
+					от имени Согласкина
 				  -->
 				<bean class="ru.it.lecm.integrotest.actions.RunAs">
 					<property name="byUser" value="Согласкин" />
@@ -648,7 +648,7 @@
 		  -->
 	</bean>
 
-<!-- 
+<!--
 	<util:list id="Y" list-class="java.util.ArrayList">
 		<value>value1</value>
 		<ref bean="X"/>
