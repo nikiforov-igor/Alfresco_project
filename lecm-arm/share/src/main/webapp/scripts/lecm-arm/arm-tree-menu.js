@@ -51,6 +51,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 menu.menuState = YAHOO.lang.JSON.parse(menuPref);
                             } else {
                                 menu.menuState = {
+	                                accordion: "",
                                     selected: ""
                                 };
                             }
@@ -100,12 +101,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		    if (this.accordionItems != null) {
 			    for (var i = 0; i < this.accordionItems.length; i++) {
 				    var node = this.accordionItems[i];
+
+				    var forceExpand = this.menuState.accordion == node.id || ((this.menuState.accordion == null || this.menuState.accordion.length == 0) && i == 0);
+
 				    YAHOO.util.Event.onAvailable("ac-head-" + node.nodeRef, function (obj) {
 					    YAHOO.util.Event.on("ac-head-" + obj.node.nodeRef, 'click', this.onAccordionClick, obj.node, this);
 					    if (obj.forceExpand) {
 						    this.onAccordionClick(null, obj.node);
 					    }
-				    }, {node: node, forceExpand: i == 0}, this);
+				    }, {node: node, forceExpand: forceExpand}, this);
 			    }
 		    }
 	    },
@@ -140,6 +144,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 		    var anim = new Anim("ac-content-" + node.nodeRef, attributes, .6, YAHOO.util.Easing.backOut);
 		    anim.animate();
+		    this.menuState.accordion = node.id;
 	    },
 
 	    collapseAccordion: function(node) {
