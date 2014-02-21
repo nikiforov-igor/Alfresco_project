@@ -89,14 +89,14 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
             for (ArmNode accordion : accordions) {
-                nodes.add(toJSON(accordion));
+                nodes.add(toJSON(accordion, false));
             }
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
                 List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 for (ArmNode child : childs) {
-                    nodes.add(toJSON(child));
+                    nodes.add(toJSON(child, true));
                 }
             }
         }
@@ -109,7 +109,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         }
     }
 
-    private JSONObject toJSON(ArmNode node) {
+    private JSONObject toJSON(ArmNode node, boolean calculateChilds) {
         JSONObject result = new JSONObject();
         try {
             result.put(ID, node.getNodeRef() != null ? node.getNodeRef().getId() : node.getTitle());
@@ -123,7 +123,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(TYPES, listToString(node.getTypes()));
             result.put(COLUMNS, getColumnsJSON(node.getColumns()));
             result.put(LABEL, node.getTitle());
-            result.put(IS_LEAF, !service.hasChildNodes(node));
+            if (calculateChilds) {
+                result.put(IS_LEAF, !service.hasChildNodes(node));
+            }
             result.put(FILTER, getFiltersJSON(node.getAvaiableFilters()));
 
             if (node.getSearchQuery() != null) {
