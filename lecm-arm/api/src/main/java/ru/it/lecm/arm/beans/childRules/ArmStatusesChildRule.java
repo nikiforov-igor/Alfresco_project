@@ -1,11 +1,13 @@
 package ru.it.lecm.arm.beans.childRules;
 
-import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -13,7 +15,7 @@ import java.util.List;
  * Time: 15:55
  */
 public class ArmStatusesChildRule extends ArmBaseChildRule {
-	private enum Rule {
+    private enum Rule {
 		ALL,
 		ALL_NOT_ARCHIVE,
 		ALL_ARCHIVE,
@@ -24,7 +26,13 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
 	private String rule;
 	private List<String> selectedStatuses;
 
-	public String getRule() {
+    private StateMachineServiceBean stateMachineServiceBean;
+
+    public void setStateMachineServiceBean(StateMachineServiceBean stateMachineServiceBean) {
+        this.stateMachineServiceBean = stateMachineServiceBean;
+    }
+
+    public String getRule() {
 		return rule;
 	}
 
@@ -41,15 +49,79 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
 	}
 
 	@Override
-	public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+    public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
         List<ArmNode> nodes = new ArrayList<ArmNode>();
-        List<String> statuses = getSelectedStatuses();
-        if (statuses != null) {
-            for (String status : statuses) {
-                ArmNode childNode = service.wrapStatusAsObject(status, node);
-                nodes.add(childNode);
+        Set<String> allStatuses = new HashSet<String>();
+        List<String> avaiableTypes = new ArrayList<String>();
+
+        if (node != null) {
+            avaiableTypes.addAll(node.getTypes());
+        }
+
+        switch (Rule.valueOf(getRule())) {
+            case SELECTED: {
+                List<String> statuses = getSelectedStatuses();
+                if (statuses != null) {
+                    for (String status : statuses) {
+                        ArmNode childNode = service.wrapStatusAsObject(status, node);
+                        nodes.add(childNode);
+                    }
+                }
+                break;
+            }
+            case EXCEPT_SELECTED: {
+                List<String> excludedStatuses = getSelectedStatuses();
+                for (String docType : avaiableTypes) {
+                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, true);
+                    for (String s : statusesForType) {
+                        allStatuses.add(s);
+                    }
+                }
+
+                if (excludedStatuses != null) {
+                    for (String exStatus : excludedStatuses) {
+                        allStatuses.remove(exStatus);
+                    }
+                }
+                break;
+            }
+            case ALL_ARCHIVE: {
+                for (String docType : avaiableTypes) {
+                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, false, true);
+                    for (String s : statusesForType) {
+                        allStatuses.add(s);
+                    }
+                }
+                break;
+            }
+            case ALL_NOT_ARCHIVE: {
+                for (String docType : avaiableTypes) {
+                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, false);
+                    for (String s : statusesForType) {
+                        allStatuses.add(s);
+                    }
+                }
+                break;
+            }
+            case ALL: {
+                for (String docType : avaiableTypes) {
+                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, true);
+                    for (String s : statusesForType) {
+                        allStatuses.add(s);
+                    }
+                }
+                break;
+            }
+            default: {
+                break;
             }
         }
+
+        for (String st : allStatuses) {
+            ArmNode childNode = service.wrapStatusAsObject(st, node);
+            nodes.add(childNode);
+        }
+
         return nodes;
-	}
+    }
 }

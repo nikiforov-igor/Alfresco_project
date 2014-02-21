@@ -43,6 +43,7 @@
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="searchService" ref="searchService"/>
 		<property name="namespaceService" ref="namespaceService"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

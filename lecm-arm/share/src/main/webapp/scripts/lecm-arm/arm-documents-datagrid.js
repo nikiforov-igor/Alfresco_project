@@ -41,7 +41,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var node = args[1].armNode;
 
                 var searchQuery = this.getSearchQuery(node);
-                if (searchQuery) {
+                if (searchQuery != null) {
                     datagridMeta.searchConfig = {
                         filter: searchQuery
                     }
@@ -108,7 +108,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
 
-            if (this.filtersMeta && this.filtersMeta.query) {
+            if (this.filtersMeta && this.filtersMeta.query != null) {
                 updatedSearchConfig.filter += (this.filtersMeta.query.length > 0 ? (" AND " + this.filtersMeta.query) : "");
                 updatedSearchConfig.filter.trim();
             }

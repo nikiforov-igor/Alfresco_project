@@ -13,6 +13,7 @@ import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
 
@@ -42,6 +43,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             return 0;
         }
     };
+
+    private StateMachineServiceBean stateMachineHelper;
 
     @Override
 	public NodeRef getServiceRootFolder() {
@@ -232,6 +235,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				} else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
 					result = new ArmStatusesChildRule();
 					((ArmStatusesChildRule) result).setRule((String) nodeService.getProperty(query, PROP_STATUSES_RULE));
+                    ((ArmStatusesChildRule) result).setStateMachineServiceBean(stateMachineHelper);
 
 					String selectedStatuses = (String) nodeService.getProperty(query, PROP_SELECTED_STATUSES);
 					if (selectedStatuses != null) {
@@ -263,4 +267,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	public void setNamespaceService(NamespaceService namespaceService) {
 		this.namespaceService = namespaceService;
 	}
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
 }

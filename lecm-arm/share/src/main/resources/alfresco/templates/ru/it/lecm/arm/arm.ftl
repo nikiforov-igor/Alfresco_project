@@ -2,7 +2,6 @@
 <@templateHeader "transitional">
 	<@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-arm/arm-filters.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/document-list-filters-manager.js"></@script>
 
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/documents-list.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
