@@ -57,18 +57,6 @@
             <artifactId>alfresco-repository</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.extensions.surf</groupId>
-            <artifactId>spring-surf</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.extensions.surf</groupId>
             <artifactId>spring-webscripts</artifactId>
         </dependency>
@@ -79,7 +67,8 @@
         <dependency>
             <groupId>ru.it.lecm.base</groupId>
             <artifactId>base-repo-api</artifactId>
-            <version>${project.version}</version>
+            <version>${platform.version}</version>
+			<scope>provided</scope>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
