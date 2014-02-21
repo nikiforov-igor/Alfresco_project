@@ -260,12 +260,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             var actionItems = [];
                             for (var i in json) {
                                 actionItems.push({
-                                    text: json[i],
-                                    value: json[i],
+                                    text: json[i].id,
+                                    value: json[i].id,
                                     onclick: {
                                         fn: me.onGroupActionsClick,
                                         obj: {
-                                            actionId: json[i],
+                                            actionId: json[i].id,
+                                            withForm: json[i].withForm,
                                             items: items
                                         },
                                         scope: this
@@ -296,8 +297,29 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
-                alert(p_oItem.actionId);
-                alert(p_oItem.items);
+                if (p_oItem.withForm) {
+                    alert(form);
+                } else {
+                    Alfresco.util.Ajax.jsonRequest({
+                        method: "POST",
+                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                        dataObj: {
+                            items: p_oItem.items,
+                            actionId: p_oItem.actionId
+                        },
+                        successCallback: {
+                            fn: function (oResponse) {
+                                alert("Script was executed!!")
+                            }
+                        },
+                        failureCallback: {
+                            fn: function () {
+                            }
+                        },
+                        scope: this,
+                        execScripts: true
+                    });
+                }
             },
 
             onUpdateArmFilters: function(layer, args) {
