@@ -77,40 +77,63 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 // Если метка не задана, или метки совпадают - дергаем метод
                 var label = obj.bubblingLabel;
                 if(this._hasEventInterest(label)){
+                    this.filtersMeta = obj.filtersMeta;
                     if (!this.deferredListPopulation.fulfil("activeFiltersChanged")) {
-                        this.filtersMeta = obj.filtersMeta;
-                        //обновить данные в гриде! перестраивать саму таблицу не нужно
-                        this._setDefaultDataTableErrors(this.widgets.dataTable);
-
-                        if ((this.filtersMeta != null) && (this.filtersMeta.query != null)) {
-                            var searchConfig = this.datagridMeta.searchConfig;
-                            if (searchConfig == null) {
-                                this.datagridMeta.searchConfig = {};
-                                this.datagridMeta.searchConfig.filter = "";
-                            }
-
-                            var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
-                            updatedSearchConfig.filter += (this.filtersMeta.query.length > 0 ? (" AND (" + this.filtersMeta.query + ")") : "");
-
-                            var offset = 0;
-                            if (this.widgets.paginator){
-                                offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
-                            }
-
-                            this.search.performSearch({
-                                searchConfig: updatedSearchConfig,
-                                searchShowInactive: this.options.searchShowInactive,
-                                parent: this.datagridMeta.nodeRef,
-                                searchNodes: this.datagridMeta.searchNodes,
-                                itemType: this.datagridMeta.itemType,
-                                sort:this.datagridMeta.sort,
-                                offset:offset,
-                                filter: null
-                            });
-                        }
+                        this.sendRequestToUpdateGrid();
                     }
                 }
             }
+        },
+
+        sendRequestToUpdateGrid: function () {
+            //обновить данные в гриде! перестраивать саму таблицу не нужно
+            this._setDefaultDataTableErrors(this.widgets.dataTable);
+
+            var searchConfig = this.datagridMeta.searchConfig;
+            if (searchConfig == null) {
+                this.datagridMeta.searchConfig = {};
+                this.datagridMeta.searchConfig.filter = "";
+            }
+
+            if (searchConfig.formData) {
+                if (typeof searchConfig.formData == "string") {
+                    searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
+                }
+                searchConfig.formData.datatype = this.datagridMeta.itemType;
+            } else {
+                searchConfig.formData = {
+                    datatype: this.datagridMeta.itemType
+                };
+            }
+
+            var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
+
+            if (this.filtersMeta && this.filtersMeta.query) {
+                updatedSearchConfig.filter += (this.filtersMeta.query.length > 0 ? (" AND " + this.filtersMeta.query) : "");
+                updatedSearchConfig.filter.trim();
+            }
+
+            var offset = 0;
+            if (this.widgets.paginator) {
+                offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
+            }
+
+            //при первом поиске сохраняем настройки
+            if (this.initialSearchConfig == null) {
+                this.initialSearchConfig = {fullTextSearch: null};
+                this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+            }
+
+            this.search.performSearch({
+                searchConfig: updatedSearchConfig,
+                searchShowInactive: this.options.searchShowInactive,
+                parent: this.datagridMeta.nodeRef,
+                searchNodes: this.datagridMeta.searchNodes,
+                itemType: this.datagridMeta.itemType,
+                sort: this.datagridMeta.sort,
+                offset: offset,
+                filter: null
+            });
         },
 
 	    populateDataGrid: function DataGrid_populateDataGrid() {
@@ -158,7 +181,30 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		    }
 	    },
 
-	    onExpand: function(record) {
+        setupDataTable: function DataGrid__setupDataTable() {
+            var columnDefinitions = this.getDataTableColumnDefinitions();
+            this.restoreSortFromCookie();
+            // DataTable definition
+            var me = this;
+            if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+                this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                if (!this.search) {
+                    // initialize Search
+                    this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+                        showExtendSearchBlock: this.options.showExtendSearchBlock,
+                        maxSearchResults: this.options.maxResults,
+                        searchFormId: this.options.advSearchFormId
+                    });
+
+                } else {
+                    this.search.clear(this);
+                }
+                this.datagridMeta.recreate = false; // сброс флага
+            }
+            this.sendRequestToUpdateGrid();
+        },
+
+        onExpand: function(record) {
 	        this.addExpandedRow(record, "Здесь будут связи");
 	    },
 

@@ -141,6 +141,8 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
                                 addOR = true;
                             }
                         }
+                    } else if (!AuthorEnum.valueOf(filterValue.toUpperCase()).equals(AuthorEnum.FAVOURITE)){
+                        resultedQuery += "ID:\"NOT_ID\"";
                     }
                 }
             } catch (Exception ignored) {

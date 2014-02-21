@@ -57,8 +57,8 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
         try {
             JSONObject jsonFiltersObj = new JSONObject(c.getContent());
 
-            String filtersStr = (String) jsonFiltersObj.get(FILTERS);
-            String nodeStr = (String) jsonFiltersObj.get(ARM_NODE);
+            String filtersStr = (String) (jsonFiltersObj.has(FILTERS) ? jsonFiltersObj.get(FILTERS) : "");
+            String nodeStr = (String) (jsonFiltersObj.has(ARM_NODE) ? jsonFiltersObj.get(ARM_NODE) : "");
 
             JSONArray filtersArray = null;
             if (filtersStr != null && !filtersStr.isEmpty()) {

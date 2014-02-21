@@ -49,6 +49,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onReady: function () {
                 YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
+                YAHOO.util.Dom.setStyle(this.id + "-body", "display", "none");
+
                 YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
 
                 var filters = this;
@@ -58,9 +60,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             fn: function (p_oResponse) {
                                 var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters.PREFERENCE_KEY);
                                 if (filtersPref != null && filtersPref != "") {
-                                    var currentFilters = YAHOO.lang.JSON.parse(filtersPref);
+                                    filters.currentFilters = YAHOO.lang.JSON.parse(filtersPref);
                                 } else {
-                                    var currentFilters = [];
+                                    filters.currentFilters = [];
                                 }
                                 filters.deferredListPopulation.fulfil("onReady");
                             },
@@ -68,6 +70,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         },
                         failureCallback: {
                             fn: function (p_oResponse) {
+                                filters.currentFilters = [];
                                 filters.deferredListPopulation.fulfil("onReady");
                             },
                             scope: this
@@ -137,41 +140,48 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return -1;
             },
 
-            updateCurrentFiltersForm: function () {
+            updateCurrentFiltersForm: function (updatePrefs) {
                 var context = this;
-                    Alfresco.util.Ajax.jsonRequest({
-                        method: "POST",
-                        url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
-                        dataObj: {
-                            armNode: YAHOO.lang.JSON.stringify((this.currentNode && this.currentNode.data) ? this.currentNode.data : {}),
-                            filters: YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : [])
-                        },
-                        successCallback: {
-                            fn: function (oResponse) {
-                                if (oResponse) {
-                                    YAHOO.Bubbling.fire("activeFiltersChanged", {
-                                        bubblingLabel: context.bubblingLabel,
-                                        filtersMeta: {
-                                            query: oResponse.json.query
-                                        }
-                                    });
-                                    context.currentQuery = oResponse.json.query;
-                                }
-                            }
-                        },
-                        failureCallback: {
-                            fn: function () {
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
+                    dataObj: {
+                        armNode: YAHOO.lang.JSON.stringify((this.currentNode && this.currentNode.data) ? this.currentNode.data : {}),
+                        filters: context._buildFiltersJSON()
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            if (oResponse) {
                                 YAHOO.Bubbling.fire("activeFiltersChanged", {
                                     bubblingLabel: context.bubblingLabel,
-                                    filterMeta: {
-                                        query: ""
+                                    filtersMeta: {
+                                        query: oResponse.json.query
                                     }
                                 });
+                                YAHOO.Bubbling.fire ("updateNodeCounters", {
+                                    filterQuery: oResponse.json.query
+                                });
+                                context.currentQuery = oResponse.json.query;
                             }
-                        },
-                        scope: this,
-                        execScripts: true
-                    });
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                            YAHOO.Bubbling.fire("activeFiltersChanged", {
+                                bubblingLabel: context.bubblingLabel,
+                                filterMeta: {
+                                    query: ""
+                                }
+                            });
+                            YAHOO.Bubbling.fire ("updateNodeCounters", {
+                                filterQuery: ""
+                            });
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+
                 var filtersExist = this.currentFilters.length > 0;
                 Dom.setStyle(this.id + "-body", "display", filtersExist ? "" : "none");
 
@@ -188,8 +198,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
                 }
+                if (updatePrefs) {
+                    this.preferences.set(this.PREFERENCE_KEY, this._buildFiltersJSON());
+                }
             },
 
+            _buildFiltersJSON: function() {
+                return YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : [])
+            },
+            
             getRemoveFilterButton: function (filter) {
                 var id = Dom.generateId();
                 var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";

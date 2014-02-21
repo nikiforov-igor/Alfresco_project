@@ -17,6 +17,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
+
+        //YAHOO.Bubbling.on("updateNodeCounters", this.onUpdateNodeCounters, this);
         return this;
     };
 
@@ -126,7 +128,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             }
 
                             //отрисовка счетчика, если нужно
-                            otree.drawCounterValue(curElement);
+                            otree.drawCounterValue(curElement, null);
                         }
                     }
 
@@ -207,8 +209,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
 
-        drawCounterValue: function(node) {
-            if (node.data.counter != null && ("" + node.data.counter == "true")) {
+        drawCounterValue: function(node, filterQuery) {
+            if (node.data && node.data.counter != null && ("" + node.data.counter == "true")) {
                 var searchQuery = this.getSearchQuery(node);
                 if (node.data.counterLimit && node.data.counterLimit.length > 0) {
                     searchQuery += " AND (" + node.data.counterLimit + ") ";
@@ -279,6 +281,23 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return this.menuState.selected.indexOf(nodeId) >= 0;
             }
             return false;
+        },
+
+        //TODO методы ниже понадобятся, если будет динамически обновлять счетчик
+        onUpdateNodeCounters: function (layer, args) {
+            var root = this.tree.getRoot();
+            for (var count = 0; count < root.children.length; count++) {
+                var child = root.children[count];
+                this._updateCounterInner(child, args[1].filterQuery);
+            }
+        },
+
+        _updateCounterInner: function(node, filterQuery){
+            this.drawCounterValue(node, filterQuery);
+            for (var count = 0; count < node.children.length; count++) {
+                var child = node.children[count];
+                this._updateCounterInner(child, filterQuery);
+            }
         }
     });
 })();
