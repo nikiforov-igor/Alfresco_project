@@ -564,6 +564,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        if (this.options.expandable) {
 			        colSpan++;
 		        }
+		        if (this.options.showActionColumn) {
+			        colSpan++;
+		        }
 
 		        var newRow = document.createElement('tr');
 		        newRow.className = "expand-row";
