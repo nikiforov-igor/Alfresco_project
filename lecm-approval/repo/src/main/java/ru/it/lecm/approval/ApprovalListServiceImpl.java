@@ -34,6 +34,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.delegation.IDelegation;
 
 /**
@@ -731,6 +732,10 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 				if (effectiveEmployee != null) {
 					nodeService.removeAssociation(assignee, employee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
 					nodeService.createAssociation(assignee, effectiveEmployee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
+					String userName = orgstructureService.getEmployeeLogin(effectiveEmployee);
+					if (StringUtils.isNotEmpty(userName)) {
+						nodeService.setProperty(assignee, ApprovalListService.PROP_ASSIGNEES_ITEM_USERNAME, userName);
+					}
 				}
 			}
 		}

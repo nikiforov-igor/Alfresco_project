@@ -340,4 +340,9 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 	public NodeRef getLastCurrentEmployeeAbsence() {
 		return getLastEmployeeAbsence(orgstructureService.getCurrentEmployee());
 	}
+
+	@Override
+	public void setAbsenceBegin(final NodeRef absenceRef, final Date date) {
+		nodeService.setProperty(absenceRef, PROP_ABSENCE_BEGIN, date);
+	}
 }

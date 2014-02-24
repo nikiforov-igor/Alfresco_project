@@ -13,7 +13,6 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 

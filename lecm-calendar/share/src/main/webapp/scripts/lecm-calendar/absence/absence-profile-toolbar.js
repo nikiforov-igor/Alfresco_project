@@ -66,17 +66,20 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					},
 					doBeforeFormSubmit: {
 						fn: function() {
-							var htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_end");
-							var htmlNodeUnlimited = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_unlimited");
-							var endDate;
+							var htmlNodeBegin = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_begin"),
+								htmlNodeEnd = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_end"),
+								htmlNodeUnlimited = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_unlimited"),
+								beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value),
+								endDate,
+								today = new Date();
 							if (htmlNodeUnlimited.checked) {
-								var htmlNodeBegin = YAHOO.util.Dom.get(scope.id + "-createNewMyAbsenceForm_prop_lecm-absence_begin");
-								var beginDate = Alfresco.util.fromISO8601(htmlNodeBegin.value);
 								endDate = new Date(beginDate);
 							} else {
 								endDate = Alfresco.util.fromISO8601(htmlNodeEnd.value);
 							}
-							endDate.setHours(23, 59, 59, 0);
+							beginDate.setHours(today.getHours(), today.getMinutes(), today.getSeconds(), today.getMilliseconds());
+							endDate.setHours(today.getHours(), today.getMinutes(), today.getSeconds(), today.getMilliseconds());
+							htmlNodeBegin.value = Alfresco.util.toISO8601(beginDate);
 							htmlNodeEnd.value = Alfresco.util.toISO8601(endDate);
 						},
 						scope: this

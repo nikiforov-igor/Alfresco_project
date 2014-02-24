@@ -71,7 +71,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 						} else {
 							endDate = Alfresco.util.fromISO8601(htmlNodeEnd.value);
 						}
-						endDate.setHours(23, 59, 59, 0);
+						//endDate.setHours(23, 59, 59, 0);
 						htmlNodeEnd.value = Alfresco.util.toISO8601(endDate);
 					},
 					scope: this

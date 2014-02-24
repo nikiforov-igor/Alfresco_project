@@ -43,7 +43,7 @@
 
 		if (unlimitedCheckbox.checked) {
 			var today = new Date();
-			today.setHours(23, 59, 59, 0);
+			//today.setHours(23, 59, 59, 0);
 
 			endInputDate.setAttribute("readonly", true);
 			endInputDate.removeAttribute("value");

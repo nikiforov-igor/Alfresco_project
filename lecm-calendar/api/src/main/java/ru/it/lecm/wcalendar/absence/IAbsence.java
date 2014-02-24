@@ -298,4 +298,6 @@ public interface IAbsence extends ICommonWCalendar {
 	 * было отсутствий, то null
 	 */
 	NodeRef getLastCurrentEmployeeAbsence();
+
+	void setAbsenceBegin(final NodeRef absenceRef, final Date date);
 }
