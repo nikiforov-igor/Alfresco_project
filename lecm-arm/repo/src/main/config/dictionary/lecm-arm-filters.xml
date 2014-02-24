@@ -20,7 +20,7 @@
                 <property name="lecm-arm:filter-code">СONTROL_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">true</property>
-                <property name="lecm-arm:filter-values">true|Контрольные, false|Не контрольные</property>
+                <property name="lecm-arm:filter-values">true|Контрольные,false|Не контрольные</property>
                 <property name="lecm-arm:filter-query">@lecm\-document\-aspects\:is\-on\-control:#value</property>
             </item>
         </items>
