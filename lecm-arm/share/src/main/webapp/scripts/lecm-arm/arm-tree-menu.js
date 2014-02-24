@@ -91,28 +91,32 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    getAccordionItemHtml: function(node) {
 			var result = "";
-		    result += "<li><div id='ac-head-" + node.nodeRef +"' class='accordion-head'><span>";
+		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'><span id='" + "ac-label-" + node.id + "'>";
 		    result += node.label;
-		    result += "</span></div><div id='ac-content-" + node.nodeRef + "' class='accordion-content'></div></li>";
+		    result += "</span></div><div id='ac-content-" + node.id + "' class='accordion-content'></div></li>";
 		    return result;
 	    },
 
-	    initAccordion : function() {
-		    if (this.accordionItems != null) {
-			    for (var i = 0; i < this.accordionItems.length; i++) {
-				    var node = this.accordionItems[i];
+        initAccordion: function () {
+            var context = this;
+            if (this.accordionItems != null) {
+                for (var i = 0; i < this.accordionItems.length; i++) {
+                    var node = this.accordionItems[i];
 
-				    var forceExpand = this.menuState.accordion == node.id || ((this.menuState.accordion == null || this.menuState.accordion.length == 0) && i == 0);
+                    var forceExpand = this.menuState.accordion == node.id || ((this.menuState.accordion == null || this.menuState.accordion.length == 0) && i == 0);
 
-				    YAHOO.util.Event.onAvailable("ac-head-" + node.nodeRef, function (obj) {
-					    YAHOO.util.Event.on("ac-head-" + obj.node.nodeRef, 'click', this.onAccordionClick, obj.node, this);
-					    if (obj.forceExpand) {
-						    this.onAccordionClick(null, obj.node);
-					    }
-				    }, {node: node, forceExpand: forceExpand}, this);
-			    }
-		    }
-	    },
+                    YAHOO.util.Event.onAvailable("ac-head-" + node.id, function (obj) {
+                        YAHOO.util.Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
+                        if (obj.forceExpand) {
+                            this.onAccordionClick(null, obj.node);
+                        }
+                        YAHOO.util.Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
+                            obj.context.drawCounterValue(obj.node, obj.context.getSearchQuery(obj.node), YAHOO.util.Dom.get("ac-label-" + obj.node.id));
+                        }, {node: obj.node, context: context}, this);
+                    }, {node: node, forceExpand: forceExpand}, this);
+                }
+            }
+        },
 
 	    onAccordionClick : function(e, node) {
 		    if (this.shownAccordionItem == null || this.shownAccordionItem != node) {
@@ -129,8 +133,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    },
 
 	    expandAccordion: function(node) {
-		    Dom.addClass("ac-head-" + node.nodeRef, "shown");
-		    Dom.addClass("ac-content-" + node.nodeRef, "shown");
+		    Dom.addClass("ac-head-" + node.id, "shown");
+		    Dom.addClass("ac-content-" + node.id, "shown");
 		    var attributes = {
 			    height: {
 				    from: 0,
@@ -142,14 +146,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			    }
 		    };
 
-		    var anim = new Anim("ac-content-" + node.nodeRef, attributes, .6, YAHOO.util.Easing.backOut);
+		    var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.backOut);
 		    anim.animate();
 		    this.menuState.accordion = node.id;
 	    },
 
 	    collapseAccordion: function(node) {
-		    Dom.removeClass("ac-head-" + node.nodeRef, "shown");
-		    Dom.removeClass("ac-content-" + node.nodeRef, "shown");
+		    Dom.removeClass("ac-head-" + node.id, "shown");
+		    Dom.removeClass("ac-content-" + node.id, "shown");
 		    var attributes = {
 			    height: {
 				    from: this.getAccordionHeight(),
@@ -160,7 +164,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				    to:0
 			    }
 		    };
-		    var anim = new Anim("ac-content-" + node.nodeRef, attributes, .6, YAHOO.util.Easing.easeBoth);
+		    var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.easeBoth);
 		    anim.animate();
 	    },
 
@@ -169,7 +173,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    },
 
         _createTree: function (node) {
-            this.tree = new YAHOO.widget.TreeView("ac-content-" + node.nodeRef);
+            this.tree = new YAHOO.widget.TreeView("ac-content-" + node.id);
             this.tree.singleNodeHighlight = true;
             this.tree.setDynamicLoad(this._loadTree.bind(this));
 
@@ -243,7 +247,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             }
 
                             //отрисовка счетчика, если нужно
-                            otree.drawCounterValue(curElement, null);
+                            if (curElement.id) {
+                                YAHOO.util.Event.onAvailable(curElement.id, function (obj) {
+                                    obj.context.drawCounterValue(obj.node.data, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
+                                }, {node: curElement, context:otree}, this);
+                            }
                         }
                     }
 
@@ -271,7 +279,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         getSearchQuery: function (node, buffer, parentId) {
             if (node) {
-                var query = node.data.searchQuery;
+                var query = node.data ? node.data.searchQuery : node.searchQuery;
                 if (query && query.length > 0) {
                     if (!buffer) {
                         buffer = [];
@@ -283,7 +291,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         buffer.push(query);
                     }
                 }
-                return this.getSearchQuery(node.parent, buffer, node.data.armNodeId);
+                return this.getSearchQuery(node.parent, buffer, node.data ? node.data.armNodeId : node.armNodeId);
             } else {
                 var resultedQuery = "";
 
@@ -324,16 +332,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
 
-        drawCounterValue: function(node, filterQuery) {
-            if (node.data && node.data.counter != null && ("" + node.data.counter == "true")) {
-                var searchQuery = this.getSearchQuery(node);
-                if (node.data.counterLimit && node.data.counterLimit.length > 0) {
-                    searchQuery += " AND (" + node.data.counterLimit + ") ";
+        drawCounterValue: function (data, query, labelElement) {
+            if ((data && data.counter != null && ("" + data.counter == "true"))) {
+                var searchQuery = query;
+                if (data.counterLimit && data.counterLimit.length > 0) {
+                    searchQuery += " AND (" + data.counterLimit + ") ";
                 }
 
                 var types = [];
-                if (node.data.types != null && node.data.types.length > 0) {
-                    types = node.data.types.split(",");
+                if (data.types != null && data.types.length > 0) {
+                    types = data.types.split(",");
                 } else {
                     types.push("lecm-document:base");
                 }
@@ -349,13 +357,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         typesQuery += '+TYPE:"' + type + '"'
                     }
                 }
-	            if (typesQuery.length > 0) {
-		            if (searchQuery.length > 0) {
-			            searchQuery = "(" + typesQuery + ") AND (" + searchQuery + ")";
-		            } else {
-			            searchQuery = typesQuery;
-		            }
-	            }
+                if (typesQuery.length > 0) {
+                    if (searchQuery.length > 0) {
+                        searchQuery = "(" + typesQuery + ") AND (" + searchQuery + ")";
+                    } else {
+                        searchQuery = typesQuery;
+                    }
+                }
 
                 if (searchQuery.length > 0) {
                     Alfresco.util.Ajax.jsonRequest({
@@ -367,14 +375,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         successCallback: {
                             fn: function (oResponse) {
                                 if (oResponse != null) {
-                                    var label = node.getLabelEl();
-                                    label.innerHTML = node.label + " (" + oResponse.json + ")";
+                                    if (labelElement) {
+                                        labelElement.innerHTML = labelElement.innerHTML + " (" + oResponse.json + ")";
+                                    }
                                 }
                             }
                         },
                         failureCallback: {
                             fn: function () {
-                                node.label = node.label + " (" + 0 + ")";
+                                if (labelElement) {
+                                    labelElement.innerHTML = labelElement.innerHTML + " (-)";
+                                }
                             }
                         }
                     });
@@ -404,23 +415,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return this.menuState.selected.indexOf(nodeId) >= 0;
             }
             return false;
-        },
-
-        //TODO методы ниже понадобятся, если будет динамически обновлять счетчик
-        onUpdateNodeCounters: function (layer, args) {
-            var root = this.tree.getRoot();
-            for (var count = 0; count < root.children.length; count++) {
-                var child = root.children[count];
-                this._updateCounterInner(child, args[1].filterQuery);
-            }
-        },
-
-        _updateCounterInner: function(node, filterQuery){
-            this.drawCounterValue(node, filterQuery);
-            for (var count = 0; count < node.children.length; count++) {
-                var child = node.children[count];
-                this._updateCounterInner(child, filterQuery);
-            }
         }
     });
 })();
