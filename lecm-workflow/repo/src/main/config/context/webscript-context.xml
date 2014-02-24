@@ -10,4 +10,8 @@
 		  p:nodeService-ref="nodeService"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap" />
 
+	<bean id="webscript.ru.it.lecm.workflow.routes.CreateEmptyRouteWebscript.get"
+		  class="ru.it.lecm.workflow.webscripts.CreateEmptyRouteWebscript" parent="webscript"
+		  p:routeService-ref="routeService"/>
+
 </beans>

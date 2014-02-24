@@ -58,4 +58,8 @@
 		  class="ru.it.lecm.workflow.beans.WorkflowResultListServiceImpl"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"/>
 
+	<bean id="routeService" parent="baseBean"
+		  class="ru.it.lecm.workflow.beans.RouteServiceImpl"
+		  p:workflowFoldersServiceImpl-ref="lecm.workflow.folders.bootstrap"/>
+
 </beans>

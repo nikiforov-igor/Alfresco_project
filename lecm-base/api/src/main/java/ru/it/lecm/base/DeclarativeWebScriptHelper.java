@@ -1,6 +1,7 @@
 package ru.it.lecm.base;
 
 import java.io.IOException;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ import org.springframework.extensions.webscripts.WebScriptException;
  * @author vlevin
  */
 public final class DeclarativeWebScriptHelper {
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(DeclarativeWebScriptHelper.class);
 
 	private DeclarativeWebScriptHelper() {
@@ -35,7 +36,7 @@ public final class DeclarativeWebScriptHelper {
 		}
 		return json;
 	}
-	
+
 	public static JSONArray getJsonArrayContent(final Content content) {
 		JSONArray json;
 		try {
@@ -50,5 +51,21 @@ public final class DeclarativeWebScriptHelper {
 			throw new WebScriptException(msg, ex);
 		}
 		return json;
+	}
+	
+	public static String mandatoryParameter(String parameter, String value) {
+		boolean isEmpty = StringUtils.isBlank(value) || "null".equalsIgnoreCase(value);
+		if (isEmpty) {
+			throw new WebScriptException(String.format("%s is a mandatory parameter", parameter));
+		}
+		return value;
+	}
+
+	public static String optionalParameter(String parameter, String value, String defaultValue) {
+		boolean isEmpty = StringUtils.isBlank(value) || "null".equalsIgnoreCase(value);
+		if (isEmpty) {
+			return defaultValue;
+		}
+		return value;
 	}
 }
