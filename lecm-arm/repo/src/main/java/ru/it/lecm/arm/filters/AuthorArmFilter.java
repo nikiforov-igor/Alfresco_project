@@ -103,6 +103,9 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
                         case DEPARTMENT: {
                             List<NodeRef> departmentEmployees = orgstructureService.getBossSubordinate(currentEmployee);
                             employees.addAll(departmentEmployees);
+                            if (employees.isEmpty()) {
+                                resultedQuery += "ID:\"NOT_ID\"";
+                            }
                             break;
                         }
                         case FAVOURITE: {
@@ -141,8 +144,6 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
                                 addOR = true;
                             }
                         }
-                    } else if (!AuthorEnum.valueOf(filterValue.toUpperCase()).equals(AuthorEnum.FAVOURITE)){
-                        resultedQuery += "ID:\"NOT_ID\"";
                     }
                 }
             } catch (Exception ignored) {

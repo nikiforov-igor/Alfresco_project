@@ -11,13 +11,14 @@
                         <td id="${item.code}" class="filter">
                             <div style="font-weight: bold">${item.name}</div>
                             <br/>
-
                             <p>
                                 <#if item.values??>
                                     <#list item.values as fValue>
                                         <#assign el="avaiableFilters"+ aDateTime?iso_utc/>
                                             <input type=<#if item.multiple>"checkbox"<#else>"radio"</#if>
-                                                name="${item.code}" value="${fValue.code}">${fValue.title}<br>
+                                                name="${item.code}"
+                                                value="${fValue.code}"
+                                                <#if fValue.checked>checked</#if>>${fValue.title}<br>
                                     </#list>
                                 </#if>
                             </p>
