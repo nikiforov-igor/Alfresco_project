@@ -6,6 +6,7 @@ function main() {
 
 	model.hasViewListPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+	model.hasReadAttachmentPerm = hasPermission(model.nodeRef, PERM_READ_ATTACHMENT);
 	model.hasAddAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_ADD);
 	model.hasDeleteOwnAttachmentPerm = hasPermission(model.nodeRef, PERM_OWN_CONTENT_DELETE);
 	model.hasStatemachine = hasStatemachine(model.nodeRef);

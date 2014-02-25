@@ -59,7 +59,9 @@
 	        function init() {
 				<#if categories??>
 					<#list categories as category>
-						<#if category.isReadOnly || !hasStatemachine>
+						<#if !hasReadAttachmentPerm>
+							<#assign showActions = []/>
+						<#elseif category.isReadOnly || !hasStatemachine>
 							<#assign showActions = readOnlyActions/>
 						<#else>
 							<#assign showActions = allActions/>

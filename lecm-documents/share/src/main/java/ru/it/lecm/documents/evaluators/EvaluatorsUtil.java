@@ -1,10 +1,14 @@
 package ru.it.lecm.documents.evaluators;
 
 import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
@@ -36,6 +40,29 @@ public class EvaluatorsUtil {
 		}
 
 		return false;
+	}
+
+	public boolean checkReadOnlyCategory(String nodeRef){
+		String url = "/lecm/document/attachments/api/getCategoryByAttachment?nodeRef="+nodeRef;
+
+		Response response = scriptRemote.connect("alfresco").get(url);
+
+		try{
+			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK){
+				JSONObject json = new JSONObject(response.getResponse());
+				Boolean res = json.getBoolean("isReadOnly");
+				if (null!=res){
+					return res;
+				}
+			}else{
+				logger.warn("Cannot get result from server");
+			}
+		}
+		 catch (JSONException ex) {
+			logger.warn("Cannot get result from server", ex);
+		}
+
+		return true;
 	}
 
 }

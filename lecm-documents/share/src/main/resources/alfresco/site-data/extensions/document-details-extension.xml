@@ -177,6 +177,30 @@
 
 				<component>
 					<scope>template</scope>
+					<region-id>document-versions</region-id>
+					<source-id>document-details</source-id>
+					<sub-components>
+						<sub-component id="default">
+							<evaluations>
+								<evaluation id="document-versions">
+									<evaluators>
+										<evaluator type="evaluator.ru.it.lecm.documents.viewVersionComponent">
+											<params>
+												<nodeRef>{nodeRef}</nodeRef>
+												<permission>_lecmPerm_ContentAddVer</permission>
+												<aspect>lecm-document-aspects:lecm-attachment</aspect>
+											</params>
+										</evaluator>
+									</evaluators>
+									<render>false</render>
+								</evaluation>
+							</evaluations>
+						</sub-component>
+					</sub-components>
+				</component>
+
+				<component>
+					<scope>template</scope>
 					<region-id>document-publishing</region-id>
 					<source-id>document-details</source-id>
 					<sub-components>

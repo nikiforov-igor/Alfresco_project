@@ -63,4 +63,8 @@
 	<bean id="evaluator.ru.it.lecm.documents.hasReadAttachmentComponent" class="ru.it.lecm.documents.evaluators.HasReadAttachmentComponentEvaluator">
 		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
 	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.viewVersionComponent" class="ru.it.lecm.documents.evaluators.ViewVersionComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
+	</bean>
 </beans>
