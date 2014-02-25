@@ -238,6 +238,11 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getDefaultAssigneesList(String workflowType) {
+		return getDefaultAssigneesList(getAssigneesListsFolder(), workflowType);
+	}
+
+	@Override
+	public NodeRef getDefaultAssigneesList(final NodeRef parentRef, final String workflowType) {
 		NodeRef result = null;
 		List<NodeRef> assigneesLists = getAssingeesListsForCurrentEmployee(workflowType);
 		for (NodeRef assigneesList : assigneesLists) {
@@ -248,7 +253,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		}
 
 		if (result == null) {
-			result = createAssigneesList(getAssigneesListsFolder(), workflowType, null);
+			result = createAssigneesList(parentRef, workflowType, null);
 		} else {
 			clearAssigneesList(result);
 		}

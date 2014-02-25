@@ -16,6 +16,8 @@ public interface WorkflowAssigneesListService {
 
 	NodeRef getDefaultAssigneesList(String workflowType); // NodeRef getDefaultListFolderRef();
 
+	NodeRef getDefaultAssigneesList(NodeRef parentRef, String workflowType);
+
 	void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName); // String save(final JSONObject json);
 
 	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType); // JSONObject getAssigneesLists();

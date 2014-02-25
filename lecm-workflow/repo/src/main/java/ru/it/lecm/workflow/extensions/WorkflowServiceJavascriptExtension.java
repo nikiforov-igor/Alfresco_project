@@ -43,8 +43,14 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		JSONObject result = new JSONObject();
 		try {
 			workflowType = json.getString("workflowType");
-			result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(workflowType).toString());
-			result.put("currentEmployee", orgstructureService.getCurrentEmployee().toString());
+			boolean hasRouteRef = json.has("routeRef");
+			if (hasRouteRef) {
+				NodeRef parentRef = new NodeRef(json.getString("routeRef"));
+				result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType));
+			} else {
+				result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(workflowType));
+			}
+			result.put("currentEmployee", orgstructureService.getCurrentEmployee());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}
@@ -108,14 +114,14 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 				// для каждого строим JSON-объект
 				jsonItem.put("title", assigneesListName);
-				jsonItem.put("nodeRef", assigneesListRef.toString());
+				jsonItem.put("nodeRef", assigneesListRef);
 
 				// складываем в json-array
 				listsJSONArray.put(jsonItem);
 			}
 
 			result.put("lists", listsJSONArray);
-			result.put("defaultList", defaultList.toString());
+			result.put("defaultList", defaultList);
 			result.put("listsFolder", workflowAssigneesListService.getAssigneesListsFolder());
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error operating JSON", ex);
