@@ -19,13 +19,9 @@
 
 	<util:list id="lecm.legacy-approval.empty"/>
 
-	<bean id="lecmLegacyApprovalModelDeploy" class="java.lang.Boolean">
-		<constructor-arg value="${legacy.approval.models.deploy}" />
-	</bean>
-
 	<bean id="lecm.legacy-approval.modelBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, statemachine.aspects.LogicEcmModelsBootstrap, lecm.legacy-approval.empty, lecm.legacy-approval.models, lecm.legacy-approval.labels">
-		<property name="models" ref="#{ lecmLegacyApprovalModelDeploy? 'lecm.legacy-approval.models' : 'lecm.legacy-approval.empty'}"/>
-		<property name="labels" ref="#{ lecmLegacyApprovalModelDeploy? 'lecm.legacy-approval.labels' : 'lecm.legacy-approval.empty'}"/>
+		<property name="models" ref="#{ '${legacy.approval.models.deploy}'? 'lecm.legacy-approval.models' : 'lecm.legacy-approval.empty'}"/>
+		<property name="labels" ref="#{ '${legacy.approval.models.deploy}'? 'lecm.legacy-approval.labels' : 'lecm.legacy-approval.empty'}"/>
 	</bean>
 </beans>
