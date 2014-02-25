@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -40,9 +42,10 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		NodeRef employeeRef = orgstructureBean.getCurrentEmployee();
 		String username = orgstructureBean.getEmployeeLogin(employeeRef);
 		NodeRef workflowFolder = workflowFoldersServiceImpl.getWorkflowFolder();
-		List<NodeRef> nodes = findNodesByAssociationRef(workflowFolder, ContentModel.ASSOC_CONTAINS, LecmWorkflowModel.TYPE_ROUTE, ASSOCIATION_TYPE.TARGET);
+		List<ChildAssociationRef> children = nodeService.getChildAssocs(workflowFolder, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		List<NodeRef> routes = new ArrayList<NodeRef>();
-		for(NodeRef nodeRef : nodes) {
+		for(ChildAssociationRef child : children) {
+			NodeRef nodeRef = child.getChildRef();
 			String creator = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
 			boolean isTemp = nodeService.hasAspect(nodeRef, LecmWorkflowModel.ASPECT_TEMP);
 			if (isTemp && StringUtils.equals(username, creator)) {
