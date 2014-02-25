@@ -728,6 +728,10 @@ public class ApprovalListServiceImpl extends BaseBean implements ApprovalListSer
 					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				} else {
 					effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+					//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+					if (employee.equals(effectiveEmployee)) {
+						effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					}
 				}
 				if (effectiveEmployee != null) {
 					nodeService.removeAssociation(assignee, employee, ApprovalListService.ASSOC_ASSIGNEES_ITEM_EMPLOYEE_ASSOC);
