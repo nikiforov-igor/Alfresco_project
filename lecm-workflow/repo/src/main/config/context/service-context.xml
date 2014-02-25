@@ -60,6 +60,7 @@
 
 	<bean id="routeService" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.RouteServiceImpl"
-		  p:workflowFoldersServiceImpl-ref="lecm.workflow.folders.bootstrap"/>
+		  p:workflowFoldersServiceImpl-ref="lecm.workflow.folders.bootstrap"
+		  p:orgstructureBean-ref="serviceOrgstructure"/>
 
 </beans>

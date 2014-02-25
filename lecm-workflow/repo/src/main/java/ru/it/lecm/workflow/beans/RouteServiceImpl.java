@@ -1,11 +1,15 @@
 package ru.it.lecm.workflow.beans;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.RouteType;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteService;
@@ -17,9 +21,14 @@ import ru.it.lecm.workflow.api.RouteService;
 public class RouteServiceImpl extends BaseBean implements RouteService {
 
 	private WorkflowFoldersServiceImpl workflowFoldersServiceImpl;
+	private OrgstructureBean orgstructureBean;
 
 	public void setWorkflowFoldersServiceImpl(WorkflowFoldersServiceImpl workflowFoldersServiceImpl) {
 		this.workflowFoldersServiceImpl = workflowFoldersServiceImpl;
+	}
+
+	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+		this.orgstructureBean = orgstructureBean;
 	}
 
 	@Override
@@ -27,16 +36,41 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		return null;
 	}
 
+	private List<NodeRef> getEmptyRoutesByCurrentEmployee() {
+		NodeRef employeeRef = orgstructureBean.getCurrentEmployee();
+		String username = orgstructureBean.getEmployeeLogin(employeeRef);
+		NodeRef workflowFolder = workflowFoldersServiceImpl.getWorkflowFolder();
+		List<NodeRef> nodes = findNodesByAssociationRef(workflowFolder, ContentModel.ASSOC_CONTAINS, LecmWorkflowModel.TYPE_ROUTE, ASSOCIATION_TYPE.TARGET);
+		List<NodeRef> routes = new ArrayList<NodeRef>();
+		for(NodeRef nodeRef : nodes) {
+			String creator = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
+			boolean isTemp = nodeService.hasAspect(nodeRef, LecmWorkflowModel.ASPECT_TEMP);
+			if (isTemp && StringUtils.equals(username, creator)) {
+				routes.add(nodeRef);
+			}
+		}
+		return routes;
+	}
+
 	@Override
 	public NodeRef createEmptyRoute(final RouteType routeType) {
-		NodeRef workflowFolder = workflowFoldersServiceImpl.getWorkflowFolder();
+		//получение списка маршрутов которые TEMP и у которых creator это currentEmployee
+		List<NodeRef> routes = getEmptyRoutesByCurrentEmployee();
+		for (NodeRef route : routes) {
+			nodeService.addAspect(route, ContentModel.ASPECT_TEMPORARY, null);
+			nodeService.deleteNode(route);
+		}
 
+		NodeRef workflowFolder = workflowFoldersServiceImpl.getWorkflowFolder();
 		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 		NodeRef routeRef = nodeService.createNode(workflowFolder, ContentModel.ASSOC_CONTAINS, assocQName, LecmWorkflowModel.TYPE_ROUTE).getChildRef();
+		nodeService.addAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP, null);
 
 		//TODO: разделение маршрута на подразделенческий и индивидуальный
 		switch(routeType) {
 			case EMPLOYEE:
+				NodeRef employeeRef = orgstructureBean.getCurrentEmployee();
+				nodeService.createAssociation(routeRef, employeeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
 				break;
 			case UNIT:
 				break;
