@@ -66,10 +66,13 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 
     @Override
     public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems) {
+        if (forItems.size() == 0) return new ArrayList<NodeRef>();
         List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
         List<NodeRef> actions = new ArrayList<NodeRef>();
         for (ChildAssociationRef child : children) {
-            actions.add(child.getChildRef());
+            if (Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
+                actions.add(child.getChildRef());
+            }
         }
         actions = filterByType(actions, forItems);
         return actions;

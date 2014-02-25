@@ -234,7 +234,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (this.reloadActionsUpdateTimer != null) {
                     clearTimeout(this.reloadActionsUpdateTimer);
                 }
-                this.reloadActionsUpdateTimer = setTimeout(this.onCheckDocumentFinished.bind(this), 1500);
+                this.reloadActionsUpdateTimer = setTimeout(this.onCheckDocumentFinished.bind(this), 500);
             },
 
             onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
@@ -269,7 +269,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             withForm: json[i].withForm,
                                             items: items
                                         },
-                                        scope: this
+                                        scope: me
                                     }
                                 });
                             }
@@ -298,7 +298,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onGroupActionsClick: function onGroupActionsClick(p_sType, p_aArgs, p_oItem) {
                 if (p_oItem.withForm) {
-                    alert(form);
+                    this._createScriptForm(p_oItem);
                 } else {
                     Alfresco.util.Ajax.jsonRequest({
                         method: "POST",
@@ -320,6 +320,73 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         execScripts: true
                     });
                 }
+            },
+
+            _createScriptForm: function _createScriptFormFunction(item) {
+                var me = this;
+                var doBeforeDialogShow = function (p_form, p_dialog) {
+                    var contId = p_dialog.id + "-form-container";
+                    Alfresco.util.populateHTML(
+                        [contId + "_h", item.actionId ]
+                    );
+
+                    Dom.addClass(contId, "metadata-form-edit");
+                    this.doubleClickLock = false;
+                };
+
+                var url = "/lecm/components/form/script" +
+                    "?itemKind={itemKind}" +
+                    "&itemId={itemId}" +
+                    "&formId={formId}" +
+                    "&mode={mode}" +
+                    "&submitType={submitType}" +
+                    "&items={items}";
+
+                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url,
+                {
+                    itemKind: "type",
+                    itemId: item.actionId,
+                    formId: "scriptForm",
+                    mode: "create",
+                    submitType: "json",
+                    items: JSON.stringify(item.items)
+                });
+
+                // Using Forms Service, so always create new instance
+                var scriptForm = new Alfresco.module.SimpleDialog(this.id + "-scriptForm");
+                scriptForm.setOptions(
+                    {
+                        width: "40em",
+                        templateUrl: templateUrl,
+                        actionUrl: null,
+                        destroyOnHide: true,
+                        doBeforeDialogShow: {
+                            fn: doBeforeDialogShow,
+                            scope: this
+                        },
+                        onSuccess: {
+                            fn: function DataGrid_onActionCreate_success(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: this.msg("message.save.success")
+                                    });
+                                window.location.href = window.location.protocol + "//" + window.location.host +
+                                    Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+                                this.doubleClickLock = false;
+                            },
+                            scope: this
+                        },
+                        onFailure: {
+                            fn: function DataGrid_onActionCreate_failure(response) {
+                                Alfresco.util.PopupManager.displayMessage(
+                                    {
+                                        text: this.msg("message.save.failure")
+                                    });
+                                this.doubleClickLock = false;
+                            },
+                            scope: this
+                        }
+                    }).show();
             },
 
             onUpdateArmFilters: function(layer, args) {

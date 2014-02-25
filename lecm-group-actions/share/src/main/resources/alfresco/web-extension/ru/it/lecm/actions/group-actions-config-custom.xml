@@ -10,6 +10,7 @@
                     <show id="lecm-group-actions:type"/>
                     <show id="lecm-group-actions:statuses"/>
                     <show id="lecm-group-actions:isGroup"/>
+                    <show id="lecm-group-actions:forCollection"/>
                     <show id="lecm-group-actions:order"/>
                     <show id="lecm-group-actions:form-fields-ref"/>
                     <show id="lecm-group-actions:script"/>
@@ -49,6 +50,7 @@
                     <show id="lecm-group-actions:type"/>
                     <show id="lecm-group-actions:statuses"/>
                     <show id="lecm-group-actions:isGroup"/>
+                    <show id="lecm-group-actions:forCollection"/>
                     <show id="lecm-group-actions:order"/>
                     <show id="lecm-group-actions:script"/>
                 </field-visibility>

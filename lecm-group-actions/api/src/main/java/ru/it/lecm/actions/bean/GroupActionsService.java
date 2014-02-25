@@ -24,6 +24,7 @@ public interface GroupActionsService {
     public static final QName PROP_STATUSES = QName.createQName(NAMESPACE_URI, "statuses");
     public static final QName PROP_EXPRESSION = QName.createQName(NAMESPACE_URI, "expression");
     public static final QName PROP_IS_GROUP = QName.createQName(NAMESPACE_URI, "isGroup");
+    public static final QName PROP_FOR_COLLECTION = QName.createQName(NAMESPACE_URI, "forCollection");
     public static final QName PROP_ORDER = QName.createQName(NAMESPACE_URI, "order");
     public static final QName PROP_SCRIPT = QName.createQName(NAMESPACE_URI, "script");
 

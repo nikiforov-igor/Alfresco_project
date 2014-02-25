@@ -37,6 +37,10 @@
                     <type>d:boolean</type>
                     <mandatory>false</mandatory>
                 </property>
+                <property name="lecm-group-actions:forCollection">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                </property>
                 <property name="lecm-group-actions:order">
                     <type>d:long</type>
                     <mandatory>false</mandatory>

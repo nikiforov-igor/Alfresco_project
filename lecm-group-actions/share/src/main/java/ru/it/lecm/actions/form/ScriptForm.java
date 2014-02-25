@@ -1,14 +1,17 @@
 package ru.it.lecm.actions.form;
 
-import org.alfresco.web.config.forms.FormSet;
-import org.alfresco.web.config.forms.Mode;
+import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.ScriptRemote;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.*;
+import org.springframework.extensions.webscripts.connector.Response;
+import org.springframework.extensions.webscripts.connector.ResponseStatus;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.Map;
 public class ScriptForm extends FormUIGet {
 
     private static ScriptRemote scriptRemote;
+    private final static Log logger = LogFactory.getLog(ScriptForm.class);
 
     private enum AlfrescoTypes {
         d_text,
@@ -45,6 +49,10 @@ public class ScriptForm extends FormUIGet {
         d_double
     }
 
+    public void setScriptRemote(ScriptRemote scriptRemote) {
+        ScriptForm.scriptRemote = scriptRemote;
+    }
+
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         return super.executeImpl(req, status, cache);
@@ -63,13 +71,65 @@ public class ScriptForm extends FormUIGet {
         Set set = new Set("", "Набор параметров");
         sets.add(set);
 
-        HashMap<String, Field> fields = new HashMap<String, Field>();
+        HashMap<String, Object> fields = new HashMap<String, Object>();
         form.put(MODEL_FIELDS, fields);
+
+        String actionId = request.getParameter("itemId");
+        List<FieldDescriptor> descriptors = new ArrayList<FieldDescriptor>();
+        try {
+            String url = "/lecm/groupActions/fields?actionId=" + URLEncoder.encode(actionId, "UTF-8");
+            Response response = scriptRemote.connect("alfresco").get(url);
+            if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
+                JSONArray jsonFields = new JSONArray(response.getResponse());
+                for (int i = 0; i < jsonFields.length(); i++) {
+                    JSONObject jsonField = jsonFields.getJSONObject(i);
+                    String name = jsonField.getString("name");
+                    String id = jsonField.getString("id");
+                    String type = jsonField.getString("type");
+                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type);
+                    descriptors.add(descriptor);
+                }
+
+            } else {
+                logger.warn("Cannot get fields list from server");
+            }
+        } catch (Exception e) {
+            logger.warn("Cannot get fields list from server", e);
+        }
+
+        int colnum = 0;
+        for (FieldDescriptor descriptor : descriptors) {
+            colnum++;
+            Field field = generateFieldModel(descriptor, colnum);
+            if (field != null) {
+                fields.put(descriptor.getId(), field);
+                FieldPointer fieldPointer = new FieldPointer(field.getId());
+                set.addChild(fieldPointer);
+            }
+        }
+
+        FormUIGet.Field actionIdField = generateTransientFieldModel("actionId", "/org/alfresco/components/form/controls/hidden.ftl");
+        actionIdField.setValue(actionId);
+        actionIdField.setType("property");
+        actionIdField.setDataType("text");
+        actionIdField.setDataKeyName(actionIdField.getId());
+        fields.put(actionIdField.getId(), actionIdField);
+        FieldPointer fieldPointer = new FieldPointer(actionIdField.getId());
+        set.addChild(fieldPointer);
+
+        FormUIGet.Field itemsField = generateTransientFieldModel("items", "/org/alfresco/components/form/controls/hidden.ftl");
+        itemsField.setValue(request.getParameter("items"));
+        itemsField.setType("property");
+        itemsField.setDataType("text");
+        itemsField.setDataKeyName(itemsField.getId());
+        fields.put(itemsField.getId(), itemsField);
+        fieldPointer = new FieldPointer(itemsField.getId());
+        set.addChild(fieldPointer);
 
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_METHOD, "GET");
         form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
-        form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/script/");
+        form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/groupActions/exec");
         form.put(MODEL_SHOW_CAPTION, false);
         form.put(MODEL_SHOW_CANCEL_BUTTON, true);
         form.put(MODEL_SHOW_RESET_BUTTON, false);
@@ -81,7 +141,7 @@ public class ScriptForm extends FormUIGet {
     	return (s != null && s.trim().length() > 0) ? s : sDefault;
     }
 
- /*   protected Field generateFieldModel(ColumnDescriptor column, int colnum, ReportDescriptor desc) {
+    protected Field generateFieldModel(FieldDescriptor column, int colnum) {
         Field field = null;
         try {
             if (column != null) {
@@ -89,22 +149,22 @@ public class ScriptForm extends FormUIGet {
                 field = new Field();
 
                 // т.к. пустые метки могут уронить диалог, сделаем их всегда заполненными ...
-                final String colMnem = nonBlank( column.getColumnName(), String.format("Column_%d", colnum) );
-                final String colCaption = nonBlank( column.getDefault(), colMnem);
+                final String colMnem = nonBlank(column.getId(), String.format("Column_%d", colnum) );
+                final String colCaption = nonBlank(column.getName(), colMnem);
 
                 field.setId(colMnem);
                 field.setName(colMnem);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
 
-                field.setDataKeyName(column.getColumnName());
+                field.setDataKeyName(column.getId());
 
-                String dataType = column.getAlfrescoType();
+                String dataType = column.getType();
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
                 field.setValue("");
 
-                processFieldControl(field, column, desc);
+                processFieldControl(field, column);
             }
         } catch (JSONException je) {
             field = null;
@@ -113,7 +173,7 @@ public class ScriptForm extends FormUIGet {
         return field;
     }
 
-    protected void processFieldControl(Field field, ColumnDescriptor column, ReportDescriptor desc) throws JSONException {
+    protected void processFieldControl(Field field, FieldDescriptor descriptor) throws JSONException {
         FieldControl control = null;
 
         DefaultControlsConfigElement defaultControls = null;
@@ -127,7 +187,7 @@ public class ScriptForm extends FormUIGet {
             throw new WebScriptException("Failed to locate default controls configuration");
         }
 
-        String alfrescoType = column.getAlfrescoType();
+        String alfrescoType = descriptor.getType();
         if (alfrescoType != null) {
             if (alfrescoType.isEmpty()) {
                 return;
@@ -135,42 +195,25 @@ public class ScriptForm extends FormUIGet {
 
             Control defaultControlConfig;
             String[] allowedValues = null;
-            if (column.getParameterValue().getType().equals(ParameterType.Type.RANGE)
-                    && enumHasValue(RangeableTypes.class, alfrescoType.replaceAll(":", "_"))) {
 
-                String rangedType = alfrescoType.replace(OLD_DATA_TYPE_PREFIX, "").concat("-range");
-                defaultControlConfig = defaultControls.getItems().get(rangedType);
-            } else { // для списка и значения
-                boolean isPropertyField = isNotAssoc(alfrescoType);
-                if (isPropertyField) {
-                    field.setType(PROPERTY);
+            boolean isPropertyField = isNotAssoc(alfrescoType);
+            if (isPropertyField) {
+                field.setType(PROPERTY);
 
-                    defaultControlConfig = defaultControls.getItems().get(alfrescoType);
-                    if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
-                        defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
-                        if (defaultControlConfig == null) {
-                            defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
-                        }
-                    }
-                } else {
-                    field.setType(ASSOCIATION);
-                    field.setEndpointDirection("TARGET");
-
-                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
+                defaultControlConfig = defaultControls.getItems().get(alfrescoType);
+                if (defaultControlConfig == null) { // попытка получить дефолтный контрол по старой альфресовской схеме
+                    defaultControlConfig = defaultControls.getItems().get(alfrescoType.replace(OLD_DATA_TYPE_PREFIX, ""));
                     if (defaultControlConfig == null) {
-                        defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
+                        defaultControlConfig = defaultControls.getItems().get(DEFAULT_FIELD_TYPE);
                     }
                 }
-                String columnExpression = column.getExpression();
-                if (columnExpression != null && !columnExpression.isEmpty()){
-                    if (!columnExpression.startsWith("{")) {// не вычисляемое значение, значит либо константа, либо список значений
-                        if (!columnExpression.contains(",")) { // константа
-                            allowedValues = new String[1];
-                            allowedValues[0] = columnExpression;
-                        } else {
-                            allowedValues = columnExpression.split(",");
-                        }
-                    }
+            } else {
+                field.setType(ASSOCIATION);
+                field.setEndpointDirection("TARGET");
+
+                defaultControlConfig = defaultControls.getItems().get(ASSOCIATION + ":" + alfrescoType);
+                if (defaultControlConfig == null) {
+                    defaultControlConfig = defaultControls.getItems().get(ASSOCIATION);
                 }
             }
 
@@ -180,61 +223,14 @@ public class ScriptForm extends FormUIGet {
                 for (ControlParam param : paramsConfig) {
                     control.getParams().put(param.getName(), param.getValue());
                 }
-
-                if (alfrescoType.toUpperCase().equals(AlfrescoTypes.STATUS.name())) {
-                    String resultedValue = "";
-                    if (desc.getFlags().getSupportedNodeTypes() != null) {
-                        for (String type : desc.getFlags().getSupportedNodeTypes()) {
-                            resultedValue += (type + ",");
-                        }
-                        resultedValue = resultedValue.substring(0, resultedValue.length() - 1);
-                    }
-
-                    control.getParams().put("docType", resultedValue);
-                    control.getParams().put("multiply", String.valueOf(column.getParameterValue().getType().equals(ParameterType.Type.LIST)));
-                }
-                // поддерживается ли множественный выбор? Да, если тип Параметра - Список
-                field.setRepeating(column.getParameterValue().getType().equals(ParameterType.Type.LIST));
             }
 
             field.setControl(control);
-
-            if (allowedValues != null) {
-                if (field.isRepeating()) {
-                    field.getControl().setTemplate(CONTROL_SELECT_MANY);
-                } else {
-                    field.getControl().setTemplate(CONTROL_SELECT_ONE);
-                }
-
-                if (!field.getControl().getParams().containsKey(CONTROL_PARAM_OPTIONS)) {
-                    List<String> optionsList = new ArrayList<String>(allowedValues.length);
-                    Collections.addAll(optionsList, allowedValues);
-
-                    // ALF-7961: don't use a comma as the list separator
-                    field.getControl().getParams().put(CONTROL_PARAM_OPTIONS,
-                            StringUtils.collectionToDelimitedString(optionsList, DELIMITER));
-                    field.getControl().getParams().put(CONTROL_PARAM_OPTION_SEPARATOR, DELIMITER);
-                }
-            }
-        }
-    }
-
-    private ReportDescriptor getReportDescriptor(String reportCode) {
-        InputStream xmlStream = null;
-        try {
-            xmlStream = reportManager.getDsXmlBytes(reportCode);
-            return DSXMLProducer.parseDSXML(xmlStream, reportCode);
-        } finally {
-            IOUtils.closeQuietly(xmlStream);
         }
     }
 
     private boolean isNotAssoc(String typeKey) {
         return typeKey != null && enumHasValue(AlfrescoTypes.class, typeKey.replaceAll(":", "_"));
-    }
-
-    public void setReportManager(ReportManagerApi reportManager) {
-        this.reportManager = reportManager;
     }
 
     static public boolean enumHasValue(Class enumClass, String name) {
@@ -244,7 +240,32 @@ public class ScriptForm extends FormUIGet {
         } catch (Exception ex){
         }
         return inEnum;
-    }*/
+    }
+
+    public class FieldDescriptor {
+
+        private String name;
+        private String id;
+        private String type;
+
+        public FieldDescriptor(String name, String id, String type) {
+            this.name = name;
+            this.id = id;
+            this.type = type;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
 
     public class Field extends Element {
         protected String name;

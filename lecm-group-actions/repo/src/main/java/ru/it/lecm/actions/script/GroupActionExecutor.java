@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.MD5;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +19,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -42,15 +40,28 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         List<NodeRef> items = new ArrayList<NodeRef>();
         String actionId = null;
 
+        HashMap<String, String> paramenters = new HashMap<String, String>();
         try {
             String content = req.getContent().getContent();
             JSONObject object = new JSONObject(content);
             actionId = object.getString("actionId");
-            JSONArray iArray = object.getJSONArray("items");
+            JSONArray iArray = null;
+            try {
+                iArray = object.getJSONArray("items");
+            } catch (JSONException e) {
+                iArray = new JSONArray(object.getString("items"));
+            }
             for (int i = 0; i < iArray.length(); i++) {
                 String item = iArray.getString(i);
                 if (NodeRef.isNodeRef(item)) {
                     items.add(new NodeRef(item));
+                }
+            }
+            Iterator it = object.keys();
+            while (it.hasNext()) {
+                String key = (String) it.next();
+                if (!"actionId".equals(key) && !"items".equals(key)) {
+                    paramenters.put(key, object.getString(key));
                 }
             }
         } catch (Exception e) {
@@ -65,10 +76,11 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         if (action != null && items.size() > 0) {
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
             Map<String, Object> scriptModel = createScriptParameters(req, null, null, model);
+            addParamenersToModel(paramenters, scriptModel);
 
             String script = nodeService.getProperty(action, GroupActionsService.PROP_SCRIPT).toString();
             ScriptProcessor scriptProcessor = getContainer().getScriptProcessorRegistry().getScriptProcessorByExtension("js");
-            if (Boolean.TRUE.equals(nodeService.getProperty(action, GroupActionsService.PROP_IS_GROUP))) {
+            if (Boolean.TRUE.equals(nodeService.getProperty(action, GroupActionsService.PROP_FOR_COLLECTION))) {
                 script = "var documents = [];" +
                          "for each (var doc in documentsArray) {" +
                          "   var node = search.findNode(doc.toString());" +
@@ -100,6 +112,20 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    private void addParamenersToModel(HashMap<String, String> parameters, Map<String, Object> model) {
+        for (String key : parameters.keySet()) {
+            String normalizeKey = key.replace(":", "_");
+            String stringValue = parameters.get(key);
+            Object value;
+            if (NodeRef.isNodeRef(stringValue)) {
+                value = new NodeRef(stringValue);
+            } else {
+                value = stringValue;
+            }
+            model.put(normalizeKey, value);
+        }
     }
 
     private static class StringScriptContent implements ScriptContent {
