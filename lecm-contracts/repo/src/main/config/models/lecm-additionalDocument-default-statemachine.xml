@@ -1,5 +1,5 @@
-
-<?xml version='1.0' encoding='UTF-8'?><stateMachine>
+<?xml version='1.0' encoding='UTF-8'?>
+<stateMachine>
 	<node>
 		<type>statemachine</type>
 		<name>lecm-additional-document_additionalDocument</name>
@@ -4485,7 +4485,9 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
 											</property>
-										</properties>aspects/><associations/>
+										</properties>
+										<aspects/>
+										<associations/>
 										<roleAssociations/>
 										<subFolders/>
 									</node>
@@ -8907,7 +8909,8 @@ additionalDocument.save();
 										<nodeRef>workspace://SpacesStore/d4dd70c7-f00e-4288-a1bb-4b0a2bbb5f46</nodeRef>
 										<properties>
 											<property>
-												<name>permissionTypeValue/name><value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+												<name>permissionTypeValue</name>
+												<value><![CDATA[LECM_BASIC_PG_Reader]]></value>
 											</property>
 										</properties>
 										<aspects>

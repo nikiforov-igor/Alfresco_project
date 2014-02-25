@@ -1,4 +1,5 @@
-<?xml version='1.0' encoding='UTF-8'?><stateMachine>
+<?xml version='1.0' encoding='UTF-8'?>
+<stateMachine>
 	<node>
 		<type>statemachine</type>
 		<name>lecm-outgoing_document</name>

@@ -7448,17 +7448,19 @@ notifications.sendNotificationFromCurrentUser(executors,notificationText, contra
 														<type>transitionWorkflow</type>
 														<name>54fefd85-7d1f-458c-9f08-704ce64c6566</name>
 														<nodeRef>workspace://SpacesStore/b10ecd0a-0df5-477e-bdf8-1fae4dde356d</nodeRef>
-														<properties>property><name>stopSubWorkflows</name>
-															<value><![CDATA[true]]></value>
-														</property>
-														<property>
-															<name>transitionLabel</name>
-															<value><![CDATA[Расторгнуть]]></value>
-														</property>
-														<property>
-															<name>workflowId</name>
-															<value><![CDATA[activiti$contractsTermination]]></value>
-														</property>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[true]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Расторгнуть]]></value>
+															</property>
+															<property>
+																<name>workflowId</name>
+																<value><![CDATA[activiti$contractsTermination]]></value>
+															</property>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
