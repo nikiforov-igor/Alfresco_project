@@ -19,17 +19,20 @@
     </DataGenerators>
 
     <PathMappings>
-        <PathMap source="/alfresco-api/post/AuthenticationService/authenticate" target="/authAudit/login"/>
+        <PathMap source="/alfresco-api/post/AuthenticationService/authenticate" target="/authAudit/error"/>
+        <PathMap source="/alfresco-api/post/AuthenticationService/getCurrentTicket" target="/authAudit/login"/>
         <PathMap source="/alfresco-api/pre/ticketComponent/invalidateTicketById" target="/authAudit/logout"/>
     </PathMappings>
 
     <Application name="AuthAudit" key="authAudit">
+        <AuditPath key="error">
+            <AuditPath key="error">
+                <RecordValue key="user" dataExtractor="simpleValue" dataSource="/authAudit/error/args/userName"/>
+            </AuditPath>    
+        </AuditPath>
         <AuditPath key="login">
             <AuditPath key="no-error">
                 <GenerateValue key="user" dataGenerator="personLogin"/>
-            </AuditPath>
-            <AuditPath key="error">
-                <RecordValue key="user" dataExtractor="simpleValue" dataSource="/authAudit/login/args/userName"/>
             </AuditPath>
         </AuditPath>
 		<AuditPath key="logout">

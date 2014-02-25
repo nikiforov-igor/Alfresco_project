@@ -181,7 +181,7 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
                                     login = values.get(key).toString();
                                     text = "Пользователь "+login+" вошёл всистему.";
 
-                                } else if (key.equals("/authAudit/login/error/user")) {
+                                } else if (key.equals("/authAudit/error/error/user")) {
                                     type = EventCategory.LOGIN_FAILED;
                                     login = values.get(key).toString();
                                     text = "Неудачная попытка входа. Login="+login;
@@ -189,7 +189,10 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
                                     type = EventCategory.LOGOUT;
                                     login = values.get(key).toString();
                                     text = "Пользователь "+login+" завершил сеанс.";
+                                } else {
+                                    logger.debug(key);
                                 }
+                                
                             }
                             
 
