@@ -21,7 +21,7 @@ import java.util.List;
  * Date: 25.06.13
  * Time: 10:15
  */
-public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.BeforeCreateNodePolicy {
+public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy{
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
@@ -55,9 +55,6 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     }
 
     public final void init() {
-        // удаляем предыдущие записи
-        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeCreateNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "beforeCreateNode"));
         // создаем ассоциацию на шаблон для отчета
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
@@ -70,56 +67,10 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         try {
             if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
                 nodeService.createAssociation(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
-
-                // берем тип отчета из шаблона
-                NodeRef reportType;
-                List<AssociationRef> typeAssoc = nodeService.getTargetAssocs(childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_TYPE);
-                if (typeAssoc != null && !typeAssoc.isEmpty()) {
-                    reportType = typeAssoc.get(0).getTargetRef();
-                    List<NodeRef> types = new ArrayList<NodeRef>();
-                    types.add(reportType);
-                    //сохраняем в отчете
-                    nodeService.setAssociations(parent, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_REPORT_TYPE, types);
-                }
-
-                Object existTemplateName = nodeService.getProperty(childAssociationRef.getChildRef(), QName.createQName(ReportsEditorModel.REPORTS_EDITOR_URI, "reportTemplateFile-text-content"));
-                String templateName;
-                if (existTemplateName == null) {
-                    templateName= nodeService.getProperty(parent, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE) + "-template";
-                } else {
-                    templateName = existTemplateName + "-template";
-                }
-
-                nodeService.setProperty(childAssociationRef.getChildRef(), ContentModel.PROP_NAME, templateName);
                 //копируем файл с шаблоном из общей директории в отчет (или генерим новый на основании источника данных)
                 copyTemplateFile(childAssociationRef.getChildRef(), parent);
             }
         } catch (AssociationExistsException ignored) {
-        }
-    }
-
-    @Override
-    public void beforeCreateNode(NodeRef nodeRef, QName assocTypeQName, QName assocQName, QName nodeTypeQName) {
-        QName parentType = nodeService.getType(nodeRef);
-        if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-            List<AssociationRef> templates = nodeService.getTargetAssocs(nodeRef, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
-            if (templates != null && !templates.isEmpty()) {
-                for (AssociationRef template : templates) {
-                    NodeRef oldTemplate = template.getTargetRef();
-                    nodeService.removeAssociation(nodeRef, oldTemplate, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
-
-                    NodeRef templateFile = nodeService.getTargetAssocs(oldTemplate, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE).get(0).getTargetRef();
-
-                    nodeService.addAspect(oldTemplate, ContentModel.ASPECT_TEMPORARY, null);
-                    nodeService.deleteNode(oldTemplate);
-
-                    List<AssociationRef> assocs = nodeService.getSourceAssocs(templateFile, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
-                    if (assocs != null && assocs.size() == 0) { // на шаблон более не ссылаются - удаляем его
-                        nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
-                        nodeService.deleteNode(templateFile);
-                    }
-                }
-            }
         }
     }
 

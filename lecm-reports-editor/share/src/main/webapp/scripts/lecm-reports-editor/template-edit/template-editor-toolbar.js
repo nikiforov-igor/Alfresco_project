@@ -26,8 +26,6 @@
 
         toolbarButtons: {},
 
-        items: [],
-
         doubleClickLock: false,
 
         setReportId: function (reportId) {
@@ -40,10 +38,6 @@
             }
         },
 
-        setDefaultFilter: function (filter) {
-            this.defaultFilter = filter;
-        },
-
         onInitDataGrid: function (layer, args) {
             this.templatesGrid = args[1].datagrid;
         },
@@ -53,16 +47,16 @@
             Dom.setStyle(this.id + "-body", "visibility", "visible");
         },
 
-        showCreateDialog: function (meta, isCopy) {
+        showCreateDialog: function (meta) {
             if (this.doubleClickLock) {
                 return;
             }
             this.doubleClickLock = true;
 
-            this._showCreateForm(meta, isCopy);
+            this._showCreateForm(meta);
         },
 
-        _showCreateForm: function (meta, isCopy) {
+        _showCreateForm: function (meta) {
             var toolbar = this;
 
             var doBeforeDialogShow = function (p_form, p_dialog) {
@@ -73,14 +67,6 @@
 
                 Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
 
-
-                toolbar.items = p_dialog.form.validations;
-                if (isCopy){
-                    var htmlItem = Dom.get(toolbar.id + '-createDetails_prop_cm_name');
-                    if (htmlItem) {
-                        htmlItem.setAttribute("value", "");
-                    }
-                }
                 toolbar.doubleClickLock = false;
             };
 
@@ -94,7 +80,7 @@
                     formId: meta.formId ? meta.formId : "uploadTemplate"
                 });
 
-            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
+            var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" +  Alfresco.util.generateDomId());
             createDetails.setOptions(
                 {
                     width: "50em",
@@ -103,33 +89,6 @@
                     destroyOnHide: true,
                     doBeforeDialogShow: {
                         fn: doBeforeDialogShow,
-                        scope: this
-                    },
-                    doBeforeFormSubmit: {
-                        fn: function InstantAbsence_doBeforeSubmit() {
-                            if (isCopy) {
-                                var form = Dom.get(this.id + "-createDetails-form");
-                                form.setAttribute("action", "/share/proxy/alfresco/api/type/lecm-rpeditor%3areportTemplate/formprocessor");
-                                var input = document.createElement('input');
-                                input.setAttribute("id", this.id + "-createDetails-form-destination");
-                                input.setAttribute("type", "hidden");
-                                input.setAttribute("name", "alf_destination");
-                                input.setAttribute("value", LogicECM.module.ReportsEditor.SETTINGS.templatesContainer);
-                                form.appendChild(input);
-                                var items = this.items;
-                                for (var index in items) {
-                                    var htmlItem = Dom.get(items[index].fieldId + "-added");
-                                    if (htmlItem == null) {
-                                        htmlItem = Dom.get(items[index].fieldId + "-cntrl-added");
-                                    }
-                                    var value = Dom.get(items[index].fieldId).value;
-                                    if (htmlItem) {
-                                        htmlItem.setAttribute("value", value);
-                                    }
-                                }
-                            }
-
-                        },
                         scope: this
                     },
                     onSuccess: {
@@ -143,7 +102,11 @@
                                 {
                                     newTemplateId: response.json.persistedObject
                                 });
-
+                            YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
+                                {
+                                    nodeRef: response.json.persistedObject,
+                                    bubblingLabel: "templates"
+                                });
                             this.doubleClickLock = false;
                         },
                         scope: this
@@ -174,13 +137,10 @@
                     value: 'create'
                 });
 
-            this.toolbarButtons.newTemplateSaveButton = Alfresco.util.createYUIButton(this, 'newTemplateSaveButton', this._onCopyToRepository,
+            this.toolbarButtons.newFromDicButton = Alfresco.util.createYUIButton(this, 'newFromDicButton', this._onCopyFromDic,
                 {
                     disabled: !this.templateId
                 });
-
-            // Export Template
-            this.toolbarButtons.exportTemplateButton = Alfresco.util.createYUIButton(this, "exportTemplateButton", this._onExportTemplate, {});
         },
 
         _onNewTemplate: function () {
@@ -191,22 +151,15 @@
                     formMode: "create",
                     itemKind: "type",
                     formId: "uploadTemplate"
-                }, false);
+                });
+        },
+
+        _onCopyFromDic: function () {
+            alert("Не реализовано!");
         },
 
         _onNewTemplateFromSource: function () {
             this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId, formId: "createFromDataSource"});
-        },
-
-        _onCopyToRepository: function (layer, args) {
-            this.showCreateDialog(
-                {
-                    itemType: this.templateId,
-                    nodeRef: this.reportId,
-                    formMode: "edit",
-                    itemKind: "node",
-                    formId: "copy-to-report"
-                }, true);
         },
 
         _onRefreshTemplate: function (layer, args) {
@@ -214,10 +167,6 @@
             if ((obj !== null) && (obj.newTemplateId !== null)) {
                 this.templateId = obj.newTemplateId;
             }
-        },
-
-        _onExportTemplate: function () {
-            document.location.href = Alfresco.constants.PROXY_URI + "/lecm/reports-editor/exportReportTemplate?reportRef=" + this.reportId;
         }
     });
 })();

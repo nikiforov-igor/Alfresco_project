@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Export template</shortname>
     <description>Export template </description>
-    <url>/lecm/reports-editor/exportReportTemplate</url>
+    <url>/lecm/reports-editor/exportReportTemplate?templateRef={templateRef}</url>
     <format default="xml">extension</format>
     <authentication>user</authentication>
 </webscript>

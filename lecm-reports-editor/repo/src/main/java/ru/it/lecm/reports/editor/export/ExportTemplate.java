@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 /**
  * User: dbashmakov
  * Date: 07.08.13
@@ -34,21 +35,14 @@ public class ExportTemplate extends AbstractWebScript {
         OutputStream resOutputStream = null;
         InputStream is = null;
         try {
-            String nodeRefStr = req.getParameter("reportRef");
-            NodeRef nodeRef = new NodeRef(nodeRefStr);
+            String nodeRefStr = req.getParameter("templateRef");
+            NodeRef templateRef = NodeRef.isNodeRef(nodeRefStr) ? new NodeRef(nodeRefStr) : null;
 
-            List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
-            NodeRef templateRef = null;
-            if (assocs != null && !assocs.isEmpty()){
-                templateRef = assocs.get(0).getTargetRef();
-            }
             if (templateRef != null) {
                 List<AssociationRef> files = nodeService.getTargetAssocs(templateRef, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
-                NodeRef fileRef = null;
-                if (files != null && !files.isEmpty()){
-                    fileRef = files.get(0).getTargetRef();
-                }
-                if (fileRef != null) {
+                if (files != null && !files.isEmpty()) {
+                    NodeRef fileRef = files.get(0).getTargetRef();
+
                     String fileName = (String) nodeService.getProperty(fileRef, ContentModel.PROP_NAME);
                     res.setContentEncoding("UTF-8");
                     res.setContentType("text/xml");

@@ -28,6 +28,14 @@ report-editor-sourcesList #alf-filters .grid tr.yui-dt-highlighted {
     background-image: url("/share/res/images/lecm-reports-editor/select-source-16.png");
 }
 
+.datagrid .onActionExport a {
+    background-image: url("../../images/lecm-dictionary/xml-file-16.png");
+}
+
+.datagrid .onActionSave a {
+    background-image: url("/share/res/images/lecm-reports-editor/select-source-16.png");
+}
+
 .reports-editor-panel {
     border-bottom: 1px solid #D9D9D9;
     margin: 0 -10px;
@@ -116,10 +124,10 @@ div[id*="reports-editor-navigation-toolbar"] .toolbar
     background-image: url("/share/res/components/images/header/trashcan.png");
 }
 
-.datalist-toolbar .export-template button {
+/*.datalist-toolbar .export-template button {
     background: url("../../images/lecm-dictionary/xml-file-16.png") no-repeat scroll 5px 5px transparent;
     cursor: pointer;
-}
+}*/
 
 div[id*="report-settings"] div.form-field input[type="text"],
 div[id*="report-settings"] div.form-field select,

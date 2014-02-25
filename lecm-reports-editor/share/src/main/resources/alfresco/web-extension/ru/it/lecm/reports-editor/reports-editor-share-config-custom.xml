@@ -37,18 +37,18 @@
             </form>
             <form id="template-info">
                 <field-visibility>
-                    <show id="lecm-rpeditor:reportTypeAssoc"/>
+                    <!--<show id="lecm-rpeditor:reportTypeAssoc"/>-->
                     <show id="lecm-rpeditor:reportTemplateAssoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-rpeditor:reportTypeAssoc">
+                    <!--<field id="lecm-rpeditor:reportTypeAssoc">
                         <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
                             <control-param name="showTargetLink">false</control-param>
                             <control-param name="substituteParent">false</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="viewOnLinkClick">false</control-param>
                         </control>
-                    </field>
+                    </field>-->
                     <field id="lecm-rpeditor:reportTemplateAssoc">
                         <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
                             <control-param name="showTargetLink">false</control-param>
@@ -114,7 +114,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
-                    <show id="lecm-rpeditor:reportTypeAssoc"/>
+                    <!--<show id="lecm-rpeditor:reportTypeAssoc"/>-->
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -145,10 +145,18 @@
         <forms>
             <form>
                 <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:templateCode"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                     <show id="lecm-rpeditor:reportTemplateFile"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-rpeditor:templateCode">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -165,7 +173,7 @@
                     </field>
                 </appearance>
             </form>
-            <form id="copy-to-report">
+            <form id="copy-to-dictionaries">
                 <field-visibility>
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportTemplateType" />
@@ -189,11 +197,18 @@
             <form>
                 <field-visibility>
                     <show id="cm:name"/>
+                    <show id="lecm-rpeditor:templateCode"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                     <show id="lecm-rpeditor:reportTemplateFile"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:templateCode">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -212,10 +227,18 @@
             </form>
             <form id="uploadTemplate">
                 <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:templateCode"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                     <show id="lecm-rpeditor:reportTemplateFile"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-rpeditor:templateCode">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -234,9 +257,17 @@
             </form>
             <form id="createFromDataSource">
                 <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:templateCode"/>
                     <show id="lecm-rpeditor:reportTemplateType"/>
                 </field-visibility>
                 <appearance>
+                    <field id="lecm-rpeditor:templateCode">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
@@ -251,7 +282,8 @@
             <form id="datagrid">
                 <field-visibility>
                     <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportTemplateFile"/>
+                    <show id="lecm-rpeditor:templateCode"/>
+                    <show id="lecm-rpeditor:reportTemplateType"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
