@@ -20,6 +20,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -544,10 +545,18 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 				} else {
 					effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+					//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+					if (employee.equals(effectiveEmployee)) {
+						effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+					}
 				}
 				if (effectiveEmployee != null) {
 					nodeService.removeAssociation(assignee, employee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
 					nodeService.createAssociation(assignee, effectiveEmployee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+					String userName = orgstructureService.getEmployeeLogin(effectiveEmployee);
+					if (StringUtils.isNotEmpty(userName)) {
+						nodeService.setProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
+					}
 				}
 			}
 		}

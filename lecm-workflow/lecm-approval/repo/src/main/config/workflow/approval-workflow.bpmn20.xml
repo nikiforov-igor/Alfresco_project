@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.it.ru/logicECM/workflow/approval">
-	<process id="lecmApproval" name="Согласование" isExecutable="true">
+	<process id="lecmApprovalWorkflow" name="Согласование" isExecutable="true">
 		<extensionElements>
 			<activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
 				<activiti:field name="script">
@@ -11,14 +11,14 @@
 							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
 							finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
 							var resultListRef = execution.getVariable("resultListRef");
-							approval.logFinalDecision(resultListRef, finalDecision);
+							approvalWorkflow.logFinalDecision(resultListRef, finalDecision);
 						}
-						approval.deleteTempAssigneesList(execution);
+						approvalWorkflow.deleteTempAssigneesList(execution);
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>
 		</extensionElements>
-		<startEvent id="start-approvement" name="Start approvement" activiti:formKey="lecmApprove:approval"></startEvent>
+		<startEvent id="start-approvement" name="Start approvement" activiti:formKey="lecmApprove2:approval"></startEvent>
 		<serviceTask id="empty-service-task" name="Service task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
 			<extensionElements>
 				<activiti:field name="script">
@@ -34,9 +34,9 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var assigneesList = approval.createAssigneesList(lecmApprove_assigneesListAssoc, execution);
+						var assigneesList = approvalWorkflow.createAssigneesList(lecmApprove2_assigneesListAssoc, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
-						var resultListRef = approval.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove_approvalType, assigneesList);
+						var resultListRef = approvalWorkflow.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove2_approvalType, assigneesList);
 						execution.setVariable("resultListRef", resultListRef);
 					]]></activiti:string>
 				</activiti:field>
@@ -46,24 +46,24 @@
 		<sequenceFlow id="flow4" sourceRef="create-approval-list" targetRef="sequential-or-parallel-approval-gate"></sequenceFlow>
 		<exclusiveGateway id="sequential-or-parallel-approval-gate" name="Exclusive Gateway"></exclusiveGateway>
 		<sequenceFlow id="from-gate-to-sequential" sourceRef="sequential-or-parallel-approval-gate" targetRef="sequential-approvement-task">
-			<conditionExpression xsi:type="tFormalExpression">${lecmApprove_approvalType == "SEQUENTIAL"}</conditionExpression>
+			<conditionExpression xsi:type="tFormalExpression">${lecmApprove2_approvalType == "SEQUENTIAL"}</conditionExpression>
 		</sequenceFlow>
 		<sequenceFlow id="from-gate-to-parallel" sourceRef="sequential-or-parallel-approval-gate" targetRef="parallel-approvement-task">
-			<conditionExpression xsi:type="tFormalExpression">${lecmApprove_approvalType == "PARALLEL"}</conditionExpression>
+			<conditionExpression xsi:type="tFormalExpression">${lecmApprove2_approvalType == "PARALLEL"}</conditionExpression>
 		</sequenceFlow>
-		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}userName"]}' activiti:formKey="lecmApprove:approveTask">
+		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmApprove2:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							approval.assignTask(assignee, task);
+							approvalWorkflow.assignTask(assignee, task);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							approval.completeTask(assignee, task);
+							approvalWorkflow.completeTask(assignee, task);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
@@ -72,21 +72,21 @@
 				<completionCondition>${"REJECTED" == taskDecision}</completionCondition>
 			</multiInstanceLoopCharacteristics>
 		</userTask>
-		<userTask id="parallel-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/approval-list/1.0}userName"]}' activiti:formKey="lecmApprove:approveTask">
+		<userTask id="parallel-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmApprove2:approveTask">
 			<extensionElements>
 				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							var dueDate = bpm_workflowDueDate;
 							task.setDueDate(dueDate);
-							approval.assignTask(assignee, task);
+							approvalWorkflow.assignTask(assignee, task);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							approval.completeTask(assignee, task);
+							approvalWorkflow.completeTask(assignee, task);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
@@ -108,7 +108,7 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var workflowId = "activiti$" + execution.getProcessInstanceId();
-						approval.notifyDeadlineTasks(workflowId, bpm_package, execution);
+						approvalWorkflow.notifyDeadlineTasks(workflowId, bpm_package, execution);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
@@ -124,11 +124,11 @@
 						if (!decisionsMap) {
 							logger.log("Attention: decisionsMap is null!");
 						}
-						var finalDecision = approval.getFinalDecision(decisionsMap);
+						var finalDecision = approvalWorkflow.getFinalDecision(decisionsMap);
 						execution.setVariable("finalDecision", finalDecision);
-						approval.logFinalDecision(resultListRef, finalDecision);
-						approval.notifyFinalDecision(finalDecision, bpm_package)
-						execution.setVariable("isApproved", approval.isApproved(finalDecision));
+						approvalWorkflow.logFinalDecision(resultListRef, finalDecision);
+						approvalWorkflow.notifyFinalDecision(finalDecision, bpm_package)
+						execution.setVariable("isApproved", approvalWorkflow.isApproved(finalDecision));
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>
@@ -138,8 +138,8 @@
 		<sequenceFlow id="flow5" sourceRef="log-final-decision" targetRef="endevent1"></sequenceFlow>
 		<endEvent id="endevent1" name="End"></endEvent>
 	</process>
-	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmApproval">
-		<bpmndi:BPMNPlane bpmnElement="lecmApproval" id="BPMNPlane_lecmApproval">
+	<bpmndi:BPMNDiagram id="BPMNDiagram_lecmApprovalWorkflow">
+		<bpmndi:BPMNPlane bpmnElement="lecmApprovalWorkflow" id="BPMNPlane_lecmApprovalWorkflow">
 			<bpmndi:BPMNShape bpmnElement="sheduled-notification" id="BPMNShape_sheduled-notification">
 				<omgdc:Bounds height="60.0" width="100.0" x="615.0" y="113.0"></omgdc:Bounds>
 			</bpmndi:BPMNShape>

@@ -251,7 +251,7 @@
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.approval</groupId>
-			<artifactId>approval-repo</artifactId>
+			<artifactId>legacy-approval-repo</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>
@@ -350,6 +350,13 @@
 		<dependency>
 			<groupId>ru.it.lecm.workflow.review</groupId>
 			<artifactId>review-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.approval</groupId>
+			<artifactId>approval-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>

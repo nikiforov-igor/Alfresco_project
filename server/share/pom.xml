@@ -201,13 +201,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.approval</groupId>
-			<artifactId>approval-share</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.reports-editor</groupId>
 			<artifactId>reports-editor-share</artifactId>
 			<version>${platform.version}</version>
@@ -294,6 +287,13 @@
 		<dependency>
 			<groupId>ru.it.lecm.workflow.review</groupId>
 			<artifactId>review-share</artifactId>
+			<version>${platform.version}</version>
+			<type>amp</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.approval</groupId>
+			<artifactId>approval-share</artifactId>
 			<version>${platform.version}</version>
 			<type>amp</type>
 			<scope>runtime</scope>

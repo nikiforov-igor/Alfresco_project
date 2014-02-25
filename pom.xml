@@ -104,7 +104,7 @@
 		<module>lecm-documents</module>
 		<module>lecm-regnumbers</module>
 		<module>lecm-contractors</module>
-		<module>lecm-approval</module>
+		<module>lecm-legacy-approval</module>
 		<module>lecm-reports-editor</module>
 		<module>lecm-errands</module>
 		<module>lecm-permission-exp</module>

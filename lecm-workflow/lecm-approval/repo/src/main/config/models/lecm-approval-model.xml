@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<model name="lecmApprove:approvalWorkflow" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+<model name="lecmApprove2:approvalWorkflow" xmlns="http://www.alfresco.org/model/dictionary/1.0">
 	<description>Workflow model for parallel and sequential approvement</description>
 	<author>vlevin</author>
-	<version>1.0</version>
+	<version>2.0</version>
 
 	<imports>
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/logicECM/model/approval-list/1.0" prefix="lecm-al"/>
 		<import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
 	</imports>
 
 	<namespaces>
-		<namespace uri="http://www.it.ru/logicECM/model/approval/wokflow/1.0" prefix="lecmApprove"/>
+		<namespace uri="http://www.it.ru/logicECM/model/approval/wokflow/2.0" prefix="lecmApprove2"/>
 	</namespaces>
 
 	<types>
-		<type name="lecmApprove:approval">
-			<title>Workflow model for parallel and sequential approvement</title>
+		<type name="lecmApprove2:approval">
+			<title>Согласование</title>
 			<parent>bpm:startTask</parent>
 
 			<properties>
-				<property name="lecmApprove:approvalType">
+				<property name="lecmApprove2:approvalType">
 					<type>d:text</type>
 					<constraints>
 						<constraint ref="lecm-workflow:workflow-concurrency-constraint" />
@@ -32,27 +31,27 @@
 			</properties>
 
 			<associations>
-				<association name="lecmApprove:assigneesListAssoc">
+				<association name="lecmApprove2:assigneesListAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
 					</source>
 					<target>
-						<class>lecm-al:assignees-list</class>
+						<class>lecm-workflow:workflow-assignees-list</class>
 						<mandatory>true</mandatory>
 						<many>false</many>
 					</target>
 				</association>
 			</associations>
 		</type>
-		<type name="lecmApprove:approveTask">
+		<type name="lecmApprove2:approveTask">
 			<parent>bpm:activitiOutcomeTask</parent>
 			<properties>
-				<property name="lecmApprove:approveTaskResult">
+				<property name="lecmApprove2:approveTaskResult">
 					<type>d:text</type>
 					<default>REJECTED</default>
 					<constraints>
-						<constraint name="lecmApprove:approveTaskResultConstraint" type="LIST">
+						<constraint name="lecmApprove2:approveTaskResultConstraint" type="LIST">
 							<parameter name="allowedValues">
 								<list>
 									<value>APPROVED</value> <!-- согласован -->
@@ -65,7 +64,7 @@
 				</property>
 			</properties>
 			<associations>
-				<association name="lecmApprove:approveTaskCommentAssoc">
+				<association name="lecmApprove2:approveTaskCommentAssoc">
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>

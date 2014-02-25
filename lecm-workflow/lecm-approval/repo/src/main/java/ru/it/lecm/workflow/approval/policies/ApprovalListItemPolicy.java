@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.workflow.approval.api.ApprovalServiceModel;
+import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
@@ -38,7 +38,7 @@ public class ApprovalListItemPolicy implements NodeServicePolicies.OnCreateNodeP
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				ApprovalServiceModel.TYPE_APPROVAL_ITEM,
+				ApprovalResultModel.TYPE_APPROVAL_ITEM,
 				new JavaBehaviour(this, "onCreateNode"));
 	}
 

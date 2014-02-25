@@ -1,3 +1,0 @@
-{
-    "approvalListFolderRef": "${approvalListFolderRef}"
-}

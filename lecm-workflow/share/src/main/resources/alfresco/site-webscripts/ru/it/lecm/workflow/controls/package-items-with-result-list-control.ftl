@@ -51,7 +51,7 @@
     {
         return Alfresco.util.siteURL("document?nodeRef=" + item.nodeRef);
     }
-    </#local>
+</#local>
     <#local allowAddAction = false>
     <#local allowRemoveAllAction = false>
     <#local allowRemoveAction = false>
@@ -59,7 +59,7 @@
 
     <#if form.data['prop_bpm_packageActionGroup']?? && form.data['prop_bpm_packageActionGroup']?is_string && form.data['prop_bpm_packageActionGroup']?length &gt; 0>
         <#local allowAddAction = true>
-    </#if>
+</#if>
 
     <#if form.data['prop_bpm_packageItemActionGroup']?? && form.data['prop_bpm_packageItemActionGroup']?is_string && form.data['prop_bpm_packageItemActionGroup']?length &gt; 0>
         <#local packageItemActionGroup = form.data['prop_bpm_packageItemActionGroup']>
@@ -73,8 +73,8 @@
         <#elseif packageItemActionGroup >
         <#else>
             <#local actions = actions + [viewMoreAction]>
-        </#if>
-    </#if>
+</#if>
+</#if>
 
 
 <#-- Additional item actions -->

@@ -119,8 +119,8 @@
 			<artifactId>lecm-reports-jar</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-        <dependency>
-			<groupId>ru.it.lecm.approval</groupId>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.approval</groupId>
 			<artifactId>approval-repo-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,1 +1,0 @@
-model.result = approvalService.getCurrentEmployeeInfo();

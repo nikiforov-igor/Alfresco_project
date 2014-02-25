@@ -10,30 +10,37 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.workflow.approval.Utils;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
+import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
+import ru.it.lecm.workflow.approval.DecisionResult;
 
-public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension {
+public class ApprovalJavascriptExtension extends BaseWebScript {
+
+	/**
+	 * переменная регламента в которой хранится идентификатор
+	 * бизнес роли, через которую будут находится исполнители регламента с учетом делегирования
+	 */
+	private final static String WORKFLOW_ROLE = "workflowRole";
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalJavascriptExtension.class);
 	private NodeService nodeService;
-	private ServiceRegistry serviceRegistry;
 	private OrgstructureBean orgstructureService;
 	private ApprovalService approvalService;
 	private StateMachineServiceBean stateMachineHelper;
+	private WorkflowAssigneesListService workflowAssigneesListService;
 
 	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
@@ -43,16 +50,16 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 		this.nodeService = nodeService;
 	}
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
 
-	public void setApprovalListService(ApprovalService approvalListService) {
+	public void setApprovalService(ApprovalService approvalListService) {
 		this.approvalService = approvalListService;
+	}
+
+	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
+		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
 
 	public ActivitiScriptNode createApprovalList(ActivitiScriptNode bpmPackage, String documentAttachmentCategoryName, String approvalType) {
@@ -76,19 +83,22 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	}
 
 	public String getFinalDecision(final Map<String, String> decisionMap) {
-		String finalDecision = "NO_DECISION";
-		if (decisionMap.containsValue("REJECTED")) {
-			finalDecision = "REJECTED";
-		} else if (decisionMap.containsValue("APPROVED_WITH_REMARK")) {
-			finalDecision = "APPROVED_WITH_REMARK";
-		} else if (decisionMap.containsValue("APPROVED")) {
-			finalDecision = "APPROVED";
+		DecisionResult finalDecision = DecisionResult.NO_DECISION;
+
+		if (decisionMap.containsValue(DecisionResult.REJECTED.name())) {
+			finalDecision = DecisionResult.REJECTED;
+		} else if (decisionMap.containsValue(DecisionResult.APPROVED_WITH_REMARK.name())) {
+			finalDecision = DecisionResult.APPROVED_WITH_REMARK;
+		} else if (decisionMap.containsValue(DecisionResult.APPROVED.name())) {
+			finalDecision = DecisionResult.APPROVED;
 		}
-		return finalDecision;
+		return finalDecision.name();
 	}
 
 	public boolean isApproved(final String finalDecision) {
-		return "APPROVED_WITH_REMARK".equals(finalDecision) || "APPROVED".equals(finalDecision) || "APPROVED_FORCE".equals(finalDecision);
+		return DecisionResult.APPROVED_WITH_REMARK.name().equals(finalDecision) ||
+				DecisionResult.APPROVED.name().equals(finalDecision) ||
+				DecisionResult.APPROVED_FORCE.name().equals(finalDecision);
 	}
 
 	public void logFinalDecision(final ActivitiScriptNode approvalListRef, final String finalDecision) {
@@ -123,8 +133,7 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 	public void terminateApproval(ActivitiScriptNode bpmPackage, String variable, Object value) {
 		NodeRef document = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
 		ArrayList<String> definitions = new ArrayList<String>();
-		definitions.add("lecmApproval");
-		definitions.add("lecmCustomApproval");
+		definitions.add("lecmApprovalWorkflow");
 		stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
 	}
 
@@ -187,6 +196,11 @@ public class ApprovalJavascriptExtension extends BaseScopableProcessorExtension 
 
 	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
 		List<NodeRef> assigneesList = approvalService.createAssigneesList(assigneesListNode.getNodeRef(), execution);
+		//у нас есть рабочая копия списка участников процесса подписания
+		//нам надо пробежаться по участникам этого списка, через сервис делегирования найти актуальных исполнителей
+		//актуализировать ассоциацию на сотрудника и userName
+		String workflowRole = (String)execution.getVariable(WORKFLOW_ROLE);
+		assigneesList = workflowAssigneesListService.actualizeAssigneesUsingDelegation(assigneesList, workflowRole);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode : assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));

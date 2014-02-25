@@ -998,10 +998,10 @@
 
          <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
-         <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentAdd" type="sys:base" /> -->
+         <includePermissionGroup permissionGroup="lecmPerm_ContentAdd" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_ContentView" type="sys:base" />
-         <includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" />
+         <!--<includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" />-->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" /> -->
 
          <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" />

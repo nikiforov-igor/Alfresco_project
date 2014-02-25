@@ -1,5 +1,7 @@
 package ru.it.lecm.contracts.reports;
 
+import java.io.Serializable;
+import java.util.*;
 import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -10,7 +12,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.approval.api.ApprovalListService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
@@ -19,9 +20,8 @@ import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
-
-import java.io.Serializable;
-import java.util.*;
+import ru.it.lecm.workflow.api.WorkflowResultModel;
+import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
 
 /**
  * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период."
@@ -57,7 +57,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 
         // выполненные Согласования -> вне статуса 'NO_DECISION'
         builder.emmit(hasData ? " AND " : "").
-                emmit(" NOT @lecm\\-al\\:approval\\-list\\-decision:" + VALUE_STATUS_NOTREADY + " ");
+                emmitFieldCond("NOT", ApprovalResultModel.PROP_APPROVAL_LIST_DECISION.toString(), VALUE_STATUS_NOTREADY);
 
         result.setLuceneQueryText(builder.toString());
         return result;
@@ -151,26 +151,26 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
         public ApproveQNameHelper(NamespaceService ns) {
             this.ns = ns;
 
-            this.QTYPE_APPROVE_ITEM = ApprovalListService.TYPE_APPROVAL_ITEM;
+            this.QTYPE_APPROVE_ITEM = ApprovalResultModel.TYPE_APPROVAL_ITEM;
             this.childApproveSet = new HashSet<QName>(Arrays.asList(QTYPE_APPROVE_ITEM));
             this.childEmployeeSet = new HashSet<QName>(Arrays.asList(OrgstructureBean.TYPE_EMPLOYEE));
 
-            this.QFLD_STARTAPPROVE = ApprovalListService.PROP_APPROVAL_LIST_APPROVE_START; // <!-- дата согласования по документу -->
-            this.QFLD_ENDAPPROVE = ApprovalListService.PROP_APPROVAL_LIST_APPROVE_DATE; // <!-- дата согласования по документу -->
+            this.QFLD_STARTAPPROVE = WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE; // <!-- дата согласования по документу -->
+            this.QFLD_ENDAPPROVE = WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_COMPLETE_DATE; // <!-- дата согласования по документу -->
 
-            this.QFLD_APPROVE_RESULT = ApprovalListService.PROP_APPROVAL_LIST_DECISION; // <!-- результат согласования документа -->
-            this.QFLD_APPROVE_DOCVER = ApprovalListService.PROP_APPROVAL_LIST_DOCUMENT_VERSION; // <!-- номер версии документа, по которой проводилось согласование -->
+            this.QFLD_APPROVE_RESULT = ApprovalResultModel.PROP_APPROVAL_LIST_DECISION; // <!-- результат согласования документа -->
+            this.QFLD_APPROVE_DOCVER = WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION; // <!-- номер версии документа, по которой проводилось согласование -->
             this.QFLD_DOC_PROJECTNUM = QName.createQName(FLD_DOC_PROJECTNUM, ns);  // <!-- Регистрационный номер проекта договора-->
 
-            this.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE = ApprovalListService.ASSOC_APPROVAL_ITEM_EMPLOYEE;
+            this.QASSOC_APPROVAL_ITEM_TO_EMPLOYEE = WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE;
 
-            this.QFLD_USER_RESULT = ApprovalListService.PROP_APPROVAL_ITEM_DECISION;
-            this.QFLD_USER_COMMENT = ApprovalListService.PROP_APPROVAL_ITEM_COMMENT;
+            this.QFLD_USER_RESULT = ApprovalResultModel.PROP_APPROVAL_ITEM_DECISION;
+            this.QFLD_USER_COMMENT = ApprovalResultModel.PROP_APPROVAL_ITEM_COMMENT;
 
-            this.QFLD_USER_APPROVE_START = ApprovalListService.PROP_APPROVAL_ITEM_START_DATE; // "cm:created"
-            this.QFLD_USER_APPROVED = ApprovalListService.PROP_APPROVAL_ITEM_APPROVE_DATE;
+            this.QFLD_USER_APPROVE_START = WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE; // "cm:created"
+            this.QFLD_USER_APPROVED = WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE;
 
-            this.QFLD_USER_DUE_DATE = ApprovalListService.PROP_APPROVAL_ITEM_DUE_DATE;
+            this.QFLD_USER_DUE_DATE = WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_DUE_DATE;
         }
 
         /**
@@ -300,10 +300,10 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 						/*
                          * из доки "Договорная деятельность ТЗ.docx"
 						 * 10.5.2	Исполнительская дисциплина по согласованиям за период.
-						 * Пусть, X = количество рабочих дней между Датой фактического согласования и Датой получения задачи на Согласование. 
+						 * Пусть, X = количество рабочих дней между Датой фактического согласования и Датой получения задачи на Согласование.
 						 * Это фактический срок согласования.
 						 * Y = значение атрибута «Плановое время согласования»,
-						 * Если X > Y, то считаем такое согласование Просроченным, 
+						 * Если X > Y, то считаем такое согласование Просроченным,
 						 * и  величина, равная X – Y будет составлять Срок просрочки.
 						 */
                         final float fact_duration = Utils.calcDurationInDays(userApprovStartAt, userApprovedAt, 0); // X

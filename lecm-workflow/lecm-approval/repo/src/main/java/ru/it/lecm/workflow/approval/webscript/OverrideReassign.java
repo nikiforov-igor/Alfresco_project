@@ -1,18 +1,12 @@
 package ru.it.lecm.workflow.approval.webscript;
 
-import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
-import ru.it.lecm.workflow.approval.api.ApprovalService;
-import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,27 +17,7 @@ public class OverrideReassign extends DeclarativeWebScript {
 
     private final static Logger logger = LoggerFactory.getLogger(OverrideReassign.class);
 
-    private WorkflowService workflowService;
-    private NodeService nodeService;
-    private ApprovalService approvalListService;
-    private DictionaryService dictionaryService;
     private OrgstructureBean orgstructureService;
-
-    public void setWorkflowService(WorkflowService workflowService) {
-		this.workflowService = workflowService;
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
-
-	public void setApprovalListService(ApprovalService approvalListService) {
-		this.approvalListService = approvalListService;
-	}
-
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -81,26 +55,6 @@ public class OverrideReassign extends DeclarativeWebScript {
 
         result.put("personLogin", personLogin);
 
-//        grandPermissions(taskID, employeeNodeRef);
-
         return result;
-    }
-
-    private void grandPermissions(String taskID, NodeRef employeeNodeRef) {
-        NodeRef documentRef = null;
-        List<NodeRef> packageContents = workflowService.getPackageContents(taskID);
-        for (NodeRef node : packageContents) {
-            if (dictionaryService.isSubClass(nodeService.getType(node), DocumentService.TYPE_BASE_DOCUMENT)) {
-                documentRef = node;
-                logger.trace("Found documentRef!");
-                break;
-            }
-        }
-
-        if (documentRef != null){
-             approvalListService.grantReviewerPermissionsInternal(employeeNodeRef, documentRef );
-        }else{
-            logger.trace("No documentRef presented.");
-        }
     }
 }
