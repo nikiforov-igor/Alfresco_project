@@ -8,8 +8,10 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -75,6 +77,8 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
             }
         }
         actions = filterByType(actions, forItems);
+        actions = filterByStatuses(actions, forItems);
+        //actions = filterByExpression(actions, forItems);
         return actions;
     }
 
@@ -108,6 +112,25 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 
     private List<NodeRef> filterByStatuses(List<NodeRef> actions, List<NodeRef> items) {
         List<NodeRef> result = new ArrayList<NodeRef>();
+        for (NodeRef action : actions) {
+            String statusesField = nodeService.getProperty(action, GroupActionsService.PROP_STATUSES).toString();
+            String[] splitStatuses = statusesField.split(";");
+            HashSet<String> statuses = new HashSet<String>();
+            for (String status : splitStatuses) {
+                statuses.add(status.trim());
+            }
+            boolean include = true;
+            for (NodeRef item : items) {
+                String status = nodeService.getProperty(item, StatemachineModel.PROP_STATUS).toString();
+                if (!statuses.contains(status)) {
+                    include = false;
+                    break;
+                }
+            }
+            if (include) {
+                result.add(action);
+            }
+        }
         return result;
     }
 
