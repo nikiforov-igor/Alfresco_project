@@ -77,3 +77,40 @@ div.arm-tree-menu .arm-accordion div.accordion-content {
 div.arm-tree-menu .arm-accordion div.accordion-content.shown {
 	height: auto;
 }
+
+#filtersBlock .filters-table-container {
+	overflow-x: auto;
+	padding: 0.5em;
+}
+
+#filtersBlock .filters-table th {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	vertical-align: text-top;
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+#filtersBlock .filters-table td {
+	width: 150px;
+	min-width: 150px;
+	max-width: 150px;
+	vertical-align: text-top;
+}
+
+#filtersBlock .filters-table td div {
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+#filtersBlock .filters-table td div {
+	height: 18px;
+}
+
+#filtersBlock .filters-table td div input,
+#filtersBlock .filters-table td div label {
+	vertical-align: middle;
+}
