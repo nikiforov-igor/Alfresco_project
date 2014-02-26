@@ -9,16 +9,19 @@ datagrid.setOptions({
 	usePagination:true,
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
-    bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+	bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
 	dataSource: "/lecm/workflow/routes/routesList",
-	actions: [
-       {
-		type:"datagrid-action-link-" +  LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+	actions: [{
+		type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+		id:"onActionEdit",
+		permission:"edit",
+		label:"${msg('actions.edit')}"
+	},{
+		type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
 		id:"onActionDelete",
 		permission:"delete",
 		label:"${msg('actions.delete-row')}"
-        }
-	]
+	}]
 });
 datagrid.setMessages(${messages});
 YAHOO.util.Event.onContentReady("${id}", function () {
