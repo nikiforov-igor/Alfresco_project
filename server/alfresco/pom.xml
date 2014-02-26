@@ -376,6 +376,21 @@
             <type>amp</type>
         </dependency>
     </dependencies>
+        <!--<dependency>
+            <groupId>ru.it.lecm.licensing</groupId>
+            <artifactId>licensing-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.base-utils</groupId>
+            <artifactId>base-utils-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>-->
+	</dependencies>
 
 	<build>
 		<finalName>${webapp.name}</finalName>

@@ -83,6 +83,7 @@
 
 	<modules>
 		<module>lecm-base</module>
+		<!--<module>lecm-base-utils</module>-->
 		<module>lecm-security</module>
 		<module>lecm-orgstructure</module>
 		<module>lecm-jasperreports-forms</module>
