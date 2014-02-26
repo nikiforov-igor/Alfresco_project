@@ -135,7 +135,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onReady: function CommentList_onReady()
             {
                 var editFormWrapper = document.createElement("div");
-                Dom.addClass(editFormWrapper, "comments-list");
                 Dom.addClass(editFormWrapper, "hidden");
                 Dom.get(this.id + "-body").appendChild(editFormWrapper);
                 this.widgets.editFormWrapper = editFormWrapper;
