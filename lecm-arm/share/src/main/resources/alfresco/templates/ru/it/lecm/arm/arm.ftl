@@ -50,16 +50,17 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 
 <div id="no_menu_page" class="sticky-wrapper">
-<@bpage.basePage showHeader=true showTitle=true showToolbar=hasPermission showMenu=false>
+<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
         <div class="yui-t1" id="arm-with-tree">
             <div id="yui-main-2">
                 <div class="yui-b" style="margin-left: 0" id="alf-content">
-                    <@region id="current-filters" scope="template" />
+	                <@region id="toolbar" scope="template" />
                     <@region id="documents-grid" scope="template" />
                 </div>
             </div>
             <div id="alf-filters" class="yui-u first column1 tree">
-                <@region id="documents-tree" scope="template" />
+	            <@region id="accordion-toolbar" scope="template"/>
+                <@region id="documents-tree" scope="template"/>
             </div>
         </div>
     <@region id="dependencies" scope="template" />

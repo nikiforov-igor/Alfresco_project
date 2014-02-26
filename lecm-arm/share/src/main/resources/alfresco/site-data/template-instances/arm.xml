@@ -19,6 +19,10 @@
             <region-id>toolbar</region-id>
             <url>/lecm/arm/documents-toolbar</url>
         </component>
+	    <component>
+            <region-id>accordion-toolbar</region-id>
+            <url>/lecm/arm/accordion-toolbar</url>
+        </component>
         <!-- Datagrid -->
         <component>
             <region-id>documents-grid</region-id>
