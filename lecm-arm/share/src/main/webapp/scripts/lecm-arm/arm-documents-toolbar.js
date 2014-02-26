@@ -300,25 +300,48 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (p_oItem.withForm) {
                     this._createScriptForm(p_oItem);
                 } else {
-                    Alfresco.util.Ajax.jsonRequest({
-                        method: "POST",
-                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
-                        dataObj: {
-                            items: p_oItem.items,
-                            actionId: p_oItem.actionId
-                        },
-                        successCallback: {
-                            fn: function (oResponse) {
-                                alert("Script was executed!!")
-                            }
-                        },
-                        failureCallback: {
-                            fn: function () {
-                            }
-                        },
-                        scope: this,
-                        execScripts: true
-                    });
+                    var me = this;
+                    Alfresco.util.PopupManager.displayPrompt(
+                        {
+                            title: "Выполнение действия",
+                            text: "Подтвердите выполнение действия \"" + p_oItem.actionId + "\"",
+                            buttons: [
+                                {
+                                    text: "Ок",
+                                    handler: function dlA_onAction_action()
+                                    {
+                                        this.destroy();
+                                        Alfresco.util.Ajax.jsonRequest({
+                                            method: "POST",
+                                            url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                            dataObj: {
+                                                items: p_oItem.items,
+                                                actionId: p_oItem.actionId
+                                            },
+                                            successCallback: {
+                                                fn: function (oResponse) {
+                                                    document.location.href = document.location.href;
+                                                }
+                                            },
+                                            failureCallback: {
+                                                fn: function () {
+                                                }
+                                            },
+                                            scope: me,
+                                            execScripts: true
+                                        });
+
+                                    }
+                                },
+                                {
+                                    text: "Отмена",
+                                    handler: function dlA_onActionDelete_cancel()
+                                    {
+                                        this.destroy();
+                                    },
+                                    isDefault: true
+                                }]
+                        });
                 }
             },
 
