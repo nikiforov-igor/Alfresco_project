@@ -1,4 +1,12 @@
 <alfresco-config>
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-workflow/workflow-validators.js" />
+			</dependencies>
+		</forms>
+	</config>
+
 	<config evaluator="string-compare" condition="activiti$lecmSign">
 		<forms>
 			<form>
@@ -11,13 +19,17 @@
 				<appearance>
 					<field id="bpm:workflowDueDate" mandatory="true">
 						<!-- TODO: валидатор сроков последовательного подписания -->
-						<!--<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-						</constraint-handlers>-->
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowDueDateValidator" event="keyup"/>
+						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecmSign:assigneesListAssoc">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowListValidator" event="change" message="list"/>
+						</constraint-handlers>
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="namespace">list</control-param>
 							<control-param name="workflowType">SIGNING</control-param>
 							<control-param name="concurrency">SEQUENTIAL</control-param>
 							<control-param name="concurrencyInputName">prop_lecmSign_Concurrency</control-param>

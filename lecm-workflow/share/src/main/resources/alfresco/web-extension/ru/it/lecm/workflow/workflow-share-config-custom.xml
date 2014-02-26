@@ -11,40 +11,6 @@
 
 	<config evaluator="model-type" condition="lecm-workflow:route">
 		<forms>
-			<form>
-				<field-visibility>
-					<show id="cm:title"/>
-					<show id="lecm-workflow:route-to-employee-assoc"/>
-
-					<show id="lecm-workflow:fake-workflow-list-1" force="true"/>
-					<!--<show id="lecm-workflow:fake-workflow-list-2" force="true"/>-->
-
-					<show id="lecm-workflow:is-register-after-signed"/>
-				</field-visibility>
-				<appearance>
-					<field id="cm:title"/>
-					<field id="lecm-workflow:route-to-employee-assoc"/>
-
-					<!-- Первый контрол списков -->
-					<field id="lecm-workflow:fake-workflow-list-1">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
-							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
-							<control-param name="concurrencyInputName"></control-param>
-							<!--<control-param name="concurrency"></control-param>&lt;!&ndash; PARALLEL | SEQUENTIAL &ndash;&gt;-->
-						</control>
-					</field>
-
-					<!-- Второй контрол списков -->
-					<!--<field id="lecm-workflow:fake-workflow-list-2">-->
-					<!--<control template="/ru/it/lecm/workflow/controls/button-add.ftl">-->
-					<!--<control-param name="asdf">zxcv</control-param>-->
-					<!--</control>-->
-					<!--</field>-->
-
-					<field id="lecm-workflow:is-register-after-signed"/>
-				</appearance>
-			</form>
-
 			<form id="datagrid">
 				<field-visibility>
 					<show id="cm:name"/>
@@ -52,26 +18,91 @@
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-workflow:route">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
+					<show id="lecm-workflow:is-register-after-signed"/>
+				</field-visibility>
+				<appearance>
+					<!-- Первый контрол списков -->
+					<field id="lecm-workflow:fake-workflow-list-approval">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">approval</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+							<control-param name="workflowType">APPROVAL</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="itemType">route</control-param>
+						</control>
+					</field>
+
+					<!-- Второй контрол списков -->
+					<field id="lecm-workflow:fake-workflow-list-signing">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">signing</control-param>
+							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->
+							<control-param name="itemType">route</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
 
 			<form id="createNewCommonRouteForm">
 				<field-visibility>
 					<show id="cm:title"/>
-					<show id="lecm-workflow:route-to-employee-assoc"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 			</form>
 
 			<form id="createNewPrivateRouteForm">
 				<field-visibility>
-					<show id="cm:title"/>
-					<show id="lecm-workflow:route-to-employee-assoc"/>
+					<show id="cm:name"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
+				<appearance>
+					<!-- Первый контрол списков -->
+					<field id="lecm-workflow:fake-workflow-list-approval">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">approval</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+							<control-param name="workflowType">APPROVAL</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="itemType">route</control-param>
+						</control>
+					</field>
+
+					<!-- Второй контрол списков -->
+					<field id="lecm-workflow:fake-workflow-list-signing">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">signing</control-param>
+							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->
+							<control-param name="itemType">route</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 		</forms>
 	</config>
-
-	<config evaluator="node-type" condition="lecm-workflow:route"></config>
 
 	<config evaluator="model-type" condition="lecm-workflow:assignee">
 		<forms>
