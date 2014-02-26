@@ -11,9 +11,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: pmelnikov
@@ -75,17 +73,47 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
 
     @Override
     public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems) {
+        return getActiveActions(forItems, true);
+    }
+
+    public List<NodeRef> getActiveActions(NodeRef item) {
+        List<NodeRef> forItems = new ArrayList<NodeRef>();
+        forItems.add(item);
+        return getActiveActions(forItems, false);
+    }
+
+    private List<NodeRef> getActiveActions(List<NodeRef> forItems, boolean group) {
         if (forItems.size() == 0) return new ArrayList<NodeRef>();
         List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
         List<NodeRef> actions = new ArrayList<NodeRef>();
         for (ChildAssociationRef child : children) {
-            if (Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
-                actions.add(child.getChildRef());
+            if (group) {
+                if (Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
+                    actions.add(child.getChildRef());
+                }
+            } else {
+                if (!Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
+                    actions.add(child.getChildRef());
+                }
             }
         }
         actions = filterByType(actions, forItems);
         actions = filterByStatuses(actions, forItems);
         actions = filterByExpression(actions, forItems);
+        Collections.sort(actions, new Comparator<NodeRef>() {
+            @Override
+            public int compare(NodeRef o1, NodeRef o2) {
+                long order1 = (Long) nodeService.getProperty(o1, GroupActionsService.PROP_ORDER);
+                long order2 = (Long) nodeService.getProperty(o2, GroupActionsService.PROP_ORDER);
+                if (order1 > order2) {
+                    return 1;
+                } else if (order1 < order2) {
+                        return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         return actions;
     }
 

@@ -389,14 +389,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         },
                         onSuccess: {
                             fn: function DataGrid_onActionCreate_success(response) {
-                                Alfresco.util.PopupManager.displayMessage(
-                                    {
-                                        text: this.msg("message.save.success")
-                                    });
-                                window.location.href = window.location.protocol + "//" + window.location.host +
-                                    Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
-                                this.doubleClickLock = false;
-                            },
+                                document.location.href = document.location.href;                            },
                             scope: this
                         },
                         onFailure: {

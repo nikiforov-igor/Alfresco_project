@@ -34,7 +34,7 @@
                     actionsConfig: {
                         fullDelete: "true"
                     },
-                    sort: "lecm-group-actions:order|ASC"
+                    sort: "lecm-group-actions:order|true"
                 },
                 showActionColumn: true,
                 showCheckboxColumn: false,

@@ -30,5 +30,20 @@ public interface GroupActionsService {
 
     public NodeRef getHomeRef();
 
+    /**
+     * Вывод груповвых действий для набора документов
+     *
+     * @param forItems
+     * @return
+     */
     public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems);
+
+    /**
+     * Вывод не груповвых действий для документа
+     *
+     * @param item
+     * @return
+     */
+    public List<NodeRef> getActiveActions(NodeRef item);
+
 }

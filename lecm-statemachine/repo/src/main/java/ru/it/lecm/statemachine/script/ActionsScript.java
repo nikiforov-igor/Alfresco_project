@@ -18,6 +18,7 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -43,6 +44,7 @@ public class ActionsScript extends DeclarativeWebScript {
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
     private static DocumentService documentService;
+    private GroupActionsService groupActionsService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         ActionsScript.orgstructureService = orgstructureService;
@@ -54,6 +56,10 @@ public class ActionsScript extends DeclarativeWebScript {
 
     public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
         ActionsScript.frequencyAnalysisService = frequencyAnalysisService;
+    }
+
+    public void setGroupActionsService(GroupActionsService groupActionsService) {
+        this.groupActionsService = groupActionsService;
     }
 
     @Override
@@ -233,6 +239,15 @@ public class ActionsScript extends DeclarativeWebScript {
                     }
 
                     sort(actionsList);
+                    List<NodeRef> actions = groupActionsService.getActiveActions(nodeRef);
+                    for (NodeRef action : actions) {
+                        HashMap<String, Object> actionStruct = new HashMap<String, Object>();
+                        actionStruct.put("type", "group");
+                        actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                        actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                        actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
+                        actionsList.add(actionStruct);
+                    }
                     result.put("actions", actionsList);
                 }
             }
@@ -307,6 +322,5 @@ public class ActionsScript extends DeclarativeWebScript {
         }, false, true);
         return childAssocRef.getChildRef();
     }
-
 
 }

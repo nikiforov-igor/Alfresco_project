@@ -110,7 +110,9 @@ LogicECM.module = LogicECM.module || {};
                         viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
                         return;
                     }
-                    if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
+                    if (action.type == "group") {
+                        parent.onGroupActions(action);
+                    } else if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
                         parent.showForm(action);
                     } else {
                         parent.showPromt(action);
@@ -214,7 +216,121 @@ LogicECM.module = LogicECM.module || {};
             this.doubleClickLock = false;
         },
 
-		_chooseState:function (type, taskId, formResponse, actionId) {
+        onGroupActions: function onGroupActionsFunction(action) {
+            if (action.isForm) {
+                this._createScriptForm(action);
+            } else {
+                var me = this;
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: "Выполнение действия",
+                        text: "Подтвердите выполнение действия \"" + action.actionId + "\"",
+                        buttons: [
+                            {
+                                text: "Ок",
+                                handler: function dlA_onAction_action()
+                                {
+                                    this.destroy();
+                                    var items = [];
+                                    items.push(me.options.nodeRef);
+                                    Alfresco.util.Ajax.jsonRequest({
+                                        method: "POST",
+                                        url: Alfresco.constants.PROXY_URI + "lecm/groupActions/exec",
+                                        dataObj: {
+                                            items: items,
+                                            actionId: action.actionId
+                                        },
+                                        successCallback: {
+                                            fn: function (oResponse) {
+                                                document.location.href = document.location.href;
+                                            }
+                                        },
+                                        failureCallback: {
+                                            fn: function () {
+                                            }
+                                        },
+                                        scope: me,
+                                        execScripts: true
+                                    });
+
+                                }
+                            },
+                            {
+                                text: "Отмена",
+                                handler: function dlA_onActionDelete_cancel()
+                                {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }]
+                    });
+            }
+        },
+
+        _createScriptForm: function _createScriptFormFunction(action) {
+            var me = this;
+            var doBeforeDialogShow = function (p_form, p_dialog) {
+                var contId = p_dialog.id + "-form-container";
+                Alfresco.util.populateHTML(
+                    [contId + "_h", action.actionId ]
+                );
+
+                Dom.addClass(contId, "metadata-form-edit");
+                this.doubleClickLock = false;
+            };
+
+            var url = "/lecm/components/form/script" +
+                "?itemKind={itemKind}" +
+                "&itemId={itemId}" +
+                "&formId={formId}" +
+                "&mode={mode}" +
+                "&submitType={submitType}" +
+                "&items={items}";
+            var items = [];
+            items.push(this.options.nodeRef)
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url,
+                {
+                    itemKind: "type",
+                    itemId: action.actionId,
+                    formId: "scriptForm",
+                    mode: "create",
+                    submitType: "json",
+                    items: JSON.stringify(items)
+                });
+
+            // Using Forms Service, so always create new instance
+            var scriptForm = new Alfresco.module.SimpleDialog(this.id + "-scriptForm");
+            scriptForm.setOptions(
+                {
+                    width: "40em",
+                    templateUrl: templateUrl,
+                    actionUrl: null,
+                    destroyOnHide: true,
+                    doBeforeDialogShow: {
+                        fn: doBeforeDialogShow,
+                        scope: this
+                    },
+                    onSuccess: {
+                        fn: function DataGrid_onActionCreate_success(response) {
+                            document.location.href = document.location.href;
+                        },
+                        scope: this
+                    },
+                    onFailure: {
+                        fn: function DataGrid_onActionCreate_failure(response) {
+                            Alfresco.util.PopupManager.displayMessage(
+                                {
+                                    text: this.msg("message.save.failure")
+                                });
+                            this.doubleClickLock = false;
+                        },
+                        scope: this
+                    }
+                }).show();
+        },
+
+
+        _chooseState:function (type, taskId, formResponse, actionId) {
 			var url = Alfresco.constants.PROXY_URI + "lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
 			url = YAHOO.lang.substitute(url, {
 				actionType: type,

@@ -173,6 +173,7 @@
         <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
+        <property name="groupActionsService" ref="groupActionsService"/>
 	</bean>
 
     <bean id="statemachine.endWorkflowEvent"
