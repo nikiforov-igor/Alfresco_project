@@ -375,7 +375,6 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
-    </dependencies>
         <!--<dependency>
             <groupId>ru.it.lecm.licensing</groupId>
             <artifactId>licensing-repo</artifactId>
