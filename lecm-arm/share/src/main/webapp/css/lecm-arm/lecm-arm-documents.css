@@ -65,3 +65,6 @@ div.arm-tree-menu .arm-accordion div.accordion-content {
 	overflow-x: auto;
 	padding-left: 10px;
 }
+div.arm-tree-menu .arm-accordion div.accordion-content.shown {
+	height: auto;
+}

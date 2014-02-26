@@ -8,8 +8,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
 	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
-		Anim = YAHOO.util.Anim;
+		Event = YAHOO.util.Event;
 
     LogicECM.module.ARM.TreeMenu = function (htmlId) {
         LogicECM.module.ARM.TreeMenu.superclass.constructor.call(
@@ -105,12 +104,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                     var forceExpand = this.menuState.accordion == node.id || ((this.menuState.accordion == null || this.menuState.accordion.length == 0) && i == 0);
 
-                    YAHOO.util.Event.onAvailable("ac-head-" + node.id, function (obj) {
-                        YAHOO.util.Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
+                    Event.onAvailable("ac-head-" + node.id, function (obj) {
+                        Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
                         if (obj.forceExpand) {
                             this.onAccordionClick(null, obj.node);
                         }
-                        YAHOO.util.Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
+                        Event.onAvailable("ac-label-" + obj.node.id, function (obj) {
                             obj.context.drawCounterValue(obj.node, obj.context.getSearchQuery(obj.node), YAHOO.util.Dom.get("ac-label-" + obj.node.id));
                         }, {node: obj.node, context: context}, this);
                     }, {node: node, forceExpand: forceExpand}, this);
@@ -135,37 +134,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    expandAccordion: function(node) {
 		    Dom.addClass("ac-head-" + node.id, "shown");
 		    Dom.addClass("ac-content-" + node.id, "shown");
-		    var attributes = {
-			    height: {
-				    from: 0,
-				    to: this.getAccordionHeight()
-			    },
-			    opacity: {
-				    from: 0,
-				    to: 1
-			    }
-		    };
-
-		    var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.backOut);
-		    anim.animate();
 		    this.menuState.accordion = node.id;
 	    },
 
 	    collapseAccordion: function(node) {
 		    Dom.removeClass("ac-head-" + node.id, "shown");
 		    Dom.removeClass("ac-content-" + node.id, "shown");
-		    var attributes = {
-			    height: {
-				    from: this.getAccordionHeight(),
-				    to: 0
-			    },
-			    opacity: {
-				    from:1,
-				    to:0
-			    }
-		    };
-		    var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.easeBoth);
-		    anim.animate();
 	    },
 
 	    getAccordionHeight: function() {
@@ -248,7 +222,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                             //отрисовка счетчика, если нужно
                             if (curElement.id) {
-                                YAHOO.util.Event.onAvailable(curElement.id, function (obj) {
+                                Event.onAvailable(curElement.id, function (obj) {
                                     obj.context.drawCounterValue(obj.node.data, obj.context.getSearchQuery(obj.node), obj.node.getLabelEl());
                                 }, {node: curElement, context:otree}, this);
                             }
