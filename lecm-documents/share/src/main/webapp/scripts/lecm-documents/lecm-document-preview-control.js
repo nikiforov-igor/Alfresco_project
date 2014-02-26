@@ -117,7 +117,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			reloadAttachmentPreview: function() {
-				Alfresco.util.Ajax.request(
+                if (this.attachmentsSelect.value) {
+				    Alfresco.util.Ajax.request(
 					{
 						url: Alfresco.constants.URL_SERVICECONTEXT + "components/preview/web-preview",
 						dataObj: {
@@ -143,6 +144,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 						scope: this,
 						execScripts: true
 					});
+                }
 			}
 		});
 })();
