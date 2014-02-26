@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.expression;
+package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -8,7 +8,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +26,7 @@ public class Expression {
 	private StandardEvaluationContext context;
 	private static OrgstructureBean orgstructureBean;
 	private static DocumentService documentService;
+	private static StateMachineServiceBean stateMachineHelper;
 
     private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
 
@@ -33,13 +34,12 @@ public class Expression {
     }
 
     public Expression(NodeRef document, ServiceRegistry serviceRegistry) {
-        StateMachineHelper helper = new StateMachineHelper();
         NodeRef documentRef = document;
         this.doc = new ExpressionDocument(documentRef, serviceRegistry);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
-        String executionId = helper.getStatemachineId(document);
+        String executionId = stateMachineHelper.getStatemachineId(document);
         if (executionId != null) {
-            this.state = helper.getVariables(executionId);
+            this.state = stateMachineHelper.getVariables(executionId);
         }
         this.context = new StandardEvaluationContext(this);
     }
@@ -75,5 +75,9 @@ public class Expression {
 
     public void setDocumentService(DocumentService documentService) {
         Expression.documentService = documentService;
+    }
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
     }
 }

@@ -7,7 +7,6 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,9 @@ public class ChooseStartPathAction extends StateMachineAction {
             return;
         }
 
-        Expression expression = new Expression(document, getServiceRegistry());
         execution.setVariable(DIRECTION_VARIABLE, "");
         for (StartExpression startExpression : expressions) {
-            if (expression.execute(startExpression.getExpression())) {
+            if (getDocumentService().execExpression(document, startExpression.getExpression())) {
                 execution.setVariable(DIRECTION_VARIABLE, startExpression.getValue());
                 break;
             }

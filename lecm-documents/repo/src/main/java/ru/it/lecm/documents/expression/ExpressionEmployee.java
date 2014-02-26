@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.expression;
+package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;

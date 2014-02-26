@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.expression;
+package ru.it.lecm.documents.expression;
 
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -8,7 +8,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineHelper;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class ExpressionDocument {
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
 	private static DocumentService documentService;
-    private static StateMachineHelper stateMachineHelper;
+    private static StateMachineServiceBean stateMachineHelper;
 
     public ExpressionDocument() {
 
@@ -174,7 +174,7 @@ public class ExpressionDocument {
 		ExpressionDocument.documentConnectionService = documentConnectionService;
 	}
 
-	public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
 		ExpressionDocument.stateMachineHelper = stateMachineHelper;
 	}
 

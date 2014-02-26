@@ -26,6 +26,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
+import ru.it.lecm.documents.expression.Expression;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
@@ -660,4 +661,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
         subTypes.remove(DocumentService.TYPE_BASE_DOCUMENT);
         return subTypes;
 	}
+
+    @Override
+    public boolean execExpression(NodeRef document, String expression) {
+        Expression evaluator = new Expression(document, serviceRegistry);
+        return evaluator.execute(expression);
+    }
 }

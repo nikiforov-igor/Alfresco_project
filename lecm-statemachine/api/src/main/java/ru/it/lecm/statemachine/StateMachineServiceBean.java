@@ -5,6 +5,7 @@ import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface StateMachineServiceBean {
@@ -128,5 +129,9 @@ public interface StateMachineServiceBean {
      * @return Имя предыдущего статуса
      */
     public String getPreviousStatusName(NodeRef document);
+
+    public String getStatemachineId(NodeRef document);
+
+    public Map<String, Object> getVariables(String executionId);
 
 }

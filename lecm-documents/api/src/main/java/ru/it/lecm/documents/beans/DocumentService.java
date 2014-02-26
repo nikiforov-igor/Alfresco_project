@@ -292,4 +292,12 @@ public interface DocumentService {
     public NodeRef getDocumentAuthor(NodeRef document);
 
     public Collection<QName> getDocumentSubTypes();
+
+    /**
+     * Выполнение выражения для документа
+     * @param document
+     * @param expression
+     * @return
+     */
+    public boolean execExpression(NodeRef document, String expression);
 }

@@ -27,6 +27,7 @@
         <property name="stateMachineService"  ref="stateMachineHelper"/>
         <property name="serviceRegistry"  ref="ServiceRegistry"/>
         <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
             <map>

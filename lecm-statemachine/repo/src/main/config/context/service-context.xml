@@ -97,6 +97,7 @@
         <property name="businessJournalService" ref="businessJournalService" />
         <property name="transactionService" ref="transactionService" />
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+        <property name="documentService" ref="documentService"/>
 	</bean>
 
     <bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper" depends-on="activitiProcessEngineConfiguration, statemachine.LogicEcmModelsBootstrap, stateMachineHelper">
@@ -105,6 +106,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="transactionService" ref="transactionService" />
         <property name="workCalendarService" ref="WorkCalendarService" />
+        <property name="documentService" ref="documentService"/>
     </bean>
 
 	<bean id="assignWorkflow" class="ru.it.lecm.statemachine.assign.AssignExecution">
@@ -121,6 +123,7 @@
         <property name="repositoryStructureHelper" ref="repositoryStructureHelper" />
         <property name="timerActionHelper" ref="timerActionHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
     </bean>
 
     <bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"
@@ -132,7 +135,8 @@
 			<ref bean="nodeService"/>
 		</property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
-	</bean>
+        <property name="documentService" ref="documentService"/>
+    </bean>
 
 	<bean id="workflowUtil" class="ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil" >
 		<property name="serviceRegistry">
@@ -171,7 +175,12 @@
         <property name="documentService" ref="documentService"/>
 	</bean>
 
-	<bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl" />
+    <bean id="statemachine.endWorkflowEvent"
+          class="ru.it.lecm.statemachine.action.listener.EndWorkflowEvent">
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="stateMachineActions" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl" />
 
 	<bean id="statusChange.StateMachineAction" class="ru.it.lecm.statemachine.bean.StateMachineActionsImpl">
 		<property name="name" value="StatusChange"/>
@@ -264,21 +273,5 @@
     </bean>
 
     <bean id="defaultStatemachines" class="ru.it.lecm.statemachine.bean.DefaultStatemachinesImpl" init-method="register"/>
-
-    <bean id="documentExpression" class="ru.it.lecm.statemachine.expression.ExpressionDocument">
-	    <property name="documentService" ref="documentService"/>
-        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
-        <property name="documentConnectionService" ref="documentConnectionService"/>
-        <property name="stateMachineHelper" ref="stateMachineHelper"/>
-    </bean>
-
-    <bean id="lecmBPExpression" class="ru.it.lecm.statemachine.expression.Expression">
-        <property name="orgstructureBean" ref="serviceOrgstructure"/>
-        <property name="documentService" ref="documentService"/>
-    </bean>
-
-     <bean id="employeeExpression" class="ru.it.lecm.statemachine.expression.ExpressionEmployee">
-        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
-    </bean>
 
 </beans>

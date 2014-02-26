@@ -124,6 +124,7 @@
         <property name="searchService" ref="searchService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="copyService" ref="copyService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"
@@ -629,9 +630,27 @@
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
-	<bean  id="documentResponseToPolicy" class="ru.it.lecm.documents.policy.DocumentResponseToPolicy"
+	<bean id="documentResponseToPolicy" class="ru.it.lecm.documents.policy.DocumentResponseToPolicy"
 	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
+
+    <bean id="documentExpression" class="ru.it.lecm.documents.expression.ExpressionDocument">
+        <property name="documentService" ref="documentService"/>
+        <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+    </bean>
+
+    <bean id="lecmBPExpression" class="ru.it.lecm.documents.expression.Expression">
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="stateMachineHelper" ref="stateMachineHelper"/>
+    </bean>
+
+    <bean id="employeeExpression" class="ru.it.lecm.documents.expression.ExpressionEmployee">
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+    </bean>
+
 </beans>

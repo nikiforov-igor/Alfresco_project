@@ -28,7 +28,6 @@ import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
 import java.util.*;
@@ -149,8 +148,6 @@ public class ActionsScript extends DeclarativeWebScript {
                     if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
                         result.put("taskId", task.getId());
 
-                        Expression expression = new Expression(documentRef, serviceRegistry);
-
                         ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
                         List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
                         for (StateMachineAction action : actions) {
@@ -161,7 +158,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 HashSet<String> fields = new HashSet<String>();
                                 boolean hideAction = false;
                                 for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                    if (!expression.execute(condition.getExpression())) {
+                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
                                         messages.add(condition.getErrorMessage());
                                         fields.addAll(condition.getFields());
                                         hideAction = hideAction || condition.isHideAction();
@@ -205,7 +202,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 HashSet<String> fields = new HashSet<String>();
                                 boolean hideAction = false;
                                 for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                    if (!expression.execute(condition.getExpression())) {
+                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
                                         messages.add(condition.getErrorMessage());
                                         fields.addAll(condition.getFields());
                                         hideAction = hideAction || condition.isHideAction();

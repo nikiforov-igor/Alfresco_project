@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.expression;
+package ru.it.lecm.documents.expression;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;

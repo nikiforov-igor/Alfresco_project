@@ -9,11 +9,11 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-import ru.it.lecm.statemachine.expression.Expression;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -30,6 +30,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
     private PolicyComponent policyComponent;
     private NodeService nodeService;
     private ServiceRegistry serviceRegistry;
+    private DocumentService documentService;
 
     public final void init() {
         PropertyCheck.mandatory(this, "nodeService", nodeService);
@@ -47,14 +48,12 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
             StateMachineHelper helper = new StateMachineHelper();
             List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
 
-            Expression lecmExpression = new Expression(nodeRef, serviceRegistry);
-
             WaitForDocumentChangeAction.Expression result = null;
             for (StateMachineAction action : actions) {
                 WaitForDocumentChangeAction documentChangeAction = (WaitForDocumentChangeAction) action;
                 List<WaitForDocumentChangeAction.Expression> expressions = documentChangeAction.getExpressions();
                 for (WaitForDocumentChangeAction.Expression expression : expressions) {
-                    if (lecmExpression.execute(expression.getExpression())) {
+                    if (documentService.execExpression(nodeRef, expression.getExpression())) {
                         result = expression;
                         break;
                     }
@@ -87,5 +86,9 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

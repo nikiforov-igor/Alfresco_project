@@ -14,7 +14,7 @@ import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.GUID;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
-import ru.it.lecm.statemachine.expression.Expression;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.expression.TransitionExpression;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
@@ -36,6 +36,7 @@ public class TimerActionHelper implements InitializingBean {
     private static TransactionService transactionService;
     private static RepositoryStructureHelper repositoryStructureHelper;
     private static IWorkCalendar workCalendarService;
+    private static DocumentService documentService;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         TimerActionHelper.serviceRegistry = serviceRegistry;
@@ -132,10 +133,8 @@ public class TimerActionHelper implements InitializingBean {
 
         NodeRef document = stateMachineHelper.getStatemachineDocument(stateMachineExecutionId);
         Map<String, Object> variables = stateMachineHelper.getVariables(stateMachineExecutionId);
-        Expression lecmExpression = new Expression(document, serviceRegistry);
-
         for (TransitionExpression expression : expressions) {
-            if (lecmExpression.execute(expression.getExpression())) {
+            if (documentService.execExpression(document, expression.getExpression())) {
                 return expression;
             }
         }
@@ -321,5 +320,9 @@ public class TimerActionHelper implements InitializingBean {
 
     private String providePrefix(String activityId) {
         return StateMachineHelper.ACTIVITI_PREFIX + clearPrefix(activityId);
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.TimerActionHelper;
@@ -39,10 +40,11 @@ public class StateMachineHandler {
 	private LecmPermissionService LecmPermissionService;
 	private OrgstructureBean orgstructureBean;
     private TimerActionHelper timerActionHelper;
+    private DocumentService documentService;
 
 	private String processId = "";
 
-	public StateMachineHandler() {
+    public StateMachineHandler() {
 	}
 
     public StatemachineTaskListener configure(Element lecmExtention, String processId) {
@@ -107,6 +109,7 @@ public class StateMachineHandler {
 			action.setRepositoryStructureHelper(repositoryStructureHelper);
 			action.setTimerActionHelper(timerActionHelper);
             action.setOrgstructureBean(orgstructureBean);
+            action.setDocumentService(documentService);
 			final StateMachineAction currentAction = action;
 			try {
 				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
@@ -123,6 +126,10 @@ public class StateMachineHandler {
 		}
 		return action;
 	}
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
     public class StatemachineTaskListener implements ExecutionListener {
 

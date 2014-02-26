@@ -52,7 +52,6 @@ import ru.it.lecm.statemachine.action.script.WorkflowScript;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-import ru.it.lecm.statemachine.expression.Expression;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
 
 import java.io.Serializable;
@@ -82,6 +81,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static DocumentMembersService documentMembersService;
     private static BusinessJournalService businessJournalService;
     private static TransactionService transactionService;
+    private static DocumentService documentService;
     private LecmPermissionService lecmPermissionService;
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
@@ -118,6 +118,11 @@ public class StateMachineHelper implements StateMachineServiceBean {
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
     }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
+
 
     public String startUserWorkflowProcessing(final String taskId, final String workflowId, final String assignee) {
         final String user = AuthenticationUtil.getFullyAuthenticatedUser();
@@ -1233,8 +1238,6 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
 
         if (nextState != null) {
-            Expression expression = new Expression(document, serviceRegistry);
-
             if (nextState.isStopSubWorkflows()) {
                 new StateMachineHelper().stopDocumentSubWorkflows(statemachineId);
             }

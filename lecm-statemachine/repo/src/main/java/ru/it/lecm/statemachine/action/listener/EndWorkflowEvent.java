@@ -4,13 +4,13 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-import ru.it.lecm.statemachine.expression.Expression;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +25,8 @@ import java.util.List;
  * для дальнейшего оповещения машины состояний.
  */
 public class EndWorkflowEvent implements ExecutionListener {
+
+    private static DocumentService documentService;
 
     @Override
     public void notify(final DelegateExecution delegateExecution) throws Exception {
@@ -93,10 +95,9 @@ public class EndWorkflowEvent implements ExecutionListener {
                     List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(TransitionAction.class), ExecutionListener.EVENTNAME_END);
                     boolean isTrasitionValid = false;
                     boolean stopSubWorkflows = false;
-                    Expression expression = new Expression(document, StateMachineHelper.getServiceRegistry());
                     for (StateMachineAction action : transitionActions) {
                         TransitionAction transitionAction = (TransitionAction) action;
-                        boolean currentTransitionValid = expression.execute(transitionAction.getExpression());
+                        boolean currentTransitionValid = documentService.execExpression(document, transitionAction.getExpression());
                         HashMap<String, Object> parameters = new HashMap<String, Object>();
                         parameters.put(transitionAction.getVariableName(), currentTransitionValid);
                         helper.setExecutionParamentersByTaskId(taskId, parameters);
@@ -122,5 +123,9 @@ public class EndWorkflowEvent implements ExecutionListener {
 
 
 
+    }
+
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
     }
 }
