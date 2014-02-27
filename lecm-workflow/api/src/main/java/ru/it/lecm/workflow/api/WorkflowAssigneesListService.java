@@ -22,6 +22,8 @@ public interface WorkflowAssigneesListService {
 
 	List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType); // JSONObject getAssigneesLists();
 
+	List<NodeRef> getAssingeesListsForCurrentEmployee(NodeRef parentRef, String workflowType);
+
 	AssigneesList getAssigneesListDetail(NodeRef assingeesListRef); // JSONObject getListContents(final JSONObject json); (getAssigneesListContents)
 
 	void clearDueDatesInAssigneesList(NodeRef assigneeListRef); //void clearDueDates(final JSONObject json);

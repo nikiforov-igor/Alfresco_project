@@ -41,15 +41,17 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 
 	@Override
 	public void onUpdateNode(final NodeRef routeRef) {
-		boolean hasTempAspect = nodeService.hasAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
-		List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
-		int assigneesCount = 0;
-		for (ChildAssociationRef child : children) {
-			NodeRef assigneesListRef = child.getChildRef();
-			assigneesCount += nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL).size();
-		}
-		if (hasTempAspect && assigneesCount > 0) {
-			nodeService.removeAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
+		if (nodeService.exists(routeRef)) {
+			boolean hasTempAspect = nodeService.hasAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
+			List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
+			int assigneesCount = 0;
+			for (ChildAssociationRef child : children) {
+				NodeRef assigneesListRef = child.getChildRef();
+				assigneesCount += nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL).size();
+			}
+			if (hasTempAspect && assigneesCount > 0) {
+				nodeService.removeAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
+			}
 		}
 	}
 

@@ -245,7 +245,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	@Override
 	public NodeRef getDefaultAssigneesList(final NodeRef parentRef, final String workflowType) {
 		NodeRef result = null;
-		List<NodeRef> assigneesLists = getAssingeesListsForCurrentEmployee(workflowType);
+		List<NodeRef> assigneesLists = getAssingeesListsForCurrentEmployee(parentRef, workflowType);
 		for (NodeRef assigneesList : assigneesLists) {
 			if (isTempAssigneesList(assigneesList)) {
 				result = assigneesList;
@@ -266,9 +266,14 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public List<NodeRef> getAssingeesListsForCurrentEmployee(String workflowType) {
+		return getAssingeesListsForCurrentEmployee(getAssigneesListsFolder(), workflowType);
+	}
+
+	@Override
+	public List<NodeRef> getAssingeesListsForCurrentEmployee(final NodeRef parentRef, final String workflowType) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
-		List<NodeRef> allEmployeeAssigneesList = getAllAssingeesListsForCurrentEmployee();
+		List<NodeRef> allEmployeeAssigneesList = getAllAssingeesListsForCurrentEmployee(parentRef);
 		for (NodeRef assigneeListRef : allEmployeeAssigneesList) {
 			if (workflowType.equalsIgnoreCase(getAssigneesListWorkflowType(assigneeListRef))) {
 				result.add(assigneeListRef);
@@ -278,10 +283,17 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return result;
 	}
 
-	private List<NodeRef> getAllAssingeesListsForCurrentEmployee() {
+	private List<NodeRef> getAllAssingeesListsForCurrentEmployee(final NodeRef parentRef) {
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 		List<NodeRef> allEmployeeAssigneesList = findNodesByAssociationRef(currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, ASSOCIATION_TYPE.SOURCE);
-		return allEmployeeAssigneesList;
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		for (NodeRef assigneeList : allEmployeeAssigneesList) {
+			NodeRef primaryParentRef = nodeService.getPrimaryParent(assigneeList).getParentRef();
+			if (parentRef.equals(primaryParentRef)) {
+				result.add(assigneeList);
+			}
+		}
+		return result;
 	}
 
 	@Override
