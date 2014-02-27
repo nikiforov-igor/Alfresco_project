@@ -27,6 +27,7 @@
                             <control-param name="itemType">lecm-group-actions:form-field</control-param>
                             <control-param name="height">100</control-param>
                             <control-param name="fullDelete">true</control-param>
+                            <control-param name="sort">lecm-group-actions:field-priority|true</control-param>
                         </control>
                     </field>
                     <field id="lecm-group-actions:script" >
@@ -89,6 +90,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-group-actions:field-id"/>
                     <show id="lecm-group-actions:field-type"/>
+                    <show id="lecm-group-actions:field-priority"/>
                 </field-visibility>
             </form>
         </forms>
@@ -102,6 +104,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-group-actions:field-id"/>
                     <show id="lecm-group-actions:field-type"/>
+                    <show id="lecm-group-actions:field-priority"/>
                 </field-visibility>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->

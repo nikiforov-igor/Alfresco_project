@@ -69,6 +69,10 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+                <property name="lecm-group-actions:field-priority">
+                    <type>d:long</type>
+                    <default>0</default>
+                </property>
             </properties>
 		</type>
 	</types>
