@@ -15,6 +15,7 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -42,7 +43,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
  * Time: 15:38
  */
 public class DocumentAttachmentsPolicy extends BaseBean {
-
+	private static final String ATTACHMENT_CREATING_WORKING_COPY = "attachment_creating_working_copy";
 	final protected Logger logger = LoggerFactory.getLogger(DocumentAttachmentsPolicy.class);
 
 	private PolicyComponent policyComponent;
@@ -53,8 +54,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	private SubstitudeBean substituteService;
 	private LecmPermissionService lecmPermissionService;
 	private StateMachineServiceBean stateMachineBean;
-
-	private boolean isCreatingWorkingCopy = false;
 
 	final private QName[] AFFECTED_PROPERTIES = {ContentModel.PROP_CREATOR, ContentModel.PROP_MODIFIER};
 
@@ -127,7 +126,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(category);
 		if (document != null) {
-			if (!nodeService.hasAspect(attachmentRef, ContentModel.ASPECT_WORKING_COPY) && !this.isCreatingWorkingCopy) {
+			if (!nodeService.hasAspect(attachmentRef, ContentModel.ASPECT_WORKING_COPY) && AlfrescoTransactionSupport.getResource(ATTACHMENT_CREATING_WORKING_COPY) == null) {
 				boolean assocExist = false;
 				List<AssociationRef> existAssocs = nodeService.getTargetAssocs(category, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				if (existAssocs != null) {
@@ -140,8 +139,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				if (!assocExist) {
 					nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				}
-			} else {
-				this.isCreatingWorkingCopy = false;
 			}
 		}
 	}
@@ -247,7 +244,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void beforeCheckOut(NodeRef nodeRef, NodeRef nodeRef2, QName qName, QName qName2) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null) {
-			this.isCreatingWorkingCopy = true;
+			AlfrescoTransactionSupport.bindResource(ATTACHMENT_CREATING_WORKING_COPY, true);
 		}
 	}
 
