@@ -381,8 +381,8 @@
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
-        </dependency>-->
-		
+        </dependency-->
+
 	</dependencies>
 
 	<build>
