@@ -546,7 +546,6 @@
 		var zeroDate, todayDate, restrictedRangeString;
 		var cm = Alfresco.util.ComponentManager;
 
-		debugger;
 
 	<#-- args.htmlid без namepsace! -->
 		if (args[1].fieldId === '${args.htmlid}_prop_bpm_workflowDueDate-cntrl-date') {
@@ -609,7 +608,6 @@
 			return;
 		}
 
-		debugger;
 
 		if (thisDg.options.bubblingLabel === argsDg.options.bubblingLabel) {
 			YAHOO.Bubbling.unsubscribe('datagridVisible', this._hackTheRecordSet);
@@ -749,7 +747,6 @@
 	 * Метод создаёт датагрид
 	 */
 	WorkflowList.prototype._initDatagrid = function(options) {
-		debugger;
 
 		this.widgets.datagrid = new WorkflowDatagrid('${datagridId}');
 
@@ -890,7 +887,6 @@
 		var form = comMan.get('${formId}');
 		var formIndex = components.indexOf(form); // IE9+
 
-		debugger;
 
 		var widgets = this.widgets;
 		var datagrid = widgets.datagrid;

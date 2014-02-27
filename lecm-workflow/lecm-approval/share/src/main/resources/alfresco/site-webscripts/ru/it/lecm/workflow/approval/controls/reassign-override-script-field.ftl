@@ -153,7 +153,6 @@
     };
 
     var validateField = function(field, args,  event, form, silent, message){
-        debugger;
         if(!field) {
             field = document.getElementById("${fieldHtmlId}-dialogOverride_reassign-to-employee-cntrl-currentValueDisplay");
         }

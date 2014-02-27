@@ -54,7 +54,6 @@
 		var rprTreeIdsLg = rprTreeQueries.length;
 		var autoCompQueriesLg = autoCompQueries.length;
 
-		debugger;
 
 		for(i = 0; i < rprTreeIdsLg; i++) {
 			rprTree = this.components.filter(function(v) {

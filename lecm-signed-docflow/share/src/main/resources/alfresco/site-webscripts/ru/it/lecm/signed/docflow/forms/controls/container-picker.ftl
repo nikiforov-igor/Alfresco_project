@@ -3,7 +3,6 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <script type="text/javascript">
 		function getOptions() {
-		    debugger;
 			var optsString = '';
 			
 			var certs = CryptoApplet.getCerts();
