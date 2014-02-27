@@ -27,15 +27,41 @@
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-workflow:workflow-assignees-list-owner-assoc"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true" for-mode="edit"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true" for-mode="edit"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
+				<appearance>
+					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true"/>
+					<field id="lecm-workflow:fake-workflow-list-approval">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">approval</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+							<control-param name="workflowType">APPROVAL</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="itemType">route</control-param>
+						</control>
+					</field>
+					<field id="lecm-workflow:fake-workflow-list-signing">
+						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="namespace">signing</control-param>
+							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
+							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->
+							<control-param name="itemType">route</control-param>
+							<control-param name="showListSelectMenu">false</control-param>
+							<control-param name="showComputeTermsButton">false</control-param>
+						</control>
+					</field>
+				</appearance>
 			</form>
 			<form id="createNewCommonRouteForm">
 				<field-visibility>
 					<show id="cm:name"/>
 					<show id="lecm-workflow:workflow-assignees-list-owner-assoc"/>
-					<show id="lecm-workflow:fake-workflow-list-approval" force="true" for-mode="edit"/>
-					<show id="lecm-workflow:fake-workflow-list-signing" force="true" for-mode="edit"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>
@@ -76,8 +102,8 @@
 			<form id="createNewPrivateRouteForm">
 				<field-visibility>
 					<show id="cm:name"/>
-					<show id="lecm-workflow:fake-workflow-list-approval" force="true" for-mode="edit"/>
-					<show id="lecm-workflow:fake-workflow-list-signing" force="true" for-mode="edit"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>
