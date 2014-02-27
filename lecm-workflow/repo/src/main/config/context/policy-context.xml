@@ -11,4 +11,10 @@
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureBean-ref="serviceOrgstructure"/>
 
+	<bean init-method="init"
+		  depends-on="workflow.model.bootstrap"
+		  class="ru.it.lecm.workflow.policies.RouteRolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"/>
+
 </beans>

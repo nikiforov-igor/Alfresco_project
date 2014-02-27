@@ -108,6 +108,16 @@ public final class LecmWorkflowModel {
 	 */
 	public final static QName TYPE_ROUTE = QName.createQName(WORKFLOW_NAMESPACE, "route");
 
+	/**
+	 * &lt;aspect name="lecm-workflow:workflow-route-aspect"&gt;
+	 */
+	public final static QName ASPECT_ROUTE = QName.createQName(WORKFLOW_NAMESPACE, "workflow-route-aspect");
+
+	/**
+	 * &lt;child-association name="lecm-workflow:route-contains-workflow-assignees-list"&gt;
+	 */
+	public final static QName ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST = QName.createQName(WORKFLOW_NAMESPACE, "route-contains-workflow-assignees-list");
+
 	private LecmWorkflowModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of LecmWorkflowModel class.");
 	}

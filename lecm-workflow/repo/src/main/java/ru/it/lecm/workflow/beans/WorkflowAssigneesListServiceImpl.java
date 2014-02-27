@@ -256,7 +256,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		if (result == null) {
 			result = createAssigneesList(parentRef, workflowType, null);
 		} else {
-			clearAssigneesList(result);
+			if (!nodeService.hasAspect(result, LecmWorkflowModel.ASPECT_WORKFLOW_ROUTE)) {
+				clearAssigneesList(result);
+			}
 		}
 
 		return result;

@@ -25,11 +25,11 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 	private WorkflowFoldersServiceImpl workflowFoldersServiceImpl;
 	private OrgstructureBean orgstructureBean;
 
-	public void setWorkflowFoldersServiceImpl(WorkflowFoldersServiceImpl workflowFoldersServiceImpl) {
+	public void setWorkflowFoldersServiceImpl(final WorkflowFoldersServiceImpl workflowFoldersServiceImpl) {
 		this.workflowFoldersServiceImpl = workflowFoldersServiceImpl;
 	}
 
-	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+	public void setOrgstructureBean(final OrgstructureBean orgstructureBean) {
 		this.orgstructureBean = orgstructureBean;
 	}
 
@@ -44,9 +44,9 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		NodeRef workflowFolder = workflowFoldersServiceImpl.getWorkflowFolder();
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(workflowFolder, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 		List<NodeRef> routes = new ArrayList<NodeRef>();
-		for(ChildAssociationRef child : children) {
+		for (ChildAssociationRef child : children) {
 			NodeRef nodeRef = child.getChildRef();
-			String creator = (String)nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
+			String creator = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATOR);
 			boolean isTemp = nodeService.hasAspect(nodeRef, LecmWorkflowModel.ASPECT_TEMP);
 			if (isTemp && StringUtils.equals(username, creator)) {
 				routes.add(nodeRef);
@@ -70,7 +70,7 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		nodeService.addAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP, null);
 
 		//TODO: разделение маршрута на подразделенческий и индивидуальный
-		switch(routeType) {
+		switch (routeType) {
 			case EMPLOYEE:
 				NodeRef employeeRef = orgstructureBean.getCurrentEmployee();
 				nodeService.createAssociation(routeRef, employeeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
