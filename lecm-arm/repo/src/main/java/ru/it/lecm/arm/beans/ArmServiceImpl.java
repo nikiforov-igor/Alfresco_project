@@ -115,6 +115,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		Set<QName> typeSet = new HashSet<QName>(1);
 		typeSet.add(TYPE_ARM_ACCORDION);
 		typeSet.add(TYPE_ARM_NODE);
+		typeSet.add(TYPE_ARM_REPORTS_NODE);
 		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
 		if (childAssocs != null) {
 			for (ChildAssociationRef child : childAssocs) {
@@ -189,8 +190,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public ArmCounter getNodeCounter(NodeRef node) {
-		boolean counterEnable = (Boolean) nodeService.getProperty(node, PROP_COUNTER_ENABLE);
-		if (counterEnable) {
+		Boolean counterEnable = (Boolean) nodeService.getProperty(node, PROP_COUNTER_ENABLE);
+		if (counterEnable != null && counterEnable) {
 			ArmCounter result = new ArmCounter();
 			result.setQuery((String) nodeService.getProperty(node, PROP_COUNTER_QUERY));
 			result.setDescription((String) nodeService.getProperty(node, PROP_COUNTER_DESCRIPTION));

@@ -190,6 +190,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             var newNode = {
                                 id: oResults[nodeIndex].id,
                                 nodeRef: oResults[nodeIndex].nodeRef,
+                                nodeType: oResults[nodeIndex].nodeType,
                                 armNodeRef: oResults[nodeIndex].armNodeRef,
                                 armNodeId: oResults[nodeIndex].armNodeId,
                                 label: oResults[nodeIndex].label,
@@ -290,6 +291,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.menuState.selected = this._getTextNodeId(node);
 
             if (node) {
+	            var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
+	            Dom.setStyle("arm-documents-grid", "display", isReportNode ? "none" : "block");
+	            Dom.setStyle("arm-documents-reports", "display", !isReportNode ? "none" : "block");
+
+	            if (isReportNode) {
+		            YAHOO.Bubbling.fire ("updateArmReports", {
+			            types: node.data.types
+		            });
+	            }
+
 	            YAHOO.Bubbling.fire ("armNodeSelected", {
 		            armNode: node,
 		            bubblingLabel: "documents-arm"
@@ -300,7 +311,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            });
 
                 YAHOO.Bubbling.fire ("updateArmFilters", {
-                    currentNode: node
+                    currentNode: node,
+	                disabled: isReportNode
                 });
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());

@@ -85,6 +85,7 @@
 		<property name="service" ref="armService"/>
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
+		<property name="namespaceService" ref="namespaceService"/>
 	</bean>
 
 	<bean id="armAccordionPolicy" class="ru.it.lecm.arm.policy.ArmAccordionPolicy"

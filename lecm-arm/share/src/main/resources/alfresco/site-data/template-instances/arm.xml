@@ -33,6 +33,10 @@
             </properties>
         </component>
         <component>
+            <region-id>reports</region-id>
+            <url>/lecm/arm/reports</url>
+        </component>
+	    <component>
             <region-id>documents-tree</region-id>
             <url>/lecm/arm/documents-tree-menu</url>
         </component>

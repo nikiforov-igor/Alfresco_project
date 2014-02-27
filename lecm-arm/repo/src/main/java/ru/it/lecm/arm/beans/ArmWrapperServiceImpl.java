@@ -3,6 +3,7 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.NamespaceService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -21,6 +22,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private ArmServiceImpl service;
     private SubstitudeBean substitudeService;
     private DictionaryBean dictionaryService;
+	private NamespaceService namespaceService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -38,7 +40,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         this.dictionaryService = dictionaryService;
     }
 
-    public List<ArmNode> getAccordionsByArmCode(String armCode) {
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
+	public List<ArmNode> getAccordionsByArmCode(String armCode) {
         List<ArmNode> result = new ArrayList<ArmNode>();
 
         NodeRef arm = service.getArmByCode(armCode);
@@ -62,9 +68,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (isArmElement(node)) {
             parentFromArm = node;
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
-            if (service.isArmNode(parent.getNodeRef()) || service.isArmAccordion(parent.getNodeRef())) {
-                parentFromArm = parent.getNodeRef();
-            }
+            parentFromArm = parent.getNodeRef();
         }
 
         if (parentFromArm != null) {
@@ -102,6 +106,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
+	    node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         if (!isAccordion) {
             node.setArmNodeRef(nodeService.getPrimaryParent(nodeRef).getParentRef()); // для узла Арм - данное поле дублируется. как так узел Арм - реален
         } else {
@@ -132,6 +137,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle(substitudeService.getObjectDescription(nodeRef));
         node.setNodeRef(nodeRef);
+        node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());
         node.setColumns(parentNode.getColumns());
         node.setAvaiableFilters(parentNode.getAvaiableFilters());
@@ -179,7 +185,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     private boolean isArmElement(NodeRef node) {
-        return service.isArmNode(node) || service.isArmAccordion(node);
+        return service.isArmNode(node) || service.isArmAccordion(node) || service.isArmReportsNode(node);
     }
 
     private List<ArmColumn> getNodeColumns(NodeRef node) {

@@ -55,7 +55,12 @@
             <div id="yui-main-2">
                 <div class="yui-b" style="margin-left: 0" id="alf-content">
 	                <@region id="toolbar" scope="template" />
-                    <@region id="documents-grid" scope="template" />
+	                <div id="arm-documents-grid">
+                        <@region id="documents-grid" scope="template" />
+	                </div>
+	                <div id="arm-documents-reports" style="display: none">
+                        <@region id="reports" scope="template" />
+	                </div>
                 </div>
             </div>
             <div id="alf-filters" class="yui-u first column1 tree">

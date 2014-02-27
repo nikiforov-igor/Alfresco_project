@@ -290,20 +290,24 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             onUpdateArmFilters: function(layer, args) {
-                var currentNode = args[1].currentNode;
-                if (currentNode !== null) {
-                    var filters = currentNode.data.filters;
-                    var hasFilters= filters != null && filters.length > 0;
-                    if (hasFilters) {
-                        this.avaiableFilters = [];
-                        for (var i = 0; i < filters.length; i++) {
-                            var filter = filters[i];
-                            this.avaiableFilters.push(filter);
-                        }
+	            this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].disabled);
 
-                        this.isNeedUpdate = true;
-                    }
-                }
+	            if (!args[1].disabled) {
+	                var currentNode = args[1].currentNode;
+	                if (currentNode !== null) {
+	                    var filters = currentNode.data.filters;
+	                    var hasFilters= filters != null && filters.length > 0;
+	                    if (hasFilters) {
+	                        this.avaiableFilters = [];
+	                        for (var i = 0; i < filters.length; i++) {
+	                            var filter = filters[i];
+	                            this.avaiableFilters.push(filter);
+	                        }
+
+	                        this.isNeedUpdate = true;
+	                    }
+	                }
+	            }
             },
 
             _buildPreferencesValue: function () {

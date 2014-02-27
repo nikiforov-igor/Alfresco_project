@@ -36,6 +36,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     final private static Logger logger = LoggerFactory.getLogger(ArmTreeMenuScript.class);
 
     public static final String NODE_REF = "nodeRef";
+    public static final String NODE_TYPE = "nodeType";
     public static final String ARM_NODE_REF = "armNodeRef";
     public static final String ARM_NODE_ID = "armNodeId";
     public static final String SEARCH_QUERY = "searchQuery";
@@ -114,6 +115,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         try {
             result.put(ID, node.getNodeRef() != null ? node.getNodeRef().getId() : node.getTitle());
             result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
+	        result.put(NODE_TYPE, node.getNodeType() != null ? node.getNodeType() : null);
 
             if (node.getArmNodeRef() != null) {
                 result.put(ARM_NODE_REF, node.getArmNodeRef().toString());

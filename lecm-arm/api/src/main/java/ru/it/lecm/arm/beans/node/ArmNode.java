@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class ArmNode {
     private NodeRef nodeRef;
+    private String nodeType;
     private NodeRef armNodeRef;
     private String title;
     private List<String> types;
@@ -98,7 +99,15 @@ public class ArmNode {
         this.nodeRef = nodeRef;
     }
 
-    public ArmBaseChildRule getNodeQuery() {
+	public String getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
+
+	public ArmBaseChildRule getNodeQuery() {
         return nodeQuery;
     }
 
