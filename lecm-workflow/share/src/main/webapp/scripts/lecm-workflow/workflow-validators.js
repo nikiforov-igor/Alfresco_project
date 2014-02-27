@@ -35,8 +35,6 @@ LogicECM.module.Workflow.workflowDueDateValidator = function(field, args, event,
 LogicECM.module.Workflow.workflowListValidator = function(field, args, event, form, silent, message) {
 	'use strict';
 
-	debugger;
-
 	function isNotAllowed(record) {
 		var ASOC_ASSIGNEE_EMPLOYEE_ASSOC = 'assoc_lecm-workflow_assignee-employee-assoc';
 		var ref = record.getData('itemData')[ASOC_ASSIGNEE_EMPLOYEE_ASSOC].value;
