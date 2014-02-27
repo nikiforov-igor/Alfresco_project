@@ -23,6 +23,7 @@ public interface ArmService {
 
 	public static final QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");
 	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
+	public static final QName TYPE_ARM_REPORTS_NODE = QName.createQName(ARM_NAMESPACE_URI, "reports-node");
 	public static final QName PROP_NODE_TYPES = QName.createQName(ARM_NAMESPACE_URI, "types");
 	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
 	public static final QName PROP_COUNTER_ENABLE = QName.createQName(ARM_NAMESPACE_URI, "counter-enable");
@@ -64,9 +65,14 @@ public interface ArmService {
 	public boolean isArmAccordion(NodeRef ref);
 
 	/**
-	 * проверяет что объект является epkjv
+	 * проверяет что объект является узлом
 	 */
 	public boolean isArmNode(NodeRef ref);
+
+	/**
+	 * проверяет что объект является узлом с отчётами
+	 */
+	public boolean isArmReportsNode(NodeRef ref);
 
 	/**
 	 * Получение справочника с настройками АРМ

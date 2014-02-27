@@ -33,11 +33,20 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			_initButtons: function () {
 				this.toolbarButtons["defaultActive"].newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow);
 
+				this.toolbarButtons["defaultActive"].newReportsNode = Alfresco.util.createYUIButton(this, "newReportsNodeButton", this.onNewReportNode);
+
 				this.toolbarButtons["defaultActive"].deleteNodeButton = Alfresco.util.createYUIButton(this, "deleteNodeButton", this.onDeleteNode);
 			},
 
-			onNewRow: function(){
+			onNewReportNode: function() {
+				this.onNewRow(null, null, "lecm-arm:reports-node");
+			},
+
+			onNewRow: function(e, target, itemType){
 				if (this.node != null) {
+					if (itemType == null) {
+						itemType = this.node.itemType;
+					}
 					if (this.editDialogOpening) {
 						return;
 					}
@@ -49,8 +58,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						Alfresco.util.populateHTML(
 							[contId + "_h", this.msg("label.create-row.title") ]
 						);
-						if (me.node.itemType && me.node.itemType != "") {
-							Dom.addClass(contId, me.node.itemType.replace(":", "_") + "_edit");
+						if (itemType && itemType != "") {
+							Dom.addClass(contId, itemType.replace(":", "_") + "_edit");
 						}
 						me.editDialogOpening = false;
 					};
@@ -58,7 +67,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
 						{
 							itemKind:"type",
-							itemId:me.node.itemType,
+							itemId:itemType,
 							destination:me.node.nodeRef,
 							mode:"create",
 							formId: "",
@@ -163,6 +172,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", "Удалить выбранный " + this.getTypeName(this.node.currentItemType));
 
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType == "lecm-arm:arm");
+					this.toolbarButtons["defaultActive"].newReportsNode.set("disabled", this.node.itemType != "lecm-arm:node" && this.node.itemType != "lecm-arm:reports-node");
 				}
 			},
 

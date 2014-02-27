@@ -95,6 +95,15 @@
 			</overrides>
 		</type>
 
+		<type name="lecm-arm:reports-node">
+			<parent>lecm-arm:base-node</parent>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-arm:reports-node</default>
+				</property>
+			</overrides>
+		</type>
+
 		<type name="lecm-arm:base-node">
 			<parent>lecm-dic:hierarchical_dictionary_values</parent>
 			<properties>

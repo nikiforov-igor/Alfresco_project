@@ -218,6 +218,44 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-arm:reports-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:reports-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-arm:field">
 		<forms>
 			<form>

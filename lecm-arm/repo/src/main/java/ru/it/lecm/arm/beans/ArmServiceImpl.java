@@ -65,6 +65,13 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		return isProperType(ref, types);
 	}
 
+	@Override
+	public boolean isArmReportsNode(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+		types.add(TYPE_ARM_REPORTS_NODE);
+		return isProperType(ref, types);
+	}
+
 	public NodeRef getDictionaryArmSettings() {
 		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ARM_SETTINGS_DICTIONARY_NAME);
 	}
@@ -132,7 +139,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	@Override
 	public Collection<QName> getNodeTypesIncludeInherit(NodeRef node) {
 		Collection<QName> results = new ArrayList<QName>();
-		if (isArmNode(node) || isArmAccordion(node)) {
+		if (isArmNode(node) || isArmAccordion(node) || isArmReportsNode(node)) {
 			String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
 			if (types != null && types.length() > 0) {
 				List<String> stringTypes = Arrays.asList(types.split(","));
@@ -140,7 +147,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 					results.add(QName.createQName(type, namespaceService));
 				}
 			}
-			if (results.size() == 0 && isArmNode(node)) {
+			if (results.size() == 0 && (isArmNode(node) || isArmReportsNode(node))) {
 				results = getNodeTypesIncludeInherit(nodeService.getPrimaryParent(node).getParentRef());
 			}
 		}
