@@ -531,6 +531,7 @@
 
 	WorkflowList.prototype._hackTheDestructor = function(layer, args) {
 		YAHOO.Bubbling.unsubscribe('afterFormRuntimeInit', this._hackTheDestructor);
+
 		this.widgets.simpleDialog.dialog.unsubscribeAll('destroy');
 		this.widgets.simpleDialog.dialog.subscribe('destroy', this._destructor, null, this);
 	};
@@ -873,12 +874,13 @@
 		this.widgets.formAddAssignee.show();
 	};
 
-	WorkflowList.prototype._destructor = function() {};
+	WorkflowList.prototype.__destructor = function() {};
 
-	WorkflowList.prototype.__destructor = function() {
-		var k;
+	WorkflowList.prototype._destructor = function() {
+		var k, w;
 
 		var isFn = YAHOO.lang.isFunction;
+		var isVl = YAHOO.lang.isValue;
 		var Bubb = YAHOO.Bubbling;
 
 		var comMan = Alfresco.util.ComponentManager;
@@ -887,10 +889,11 @@
 		var form = comMan.get('${formId}');
 		var formIndex = components.indexOf(form); // IE9+
 
-
 		var widgets = this.widgets;
 		var datagrid = widgets.datagrid;
 		var recordSet = datagrid.widgets.dataTable.getRecordSet();
+
+		debugger;
 
 		this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
 
@@ -902,24 +905,33 @@
 		Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked);
 		Bubb.unsubscribe('changeFilter', datagrid.onFilterChanged);
 
-		recordSet.unsubscribeAll('recordAddEvent');
-		recordSet.unsubscribeAll('recordUpdateEvent');
-		recordSet.unsubscribeAll('recordSetEvent');
-		recordSet.unsubscribeAll('recordsAddEvent');
-		recordSet.unsubscribeAll('recordsSetEvent');
-		recordSet.unsubscribeAll('recordDeleteEvent');
-		recordSet.unsubscribeAll('recordsDeleteEvent');
+		recordSet.unsubscribeAll();
+
+		if(isVl(this.widgets.calendar)) {
+			this.widgets.calendar.selectEvent.unsubscribeAll();
+			this.widgets.calendar.deselectEvent.unsubscribeAll();
+		}
 
 		for (k in this.widgets) {
 			if (widgets.hasOwnProperty(k)) {
-				if (isFn(widgets[k].destroy)) {
-					widgets[k].destroy();
+				w = widgets[k];
+
+				if(w.hasOwnProperty('nodeName') && w.hasOwnProperty('tagName')) {
+					$(w).remove();
+					continue;
+				}
+
+				if(isFn(w.get)) {
+					if(w.get('element') === null) {
+						continue;
+					}
+				}
+
+				if (isFn(w.destroy)) {
+					w.destroy();
 				}
 			}
 		}
-
-		this.widgets.calendar.selectEvent.unsubscribeAll();
-		this.widgets.calendar.deselectEvent.unsubscribeAll();
 
 		while (components.length > formIndex) { // Не оптимизируй...
 			comMan.unregister(components[formIndex]);
