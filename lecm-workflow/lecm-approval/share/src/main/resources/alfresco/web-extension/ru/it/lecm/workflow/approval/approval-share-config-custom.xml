@@ -24,8 +24,8 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
 							<control-param name="autoCompleteJsName">employeesAssocAutoComplete</control-param>
 							<control-param name="treeViewJsName">employeesAssocTreeView</control-param>
-                            <control-param name="employeeAbsenceMarker">true</control-param>
-                            <control-param name="itemType">lecm-orgstr:employee</control-param>
+							<control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="itemType">lecm-orgstr:employee</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -50,16 +50,20 @@
 					</field>
 
 					<field id="bpm:workflowDueDate" mandatory="true">
-<!--						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-						</constraint-handlers>-->
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowDueDateValidator" event="keyup"/>
+						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecmApprove2:assigneesListAssoc">
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+							<control-param name="namespace">approval</control-param>
 							<control-param name="workflowType">APPROVAL</control-param>
 							<control-param name="concurrency">USER</control-param>
 							<control-param name="concurrencyInputName">prop_lecmApprove2_approvalType</control-param>
+							<control-param name="showListSelectMenu">true</control-param>
+							<control-param name="showComputeTermsButton">true</control-param>
+							<!--<control-param name="allowedBusinessRoleId">DA_APPROVER</control-param>-->
 						</control>
 					</field>
 					<field id="packageItems">

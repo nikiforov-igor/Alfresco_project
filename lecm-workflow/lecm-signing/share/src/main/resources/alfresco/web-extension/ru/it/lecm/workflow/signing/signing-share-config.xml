@@ -18,7 +18,6 @@
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDueDate" mandatory="true">
-						<!-- TODO: валидатор сроков последовательного подписания -->
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowDueDateValidator" event="keyup"/>
 						</constraint-handlers>
@@ -29,10 +28,13 @@
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowListValidator" event="change" message="list"/>
 						</constraint-handlers>
 						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
-							<control-param name="namespace">list</control-param>
+							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param>
 							<control-param name="concurrency">SEQUENTIAL</control-param>
 							<control-param name="concurrencyInputName">prop_lecmSign_Concurrency</control-param>
+							<control-param name="showListSelectMenu">true</control-param>
+							<control-param name="showComputeTermsButton">true</control-param>
+							<!--<control-param name="allowedBusinessRoleId">DA_SIGNER</control-param>-->
 						</control>
 					</field>
 					<field id="packageItems">
