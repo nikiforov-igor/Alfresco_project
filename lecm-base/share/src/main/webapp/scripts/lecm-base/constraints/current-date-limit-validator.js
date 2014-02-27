@@ -3,9 +3,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 }
 
 LogicECM.module = LogicECM.module || {};
-LogicECM.module.Errands = LogicECM.module.Errands || {};
 
-LogicECM.module.Errands.limitationDateValidation =
+LogicECM.module.currentDateLimitValidation =
 	function (field, args,  event, form, silent, message) {
 		var valid = false;
 		var fieldValue = field.value;

@@ -86,7 +86,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="set1" mandatory="true">
 	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-errands:title" set="set2">
@@ -304,7 +304,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="main" mandatory="true">
 	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
@@ -514,7 +514,7 @@
                     </field>
                     <field id="lecm-errands:limitation-date" set="main" mandatory="true">
 	                    <constraint-handlers>
-		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.Errands.limitationDateValidation" event="change"/>
+		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
                             <control-param name="maxLimitArg">parentLimitationDate</control-param>
