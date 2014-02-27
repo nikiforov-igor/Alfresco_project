@@ -62,7 +62,7 @@
                     startLocation: "${field.control.params.startLocation}",
                 </#if>
                 mandatory: ${isFieldMandatory?string},
-                itemType: "${field.endpointType!''}",
+                itemType: "${ field.control.params.endpointType ! field.endpointType! }",
                 itemFamily: "node",
                 maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                 oldValue: "${fieldValue}",
