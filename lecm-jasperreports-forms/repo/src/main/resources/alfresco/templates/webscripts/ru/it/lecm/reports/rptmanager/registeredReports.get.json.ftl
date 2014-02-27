@@ -6,7 +6,6 @@
     "code" : "${report.reportCode!""}",
     "name" : "${report.reportName!""}",
     "docType" : "${report.documentType!""}",
-    "reportType" : "${report.rtype.getMnem()!""}",
     "description" : "${report.reportDesc!""}"
     }
         <#if report_has_next>,</#if>

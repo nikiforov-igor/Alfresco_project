@@ -1,9 +1,9 @@
 package ru.it.lecm.reports.api.model.DAO;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 
 /**
@@ -12,111 +12,52 @@ import ru.it.lecm.reports.model.impl.ReportTemplate;
  * @author rabdullin
  */
 public interface ReportEditorDAO {
+    public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
 
-    final public String TYPE_ReportDescriptor = "lecm-rpeditor:reportDescriptor";
+    final public QName TYPE_REPORT_DESCRIPTOR = QName.createQName(REPORTS_EDITOR_URI, "reportDescriptor");
+    final public QName TYPE_SUB_REPORT_DESCRIPTOR = QName.createQName(REPORTS_EDITOR_URI, "subReportDescriptor");
 
-    /* "lecm-rpeditor:reportDescriptor" */
-    /*
-	 *   PROP_T_XXX   (text) текстовое поле
-	 *   PROP_D_XXX   (date) поле с датой
-	 *   PROP_B_XXX   (boolean) логическое числовое поле
-	 *   PROP_I_XXX   (int) целое числовое поле
-	 *   PROP_F_XXX   (float) вещественное числовое поле
-	 */
-    final static public String PROP_T_REPORT_CODE = "lecm-rpeditor:reportCode";
+    final static public QName PROP_REPORT_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportCode");
+    final static public QName PROP_REPORT_DOCTYPE = QName.createQName(REPORTS_EDITOR_URI, "reportDocType");
+    final static public QName PROP_REPORT_MULTIPLICITY = QName.createQName(REPORTS_EDITOR_URI, "reportObjectsMultiplicity");
 
-    /**
-     * тип документов для выборки
-     * в принципе, имеет вид сслыки на тип, например: "lecm-contract:document"
-     */
-    final static public String PROP_T_REPORT_DOCTYPE = "lecm-rpeditor:reportDocType";
+    final static public QName PROP_REPORT_QUERY = QName.createQName(REPORTS_EDITOR_URI, "reportQuery");
+    final static public QName PROP_REPORT_QUERY_SORT = QName.createQName(REPORTS_EDITOR_URI, "reportQuerySort");
+    final static public QName PROP_REPORT_QUERY_OFFSET = QName.createQName(REPORTS_EDITOR_URI, "reportQueryOffset");
+    final static public QName PROP_REPORT_QUERY_LIMIT = QName.createQName(REPORTS_EDITOR_URI, "reportQueryLimit");
+    final static public QName PROP_REPORT_QUERY_PGSIZE = QName.createQName(REPORTS_EDITOR_URI, "reportQueryPgSize");
 
-    final static public String PROP_B_REPORT_MULTIPLICITY = "lecm-rpeditor:reportObjectsMultiplicity";
+    final static public QName PROP_RPROVIDER_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportProviderCode");
+    final static public QName PROP_RPROVIDER_CLASS = QName.createQName(REPORTS_EDITOR_URI, "reportProviderClass");
 
-    final static public String PROP_T_REPORT_QUERY = "lecm-rpeditor:reportQuery";
+    final static public QName TYPE_REPORT_DATASOURCE = QName.createQName(REPORTS_EDITOR_URI, "reportDataSource");
+    final static public QName PROP_REPORT_DATASOURSE_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataSourceCode");
 
-    final static public String PROP_T_REPORT_QUERY_SORT = "lecm-rpeditor:reportQuerySort";
+    final static public QName TYPE_RDS_COLUMN = QName.createQName(REPORTS_EDITOR_URI, "reportDataColumn");
+    final static public QName PROP_RDS_COLUMN_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataColumnCode");
+    final static public QName PROP_RDS_COLUMN_EXPR = QName.createQName(REPORTS_EDITOR_URI, "dataColumnExpression");
+    final static public QName PROP_RDS_COLUMN_CLASS = QName.createQName(REPORTS_EDITOR_URI, "dataColumnClass");
+    final static public QName PROP_RDS_COLUMN_ORDER = QName.createQName(REPORTS_EDITOR_URI, "dataColumnOrder");
 
-    final static public String PROP_I_REPORT_QUERY_OFFSET = "lecm-rpeditor:reportQueryOffset";
-    final static public String PROP_I_REPORT_QUERY_LIMIT = "lecm-rpeditor:reportQueryLimit";
+    final static public QName PROP_RDS_COLTYPE_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportColumnTypeCode");
+    final static public QName PROP_RDS_COLTYPE_CLASS = QName.createQName(REPORTS_EDITOR_URI, "reportColumnTypeClass");
 
-    final static public String PROP_I_REPORT_QUERY_PGSIZE = "lecm-rpeditor:reportQueryPgSize";
+    final static public QName PROP_T_RDS_PARTYPE_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportParameterTypeCode");
+    final static public QName PROP_T_RDS_PARTYPE_LABEL1 = QName.createQName(REPORTS_EDITOR_URI, "reportParameterTypeLabel1");
+    final static public QName PROP_T_RDS_PARTYPE_LABEL2 = QName.createQName(REPORTS_EDITOR_URI, "reportParameterTypeLabel2");
 
-    /* "lecm-rpeditor:reportType" */
-    final static public String PROP_T_RTYPE_CODE = "lecm-rpeditor:reportTypeCode";
+    final static public QName ASSOC_RDS_COLUMN_TYPE = QName.createQName(REPORTS_EDITOR_URI, "columnTypeAssoc");
+    final static public QName ASSOC_RDS_COLUMN_PARAMTYPE = QName.createQName(REPORTS_EDITOR_URI, "columnParameterTypeAssoc");
 
-    /* <!-- Тип провайдера--> "lecm-rpeditor:reportProvider" */
-    final static public String PROP_T_RPROVIDER_CODE = "lecm-rpeditor:reportProviderCode";
-    final static public String PROP_T_RPROVIDER_CLASS = "lecm-rpeditor:reportProviderClass";
+    final static public QName ASSOC_RTEMPLATE_TYPE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateType");
+    final static public QName PROP_RTEMPLATE_CODE = QName.createQName(REPORTS_EDITOR_URI, "templateCode");
+    final static public QName ASSOC_RTEMPLATE_FILE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateFile");
 
-    /* <!-- Набор данных -->, parent: "cm:folder" */
-    final static public String TYPE_REPORT_DATASOURCE = "lecm-rpeditor:reportDataSource";
-    final static public String PROP_T_RDS_CODE = "lecm-rpeditor:dataSourceCode";
+    final static public QName ASSOC_REPORT_PROVIDER = QName.createQName(REPORTS_EDITOR_URI, "reportProviderAssoc");
 
-    /* <!-- Колонка данных --> "lecm-rpeditor:reportDataColumn", parent: "cm:object" */
-    final static public String TYPE_RDS_COLUMN = "lecm-rpeditor:reportDataColumn";
-    final static public String PROP_T_RDS_COLUMN_CODE = "lecm-rpeditor:dataColumnCode";
-    final static public String PROP_T_RDS_COLUMN_EXPR = "lecm-rpeditor:dataColumnExpression";
-    final static public String PROP_T_RDS_COLUMN_CLASS = "lecm-rpeditor:dataColumnClass";
-    final static public String PROP_T_RDS_COLUMN_ORDER = "lecm-rpeditor:dataColumnOrder";
+    final static public QName ASSOC_REPORT_TEMLATE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateAssoc");
 
-    /* <!-- Тип колонок в отчете--> "lecm-rpeditor:reportDataColumn", parent: "lecm-dic:plane_dictionary_values" */
-    final static public String TYPE_RDS_COLTYPE = "lecm-rpeditor:reportColumnType";
-    final static public String PROP_T_RDS_COLTYPE_CODE = "lecm-rpeditor:reportColumnTypeCode";
-    final static public String PROP_T_RDS_COLTYPE_CLASS = "lecm-rpeditor:reportColumnTypeClass";
-
-    /* <!-- Тип параметра--> "lecm-rpeditor:reportParameterType", parent: "lecm-dic:plane_dictionary_values" */
-    final static public String TYPE_RDS_PARTYPE = "lecm-rpeditor:reportParameterType";
-    final static public String PROP_T_RDS_PARTYPE_CODE = "lecm-rpeditor:reportParameterTypeCode";
-    final static public String PROP_T_RDS_PARTYPE_LABEL1 = "lecm-rpeditor:reportParameterTypeLabel1";
-    final static public String PROP_T_RDS_PARTYPE_LABEL2 = "lecm-rpeditor:reportParameterTypeLabel2";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportColumnType"
-     */
-    final static public String ASSOC_RDS_COLUMN_TYPE = "lecm-rpeditor:columnTypeAssoc";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportParameterType"
-     */
-    final static public String ASSOC_RDS_COLUMN_PARAMTYPE = "lecm-rpeditor:columnParameterTypeAssoc";
-
-    /**
-     * M1-Ссылка на target: "cm:content"
-     */
-    final static public String ASSOC_RTEMPLATE_FILE = "lecm-rpeditor:reportTemplateFile";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportType"
-     */
-    final static public String ASSOC_RTEMPLATE_TYPE = "lecm-rpeditor:reportTemplateType";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportType"
-     */
-    final static public String ASSOC_REPORT_TYPE = "lecm-rpeditor:reportTypeAssoc";
-    final public String TYPE_ReportType = "lecm-rpeditor:reportType";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportProvider"
-     */
-    final static public String ASSOC_REPORT_PROVIDER = "lecm-rpeditor:reportProviderAssoc";
-    final public String TYPE_ReportProvider = "lecm-rpeditor:reportProvider";
-
-    /**
-     * M1-Ссылка на target: "lecm-rpeditor:reportTemplate"
-     */
-    final static public String ASSOC_REPORT_TEMLATE = "lecm-rpeditor:reportTemplateAssoc";
-    final public String TYPE_ReportTemplate = "lecm-rpeditor:reportTemplate";
-
-    // TODO: ASSOC_REPORT_DATASOURCE
-    // final static public String ASSOC_REPORT_DATASOURCE = "lecm-rpeditor:reportXXX";
-    // final public String TYPE_ReportDataSource = "lecm-rpeditor:reportXXX";
-
-    // final static public String ASSOC_XXX = ;
-
-    final static public String PROP_T_REPORT_FLAGS = "lecm-rpeditor:reportExtFlags";
-    final static public String PROP_T_REPORT_IS_SUB = "lecm-rpeditor:reportIsSubReport";
+    final static public QName PROP_T_REPORT_FLAGS = QName.createQName(REPORTS_EDITOR_URI, "reportExtFlags");
 
     /**
      * Получить "Описатеть отчёта" по id узла типа "lecm-rpeditor:reportDescriptor"
@@ -134,14 +75,6 @@ public interface ReportEditorDAO {
      */
     ReportDescriptor getReportDescriptor(NodeRef id, boolean withoutSubs);
 
-    /**
-     * Получить описатеть отчёта по названию
-     *
-     * @param mnemo мнемонический код отчёта (уникальный)
-     * @return описатель отчёта или null, если его нет
-     */
-    ReportDescriptor getReportDescriptor(String mnemo);
-
     NodeRef getReportDescriptorNodeByCode(String reportCode);
 
     /*
@@ -149,42 +82,6 @@ public interface ReportEditorDAO {
      * @param id узел типа <type name="lecm-rpeditor:reportTemplate">
      */
     ReportTemplate getReportTemplate(NodeRef id);
-
-    /*
-     * Получить "Шаблон файла отчета" по названию
-     * @param rtMnemo  мнемоника объекта типа <type name="lecm-rpeditor:reportTemplate">
-     */
-    ReportTemplate getReportTemplate(String rtMnemo);
-
-	/*
-	 * Набор данных
-	 * "lecm-rpeditor:reportDataSource"
-	 */
-
-	/*
-	 * Колонка данных
-	 * <type name="lecm-rpeditor:reportDataColumn">
-	 */
-
-	/*
-	 * Справочники: Тип отчета
-	 * <type name="lecm-rpeditor:reportType">
-	 */
-
-	/*
-	 * Справочники: Тип провайдера
-	 * <type name="lecm-rpeditor:reportProvider">
-	 */
-
-	/*
-	 * Справочники: Тип колонок в отчете
-	 * <type name="lecm-rpeditor:reportColumnType">
-	 */
-
-	/*
-	 * Справочники: Тип параметра
-	 * <type name="lecm-rpeditor:reportParameterType">
-	 */
 
     ColumnDescriptor createColumnDescriptor(NodeRef node);
 }

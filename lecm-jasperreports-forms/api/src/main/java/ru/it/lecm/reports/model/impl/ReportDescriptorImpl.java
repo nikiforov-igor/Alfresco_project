@@ -9,8 +9,7 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     private static final long serialVersionUID = 1L;
 
     protected DataSourceDescriptor dsDescriptor;
-    protected ReportType reportType;
-    protected ReportTemplate reportTemplate;
+    protected List<ReportTemplate> reportTemplates;
 
     protected ReportProviderDescriptor providerDescriptor;
     protected ReportFlags flags;
@@ -20,11 +19,6 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     public ReportDescriptorImpl() {
         super();
-    }
-
-    @Override
-    public ReportType getReportType() {
-        return this.reportType;
     }
 
     @Override
@@ -42,8 +36,8 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     }
 
     @Override
-    public ReportTemplate getReportTemplate() {
-        return this.reportTemplate;
+    public List<ReportTemplate> getReportTemplates() {
+        return this.reportTemplates;
     }
 
     @Override
@@ -57,13 +51,8 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     }
 
     @Override
-    public void setReportType(ReportType reportType) {
-        this.reportType = reportType;
-    }
-
-    @Override
-    public void setReportTemplate(ReportTemplate reportTemplate) {
-        this.reportTemplate = reportTemplate;
+    public void setReportTemplates(List<ReportTemplate> reportTemplates) {
+        this.reportTemplates = reportTemplates;
     }
 
     @Override
@@ -74,6 +63,14 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     @Override
     public void setFlags(ReportFlags flags) {
         this.flags = flags;
+    }
+
+    @Override
+    public ReportTemplate getDefaultTemplate() {
+        if (getReportTemplates() == null || getReportTemplates().isEmpty()) {
+            return null;
+        }
+        return getReportTemplates().get(0);
     }
 
     @Override
@@ -108,9 +105,8 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((reportType == null) ? 0 : reportType.hashCode());
         result = prime * result + ((providerDescriptor == null) ? 0 : providerDescriptor.hashCode());
-        result = prime * result + ((reportTemplate == null) ? 0 : reportTemplate.hashCode());
+        result = prime * result + ((reportTemplates == null) ? 0 : reportTemplates.hashCode());
         result = prime * result + ((flags == null) ? 0 : flags.hashCode());
         result = prime * result + ((dsDescriptor == null) ? 0 : dsDescriptor.hashCode());
         return result;
@@ -125,11 +121,6 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
         if (getClass() != obj.getClass())
             return false;
         final ReportDescriptorImpl other = (ReportDescriptorImpl) obj;
-        if (reportType == null) {
-            if (other.reportType != null)
-                return false;
-        } else if (!reportType.equals(other.reportType))
-            return false;
 
         if (providerDescriptor == null) {
             if (other.providerDescriptor != null)
@@ -137,10 +128,10 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
         } else if (!providerDescriptor.equals(other.providerDescriptor))
             return false;
 
-        if (reportTemplate == null) {
-            if (other.reportTemplate != null)
+        if (reportTemplates == null) {
+            if (other.reportTemplates != null)
                 return false;
-        } else if (!reportTemplate.equals(other.reportTemplate))
+        } else if (!reportTemplates.equals(other.reportTemplates))
             return false;
 
         if (dsDescriptor == null) {
@@ -162,8 +153,7 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("ReportDescriptorImpl [ mnem '%s'", getMnem()));
-        builder.append("\n\t, reportType ").append(reportType);
-        builder.append("\n\t, reportTemplate '").append(reportTemplate).append("'");
+        builder.append("\n\t, reportTemplates '").append(reportTemplates).append("'");
         builder.append("\n\t, providerDescriptor '").append(providerDescriptor).append("'");
         builder.append("\n\t, flags ").append(flags);
         builder.append("\n\t, dsDescriptor ").append(dsDescriptor);

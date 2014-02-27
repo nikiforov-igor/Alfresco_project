@@ -6,25 +6,22 @@ import java.util.Map;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.ReportFileData;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 
 public interface ReportGenerator {
 
 	/**
 	 * Построить отчёт по его мнемоническому названию и параметрам
 	 *
-     *
-     *
-     *
      * @param reportDesc описатель отчёта (null, если нет описателя - "hardcoded report")
-     * @param parameters параметры (обычно это request-параметры).
+     * @param templateDescriptor  шаблон отчета
+     *@param parameters параметры (обычно это request-параметры).
      * подразумевается что названия параметров в этом списке совпадают с мнемоникой
      * соот-щих колонок набора данных, который соот-ет шаблону reportName.
      * Если это не так, тогда провайдер "сам" должен разбираться "что и куда"
-     * надо назначить.
-     * @throws IOException
+     * надо назначить.  @throws IOException
 	 */
-	ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException;
-
+	ReportFileData produceReport(ReportDescriptor reportDesc, ReportTemplate templateDescriptor, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException;
 
 	/**
 	 * Вызывается менеджером при получении нового шаблона отчёта, чтобы провайдер 
@@ -47,9 +44,11 @@ public interface ReportGenerator {
 
 	/**
 	 * Сгенерировать шаблон отчёта на основании макета шаблона
-	 * @param maketData поток с данными макета шаблона
-	 * @param desc описатель отчёта
-	 * @return данные готового шаблона отчёта (получить из них поток достаточно
+	 *
+     *
+     * @param maketData поток с данными макета шаблона
+     * @param desc описатель отчёта
+     * @return данные готового шаблона отчёта (получить из них поток достаточно
 	 * просто, например:<br/>
 	 * <code>
 	 * 		byte[] data = g.generateReportTemplateByMaket(...); <br/> 
@@ -57,6 +56,4 @@ public interface ReportGenerator {
 	 *	</code>
 	 */
 	byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc);
-
-
 }

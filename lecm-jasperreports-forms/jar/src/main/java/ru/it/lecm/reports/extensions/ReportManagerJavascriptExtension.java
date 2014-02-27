@@ -42,7 +42,7 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
             final NodeRef rdId = new NodeRef(reportDescNode);
             getReportsManager().registerReportDescriptor(rdId);
             result = true;
-            serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, result);
+            serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, true);
         }
         logger.warn(String.format("report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
         return result;
@@ -75,7 +75,7 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
         if (found != null && !found.isEmpty()) {
             for (ReportDescriptor rd : found) {
                 final ReportInfo ri = new ReportInfo(
-                        rd.getReportType(), rd.getMnem(),
+                        rd.getMnem(),
                         (rd.getFlags() == null) ? null
                                 : StringUtils.collectionToCommaDelimitedString(rd.getFlags().getSupportedNodeTypes())
                 );
@@ -103,14 +103,15 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
      * @param args          аргументы для построения отчёта
      * @return nodeRef созданного узла
      */
-    public ScriptNode buildReportAndSave(final String reportCode, final String destFolderRef, Map<String, String> args) {
+    public ScriptNode buildReportAndSave(final String reportCode, final String templateCode, final String destFolderRef, Map<String, String> args) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         PropertyCheck.mandatory(this, "reportCode", reportCode);
+        PropertyCheck.mandatory(this, "templateCode", templateCode);
         PropertyCheck.mandatory(this, "destFolderRef", destFolderRef);
 
         ReportFileData result;
         try {
-            result = getReportsManager().generateReport(reportCode, args);
+            result = getReportsManager().generateReport(reportCode, templateCode, args);
         } catch (IOException ex) {
             final String msg = String.format("Exception at buildReportAndSave(reportCode='%s', destFolder={%s}), args:\n\t%s", reportCode, destFolderRef, args);
             logger.error(msg, ex);

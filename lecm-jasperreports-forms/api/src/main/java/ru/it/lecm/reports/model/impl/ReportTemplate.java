@@ -9,57 +9,61 @@ import org.apache.commons.io.IOUtils;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.Mnemonicable;
 
-public class ReportTemplate
-		extends MnemonicNamedItem
-		implements Mnemonicable, L18able
-{
-	private static final long serialVersionUID = 1L;
+public class ReportTemplate extends MnemonicNamedItem implements Mnemonicable, L18able {
+    private static final long serialVersionUID = 1L;
 
 
-	private String fileName;
-	// NOTE: тут вполне может быть проксик для реальной загрузки данных только во время первовго требования порции данных ("load-on-demand")
-	// private InputStream dataStream;
-	private byte[] data;
+    private String fileName;
+    // NOTE: тут вполне может быть проксик для реальной загрузки данных только во время первовго требования порции данных ("load-on-demand")
+    private byte[] data;
 
-	public ReportTemplate() {
-		super();
-	}
+    private ReportType reportType;
 
-	public String getFileName() {
-		return this.fileName;
-	}
+    public ReportTemplate() {
+        super();
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public String getFileName() {
+        return this.fileName;
+    }
 
-	public InputStream getData() {
-		// return this.dataStream;
-		return (this.data != null) ? new ByteArrayInputStream(this.data) : null;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public void setData(InputStream stm) {
-		// this.dataStream = stm;
-		if (stm == null) {
-			this.data = null;
-		} else {
-			try {
-				this.data = IOUtils.toByteArray(stm);
-			} catch (IOException e) {
-				throw new RuntimeException("Fail to get data bytes from input stream", e);
-			}
-		}
-	}
+    public InputStream getData() {
+        return (this.data != null) ? new ByteArrayInputStream(this.data) : null;
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append( "ReportTemplate [ ");
-		builder.append( String.format( "fileName= '%s'" , fileName));
-		builder.append( ", data ");builder.append( data ==  null ? "null" : data.length + " bytes");
-		builder.append( ", ").append(super.toString());
-		builder.append("]");
-		return builder.toString();
-	}
+    public void setData(InputStream stm) {
+        if (stm == null) {
+            this.data = null;
+        } else {
+            try {
+                this.data = IOUtils.toByteArray(stm);
+            } catch (IOException e) {
+                throw new RuntimeException("Fail to get data bytes from input stream", e);
+            }
+        }
+    }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("ReportTemplate [ ");
+        builder.append(String.format("fileName= '%s'", fileName));
+        builder.append(", data ");
+        builder.append(data == null ? "null" : data.length + " bytes");
+        builder.append(", ").append(super.toString());
+        builder.append("]");
+        return builder.toString();
+    }
+
+    public ReportType getReportType() {
+        return this.reportType;
+    }
+
+    public void setReportType(ReportType reportType) {
+        this.reportType = reportType;
+    }
 }

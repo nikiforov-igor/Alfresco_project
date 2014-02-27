@@ -3,7 +3,6 @@ package ru.it.lecm.reports.model.DAO;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.io.IOUtils;
@@ -45,10 +44,6 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         this.services = services;
     }
 
-    public void init() {
-        log.info("initialized " + this.getClass());
-    }
-
     @Override
     public ReportDescriptor getReportDescriptor(NodeRef id) {
         return getReportDescriptor(id, false);
@@ -56,21 +51,13 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
     @Override
     public ReportDescriptor getReportDescriptor(NodeRef id, boolean withoutSubs) {
-        final Map<QName, Serializable> map;
-        try {
-            map = getServices().getServiceRegistry().getNodeService().getProperties(id);
-        } catch (InvalidNodeRefException ex) {
-            log.warn(String.format("ReportDescriptor node not found: '%s'", id), ex);
-            return null;
-        }
-
-        ReportDescriptor result = getRegisteredReport(getString(map, PROP_T_REPORT_CODE));
+        ReportDescriptor result = getRegisteredReport(getString(id, PROP_REPORT_CODE));
         if (result == null) {
-            boolean isSubReport = getBoolean(map, PROP_T_REPORT_IS_SUB, false);
+            boolean isSubReport = getNodeService().getType(id).equals(TYPE_SUB_REPORT_DESCRIPTOR);
             result = !isSubReport ? new ReportDescriptorImpl() : new SubReportDescriptorImpl();
         }
 
-        setProps_RD(result, map, id);
+        setProps_RD(result, id);
 
         if (!withoutSubs) {
             setSubReports(result, id);
@@ -96,44 +83,8 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     }
 
     @Override
-    public ReportDescriptor getReportDescriptor(String mnemo) {
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder();
-        builder.emmitFieldCond(null, PROP_T_REPORT_CODE, mnemo);
-
-        final ResultSet rs = LucenePreparedQuery.execFindQuery(builder, getServices().getServiceRegistry().getSearchService());
-        final List<Map<QName, Serializable>> descs = LucenePreparedQuery.loadNodeProps(rs, mnemo, 0, 1, getServices().getServiceRegistry().getNodeService());
-        if (descs == null || descs.isEmpty()) {
-            return null;
-        }
-
-        final ReportDescriptorImpl result = new ReportDescriptorImpl();
-        setProps_RD(result, descs.get(0), rs.getNodeRef(0));
-
-        return result;
-    }
-
-    @Override
     public ReportTemplate getReportTemplate(NodeRef id) {
         return createReportTemplate(id);
-    }
-
-    @Override
-    public ReportTemplate getReportTemplate(String rtMnemo) {
-        final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
-
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder();
-        builder.emmitFieldCond(null, "cm:name", rtMnemo);
-
-        final ResultSet rs = LucenePreparedQuery.execFindQuery(builder, getServices().getServiceRegistry().getSearchService());
-        final List<Map<QName, Serializable>> descs = LucenePreparedQuery.loadNodeProps(rs, rtMnemo, 0, 1, nodeService);
-
-        if (descs == null || descs.isEmpty()) {
-            log.warn(String.format("Not found report file template '%s'", rtMnemo));
-            return null;
-        }
-
-        final NodeRef templateId = rs.getNodeRef(0);
-        return createReportTemplate(templateId);
     }
 
     /**
@@ -145,24 +96,6 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return (result != null) ? result : defaultValue;
     }
 
-    protected String getString(Map<QName, Serializable> map, final String propName, final String defaultValue) {
-        final Object result = getObj(map, propName, defaultValue);
-        return Utils.coalesce(result, null);
-    }
-
-    protected String getString(Map<QName, Serializable> map, final String propName) {
-        return getString(map, propName, null);
-    }
-
-    protected int getInt(Map<QName, Serializable> map, final String propName, int defaultValue) {
-        final Integer x = getInteger(map, propName);
-        return (x == null) ? defaultValue : x;
-    }
-
-    protected Integer getInteger(Map<QName, Serializable> map, final String propName) {
-        return (Integer) getObj(map, propName, null);
-    }
-
     protected Date getDate(Map<QName, Serializable> map, final String propName, Date defaultValue) {
         return (Date) getObj(map, propName, defaultValue);
     }
@@ -171,54 +104,84 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return getDate(map, propName, null);
     }
 
-    /**
-     * @param map          Map<QName, Serializable>
-     * @param propName     String
-     * @param defaultValue Boolean
-     * @return Boolean nullable value
-     */
-    protected Boolean getBoolean(Map<QName, Serializable> map, final String propName, Boolean defaultValue) {
-        return (Boolean) getObj(map, propName, defaultValue);
+    protected Boolean getBoolean(NodeRef node, final QName propName, Boolean defaultValue) {
+        Object value = getNodeService().getProperty(node, propName);
+        if (value != null && value instanceof Boolean) {
+            return (Boolean) value;
+        } else {
+            return defaultValue;
+        }
     }
 
-    /**
-     * @param map          Map<QName, Serializable>
-     * @param propName     String
-     * @param defaultValue Boolean
-     * @return none-null boolean value
-     */
-    protected boolean getBool(Map<QName, Serializable> map, final String propName, boolean defaultValue) {
-        return (Boolean) getObj(map, propName, defaultValue);
+    protected String getString(NodeRef node, final QName propName, String defaultValue) {
+        Object value = getNodeService().getProperty(node, propName);
+        if (value != null && value instanceof String) {
+            return (String) value;
+        } else {
+            return defaultValue;
+        }
     }
 
-    protected void setL18Name(L18able result, Map<QName, Serializable> map) {
-        setL18Name(result, map, "cm:name");
+    protected String getString(NodeRef node, final QName propName) {
+        return  getString(node, propName, null);
     }
 
-    protected void setL18Name(L18able result, Map<QName, Serializable> map, String propName) {
-        result.regItem(getString(map, "sys:locale", "ru"), getString(map, propName));
+    protected Integer getInteger(NodeRef node, final QName propName, Integer defaultValue) {
+        Object value = getNodeService().getProperty(node, propName);
+        if (value != null && value instanceof Integer) {
+            return (Integer) value;
+        } else {
+            return defaultValue;
+        }
     }
 
-    protected void setProps_RD(ReportDescriptor result, Map<QName, Serializable> map, NodeRef node) {
-        result.setMnem(getString(map, PROP_T_REPORT_CODE));
+    protected Integer getInteger(NodeRef node, final QName propName) {
+        return getInteger(node, propName, 0);
+    }
 
-        setL18Name(result, map);
+    protected void setL18Name(L18able result, NodeRef node) {
+        setL18Name(result, node, ContentModel.PROP_NAME);
+    }
 
-        setFlags(result.getFlags(), map);
+    protected void setL18Name(L18able result, NodeRef node, QName propName) {
+        NodeService nodeService = getNodeService();
+        result.regItem((String) nodeService.getProperty(node, ContentModel.PROP_LOCALE), getString(node, propName, null));
+    }
 
-        final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
-        final NamespaceService ns = getNamespaceService();
+    protected void setProps_RD(ReportDescriptor result, NodeRef node) {
+        final NodeService nodeService = getNodeService();
 
-        result.setReportType(createReportType(LucenePreparedQuery.getAssocTarget(node, ASSOC_REPORT_TYPE, nodeService, ns)));
-        result.setProviderDescriptor(createReportProvider(LucenePreparedQuery.getAssocTarget(node, ASSOC_REPORT_PROVIDER, nodeService, ns)));
-        result.setReportTemplate(createReportTemplate(LucenePreparedQuery.getAssocTarget(node, ASSOC_REPORT_TEMLATE, nodeService, ns)));
+        result.setMnem((String) nodeService.getProperty(node, PROP_REPORT_CODE));
 
-        result.setDSDescriptor(createDSDescriptor(LucenePreparedQuery.getAssocChildByType(node, TYPE_REPORT_DATASOURCE, nodeService, ns)));
+        setL18Name(result, node);
 
-        result.setSubReport(getBoolean(map, PROP_T_REPORT_IS_SUB, false));
+        setFlags(result.getFlags(), node);
+
+        List<AssociationRef> provideRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_PROVIDER);
+        if (!provideRefs.isEmpty()) {
+            NodeRef provider = provideRefs.get(0).getTargetRef();
+            result.setProviderDescriptor(createReportProvider(provider));
+        }
+
+        List<AssociationRef> templatesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_TEMLATE);
+        List<ReportTemplate> templates = new ArrayList<ReportTemplate>();
+        for (AssociationRef template : templatesRefs) {
+            templates.add(createReportTemplate(template.getTargetRef()));
+        }
+        result.setReportTemplates(templates);
+
+        Set<QName> ds = new HashSet<QName>();
+        ds.add(TYPE_REPORT_DATASOURCE);
+
+        List<ChildAssociationRef> dsChilds = nodeService.getChildAssocs(node, ds);
+        if (!dsChilds.isEmpty()) {
+            result.setDSDescriptor(createDSDescriptor(dsChilds.get(0).getChildRef()));
+        }
+
+        result.setSubReport(getNodeService().getType(node).equals(TYPE_SUB_REPORT_DESCRIPTOR));
 
         if (result.isSubReport() && result instanceof SubReportDescriptorImpl) {
-            SubReportDescriptorImpl subResult = (SubReportDescriptorImpl)result;
+            SubReportDescriptorImpl subResult = (SubReportDescriptorImpl) result;
             final String reportName = result.getMnem();
             subResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
 
@@ -272,21 +235,21 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         }
     }
 
-    protected void setFlags(ReportFlags result, Map<QName, Serializable> map) {
+    protected void setFlags(ReportFlags result, NodeRef node) {
         result.setMnem(null);
 
-        result.setText(getString(map, PROP_T_REPORT_QUERY));
+        result.setText(getString(node, PROP_REPORT_QUERY));
 
-        result.setSort(getString(map, PROP_T_REPORT_QUERY_SORT));
+        result.setSort(getString(node, PROP_REPORT_QUERY_SORT));
 
-        result.setPreferedNodeType(getString(map, PROP_T_REPORT_DOCTYPE));
-        result.setMultiRow(getBool(map, PROP_B_REPORT_MULTIPLICITY, true));
+        result.setPreferedNodeType(getString(node, PROP_REPORT_DOCTYPE));
+        result.setMultiRow(getBoolean(node, PROP_REPORT_MULTIPLICITY, true));
 
-        result.setLimit(getInt(map, PROP_I_REPORT_QUERY_LIMIT, LucenePreparedQuery.QUERYROWS_UNLIMITED));
-        result.setOffset(getInt(map, PROP_I_REPORT_QUERY_OFFSET, 0));
-        result.setPgSize(getInt(map, PROP_I_REPORT_QUERY_PGSIZE, LucenePreparedQuery.QUERYPG_ALL));
+        result.setLimit(getInteger(node, PROP_REPORT_QUERY_LIMIT));
+        result.setOffset(getInteger(node, PROP_REPORT_QUERY_OFFSET, 0));
+        result.setPgSize(getInteger(node, PROP_REPORT_QUERY_PGSIZE, LucenePreparedQuery.QUERYPG_ALL));
 
-        String customFlags = getString(map, PROP_T_REPORT_FLAGS);
+        String customFlags = getString(node, PROP_T_REPORT_FLAGS);
         if (customFlags != null) {
             customFlags = customFlags.replaceAll("\\n", "").replaceAll("\\r","");
             String[] cfStr = customFlags.split(";");
@@ -301,34 +264,32 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         }
     }
 
-    protected ReportType createReportType(NodeRef node) {
-        if (node == null) {
+    protected ReportType createReportType(NodeRef reportTypeNode) {
+        if (reportTypeNode == null) {
             return null;
         }
+        NodeService nodeService = getNodeService();
+        ReportType result = new ReportType();
 
-        final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(node);
-
-        final ReportType result = new ReportType();
-        if (map != null) {
-            result.setMnem(getString(map, PROP_T_RTYPE_CODE));
-            setL18Name(result, map);
-        }
+        result.setMnem((String) nodeService.getProperty(reportTypeNode, PROP_RTEMPLATE_CODE));
+        setL18Name(result, reportTypeNode);
 
         return result;
     }
 
-    protected ReportProviderDescriptor createReportProvider(NodeRef node) {
-        if (node == null) {
+    protected ReportProviderDescriptor createReportProvider(NodeRef providerNode) {
+        if (providerNode == null) {
             return null;
         }
 
+        NodeService nodeService = getNodeService();
+
         final ReportProviderDescriptor result = new ReportProviderDescriptor();
-        final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(node);
-        if (map != null) {
-            result.setMnem(getString(map, PROP_T_RPROVIDER_CODE));
-            setL18Name(result, map);
-            result.setClassName(getString(map, PROP_T_RPROVIDER_CLASS));
-        }
+
+        result.setMnem((String) nodeService.getProperty(providerNode, PROP_RPROVIDER_CODE));
+        setL18Name(result, providerNode);
+        result.setClassName((String) nodeService.getProperty(providerNode, PROP_RPROVIDER_CLASS));
+
         return result;
     }
 
@@ -337,61 +298,63 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             return null;
         }
 
-        final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
-
         final ReportTemplate result = new ReportTemplate();
-        setProps_ReportTemplate(result, nodeService.getProperties(node), node);
+
+        NodeService nodeService = getNodeService();
+
+        Object code = nodeService.getProperty(node, PROP_RTEMPLATE_CODE);
+        result.setMnem(code != null ? (String) code : "NOT_CODE");
+
+        setL18Name(result, node);
+
+        List<AssociationRef> filesRef = nodeService.getTargetAssocs(node, ASSOC_RTEMPLATE_FILE);
+        if (!filesRef.isEmpty()) {
+            NodeRef templateFile = filesRef.get(0).getTargetRef();
+            if (templateFile != null) {
+                result.setFileName((String) nodeService.getProperty(node, ContentModel.PROP_NAME));
+
+                final ContentReader reader = services.getServiceRegistry().getContentService().getReader(templateFile, ContentModel.PROP_CONTENT);
+                try {
+                    final byte[] data = (reader != null && reader.getSize() > 0) ? IOUtils.toByteArray(reader.getContentInputStream()) : null;
+                    result.setData((data == null) ? null : new ByteArrayInputStream(data));
+                } catch (IOException ex) {
+                    throw new RuntimeException("Error getting file content of node" + node, ex);
+                }
+            }
+        }
+
+        List<AssociationRef> typesRef = nodeService.getTargetAssocs(node, ASSOC_RTEMPLATE_TYPE);
+        if (!typesRef.isEmpty()) {
+            NodeRef templateType = typesRef.get(0).getTargetRef();
+            if (templateType != null) {
+                result.setReportType(createReportType(templateType));
+            }
+        }
+
         return result;
     }
 
-    protected void setProps_ReportTemplate(ReportTemplate result, final Map<QName, Serializable> map, NodeRef node) {
-        final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
-        final NamespaceService ns = getNamespaceService();
-
-        result.setMnem(getString(map, "cm:name"));
-        setL18Name(result, map);
-
-        final NodeRef nodeCntntFile = LucenePreparedQuery.getAssocTarget(node, ASSOC_RTEMPLATE_FILE, nodeService, ns);
-        if (nodeCntntFile != null) {
-            final Map<QName, Serializable> mapCntntFile = nodeService.getProperties(nodeCntntFile);
-            result.setFileName(getString(mapCntntFile, "cm:name"));
-
-            final ContentReader reader = services.getServiceRegistry().getContentService().getReader(nodeCntntFile, ContentModel.PROP_CONTENT);
-            try {
-                final byte[] data = (reader != null && reader.getSize() > 0) ? IOUtils.toByteArray(reader.getContentInputStream()) : null;
-                result.setData((data == null) ? null : new ByteArrayInputStream(data));
-            } catch (IOException ex) {
-                final String msg = String.format("Error getting file content of node {%s}", node);
-                throw new RuntimeException(msg, ex);
-            }
-        }
-    }
-
-    protected DataSourceDescriptorImpl createDSDescriptor(NodeRef node) {
-        if (node == null) {
+    protected DataSourceDescriptorImpl createDSDescriptor(NodeRef dsNode) {
+        if (dsNode == null) {
             return null;
         }
         final DataSourceDescriptorImpl result = new DataSourceDescriptorImpl();
-        setProps_DSDescriptor(result, node);
+
+
+        result.setMnem((String) getNodeService().getProperty(dsNode, PROP_REPORT_DATASOURSE_CODE));
+        setL18Name(result, dsNode);
+
+        Set<QName> rdsColumn = new HashSet<QName>();
+        rdsColumn.add(TYPE_RDS_COLUMN);
+
+        List<ChildAssociationRef> columns = getNodeService().getChildAssocs(dsNode, rdsColumn);
+        if (!columns.isEmpty()) {
+            for (ChildAssociationRef column : columns) {
+                final ColumnDescriptor coldesc = createColumnDescriptor(column.getChildRef());
+                result.getColumns().add(coldesc);
+            }
+        }
         return result;
-    }
-
-    protected void setProps_DSDescriptor(DataSourceDescriptor result, NodeRef node) {
-        if (node == null) {
-            return;
-        }
-
-        final NodeService nodeService = getServices().getServiceRegistry().getNodeService();
-        final NamespaceService ns = getNamespaceService();
-
-        final Map<QName, Serializable> map = nodeService.getProperties(node);
-        if (map != null) {
-            result.setMnem(getString(map, PROP_T_RDS_CODE));
-            setL18Name(result, map);
-
-            final List<NodeRef> found = LucenePreparedQuery.getAssocChildrenByType(node, TYPE_RDS_COLUMN, nodeService, ns);
-            setProps_ListColumns(result.getColumns(), found);
-        }
     }
 
     public ColumnDescriptor createColumnDescriptor(NodeRef node) {
@@ -399,40 +362,42 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             return null;
         }
         final ColumnDescriptor result = new ColumnDescriptor();
-        setProps_DataColumn(result, node);
-        return result;
-    }
 
-    protected void setProps_DataColumn(ColumnDescriptor result, NodeRef node) {
-        if (node == null) {
-            return;
+        result.setColumnName((String) getNodeService().getProperty(node, PROP_RDS_COLUMN_CODE));
+        setL18Name(result, node);
+
+        Object exprValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_EXPR);
+        if (exprValue != null) {
+            result.setExpression(exprValue.toString());
         }
 
-        final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-        final NamespaceService ns = getNamespaceService();
+        Object orderValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_ORDER);
+        if (orderValue != null) {
+            result.setOrder(Integer.valueOf(orderValue.toString()));
+        } else {
+            result.setOrder(0);
+        }
 
-        final Map<QName, Serializable> map = nodeSrv.getProperties(node);
-
-        result.setColumnName(getString(map, PROP_T_RDS_COLUMN_CODE));
-        setL18Name(result, map);
-
-        result.setExpression(getString(map, PROP_T_RDS_COLUMN_EXPR));
-        result.setOrder(getInt(map, PROP_T_RDS_COLUMN_ORDER, 0));
-        result.setAlfrescoType(getString(map, PROP_T_RDS_COLUMN_CLASS));
-
-        // TODO: result.setSpecial( getBool(map, PROP_T_RDS_ISSPECIAL, false));
+        Object alfTypeValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_CLASS);
+        if (alfTypeValue != null) {
+            result.setAlfrescoType(alfTypeValue.toString());
+        }
 
         // тип колонки ...
-
-        final NodeRef nodeColType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_TYPE, nodeSrv, ns);
-        final JavaDataType jdt = createColDataType(nodeColType);
-        result.setDataType(jdt);
+        List<AssociationRef> colTypesRefs = getNodeService().getTargetAssocs(node, ASSOC_RDS_COLUMN_TYPE);
+        if (!colTypesRefs.isEmpty()) {
+            NodeRef colType = colTypesRefs.get(0).getTargetRef();
+            result.setDataType(createColDataType(colType));
+        }
 
         // тип параметра для колонки ...
+        List<AssociationRef> colParsRefs = getNodeService().getTargetAssocs(node, ASSOC_RDS_COLUMN_PARAMTYPE);
+        if (!colParsRefs.isEmpty()) {
+            NodeRef parType = colParsRefs.get(0).getTargetRef();
+            result.setParameterValue(createParameterTypeValue(parType));
+        }
 
-        final NodeRef nodeColParType = LucenePreparedQuery.getAssocTarget(node, ASSOC_RDS_COLUMN_PARAMTYPE, nodeSrv, ns);
-        final ParameterTypedValue paramValue = createParameterTypeValue(nodeColParType);
-        result.setParameterValue(paramValue);
+        return result;
     }
 
     private JavaDataType createColDataType(NodeRef nodeColType) {
@@ -440,11 +405,9 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             return null;
         }
 
-        final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(nodeColType);
-
-        final String clazzName = getString(map, PROP_T_RDS_COLTYPE_CLASS);
-        final String name = getString(map, "cm:name");
-        final String code = getString(map, PROP_T_RDS_COLTYPE_CODE);
+        final String clazzName = (String) getNodeService().getProperty(nodeColType, PROP_RDS_COLTYPE_CLASS);
+        final String name = (String) getNodeService().getProperty(nodeColType, ContentModel.PROP_NAME);
+        final String code = (String)getNodeService().getProperty(nodeColType, PROP_RDS_COLTYPE_CODE);
 
         // если есть класс - по классу, потом по имени, потом по по мнемонике
         final String tag = Utils.coalesce(clazzName, name, code);
@@ -462,16 +425,14 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             return null;
         }
 
-        final Map<QName, Serializable> map = getServices().getServiceRegistry().getNodeService().getProperties(nodeColParType);
-
-        final String mnem = getString(map, PROP_T_RDS_PARTYPE_CODE);
+        final String mnem = (String) getNodeService().getProperty(nodeColParType, PROP_T_RDS_PARTYPE_CODE);
         final ParameterTypedValueImpl result = new ParameterTypedValueImpl(mnem);
 
-        setL18Name(result, map);
-        setL18Name(result.getPrompt1(), map, PROP_T_RDS_PARTYPE_LABEL1);
-        setL18Name(result.getPrompt2(), map, PROP_T_RDS_PARTYPE_LABEL2);
+        setL18Name(result, nodeColParType);
+        setL18Name(result.getPrompt1(), nodeColParType, PROP_T_RDS_PARTYPE_LABEL1);
+        setL18Name(result.getPrompt2(), nodeColParType, PROP_T_RDS_PARTYPE_LABEL2);
 
-        final String tagParType = getString(map, PROP_T_RDS_PARTYPE_CODE);
+        final String tagParType = getString(nodeColParType, PROP_T_RDS_PARTYPE_CODE);
         if (tagParType != null) {
             final ParameterTypedValue.Type atype = ParameterTypedValue.Type.findType(tagParType);
             if (atype == null) {
@@ -481,54 +442,18 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             }
             result.setType(atype);
         }
-
-
-        // TODO: (tag ALF_TYPES) Получение типа ассоциации альфреско и типа данных Альфреско
-        /*
-		const : String АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО = "", АТРИБУТ_С_ТИПОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "", АТРИБУТ_С_ВИДОМ_АССОЦИАЦИИ_АЛЬФРЕСКО = "";
-
-		result.setAlfrescoType( getString(map, АТРИБУТ_С_ТИПОМ_АЛЬФРЕСКО)); 
-
-		{ // тип ассоциации Альфреско ...
-			final String typeOfAssoc = getString(map, АТРИБУТ_С_ТИПОМ_АССОЦИАЦИИ_АЛЬФРЕСКО);
-			if (typeOfAssoc != null) {
-				final AlfrescoAssocInfoImpl assoc = new AlfrescoAssocInfoImpl();
-				assoc.setAssocTypeName( typeOfAssoc );
-
-				final String kindOfAssoc = getString(map, АТРИБУТ_С_ВИДОМ_АССОЦИАЦИИ_АЛЬФРЕСКО); // 11, 1M ...
-				assoc.setAssocKind(AssocKind.findAssocKind(kindOfAssoc));
-			}
-		}
-		 */
-
         return result;
-    }
-
-    /**
-     * @param result List<ColumnDescriptor>
-     * @param list   список узлов типа "lecm-rpeditor:reportDataColumn"
-     */
-    private void setProps_ListColumns(List<ColumnDescriptor> result, List<NodeRef> list) {
-        if (result == null || list == null) {
-            return;
-        }
-        for (NodeRef colRef : list) {
-            final ColumnDescriptor coldesc = createColumnDescriptor(colRef);
-            if (coldesc != null) {
-                result.add(coldesc);
-            }
-        }
     }
 
     @Override
     public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
         LuceneSearchBuilder builder = new LuceneSearchBuilder(getNamespaceService());
-        builder.emmitFieldCond(null, PROP_T_REPORT_CODE, rtMnemo);
-        builder.emmitTypeCond(TYPE_ReportDescriptor, null);
+        builder.emmitFieldCond(null, PROP_REPORT_CODE.toPrefixString(getNamespaceService()), rtMnemo);
+        builder.emmitTypeCond(TYPE_REPORT_DESCRIPTOR.toPrefixString(getNamespaceService()), null);
 
         ResultSet rs = LucenePreparedQuery.execFindQuery(builder, getServices().getServiceRegistry().getSearchService());
-        for (ResultSetRow row : rs) {
-            return row.getNodeRef();
+        if (rs != null && rs.length() > 0) {
+            return rs.getRow(0).getNodeRef();
         }
         return null;
     }
@@ -551,7 +476,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         NodeService nodeService = getNodeService();
 
         Set<QName> descriptors = new HashSet<QName>();
-        descriptors.add(QName.createQName(TYPE_ReportDescriptor, getNamespaceService()));
+        descriptors.add(TYPE_REPORT_DESCRIPTOR);
 
         List<ChildAssociationRef> childDescriptorsList = nodeService.getChildAssocs(mainReport, descriptors);
         for (ChildAssociationRef childAssociationRef : childDescriptorsList) {

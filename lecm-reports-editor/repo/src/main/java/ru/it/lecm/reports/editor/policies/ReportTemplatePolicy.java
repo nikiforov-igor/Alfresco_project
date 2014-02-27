@@ -12,7 +12,6 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -81,7 +80,7 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
             templateFile = targetAssocs.get(0).getTargetRef();  //файл шаблона задан - используем
             templateFile = copyService.copyAndRename(templateFile, report, ContentModel.ASSOC_CONTAINS, null, false);
         } else {
-            templateFile = reportsManager.produceDefaultTemplate(report);   //файл шаблона не задан - генерируем по источнику данных
+            templateFile = reportsManager.produceDefaultTemplate(report, template);   //файл шаблона не задан - генерируем по источнику данных
         }
 
         if (templateFile != null) {

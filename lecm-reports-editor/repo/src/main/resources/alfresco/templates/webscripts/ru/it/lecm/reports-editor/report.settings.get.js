@@ -1,7 +1,7 @@
 var reportNode = search.findNode(args["reportId"]);
 var settingsObj = {};
 if (reportNode) {
-    var isSubReport = reportNode.properties["lecm-rpeditor:reportIsSubReport"];
+    var isSubReport = reportNode.getTypeShost() == "lecm-rpeditor:subReportDescriptor";
     settingsObj["isSub"] = isSubReport;
     settingsObj["path"] = reportNode.getQnamePath();
     settingsObj["parent"] = isSubReport ? reportNode.parent.nodeRef.toString() : args["reportId"];

@@ -47,29 +47,6 @@ public class ReportMainProducer extends AbstractWebScript {
     }
 
     /**
-     * Журналирование параметров.
-     *
-     * @param params Map<String, String[]>
-     * @param msg String
-     */
-    private static void logParameters(final Map<String, String> params, final String msg) {
-        final StringBuilder infosb = new StringBuilder();
-        if (msg != null) {
-            infosb.append(msg);
-        }
-        int i = 0;
-        if (params != null) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                ++i;
-                final String paramName = entry.getKey();
-                final String value = entry.getValue();
-                infosb.append(String.format("\t[%d]\t'%s' \t'%s'\n", i, paramName, Utils.coalesce(value)));
-            }
-        }
-        log.info(String.format("Call report maker with args count=%d:\n %s", i, infosb.toString()));
-    }
-
-    /**
      * Формирование карты параметров webScriptRequest в виде:
      * ключ - название параметра,
      * значение - его строковое значение.
@@ -99,7 +76,7 @@ public class ReportMainProducer extends AbstractWebScript {
 
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
-
+        final String templateCode = templateParams.get("templateCode");
         final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
 
 		/* Вариант "права побоку": построение от имени системы */
@@ -107,7 +84,7 @@ public class ReportMainProducer extends AbstractWebScript {
         final ReportFileData result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<ReportFileData>() {
             @Override
             public ReportFileData doWork() throws Exception {
-                return getReportsManager().generateReport(reportName, requestParameters);
+                return getReportsManager().generateReport(reportName, templateCode, requestParameters);
             }
         });
 

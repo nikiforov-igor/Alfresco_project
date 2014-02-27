@@ -141,6 +141,73 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-rpeditor:subReportDescriptor">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                    <show id="lecm-rpeditor:reportDocType"/>
+                    <show id="lecm-rpeditor:reportProviderAssoc"/>
+                    <show id="lecm-rpeditor:parentReportTemplateAssoc"/>
+                    <show id="lecm-rpeditor:reportQuery"/>
+                    <show id="lecm-rpeditor:reportQuerySort"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportCode" help-id="report.code.help"/>
+                    <field id="lecm-rpeditor:reportDocType" label-id="label.subReport.type" help-id="report.sub.type.help"/>
+                    <field id="lecm-rpeditor:reportObjectsMultiplicity" help-id="report.multiply.help"/>
+                    <field id="lecm-rpeditor:reportQuery" label-id="label.subReport.source" help-id="report.sub.source.help">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+                    </field>
+                    <field id="lecm-rpeditor:reportProviderAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-rpeditor:parentReportTemplateAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <!--<control-param name="itemType">lecm-rpeditor:reportTemplate</control-param>-->
+                        </control>
+                    </field>
+                    <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-rpeditor:subReportDescriptor">
+        <forms>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-rpeditor:reportCode"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name" label-id="label.report.displayName"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-rpeditor:reportTemplate">
         <forms>
             <form>

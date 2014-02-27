@@ -70,15 +70,15 @@ public class GetEditorMenuScript extends AbstractWebScript {
             if (childType == null || childType.isEmpty()) {
                 childType = "custom";
             }
-            if (childType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService))) {// список отчетов
+            if (childType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService)) ||
+                    childType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR.toPrefixString(namespaceService)) ) {// список отчетов
                 Set<QName> type = new HashSet<QName>();
                 type.add(QName.createQName(childType, namespaceService));
                 List<ChildAssociationRef> childNodes = nodeService.getChildAssocs(currentRef, type);
                 for (ChildAssociationRef childNode : childNodes) {
                     String label = (String) nodeService.getProperty(childNode.getChildRef(), ContentModel.PROP_NAME);
                     String title = (String) nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-                    Object isSubValue = nodeService.getProperty(childNode.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT);
-                    Boolean isSub = isSubValue != null ? (Boolean)isSubValue : Boolean.FALSE;
+                    Boolean isSub = childType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR.toPrefixString(namespaceService));
                     nodes.add(
                             getJSONNode(childNode.getChildRef().getId(), childNode.getChildRef(),
                                     !isSub ? REPORT_CUSTOM : SUBREPORT_CUSTOM, label, title, "lecm/reports-editor/report-settings?reportId={reportId}",

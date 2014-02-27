@@ -20,7 +20,6 @@
 function initToolbar() {
     new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
         bubblingLabel: "subReports",
-        createFormId: "subReport",
         newRowDialogTitle: "label.create-subreport.title"
     });
 }
@@ -195,9 +194,8 @@ YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
                                 }
                             ],
                             datagridMeta: {
-                                itemType: "lecm-rpeditor:reportDescriptor",
+                                itemType: "lecm-rpeditor:subReportDescriptor",
                                 nodeRef: "${args.reportId}",
-                                datagridFormId: "sub-datagrid",
                                 actionsConfig: {
                                     fullDelete: true,
                                     trash: false

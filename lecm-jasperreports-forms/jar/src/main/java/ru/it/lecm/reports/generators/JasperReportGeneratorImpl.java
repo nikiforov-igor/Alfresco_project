@@ -17,6 +17,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -40,14 +41,13 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
     @Override
-    public ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException {
+    public ReportFileData produceReport(ReportDescriptor reportDesc, ReportTemplate templateDescriptor, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException {
         PropertyCheck.mandatory(this, "services", getServices());
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
         ReportFileData result = new ReportFileData();
 
-        final String reportFileName = String.format("%s.jasper", reportDesc.getMnem());
-
+        final String reportFileName = templateDescriptor.getFileName().replace("jrxml", "jasper");
         final ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

@@ -1,30 +1,24 @@
 package ru.it.lecm.reports.model.DAO;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
-import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.NodeUtils;
+
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Служба хранения файлов, шаблонов и др контента, связанного с разворачиваемыми отчётами.
@@ -47,12 +41,6 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     final public static String REPORT_SERVICE_FOLDER_ROOT_ID = "REPORT_SERVICE_FOLDER_ID";
     final public static String REPORT_SERVICE_FOLDER_ROOT_NAME = "Сервис построения отчётов";
 
-    /**
-     * Вложенная в ROOT службы папка с типом отчёта
-     */
-    final public static String RS_FOLDER_REPORT_TYPES_ID = "REPORT_TYPES_FOLDER_ID";
-    final public static String RS_FOLDER_REPORT_TYPES_NAME = "Типы отчётов";
-
     private static final transient Logger logger = LoggerFactory.getLogger(RepositoryReportContentDAOBean.class);
 
     /**
@@ -60,33 +48,14 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
      */
     private boolean readonly = false;
 
-    public void init() {
-
-        final NodeRef
-                refRoot = getServiceRootFolder(), refTypes = getFolder(RS_FOLDER_REPORT_TYPES_ID), refJasper = getFolder(ReportType.RTYPE_MNEMO_JASPER), refOOffice = getFolder(ReportType.RTYPE_MNEMO_OOFFICE),
-				refOOCalc = getFolder(ReportType.RTYPE_MNEMO_OOCALC);
-
-        logger.info(String.format("Report Content Storage Service initialized as:\n\t%s %s\n\t%s %s\n\t%s %s\n\t%s %s\n\t%s %s"
-                , "Readonly ", isReadonly()
-                , "Root", refRoot
-                , "\tTypes", refTypes
-                , "\t\tTypes.Jasper", refJasper
-                , "\t\tTypes.OOffice", refOOffice
-				, "\t\tTypes.OOCalc", refOOCalc
-        ));
-    }
-
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append(String.format("RepositoryReportContentDAOBean [readonly %s, root {%s} '%s']"
+        return String.format("RepositoryReportContentDAOBean [readonly %s, root {%s} '%s']"
                 , isReadonly()
                 , getServiceRootFolder()
                 , serviceFolders.get(REPORT_SERVICE_FOLDER_ROOT_ID)
-        ));
-        return builder.toString();
+        );
     }
-
 
     @Override
     public boolean isReadonly() {
@@ -107,53 +76,14 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     }
 
     /**
-     * Гарантировать папку для типов отчётов (второй уровень)
-     *
-     * @return NodeRef
-     */
-    NodeRef getReportTypesFolder() {
-        return getFolder(RS_FOLDER_REPORT_TYPES_ID);
-    }
-
-    /**
-     * Найти узел (3-го уровня) для указанного типа отчёта, если узла нет - вернёт NULL
-     *
-     * @param rtype тип отчёта
-     * @return узел для отчётов указанного типа или null, если не задана мнемоника для отчёта или ещё узла нет
-     */
-    private NodeRef findRTypeNode(ReportType rtype) {
-        if (rtype == null || Utils.isStringEmpty(rtype.getMnem())) {
-            return null;
-        }
-        return getFolder(getReportTypesFolder(), rtype.getMnem());
-    }
-
-    /**
-     * Создать узел (3-го уровня) для указанного типа отчёта
-     *
-     * @param rtype тип отчёта
-     * @return узел для отчётов указанного типа или null отчёта
-     */
-    private NodeRef createRTypeNode(ReportType rtype) {
-        if (rtype == null || Utils.isStringEmpty(rtype.getMnem())) {
-            return null;
-        }
-        return createFolder(getReportTypesFolder(), rtype.getMnem());
-    }
-
-    /**
      * @param reportMnem String
-     * @return Найти узел для указанного отчёта (4-го уровеня) по мнемонике и типу или вернуть NULL, если его нет
+     * @return Найти узел для указанного отчёта (2-го уровеня) по мнемонике и типу или вернуть NULL, если его нет
      */
-    private NodeRef findReportNode(ReportType rtype, String reportMnem) {
+    private NodeRef findReportNode(String reportMnem) {
         if (Utils.isStringEmpty(reportMnem)) {
             return null;
         }
-        final NodeRef nodeType = findRTypeNode(rtype);
-        if (nodeType == null) {
-            return null;
-        }
-        return getFolder(nodeType, reportMnem);
+        return getFolder(getServiceRootFolder(), reportMnem);
     }
 
     /**
@@ -164,20 +94,15 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
      * @param reportMnem String
      * @return созданный узел
      */
-    private NodeRef createReportNode(ReportType rtype, String reportMnem) {
+    private NodeRef createReportNode(String reportMnem) {
         if (Utils.isStringEmpty(reportMnem)) {
             return null;
         }
-        // Узел типов отчёта (ур 3) ...
-        NodeRef nodeType = findRTypeNode(rtype);
-        if (nodeType == null) {
-            nodeType = createRTypeNode(rtype);
-        }
 
-        // Узел самого отчёта (ур 4) ...
-        NodeRef nodeReport = getFolder(nodeType, reportMnem);
+        // Узел самого отчёта (ур 2) ...
+        NodeRef nodeReport = getFolder(getServiceRootFolder(), reportMnem);
         if (nodeReport == null) {
-            nodeReport = createFolder(nodeType, reportMnem);
+            nodeReport = createFolder(getServiceRootFolder(), reportMnem);
         }
         return nodeReport;
     }
@@ -185,13 +110,12 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     /**
      * Вернуть узел для указанного отчёта и типа. Если нет - создать.
      *
-     * @param rtype ReportType
      * @param reportMnem String
      */
-    private NodeRef ensureReportNode(ReportType rtype, String reportMnem) {
-        NodeRef nodeReport = findReportNode(rtype, reportMnem);
+    private NodeRef ensureReportNode(String reportMnem) {
+        NodeRef nodeReport = findReportNode(reportMnem);
         if (nodeReport == null) {
-            nodeReport = createReportNode(rtype, reportMnem);
+            nodeReport = createReportNode(reportMnem);
         }
         return nodeReport;
     }
@@ -200,11 +124,11 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
      * @param reportMnem String
      * @return Найти указанный отчёт по мнемонике и типу или вернуть NULL, если его нет
      */
-    private NodeRef findFileNode(ReportType rtype, String reportMnem, String fileName) {
-        if (Utils.isStringEmpty(fileName)) {
+    private NodeRef findFileNode(String reportMnem, String fileName) {
+        if (Utils.isStringEmpty(fileName) || Utils.isStringEmpty(reportMnem)) {
             return null;
         }
-        final NodeRef report = findReportNode(rtype, reportMnem);
+        final NodeRef report = findReportNode(reportMnem);
         if (report == null) {
             return null;
         }
@@ -215,7 +139,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     }
 
     private NodeRef findFileNode(IdRContent id) {
-        return (id != null) ? findFileNode(id.getReportType(), id.getReportMnemo(), id.getFileName()) : null;
+        return (id != null) ? findFileNode(id.getReportMnemo(), id.getFileName()) : null;
     }
 
     @Override
@@ -237,10 +161,9 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
 
     @Override
     public int scanContent(final ContentEnumerator enumerator) {
-        final NodeRef rootTypes = this.getFolder(RS_FOLDER_REPORT_TYPES_ID);
-
+        final NodeRef root = getServiceRootFolder();
         // узлы и названия с соот-щих уровней
-        final int levels = 3;
+        final int levels = 1;
         final NodeRef[] refs = new NodeRef[levels];
         final String[] names = new String[levels];
 
@@ -255,7 +178,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
 		 *                  здесь название файла должно быть уникально для своего отчёта
 		 */
 
-        return NodeUtils.scanHierachicalChilren(rootTypes, getNodeService(), levels, new NodeUtils.NodeEnumerator() {
+        return NodeUtils.scanHierachicalChilren(root, getNodeService(), levels, new NodeUtils.NodeEnumerator() {
             @Override
             public void lookAt(NodeRef node, List<NodeRef> parents) {
                 if (enumerator != null) {
@@ -266,16 +189,8 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
                             names[i] = Utils.coalesce(getNodeService().getProperty(refs[i], ContentModel.PROP_NAME), "");
                         }
                     }
-                    final String nameNode = Utils.coalesce(getNodeService().getProperty(node, ContentModel.PROP_NAME), "");
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format(
-                                "Scanning reports at:\n{%s} %s\n\t{%s} %s\n\t\t{%s} %s\n\t\t\t{%s} %s"
-                                , refs[0], names[0], refs[1], names[1], refs[2], names[2]
-                                , node, nameNode
-                        ));
-                    }
-
-                    final IdRContent id = new IdRContent(new ReportType(names[1]), names[2], nameNode);
+                    final String nameNode = (String) getNodeService().getProperty(node, ContentModel.PROP_NAME);
+                    final IdRContent id = new IdRContent(names[levels-1], nameNode);
                     enumerator.lookAtItem(id);
                 }
             }
@@ -326,7 +241,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
 
         ParameterCheck.mandatory("serviceRegistry", serviceRegistry);
 
-        final NodeRef nodeReport = ensureReportNode(id.getReportType(), id.getReportMnemo());
+        final NodeRef nodeReport = ensureReportNode(id.getReportMnemo());
         if (nodeReport == null) {
             throw new RuntimeException(String.format("Fail to create report node by: %s", id));
         }

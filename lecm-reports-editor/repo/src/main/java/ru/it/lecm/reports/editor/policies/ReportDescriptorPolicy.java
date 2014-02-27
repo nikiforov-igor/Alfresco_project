@@ -51,9 +51,9 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
 
     public final void init() {
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+                ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     @Override
@@ -61,41 +61,21 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         NodeRef mainReport = childAssociationRef.getParentRef();
         NodeRef subReport = childAssociationRef.getChildRef();
 
-        QName parentType = nodeService.getType(mainReport);
-        if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {// создаем дескриптор внутри другого - значит он вложенные (подотчет)
-            // помечаем данный отчет как подотчет
-            nodeService.setProperty(childAssociationRef.getChildRef(), ReportsEditorModel.PROP_REPORT_DESCRIPTOR_IS_SUBREPORT, Boolean.TRUE);
-
-            // получаем набор данных основного отчета
-            NodeRef mainDS;
-            Set<QName> source = new HashSet<QName>();
-            source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
-            List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
-            if (sourcesList.size() > 0) { // есть набор данных - получаем его
-                mainDS = sourcesList.get(0).getChildRef();
-            } else {
-                mainDS = nodeService.createNode(mainReport, ContentModel.ASSOC_CONTAINS,
-                        QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-                        ReportsEditorModel.TYPE_REPORT_DATA_SOURCE).getChildRef();
-            }
-
-            // в основной отчет добавляем в НД колонку с данными подотчета
-            addColumnToDS(mainDS, subReport);
-
-            //перечитывание дескриптора происходит при генерации DS xml файла - обновлять каждый раз вручную не имеет смысла!
-
-            /*String reportCode = (String) nodeService.getProperty(mainReport, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-            ReportDescriptor mainDescriptor = reportsManager.getRegisteredReportDescriptor(reportCode);
-            if (mainDescriptor == null) {
-                reportsManager.registerReportDescriptor(mainReport);
-                mainDescriptor = reportsManager.getRegisteredReportDescriptor(reportCode);
-            }
-
-            // добавляем новосозданную колонку к имеющимся в дескриптор
-            ColumnDescriptor addedColumnDesc = reportEditorDAOBean.createColumnDescriptor(addedColumn);
-            List<ColumnDescriptor> descColumns = mainDescriptor.getDsDescriptor().getColumns();
-            descColumns.add(addedColumnDesc);*/
+        // получаем набор данных основного отчета
+        NodeRef mainDS;
+        Set<QName> source = new HashSet<QName>();
+        source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+        List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
+        if (sourcesList.size() > 0) { // есть набор данных - получаем его
+            mainDS = sourcesList.get(0).getChildRef();
+        } else {
+            mainDS = nodeService.createNode(mainReport, ContentModel.ASSOC_CONTAINS,
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
+                    ReportsEditorModel.TYPE_REPORT_DATA_SOURCE).getChildRef();
         }
+
+        // в основной отчет добавляем в НД колонку с данными подотчета
+        addColumnToDS(mainDS, subReport);
     }
 
     private NodeRef addColumnToDS(NodeRef mainDS, NodeRef subReport) {
@@ -126,30 +106,27 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         NodeRef mainReport = nodeService.getPrimaryParent(nodeRef).getParentRef();
-        QName parentType = nodeService.getType(mainReport);
-        if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
-            Object beforeCode = before.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-            Object afterCode = after.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-            if (beforeCode != null && !afterCode.equals(beforeCode)) { // Код изменился - обработаем название колонки
-                try {
-                    // получаем набор данных основного отчета
-                    NodeRef mainDS = null;
-                    Set<QName> source = new HashSet<QName>();
-                    source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
-                    List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
-                    if (sourcesList.size() > 0) { // есть набор данных - получаем его
-                        mainDS = sourcesList.get(0).getChildRef();
-                    }
-                    if (mainDS != null) {
-                        String columnName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-                        NodeRef subColumn = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, columnName);
-                        if (subColumn != null) {
-                            nodeService.setProperty(subColumn, ReportsEditorModel.PROP_REPORT_DATA_COLUMN_CODE, afterCode.toString());
-                        }
-                    }
-                } catch (Exception ex) {
-                    logger.error(ex.getMessage(), ex);
+        Object beforeCode = before.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+        Object afterCode = after.get(ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+        if (beforeCode != null && !afterCode.equals(beforeCode)) { // Код изменился - обработаем название колонки
+            try {
+                // получаем набор данных основного отчета
+                NodeRef mainDS = null;
+                Set<QName> source = new HashSet<QName>();
+                source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+                List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
+                if (sourcesList.size() > 0) { // есть набор данных - получаем его
+                    mainDS = sourcesList.get(0).getChildRef();
                 }
+                if (mainDS != null) {
+                    String columnName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+                    NodeRef subColumn = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, columnName);
+                    if (subColumn != null) {
+                        nodeService.setProperty(subColumn, ReportsEditorModel.PROP_REPORT_DATA_COLUMN_CODE, afterCode.toString());
+                    }
+                }
+            } catch (Exception ex) {
+                logger.error(ex.getMessage(), ex);
             }
         }
     }

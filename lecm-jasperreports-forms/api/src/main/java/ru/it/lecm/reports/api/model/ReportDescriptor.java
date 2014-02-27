@@ -3,7 +3,6 @@ package ru.it.lecm.reports.api.model;
 import ru.it.lecm.reports.model.impl.ReportFlags;
 import ru.it.lecm.reports.model.impl.ReportProviderDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
-import ru.it.lecm.reports.model.impl.ReportType;
 
 import java.util.List;
 
@@ -15,17 +14,10 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
     DataSourceDescriptor getDsDescriptor();
 
     /**
-     * Тип отчёта (и провайдера). Ключ уникальности - обычная мнемоника.
-     * Список доуступных отчётов расширяем, но требует разворачивания соот-щих
-     * jar-ок дл яновых провайдеров.
-     */
-    ReportType getReportType();
-
-    /**
      * Шаблон для построения отчёта (файл) в терминах провайдера.
      * Например jrxml-файл для Jasper-отчёта.
      */
-    ReportTemplate getReportTemplate();
+    List<ReportTemplate> getReportTemplates();
 
     ReportProviderDescriptor getProviderDescriptor();
 
@@ -46,11 +38,11 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 
     public void setDSDescriptor(DataSourceDescriptor dsDescriptor);
 
-    public void setReportType(ReportType reportType);
-
-    public void setReportTemplate(ReportTemplate reportTemplate);
+    public void setReportTemplates(List<ReportTemplate> reportTemplate);
 
     public void setProviderDescriptor(ReportProviderDescriptor providerDescriptor);
 
     public void setFlags(ReportFlags flags);
+
+    public ReportTemplate getDefaultTemplate();
 }

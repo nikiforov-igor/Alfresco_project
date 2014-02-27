@@ -65,7 +65,7 @@
         <property name="targetDataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" init-method="init">
+	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl">
 		<property name="services" ref="wksKeeper"/>
         <property name="reportsManager" ref="reportsManager"/>
 	</bean>
@@ -73,15 +73,6 @@
 	<!--  RSF == Report Service Folder -->
 	<util:constant id="RSF_ROOT_ID" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_ID"/>
 	<util:constant id="RSF_ROOT_NAME" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
-
-	<util:constant id="RSF_REPORT_TYPES_ID" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_ID"/>
-	<util:constant id="RSF_REPORT_TYPES_NAME" static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.RS_FOLDER_REPORT_TYPES_NAME"/>
-
-	<util:constant id="RSF_RTYPE_JASPER_ID" static-field="ru.it.lecm.reports.model.impl.ReportType.RTYPE_MNEMO_JASPER"/>
-	<util:constant id="RSF_RTYPE_OOFFICE_ID" static-field="ru.it.lecm.reports.model.impl.ReportType.RTYPE_MNEMO_OOFFICE"/>
-	<util:constant id="RSF_RTYPE_OOCALC_ID" static-field="ru.it.lecm.reports.model.impl.ReportType.RTYPE_MNEMO_OOCALC"/>
-
-
 	<!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
 	<bean id="repositoryReportContentBean"
 			class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
@@ -93,10 +84,6 @@
 		<property name="folders">
 			<map>
 				<entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
-				<entry key="#{RSF_REPORT_TYPES_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}"/>
-				<entry key="#{RSF_RTYPE_JASPER_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}/#{RSF_RTYPE_JASPER_ID}"/>
-				<entry key="#{RSF_RTYPE_OOFFICE_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}/#{RSF_RTYPE_OOFFICE_ID}"/>
-				<entry key="#{RSF_RTYPE_OOCALC_ID}" value="#{RSF_ROOT_NAME}/#{RSF_REPORT_TYPES_NAME}/#{RSF_RTYPE_OOCALC_ID}"/>
 			</map>
 		</property>
 	</bean>
@@ -131,7 +118,7 @@
 						(@fileNameLo/@fileNameUp аналогично)
 					// @root		(!) корневой каталог использовать не разрешается
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
+		<property name="storeStructurePathFmt" value="/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- Хранилище в файловой системе "из поставки" для макетов/моделей
@@ -161,7 +148,7 @@
 					// @root		(!) корневой каталог использовать не разрешается
 			(!) Здесь зависимости от "кода отчёта" в форматной строке нет, т.к. это шаблоны
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@fileName" />
+		<property name="storeStructurePathFmt" value="/@fileName" />
 	</bean>
 
 
@@ -191,7 +178,7 @@
 						(@fileNameLo/@fileNameUp аналогично)
 					// @root		(!) корневой каталог использовать не разрешается
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
+		<property name="storeStructurePathFmt" value="/@reportMnemo/@fileName" />
 	</bean>
 
 	<!-- Хранилище в файловой системе для подотчётов.
@@ -215,7 +202,7 @@
 						subReportName
 							files
 		  -->
-		<property name="storeStructurePathFmt" value="/@reporTypeLo/@reportMnemo/@fileName" />
+		<property name="storeStructurePathFmt" value="/@reportMnemo/@fileName" />
 	</bean>
 
 	<!--

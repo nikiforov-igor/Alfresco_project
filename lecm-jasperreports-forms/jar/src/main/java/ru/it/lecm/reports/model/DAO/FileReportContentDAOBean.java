@@ -1,23 +1,20 @@
 package ru.it.lecm.reports.model.DAO;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.URLDecoder;
-
-import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
-import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class FileReportContentDAOBean implements ReportContentDAO {
 
@@ -34,10 +31,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 	 */
 
 	/* Как есть ==============================================================*/
-    /**
-     * Макрос для подстановки "Тип отчёта" как есть (без изменения регистра)
-     */
-    private static final String MACRO_RTYPE = "@reporType";
 
     /**
      * Макрос для подстановки "Мнемоники/кода отчёта" как есть
@@ -49,12 +42,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      */
     private static final String MACRO_FNAME = "@fileName";
 
-	/* Нижний регистр ========================================================*/
-    /**
-     * Макрос для подстановки "Тип отчёта" в НИЖНЕМ регистре
-     */
-    private static final String MACRO_RTYPE_LO = "@reporTypeLo";
-
     /**
      * Макрос для подстановки "Мнемоники/кода отчёта" в НИЖНЕМ регистре
      */
@@ -64,12 +51,6 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * Макрос для подстановки "Названия файла" в НИЖНЕМ регистре
      */
     private static final String MACRO_FNAME_LO = "@fileNameLo";
-
-	/* Верхний регистр =======================================================*/
-    /**
-     * Макрос для подстановки "Тип отчёта" в ВЕРХНЕМ регистре
-     */
-    private static final String MACRO_RTYPE_UP = "@reporTypeUp";
 
     /**
      * Макрос для подстановки "Мнемоники/кода отчёта" в ВЕРХНЕМ регистре
@@ -85,14 +66,13 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * формат по-умолчанию для формирования пути к файлу, относительно root-каталога
      */
     private static final String DEFAULT_STORE_STRUC_FMT
-            = MACRO_RTYPE + "/" + MACRO_RMNEM + "/" + MACRO_FNAME;
+            = "/" + MACRO_RMNEM + "/" + MACRO_FNAME;
 
 	/* Умолчания и значения ==================================================*/
     /**
      * используемое значения, когда исходное NULL
      */
     private static final String DEFAULT_NULL_FMT = MACRO_FNAME; // для формата - использовать только название файла
-    private static final String EMPTY_REPORT_TYPE_DIR = ReportsManager.DEFAULT_REPORT_TYPE; // для пустого типа отчёта
     private static final String EMPTY_REPORT_MNEM_DIR = "default"; // для пустой мнемоники (кода) отчёта
 
     private static final transient Logger logger = LoggerFactory.getLogger(FileReportContentDAOBean.class);
@@ -216,11 +196,10 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * @return File
      */
     public File makeAbsFilePath(IdRContent id) {
-        return (id != null) ? makeAbsFilePath(id.getReportType(), id.getReportMnemo(), id.getFileName()) : null;
+        return (id != null) ? makeAbsFilePath(id.getReportMnemo(), id.getFileName()) : null;
     }
 
-    public File makeAbsFilePath(final ReportType rtype, final String mnem, final String fileName) {
-        final String stype = Utils.nonblank((rtype == null) ? ReportsManager.DEFAULT_REPORT_TYPE : rtype.getMnem(), EMPTY_REPORT_TYPE_DIR);
+    public File makeAbsFilePath(final String mnem, final String fileName) {
         final String smnem = Utils.nonblank(mnem, EMPTY_REPORT_MNEM_DIR);
         final String sname = Utils.nonblank(fileName, "");
 
@@ -231,17 +210,14 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 		 */
         final String relPath = storeStructurePathFmt
                 // для нижнего регистра ...
-                .replaceAll(MACRO_RTYPE_LO, stype.toLowerCase())
                 .replaceAll(MACRO_RMNEM_LO, smnem.toLowerCase())
                 .replaceAll(MACRO_FNAME_LO, sname.toLowerCase())
 
-                        // для верхнего регистра ...
-                .replaceAll(MACRO_RTYPE_UP, stype.toUpperCase())
+                // для верхнего регистра ...
                 .replaceAll(MACRO_RMNEM_UP, smnem.toUpperCase())
                 .replaceAll(MACRO_FNAME_UP, sname.toUpperCase())
 
-                        // для обычных значений ...
-                .replaceAll(MACRO_RTYPE, stype)
+                 // для обычных значений ...
                 .replaceAll(MACRO_RMNEM, smnem)
                 .replaceAll(MACRO_FNAME, sname);
 
@@ -291,7 +267,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 
         if ("*".equals(id.getFileName())) {
             // удаление полного каталога отчёта ...
-            final File fDirReport = makeAbsFilePath(id.getReportType(), id.getReportMnemo(), "");
+            final File fDirReport = makeAbsFilePath(id.getReportMnemo(), "");
             try {
                 FileUtils.deleteDirectory(fDirReport);
                 logger.info(String.format("Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));
@@ -356,50 +332,36 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 		 */
         int result = 0;
         final File rootDir = makeAbsRootFilePath();
-        final File[] ftypes = rootDir.listFiles();
-        if (ftypes != null) {
-			/* просмотр "Типов отчётов" ... */
-            for (final File flType : ftypes) {
-                if (!flType.isDirectory() || flType.getAbsolutePath().startsWith(".")) {
+        final File[] reportsFolders = rootDir.listFiles();
+        if (reportsFolders != null) {
+            /* просмотр "Отчетов" ... */
+            for (final File report : reportsFolders) {
+                if (!report.isDirectory() || report.getAbsolutePath().startsWith(".")) {
                     // пропуск не каталогов и "."/".."
                     continue;
                 }
 
-                final ReportType rtype = new ReportType(flType.getName());
-                final File[] freports = flType.listFiles();
-                if (freports == null) {
+                final File[] reportFiles = report.listFiles();
+                if (reportFiles == null) {
                     continue;
                 }
 
-				/* просмотр Отчётов ... */
-                for (final File flReport : freports) {
-                    if (!flReport.isDirectory() || flReport.getAbsolutePath().startsWith(".")) {
+                final String rmnem = report.getName();
+
+                /* просмотр "файлов отчета" ... */
+                for (final File rFile : reportFiles) {
+                    if (rFile.isDirectory() || rFile.getAbsolutePath().startsWith(".")) {
                         // пропуск не каталогов и "."/".."
                         continue;
                     }
+                    result++;
 
-                    final String rmnem = flReport.getName();
-                    final File[] frepoFiles = flReport.listFiles();
-                    if (frepoFiles == null) {
-                        continue;
+					/* Обратный вызов для каждого файла ... */
+                    if (enumerator != null) {
+                        final String rFileName = rFile.getName();
+                        final IdRContent id = IdRContent.createId(rmnem, rFileName);
+                        enumerator.lookAtItem(id);
                     }
-
-					/* просмотр Файлов ... */
-                    for (final File file : frepoFiles) {
-                        if (file.isDirectory()) {
-                            // пропуск каталогов
-                            continue;
-                        }
-
-                        result++;
-
-						/* Обратный вызов для каждого файла ... */
-                        if (enumerator != null) {
-                            final String rFileName = file.getName();
-                            final IdRContent id = IdRContent.createId(rtype, rmnem, rFileName);
-                            enumerator.lookAtItem(id);
-                        }
-                    } // for k
                 } // for j
             } // for i
         }

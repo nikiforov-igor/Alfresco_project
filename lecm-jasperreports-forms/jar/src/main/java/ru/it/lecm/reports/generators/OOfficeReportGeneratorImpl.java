@@ -24,6 +24,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -265,7 +266,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	}
 
 	@Override
-	public ReportFileData produceReport(ReportDescriptor reportDesc, Map<String, Object> parameters, ReportContentDAO rptContent)
+	public ReportFileData produceReport(ReportDescriptor reportDesc, ReportTemplate templateDescriptor, Map<String, Object> parameters, ReportContentDAO rptContent)
 			throws IOException {
         ReportFileData buildResult = new ReportFileData();
 		PropertyCheck.mandatory(this, "services", getServices());
@@ -281,8 +282,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		/* Получение данных шаблона отчёта */
 		final ContentReader reader;
 
-		final String reportTemplateFileName = // имя файла openOffice с шаблоном документа
-				String.format("%s%s", reportDesc.getMnem(), OO_FILEEXT);
+		final String reportTemplateFileName = templateDescriptor.getFileName();
 
 		reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportTemplateFileName));
 		if (reader == null) {

@@ -62,12 +62,13 @@ public class DSXMLProducer {
 
     /* параметры запроса в xml-секции "report" */
     public static final String XMLNODE_REPORTDESC = "report.descriptor";
-    public static final String XMLNODE_REPORT_TYPE = "type"; // например, "JASPER"
     public static final String XMLNODE_REPORT_PROVIDER = "provider";
+    public static final String XMLNODE_REPORT_TEMPLATES = "templates";
     public static final String XMLNODE_REPORT_TEMPLATE = "template";
     public static final String XMLNODE_REPORT_DS = "datasource.descriptor";
 
     public static final String XMLATTR_FILENAME = "filename";
+    public static final String XMLATTR_TEMPLATE_TYPE = "type";
 
     /* параметры cmis-соединения в xml-секции "cmis" */
     public static final String XMLNODE_CMIS = "cmis.connection";
@@ -247,12 +248,6 @@ public class DSXMLProducer {
 
         final Element result = XmlHelper.xmlCreateStdMnemoItem(doc, srcRDesc, xmlNodeRDName);
 
-        // тип отчёта
-        final Element nodeRType = xmlCreateReportTypeNode(doc, XMLNODE_REPORT_TYPE, srcRDesc.getReportType());
-        if (nodeRType != null) {
-            result.appendChild(nodeRType);
-        }
-
         // провайдер
         final Element nodeProvider = xmlCreateReportProviderNode(doc, XMLNODE_REPORT_PROVIDER, srcRDesc.getProviderDescriptor());
         if (nodeProvider != null) {
@@ -260,9 +255,16 @@ public class DSXMLProducer {
         }
 
         // нативный шаблон отчёта
-        final Element nodeTemplate = xmlCreateReportTemplateNode(doc, XMLNODE_REPORT_TEMPLATE, srcRDesc.getReportTemplate());
-        if (nodeTemplate != null) {
-            result.appendChild(nodeTemplate);
+        final Element nodeTemplates = doc.createElement(XMLNODE_REPORT_TEMPLATES);
+        if (nodeTemplates != null) {
+            result.appendChild(nodeTemplates);
+
+            final List<Element> templatesList = xmlCreateReportTemplateNodes(doc, XMLNODE_REPORT_TEMPLATE, srcRDesc.getReportTemplates());
+            if (templatesList != null) {
+                for (Element element : templatesList) {
+                    result.appendChild(element);
+                }
+            }
         }
 
         // набор данных ...
@@ -286,38 +288,17 @@ public class DSXMLProducer {
 
         XmlHelper.parseStdMnemoItem(dest, srcNode);
 
-        // тип отчёта
-        final Element nodeRType = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_TYPE);
-        dest.setReportType(parseReportType(nodeRType));
-
         // провайдер
         final Element nodeProvider = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_PROVIDER);
         dest.setProviderDescriptor(parseProviderDescriptor(nodeProvider));
 
         // нативный шаблон отчёта
-        final Element nodeTemplate = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_TEMPLATE);
-        dest.setReportTemplate(parseReportTemplate(nodeTemplate));
+        final Element nodeTemplate = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_TEMPLATES);
+        dest.setReportTemplates(parseReportTemplate(nodeTemplate));
 
         // набор данных ...
         final Element nodeDS = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_DS);
         dest.setDSDescriptor(parseDSDescriptor(nodeDS));
-    }
-
-    private static Element xmlCreateReportTypeNode(Document doc, String xmlNodeNameRType, ReportType rtypeDesc) {
-        if (rtypeDesc == null) {
-            return null;
-        }
-        return XmlHelper.xmlCreateStdMnemoItem(doc, rtypeDesc, xmlNodeNameRType);
-    }
-
-    private static ReportType parseReportType(Element srcNodeRType) {
-        if (srcNodeRType == null) {
-            return null;
-        }
-
-        final ReportType result = new ReportType();
-        XmlHelper.parseStdMnemoItem(result, srcNodeRType);
-        return result;
     }
 
     private static Element xmlCreateReportProviderNode(Document doc, String xmlNodeNameRP, ReportProviderDescriptor rpDesc) {
@@ -346,32 +327,47 @@ public class DSXMLProducer {
         return result;
     }
 
-    private static Element xmlCreateReportTemplateNode(Document doc, String xmlNodeNameRT, ReportTemplate rtDesc) {
-        if (rtDesc == null) {
+    private static List<Element> xmlCreateReportTemplateNodes(Document doc, String xmlNodeNameRT, List<ReportTemplate> templates) {
+        if (templates == null || templates.isEmpty()) {
             return null;
         }
-
-        final Element result = XmlHelper.xmlCreateStdMnemoItem(doc, rtDesc, xmlNodeNameRT);
-        if (rtDesc.getFileName() != null) {
-            result.setAttribute(XMLATTR_FILENAME, rtDesc.getFileName());
+        List<Element> results = new ArrayList<Element>();
+        for (ReportTemplate template : templates) {
+            final Element result = XmlHelper.xmlCreateStdMnemoItem(doc, template, xmlNodeNameRT);
+            if (template.getFileName() != null) {
+                result.setAttribute(XMLATTR_FILENAME, template.getFileName());
+            }
+            if (template.getReportType() != null) {
+                result.setAttribute(XMLATTR_TEMPLATE_TYPE, template.getReportType().getMnem());
+            }
         }
 
-        return result;
+        return results;
     }
 
-    private static ReportTemplate parseReportTemplate(Element srcNodeTemplate) {
+    private static List<ReportTemplate> parseReportTemplate(Element srcNodeTemplate) {
         if (srcNodeTemplate == null) {
             return null;
         }
 
-        final ReportTemplate result = new ReportTemplate();
-        XmlHelper.parseStdMnemoItem(result, srcNodeTemplate);
+        List<ReportTemplate> resultTemplates = new ArrayList<ReportTemplate>();
 
-        if (srcNodeTemplate.hasAttribute(XMLATTR_FILENAME)) {
-            result.setFileName(srcNodeTemplate.getAttribute(XMLATTR_FILENAME));
+        final List<Node> templatesList = XmlHelper.findNodesList(srcNodeTemplate, XMLNODE_REPORT_TEMPLATE, null, null);
+
+        for (Node node : templatesList) {
+            ReportTemplate result = new ReportTemplate();
+            XmlHelper.parseStdMnemoItem(result, (Element)node);
+
+            if (((Element)node).hasAttribute(XMLATTR_FILENAME)) {
+                result.setFileName(((Element)node).getAttribute(XMLATTR_FILENAME));
+            }
+            if (((Element)node).hasAttribute(XMLATTR_TEMPLATE_TYPE)) {
+                result.setReportType(new ReportType(((Element)node).getAttribute(XMLATTR_TEMPLATE_TYPE)));
+            }
+            resultTemplates.add(result);
         }
 
-        return result;
+        return resultTemplates;
     }
 
     private static Element xmlCreateReportDSNode(Document doc, String xmlNodeNameDS, DataSourceDescriptor dsDesc) {
