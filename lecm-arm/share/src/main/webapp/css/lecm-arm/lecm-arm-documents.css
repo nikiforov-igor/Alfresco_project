@@ -118,3 +118,7 @@ div.arm-tree-menu .arm-accordion div.accordion-content.shown {
 .yui-skin-lecmTheme .datagrid .grid.yui-dt table .expand-row .arm-connections-table {
 	margin-left: 50px;
 }
+
+.arm-reports-list {
+	margin: 15px;
+}

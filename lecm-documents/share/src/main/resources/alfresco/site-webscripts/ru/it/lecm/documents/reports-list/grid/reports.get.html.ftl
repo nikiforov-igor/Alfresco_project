@@ -8,7 +8,7 @@
         <#list reportsDescriptors as report>
             <div>
                 <h3>
-                    <a href="#" id="reports-list-report-link" class="theme-color-1" style="font-weight: bold;"
+                    <a href="#" class="theme-color-1" style="font-weight: bold;"
                        onClick='LogicECM.module.Documents.Reports.reportLinkClicked(this, {"reportCode": "${report.code}"});'><#if report.name != "">${report.name}<#else>(no name)</#if></a>
                 </h3>
                 <#if report.description?? && report.description != "">
