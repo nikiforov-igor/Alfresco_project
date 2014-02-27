@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
 	<process id="lecmRoute" name="Запуск по маршруту">
-		<startEvent id="start-route" name="Start Route"/>
+		<startEvent id="start-route" name="Start Route" activiti:formKey="lecmRoute:routing"/>
 		<serviceTask id="empty-task" name="Empty task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
 			<extensionElements>
 				<activiti:field name="script">
@@ -15,7 +15,10 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-    				//тут будет скрипт подготовки входных параметров того, чего мы запускаем: согласование или подписание
+						//тут будет скрипт подготовки входных параметров того, чего мы запускаем: согласование или подписание
+						logger.log("Hello from lecmRoute workflow!");
+						logger.log("Let me see all my variables");
+						routeWorkflow.exploreExecutionVariables(execution);
 					]]></activiti:string>
 				</activiti:field>
 			</extensionElements>

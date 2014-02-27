@@ -6,6 +6,14 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
+	<util:list id="routing.models">
+		<value>alfresco/module/${artifactId}/models/lecm-workflow-route-model.xml</value>
+	</util:list>
+
+	<bean id="routing.model.bootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="statemachine.aspects.LogicEcmModelsBootstrap"
+		  p:models-ref="routing.models"/>
+
 	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
 	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
 	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
@@ -19,6 +27,7 @@
 		</props>
 	</util:list>
 	<bean id="route.workflow.bootstrap" parent="workflowDeployer"
+		  depends-on="routing.model.bootstrap"
 		  p:workflowDefinitions-ref="route.workflows"/>
 
 </beans>
