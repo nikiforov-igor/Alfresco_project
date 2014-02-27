@@ -285,6 +285,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _treeNodeSelected: function (node) {
+	        if (this.selectedNode != null) {
+	            this.selectedNode.tree.onEventToggleHighlight(this.selectedNode);
+	        }
+
             this.selectedNode = node;
             this.tree.onEventToggleHighlight(node);
 
