@@ -114,3 +114,7 @@ div.arm-tree-menu .arm-accordion div.accordion-content.shown {
 #filtersBlock .filters-table td div label {
 	vertical-align: middle;
 }
+
+.yui-skin-lecmTheme .datagrid .grid.yui-dt table .expand-row .arm-connections-table {
+	margin-left: 50px;
+}

@@ -205,7 +205,27 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         onExpand: function(record) {
-	        this.addExpandedRow(record, "Здесь будут связи");
+	        var nodeRef = record.getData("nodeRef");
+	        if (nodeRef != null) {
+		        var me = this;
+		        Alfresco.util.Ajax.request(
+			        {
+				        url: Alfresco.constants.PROXY_URI + "lecm/document/connections/api/armPresentation",
+				        dataObj: {
+					        nodeRef: nodeRef
+				        },
+				        successCallback: {
+					        fn: function(response) {
+						        if (response.serverResponse != null) {
+							        me.addExpandedRow(record, response.serverResponse.responseText);
+						        }
+					        }
+				        },
+				        failureMessage: "message.failure",
+				        execScripts: true,
+				        scope: this
+			        });
+	        }
 	    },
 
         getSearchQuery: function (node, buffer, parentId) {
