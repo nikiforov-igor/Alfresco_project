@@ -34,7 +34,7 @@
 <#assign concurrencyInputId = namespaceId + '-concurrency-input'>
 <#assign concurrencyInputName = field.control.params.concurrencyInputName>
 <#assign concurrencyInputInitialValue = (concurrencyShareConfig == 'user') ? string('SEQUENTIAL', concurrencyShareConfig)>
-<#assign concurrencyIsNotPredefined = concurrencyInputInitialValue == 'user'>
+<#assign concurrencyIsNotPredefined = concurrencyShareConfig == 'user'>
 
 <#assign listNodeRefInput = namespaceId + '-workflow-type-input'>
 
