@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 25.06.13
  * Time: 10:15
  */
-public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy{
+public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnDeleteNodePolicy{
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
@@ -57,6 +57,8 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         // создаем ассоциацию на шаблон для отчета
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onDeleteNode"));
     }
 
     @Override
@@ -85,6 +87,20 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
 
         if (templateFile != null) {
             nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(templateFile));
+        }
+    }
+
+    @Override
+    public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+        NodeRef template = childAssocRef.getChildRef();
+        List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+        NodeRef templateFile;
+        if (targetAssocs != null && !targetAssocs.isEmpty()) {
+            templateFile = targetAssocs.get(0).getTargetRef();
+            if (nodeService.exists(templateFile)) {
+                nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
+                nodeService.deleteNode(templateFile);
+            }
         }
     }
 }

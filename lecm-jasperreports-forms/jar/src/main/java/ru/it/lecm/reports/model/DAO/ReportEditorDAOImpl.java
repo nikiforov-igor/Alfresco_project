@@ -145,7 +145,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
     protected void setL18Name(L18able result, NodeRef node, QName propName) {
         NodeService nodeService = getNodeService();
-        result.regItem((String) nodeService.getProperty(node, ContentModel.PROP_LOCALE), getString(node, propName, null));
+        result.regItem(nodeService.getProperty(node, ContentModel.PROP_LOCALE).toString(), getString(node, propName, null));
     }
 
     protected void setProps_RD(ReportDescriptor result, NodeRef node) {
@@ -271,7 +271,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         NodeService nodeService = getNodeService();
         ReportType result = new ReportType();
 
-        result.setMnem((String) nodeService.getProperty(reportTypeNode, PROP_RTEMPLATE_CODE));
+        result.setMnem((String) nodeService.getProperty(reportTypeNode, PROP_RTYPE_CODE));
         setL18Name(result, reportTypeNode);
 
         return result;

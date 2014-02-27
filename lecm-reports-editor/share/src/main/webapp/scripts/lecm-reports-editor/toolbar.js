@@ -80,7 +80,7 @@
                                         nodeRef: response.json.persistedObject,
                                         bubblingLabel: this.options.bubblingLabel
                                     });
-                                if ("lecm-rpeditor:reportDescriptor" == meta.itemType){
+                                if ("lecm-rpeditor:reportDescriptor" == meta.itemType || "lecm-rpeditor:subReportDescriptor" == meta.itemType){
                                     YAHOO.Bubbling.fire("newReportCreated",
                                         {
                                             reportId: response.json.persistedObject

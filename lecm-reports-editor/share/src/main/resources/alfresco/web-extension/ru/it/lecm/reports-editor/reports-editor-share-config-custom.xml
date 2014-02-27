@@ -1,4 +1,20 @@
 <alfresco-config>
+    <config>
+        <forms>
+            <dependencies>
+                <js src="/scripts/lecm-reports-editor/select-report-template-ctrl.js"/>
+            </dependencies>
+            <default-controls>
+                <type name="TEMPLATES" template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl">
+                    <control-param name="ctrlValue">templateCode</control-param>
+                    <control-param name="notSelectedOptionLabel">""</control-param>
+                    <control-param name="notSelectedOption">true</control-param>
+                    <control-param name="fromParent">false</control-param>
+                </type>
+            </default-controls>
+        </forms>
+    </config>
+
     <config evaluator="node-type" condition="lecm-rpeditor:reportDescriptor">
         <forms>
             <form>
@@ -171,12 +187,10 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:parentReportTemplateAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Шаблоны</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <!--<control-param name="itemType">lecm-rpeditor:reportTemplate</control-param>-->
+                        <control template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl">
+                            <control-param name="ctrlValue">nodeRef</control-param>
+                            <control-param name="notSelectedOption">false</control-param>
+                            <control-param name="fromParent">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
@@ -337,7 +351,7 @@
                     </field>
                     <field id="lecm-rpeditor:reportTemplateType">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_отчета</control-param>
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Отчёты</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="notSelectedOptionShow">false</control-param>
                             <control-param name="notSelectedOptionLabel"> </control-param>

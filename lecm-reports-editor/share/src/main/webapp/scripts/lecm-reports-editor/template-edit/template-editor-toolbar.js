@@ -13,14 +13,11 @@
             ["button", "container", "connection"]);
 
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
-        YAHOO.Bubbling.on("refreshTemplate", this._onRefreshTemplate, this);
         return this;
     };
 
     YAHOO.extend(LogicECM.module.ReportsEditor.TemplateEditToolbar, Alfresco.component.Base, {
         reportId: null,
-
-        templateId: null,
 
         templatesGrid: null,
 
@@ -30,12 +27,6 @@
 
         setReportId: function (reportId) {
             this.reportId = reportId;
-        },
-
-        setTemplateId: function (templateId) {
-            if (templateId && templateId.length > 0) {
-                this.templateId = templateId;
-            }
         },
 
         onInitDataGrid: function (layer, args) {
@@ -98,10 +89,6 @@
                                     text: this.msg("message.save.success")
                                 });
 
-                            YAHOO.Bubbling.fire("refreshTemplate",
-                                {
-                                    newTemplateId: response.json.persistedObject
-                                });
                             YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                 {
                                     nodeRef: response.json.persistedObject,
@@ -139,7 +126,7 @@
 
             this.toolbarButtons.newFromDicButton = Alfresco.util.createYUIButton(this, 'newFromDicButton', this._onCopyFromDic,
                 {
-                    disabled: !this.templateId
+                    disabled: false
                 });
         },
 
@@ -160,13 +147,6 @@
 
         _onNewTemplateFromSource: function () {
             this.showCreateDialog({itemType: "lecm-rpeditor:reportTemplate", nodeRef: this.reportId, formId: "createFromDataSource"});
-        },
-
-        _onRefreshTemplate: function (layer, args) {
-            var obj = args[1];
-            if ((obj !== null) && (obj.newTemplateId !== null)) {
-                this.templateId = obj.newTemplateId;
-            }
         }
     });
 })();

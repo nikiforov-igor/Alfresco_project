@@ -2,6 +2,7 @@ package ru.it.lecm.reports.api.model.DAO;
 
 import org.alfresco.service.cmr.repository.ContentReader;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 
 import java.io.InputStream;
@@ -90,18 +91,21 @@ public interface ReportContentDAO {
 
         private String reportMnemo;
         private String fileName;
-
+        private ReportType reportType;
         /**
          * Создание id по трём его составляющим
          *
          * @param fileName имя файла, если пустое или null, то вместо него используется маска "*"
          */
         public static IdRContent createId(String reportMnemo, String fileName) {
-            if (fileName == null || fileName.trim().length() == 0)
-                fileName = FILENAME_WILDCARD_ANYFILE;
-            return new IdRContent(reportMnemo, fileName.trim());
+            return createId(reportMnemo, fileName, null);
         }
 
+        public static IdRContent createId(String reportMnemo, String fileName, String templateType) {
+            if (fileName == null || fileName.trim().length() == 0)
+                fileName = FILENAME_WILDCARD_ANYFILE;
+            return new IdRContent(reportMnemo, fileName.trim(), templateType);
+        }
         /**
          * Создать id указанного файла отчёта
          *
@@ -124,6 +128,15 @@ public interface ReportContentDAO {
             super();
             this.reportMnemo = reportMnemo;
             this.fileName = fileName;
+        }
+
+        public IdRContent(String reportMnemo, String fileName, String templateType) {
+            super();
+            this.reportMnemo = reportMnemo;
+            this.fileName = fileName;
+            if (templateType != null) {
+                this.reportType = new ReportType(templateType);
+            }
         }
 
         @Override
@@ -178,6 +191,14 @@ public interface ReportContentDAO {
 
         public void setFileName(String fileName) {
             this.fileName = fileName;
+        }
+
+        public ReportType getReportType() {
+            return reportType;
+        }
+
+        public void setReportType(ReportType reportType) {
+            this.reportType = reportType;
         }
     }
 

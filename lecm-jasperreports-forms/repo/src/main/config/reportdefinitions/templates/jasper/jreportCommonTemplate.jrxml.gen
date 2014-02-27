@@ -22,7 +22,7 @@
 		<defaultValueExpression><![CDATA["ds-@RDesc.mnem@@.xml"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["reportdefinitions/deploy/@RDesc.mnem@@"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/@RDesc.mnem@@"]]></defaultValueExpression>
 	</parameter>
 
 	<prototype-params>

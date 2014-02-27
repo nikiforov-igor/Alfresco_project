@@ -102,9 +102,9 @@ public class GetEditorMenuScript extends AbstractWebScript {
 
                 nodes.add(getJSONNode("source", currentRef, "-", "Настройки набора данных", null, "lecm/reports-editor/source-edit?reportId={reportId}", null, true));
 
-                String type = ReportsEditorModel.TYPE_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
+                String type = ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR.toPrefixString(namespaceService);
                 Set<QName> reportType = new HashSet<QName>();
-                reportType.add(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
+                reportType.add(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR);
                 List<ChildAssociationRef> childReports = nodeService.getChildAssocs(currentRef, reportType);
                 nodes.add(getJSONNode("subs", currentRef, type, "Вложенные отчеты", null, "lecm/reports-editor/subreports?reportId={reportId}", null, childReports.size() == 0));
 

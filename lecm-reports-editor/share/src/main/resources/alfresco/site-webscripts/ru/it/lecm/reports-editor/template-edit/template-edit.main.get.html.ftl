@@ -36,7 +36,6 @@
         function initToolbar() {
             var reportsEditor = new LogicECM.module.ReportsEditor.TemplateEditToolbar("${toolbarId}");
             reportsEditor.setReportId("${args.reportId}");
-            reportsEditor.setTemplateId("${activeTemplateId!""}");
             reportsEditor.setMessages(${messages});
         }
         YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
@@ -54,7 +53,7 @@
                     var datagrid = new LogicECM.module.ReportsEditor.TemplateEditGrid('${gridId}').setOptions(
                             {
                                 usePagination: true,
-                                useDynamicPagination: false,
+                                useDynamicPagination: true,
                                 showExtendSearchBlock: false,
                                 forceSubscribing: true,
                                 actions: [

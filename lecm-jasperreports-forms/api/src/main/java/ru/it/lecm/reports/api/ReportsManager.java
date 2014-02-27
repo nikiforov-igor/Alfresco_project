@@ -698,7 +698,7 @@ public class ReportsManager {
                 ? (!reportDesc.isSubReport() ? defaults.getGenerationTemplate() : defaults.getSubReportGenerationTemplate()) // название шаблона из установок по-умолчанию для данного типа отчёта
                 : (!reportDesc.isSubReport() ? DEFAULT_REPORT_TEMPLATE : DEFAULT_SUB_REPORT_TEMPLATE);
 
-        final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(reportDesc, templateFileName);
+        final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(reportDesc.getMnem(), templateFileName, template.getReportType().getMnem().toLowerCase());
 
 
         // загрузка макета шаблона ...

@@ -17,22 +17,23 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-function initToolbar() {
-    new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
-        bubblingLabel: "subReports",
-        newRowDialogTitle: "label.create-subreport.title"
-    });
-}
-YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
-
+(function() {
+    function initToolbar() {
+        new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
+            bubblingLabel: "subReports",
+            newRowDialogTitle: "label.create-subreport.title"
+        });
+    }
+    YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
+})();
 //]]></script>
 
 
-<#assign gridId = "re-subreports-grid" + id />
+<#assign gridId = "re-subreports-grid-" + id />
 <div class="yui-t1" id="${gridId}">
     <div id="yui-main-2">
-        <div class="yui-b" id="alf-content-${id}" style="margin-left: 0;">
-        <@grid.datagrid id=gridId showViewForm=false>
+        <div class="yui-b" id="alf-content-${gridId}" style="margin-left: 0;">
+        <@grid.datagrid id="${gridId}" showViewForm=false>
             <script type="text/javascript">//<![CDATA[
             var $html = Alfresco.util.encodeHTML,
                     $links = Alfresco.util.activateLinks,
@@ -179,12 +180,13 @@ YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
                 }
             }, true);
 
-            function createDatagrid() {
+            function createSubDatagrid() {
                 var datagrid = new LogicECM.module.ReportsEditor.Grid('${gridId}').setOptions(
                         {
                             usePagination: true,
-                            useDynamicPagination: true,
+                            useDynamicPagination: false,
                             showExtendSearchBlock: false,
+                            forceSubscribing: true,
                             actions: [
                                 {
                                     type: "datagrid-action-link-subReports",
@@ -209,7 +211,7 @@ YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
                 datagrid.draw();
             }
 
-            YAHOO.util.Event.onContentReady("${gridId}", createDatagrid);
+            YAHOO.util.Event.onContentReady("${gridId}", createSubDatagrid);
             //]]></script>
         </@grid.datagrid>
         </div>

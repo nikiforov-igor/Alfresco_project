@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.URLDecoder;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
+import ru.it.lecm.reports.model.impl.ReportType;
 import ru.it.lecm.reports.utils.Utils;
 
 import java.io.File;
@@ -51,6 +52,8 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * Макрос для подстановки "Названия файла" в НИЖНЕМ регистре
      */
     private static final String MACRO_FNAME_LO = "@fileNameLo";
+
+    private static final String MACRO_RTYPE_LO = "@reportTypeLo";
 
     /**
      * Макрос для подстановки "Мнемоники/кода отчёта" в ВЕРХНЕМ регистре
@@ -196,10 +199,10 @@ public class FileReportContentDAOBean implements ReportContentDAO {
      * @return File
      */
     public File makeAbsFilePath(IdRContent id) {
-        return (id != null) ? makeAbsFilePath(id.getReportMnemo(), id.getFileName()) : null;
+        return (id != null) ? makeAbsFilePath(id.getReportMnemo(), id.getFileName(),id.getReportType()) : null;
     }
 
-    public File makeAbsFilePath(final String mnem, final String fileName) {
+    public File makeAbsFilePath(final String mnem, final String fileName, ReportType reportType) {
         final String smnem = Utils.nonblank(mnem, EMPTY_REPORT_MNEM_DIR);
         final String sname = Utils.nonblank(fileName, "");
 
@@ -219,8 +222,8 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 
                  // для обычных значений ...
                 .replaceAll(MACRO_RMNEM, smnem)
-                .replaceAll(MACRO_FNAME, sname);
-
+                .replaceAll(MACRO_FNAME, sname)
+                .replaceAll(MACRO_RTYPE_LO, reportType != null ? reportType.getMnem().toLowerCase() : "");
         // все пути относительно class-path: getSysRootDir() и далее rootDir ...
         return new File(makeAbsRootFilePath().getAbsolutePath() + "/" + relPath);
     }
@@ -267,7 +270,7 @@ public class FileReportContentDAOBean implements ReportContentDAO {
 
         if ("*".equals(id.getFileName())) {
             // удаление полного каталога отчёта ...
-            final File fDirReport = makeAbsFilePath(id.getReportMnemo(), "");
+            final File fDirReport = makeAbsFilePath(id.getReportMnemo(), "", id.getReportType());
             try {
                 FileUtils.deleteDirectory(fDirReport);
                 logger.info(String.format("Delete directory by id=[%s]:\n\t directory deleted: '%s'", id, fDirReport.getAbsolutePath()));

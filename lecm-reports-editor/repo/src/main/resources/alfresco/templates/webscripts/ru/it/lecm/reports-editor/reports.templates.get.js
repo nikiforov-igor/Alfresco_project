@@ -1,1 +1,0 @@
-model.templates = reportsEditor.getTemplates();

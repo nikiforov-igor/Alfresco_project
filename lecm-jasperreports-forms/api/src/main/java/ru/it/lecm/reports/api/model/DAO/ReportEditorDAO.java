@@ -59,6 +59,8 @@ public interface ReportEditorDAO {
 
     final static public QName PROP_T_REPORT_FLAGS = QName.createQName(REPORTS_EDITOR_URI, "reportExtFlags");
 
+    final static public QName PROP_RTYPE_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportTypeCode");
+
     /**
      * Получить "Описатеть отчёта" по id узла типа "lecm-rpeditor:reportDescriptor"
      *
