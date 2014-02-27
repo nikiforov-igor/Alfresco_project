@@ -74,6 +74,7 @@
 							<control-param name="showSearch">false</control-param>
 							<control-param name="showSelectedItemsPath">false</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
 						</control>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-approval">
@@ -102,8 +103,8 @@
 			<form id="createNewPrivateRouteForm">
 				<field-visibility>
 					<show id="cm:name"/>
-					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
-					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
+					<show id="lecm-workflow:fake-workflow-list-approval" force="true" for-mode="edit"/>
+					<show id="lecm-workflow:fake-workflow-list-signing" force="true" for-mode="edit"/>
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>

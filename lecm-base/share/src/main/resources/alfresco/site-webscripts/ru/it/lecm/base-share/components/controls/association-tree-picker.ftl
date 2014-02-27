@@ -161,6 +161,6 @@
 		    </#list>
 	    },
 	    </#if>
-        itemType: "${field.endpointType ! field.control.params.endpointType}"
+        itemType: "${field.control.params.endpointType ! field.endpointType}"
     }).setMessages( ${messages} );
 </script>

@@ -31,6 +31,10 @@ YAHOO.util.Event.onContentReady("${id}", function () {
 			nodeRef: LogicECM.module.Routes.Const.ROUTES_CONTAINER.nodeRef,
 			searchConfig: {
 				filter: ""
+			},
+			actionsConfig: {
+				fullDelete: true,
+				trash: false
 			}
 		},
 		bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL
