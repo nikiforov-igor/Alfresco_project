@@ -318,13 +318,6 @@
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.base-utils</groupId>
-            <artifactId>base-utils-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
         </dependency>-->
 	</dependencies>
 

@@ -83,7 +83,6 @@
 
 	<modules>
 		<module>lecm-base</module>
-		<!--<module>lecm-base-utils</module>-->
 		<module>lecm-security</module>
 		<module>lecm-orgstructure</module>
 		<module>lecm-jasperreports-forms</module>
@@ -119,6 +118,7 @@
 		<module>lecm-workflow</module>
 		<module>lecm-internal</module>
 		<module>lecm-group-actions</module>
+		<!--<module>lecm-licensing</module>-->
 	</modules>
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
