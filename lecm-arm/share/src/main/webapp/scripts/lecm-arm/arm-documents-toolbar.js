@@ -16,6 +16,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.avaiableFilters = [];
 
 	    YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
+	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
 
@@ -100,6 +101,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                 this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
+                this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
 
             },
 
@@ -110,6 +112,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     menu.clearContent();
                     menu.render();
                 }
+            },
+            onCheckDocument: function onCheckDocumentFunction() {
+                var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+                var items = this.modules.dataGrid.getSelectedItems();
+                if (items.length == 0) {
+                    button.set("disabled", true);
+                } else {
+                    button.set("disabled", false);
+                }
+
             },
 
             onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
@@ -151,15 +163,18 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     }
                                 });
                             }
+                            if (actionItems.length == 0) {
+                                actionItems.push({
+                                    text: "Нет доступных операций",
+                                    disabled: true
+                                });
+                            }
                             if (YAHOO.util.Dom.inDocument(menu.element)) {
                                 menu.clearContent();
                                 menu.addItems(actionItems);
                                 menu.render();
                             } else {
                                 menu.itemData = actionItems;
-                            }
-                            if (actionItems.length == 0) {
-                                menu.hide();
                             }
                             YAHOO.lang.later(500, splashScreen, splashScreen.destroy);
                         }
