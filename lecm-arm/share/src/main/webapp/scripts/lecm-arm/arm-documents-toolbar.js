@@ -12,7 +12,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     LogicECM.module.ARM.DocumentsToolbar = function (htmlId) {
         LogicECM.module.ARM.DocumentsToolbar.superclass.constructor.call(this, "LogicECM.module.ARM.DocumentsToolbar", htmlId);
 
-        this.filtersDialog = null;
         this.splashScreen = null;
         this.avaiableFilters = [];
 
@@ -27,7 +26,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         {
             PREFERENCE_KEY: "ru.it.lecm.arm.current-filters",
 
-            filtersDialog: null,
             splashScreen: null,
             gridBubblingLabel: "documents-arm",
 	        doubleClickLock: false,
@@ -38,40 +36,43 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             reloadActionsUpdateTimer: null,
 
             _renderFilters: function (filters, updateHtml) {
-                if (!updateHtml) {
-                    this.filtersDialog.show();
-                } else {
-                    var filtersDiv = Dom.get("filtersBlock-forms");
-                    var toolbar = this;
-                    Alfresco.util.Ajax.jsonRequest({
-                        method: "POST",
-                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
-                        dataObj: {
-                            htmlId: Alfresco.util.generateDomId(),
-                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
-                        },
-                        successCallback: {
-                            fn: function (oResponse) {
-                                filtersDiv.innerHTML = oResponse.serverResponse.responseText;
-                                toolbar.isNeedUpdate = false;
-                                if (toolbar.filtersDialog != null) {
-                                    toolbar.filtersDialog.show();
-                                }
-                            }
-                        },
-                        failureCallback: {
-                            fn: function () {
-                            }
-                        },
-                        scope: this,
-                        execScripts: true
-                    });
-                }
+	            var filterDialog = Dom.get(this.id + "-filters-dialog");
+	            if (filterDialog != null) {
+	                if (!updateHtml) {
+		                Dom.setStyle(filterDialog, "visibility", "visible");
+	                } else {
+	                    var toolbar = this;
+		                var me = this;
+	                    Alfresco.util.Ajax.jsonRequest({
+	                        method: "POST",
+	                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+	                        dataObj: {
+	                            htmlId: Alfresco.util.generateDomId(),
+	                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+	                        },
+	                        successCallback: {
+	                            fn: function (oResponse) {
+		                            var filterContainer = Dom.get(me.id + "-filters-dialog-content");
+		                            if (filterContainer != null) {
+		                                filterContainer.innerHTML = oResponse.serverResponse.responseText;
+		                            }
+	                                toolbar.isNeedUpdate = false;
+		                            Dom.setStyle(filterDialog, "visibility", "visible");
+	                            }
+	                        },
+	                        failureCallback: {
+	                            fn: function () {
+	                            }
+	                        },
+	                        scope: this,
+	                        execScripts: true
+	                    });
+	                }
+	            }
             },
 
             onFiltersClick: function () {
                 //отрисовка фильтров в окне
-                this._drawFiltersPanel();
                 this._renderFilters(this.avaiableFilters, this.isNeedUpdate);
             },
 
@@ -84,11 +85,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     });
                 }
 
-                this.filtersDialog.hide();
+	            Dom.setStyle(this.id + "-filters-dialog", "visibility", "hidden");
             },
 
             _initButtons: function () {
                 this.toolbarButtons["defaultActive"].filtersButton = Alfresco.util.createYUIButton(this, "filtersButton", this.onFiltersClick);
+	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-apply-button", this.onApplyFilterClick);
 
                 this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
                     this.id + "-groupActionsButton",
@@ -98,18 +100,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         disabled: true
                     }
                 );
-            },
-
-            _drawFiltersPanel: function () {
-                if (this.filtersDialog == null) {
-                    // создаем диалог
-                    this.filtersDialog = Alfresco.util.createYUIPanel("filtersBlock",
-                        {
-                            width: "400px"
-                        });
-                    // создаем кнопки
-                    this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filtersBlock-apply-button", this.onApplyFilterClick, {}, Dom.get("filtersBlock-apply-button"));
-                }
             },
 
             onCheckDocument: function onCheckDocumentOnDataGrid() {
@@ -290,24 +280,22 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             onUpdateArmFilters: function(layer, args) {
-	            this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].disabled);
+	            Dom.setStyle(this.id + "-filters-dialog", "visibility", "hidden");
+                var currentNode = args[1].currentNode;
+                if (currentNode !== null) {
+                    var filters = currentNode.data.filters;
+                    var hasFilters = filters != null && filters.length > 0;
+	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].disabled || !hasFilters);
+                    if (hasFilters) {
+                        this.avaiableFilters = [];
+                        for (var i = 0; i < filters.length; i++) {
+                            var filter = filters[i];
+                            this.avaiableFilters.push(filter);
+                        }
 
-	            if (!args[1].disabled) {
-	                var currentNode = args[1].currentNode;
-	                if (currentNode !== null) {
-	                    var filters = currentNode.data.filters;
-	                    var hasFilters= filters != null && filters.length > 0;
-	                    if (hasFilters) {
-	                        this.avaiableFilters = [];
-	                        for (var i = 0; i < filters.length; i++) {
-	                            var filter = filters[i];
-	                            this.avaiableFilters.push(filter);
-	                        }
-
-	                        this.isNeedUpdate = true;
-	                    }
-	                }
-	            }
+                        this.isNeedUpdate = true;
+                    }
+                }
             },
 
             _buildPreferencesValue: function () {

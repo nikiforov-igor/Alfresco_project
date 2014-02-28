@@ -16,36 +16,26 @@
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <@comp.baseToolbar id true false false>
-<div class="filters">
-        <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
-           <span class="first-child">
-              <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>
-           </span>
-        </span>
-    <div style="display: none;">
-        <div id="filtersBlock" class="yui-panel">
-            <div id="${id}-filters-head" class="hd">${msg("filters-block")}</div>
-            <div id="${id}-filters-body" class="bd">
-                <div id="${id}-filters-content">
-                    <div id="filtersBlock-content" >
-                        <div id="${id}-filtersContainer" class="filters">
-                            <div id="filtersBlock-forms" class="forms-container form-fields"></div>
-                        </div>
-                    </div>
-                    <div class="bdft">
-                    <#-- Кнопка Применить -->
-                        <div class="yui-u align-right">
-                            <span id="filtersBlock-apply-button" class="yui-button yui-push-button filters-icon">
-                                <span class="first-child">
-                                    <button type="button">${msg('button.apply')}</button>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="filters-block">
+	<div class="filters">
+	    <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
+	       <span class="first-child">
+	          <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>
+	       </span>
+	    </span>
+	</div>
+	<div id="${id}-filters-dialog" class="filters-dialog">
+		<div id="${id}-filters-dialog-content" class="filters-dialog-content">
+			Здесь Будут фильтры
+		</div>
+		<div class="filters-dialog-buttons">
+            <span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
+                <span class="first-child">
+                    <button type="button">${msg('filter.button.ok')}</button>
+                </span>
+            </span>
+		</div>
+	</div>
 </div>
 <div class="group-actions">
     <span id="${id}-groupActionsButton" class="yui-button yui-push-button">
