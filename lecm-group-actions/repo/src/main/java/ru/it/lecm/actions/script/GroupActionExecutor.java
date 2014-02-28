@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
 import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -72,15 +73,21 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         if (actionId != null) {
             action = nodeService.getChildByName(actionsService.getHomeRef(), ContentModel.ASSOC_CONTAINS, actionId);
         }
-
+        HashMap<String, Object> result = new HashMap<String, Object>();
         if (action != null && items.size() > 0) {
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
             Map<String, Object> scriptModel = createScriptParameters(req, null, null, model);
             addParamenersToModel(paramenters, scriptModel);
 
+            Map<String, Object> returnModel = new HashMap<String, Object>(8, 1.0f);
+            scriptModel.put("model", returnModel);
+
             String script = nodeService.getProperty(action, GroupActionsService.PROP_SCRIPT).toString();
             ScriptProcessor scriptProcessor = getContainer().getScriptProcessorRegistry().getScriptProcessorByExtension("js");
+
             if (Boolean.TRUE.equals(nodeService.getProperty(action, GroupActionsService.PROP_FOR_COLLECTION))) {
+                result.put("forCollection", true);
+                result.put("withErrors", false);
                 script = "var documents = [];" +
                          "for each (var doc in documentsArray) {" +
                          "   var node = search.findNode(doc.toString());" +
@@ -88,18 +95,39 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                          "}\r\n" + script;
                 ScriptContent scriptContent = new StringScriptContent(script);
                 scriptModel.put("documentsArray", items.toArray());
-                scriptProcessor.executeScript(scriptContent, scriptModel);
+                try {
+                    scriptProcessor.executeScript(scriptContent, scriptModel);
+                } catch (Exception e) {
+                    logger.error("Error while execute script: ", e);
+                    result.put("withErrors", true);
+                }
+                result.put("redirect", returnModel.get("redirect"));
+                result.put("openWindow", returnModel.get("openWindow"));
             } else {
+                result.put("forCollection", false);
+                result.put("withErrors", false);
                 ScriptContent scriptContent = new StringScriptContent(script);
+                ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
                 for (NodeRef item : items) {
                     scriptModel.put("document", item);
-                    scriptProcessor.executeScript(scriptContent, scriptModel);
+                    HashMap<String, Object> itemResult = new HashMap<String, Object>();
+                    itemResult.put("message", nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING).toString());
+                    itemResult.put("withErrors", false);
+                    try {
+                        scriptProcessor.executeScript(scriptContent, scriptModel);
+                    } catch (Exception e) {
+                        logger.error("Error while execute script: ", e);
+                        itemResult.put("withErrors", true);
+                    }
+                    itemResult.put("redirect", returnModel.get("redirect"));
+                    itemResult.put("openWindow", returnModel.get("openWindow"));
+                    itemsResult.add(itemResult);
                 }
+                result.put("items", itemsResult);
             }
-
         }
 
-        return new HashMap<String, Object>();
+        return result;
     }
 
     public void setNodeService(NodeService nodeService) {

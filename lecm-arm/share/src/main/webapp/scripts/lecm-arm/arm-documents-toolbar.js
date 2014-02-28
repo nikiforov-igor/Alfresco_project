@@ -212,7 +212,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             },
                                             successCallback: {
                                                 fn: function (oResponse) {
-                                                    document.location.href = document.location.href;
+                                                    me._actionResponse(p_oItem.actionId, oResponse);
                                                 }
                                             },
                                             failureCallback: {
@@ -235,6 +235,26 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 }]
                         });
                 }
+            },
+
+            _openMessageWindow: function openMessageWindowFunction(title, message, reload) {
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: "Результат выполнения операции \"" + title + "\"",
+                        text: message,
+                        noEscape: true,
+                        buttons: [
+                            {
+                                text: "Ок",
+                                handler: function dlA_onAction_action()
+                                {
+                                    this.destroy();
+                                    if (reload) {
+                                        document.location.href = document.location.href;
+                                    }
+                                }
+                            }]
+                    });
             },
 
             _createScriptForm: function _createScriptFormFunction(item) {
@@ -281,7 +301,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         },
                         onSuccess: {
                             fn: function DataGrid_onActionCreate_success(response) {
-                                document.location.href = document.location.href;                            },
+                                me._actionResponse(item.actionId, response);
+                            },
                             scope: this
                         },
                         onFailure: {
@@ -295,6 +316,36 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             scope: this
                         }
                     }).show();
+            },
+
+            _actionResponse: function actionResponseFunction(actionId, response) {
+                var json = eval("(" + response.serverResponse.responseText + ")");
+                if (json.forCollection) {
+                    if (json.redirect != "") {
+                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + json.redirect;
+                    } else if (json.openWindow) {
+                        window.open(Alfresco.constants.URL_PAGECONTEXT + json.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                    } else if (json.withErrors) {
+                        this._openMessageWindow(actionId, "Ошибка при выполнении операции \"" + actionId + "\"", false);
+                    } else {
+                        document.location.href = document.location.href;
+                    }
+                } else {
+                    var message = "";
+                    for (var i in json.items) {
+                        var item = json.items[i];
+                        if (item.redirect != "") {
+                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+                        } else if (item.openWindow) {
+                            window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                        } else {
+                            message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
+                        }
+                    }
+                    if (message != "") {
+                        this._openMessageWindow(actionId, message, true);
+                    }
+                }
             },
 
             onUpdateArmFilters: function(layer, args) {

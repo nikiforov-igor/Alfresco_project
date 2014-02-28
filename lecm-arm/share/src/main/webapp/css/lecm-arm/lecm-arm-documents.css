@@ -176,3 +176,18 @@ div.arm-tree-menu .arm-accordion .wait-container {
 .arm-reports-list {
 	margin: 15px;
 }
+
+div.noerror-item
+{
+    background: url('/share/res/images/lecm-arm/noerror.png') no-repeat 0 0;
+    padding: 0 0 10px 20px;
+    text-align: left;
+}
+
+div.error-item
+{
+    background: url('/share/res/images/lecm-arm/error.png') no-repeat 0 0;
+    padding: 0 0 10px 20px;
+    text-align: left;
+}
+
