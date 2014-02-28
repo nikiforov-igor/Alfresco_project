@@ -72,6 +72,15 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		return isProperType(ref, types);
 	}
 
+	@Override
+	public boolean isArmElement(NodeRef ref) {
+		Set<QName> types = new HashSet<QName>();
+        types.add(TYPE_ARM_ACCORDION);
+        types.add(TYPE_ARM_NODE);
+		types.add(TYPE_ARM_REPORTS_NODE);
+		return isProperType(ref, types);
+	}
+
 	public NodeRef getDictionaryArmSettings() {
 		return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, ARM_SETTINGS_DICTIONARY_NAME);
 	}

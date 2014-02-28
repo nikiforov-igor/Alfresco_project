@@ -185,7 +185,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     private boolean isArmElement(NodeRef node) {
-        return service.isArmNode(node) || service.isArmAccordion(node) || service.isArmReportsNode(node);
+        return service.isArmElement(node);
     }
 
     private List<ArmColumn> getNodeColumns(NodeRef node) {

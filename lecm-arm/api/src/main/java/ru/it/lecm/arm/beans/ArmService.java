@@ -74,6 +74,13 @@ public interface ArmService {
 	 */
 	public boolean isArmReportsNode(NodeRef ref);
 
+    /**
+     * проверяет что объект является корректным элементом АРМ
+     * @param ref
+     * @return
+     */
+    public boolean isArmElement(NodeRef ref);
+
 	/**
 	 * Получение справочника с настройками АРМ
 	 * @return Справочник с настройками АРМ
