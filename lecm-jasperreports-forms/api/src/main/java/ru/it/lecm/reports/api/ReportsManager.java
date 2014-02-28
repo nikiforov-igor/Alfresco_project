@@ -863,9 +863,9 @@ public class ReportsManager {
                  * именно его (не требуется определять откуда получен описатель - из
                  * файлового хранилища или из репозитория)
                  */
-                findAndCheckReportGenerator(template.getReportType()).onRegister(desc, templateRawData, storage);
+                findAndCheckReportGenerator(template.getReportType()).onRegister(desc, template, templateRawData, storage);
                 if (isSubreport) {//сохраняем подотчет и в файловую систему!
-                    findAndCheckReportGenerator(template.getReportType()).onRegister(desc, templateRawData, subReportStorage);
+                    findAndCheckReportGenerator(template.getReportType()).onRegister(desc, template, templateRawData, subReportStorage);
                 }
                 logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
 
@@ -906,7 +906,7 @@ public class ReportsManager {
                         toStorage.storeContent(id, baStm);
                     }
 
-                    findAndCheckReportGenerator(template.getReportType()).onRegister(descriptor, templateRawData, toStorage);
+                    findAndCheckReportGenerator(template.getReportType()).onRegister(descriptor, template, templateRawData, toStorage);
                 }
             } catch (Throwable ex) {
                 final String msg = String.format(

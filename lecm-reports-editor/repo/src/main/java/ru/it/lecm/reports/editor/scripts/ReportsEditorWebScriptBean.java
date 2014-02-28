@@ -55,4 +55,17 @@ public class ReportsEditorWebScriptBean extends BaseWebScript {
         List<NodeRef> refs = service.getTemplates();
         return createScriptable(refs);
     }
+
+    public Scriptable getReportTemplates(String reportId, boolean fromParent) {
+        NodeRef reportRef;
+        if (NodeRef.isNodeRef(reportId)) {
+            reportRef = new NodeRef(reportId);
+        } else {
+            reportRef = service.getReportDescriptorNodeByCode(reportId);
+        }
+        if (fromParent && reportRef != null) {
+            reportRef = serviceRegistry.getNodeService().getPrimaryParent(reportRef).getParentRef();
+        }
+        return createScriptable(service.getReportTemplates(reportRef));
+    }
 }

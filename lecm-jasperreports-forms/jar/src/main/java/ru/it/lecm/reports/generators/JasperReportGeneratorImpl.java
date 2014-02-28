@@ -199,12 +199,12 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     }
 
     @Override
-    public void onRegister(ReportDescriptor desc, byte[] templateData, ReportContentDAO storage) {
-        compileJrxml(desc, templateData, storage);
+    public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) {
+        compileJrxml(desc, template, templateData, storage);
     }
 
-    private void compileJrxml(ReportDescriptor desc, byte[] templateData, ReportContentDAO storage) {
-        if (templateData == null) {
+    private void compileJrxml(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) {
+        if (templateData == null || template == null) {
             return;
         }
 
@@ -215,7 +215,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         try {
             JasperCompileManager.compileReportToStream(inData, outData);
-            final IdRContent id = IdRContent.createId(desc, desc.getMnem() + ".jasper");
+            final IdRContent id = IdRContent.createId(desc, getReportsManager().getTemplateFileName(desc, template, ".jasper"));
             storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
         } catch (JRException ex) {
             final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());

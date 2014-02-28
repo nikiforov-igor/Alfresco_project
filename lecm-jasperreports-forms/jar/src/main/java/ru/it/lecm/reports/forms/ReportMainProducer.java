@@ -76,7 +76,7 @@ public class ReportMainProducer extends AbstractWebScript {
 
         final Map<String, String> templateParams = webScriptRequest.getServiceMatch().getTemplateVars();
         final String reportName = Utils.coalesce(templateParams.get("report"), templateParams.get("reportCode"));
-        final String templateCode = templateParams.get("templateCode");
+        final String templateCode = webScriptRequest.getParameter("templateCode");
         final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
 
 		/* Вариант "права побоку": построение от имени системы */

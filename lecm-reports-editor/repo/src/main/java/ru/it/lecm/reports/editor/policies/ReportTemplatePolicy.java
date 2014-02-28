@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 25.06.13
  * Time: 10:15
  */
-public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.OnDeleteNodePolicy{
+public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy, NodeServicePolicies.BeforeDeleteNodePolicy{
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
@@ -57,8 +57,8 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         // создаем ассоциацию на шаблон для отчета
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onDeleteNode"));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "beforeDeleteNode"));
     }
 
     @Override
@@ -91,8 +91,7 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     }
 
     @Override
-    public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-        NodeRef template = childAssocRef.getChildRef();
+    public void beforeDeleteNode(NodeRef template) {
         List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
         NodeRef templateFile;
         if (targetAssocs != null && !targetAssocs.isEmpty()) {

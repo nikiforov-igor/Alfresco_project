@@ -40,7 +40,7 @@ public interface ReportGenerator {
 	 * 		<br/> storage.storeContent(id, new ByteArrayInputStream(fileRawData)); 
 	 * </code>
 	 */
-	void onRegister(ReportDescriptor desc, byte[] templateData, ReportContentDAO storage);
+	void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage);
 
 	/**
 	 * Сгенерировать шаблон отчёта на основании макета шаблона

@@ -163,7 +163,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     public int scanContent(final ContentEnumerator enumerator) {
         final NodeRef root = getServiceRootFolder();
         // узлы и названия с соот-щих уровней
-        final int levels = 1;
+        final int levels = 2;
         final NodeRef[] refs = new NodeRef[levels];
         final String[] names = new String[levels];
 

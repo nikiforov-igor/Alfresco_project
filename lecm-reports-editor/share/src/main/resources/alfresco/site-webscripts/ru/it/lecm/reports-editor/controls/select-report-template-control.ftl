@@ -5,6 +5,23 @@
 
 <#assign controlId = fieldHtmlId + "-cntrl">
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign isFieldMandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+    <#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
+<#if field.control.params.notSelectedOptionLabel??>
+    <#assign notSelectedText = field.control.params.notSelectedOptionLabel>
+<#elseif field.control.params.notSelectedOptionLabelCode??>
+    <#assign notSelectedText = msg(field.control.params.notSelectedOptionLabelCode)>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function () {
     var control = new LogicECM.module.ReportsEditor.SelectReportTemplateCtrl("${fieldHtmlId}").setMessages(${messages});
@@ -21,7 +38,7 @@
                 </#if>
                 oldValue: "${fieldValue}",
                 selectedValue: "${fieldValue}",
-                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+                nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name} ({lecm-rpeditor:templateCode})'}",
                 notSelectedOptionShow: ${field.control.params.notSelectedOption?string},
                 notSelectedText: "${notSelectedText?string}",
                 fieldId: "${fieldId}"

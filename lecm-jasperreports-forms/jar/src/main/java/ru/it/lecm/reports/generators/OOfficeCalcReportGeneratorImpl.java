@@ -117,7 +117,7 @@ public class OOfficeCalcReportGeneratorImpl extends ReportGeneratorBase {
 	 * Здесь (openOffice) ничего дополнительно не требуется.
 	 */
 	@Override
-	public void onRegister(ReportDescriptor desc, byte[] templateData,
+	public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData,
 			ReportContentDAO storage) {
 		logger.info(String.format("decriptor deploy notification /'%s'/  \"%s\"", desc.getMnem(), desc.getDefault()));
 	}

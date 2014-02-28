@@ -311,7 +311,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         if (!filesRef.isEmpty()) {
             NodeRef templateFile = filesRef.get(0).getTargetRef();
             if (templateFile != null) {
-                result.setFileName((String) nodeService.getProperty(node, ContentModel.PROP_NAME));
+                result.setFileName((String) nodeService.getProperty(templateFile, ContentModel.PROP_NAME));
 
                 final ContentReader reader = services.getServiceRegistry().getContentService().getReader(templateFile, ContentModel.PROP_CONTENT);
                 try {

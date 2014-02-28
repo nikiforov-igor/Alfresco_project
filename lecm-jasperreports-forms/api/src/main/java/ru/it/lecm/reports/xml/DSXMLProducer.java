@@ -262,7 +262,7 @@ public class DSXMLProducer {
             final List<Element> templatesList = xmlCreateReportTemplateNodes(doc, XMLNODE_REPORT_TEMPLATE, srcRDesc.getReportTemplates());
             if (templatesList != null) {
                 for (Element element : templatesList) {
-                    result.appendChild(element);
+                    nodeTemplates.appendChild(element);
                 }
             }
         }
@@ -340,6 +340,7 @@ public class DSXMLProducer {
             if (template.getReportType() != null) {
                 result.setAttribute(XMLATTR_TEMPLATE_TYPE, template.getReportType().getMnem());
             }
+            results.add(result);
         }
 
         return results;
@@ -353,20 +354,21 @@ public class DSXMLProducer {
         List<ReportTemplate> resultTemplates = new ArrayList<ReportTemplate>();
 
         final List<Node> templatesList = XmlHelper.findNodesList(srcNodeTemplate, XMLNODE_REPORT_TEMPLATE, null, null);
+        if (templatesList != null) {
+            for (Node node : templatesList) {
+                ReportTemplate result = new ReportTemplate();
+                XmlHelper.parseStdMnemoItem(result, (Element)node);
 
-        for (Node node : templatesList) {
-            ReportTemplate result = new ReportTemplate();
-            XmlHelper.parseStdMnemoItem(result, (Element)node);
+                if (((Element)node).hasAttribute(XMLATTR_FILENAME)) {
+                    result.setFileName(((Element)node).getAttribute(XMLATTR_FILENAME));
+                }
+                if (((Element)node).hasAttribute(XMLATTR_TEMPLATE_TYPE)) {
+                    result.setReportType(new ReportType(((Element)node).getAttribute(XMLATTR_TEMPLATE_TYPE)));
+                }
+                resultTemplates.add(result);
+            }
 
-            if (((Element)node).hasAttribute(XMLATTR_FILENAME)) {
-                result.setFileName(((Element)node).getAttribute(XMLATTR_FILENAME));
-            }
-            if (((Element)node).hasAttribute(XMLATTR_TEMPLATE_TYPE)) {
-                result.setReportType(new ReportType(((Element)node).getAttribute(XMLATTR_TEMPLATE_TYPE)));
-            }
-            resultTemplates.add(result);
         }
-
         return resultTemplates;
     }
 

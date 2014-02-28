@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.editor;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -81,6 +82,30 @@ public class ReportsEditorService extends BaseBean {
 
     public List<NodeRef> getTemplates() {
         return getElements(getTemplatesRootFolder(), ReportsEditorModel.TYPE_REPORT_TEMPLATE);
+    }
+
+    public List<NodeRef> getReportTemplates(NodeRef reportId) {
+        List<NodeRef> templates = new ArrayList<NodeRef>();
+        if (reportId != null) {
+            List<AssociationRef> templatesAssocs = nodeService.getTargetAssocs(reportId, ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
+            for (AssociationRef templatesAssoc : templatesAssocs) {
+                templates.add(templatesAssoc.getTargetRef());
+            }
+        }
+
+        return templates;
+    }
+
+    public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+        List<NodeRef> reportsElement = getElements(reReportsRef, ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
+        for (NodeRef report : reportsElement) {
+            Serializable reportCode = nodeService.getProperty(report, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
+            if (reportCode != null && reportCode.equals(rtMnemo) && !isArchive(report)) {
+                return report;
+            }
+        }
+        return null;
     }
 
     public List<NodeRef> getDataColumnTypeByClass(String className) {

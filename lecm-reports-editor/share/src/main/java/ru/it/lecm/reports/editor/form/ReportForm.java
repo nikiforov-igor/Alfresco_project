@@ -10,12 +10,13 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+import ru.it.lecm.reports.xml.XmlHelper;
 
 import java.io.InputStream;
 import java.util.*;
@@ -26,6 +27,9 @@ import java.util.*;
  * Time: 15:28
  */
 public class ReportForm extends FormUIGet {
+    public static final String TEMPLATE_CODE = "templateCode";
+    public static final String TEMPLATES = "TEMPLATES";
+    public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
 
     private enum AlfrescoTypes {
@@ -38,7 +42,8 @@ public class ReportForm extends FormUIGet {
         d_datetime,
         d_any,
         d_double,
-        STATUS
+        STATUS,
+        TEMPLATES
     }
 
     private enum RangeableTypes {
@@ -88,6 +93,10 @@ public class ReportForm extends FormUIGet {
             }
         });
 
+        if (descriptor.getReportTemplates() != null && descriptor.getReportTemplates().size() > 1) {
+            addTemplateParameterColumn(params);
+        }
+
         int colnum = 0;
         for (ColumnDescriptor param : params) {
         	colnum++;
@@ -99,7 +108,15 @@ public class ReportForm extends FormUIGet {
             }
         }
 
+        Map<String, Object> arguments = new HashMap<String, Object>();
+
+        String[] parameters = request.getParameterNames();
+        for (String parameter : parameters) {
+            arguments.put(parameter, request.getParameter(parameter));
+        }
+
         form.put(MODEL_MODE, Mode.CREATE);
+        form.put(MODEL_ARGUMENTS, arguments);
         form.put(MODEL_METHOD, "GET");
         form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
         form.put(MODEL_SUBMISSION_URL, "proxy/alfresco/lecm/report/" + descriptor.getMnem() + (params.isEmpty() ? "?autoSubmit=true" : ""));
@@ -108,6 +125,18 @@ public class ReportForm extends FormUIGet {
         form.put(MODEL_SHOW_RESET_BUTTON, false);
         form.put(MODEL_SHOW_SUBMIT_BUTTON, true);
         return model;
+    }
+
+    private void addTemplateParameterColumn(List<ColumnDescriptor> params) {
+        ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
+        templateParam.setAlfrescoType(TEMPLATES);
+
+        L18Value name = new L18Value();
+        name.regItem("ru", TEMPLATES_COLUMN_NAME);
+        templateParam.setL18Name(name);
+
+        templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
+        params.add(templateParam);
     }
 
     static String nonBlank(String s, String sDefault) {
@@ -122,8 +151,8 @@ public class ReportForm extends FormUIGet {
                 field = new Field();
 
                 // т.к. пустые метки могут уронить диалог, сделаем их всегда заполненными ...
-                final String colMnem = nonBlank( column.getColumnName(), String.format("Column_%d", colnum) );
-                final String colCaption = nonBlank( column.getDefault(), colMnem);
+                final String colMnem = nonBlank(column.getColumnName(), String.format("Column_%d", colnum));
+                final String colCaption = nonBlank(column.getDefault(), colMnem);
 
                 field.setId(colMnem);
                 field.setName(colMnem);
