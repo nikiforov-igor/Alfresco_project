@@ -81,6 +81,9 @@ div.arm-tree-menu .arm-accordion div.accordion-content {
 div.arm-tree-menu .arm-accordion div.accordion-content.shown {
 	height: auto;
 }
+div.arm-tree-menu .arm-accordion .wait-container {
+	text-align: center;
+}
 
 .filters-block .filters-dialog {
 	z-index: 2;

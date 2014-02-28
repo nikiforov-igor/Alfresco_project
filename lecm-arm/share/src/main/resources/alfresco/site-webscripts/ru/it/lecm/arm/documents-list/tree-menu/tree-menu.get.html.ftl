@@ -3,7 +3,9 @@
 
 <#assign id = args.htmlid>
 <div id="${id}-arm-tree" class="ygtv-highlight arm-tree-menu">
-	<ul id="${id}-headlines" class="arm-accordion dynamic"></ul>
+	<ul id="${id}-headlines" class="arm-accordion">
+		<li class="wait-container"><div class="wait"></div></li>
+	</ul>
 </div>
 <script type="text/javascript">//<![CDATA[
 (function () {

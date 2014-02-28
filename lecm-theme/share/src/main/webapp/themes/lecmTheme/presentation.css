@@ -716,6 +716,14 @@ h4 .lighter
    background-repeat: no-repeat;
 }
 
+.yui-skin-lecmTheme div.wait {
+    width: 18px;
+	height: 18px;
+	display: inline-block;
+    background-image: url(yui/assets/wait.gif);
+    background-repeat: no-repeat;
+}
+
 .yui-skin-lecmTheme .yui-overlay-hidden #message .bd span.wait
 {
    display: none;
