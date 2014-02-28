@@ -15,7 +15,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.splashScreen = null;
         this.avaiableFilters = [];
 
-	    YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
+	    YAHOO.Bubbling.on("armTreeNodeSelect", this.onToolbarUpdate, this);
 	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
@@ -32,6 +32,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             avaiableFilters:[],
             isNeedUpdate: false,
+            currentType: null,
 
             _renderFilters: function (filters, updateHtml) {
 	            var filterDialog = Dom.get(this.id + "-filters-dialog");
@@ -99,12 +100,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 );
 
-	            this.toolbarButtons[this.options.searchButtonsType].push(
-		            Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
+	            this.toolbarButtons["defaultActive"].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick);
+
+	            this.toolbarButtons["defaultActive"].extendSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
 			            {
-				            disabled: this.options.searchButtonsType != 'defaultActive'
-			            })
-	            );
+				            disabled: true
+			            });
 
                 this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
@@ -355,13 +356,25 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             },
 
-            onUpdateArmFilters: function(layer, args) {
+            onToolbarUpdate: function(layer, args) {
 	            Dom.setStyle(this.id + "-filters-dialog", "visibility", "hidden");
                 var currentNode = args[1].currentNode;
                 if (currentNode !== null) {
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
-	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].disabled || !hasFilters);
+	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
+
+	                this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isReportNode);
+	                var searchInput = Dom.get(this.id + "-full-text-search");
+	                if (args[1].isReportNode) {
+		                searchInput.setAttribute("disabled", true);
+	                } else {
+		                searchInput.removeAttribute("disabled");
+	                }
+	                if (this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
+	                    this.onClearSearch();
+	                }
+
                     if (hasFilters) {
                         this.avaiableFilters = [];
                         for (var i = 0; i < filters.length; i++) {
@@ -371,6 +384,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                         this.isNeedUpdate = true;
                     }
+
+	                var types = [];
+	                if (currentNode.data.types != null) {
+		                types = currentNode.data.types.split(",");
+	                }
+	                this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isReportNode || types.length != 1);
+	                this.currentType = types[0];
                 }
             },
 
@@ -444,6 +464,22 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 }
                 return formData;
-            }
+            },
+
+	        onExSearchClick: function () {
+		        if (this.currentType != null) {
+			        var grid = this.modules.dataGrid;
+			        var advSearch = grid.search;
+
+			        advSearch.options.searchFormId = Alfresco.util.generateDomId();
+			        if (advSearch.currentForm != null && this.currentType != advSearch.currentForm.type) {
+			            advSearch.currentForm = null;
+			        }
+
+			        advSearch.showDialog({
+				        itemType: this.currentType
+			        });
+		        }
+	        }
         }, true);
 })();

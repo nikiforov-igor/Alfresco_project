@@ -21,13 +21,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
 
-        this.deferredListPopulation = new Alfresco.util.Deferred(["updateArmFilters", "onReady"],
+        this.deferredListPopulation = new Alfresco.util.Deferred(["armTreeNodeSelect", "onReady"],
             {
                 fn: this.updateCurrentFiltersForm,
                 scope: this
             });
 
-        YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
+        YAHOO.Bubbling.on("armTreeNodeSelect", this.onUpdateAvaiableFilters, this);
         YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
         return this;
     };
@@ -96,7 +96,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         this.avaiableFilters = [];
                     }
                 }
-                this.deferredListPopulation.fulfil("updateArmFilters");
+                this.deferredListPopulation.fulfil("armTreeNodeSelect");
             },
 
             onUpdateCurrentFilters: function (layer, args) {

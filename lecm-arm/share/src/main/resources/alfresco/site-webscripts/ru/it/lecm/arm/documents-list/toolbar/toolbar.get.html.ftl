@@ -15,7 +15,7 @@
 //]]></script>
 
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
-<@comp.baseToolbar id true true false>
+<@comp.baseToolbar id true true true>
 <div class="filters-block">
 	<div class="filters">
 	    <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">

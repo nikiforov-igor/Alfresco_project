@@ -157,7 +157,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     armNode: null,
                     bubblingLabel: "documents-arm"
                 });
-                YAHOO.Bubbling.fire ("updateArmFilters", {
+                YAHOO.Bubbling.fire ("armTreeNodeSelect", {
                     currentNode: null
                 });
             }
@@ -314,9 +314,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            createTypes: node.data.createTypes
 	            });
 
-                YAHOO.Bubbling.fire ("updateArmFilters", {
+                YAHOO.Bubbling.fire ("armTreeNodeSelect", {
                     currentNode: node,
-	                disabled: isReportNode
+	                isReportNode: isReportNode
                 });
             }
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());

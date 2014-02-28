@@ -145,7 +145,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                                             this.performSearch({
                                                 parent:this.dataGrid.datagridMeta.nodeRef,
-	                                            searchNodes: this.datagridMeta.searchNodes,
+	                                            searchNodes: this.dataGrid.datagridMeta.searchNodes,
                                                 sort:this.dataGrid.datagridMeta.sort,
                                                 itemType:this.dataGrid.datagridMeta.itemType,
                                                 searchConfig:this.dataGrid.datagridMeta.searchConfig,

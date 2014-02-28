@@ -42,7 +42,7 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                     usePagination: true,
                     useDynamicPagination:true,
                     pageSize: 20,
-                    showExtendSearchBlock: false,
+                    showExtendSearchBlock: true,
                     actions: [
                         {
                             type: "datagrid-action-link-documents-arm",
