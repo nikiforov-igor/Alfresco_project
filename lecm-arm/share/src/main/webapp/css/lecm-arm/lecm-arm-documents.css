@@ -67,10 +67,13 @@ div.arm-tree-menu .arm-accordion div.accordion-head {
 div.arm-tree-menu .arm-accordion div.accordion-head.shown {
 	cursor: auto;
 }
-div.arm-tree-menu .arm-accordion div.accordion-head span {
+div.arm-tree-menu .arm-accordion div.accordion-head span.accordion-label {
 	position: absolute;
 	margin-left: 10px;
 	margin-top: 6px;
+}
+div.arm-tree-menu .arm-accordion span.accordion-counter-label {
+	margin-left: 5px;
 }
 div.arm-tree-menu .arm-accordion div.accordion-content {
 	height: 0;

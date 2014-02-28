@@ -90,7 +90,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    getAccordionItemHtml: function(node) {
 			var result = "";
-		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'><span id='" + "ac-label-" + node.id + "'>";
+		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'><span id='" + "ac-label-" + node.id + "' class='accordion-label'>";
 		    result += node.label;
 		    result += "</span></div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
 		    return result;
@@ -366,7 +366,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             fn: function (oResponse) {
                                 if (oResponse != null) {
                                     if (labelElement) {
-                                        labelElement.innerHTML = labelElement.innerHTML + " (" + oResponse.json + ")";
+	                                    var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
+	                                    counterSpan += "(" + oResponse.json + ")";
+	                                    counterSpan += "</span>";
+
+                                        labelElement.innerHTML = labelElement.innerHTML + counterSpan;
                                     }
                                 }
                             }
