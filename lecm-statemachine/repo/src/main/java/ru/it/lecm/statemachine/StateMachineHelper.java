@@ -534,6 +534,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     @Override
     public boolean isReadOnlyCategory(NodeRef document, String category) {
+        if (AuthenticationUtil.isRunAsUserTheSystemUser()) {
+            return false;   //Системе доступны все категории
+        }
         Set<StateField> categories = getStateCategories(document).getFields();
         boolean result = true;
 	    if (categories != null && categories.size() > 0) {
