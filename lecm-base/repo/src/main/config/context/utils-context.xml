@@ -23,6 +23,11 @@
     
 	<bean id="base-algo-utils.service" class="ru.it.lecm.base.utils.BaseAlgorithmUtils" parent="baseBean"
 	    depends-on="base-utils.service"
-    	p:lecmBaseUtilsService="base-utils.service"/>
+    	p:lecmBaseUtilsService-ref="base-utils.service"/>
 
+	<bean id="base-utils.script" parent="baseScript" class="ru.it.lecm.base.scripts.BaseUtilsWebScriptBean"
+          depends-on="base-utils.service"
+			p:extensionName="baseUtils"
+			p:baseUtilsService-ref="base-utils.service"/>
+	
 </beans>
