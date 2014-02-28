@@ -211,6 +211,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         onExpand: function(record) {
+	        if (this.doubleClickLock) return;
+	        this.doubleClickLock = true;
 	        var nodeRef = record.getData("nodeRef");
 	        if (nodeRef != null) {
 		        var me = this;
@@ -224,6 +226,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					        fn: function(response) {
 						        if (response.serverResponse != null) {
 							        me.addExpandedRow(record, response.serverResponse.responseText);
+							        me.doubleClickLock = false;
 						        }
 					        }
 				        },
