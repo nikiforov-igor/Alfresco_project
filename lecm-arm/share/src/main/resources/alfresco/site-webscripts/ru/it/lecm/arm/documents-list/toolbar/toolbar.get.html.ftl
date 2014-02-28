@@ -25,9 +25,7 @@
 	    </span>
 	</div>
 	<div id="${id}-filters-dialog" class="filters-dialog">
-		<div id="${id}-filters-dialog-content" class="filters-dialog-content">
-			Здесь Будут фильтры
-		</div>
+		<div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
 		<div class="filters-dialog-buttons">
             <span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
                 <span class="first-child">
