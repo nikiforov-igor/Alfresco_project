@@ -32,11 +32,13 @@
 
 <#-- Отправка данных -->
 <#assign concurrencyInputId = namespaceId + '-concurrency-input'>
-<#assign concurrencyInputName = field.control.params.concurrencyInputName>
+<#assign concurrencyInputName = field.control.params.concurrencyInputName ! ''>
 <#assign concurrencyInputInitialValue = (concurrencyShareConfig == 'user') ? string('SEQUENTIAL', concurrencyShareConfig)>
 <#assign concurrencyIsNotPredefined = concurrencyShareConfig == 'user'>
 
 <#assign listNodeRefInput = namespaceId + '-workflow-type-input'>
+
+<#assign dueDateId = '${htmlId}_prop_bpm_workflowDueDate'>
 
 <#-- Состояния -->
 <#assign routeRef = (form.mode == 'edit') ? string(args.itemId, '')>
@@ -569,16 +571,14 @@
 		var zeroDate, todayDate, restrictedRangeString;
 		var cm = Alfresco.util.ComponentManager;
 
-
-		<#-- args.htmlid без namepsace! -->
-		if (args[1].fieldId === '${args.htmlid}_prop_bpm_workflowDueDate-cntrl-date') {
+		if (args[1].fieldId === '${dueDateId}-cntrl-date') {
 			YAHOO.Bubbling.unsubscribe('registerValidationHandler', this._hackTheCalendar);
 
 			zeroDate = new Date(0);
 			todayDate = new Date();
 			restrictedRangeString = getYahooDateString(zeroDate) + '-' + getYahooDateString(todayDate);
 
-			this.widgets.calendar = cm.get('${args.htmlid}_prop_bpm_workflowDueDate-cntrl').widgets.calendar;
+			this.widgets.calendar = cm.get('${dueDateId}-cntrl').widgets.calendar;
 			this.widgets.calendar.addRenderer(restrictedRangeString, this.widgets.calendar.renderCellStyleHighlight3);
 
 			this.widgets.calendar.selectEvent.subscribe(this.validateForm, this, true);
@@ -600,7 +600,7 @@
 			// На afterFormRuntimeInit подписывается каждый экземпляр WorkflowList, и каждый пытается inject-ить этот
 			// валидатор. Чтобы не создавать копии одного и тоже валидатора, inject-им только при отсутствии.
 			if (!validations.some(isDueDateValidator)) {
-				formsRuntime.addValidation('${htmlId}_prop_bpm_workflowDueDate', // fieldId
+				formsRuntime.addValidation('${dueDateId}', // fieldId
 						LogicECM.module.Workflow.workflowDueDateValidator, // validationHandler
 						null, // validationArgs
 						'change', // when
@@ -890,8 +890,6 @@
 
 		this.widgets.formAddAssignee.show();
 	};
-
-	WorkflowList.prototype.__destructor = function() {};
 
 	WorkflowList.prototype._destructor = function() {
 		function removeAllBubbles(obj) {
