@@ -16,7 +16,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.avaiableFilters = [];
 
 	    YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
-	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
 
@@ -32,8 +31,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             avaiableFilters:[],
             isNeedUpdate: false,
-
-            reloadActionsUpdateTimer: null,
 
             _renderFilters: function (filters, updateHtml) {
 	            var filterDialog = Dom.get(this.id + "-filters-dialog");
@@ -97,31 +94,38 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     {
                         type: "menu",
                         menu: [],
-                        disabled: true
+                        disabled: false
                     }
                 );
+
+                this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
+                this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
+
             },
 
-            onCheckDocument: function onCheckDocumentOnDataGrid() {
+            clearOperationsList: function clearOperationsListFunction() {
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
-                button.set("disabled", true);
-                if (this.reloadActionsUpdateTimer != null) {
-                    clearTimeout(this.reloadActionsUpdateTimer);
+                var menu = button.getMenu();
+                if (YAHOO.util.Dom.inDocument(menu.element)) {
+                    menu.clearContent();
+                    menu.render();
                 }
-                this.reloadActionsUpdateTimer = setTimeout(this.onCheckDocumentFinished.bind(this), 500);
             },
 
             onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
                 var menu = button.getMenu();
-
-
                 var datagridItems = this.modules.dataGrid.getSelectedItems();
                 var items = []
                 for (var i in datagridItems) {
                     items.push(datagridItems[i].nodeRef);
                 }
                 var me = this;
+                var splashScreen = Alfresco.util.PopupManager.displayMessage(
+                {
+                        spanClass: "wait",
+                        displayTime: 0
+                });
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/groupActions/list",
@@ -155,10 +159,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 menu.itemData = actionItems;
                             }
                             if (actionItems.length == 0) {
-                                button.set("disabled", true);
-                            } else {
-                                button.set("disabled", false);
+                                menu.hide();
                             }
+                            YAHOO.lang.later(500, splashScreen, splashScreen.destroy);
                         }
                     },
                     failureCallback: {
