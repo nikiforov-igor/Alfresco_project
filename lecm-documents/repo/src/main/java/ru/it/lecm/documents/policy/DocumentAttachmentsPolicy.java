@@ -1,11 +1,5 @@
 package ru.it.lecm.documents.policy;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
@@ -25,7 +19,6 @@ import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -36,6 +29,12 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -237,7 +236,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	public void beforeUpdateNode(NodeRef nodeRef) {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
 		if (document != null) {
-			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
+//			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(nodeRef));
 		}
 	}
 
@@ -255,7 +254,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
 		if (document != null) {
 			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
-			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
+//			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
 
 			//добавим аспект lecm-attachment к файлу вложения
 			nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
