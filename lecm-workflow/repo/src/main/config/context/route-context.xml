@@ -30,4 +30,21 @@
 		  depends-on="routing.model.bootstrap"
 		  p:workflowDefinitions-ref="route.workflows"/>
 
+	<bean id="abstract.workflowRunner" abstract="true"/>
+
+	<bean id="approval.workflowRunner" parent="abstract.workflowRunner"
+		  class="ru.it.lecm.workflow.beans.ApprovalWorkflowRunner"/>
+
+	<bean id="signing.workflowRunner" parent="abstract.workflowRunner"
+		  class="ru.it.lecm.workflow.beans.SigningWorkflowRunner"/>
+
+	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APROVAL"/>
+	<util:constant id="SIGNING" static-field="ru.it.lecm.workflow.WorkflowType.SIGNING"/>
+	<util:map id="workflow.runners">
+		<entry key-ref="APPROVAL" value-ref="approval.workflowRunner"/>
+		<entry key-ref="SIGNING" value-ref="signing.workflowRunner"/>
+	</util:map>
+	<bean id="workflowRunnerService" class="ru.it.lecm.workflow.beans.WorkflowRunnerFactory"
+		  p:runners-ref="workflow.runners"/>
+
 </beans>

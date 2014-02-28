@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-document-route:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>LECM Worflow Model</description>
+	<author>vlevin</author>
+	<version>1.0</version>
+
+	<imports>
+		<!-- Import Alfresco Dictionary Definitions -->
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<!-- Import Alfresco Content Domain Model Definitions -->
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/document/route/1.0" prefix="lecm-document-route"/>
+	</namespaces>
+
+	<aspects>
+		<aspect name="lecm-document-route:routable">
+			<properties>
+				<!-- является ли документ маршрутизируемым -->
+				<property name="lecm-document-route:isRoutable">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+				</property>
+				<!-- ссылка на маршрут -->
+				<property name="lecm-document-route:routeRef">
+					<type>d:noderef</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</aspect>
+	</aspects>
+
+</model>
