@@ -180,7 +180,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				if (type == "lecm-arm:arm") {
 					return "АРМ";
 				} else if (type == "lecm-arm:accordion"){
-					return "аккордион";
+					return "раздел";
 				} else if (type == "lecm-arm:node") {
 					return "узел";
 				}
