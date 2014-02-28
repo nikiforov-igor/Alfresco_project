@@ -76,8 +76,10 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
                 String docTypesStr = (String) currentNode.get("types");
                 String[] docTypesArray = docTypesStr.split(",");
                 for (String type : docTypesArray) {
-                    QName typeQName = QName.createQName(type, namespaceService);
-                    docTypes.add(typeQName);
+                    if (type.length() > 0) {
+                        QName typeQName = QName.createQName(type, namespaceService);
+                        docTypes.add(typeQName);
+                    }
                 }
             } catch (JSONException e) {
                 logger.error(e.getMessage(), e);

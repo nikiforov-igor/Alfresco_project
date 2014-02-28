@@ -109,8 +109,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
 
             if (this.filtersMeta && this.filtersMeta.query != null) {
-                updatedSearchConfig.filter += (this.filtersMeta.query.length > 0 ? (" AND " + this.filtersMeta.query) : "");
-                updatedSearchConfig.filter.trim();
+                if (updatedSearchConfig.filter.length > 0 && this.filtersMeta.query.length > 0) {
+                    updatedSearchConfig.filter = updatedSearchConfig.filter + " AND " + this.filtersMeta.query;
+                } else if (this.filtersMeta.query.length > 0){
+                    updatedSearchConfig.filter = this.filtersMeta.query;
+                }
+                if (updatedSearchConfig.filter) {
+                    updatedSearchConfig.filter.trim()
+                }
             }
 
             var offset = 0;
