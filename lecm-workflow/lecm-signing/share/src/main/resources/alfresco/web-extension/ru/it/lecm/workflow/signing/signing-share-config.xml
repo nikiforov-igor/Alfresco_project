@@ -27,7 +27,7 @@
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowListValidator" event="change" message="list"/>
 						</constraint-handlers>
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param>
 							<control-param name="concurrency">SEQUENTIAL</control-param>

@@ -47,12 +47,8 @@
 		<div class="workflow-list-control-dimmer__inner">Пододжите, пожалуйста...</div>
 	</div>
 
-	<div style="margin: 5px 0;">
-		<div class="form-field">
-			<label for="${radioWorkflowTypeId}">NodeRef на папку:</label>
-			<input type="text" id="${listNodeRefInput}" name="${field.name}_added" value=""/>
-		</div>
-	</div>
+	<#-- NodeRef на папку -->
+	<input type="hidden" id="${listNodeRefInput}" name="${field.name}_added" value=""/>
 
 <#if concurrencyIsNotPredefined>
 <#-- Если тип бизнес-процесса не задан через SCC, то дадим пользователю возможность выбора -->
@@ -111,6 +107,28 @@
 			bubblingLabel: this.options.bubblingLabel,
 			datagridMeta: this.options.datagridMeta
 		});
+	};
+
+	WorkflowDatagrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
+		// Если у нас нет списка разрешённых согласующих, то ничего не делаем
+		if (grid.options.allowedNodes.length === 0) {
+			return null;
+		}
+
+		var ASSOC_EMPLOYEE = 'assoc_lecm-workflow_assignee-employee-assoc';
+		var allowed = grid.options.allowedNodes;
+		var currentEmployeeRef = oRecord.getData('itemData')[ASSOC_EMPLOYEE].value;
+
+		if (allowed.indexOf(currentEmployeeRef) < 0) {
+			// Если текущий сотрудник не входит в бизнес-роль
+			elCell.parentElement.parentElement.style.backgroundColor = '#f99';
+		} else {
+			// Если текущий сотрудник входит в бизнес-роль
+			elCell.parentElement.parentElement.style.backgroundColor = '';
+		}
+
+		// Если getCustomCellFormatter возвращает null, то datagrid добавляет свои правила отрисовки
+		return null;
 	};
 
 	WorkflowDatagrid.prototype._moveTo = function(direction, nodeRef) {
@@ -332,6 +350,8 @@
 	WorkflowList.prototype._initAllowedNodes = function() {
 		var workflowList = this;
 
+		YAHOO.Bubbling.unsubscribe('datagridVisible', this._initAllowedNodes, this);
+
 		if (this.options.allowedBusinessRoleId.length > 0) { // Trim?
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'POST',
@@ -342,7 +362,9 @@
 				},
 				successCallback: {
 					fn: function(response) {
-						workflowList.setOptions({ allowedNodes: response.json.employees });
+						workflowList.options.allowedNodes = response.json.employees;
+						workflowList.widgets.datagrid.options.allowedNodes = response.json.employees;
+						workflowList.widgets.datagrid.refresh();
 					}
 				},
 				failureCallback: {
@@ -548,7 +570,7 @@
 		var cm = Alfresco.util.ComponentManager;
 
 
-	<#-- args.htmlid без namepsace! -->
+		<#-- args.htmlid без namepsace! -->
 		if (args[1].fieldId === '${args.htmlid}_prop_bpm_workflowDueDate-cntrl-date') {
 			YAHOO.Bubbling.unsubscribe('registerValidationHandler', this._hackTheCalendar);
 
@@ -556,8 +578,6 @@
 			todayDate = new Date();
 			restrictedRangeString = getYahooDateString(zeroDate) + '-' + getYahooDateString(todayDate);
 
-			// DEBUG FIX! Для того, чтобы нормально отлаживать валидацию формы, удалить после отладки, вернуть простую
-			// проверку!
 			this.widgets.calendar = cm.get('${args.htmlid}_prop_bpm_workflowDueDate-cntrl').widgets.calendar;
 			this.widgets.calendar.addRenderer(restrictedRangeString, this.widgets.calendar.renderCellStyleHighlight3);
 
@@ -565,8 +585,6 @@
 			this.widgets.calendar.deselectEvent.subscribe(this.validateForm, this, true);
 		}
 	};
-
-
 
 	WorkflowList.prototype._hackTheValidation = function(layer, args) {
 		function isDueDateValidator(vldtn) {
@@ -608,7 +626,6 @@
 		if (thisDg === null || thisDg === undefined) {
 			return;
 		}
-
 
 		if (thisDg.options.bubblingLabel === argsDg.options.bubblingLabel) {
 			YAHOO.Bubbling.unsubscribe('datagridVisible', this._hackTheRecordSet);
@@ -877,6 +894,21 @@
 	WorkflowList.prototype.__destructor = function() {};
 
 	WorkflowList.prototype._destructor = function() {
+		function removeAllBubbles(obj) {
+			var event;
+			var bubble = YAHOO.Bubbling.bubble;
+
+			for(event in bubble) {
+				if(bubble.hasOwnProperty(event)) {
+					bubble[event].subscribers.forEach(function(s) {
+						if(s.obj === obj) {
+							YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
+						}
+					});
+				}
+			}
+		}
+
 		var k, w;
 
 		var isFn = YAHOO.lang.isFunction;
@@ -891,21 +923,19 @@
 
 		var widgets = this.widgets;
 		var datagrid = widgets.datagrid;
-		var recordSet = datagrid.widgets.dataTable.getRecordSet();
-
-		debugger;
+		var rs = datagrid.widgets.dataTable.getRecordSet();
 
 		this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
 
-		Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged);
-		Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated);
-		Bubb.unsubscribe('dataItemUpdated', datagrid.onDataItemUpdated);
-		Bubb.unsubscribe('dataItemsDeleted', datagrid.onDataItemsDeleted);
-		Bubb.unsubscribe('datagridRefresh', datagrid.onDataGridRefresh);
-		Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked);
-		Bubb.unsubscribe('changeFilter', datagrid.onFilterChanged);
+		Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged, datagrid);
+		Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated, datagrid);
+		Bubb.unsubscribe('dataItemUpdated', datagrid.onDataItemUpdated, datagrid);
+		Bubb.unsubscribe('dataItemsDeleted', datagrid.onDataItemsDeleted, datagrid);
+		Bubb.unsubscribe('datagridRefresh', datagrid.onDataGridRefresh, datagrid);
+		Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked, datagrid);
+		Bubb.unsubscribe('changeFilter', datagrid.onFilterChanged, datagrid);
 
-		recordSet.unsubscribeAll();
+		rs.unsubscribeAll();
 
 		if(isVl(this.widgets.calendar)) {
 			this.widgets.calendar.selectEvent.unsubscribeAll();
@@ -934,6 +964,7 @@
 		}
 
 		while (components.length > formIndex) { // Не оптимизируй...
+			removeAllBubbles(components[formIndex]);
 			comMan.unregister(components[formIndex]);
 		}
 	};
@@ -944,13 +975,13 @@
 	 */
 	WorkflowList.prototype.onReady = function() {
 		this._initButtons();
-		this._initAllowedNodes();
 		this._initControl();
 
 		YAHOO.Bubbling.on('afterFormRuntimeInit', this._hackTheValidation, this);
 		YAHOO.Bubbling.on('afterFormRuntimeInit', this._hackTheDestructor, this);
 		YAHOO.Bubbling.on('registerValidationHandler', this._hackTheCalendar, this);
 		YAHOO.Bubbling.on('datagridVisible', this._hackTheRecordSet, this);
+		YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
 	};
 
 	var workflowList = new WorkflowList('${containerId}');

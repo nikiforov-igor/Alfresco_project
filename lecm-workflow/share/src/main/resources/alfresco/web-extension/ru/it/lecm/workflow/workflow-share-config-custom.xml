@@ -34,7 +34,7 @@
 				<appearance>
 					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true"/>
 					<field id="lecm-workflow:fake-workflow-list-approval">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
@@ -44,7 +44,7 @@
 						</control>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
@@ -78,7 +78,7 @@
 						</control>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-approval">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
@@ -88,7 +88,7 @@
 						</control>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
@@ -109,7 +109,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow:fake-workflow-list-approval">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
@@ -119,7 +119,7 @@
 						</control>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName"></control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->

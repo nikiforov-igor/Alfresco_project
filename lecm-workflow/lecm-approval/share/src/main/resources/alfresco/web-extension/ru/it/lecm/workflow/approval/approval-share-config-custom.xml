@@ -56,7 +56,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecmApprove2:assigneesListAssoc">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="namespace">approval</control-param>
 							<control-param name="workflowType">APPROVAL</control-param>
 							<control-param name="concurrency">USER</control-param>

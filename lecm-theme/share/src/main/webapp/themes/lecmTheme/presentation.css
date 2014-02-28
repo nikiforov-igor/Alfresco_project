@@ -2678,3 +2678,7 @@ div.form-field table.formFieldControlParamsTable {
 	font-size: 22px;
 	text-align: center !important;
 }
+
+.workflow-list-control-container .yuimenu ul {
+	background-color: #fff;
+}

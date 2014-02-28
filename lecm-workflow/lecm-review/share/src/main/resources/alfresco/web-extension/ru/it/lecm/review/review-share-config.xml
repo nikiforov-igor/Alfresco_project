@@ -17,7 +17,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecmReview:assigneesListAssoc">
-						<control template="/ru/it/lecm/workflow/controls/button-add.ftl">
+						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="workflowType">REVIEW</control-param>
 							<control-param name="concurrency">PARALLEL</control-param>
 							<control-param name="concurrencyInputName">workflowConcurrency</control-param>
