@@ -33,19 +33,19 @@
 
 <script type="text/javascript">//<![CDATA[
     (function() {
-        function initToolbar() {
-            var reportsEditor = new LogicECM.module.ReportsEditor.TemplateEditToolbar("${toolbarId}");
-            reportsEditor.setReportId("${args.reportId}");
-            reportsEditor.setMessages(${messages});
-        }
-        YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
+    function initToolbar() {
+        var reportsEditor = new LogicECM.module.ReportsEditor.TemplateEditToolbar("${toolbarId}");
+        reportsEditor.setReportId("${args.reportId}");
+        reportsEditor.setMessages(${messages});
+    }
+    YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
     })();
 </script>
 
 <#assign gridId = "re-template-edit-grid-" + id/>
 
 <div class="yui-t1" id="${gridId}">
-    <div class="yui-b" id="alf-content-${gridId}" style="margin-left: 0;">
+    <div class="yui-b" id="alf-content-${id}" style="margin-left: 0;">
         <@grid.datagrid id="${gridId}" showViewForm=false>
             <script type="text/javascript">//<![CDATA[
             (function() {

@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -25,7 +26,7 @@ import java.util.*;
  * Time: 11:19
  */
 public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodePolicy,
-        NodeServicePolicies.OnUpdatePropertiesPolicy {
+        NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.BeforeDeleteNodePolicy {
     final static protected Logger logger = LoggerFactory.getLogger(ReportDescriptorPolicy.class);
 
     protected PolicyComponent policyComponent;
@@ -54,6 +55,8 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
                 ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "beforeDeleteNode"));
     }
 
     @Override
@@ -103,6 +106,19 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         return column;
     }
 
+    private void removeColumnToDS(NodeRef mainDS, NodeRef subReport) {
+        try {
+            String subReportName = (String) nodeService.getProperty(subReport, ContentModel.PROP_NAME);
+
+            NodeRef columnRef = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, subReportName);
+            if (columnRef != null) {
+                nodeService.deleteNode(columnRef);
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+    }
+
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         NodeRef mainReport = nodeService.getPrimaryParent(nodeRef).getParentRef();
@@ -128,6 +144,23 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
             } catch (Exception ex) {
                 logger.error(ex.getMessage(), ex);
             }
+        }
+    }
+
+    @Override
+    public void beforeDeleteNode(NodeRef report) {
+        NodeRef mainReport = nodeService.getPrimaryParent(report).getParentRef();
+
+        // получаем набор данных основного отчета
+        NodeRef mainDS = null;
+        Set<QName> source = new HashSet<QName>();
+        source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+        List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
+        if (sourcesList.size() > 0) { // есть набор данных - получаем его
+            mainDS = sourcesList.get(0).getChildRef();
+        }
+        if (mainDS != null) {
+            removeColumnToDS(mainDS, report);
         }
     }
 }

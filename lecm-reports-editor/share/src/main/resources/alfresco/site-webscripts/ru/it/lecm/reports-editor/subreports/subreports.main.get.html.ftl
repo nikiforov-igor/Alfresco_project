@@ -32,7 +32,7 @@
 <#assign gridId = "re-subreports-grid-" + id />
 <div class="yui-t1" id="${gridId}">
     <div id="yui-main-2">
-        <div class="yui-b" id="alf-content-${gridId}" style="margin-left: 0;">
+        <div class="yui-b" id="alf-content-${id}" style="margin-left: 0;">
         <@grid.datagrid id="${gridId}" showViewForm=false>
             <script type="text/javascript">//<![CDATA[
             var $html = Alfresco.util.encodeHTML,
@@ -40,13 +40,13 @@
                     $combine = Alfresco.util.combinePaths,
                     $userProfile = Alfresco.util.userProfileLink;
 
-            LogicECM.module.ReportsEditor.Grid = function (containerId) {
-                return LogicECM.module.ReportsEditor.Grid.superclass.constructor.call(this, containerId);
+            LogicECM.module.ReportsEditor.SubGrid = function (containerId) {
+                return LogicECM.module.ReportsEditor.SubGrid.superclass.constructor.call(this, containerId);
             };
 
-            YAHOO.lang.extend(LogicECM.module.ReportsEditor.Grid, LogicECM.module.Base.DataGrid);
+            YAHOO.lang.extend(LogicECM.module.ReportsEditor.SubGrid, LogicECM.module.Base.DataGrid);
 
-            YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.Grid.prototype, {
+            YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SubGrid.prototype, {
 
                 splashScreen: null,
 
@@ -181,10 +181,10 @@
             }, true);
 
             function createSubDatagrid() {
-                var datagrid = new LogicECM.module.ReportsEditor.Grid('${gridId}').setOptions(
+                var datagrid = new LogicECM.module.ReportsEditor.SubGrid('${gridId}').setOptions(
                         {
                             usePagination: true,
-                            useDynamicPagination: false,
+                            useDynamicPagination: true,
                             showExtendSearchBlock: false,
                             forceSubscribing: true,
                             actions: [

@@ -1587,7 +1587,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			setupActions: function() {
 				if (this.options.actions != null) {
 					var actionsDiv = document.getElementById(this.id + "-actionSet");
-                    if (actionsDiv.children.length == 0) {
+                    if (actionsDiv && actionsDiv.children.length == 0) {
                         for (var i = 0; i < this.options.actions.length; i++) {
                             var action = this.options.actions[i];
 

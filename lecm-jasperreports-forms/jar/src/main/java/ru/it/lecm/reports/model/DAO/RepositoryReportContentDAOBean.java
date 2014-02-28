@@ -12,13 +12,11 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.NodeUtils;
+import ru.it.lecm.reports.xml.DSXMLProducer;
 
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Служба хранения файлов, шаблонов и др контента, связанного с разворачиваемыми отчётами.
@@ -162,40 +160,32 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
     @Override
     public int scanContent(final ContentEnumerator enumerator) {
         final NodeRef root = getServiceRootFolder();
-        // узлы и названия с соот-щих уровней
-        final int levels = 2;
-        final NodeRef[] refs = new NodeRef[levels];
-        final String[] names = new String[levels];
-
         // проходим по всем типа, отчётам и файлам ...
         /*
 		 * Иерахия хранения:
 		 *   1. папка службы (как принято для lecm служб)
-		 *      2. папка "Типы отчётов"
-		 *         [lev==1] 3. папка конкретного "Типа отчёта" (reportType)
-		 *            [lev==2] 4. папка "Отчёт" (reportMnemo)
-		 *               [lev==3] 5. [Файл/Контент] Название + данные
-		 *                  здесь название файла должно быть уникально для своего отчёта
+		 *            [lev==1] 2. папка "Отчёт" (reportMnemo)
+		 *            [lev==2] 3. Файлы отчета
 		 */
+        Set<QName> folderType = new HashSet<QName>();
+        folderType.add(ContentModel.TYPE_FOLDER);
 
-        return NodeUtils.scanHierachicalChilren(root, getNodeService(), levels, new NodeUtils.NodeEnumerator() {
-            @Override
-            public void lookAt(NodeRef node, List<NodeRef> parents) {
-                if (enumerator != null) {
-                    // подгрузка названий ...
-                    for (int i = 0; i < refs.length; i++) {
-                        if (refs[i] == null || !refs[i].equals(parents.get(i))) {
-                            refs[i] = parents.get(i);
-                            names[i] = Utils.coalesce(getNodeService().getProperty(refs[i], ContentModel.PROP_NAME), "");
-                        }
-                    }
-                    final String nameNode = (String) getNodeService().getProperty(node, ContentModel.PROP_NAME);
-                    final IdRContent id = new IdRContent(names[levels-1], nameNode);
-                    enumerator.lookAtItem(id);
-                }
+        int resultCnt = 0;
+        List<ChildAssociationRef> reportsFolders = nodeService.getChildAssocs(root, folderType);
+        for (ChildAssociationRef reportsFolder : reportsFolders) {
+            NodeRef report = reportsFolder.getChildRef();
+            String reportCode = (String) nodeService.getProperty(report, ContentModel.PROP_NAME);
+
+            String dsXmlFileName = DSXMLProducer.PFX_DS + reportCode + ".xml";
+
+            NodeRef dsConfigFile = nodeService.getChildByName(report, ContentModel.ASSOC_CONTAINS, dsXmlFileName);
+
+            if (dsConfigFile != null) {
+                resultCnt++;
+                enumerator.lookAtItem(new IdRContent(reportCode, dsXmlFileName));
             }
         }
-        );
+        return  resultCnt;
     }
 
     @Override

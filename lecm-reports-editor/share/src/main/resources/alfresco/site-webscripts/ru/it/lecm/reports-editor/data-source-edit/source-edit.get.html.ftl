@@ -40,7 +40,7 @@
             </span>
         </span>
     </div>
-</@comp.baseToolbar>
+    </@comp.baseToolbar>
 </div>
 <div id="selectSourcePanel" class="yui-panel" style="display:none">
     <div id="selectSourcePanel-select-head" class="hd">Выбрать</div>

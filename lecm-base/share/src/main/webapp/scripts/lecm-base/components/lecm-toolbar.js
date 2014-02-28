@@ -409,7 +409,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             onSelectedItemsChanged: function Toolbar_onSelectedItemsChanged(layer, args) {
-                if (this.modules.dataGrid) {
+                if (this.modules.dataGrid && this.modules.dataGrid._hasEventInterest(args[1])) {
                     var items = this.modules.dataGrid.getSelectedItems();
                     for (var index in this.groupActions) {
                         if (this.groupActions.hasOwnProperty(index)) {
