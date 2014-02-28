@@ -37,13 +37,6 @@ import ru.it.lecm.base.beans.BaseBean;
  */
 public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsService {
 
-    private static final int INDEX_KEY = 0;
-    private static final int INDEX_IV = 1;
-    private static final int ITERATIONS = 1;
-
-    private static final int ARG_INDEX_FILENAME = 0;
-    private static final int ARG_INDEX_PASSWORD = 1;
-    
     private static final int SALT_OFFSET = 8;
     private static final int SALT_SIZE = 8;
     private static final int CIPHERTEXT_OFFSET = SALT_OFFSET + SALT_SIZE;
@@ -65,15 +58,16 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 		return getFolder(LECM_SECRET_FOLDER_ID);
 	}
 
-    //TODO �������������
+    //TODO Замаскировать
+    //TODO как следует обработать исключения
     public Properties decrypt(NodeRef nodeRef) throws IOException {
         Properties result=null;
-        //��������� �������������\
+        
         if (!(nodeService.exists(nodeRef) && nodeService.getType(nodeRef).isMatch(ContentModel.TYPE_CONTENT))) {
             throw new RuntimeException("File not exists");
         }
         
-        //�������� �������
+        
         ContentService contentService = serviceRegistry.getContentService();
         ContentReader contentReader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
         if (!contentReader.exists()) {
@@ -93,7 +87,7 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
             bufferedReader.close();
         }
         try {
-            //������������
+        
             byte[] content = Base64.decodeBase64(line);
             byte[] salt = Arrays.copyOfRange(
                     content, SALT_OFFSET, SALT_OFFSET + SALT_SIZE);
@@ -103,7 +97,7 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
             
             Cipher cipher = OpenSSLCipherFactory.getInstance(MAGIC_WORD.getBytes(), salt, Cipher.DECRYPT_MODE, KEY_SIZE_BITS);
             byte[] decrypted = cipher.doFinal(encrypted);
-            //���������    
+        
             result = new Properties();
             result.load(new ByteArrayInputStream(decrypted));
         } catch (NoSuchAlgorithmException ex) {

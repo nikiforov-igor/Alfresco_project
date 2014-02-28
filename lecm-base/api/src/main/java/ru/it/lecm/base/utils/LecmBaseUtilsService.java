@@ -1,5 +1,8 @@
 package ru.it.lecm.base.utils;
 
+import java.io.Serializable;
+import java.util.Map;
+import org.alfresco.service.cmr.repository.NodeRef;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import org.alfresco.service.namespace.QName;
@@ -23,4 +26,5 @@ public interface LecmBaseUtilsService {
 	public static final QName PROP_EXPIRATION_DATE = QName.createQName("http://www.alfresco.org/model/content/1.0", "expiration_date");
 	public static final QName PROP_CUSTOMER = QName.createQName("http://www.alfresco.org/model/content/1.0", "customer");
 	
+    public Boolean checkProperties(NodeRef nodeRef, Map<QName, Serializable> properties);
 }
