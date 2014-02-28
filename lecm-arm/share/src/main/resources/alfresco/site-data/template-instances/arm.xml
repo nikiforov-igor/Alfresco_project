@@ -11,7 +11,7 @@
             <url>/lecm/base/title-with-filter-label</url>
             <properties>
                 <title>page.title.arm</title>
-                <filteredLabel>page.title.arm</filteredLabel>
+                <filteredLabel>arm.title.filteredLabel</filteredLabel>
             </properties>
         </component>
         <!-- Toolbar -->
