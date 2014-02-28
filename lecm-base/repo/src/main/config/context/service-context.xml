@@ -341,5 +341,4 @@
         <property name="namespaceService" ref="NamespaceService" />
     </bean>
 
-	<bean id="lecmBaseAlgorithmUtils" class="ru.it.lecm.base.utils.BaseAlgorithmUtils"/>
 </beans>
