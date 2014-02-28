@@ -99,6 +99,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 );
 
+	            this.toolbarButtons[this.options.searchButtonsType].push(
+		            Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick,
+			            {
+				            disabled: this.options.searchButtonsType != 'defaultActive'
+			            })
+	            );
+
                 this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
