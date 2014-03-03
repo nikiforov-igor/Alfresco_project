@@ -189,8 +189,9 @@
                     <field id="lecm-rpeditor:parentReportTemplateAssoc">
                         <control template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl">
                             <control-param name="ctrlValue">nodeRef</control-param>
-                            <control-param name="notSelectedOption">false</control-param>
+                            <control-param name="notSelectedOption">true</control-param>
                             <control-param name="fromParent">true</control-param>
+                            <control-param name="notSelectedOptionLabel"> </control-param>
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>

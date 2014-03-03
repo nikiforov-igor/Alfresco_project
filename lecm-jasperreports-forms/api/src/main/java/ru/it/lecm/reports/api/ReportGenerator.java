@@ -46,8 +46,10 @@ public interface ReportGenerator {
 	 * Сгенерировать шаблон отчёта на основании макета шаблона
 	 *
      *
+     *
      * @param maketData поток с данными макета шаблона
      * @param desc описатель отчёта
+     * @param template
      * @return данные готового шаблона отчёта (получить из них поток достаточно
 	 * просто, например:<br/>
 	 * <code>
@@ -55,5 +57,5 @@ public interface ReportGenerator {
 	 * 		ByteArrayOutputStream stm = new ByteArrayOutputStream( data);<br/>
 	 *	</code>
 	 */
-	byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc);
+	byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template);
 }

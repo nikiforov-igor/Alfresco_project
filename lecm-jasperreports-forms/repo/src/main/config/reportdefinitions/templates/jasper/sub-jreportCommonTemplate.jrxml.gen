@@ -176,7 +176,7 @@
                         <subreport isUsingCache="true">
                             <reportElement uuid="@GUID" positionType="Float" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" stretchType="RelativeToTallestObject" isPrintWhenDetailOverflows="true"/>
                             <dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{@SUB.desc.destColumnName}, false)]]></dataSourceExpression>
-                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
+                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.templateName@@.jasper"]]></subreportExpression>
                         </subreport>
                     </band>
                 </macro.body.field.case>
@@ -192,7 +192,7 @@
                                 </macro.body.field>
                             </prototype-fields>
                             <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.desc.destColumnName@@.jasper"]]></subreportExpression>
+                            <subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "@SUB.desc.destColumnName@@/@SUB.templateName@@.jasper"]]></subreportExpression>
                         </subreport>
                     </band>
                 </macro.body.field.case>

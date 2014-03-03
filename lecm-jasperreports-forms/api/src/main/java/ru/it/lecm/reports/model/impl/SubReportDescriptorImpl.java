@@ -18,6 +18,8 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl {
     private Map<String, String> subItemsSourceMap;
     private ReportDescriptor ownerReport;
 
+    private ReportTemplate parentTemplate = null;
+
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -122,5 +124,13 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl {
     @Override
     public boolean isSubReport() {
         return true;
+    }
+
+    public ReportTemplate getParentTemplate() {
+        return parentTemplate;
+    }
+
+    public void setParentTemplate(ReportTemplate parentTemplate) {
+        this.parentTemplate = parentTemplate;
     }
 }

@@ -51,10 +51,13 @@
 		<property name="maxConnectionRetries" value="2" />
 		<property name="connection" ref="reportOpenOfficeConnection" />
         <property name="targetDataSource" ref="dataSource" />
+        <property name="fileExtension" value=".odt" />
+        <property name="defaultTarget" value="DOC" />
+        <property name="templateGenerator" ref="ooOdtTemplateGenerator"/>
 	</bean>
 
 	<!-- Генератор OOffice Calc отчётов -->
-	<bean id="ooCalcReportGenerator" class="ru.it.lecm.reports.generators.OOfficeCalcReportGeneratorImpl" init-method="init">
+	<bean id="ooCalcReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init">
 		<property name="services" ref="wksKeeper"/>
 		<property name="resolver" ref="linksResolverBean"/>
 		<property name="reportsManagerBeanName" value="reportsManager"/>
@@ -63,7 +66,28 @@
 		<property name="maxConnectionRetries" value="2" />
 		<property name="connection" ref="reportOpenOfficeConnection" />
         <property name="targetDataSource" ref="dataSource" />
+        <property name="fileExtension" value=".ods" />
+        <property name="defaultTarget" value="XLS" />
+        <property name="templateGenerator" ref="ooCalcTemplateGenerator"/>
 	</bean>
+
+    <bean id="ooCalcTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeCalcTemplateGenerator">
+        <property name="connection">
+            <ref bean="reportOpenOfficeConnection"/>
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+
+    <bean id="ooOdtTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator">
+        <property name="connection">
+            <ref bean="reportOpenOfficeConnection"/>
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
 
 	<bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl">
 		<property name="services" ref="wksKeeper"/>

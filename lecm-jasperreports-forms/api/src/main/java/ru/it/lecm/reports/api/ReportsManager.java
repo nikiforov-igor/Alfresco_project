@@ -448,8 +448,9 @@ public class ReportsManager {
             return null;
         }
         StringBuilder builder = new StringBuilder();
+        builder.append(desc.getMnem()).append("_");
+
         if (template != null) {
-            builder.append(desc.getMnem()).append("_");
             builder.append(template.getMnem());
         }
         builder.append(extension);
@@ -671,7 +672,7 @@ public class ReportsManager {
 
             final ReportGenerator rg = findAndCheckReportGenerator(null);
 
-            return rg.generateReportTemplateByMaket(maketData, reportDesc);
+            return rg.generateReportTemplateByMaket(maketData, reportDesc, null);
 
         } catch (Throwable ex) {
             final String msg = String.format("Report '%s': get generated template '%s' problem\n\t%s"
@@ -710,7 +711,7 @@ public class ReportsManager {
 
             final ReportGenerator rg = findAndCheckReportGenerator(template.getReportType());
 
-            return rg.generateReportTemplateByMaket(maketData, reportDesc);
+            return rg.generateReportTemplateByMaket(maketData, reportDesc, template);
 
         } catch (Throwable ex) {
             final String msg = String.format("Report '%s': get generated template '%s' problem\n\t%s"

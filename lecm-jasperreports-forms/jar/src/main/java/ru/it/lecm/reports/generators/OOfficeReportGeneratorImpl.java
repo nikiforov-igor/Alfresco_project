@@ -1,77 +1,51 @@
 package ru.it.lecm.reports.generators;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.text.SimpleDateFormat;
-import java.util.Map;
-
+import com.sun.star.ucb.XFileIdentifierConverter;
+import com.sun.star.uno.UnoRuntime;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
-
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.api.model.DataSourceDescriptor;
-import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
-import ru.it.lecm.reports.ooffice.OpenOfficeFillManager;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
-import com.sun.star.ucb.XFileIdentifierConverter;
-import com.sun.star.uno.UnoRuntime;
+import java.io.File;
+import java.io.IOException;
+import java.net.ConnectException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
-
 	private static final transient Logger logger = LoggerFactory.getLogger(OOfficeReportGeneratorImpl.class);
 
 	private final static Object _lockerUniqueGen = new Object();
 
 	/**
-	 * файловое расширение для openOffice-файла
-	 */
-	private static final String OO_FILEEXT = ".odt";
-
-	/**
-	 * файловое расширение для временного openOffice-файла
-	 */
-	private static final String TEMP_OO_FILEEXT = "_tmp" + OO_FILEEXT;
-
-	/**
-	 * файловая маска-суффикс для временного openOffice-файла генерируемого Шаблона Отчёта
-	 */
-	private static final String FMT_SFX_TEMP_RESULT_FILENAME_S = "-report_ready_%s" + TEMP_OO_FILEEXT;
-
-	/**
-	 * файловая маска-суффикс для обычного генерируемого openOffice-отчёта
-	 */
-	private static final String FMT_SFX_RESULT_FILENAME_S = "-report_ready_%s" + OO_FILEEXT;
-
-	/**
 	 * максимальное кол-во попыток сохранить временный файл ("забить место")
 	 */
 	private final static int MAX_CREATE_FILE_RETRY = 10;
-
-	/**
-	 * Целевой формат отчёта по-умолчанию
-	 */
-	private static final JasperReportTargetFileType DEFAULT_TARGET = JasperReportTargetFileType.DOC;
-
-	/**
-	 * "Что сгенерировать" = название колонки (типа строка) с целевым форматом файла после генератора
-	 */
-	private static final String COLNAME_TARGETFORMAT = DataSourceDescriptor.COLNAME_REPORT_TARGETFORMAT;
 
 	private FileReportContentDAOBean resultDAO;
 	private OpenOfficeConnection connection;
@@ -83,11 +57,29 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	private boolean ooConnectedStrictly = false;
 	private int maxConnectionRetries = 3;
 
-	public void init() {
+    // по умолчанию, сервис заточен на работу с ODT
+    private String fileExtension = ".odt";
+    private String defaultTarget = "DOC";
+
+    private OOTemplateGenerator templateGenerator;
+
+    public void init() {
 		checkConnection();
 	}
 
-	public void setOoConnectedStrictly(boolean ooConnectedStrictly) {
+    public void setFileExtension(String fileExtension) {
+        this.fileExtension = fileExtension;
+    }
+
+    public void setDefaultTarget(String defaultTarget) {
+        this.defaultTarget = defaultTarget;
+    }
+
+    public void setTemplateGenerator(OOTemplateGenerator templateGenerator) {
+        this.templateGenerator = templateGenerator;
+    }
+
+    public void setOoConnectedStrictly(boolean ooConnectedStrictly) {
 		this.ooConnectedStrictly = ooConnectedStrictly;
 	}
 
@@ -119,8 +111,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	 * Здесь (openOffice) ничего дополнительно не требуется.
 	 */
 	@Override
-	public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData,
-			ReportContentDAO storage) {
+	public void onRegister(ReportDescriptor desc, ReportTemplate template, byte[] templateData, ReportContentDAO storage) {
 		logger.info(String.format("decriptor deploy notification /'%s'/  \"%s\"", desc.getMnem(), desc.getDefault()));
 	}
 
@@ -193,7 +184,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 	}
 
 	@Override
-	public byte[] generateReportTemplateByMaket(final byte[] maketData, final ReportDescriptor desc) {
+	public byte[] generateReportTemplateByMaket(final byte[] maketData, final ReportDescriptor desc, final ReportTemplate template) {
 		// обмен идёт через файловое хранилище - openOffice работает с файлами ...
 		PropertyCheck.mandatory(this, "connection", getConnection());
 		PropertyCheck.mandatory(this, "resultDAO", getResultDAO());
@@ -207,7 +198,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 			File ooFile = null;
 			try {
 				// генерация уникального названия для результата (после операции - удалим)
-				ooFile = createNewUniquieFile(desc, FMT_SFX_TEMP_RESULT_FILENAME_S);
+				ooFile = createNewUniquieFile(desc, "-report_ready_%s_tmp" + fileExtension);
 				Utils.saveDataToFile(ooFile, maketData);
 
 				final File workFile = ooFile;
@@ -224,13 +215,10 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 								}
 								/* выходной - "обычный" файлик OpenOffice */
 								final String urlWork = toUrl(workFile, connection);
-								final String urlSaveAs = null; // если надо задать название файла другим ...
-
 								final String author = "LECM USER";
 
 								/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-								final OpenOfficeTemplateGenerator ooGen = new OpenOfficeTemplateGenerator(getConnection(), getTargetDataSource());
-								ooGen.odtAddColumnsAsDocCustomProps(getConnection(), desc, urlWork, urlSaveAs, author);
+								templateGenerator.odtAddColumnsAsDocCustomProps(getConnection(), desc, template, urlWork, null, author);
 
 								/** чтение файла в виде буфера ... */
 								final String errLogInfo = String.format("Fail to load generated [temporary] file: \n '%s'", urlWork);
@@ -253,16 +241,16 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		}
 	}
 
-	/**
+    /**
 	 * Найти целевой формат в параметрах ...
-	 *
-	 *
-     *
 	 */
-	// DONE: (?) разрешить задавать формат в колонках данных (константой или выражением)
 	private JasperReportTargetFileType findTargetArg(final Map<String, Object> requestParameters) {
-		final String value = ArgsHelper.findArg(requestParameters, COLNAME_TARGETFORMAT, null);
-		return JasperReportTargetFileType.findByName(value, DEFAULT_TARGET);
+		final String value = ArgsHelper.findArg(requestParameters, DataSourceDescriptor.COLNAME_REPORT_TARGETFORMAT, null);
+        JasperReportTargetFileType defaultType = null;
+        if (defaultTarget != null) {
+            defaultType = JasperReportTargetFileType.findByName(defaultTarget, null);
+        }
+		return JasperReportTargetFileType.findByName(value, defaultType);
 	}
 
 	@Override
@@ -293,7 +281,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		File ooFile = null; // файл с шаблоном
 		File ooResultFile; // готовый файл с правильным расширением
 		try {
-			ooFile = createNewUniquieFile(reportDesc, FMT_SFX_RESULT_FILENAME_S);
+			ooFile = createNewUniquieFile(reportDesc, "-report_ready_%s" + fileExtension);
 			Utils.saveDataToFile(ooFile, reader.getContentInputStream());
 
 			final JasperReportTargetFileType target = findTargetArg(parameters);
@@ -371,10 +359,8 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 						// Выходной файл ...
 						final String urlSaveAs = toUrl(destDocFile, connection);
 
-						/* Добавление атрибутов из колонок данных и сохранение в urlSave... */
-						final OpenOfficeFillManager filler = new OpenOfficeFillManager(getConnection(), getTargetDataSource());
 						try {
-							filler.fill(report, requestParameters, dataSource, urlSrc, urlSaveAs);
+							fill(report, requestParameters, dataSource, urlSrc, urlSaveAs);
 						} catch (JRException ex) {
 							final String msg = String.format("Error filling report '%s':\n%s", report.getMnem(), ex.getMessage());
 							logger.error(msg, ex);
@@ -392,7 +378,100 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		return result;
 	}
 
-	private abstract class Job<TResult> {
+    /**
+     * Выполнить заполнение данными указанного отчёта файла openOffice
+     *
+     * @param report     отчёт
+     * @param parameters параметры
+     * @param jrDataSource набор данных
+     * @param urlSrc     исходный файл openOffice (".odt")
+     * @param urlSaveAs  целевой файл (может иметь другой формат, например, ".rtf")
+     * @throws JRException
+     */
+    public void fill(ReportDescriptor report, Map<String, Object> parameters, JRDataSource jrDataSource, String urlSrc, String urlSaveAs) throws JRException {
+        PropertyCheck.mandatory(this, "connection", connection);
+
+        // атрибуты одной строки НД, которые надо будет присвоить параметрам документа
+        final Map<String, Object> props = new HashMap<String, Object>();
+
+        // формируем значения
+        if (!report.isSQLDataSource()) {
+            // по умолчанию - expressions
+            for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
+                props.put(colDesc.getColumnName(), colDesc.getExpression());
+            }
+            // реальные значения из источника
+            if (jrDataSource.next()) {
+                /* получение данных из текущей строки ... */
+                for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
+                    Object value = jrDataSource.getFieldValue(DataFieldColumn.createDataField(colDesc));
+                    if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                        // пустой подотчет - вместо null подсовываем пустой список
+                        value = new ArrayList();
+                    }
+                    props.put(colDesc.getColumnName(), value);
+                }
+            }
+        } else {
+            Connection sqlConnection = null;
+            ResultSet resultSet = null;
+            PreparedStatement statement = null;
+
+            try {
+                sqlConnection =  getTargetDataSource().getConnection();
+                String query = report.getFlags().getText();
+
+                statement = sqlConnection.prepareStatement(query);
+                statement.setMaxRows(1);
+
+                resultSet = statement.executeQuery();
+
+                // по умолчанию - названия столбцов из запроса
+                int columnCount = resultSet.getMetaData().getColumnCount();
+                for (int i = 1; i <= columnCount; i++) {
+                    String columnName = resultSet.getMetaData().getColumnName(i);
+
+                    String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
+                    props.put(columnName, value);
+                }
+                /* + из колонок берем подотчеты... */
+                for (ColumnDescriptor colDesc : report.getDsDescriptor().getColumns()) {
+                    if (colDesc.getExpression() != null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                        props.put(colDesc.getColumnName(), new ArrayList<Map>());
+                    }
+                }
+            } catch (SQLException e) {
+                logger.error(e.getMessage(), e);
+            } finally {
+                if (resultSet != null) {
+                    try {
+                        resultSet.close();
+                    } catch (SQLException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                if (sqlConnection != null) {
+                    try {
+                        sqlConnection.close();
+                    } catch (SQLException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+            }
+        }
+
+        //в props для обычного провайдера - список заполненных значений, для SQL - дефолтныхce);
+        templateGenerator.odtSetColumnsAsDocCustomProps(props, parameters, report, urlSrc, urlSaveAs, null);
+    }
+
+    private abstract class Job<TResult> {
 
 		/**
 		 * возвращаемое значение

@@ -13,6 +13,7 @@ import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
@@ -179,6 +180,7 @@ public class XMLMacroGenerator {
      * активный описатель отчёта
      */
     private ReportDescriptor reportDesc;
+    private ReportTemplate templateDesc;
 
     private BasicDataSource dataSourceContext;
 
@@ -189,8 +191,9 @@ public class XMLMacroGenerator {
      */
     private MacroValues globals;
 
-    public XMLMacroGenerator(ReportDescriptor rdesc, BasicDataSource ds) {
+    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, BasicDataSource ds) {
         setReportDesc(rdesc);
+        this.templateDesc = template;
         this.dataSourceContext = ds;
     }
 
@@ -235,7 +238,8 @@ public class XMLMacroGenerator {
         if (templateStm == null) {
             return null;
         }
-        logger.debug(String.format("macro expanding template xml '%s' ...", streamNameInfo));
+
+        logger.debug("Macro expanding template xml : " + streamNameInfo);
 
 		/*(@) обновление мета-части описания ... */
         //  xml-генерация по шаблону ...
@@ -246,11 +250,11 @@ public class XMLMacroGenerator {
             // формирование результата
             final ByteArrayOutputStream result = XmlHelper.serialize(docResult);
 
-            logger.info(String.format("macro expantion SUCCESSFULL from template xml '%s' ...", streamNameInfo));
+            logger.info("Macro Expantion SUCCESSFULL From Template Xml :" + streamNameInfo);
 
             return result;
         } catch (Throwable t) {
-            final String msg = String.format("Problem macro expanding template xml '%s' ...", streamNameInfo);
+            String msg = "Problem Macro Expanding Template Xml :" + streamNameInfo;
             logger.error(msg, t);
             throw new RuntimeException(msg, t);
         }
@@ -458,6 +462,11 @@ public class XMLMacroGenerator {
                     , this.reportDesc != null ? this.reportDesc.getMnem() : null));
         }
 
+        if (this.templateDesc == null || this.templateDesc.getFileName() == null) {
+            logger.info(String.format("No report template present for report '%s' -> producing empty macros"
+                    , this.templateDesc != null ? this.templateDesc.getMnem() : null));
+        }
+
         // проверка наличия родителя ...
         final Node destRoot = srcMacroNode.getParentNode();
         if (destRoot == null) {
@@ -476,7 +485,7 @@ public class XMLMacroGenerator {
         } else if (srcMacroNode.getNodeName().endsWith(PROTO_COLUMNS)) {
             block.doListMacroExpansion(reportDesc, false);
         } else if (srcMacroNode.getNodeName().endsWith(PROTO_SUBREPORTS)) {
-            block.doSubListMacroExtension(reportDesc.getSubreports());
+            block.doSubListMacroExtension(reportDesc.getSubreports(), templateDesc);
         }
     }
 
@@ -773,7 +782,7 @@ public class XMLMacroGenerator {
             curVars.calcAllNext(CalcPhase.post); // обновить текущие значения "на месте" ...
         }
 
-        public void doSubListMacroExtension(List<ReportDescriptor> subReports) {
+        public void doSubListMacroExtension(List<ReportDescriptor> subReports, ReportTemplate parentTemplate) {
             if (subReports != null) {
                 // применяем к каждой колонке НД макросы из всех вложенных child-узлов nodeMacros ...
                 int index = -1;
@@ -781,8 +790,12 @@ public class XMLMacroGenerator {
 
                 for (ReportDescriptor sub : subReports) {
                     if (sub instanceof SubReportDescriptorImpl) {
-                        index++;
-                        this.doSubReportMacroExpansion((SubReportDescriptorImpl)sub, index);
+                        SubReportDescriptorImpl subReportWrapper = ((SubReportDescriptorImpl) sub);
+                        if (subReportWrapper.getParentTemplate() == null ||
+                                parentTemplate.getMnem().equals(subReportWrapper.getParentTemplate().getMnem())) {
+                            index++;
+                            this.doSubReportMacroExpansion(subReportWrapper, index);
+                        }
                     }
                 }
             }
@@ -1681,12 +1694,22 @@ public class XMLMacroGenerator {
 
     public class SubReportDescXtender extends RectXtender {
         private SubReportDescriptorImpl desc;
+        private ReportTemplate template;
         private int index;
+        private String templateName;
 
         public SubReportDescXtender(int colIndex, SubReportDescriptorImpl desc) {
             super();
             this.desc = desc;
             this.index = colIndex;
+            if (desc != null) {
+                if (desc.getReportTemplates() != null && !desc.getReportTemplates().isEmpty()) {
+                    this.template = desc.getReportTemplates().get(0); // для подотчетов - всегда берем  первый шаблон!
+                    if (this.template != null) {
+                        this.templateName = this.template.getFileName().substring(0, this.template.getFileName().lastIndexOf("."));
+                    }
+                }
+            }
         }
 
         public SubReportDescriptorImpl getDesc() {
@@ -1705,6 +1728,17 @@ public class XMLMacroGenerator {
             this.index = index;
         }
 
+        public ReportTemplate getTemplate() {
+            return template;
+        }
+
+        public String getTemplateName() {
+            return templateName;
+        }
+
+        public void setTemplateName(String templateName) {
+            this.templateName = templateName;
+        }
     }
 
     public class SubReportDescValue extends RefMacroVar<SubReportDescXtender> {

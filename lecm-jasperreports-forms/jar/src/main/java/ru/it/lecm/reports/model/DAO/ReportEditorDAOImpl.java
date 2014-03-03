@@ -20,6 +20,7 @@ import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
+import javax.xml.soap.Node;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -186,12 +187,13 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             subResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
 
             // источник данных для вложенного списка полей должен быть указан как query
-            String sourceLink = result.getFlags().getText();
-            /*if (Utils.isStringEmpty(sourceLink)) {
-                //TODO точка расширения получения источника для подотчета
-            }*/
-            subResult.setSourceListExpression(sourceLink);
+            subResult.setSourceListExpression(result.getFlags().getText());
 
+            List<AssociationRef> parentTempRefAssoc = getNodeService().getTargetAssocs(node, ASSOC_PARENT_TEMPLATE_ASSOC);
+            if (!parentTempRefAssoc.isEmpty()){
+                NodeRef parentTemplate = parentTempRefAssoc.get(0).getTargetRef();
+                subResult.setParentTemplate(createReportTemplate(parentTemplate));
+            }
             // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
             List<String> sourceTypes = result.getFlags().getSupportedNodeTypes();
             if (sourceTypes != null) {

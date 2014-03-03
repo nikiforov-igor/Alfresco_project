@@ -17,6 +17,7 @@ import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.model.impl.NamedValue;
 import ru.it.lecm.reports.model.impl.ReportFlags;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
@@ -95,10 +96,10 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
      * Предполагается, что входной поток это xml-макет для генератора ru.it.lecm.reports.generators.XMLMacroGenerator
      */
     @Override
-    public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc) {
-        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, getTargetDataSource());
+    public byte[] generateReportTemplateByMaket(byte[] maketData, ReportDescriptor desc, ReportTemplate template) {
+        final XMLMacroGenerator xmlGenerator = new XMLMacroGenerator(desc, template, getTargetDataSource());
         final ByteArrayOutputStream result = xmlGenerator.xmlGenerateByTemplate(
-                new ByteArrayInputStream(maketData), "template for report " + desc.getMnem());
+                new ByteArrayInputStream(maketData), "Template For Report - " + desc.getMnem());
         return (result != null) ? result.toByteArray() : null;
     }
 
