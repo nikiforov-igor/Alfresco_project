@@ -1,10 +1,13 @@
 package ru.it.lecm.base.utils;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.base.beans.BaseBean;
+
 /**
  *
  * @author snovikov
  */
-public class BaseAlgorithmUtils implements IBaseAlgorithmUtils {
+public class BaseAlgorithmUtils extends BaseBean implements IBaseAlgorithmUtils {
 
     private LecmBaseUtilsService lecmBaseUtilsService;
 
@@ -12,8 +15,8 @@ public class BaseAlgorithmUtils implements IBaseAlgorithmUtils {
         return lecmBaseUtilsService;
     }
 
-    public void setLecmBaseUtilsService(LecmBaseUtilsService LecmBaseUtilsService) {
-        this.lecmBaseUtilsService = LecmBaseUtilsService;
+    public void setLecmBaseUtilsService(LecmBaseUtilsService lecmBaseUtilsService) {
+        this.lecmBaseUtilsService = lecmBaseUtilsService;
     }
 
     @Override
@@ -24,5 +27,10 @@ public class BaseAlgorithmUtils implements IBaseAlgorithmUtils {
             return null;
         }    
     }
+
+	@Override
+	public NodeRef getServiceRootFolder() {
+		return null;
+	}
 
 }

@@ -25,6 +25,9 @@ import javax.crypto.NoSuchPaddingException;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -48,11 +51,16 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 	private Date nextRefreshDate;
 	
 	private NamespaceService namespaceService;
+	//private ContentService contentService;
 	
 	public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
-	
+	/*
+	public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+	*/
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(LECM_SECRET_FOLDER_ID);
@@ -60,16 +68,21 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 
     //TODO Замаскировать
     //TODO как следует обработать исключения
-    public Properties decrypt(NodeRef nodeRef) throws IOException {
+    public Properties decrypt(final NodeRef nodeRef) throws IOException {
         Properties result=null;
         
         if (!(nodeService.exists(nodeRef) && nodeService.getType(nodeRef).isMatch(ContentModel.TYPE_CONTENT))) {
             throw new RuntimeException("File not exists");
         }
         
-        
-        ContentService contentService = serviceRegistry.getContentService();
-        ContentReader contentReader = contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+        ContentReader contentReader = AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<ContentReader> () {
+			@Override
+			public ContentReader doWork () throws Exception {
+				ContentService contentService = serviceRegistry.getContentService();
+				return contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+			}
+		}, AuthenticationUtil.getSystemUserName());
+		
         if (!contentReader.exists()) {
             throw new RuntimeException("File not exists");
         }
@@ -132,14 +145,14 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 				if (propQName != null && propValue != null) 
 					propertiesMap.put(propQName, propValue);
 			}
+			this.nextRefreshDate = new Date(new Date().getTime() + PROPS_REFRESH_PERIOD);
 		}
-		this.nextRefreshDate = new Date(new Date().getTime() + PROPS_REFRESH_PERIOD);
 	}
 		
 	public void init() {
 		try {
 			refreshPropertiesMap();
-		} catch(IOException e) {
+		} catch(Exception e) {
 			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}

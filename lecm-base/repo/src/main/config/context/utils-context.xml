@@ -19,6 +19,7 @@
 			p:nodeService-ref="nodeService"
 			p:namespaceService-ref="namespaceService"
 			p:transactionService-ref="transactionService"
+			p:serviceRegistry-ref="serviceRegistry"
 			p:folders-ref="base-utils.folders"/>
     
 	<bean id="base-algo-utils.service" class="ru.it.lecm.base.utils.BaseAlgorithmUtils" parent="baseBean"
