@@ -193,11 +193,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     items.push(datagridItems[i].nodeRef);
                 }
                 var me = this;
-                var splashScreen = Alfresco.util.PopupManager.displayMessage(
-                {
-                        spanClass: "wait",
-                        displayTime: 0
-                });
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/groupActions/list",
@@ -236,7 +231,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             } else {
                                 menu.itemData = actionItems;
                             }
-                            YAHOO.lang.later(500, splashScreen, splashScreen.destroy);
                         }
                     },
                     failureCallback: {
