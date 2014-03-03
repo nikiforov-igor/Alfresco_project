@@ -113,7 +113,7 @@
 
 	WorkflowDatagrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
 		// Если у нас нет списка разрешённых согласующих, то ничего не делаем
-		if (grid.options.allowedNodes.length === 0) {
+		if (!grid.options.allowedNodes || grid.options.allowedNodes.length === 0) {
 			return null;
 		}
 
