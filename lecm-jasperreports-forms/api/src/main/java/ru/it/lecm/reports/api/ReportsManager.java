@@ -567,7 +567,7 @@ public class ReportsManager {
         if (descriptor == null) {
             return null;
         }
-        if (templateCode == null) {
+        if (templateCode == null || templateCode.isEmpty()) {
             return descriptor.getDefaultTemplate();
         }
         for (ReportTemplate reportTemplate : descriptor.getReportTemplates()) {

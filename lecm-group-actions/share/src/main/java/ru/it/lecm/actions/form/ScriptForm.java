@@ -37,16 +37,8 @@ public class ScriptForm extends FormUIGet {
         d_datetime,
         d_any,
         d_double,
-        STATUS
-    }
-
-    private enum RangeableTypes {
-        d_int,
-        d_float,
-        d_long,
-        d_date,
-        d_datetime,
-        d_double
+        STATUS,
+        TEMPLATES
     }
 
     public void setScriptRemote(ScriptRemote scriptRemote) {
