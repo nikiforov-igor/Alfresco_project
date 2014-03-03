@@ -18,19 +18,16 @@ public class BaseQueryArmFilter implements ArmDocumenstFilter {
     final public static String VALUE = "#value";
 
     @Override
-    public String getQuery(Object armNode, List<String> args) {
+    public String getQuery(Object armNode, String baseQuery, List<String> args) {
         String resultedQuery = "";
-        if (args != null && !args.isEmpty()) {
-            logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));
+        if (baseQuery != null) {
+            logger.debug("Filter baseQuery: " + baseQuery);
 
-            String baseQuery = args.get(0);
-            if (baseQuery == null || baseQuery.isEmpty()){
-                return  resultedQuery;
+            if ( baseQuery.isEmpty()){
+                return resultedQuery;
             }
 
             // все остальные данные - значения
-            args.remove(0);
-
             if (args.isEmpty()) {
                 return baseQuery;
             }

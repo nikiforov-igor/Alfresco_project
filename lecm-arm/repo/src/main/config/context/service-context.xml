@@ -98,8 +98,6 @@
 
     <bean id="authorArmFilter" class="ru.it.lecm.arm.filters.AuthorArmFilter">
         <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="documentService" ref="documentService"/>
-        <property name="namespaceService" ref="namespaceService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="preferenceService" ref="preferenceService"/>
     </bean>

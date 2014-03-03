@@ -14,6 +14,7 @@
                 <property name="lecm-arm:filter-class">authorArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,FAVOURITE|Избранные,ALL|Все</property>
+                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref</property>
             </item>
             <item name="cm:Контроль" type="lecm-arm:filter">
                 <property name="cm:name">Контроль</property>

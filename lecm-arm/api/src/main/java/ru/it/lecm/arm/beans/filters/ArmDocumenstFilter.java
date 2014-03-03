@@ -6,5 +6,5 @@ import java.util.List;
  * User: DBashmakov
  */
 public interface ArmDocumenstFilter {
-    public String getQuery(Object armNode, List<String> args);
+    public String getQuery(Object armNode, String params, List<String> args);
 }

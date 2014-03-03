@@ -89,10 +89,6 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
                     }
 
                     if (filterBean != null) {
-                        if (filterBean instanceof BaseQueryArmFilter) { // для бина с запросом первым параметром пойдет сам запрос
-                            values.add(filter.has(QUERY) ? (String) filter.get(QUERY) : null);
-                        }
-
                         if (Boolean.valueOf(String.valueOf(filter.get(MULTIPLE)))) {
                             Object curValues = filter.get(CUR_VALUE);
                             if (curValues instanceof JSONArray) {
@@ -110,7 +106,9 @@ public class ArmQueryByFiltersScript extends AbstractWebScript implements Applic
                             values.addAll(Arrays.asList(currentValueStr.split(",")));
                         }
 
-                        String query = filterBean.getQuery(armNode, values);
+	                    String params = filter.has(QUERY) ? (String) filter.get(QUERY) : null;
+
+                        String query = filterBean.getQuery(armNode, params, values);
                         if (!query.isEmpty()) {
                             builder.append("(").append(query).append(")").append(" AND");
                         }
