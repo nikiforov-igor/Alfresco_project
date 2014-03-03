@@ -1,12 +1,5 @@
 package ru.it.lecm.businessjournal.schedule;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
@@ -23,6 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+
+import java.io.Serializable;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  *
@@ -179,7 +176,7 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
                                 if (key.equals("/authAudit/login/no-error/user")) {
                                     type = EventCategory.LOGIN_SUCCESS;
                                     login = values.get(key).toString();
-                                    text = "Пользователь "+login+" вошёл всистему.";
+                                    text = "Пользователь "+login+" вошёл в систему.";
 
                                 } else if (key.equals("/authAudit/error/error/user")) {
                                     type = EventCategory.LOGIN_FAILED;
