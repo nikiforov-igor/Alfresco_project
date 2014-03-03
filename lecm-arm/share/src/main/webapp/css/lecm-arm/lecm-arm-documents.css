@@ -168,3 +168,7 @@ div.error-item
     text-align: left;
 }
 
+.arm-tree-menu td.ygtvcell {
+	text-align: left;
+	white-space: nowrap;
+}

@@ -105,25 +105,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		    },
 
 		    _drawFiltersPanel: function () {
-			    if (this.filtersDialog == null) {
-				    // создаем диалог
-				    this.filtersDialog = new YAHOO.widget.Panel(this.id + "-filters-dialog",
-					    {
-						    fixedcenter: false,
-						    close: false,
-						    draggable: false,
-						    zindex: 4,
-						    modal: true,
-						    visible: false
-					    }
-				    );
-				    this.filtersDialog.render();
-			    }
+			    // создаем диалог
+			    this.filtersDialog = new YAHOO.widget.Panel(this.id + "-filters-dialog",
+				    {
+					    fixedcenter: false,
+					    close: false,
+					    draggable: false,
+					    zindex: 4,
+					    modal: true,
+					    visible: false
+				    }
+			    );
+			    this.filtersDialog.render();
 		    },
 
             onFiltersClick: function () {
-                //отрисовка фильтров в окне
-                this._drawFiltersPanel();
                 this._renderFilters(this.avaiableFilters, this.isNeedUpdate);
             },
 
@@ -140,6 +136,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             _initButtons: function () {
+	            this._drawFiltersPanel();
                 this.toolbarButtons["defaultActive"].filtersButton = Alfresco.util.createYUIButton(this, "filtersButton", this.onFiltersClick);
 	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-apply-button", this.onApplyFilterClick);
 
