@@ -24,14 +24,16 @@
 	       </span>
 	    </span>
 	</div>
-	<div id="${id}-filters-dialog" class="filters-dialog">
-		<div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
-		<div class="filters-dialog-buttons">
-            <span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
-                <span class="first-child">
-                    <button type="button">${msg('filter.button.ok')}</button>
-                </span>
-            </span>
+	<div id="${id}-filters-dialog" class="yui-panel filters-dialog">
+		<div id="${id}-filters-dialog" class="bd">
+			<div id="${id}-filters-dialog-content" class="filters-dialog-content"></div>
+			<div class="bdft">
+	            <span id="${id}-filters-apply-button" class="yui-button yui-push-button filters-icon">
+	                <span class="first-child">
+	                    <button type="button" tabindex="0">${msg("filter.button.ok")}</button>
+	                </span>
+	            </span>
+			</div>
 		</div>
 	</div>
 </div>

@@ -12,6 +12,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     LogicECM.module.ARM.DocumentsToolbar = function (htmlId) {
         LogicECM.module.ARM.DocumentsToolbar.superclass.constructor.call(this, "LogicECM.module.ARM.DocumentsToolbar", htmlId);
 
+        this.filtersDialog = null;
         this.splashScreen = null;
         this.avaiableFilters = [];
 
@@ -26,6 +27,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         {
             PREFERENCE_KEY: "ru.it.lecm.arm.current-filters",
 
+            filtersDialog: null,
             splashScreen: null,
             gridBubblingLabel: "documents-arm",
 	        doubleClickLock: false,
@@ -34,44 +36,94 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             isNeedUpdate: false,
             currentType: null,
 
-            _renderFilters: function (filters, updateHtml) {
-	            var filterDialog = Dom.get(this.id + "-filters-dialog");
-	            if (filterDialog != null) {
-	                if (!updateHtml) {
-		                Dom.setStyle(filterDialog, "visibility", "visible");
-	                } else {
-	                    var toolbar = this;
-		                var me = this;
-	                    Alfresco.util.Ajax.jsonRequest({
-	                        method: "POST",
-	                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
-	                        dataObj: {
-	                            htmlId: Alfresco.util.generateDomId(),
-	                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
-	                        },
-	                        successCallback: {
-	                            fn: function (oResponse) {
-		                            var filterContainer = Dom.get(me.id + "-filters-dialog-content");
-		                            if (filterContainer != null) {
-		                                filterContainer.innerHTML = oResponse.serverResponse.responseText;
-		                            }
-	                                toolbar.isNeedUpdate = false;
-		                            Dom.setStyle(filterDialog, "visibility", "visible");
-	                            }
-	                        },
-	                        failureCallback: {
-	                            fn: function () {
-	                            }
-	                        },
-	                        scope: this,
-	                        execScripts: true
-	                    });
-	                }
-	            }
-            },
+//            _renderFilters: function (filters, updateHtml) {
+//	            var filterDialog = Dom.get(this.id + "-filters-dialog");
+//	            if (filterDialog != null) {
+//	                if (!updateHtml) {
+//		                Dom.setStyle(filterDialog, "visibility", "visible");
+//	                } else {
+//	                    var toolbar = this;
+//		                var me = this;
+//	                    Alfresco.util.Ajax.jsonRequest({
+//	                        method: "POST",
+//	                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+//	                        dataObj: {
+//	                            htmlId: Alfresco.util.generateDomId(),
+//	                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+//	                        },
+//	                        successCallback: {
+//	                            fn: function (oResponse) {
+//		                            var filterContainer = Dom.get(me.id + "-filters-dialog-content");
+//		                            if (filterContainer != null) {
+//		                                filterContainer.innerHTML = oResponse.serverResponse.responseText;
+//		                            }
+//	                                toolbar.isNeedUpdate = false;
+//		                            Dom.setStyle(filterDialog, "visibility", "visible");
+//	                            }
+//	                        },
+//	                        failureCallback: {
+//	                            fn: function () {
+//	                            }
+//	                        },
+//	                        scope: this,
+//	                        execScripts: true
+//	                    });
+//	                }
+//	            }
+//            },
+
+		    _renderFilters: function (filters, updateHtml) {
+			    if (!updateHtml) {
+				    this.filtersDialog.show();
+			    } else {
+				    var filtersDiv = Dom.get(this.id + "-filters-dialog-content");
+				    var toolbar = this;
+				    Alfresco.util.Ajax.jsonRequest({
+					    method: "POST",
+					    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+					    dataObj: {
+						    htmlId: Alfresco.util.generateDomId(),
+						    filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+					    },
+					    successCallback: {
+						    fn: function (oResponse) {
+							    filtersDiv.innerHTML = oResponse.serverResponse.responseText;
+							    toolbar.isNeedUpdate = false;
+							    if (toolbar.filtersDialog != null) {
+								    toolbar.filtersDialog.show();
+							    }
+						    }
+					    },
+					    failureCallback: {
+						    fn: function () {
+						    }
+					    },
+					    scope: this,
+					    execScripts: true
+				    });
+			    }
+		    },
+
+		    _drawFiltersPanel: function () {
+			    if (this.filtersDialog == null) {
+				    // создаем диалог
+				    this.filtersDialog = new YAHOO.widget.Panel(this.id + "-filters-dialog",
+					    {
+						    fixedcenter: false,
+						    close: false,
+						    draggable: false,
+						    zindex: 4,
+						    modal: true,
+						    visible: false
+					    }
+				    );
+				    this.filtersDialog.render();
+			    }
+		    },
 
             onFiltersClick: function () {
                 //отрисовка фильтров в окне
+                this._drawFiltersPanel();
                 this._renderFilters(this.avaiableFilters, this.isNeedUpdate);
             },
 
@@ -84,7 +136,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     });
                 }
 
-	            Dom.setStyle(this.id + "-filters-dialog", "visibility", "hidden");
+	            this.filtersDialog.hide();
             },
 
             _initButtons: function () {
@@ -357,7 +409,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
 
             onToolbarUpdate: function(layer, args) {
-	            Dom.setStyle(this.id + "-filters-dialog", "visibility", "hidden");
                 var currentNode = args[1].currentNode;
                 if (currentNode !== null) {
                     var filters = currentNode.data.filters;
