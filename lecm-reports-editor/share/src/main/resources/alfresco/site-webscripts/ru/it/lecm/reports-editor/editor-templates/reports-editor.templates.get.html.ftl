@@ -18,15 +18,17 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-function initToolbar() {
-    new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
-        bubblingLabel: "templates",
-        createFormId: "${args.createFormId!''}",
-        newRowDialogTitle: "label.create-template.title"
-    });
-}
-YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
+(function () {
+    function initToolbar() {
+        new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
+            bubblingLabel: "templates",
+            createFormId: "${args.createFormId!''}",
+            newRowDialogTitle: "label.create-template.title"
+        });
+    }
 
+    YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
+})();
 //]]></script>
 
 <#assign gridId = "re-templates-grid-" + id/>

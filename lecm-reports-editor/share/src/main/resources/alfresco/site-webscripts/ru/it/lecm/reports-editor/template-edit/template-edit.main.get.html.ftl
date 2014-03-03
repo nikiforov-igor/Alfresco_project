@@ -32,14 +32,12 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-    (function() {
     function initToolbar() {
         var reportsEditor = new LogicECM.module.ReportsEditor.TemplateEditToolbar("${toolbarId}");
         reportsEditor.setReportId("${args.reportId}");
         reportsEditor.setMessages(${messages});
     }
     YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
-    })();
 </script>
 
 <#assign gridId = "re-template-edit-grid-" + id/>
@@ -105,12 +103,10 @@
 </div>
 
 <script type="text/javascript">//<![CDATA[
-(function() {
     function initEditor() {
         var reportsEditor = new LogicECM.module.ReportsEditor.TemplateEditor("${gridId}");
         reportsEditor.setReportId("${args.reportId}");
         reportsEditor.setMessages(${messages});
     }
     YAHOO.util.Event.onDOMReady(initEditor);
-})();
 </script>

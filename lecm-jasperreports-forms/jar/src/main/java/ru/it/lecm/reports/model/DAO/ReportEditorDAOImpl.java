@@ -476,7 +476,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         NodeService nodeService = getNodeService();
 
         Set<QName> descriptors = new HashSet<QName>();
-        descriptors.add(TYPE_REPORT_DESCRIPTOR);
+        descriptors.add(TYPE_SUB_REPORT_DESCRIPTOR);
 
         List<ChildAssociationRef> childDescriptorsList = nodeService.getChildAssocs(mainReport, descriptors);
         for (ChildAssociationRef childAssociationRef : childDescriptorsList) {

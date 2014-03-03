@@ -66,7 +66,7 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
         NodeRef parent = childAssociationRef.getParentRef();
         QName parentType = nodeService.getType(parent);
         try {
-            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR)) {
+            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) || parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
                 nodeService.createAssociation(parent, childAssociationRef.getChildRef(), ReportsEditorModel.ASSOC_REPORT_DESCRIPTOR_TEMPLATE);
                 //копируем файл с шаблоном из общей директории в отчет (или генерим новый на основании источника данных)
                 copyTemplateFile(childAssociationRef.getChildRef(), parent);

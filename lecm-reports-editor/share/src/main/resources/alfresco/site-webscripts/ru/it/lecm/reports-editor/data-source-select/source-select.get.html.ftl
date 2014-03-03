@@ -126,17 +126,16 @@
     </div>
 
     <script type="text/javascript">//<![CDATA[
-        var sourceSelectEditor = null;
+    (function() {
         function initEditor() {
-            if (sourceSelectEditor == null) {
-                sourceSelectEditor = new LogicECM.module.ReportsEditor.SelectSourceEditor("${id}").setMessages(${messages});
+                var sourceSelectEditor = new LogicECM.module.ReportsEditor.SelectSourceEditor("${id}").setMessages(${messages});
                 sourceSelectEditor.setReportId("${args.reportId}");
                 sourceSelectEditor.setDataSourceId("${activeSourceId!""}");
                 sourceSelectEditor.setColumnsDataGridLabel("${sourceColumnsLabel}");
                 sourceSelectEditor.setSourcesDataGridLabel("${sourceListLabel}");
-            }
         }
 
         YAHOO.util.Event.onContentReady("${toolbarId}-body", initEditor);
+    })();
     //]]></script>
 </div>

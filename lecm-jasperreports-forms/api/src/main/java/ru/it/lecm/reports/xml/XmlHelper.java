@@ -223,9 +223,6 @@ public class XmlHelper {
 
     public static void xmlAddClassNameAttr(Element result, JavaClassable jclazz, String xmlAttrName, String defaultAttrValue) {
         if (jclazz != null && jclazz.getClassName() != null) {
-            if (defaultAttrValue != null && jclazz.getClassName().equals(defaultAttrValue)) {
-                return; // совпадает со значением по-умолчанию
-            }
             result.setAttribute(xmlAttrName, jclazz.getClassName());
         }
     }

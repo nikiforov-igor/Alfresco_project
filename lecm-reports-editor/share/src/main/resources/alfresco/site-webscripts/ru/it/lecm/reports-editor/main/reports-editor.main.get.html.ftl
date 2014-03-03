@@ -60,52 +60,46 @@
                                         };
                                     };
 
-                            for (var i = 0, ii = obj.items.length; i < ii; i++) {
-                                recordFound = this._findRecordByParameter(obj.items[i].nodeRef, "nodeRef");
-                                if (recordFound !== null) {
-                                    var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
-                                    sUrl = YAHOO.lang.substitute(sUrl, {
-                                        reportCode: obj.items[i].itemData["prop_lecm-rpeditor_reportCode"].value
-                                    });
-                                    me._showSplash();
-                                    var callback = {
-                                        success: function (oResponse) {
-                                            oResponse.argument.parent._hideSplash();
-                                            obj.items[i].itemData["prop_lecm-rpeditor_reportIsDeployed"] = {value: false, displayValue: false};
-                                            YAHOO.Bubbling.fire("dataItemUpdated",
-                                                    {
-                                                        item: obj.items[i],
-                                                        bubblingLabel: me.options.bubblingLabel
-                                                    });
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: "Отчет удален из системы",
-                                                        displayTime: 3
-                                                    });
-                                        },
-                                        failure: function (oResponse) {
-                                            oResponse.argument.parent._hideSplash();
-                                            Alfresco.util.PopupManager.displayMessage(
-                                                    {
-                                                        text: "При удалении отчета из системы произошла ошибка",
-                                                        displayTime: 3
-                                                    });
-                                        },
-                                        argument: {
-                                            parent: me
-                                        },
-                                        timeout: 30000
-                                    };
-                                    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+                            //for (var i = 0, ii = obj.items.length; i < ii; i++) {
+                            recordFound = this._findRecordByParameter(obj.items[0].nodeRef, "nodeRef");
+                            if (recordFound !== null) {
+                                var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/undeployReport?reportCode={reportCode}";
+                                sUrl = YAHOO.lang.substitute(sUrl, {
+                                    reportCode: obj.items[0].itemData["prop_lecm-rpeditor_reportCode"].value
+                                });
+                                me._showSplash();
+                                var callback = {
+                                    success: function (oResponse) {
+                                        oResponse.argument.parent._hideSplash();
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "Отчет удален из системы",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    failure: function (oResponse) {
+                                        oResponse.argument.parent._hideSplash();
+                                        Alfresco.util.PopupManager.displayMessage(
+                                                {
+                                                    text: "При удалении отчета из системы произошла ошибка",
+                                                    displayTime: 3
+                                                });
+                                    },
+                                    argument: {
+                                        parent: me
+                                    },
+                                    timeout: 30000
+                                };
+                                YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 
-                                    el = this.widgets.dataTable.getTrEl(recordFound);
-                                    Alfresco.util.Anim.fadeOut(el,
-                                            {
-                                                callback: fnCallback(recordFound),
-                                                scope: this
-                                            });
-                                }
+                                el = this.widgets.dataTable.getTrEl(recordFound);
+                                Alfresco.util.Anim.fadeOut(el,
+                                        {
+                                            callback: fnCallback(recordFound),
+                                            scope: this
+                                        });
                             }
+                            //}
                         }
                     },
 
