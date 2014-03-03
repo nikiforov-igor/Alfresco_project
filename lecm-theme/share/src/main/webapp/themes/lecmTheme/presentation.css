@@ -6,6 +6,13 @@ a, a:focus,
 button, button:focus {
     outline: none;
 }
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none !important;
+    border-color: #1986DD !important;
+    box-shadow: 0 0 10px #1986DD !important;
+}
 ul, ul li,
 ol, ol li {
     margin: 0;
