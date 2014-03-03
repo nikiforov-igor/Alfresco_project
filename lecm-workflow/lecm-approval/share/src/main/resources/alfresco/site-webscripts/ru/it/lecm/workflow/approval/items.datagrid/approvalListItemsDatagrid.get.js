@@ -1,7 +1,7 @@
 (function(){
 	var approvalListNodeRef = args["nodeRef"],
-		approvaItemType = args["approvaItemType"];
+		approvalItemType = args["approvalItemType"];
 	model.approvalListNodeRef = approvalListNodeRef;
-	model.approvaItemType = approvaItemType;
+	model.approvalItemType = approvalItemType;
 	model.id = approvalListNodeRef.replace(/:|\//g, '_');
 })();

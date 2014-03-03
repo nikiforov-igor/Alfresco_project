@@ -19,14 +19,14 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			successCallback: {
 				fn: function(response) {
 					if (response) {
-						me.approvaListType = response.json.approvaListType;
+						me.approvalListType = response.json.approvalListType;
 						me.approvalContainer = response.json.approvalContainer;
-						me.approvaItemType = response.json.approvaItemType;
+						me.approvalItemType = response.json.approvalItemType;
 						me.approvalContainerPath = response.json.approvalContainerPath;
 						YAHOO.util.Event.onContentReady(containerId, function() {
 							YAHOO.Bubbling.fire("activeGridChanged", {
 								datagridMeta: {
-									itemType: me.approvaListType,
+									itemType: me.approvalListType,
 									nodeRef: me.approvalContainer,
 									datagridFormId: "approvalListDataGridControl",
 									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
@@ -61,7 +61,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/workflow/approval/approvalListItemsDatagrid",
 				dataObj: {
 					nodeRef: nodeRef,
-					approvaItemType: this.approvaItemType
+					approvalItemType: this.approvalItemType
 				},
 				successCallback: {
 					fn: function(response) {
@@ -79,15 +79,15 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 
 
-	LogicECM.module.Approval.ApprovalItemsDataGridControl = function(containerId, approvalNodeRef, approvaItemType) {
+	LogicECM.module.Approval.ApprovalItemsDataGridControl = function(containerId, approvalNodeRef, approvalItemType) {
 		var me = this;
 		this.approvalListNodeRef = approvalNodeRef;
-		this.approvaItemType = approvaItemType;
+		this.approvalItemType = approvalItemType;
 
 		YAHOO.util.Event.onContentReady(containerId, function() {
 			YAHOO.Bubbling.fire("activeGridChanged", {
 				datagridMeta: {
-					itemType: me.approvaItemType,
+					itemType: me.approvalItemType,
 					nodeRef: me.approvalListNodeRef,
 					datagridFormId: "approvalItemsDataGridControl",
 					sort: 'lecm-workflow-result:workflow-result-item-finish-date|true',

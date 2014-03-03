@@ -6,7 +6,7 @@
 <script>
 (function(){
 	LogicECM.CurrentModules = LogicECM.CurrentModules || {};
-	LogicECM.CurrentModules["${id}"] = new LogicECM.module.Approval.ApprovalItemsDataGridControl("${datagridId}", "${approvalListNodeRef}", "${approvaItemType}");
+	LogicECM.CurrentModules["${id}"] = new LogicECM.module.Approval.ApprovalItemsDataGridControl("${datagridId}", "${approvalListNodeRef}", "${approvalItemType}");
 	LogicECM.CurrentModules["${id}"].setMessages(${messages});
 	LogicECM.CurrentModules["${id}"].setOptions({
 		usePagination: false,

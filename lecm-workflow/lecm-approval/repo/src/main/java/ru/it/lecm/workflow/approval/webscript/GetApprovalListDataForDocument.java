@@ -50,8 +50,8 @@ public class GetApprovalListDataForDocument extends DeclarativeWebScript {
 		NodeRef approvalContainer = approvalService.getOrCreateApprovalFolderContainer(documentRef);
 
 		try {
-			json.put("approvaListType", ApprovalResultModel.TYPE_APPROVAL_LIST.toPrefixString(namespaceService));
-			json.put("approvaItemType", ApprovalResultModel.TYPE_APPROVAL_ITEM.toPrefixString(namespaceService));
+			json.put("approvalListType", ApprovalResultModel.TYPE_APPROVAL_LIST.toPrefixString(namespaceService));
+			json.put("approvalItemType", ApprovalResultModel.TYPE_APPROVAL_ITEM.toPrefixString(namespaceService));
 			json.put("approvalContainer", approvalContainer);
 			json.put("approvalContainerPath", nodeService.getPath(approvalContainer).toPrefixString(namespaceService));
 		} catch (JSONException ex) {
