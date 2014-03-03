@@ -17,4 +17,11 @@
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
 
+	<bean init-method="init"
+		  depends-on="workflow.model.bootstrap"
+		  class="ru.it.lecm.workflow.policies.WorkflowResultListPolicy"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureBean-ref="serviceOrgstructure"/>
+
 </beans>

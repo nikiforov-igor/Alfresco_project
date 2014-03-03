@@ -2,7 +2,7 @@
 <webscript>
 	<shortname>Override reassign</shortname>
 	<description>Override reassign</description>
-	<url>/lecm/approval/OverrideReassign</url>
+	<url>/lecm/workflow/approval/OverrideReassign</url>
 	<authentication>user</authentication>
 	<format default="json"/>
 </webscript>

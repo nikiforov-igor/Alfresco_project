@@ -175,7 +175,30 @@ LogicECM.module.Base.Util = {
 			return (typeof found[0] == "object" ? found[0] : null);
 		}
 		return null;
+	},
+	printReport: function(nodeRef, reportId) {
+		Alfresco.util.Ajax.jsonGet({
+			url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportId + "?ID=" + encodeURI(nodeRef),
+			successCallback: {
+				fn: function(response) {
+					window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText,
+						"report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+
+					Alfresco.util.PopupManager.displayMessage({
+						text: Alfresco.component.Base.prototype.msg("message.report.success")
+					});
+				}
+			},
+			failureCallback: {
+				fn: function(response) {
+					Alfresco.util.PopupManager.displayMessage({
+						text: Alfresco.component.Base.prototype.msg("message.report.failure")
+					});
+				}
+			}
+		});
 	}
+
 };
 
 (function(){

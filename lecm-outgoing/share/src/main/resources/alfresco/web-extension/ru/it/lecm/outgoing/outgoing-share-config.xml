@@ -11,6 +11,7 @@
 		<forms>
 			<!-- Форма редактирования -->
 			<form>
+				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="lecm-document-aspects:reg-data-number" force="true"/>										<!-- Рег. номер -->
 					<show id="lecm-document-aspects:reg-data-date" force="true"/>										<!-- Дата регистрации -->
@@ -24,17 +25,22 @@
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
+					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
+					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
 				</field-visibility>
 				<appearance>
-					<set id="outgoing1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-					<set id="outgoing2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing3" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-					<set id="outgoing4" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing5" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing6" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing7" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing8" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing9" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
+					<set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
+
+					<set id="outgoing1" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+					<set id="outgoing2" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing3" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+					<set id="outgoing4" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing6" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing8" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing9" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
 					<!-- outgoing1:full-width-set -->
 					<field id="lecm-document-aspects:reg-data-number" set="outgoing1">
@@ -95,6 +101,11 @@
 					<field id="lecm-document:creator" set="outgoing9">
 						<control template="/org/alfresco/components/form/controls/readonly.ftl"/>
 					</field>
+
+					<field id="lecm-outgoing:approval-list" set="approval-and-signing">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+					</field>
+					<field id="lecm-outgoing:signing-list" set="approval-and-signing"></field>
 				</appearance>
 			</form>
 

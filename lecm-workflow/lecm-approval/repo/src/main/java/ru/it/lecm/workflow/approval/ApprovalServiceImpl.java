@@ -367,12 +367,19 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	}
 
-	private NodeRef getOrCreateApprovalFolder(NodeRef parentRef, String approvalType) {
-		NodeRef result = null;
+	@Override
+	public NodeRef getOrCreateApprovalFolderContainer(NodeRef parentRef) {
 		NodeRef approvalRef = getFolder(parentRef, "Согласование");
 		if (approvalRef == null) {
 			approvalRef = createFolder(parentRef, "Согласование");
 		}
+		return approvalRef;
+	}
+
+	private NodeRef getOrCreateApprovalFolder(NodeRef parentRef, String approvalType) {
+		NodeRef result = null;
+
+		NodeRef approvalRef = getOrCreateApprovalFolderContainer(parentRef);
 
 		if (APPROVAL_TYPE_PARALLEL.equals(approvalType)) {
 			result = getOrCreateParallelApprovalFolder(approvalRef);

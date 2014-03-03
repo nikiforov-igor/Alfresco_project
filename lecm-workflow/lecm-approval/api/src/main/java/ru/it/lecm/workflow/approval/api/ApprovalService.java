@@ -25,4 +25,6 @@ public interface ApprovalService extends LecmWorkflowService {
 	void deleteTempAssigneesList(DelegateExecution execution);
 
 	NodeRef getEmployeeForAssignee(NodeRef assignee);
+
+	NodeRef getOrCreateApprovalFolderContainer(NodeRef parentRef);
 }

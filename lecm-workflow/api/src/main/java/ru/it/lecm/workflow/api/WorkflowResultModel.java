@@ -61,6 +61,12 @@ public final class WorkflowResultModel {
 	 */
 	public final static QName ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE = QName.createQName(WORKFLOW_RESULT_NAMESPACE, "workflow-result-item-employee-assoc");
 
+	/**
+	 * &lt;association name="lecm-workflow-result:workflow-result-list-initiator-assoc"&gt;
+	 *
+	 */
+	public final static QName ASSOCWORKFLOW_RESULT_LIST_INITIATOR = QName.createQName(WORKFLOW_RESULT_NAMESPACE, "workflow-result-list-initiator-assoc");
+
 	private WorkflowResultModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of WorkflowResultModel class.");
 	}

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>GetApprovalListDataForDocument</shortname>
+	<description>Override reassign</description>
+	<url>/lecm/workflow/approval/GetApprovalListDataForDocument</url>
+	<authentication>user</authentication>
+	<format default="json"/>
+</webscript>

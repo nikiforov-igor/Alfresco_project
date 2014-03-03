@@ -153,6 +153,22 @@
 		</forms>
 	</config>
 
+	<config evaluator="model-type" condition="lecmApprovalResult:approvalResultList">
+		<forms>
+			<form id="approvalListDataGridControl">
+				<field-visibility>
+					<show id="lecm-workflow-result:workflow-result-list-start-date"/>
+					<show id="lecm-workflow-result:workflow-result-list-complete-date"/>
+					<show id="lecmApprovalResult:approvalResultListDecision"/>
+					<show id="lecm-workflow-result:workflow-result-list-initiator-assoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-workflow-result:workflow-result-list-initiator-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="model-type" condition="lecmApprovalResult:approvalResultItem">
 		<forms>
 			<form id="datagrid">
@@ -169,7 +185,40 @@
 					<field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
 					<field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-al:approval-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
 					<field id="lecm-workflow-result:workflow-result-item-employee-unit" substituteString="{lecm-al:approval-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>
-					<field id="lecm-al:approval-item-comment-assoc" label-id="field.comment.file"/>
+					<field id="lecmApprovalResult:approvalResultItemCommentAssoc" label-id="field.comment.file"/>
+				</appearance>
+			</form>
+
+			<form id="approvalItemsDataGridControl">
+				<field-visibility>
+					<show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
+					<show id="lecm-workflow-result:workflow-result-item-finish-date"/>
+					<show id="lecmApprovalResult:approvalResultItemDecision"/>
+					<show id="lecmApprovalResult:approvalResultItemComment"/>
+					<show id="lecmApprovalResult:approvalResultItemCommentAssoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+					<field id="lecmApprovalResult:approvalResultItemCommentAssoc" label-id="field.comment.file"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecmApprovalResult:approvalResultItem">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
+					<show id="lecmApprovalResult:approvalResultItemDecision"/>
+					<show id="lecm-workflow-result:workflow-result-item-finish-date"/>
+					<show id="lecmApprovalResult:approvalResultItemComment"/>
+					<show id="lecmApprovalResult:approvalResultItemCommentAssoc"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecmApprovalResult:approvalResultItemCommentAssoc">
+						<control template="/ru/it/lecm/base-share/components/controls/view-file-link.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>

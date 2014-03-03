@@ -7,4 +7,10 @@
 	<bean id="webscript.ru.it.lecm.workflow.approval.OverrideReassign.get" parent="webscript"
 		  class="ru.it.lecm.workflow.approval.webscript.OverrideReassign"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
+
+	<bean id="webscript.ru.it.lecm.workflow.approval.GetApprovalListDataForDocument.get" parent="webscript"
+		  class="ru.it.lecm.workflow.approval.webscript.GetApprovalListDataForDocument"
+		  p:approvalService-ref="approvalWorkflowService"
+		  p:namespaceService-ref="namespaceService"
+		  p:nodeService-ref="nodeService"/>
 </beans>

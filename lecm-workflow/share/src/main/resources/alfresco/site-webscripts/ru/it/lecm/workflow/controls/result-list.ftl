@@ -19,8 +19,12 @@
 <@grid.datagrid containerId true "app-list-item-employee-view">
 	<script type="text/javascript">
 	(function () {
-		LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
-			var html = "";
+		LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
+			var html = "", i, ii, columnContent, datalistColumn, data,
+					resultItemCommentTemplate = '<a href="{proto}//{host}{pageContext}document-attachment?nodeRef={nodeRef}">' +
+						'<img src="{resContext}/components/images/generic-file-16.png" width="16"  alt="{displayValue}" title="{displayValue}"/></a>',
+					attributeForShowTemplate = '<a href="javascript:void(0);" onclick="viewAttributes(\'{nodeRef}\')">{content}</a>';
+
 			if (!oRecord) {
 				oRecord = this.getRecord(elCell);
 			}
@@ -34,23 +38,33 @@
 				}
 
 				if (oData) {
-					var datalistColumn = grid.datagridColumns[oColumn.key];
+					datalistColumn = grid.datagridColumns[oColumn.key];
 					if (datalistColumn) {
 						oData = YAHOO.lang.isArray(oData) ? oData : [oData];
-						for (var i = 0, ii = oData.length, data; i < ii; i++) {
+						for (i = 0, ii = oData.length, data; i < ii; i++) {
 							data = oData[i];
 
-							var columnContent = "";
-							switch (datalistColumn.name.toLowerCase()) { //  меняем отрисовку для конкретных колонок
+							switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
 								case "lecmApprovalResult:approvalResultItemCommentAssoc":
-									columnContent = "<a href=\'" +window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT+'document-attachment?nodeRef='+ data.value +"\'\"><img src=\"${url.context}/res/components/images/generic-file-16.png\" width=\"16\"  alt=\"" + data.displayValue + "\" title=\"" + data.displayValue + "\"/></a>";
+									columnContent = YAHOO.lang.substitute(resultItemCommentTemplate, {
+										proto: window.location.protocol,
+										host: window.location.host,
+										pageContext: Alfresco.constants.URL_PAGECONTEXT,
+										nodeRef: data.value,
+										resContext: Alfresco.constants.URL_RESCONTEXT,
+										displayValue: data.displayValue
+									});
+
 									break;
 								default:
 									break;
 							}
-							if (columnContent != "") {
+							if (columnContent) {
 								if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
-									html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\')\">" + columnContent + "</a>";
+									html += YAHOO.lang.substitute(attributeForShowTemplate, {
+										nodeRef: oRecord.getData("nodeRef"),
+										content: columnContent
+									});
 								} else {
 									html += columnContent;
 								}
@@ -63,7 +77,7 @@
 					}
 				}
 			}
-			return html.length > 0 ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+			return html ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
 		};
 
 		YAHOO.util.Event.onDOMReady(function (){
