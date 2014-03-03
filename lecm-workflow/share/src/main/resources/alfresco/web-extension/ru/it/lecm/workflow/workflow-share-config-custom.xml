@@ -2,6 +2,16 @@
 <alfresco-config>
 	<config>
 		<forms>
+			<default-controls>
+				<type name="association:lecm-workflow:route" template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
+					<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Бизнес_x0020_процессов</control-param>
+					<!--<control-param name="nameSubstituteString">{lecm-absence:code} - {cm:name}</control-param>-->
+					<control-param name="notSelectedOptionShow">true</control-param>
+					<control-param name="notSelectedOptionLabel"> </control-param>
+					<control-param name="showCreateNewButton">false</control-param>
+					<control-param name="endpointType">lecm-workflow:route</control-param>
+				</type>
+			</default-controls>
 			<dependencies>
 				<css src="/css/lecm-workflow/result-list.css" />
 				<js src="/scripts/lecm-workflow/lecm-package-items-finder.js" />

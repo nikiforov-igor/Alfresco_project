@@ -27,12 +27,12 @@ public enum WorkflowType {
 		throw new IllegalArgumentException(String.format("'%s' type is invalid. Appropriate WorkflowType not found!", type));
 	}
 
-	public static WorkflowType getById(final String workflowDefinitionId) {
+	public static WorkflowType getById(final String workflowDefinition) {
 		for (WorkflowType workflowType : WorkflowType.values()) {
-			if (workflowType.workflowDefinitionId.equals(workflowDefinitionId)) {
+			if (workflowType.workflowDefinitionId.equals(workflowDefinition)) {
 				return workflowType;
 			}
 		}
-		throw new IllegalArgumentException(String.format("'%s' is invalid. Appropriate WorkflowType not found!", workflowDefinitionId));
+		throw new IllegalArgumentException(String.format("'%s' is invalid. Appropriate WorkflowType not found!", workflowDefinition));
 	}
 }

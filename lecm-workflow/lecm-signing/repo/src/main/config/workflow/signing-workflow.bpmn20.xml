@@ -36,7 +36,8 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var assigneesList = signingWorkflow.createAssigneesList(lecmSign_assigneesListAssoc, execution);
+						var assignees = execution.getVariable("lecm-workflow_assigneesListAssoc");
+						var assigneesList = signingWorkflow.createAssigneesList(assignees, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
 						var resultListRef = signingWorkflow.createResultList(bpm_package, documentAttachmentCategoryName, assigneesList);
 						execution.setVariable("resultListRef", resultListRef);

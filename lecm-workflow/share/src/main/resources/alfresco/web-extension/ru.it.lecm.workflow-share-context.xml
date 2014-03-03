@@ -10,7 +10,6 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/workflow-share-config-custom.xml</value>
-				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/route-workflow-share-config.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -19,7 +18,6 @@
 		<property name="resourceBundles">
 			<list>
 				<value>alfresco.web-extension.ru.it.lecm.workflow.form</value>
-				<value>alfresco.web-extension.ru.it.lecm.workflow.route</value>
 			</list>
 		</property>
 	</bean>

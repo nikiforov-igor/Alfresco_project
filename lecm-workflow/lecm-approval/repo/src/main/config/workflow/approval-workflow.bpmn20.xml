@@ -34,7 +34,8 @@
 			<extensionElements>
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
-						var assigneesList = approvalWorkflow.createAssigneesList(lecmApprove2_assigneesListAssoc, execution);
+						var assignees = execution.getVariable("lecm-workflow_assigneesListAssoc");
+						var assigneesList = approvalWorkflow.createAssigneesList(assignees, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
 						var resultListRef = approvalWorkflow.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove2_approvalType, assigneesList);
 						execution.setVariable("resultListRef", resultListRef);

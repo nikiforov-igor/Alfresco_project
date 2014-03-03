@@ -221,6 +221,21 @@
 			</associations>
 		</aspect>
 
+		<aspect name="lecm-workflow:assigneesListAspect">
+			<associations>
+				<association name="lecm-workflow:assigneesListAssoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-workflow:workflow-assignees-list</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
 
 	</aspects>
 </model>

@@ -6,37 +6,24 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<util:list id="routing.models">
-		<value>alfresco/module/${artifactId}/models/lecm-workflow-route-model.xml</value>
-	</util:list>
-
-	<bean id="routing.model.bootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="statemachine.aspects.LogicEcmModelsBootstrap"
-		  p:models-ref="routing.models"/>
-
-	<util:constant id="ENGINE_ID" static-field="org.alfresco.repo.workflow.WorkflowDeployer.ENGINE_ID"/>
-	<util:constant id="LOCATION" static-field="org.alfresco.repo.workflow.WorkflowDeployer.LOCATION"/>
-	<util:constant id="MIMETYPE" static-field="org.alfresco.repo.workflow.WorkflowDeployer.MIMETYPE"/>
-	<util:constant id="REDEPLOY" static-field="org.alfresco.repo.workflow.WorkflowDeployer.REDEPLOY"/>
-	<util:list id="route.workflows">
-		<props>
-			<prop key="#{ENGINE_ID}">activiti</prop>
-			<prop key="#{LOCATION}">alfresco/module/${artifactId}/workflow/route-workflow.bpmn20.xml</prop>
-			<prop key="#{MIMETYPE}">text/xml</prop>
-			<prop key="#{REDEPLOY}">${redeploy.process.definitions}</prop>
-		</props>
-	</util:list>
-	<bean id="route.workflow.bootstrap" parent="workflowDeployer"
-		  depends-on="routing.model.bootstrap"
-		  p:workflowDefinitions-ref="route.workflows"/>
-
 	<bean id="abstract.workflowRunner" abstract="true"/>
 
+	<util:list id="approval.inputVariables">
+		<value>documentAttachmentCategoryName</value>
+		<value>workflowRole</value>
+		<value>commentFileAttachmentCategoryName</value>
+	</util:list>
 	<bean id="approval.workflowRunner" parent="abstract.workflowRunner"
-		  class="ru.it.lecm.workflow.beans.ApprovalWorkflowRunner"/>
+		  class="ru.it.lecm.workflow.beans.ApprovalWorkflowRunner"
+		  p:inputVariables-ref="approval.inputVariables"/>
 
+	<util:list id="signing.inputVariables">
+		<value>documentAttachmentCategoryName</value>
+		<value>workflowRole</value>
+	</util:list>
 	<bean id="signing.workflowRunner" parent="abstract.workflowRunner"
-		  class="ru.it.lecm.workflow.beans.SigningWorkflowRunner"/>
+		  class="ru.it.lecm.workflow.beans.SigningWorkflowRunner"
+		  p:inputVariables-ref="signing.inputVariables"/>
 
 	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APROVAL"/>
 	<util:constant id="SIGNING" static-field="ru.it.lecm.workflow.WorkflowType.SIGNING"/>

@@ -6,7 +6,7 @@
 					<show id="bpm:workflowDueDate"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
-					<show id="lecmReview:assigneesListAssoc" />
+					<show id="lecm-workflow:assigneesListAssoc" />
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDueDate" mandatory="true">
@@ -16,7 +16,7 @@
 						</constraint-handlers>-->
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
-					<field id="lecmReview:assigneesListAssoc">
+					<field id="lecm-workflow:assigneesListAssoc">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="workflowType">REVIEW</control-param>
 							<control-param name="concurrency">PARALLEL</control-param>

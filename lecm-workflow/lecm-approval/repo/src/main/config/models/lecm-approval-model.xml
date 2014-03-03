@@ -20,7 +20,6 @@
 		<type name="lecmApprove2:approval">
 			<title>Согласование</title>
 			<parent>bpm:startTask</parent>
-
 			<properties>
 				<property name="lecmApprove2:approvalType">
 					<type>d:text</type>
@@ -29,20 +28,9 @@
 					</constraints>
 				</property>
 			</properties>
-
-			<associations>
-				<association name="lecmApprove2:assigneesListAssoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-workflow:workflow-assignees-list</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-workflow:assigneesListAspect</aspect>
+			</mandatory-aspects>
 		</type>
 		<type name="lecmApprove2:approveTask">
 			<parent>bpm:activitiOutcomeTask</parent>

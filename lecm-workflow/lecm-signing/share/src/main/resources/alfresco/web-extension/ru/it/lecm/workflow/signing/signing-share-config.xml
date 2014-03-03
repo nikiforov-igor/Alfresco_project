@@ -12,7 +12,7 @@
 			<form>
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
-					<show id="lecmSign:assigneesListAssoc"/>
+					<show id="lecm-workflow:assigneesListAssoc"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
 				</field-visibility>
@@ -23,7 +23,7 @@
 						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
-					<field id="lecmSign:assigneesListAssoc">
+					<field id="lecm-workflow:assigneesListAssoc">
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Workflow.workflowListValidator" event="change" message="list"/>
 						</constraint-handlers>

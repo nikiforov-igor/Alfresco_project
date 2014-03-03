@@ -12,6 +12,8 @@
 
 	<bean id="route.workflow.extension" parent="baseScript"
 		  class="ru.it.lecm.workflow.extensions.RouteWorkflowJavascriptExtension"
+		  p:nodeService-ref="nodeService"
+		  p:workflowRunnerService-ref="workflowRunnerService"
 		  p:extensionName="routeWorkflow"/>
 
 </beans>

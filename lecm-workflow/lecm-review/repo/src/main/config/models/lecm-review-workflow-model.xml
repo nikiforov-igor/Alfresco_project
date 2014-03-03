@@ -29,19 +29,9 @@
 	<types>
 		<type name="lecmReview:review">
 			<parent>bpm:startTask</parent>
-			<associations>
-				<association name="lecmReview:assigneesListAssoc">
-					<source>
-						<mandatory>false</mandatory>
-						<many>true</many>
-					</source>
-					<target>
-						<class>lecm-workflow:workflow-assignees-list</class>
-						<mandatory>true</mandatory>
-						<many>false</many>
-					</target>
-				</association>
-			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-workflow:assigneesListAspect</aspect>
+			</mandatory-aspects>
 		</type>
 
 		<type name="lecmReview:reviewTask">

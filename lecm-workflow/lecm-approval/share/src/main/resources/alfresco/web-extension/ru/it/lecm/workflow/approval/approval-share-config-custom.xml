@@ -40,7 +40,7 @@
 					<show id="bpm:workflowDueDate"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
-					<show id="lecmApprove2:assigneesListAssoc"/>
+					<show id="lecm-workflow:assigneesListAssoc"/>
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDescription">
@@ -55,7 +55,7 @@
 						</constraint-handlers>
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
-					<field id="lecmApprove2:assigneesListAssoc">
+					<field id="lecm-workflow:assigneesListAssoc">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="namespace">approval</control-param>
 							<control-param name="workflowType">APPROVAL</control-param>
