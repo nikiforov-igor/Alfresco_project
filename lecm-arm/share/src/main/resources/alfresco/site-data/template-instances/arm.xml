@@ -29,7 +29,6 @@
             <url>/lecm/arm/documents-grid</url>
             <properties>
                 <itemType>lecm-document:base</itemType>
-                <bubblingLabel>documents-arm</bubblingLabel>
             </properties>
         </component>
         <component>

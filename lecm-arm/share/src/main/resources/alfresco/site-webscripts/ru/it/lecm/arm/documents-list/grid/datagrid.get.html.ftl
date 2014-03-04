@@ -36,29 +36,27 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
 		<div class="yui-b" id="alf-content" style="margin-left: 0;">
 		<@grid.datagrid id=id showViewForm=true>
 			<script type="text/javascript">//<![CDATA[
-			function createDatagrid() {
-
-                new LogicECM.module.ARM.DataGrid('${id}').setOptions({
-                    usePagination: true,
-                    useDynamicPagination:true,
-                    pageSize: 20,
-                    showExtendSearchBlock: true,
-                    actions: [
-                        {
-                            type: "datagrid-action-link-documents-arm",
-                            id: "onActionEdit",
-                            permission: "",
-                            label: "${msg("actions.edit")}"
-                        }
-                    ],
-                    allowCreate: false,
-                    showActionColumn: true,
-                    showCheckboxColumn: true,
-                    bubblingLabel: "documents-arm",
-	                expandable: true
-                }).setMessages(${messages});
-
                 YAHOO.util.Event.onContentReady ('${id}', function () {
+                    new LogicECM.module.ARM.DataGrid('${id}').setOptions({
+                        usePagination: true,
+                        useDynamicPagination:true,
+                        pageSize: 20,
+                        showExtendSearchBlock: true,
+                        actions: [
+                            {
+                            type: "datagrid-action-link-documents-arm",
+                                id: "onActionEdit",
+                                permission: "",
+                                label: "${msg("actions.edit")}"
+                            }
+                        ],
+                        allowCreate: false,
+                        showActionColumn: true,
+                        showCheckboxColumn: true,
+                    bubblingLabel: "documents-arm",
+                        expandable: true
+                    }).setMessages(${messages});
+
                     YAHOO.Bubbling.fire ("activeGridChanged", {
                         datagridMeta: {
                             itemType: "lecm-document:base",
@@ -77,13 +75,6 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         bubblingLabel: "documents-arm"
                     });
                 });
-			}
-
-			function initArmGrid() {
-				createDatagrid();
-			}
-
-			YAHOO.util.Event.onDOMReady(initArmGrid);
 			//]]></script>
 		</@grid.datagrid>
 		</div>

@@ -1022,15 +1022,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             _setupPaginatior: function DataGrid_setupPaginatior() {
-                /**
-                 * YUI History - page
-                 */
-                var handlePagination = function DataGrid_handlePagination(state, me) {
-                    me.widgets.paginator.setState(state);
-                };
+                if (this.options.usePagination) {
+                    var handlePagination = function DataGrid_handlePagination(state, me) {
+                        me.widgets.paginator.setState(state);
+                    };
 
-                if (this.options.usePagination && !this.widgets.paginator) {
-                    // YUI Paginator definition
                     this.widgets.paginator = new YAHOO.widget.Paginator(
                         {
                             containers: [this.id + "-paginatorBottom"],
