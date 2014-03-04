@@ -66,5 +66,32 @@
         <property name="serviceRegistry"  ref="ServiceRegistry"/>
     </bean>
 
-
+    <bean id="groupActions.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-group-actions:action">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-group-actions:expression</value>
+                        <value>lecm-group-actions:type</value>
+                        <value>lecm-group-actions:statuses</value>
+                        <value>lecm-group-actions:isGroup</value>
+                        <value>lecm-group-actions:forCollection</value>
+                        <value>lecm-group-actions:order</value>
+                        <value>lecm-group-actions:form-fields-ref</value>
+                        <value>lecm-group-actions:script</value>
+                    </list>
+                </entry>
+                <entry key="lecm-group-actions:form-field">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-group-actions:field-id</value>
+                        <value>lecm-group-actions:field-type</value>
+                        <value>lecm-group-actions:field-priority</value>
+                        <value>lecm-group-actions:field-default-value</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>
