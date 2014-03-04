@@ -87,6 +87,14 @@ public class ArmWebScriptBean extends BaseWebScript {
 			TypeDefinition type = dictionaryService.getType(typeQName);
 			attributes.addAll(type.getProperties().values());
 			attributes.addAll(type.getAssociations().values());
+
+			List<AspectDefinition> defaultAspects = type.getDefaultAspects();
+			if (defaultAspects != null) {
+				for (AspectDefinition aspect: defaultAspects) {
+					attributes.addAll(aspect.getProperties().values());
+					attributes.addAll(aspect.getAssociations().values());
+				}
+			}
 		}
 
 		JSONObject result = new JSONObject();
