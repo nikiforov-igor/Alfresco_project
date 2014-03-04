@@ -78,7 +78,8 @@ public class ScriptForm extends FormUIGet {
                     String name = jsonField.getString("name");
                     String id = jsonField.getString("id");
                     String type = jsonField.getString("type");
-                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type);
+                    String value = jsonField.getString("value");
+                    FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value);
                     descriptors.add(descriptor);
                 }
 
@@ -148,13 +149,13 @@ public class ScriptForm extends FormUIGet {
                 field.setName(colMnem);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
+                field.setValue(column.getValue());
 
                 field.setDataKeyName(column.getId());
 
                 String dataType = column.getType();
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
-                field.setValue("");
 
                 processFieldControl(field, column);
             }
@@ -239,11 +240,13 @@ public class ScriptForm extends FormUIGet {
         private String name;
         private String id;
         private String type;
+        private String value;
 
-        public FieldDescriptor(String name, String id, String type) {
+        public FieldDescriptor(String name, String id, String type, String value) {
             this.name = name;
             this.id = id;
             this.type = type;
+            this.value = value;
         }
 
         public String getName() {
@@ -256,6 +259,10 @@ public class ScriptForm extends FormUIGet {
 
         public String getType() {
             return type;
+        }
+
+        public String getValue() {
+            return value;
         }
     }
 

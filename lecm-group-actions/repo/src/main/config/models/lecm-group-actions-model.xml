@@ -73,6 +73,10 @@
                     <type>d:long</type>
                     <default>0</default>
                 </property>
+                <property name="lecm-group-actions:field-default-value">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
             </properties>
 		</type>
 	</types>

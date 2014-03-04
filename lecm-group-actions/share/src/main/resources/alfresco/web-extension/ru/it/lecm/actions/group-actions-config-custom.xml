@@ -91,6 +91,7 @@
                     <show id="lecm-group-actions:field-id"/>
                     <show id="lecm-group-actions:field-type"/>
                     <show id="lecm-group-actions:field-priority"/>
+                    <show id="lecm-group-actions:field-default-value"/>
                 </field-visibility>
             </form>
         </forms>
@@ -105,6 +106,7 @@
                     <show id="lecm-group-actions:field-id"/>
                     <show id="lecm-group-actions:field-type"/>
                     <show id="lecm-group-actions:field-priority"/>
+                    <show id="lecm-group-actions:field-default-value"/>
                 </field-visibility>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->
