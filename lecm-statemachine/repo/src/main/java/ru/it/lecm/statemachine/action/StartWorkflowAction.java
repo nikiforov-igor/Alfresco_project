@@ -8,7 +8,7 @@ import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
-import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.util.List;

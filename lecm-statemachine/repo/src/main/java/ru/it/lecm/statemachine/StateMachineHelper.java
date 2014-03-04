@@ -49,7 +49,7 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.script.WorkflowScript;
-import ru.it.lecm.statemachine.action.util.DocumentWorkflowUtil;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
