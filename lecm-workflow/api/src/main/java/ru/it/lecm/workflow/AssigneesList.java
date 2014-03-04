@@ -27,7 +27,7 @@ public class AssigneesList {
 		return workflowType;
 	}
 
-	public void setWorkflowType(String workflowType) {
+	public void setWorkflowType(final String workflowType) {
 		this.workflowType = workflowType;
 	}
 
@@ -35,7 +35,7 @@ public class AssigneesList {
 		return listName;
 	}
 
-	public void setListName(String listName) {
+	public void setListName(final String listName) {
 		this.listName = listName;
 	}
 
@@ -43,9 +43,11 @@ public class AssigneesList {
 		return listItems;
 	}
 
-	public void setListItems(List<AssigneesListItem> listItems) {
-		this.listItems = listItems;
+	public void setListItems(final List<AssigneesListItem> listItems) {
+		this.listItems = new ArrayList<AssigneesListItem>(listItems);
 	}
 
-
+	public void addListItems(final List<AssigneesListItem> listItems) {
+		this.listItems.addAll(listItems);
+	}
 }

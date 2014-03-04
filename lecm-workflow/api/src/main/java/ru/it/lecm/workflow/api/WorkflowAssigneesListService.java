@@ -84,4 +84,8 @@ public interface WorkflowAssigneesListService {
 	 * @return  список исполнителей у которого сотрудники и имена указывают на исполнителей с учетом делегирования
 	 */
 	List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole);
+
+	int getAssigneesListItemDaysToComplete(final NodeRef assigneesItemRef);
+
+	NodeRef getStaffFromAssigneesListItem(final NodeRef assigneesItemRef);
 }

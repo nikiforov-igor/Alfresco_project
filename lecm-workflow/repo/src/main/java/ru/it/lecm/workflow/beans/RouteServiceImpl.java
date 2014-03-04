@@ -81,4 +81,19 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 
 		return routeRef;
 	}
+
+	@Override
+	public NodeRef getAssigneesListByWorkflowType(final NodeRef routeRef, final String workflowType) {
+		NodeRef assigneesListRef = null;
+		List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef child : children) {
+			NodeRef nodeRef = child.getChildRef();
+			String type = (String) nodeService.getProperty(nodeRef, LecmWorkflowModel.PROP_WORKFLOW_TYPE);
+			if (workflowType.equals(type)) {
+				assigneesListRef = nodeRef;
+				break;
+			}
+		}
+		return assigneesListRef;
+	}
 }

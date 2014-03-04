@@ -1,6 +1,7 @@
 package ru.it.lecm.workflow.beans;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +13,22 @@ import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.ParameterCheck;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineEventCategory;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.workflow.WorkflowType;
+import ru.it.lecm.workflow.api.RouteService;
+import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowRunner;
+import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
 
 /**
  *
@@ -26,15 +36,16 @@ import ru.it.lecm.workflow.api.WorkflowRunner;
  */
 public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 
-	protected final static String DOCUMENT_REF = "documentRef";
-	protected final static String ROUTE_REF = "routeRef";
-	protected final static String WORKFLOW_DEFINITION = "workflowDefinition";
-
 	protected NodeService nodeService;
 	protected WorkflowService workflowService;
 	protected OrgstructureBean orgstructureBean;
-	protected  AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration;
+	protected AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration;
+	protected StateMachineServiceBean stateMachineService;
+	protected BusinessJournalService businessJournalService;
+	protected RouteService routeService;
+	protected WorkflowAssigneesListService workflowAssigneesListService;
 
+	protected WorkflowType workflowType;
 	protected List<String> inputVariables;
 
 	public void setNodeService(final NodeService nodeService) {
@@ -45,12 +56,37 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 		this.workflowService = workflowService;
 	}
 
-	public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+	public void setOrgstructureBean(final OrgstructureBean orgstructureBean) {
 		this.orgstructureBean = orgstructureBean;
 	}
 
-	public void setAlfrescoProcessEngineConfiguration(AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration) {
+	public void setAlfrescoProcessEngineConfiguration(final AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration) {
 		this.alfrescoProcessEngineConfiguration = alfrescoProcessEngineConfiguration;
+	}
+
+	public void setStateMachineService(final StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
+	}
+
+	public void setBusinessJournalService(final BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
+
+	public void setRouteService(final RouteService routeService) {
+		this.routeService = routeService;
+	}
+
+	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
+		this.workflowAssigneesListService = workflowAssigneesListService;
+	}
+
+	@Override
+	public WorkflowType getWorkflowType() {
+		return workflowType;
+	}
+
+	public void setWorkflowType(WorkflowType workflowType) {
+		this.workflowType = workflowType;
 	}
 
 	public void setInputVariables(final List<String> inputVariables) {
@@ -59,15 +95,12 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 
 	protected void checkMandatoryVariables(final Map<String, Object> variables) {
 		for (String inputVariable : inputVariables) {
-			if (!variables.containsKey(inputVariable)) {
-				String msg = String.format("'%s' is a mandatory.input variable", inputVariable);
-				throw new IllegalArgumentException(msg);
-			}
+			ParameterCheck.mandatoryString(inputVariable, (String)variables.get(inputVariable));
 		}
 	}
 
 	protected Map<QName, Serializable> getInitialWorkflowProperties(final Map<String, Object> variables) {
-		NodeRef documentRef = (NodeRef) variables.get(DOCUMENT_REF);
+		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
 
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		//bpmPackage
@@ -85,7 +118,7 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 	}
 
 	protected WorkflowDefinition getWorkflowDefinition(final Map<String, Object> variables) {
-		String workflowDefinition = (String) variables.get(WORKFLOW_DEFINITION);
+		String workflowDefinition = WorkflowVariablesHelper.getWorkflowDefinition(variables);
 		WorkflowDefinition definition = workflowService.getDefinitionByName(workflowDefinition);
 		if (definition == null) {
 			String msg = String.format("No workflow definition found for %s", workflowDefinition);
@@ -94,12 +127,12 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 		return definition;
 	}
 
-	protected String startWorkflow(final WorkflowDefinition workflowDefinition, final Map<QName, Serializable> properties) {
+	protected WorkflowInstance startWorkflow(final WorkflowDefinition workflowDefinition, final Map<QName, Serializable> properties) {
 		WorkflowPath path = workflowService.startWorkflow(workflowDefinition.getId(), properties);
-		String instanceId = path.getInstance().getId();
-		WorkflowTask startTask = workflowService.getStartTask(instanceId);
+		WorkflowInstance instance = path.getInstance();
+		WorkflowTask startTask = workflowService.getStartTask(instance.getId());
 		workflowService.endTask(startTask.getId(), null);
-		return instanceId;
+		return instance;
 	}
 
 	protected void setInputVariables(final String executionId, final Map<String, Object> variables) {
@@ -109,4 +142,11 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 		}
 	}
 
+	protected void logStartWorkflowEvent(final NodeRef document, final WorkflowInstance instance) {
+		if (!stateMachineService.isServiceWorkflow(instance)) {
+			String message = "Запущен бизнес-процесс #object1 на документе #mainobject";
+			List<String> objects = Collections.singletonList(instance.getId());
+			businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, message, objects);
+		}
+	}
 }

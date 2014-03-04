@@ -1,5 +1,7 @@
 package ru.it.lecm.workflow.beans;
 
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,7 @@ public class WorkflowRunnerFactory implements FactoryBean<WorkflowRunnerFactory>
 	private final static Class<WorkflowRunnerFactory> CLASS = WorkflowRunnerFactory.class;
 	private final static Logger logger = LoggerFactory.getLogger(CLASS);
 
-	private Map<WorkflowType, WorkflowRunner> runners;
+	private final Map<WorkflowType, WorkflowRunner> runners = new EnumMap<WorkflowType, WorkflowRunner>(WorkflowType.class);
 
 	@Override
 	public WorkflowRunnerFactory getObject() throws Exception {
@@ -34,8 +36,15 @@ public class WorkflowRunnerFactory implements FactoryBean<WorkflowRunnerFactory>
 		return true;
 	}
 
-	public void setRunners(Map<WorkflowType, WorkflowRunner> runners) {
-		this.runners = runners;
+	public void setRunners(List<WorkflowRunner> runners) {
+		for (WorkflowRunner runner : runners) {
+			WorkflowType workflowType = runner.getWorkflowType();
+			boolean hasPreviousRunner = this.runners.containsKey(workflowType);
+			if (hasPreviousRunner) {
+				logger.warn("New workflow runner was registered for workflow type {}. Previous workflow runner is lost. Please check your configuration");
+			}
+			this.runners.put(workflowType, runner);
+		}
 	}
 
 	@Override

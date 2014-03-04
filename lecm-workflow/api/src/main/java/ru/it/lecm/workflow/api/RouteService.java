@@ -10,4 +10,6 @@ import ru.it.lecm.workflow.RouteType;
 public interface RouteService {
 
 	NodeRef createEmptyRoute(final RouteType routeType);
+
+	NodeRef getAssigneesListByWorkflowType(final NodeRef routeRef, final String workflowType);
 }

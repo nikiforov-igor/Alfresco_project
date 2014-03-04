@@ -904,6 +904,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 	    }
     }
 
+	@Override
 	public boolean isServiceWorkflow(String executionId) {
 		WorkflowInstance workflow = serviceRegistry.getWorkflowService().getWorkflowById(executionId);
 		if (workflow != null) {
@@ -912,6 +913,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 		return false;
 	}
 
+	@Override
 	public boolean isServiceWorkflow(WorkflowInstance workflow) {
 		List<AspectDefinition> aspects = workflow.getDefinition().getStartTaskDefinition().getMetadata().getDefaultAspects();
 		if (aspects != null) {

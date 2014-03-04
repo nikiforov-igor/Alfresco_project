@@ -19,22 +19,32 @@ import org.alfresco.service.cmr.repository.NodeRef;
  */
 public class AssigneesListItem {
 	private int order;
+	private int daysToComplete;
 	private Date dueDate;
 	private NodeRef employeeRef;
+	private NodeRef staffRef; //reserved for future
 
 	public int getOrder() {
 		return order;
 	}
 
-	public void setOrder(int order) {
+	public void setOrder(final int order) {
 		this.order = order;
+	}
+
+	public int getDaysToComplete() {
+		return daysToComplete;
+	}
+
+	public void setDaysToComplete(final int daysToComplete) {
+		this.daysToComplete = daysToComplete;
 	}
 
 	public Date getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(final Date dueDate) {
 		this.dueDate = dueDate;
 	}
 
@@ -42,9 +52,15 @@ public class AssigneesListItem {
 		return employeeRef;
 	}
 
-	public void setEmployeeRef(NodeRef employeeRef) {
+	public void setEmployeeRef(final NodeRef employeeRef) {
 		this.employeeRef = employeeRef;
 	}
 
+	public NodeRef getStaffRef() {
+		return staffRef;
+	}
 
+	public void setStaffRef(final NodeRef staffRef) {
+		this.staffRef = staffRef;
+	}
 }

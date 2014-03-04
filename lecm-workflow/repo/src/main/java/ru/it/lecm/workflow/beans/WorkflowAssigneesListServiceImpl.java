@@ -328,6 +328,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			assigneesListItem.setOrder(getAssigneesListItemOrder(listItem));
 			assigneesListItem.setDueDate(getAssigneesListItemDueDate(listItem));
 			assigneesListItem.setEmployeeRef(getEmployeeFromAssigneeListItem(listItem));
+			assigneesListItem.setDaysToComplete(getAssigneesListItemDaysToComplete(listItem));
+			assigneesListItem.setStaffRef(getStaffFromAssigneesListItem(listItem));//reserved for future
 
 			assigneesList.getListItems().add(assigneesListItem);
 		}
@@ -575,5 +577,17 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			}
 		}
 		return assigneesList;
+	}
+
+	@Override
+	public int getAssigneesListItemDaysToComplete(final NodeRef assigneesItemRef) {
+		Integer daysToComplete = (Integer)nodeService.getProperty(assigneesItemRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
+		return (daysToComplete != null) ? daysToComplete : 0;
+	}
+
+	@Override
+	public NodeRef getStaffFromAssigneesListItem(final NodeRef assigneesItemRef) {
+		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesItemRef, LecmWorkflowModel.ASSOC_ASSIGNEE_ORG_ELEMENT_MEMBER);
+		return targetAssocs.isEmpty() ? null : targetAssocs.get(0).getTargetRef();
 	}
 }

@@ -6,31 +6,42 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="abstract.workflowRunner" abstract="true"/>
+	<bean id="abstract.workflowRunner" abstract="true"
+		  class="ru.it.lecm.workflow.beans.AbstractWorkflowRunner"
+		  p:nodeService-ref="nodeService"
+		  p:workflowService-ref="WorkflowService"
+		  p:orgstructureBean-ref="serviceOrgstructure"
+		  p:alfrescoProcessEngineConfiguration-ref="activitiProcessEngineConfiguration"
+		  p:stateMachineService-ref="stateMachineHelper"
+		  p:businessJournalService-ref="businessJournalService"
+		  p:routeService-ref="routeService"
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
 
 	<util:list id="approval.inputVariables">
 		<value>documentAttachmentCategoryName</value>
 		<value>workflowRole</value>
 		<value>commentFileAttachmentCategoryName</value>
 	</util:list>
+	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APROVAL"/>
 	<bean id="approval.workflowRunner" parent="abstract.workflowRunner"
 		  class="ru.it.lecm.workflow.beans.ApprovalWorkflowRunner"
-		  p:inputVariables-ref="approval.inputVariables"/>
+		  p:inputVariables-ref="approval.inputVariables"
+		  p:workflowType-ref="APPROVAL"/>
 
 	<util:list id="signing.inputVariables">
 		<value>documentAttachmentCategoryName</value>
 		<value>workflowRole</value>
 	</util:list>
+	<util:constant id="SIGNING" static-field="ru.it.lecm.workflow.WorkflowType.SIGNING"/>
 	<bean id="signing.workflowRunner" parent="abstract.workflowRunner"
 		  class="ru.it.lecm.workflow.beans.SigningWorkflowRunner"
-		  p:inputVariables-ref="signing.inputVariables"/>
+		  p:inputVariables-ref="signing.inputVariables"
+		  p:workflowType-ref="SIGNING"/>
 
-	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APROVAL"/>
-	<util:constant id="SIGNING" static-field="ru.it.lecm.workflow.WorkflowType.SIGNING"/>
-	<util:map id="workflow.runners">
-		<entry key-ref="APPROVAL" value-ref="approval.workflowRunner"/>
-		<entry key-ref="SIGNING" value-ref="signing.workflowRunner"/>
-	</util:map>
+	<util:list id="workflow.runners">
+		<ref bean="approval.workflowRunner"/>
+		<ref bean="signing.workflowRunner"/>
+	</util:list>
 	<bean id="workflowRunnerService" class="ru.it.lecm.workflow.beans.WorkflowRunnerFactory"
 		  p:runners-ref="workflow.runners"/>
 

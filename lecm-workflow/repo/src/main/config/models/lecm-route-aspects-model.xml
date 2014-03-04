@@ -28,6 +28,14 @@
 					<type>d:noderef</type>
 					<mandatory>true</mandatory>
 				</property>
+				<!-- результат согласования по маршруту -->
+				<property name="lecm-document-route:is-approved">
+					<type>d:boolean</type>
+				</property>
+				<!-- результат подписания по маршруту -->
+				<property name="lecm-document-route:is-signed">
+					<type>d:boolean</type>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>
