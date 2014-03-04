@@ -143,8 +143,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
         boolean hasData = !builder.isEmpty();
 
-        builder.emmitFieldCond((hasData ? " AND " : ""), "lecm-statemachine-aspects:is-draft", false);
-
+        builder.emmitFieldCond((hasData ? " AND NOT(" : ""), "lecm-statemachine-aspects:is-draft", true);
+        builder.emmit(")");
         result.setLuceneQueryText(builder.toString());
         return result;
     }

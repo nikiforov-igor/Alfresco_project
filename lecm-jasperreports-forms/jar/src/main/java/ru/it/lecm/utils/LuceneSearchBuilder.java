@@ -100,7 +100,7 @@ public class LuceneSearchBuilder {
         if (prefix != null) {
             getQuery().append(prefix);
         }
-        getQuery().append("+("); // (!) экранируем выражение с проверкой двух и более типов и "плюсом" задаём строгое условие ...
+        getQuery().append("("); // (!) экранируем выражение с проверкой двух и более типов и "плюсом" задаём строгое условие ...
         boolean first = true;
         for (String typeName : typeNames) {
             getQuery().append("\n\t");
@@ -135,7 +135,7 @@ public class LuceneSearchBuilder {
         if (prefix != null) {
             getQuery().append(prefix);
         }
-        final String typeTag = (strictCond) ? " +TYPE:" : " TYPE:";
+        final String typeTag = (strictCond) ? " TYPE:" : " TYPE:";
         getQuery().append(typeTag).append(Utils.quoted(qType.toString()));
         return true;
     }
@@ -157,7 +157,7 @@ public class LuceneSearchBuilder {
             getQuery().append(prefix);
         }
         getQuery()
-                .append(" +@")
+                .append(" @")
                 .append(Utils.luceneEncode(fld))
                 .append(":\"")
                 .append(value.toString())
