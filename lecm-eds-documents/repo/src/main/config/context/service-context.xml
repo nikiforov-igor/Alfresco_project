@@ -19,7 +19,10 @@
 
 	<bean id="eds.models.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
-          			  documents.LogicEcmModelsBootstrap"
+          			  documents.LogicEcmModelsBootstrap,
+		              ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+				      documents.dictionaries.LogicEcmModelsBootstrap,
+				      dictionary.fileRegister.LogicEcmModelsBootstrap"
 		  p:models-ref="eds.models"
 		  p:labels-ref="eds.models.labels"/>
 

@@ -162,4 +162,37 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             }
 
         }, true);
+
+	LogicECM.DocumentTasks.loadTask = function(taskId, taskName) {
+		var doBeforeDialogShow = function (p_form, p_dialog) {
+			var contId = p_dialog.id + "-form-container";
+			Alfresco.util.populateHTML(
+				[contId + "_h", taskName]
+			);
+		};
+
+		var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&formUI={formUI}&submitType={submitType}&showCancelButton=true",
+			{
+				itemKind: "task",
+				itemId: taskId,
+				mode: "edit",
+				formUI: "true",
+				submitType: "json",
+				showCancelButton: "true"
+			});
+
+		// Using Forms Service, so always create new instance
+		var taskDetails = new Alfresco.module.SimpleDialog(this.id + "-taskDetails");
+		taskDetails.setOptions(
+			{
+				width:"50em",
+				templateUrl:templateUrl,
+				actionUrl:null,
+				destroyOnHide:true,
+				doBeforeDialogShow:{
+					fn:doBeforeDialogShow,
+					scope:this
+				}
+			}).show();
+	};
 })();

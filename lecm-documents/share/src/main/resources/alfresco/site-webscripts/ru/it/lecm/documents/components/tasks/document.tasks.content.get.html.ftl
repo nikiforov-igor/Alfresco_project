@@ -29,7 +29,8 @@ ${msg("heading")}
                 <div style="clear:both;"></div>
                 <div class="workflow-task-main-text text-broken">
                     <span class="workflow-task-title">
-                        <a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}</a>
+                        <#--<a href="${url.context}/page/task-edit?taskId=${task.id}">${task.title}</a>-->
+                        <a href="javascript:void(0);" onclick="LogicECM.DocumentTasks.loadTask('${task.id}', '${task.title}');">${task.title}</a>
                     </span>
                 </div>
             </div>
