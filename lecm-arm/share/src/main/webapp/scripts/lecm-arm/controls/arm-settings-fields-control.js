@@ -23,7 +23,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 	LogicECM.module.ARM.SettingsAddFields = function (htmlId) {
 		LogicECM.module.ARM.SettingsAddFields.superclass.constructor.call(this, "LogicECM.module.ARM.SettingsAddFields", htmlId);
-		this.selectedItems = [];
+		this.selectedItems = {};
 		return this;
 	};
 
@@ -72,6 +72,8 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 			},
 
 			showAddFromModelDialog: function() {
+				this.selectedItems = {};
+
 				var url = Alfresco.constants.PROXY_URI + "/lecm/arm/settings/fields?nodeRef=" + encodeURIComponent(this.options.parentNodeRef);
 				this.widgets.dataSource = new YAHOO.util.DataSource(url,
 					{
@@ -147,8 +149,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 					record;
 				for (var i = 0; i <= recordSet.getRecords().length; i++) {
 					record = recordSet.getRecord(i);
-					if (record && this.selectedItems[record.getData("name")])
-					{
+					if (record && this.selectedItems[record.getData("name")]) {
 						items.push({
 							name: record.getData("name"),
 							title: record.getData("title")
