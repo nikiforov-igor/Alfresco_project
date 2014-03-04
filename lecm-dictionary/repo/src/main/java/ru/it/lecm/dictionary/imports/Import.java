@@ -20,7 +20,6 @@ import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.dictionary.beans.XMLImportBean;
 import ru.it.lecm.dictionary.beans.XMLImporterInfo;
 
-import javax.activation.MimeType;
 import javax.transaction.UserTransaction;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -79,7 +78,13 @@ public class Import extends AbstractWebScript {
 			    ignoreErrors = true;
 		    }
 
-			final NodeRef rootDir = dictionaryBean.getDictionariesRoot();
+            String receivedNodeRef = req.getParameter("nodeRef");
+			final NodeRef rootDir;
+            if (NodeRef.isNodeRef(receivedNodeRef)) {
+                rootDir = new NodeRef(receivedNodeRef);
+            } else {
+                rootDir = dictionaryBean.getDictionariesRoot();
+            }
 		    final InputStream finalInputStream = inputStream;
 
 		    UserTransaction ut = transactionService.getUserTransaction();
