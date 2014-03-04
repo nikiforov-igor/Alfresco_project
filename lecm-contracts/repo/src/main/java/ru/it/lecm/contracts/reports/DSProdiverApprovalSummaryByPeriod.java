@@ -142,7 +142,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
         // <!-- результат согласования документа -->
         final QName QFLD_APPROVE_RESULT;
 
-        // "lecm-al:approval-list-document-version"; // <!-- номер версии документа, по которой проводилось согласование -->
+        // "lecm-workflow-result:workflow-result-list-document-version"; // <!-- номер версии документа, по которой проводилось согласование -->
         final QName QFLD_APPROVE_DOCVER;
 
         // "lecm-contract:regNumProject"; // <!-- Регистрационный номер проекта договора-->
@@ -176,7 +176,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
         /**
          * Получить главный документ исходя из списка Согласования.
          * Главный документ типа "lecm-contract:document" находится на три (!)
-         * уровня выше чем "lecm-al:approval-list"
+         * уровня выше чем "lecmApprovalResult:approvalResultList"
          */
         static public NodeRef getMainDocByApproveListId(NodeRef approveListId, NodeService nodeSrv) {
             final NodeRef parent1 = nodeSrv.getPrimaryParent(approveListId).getParentRef(); // папка типа "cm:folder", cm:name="Параллельное согласование"

@@ -4,7 +4,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
 "Лист согласования" по указанному Id списка согласования:
 Входные параметры:
-	•	Id списка Согласования для формирования отчёта (с типом "lecm-al:approval-list")
+	•	Id списка Согласования для формирования отчёта (с типом "lecmApprovalResult:approvalResultList")
 
 Выходные данные отчета:
 	•	№ проекта договора
@@ -14,8 +14,8 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 	(!) Вложенная таблица Согласующих подгружается как основная часть
 
 	Сами отдельные согласования:
-			<child-association name="lecm-al:approval-list-contains-approval-item">
-				<target><class>lecm-al:approval-item</class></target>
+			<child-association name="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc">
+				<target><class>lecmApprovalResult:approvalResultItem</class></target>
 			</child-association>
 
 	•	Результат согласования сотрудником
@@ -23,9 +23,9 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 	•	Дата согласования
 
 	•	Для Сотрудника-Исполнителя: ФИО, Должность, Подразделение
-			через "lecm-al:approval-item" ассоциацию 
+			через "lecmApprovalResult:approvalResultItem" ассоциацию
 			== ссылка на элемент справочника "Сотрудники" ==
-			<association name="lecm-al:approval-item-employee-assoc">
+			<association name="lecm-workflow-result:workflow-result-item-employee-assoc">
 				<target><class>lecm-orgstr:employee</class>
 				</target>
 			</association>
@@ -38,25 +38,25 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
 	== лист согласования ==
 		col_AproveList.XXX
-				<type name="lecm-al:approval-list">
+				<type name="lecmApprovalResult:approvalResultList">
 				"текущий объект"
 
 	== Договор-контракт ==
 		col_Doc.XXX
 				<type name="lecm-contract:document">
-				ссылка на документ из "текущего объекта" 
-				вверх по 
+				ссылка на документ из "текущего объекта"
+				вверх по
 				== Ссылка на документ, приложенный согласующим сотрудником ==
-						из <Согласующий сотрудник> of <type name="lecm-al:approval-item">
-				by	<association name="lecm-al:approval-item-comment-assoc">
+						из <Согласующий сотрудник> of <type name="lecmApprovalResult:approvalResultItem">
+				by	<association name="lecmApprovalResult:approvalResultItemCommentAssoc">
 						<target><class>cm:content</class></target>
 					</association>
 
 	== Заполненое Согласование Сотрудника ==
 		col_Item.XXX
-				<type name="lecm-al:approval-item">
+				<type name="lecmApprovalResult:approvalResultItem">
 				ссылка из "текущего объекта"
-				вниз по <child-association name="lecm-al:approval-list-contains-approval-item">
+				вниз по <child-association name="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc">
 				на <target>
 
 	== Согласующий сотрудник ==
@@ -64,7 +64,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		col_ItemEmployee.XXX
 				<type name="lecm-orgstr:employee">
 				ссылка из col_Item
-				вниз по <association name="lecm-al:approval-item-employee-assoc">
+				вниз по <association name=""lecm-workflow-result:workflow-result-item-employee-assoc">
 				на <target>
   -->
 <ds.config>
@@ -87,12 +87,12 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<pgsize>-1</pgsize>
 		<allVersions>true</allVersions>
 
-		<preferedType>lecm-al:approval-list</preferedType>
+		<preferedType>lecmApprovalResult:approvalResultList</preferedType>
 
 		<isMultiRow>false</isMultiRow>
 		<isCustom>false</isCustom>
 
-		<queryText><![CDATA[+TYPE:"lecm-al:approval-list"]]></queryText>
+		<queryText><![CDATA[+TYPE:"lecmApprovalResult:approvalResultList"]]></queryText>
 
 		<flags>
 				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
@@ -101,8 +101,8 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
 	</query.descriptor>
 
-	<!-- отображаемые значения для кодов для 
-		 результат согласования документа = "lecm-al:approval-list-decision"
+	<!-- отображаемые значения для кодов для
+		 результат согласования документа = "lecmApprovalResult:approvalResultListDecision"
 		 locale="RU_RU"
 	  -->
 	<statuses.valueDisplay>
@@ -132,22 +132,22 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				displayName="Номер проекта договора"/>
 
 		<!-- approval-list: номер версии документа, по которой проводилось согласование -->
-		<field queryFldName="lecm-al:approval-list-document-version"
+		<field queryFldName="lecm-workflow-result:workflow-result-list-document-version"
 				jrFldName="col_AproveList.Version"
 				displayName="Номер версии документа"/>
 
 		<!-- approval-list: результат согласования документа -->
-		<field queryFldName="lecm-al:approval-list-decision"
+		<field queryFldName="lecmApprovalResult:approvalResultListDecision"
 				jrFldName="col_AproveList.ApproveResult"
 				displayName="Результат Согласования"/>
 
 		<!-- approval-list: дата начала согласования -->
-		<field queryFldName="lecm-al:approval-list-approve-start"
+		<field queryFldName="lecm-workflow-result:workflow-result-list-start-date"
 				jrFldName="col_AproveList.ApproveStart"
 				displayName="Дата начала согасования по документу" javaValueClass="date"/>
 
 		<!-- approval-list: дата согласования по документу -->
-		<field queryFldName="lecm-al:approval-list-approve-date"
+		<field queryFldName="lecm-workflow-result:workflow-result-list-complete-date"
 				jrFldName="col_AproveList.ApproveEnd"
 				displayName="Дата согласования по документу" javaValueClass="date"/>
 
@@ -172,28 +172,28 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				jrFldName="col_ExecEmployee.Unit.Name"
 				displayName="Наименование отдела Исполнителя"/>
 
-		<!-- === 
-				отдельные согласования: lecm-al:approval-item 
+		<!-- ===
+				отдельные согласования: lecmApprovalResult:approvalResultItem
 			 ===
 		  -->
 
-		 <!-- "lecm-al:approval-item": Результат согласования сотрудником -->
-		<field queryFldName="{lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-decision}"
+		 <!-- "lecmApprovalResult:approvalResultItem": Результат согласования сотрудником -->
+		<field queryFldName="{lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecmApprovalResult:approvalResultItemDecision}"
 				jrFldName="col_Item.ApproveResult"
 				displayName="Результат Согласования Сотрудником"/>
 
-		<!-- "lecm-al:approval-item": замечания сотрудника -->
-		<field queryFldName="lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-comment"
+		<!-- "lecmApprovalResult:approvalResultItem": замечания сотрудника -->
+		<field queryFldName="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecmApprovalResult:approvalResultItemComment"
 				jrFldName="col_Item.ApproveNotes"
 				displayName="Замечания от Сотрудника"/>
 
-		<!-- "lecm-al:approval-item": Дата согласования сотрудника -->
-		<field queryFldName="lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-approve-date"
+		<!-- "lecmApprovalResult:approvalResultItem": Дата согласования сотрудника -->
+		<field queryFldName="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-finish-date"
 				jrFldName="col_Item.ApproveDate"
 				displayName="Дата согласования Сотрудником" javaValueClass="date"/>
 
 		<!-- Для Сотрудника-Согласующего: ФИО -->
-		<field queryFldName="{{ApproveEmployee} is {lecm-al:approval-list-contains-approval-item/lecm-al:approval-item-employee-assoc/lecm-orgstr:employee-short-name}}"
+		<field queryFldName="{{ApproveEmployee} is {lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}}"
 				jrFldName="col_Item.Employee"
 				displayName="Согласующий" />
 

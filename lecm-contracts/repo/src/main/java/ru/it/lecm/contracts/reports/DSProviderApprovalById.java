@@ -22,7 +22,7 @@ import java.util.*;
  * Отчёт "Список согласования"
  * параметр node_id списка согласования (типа )
  * Входной параметр:
- * •	NodeId списка Согласования для формирования отчёта (с типом "lecm-al:approval-list")
+ * •	NodeId списка Согласования для формирования отчёта (с типом "lecmApprovalResult:approvalResultList")
  *
  * @author rabdullin
  */
@@ -282,7 +282,7 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
     /**
      * Локализация для "<!-- результат согласования документа -->" и "<!-- Результат согласования сотрудником -->"
      *
-     * @param listValue см lecm-approval-list-model.xml::"lecm-al:approval-item-decision" и "lecm-al:approval-list-decision"
+     * @param listValue см lecm-approval-list-model.xml::"lecmApprovalResult:approvalResultItemDecision" и "lecmApprovalResult:approvalResultListDecision"
      */
     private String makeL12_ApproveResult(String listValue) {
         final Object l18 = getL18ApproveResultMap().get(listValue);
