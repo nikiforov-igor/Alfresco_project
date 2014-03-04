@@ -14,4 +14,5 @@ public interface SigningWorkflowService extends LecmWorkflowService {
 	void dropSigningResults(final NodeRef resultListRef);
 	NodeRef createResultList(final NodeRef bpmPackage, final String documentAttachmentCategoryName, final List<NodeRef> assigneesList);
 	void logDecision(final NodeRef resultListRef, final WorkflowTaskDecision taskDecision);
+	NodeRef getOrCreateSigningFolderContainer(NodeRef parentRef);
 }

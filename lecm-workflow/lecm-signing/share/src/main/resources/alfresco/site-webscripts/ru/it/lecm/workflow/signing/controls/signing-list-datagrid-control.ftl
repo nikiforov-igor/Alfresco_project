@@ -15,7 +15,7 @@
 		var loader = new YAHOO.util.YUILoader({
 			require: [
 				"lecmDatagrid",
-				"lecmApprovalListDataGridControl"
+				"lecmSigningListDataGridControl"
 			],
 			skin: {}
 		});
@@ -27,9 +27,9 @@
 		});
 
 		loader.addModule({
-			name: 'lecmApprovalListDataGridControl',
+			name: 'lecmSigningListDataGridControl',
 			type: 'js',
-			fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-approval/approval-list-datagrid-control.js'
+			fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-signing/signing-list-datagrid-control.js'
 		});
 
 		loader.onSuccess = createDatagrid;
@@ -37,21 +37,15 @@
 	}
 
 	function createDatagrid() {
-		LogicECM.CurrentModules["approvalListDatagridControl"] = new LogicECM.module.Approval.ApprovalListDataGridControl("${controlId}", "${itemId}");
-		LogicECM.CurrentModules["approvalListDatagridControl"].setMessages(${messages});
-		LogicECM.CurrentModules["approvalListDatagridControl"].setOptions({
+		LogicECM.CurrentModules["signingListDatagridControl"] = new LogicECM.module.Signing.SigningListDatagridControl("${controlId}", "${itemId}");
+		LogicECM.CurrentModules["signingListDatagridControl"].setMessages(${messages});
+		LogicECM.CurrentModules["signingListDatagridControl"].setOptions({
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
-			bubblingLabel: "ApprovalListDataGridControl",
-			expandable: true,
-			showActionColumn: true,
-			actions: [{
-				type: "datagrid-action-link-ApprovalListDataGridControl",
-				id: "onActionPrint",
-				permission: "edit",
-				label: "${msg('button.print')}"
-			}]
+			bubblingLabel: "SigningListDatagridControl",
+			expandable: false,
+			showActionColumn: false
 		});
 	}
 

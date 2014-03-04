@@ -223,13 +223,19 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	@Override
 	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = workflowResultListService.getOrCreateWorkflowResultFolder(bpmPackage);
-		NodeRef resultListRoot = getFolder(resultListContainer, "Подписание");
-		if (resultListRoot == null) {
-			resultListRoot = createFolder(resultListContainer, "Подписание");
-		}
+		NodeRef resultListRoot = getOrCreateSigningFolderContainer(resultListContainer);
 
 		NodeRef resultList = workflowResultListService.createResultList(resultListRoot, bpmPackage, documentAttachmentCategoryName, SigningWorkflowModel.TYPE_SIGN_RESULT_LIST, RESULT_LIST_NAME_FORMAT);
 		workflowResultListService.prepareResultList(resultList, assigneesList, SigningWorkflowModel.TYPE_SIGN_RESULT_ITEM);
 		return resultList;
+	}
+
+	@Override
+	public NodeRef getOrCreateSigningFolderContainer(NodeRef parentRef) {
+		NodeRef resultListRoot = getFolder(parentRef, "Подписание");
+		if (resultListRoot == null) {
+			resultListRoot = createFolder(parentRef, "Подписание");
+		}
+		return resultListRoot;
 	}
 }

@@ -27,6 +27,7 @@
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
 					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
+					<show id="lecm-outgoing:style-for-approval-and-signing-tab" force="true" for-mode="view"/>			<!-- Костыль, обходящий странное поведение base-form-tabs.ftl-->
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -102,10 +103,18 @@
 						<control template="/org/alfresco/components/form/controls/readonly.ftl"/>
 					</field>
 
-					<field id="lecm-outgoing:approval-list" set="approval-and-signing">
+					<field id="lecm-outgoing:approval-list" set="approval-and-signing" label="Согласование">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
-					<field id="lecm-outgoing:signing-list" set="approval-and-signing"></field>
+					<field id="lecm-outgoing:signing-list" set="approval-and-signing" label="Подписание">
+						<control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
+					</field>
+
+					<field id="lecm-outgoing:style-for-approval-and-signing-tab" set="approval-and-signing">
+						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+							<control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 
