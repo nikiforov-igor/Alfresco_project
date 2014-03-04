@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model xmlns="http://www.alfresco.org/model/dictionary/1.0" name="lecm-ord:model">
+    <description>ОРД</description>
+    <author>VKuprin</author>
+    <version>1.0</version>
+    
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/system/1.0" prefix="sys"/>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+        <import uri="http://www.it.ru/lecm/model/signed-docflow/1.0" prefix="lecm-signed-docflow"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/lecm/ORD/1.0" prefix="lecm-ord"/>
+    </namespaces>
+    <constraints>
+        <constraint name="lecm-ord:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Прочее</value>
+                    <value>Подлинник</value>
+                    <value>Приложения</value>
+                    <value>Документ</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-ord:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value><![CDATA[ОРД, №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}, автор {lecm-document:creator-ref}]]></value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-ord:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+            <parameter name="armUrl">
+                <value>documents-list?doctype=lecm-ord:document</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-ord:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-ord:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+            <parameter name="regNumbersProperties">
+                <value>1</value>
+            </parameter>
+        </constraint>
+    </constraints>
+    <types>
+        <type name="lecm-ord:document">
+            <title>Logic Ecm ORD</title>
+            <parent>lecm-eds-document:base</parent>
+            <properties></properties>
+            <associations></associations>
+            <mandatory-aspects></mandatory-aspects>
+        </type>
+    </types>
+</model>

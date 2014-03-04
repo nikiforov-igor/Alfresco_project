@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    
+    <util:list id="ord.models">
+		<value>alfresco/module/${artifactId}/models/lecm-ord-model.xml</value>
+		<!--<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>-->
+	</util:list>
+    
+    <util:list id="ord.models.labels">
+<!--		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>-->
+	</util:list>
+    <!-- Registration of orgStructure models -->
+    <bean id="ord.models.bootstrap" parent="modelsToRepositoryLoader"
+          depends-on="dictionaryBootstrap, eds.models.bootstrap, documents.LogicEcmModelsBootstrap"
+          p:models-ref="ord.models"
+		  p:labels-ref="ord.models.labels"/>
+
+    <util:list id="ord.dictionaries">
+<!--		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>-->
+	</util:list>
+
+	<bean id="ord.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  businessJournalLogEventsPolicy"
+		  p:dictionaries-ref="ord.dictionaries"/>
+    
+</beans>

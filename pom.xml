@@ -118,6 +118,7 @@
 		<module>lecm-workflow</module>
 		<module>lecm-internal</module>
 		<module>lecm-group-actions</module>
+		<module>lecm-ord</module>
 		<!--<module>lecm-licensing</module>-->
 	</modules>
 	<scm>
