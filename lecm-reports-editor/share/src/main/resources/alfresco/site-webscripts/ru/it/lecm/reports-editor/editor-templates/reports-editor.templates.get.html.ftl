@@ -2,8 +2,9 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign id = args.htmlid>
-
+<#assign aDateTime = .now>
 <#assign toolbarId = "re-templates-toolbar-" + id/>
+<#assign templatesLabel ="templates-" + aDateTime?iso_utc>
 
 <div id="${toolbarId}">
     <@comp.baseToolbar toolbarId true false false>
@@ -21,7 +22,7 @@
 (function () {
     function initToolbar() {
         new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
-            bubblingLabel: "templates",
+            bubblingLabel: "${templatesLabel}",
             createFormId: "${args.createFormId!''}",
             newRowDialogTitle: "label.create-template.title"
         });
@@ -47,13 +48,13 @@
                             forceSubscribing: true,
                             actions: [
                                 {
-                                    type:"datagrid-action-link-templates",
+                                    type:"datagrid-action-link-${templatesLabel}",
                                     id:"onActionEdit",
                                     permission:"edit",
                                     label:"${msg("actions.edit")}"
                                 },
                                 {
-                                    type:"datagrid-action-link-templates",
+                                    type:"datagrid-action-link-${templatesLabel}",
                                     id:"onActionDelete",
                                     permission:"delete",
                                     label:"${msg("actions.delete-row")}",
@@ -63,20 +64,23 @@
                                     }
                                 }
                             ],
-                            datagridMeta: {
-                                itemType: "lecm-rpeditor:reportTemplate",
-                                nodeRef: LogicECM.module.ReportsEditor.SETTINGS.templatesContainer,
-                                actionsConfig: {
-                                    fullDelete: true,
-                                    trash: false
-                                },
-                                sort: "cm:name|true"
-                            },
-                            bubblingLabel: "templates",
+                            bubblingLabel: "${templatesLabel}",
                             showCheckboxColumn: false
                         }).setMessages(${messages});
 
-                datagrid.draw();
+
+                YAHOO.Bubbling.fire("activeGridChanged", {
+                    datagridMeta: {
+                        itemType: "lecm-rpeditor:reportTemplate",
+                        nodeRef: LogicECM.module.ReportsEditor.SETTINGS.templatesContainer,
+                        actionsConfig: {
+                            fullDelete: true,
+                            trash: false
+                        },
+                        sort: "cm:name|true"
+                    },
+                    bubblingLabel: "${templatesLabel}"
+                });
             }
 
             YAHOO.util.Event.onContentReady('${gridId}', createDatagrid);

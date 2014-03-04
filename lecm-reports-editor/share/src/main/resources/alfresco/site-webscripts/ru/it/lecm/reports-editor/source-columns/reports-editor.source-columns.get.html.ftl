@@ -59,20 +59,22 @@
                                 }
                             }
                         ],
-                        datagridMeta: {
-                            itemType: "lecm-rpeditor:reportDataColumn",
-                            nodeRef: "${args["sourceId"]}",
-                            actionsConfig: {
-                                fullDelete: true,
-                                trash: false
-                            },
-                            sort: "cm:name|true"
-                        },
                         bubblingLabel: "sourceColumns",
                         showCheckboxColumn: false
                     }).setMessages(${messages});
 
-            datagrid.draw();
+            YAHOO.Bubbling.fire("activeGridChanged", {
+                datagridMeta: {
+                    itemType: "lecm-rpeditor:reportDataColumn",
+                    nodeRef: "${args["sourceId"]}",
+                    actionsConfig: {
+                        fullDelete: true,
+                        trash: false
+                    },
+                    sort: "cm:name|true"
+                },
+                bubblingLabel: "sourceColumns"
+            });
         }
 
         YAHOO.util.Event.onContentReady('${gridId}', createDatagrid);

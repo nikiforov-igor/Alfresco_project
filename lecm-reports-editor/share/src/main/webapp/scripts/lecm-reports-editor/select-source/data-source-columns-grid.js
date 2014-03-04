@@ -2,6 +2,7 @@ LogicECM.module.ReportsEditor.ColumnsGrid = function (containerId) {
     LogicECM.module.ReportsEditor.ColumnsGrid.superclass.constructor.call(this, containerId);
     this.activeSourceColumns = [];
 
+    YAHOO.Bubbling.on("copyColumnToReportSource", this.onCopyLock, this);
     return this;
 };
 
@@ -10,13 +11,23 @@ YAHOO.lang.extend(LogicECM.module.ReportsEditor.ColumnsGrid, LogicECM.module.Bas
 YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.ColumnsGrid.prototype, {
 
     activeSourceColumns: [],
+    mainDataGridLabel: null,
+    doubleClickLock: false,
 
     onActionAdd: function (item) {
-        // добавляем столбец в набор данных (копируем в отчет)
-        YAHOO.Bubbling.fire("copyColumnToReportSource", {
-            sourceId: this.datagridMeta.nodeRef,
-            columnId: item.nodeRef
-        });
+        if (!this.doubleClickLock) {
+            this.doubleClickLock = true;
+            // добавляем столбец в набор данных (копируем в отчет)
+            YAHOO.Bubbling.fire("copyColumnToReportSource", {
+                sourceId: this.datagridMeta.nodeRef,
+                columnId: item.nodeRef,
+                bubblingLabel: this.mainDataGridLabel
+            });
+        }
+    },
+
+    onCopyLock: function() {
+        this.doubleClickLock = false;
     },
 
     onActionDelete: function (p_items, owner, actionsConfig) {

@@ -2,8 +2,11 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign id = args.htmlid>
+<#assign aDateTime = .now>
 
 <#assign toolbarId = "re-subreports-toolbar-" + id/>
+<#assign subReportsLabel ="subReports-" + aDateTime?iso_utc>
+
 <div id="${toolbarId}">
 <@comp.baseToolbar toolbarId true false false>
     <div class="new-row">
@@ -20,7 +23,7 @@
 (function() {
     function initToolbar() {
         new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
-            bubblingLabel: "subReports",
+            bubblingLabel: "${subReportsLabel}",
             newRowDialogTitle: "label.create-subreport.title"
         });
     }
@@ -180,7 +183,7 @@
                 }
             }, true);
 
-            function createSubDatagrid() {
+            YAHOO.util.Event.onContentReady("${gridId}", function () {
                 var datagrid = new LogicECM.module.ReportsEditor.SubGrid('${gridId}').setOptions(
                         {
                             usePagination: true,
@@ -189,29 +192,29 @@
                             forceSubscribing: true,
                             actions: [
                                 {
-                                    type: "datagrid-action-link-subReports",
+                                    type: "datagrid-action-link-${subReportsLabel}",
                                     id: "onActionDelete",
                                     permission: "delete",
                                     label: "${msg("actions.delete-row")}"
                                 }
                             ],
-                            datagridMeta: {
-                                itemType: "lecm-rpeditor:subReportDescriptor",
-                                nodeRef: "${args.reportId}",
-                                actionsConfig: {
-                                    fullDelete: true,
-                                    trash: false
-                                },
-                                sort: "cm:name|true"
-                            },
-                            bubblingLabel: "subReports",
+                            bubblingLabel: "${subReportsLabel}",
                             showCheckboxColumn: false
                         }).setMessages(${messages});
 
-                datagrid.draw();
-            }
-
-            YAHOO.util.Event.onContentReady("${gridId}", createSubDatagrid);
+                YAHOO.Bubbling.fire("activeGridChanged", {
+                    datagridMeta: {
+                        itemType: "lecm-rpeditor:subReportDescriptor",
+                        nodeRef: "${args.reportId}",
+                        actionsConfig: {
+                            fullDelete: true,
+                            trash: false
+                        },
+                        sort: "cm:name|true"
+                    },
+                    bubblingLabel: "${subReportsLabel}"
+                });
+            });
             //]]></script>
         </@grid.datagrid>
         </div>

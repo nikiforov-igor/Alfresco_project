@@ -4,25 +4,28 @@
 <#assign aDateTime = .now>
 <#assign id = "data-source-select-" + aDateTime?iso_utc/>
 
+<#assign sourceListLabel ="sourcesList-" + aDateTime?iso_utc>
+<#assign sourceColumnsLabel ="sourceColumns-" + aDateTime?iso_utc>
+<#assign parentGridLabel = args.gridLabel!""/>
+
 <div class="yui-t1" id="${id}">
     <div id="yui-main" style="width: 55%;">
         <div id="alf-content">
         <#assign toolbarId = "${id}-columns-toolbar"/>
             <!-- Toolbar Start-->
             <div id="${toolbarId}" class="select-columns-toolbar">
-            <@comp.baseToolbar toolbarId true false false>
-                <div class="select-row">
-                        <span id="${toolbarId}-selectColumnsBtn" class="yui-button yui-push-button">
-                            <span class="first-child">
-                                <button type="button" title="${msg("label.select.btn")}">${msg("label.select.btn")}</button>
+                <@comp.baseToolbar toolbarId true false false>
+                    <div class="select-row">
+                            <span id="${toolbarId}-selectColumnsBtn" class="yui-button yui-push-button">
+                                <span class="first-child">
+                                    <button type="button" title="${msg("label.select.btn")}">${msg("label.select.btn")}</button>
+                                </span>
                             </span>
-                        </span>
-                </div>
-            </@comp.baseToolbar>
+                    </div>
+                </@comp.baseToolbar>
             </div>
             <!-- Toolbar End-->
             <#assign columnsGridId = "${id}-columns-grid">
-            <#assign sourceColumnsLabel ="sourceColumns-" + aDateTime?iso_utc>
             <div class="reports">
                 <div id="${columnsGridId}" class="columns-right-grid">
                     <div id="${columnsGridId}-alf-content">
@@ -58,17 +61,21 @@
                                                 }
                                             }
                                         ],
-                                        datagridMeta: {
-                                            datagridFormId: "short-datagrid",
-                                            itemType: "lecm-rpeditor:reportDataColumn",
-                                            nodeRef: "NOT_LOAD",
-                                            sort: "lecm-rpeditor:dataColumnCode|true"
-                                        },
                                         bubblingLabel: "${sourceColumnsLabel}",
                                         showCheckboxColumn: true
                                     }).setMessages(${messages});
 
-                            datagrid.draw();
+                            datagrid.mainDataGridLabel  = "${parentGridLabel}";
+
+                            YAHOO.Bubbling.fire("activeGridChanged", {
+                                datagridMeta: {
+                                    datagridFormId: "short-datagrid",
+                                    itemType: "lecm-rpeditor:reportDataColumn",
+                                    nodeRef: "NOT_LOAD",
+                                    sort: "lecm-rpeditor:dataColumnCode|true"
+                                },
+                                bubblingLabel: "${sourceColumnsLabel}"
+                            });
                         }
 
                         YAHOO.util.Event.onContentReady("${columnsGridId}", createColumnsDatagrid);
@@ -82,7 +89,6 @@
 
     <div id="alf-filters" style="width:40%">
         <#assign sourceGridId ="${id}-sources-grid">
-        <#assign sourceListLabel ="sourcesList-" + aDateTime?iso_utc>
         <!-- Grid Start-->
             <div class="reports">
             <div id="${sourceGridId}" class="sources-left-grid">
@@ -106,15 +112,19 @@
                                                 label: "${msg("actions.select")}"
                                             }
                                         ],
-                                        datagridMeta: {
-                                            itemType: "lecm-rpeditor:reportDataSource",
-                                            nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer
-                                        },
                                         bubblingLabel: "${sourceListLabel}",
                                         showCheckboxColumn: false
                                     }).setMessages(${messages});
 
-                            datagrid.draw();
+                            datagrid.mainDataGridLabel = "${parentGridLabel}";
+
+                            YAHOO.Bubbling.fire("activeGridChanged", {
+                                datagridMeta: {
+                                    itemType: "lecm-rpeditor:reportDataSource",
+                                    nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer
+                                },
+                                bubblingLabel: "${sourceListLabel}"
+                            });
                         }
 
                     YAHOO.util.Event.onContentReady("${sourceGridId}", createSourcesDatagrid);
@@ -133,6 +143,7 @@
                 sourceSelectEditor.setDataSourceId("${activeSourceId!""}");
                 sourceSelectEditor.setColumnsDataGridLabel("${sourceColumnsLabel}");
                 sourceSelectEditor.setSourcesDataGridLabel("${sourceListLabel}");
+                sourceSelectEditor.setMainDataGridLabel("${parentGridLabel}");
         }
 
         YAHOO.util.Event.onContentReady("${toolbarId}-body", initEditor);

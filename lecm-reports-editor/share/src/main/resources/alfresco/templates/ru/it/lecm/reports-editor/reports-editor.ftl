@@ -4,10 +4,9 @@
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/reports-editor-const.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/editor-tree-menu.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/toolbar.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/template-edit/template-editor.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/template-edit/template-editor-toolbar.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/template-edit/template-editor-grid.js"></@script>
-    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/edit-source/edit-source-toolbar.js"></@script>
+    <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/edit-source/source-edit-toolbar.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/select-source/data-source-columns-grid.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/select-source/source-select-editor.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-reports-editor/select-source/data-sources-grid.js"></@script>

@@ -13,9 +13,14 @@
 
         YAHOO.Bubbling.on("initDatagrid", this.onInitDataGrid, this);
         YAHOO.Bubbling.on("updateReportSourceColumns", this._onUpdateSourceColumns, this);
+        YAHOO.Bubbling.on("copyColumnToReportSource", this._onCopyColumn, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this._onSelectedItemsChanged, this);
         YAHOO.Bubbling.on("onSearchSuccess", this._toolbarButtonActivate, this);
         YAHOO.Bubbling.on("dataItemsDeleted", this._toolbarButtonActivate, this);
+        YAHOO.Bubbling.on("unsubscribeBubbling", this.onUnsubscribe, this);
+        YAHOO.Bubbling.on("copySourceToReport", this._copySourceToReport, this);
+        YAHOO.Bubbling.on("updateActiveColumns", this.onUpdateActiveColumns, this);
+
         return this;
     };
 
@@ -45,6 +50,12 @@
 
         doubleClickLock: false,
 
+        bubblingLabel: null,
+
+        setBubblingLabel: function (label) {
+            this.bubblingLabel = label;
+        },
+
         setDataSourceId: function (dataSourceId) {
             if (dataSourceId && dataSourceId.length > 0) {
                 this.dataSourceId = dataSourceId;
@@ -55,9 +66,24 @@
             this.reportId = reportId;
         },
 
+        onUnsubscribe: function (layer, args) {
+            YAHOO.Bubbling.unsubscribe("initDatagrid", this.onInitDataGrid, this);
+            YAHOO.Bubbling.unsubscribe("updateReportSourceColumns", this._onUpdateSourceColumns, this);
+            YAHOO.Bubbling.unsubscribe("selectedItemsChanged", this._onSelectedItemsChanged, this);
+            YAHOO.Bubbling.unsubscribe("onSearchSuccess", this._toolbarButtonActivate, this);
+            YAHOO.Bubbling.unsubscribe("dataItemsDeleted", this._toolbarButtonActivate, this);
+        },
+
+        onUpdateActiveColumns: function (layer, args){
+            var obj = args[1];
+            if ((obj !== null) && (obj.columns !== null) && (obj.bubblingLabel == this.bubblingLabel)) {
+                this.columnsDataGrid.activeSourceColumns = obj.columns;
+            }
+        },
+
         onInitDataGrid: function (layer, args) {
             var datagrid = args[1].datagrid;
-            if (datagrid.options.bubblingLabel == "editSourceColumns") {
+            if (datagrid.options.bubblingLabel == this.bubblingLabel) {
                 this.columnsDataGrid = datagrid;
                 this.setDataSourceId(this.columnsDataGrid.datagridMeta.nodeRef);
 
@@ -67,16 +93,13 @@
             }
         },
 
-        onReady: function () {
-        },
-
         createSelectDialog: function() {
             this.selectSourcePanel = Alfresco.util.createYUIPanel("selectSourcePanel",
                 {
                     width: "900px"
                 });
             YAHOO.Bubbling.on("hidePanel", this._hideSelectDialog);
-            this.widgets.closeButton = Alfresco.util.createYUIButton(this, "searchBlock-search-button", this._onClose, {}, Dom.get("selectSourcePanel-close-button"));
+            this.widgets.closeButton = Alfresco.util.createYUIButton(this, null, this._onClose, {}, Dom.get("selectSourcePanel-close-button"));
         },
 
         copySource: function (sourceId, from, to, fireCreateEvent) {
@@ -169,10 +192,12 @@
             Alfresco.util.Ajax.request(
                 {
                     method: "GET",
-                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/source-select?reportId=" + this.reportId,
+                    url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/reports-editor/source-select?reportId=" + this.reportId + "&gridLabel=" + this.bubblingLabel,
                     successCallback: {
                         fn: function (response) {
                             var formDiv = Dom.get("selectSourcePanel-form");
+                            formDiv.innerHTML = "";
+                            //YAHOO.Bubbling.fire("unsubscribeBubbling");
                             formDiv.innerHTML = response.serverResponse.responseText;
                             this._viewSelectDialog();
                         },
@@ -342,7 +367,7 @@
                     },
                     sort: "lecm-rpeditor:dataColumnCode|true"
                 },
-                bubblingLabel: "editSourceColumns"
+                bubblingLabel: this.bubblingLabel
             });
         },
 
@@ -368,6 +393,116 @@
                     }
                 }
             }
+        },
+
+        _copySourceToReport: function (layer, args) {
+            var obj = args[1];
+            if ((obj !== null) && (obj.dataSourceId !== null) && (obj.bubblingLabel == this.bubblingLabel)) {
+                if (obj.dataSourceId) {
+                    Alfresco.util.Ajax.request(
+                        {
+                            method: "GET",
+                            dataObj: {
+                                dataSourceId: obj.dataSourceId
+                            },
+                            url: Alfresco.constants.PROXY_URI + "lecm/reports-editor/getDataSourceColumns",
+                            successCallback: {
+                                fn: function (response) {
+                                    var oResults = eval("(" + response.serverResponse.responseText + ")");
+                                    if (oResults) {
+                                        for (var k = 0; k < oResults.length; k++) {
+                                            if (!this.existInSource(oResults[k].code)) {
+                                                this.copyColumn(oResults[k].nodeRef, obj.dataSourceId, this.dataSourceId, true);
+                                            }
+                                            if (k == oResults.length - 1) {
+                                                Alfresco.util.PopupManager.displayMessage({
+                                                        text: "Набор скопирован"
+                                                    }, Dom.get("selectSourcePanel")
+                                                );
+                                            }
+                                        }
+                                    }
+                                },
+                                scope: this
+                            },
+                            failureCallback: {
+                                fn: function (response) {
+                                    alert(response.json.message);
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "Не удалось получить список столбцов для набора данных"
+                                    }, Dom.get("selectSourcePanel"));
+                                }
+                            },
+                            execScripts: true,
+                            requestContentType: "application/json",
+                            responseContentType: "application/json"
+                        });
+                }
+            }
+        },
+
+        copyColumn: function (columnId, from, to, fireUpdateEvent) {
+            var copyRefs = [];
+            copyRefs.push(columnId);
+
+            var copyTo = new Alfresco.util.NodeRef(to);
+
+            Alfresco.util.Ajax.request(
+                {
+                    method: "POST",
+                    dataObj: {
+                        nodeRefs: copyRefs,
+                        parentId: from
+                    },
+                    url: Alfresco.constants.PROXY_URI + "slingshot/doclib/action/copy-to/node/" + copyTo.uri,
+                    successCallback: {
+                        fn: function (response) {
+                            if (response.json.overallSuccess) {
+                                if (fireUpdateEvent) {
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "Столбец добавлен в набор"
+                                    }, Dom.get("selectSourcePanel"));
+                                    // обновляем список колонок
+                                    YAHOO.Bubbling.fire("updateReportSourceColumns");
+                                }
+                            }
+                        },
+                        scope: this
+                    },
+                    failureCallback: {
+                        fn: function (response) {
+                            alert(response.json.message);
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: "Не удалось скопировать шаблон"
+                            });
+                        }
+                    },
+                    execScripts: true,
+                    requestContentType: "application/json",
+                    responseContentType: "application/json"
+                });
+        },
+
+        _onCopyColumn: function (layer, args) {
+            var obj = args[1];
+            if ((obj !== null) && (obj.columnId !== null) && obj.bubblingLabel == this.bubblingLabel) {
+                if (this.dataSourceId) {
+                    this.copyColumn(obj.columnId, obj.sourceId, this.dataSourceId, true);
+                } else {
+                    Alfresco.util.PopupManager.displayMessage({
+                        text: "Нет активного набора!"
+                    });
+                }
+            }
+        },
+
+        existInSource: function (columnCode){
+            for (var k = 0; k < this.columnsDataGrid.activeSourceColumns.length; k++) {
+                if (this.columnsDataGrid.activeSourceColumns[k].code == columnCode){
+                    return true;
+                }
+            }
+            return false;
         }
     });
 })();

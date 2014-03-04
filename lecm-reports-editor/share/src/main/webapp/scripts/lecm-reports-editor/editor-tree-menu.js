@@ -252,6 +252,7 @@
                             successCallback: {
                                 fn: function (response) {
                                     var contentEl = Dom.get("alf-content");
+                                    YAHOO.Bubbling.fire("unsubscribeBubbling");
                                     contentEl.innerHTML = response.serverResponse.responseText;
                                 }
                             },
