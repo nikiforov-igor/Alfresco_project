@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <alfresco-config>
 	<config evaluator="string-compare" condition="activiti$regnumReservation">
 		<forms>
@@ -30,12 +31,12 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmCustom:presentString" force="true" />
+					<show id="reservationWf:presentString" force="true" />
 					<show id="reservationWf:isReservate" />
 					<show id="bpm:comment" />
 				</field-visibility>
 				<appearance>
-					<field id="lecmCustom:presentString">
+					<field id="reservationWf:presentString">
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
 					<field id="reservationWf:isReservate">
