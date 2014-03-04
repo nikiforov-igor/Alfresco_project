@@ -414,7 +414,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		                searchInput.removeAttribute("disabled");
 	                }
 	                if (this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
-	                    this.onClearSearch();
+		                Dom.get(this.id + "-full-text-search").value = "";
+		                YAHOO.Bubbling.fire("hideFilteredLabel");
+		                this.checkShowClearSearch();
 	                }
 
                     if (hasFilters) {
