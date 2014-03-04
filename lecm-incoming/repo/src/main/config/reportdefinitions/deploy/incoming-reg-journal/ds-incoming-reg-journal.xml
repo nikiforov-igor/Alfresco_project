@@ -103,7 +103,7 @@
         </field>
 
         <field alfrescoType="d:date" displayName="Срок исполнения"
-               queryFldName="{lecm-incoming:execution-date}"
+               queryFldName="{lecm-eds-document:execution-date}"
                javaValueClass="java.util.Date" jrFldName="col_ExecDate">
             <l18>
                 <item key="RU_RU" value="Срок исполнения"/>

@@ -71,7 +71,7 @@
                 <value>lecm-document-aspects:is-on-control</value>
                 <value>lecm-incoming:outgoing-number</value>
                 <value>lecm-incoming:outgoing-date</value>
-                <value>lecm-incoming:execution-date</value>
+                <value>lecm-eds-document:execution-date</value>
             </list>
         </property>
         <property name="assocsToCopy">

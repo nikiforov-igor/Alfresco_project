@@ -74,11 +74,6 @@
                     <title>Исходящий от</title>
                     <type>d:date</type>
                 </property>
-                <!--Срок исполнения-->
-                <property name="lecm-incoming:execution-date">
-                    <title>Срок исполнения</title>
-                    <type>d:date</type>
-                </property>
                 <property name="lecm-incoming:delivery-method-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">

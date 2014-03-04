@@ -14,7 +14,7 @@
                 <field-visibility>
 	                <show id="lecm-incoming:is-not-registered"/>
 	                <show id="lecm-document-aspects:is-on-control"/>
-	                <show id="lecm-incoming:execution-date"/>
+	                <show id="lecm-eds-document:execution-date"/>
 	                <show id="lecm-document-aspects:reg-data-number"/>
 	                <show id="lecm-document-aspects:reg-data-date"/>
 	                <show id="lecm-document:title"/>
@@ -46,7 +46,7 @@
 
 		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
 		            <field id="lecm-document-aspects:is-on-control" set="incoming1"/>
-		            <field id="lecm-incoming:execution-date" set="incoming1" mandatory="true">
+		            <field id="lecm-eds-document:execution-date" set="incoming1" mandatory="true">
 			            <constraint-handlers>
 				            <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 			            </constraint-handlers>
@@ -213,7 +213,7 @@
 	                <show id="lecm-document:subject-assoc"/>
 	                <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-eds-document:note"/>
-	                <show id="lecm-incoming:execution-date"/>
+	                <show id="lecm-eds-document:execution-date"/>
 	                <show id="lecm-document-aspects:is-on-control"/>
 	                <show id="lecm-incoming:is-not-registered"/>
                 </field-visibility>
@@ -299,7 +299,7 @@
 		            </field>
 		            <field id="lecm-document-aspects:is-on-control" set="incoming10"/>
 		            <field id="lecm-incoming:is-not-registered" set="incoming10"/>
-		            <field id="lecm-incoming:execution-date" set="incoming11" mandatory="true">
+		            <field id="lecm-eds-document:execution-date" set="incoming11" mandatory="true">
 			            <constraint-handlers>
 				            <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 			            </constraint-handlers>
@@ -354,7 +354,7 @@
                     <show id="lecm-document-aspects:is-on-control"/>
                     <show id="lecm-incoming:is-not-registered"/>
                     <show id="lecm-incoming:outgoing-date"/>
-                    <show id="lecm-incoming:execution-date"/>
+                    <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-document:subject-assoc"/>

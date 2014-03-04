@@ -44,6 +44,11 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+	            <!--Срок исполнения-->
+	            <property name="lecm-eds-document:execution-date">
+		            <title>Срок исполнения</title>
+		            <type>d:date</type>
+	            </property>
                 <property name="lecm-eds-document:document-type-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">

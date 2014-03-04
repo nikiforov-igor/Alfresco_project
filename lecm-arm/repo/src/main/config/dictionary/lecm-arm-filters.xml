@@ -22,7 +22,7 @@
                 <property name="lecm-arm:filter-class">dateArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">OVERDUE|Просроченные,IN_THE_WORK|В работе,WITH_UPCOMING_PERIOD|С приближающимся сроком,ALL|Все</property>
-                <property name="lecm-arm:filter-query">lecm-incoming:execution-date</property>
+                <property name="lecm-arm:filter-query">lecm-eds-document:execution-date</property>
             </item>
             <item name="cm:Контроль" type="lecm-arm:filter">
                 <property name="cm:name">Контроль</property>

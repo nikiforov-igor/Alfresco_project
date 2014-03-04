@@ -93,6 +93,7 @@ public interface DocumentService {
 
     public static final String EDS_NAMESPACE_URI = "http://www.it.ru/logicECM/eds-document/1.0";
     public static final QName TYPE_EDS_DOCUMENT = QName.createQName(EDS_NAMESPACE_URI, "base");
+	public static final QName PROP_EDS_EXECUTION_DATE = QName.createQName(EDS_NAMESPACE_URI, "execution-date");
 
     /**
      * Метод для получения рейтинга документа
