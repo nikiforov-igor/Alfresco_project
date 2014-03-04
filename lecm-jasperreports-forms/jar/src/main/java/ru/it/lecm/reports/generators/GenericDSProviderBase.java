@@ -30,6 +30,7 @@ import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
+import ru.it.lecm.utils.LuceneSearchBuilder;
 
 import java.util.*;
 
@@ -135,7 +136,17 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * @return LucenePreparedQuery
      */
     protected LucenePreparedQuery buildQuery() {
-        return LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
+        final LucenePreparedQuery result = LucenePreparedQuery.prepareQuery(this.reportDescriptor, getServices().getServiceRegistry());
+
+        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
+        builder.emmit(result.luceneQueryText());
+
+        boolean hasData = !builder.isEmpty();
+
+        builder.emmitFieldCond((hasData ? " AND " : ""), "lecm-statemachine-aspects:is-draft", false);
+
+        result.setLuceneQueryText(builder.toString());
+        return result;
     }
 
     public JRDSConfigXML conf() {
