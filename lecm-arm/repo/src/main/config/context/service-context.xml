@@ -107,4 +107,96 @@
 	</bean>
 
     <bean id="baseQueryArmFilter" class="ru.it.lecm.arm.filters.BaseQueryArmFilter"/>
+
+    <bean id="arm.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-arm:arm">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:accordion">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:order</value>
+                        <value>lecm-arm:business-roles-assoc</value>
+                        <value>lecm-arm:types</value>
+                        <value>lecm-arm:search-query</value>
+                        <value>lecm-arm:counter-enable</value>
+                        <value>lecm-arm:counter-limitation</value>
+                        <value>lecm-arm:counter-description</value>
+                        <value>lecm-arm:fields-assoc</value>
+                        <value>lecm-arm:filters-assoc</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:node">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:order</value>
+                        <value>lecm-arm:node-child-rule-assoc</value>
+                        <value>lecm-arm:types</value>
+                        <value>lecm-arm:search-query</value>
+                        <value>lecm-arm:counter-enable</value>
+                        <value>lecm-arm:counter-limitation</value>
+                        <value>lecm-arm:counter-description</value>
+                        <value>lecm-arm:fields-assoc</value>
+                        <value>lecm-arm:filters-assoc</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:reports-node">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:order</value>
+                        <value>lecm-arm:node-child-rule-assoc</value>
+                        <value>lecm-arm:types</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:field">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:field-title</value>
+                        <value>lecm-arm:field-name</value>
+                        <value>lecm-arm:field-format-string</value>
+                        <value>lecm-arm:field-sortable</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:base-child-rule">
+                    <list>
+                        <value>cm:name</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:query-child-rule">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:list-query-child-rule</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:dictionary-child-rule">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:child-rule-dictionary-assoc</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:statuses-child-rule">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:statuses-rule</value>
+                        <value>lecm-arm:selected-statuses</value>
+                    </list>
+                </entry>
+                <entry key="lecm-arm:filter">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:filter-code</value>
+                        <value>lecm-arm:filter-multiple-select</value>
+                        <value>lecm-arm:filter-query</value>
+                        <value>lecm-arm:filter-class</value>
+                        <value>lecm-arm:lecm-arm:filter-values</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>
