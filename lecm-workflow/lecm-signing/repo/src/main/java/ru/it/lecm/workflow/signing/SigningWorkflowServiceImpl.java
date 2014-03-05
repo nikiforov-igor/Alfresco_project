@@ -67,8 +67,28 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
+		String decisionMessage;
 		String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+
+		DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
+		NodeRef initiatorRef = docInfo.getInitiatorRef();
+		List<NodeRef> recipients = new ArrayList<NodeRef>();
+		recipients.add(initiatorRef);
+
+		if (DecisionResult.SIGNED.name().equals(decision)) {
+			decisionMessage = "подписал проект";
+		} else if (DecisionResult.REJECTED.name().equals(decision)) {
+			decisionMessage = "отклонил подписание проекта";
+		} else {
+			decisionMessage = "";
+		}
+
+		NodeRef employee = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		String name = (String) nodeService.getProperty(employee, ContentModel.PROP_NAME);
+		String message = String.format("Сотрудник %s %s документа %s", name, decisionMessage, docInfo.getDocumentLink());
+		sendNotification(message, docInfo.getDocumentRef(), recipients);
 
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
 		taskDecision.setUserName(task.getAssignee());
