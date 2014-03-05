@@ -12,6 +12,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -56,6 +57,8 @@ public class ReportsManager {
     private Map<String, ReportDefaultsDesc> reportDefaults;
 
     protected ServiceRegistry serviceRegistry;
+    private OrgstructureBean orgstructureBean;
+
     private SubstitudeBean substitudeService;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
@@ -112,6 +115,10 @@ public class ReportsManager {
     public void setContentFileDAO(ReportContentDAO value) {
         logger.debug(String.format("contentFileDAO assigned: %s", value));
         this.contentFileDAO = value;
+    }
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
     }
 
     /**
@@ -215,20 +222,33 @@ public class ReportsManager {
             docType = null;
         }
 
+        final HashSet<String> employeeRoles = new HashSet<String>();
+        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+
+        if (currentEmployee != null) {
+            List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
+            for (NodeRef role : roleRefs) {
+                String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+                employeeRoles.add(name);
+            }
+        }
+
         final List<ReportDescriptor> found = new ArrayList<ReportDescriptor>();
         try {
             if (docType == null) {
                 // не задано фильтрование -> вернуть сразу всё целиком ... без подотчетов
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
-                        found.add(desc);
+                        if (hasPermissionToReport(desc, employeeRoles)) {
+                            found.add(desc);
+                        }
                     }
                 }
             } else {
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
                         final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
-                        if (okDocType) {
+                        if (okDocType && hasPermissionToReport(desc, employeeRoles)) {
                             found.add(desc);
                         }
                     }
@@ -236,9 +256,24 @@ public class ReportsManager {
             }
         } finally {
             // сортируем описания по алфавиту
-            Collections.sort(found, new Comparator_ByAlphabet());
+            //Collections.sort(found, new Comparator_ByAlphabet());
         }
         return found;
+    }
+
+    private boolean hasPermissionToReport(ReportDescriptor descriptor, HashSet<String> employeeRoles) {
+        Set<String> reportRoles = descriptor.getBusinessRoles();
+        if (reportRoles.isEmpty()) {
+            return true;
+        }
+        if (!reportRoles.isEmpty()) {
+            for (String reportRole : reportRoles) {
+                if (employeeRoles.contains(reportRole)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

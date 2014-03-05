@@ -22,6 +22,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
+                    <show id="lecm-rpeditor:businessRolesAssoc"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>
@@ -49,59 +50,16 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
-                </appearance>
-            </form>
-            <form id="template-info">
-                <field-visibility>
-                    <!--<show id="lecm-rpeditor:reportTypeAssoc"/>-->
-                    <show id="lecm-rpeditor:reportTemplateAssoc"/>
-                </field-visibility>
-                <appearance>
-                    <!--<field id="lecm-rpeditor:reportTypeAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
-                            <control-param name="showTargetLink">false</control-param>
-                            <control-param name="substituteParent">false</control-param>
+                    <field id="lecm-rpeditor:businessRolesAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="viewOnLinkClick">false</control-param>
-                        </control>
-                    </field>-->
-                    <field id="lecm-rpeditor:reportTemplateAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/associationControl.ftl">
-                            <control-param name="showTargetLink">false</control-param>
-                            <control-param name="substituteParent">false</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="viewOnLinkClick">false</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
-            <form id="subReport">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportCode"/>
-                    <show id="lecm-rpeditor:reportDocType"/>
-                    <show id="lecm-rpeditor:reportProviderAssoc"/>
-                    <show id="lecm-rpeditor:reportQuery"/>
-                    <show id="lecm-rpeditor:reportQuerySort"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:reportCode" help-id="report.code.help"/>
-                    <field id="lecm-rpeditor:reportDocType" label-id="label.subReport.type" help-id="report.sub.type.help"/>
-                    <field id="lecm-rpeditor:reportObjectsMultiplicity" help-id="report.multiply.help"/>
-                    <field id="lecm-rpeditor:reportQuery" label-id="label.subReport.source" help-id="report.sub.source.help">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
-                    </field>
-                    <field id="lecm-rpeditor:reportProviderAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showViewIncompleteWarning">false</control-param>
+                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
                 </appearance>
             </form>
         </forms>
@@ -130,25 +88,6 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
-                    <!--<show id="lecm-rpeditor:reportTypeAssoc"/>-->
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                </appearance>
-            </form>
-            <form id="sub-datagrid">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportCode"/>
-                </field-visibility>
-                <appearance>
-                    <field id="cm:name" label-id="label.report.displayName"/>
-                </appearance>
-            </form>
-            <form id="subReport">
-                <field-visibility>
-                    <show id="cm:name"/>
-                    <show id="lecm-rpeditor:reportCode"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
@@ -164,6 +103,7 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
+                    <show id="lecm-rpeditor:businessRolesAssoc"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:parentReportTemplateAssoc"/>
                     <show id="lecm-rpeditor:reportQuery"/>
@@ -195,6 +135,16 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
+                    <field id="lecm-rpeditor:businessRolesAssoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="showViewIncompleteWarning">false</control-param>
+                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+                        </control>
+                    </field>
                 </appearance>
             </form>
         </forms>

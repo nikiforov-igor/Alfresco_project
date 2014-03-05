@@ -22,6 +22,7 @@
                 <item key="RU_RU"><![CDATA[c8597f9b-6e30-4556-9ac0-3ff100823258]]></item>
             </l18>
         </datasource.descriptor>
+        <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
     </report.descriptor>
     <query.descriptor>
         <offset>0</offset>

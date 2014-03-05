@@ -37,6 +37,7 @@
         <templates>
             <template mnem="contract-delta-list-byid" type="JASPER" filename="contract-delta-list-byid.jrxml"/>
         </templates>
+        <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
     </report.descriptor>
 
 	<query.descriptor>

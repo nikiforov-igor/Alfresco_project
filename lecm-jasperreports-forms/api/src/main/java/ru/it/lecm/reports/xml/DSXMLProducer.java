@@ -64,6 +64,7 @@ public class DSXMLProducer {
     public static final String XMLNODE_REPORTDESC = "report.descriptor";
     public static final String XMLNODE_REPORT_PROVIDER = "provider";
     public static final String XMLNODE_REPORT_TEMPLATES = "templates";
+    public static final String XMLNODE_ROLES = "roles";
     public static final String XMLNODE_REPORT_TEMPLATE = "template";
     public static final String XMLNODE_REPORT_DS = "datasource.descriptor";
 
@@ -273,6 +274,10 @@ public class DSXMLProducer {
             result.appendChild(nodeDS);
         }
 
+        //права доступа
+        final String rolesValues = StringUtils.collectionToCommaDelimitedString(srcRDesc.getBusinessRoles());
+        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_ROLES, rolesValues);
+
         return result;
     }
 
@@ -299,6 +304,10 @@ public class DSXMLProducer {
         // набор данных ...
         final Element nodeDS = XmlHelper.findNodeByName(srcNode, XMLNODE_REPORT_DS);
         dest.setDSDescriptor(parseDSDescriptor(nodeDS));
+
+        // права доступа
+        String businessRoles = XmlHelper.getNodeAsText(srcNode, XMLNODE_ROLES, null);
+        dest.setBusinessRoles(businessRoles == null ? null : StringUtils.commaDelimitedListToSet(businessRoles));
     }
 
     private static Element xmlCreateReportProviderNode(Document doc, String xmlNodeNameRP, ReportProviderDescriptor rpDesc) {

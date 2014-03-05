@@ -8,6 +8,7 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
@@ -170,6 +171,14 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
             templates.add(createReportTemplate(template.getTargetRef()));
         }
         result.setReportTemplates(templates);
+
+        List<AssociationRef> rolesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_ROLES);
+        Set<String> rolesSet = new HashSet<String>();
+        for (AssociationRef role : rolesRefs) {
+            String id = (String) nodeService.getProperty(role.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+            rolesSet.add(id);
+        }
+        result.setBusinessRoles(rolesSet);
 
         Set<QName> ds = new HashSet<QName>();
         ds.add(TYPE_REPORT_DATASOURCE);

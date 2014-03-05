@@ -79,6 +79,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
         <templates>
             <template mnem="approval-list" type="JASPER" filename="approval-list.jrxml"/>
         </templates>
+        <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
 	</report.descriptor>
 
 	<query.descriptor>

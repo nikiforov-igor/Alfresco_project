@@ -22,6 +22,7 @@
                 <item key="RU_RU" value="ecb7c9b7-ea04-4641-a290-650442e86ee0"/>
             </l18>
         </datasource.descriptor>
+        <roles>INCOMING_RECORDER,INCOMING_CREATOR,INCOMING_RECIPIENT,INCOMING_REVIEWER,INCOMING_REVIEWER_IN_UNIT,INCOMING_REVIEWER_DYNAMIC</roles>
     </report.descriptor>
     <query.descriptor>
         <offset>0</offset>

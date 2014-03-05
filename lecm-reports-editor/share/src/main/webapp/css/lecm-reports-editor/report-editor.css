@@ -133,7 +133,7 @@ div[id*="report-settings"] div.form-field input[type="text"],
 div[id*="report-settings"] div.form-field select,
 div[id*="report-settings"] .yui-skin-lecmTheme .yui-panel div.form-field textarea {
     min-height: 26px;
-    max-height: 100px;
+    max-height: 26px;
     width: 30em;
     margin: 0;
     border-width: 1px;

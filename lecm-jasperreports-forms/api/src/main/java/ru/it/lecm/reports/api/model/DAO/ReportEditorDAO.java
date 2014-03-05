@@ -56,6 +56,7 @@ public interface ReportEditorDAO {
     final static public QName ASSOC_REPORT_PROVIDER = QName.createQName(REPORTS_EDITOR_URI, "reportProviderAssoc");
 
     final static public QName ASSOC_REPORT_TEMLATE = QName.createQName(REPORTS_EDITOR_URI, "reportTemplateAssoc");
+    final static public QName ASSOC_REPORT_ROLES = QName.createQName(REPORTS_EDITOR_URI, "businessRolesAssoc");
     final static public QName ASSOC_PARENT_TEMPLATE_ASSOC = QName.createQName(REPORTS_EDITOR_URI, "parentReportTemplateAssoc");
 
     final static public QName PROP_T_REPORT_FLAGS = QName.createQName(REPORTS_EDITOR_URI, "reportExtFlags");

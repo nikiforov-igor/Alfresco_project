@@ -1,6 +1,9 @@
 package ru.it.lecm.reports.model.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.utils.Utils;
@@ -14,6 +17,8 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
     protected ReportProviderDescriptor providerDescriptor;
     protected ReportFlags flags;
     protected List<ReportDescriptor> subreports;
+
+    protected Set<String> businessRoles;
 
     protected boolean subReport = false;
 
@@ -71,6 +76,19 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
             return null;
         }
         return getReportTemplates().get(0);
+    }
+
+    @Override
+    public Set<String> getBusinessRoles() {
+        if (businessRoles == null) {
+            return new HashSet<String>();
+        }
+        return businessRoles;
+    }
+
+    @Override
+    public void setBusinessRoles(Set<String> roles) {
+        this.businessRoles = roles;
     }
 
     @Override

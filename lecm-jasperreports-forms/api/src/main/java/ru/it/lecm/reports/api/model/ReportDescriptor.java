@@ -5,6 +5,7 @@ import ru.it.lecm.reports.model.impl.ReportProviderDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ReportDescriptor extends Mnemonicable, L18able {
 
@@ -45,4 +46,8 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
     public void setFlags(ReportFlags flags);
 
     public ReportTemplate getDefaultTemplate();
+
+    public Set<String> getBusinessRoles();
+
+    public void setBusinessRoles(Set<String> roles);
 }

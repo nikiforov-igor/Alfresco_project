@@ -5,4 +5,5 @@
 	<!-- 2 args: docType; reportType -->
 	<url>/lecm/reports/rptmanager/registeredReports</url>
 	<format default="json">extension</format>
+    <authentication>user</authentication>
 </webscript>

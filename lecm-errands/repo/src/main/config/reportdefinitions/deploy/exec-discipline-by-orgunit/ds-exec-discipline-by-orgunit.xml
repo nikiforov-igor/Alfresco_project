@@ -17,6 +17,7 @@
                 </l18>
             </template>
         </templates>
+        <roles>ERRANDS_INITIATOR,ERRANDS_EXECUTOR,ERRANDS_CONTROLLER,ERRANDS_COEXECUTOR,ERRANDS_READER,ERRANDS_CURATOR,ERRANDS_CHOOSING_INITIATOR</roles>
     </report.descriptor>
 
     <query.descriptor>
