@@ -95,4 +95,13 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="${groupId}.${artifactId}.groupOperations" parent="ServiceFolderPermissionHelper">
+        <property name="serviceBean" ref="groupActionsService"/>
+        <property name="permissionsList">
+            <list>
+                <value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>
