@@ -153,6 +153,7 @@
 
 	                data += (i == 0 ? '' : '&') + item.name + '=' + item.value;
 	            }
+                data += "&maxItems=100&skipCount=0&checkMainObject=false";
 
 	            Alfresco.util.Ajax.jsonGet({
 	                url: Alfresco.constants.PROXY_URI + "lecm/business-journal/api/search?" + data,
