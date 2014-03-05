@@ -78,7 +78,7 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecmApprove:presentString"/>
+					<show id="lecmApprove2:presentString"/>
 					<show id="bpm:dueDate" />
 					<show id="lecmApprove2:approveTaskResult" />
 					<show id="bpm:comment" />
