@@ -50,7 +50,7 @@
 
     <types>
 		<type name="lecm-internal:document">
-			<title>Logic Ecm internal Document</title>
+			<title>Внутренний</title>
 			<parent>lecm-eds-document:base</parent>
 		</type>
 	</types>
