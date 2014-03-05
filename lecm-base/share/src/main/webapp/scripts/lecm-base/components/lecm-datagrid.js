@@ -331,7 +331,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @type int
              * @default 0
              */
-            totalRecords: null,
+            totalRecords: 0,
 
             /**
              * Object literal of selected states for visible items (indexed by nodeRef).
@@ -1001,8 +1001,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onDataGridColumns: function DataGrid_onDataGridColumns(response)
             {
                 this.datagridColumns = response.json.columns;
-                // Set-up YUI History Managers and Paginator
-                this._setupPaginatior();
                 // DataSource set-up and event registration
                 this.setupDataSource();
                 // DataTable set-up and event registration
@@ -1437,6 +1435,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // DataTable definition
                 var me = this;
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+                    this._setupPaginatior();
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                     if (!this.search) {
                     // initialize Search
