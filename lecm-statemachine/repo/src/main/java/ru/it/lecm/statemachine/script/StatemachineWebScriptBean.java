@@ -307,4 +307,8 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.getPreviousStatusName(document.getNodeRef());
     }
 
+    public void executeTransitionAction(ScriptNode document, String actionName) {
+        stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName);
+    }
+
 }

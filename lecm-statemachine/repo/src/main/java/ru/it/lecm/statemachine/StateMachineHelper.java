@@ -49,10 +49,10 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.action.script.WorkflowScript;
-import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 import ru.it.lecm.statemachine.listener.StateMachineHandler;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -890,6 +890,28 @@ public class StateMachineHelper implements StateMachineServiceBean {
             response = executeUserWorkflowAction(document, statemachineId, taskId, actionId, persistedResponse);
         }
         return response;
+    }
+
+    @Override
+    public void executeTransitionAction(NodeRef document, String actionName) {
+        String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
+        String taskId = getCurrentTaskId(statemachineId);
+
+        List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+        FinishStateWithTransitionAction.NextState nextState = null;
+        for (StateMachineAction action : actions) {
+            FinishStateWithTransitionAction finishStateWithTransitionAction = (FinishStateWithTransitionAction) action;
+            List<FinishStateWithTransitionAction.NextState> states = finishStateWithTransitionAction.getStates();
+            for (FinishStateWithTransitionAction.NextState state : states) {
+                if (state.getLabel().equalsIgnoreCase(actionName)) {
+                    nextState = state;
+                }
+            }
+        }
+        if (nextState != null) {
+            executeTransitionAction(document, statemachineId, taskId, nextState.getActionId(), null);
+        }
+
     }
 
     public void logEndWorkflowEvent(NodeRef document, String executionId) {

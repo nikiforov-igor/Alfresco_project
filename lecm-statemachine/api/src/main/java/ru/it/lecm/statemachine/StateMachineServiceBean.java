@@ -134,7 +134,9 @@ public interface StateMachineServiceBean {
 
     public Map<String, Object> getVariables(String executionId);
 
-	boolean isServiceWorkflow(String executionId);
+    void executeTransitionAction(NodeRef document, String actionName);
+
+    boolean isServiceWorkflow(String executionId);
 
 	boolean isServiceWorkflow(WorkflowInstance workflow);
 }
