@@ -9,8 +9,10 @@ function main() {
 
         //сохраненные фильтры
         var filtersPref = preferenceService.getPreferences(person.properties["cm:userName"], PREF_FILTERS);
-        var currentFilters = findValueByDotNotation(eval('(' + jsonUtils.toJSONString(filtersPref) + ')'), PREF_FILTERS, []);
-        currentFilters = eval('(' + currentFilters + ')');
+        var currentFilters = findValueByDotNotation(eval('(' + jsonUtils.toJSONString(filtersPref) + ')'), PREF_FILTERS, null);
+        if (currentFilters != null) {
+	        currentFilters = eval('(' + currentFilters + ')');
+        }
 
         for (var index in filtersJSON) {
             var filter = filtersJSON[index];
