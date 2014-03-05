@@ -33,8 +33,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	        onNewRow: function (p_sType, p_aArgs, p_oItem) {
 		        var destination = p_oItem.destination,
-			        itemType = p_oItem.type;
-		        this.showCreateDialog({itemType: itemType, nodeRef: destination});
+			        itemType = p_oItem.type,
+			        typeLabel = p_oItem.typeLabel;
+		        this.showCreateDialog({itemType: itemType, nodeRef: destination, typeLabel: typeLabel});
 	        },
 
 	        showCreateDialog: function (meta) {
@@ -45,7 +46,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		        var doBeforeDialogShow = function (p_form, p_dialog) {
 			        var contId = p_dialog.id + "-form-container";
 			        var addMsg = meta.addMessage;
-			        var defaultMsg = this.msg("label.create-row.title");
+			        var defaultMsg = this.msg("label.create-row.title") + " " + meta.typeLabel;
 			        Alfresco.util.populateHTML(
 				        [contId + "_h", addMsg ? addMsg : defaultMsg ]
 			        );
@@ -117,6 +118,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						        fn: this.onNewRow,
 						        obj: {
 							        type: type.type,
+							        typeLabel: type.label,
 							        destination: type.draftFolder
 						        },
 						        scope: this

@@ -8,6 +8,7 @@ function main()
     var showSearchBlock = args["showSearchBlock"];
     var showExSearchBtn = args["showExSearchBtn"];
     var showButtons = args["showButtons"];
+	var showImportXmlBtn = args["showImportXmlBtn"];
 
     if (showSearchBlock) {
         model.showSearchBlock = (showSearchBlock == 'true');
@@ -18,6 +19,9 @@ function main()
     if (showButtons){
         model.showButtons = (showButtons == 'true');
     }
+	if (showImportXmlBtn){
+		model.showImportXmlBtn = (showImportXmlBtn == 'true');
+	}
 }
 
 main();

@@ -36,7 +36,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
      * YUI Library aliases
      */
     var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+        Event = YAHOO.util.Event,
+	    Connect = YAHOO.util.Connect;
 
     /**
      * Toolbar constructor.
@@ -84,7 +85,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 bubblingLabel: null,
                 newRowDialogTitle: 'label.create-row.title',
                 searchButtonsType: 'defaultActive',
-                newRowButtonType: 'defaultActive'
+                newRowButtonType: 'defaultActive',
+	            showImportXml: false
             },
 
             toolbarButtons: {
@@ -96,6 +98,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             },
 
             groupActions: {},
+
+	        importFromSubmitButton: null,
+	        importFromDialog: null,
+	        importInfoDialog: null,
+	        importErrorDialog: null,
 
             _initButtons: function () {
                 this.toolbarButtons[this.options.newRowButtonType].push(
@@ -119,6 +126,21 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             disabled: this.options.searchButtonsType != 'defaultActive'
                         })
                 );
+
+	            if (this.options.showImportXml) {
+		            this.toolbarButtons[this.options.searchButtonsType].push(
+		                Alfresco.util.createYUIButton(this, "importXmlButton", this.showImportDialog,
+			                {
+				                disabled: this.options.searchButtonsType != 'defaultActive'
+			                })
+	                );
+		            this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
+			            disabled: true
+		            });
+		            Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+		            Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
+		            Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
+	            }
             },
             /**
              * Fired by YUI when parent element is available for scripting.
@@ -126,6 +148,22 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @method onReady
              */
             onReady: function BaseToolbar_onReady() {
+	            if (this.options.showImportXml) {
+		            this.importInfoDialog = Alfresco.util.createYUIPanel(this.id + "-import-info-form",
+			            {
+				            width: "50em"
+			            });
+
+		            this.importErrorDialog = Alfresco.util.createYUIPanel(this.id + "-import-error-form",
+			            {
+				            width: "60em"
+			            });
+
+		            this.importFromDialog = Alfresco.util.createYUIPanel(this.id + "-import-form",
+			            {
+				            width: "50em"
+			            });
+	            }
 
                 this._initButtons();
                 var me = this;
@@ -433,6 +471,56 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         dataGrid[fn].call(dataGrid, dataGrid.getSelectedItems(), null, {fullDelete: true});
                     }
                 }
-            }
+            },
+
+	        showImportDialog: function() {
+		        Dom.get(this.id + "-import-form-chbx-ignore").checked = false;
+		        Dom.get(this.id + "-import-form-import-file").value = "";
+		        this.importFromDialog.show();
+	        },
+
+	        hideImportDialog: function() {
+		        this.importFromDialog.hide();
+	        },
+
+	        checkImportFile: function(event) {
+		        this.importFromSubmitButton.set("disabled", event.currentTarget.value == null || event.currentTarget.value.length == 0);
+	        },
+
+	        /**
+	         * On "submit"-button click.
+	         */
+	        onImportXML: function() {
+		        if (this.modules.dataGrid && this.modules.dataGrid.datagridMeta != null && this.modules.dataGrid.datagridMeta.nodeRef != null) {
+			        var me = this;
+			        Connect.setForm(this.id + '-import-xml-form', true);
+			        var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import?nodeRef=" + this.modules.dataGrid.datagridMeta.nodeRef;
+			        var callback = {
+				        upload: function(oResponse){
+					        var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);
+					        if (oResults[0] != null && oResults[0].text != null) {
+						        Dom.get(me.id + "-import-info-form-content").innerHTML = oResults[0].text;
+						        me.importInfoDialog.show();
+					        } else if (oResults.exception != null) {
+						        Dom.get(me.id + "-import-error-form-exception").innerHTML = oResults.exception.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
+						        Dom.get(me.id + "-import-error-form-stack-trace").innerHTML = me.getStackTraceString(oResults.callstack);
+						        Dom.setStyle(me.id + "-import-error-form-more", "display", "none");
+						        me.importErrorDialog.show();
+					        }
+
+					        YAHOO.Bubbling.fire("datagridRefresh",
+						        {
+							        bubblingLabel: me.options.bubblingLabel
+						        });
+				        }
+			        };
+			        this.hideImportDialog();
+			        Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
+		        }
+	        },
+
+	        errorFormShowMore: function() {
+		        Dom.setStyle(this.id + "-import-error-form-more", "display", "block");
+	        }
         }, true);
 })();

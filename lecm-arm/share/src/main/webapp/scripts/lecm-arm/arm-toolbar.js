@@ -30,12 +30,29 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			node: null,
 			editDialogOpening: false,
 
+			importFromDialog: null,
+			importInfoDialog: null,
+			importErrorDialog: null,
+
 			_initButtons: function () {
 				this.toolbarButtons["defaultActive"].newRowButton = Alfresco.util.createYUIButton(this, "newRowButton", this.onNewRow);
 
 				this.toolbarButtons["defaultActive"].newReportsNode = Alfresco.util.createYUIButton(this, "newReportsNodeButton", this.onNewReportNode);
 
 				this.toolbarButtons["defaultActive"].deleteNodeButton = Alfresco.util.createYUIButton(this, "deleteNodeButton", this.onDeleteNode);
+
+				this.toolbarButtons["defaultActive"].exportButton = Alfresco.util.createYUIButton(this, "exportArmButton", this.onExport);
+
+				this.toolbarButtons["defaultActive"].importButton = Alfresco.util.createYUIButton(this, "importArmButton", this.showImportDialog,
+						{
+							disabled: this.options.searchButtonsType != 'defaultActive'
+						});
+				this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
+					disabled: true
+				});
+				Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+				YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
+				YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
 			},
 
 			onNewReportNode: function() {
@@ -173,6 +190,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType == "lecm-arm:arm");
 					this.toolbarButtons["defaultActive"].newReportsNode.set("disabled", this.node.itemType != "lecm-arm:node" && this.node.itemType != "lecm-arm:reports-node");
+
+					this.toolbarButtons["defaultActive"].exportButton.set("disabled", this.node.currentItemType != "lecm-arm:arm");
+					this.toolbarButtons["defaultActive"].importButton.set("disabled", this.node.currentItemType != "lecm-dic:dictionary");
 				}
 			},
 
@@ -185,6 +205,35 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					return "узел";
 				}
 				return "элемент";
+			},
+
+			onExport: function() {
+				if (this.node != null) {
+					document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export?nodeRef=" + this.node.nodeRef;
+				}
+			},
+
+			onImportXML: function() {
+				var me = this;
+				YAHOO.util.Connect.setForm(this.id + '-import-xml-form', true);
+				var url = Alfresco.constants.URL_CONTEXT + "proxy/alfresco/lecm/dictionary/post/import?nodeRef=" + this.node.nodeRef;
+				var callback = {
+					upload: function(oResponse){
+						var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);
+						YAHOO.Bubbling.fire("itemsListChanged");
+						if (oResults[0] != null && oResults[0].text != null) {
+							Dom.get(me.id + "-import-info-form-content").innerHTML = oResults[0].text;
+							me.importInfoDialog.show();
+						} else if (oResults.exception != null) {
+							Dom.get(me.id + "-import-error-form-exception").innerHTML = oResults.exception.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
+							Dom.get(me.id + "-import-error-form-stack-trace").innerHTML = me.getStackTraceString(oResults.callstack);
+							Dom.setStyle(me.id + "-import-error-form-more", "display", "none");
+							me.importErrorDialog.show();
+						}
+					}
+				};
+				this.hideImportDialog();
+				YAHOO.util.Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
 			}
 		}, true);
 })();
