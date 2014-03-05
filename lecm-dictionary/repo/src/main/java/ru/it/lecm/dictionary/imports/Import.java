@@ -80,7 +80,7 @@ public class Import extends AbstractWebScript {
 
             String receivedNodeRef = req.getParameter("nodeRef");
 			final NodeRef rootDir;
-            if (NodeRef.isNodeRef(receivedNodeRef)) {
+            if (receivedNodeRef != null && NodeRef.isNodeRef(receivedNodeRef)) {
                 rootDir = new NodeRef(receivedNodeRef);
             } else {
                 rootDir = dictionaryBean.getDictionariesRoot();
