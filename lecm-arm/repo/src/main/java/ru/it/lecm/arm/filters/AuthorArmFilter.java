@@ -44,10 +44,11 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
     }
 
     @Override
-    public String getQuery(Object armNode, String authorProperty, List<String> args) {
+    public String getQuery(Object armNode, String authorProperties, List<String> args) {
         String resultedQuery = "";
         if (args != null && !args.isEmpty()) {
             logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));
+	        logger.debug("Filter params: " + authorProperties);
 
             String filterValue = args.get(0);
 
@@ -97,12 +98,13 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
                     }
                     if (employees.size() > 0) {
                         boolean addOR = false;
-	                    String authorProp = authorProperty.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-
-                        for (NodeRef employeeRef : employees) {
-                            resultedQuery += (addOR ? " OR " : "") + "@" + authorProp + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
-                            addOR = true;
-                        }
+	                    for (String field : authorProperties.split(",")) {
+		                    String authorProp = field.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
+	                        for (NodeRef employeeRef : employees) {
+	                            resultedQuery += (addOR ? " OR " : "") + "@" + authorProp + ":\"" + employeeRef.toString().replace(":", "\\:") + "\"";
+	                            addOR = true;
+	                        }
+	                    }
                     }
                 }
             } catch (Exception ignored) {

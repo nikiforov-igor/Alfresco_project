@@ -137,10 +137,6 @@
         </property>
     </bean>
 
-	<bean id="errandsOnCreateAssocsPolicy" class="ru.it.lecm.errands.policy.ErrandsOnCreateAssocsPolicy"
-	      parent="logicEcmAssociationPolicy" init-method="init">
-    </bean>
-
 	<bean id="errands.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
 		<constructor-arg>
 			<map>

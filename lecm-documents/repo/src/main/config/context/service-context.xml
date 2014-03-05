@@ -653,4 +653,10 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
     </bean>
 
+	<bean id="documentsOnCreateAssocsPolicy" class="ru.it.lecm.documents.policy.DocumentsOnCreateAssocsPolicy"
+	      parent="logicEcmAssociationPolicy" init-method="init">
+		<property name="substitute">
+			<ref bean="substitudeService"/>
+		</property>
+	</bean>
 </beans>

@@ -104,13 +104,6 @@
         </property>
     </bean>
 
-    <bean id="incomingOnCreateAssocsPolicy" class="ru.it.lecm.incoming.policy.IncomingOnCreateAssocsPolicy"
-          parent="logicEcmAssociationPolicy" init-method="init">
-        <property name="substitute">
-            <ref bean="substitudeService"/>
-        </property>
-    </bean>
-
 	<bean id="incomingWorkflowBootstrap" parent="workflowDeployer"
 	      depends-on="incoming.LogicEcmIncomingBootstrap,
 				     statemachine.aspects.LogicEcmModelsBootstrap,

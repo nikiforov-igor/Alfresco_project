@@ -379,9 +379,6 @@
 		</property>
 	</bean>
 
-    <bean id="contractsOnCreateAssocsPolicy" class="ru.it.lecm.contracts.policies.ContractsOnCreateAssocsPolicy" parent="logicEcmAssociationPolicy"
-          init-method="init" depends-on="contracts.LogicEcmContractsBootstrap"/>
-
     <bean id="contractStagesPolicy" class="ru.it.lecm.contracts.policies.ContractStagesPolicy"
           depends-on="contracts.LogicEcmContractsTableStructureBootstrap"
           init-method="init">

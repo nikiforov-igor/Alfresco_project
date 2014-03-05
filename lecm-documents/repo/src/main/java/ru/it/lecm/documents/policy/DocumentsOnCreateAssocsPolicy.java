@@ -1,25 +1,25 @@
-package ru.it.lecm.incoming.policy;
+package ru.it.lecm.documents.policy;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
-import ru.it.lecm.incoming.beans.IncomingServiceImpl;
+import ru.it.lecm.documents.beans.DocumentService;
 
 import java.io.Serializable;
 
-public class IncomingOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
+public class DocumentsOnCreateAssocsPolicy extends LogicECMAssociationPolicy {
     private SubstitudeBean substitute;
 
     @Override
     public final void init() {
         super.init();
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-                IncomingServiceImpl.TYPE_INCOMING, new JavaBehaviour(this, "onDeleteAssociation"));
+                DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onDeleteAssociation"));
 
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-                IncomingServiceImpl.TYPE_INCOMING, new JavaBehaviour(this, "onCreateAssociation"));
+		        DocumentService.TYPE_BASE_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
     }
 
     @Override

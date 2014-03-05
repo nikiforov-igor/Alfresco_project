@@ -9,12 +9,12 @@
 		<property name="lecm-dic:description">Фильтры АРМ</property>
         <items>
             <item name="cm:По автору" type="lecm-arm:filter">
-                <property name="cm:name">По автору</property>
+                <property name="cm:name">По принадлежности</property>
                 <property name="lecm-arm:filter-code">AUTHOR_FILTER</property>
                 <property name="lecm-arm:filter-class">authorArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,FAVOURITE|Избранные,ALL|Все</property>
-                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref</property>
+                <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,ALL|Все</property>
+                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref</property>
             </item>
 	        <item name="cm:По срокам" type="lecm-arm:filter">
                 <property name="cm:name">По срокам</property>
@@ -25,12 +25,28 @@
                 <property name="lecm-arm:filter-query">lecm-eds-document:execution-date</property>
             </item>
             <item name="cm:Контроль" type="lecm-arm:filter">
-                <property name="cm:name">Контроль</property>
+                <property name="cm:name">На контроле</property>
                 <property name="lecm-arm:filter-code">СONTROL_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
-                <property name="lecm-arm:filter-multiple-select">true</property>
-                <property name="lecm-arm:filter-values">true|Контрольные,false|Не контрольные</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">true|True,false|False</property>
                 <property name="lecm-arm:filter-query">@lecm\-document\-aspects\:is\-on\-control:#value</property>
+            </item>
+	        <item name="cm:Требующие визы" type="lecm-arm:filter">
+				<property name="cm:name">Требующие визы</property>
+                <property name="lecm-arm:filter-code">REQUIRING_VISA</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">На подписании|На подписание,На согласовании|На согласование</property>
+                <property name="lecm-arm:filter-query">@lecm\-statemachine\:status:'#value'</property>
+            </item>
+	        <item name="cm:Вид документа" type="lecm-arm:filter">
+				<property name="cm:name">Вид документа</property>
+                <property name="lecm-arm:filter-code">DOCUMENT_TYPE</property>
+                <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
+                <property name="lecm-arm:filter-multiple-select">false</property>
+                <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние</property>
+                <property name="lecm-arm:filter-query">+TYPE:'#value'</property>
             </item>
         </items>
 	</item>
