@@ -1,9 +1,11 @@
 package ru.it.lecm.actions.script;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.MD5;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +34,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
     private NodeService nodeService;
     private GroupActionsServiceImpl actionsService;
     private ServiceRegistry serviceRegistry;
+    private TransactionService transactionService;
 
     final private static Logger logger = LoggerFactory.getLogger(GroupActionExecutor.class);
 
@@ -76,14 +79,14 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         HashMap<String, Object> result = new HashMap<String, Object>();
         if (action != null && items.size() > 0) {
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
-            Map<String, Object> scriptModel = createScriptParameters(req, null, null, model);
+            final Map<String, Object> scriptModel = createScriptParameters(req, null, null, model);
             addParamenersToModel(paramenters, scriptModel);
 
             Map<String, Object> returnModel = new HashMap<String, Object>(8, 1.0f);
             scriptModel.put("model", returnModel);
 
             String script = nodeService.getProperty(action, GroupActionsService.PROP_SCRIPT).toString();
-            ScriptProcessor scriptProcessor = getContainer().getScriptProcessorRegistry().getScriptProcessorByExtension("js");
+            final ScriptProcessor scriptProcessor = getContainer().getScriptProcessorRegistry().getScriptProcessorByExtension("js");
 
             if (Boolean.TRUE.equals(nodeService.getProperty(action, GroupActionsService.PROP_FOR_COLLECTION))) {
                 result.put("forCollection", true);
@@ -93,10 +96,16 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                          "   var node = search.findNode(doc.toString());" +
                          "   if (node != null) documents.push(node);" +
                          "}\r\n" + script;
-                ScriptContent scriptContent = new StringScriptContent(script);
+                final ScriptContent scriptContent = new StringScriptContent(script);
                 scriptModel.put("documentsArray", items.toArray());
                 try {
-                    scriptProcessor.executeScript(scriptContent, scriptModel);
+                    transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                        @Override
+                        public Object execute() throws Throwable {
+                            scriptProcessor.executeScript(scriptContent, scriptModel);
+                            return null;
+                        }
+                    }, false, true);
                 } catch (Exception e) {
                     logger.error("Error while execute script: ", e);
                     result.put("withErrors", true);
@@ -106,7 +115,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
             } else {
                 result.put("forCollection", false);
                 result.put("withErrors", false);
-                ScriptContent scriptContent = new StringScriptContent(script);
+                final ScriptContent scriptContent = new StringScriptContent(script);
                 ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
                 for (NodeRef item : items) {
                     scriptModel.put("document", item);
@@ -114,7 +123,18 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                     itemResult.put("message", nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING).toString());
                     itemResult.put("withErrors", false);
                     try {
-                        scriptProcessor.executeScript(scriptContent, scriptModel);
+                        try {
+                            transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                                @Override
+                                public Object execute() throws Throwable {
+                                    scriptProcessor.executeScript(scriptContent, scriptModel);
+                                    return null;
+                                }
+                            }, false, true);
+                        } catch (Exception e) {
+                            logger.error("Error while execute script: ", e);
+                            result.put("withErrors", true);
+                        }
                     } catch (Exception e) {
                         logger.error("Error while execute script: ", e);
                         itemResult.put("withErrors", true);
@@ -154,6 +174,10 @@ public class GroupActionExecutor extends DeclarativeWebScript {
             }
             model.put(normalizeKey, value);
         }
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     private static class StringScriptContent implements ScriptContent {
