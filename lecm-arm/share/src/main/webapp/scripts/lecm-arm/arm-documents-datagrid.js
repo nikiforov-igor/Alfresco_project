@@ -193,6 +193,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             // DataTable definition
             var me = this;
             if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+                this._setupPaginatior();
                 this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                 if (!this.search) {
                     // initialize Search

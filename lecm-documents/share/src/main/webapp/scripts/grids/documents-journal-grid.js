@@ -238,8 +238,6 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
         onDataGridColumns: function DataGrid_onDataGridColumns(response)
         {
             this.datagridColumns = response.json.columns;
-            // Set-up YUI History Managers and Paginator
-            this._setupPaginatior();
             /*this._setupFilter();*/
             // DataSource set-up and event registration
             this.setupDataSource();

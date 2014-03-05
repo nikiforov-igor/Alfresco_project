@@ -85,6 +85,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             // DataTable definition
             var me = this;
             if (!this.widgets.dataTable) {
+                this._setupPaginatior();
                 this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                 this.widgets.dataTable.subscribe("beforeRenderEvent", function () {
                         me.beforeRenderFunction();
