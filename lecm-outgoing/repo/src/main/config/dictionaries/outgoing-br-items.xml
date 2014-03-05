@@ -14,6 +14,12 @@
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за отправку исходящих документов</property>
 			</item>
+			<item name="cm:Исходящие. Создатель" type="lecm-orgstr:business-role">
+				<property name="cm:name">Исходящие. Создатель</property>
+				<property name="lecm-orgstr:business-role-identifier">OUTGOING_CREATOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудник, создавший исходящий документ</property>
+			</item>
 		</items>
 	</item>
 </items>
