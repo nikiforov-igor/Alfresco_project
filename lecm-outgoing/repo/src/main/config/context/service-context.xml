@@ -35,4 +35,14 @@
 	<bean id="outgoing.service" parent="baseBean"
 		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"
 		  depends-on="outgoing.model.bootstrap"/>
+
+    <bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
+                <value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
+                <value>alfresco/module/${artifactId}/actions/send.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

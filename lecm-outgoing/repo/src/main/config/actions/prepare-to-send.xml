@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Подготовка к отправке" type="lecm-group-actions:action" path="/Business platform/LECM/Сервис Групповые операции">
+        <property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/0038defa-3d15-4bed-a2ce-7a753df01382]]></property>
+        <property name="cm:name"><![CDATA[Подготовка к отправке]]></property>
+        <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован]]></property>
+        <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>
+        <property name="lecm-group-actions:order"><![CDATA[20]]></property>
+        <property name="lecm-group-actions:expression"><![CDATA[]]></property>
+        <property name="lecm-group-actions:isGroup"><![CDATA[true]]></property>
+        <property name="lecm-group-actions:forCollection"><![CDATA[false]]></property>
+        <property name="lecm-group-actions:script"><![CDATA[statemachine.executeTransitionAction(document, "Подготовить к отправке");]]></property>
+    </item>
+</items>
