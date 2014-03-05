@@ -1,6 +1,9 @@
 package ru.it.lecm.dictionary.bootstrap;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
@@ -12,6 +15,7 @@ import ru.it.lecm.dictionary.beans.XMLImportBean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 /**
@@ -27,8 +31,18 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	private List<String> createOrUpdateDictionaries;
     private DictionaryBean dictionaryBean;
     private XMLImportBean xmlImportBean;
+    private String rootPath;
+    private Repository repositoryHelper;
 
-	@SuppressWarnings("UnusedDeclaration")
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
+
+    public void setRootPath(String rootPath) {
+        this.rootPath = rootPath;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
 	public void setDictionaries(List<String> dictionaries) {
 		this.dictionaries = dictionaries;
 	}
@@ -57,7 +71,12 @@ public class LecmDictionaryBootstrap extends BaseBean {
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
-				final NodeRef rootDir = dictionaryBean.getDictionariesRoot();
+                final NodeRef rootDir;
+                if (rootPath != null) {
+				    rootDir = getNodeByPath(rootPath);
+                } else {
+                    rootDir = dictionaryBean.getDictionariesRoot();
+                }
 				if (dictionaries != null) {
 					for (final String dictionary : dictionaries) {
                         logger.info("Importing dictionary: {}", dictionary);
@@ -116,4 +135,26 @@ public class LecmDictionaryBootstrap extends BaseBean {
 		AuthenticationUtil.runAsSystem(raw);
 
 	}
+
+    private NodeRef getNodeByPath(String path) {
+        NodeRef result = null;
+        StringTokenizer t = new StringTokenizer(path, "/");
+        if (t.hasMoreTokens())
+        {
+            result = repositoryHelper.getCompanyHome();
+            while (t.hasMoreTokens() && result != null)
+            {
+                String name = t.nextToken();
+                try
+                {
+                    result = nodeService.getChildByName(result, ContentModel.ASSOC_CONTAINS, name);
+                }
+                catch (AccessDeniedException ade)
+                {
+                    result = null;
+                }
+            }
+        }
+        return result;
+    }
 }
