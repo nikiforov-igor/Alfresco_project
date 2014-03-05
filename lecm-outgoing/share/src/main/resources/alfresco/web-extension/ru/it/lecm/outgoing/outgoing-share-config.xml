@@ -13,7 +13,7 @@
 			<form>
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
-					<show id="lecm-document-aspects:reg-data-number" force="true"/>										<!-- Рег. номер -->
+					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 					<show id="lecm-document-aspects:reg-data-date" force="true"/>										<!-- Дата регистрации -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
@@ -44,11 +44,7 @@
 					<set id="outgoing9" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
 					<!-- outgoing1:full-width-set -->
-					<field id="lecm-document-aspects:reg-data-number" set="outgoing1">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGNUM}</control-param>
-						</control>
-					</field>
+					<field id="lecm-document:regnum" set="outgoing1"/>
 					<field id="lecm-document-aspects:reg-data-date" set="outgoing1">
 						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
 							<control-param name="formatString">{~REGDATE}</control-param>

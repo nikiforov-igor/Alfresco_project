@@ -1,7 +1,6 @@
 package ru.it.lecm.outgoing.extensions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -103,18 +102,22 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * @return объект Scriptable пригодный для работы из яваскрипта машины состояний
 	 */
 	public Scriptable getRegistrars(final String businessRoleId, final ScriptNode outgoingRef) {
-		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		List<NodeRef> registrars;
 		//получаем текущего пользователя
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		//получаем его основную должностную позицию
-		NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
-		if (primaryStaff != null) {
-			NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
-			//получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
-			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.isRegistrationCenralized() ? 
-				orgstructureService.getEmployeesByBusinessRole(businessRoleId) :
-				edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit);
-			registrars.addAll(potentialWorkers);
+		// централизованная ли регистрация
+		Boolean registrationCenralized = edsGlobalSettingsService.isRegistrationCenralized();
+
+		if (registrationCenralized) {
+			registrars =  orgstructureService.getEmployeesByBusinessRole(businessRoleId);
+		} else {
+			registrars = new ArrayList<NodeRef>();
+			//получаем основную должностную позицию
+			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
+			if (primaryStaff != null) {
+				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+				registrars.addAll(edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit));
+			}
 		}
 		return createScriptable(registrars);
 	}

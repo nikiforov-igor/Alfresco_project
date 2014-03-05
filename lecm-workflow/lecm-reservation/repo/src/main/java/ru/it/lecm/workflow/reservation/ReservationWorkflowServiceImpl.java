@@ -3,7 +3,6 @@ package ru.it.lecm.workflow.reservation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -132,17 +131,24 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 
 	@Override
 	public List<NodeRef> getRegistrars(final NodeRef bpmPackage, final String registrarRole) {
-		List<NodeRef> registrars = new ArrayList<NodeRef>();
+		List<NodeRef> registrars;
 		//получаем текущего пользователя
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		//получаем его основную должностную позицию
-		NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
-		if (primaryStaff != null) {
-			NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
-			//получение списка регистраторов в засисимости от центролизованной/нецентрализованной регистрации
-			Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(registrarRole, unit);
-			registrars.addAll(potentialWorkers);
+		// централизованная ли регистрация
+		Boolean registrationCenralized = edsGlobalSettingsService.isRegistrationCenralized();
+
+		if (registrationCenralized) {
+			registrars =  orgstructureService.getEmployeesByBusinessRole(registrarRole);
+		} else {
+			registrars = new ArrayList<NodeRef>();
+			//получаем основную должностную позицию
+			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
+			if (primaryStaff != null) {
+				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+				registrars.addAll(edsGlobalSettingsService.getPotentialWorkers(registrarRole, unit));
+			}
 		}
+
 		return registrars;
 	}
 
