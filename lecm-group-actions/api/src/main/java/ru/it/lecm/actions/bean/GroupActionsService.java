@@ -13,7 +13,7 @@ import java.util.List;
 public interface GroupActionsService {
 
     public static final String GA_ROOT_ID = "GA_ROOT_ID";
-    public static final String GA_ROOT_NAME = "GA_ROOT_NAME";
+    public static final String GA_ROOT_NAME = "Сервис Групповые операции";
 
     public static final String NAMESPACE_URI = "http://www.it.ru/lecm/group-actions/1.0";
 
