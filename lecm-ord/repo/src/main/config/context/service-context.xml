@@ -5,15 +5,15 @@
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-    
+
     <util:list id="ord.models">
 		<value>alfresco/module/${artifactId}/models/lecm-ord-model.xml</value>
 	</util:list>
-    
+
     <util:list id="ord.models.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-ord-model</value>
 	</util:list>
-    
+
     <util:list id="ord.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-type.xml</value>
 	</util:list>
@@ -37,5 +37,9 @@
 		  p:dictionaries-ref="ord.dictionaries"
           p:createOrUpdateDictionaries-ref="ord.dictionaries.items"
           />
-		  
+
+	<bean id="ord.statemachine.bootstrap" parent="defaultStatemachines"
+		  p:statemachineName="lecm-ord:document"
+		  p:path="alfresco/module/${artifactId}/statemachine/lecm-ord-statemachine-default.xml"/>
+
 </beans>
