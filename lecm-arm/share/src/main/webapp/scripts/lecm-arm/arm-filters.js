@@ -40,6 +40,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             avaiableFilters: [],
             currentFilters: [],
+            filtersFromPref: [],
 
             currentQuery: null,
 
@@ -60,17 +61,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             fn: function (p_oResponse) {
                                 var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters.PREFERENCE_KEY);
                                 if (filtersPref != null && filtersPref != "") {
-                                    filters.currentFilters = YAHOO.lang.JSON.parse(filtersPref);
+                                    filters.filtersFromPref = YAHOO.lang.JSON.parse(filtersPref);
                                 } else {
-                                    filters.currentFilters = [];
+                                    filters.filtersFromPref = [];
                                 }
+                                filters.currentFilters = filters.filtersFromPref.slice(0);
                                 filters.deferredListPopulation.fulfil("onReady");
                             },
                             scope: this
                         },
                         failureCallback: {
                             fn: function (p_oResponse) {
-                                filters.currentFilters = [];
+                                filters.filtersFromPref = [];
+                                filters.currentFilters = filters.filtersFromPref.slice(0);
                                 filters.deferredListPopulation.fulfil("onReady");
                             },
                             scope: this
@@ -91,21 +94,32 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             var filter = filters[i];
                             this.avaiableFilters.push(filter);
                         }
+
+                        this.currentFilters = this.filtersFromPref.slice(0);
+                        for (var j = 0; j < this.filtersFromPref.length; j++) {
+                            var indexInAvaiables = this._filterInArray(this.filtersFromPref[j].code, this.avaiableFilters);
+                            if (indexInAvaiables < 0) {
+                                this.currentFilters.splice(this.currentFilters.indexOf(this.filtersFromPref[j]), 1);
+                            }
+                        }
                     } else {
                         this.avaiableFilters = [];
+                        this.currentFilters = [];
                     }
                 }
-                this.deferredListPopulation.fulfil("updateArmFilters");
+                if (!this.deferredListPopulation.fulfil("updateArmFilters")) {
+                    this.updateCurrentFiltersForm(false);
+                }
             },
 
             onUpdateCurrentFilters: function (layer, args) {
                 var filters = args[1].filtersData;
                 if (filters != null) {
-                    //обновим сброшенные - оставим те пришли(будут обновлены) и те, которых нет в списке доступных для выбора
+                    //обновим сброшенные - оставим те пришли(будут обновлены)
                     var newCurrentFilters = [];
                     for (var i = 0; i < this.currentFilters.length; i++) {
                         var filterCode = this.currentFilters[i].code;
-                        if (filters[filterCode] != null || (this._filterInArray(filterCode, this.avaiableFilters) < 0)) {
+                        if (filters[filterCode] != null) {
                             newCurrentFilters.push(this.currentFilters[i]);
                         }
                     }
@@ -183,7 +197,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (currentFiltersConteiner != null) {
                         var filtersHTML = "";
                         for (var i = 0; i < this.currentFilters.length; i++) {
-                            var curFilter =  this.currentFilters[i];
+                            var curFilter = this.currentFilters[i];
                             var valuesTitle = "";
                             if (YAHOO.lang.isArray(curFilter.curValue)) {
                                 for (var j = 0; j < curFilter.curValue.length; j++) {
@@ -195,7 +209,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 valuesTitle = this._findFilterValueTitle(curFilter.curValue, curFilter.values);
                             }
 
-                            filtersHTML += "<span class='arm-filter-item' title='" +  valuesTitle + "'>";
+                            filtersHTML += "<span class='arm-filter-item' title='" + valuesTitle + "'>";
                             filtersHTML += curFilter.name;
                             filtersHTML += this.getRemoveFilterButton(curFilter);
                             filtersHTML += "</span>";
@@ -205,6 +219,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
                 if (updatePrefs) {
                     this.preferences.set(this.PREFERENCE_KEY, this._buildFiltersJSON());
+                    this.filtersFromPref = this.currentFilters.slice(0);
                 }
             },
 
