@@ -14,7 +14,7 @@
                 <property name="lecm-arm:filter-class">authorArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
                 <property name="lecm-arm:filter-values">MY|Мои,DEPARTMENT|Мое подразделение,ALL|Все</property>
-                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref</property>
+                <property name="lecm-arm:filter-query">lecm-document:author-assoc-ref,lecm-eds-document:recipients-assoc-ref,lecm-eds-document:reviewers-assoc-ref,lecm-ord:controller-assoc-ref</property>
             </item>
 	        <item name="cm:По срокам" type="lecm-arm:filter">
                 <property name="cm:name">По срокам</property>
@@ -45,7 +45,7 @@
                 <property name="lecm-arm:filter-code">DOCUMENT_TYPE</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние</property>
+                <property name="lecm-arm:filter-values">lecm-incoming:document|Входящие,lecm-outgoing:document|Исходящие,lecm-internal:document|Внутренние,lecm-ord:document|ОРД</property>
                 <property name="lecm-arm:filter-query">+TYPE:'#value'</property>
             </item>
         </items>
