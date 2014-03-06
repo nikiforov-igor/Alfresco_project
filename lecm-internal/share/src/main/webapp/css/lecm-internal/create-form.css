@@ -1,0 +1,64 @@
+.yui-skin-lecmTheme .yui-panel div.form-field > label, .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label {
+	width: auto !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+	margin-left: 0 !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 92% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 83% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel .yui-u div.form-field input[type=text]:not(.autocomplete-input) {
+	width: 94% !important;
+}
+
+.format-info {
+	top: 55px !important;
+}
+
+.defaultSkin table.mceLayout {
+	width: 100% !important;
+}
+
+.datepicker-icon {
+	margin-top: 5px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field input[type=text]:not(.autocomplete-input)
+{
+	width: 100% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder .current-values {
+	width: 95% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+	width: 91% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.object-finder.with-two-buttons div.current-values {
+	width: 83% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.current-values {
+	width: 90% !important;
+}
+
+.uploader-block {
+	margin-top: -13px !important;
+}
+
+.attachments-list {
+	width: 78% !important;
+}
+
+div.form-field.dnd-uploader label {
+	padding-right: 210px !important;
+}
