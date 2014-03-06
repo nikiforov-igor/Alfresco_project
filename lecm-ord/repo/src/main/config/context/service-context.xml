@@ -7,8 +7,8 @@
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <util:list id="ord.models">
+	    <value>alfresco/module/${artifactId}/models/lecm-ord-table-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-ord-model.xml</value>
-		<value>alfresco/module/${artifactId}/models/lecm-ord-table-model.xml</value>
 	</util:list>
 
     <util:list id="ord.models.labels">
