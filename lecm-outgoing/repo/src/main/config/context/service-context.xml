@@ -46,4 +46,35 @@
             </list>
         </property>
     </bean>
+
+	<util:list id="outgoing.copySettings.propsToCopy">
+		<value>lecm-document:title</value>
+		<value>lecm-eds-document:note</value>
+		<value>lecm-eds-document:summaryContent</value>
+		<value>lecm-eds-document:execution-date</value>
+	</util:list>
+
+	<util:list id="outgoing.copySettings.assocsToCopy">
+		<value>lecm-outgoing:contractor-assoc</value>
+		<value>lecm-outgoing:recipient-assoc</value>
+		<value>lecm-outgoing:registrar-assoc</value>
+		<value>lecm-outgoing:delivery-method-assoc</value>
+		<value>lecm-eds-document:document-type-assoc</value>
+		<value>lecm-eds-document:file-register-assoc</value>
+		<value>lecm-eds-document:recipients-assoc</value>
+		<value>lecm-eds-document:reviewers-assoc</value>
+		<value>lecm-document:subject-assoc</value>
+	</util:list>
+
+	<bean id="outgoing.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+		  p:propsToCopy-ref="outgoing.copySettings.propsToCopy"
+		  p:assocsToCopy-ref="outgoing.copySettings.assocsToCopy" />
+
+	<util:map id="outgoing.copySettings.bean.settings">
+		<entry key="lecm-outgoing:document" value-ref="outgoing.copySettings"/>
+	</util:map>
+
+	<bean id="outgoing.copySettings.bean" parent="documentCopySettingsBean"
+		  p:settings-ref="outgoing.copySettings.bean.settings" />
+
 </beans>
