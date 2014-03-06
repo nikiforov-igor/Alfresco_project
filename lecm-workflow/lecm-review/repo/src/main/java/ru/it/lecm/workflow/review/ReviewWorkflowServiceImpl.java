@@ -88,7 +88,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		DelegateExecution execution = task.getExecution();
 		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReviewerPermissions(employeeRef, bpmPackage);
+		grantReaderPermissions(employeeRef, bpmPackage, false);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
@@ -98,7 +98,6 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
 		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
 		taskDecision.setUserName(task.getAssignee());
@@ -115,9 +114,6 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		NodeRef resultListRef = resultListService.getResultListRef(task);
 		logDecision(resultListRef, taskDecision);
 
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		revokeReviewerPermissions(employeeRef, bpmPackage);
-		grantReaderPermissions(employeeRef, bpmPackage);
 		return taskDecision;
 	}
 

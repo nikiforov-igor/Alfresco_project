@@ -14,7 +14,6 @@ import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -113,30 +112,33 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	*/
 
 	@Override
-	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
+	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
-			this.grantReviewerPermissionsInternal(employeeRef, documentRef);
+			this.grantReviewerPermissionsInternal(employeeRef, documentRef, addEmployeeAsMember);
 		}
 	}
 
 	@Override
-	public void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef) {
-		grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer");
+	public void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef, final boolean addEmployeeAsMember) {
+		grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer", addEmployeeAsMember);
 	}
 
 	@Override
-	public void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage) {
+	public void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
-			this.grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reader");
+			this.grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reader", addEmployeeAsMember);
 		}
 	}
 
-	protected void grantPermissions(final NodeRef employeeRef, final NodeRef documentRef, final String permissionGroup) {
+	protected void grantPermissions(final NodeRef employeeRef, final NodeRef documentRef, final String permissionGroup, final boolean addEmployeeAsMember) {
 		if (documentRef != null) {
-			NodeRef member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, permissionGroup);
-			if (member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права
+			NodeRef member = null;
+			if (addEmployeeAsMember) {
+				member = documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, permissionGroup);
+			}
+			if (!addEmployeeAsMember || member == null) { // сотрудник уже добавлен как участник - значит просто раздаем доп права
 				LecmPermissionService.LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(permissionGroup);
 				lecmPermissionService.grantAccess(pgGranting, documentRef, employeeRef);
 			}

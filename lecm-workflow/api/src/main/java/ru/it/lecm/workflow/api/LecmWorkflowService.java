@@ -20,34 +20,37 @@ public interface LecmWorkflowService {
 	 * раздать всем участникам процесса согласования права
 	 * LECM_BASIC_PG_Reviewer
 	 *
-	 * @param employeeRef
-	 * @param bpmPackage
+	 * @param employeeRef сотрудник
+	 * @param bpmPackage bpmPackage с документом
+	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
 	 */
-	void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+	void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember);
 
 	/**
 	 * раздать всем участникам процесса согласования права
 	 * LECM_BASIC_PG_Reviewer
 	 *
-	 * @param employeeRef
-	 * @param documentRef
+	 * @param employeeRef сотрудник
+	 * @param documentRef документ
+	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
 	 */
-	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef);
+	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef, final boolean addEmployeeAsMember);
 
 	/**
 	 * раздать всем участникам процесса согласования права
 	 * LECM_BASIC_PG_Reader
 	 *
-	 * @param employeeRef
-	 * @param bpmPackage
+	 * @param employeeRef сотрудник
+	 * @param bpmPackage bpmPackage с документом
+	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
 	 */
-	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
+	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember);
 
 	/**
 	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
 	 *
-	 * @param employeeRef
-	 * @param bpmPackage
+	 * @param employeeRef сотрудник
+	 * @param bpmPackage bpmPackage с документом
 	 */
 	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 

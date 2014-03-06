@@ -95,6 +95,8 @@ public interface DocumentService {
     public static final QName TYPE_EDS_DOCUMENT = QName.createQName(EDS_NAMESPACE_URI, "base");
 	public static final QName PROP_EDS_EXECUTION_DATE = QName.createQName(EDS_NAMESPACE_URI, "execution-date");
 
+	public static final QName PROP_SYS_WORKFLOWS = QName.createQName(DOCUMENT_NAMESPACE_URI, "sys_workflows");
+
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef

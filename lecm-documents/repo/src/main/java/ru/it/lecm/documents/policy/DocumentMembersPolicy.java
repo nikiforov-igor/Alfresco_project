@@ -56,7 +56,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 
 	private LecmPermissionService lecmPermissionService;
 
-    final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
+    final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
+    final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_EVER = { DocumentService.PROP_SYS_WORKFLOWS };
 
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
@@ -263,8 +264,11 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         /* не добавлять сотрудника как участника
             1) если изменения выполняет система
             2) если сотрудник добавляет комментарий, ставит рейтинг и документ находится на финальном статусе
+            3) если меняются бизнес-процессы, прицепленные к документу (бизнес-процесс сам решит, включать ли сотрудника в участники)
         */
-        if (!AuthenticationUtil.getSystemUserName().equals(userName) && !(hasDoNotAddMemberUpdatedProperties(before, after) && stateMachineBean.isFinal(nodeRef))) {
+        if (!AuthenticationUtil.getSystemUserName().equals(userName) &&
+                !(hasDoNotAddMemberUpdatedProperties(before, after, AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE) && stateMachineBean.isFinal(nodeRef)) &&
+                !hasDoNotAddMemberUpdatedProperties(before, after, AFFECTED_NOT_ADD_MEMBER_PROPERTIES_EVER)) {
             documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
         }
     }
@@ -274,8 +278,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		return null;
 	}
 
-    private boolean hasDoNotAddMemberUpdatedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after) {
-        for (QName affected : AFFECTED_NOT_ADD_MEMBER_PROPERTIES) {
+    private boolean hasDoNotAddMemberUpdatedProperties(Map<QName, Serializable> before, Map<QName, Serializable> after, QName[] notAffectedProperties) {
+        for (QName affected : notAffectedProperties) {
             Object prev = before.get(affected);
             Object cur = after.get(affected);
             if (cur != null && !cur.equals(prev)) {

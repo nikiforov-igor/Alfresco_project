@@ -324,7 +324,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
-		grantReaderPermissions(employeeRef, bpmPackage);
+		grantReaderPermissions(employeeRef, bpmPackage, true);
 		return taskDecision;
 	}
 
@@ -424,7 +424,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		DelegateExecution execution = task.getExecution();
 		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReviewerPermissions(employeeRef, bpmPackage);
+		grantReviewerPermissions(employeeRef, bpmPackage, true);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
