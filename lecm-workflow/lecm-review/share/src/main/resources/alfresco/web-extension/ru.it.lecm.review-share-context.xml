@@ -16,5 +16,5 @@
 		  p:configs-ref="review.workflow.share.configs"/>
 
 	<bean id="review.workflow.resource.bundle.bootstrap" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
-		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.review.review"/>
+		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.workflow.review"/>
 </beans>
