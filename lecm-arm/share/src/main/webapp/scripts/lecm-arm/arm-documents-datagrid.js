@@ -20,6 +20,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 scope: this
             });
 
+        this.preferences = new Alfresco.service.Preferences();
+
         return this;
     };
 
@@ -28,7 +30,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DataGrid.prototype, {
         doubleClickLock: false,
 
+        PREFERENCE_KEY: "ru.it.lecm.arm.menu-state",
+
         filtersMeta: null,
+
+        armMenuState: {},
+
+        preferences: null,
 
         onActionEdit: function (item){
             window.location.href = window.location.protocol + "//" + window.location.host +
@@ -66,6 +74,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
                 datagridMeta.recreate = true;
             }
+            if (args[1].menuState) {
+                this.armMenuState = args[1].menuState;
+
+                if (this.armMenuState.pageNum) {
+                    this.options.initialPage = this.armMenuState.pageNum;
+                }
+            }
             if(!this.deferredListPopulation.fulfil("armNodeSelected")){
                 this.populateDataGrid();
             }
@@ -82,6 +97,31 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         this.sendRequestToUpdateGrid();
                     }
                 }
+            }
+        },
+
+        _setupPaginatior: function DataGrid_setupPaginatior() {
+            if (this.options.usePagination) {
+                var handlePagination = function DataGrid_handlePagination(state, me) {
+                    me.widgets.paginator.setState(state);
+                };
+
+                this.widgets.paginator = new YAHOO.widget.Paginator(
+                    {
+                        containers: [this.id + "-paginatorBottom"],
+                        rowsPerPage: this.options.pageSize,
+                        initialPage: this.options.initialPage,
+                        totalRecords:  YAHOO.widget.Paginator.VALUE_UNLIMITED, // temporary to allow initialPage config.  Will be overwritten by DataTable
+                        template: this.msg("pagination.template"),
+                        pageReportTemplate: this.msg("pagination.template.page-report"),
+                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
+                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
+                    });
+
+                this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
+
+                // Display the bottom paginator bar
+                Dom.setStyle(this.id + "-datagridBarBottom", "display", "block");
             }
         },
 
@@ -186,6 +226,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				    });
 		    }
 	    },
+
+        _generatePaginatorRequest: function (oState, oSelf) {
+            var request = LogicECM.module.ARM.DataGrid.superclass._generatePaginatorRequest.call(this, oState, oSelf);
+            this.armMenuState.pageNum = oState.pagination.page;
+            this.preferences.set(this.PREFERENCE_KEY, YAHOO.lang.JSON.stringify(this.armMenuState));
+
+            return request;
+        },
 
         setupDataTable: function DataGrid__setupDataTable() {
             var columnDefinitions = this.getDataTableColumnDefinitions();

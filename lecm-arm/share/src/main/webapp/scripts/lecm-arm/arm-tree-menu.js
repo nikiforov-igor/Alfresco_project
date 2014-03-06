@@ -51,7 +51,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             } else {
                                 menu.menuState = {
 	                                accordion: "",
-                                    selected: ""
+                                    selected: "",
+                                    pageNum: 1
                                 };
                             }
                             menu.createAccordion();
@@ -155,7 +156,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 //нет выбранного узла - сразу отсылаем событие на перерисовку грида
                 YAHOO.Bubbling.fire ("armNodeSelected", {
                     armNode: null,
-                    bubblingLabel: "documents-arm"
+                    bubblingLabel: "documents-arm",
+                    menuState:this.menuState
                 });
                 YAHOO.Bubbling.fire ("updateArmFilters", {
                     currentNode: null
@@ -307,7 +309,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	            YAHOO.Bubbling.fire ("armNodeSelected", {
 		            armNode: node,
-		            bubblingLabel: "documents-arm"
+		            bubblingLabel: "documents-arm",
+                    menuState:this.menuState
 	            });
 
 	            YAHOO.Bubbling.fire ("updateArmToolbar", {
@@ -319,6 +322,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	                isReportNode: isReportNode
                 });
             }
+            // сбрасываем после того, как отослали запрос к гриду
+            this.menuState.pageNum = 1;
             this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
         },
 

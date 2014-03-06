@@ -1247,6 +1247,51 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
+            _generatePaginatorRequest: function (oState, oSelf) {
+                this.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON)
+
+                var sort = this.datagridMeta.sort,
+                    sortField;
+                if (this.currentSort) {
+                    if (this.currentSort.oColumn.field.indexOf("assoc_") != 0) {
+                        sortField = this.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
+                    } else {
+                        sortField = this.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
+                    }
+                    sort = sortField + "|" + (this.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
+                }
+
+                // дополнительный фильтр из адресной строки (или параметров)
+                var successFilter = this.currentFilter;
+                if (!successFilter) {
+                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                    if (bookmarkedFilter){
+                        try {
+                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                            }
+                        }
+                        catch (e) {
+                            // Catch "malformed URI sequence" exception
+                        }
+                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                            var filters = strFilter.split("|");
+                            return {
+                                filterId: window.unescape(filters[0] || ""),
+                                filterData: window.unescape(filters[1] || "")
+                            };
+                        };
+
+                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        this.currentFilter = successFilter;
+                    }
+                }
+
+                var params = this.search.buildSearchParams(this.datagridMeta.nodeRef, null,
+                    this.datagridMeta.itemType, sort, this.datagridMeta.searchConfig, this.dataRequestFields.join(","),
+                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
+                return YAHOO.lang.JSON.stringify(params);
+            },
+
 	        /**
              * Прорисовка таблицы, установка свойств, сортировка.
              * @param columnDefinitions колонки
@@ -1255,55 +1300,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @private
              */
             _setupDataTable: function (columnDefinitions, me) {
-	            var generateRequest = function (oState, oSelf) {
-	                me.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON);
-	                var sort = me.datagridMeta.sort,
-	                    sortField;
-	                if (me.currentSort) {
-	                    if (me.currentSort.oColumn.field.indexOf("assoc_") != 0) {
-	                        sortField = me.currentSort.oColumn.field.replace("prop_", "").replace("_", ":");
-	                    } else {
-	                        sortField = me.currentSort.oColumn.field.replace("assoc_", "").replace("_", ":") + "-text-content";
-	                    }
-	                    sort = sortField + "|" + (me.currentSort.sSortDir == YAHOO.widget.DataTable.CLASS_ASC ? "true" : "false");
-	                }
-
-	                // дополнительный фильтр из адресной строки (или параметров)
-	                var successFilter = me.currentFilter;
-	                if (!successFilter) {
-	                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-	                    if (bookmarkedFilter){
-	                        try {
-	                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
-	                            }
-	                        }
-	                        catch (e) {
-	                            // Catch "malformed URI sequence" exception
-	                        }
-	                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-	                            var filters = strFilter.split("|"),
-	                                filterObj =
-	                                {
-	                                    filterId: window.unescape(filters[0] || ""),
-	                                    filterData: window.unescape(filters[1] || "")
-	                                };
-	                            return filterObj;
-	                        };
-
-	                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-	                        me.currentFilter = successFilter;
-	                    }
-	                }
-
-	                var params = me.search.buildSearchParams(me.datagridMeta.nodeRef, null,
-	                    me.datagridMeta.itemType, sort, me.datagridMeta.searchConfig, me.dataRequestFields.join(","),
-	                    me.dataRequestNameSubstituteStrings.join(","), me.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
-	                return YAHOO.lang.JSON.stringify(params);
-	            };
-
 	            var dTable = new YAHOO.widget.DataTable(this.id + "-grid", columnDefinitions, this.widgets.dataSource,
                     {
-                        generateRequest: generateRequest,
+                        generateRequest: this._generatePaginatorRequest.bind(this),
                         initialLoad: false,
                         dynamicData: (this.options.usePagination && this.options.useDynamicPagination),
                         "MSG_EMPTY": this.msg("message.empty"),
