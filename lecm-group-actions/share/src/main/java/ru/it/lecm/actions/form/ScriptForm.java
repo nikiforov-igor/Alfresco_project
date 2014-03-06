@@ -119,6 +119,14 @@ public class ScriptForm extends FormUIGet {
         fieldPointer = new FieldPointer(itemsField.getId());
         set.addChild(fieldPointer);
 
+        Map<String, Object> arguments = new HashMap<String, Object>();
+        String[] parameters = request.getParameterNames();
+        for (String parameter : parameters) {
+            arguments.put(parameter, request.getParameter(parameter));
+        }
+
+        form.put(MODEL_ARGUMENTS, arguments);
+
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_METHOD, "GET");
         form.put(MODEL_ENCTYPE, ENCTYPE_JSON);
