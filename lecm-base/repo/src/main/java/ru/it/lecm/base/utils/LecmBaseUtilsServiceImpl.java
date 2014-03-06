@@ -1,19 +1,36 @@
 package ru.it.lecm.base.utils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.Signature;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -32,7 +49,14 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.openssl.PEMEncryptedKeyPair;
+import org.bouncycastle.openssl.PEMKeyPair;
 import ru.it.lecm.base.beans.BaseBean;
+import org.bouncycastle.openssl.PEMParser;
+import org.bouncycastle.openssl.jcajce.JcePEMDecryptorProviderBuilder;
+import static ru.it.lecm.base.utils.LecmBaseUtilsService.LECM_PUBKEY_FILE_NAME;
 
 /**
  *
@@ -69,7 +93,7 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
     //TODO Замаскировать
     //TODO как следует обработать исключения
     public Properties decrypt(final NodeRef nodeRef) throws IOException {
-        Properties result=null;
+        Properties result= new Properties();
         
         if (!(nodeService.exists(nodeRef) && nodeService.getType(nodeRef).isMatch(ContentModel.TYPE_CONTENT))) {
             throw new RuntimeException("File not exists");
@@ -101,7 +125,7 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
         }
         try {
         
-            byte[] content = Base64.decodeBase64(line);
+            byte[] content = Base64.decodeBase64(originalText.toString());
             byte[] salt = Arrays.copyOfRange(
                     content, SALT_OFFSET, SALT_OFFSET + SALT_SIZE);
             
@@ -173,11 +197,102 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 			
 			try {
 				Date propDate = COMMON_DATE_FORMAT.parse((String)this.propertiesMap.get(PROP_EXPIRATION_DATE));
-				result = new Date().before(propDate);
+				result = checkSignature(nodeRef, null) && new Date().before(propDate);
 			} catch(ParseException e) {
 				Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
 			}
 		}
 		return result;
+	}
+	
+	public Boolean checkSignature(final NodeRef nodeRef, final NodeRef signatureRef) {
+		Boolean result = false;
+		
+		try {
+			NodeRef folderRef = getServiceRootFolder();
+			
+			//read the signature
+			NodeRef sigToVerifyRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, LECM_SIGNATURE_FILE_NAME);
+			byte[] sigToVerify = readContent(sigToVerifyRef);
+
+			//read the key
+			NodeRef pubKeyRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, LECM_PUBKEY_FILE_NAME);
+			byte[] pubKeyStr = readContent(pubKeyRef);
+			
+			//read the content
+			NodeRef contentRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, LECM_LICENSE_FILE_NAME);
+			byte[] contenStr = readContent(contentRef);
+			
+			X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(pubKeyStr);
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+			PublicKey pubKey = keyFactory.generatePublic(pubKeySpec);
+
+			Signature signature = Signature.getInstance("SHA1withRSA");
+			signature.initVerify(pubKey);
+			signature.update(contenStr);
+			result = signature.verify(sigToVerify);
+		} catch(NoSuchAlgorithmException e) {
+			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch(IOException e) {
+			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch(InvalidKeySpecException e) {
+			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch(InvalidKeyException e) {
+			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+		} catch(SignatureException e) {
+			Logger.getLogger(LecmBaseUtilsServiceImpl.class.getName()).log(Level.SEVERE, null, e);
+		}
+		
+		return result;
+	}
+	
+	private byte[] readContent(final NodeRef nodeRef) throws IOException {
+		ContentReader contentReader = AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<ContentReader> () {
+			@Override
+			public ContentReader doWork () throws Exception {
+				ContentService contentService = serviceRegistry.getContentService();
+				return contentService.getReader(nodeRef, ContentModel.PROP_CONTENT);
+			}
+		}, AuthenticationUtil.getSystemUserName());
+		
+        if (!contentReader.exists()) {
+            throw new RuntimeException("File not exists");
+        }
+		
+        InputStream is = contentReader.getContentInputStream();
+		byte[] result = IOUtils.toByteArray(is);
+		is.close();
+		
+		return result;
+	}
+	
+	public void genSig() throws NoSuchAlgorithmException, NoSuchProviderException, InvalidKeyException, SignatureException, IOException {
+		Security.addProvider(new BouncyCastleProvider());
+		
+		KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA", "BC");
+		keyGen.initialize(1024, new SecureRandom());
+		KeyPair keyPair = keyGen.generateKeyPair();
+		
+		Signature signature = Signature.getInstance("SHA1withRSA", "BC");
+
+		signature.initSign(keyPair.getPrivate(), new SecureRandom());
+
+		NodeRef folderRef = getServiceRootFolder();
+		NodeRef contentRef = nodeService.getChildByName(folderRef, ContentModel.ASSOC_CONTAINS, LECM_LICENSE_FILE_NAME);
+		byte[] contenStr = readContent(contentRef);
+		signature.update(contenStr);
+		
+		byte[] sigBytes = signature.sign();
+		
+		//save keys
+		saveInFile(LECM_PRIVKEY_FILE_NAME, keyPair.getPrivate().getEncoded());
+		saveInFile(LECM_PUBKEY_FILE_NAME, keyPair.getPublic().getEncoded());
+
+		//save signature
+		saveInFile(LECM_SIGNATURE_FILE_NAME, sigBytes);
+	}
+
+	private void saveInFile(String LECM_PRIVKEY_FILE_NAME, byte[] encoded) {
+		//saving
 	}
 }

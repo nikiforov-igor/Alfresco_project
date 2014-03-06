@@ -390,6 +390,11 @@
 				<artifactId>xbean-spring</artifactId>
 				<version>3.6</version>
 			</dependency>
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcpkix-jdk15on</artifactId>
+				<version>1.50</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

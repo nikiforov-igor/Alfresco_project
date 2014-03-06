@@ -18,6 +18,8 @@ public interface LecmBaseUtilsService {
 	
 	public static final String LECM_SIGNATURE_FILE_NAME = "signature";
 	public static final String LECM_LICENSE_FILE_NAME = "license";
+	public static final String LECM_PUBKEY_FILE_NAME = "key";
+	public static final String LECM_PRIVKEY_FILE_NAME = "private_key";
 	
 	public static final DateFormat COMMON_DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy");
 	
