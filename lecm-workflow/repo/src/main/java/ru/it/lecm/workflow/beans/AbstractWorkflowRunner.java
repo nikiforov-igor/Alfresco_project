@@ -102,9 +102,31 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		this.runtimeService = alfrescoProcessEngineConfiguration.getRuntimeService();
 	}
 
+	@Override
+	public String run(final Map<String, Object> variables) {
+		checkMandatoryVariables(variables);
+		//формирование bpmPackage
+		Map<QName, Serializable> properties = getInitialWorkflowProperties(variables);
+		//получение workflowDefinition
+		WorkflowDefinition workflowDefinition = getWorkflowDefinition(variables);
+		properties = runImpl(variables, properties);
+		// start the workflow
+		WorkflowInstance workflowInstance = startWorkflow(workflowDefinition, properties);
+		//инициализировать входные переменные
+		setInputVariables(workflowInstance.getId(), variables);
+		//отсигналить что все готово
+		stateMachineService.sendSignal(workflowInstance.getId());
+		// log to business journal
+		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
+		logStartWorkflowEvent(documentRef, workflowInstance);
+		return workflowInstance.getId();
+	}
+
+	protected abstract Map<QName, Serializable> runImpl(final Map<String, Object> variables, final Map<QName, Serializable> properties);
+
 	protected void checkMandatoryVariables(final Map<String, Object> variables) {
 		for (String inputVariable : inputVariables) {
-			ParameterCheck.mandatoryString(inputVariable, (String)variables.get(inputVariable));
+			ParameterCheck.mandatoryString(inputVariable, (String) variables.get(inputVariable));
 		}
 	}
 
