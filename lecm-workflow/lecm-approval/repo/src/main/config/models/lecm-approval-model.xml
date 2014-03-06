@@ -16,6 +16,18 @@
 		<namespace uri="http://www.it.ru/logicECM/model/approval/wokflow/2.0" prefix="lecmApprove2"/>
 	</namespaces>
 
+	<constraints>
+		<constraint name="lecmApprove2:approveTaskResultConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>APPROVED</value> <!-- согласован -->
+					<value>APPROVED_WITH_REMARK</value> <!-- согласован с замечанием -->
+					<value>REJECTED</value> <!-- отклонен -->
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
 	<types>
 		<type name="lecmApprove2:approval">
 			<title>Согласование</title>
@@ -39,15 +51,7 @@
 					<type>d:text</type>
 					<default>REJECTED</default>
 					<constraints>
-						<constraint name="lecmApprove2:approveTaskResultConstraint" type="LIST">
-							<parameter name="allowedValues">
-								<list>
-									<value>APPROVED</value> <!-- согласован -->
-									<value>APPROVED_WITH_REMARK</value> <!-- согласован с замечанием -->
-									<value>REJECTED</value> <!-- отклонен -->
-								</list>
-							</parameter>
-						</constraint>
+						<constraint ref="lecmApprove2:approveTaskResultConstraint"/>
 					</constraints>
 				</property>
 			</properties>
@@ -69,7 +73,10 @@
 					<default>edit_package_item_actions</default>
 				</property>
 				<property name="bpm:outcomePropertyName">
-					<default>{http://www.it.ru/logicECM/model/approval/approve-task/1.0}approveTaskResult</default>
+					<default>{http://www.it.ru/logicECM/model/approval/wokflow/2.0}approveTaskResult</default>
+					<constraints>
+						<constraint ref="lecmApprove2:approveTaskResultConstraint"/>
+					</constraints>
 				</property>
 			</overrides>
 		</type>
