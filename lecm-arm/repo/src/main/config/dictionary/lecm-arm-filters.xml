@@ -37,8 +37,8 @@
                 <property name="lecm-arm:filter-code">REQUIRING_VISA</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">На подписании|На подписание,На согласовании|На согласование</property>
-                <property name="lecm-arm:filter-query">@lecm\-statemachine\:status:'#value'</property>
+                <property name="lecm-arm:filter-values">lecmSign|На подписание,lecmApprovalWorkflow|На согласование,lecmReview|На ознакомлении</property>
+                <property name="lecm-arm:filter-query">@lecm\-document\:sys_workflows:'*#value*'</property>
             </item>
 	        <item name="cm:Вид документа" type="lecm-arm:filter">
 				<property name="cm:name">Вид документа</property>

@@ -115,7 +115,7 @@ public class EndWorkflowEvent implements ExecutionListener {
 
                         helper.nextTransition(taskId);
                     }
-
+	                utils.removeWorkflow(document, executionId);
                 }
                 return null;
             }
