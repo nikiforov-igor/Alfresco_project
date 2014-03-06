@@ -37,6 +37,7 @@
 		  depends-on="outgoing.model.bootstrap"/>
 
     <bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
         <property name="createOrUpdateDictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>

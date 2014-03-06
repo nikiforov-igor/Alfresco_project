@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Направить на регистрацию" type="lecm-group-actions:action" path="/Business platform/LECM/Сервис Групповые операции">
+    <item name="cm:Направить на регистрацию" type="lecm-group-actions:action">
         <property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/be124cac-a380-46a7-918e-b628e105ba20]]></property>
         <property name="cm:name"><![CDATA[Направить на регистрацию]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Подписан]]></property>
