@@ -184,22 +184,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         var filtersHTML = "";
                         for (var i = 0; i < this.currentFilters.length; i++) {
                             var curFilter =  this.currentFilters[i];
+                            var valuesTitle = "";
                             if (YAHOO.lang.isArray(curFilter.curValue)) {
                                 for (var j = 0; j < curFilter.curValue.length; j++) {
-                                    var valueTitle = this._findFilterValueTitle(curFilter.curValue[j], curFilter.values);
-                                    if (valueTitle != null) {
-                                        filtersHTML += "<span class='arm-filter-item'>";
-                                        filtersHTML += valueTitle;
-                                        filtersHTML += this.getRemoveFilterButton(curFilter, curFilter.curValue[j]);
-                                        filtersHTML += "</span>";
-                                    }
+                                    var vTitle = this._findFilterValueTitle(curFilter.curValue[j], curFilter.values);
+                                    valuesTitle += (vTitle + ", ");
                                 }
+                                valuesTitle = valuesTitle.substring(0, valuesTitle.length - 2);
                             } else {
-                                filtersHTML += "<span class='arm-filter-item'>";
-                                filtersHTML += this._findFilterValueTitle(curFilter.curValue, curFilter.values);
-                                filtersHTML += this.getRemoveFilterButton(curFilter, curFilter.curValue);
-                                filtersHTML += "</span>";
+                                valuesTitle = this._findFilterValueTitle(curFilter.curValue, curFilter.values);
                             }
+
+                            filtersHTML += "<span class='arm-filter-item' title='" +  valuesTitle + "'>";
+                            filtersHTML += curFilter.name;
+                            filtersHTML += this.getRemoveFilterButton(curFilter);
+                            filtersHTML += "</span>";
                         }
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
@@ -222,25 +221,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return null;
             },
 
-            getRemoveFilterButton: function (filter, valueToDelete) {
+            getRemoveFilterButton: function (filter) {
                 var id = Dom.generateId();
                 var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
                 YAHOO.util.Event.onAvailable(id, function (filter) {
-                    YAHOO.util.Event.on(id, 'click', this.deleteFilter, {
-                        filter: filter,
-                        value:valueToDelete
-                    }, this);
+                    YAHOO.util.Event.on(id, 'click', this.deleteFilter, filter, this);
                 }, filter, this);
                 return result;
             },
 
-            deleteFilter: function (e, filterObj) {
-                if (YAHOO.lang.isArray(filterObj.filter.curValue)) {
-                    var filterIndex = this.currentFilters.indexOf(filterObj.filter);
-                    this.currentFilters[filterIndex].curValue.splice(this.currentFilters[filterIndex].curValue.indexOf(filterObj.value), 1)
-                } else {
-                    this.currentFilters.splice(this.currentFilters.indexOf(filterObj.filter), 1);
-                }
+            deleteFilter: function (e, filter) {
+                this.currentFilters.splice(this.currentFilters.indexOf(filter), 1);
                 this.updateCurrentFiltersForm(true);
             },
 
