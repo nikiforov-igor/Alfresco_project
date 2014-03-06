@@ -17,13 +17,13 @@ public final class WorkflowVariablesHelper {
 	public static NodeRef getDocumentRef(final Map<String, Object> variables) {
 		Object documentRef = variables.get(DOCUMENT_REF);
 		ParameterCheck.mandatory(DOCUMENT_REF, documentRef);
-		return (NodeRef)documentRef;
+		return new NodeRef(documentRef.toString());
 	}
 
 	public static NodeRef getRouteRef(final Map<String, Object> variables) {
 		Object routeRef = variables.get(ROUTE_REF);
 		ParameterCheck.mandatory(ROUTE_REF, routeRef);
-		return (NodeRef)routeRef;
+		return new NodeRef(routeRef.toString());
 	}
 
 	public static String getWorkflowDefinition(final Map<String, Object> variables) {

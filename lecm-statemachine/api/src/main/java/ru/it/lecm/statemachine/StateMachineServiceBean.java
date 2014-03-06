@@ -139,4 +139,6 @@ public interface StateMachineServiceBean {
     boolean isServiceWorkflow(String executionId);
 
 	boolean isServiceWorkflow(WorkflowInstance workflow);
+
+	void sendSignal(String executionId);
 }

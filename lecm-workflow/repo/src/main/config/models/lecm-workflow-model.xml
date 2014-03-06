@@ -175,7 +175,7 @@
 
 		<aspect name="lecm-workflow:workflow-concurrency-aspect">
 			<properties>
-				<property name="lecm-workflow:workflow-concurrency">
+				<property name="lecm-workflow:workflowConcurrency">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
 					<constraints>

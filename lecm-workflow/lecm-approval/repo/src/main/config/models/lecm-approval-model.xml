@@ -32,16 +32,9 @@
 		<type name="lecmApprove2:approval">
 			<title>Согласование</title>
 			<parent>bpm:startTask</parent>
-			<properties>
-				<property name="lecmApprove2:approvalType">
-					<type>d:text</type>
-					<constraints>
-						<constraint ref="lecm-workflow:workflow-concurrency-constraint" />
-					</constraints>
-				</property>
-			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-workflow:assigneesListAspect</aspect>
+				<aspect>lecm-workflow:workflow-concurrency-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 		<type name="lecmApprove2:approveTask">

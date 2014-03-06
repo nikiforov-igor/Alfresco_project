@@ -14,6 +14,11 @@
 							approvalWorkflow.logFinalDecision(resultListRef, finalDecision);
 						}
 						approvalWorkflow.deleteTempAssigneesList(execution);
+						//временное решение
+						var document = bpm_package.children[0];
+						if (document.hasAspect("lecm-document-route:routable")) {
+							document.properties["lecm-document-route:is-approved"] = isApproved;
+						}
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>
@@ -37,7 +42,7 @@
 						var assignees = execution.getVariable("lecm-workflow_assigneesListAssoc");
 						var assigneesList = approvalWorkflow.createAssigneesList(assignees, execution);
 						execution.setVariableLocal("assigneesList", assigneesList);
-						var resultListRef = approvalWorkflow.createApprovalList(bpm_package, documentAttachmentCategoryName, lecmApprove2_approvalType, assigneesList);
+						var resultListRef = approvalWorkflow.createApprovalList(bpm_package, documentAttachmentCategoryName, execution.getVariable("lecm-workflow_workflowConcurrency"), assigneesList);
 						execution.setVariable("resultListRef", resultListRef);
 					]]></activiti:string>
 				</activiti:field>
@@ -47,10 +52,10 @@
 		<sequenceFlow id="flow4" sourceRef="create-approval-list" targetRef="sequential-or-parallel-approval-gate"></sequenceFlow>
 		<exclusiveGateway id="sequential-or-parallel-approval-gate" name="Exclusive Gateway"></exclusiveGateway>
 		<sequenceFlow id="from-gate-to-sequential" sourceRef="sequential-or-parallel-approval-gate" targetRef="sequential-approvement-task">
-			<conditionExpression xsi:type="tFormalExpression">${lecmApprove2_approvalType == "SEQUENTIAL"}</conditionExpression>
+			<conditionExpression xsi:type="tFormalExpression">${execution.getVariable("lecm-workflow_workflowConcurrency") == "SEQUENTIAL"}</conditionExpression>
 		</sequenceFlow>
 		<sequenceFlow id="from-gate-to-parallel" sourceRef="sequential-or-parallel-approval-gate" targetRef="parallel-approvement-task">
-			<conditionExpression xsi:type="tFormalExpression">${lecmApprove2_approvalType == "PARALLEL"}</conditionExpression>
+			<conditionExpression xsi:type="tFormalExpression">${execution.getVariable("lecm-workflow_workflowConcurrency") == "PARALLEL"}</conditionExpression>
 		</sequenceFlow>
 		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmApprove2:approveTask">
 			<extensionElements>

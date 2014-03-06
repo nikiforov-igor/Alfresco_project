@@ -7,7 +7,7 @@ package ru.it.lecm.workflow;
  */
 public enum WorkflowType {
 
-	APROVAL("lecmApprovalWorkflow"),
+	APPROVAL("lecmApprovalWorkflow"),
 	SIGNING("lecmSign"),
 	RESERVATION("regnumReservation"),
 	REVIEW("lecmReview");

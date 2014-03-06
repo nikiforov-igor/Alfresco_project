@@ -1402,7 +1402,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return statemachineId != null && getExecution((String) statemachineId) == null;
     }
 
-    private void sendSignal(String executionId) {
+	@Override
+    public void sendSignal(String executionId) {
         RuntimeService runtimeService = activitiProcessEngineConfiguration.getRuntimeService();
         Object executionObject = runtimeService.createExecutionQuery().executionId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
         if (executionObject != null) {

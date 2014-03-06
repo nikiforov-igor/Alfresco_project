@@ -20,6 +20,7 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
+import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineEventCategory;
@@ -34,12 +35,15 @@ import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
  *
  * @author vmalygin
  */
-public abstract class AbstractWorkflowRunner implements WorkflowRunner {
+public abstract class AbstractWorkflowRunner implements WorkflowRunner, InitializingBean {
+
+	protected final static String ACTIVITI_PREFIX = "activiti$";
 
 	protected NodeService nodeService;
 	protected WorkflowService workflowService;
 	protected OrgstructureBean orgstructureBean;
 	protected AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration;
+	protected RuntimeService runtimeService;
 	protected StateMachineServiceBean stateMachineService;
 	protected BusinessJournalService businessJournalService;
 	protected RouteService routeService;
@@ -93,6 +97,11 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 		this.inputVariables = inputVariables;
 	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		this.runtimeService = alfrescoProcessEngineConfiguration.getRuntimeService();
+	}
+
 	protected void checkMandatoryVariables(final Map<String, Object> variables) {
 		for (String inputVariable : inputVariables) {
 			ParameterCheck.mandatoryString(inputVariable, (String)variables.get(inputVariable));
@@ -119,7 +128,7 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 
 	protected WorkflowDefinition getWorkflowDefinition(final Map<String, Object> variables) {
 		String workflowDefinition = WorkflowVariablesHelper.getWorkflowDefinition(variables);
-		WorkflowDefinition definition = workflowService.getDefinitionByName(workflowDefinition);
+		WorkflowDefinition definition = workflowService.getDefinitionByName(ACTIVITI_PREFIX + workflowDefinition);
 		if (definition == null) {
 			String msg = String.format("No workflow definition found for %s", workflowDefinition);
 			throw new IllegalArgumentException(msg);
@@ -130,15 +139,15 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner {
 	protected WorkflowInstance startWorkflow(final WorkflowDefinition workflowDefinition, final Map<QName, Serializable> properties) {
 		WorkflowPath path = workflowService.startWorkflow(workflowDefinition.getId(), properties);
 		WorkflowInstance instance = path.getInstance();
+
 		WorkflowTask startTask = workflowService.getStartTask(instance.getId());
 		workflowService.endTask(startTask.getId(), null);
 		return instance;
 	}
 
 	protected void setInputVariables(final String executionId, final Map<String, Object> variables) {
-		RuntimeService runtimeService = alfrescoProcessEngineConfiguration.getRuntimeService();
 		for (Entry<String, Object> var : variables.entrySet()) {
-			runtimeService.setVariable(executionId, var.getKey(), var.getValue());
+			runtimeService.setVariable(executionId.replace(ACTIVITI_PREFIX, ""), var.getKey(), var.getValue());
 		}
 	}
 

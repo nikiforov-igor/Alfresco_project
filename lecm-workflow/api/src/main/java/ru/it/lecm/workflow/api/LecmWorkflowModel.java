@@ -123,6 +123,16 @@ public final class LecmWorkflowModel {
 	 */
 	public final static QName ASSOC_WORKFLOW_ASSIGNEES_LIST = QName.createQName(WORKFLOW_NAMESPACE, "assigneesListAssoc");
 
+	/**
+	 * &lt;aspect name="lecm-workflow:workflow-concurrency-aspect"&gt;
+	 */
+	public final static QName ASPECT_WORKFLOW_CONCURRENCY = QName.createQName(WORKFLOW_NAMESPACE, "workflow-concurrency-aspect");
+
+	/**
+	 * &lt;property name="lecm-workflow:workflowConcurrency"&gt;
+	 */
+	public final static QName PROP_WORKFLOW_CONCURRENCY = QName.createQName(WORKFLOW_NAMESPACE, "workflowConcurrency");
+
 	private LecmWorkflowModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of LecmWorkflowModel class.");
 	}

@@ -45,7 +45,7 @@
 					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true"/>
 					<field id="lecm-workflow:fake-workflow-list-approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
 							<control-param name="showComputeTermsButton">false</control-param>
@@ -55,7 +55,7 @@
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
 							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->
@@ -89,7 +89,7 @@
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
 							<control-param name="showComputeTermsButton">false</control-param>
@@ -99,7 +99,7 @@
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
 							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->
@@ -120,7 +120,7 @@
 				<appearance>
 					<field id="lecm-workflow:fake-workflow-list-approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
 							<control-param name="showListSelectMenu">false</control-param>
 							<control-param name="showComputeTermsButton">false</control-param>
@@ -130,7 +130,7 @@
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
-							<control-param name="concurrencyInputName"></control-param>
+							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
 							<control-param name="workflowType">SIGNING</control-param><!-- APPROVAL | SIGNING | REVIEW -->
 							<control-param name="concurrency">SEQUENTIAL</control-param><!-- PARALLEL | SEQUENTIAL -->

@@ -72,7 +72,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	 * @param assigneesList список сотрудников, ака согласущие лица
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех
 	 * item-ов workflow
-	 * @param approvalType тип согласования: APPROVAL, SEQUENTIAL, CUSTOM
+	 * @param approvalType тип согласования: 
 	 * @param documentAttachmentCategoryName название категории вложений, в
 	 * которой хранится файл документа
 	 * @return ссылку на новый лист согласования

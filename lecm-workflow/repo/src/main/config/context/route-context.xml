@@ -22,7 +22,7 @@
 		<value>workflowRole</value>
 		<value>commentFileAttachmentCategoryName</value>
 	</util:list>
-	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APROVAL"/>
+	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APPROVAL"/>
 	<bean id="approval.workflowRunner" parent="abstract.workflowRunner"
 		  class="ru.it.lecm.workflow.beans.ApprovalWorkflowRunner"
 		  p:inputVariables-ref="approval.inputVariables"

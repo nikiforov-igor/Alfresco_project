@@ -16,6 +16,7 @@ import ru.it.lecm.workflow.WorkflowType;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowRunner;
 import ru.it.lecm.workflow.api.WorkflowRunnerService;
+import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
 
 /**
  *
@@ -61,10 +62,10 @@ public class RouteWorkflowJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-	public void startWorkflow(final Map<String, Object> variables) {
-		String workflowDefinition  = (String)variables.get("workflowDefinition");
+	public String startWorkflow(final Map<String, Object> variables) {
+		String workflowDefinition = WorkflowVariablesHelper.getWorkflowDefinition(variables);
 		WorkflowType workflowType = WorkflowType.getById(workflowDefinition);
 		WorkflowRunner workflowRunner = workflowRunnerService.getWorkflowRunner(workflowType);
-		String workflowInstanceId = workflowRunner.run(variables);
+		return workflowRunner.run(variables);
 	}
 }
