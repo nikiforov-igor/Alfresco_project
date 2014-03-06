@@ -317,13 +317,21 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_PROPERTY)) {
                 propName = xmlr.getAttributeValue("", ExportNamespace.ATTR_NAME);
                 xmlr.next();
-                if (XMLStreamConstants.CHARACTERS == xmlr.getEventType()
+	            value = null;
+                while (XMLStreamConstants.CHARACTERS == xmlr.getEventType()
                         || XMLStreamConstants.CDATA == xmlr.getEventType()) {
-                    value = xmlr.getText();
-                    properties.put(QName.createQName(propName, namespaceService), value);
-                    xmlr.nextTag();
+                    String str = xmlr.getText();
+	                if (value == null) {
+		                value = str;
+	                } else {
+		                value += str;
+	                }
+                    xmlr.next();
                 }
-                xmlr.nextTag();//пропускаем закрывающий тэг
+	            if (value != null) {
+	                properties.put(QName.createQName(propName, namespaceService), value.trim());
+	            }
+	            xmlr.nextTag();//пропускаем закрывающий тэг
             }
             return properties;
         }
