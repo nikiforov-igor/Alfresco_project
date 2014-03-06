@@ -157,7 +157,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     armNode: null,
                     bubblingLabel: "documents-arm"
                 });
-                YAHOO.Bubbling.fire ("armTreeNodeSelect", {
+                YAHOO.Bubbling.fire ("updateArmFilters", {
                     currentNode: null
                 });
             }
@@ -314,7 +314,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            createTypes: node.data.createTypes
 	            });
 
-                YAHOO.Bubbling.fire ("armTreeNodeSelect", {
+                YAHOO.Bubbling.fire ("updateArmFilters", {
                     currentNode: node,
 	                isReportNode: isReportNode
                 });

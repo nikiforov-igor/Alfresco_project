@@ -25,18 +25,10 @@ function main() {
                 }
             }
 
-            var fValues = filter.values.split(",");
-            var valuesArr = [];
-            for (var value in fValues) {
-                var vArray = fValues[value].split("|");
-                var v = {
-                    code: vArray[0],
-                    title: vArray[1],
-                    checked: (filter.curValue != null && existInArray(vArray[0].replace(/^\s+/, ''), filter.curValue))
-                };
-                valuesArr.push(v);
+            for (var i in filter.values) {
+                filter.values[i].checked =  (filter.curValue != null && existInArray(filter.values[i].code.replace(/^\s+/, ''), filter.curValue));
             }
-            filter.values = valuesArr;
+
             filtersArray.push(filter);
         }
         model.filters = filtersArray;

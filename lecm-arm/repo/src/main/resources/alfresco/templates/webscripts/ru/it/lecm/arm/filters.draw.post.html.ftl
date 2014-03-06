@@ -23,7 +23,7 @@
                                             name="${item.code}"
                                             value="${fValue.code}"
                                             <#if fValue.checked>checked</#if>>
-                                        <label title="${fValue.title}">${fValue.title}</label>
+                                        <label title="${fValue.name}">${fValue.name}</label>
                                     </div>
                                 </#list>
                             </#if>

@@ -21,13 +21,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
 
-        this.deferredListPopulation = new Alfresco.util.Deferred(["armTreeNodeSelect", "onReady"],
+        this.deferredListPopulation = new Alfresco.util.Deferred(["updateArmFilters", "onReady"],
             {
                 fn: this.updateCurrentFiltersForm,
                 scope: this
             });
 
-        YAHOO.Bubbling.on("armTreeNodeSelect", this.onUpdateAvaiableFilters, this);
+        YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
         YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
         return this;
     };
@@ -91,12 +91,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             var filter = filters[i];
                             this.avaiableFilters.push(filter);
                         }
-
                     } else {
                         this.avaiableFilters = [];
                     }
                 }
-                this.deferredListPopulation.fulfil("armTreeNodeSelect");
+                this.deferredListPopulation.fulfil("updateArmFilters");
             },
 
             onUpdateCurrentFilters: function (layer, args) {
@@ -158,9 +157,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                         query: oResponse.json.query
                                     }
                                 });
-                                YAHOO.Bubbling.fire ("updateNodeCounters", {
-                                    filterQuery: oResponse.json.query
-                                });
                                 context.currentQuery = oResponse.json.query;
                             }
                         }
@@ -172,9 +168,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 filterMeta: {
                                     query: ""
                                 }
-                            });
-                            YAHOO.Bubbling.fire ("updateNodeCounters", {
-                                filterQuery: ""
                             });
                         }
                     },
@@ -190,10 +183,23 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (currentFiltersConteiner != null) {
                         var filtersHTML = "";
                         for (var i = 0; i < this.currentFilters.length; i++) {
-                            filtersHTML += "<span class='arm-filter-item'>";
-                            filtersHTML += this.currentFilters[i].name;
-                            filtersHTML += this.getRemoveFilterButton(this.currentFilters[i]);
-                            filtersHTML += "</span>";
+                            var curFilter =  this.currentFilters[i];
+                            if (YAHOO.lang.isArray(curFilter.curValue)) {
+                                for (var j = 0; j < curFilter.curValue.length; j++) {
+                                    var valueTitle = this._findFilterValueTitle(curFilter.curValue[j], curFilter.values);
+                                    if (valueTitle != null) {
+                                        filtersHTML += "<span class='arm-filter-item'>";
+                                        filtersHTML += valueTitle;
+                                        filtersHTML += this.getRemoveFilterButton(curFilter, curFilter.curValue[j]);
+                                        filtersHTML += "</span>";
+                                    }
+                                }
+                            } else {
+                                filtersHTML += "<span class='arm-filter-item'>";
+                                filtersHTML += this._findFilterValueTitle(curFilter.curValue, curFilter.values);
+                                filtersHTML += this.getRemoveFilterButton(curFilter, curFilter.curValue);
+                                filtersHTML += "</span>";
+                            }
                         }
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
@@ -206,18 +212,35 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             _buildFiltersJSON: function() {
                 return YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : [])
             },
-            
-            getRemoveFilterButton: function (filter) {
+
+            _findFilterValueTitle: function(code, valuesList) {
+                for (var i = 0; i < valuesList.length; i++) {
+                    if (valuesList[i].code == code) {
+                        return valuesList[i].name;
+                    }
+                }
+                return null;
+            },
+
+            getRemoveFilterButton: function (filter, valueToDelete) {
                 var id = Dom.generateId();
                 var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
                 YAHOO.util.Event.onAvailable(id, function (filter) {
-                    YAHOO.util.Event.on(id, 'click', this.deleteFilter, filter, this);
+                    YAHOO.util.Event.on(id, 'click', this.deleteFilter, {
+                        filter: filter,
+                        value:valueToDelete
+                    }, this);
                 }, filter, this);
                 return result;
             },
 
-            deleteFilter: function (e, filter) {
-                this.currentFilters.splice(this.currentFilters.indexOf(filter), 1);
+            deleteFilter: function (e, filterObj) {
+                if (YAHOO.lang.isArray(filterObj.filter.curValue)) {
+                    var filterIndex = this.currentFilters.indexOf(filterObj.filter);
+                    this.currentFilters[filterIndex].curValue.splice(this.currentFilters[filterIndex].curValue.indexOf(filterObj.value), 1)
+                } else {
+                    this.currentFilters.splice(this.currentFilters.indexOf(filterObj.filter), 1);
+                }
                 this.updateCurrentFiltersForm(true);
             },
 

@@ -16,7 +16,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.splashScreen = null;
         this.avaiableFilters = [];
 
-	    YAHOO.Bubbling.on("armTreeNodeSelect", this.onToolbarUpdate, this);
+	    YAHOO.Bubbling.on("updateArmFilters", this.onToolbarUpdate, this);
 	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
@@ -33,76 +33,34 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	        doubleClickLock: false,
 
             avaiableFilters:[],
-            isNeedUpdate: false,
             currentType: null,
 
-//            _renderFilters: function (filters, updateHtml) {
-//	            var filterDialog = Dom.get(this.id + "-filters-dialog");
-//	            if (filterDialog != null) {
-//	                if (!updateHtml) {
-//		                Dom.setStyle(filterDialog, "visibility", "visible");
-//	                } else {
-//	                    var toolbar = this;
-//		                var me = this;
-//	                    Alfresco.util.Ajax.jsonRequest({
-//	                        method: "POST",
-//	                        url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
-//	                        dataObj: {
-//	                            htmlId: Alfresco.util.generateDomId(),
-//	                            filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
-//	                        },
-//	                        successCallback: {
-//	                            fn: function (oResponse) {
-//		                            var filterContainer = Dom.get(me.id + "-filters-dialog-content");
-//		                            if (filterContainer != null) {
-//		                                filterContainer.innerHTML = oResponse.serverResponse.responseText;
-//		                            }
-//	                                toolbar.isNeedUpdate = false;
-//		                            Dom.setStyle(filterDialog, "visibility", "visible");
-//	                            }
-//	                        },
-//	                        failureCallback: {
-//	                            fn: function () {
-//	                            }
-//	                        },
-//	                        scope: this,
-//	                        execScripts: true
-//	                    });
-//	                }
-//	            }
-//            },
-
-		    _renderFilters: function (filters, updateHtml) {
-			    if (!updateHtml) {
-				    this.filtersDialog.show();
-			    } else {
-				    var filtersDiv = Dom.get(this.id + "-filters-dialog-content");
-				    var toolbar = this;
-				    Alfresco.util.Ajax.jsonRequest({
-					    method: "POST",
-					    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
-					    dataObj: {
-						    htmlId: Alfresco.util.generateDomId(),
-						    filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
-					    },
-					    successCallback: {
-						    fn: function (oResponse) {
-							    filtersDiv.innerHTML = oResponse.serverResponse.responseText;
-							    toolbar.isNeedUpdate = false;
-							    if (toolbar.filtersDialog != null) {
-								    toolbar.filtersDialog.show();
-							    }
-						    }
-					    },
-					    failureCallback: {
-						    fn: function () {
-						    }
-					    },
-					    scope: this,
-					    execScripts: true
-				    });
-			    }
-		    },
+            _renderFilters: function (filters) {
+                var filtersDiv = Dom.get(this.id + "-filters-dialog-content");
+                var toolbar = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
+                    dataObj: {
+                        htmlId: Alfresco.util.generateDomId(),
+                        filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            filtersDiv.innerHTML = oResponse.serverResponse.responseText;
+                            if (toolbar.filtersDialog != null) {
+                                toolbar.filtersDialog.show();
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            },
 
 		    _drawFiltersPanel: function () {
 			    // создаем диалог
@@ -120,7 +78,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		    },
 
             onFiltersClick: function () {
-                this._renderFilters(this.avaiableFilters, this.isNeedUpdate);
+                this._renderFilters(this.avaiableFilters);
             },
 
             onApplyFilterClick: function () {
@@ -185,7 +143,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
                 var menu = button.getMenu();
                 var datagridItems = this.modules.dataGrid.getSelectedItems();
-                var items = []
+                var items = [];
                 for (var i in datagridItems) {
                     items.push(datagridItems[i].nodeRef);
                 }
@@ -404,15 +362,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (currentNode !== null) {
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
-	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
 
+	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
 	                this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isReportNode);
+
 	                var searchInput = Dom.get(this.id + "-full-text-search");
 	                if (args[1].isReportNode) {
 		                searchInput.setAttribute("disabled", true);
 	                } else {
 		                searchInput.removeAttribute("disabled");
 	                }
+
 	                if (this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
 		                Dom.get(this.id + "-full-text-search").value = "";
 		                YAHOO.Bubbling.fire("hideFilteredLabel");
@@ -425,8 +385,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             var filter = filters[i];
                             this.avaiableFilters.push(filter);
                         }
-
-                        this.isNeedUpdate = true;
                     }
 
 	                var types = [];
@@ -460,7 +418,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             if ((name.length > 2) && (name.substring(name.length - 2) == '[]')) {
                                 name = name.substring(0, name.length - 2);
                                 if (formData[name] === undefined) {
-                                    formData[name] = new Array();
+                                    formData[name] = [];
                                 }
                                 formData[name].push(value);
                             }
@@ -483,7 +441,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                     for (var j = 0, jj = element.options.length; j < jj; j++) {
                                         if (element.options[j].selected) {
                                             if (formData[name] == undefined) {
-                                                formData[name] = new Array();
+                                                formData[name] = [];
                                             }
                                             formData[name].push(element.options[j].value);
                                         }

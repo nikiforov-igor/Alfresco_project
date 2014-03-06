@@ -1,5 +1,7 @@
 package ru.it.lecm.arm.beans;
 
+import java.util.List;
+
 /**
  * User: DBashmakov
  * Date: 17.02.14
@@ -11,7 +13,7 @@ public class ArmFilter {
     private boolean multipleSelect;
     private String query;
     private String filterClass;
-    private String values;
+    private List<ArmFilterValue> values;
 
     public String getTitle() {
         return title;
@@ -53,11 +55,11 @@ public class ArmFilter {
         this.filterClass = filterClass;
     }
 
-    public String getValues() {
+    public List<ArmFilterValue> getValues() {
         return values;
     }
 
-    public void setValues(String values) {
+    public void setValues(List<ArmFilterValue> values) {
         this.values = values;
     }
 

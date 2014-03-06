@@ -179,7 +179,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     filter.setMultipleSelect((Boolean) multipleValue);
                 }
 
-                filter.setValues((String) nodeService.getProperty(ref, PROP_FILTER_VALUES));
+                List<ArmFilterValue> valueList = new ArrayList<ArmFilterValue>();
+                String valuesStr = (String) nodeService.getProperty(ref, PROP_FILTER_VALUES);
+                if (!valuesStr.isEmpty())  {
+                    String[] valuesArray = valuesStr.split(",");
+
+                    for(String value :valuesArray){
+                        if (!value.trim().isEmpty()) {
+                            String[] v = value.trim().split("\\|");
+                            if (v.length >= 2) {
+                                valueList.add(new ArmFilterValue(v[1],v[0]));
+                            }
+                        }
+                    }
+                }
+
+                filter.setValues(valueList);
 
                 Object query = nodeService.getProperty(ref, PROP_FILTER_QUERY);
                 if (query != null) {
