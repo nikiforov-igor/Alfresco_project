@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-ord-table-structure:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Пункты ОРД</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/lecm/ORD/table-structure/1.0" prefix="lecm-ord-table-structure"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-ord-table-structure:item">
+            <title>Пункт ОРД</title>
+            <parent>lecm-document:tableDataRow</parent>
+
+            <properties>
+                <!-- Срок исполнения -->
+                <property name="lecm-ord-table-structure:execution-date">
+                    <type>d:date</type>
+                    <mandatory>true</mandatory>
+                </property>
+                <!-- содержание - textarea-->
+                <property name="lecm-ord-table-structure:item-content">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- примечание - textarea-->
+                <property name="lecm-ord-table-structure:item-comment">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Фактическая дата исполнения -->
+                <property name="lecm-ord-table-structure:execution-date-real">
+                    <type>d:date</type>
+                    <mandatory>false</mandatory>
+                </property> 
+                
+                <!--служебные--> 
+                <property name="lecm-ord-table-structure:item-status-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-ord-table-structure:executor-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+
+            <associations>
+                <!-- Статус -->
+                <association name="lecm-ord-table-structure:item-status-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-dic:plane_dictionary_values</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                
+                
+                <!-- Исполнитель -->
+                <association name="lecm-ord-table-structure:executor-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                
+                
+            </associations>
+        </type>
+     
+     
+        <type name="lecm-ord-table-structure:itemsTable">
+            <title>Таблица пунктов ОРД</title>
+            <parent>lecm-document:tableData</parent>
+            <overrides>
+                <property name="lecm-document:tableDataRowType">
+                    <default>lecm-ord-table-structure:item</default>
+                </property>
+                
+                <property name="lecm-document:pageSize">
+                    <default>5</default>
+                </property>
+            </overrides>
+        </type>
+    </types>
+    
+    <aspects>
+        <aspect name="lecm-ord-table-structure:table-items-aspect">
+            <title>Table structure aspect</title>
+            <parent>lecm-document:tableDataAspect</parent>
+            <properties>
+                <property name="lecm-ord-table-structure:items-assoc-text-content">
+                    <type>d:text</type>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-ord-table-structure:items-assoc">
+                    <source>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </source>
+                    <target>
+                        <class>lecm-ord-table-structure:itemsTable</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+    </aspects>
+
+</model>
+

@@ -8,14 +8,17 @@
 
     <util:list id="ord.models">
 		<value>alfresco/module/${artifactId}/models/lecm-ord-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-ord-table-model.xml</value>
 	</util:list>
 
     <util:list id="ord.models.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-ord-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-ord-table-model</value>
 	</util:list>
 
     <util:list id="ord.dictionaries">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-type.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-item-status.xml</value>
 	</util:list>
     <util:list id="ord.dictionaries.items">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-regnumbers-items.xml</value>

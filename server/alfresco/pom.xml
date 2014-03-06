@@ -382,6 +382,13 @@
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.nd</groupId>
+            <artifactId>nd-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
         <!--<dependency>
             <groupId>ru.it.lecm.licensing</groupId>
             <artifactId>licensing-repo</artifactId>

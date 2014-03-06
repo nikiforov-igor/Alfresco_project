@@ -119,6 +119,7 @@
 		<module>lecm-internal</module>
 		<module>lecm-group-actions</module>
 		<module>lecm-ord</module>
+		<module>lecm-nd</module>
 		<!--<module>lecm-licensing</module>-->
 	</modules>
 	<scm>
