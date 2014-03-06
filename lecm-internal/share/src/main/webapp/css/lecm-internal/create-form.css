@@ -1,5 +1,10 @@
-.yui-skin-lecmTheme .yui-panel div.form-field > label, .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label {
+.yui-skin-lecmTheme .yui-panel div.form-field > label, .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label,
+div.metadata-form div.form-field span.viewmode-label {
 	width: auto !important;
+}
+
+div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode-value {
+	width: 100% !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
@@ -36,7 +41,7 @@
 }
 
 .yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder .current-values {
-	width: 95% !important;
+	width: 94% !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
@@ -48,7 +53,7 @@
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.current-values {
-	width: 90% !important;
+	width: 88% !important;
 }
 
 .uploader-block {
@@ -56,9 +61,23 @@
 }
 
 .attachments-list {
-	width: 78% !important;
+	width: 76% !important;
+}
+
+div.metadata-form ul.attachments-list {
+	width: 100% !important;
 }
 
 div.form-field.dnd-uploader label {
 	padding-right: 210px !important;
+}
+
+div.yui-gb div.yui-u {
+	width: 31% !important;
+	margin-left: 2% !important;
+}
+
+div.yui-gb div.yui-u.first {
+	margin-left: 0 !important;
+	margin-right: 0px !important;
 }
