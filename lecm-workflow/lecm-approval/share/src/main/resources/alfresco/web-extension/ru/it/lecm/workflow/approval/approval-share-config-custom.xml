@@ -125,6 +125,12 @@
 					</field>
 				</appearance>
 			</form>
+			<form>
+				<field-visibility>
+					<hide id="packageItems"/>
+					<hide id="lecm-workflow:assigneesListAssoc"/>
+				</field-visibility>
+			</form>
 		</forms>
 	</config>
 
