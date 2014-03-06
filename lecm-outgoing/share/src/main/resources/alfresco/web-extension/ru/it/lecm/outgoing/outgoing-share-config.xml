@@ -2,8 +2,8 @@
 	<config>
 		<forms>
 			<dependencies>
-                <css src="/css/lecm-base/base-styles.css" />
-                <css src="/css/font-awesome.css" />
+				<css src="/css/lecm-base/base-styles.css" />
+				<css src="/css/font-awesome.css" />
 			</dependencies>
 		</forms>
 	</config>
@@ -225,7 +225,7 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
 							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
 							<control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-							<control-param name="itemType">lecm-document:base</control-param>
+							<control-param name="itemType">lecm-incoming:document</control-param>
 						</control>
 					</field>
 
