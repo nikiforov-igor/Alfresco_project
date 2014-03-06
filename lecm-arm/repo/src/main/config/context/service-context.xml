@@ -18,7 +18,17 @@
 		</property>
 	</bean>
 
-	<bean id="arm.filters.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap, armService">
+	<bean id="arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap, armService">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/dictionary/lecm-arm.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="arm.filters.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+	      depends-on="arm.LogicEcmModelsBootstrap, armService, arm.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
 		<property name="createOrUpdateDictionaries">
 			<list>
@@ -27,8 +37,9 @@
 		</property>
 	</bean>
 
-	<bean id="arm.LogicEcmConnectionTypesBootstrap" parent="lecmDictionaryBootstrap" depends-on="arm.LogicEcmModelsBootstrap, armService, arm.filters.LogicEcmConnectionTypesBootstrap">
-        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ"/>
+	<bean id="arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
 		<property name="createOrUpdateDictionaries">
 			<list>
                 <value>alfresco/module/${artifactId}/dictionary/default-arm.xml</value>
