@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="lecm-dic:Тип параметра" type="lecm-dic:dictionary" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники">
+    <item name="lecm-dic:Тип параметра" type="lecm-dic:dictionary">
         <property name="cm:name">Тип параметра</property>
         <property name="lecm-dic:attributeForShow">cm:name</property>
         <property name="lecm-dic:type">lecm-rpeditor:reportParameterType</property>
