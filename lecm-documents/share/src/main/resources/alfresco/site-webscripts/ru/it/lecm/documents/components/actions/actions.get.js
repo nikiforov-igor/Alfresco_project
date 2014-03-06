@@ -4,7 +4,7 @@
 function main() {
     AlfrescoUtil.param('nodeRef');
     var hasPerm = hasPermission(model.nodeRef, PERM_ACTION_EXEC);
-    model.hasPermission = hasPerm || hasOnlyInDraftPermission(model.nodeRef, "LECM_BASIC_PG_Initiator");
+    model.hasPermission = true; // hasPerm || hasOnlyInDraftPermission(model.nodeRef, "LECM_BASIC_PG_Initiator");
 }
 
 main();

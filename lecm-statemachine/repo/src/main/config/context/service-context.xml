@@ -174,7 +174,10 @@
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
         <property name="groupActionsService" ref="groupActionsService"/>
-	</bean>
+        <property name="authService" ref="authenticationService"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+
+    </bean>
 
     <bean id="statemachine.endWorkflowEvent"
           class="ru.it.lecm.statemachine.action.listener.EndWorkflowEvent">

@@ -110,7 +110,9 @@ LogicECM.module = LogicECM.module || {};
                         viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
                         return;
                     }
-                    if (action.type == "group") {
+                    if (action.type == "task") {
+                        parent.showTask(action.actionId, action.label);
+                    } else if (action.type == "group") {
                         parent.onGroupActions(action);
                     } else if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
                         parent.showForm(action);
@@ -265,6 +267,45 @@ LogicECM.module = LogicECM.module || {};
                             }]
                     });
             }
+        },
+
+        showTask: function(taskId, taskName) {
+            var doBeforeDialogShow = function (p_form, p_dialog) {
+                var contId = p_dialog.id + "-form-container";
+                Alfresco.util.populateHTML(
+                    [contId + "_h", taskName]
+                );
+            };
+
+            var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&formUI={formUI}&submitType={submitType}&showCancelButton=true",
+                {
+                    itemKind: "task",
+                    itemId: taskId,
+                    mode: "edit",
+                    formUI: "true",
+                    submitType: "json",
+                    showCancelButton: "true"
+                });
+
+            // Using Forms Service, so always create new instance
+            var taskDetails = new Alfresco.module.SimpleDialog(this.id + "-taskDetails");
+            taskDetails.setOptions(
+                {
+                    width:"50em",
+                    templateUrl:templateUrl,
+                    actionUrl:null,
+                    destroyOnHide:true,
+                    doBeforeDialogShow:{
+                        fn:doBeforeDialogShow,
+                        scope:this
+                    },
+                    onSuccess: {
+                        fn: function DataGrid_onActionCreate_success(response) {
+                            document.location.href = document.location.href;
+                        },
+                        scope: this
+                    }
+                }).show();
         },
 
         _createScriptForm: function _createScriptFormFunction(action) {

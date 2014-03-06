@@ -8,6 +8,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -22,6 +23,7 @@ import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
@@ -45,6 +47,8 @@ public class ActionsScript extends DeclarativeWebScript {
     private static OrgstructureBean orgstructureService;
     private static DocumentService documentService;
     private GroupActionsService groupActionsService;
+    private AuthenticationService authService;
+    private LecmPermissionService lecmPermissionService;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         ActionsScript.orgstructureService = orgstructureService;
@@ -146,101 +150,113 @@ public class ActionsScript extends DeclarativeWebScript {
         for (WorkflowPath path : paths) {
             List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
             for (WorkflowTask task : tasks) {
+                result.put("taskId", task.getId());
                 Map<QName, Serializable> properties = task.getProperties();
                 NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
-                List<ChildAssociationRef> children = nodeService.getChildAssocs(packageRef);
-                for (ChildAssociationRef child : children) {
-                    NodeRef documentRef = child.getChildRef();
-                    if (nodeService.getProperty(documentRef, StatemachineModel.PROP_STATUS) != null) {
-                        result.put("taskId", task.getId());
+                NodeRef documentRef = nodeService.getChildAssocs(packageRef).get(0).getChildRef();
 
-                        ArrayList<HashMap<String, Object>> resultStates = new ArrayList<HashMap<String, Object>>();
-                        List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
-                        for (StateMachineAction action : actions) {
-                            FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
-                            List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
-                            for (FinishStateWithTransitionAction.NextState state : states) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                    }
-                                }
+                List<WorkflowTask> activeTasks = helper.getActiveTasks(nodeRef);
+                List<WorkflowTask> userTasks = helper.getAssignedAndPooledTasks(authService.getCurrentUserName());
+                for (WorkflowTask activeTask : activeTasks) {
+                    for (WorkflowTask userTask : userTasks) {
+                        if (activeTask.getId().equals(userTask.getId())) {
+                            HashMap<String, Object> taskStruct = new HashMap<String, Object>();
+                            taskStruct.put("type", "task");
+                            taskStruct.put("actionId", userTask.getId());
+                            taskStruct.put("label", userTask.getTitle());
+                            taskStruct.put("isForm", false);
+                            actionsList.add(taskStruct);
+                        }
+                    }
+                }
 
-                                Map<String, String> variables = helper.getInputVariablesMap(statemachineId, state.getVariables().getInput());
+                if (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", documentRef, authService.getCurrentUserName())
+                    || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", documentRef, authService.getCurrentUserName()) && helper.isDraft(documentRef))) {
 
-                                if (!hideAction) {
-                                    Long count = counts.get(state.getActionId());
-                                    if (count == null) {
-                                        count = 0L;
-                                    }
-
-                                    HashMap<String, Object> resultState = new HashMap<String, Object>();
-                                    resultState.put("type", "trans");
-                                    resultState.put("actionId", state.getActionId());
-                                    resultState.put("label", state.getLabel());
-                                    resultState.put("workflowId", state.getWorkflowId());
-                                    resultState.put("errors", messages);
-                                    resultState.put("fields", fields);
-                                    resultState.put("count", count);
-                                    resultState.put("variables", variables);
-                                    resultState.put("isForm", state.isForm());
-                                    if (state.isForm()) {
-                                        resultState.put("formType", state.getFormType());
-                                        resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
-                                    }
-                                    actionsList.add(resultState);
-
+                    List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+                    for (StateMachineAction action : actions) {
+                        FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
+                        List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
+                        for (FinishStateWithTransitionAction.NextState state : states) {
+                            ArrayList<String> messages = new ArrayList<String>();
+                            HashSet<String> fields = new HashSet<String>();
+                            boolean hideAction = false;
+                            for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
+                                if (!documentService.execExpression(documentRef, condition.getExpression())) {
+                                    messages.add(condition.getErrorMessage());
+                                    fields.addAll(condition.getFields());
+                                    hideAction = hideAction || condition.isHideAction();
                                 }
                             }
-                        }
 
-                        actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
-                        for (StateMachineAction action : actions) {
-                            UserWorkflow userWorkflow = (UserWorkflow) action;
-                            List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
-                            for (UserWorkflow.UserWorkflowEntity entity : entities) {
-                                ArrayList<String> messages = new ArrayList<String>();
-                                HashSet<String> fields = new HashSet<String>();
-                                boolean hideAction = false;
-                                for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
-                                    if (!documentService.execExpression(documentRef, condition.getExpression())) {
-                                        messages.add(condition.getErrorMessage());
-                                        fields.addAll(condition.getFields());
-                                        hideAction = hideAction || condition.isHideAction();
-                                    }
+                            Map<String, String> variables = helper.getInputVariablesMap(statemachineId, state.getVariables().getInput());
+
+                            if (!hideAction) {
+                                Long count = counts.get(state.getActionId());
+                                if (count == null) {
+                                    count = 0L;
                                 }
 
-                                Map<String, String> variables = helper.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
-
-                                if (!hideAction) {
-                                    Long count = counts.get(entity.getId());
-                                    if (count == null) {
-                                        count = 0L;
-                                    }
-                                    HashMap<String, Object> workflow = new HashMap<String, Object>();
-                                    workflow.put("type", "user");
-                                    workflow.put("actionId", entity.getId());
-                                    workflow.put("label", entity.getLabel());
-                                    workflow.put("workflowId", entity.getWorkflowId());
-                                    workflow.put("errors", messages);
-                                    workflow.put("fields", fields);
-                                    workflow.put("count",count);
-                                    workflow.put("variables", variables);
-                                    workflow.put("isForm", false);
-                                    actionsList.add(workflow);
+                                HashMap<String, Object> resultState = new HashMap<String, Object>();
+                                resultState.put("type", "trans");
+                                resultState.put("actionId", state.getActionId());
+                                resultState.put("label", state.getLabel());
+                                resultState.put("workflowId", state.getWorkflowId());
+                                resultState.put("errors", messages);
+                                resultState.put("fields", fields);
+                                resultState.put("count", count);
+                                resultState.put("variables", variables);
+                                resultState.put("isForm", state.isForm());
+                                if (state.isForm()) {
+                                    resultState.put("formType", state.getFormType());
+                                    resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
                                 }
+                                actionsList.add(resultState);
+
                             }
                         }
                     }
 
+                    actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+                    for (StateMachineAction action : actions) {
+                        UserWorkflow userWorkflow = (UserWorkflow) action;
+                        List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
+                        for (UserWorkflow.UserWorkflowEntity entity : entities) {
+                            ArrayList<String> messages = new ArrayList<String>();
+                            HashSet<String> fields = new HashSet<String>();
+                            boolean hideAction = false;
+                            for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
+                                if (!documentService.execExpression(documentRef, condition.getExpression())) {
+                                    messages.add(condition.getErrorMessage());
+                                    fields.addAll(condition.getFields());
+                                    hideAction = hideAction || condition.isHideAction();
+                                }
+                            }
+
+                            Map<String, String> variables = helper.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
+
+                            if (!hideAction) {
+                                Long count = counts.get(entity.getId());
+                                if (count == null) {
+                                    count = 0L;
+                                }
+                                HashMap<String, Object> workflow = new HashMap<String, Object>();
+                                workflow.put("type", "user");
+                                workflow.put("actionId", entity.getId());
+                                workflow.put("label", entity.getLabel());
+                                workflow.put("workflowId", entity.getWorkflowId());
+                                workflow.put("errors", messages);
+                                workflow.put("fields", fields);
+                                workflow.put("count", count);
+                                workflow.put("variables", variables);
+                                workflow.put("isForm", false);
+                                actionsList.add(workflow);
+                            }
+                        }
+                    }
                     sort(actionsList);
-                    List<NodeRef> actions = groupActionsService.getActiveActions(nodeRef);
-                    for (NodeRef action : actions) {
+                    List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
+                    for (NodeRef action : groupActions) {
                         HashMap<String, Object> actionStruct = new HashMap<String, Object>();
                         actionStruct.put("type", "group");
                         actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
@@ -248,10 +264,10 @@ public class ActionsScript extends DeclarativeWebScript {
                         actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
                         actionsList.add(actionStruct);
                     }
-                    result.put("actions", actionsList);
                 }
             }
         }
+        result.put("actions", actionsList);
         return result;
     }
 
@@ -323,4 +339,11 @@ public class ActionsScript extends DeclarativeWebScript {
         return childAssocRef.getChildRef();
     }
 
+    public void setAuthService(AuthenticationService authService) {
+        this.authService = authService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 }

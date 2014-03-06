@@ -82,7 +82,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static BusinessJournalService businessJournalService;
     private static TransactionService transactionService;
     private static DocumentService documentService;
-    private LecmPermissionService lecmPermissionService;
+    private static LecmPermissionService lecmPermissionService;
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
     private static String PROP_PARENT_PROCESS_ID = "parentProcessId";
