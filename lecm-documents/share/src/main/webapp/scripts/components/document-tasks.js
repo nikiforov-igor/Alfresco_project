@@ -192,7 +192,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				doBeforeDialogShow:{
 					fn:doBeforeDialogShow,
 					scope:this
-				}
+				}, onSuccess: {
+                    fn: function DataGrid_onActionCreate_success(response) {
+                        document.location.href = document.location.href;
+                    },
+                    scope: this
+                }
 			}).show();
 	};
 })();
