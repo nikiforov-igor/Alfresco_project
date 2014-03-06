@@ -104,16 +104,12 @@
 					<show id="lecm-workflow-result:workflow-result-list-start-date"/>
 					<show id="lecm-workflow-result:workflow-result-list-complete-date"/>
 					<show id="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc"/>
-					<show id="lecm-workflow-result:printBtn"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc">
 						<control template="/ru/it/lecm/workflow/controls/result-list.ftl">
 							<control-param name="itemType">lecm-review-result:review-result-item</control-param>
 						</control>
-					</field>
-					<field id="lecm-workflow-result:printBtn">
-						<control template="/ru/it/lecm/workflow/controls/printListBtn.ftl"/>
 					</field>
 				</appearance>
 			</form>

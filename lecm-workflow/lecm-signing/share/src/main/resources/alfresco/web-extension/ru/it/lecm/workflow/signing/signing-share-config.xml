@@ -112,16 +112,12 @@
 					<show id="lecm-workflow-result:workflow-result-list-complete-date"/>
 					<show id="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc"/>
 					<show id="lecmSignResult:signResultListDecision"/>
-					<show id="lecmSignResult:printBtn"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc">
 						<control template="/ru/it/lecm/workflow/controls/result-list.ftl">
 							<control-param name="itemType">lecmSignResult:signResultItem</control-param>
 						</control>
-					</field>
-					<field id="lecmSignResult:printBtn">
-						<control template="/ru/it/lecm/workflow/controls/printListBtn.ftl"/>
 					</field>
 				</appearance>
 			</form>
