@@ -292,7 +292,7 @@ public class LecmBaseUtilsServiceImpl extends BaseBean implements LecmBaseUtilsS
 		saveInFile(LECM_SIGNATURE_FILE_NAME, sigBytes);
 	}
 
-	private void saveInFile(String LECM_PRIVKEY_FILE_NAME, byte[] encoded) {
+	private void saveInFile(String fileName, byte[] encoded) {
 		//saving
 	}
 }
