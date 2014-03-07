@@ -36,16 +36,16 @@
 		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"
 		  depends-on="outgoing.model.bootstrap"/>
 
-    <bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
-        <property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
-        <property name="createOrUpdateDictionaries">
-            <list>
-                <value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
-                <value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
-                <value>alfresco/module/${artifactId}/actions/send.xml</value>
-            </list>
-        </property>
-    </bean>
+	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
+		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
+		<property name="createOrUpdateDictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
+				<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
+				<value>alfresco/module/${artifactId}/actions/send.xml</value>
+			</list>
+		</property>
+	</bean>
 
 	<util:list id="outgoing.copySettings.propsToCopy">
 		<value>lecm-document:title</value>
@@ -76,5 +76,14 @@
 
 	<bean id="outgoing.copySettings.bean" parent="documentCopySettingsBean"
 		  p:settings-ref="outgoing.copySettings.bean.settings" />
+
+	<util:list id="outgoing.taggedCounterRegistrator.tags">
+		<value>project</value>
+	</util:list>
+	<bean id="outgoing.taggedCounterRegistrator"
+		  parent="regNumbersTaggedCounterRegistrator"
+		  depends-on="outgoing.model.bootstrap"
+		  p:documentType="lecm-outgoing:document"
+		  p:tags-ref="outgoing.taggedCounterRegistrator.tags"/>
 
 </beans>

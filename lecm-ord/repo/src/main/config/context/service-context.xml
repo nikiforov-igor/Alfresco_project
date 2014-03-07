@@ -45,4 +45,13 @@
 		  p:statemachineName="lecm-ord:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-ord-statemachine-default.xml"/>
 
+	<util:list id="ord.taggedCounterRegistrator.tags">
+		<value>project</value>
+	</util:list>
+	<bean id="ord.taggedCounterRegistrator"
+		  parent="regNumbersTaggedCounterRegistrator"
+		  depends-on="outgoing.model.bootstrap"
+		  p:documentType="lecm-ord:document"
+		  p:tags-ref="ord.taggedCounterRegistrator.tags"/>
+
 </beans>
