@@ -34,7 +34,9 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 				destination: null,
 
-                singleValue: false
+                singleValue: false,
+
+				mandatory:false
 			},
 
 			onReady: function () {
@@ -117,6 +119,10 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 			updateFormFields: function() {
 				Dom.get(this.id).value = this.getSelectedItems().toString();
+
+				if (this.options.mandatory) {
+					YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+				}
 			},
 
 			getSelectedItems:function AssociationTreeViewer_getSelectedItems() {

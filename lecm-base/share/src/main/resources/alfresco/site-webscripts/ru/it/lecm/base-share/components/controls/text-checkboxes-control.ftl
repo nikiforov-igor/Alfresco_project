@@ -20,6 +20,11 @@
                 <#if field.control.params.singleValue??>
                     singleValue: ${field.control.params.singleValue},
                 </#if>
+				<#if field.mandatory??>
+					mandatory: ${field.mandatory?string},
+				<#elseif field.endpointMandatory??>
+					mandatory: ${field.endpointMandatory?string},
+				</#if>
 				itemId: "${form.arguments.itemId}",
 				<#if form.destination??>
 					destination: "${form.destination}",
