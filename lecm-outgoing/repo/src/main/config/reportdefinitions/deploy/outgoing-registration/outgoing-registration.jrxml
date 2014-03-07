@@ -14,7 +14,7 @@
 		<defaultValueExpression><![CDATA["ds-outgoing-registration.xml"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["reportdefinitions/deploy/outgoing-registration"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/outgoing-registration/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["TYPE:\"lecm-outgoing:document\""]]></defaultValueExpression>
