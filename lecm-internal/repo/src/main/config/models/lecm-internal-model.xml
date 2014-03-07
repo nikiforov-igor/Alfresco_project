@@ -74,18 +74,8 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <property name="lecm-internal:content">
-                    <title>Содержание</title>
-                    <type>d:text</type>
-                    <mandatory>true</mandatory>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-internal:execution-date">
-                    <title>Срок исполнения</title>
+                <property name="lecm-internal:response-date">
+                    <title>Срок ответа</title>
                     <type>d:date</type>
                 </property>
             </properties>
@@ -102,6 +92,19 @@
                         <many>false</many>
                     </target>
                 </association>
+	            <!-- Получатель -->
+	            <association name="lecm-internal:recipient-assoc">
+		            <title>Получатель</title>
+		            <source>
+			            <mandatory>false</mandatory>
+			            <many>true</many>
+		            </source>
+		            <target>
+			            <class>lecm-orgstr:employee</class>
+			            <mandatory>false</mandatory>
+			            <many>false</many>
+		            </target>
+	            </association>
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
