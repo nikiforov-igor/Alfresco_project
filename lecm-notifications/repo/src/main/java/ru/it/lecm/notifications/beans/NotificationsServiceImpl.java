@@ -18,15 +18,15 @@ import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.delegation.IDelegation;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import static ru.it.lecm.base.beans.BaseBean.IS_ACTIVE;
+
 import static ru.it.lecm.orgstructure.beans.OrgstructureBean.TYPE_EMPLOYEE;
 
 /**
@@ -254,23 +254,28 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	 * @return Множество атомарных уведомлений
 	 */
 	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
+        long start = System.currentTimeMillis();
+        logger.warn("createAtomicNotifications start: {}", start);
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 		if (generalizedNotification != null) {
 			Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
 			if (generalizedNotification.getRecipientEmployeeRefs() != null) {
 				employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
+                logger.warn("Recipients added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
 				for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
 					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
 				}
+                logger.warn("Units added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
 				for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
 					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
 				}
+                logger.warn("Groups added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientPositionRefs() != null) {
@@ -279,12 +284,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 						employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
 					}
 				}
+                logger.warn("Positions added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
 				for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
 					employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
 				}
+                logger.warn("Roles added. Current size: {}", employeeRefs.size());
 			}
 
                         //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
@@ -319,8 +326,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                                 }
                             }
                         }
-
+            logger.warn("Delegates added. Current size: {}", employeeRefs.size());
 			result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
+            logger.warn("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
 		}
 		return result;
 	}
