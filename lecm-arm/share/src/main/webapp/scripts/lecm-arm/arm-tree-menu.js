@@ -239,7 +239,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 },
                 failure: function (oResponse) {
-                    alert(oResponse);
+	                Alfresco.util.PopupManager.displayMessage(
+		                {
+			                text:otree.msg("message.arm.load.failure")
+		                });
 
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
@@ -249,7 +252,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     node: node,
                     fnLoadComplete: fnLoadComplete
                 },
-                timeout: 20000
+                timeout: 60000
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },
