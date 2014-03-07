@@ -12,10 +12,10 @@
 	})();
 	//]]></script>
 
-	<div class="preview-select">
+	<div class="preview-select document-preview">
 		<select id="${fieldHtmlId}-attachment-select"></select>
 	</div>
-	<div id="${fieldHtmlId}-preview-container"></div>
+	<div id="${fieldHtmlId}-preview-container" class="document-preview"></div>
 
 	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
 </div>

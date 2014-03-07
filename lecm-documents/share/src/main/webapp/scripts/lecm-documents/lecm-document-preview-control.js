@@ -135,6 +135,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 									var container = Dom.get(this.id + "-preview-container-previewer-div");
 
 									container.innerHTML = "";
+                                    preview.setAttribute("style", "");
 									container.appendChild(preview);
 								}, {}, this);
 							},
