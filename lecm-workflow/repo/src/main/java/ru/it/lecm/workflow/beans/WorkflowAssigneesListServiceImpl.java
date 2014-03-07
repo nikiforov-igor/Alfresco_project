@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -550,8 +551,11 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole) {
+		final List<NodeRef> actualizedAssigneesList = new ArrayList<NodeRef>();
 		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
+		Set<NodeRef> seenEmployees = new HashSet<NodeRef>();
 		for (NodeRef assignee : assigneesList) {
+			NodeRef seenEmployee;
 			NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
 			boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
@@ -567,21 +571,42 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 					}
 				}
 				if (effectiveEmployee != null) {
+					// задач сотруднику не назначалось. работаем дальше
 					nodeService.removeAssociation(assignee, employee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
 					nodeService.createAssociation(assignee, effectiveEmployee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
 					String userName = orgstructureService.getEmployeeLogin(effectiveEmployee);
 					if (StringUtils.isNotEmpty(userName)) {
 						nodeService.setProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
 					}
+					// запомним, что уже видели его
+					seenEmployee = effectiveEmployee;
+				} else {
+					// не отделегировалось. работаем, как будто ничего не произошло
+					seenEmployee = employee;
 				}
+			} else {
+				seenEmployee = employee;
+			}
+
+			// этому сотруднику уже назначалась задача?
+			if (seenEmployees.contains(seenEmployee)) {
+				// удалить участника совсем
+				nodeService.addAspect(assignee, ContentModel.ASPECT_TEMPORARY, null);
+				nodeService.deleteNode(assignee);
+			} else {
+			// задач сотруднику не назначалось. работаем дальше
+				// добавим в новый список участников
+				actualizedAssigneesList.add(assignee);
+				// запомним, что уже видели его
+				seenEmployees.add(seenEmployee);
 			}
 		}
-		return assigneesList;
+		return actualizedAssigneesList;
 	}
 
 	@Override
 	public int getAssigneesListItemDaysToComplete(final NodeRef assigneesItemRef) {
-		Integer daysToComplete = (Integer)nodeService.getProperty(assigneesItemRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
+		Integer daysToComplete = (Integer) nodeService.getProperty(assigneesItemRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
 		return (daysToComplete != null) ? daysToComplete : 0;
 	}
 

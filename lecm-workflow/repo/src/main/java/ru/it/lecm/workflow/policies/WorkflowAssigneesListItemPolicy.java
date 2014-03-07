@@ -88,10 +88,15 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 		NodeRef assigneesList = childAssocRef.getParentRef();
 		NodeRef assigneesItem = childAssocRef.getChildRef();
 
+		if (!nodeService.exists(assigneesItem)) {
+			// наша нода была удалена. скорее всего во время актуализации списка участников
+			return;
+		}
+
 		List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
 		for (ChildAssociationRef targetAssoc : targetAssocs) {
 			NodeRef listItem = targetAssoc.getChildRef();
-			if (assigneesItem.equals(listItem)) {
+			if (!nodeService.exists(listItem) || assigneesItem.equals(listItem)) {
 				continue;
 			}
 			int itemOrder = (Integer) nodeService.getProperty(listItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
@@ -104,11 +109,15 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 
 	@Override
 	public void onCreateAssociation(AssociationRef associationRef) {
-		NodeRef assigneeItemRef = associationRef.getSourceRef();
+		NodeRef assigneesItem = associationRef.getSourceRef();
 		NodeRef employeeRef = associationRef.getTargetRef();
+		if (!nodeService.exists(assigneesItem)) {
+			// наша нода была удалена. скорее всего во время актуализации списка участников
+			return;
+		}
 		String userName = orgstructureBean.getEmployeeLogin(employeeRef);
 		if (StringUtils.isNotEmpty(userName)) {
-			nodeService.setProperty(assigneeItemRef, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
+			nodeService.setProperty(assigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
 		}
 	}
 
