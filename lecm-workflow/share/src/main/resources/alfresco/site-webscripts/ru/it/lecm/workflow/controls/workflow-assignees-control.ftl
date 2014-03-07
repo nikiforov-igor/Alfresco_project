@@ -652,7 +652,6 @@
 
 	WorkflowList.prototype.validateForm = function() {
 		this.widgets.form.formsRuntime.updateSubmitElements()
-		console.log('validateForm method has been executing!');
 	};
 
 	WorkflowList.prototype._setCurrentListRef = function(ref) {

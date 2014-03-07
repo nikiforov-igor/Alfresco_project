@@ -48,11 +48,16 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 	}
 
 	function hasNoDate(record) {
-		var value = record.getData('itemData')['assoc_lecm-workflow_assignee-employee-assoc'].value;
+		var ASOC_ASSIGNEE_EMPLOYEE_ASSOC = 'assoc_lecm-workflow_assignee-employee-assoc';
+		var value = record.getData('itemData')[ASOC_ASSIGNEE_EMPLOYEE_ASSOC].value;
 		return !isValue(value);
 	}
 
 	function isNotInRightOrder(record, i, array) {
+		if (i === array.length - 1) {
+			return false;
+		}
+
 		var currDate, nextDate;
 
 		var PROP_DUE_DATE = 'prop_lecm-workflow_assignee-due-date';
@@ -89,7 +94,7 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 				return true;
 			}
 
-			if (YAHOO.widget.DateMath.before(itemDate, calendarDate)) {
+			if (YAHOO.widget.DateMath.before(calendarDate, itemDate)) {
 				return true;
 			}
 
@@ -131,6 +136,9 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 	} else {
 		if(concurrency === 'SEQUENTIAL') {
 			if(records.some(isNotValid)) {
+				return false;
+			}
+			if (records.some(isNotInRightOrder)) {
 				return false;
 			}
 		}
