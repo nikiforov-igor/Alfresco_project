@@ -23,10 +23,10 @@
             <![CDATA[ true ]]>
         </property>
         <property name="lecm-group-actions:forCollection">
-            <![CDATA[ false ]]>
+            <![CDATA[ true ]]>
         </property>
         <property name="lecm-group-actions:script">
-            <![CDATA[model.openWindow="proxy/alfresco/lecm/report/outgoing-cover?exec=1&templateCode=" + templateCode + "&ID=" + document.nodeRef.toString()]]>
+            <![CDATA[model.openWindow="proxy/alfresco/lecm/report/outgoing-cover?exec=1&templateCode=" + templateCode + "&ID=" + documentsArray.join(",")]]>
         </property>
         <items>
             <item name="cm:Шаблон" type="lecm-group-actions:form-field">
