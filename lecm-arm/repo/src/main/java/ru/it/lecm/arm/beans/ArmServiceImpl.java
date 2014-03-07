@@ -15,6 +15,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -103,7 +104,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public List<NodeRef> getArmAccordions(NodeRef arm) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+        Set<NodeRef> result = new TreeSet<NodeRef>(comparator);
 
 		Set<QName> typeSet = new HashSet<QName>(1);
 		typeSet.add(TYPE_ARM_ACCORDION);
@@ -113,13 +114,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				result.add(accordionAssoc.getChildRef());
 			}
 		}
-        Collections.sort(result, comparator);
-		return result;
+        List<NodeRef> nodes = new ArrayList<NodeRef>(result.size());
+        nodes.addAll(result);
+        return nodes;
 	}
 
 	@Override
 	public List<NodeRef> getChildNodes(NodeRef node) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		Set<NodeRef> result = new TreeSet<NodeRef>(comparator);
 
 		Set<QName> typeSet = new HashSet<QName>(1);
 		typeSet.add(TYPE_ARM_ACCORDION);
@@ -131,8 +133,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				result.add(child.getChildRef());
 			}
 		}
-        Collections.sort(result, comparator);
-		return result;
+        List<NodeRef> nodes = new ArrayList<NodeRef>(result.size());
+        nodes.addAll(result);
+		return nodes;
 	}
 
 	@Override
@@ -149,7 +152,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	@Override
 	public Collection<QName> getNodeTypesIncludeInherit(NodeRef node) {
 		Collection<QName> results = new ArrayList<QName>();
-		if (isArmNode(node) || isArmAccordion(node) || isArmReportsNode(node)) {
+		if (isArmElement(node)) {
 			String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
 			if (types != null && types.length() > 0) {
 				List<String> stringTypes = Arrays.asList(types.split(","));
@@ -157,7 +160,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 					results.add(QName.createQName(type, namespaceService));
 				}
 			}
-			if (results.size() == 0 && (isArmNode(node) || isArmReportsNode(node))) {
+			if (results.size() == 0 && !isArmAccordion(node)) {
 				results = getNodeTypesIncludeInherit(nodeService.getPrimaryParent(node).getParentRef());
 			}
 		}
@@ -167,20 +170,21 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	@Override
 	public List<ArmFilter> getNodeFilters(NodeRef node) {
 		List<ArmFilter> result = new ArrayList<ArmFilter>();
-        List<NodeRef> filters = findNodesByAssociationRef(node, ASSOC_NODE_FILTERS, TYPE_ARM_FILTER, ASSOCIATION_TYPE.TARGET);
+        List<NodeRef> filters = findNodesByAssociationRef(node, ASSOC_NODE_FILTERS, null, ASSOCIATION_TYPE.TARGET);
         if (filters != null) {
             for (NodeRef ref : filters) {
                 ArmFilter filter = new ArmFilter();
-                filter.setTitle((String) nodeService.getProperty(ref, ContentModel.PROP_NAME));
-                filter.setCode((String) nodeService.getProperty(ref, PROP_FILTER_CODE));
+                Map<QName, Serializable> props = nodeService.getProperties(ref);
+                filter.setTitle((String) props.get(ContentModel.PROP_NAME));
+                filter.setCode((String) props.get(PROP_FILTER_CODE));
 
-                Object multipleValue = nodeService.getProperty(ref, PROP_FILTER_MULTIPLE);
+                Object multipleValue = props.get(PROP_FILTER_MULTIPLE);
                 if (multipleValue != null) {
                     filter.setMultipleSelect((Boolean) multipleValue);
                 }
 
                 List<ArmFilterValue> valueList = new ArrayList<ArmFilterValue>();
-                String valuesStr = (String) nodeService.getProperty(ref, PROP_FILTER_VALUES);
+                String valuesStr = (String) props.get(PROP_FILTER_VALUES);
                 if (!valuesStr.isEmpty())  {
                     String[] valuesArray = valuesStr.split(",");
 
@@ -196,12 +200,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
                 filter.setValues(valueList);
 
-                Object query = nodeService.getProperty(ref, PROP_FILTER_QUERY);
+                Object query = props.get(PROP_FILTER_QUERY);
                 if (query != null) {
                     filter.setQuery((String) query);
                 }
 
-                Object fClass = nodeService.getProperty(ref, PROP_FILTER_CLASS);
+                Object fClass = props.get(PROP_FILTER_CLASS);
                 if (fClass != null) {
                     filter.setFilterClass((String) fClass);
                 }
@@ -214,11 +218,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public ArmCounter getNodeCounter(NodeRef node) {
-		Boolean counterEnable = (Boolean) nodeService.getProperty(node, PROP_COUNTER_ENABLE);
+        Map<QName, Serializable> props = nodeService.getProperties(node);
+		Boolean counterEnable = (Boolean) props.get(PROP_COUNTER_ENABLE);
 		if (counterEnable != null && counterEnable) {
 			ArmCounter result = new ArmCounter();
-			result.setQuery((String) nodeService.getProperty(node, PROP_COUNTER_QUERY));
-			result.setDescription((String) nodeService.getProperty(node, PROP_COUNTER_DESCRIPTION));
+			result.setQuery((String) props.get(PROP_COUNTER_QUERY));
+			result.setDescription((String) props.get(PROP_COUNTER_DESCRIPTION));
 
 			return result;
 		}
@@ -229,14 +234,15 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	@Override
 	public List<ArmColumn> getNodeColumns(NodeRef node) {
 		List<ArmColumn> result = new ArrayList<ArmColumn>();
-		List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, TYPE_ARM_COLUMN, ASSOCIATION_TYPE.TARGET);
+		List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
 		if (columns != null) {
 			for (NodeRef ref : columns) {
 				ArmColumn column = new ArmColumn();
-				column.setTitle((String) nodeService.getProperty(ref, PROP_COLUMN_TITLE));
-				column.setField((String) nodeService.getProperty(ref, PROP_COLUMN_FIELD_NAME));
-				column.setFormatString((String) nodeService.getProperty(ref, PROP_COLUMN_FORMAT_STRING));
-                Object sortableValue = nodeService.getProperty(ref, PROP_COLUMN_SORTABLE);
+                Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
+				column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
+				column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
+				column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
+                Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
                 if (sortableValue != null) {
                     column.setSortable((Boolean) sortableValue);
                 }
@@ -255,21 +261,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				ArmBaseChildRule result = null;
 				NodeRef query = queryAssoc.get(0).getTargetRef();
 				QName queryType = nodeService.getType(query);
-				if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
+                Map<QName, Serializable> props = nodeService.getProperties(query);
+                if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
 					result = new ArmQueryChildRule();
-					((ArmQueryChildRule) result).setListQuery((String) nodeService.getProperty(query, PROP_LIST_QUERY_CHILD_RULE));
+					((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
                     ((ArmQueryChildRule) result).setSearchService(searchService);
 				} else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
 					result = new ArmDictionaryChildRule();
-					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, DictionaryBean.TYPE_DICTIONARY, ASSOCIATION_TYPE.TARGET);
+					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);
 					((ArmDictionaryChildRule) result).setDictionary(dictionary);
                     ((ArmDictionaryChildRule) result).setDictionaryService(dictionaryService);
 				} else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
 					result = new ArmStatusesChildRule();
-					((ArmStatusesChildRule) result).setRule((String) nodeService.getProperty(query, PROP_STATUSES_RULE));
+					((ArmStatusesChildRule) result).setRule((String) props.get(PROP_STATUSES_RULE));
                     ((ArmStatusesChildRule) result).setStateMachineServiceBean(stateMachineHelper);
 
-					String selectedStatuses = (String) nodeService.getProperty(query, PROP_SELECTED_STATUSES);
+					String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
 					if (selectedStatuses != null) {
 						List<String> selectedStatusesList = new ArrayList<String>();
 						for (String str: selectedStatuses.split(",")) {
