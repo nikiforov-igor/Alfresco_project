@@ -28,6 +28,15 @@
 					  businessJournalLogEventsPolicy"
 		  p:createOrUpdateDictionaries-ref="outgoing.dictionaries"/>
 
+	<util:list id="outgoing.groupOperations.dictionaries">
+		<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
+		<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
+		<value>alfresco/module/${artifactId}/actions/send.xml</value>
+	</util:list>
+	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService, outgoing.model.bootstrap"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:createOrUpdateDictionaries-ref="outgoing.groupOperations.dictionaries"/>
+
 	<bean id="outgoing.statemachine.bootstrap" parent="defaultStatemachines"
 		  p:statemachineName="lecm-outgoing:document"
 		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
@@ -36,16 +45,6 @@
 		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"
 		  depends-on="outgoing.model.bootstrap"/>
 
-	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
-		<property name="rootPath" value="/Business platform/LECM/Сервис Групповые операции"/>
-		<property name="createOrUpdateDictionaries">
-			<list>
-				<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
-				<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
-				<value>alfresco/module/${artifactId}/actions/send.xml</value>
-			</list>
-		</property>
-	</bean>
 
 	<util:list id="outgoing.copySettings.propsToCopy">
 		<value>lecm-document:title</value>
