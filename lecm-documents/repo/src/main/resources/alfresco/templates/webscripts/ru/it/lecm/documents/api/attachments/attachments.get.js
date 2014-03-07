@@ -16,17 +16,7 @@ if (categories != null) {
 				for (var j = 0; j < attachments.length; j++) {
 					if (k < count || isNaN(count)) {
 						var attachment = attachments[j];
-						var aspects = attachment.aspects;
-						var locked = false;
-						if (aspects) {
-							for (var l = 0; l < aspects.length; l++) {
-								if (aspects[l] == "{http://www.alfresco.org/model/content/1.0}lockable") {
-									locked = true;
-									break;
-								}
-							}
-						}
-						lockStatus[attachment.nodeRef.toString()] = locked;
+						lockStatus[attachment.nodeRef.toString()] = attachment.isLocked;
 						showAttachments.push(attachment);
 					} else {
 						hasNext = true;
