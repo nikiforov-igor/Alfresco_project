@@ -46,6 +46,9 @@
 				</property>
 			</properties>
 			<overrides>
+				<property name="bpm:reassignable">
+					<default>false</default>
+				</property>
 				<property name="bpm:packageItemActionGroup">
 					<default>edit_package_item_actions</default>
 				</property>
