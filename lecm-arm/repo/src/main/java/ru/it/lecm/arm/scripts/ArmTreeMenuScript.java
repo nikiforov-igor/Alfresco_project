@@ -210,13 +210,17 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 				QName typeQName = QName.createQName(type, namespaceService);
 				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
 				if (typeDefinition != null) {
-					if (statemachineService.isStarter(type)) {
-						JSONObject json = new JSONObject();
-						json.put("type", type);
-						json.put("draftFolder", documentService.getDraftRootByType(typeQName));
-						json.put("label", typeDefinition.getTitle());
-						results.put(json);
-					}
+                    try {
+                        if (statemachineService.isStarter(type)) {
+                            JSONObject json = new JSONObject();
+                            json.put("type", type);
+                            json.put("draftFolder", documentService.getDraftRootByType(typeQName));
+                            json.put("label", typeDefinition.getTitle());
+                            results.put(json);
+                        }
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage(), ex);
+                    }
 				}
 			}
 		}
