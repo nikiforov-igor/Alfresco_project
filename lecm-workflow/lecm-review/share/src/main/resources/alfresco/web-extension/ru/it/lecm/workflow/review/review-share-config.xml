@@ -128,8 +128,8 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
-					<field id="lecm-workflow-result:workflow-result-item-employee-unit" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>
-					<field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
+					<field id="lecm-workflow-result:workflow-result-item-employee-position" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}"/>
+					<field id="lecm-workflow-result:workflow-result-item-employee-unit" substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
 				</appearance>
 			</form>
 		</forms>
