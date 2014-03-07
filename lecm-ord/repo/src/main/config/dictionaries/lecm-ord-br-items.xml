@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+		<items>
+			<item name="cm:ОРД. Контролер" type="lecm-orgstr:business-role">
+				<property name="cm:name">ОРД. Контролер</property>
+				<property name="lecm-orgstr:business-role-identifier">ORD_CONTROLLER_DYNAMIC</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудник, назначенный Контролером по ОРД документу. Динамическая роль.</property>
+			</item>
+			<item name="cm:ОРД. Создатель" type="lecm-orgstr:business-role">
+				<property name="cm:name">ОРД. Создатель</property>
+				<property name="lecm-orgstr:business-role-identifier">ORD_CREATOR</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право на создание ОРД документов. Статическая роль.</property>
+			</item>
+		</items>
+	</item>
+</items>

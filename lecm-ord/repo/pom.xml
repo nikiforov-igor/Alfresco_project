@@ -26,6 +26,14 @@
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-data-model</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.extensions.surf</groupId>
+			<artifactId>spring-webscripts</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -34,6 +42,33 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
         </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.ord</groupId>
+			<artifactId>ord-repo-api</artifactId>
+			<version>${platform.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.notifications</groupId>
+			<artifactId>notifications-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.documents</groupId>
+			<artifactId>documents-repo-api</artifactId>
+			<version>${platform.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>ru.it.lecm.eds-documents</groupId>
+		    <artifactId>eds-documents-repo-api</artifactId>
+		    <version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

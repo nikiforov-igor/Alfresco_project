@@ -18,5 +18,6 @@
     <modules>
         <module>repo</module>
         <module>share</module>
+		<module>api</module>
     </modules>
 </project>
