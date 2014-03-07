@@ -164,6 +164,7 @@ public class ActionsScript extends DeclarativeWebScript {
                             taskStruct.put("type", "task");
                             taskStruct.put("actionId", userTask.getId());
                             taskStruct.put("label", userTask.getTitle());
+                            taskStruct.put("count", Long.MAX_VALUE);
                             taskStruct.put("isForm", false);
                             actionsList.add(taskStruct);
                         }
