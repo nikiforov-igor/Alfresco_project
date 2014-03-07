@@ -26,7 +26,9 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -90,15 +92,16 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
         if (nodeRef == null) { // получаем список корневых узлов - аккордеонов для заданного АРМ
             List<ArmNode> accordions = service.getAccordionsByArmCode(armCode);
+	        Map<String, Boolean> isStarterHash = new HashMap<String, Boolean>();
             for (ArmNode accordion : accordions) {
-                nodes.add(toJSON(accordion, false));
+                nodes.add(toJSON(accordion, true, isStarterHash));
             }
         } else {
             // получение списка дочерних элементов
             if (NodeRef.isNodeRef(nodeRef)) {
                 List<ArmNode> childs = service.getChildNodes(new NodeRef(nodeRef), new NodeRef(armNodeRef));
                 for (ArmNode child : childs) {
-                    nodes.add(toJSON(child, true));
+                    nodes.add(toJSON(child, false, null));
                 }
             }
         }
@@ -111,7 +114,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         }
     }
 
-    private JSONObject toJSON(ArmNode node, boolean calculateChilds) {
+    private JSONObject toJSON(ArmNode node, boolean isAccordionNode, Map<String, Boolean> isStarterHash) {
         JSONObject result = new JSONObject();
         try {
             result.put(ID, node.getNodeRef() != null ? node.getNodeRef().getId() : node.getTitle());
@@ -126,7 +129,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             result.put(TYPES, listToString(node.getTypes()));
             result.put(COLUMNS, getColumnsJSON(node.getColumns()));
             result.put(LABEL, node.getTitle());
-            if (calculateChilds) {
+            if (!isAccordionNode) {
                 result.put(IS_LEAF, !service.hasChildNodes(node));
             }
             result.put(FILTER, getFiltersJSON(node.getAvaiableFilters()));
@@ -140,7 +143,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 result.put(COUNTER_DESC, node.getCounter().getDescription());
                 result.put(COUNTER_LIMIT, node.getCounter().getQuery());
             }
-	        result.put(CREATE_TYPES, getCreateTypes(node));
+	        result.put(CREATE_TYPES, getCreateTypes(node, isAccordionNode, isStarterHash));
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
@@ -202,7 +205,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		return results;
 	}
 
-	private JSONArray getCreateTypes(ArmNode node) throws JSONException {
+	private JSONArray getCreateTypes(ArmNode node, boolean isAccordion, Map<String, Boolean> isStarterHash) throws JSONException {
 		JSONArray results = new JSONArray();
 		List<String> allTypes = node.getCreateTypes();
 		if (allTypes != null) {
@@ -211,7 +214,16 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
 				if (typeDefinition != null) {
                     try {
-                        if (statemachineService.isStarter(type)) {
+	                    boolean isStarter = true;
+	                    if (isAccordion) {
+		                    if (isStarterHash.containsKey(type)) {
+			                    isStarter = isStarterHash.get(type);
+		                    } else {
+			                    isStarter = statemachineService.isStarter(type);
+			                    isStarterHash.put(type, isStarter);
+		                    }
+	                    }
+                        if (isStarter) {
                             JSONObject json = new JSONObject();
                             json.put("type", type);
                             json.put("draftFolder", documentService.getDraftRootByType(typeQName));

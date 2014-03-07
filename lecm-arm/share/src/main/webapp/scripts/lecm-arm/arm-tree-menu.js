@@ -166,6 +166,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var root = this.tree.getRoot();
 	        root.data.nodeRef  = node.nodeRef;
 	        root.data.armNodeRef  = node.armNodeRef;
+	        root.data.createTypes  = node.createTypes;
             this._loadTree(root);
 
             this.tree.subscribe('clickEvent', function (event) {
@@ -316,8 +317,22 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     menuState:this.menuState
 	            });
 
+	            var parent = node;
+	            while (parent.parent != null) {
+		            parent = parent.parent;
+	            }
+
+	            var createTypes = [];
+	            for (var i = 0; i < node.data.createTypes.length; i++) {
+		            for (var j = 0; j < parent.data.createTypes.length; j++) {
+			            if (node.data.createTypes[i].type == parent.data.createTypes[j].type) {
+				            createTypes.push(node.data.createTypes[i]);
+			            }
+		            }
+	            }
+
 	            YAHOO.Bubbling.fire ("updateArmToolbar", {
-		            createTypes: node.data.createTypes
+		            createTypes: createTypes
 	            });
 
                 YAHOO.Bubbling.fire ("updateArmFilters", {
