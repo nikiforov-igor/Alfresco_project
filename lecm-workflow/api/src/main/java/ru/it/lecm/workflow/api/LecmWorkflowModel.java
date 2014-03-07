@@ -114,6 +114,11 @@ public final class LecmWorkflowModel {
 	public final static QName ASPECT_ROUTE = QName.createQName(WORKFLOW_NAMESPACE, "workflow-route-aspect");
 
 	/**
+	 * &lt;property name="lecm-workflow:is-register-after-signed"&gt;
+	 */
+	public final static QName PROP_IS_REGISTER_AFTER_SIGNED = QName.createQName(WORKFLOW_NAMESPACE, "is-register-after-signed");
+
+	/**
 	 * &lt;child-association name="lecm-workflow:route-contains-workflow-assignees-list"&gt;
 	 */
 	public final static QName ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST = QName.createQName(WORKFLOW_NAMESPACE, "route-contains-workflow-assignees-list");

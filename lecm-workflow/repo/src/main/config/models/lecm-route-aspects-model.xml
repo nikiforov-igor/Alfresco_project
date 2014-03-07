@@ -21,24 +21,27 @@
 				<!-- является ли документ маршрутизируемым -->
 				<property name="lecm-document-route:isRoutable">
 					<type>d:boolean</type>
-					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 				<!-- ссылка на маршрут -->
 				<property name="lecm-document-route:routeRef">
 					<type>d:noderef</type>
-					<mandatory>true</mandatory>
+					<index enabled="false"/>
 				</property>
 				<!-- результат согласования по маршруту -->
 				<property name="lecm-document-route:is-approved">
 					<type>d:boolean</type>
+					<index enabled="false"/>
 				</property>
 				<!-- результат подписания по маршруту -->
 				<property name="lecm-document-route:is-signed">
 					<type>d:boolean</type>
+					<index enabled="false"/>
 				</property>
 				<!-- направить на регистрацию после подписания -->
 				<property name="lecm-document-route:is-register-after-signed">
 					<type>d:boolean</type>
+					<index enabled="false"/>
 				</property>
 			</properties>
 		</aspect>

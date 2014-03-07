@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.workflow.WorkflowType;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowRunner;
 import ru.it.lecm.workflow.api.WorkflowRunnerService;
@@ -49,11 +50,16 @@ public class RouteWorkflowJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-	public void makeDocumentRoutable(final ScriptNode document, final ScriptNode routeRef) {
+	public void makeDocumentRoutable(final ScriptNode document, final ScriptNode route) {
 		NodeRef documentRef = document.getNodeRef();
+		NodeRef routeRef = route.getNodeRef();
+		Serializable isRegisterAfterSigned = nodeService.getProperty(routeRef, LecmWorkflowModel.PROP_IS_REGISTER_AFTER_SIGNED);
+
 		Map<QName, Serializable> routableProps = new HashMap<QName, Serializable>();
 		routableProps.put(RouteAspecsModel.PROP_IS_ROUTABLE, true);
-		routableProps.put(RouteAspecsModel.PROP_ROUTEREF, routeRef.getNodeRef());
+		routableProps.put(RouteAspecsModel.PROP_ROUTEREF, routeRef);
+		routableProps.put(RouteAspecsModel.PROP_IS_REGISTER_AFTER_SIGNED, isRegisterAfterSigned);
+
 		boolean hasRoutableAspect = nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE);
 		if (!hasRoutableAspect) {
 			nodeService.addAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE, routableProps);
