@@ -34,4 +34,6 @@ public class ReportsEditorModel {
     public final static QName ASSOC_REPORT_DATA_COLUMN_COLUMN_TYPE = QName.createQName(REPORTS_EDITOR_URI, "columnTypeAssoc");
 
     public final static QName PROP_DATA_SOURCE_CODE = QName.createQName(REPORTS_EDITOR_URI, "dataSourceCode");
+
+    public final static  QName PROP_RTEMPLATE_CODE = QName.createQName(REPORTS_EDITOR_URI, "templateCode");
 }

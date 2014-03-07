@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Печать конверта" type="lecm-group-actions:action">
+        <property name="lecm-group-actions:form-fields-ref">
+            <![CDATA[workspace://SpacesStore/f7623cfd-9811-4579-acd8-4e839df641b1]]>
+        </property>
+        <property name="cm:name">
+            <![CDATA[ Печать конверта ]]>
+        </property>
+        <property name="lecm-group-actions:statuses">
+            <![CDATA[ ]]>
+        </property>
+        <property name="lecm-group-actions:type">
+            <![CDATA[ lecm-outgoing:document ]]>
+        </property>
+        <property name="lecm-group-actions:order">
+            <![CDATA[ 10 ]]>
+        </property>
+        <property name="lecm-group-actions:expression">
+            <![CDATA[ ]]>
+        </property>
+        <property name="lecm-group-actions:isGroup">
+            <![CDATA[ true ]]>
+        </property>
+        <property name="lecm-group-actions:forCollection">
+            <![CDATA[ false ]]>
+        </property>
+        <property name="lecm-group-actions:script">
+            <![CDATA[model.openWindow="proxy/alfresco/lecm/report/outgoing-cover?exec=1&templateCode=" + templateCode + "&ID=" + document.nodeRef.toString()]]>
+        </property>
+        <items>
+            <item name="cm:Шаблон" type="lecm-group-actions:form-field">
+                <property name="cm:name">
+                    <![CDATA[ Шаблон ]]>
+                </property>
+                <property name="lecm-group-actions:field-default-value">
+                    <![CDATA[ reportId=outgoing-cover ]]>
+                </property>
+                <property name="lecm-group-actions:field-id">
+                    <![CDATA[ templateCode ]]>
+                </property>
+                <property name="lecm-group-actions:field-type">
+                    <![CDATA[ TEMPLATES ]]>
+                </property>
+                <property name="lecm-group-actions:field-priority">
+                    <![CDATA[ 10 ]]>
+                </property>
+            </item>
+        </items>
+    </item>
+</items>

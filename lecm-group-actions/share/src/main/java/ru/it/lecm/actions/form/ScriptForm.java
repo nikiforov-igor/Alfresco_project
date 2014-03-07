@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.extensions.surf.util.URLDecoder;
 import org.springframework.extensions.webscripts.*;
 import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
@@ -79,6 +80,9 @@ public class ScriptForm extends FormUIGet {
                     String id = jsonField.getString("id");
                     String type = jsonField.getString("type");
                     String value = jsonField.getString("value");
+                    if (value != null) {
+                        value = URLDecoder.decode(value);
+                    }
                     FieldDescriptor descriptor = new FieldDescriptor(name, id, type, value);
                     descriptors.add(descriptor);
                 }
@@ -157,7 +161,16 @@ public class ScriptForm extends FormUIGet {
                 field.setName(colMnem);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
-                field.setValue(column.getValue());
+
+                String fieldValue = column.getValue();
+
+                Map<String, String> paramsMap = new HashMap<String, String>();
+
+                if (!fieldValue.contains("=")) {
+                    field.setValue(column.getValue());
+                } else {
+                    paramsMap = getQueryMap(fieldValue);
+                }
 
                 field.setDataKeyName(column.getId());
 
@@ -165,7 +178,7 @@ public class ScriptForm extends FormUIGet {
                 dataType = dataType.startsWith("d:") ? dataType.replace("d:", "") : dataType;
                 field.setDataType(dataType);
 
-                processFieldControl(field, column);
+                processFieldControl(field, column, paramsMap);
             }
         } catch (JSONException je) {
             field = null;
@@ -174,7 +187,7 @@ public class ScriptForm extends FormUIGet {
         return field;
     }
 
-    protected void processFieldControl(Field field, FieldDescriptor descriptor) throws JSONException {
+    protected void processFieldControl(Field field, FieldDescriptor descriptor, Map<String,String> controlParams) throws JSONException {
         FieldControl control = null;
 
         DefaultControlsConfigElement defaultControls = null;
@@ -195,7 +208,6 @@ public class ScriptForm extends FormUIGet {
             }
 
             Control defaultControlConfig;
-            String[] allowedValues = null;
 
             boolean isPropertyField = isNotAssoc(alfrescoType);
             if (isPropertyField) {
@@ -224,6 +236,12 @@ public class ScriptForm extends FormUIGet {
                 for (ControlParam param : paramsConfig) {
                     control.getParams().put(param.getName(), param.getValue());
                 }
+
+                if (controlParams != null && !controlParams.isEmpty())  {
+                    for (String paramKey : controlParams.keySet()) {
+                        control.getParams().put(paramKey, controlParams.get(paramKey));
+                    }
+                }
             }
 
             field.setControl(control);
@@ -241,6 +259,19 @@ public class ScriptForm extends FormUIGet {
         } catch (Exception ex){
         }
         return inEnum;
+    }
+
+    private Map<String, String> getQueryMap(String query) {
+        Map<String, String> map = new HashMap<String, String>();
+        if (query != null) {
+            String[] params = query.split("&");
+            for (String param : params) {
+                String name = param.split("=")[0];
+                String value = param.split("=")[1];
+                map.put(name, value);
+            }
+        }
+        return map;
     }
 
     public class FieldDescriptor {

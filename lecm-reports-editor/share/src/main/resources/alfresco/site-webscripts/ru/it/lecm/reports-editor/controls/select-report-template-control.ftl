@@ -27,14 +27,14 @@
     var control = new LogicECM.module.ReportsEditor.SelectReportTemplateCtrl("${fieldHtmlId}").setMessages(${messages});
     control.setOptions(
             {
-                reportNodeRef: "${form.arguments.itemId}",
+                reportNodeRef: <#if field.control.params.reportId??>"${field.control.params.reportId}"<#else>"${form.arguments.itemId}"</#if>,
                 ctrlValue: "${field.control.params.ctrlValue!"nodeRef"}",
                 mandatory: ${isFieldMandatory?string},
                 itemType: "${field.endpointType!''}",
                 itemFamily: "node",
                 maxSearchResults: 30,
                 <#if field.control.params.fromParent??>
-                    fromParent:"${field.control.params.fromParent?string}",
+                fromParent:${field.control.params.fromParent?string},
                 </#if>
                 oldValue: "${fieldValue}",
                 selectedValue: "${fieldValue}",

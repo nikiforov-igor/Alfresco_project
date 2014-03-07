@@ -6,9 +6,9 @@
                 <#if results??>
                     <#list results as row>
                         {
-                            "templateName": "${row.properties.name!""}",
-                            "templateCode":"${row.properties["lecm-rpeditor:templateCode"]!""}",
-                            "nodeRef": "${row.nodeRef}"
+                            "templateName": "${row.name}",
+                            "templateCode":"${row.code!""}",
+                            "nodeRef": "${row.nodeRef!""}"
                         }
                         <#if row_has_next>,</#if>
                     </#list>

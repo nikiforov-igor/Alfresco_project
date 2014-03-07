@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.reports.api.ReportsManager;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class ReportsEditorService extends BaseBean {
     private NodeRef reSourcesRef;
     private NodeRef reTemplatesRef;
     private NodeRef reReportsRef;
+    private ReportsManager reportsManager;
 
     /**
      * Метод инициализвции сервиса
@@ -133,5 +135,13 @@ public class ReportsEditorService extends BaseBean {
             result.add(ref.getChildRef());
         }
         return result;
+    }
+
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
+
+    public ReportsManager getReportsManager() {
+        return reportsManager;
     }
 }
