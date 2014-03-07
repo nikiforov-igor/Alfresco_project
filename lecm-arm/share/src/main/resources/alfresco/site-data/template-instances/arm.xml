@@ -8,9 +8,9 @@
         <!-- Title -->
         <component>
             <region-id>title</region-id>
-            <url>/lecm/base/title-with-filter-label</url>
+            <url>/lecm/arm/documents/title</url>
             <properties>
-                <title>page.title.arm</title>
+                <code>{code}</code>
                 <filteredLabel>arm.title.filteredLabel</filteredLabel>
             </properties>
         </component>

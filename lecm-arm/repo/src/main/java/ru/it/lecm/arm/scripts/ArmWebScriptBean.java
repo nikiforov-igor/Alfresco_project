@@ -148,4 +148,10 @@ public class ArmWebScriptBean extends BaseWebScript {
 		}
 		return results;
 	}
+
+	public ScriptNode getArmByCode(String code) {
+		NodeRef arm = armService.getArmByCode(code);
+
+		return (arm == null) ? null : new ScriptNode(arm, serviceRegistry, getScope());
+	}
 }

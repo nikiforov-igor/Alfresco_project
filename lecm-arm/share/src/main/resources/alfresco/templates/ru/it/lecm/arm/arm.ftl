@@ -8,6 +8,7 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-arm/lecm-arm-documents.css" />
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/data-lists/toolbar.css" />
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
+	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/components/title-with-filter-label/title-with-filter-label.css" />
 	<#include "/org/alfresco/components/form/form.get.head.ftl">
 
     <#assign filter = ""/>

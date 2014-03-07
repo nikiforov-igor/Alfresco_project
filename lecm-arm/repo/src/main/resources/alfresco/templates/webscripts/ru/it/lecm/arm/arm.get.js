@@ -1,0 +1,1 @@
+model.arm = arm.getArmByCode(args["code"]);
