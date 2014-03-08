@@ -19,33 +19,24 @@
 -->
 <beans>
 
-    <bean id="internalShit" parent="dictionaryModelBootstrap"
+    <bean id="internal.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
           depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
           ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
 		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, dictionary.LogicEcmDictionaryCurrencyModelBootstrap,
 		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/models/lecm-internal-doc-type-dic-model.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="internal.LogicEcmInternalBootstrap" parent="modelsToRepositoryLoader"
-          depends-on="dictionaryBootstrap,dictionary.fileRegister.LogicEcmModelsBootstrap,
-          ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
-		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, dictionary.LogicEcmDictionaryCurrencyModelBootstrap,
-		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap, internalShit">
-        <property name="models">
-            <list>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-model.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-typical-answers-dic-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-internal-answers-model.xml</value>
             </list>
         </property>
-        <!--        <property name="labels">
+        <property name="labels">
             <list>
                 <value>alfresco/module/${artifactId}/messages/lecm-internal-model</value>
             </list>
-        </property>-->
+        </property>
     </bean>
 
     <bean id="${groupId}.${artifactId}.internalDictionaryBootstrap"
@@ -53,7 +44,13 @@
           depends-on="internal.LogicEcmInternalBootstrap">
         <property name="dictionaries">
             <list>
-                <value>alfresco/module/${artifactId}/models/lecm-internal-doc-type-dic.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-typical-answers-dic.xml</value>
+            </list>
+        </property>
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-br-items.xml</value>
             </list>
         </property>
     </bean>

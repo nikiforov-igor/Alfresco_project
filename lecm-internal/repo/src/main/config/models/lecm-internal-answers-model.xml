@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-internal-answers:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Ответ-комментарий</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/logicECM/lecm-internal-typical-answer/1.0" prefix="lecm-internal-typical-answer"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/lecm-internal-answers/1.0" prefix="lecm-internal-answers"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-internal-answers:answer">
+            <title>Ответ-комментарий</title>
+            <parent>cm:content</parent>
+            <properties>
+                <property name="lecm-internal-answers:typical-answer-assoc-ref">
+                    <title>Типовой ответ</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-internal-answers:typical-answer-assoc-text-content">
+                    <title>Типовой ответ</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-internal-answers:answer-date">
+                    <title>Фактическая дата ответа</title>
+                    <type>d:date</type>
+                </property>
+                <property name="lecm-internal-answers:content">
+                    <title>Содержание</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-internal-answers:typical-answer-assoc">
+                    <title>Типовой ответ</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-internal-typical-answer:dictionary</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-internal-answers:attachment">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </type>
+    </types>
+</model>

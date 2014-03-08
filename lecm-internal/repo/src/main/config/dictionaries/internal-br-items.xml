@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:Внутренние. Инициатор" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Инициатор</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_INITIATOR</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право на создание Внутренних документов.</property>
+            </item>
+            <item name="cm:Внутренние. Регистратор" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Регистратор</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_REGISTAR</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за регистрацию документов.</property>
+            </item>
+            <item name="cm:Внутренние. Получатель" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Получатель</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_RECIPIENT</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник, являющийся Получателем внутреннего документа.</property>
+            </item>
+            <item name="cm:Внутренние. Подписывающий" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Подписывающий</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_SIGNER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник, подписывающий документ. Динамическая роль.</property>
+            </item>
+            <item name="cm:Внутренние. Рассматривающий в подразделении" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Рассматривающий в подразделении</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_REVIEWER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за первичное рассмотрение поступающих документов в подразделении.</property>
+            </item>
+            <item name="cm:Внутренние. Технолог" type="lecm-orgstr:business-role">
+                <property name="cm:name">Внутренние. Технолог</property>
+                <property name="lecm-orgstr:business-role-identifier">INNER_ENGINEER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Сотрудник может редактировать документ на любом статусе жизненного цикла.</property>
+            </item>
+        </items>
+    </item>
+</items>

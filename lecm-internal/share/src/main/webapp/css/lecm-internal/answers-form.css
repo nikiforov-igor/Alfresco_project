@@ -49,7 +49,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.object-finder.with-two-buttons div.current-values {
-	width: 83% !important;
+	width: 75% !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.current-values {
@@ -61,7 +61,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .attachments-list {
-	width: 76% !important;
+	width: 67% !important;
 }
 
 div.metadata-form ul.attachments-list {
@@ -82,6 +82,3 @@ div.yui-gb div.yui-u.first {
 	margin-right: 0px !important;
 }
 
-div.form-field textarea {
-	width: 100% !important;
-}

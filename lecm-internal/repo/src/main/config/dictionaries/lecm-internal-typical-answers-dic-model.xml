@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-internal-typical-answer:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Модель справочника типовых ответов</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/lecm-internal-typical-answer/1.0" prefix="lecm-internal-typical-answer"/>
+    </namespaces>
+
+    <types>
+        <type name="lecm-internal-typical-answer:dictionary">
+            <title>Internal Document Type</title>
+            <parent>lecm-dic:plane_dictionary_values</parent>
+            <properties>
+                <property name="lecm-internal-typical-answer:code">
+                    <title>Код</title>
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+        </type>
+    </types>
+</model>

@@ -2,10 +2,42 @@
 
     <config evaluator="node-type" condition="lecm-internal:document">
         <forms>
+            <!-- Форма для модального представления -->
+            <form id="internal-modal">
+                <field-visibility>
+                    <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+                    <show id="lecm-document-aspects:reg-data-date" force="true"/>
+                    <show id="lecm-document:creator"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <set id="header" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
+                    <set id="content" appearance=""/>
+                    <set id="uploader" appearance=""/>
+
+                    <field id="lecm-document:regnum" set="header"/>
+                    <field id="lecm-document-aspects:reg-data-date" set="header"/>
+                    <field id="lecm-document:creator" set="header"/>
+
+                    <field id="lecm-eds-document:summaryContent" set="content">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+
+                    <field id="lecm-document-aspects:attachments-temp-assoc" set="uploader" label="Вложения">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Вложения</control-param>
+                        </control>
+                    </field>
+                    
+                </appearance>
+            </form>
             <!-- Форма редатирования-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
+                    <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date" force="true"/>
                     <show id="lecm-document:creator"/>
@@ -42,6 +74,7 @@
                     <set id="responseTo" parent="common" appearance=""/>
                     <set id="subjectAndRegister" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="uploader" parent="common" appearance=""/>
+                    <set id="note" parent="common" appearance=""/>
 
                     <field id="lecm-document:regnum" set="header"/>
                     <field id="lecm-document-aspects:reg-data-date" set="header"/>
@@ -118,6 +151,12 @@
                         </control>
                     </field>
 
+                    <field id="lecm-eds-document:note" set="note">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
@@ -174,6 +213,74 @@
                     <show id="lecm-internal-doc-type:code"/>
                     <show id="cm:name"/>
                 </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-internal-typical-answer:dictionary">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-internal-typical-answer:code"/>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-internal-typical-answer:dictionary">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-internal-typical-answer:code"/>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-internal-answers:answer">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-internal-answers:typical-answer-assoc"/>
+                    <show id="cm:creator" for-mode="view"/>
+                    <show id="lecm-internal-answers:content"/>
+                    <show id="lecm-internal-answers:attachment"/>
+                    <show id="lecm-internal-answers:answer-date" for-mode="view"/>
+                    <show id="lecm-internal-answers:custom-style" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="answerAndAuthor" appearance="" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="content" appearance=""/>
+                    <set id="attachment" appearance=""/>
+                    <set id="date" appearance=""/>
+                    <field id="lecm-internal-answers:typical-answer-assoc" set="answerAndAuthor">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типовые_x0020_ответы</control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">true</control-param>
+                            <control-param name="endpointType">lecm-internal-typical-answer:dictionary</control-param>
+                        </control>
+                    </field>
+                    <field id="cm:creator" set="answerAndAuthor"/>
+                    <field id="lecm-internal-answers:content" set="content">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
+                    </field>
+                    <field id="lecm-internal-answers:attachment" set="attachment">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Вложения</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-internal-answers:answer-date" set="date"/>
+                    <field id="lecm-internal-answers:custom-style">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="cssFile">lecm-internal/answers-form.css</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
