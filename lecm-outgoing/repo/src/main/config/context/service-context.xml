@@ -33,6 +33,7 @@
 		<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
 		<value>alfresco/module/${artifactId}/actions/send.xml</value>
 		<value>alfresco/module/${artifactId}/actions/print-cover.xml</value>
+		<value>alfresco/module/${artifactId}/actions/route.xml</value>
 	</util:list>
 	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService, outgoing.model.bootstrap"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
