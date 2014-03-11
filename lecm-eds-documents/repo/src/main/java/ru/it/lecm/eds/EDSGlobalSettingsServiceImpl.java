@@ -230,4 +230,13 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         }
         return false;
     }
+
+    @Override
+    public Boolean isHideProperties() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            return (Boolean) nodeService.getProperty(settings, PROP_SETTINGS_HIDE_PROPS);
+        }
+        return false;
+    }
 }

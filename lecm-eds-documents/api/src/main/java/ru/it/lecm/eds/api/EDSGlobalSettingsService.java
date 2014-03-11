@@ -23,7 +23,8 @@ public interface EDSGlobalSettingsService {
 
 	public final static QName TYPE_SETTINGS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "settings");
 	public final static QName PROP_SETTINGS_CENTRALIZED_REGISTRATION = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "centralized-registration");
-	
+	public final static QName PROP_SETTINGS_HIDE_PROPS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "hide-properties-for-recipients");
+
 	public final static QName TYPE_POTENTIAL_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role");
 	public final static QName PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc-ref");
 	public final static QName PROP_POTENTIAL_ROLE_ORG_ELEMENT_REF = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc-ref");
@@ -44,4 +45,6 @@ public interface EDSGlobalSettingsService {
 	public NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs);
 	
 	public Boolean isRegistrationCenralized();
+
+	public Boolean isHideProperties();
 }

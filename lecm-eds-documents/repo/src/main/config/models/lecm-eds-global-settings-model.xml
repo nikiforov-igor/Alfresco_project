@@ -26,6 +26,12 @@
 				    <mandatory>true</mandatory>
 				    <default>true</default>
 			    </property>
+                <!-- Режим регистрации -->
+                <property name="lecm-eds-globset:hide-properties-for-recipients">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>false</default>
+                </property>
 		    </properties>
 	    </type>
 		

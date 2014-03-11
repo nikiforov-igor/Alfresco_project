@@ -26,7 +26,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-eds-globset:centralized-registration"/>
+                    <show id="lecm-eds-globset:hide-properties-for-recipients"/>
+                    <show id="lecm-eds-globset:centralized-registration"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">
@@ -50,7 +51,8 @@
 		<forms>
 			<form>
 				<field-visibility>
-					<show id="lecm-eds-globset:centralized-registration"/>
+                    <show id="lecm-eds-globset:hide-properties-for-recipients"/>
+                    <show id="lecm-eds-globset:centralized-registration"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-globset:centralized-registration" label-id="label.centralized-registration">

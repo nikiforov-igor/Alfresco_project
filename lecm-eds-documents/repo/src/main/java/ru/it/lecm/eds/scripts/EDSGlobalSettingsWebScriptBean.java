@@ -68,4 +68,8 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript{
 	public Boolean isRegistrationCenralized() {
 		return edsGlobalSettingsService.isRegistrationCenralized();
 	}
+
+    public Boolean isHidePropsForRecipient() {
+        return edsGlobalSettingsService.isHideProperties();
+    }
 }
