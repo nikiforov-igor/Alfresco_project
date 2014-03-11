@@ -28,15 +28,6 @@
 					<type>d:boolean</type>
 					<index enabled="false"/>
 				</property>
-			</properties>
-			<mandatory-aspects>
-				<aspect>lecm-document-route:approval</aspect>
-				<aspect>lecm-document-route:signing</aspect>
-			</mandatory-aspects>
-		</aspect>
-
-		<aspect name="lecm-document-route:approval">
-			<properties>
 				<!-- идентификатор запущенного процесса согласования -->
 				<property name="lecm-document-route:approval-workflow-id">
 					<type>d:text</type>
@@ -47,11 +38,6 @@
 					<type>d:boolean</type>
 					<index enabled="false"/>
 				</property>
-			</properties>
-		</aspect>
-
-		<aspect name="lecm-document-route:signing">
-			<properties>
 				<!-- идентификатор запущенного процесса подписания -->
 				<property name="lecm-document-route:signing-workflow-id">
 					<type>d:text</type>
@@ -65,5 +51,4 @@
 			</properties>
 		</aspect>
 	</aspects>
-
 </model>
