@@ -859,7 +859,7 @@
 															<property>
 																<name>transitionExpression</name>
 																<value>
-																	<![CDATA[doc.attr("lecm-document-route:isRoutable") != null and doc.attr("lecm-document-route:isRoutable") == true]]>
+																	<![CDATA[doc.hasAspect("lecm-document-route:routable") == true]]>
 																</value>
 															</property>
 														</properties>
@@ -3715,7 +3715,7 @@
 															<property>
 																<name>transitionExpression</name>
 																<value>
-																	<![CDATA[doc.attr("lecm-document-route:isRoutable") != null and doc.attr("lecm-document-route:isRoutable") == true]]>
+																	<![CDATA[doc.hasAspect("lecm-document-route:routable") == true]]>
 																</value>
 															</property>
 														</properties>
@@ -6269,7 +6269,7 @@
             workflowRole: "DA_SIGNER",
             workflowDefinition: "lecmSign",
             documentRef: outgoing.nodeRef,
-            routeRef: outgoing.routeRef
+            routeRef: outgoing.properties["lecm-document-route:routeRef"].nodeRef
         });
         routeWorkflow.startWorkflow(variables);
     }

@@ -24,11 +24,6 @@ public final class RouteAspecsModel {
 	public final static QName ASPECT_ROUTABLE = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "routable");
 
 	/**
-	 * &lt;property name="lecm-document-route:isRoutable"&gt;
-	 */
-	public final static QName PROP_IS_ROUTABLE = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "isRoutable");
-
-	/**
 	 * &lt;property name="lecm-document-route:routeRef"&gt;
 	 */
 	public final static QName PROP_ROUTEREF = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "routeRef");
@@ -47,6 +42,16 @@ public final class RouteAspecsModel {
 	 * &lt;property name="lecm-document-route:is-signed"&gt;
 	 */
 	public final static QName PROP_IS_SIGNED = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "is-signed");
+
+	/**
+	 * &lt;property name="lecm-document-route:approval-workflow-id"&gt;
+	 */
+	public final static QName PROP_APPROVAL_WORKFLOW_ID = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "approval-workflow-id");
+
+	/**
+	 * &lt;property name="lecm-document-route:signing-workflow-id"&gt;
+	 */
+	public final static QName PROP_SIGNING_WORKFLOW_ID = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "signing-workflow-id");
 
 	private RouteAspecsModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of RouteAspecsModel class.");

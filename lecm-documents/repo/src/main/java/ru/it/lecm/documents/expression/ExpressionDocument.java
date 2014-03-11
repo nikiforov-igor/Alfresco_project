@@ -13,6 +13,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.alfresco.service.namespace.InvalidQNameException;
+import org.alfresco.service.namespace.NamespaceException;
 
 /**
  * User: PMelnikov
@@ -164,6 +166,18 @@ public class ExpressionDocument {
 		}
 
 		return filteredDocuments.size() > 0;
+	}
+	
+	/**
+	 * Проверка на наличие у документа указанного аспекта
+	 * @param aspectName имя аспекта в виде prefix:localName
+	 * @return true если аспект навешен на документ, false в противном случае
+	 * @throws InvalidQNameException
+	 * @throws NamespaceException
+	 */
+	public boolean hasAspect(final String aspectName) throws InvalidQNameException, NamespaceException {
+		QName aspectTypeQName = QName.createQName(aspectName, serviceRegistry.getNamespaceService());
+		return serviceRegistry.getNodeService().hasAspect(nodeRef, aspectTypeQName);
 	}
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {

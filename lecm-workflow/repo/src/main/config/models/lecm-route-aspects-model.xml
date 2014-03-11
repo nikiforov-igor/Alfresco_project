@@ -18,14 +18,28 @@
 	<aspects>
 		<aspect name="lecm-document-route:routable">
 			<properties>
-				<!-- является ли документ маршрутизируемым -->
-				<property name="lecm-document-route:isRoutable">
-					<type>d:boolean</type>
-					<index enabled="false"/>
-				</property>
 				<!-- ссылка на маршрут -->
 				<property name="lecm-document-route:routeRef">
 					<type>d:noderef</type>
+					<index enabled="false"/>
+				</property>
+				<!-- направить на регистрацию после подписания -->
+				<property name="lecm-document-route:is-register-after-signed">
+					<type>d:boolean</type>
+					<index enabled="false"/>
+				</property>
+			</properties>
+			<mandatory-aspects>
+				<aspect>lecm-document-route:approval</aspect>
+				<aspect>lecm-document-route:signing</aspect>
+			</mandatory-aspects>
+		</aspect>
+
+		<aspect name="lecm-document-route:approval">
+			<properties>
+				<!-- идентификатор запущенного процесса согласования -->
+				<property name="lecm-document-route:approval-workflow-id">
+					<type>d:text</type>
 					<index enabled="false"/>
 				</property>
 				<!-- результат согласования по маршруту -->
@@ -33,13 +47,18 @@
 					<type>d:boolean</type>
 					<index enabled="false"/>
 				</property>
-				<!-- результат подписания по маршруту -->
-				<property name="lecm-document-route:is-signed">
-					<type>d:boolean</type>
+			</properties>
+		</aspect>
+
+		<aspect name="lecm-document-route:signing">
+			<properties>
+				<!-- идентификатор запущенного процесса подписания -->
+				<property name="lecm-document-route:signing-workflow-id">
+					<type>d:text</type>
 					<index enabled="false"/>
 				</property>
-				<!-- направить на регистрацию после подписания -->
-				<property name="lecm-document-route:is-register-after-signed">
+				<!-- результат подписания по маршруту -->
+				<property name="lecm-document-route:is-signed">
 					<type>d:boolean</type>
 					<index enabled="false"/>
 				</property>

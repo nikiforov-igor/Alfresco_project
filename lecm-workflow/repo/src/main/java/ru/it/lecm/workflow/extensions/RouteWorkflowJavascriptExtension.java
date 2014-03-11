@@ -42,7 +42,6 @@ public class RouteWorkflowJavascriptExtension extends BaseWebScript {
 		Serializable isRegisterAfterSigned = nodeService.getProperty(routeRef, LecmWorkflowModel.PROP_IS_REGISTER_AFTER_SIGNED);
 
 		Map<QName, Serializable> routableProps = new HashMap<QName, Serializable>();
-		routableProps.put(RouteAspecsModel.PROP_IS_ROUTABLE, true);
 		routableProps.put(RouteAspecsModel.PROP_ROUTEREF, routeRef);
 		routableProps.put(RouteAspecsModel.PROP_IS_REGISTER_AFTER_SIGNED, isRegisterAfterSigned);
 

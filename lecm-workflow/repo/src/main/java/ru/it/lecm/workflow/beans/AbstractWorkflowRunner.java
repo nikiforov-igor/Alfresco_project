@@ -114,15 +114,23 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		WorkflowInstance workflowInstance = startWorkflow(workflowDefinition, properties);
 		//инициализировать входные переменные
 		setInputVariables(workflowInstance.getId(), variables);
+		//сохранить ИДшник запущенного бизнес процесса в атрибуты документа
+		persistWorkflowId(variables, workflowInstance);
 		//отсигналить что все готово
 		stateMachineService.sendSignal(workflowInstance.getId());
 		// log to business journal
-		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
-		logStartWorkflowEvent(documentRef, workflowInstance);
+		logStartWorkflowEvent(variables, workflowInstance);
 		return workflowInstance.getId();
 	}
 
+	private void persistWorkflowId(final Map<String, Object> variables, final WorkflowInstance instance) {
+		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
+		nodeService.setProperty(documentRef, getWorkflowIdPropQName(), instance.getId());
+	}
+
 	protected abstract Map<QName, Serializable> runImpl(final Map<String, Object> variables, final Map<QName, Serializable> properties);
+
+	protected abstract QName getWorkflowIdPropQName();
 
 	protected void checkMandatoryVariables(final Map<String, Object> variables) {
 		for (String inputVariable : inputVariables) {
@@ -173,11 +181,12 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		}
 	}
 
-	protected void logStartWorkflowEvent(final NodeRef document, final WorkflowInstance instance) {
+	protected void logStartWorkflowEvent(final Map<String, Object> variables, final WorkflowInstance instance) {
 		if (!stateMachineService.isServiceWorkflow(instance)) {
 			String message = "Запущен бизнес-процесс #object1 на документе #mainobject";
+			NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
 			List<String> objects = Collections.singletonList(instance.getId());
-			businessJournalService.log(document, StateMachineEventCategory.START_WORKFLOW, message, objects);
+			businessJournalService.log(documentRef, StateMachineEventCategory.START_WORKFLOW, message, objects);
 		}
 	}
 }
