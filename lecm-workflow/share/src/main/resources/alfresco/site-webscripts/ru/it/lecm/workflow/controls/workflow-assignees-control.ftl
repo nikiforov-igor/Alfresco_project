@@ -511,7 +511,10 @@
 		var input = YAHOO.util.Dom.get('${concurrencyInputId}');
 
 		if (value === 'user' || value === 'sequential') {
-			input.value = 'SEQUENTIAL';
+
+			if (input !== null && input !== undefined) {
+				input.value = 'SEQUENTIAL';
+			}
 
 			workflowList.setOptions(SEQUENTIAL);
 			datagrid.setOptions(SEQUENTIAL);
@@ -522,7 +525,10 @@
 				btnComputeTerms.setStyle('display', '');
 			}
 		} else {
-			input.value = 'PARALLEL';
+
+			if (input !== null && input !== undefined) {
+				input.value = 'PARALLEL';
+			}
 
 			workflowList.setOptions(PARALLEL);
 			datagrid.setOptions(PARALLEL);
@@ -533,6 +539,10 @@
 				btnComputeTerms.setStyle('display', 'none');
 			}
 		}
+	};
+
+	WorkflowList.prototype._setInitialConcurrency = function() {
+		this._setConcurrency(this.options.concurrency);
 	};
 
 	WorkflowList.prototype._onListsMenuClick = function(eventType, args) {
@@ -979,6 +989,7 @@
 		YAHOO.Bubbling.on('registerValidationHandler', this._hackTheCalendar, this);
 		YAHOO.Bubbling.on('datagridVisible', this._hackTheRecordSet, this);
 		YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
+		YAHOO.Bubbling.on('datagridVisible', this._setInitialConcurrency, this);
 	};
 
 	var workflowList = new WorkflowList('${containerId}');
