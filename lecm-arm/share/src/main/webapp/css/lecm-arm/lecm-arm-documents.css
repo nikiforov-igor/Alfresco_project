@@ -64,9 +64,7 @@ div.arm-tree-menu .arm-accordion div.accordion-head {
 	font-style: normal;
 	color: #333333;
 }
-div.arm-tree-menu .arm-accordion div.accordion-head.shown {
-	cursor: auto;
-}
+
 div.arm-tree-menu .arm-accordion div.accordion-head span.accordion-label {
 	position: absolute;
 	margin-left: 10px;

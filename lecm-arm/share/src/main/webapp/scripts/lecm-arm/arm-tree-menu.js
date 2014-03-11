@@ -8,6 +8,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
 	var Dom = YAHOO.util.Dom,
+        Anim = YAHOO.util.Anim,
 		Event = YAHOO.util.Event;
 
     LogicECM.module.ARM.TreeMenu = function (htmlId) {
@@ -135,12 +136,38 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    expandAccordion: function(node) {
 		    Dom.addClass("ac-head-" + node.id, "shown");
 		    Dom.addClass("ac-content-" + node.id, "shown");
+            var attributes = {
+                height: {
+                    from: 0,
+                    to: this.getAccordionHeight()
+                },
+                opacity: {
+                    from: 0,
+                    to: 1
+                }
+            };
+
+            var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.backOut);
+            anim.animate();
 		    this.menuState.accordion = node.id;
 	    },
 
 	    collapseAccordion: function(node) {
 		    Dom.removeClass("ac-head-" + node.id, "shown");
 		    Dom.removeClass("ac-content-" + node.id, "shown");
+
+            var attributes = {
+                height: {
+                    from: this.getAccordionHeight(),
+                    to: 0
+                },
+                opacity: {
+                    from:1,
+                    to:0
+                }
+            };
+            var anim = new Anim("ac-content-" + node.id, attributes, .6, YAHOO.util.Easing.easeBoth);
+            anim.animate();
 	    },
 
 	    getAccordionHeight: function() {
