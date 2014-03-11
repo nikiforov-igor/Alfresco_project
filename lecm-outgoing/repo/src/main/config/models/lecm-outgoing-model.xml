@@ -54,7 +54,7 @@
 	<types>
 		<!-- Исходящее -->
 		<type name="lecm-outgoing:document">
-			<title>Исходящий</title>
+			<title>Исходящий документ</title>
 			<parent>lecm-eds-document:base</parent>
 			<associations>
 				<association name="lecm-outgoing:contractor-assoc">
@@ -112,6 +112,6 @@
 				<aspect>lecm-document-aspects:on-control-aspect</aspect>
 			</mandatory-aspects>
 		</type>
-				
+
 	</types>
 </model>
