@@ -75,7 +75,7 @@ div.arm-tree-menu .arm-accordion span.accordion-counter-label {
 }
 div.arm-tree-menu .arm-accordion div.accordion-content {
 	height: 0;
-	overflow-y: hidden;
+	overflow-y: auto;
 	overflow-x: auto;
 	padding-left: 10px;
 }
