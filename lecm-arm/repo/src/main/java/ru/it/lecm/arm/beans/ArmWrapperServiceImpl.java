@@ -97,8 +97,46 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return result;
     }
 
+    private boolean hasChildNodes(NodeRef node, NodeRef parentRef) {
+
+        // 1. Дочерние статические элементы из настроек ARM
+        NodeRef parentFromArm;
+        if (isArmElement(node)) {
+            parentFromArm = node;
+        } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
+            parentFromArm = parentRef;
+        }
+
+        //2. Добавить реальных дочерних узлов для иерархического справочника!
+        // в остальных случаях у нас не может быть дочерних элементов
+        if (node != null && !isArmElement(node) && dictionaryService.isDictionaryValue(node)){
+            List<NodeRef> dicChilds = dictionaryService.getChildren(node);
+            if (!dicChilds.isEmpty()) {
+                return true;
+            }
+        }
+
+        if (parentFromArm != null) {
+            List<NodeRef> staticChilds = service.getChildNodes(parentFromArm); // узлы АРМа
+            for (NodeRef staticChild : staticChilds) {
+                if (service.getNodeChildRule(staticChild) != null) {
+                    ArmNode stNode = wrapArmNodeAsObject(staticChild);
+                    List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
+                    if (!queriedChilds.isEmpty()) {
+                        return true;
+                    }
+                } else {
+                    return true;
+                }
+            }
+        }
+
+
+        return false;
+    }
+
     public boolean hasChildNodes(ArmNode node) {
-        return !getChildNodes(node.getNodeRef(), node.getArmNodeRef()).isEmpty() ||
+        return hasChildNodes(node.getNodeRef(), node.getArmNodeRef()) ||
                 (node.getNodeQuery() != null && !node.getNodeQuery().build(this, node).isEmpty());
     }
 
