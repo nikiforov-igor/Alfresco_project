@@ -28,7 +28,8 @@
     <bean id="ord.document.models.bootstrap" parent="modelsToRepositoryLoader"
           depends-on="
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
-            eds.models.bootstrap, documents.LogicEcmModelsBootstrap"
+            eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
+            errands.LogicEcmModelsBootstrap"
           p:models-ref="ord.models"
 		  p:labels-ref="ord.models.labels"/>
 
