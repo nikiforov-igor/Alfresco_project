@@ -46,7 +46,7 @@
 <div id='${containerId}' class="workflow-list-control-container">
 	<#-- Элемент-затемнитель контрола, который показывается на время его инициализации -->
 	<div id="${dimmerId}" class="workflow-list-control-dimmer">
-		<div class="workflow-list-control-dimmer__inner">Пододжите, пожалуйста...</div>
+		<div class="workflow-list-control-dimmer__inner">Подождите, пожалуйста...</div>
 	</div>
 
 	<#-- NodeRef на папку -->
