@@ -4,16 +4,15 @@
 			<form>
 				<field-visibility>
 					<show id="bpm:workflowDueDate"/>
+					<show id="lecmReview:noReviewControl"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
 					<show id="lecm-workflow:assigneesListAssoc" />
+					<!-- Костыль для исправления захардкоженного в document-metadata-form-edit.css маржина у чекбоксов-->
+					<show id="lecmReview:css" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="bpm:workflowDueDate" mandatory="true">
-						<!-- TODO: валидатор сроков ознакомления -->
-						<!--<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-						</constraint-handlers>-->
 						<control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
 					</field>
 					<field id="lecm-workflow:assigneesListAssoc">
@@ -32,6 +31,11 @@
 					<field id="packageItems">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 					</field>
+					<field id="lecmReview:css">
+						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+							<control-param name="css">input.formsCheckBox { margin-left: 0 !important; }</control-param>
+						</control>
+					</field>
 				</appearance>
 			</form>
 		</forms>
@@ -48,7 +52,6 @@
 					<show id="transitions" force="true" />
 				</field-visibility>
 				<appearance>
-					<!-- TODO: строка представления для документа в задаче -->
 					<field id="lecmReview:presentString">
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>

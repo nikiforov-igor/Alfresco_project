@@ -29,6 +29,12 @@
 	<types>
 		<type name="lecmReview:review">
 			<parent>bpm:startTask</parent>
+			<properties>
+				<property name="lecmReview:noReviewControl">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
 			<mandatory-aspects>
 				<aspect>lecm-workflow:assigneesListAspect</aspect>
 			</mandatory-aspects>

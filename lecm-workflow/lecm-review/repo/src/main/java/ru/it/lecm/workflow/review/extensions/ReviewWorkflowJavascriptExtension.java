@@ -1,5 +1,6 @@
 package ru.it.lecm.workflow.review.extensions;
 
+import java.util.Date;
 import java.util.List;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
@@ -58,6 +59,10 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 
 	public ActivitiScriptNode createResultList(final ActivitiScriptNode bpmPackage, final String documentAttachmentCategoryName, final ActivitiScriptNodeList assigneesList) {
 		return new ActivitiScriptNode(reviewWorkflowService.createResultList(bpmPackage.getNodeRef(), documentAttachmentCategoryName, assigneesList.getNodeReferences()), serviceRegistry);
+	}
+
+	public void sendBareNotifications(final ActivitiScriptNodeList assigneesList, final Date workflowDueDate, final ActivitiScriptNode bpmPackage) {
+		reviewWorkflowService.sendBareNotifications(assigneesList.getNodeReferences(), workflowDueDate, bpmPackage.getNodeRef());
 	}
 
 }

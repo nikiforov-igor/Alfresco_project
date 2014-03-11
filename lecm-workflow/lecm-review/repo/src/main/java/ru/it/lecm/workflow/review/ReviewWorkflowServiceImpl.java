@@ -244,4 +244,13 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		resultListService.setResultListCompleteDate(resultList, DateUtils.truncate(new Date(), Calendar.DATE));
 	}
 
+	@Override
+	public void sendBareNotifications(List<NodeRef> assigneesList, Date workflowDueDate, NodeRef bpmPackage) {
+		for (NodeRef assignee : assigneesList) {
+			NodeRef employeeRef = assigneesListService.getEmployeeByAssignee(assignee);
+			grantReaderPermissions(employeeRef, bpmPackage, false);
+			notifyWorkflowStarted(employeeRef, workflowDueDate, bpmPackage);
+		}
+	}
+
 }
