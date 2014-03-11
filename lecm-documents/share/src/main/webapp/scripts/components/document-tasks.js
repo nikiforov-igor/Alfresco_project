@@ -193,11 +193,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					fn:doBeforeDialogShow,
 					scope:this
 				}, onSuccess: {
-                    fn: function DataGrid_onActionCreate_success(response) {
-                        document.location.href = document.location.href;
-                    },
-                    scope: this
-                }
+					fn: function DataGrid_onActionCreate_success(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: Alfresco.component.Base.prototype.msg("message.success")
+						});
+						document.location.href = document.location.href;
+					},
+					scope: this
+				}
 			}).show();
 	};
 })();
