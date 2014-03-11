@@ -47,7 +47,9 @@ LogicECM.module = LogicECM.module || {};
 				deleteMessageFunction: true,
 				editFormTitleMsg: "label.edit-row.title",
 				createFormTitleMsg: "label.create-row.title",
-				viewFormTitleMsg: "logicecm.view"
+                viewFormTitleMsg: "logicecm.view",
+                expandable: false,
+                expandDataSource: "components/form"
 			},
 
             datagrid: null,
@@ -190,7 +192,9 @@ LogicECM.module = LogicECM.module || {};
                         refreshAfterCreate: this.options.refreshAfterCreate,
 						editFormTitleMsg: this.options.editFormTitleMsg,
 						createFormTitleMsg: this.options.createFormTitleMsg,
-						viewFormTitleMsg: this.options.viewFormTitleMsg
+						viewFormTitleMsg: this.options.viewFormTitleMsg,
+                        expandable: this.options.expandable,
+                        expandDataSource: this.options.expandDataSource
 					}).setMessages(this.options.messages);
 				}
 
@@ -538,6 +542,15 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
         getDataTableColumnDefinitions:function DataGrid_getDataTableColumnDefinitions() {
             // YUI DataTable column definitions
             var columnDefinitions = [];
+            if (this.options.expandable) {
+                columnDefinitions.push({
+                    key: "expand",
+                    label: "",
+                    sortable: false,
+                    formatter: this.fnRenderCellExpand (),
+                    width: 16
+                });
+            }
             if (this.options.showCheckboxColumn) {
                 columnDefinitions.push({
                     key: "nodeRef",

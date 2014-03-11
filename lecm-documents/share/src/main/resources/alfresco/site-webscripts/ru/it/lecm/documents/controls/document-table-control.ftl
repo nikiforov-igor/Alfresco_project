@@ -9,6 +9,17 @@
 <#assign containerId = fieldHtmlId + "-container-" + aDateTime?iso_utc>
 <#assign bubblingId = containerId/>
 
+<#assign expandable="false"/>
+<#if params.expandable??>
+    <#assign expandable = params.expandable/>
+</#if>
+
+<#assign expandDataSource=""/>
+<#if params.expandDataSource?has_content>
+    <#assign expandDataSource = params.expandDataSource/>
+</#if>
+
+
 <#assign attributeForShow = ""/>
 <#if params.attributeForShow??>
     <#assign attributeForShow = params.attributeForShow/>
@@ -70,6 +81,10 @@
 				<#if params.viewFormTitleMsg??>
 					viewFormTitleMsg: "${params.viewFormTitleMsg}",
 				</#if>
+                expandable: ${expandable?string},
+                <#if expandDataSource?has_content>
+                    expandDataSource: "${expandDataSource}",
+                </#if>
                 showActions: ${showActions?string}
 			});
 })();
