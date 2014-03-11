@@ -1249,7 +1249,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
         return result;
     }
 
-    private TransitionResponse executeTransitionAction(final NodeRef document, String statemachineId, String taskId, String actionId, String persistedResponse) {
+    private TransitionResponse executeTransitionAction(final NodeRef document, final String statemachineId, String taskId, String actionId, String persistedResponse) {
         TransitionResponse response = new TransitionResponse();
         List<String> errors = new ArrayList<String>();
         List<StateMachineAction> actions = getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
@@ -1270,7 +1270,14 @@ public class StateMachineHelper implements StateMachineServiceBean {
             }
 
             if (!"".equals(nextState.getScript())) {
-                executeScript(nextState.getScript(), statemachineId);
+                final String script = nextState.getScript();
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        executeScript(script, statemachineId);
+                        return null;
+                    }
+                });
             }
 
             if (!"".equals(nextState.getOutputVariableValue())) {
