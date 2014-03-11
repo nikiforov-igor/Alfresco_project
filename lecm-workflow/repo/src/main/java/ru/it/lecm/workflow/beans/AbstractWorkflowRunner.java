@@ -25,6 +25,8 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineEventCategory;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.WorkflowDescriptor;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.workflow.WorkflowType;
 import ru.it.lecm.workflow.api.RouteService;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
@@ -116,6 +118,8 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		setInputVariables(workflowInstance.getId(), variables);
 		//сохранить ИДшник запущенного бизнес процесса в атрибуты документа
 		persistWorkflowId(variables, workflowInstance);
+		//прицепиться к машине состояний документа
+		connectToStatemachine(variables, workflowInstance);
 		//отсигналить что все готово
 		stateMachineService.sendSignal(workflowInstance.getId());
 		// log to business journal
@@ -126,6 +130,14 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 	private void persistWorkflowId(final Map<String, Object> variables, final WorkflowInstance instance) {
 		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
 		nodeService.setProperty(documentRef, getWorkflowIdPropQName(), instance.getId());
+	}
+
+	private void connectToStatemachine(final Map<String, Object> variables, final WorkflowInstance instance) {
+		NodeRef documentRef = WorkflowVariablesHelper.getDocumentRef(variables);
+		String stateMachineExecutionId = stateMachineService.getStatemachineId(documentRef);
+		String currentTaskId = stateMachineService.getCurrentTaskId(stateMachineExecutionId);
+		WorkflowDescriptor descriptor = new WorkflowDescriptor(instance.getId(), stateMachineExecutionId, instance.getDefinition().getId(), currentTaskId, "", "", "");
+		new DocumentWorkflowUtil().addWorkflow(documentRef, instance.getId(), descriptor);
 	}
 
 	protected abstract Map<QName, Serializable> runImpl(final Map<String, Object> variables, final Map<QName, Serializable> properties);
