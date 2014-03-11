@@ -24,7 +24,7 @@
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
                     
-                    <show id="lecm-ord:css" force="true"/>   <!-- Костыль для инъекции css-->
+                    <show id="lecm-ord:css" force="true"/> 
                 </field-visibility>
                 <appearance>
                     <set id="ord0" template="/ru/it/lecm/base-share/components/preview-set.ftl"/>
@@ -151,9 +151,9 @@
                     <show id="lecm-ord-table-structure:items-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="common" label.id="label.ord.common"/>
-                    <set id="items" label.id="label.ord.items"/>
-                    <set id="agreement" label.id="label.ord.agreement"/>
+                    <set id="common" label-id="label.ord.common"/>
+                    <set id="items" label-id="label.ord.items"/>
+                    <set id="agreement" label-id="label.ord.agreement"/>
                     
                     <set id="ord0" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="ord1" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
@@ -196,6 +196,8 @@
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-ord-table-structure:item-content</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
+<!--                            <control-param name="expandable">true</control-param>
+                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="deleteMessageFunction"></control-param>
@@ -206,7 +208,7 @@
                     </field>
                 </appearance>
             </form>
-             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
+            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
                     <show id="lecm-eds-document:document-type-assoc"/>
@@ -224,23 +226,125 @@
             <form>
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
+					<show id="lecm-ord-table-structure:item-status-assoc"/>
                     <show id="lecm-ord-table-structure:item-content"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
+					<show id="lecm-ord-table-structure:executor-assoc"/>
+					<show id="lecm-ord-table-structure:execution-date"/>
                     <show id="lecm-ord-table-structure:execution-date-real"/>
-                    <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-comment"/>
+                    <show id="lecm-ord-table-structure:errand-assoc"/>
+					<show id="lecm-ord:css" />
                 </field-visibility>
+				<appearance>
+                    <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="first-row" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+					<set id="item0" parent="first-row" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="item1" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="item3" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="item4" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    
+                    <field id="lecm-ord:css" set="item-container">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="css">
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field {
+								margin-bottom: 0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row .set{
+								padding-bottom:0;
+								margin-bottom: 0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field label {
+								float: left;
+								width: auto;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field span.viewmode-value {
+								float:right;
+								margin-right: 30px;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field span.viewmode-label,
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field .help-icon {
+								display: none;
+							}
+
+							.yui-skin-lecmTheme .yui-panel .item-container .first-row .two-column div.form-field input[type="text"]{
+								width: 6em;
+							}
+							
+							.yui-skin-lecmTheme .yui-panel .item-container .item1 {
+								clear: both;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .item4 .form-field {
+								padding: 0.5em 0;
+							}
+							
+							.yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field  span.viewmode-label{
+								display: none;
+							}
+							 .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
+								width: 46em;
+							 }
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.document-preview) {
+								margin-left:0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field label {
+								float: none;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field .format-info {
+								margin-top: 3px;
+								height: 0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field input[type="text"]		
+							{
+                                width: 20em;
+                            }
+							.yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+								width: 23em;
+								height: 20px;
+								margin-bottom: 10px;
+							}
+							</control-param>
+                        </control>
+                    </field>
+                    
+                    <field id="lecm-document:indexTableRow" set="item0"/>
+					<field id="lecm-ord-table-structure:item-status-assoc" set="item0">
+						 <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-ord-table-structure:item-status-assoc/cm:name}</control-param>
+                        </control>
+					</field>
+                    <field id="lecm-ord-table-structure:item-content" set="item1">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
+                    <field id="lecm-ord-table-structure:execution-date" set="item2"/>
+					<field id="lecm-ord-table-structure:execution-date-real" set="item2">
+						<control template="/org/alfresco/components/form/controls/info.ftl"/>
+					</field> 
+                    <field id="lecm-ord-table-structure:item-comment" set="item3">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+					</field>	
+                    <field id="lecm-ord-table-structure:errand-assoc" set="item4">
+						 <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</control-param>
+                        </control>
+					</field>
+                </appearance>
+				
             </form>        
             <form id="table-structure-info">
                 <field-visibility>
-                    <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
+<!--                    <show id="lecm-document:indexTableRow" force="true"/>
+                    <show id="lecm-ord-table-structure:execution-date"/>-->
                     <show id="lecm-ord-table-structure:item-content"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
+<!--                    <show id="lecm-ord-table-structure:item-comment"/>
                     <show id="lecm-ord-table-structure:execution-date-real"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:item-status-assoc"/>-->
                 </field-visibility>
             </form>
         </forms>
@@ -250,26 +354,83 @@
             <form>
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
                     <show id="lecm-ord-table-structure:item-content"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
-                    <show id="lecm-ord-table-structure:execution-date-real"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
-                    <show id="lecm-ord-table-structure:item-status-assoc"/>
+                    <show id="lecm-ord-table-structure:execution-date"/>
+                    <show id="lecm-ord-table-structure:item-comment"/>
+					<show id="lecm-ord:css" />
                 </field-visibility>
+                <appearance>
+                    <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="item0" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                    <set id="item1" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="item3" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    
+                    <field id="lecm-ord:css" set="item0">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="css">
+							 .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
+								width: 46em;
+							 }
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.document-preview) {
+								margin-left:0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field label {
+								float: none;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container div.form-field .format-info {
+								margin-top: 3px;
+								height: 0;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field input[type="text"]
+							{
+                                width: 20em;
+                            }
+							
+							.yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+								width: 23em;
+								height: 20px;
+								margin-bottom: 10px;
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field label {
+								float: left;
+								width: auto;
+								
+							}
+							.yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field input[type="text"] {
+								width: 6em;
+							}
+							</control-param>
+                        </control>
+                    </field>
+                    
+                    <field id="lecm-document:indexTableRow" set="item0"/>
+
+                    <field id="lecm-ord-table-structure:item-content" set="item1">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
+                    <field id="lecm-ord-table-structure:execution-date" set="item2"/>
+                    <field id="lecm-ord-table-structure:item-comment" set="item3">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+					</field>	
+                    
+                </appearance>
             </form>        
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
-                    <show id="lecm-ord-table-structure:execution-date"/>
-                    <show id="lecm-ord-table-structure:item-content"/>
-                    <show id="lecm-ord-table-structure:item-comment"/>
-                    <show id="lecm-ord-table-structure:execution-date-real"/>
                     <show id="lecm-ord-table-structure:executor-assoc"/>
+                    <show id="lecm-ord-table-structure:execution-date"/>
                     <show id="lecm-ord-table-structure:item-status-assoc"/>
                 </field-visibility>
             </form>
         </forms>
     </config>
-    
+
 </alfresco-config>
