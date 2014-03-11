@@ -1075,6 +1075,99 @@
 
 			<includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
 	   </permissionGroup>
+
+       <!-- Выполняющий действия -->
+       <permissionGroup name="LECM_BASIC_PG_ActionPerformer_Lite" allowFullControl="false" expose="false" >
+           <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
+           <!--<includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />-->
+           <!--<includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />-->
+
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
+
+           <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
+
+           <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentAdd" type="sys:base" /> -->
+           <includePermissionGroup permissionGroup="lecmPerm_ContentView" type="sys:base" />
+           <!--<includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" />-->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" /> -->
+           <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" />
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_WFEnumBP" type="sys:base" />-->
+           <includePermissionGroup permissionGroup="lecmPerm_WFTaskList" type="sys:base" />
+           <!--<includePermissionGroup permissionGroup="lecmPerm_WFArtefactsBP" type="sys:base" />-->
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_HistoryView" type="sys:base" />-->
+
+           <includePermissionGroup permissionGroup="lecmPerm_TagView" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_TagCreate" type="sys:base" />
+           <!--<includePermissionGroup permissionGroup="lecmPerm_TagDelete" type="sys:base" />-->
+
+           <includePermissionGroup permissionGroup="lecmPerm_LinksView" type="sys:base" />
+           <!--<includePermissionGroup permissionGroup="lecmPerm_LinksCreate" type="sys:base" />-->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_LinksDelete" type="sys:base" /> -->
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_CommentCreate" type="sys:base" />-->
+           <!--<includePermissionGroup permissionGroup="lecmPerm_CommentView" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_CommentDelete" type="sys:base" />-->
+
+           <includePermissionGroup permissionGroup="lecmPerm_ActionExec" type="sys:base" />
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" />-->
+
+           <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+
+           <includePermissionGroup permissionGroup="lecmPerm_ReadAttachment" type="sys:base" />
+       </permissionGroup>
+
+       <permissionGroup name="LECM_BASIC_PG_Reader_Lite" allowFullControl="false" expose="false" >
+           <includePermissionGroup permissionGroup="Consumer" type="cm:cmobject" />
+           <!--
+            <includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
+            <includePermissionGroup permissionGroup="Contributor" type="cm:cmobject" />
+             -->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
+
+           <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
+
+           <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentAdd" type="sys:base" /> -->
+           <includePermissionGroup permissionGroup="lecmPerm_ContentView" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentAddVer" type="sys:base" /> -->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ContentDelete" type="sys:base" /> -->
+           <includePermissionGroup permissionGroup="lecmPerm_ContentCopy" type="sys:base" /> <!--это 'неслабые' права = на ЛЮБУЮ опекрацию записи-->
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_WFEnumBP" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_WFTaskList" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_WFArtefactsBP" type="sys:base" />-->
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_HistoryView" type="sys:base" />-->
+
+           <includePermissionGroup permissionGroup="lecmPerm_TagView" type="sys:base" />
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_TagCreate" type="sys:base" /> -->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_TagDelete" type="sys:base" /> -->
+
+
+           <includePermissionGroup permissionGroup="lecmPerm_LinksView" type="sys:base" />
+           <!--
+           <includePermissionGroup permissionGroup="lecmPerm_LinksCreate" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_LinksDelete" type="sys:base" />
+
+           <includePermissionGroup permissionGroup="lecmPerm_CommentCreate" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_CommentView" type="sys:base" />
+           <includePermissionGroup permissionGroup="lecmPerm_CommentDelete" type="sys:base" /> -->
+
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_ActionExec" type="sys:base" /> -->
+
+           <!--<includePermissionGroup permissionGroup="lecmPerm_MemberList" type="sys:base" />-->
+           <!-- <includePermissionGroup permissionGroup="lecmPerm_MemberAdd" type="sys:base" /> -->
+           <includePermissionGroup permissionGroup="lecmPerm_SetRate" type="sys:base" />
+       </permissionGroup>
    </permissionSet>
 
    <!-- =============================== -->
