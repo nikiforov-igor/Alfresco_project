@@ -60,4 +60,12 @@
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-internal-default-statemachine.xml" />
     </bean>
 
+    <bean  id="internalCreateRecipientPolicy" class="ru.it.lecm.internal.policy.InternalCreateRecipientPolicy"
+           init-method="init" depends-on="internal.LogicEcmInternalBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="edsGlobalSettingsService" ref="eds.global-settings.service"/>
+        <property name="permissionService" ref="lecmPermissionServiceBean"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+    </bean>
+
 </beans>

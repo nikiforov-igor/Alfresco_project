@@ -567,7 +567,7 @@
 								<property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
 								<property name="cm:name"><![CDATA[ce8184b5-f69b-46a8-b4b5-6aec3ec65aed]]></property>
 								<property
-										name="lecm-arm:field-name"><![CDATA[lecm-internal:recipient-assoc]]></property>
+										name="lecm-arm:field-name"><![CDATA[lecm-eds-document:recipients-assoc]]></property>
 							</item>
 						</items>
 						<assocs>
