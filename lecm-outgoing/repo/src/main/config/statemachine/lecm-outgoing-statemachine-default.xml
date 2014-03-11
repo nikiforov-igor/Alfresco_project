@@ -4857,7 +4857,7 @@
 																	<![CDATA[//очистить информацию о маршруте
 (function() {
     var outgoing = stm_document;
-    if(document.hasAspect("lecm-document-route:routable")) {
+    if(outgoing.hasAspect("lecm-document-route:routable")) {
         outgoing.removeAspect("lecm-document-route:routable");
         outgoing.save();
     }
