@@ -6,10 +6,12 @@
 				<activiti:field name="script">
 					<activiti:string><![CDATA[
 						var isSigned = execution.getVariable("isSigned");
-						if (Packages.java.lang.Boolean.FALSE.equals(isSigned)) {
+						var isSignedValue = Packages.java.lang.Boolean.TRUE.equals(isSigned);
+						if (!isSignedValue) {
 							signingWorkflow.dropSigningResults(resultListRef);
 						}
 						signingWorkflow.deleteTempAssigneesList(execution);
+						signingWorkflow.saveRouteApprovalResult(bpm_package, isSignedValue);
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>

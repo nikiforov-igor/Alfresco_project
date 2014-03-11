@@ -38,6 +38,16 @@ public final class RouteAspecsModel {
 	 */
 	public final static QName PROP_IS_REGISTER_AFTER_SIGNED = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "is-register-after-signed");
 
+	/**
+	 * &lt;property name="lecm-document-route:is-approved"&gt;
+	 */
+	public final static QName PROP_IS_APPROVED = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "is-approved");
+
+	/**
+	 * &lt;property name="lecm-document-route:is-signed"&gt;
+	 */
+	public final static QName PROP_IS_SIGNED = QName.createQName(ROUTE_ASPECTS_NAMESPACE, "is-signed");
+
 	private RouteAspecsModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of RouteAspecsModel class.");
 	}

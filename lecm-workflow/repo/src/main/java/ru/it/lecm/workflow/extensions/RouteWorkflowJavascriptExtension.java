@@ -3,8 +3,6 @@ package ru.it.lecm.workflow.extensions;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -36,18 +34,6 @@ public class RouteWorkflowJavascriptExtension extends BaseWebScript {
 
 	public void setWorkflowRunnerService(WorkflowRunnerService workflowRunnerService) {
 		this.workflowRunnerService = workflowRunnerService;
-	}
-
-	public void exploreExecutionVariables(final DelegateExecution execution) {
-
-		Map<String, Object> variables = execution.getVariables();
-		for(Entry<String, Object> entry : variables.entrySet()) {
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			String simpleName = (value == null) ? "null":value.getClass().getSimpleName();
-			Object args[] = {key, simpleName, value};
-			logger.debug("variable {}\t\tsimpleName {}\t\tvalue {}", args);
-		}
 	}
 
 	public void makeDocumentRoutable(final ScriptNode document, final ScriptNode route) {

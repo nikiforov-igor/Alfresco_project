@@ -7,18 +7,14 @@
 					<activiti:string><![CDATA[
 						var finalDecision = execution.getVariable("finalDecision");
 						var isApproved = execution.getVariable("isApproved");
+						var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
 						if (!finalDecision && isApproved != null) {
-							var isApprovedValue = Packages.java.lang.Boolean.TRUE.equals(isApproved);
 							finalDecision = isApprovedValue ? "APPROVED_FORCE" : "REJECTED_FORCE";
 							var resultListRef = execution.getVariable("resultListRef");
 							approvalWorkflow.logFinalDecision(resultListRef, finalDecision);
 						}
 						approvalWorkflow.deleteTempAssigneesList(execution);
-						//временное решение
-						var document = bpm_package.children[0];
-						if (document.hasAspect("lecm-document-route:routable")) {
-							document.properties["lecm-document-route:is-approved"] = isApproved;
-						}
+						approvalWorkflow.saveRouteApprovalResult(bpm_package, isApprovedValue);
 					]]></activiti:string>
 				</activiti:field>
 			</activiti:executionListener>

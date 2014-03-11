@@ -24,6 +24,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
+import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.approval.DecisionResult;
 
@@ -72,7 +73,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	 * @param assigneesList список сотрудников, ака согласущие лица
 	 * @param bpmPackage ссылка на Workflow Package Folder, хранилище всех
 	 * item-ов workflow
-	 * @param approvalType тип согласования: 
+	 * @param approvalType тип согласования:
 	 * @param documentAttachmentCategoryName название категории вложений, в
 	 * которой хранится файл документа
 	 * @return ссылку на новый лист согласования
@@ -232,4 +233,10 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 		return decisionMap;
 	}
 
+	public void saveRouteApprovalResult(final ActivitiScriptNode bpmPackage, final boolean isApproved) {
+		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
+		if (nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE)) {
+			nodeService.setProperty(documentRef, RouteAspecsModel.PROP_IS_APPROVED, isApproved);
+		}
+	}
 }

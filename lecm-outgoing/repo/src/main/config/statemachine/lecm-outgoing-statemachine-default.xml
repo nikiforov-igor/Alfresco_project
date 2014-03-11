@@ -6261,6 +6261,7 @@
 																	<![CDATA[//запуск подписания по маршруту
 (function() {
     var variables,
+        jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils(),
         outgoing = stm_document;
     if(outgoing.hasAspect("lecm-document-route:routable")) {
         variables = jsonUtils.toJSONObject({

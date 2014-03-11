@@ -8,8 +8,11 @@ import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
+import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 
@@ -25,8 +28,13 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	 */
 	private final static String WORKFLOW_ROLE = "workflowRole";
 
+	private NodeService nodeService;
 	private SigningWorkflowService signingWorkflowService;
 	private WorkflowAssigneesListService workflowAssigneesListService;
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
 	public void setSigningWorkflowService(final SigningWorkflowService signingWorkflowService) {
 		this.signingWorkflowService = signingWorkflowService;
@@ -102,5 +110,12 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
 	public void logDecision(final ActivitiScriptNode resultListRef, final WorkflowTaskDecision taskDecision) {
 		signingWorkflowService.logDecision(resultListRef.getNodeRef(), taskDecision);
+	}
+
+	public void saveRouteApprovalResult(final ActivitiScriptNode bpmPackage, final boolean isApproved) {
+		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
+		if (nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE)) {
+			nodeService.setProperty(documentRef, RouteAspecsModel.PROP_IS_SIGNED, isApproved);
+		}
 	}
 }
