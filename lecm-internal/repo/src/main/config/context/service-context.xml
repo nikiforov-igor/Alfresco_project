@@ -26,11 +26,11 @@
 		  documents.LogicEcmModelsConnectionsBootstrap,documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-model.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-typical-answers-dic-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-internal-model.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-internal-answers-model.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-table-structure-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-internal-answers-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-internal-model.xml</value>
             </list>
         </property>
         <property name="labels">
@@ -69,7 +69,7 @@
         <property name="permissionService" ref="lecmPermissionServiceBean"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
-    
+
     <bean id="internalCreatePolicy" class="ru.it.lecm.internal.policy.InternalCreatePolicy" init-method="init">
         <property name="nodeService" ref="NodeService"/>
         <property name="policyComponent" ref="policyComponent"/>
