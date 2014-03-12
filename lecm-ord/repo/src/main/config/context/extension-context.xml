@@ -11,6 +11,8 @@
 		  p:nodeService-ref="nodeService"
 		  p:documentService-ref="documentService"
 		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"/>
+		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+		  p:documentConnectionService-ref="documentConnectionService"
+		  p:lecmDictionaryService-ref="serviceDictionary"/>
 
 </beans>
