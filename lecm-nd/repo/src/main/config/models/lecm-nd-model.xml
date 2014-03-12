@@ -3,7 +3,7 @@
     <description>Нормативные документы</description>
     <author>VKuprin</author>
     <version>1.0</version>
-    
+
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
@@ -56,7 +56,7 @@
                     <type>d:boolean</type>
                 </property>
                 <!--Служебные свойства-->
-                    
+
                 <property name="lecm-nd:registrar-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
@@ -73,7 +73,24 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-
+                <!-- Дата начала действия -->
+                <property name="lecm-nd:begin-date">
+                    <type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Дата окончания действия -->
+                <property name="lecm-nd:end-date">
+                    <type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-nd:registrar-assoc">
@@ -88,7 +105,19 @@
                         <many>false</many>
                     </target>
                 </association>
-                
+                <!-- Подразделения -->
+                <association name="lecm-nd:org-unit-assoc">
+                    <title>Подразделения</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:organization-unit</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
             </associations>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
