@@ -72,6 +72,7 @@ div.arm-tree-menu .arm-accordion div.accordion-head span.accordion-label {
 }
 div.arm-tree-menu .arm-accordion span.accordion-counter-label {
 	margin-left: 5px;
+    color: #EE801F;
 }
 div.arm-tree-menu .arm-accordion div.accordion-content {
 	height: 0;
