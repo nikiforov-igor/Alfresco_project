@@ -57,7 +57,7 @@
                         <item type="link" id="reports-editor">/reports-editor</item>
                         <item type="link" id="arm-settings">/arm-settings</item>
                         <item type="link" id="group-actions">/group-actions</item>
-						<item type="link" id="routes">/routes</item>
+						<item type="link" id="routes-settings">/routes</item>
                         <item type="link" id="more" icon="">/console/admin-console/</item>
                     </container-group>
                 </item>

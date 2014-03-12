@@ -69,7 +69,7 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		NodeRef routeRef = nodeService.createNode(workflowFolder, ContentModel.ASSOC_CONTAINS, assocQName, LecmWorkflowModel.TYPE_ROUTE).getChildRef();
 		nodeService.addAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP, null);
 
-		//TODO: разделение маршрута на подразделенческий и индивидуальный
+		//разделение маршрута на подразделенческий и индивидуальный
 		switch (routeType) {
 			case EMPLOYEE:
 				NodeRef employeeRef = orgstructureBean.getCurrentEmployee();

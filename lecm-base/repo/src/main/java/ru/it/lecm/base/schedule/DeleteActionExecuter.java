@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.action.ParameterDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import java.util.List;
+import org.alfresco.model.ContentModel;
 
 /**
  * User: AIvkin
@@ -22,6 +23,7 @@ public class DeleteActionExecuter extends ActionExecuterAbstractBase {
 
 	@Override
 	protected void executeImpl(Action action, NodeRef nodeRef) {
+		nodeService.addAspect(nodeRef, ContentModel.ASPECT_TEMPORARY, null);
 		nodeService.deleteNode(nodeRef);
 	}
 
