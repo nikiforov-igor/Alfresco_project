@@ -411,6 +411,14 @@
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
+                            <item name="cm:755cf330-0ffb-4864-ad0f-3acc93e86a42" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
+                                <property name="cm:name"><![CDATA[0a1904cb-0c8d-45cd-8fc8-72792577d2c4]]></property>
+                                <property name="lecm-arm:field-name">
+                                    <![CDATA[lecm-outgoing:contractor-assoc]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                            </item>
 						</items>
 						<assocs>
 							<assoc type="lecm-arm:fields-assoc"
@@ -423,6 +431,8 @@
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Исходящие/1872aae5-d4e5-4760-a85f-4746ad6c9206"/>
 							<assoc type="lecm-arm:fields-assoc"
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Исходящие/38997060-708e-4908-abb6-58dd5254f465"/>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Исходящие/0a1904cb-0c8d-45cd-8fc8-72792577d2c4"/>
 						</assocs>
 					</item>
 					<item name="cm:Внутренние" type="lecm-arm:node">
