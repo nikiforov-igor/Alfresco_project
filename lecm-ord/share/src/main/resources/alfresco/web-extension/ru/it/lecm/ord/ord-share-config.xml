@@ -149,23 +149,49 @@
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
                     <show id="lecm-ord-table-structure:items-assoc"/>
+                    <show id="form-css"/>
                 </field-visibility>
                 <appearance>
-                    <set id="common" label-id="label.ord.common"/>
+                    <set id="ord-document-form-common-set" label-id="label.ord.common" template="/ru/it/lecm/ord/components/class-set.ftl"/>
                     <set id="items" label-id="label.ord.items"/>
                     <set id="agreement" label-id="label.ord.agreement"/>
-                    
-                    <set id="ord0" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="ord1" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="ord2" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="ord3" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="ord4" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="ord5" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="ord6" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="ord7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
-                    <field id="lecm-document:title" label="Заголовок" set="ord0"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord1">
+                    <set id="ord0" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="ord1" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="ord2" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="ord3" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="ord4" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="ord5" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+                    <set id="ord6" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="ord7" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+
+					<field id="form-css" set="ord-document-form-common-set">
+						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="css">
+                            	.ord-document-form-common-set .two-column .first .selectone-control select {
+                            		width: 218px !important;
+                            	}
+                            	.ord-document-form-common-set .two-column div:not(.first) .date-entry {
+                            		width: 208px !important;
+                            	}
+                            	.ord-document-form-common-set .full-width .autocomplete-block {
+                            		margin-left: 200px !important;
+                            		margin-right: 20px !important;
+                            	}
+                            	.ord-document-form-common-set .full-width .autocomplete-block .autocompleteCurrentValueDisplayInvisible{
+                            		width: 100% !important;
+                            	}
+                            	.ord-document-form-common-set .two-column .first .object-finder .current-values {
+                            		width: 180px !important;
+                            	}
+                            	.ord-document-form-common-set .two-column div:not(.first) .object-finder .current-values {
+                            		width: 173px !important;
+                            	}
+                            </control-param>
+                        </control>
+					</field>
+                    <field id="lecm-document:title" set="ord0"/>
+                    <field id="lecm-eds-document:document-type-assoc" set="ord1">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -174,30 +200,30 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:execution-date" label="Срок исполнения" set="ord1"/>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание" set="ord2">
+                    <field id="lecm-eds-document:execution-date" set="ord1"/>
+                    <field id="lecm-eds-document:summaryContent" set="ord2">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-ord:controller-assoc" label="Контролёр" set="ord3"/>
-                    <field id="lecm-eds-document:note" label="Примечание" set="ord4">
+                    <field id="lecm-ord:controller-assoc" set="ord3"/>
+                    <field id="lecm-eds-document:note"  set="ord4">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" label="Тематика" set="ord5"/>
-                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура дел" set="ord5"/>
-                    
+                    <field id="lecm-document:subject-assoc" set="ord5"/>
+                    <field id="lecm-eds-document:file-register-assoc" set="ord5"/>
+
                     <field id="lecm-ord:canceled-assoc" set="ord6"/>
                     <field id="lecm-ord:accepted-assoc" set="ord7"/>
-                                        
+
                     <field id="lecm-ord-table-structure:items-assoc" set="items">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-ord-table-structure:item-content</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
-                            <control-param name="expandable">true</control-param>
-                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
+<!--                            <control-param name="expandable">true</control-param>
+                            <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>-->
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
                             <control-param name="deleteMessageFunction"></control-param>
