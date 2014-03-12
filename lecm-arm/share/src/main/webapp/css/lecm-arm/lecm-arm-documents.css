@@ -146,6 +146,8 @@ div.arm-tree-menu .arm-accordion .wait-container {
 
 .yui-skin-lecmTheme .datagrid .grid.yui-dt table .expand-row .arm-connections-table {
 	margin-left: 50px;
+    background-color: #C9EBF5;
+    color: #8E8E8E;
 }
 
 .arm-reports-list {
