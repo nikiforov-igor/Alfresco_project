@@ -408,16 +408,18 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		String previousUserName = workflowAssigneesListService.getAssigneesListItemUserName(assignee);
 
 		if (!currentUserName.equals(previousUserName)) {
+			int order = 0;
 			NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
+			NodeRef oldApprovalListItem = workflowResultListService.getResultItemByUserName(approvalListRef, previousUserName);
+			if (oldApprovalListItem != null) {
+				order = (Integer) nodeService.getProperty(oldApprovalListItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
+				nodeService.setProperty(oldApprovalListItem, ApprovalResultModel.PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
+				nodeService.setProperty(oldApprovalListItem, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, new Date());
+			}
 			NodeRef approvalListItemRef = workflowResultListService.getResultItemByUserName(approvalListRef, currentUserName);
 			if (approvalListItemRef == null) {
 				String newItemTitle = String.format(ASSEGNEE_ITEM_FORMAT, currentUserName);
-				workflowResultListService.createResultItem(approvalListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, ApprovalResultModel.TYPE_APPROVAL_ITEM);
-			}
-			NodeRef oldApprovalListItem = workflowResultListService.getResultItemByUserName(approvalListRef, previousUserName);
-			if (oldApprovalListItem != null) {
-				nodeService.setProperty(oldApprovalListItem, ApprovalResultModel.PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
-				nodeService.setProperty(oldApprovalListItem, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, new Date());
+				workflowResultListService.createResultItem(approvalListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, order, ApprovalResultModel.TYPE_APPROVAL_ITEM);
 			}
 		}
 

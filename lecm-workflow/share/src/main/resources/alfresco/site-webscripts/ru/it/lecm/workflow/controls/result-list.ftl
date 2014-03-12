@@ -88,7 +88,8 @@
 				datagridMeta: {
 					itemType: "${itemType}",
 					datagridFormId: "datagrid",
-					nodeRef: "${form.arguments.itemId}"
+					nodeRef: "${form.arguments.itemId}",
+					sort: "lecm-workflow:assignee-order|true",
 				},
 				bubblingLabel: "${containerId}",
 			allowCreate: ${allowCreate?string},

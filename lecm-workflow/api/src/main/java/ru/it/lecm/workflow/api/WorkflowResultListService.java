@@ -12,7 +12,7 @@ import org.alfresco.service.namespace.QName;
  */
 public interface WorkflowResultListService {
 
-	NodeRef createResultItem(NodeRef resultListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType);
+	NodeRef createResultItem(NodeRef resultListRef, NodeRef employeeRef, String itemTitle, Date dueDate, int order, QName resultItemType);
 
 	NodeRef createResultList(final NodeRef parentRef, final NodeRef bpmPackage, final String documentAttachmentCategoryName, QName resultListType, String resultListName);
 

@@ -27,10 +27,7 @@ LogicECM.module.Signing = LogicECM.module.Signing || {};
 									datagridMeta: {
 										itemType: me.signingItemType,
 										nodeRef: me.signingListRef,
-										sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
-										searchConfig: {
-											filter: ''
-										}
+										sort: 'lecm-workflow:assignee-order|true'
 									},
 									bubblingLabel: "SigningListDatagridControl"
 								});

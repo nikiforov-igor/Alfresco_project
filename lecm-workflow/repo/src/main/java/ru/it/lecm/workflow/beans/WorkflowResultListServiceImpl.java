@@ -56,12 +56,13 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 	}
 
 	@Override
-	public NodeRef createResultItem(NodeRef resultListRef, NodeRef employeeRef, String itemTitle, Date dueDate, QName resultItemType) {
+	public NodeRef createResultItem(NodeRef resultListRef, NodeRef employeeRef, String itemTitle, Date dueDate, int order, QName resultItemType) {
 		NodeRef resultListItemRef;
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_TITLE, itemTitle);
 		properties.put(ContentModel.PROP_NAME, itemTitle);
 		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_DUE_DATE, dueDate);
+		properties.put(LecmWorkflowModel.PROP_ASSIGNEE_ORDER, order);
 
 		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, itemTitle);
 		resultListItemRef = nodeService.createNode(resultListRef, ContentModel.ASSOC_CONTAINS, assocQName, resultItemType, properties).getChildRef();
@@ -79,10 +80,11 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 			NodeRef employeeRef = findNodeByAssociationRef(assigneeNode, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			Date dueDate = (Date) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 			String userName = (String) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);
+			int order = (Integer) nodeService.getProperty(assigneeNode, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
 
 			String itemTitle = String.format(RESULT_ITEM_FORMAT, userName);
 
-			createResultItem(emptyResultList, employeeRef, itemTitle, dueDate, resultItemType);
+			createResultItem(emptyResultList, employeeRef, itemTitle, dueDate, order, resultItemType);
 		}
 	}
 

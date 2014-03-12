@@ -191,6 +191,11 @@
 				<property name="lecm-workflow:assignee-order">
 					<type>d:int</type>
 					<mandatory>true</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
 				</property>
 			</properties>
 		</aspect>

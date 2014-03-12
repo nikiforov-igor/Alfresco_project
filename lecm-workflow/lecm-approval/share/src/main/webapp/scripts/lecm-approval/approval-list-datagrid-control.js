@@ -90,10 +90,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					itemType: me.approvalItemType,
 					nodeRef: me.approvalListNodeRef,
 					datagridFormId: "approvalItemsDataGridControl",
-					sort: 'lecm-workflow-result:workflow-result-item-finish-date|true',
-					searchConfig: {
-						filter: ''
-					}
+					sort: 'lecm-workflow:assignee-order|true'
 				},
 				bubblingLabel: containerId
 			});
@@ -141,9 +138,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 										displayValue: data.displayValue
 									});
 									break;
-//								case "lecmApprovalResult:approvalResultItemDecision":
-
-//									break;
 								default:
 									break;
 							}
