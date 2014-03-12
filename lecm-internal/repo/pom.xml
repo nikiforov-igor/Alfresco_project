@@ -14,9 +14,9 @@
     <name>Logic ECM Internal Document Module Repo</name>
     <description>Logic ECM Internal Document Module Repo</description>
     <!--
-       need to list these as a provided so that Maven doesn't download them
-       and include them in the AMP, they are provided by Alfresco
-   -->
+        need to list these as a provided so that Maven doesn't download them
+        and include them in the AMP, they are provided by Alfresco
+    -->
     <dependencies>
         <dependency>
             <groupId>org.alfresco</groupId>
@@ -26,10 +26,10 @@
             <groupId>org.alfresco</groupId>
             <artifactId>alfresco-repository</artifactId>
         </dependency>
-	    <dependency>
-		    <groupId>org.alfresco</groupId>
-		    <artifactId>alfresco-data-model</artifactId>
-	    </dependency>
+        <dependency>
+            <groupId>org.alfresco</groupId>
+            <artifactId>alfresco-data-model</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -77,10 +77,10 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-	    <dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-api</artifactId>
-	    </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
@@ -110,17 +110,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>ru.it.lecm.internal</groupId>
+            <artifactId>internal-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>ru.it.lecm.eds-documents</groupId>
             <artifactId>eds-documents-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <scope>provided</scope>
+            <version>${project.version}</version>
         </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
-       The scm is required for the buildnumber-maven-plugin which is required
-       for AMP version numbering
-   -->
+        The scm is required for the buildnumber-maven-plugin which is required
+        for AMP version numbering
+    -->
     <scm>
         <connection>scm:svn:http://domain.com/svn/trunk/</connection>
         <developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>
@@ -163,10 +167,10 @@
                 </excludes>
             </resource>
             <!--
-             Copies and filters AMP config in the proper package
-             'alfresco/module/${project.artifactId}' so to enforce full module
-             naming single sourcing from POM properties
-         -->
+                Copies and filters AMP config in the proper package
+                'alfresco/module/${project.artifactId}' so to enforce full module
+                naming single sourcing from POM properties
+            -->
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/config</directory>

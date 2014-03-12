@@ -17,7 +17,7 @@ public interface EDSDocumentService {
     public static final QName PROP_CONTENT = QName.createQName(EDS_NAMESPACE_URI, "summaryContent");
 
     public static final QName ASSOC_DOCUMENT_TYPE= QName.createQName(EDS_NAMESPACE_URI, "document-type-assoc");
-    public static final QName ASSOC_RECIPIENTS = QName.createQName(EDS_NAMESPACE_URI, "recipients-assoc");
     public static final QName ASSOC_FILE_REGISTER = QName.createQName(EDS_NAMESPACE_URI, "file-register-assoc");
+	public static final QName ASSOC_RECIPIENTS = QName.createQName(EDS_NAMESPACE_URI, "recipients-assoc");
 
 }

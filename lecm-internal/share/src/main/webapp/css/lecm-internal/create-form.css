@@ -85,3 +85,7 @@ div.yui-gb div.yui-u.first {
 div.form-field textarea {
 	width: 100% !important;
 }
+
+tr.yui-dt-first.yui-dt-last > th {
+	width: 50px !important;
+}
