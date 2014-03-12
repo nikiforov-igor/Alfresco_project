@@ -355,24 +355,22 @@ public class StateMachineHelper implements StateMachineServiceBean {
      * @return
      */
     public boolean isStarter(String type, NodeRef employee) {
-        List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(employee, true, true);
-        HashSet<String> roles = new HashSet<String>();
-        for (NodeRef role : roleRefs) {
-            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-            roles.add(name);
-        }
-        boolean result = false;
+        Set<String> accessRoles = new HashSet<String>();
         List<StateMachineAction> actions = getStartActions(type.replace(":", "_"));
         for (StateMachineAction action : actions) {
             if (action instanceof DocumentPermissionAction) {
                 DocumentPermissionAction permissions = (DocumentPermissionAction) action;
-                Set<String> accessRoles = permissions.getRoles();
-                for (String role : roles) {
-                    result = result || accessRoles.contains(role);
-                }
+                accessRoles.addAll(permissions.getRoles());
             }
         }
-        return result;
+        List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(employee, true, true);
+        for (NodeRef role : roleRefs) {
+            String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+            if (accessRoles.contains(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
