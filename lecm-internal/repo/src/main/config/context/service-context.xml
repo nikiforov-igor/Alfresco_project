@@ -65,9 +65,8 @@
     <bean  id="internalCreateRecipientPolicy" class="ru.it.lecm.internal.policy.InternalCreateRecipientPolicy"
            init-method="init" depends-on="internal.LogicEcmInternalBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
-        <property name="edsGlobalSettingsService" ref="eds.global-settings.service"/>
-        <property name="permissionService" ref="lecmPermissionServiceBean"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="NodeService"/>
     </bean>
 
     <bean id="internalCreatePolicy" class="ru.it.lecm.internal.policy.InternalCreatePolicy" init-method="init">

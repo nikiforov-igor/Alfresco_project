@@ -22,7 +22,8 @@ public interface InternalService {
 	public final static QName TYPE_INTERNAL = QName.createQName(INTERNAL_NAMESPACE, "document");
 	public final static QName TYPE_ANSWER = QName.createQName(ANSWERS_TABLE_NAMESPACE, "answer");
 
-	public final static QName PROP_ANSWER_TABLE_STATUS = QName.createQName(ANSWERS_TABLE_NAMESPACE, "answer-status");
+    public final static QName ASSOC_INTERNAL_RECIPIENTS = QName.createQName(INTERNAL_NAMESPACE, "recipients-assoc");
+    public final static QName PROP_ANSWER_TABLE_STATUS = QName.createQName(ANSWERS_TABLE_NAMESPACE, "answer-status");
 	public final static QName PROP_ANSWER_TABLE_EMPLOYEE_ASSOC_REF = QName.createQName(ANSWERS_TABLE_NAMESPACE, "employee-assoc-ref");
 	public final static QName PROP_ANSWER_TABLE_EMPLOYEE_ASSOC_TEXT = QName.createQName(ANSWERS_TABLE_NAMESPACE, "employee-assoc-text-content");
 	public final static QName PROP_ANSWER_TABLE_ANSWER = QName.createQName(ANSWERS_TABLE_NAMESPACE, "answer-details");

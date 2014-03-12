@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-internal:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-	<description>Внутренние</description>
-	<author>Logic ECM</author>
-	<version>1.0</version>
-	<imports>
-            <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
-            <import uri="http://www.it.ru/logicECM/internal-doc-type/1.0" prefix="lecm-internal-doc-type"/>
-		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
-		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
-		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+    <description>Внутренние</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/internal-doc-type/1.0" prefix="lecm-internal-doc-type"/>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
-        <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
-        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
-        <import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
-        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
-        <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
-		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
-                <import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
-	</imports>
-	<namespaces>
-		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
-	</namespaces>
+        <import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
+    </namespaces>
 
     <constraints>
-        <constraint name="lecm-internal:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+        <constraint name="lecm-internal:present-string-constraint"
+                    type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
                 <value><![CDATA[Внутренний от {cm:created?dd-MM-yyyy}, номер {~REGNUM}]]></value>
             </parameter>
@@ -40,16 +32,17 @@
                 </list>
             </parameter>
         </constraint>
-        <constraint name="lecm-internal:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+        <constraint name="lecm-internal:author-property-constraint"
+                    type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
             <parameter name="authorProperty">
                 <value>lecm-document:creator-ref</value>
             </parameter>
         </constraint>
-	    <constraint name="lecm-internal:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
-		    <parameter name="armUrl">
-			    <value>arm?code=SED</value>
-		    </parameter>
-	    </constraint>
+        <constraint name="lecm-internal:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+            <parameter name="armUrl">
+                <value>arm?code=SED</value>
+            </parameter>
+        </constraint>
     </constraints>
 
     <types>
@@ -81,6 +74,19 @@
                 </property>
             </properties>
             <associations>
+                <!-- Получатель (сотрудник или подразделение) -->
+                <association name="lecm-internal:recipients-assoc">
+                    <title>Получатель</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:cmobject</class>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </target>
+                </association>
                 <association name="lecm-internal:doc-type-assoc">
                     <title>Вид внутреннего документа</title>
                     <source>
@@ -100,5 +106,5 @@
                 <aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
             </mandatory-aspects>
         </type>
-	</types>
+    </types>
 </model>
