@@ -239,8 +239,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     }
 
     public NodeRef getDraftRoot() {
-        NodeRef person = repositoryHelper.getPerson();
-        return repositoryStructureHelper.getDraftsRef(person);
+        String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
+        return repositoryStructureHelper.getDraftsRef(fullyAuthenticatedUser);
     }
 
     public NodeRef getDraftRootByType(QName docType) {
