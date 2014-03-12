@@ -363,6 +363,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 accessRoles.addAll(permissions.getRoles());
             }
         }
+        if (accessRoles.isEmpty()) {
+            return false;
+        }
         List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(employee, true, true);
         for (NodeRef role : roleRefs) {
             String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
