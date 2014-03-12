@@ -115,7 +115,6 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 	@Override
 	public void setReservationActive(final NodeRef bpmPackage, final boolean isActive) {
 		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage);
-		//TODO: AuthenticationUtils.runAsSystemUser
 		boolean hasReservationAspect = nodeService.hasAspect(documentRef, ReservationAspectsModel.ASPECT_IS_RESERVATION_RUNNING);
 		if (hasReservationAspect) {
 			nodeService.setProperty(documentRef, ReservationAspectsModel.PROP_IS_RESERVATION_RUNNING, isActive);

@@ -18,11 +18,21 @@ import org.alfresco.service.cmr.repository.NodeRef;
  * }
  */
 public class AssigneesListItem {
+
+	private NodeRef nodeRef;
 	private int order;
 	private int daysToComplete;
 	private Date dueDate;
 	private NodeRef employeeRef;
 	private NodeRef staffRef; //reserved for future
+
+	public NodeRef getNodeRef() {
+		return nodeRef;
+	}
+
+	public void setNodeRef(NodeRef nodeRef) {
+		this.nodeRef = nodeRef;
+	}
 
 	public int getOrder() {
 		return order;

@@ -317,15 +317,18 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	@Override
-	public AssigneesList getAssigneesListDetail(NodeRef assingeesListRef) {
+	public AssigneesList getAssigneesListDetail(final NodeRef assigneesListRef) {
 		AssigneesList assigneesList = new AssigneesList();
-		assigneesList.setListName(getNodeRefName(assingeesListRef));
+		assigneesList.setNodeRef(assigneesListRef);
+		assigneesList.setListName(getNodeRefName(assigneesListRef));
+		assigneesList.setConcurrency(getAssigneesListConcurrency(assigneesListRef));
 
-		List<NodeRef> listItemsNodes = getAssigneesListItems(assingeesListRef);
+		List<NodeRef> listItemsNodes = getAssigneesListItems(assigneesListRef);
 
 		// бежим по элементам листа согласующих
 		for (NodeRef listItem : listItemsNodes) {
 			AssigneesListItem assigneesListItem = new AssigneesListItem();
+			assigneesListItem.setNodeRef(listItem);
 			assigneesListItem.setOrder(getAssigneesListItemOrder(listItem));
 			assigneesListItem.setDueDate(getAssigneesListItemDueDate(listItem));
 			assigneesListItem.setEmployeeRef(getEmployeeFromAssigneeListItem(listItem));
@@ -334,6 +337,14 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 			assigneesList.getListItems().add(assigneesListItem);
 		}
+		//отсортировать их по order
+		Collections.sort(assigneesList.getListItems(), new Comparator<AssigneesListItem>() {
+			@Override
+			public int compare(AssigneesListItem o1, AssigneesListItem o2) {
+				return (o1.getOrder() < o2.getOrder()) ? -1 : ((o1.getOrder() == o2.getOrder()) ? 0 : 1);
+			}
+		});
+
 		return assigneesList;
 	}
 
@@ -614,5 +625,35 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public NodeRef getStaffFromAssigneesListItem(final NodeRef assigneesItemRef) {
 		List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(assigneesItemRef, LecmWorkflowModel.ASSOC_ASSIGNEE_ORG_ELEMENT_MEMBER);
 		return targetAssocs.isEmpty() ? null : targetAssocs.get(0).getTargetRef();
+	}
+
+	@Override
+	public Date calculateAssigneesDueDatesByCompletionDays(final NodeRef assigneesListRef) {
+		AssigneesList assigneesList = getAssigneesListDetail(assigneesListRef);
+		String concurrency = assigneesList.getConcurrency();
+		List<AssigneesListItem> items = assigneesList.getListItems();
+		Date workflowDueDate = new Date();
+		if (LecmWorkflowModel.CONCURRENCY_PAR.equals(concurrency)) { //параллельный процесс
+			//по идее у списка должно быть проперти в котором хранится общий срок
+			//здесь мы должны этот общий срок посчитать, вернуть и каждому раздать
+			for (AssigneesListItem item : items) {
+				nodeService.setProperty(item.getNodeRef(), LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE, workflowDueDate);
+			}
+		} else if (LecmWorkflowModel.CONCURRENCY_SEQ.equals(concurrency)) { //последовательный процесс
+			Date currentDate = new Date();
+			for (AssigneesListItem item : items) {
+				currentDate = workCalendarService.getEmployeeNextWorkingDay(item.getEmployeeRef(), currentDate, item.getDaysToComplete());
+				nodeService.setProperty(item.getNodeRef(), LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE, currentDate);
+			}
+			workflowDueDate = currentDate;
+		} else {
+			logger.error("{} is unknown concurrency for assigneesList {}. Due dates can't be calculated!", concurrency, assigneesList);
+		}
+		return workflowDueDate;
+	}
+
+	@Override
+	public String getAssigneesListConcurrency(NodeRef assigneesListRef) {
+		return (String)nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 	}
 }

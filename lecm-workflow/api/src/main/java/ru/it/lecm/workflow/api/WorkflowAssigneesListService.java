@@ -88,4 +88,16 @@ public interface WorkflowAssigneesListService {
 	int getAssigneesListItemDaysToComplete(final NodeRef assigneesItemRef);
 
 	NodeRef getStaffFromAssigneesListItem(final NodeRef assigneesItemRef);
+
+	/**
+	 * расчитать сроки исполнения для участников опираясь на
+	 * 1) сроки согласования в днях
+	 * 2) тип списка исполнения: последовательный или параллельный
+	 * этот метод предназначен для использования в маршрутах
+	 * @param assigneesListRef нода списка исполнителей для которой рассчитываются
+	 * @return общий срок исполнения
+	 */
+	Date calculateAssigneesDueDatesByCompletionDays(final NodeRef assigneesListRef);
+
+	String getAssigneesListConcurrency(final NodeRef assigneesListRef);
 }
