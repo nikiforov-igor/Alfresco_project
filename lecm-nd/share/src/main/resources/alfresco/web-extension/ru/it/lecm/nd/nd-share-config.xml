@@ -33,8 +33,6 @@
                     <set id="nd5" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="nd7" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="nd8" parent="nd2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="nd9" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    <set id="nd10" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
                     <field id="lecm-document-aspects:attachments-temp-assoc" set="nd1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl">
