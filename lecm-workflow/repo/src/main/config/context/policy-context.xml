@@ -24,4 +24,9 @@
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureBean-ref="serviceOrgstructure"/>
 
+	<bean init-method="init"
+		  depends-on="workflow.model.bootstrap"
+		  class="ru.it.lecm.workflow.policies.WorkflowAssociationPolicy"
+		  parent="logicEcmAssociationPolicy"/>
+
 </beans>

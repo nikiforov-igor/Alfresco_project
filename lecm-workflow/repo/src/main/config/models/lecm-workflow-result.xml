@@ -112,6 +112,23 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!-- атрибуты для того, чтобы можно было сортировать результаты по сотруднику -->
+				<property name="lecm-workflow-result:workflow-result-item-employee-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-workflow-result:workflow-result-item-employee-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>false</tokenised>
+					</index>
+				</property>
 			</properties>
 
 			<associations>
