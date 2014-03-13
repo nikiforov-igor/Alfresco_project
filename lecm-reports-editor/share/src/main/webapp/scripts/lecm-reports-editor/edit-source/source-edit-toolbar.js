@@ -270,7 +270,7 @@
                 }
                 this.doubleClickLock = false;
             };
-
+            var context = this;
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
                 {
                     itemKind: meta.itemKind,
@@ -321,7 +321,7 @@
                                 YAHOO.Bubbling.fire("dataItemCreated",
                                     {
                                         nodeRef: response.json.persistedObject,
-                                        bubblingLabel: "editSourceColumns"
+                                        bubblingLabel: context.bubblingLabel
                                     });
                                 this.toolbarButtons.saveAsButton.set("disabled",false);
                             }

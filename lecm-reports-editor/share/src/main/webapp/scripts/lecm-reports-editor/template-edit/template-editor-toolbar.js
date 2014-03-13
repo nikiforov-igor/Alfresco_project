@@ -92,6 +92,7 @@
                     formId: meta.formId ? meta.formId : "uploadTemplate"
                 });
 
+            var context = this;
             var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails-" + Alfresco.util.generateDomId());
             createDetails.setOptions(
                 {
@@ -113,7 +114,7 @@
                             YAHOO.Bubbling.fire("dataItemCreated", // обновить данные в гриде
                                 {
                                     nodeRef: response.json.persistedObject,
-                                    bubblingLabel: "templates"
+                                    bubblingLabel: context.bubblingLabel
                                 });
                             this.doubleClickLock = false;
                         },
