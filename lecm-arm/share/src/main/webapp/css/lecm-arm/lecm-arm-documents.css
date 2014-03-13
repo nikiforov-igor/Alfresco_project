@@ -56,7 +56,11 @@ div.arm-tree-menu .arm-accordion {
 
 div.arm-tree-menu .arm-accordion div.accordion-head {
 	cursor: pointer;
-	background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;
+	/*background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;*/
+    background-color: #F2F2F2;
+    border-bottom: 1px solid #D7D7D7;
+    border-top: 1px solid #FFFFFF;
+    border-right: 1px solid #FFFFFF;
 	height: 29px;
 	font-size: 13px;
 	font-weight: bold;
