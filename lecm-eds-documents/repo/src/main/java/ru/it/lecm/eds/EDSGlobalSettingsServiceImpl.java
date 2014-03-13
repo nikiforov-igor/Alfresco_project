@@ -29,11 +29,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalSettingsService {
 
 	private Map<String, Map<String, NodeRef>> potentialRolesMap;
-		
+
 	private OrgstructureBean orgstructureService;
     private NamespaceService namespaceService;
 	private DictionaryBean dictionaryService;
-	
+
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
     }
@@ -41,19 +41,19 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
-	
+
 	public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
-	
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
 	}
-	
+
 	public void init() {
 		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
-		
+
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
 		List<NodeRef> potentialRolesRefs = dictionaryService.getChildren(potentialRolesDictionary);
 		for (NodeRef potentialRoleRef : potentialRolesRefs) {
@@ -64,20 +64,21 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 			}
 		}
 	}
-	
+
 	private void updatePotentialRolesMap(String businessRoleId, String organizationElementStrRef, NodeRef potentialRoleRef) {
 		if (businessRoleId == null || organizationElementStrRef == null || potentialRoleRef == null) {
 			return;
 		}
-		
-		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleId) ? 
-			this.potentialRolesMap.get(businessRoleId) : 
+
+		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleId) ?
+			this.potentialRolesMap.get(businessRoleId) :
 			new HashMap<String, NodeRef>();
 		orgElementRoles.put(organizationElementStrRef, potentialRoleRef);
 
 		this.potentialRolesMap.put(businessRoleId, orgElementRoles);
 	}
-	
+
+	@Override
 	public Collection<NodeRef> getPotentialWorkers(String businessRoleId, NodeRef organizationElementRef) {
 		if (businessRoleId == null || organizationElementRef == null) {
 			return new HashSet<NodeRef>();
@@ -85,16 +86,17 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		NodeRef businessRoleRef = orgstructureService.getBusinessRoleByIdentifier(businessRoleId);
 		return getPotentialWorkers(businessRoleRef, organizationElementRef);
 	}
-	
+
+	@Override
 	public Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef) {
 		Set<NodeRef> result = new HashSet<NodeRef>();
-		
+
 		if (businessRoleRef == null || organizationElementRef == null) {
 			return result;
 		}
-		
-		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ? 
-			this.potentialRolesMap.get(businessRoleRef.toString()) : 
+
+		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ?
+			this.potentialRolesMap.get(businessRoleRef.toString()) :
 			new HashMap<String, NodeRef>();
 
 		if (orgElementRoles.containsKey(organizationElementRef.toString())) {
@@ -117,23 +119,23 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		NodeRef businessRoleRef = orgstructureService.getBusinessRoleByIdentifier(businessRoleId);
 		savePotentialWorkers(businessRoleRef, orgElementRef, employeesRefs);
 	}
-	
+
 	@Override
 	public void savePotentialWorkers(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs) {
 		if (businessRoleRef == null || orgElementRef == null) {
 			return;
 		}
-		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ? 
-			this.potentialRolesMap.get(businessRoleRef.toString()) : 
+		Map<String, NodeRef> orgElementRoles = this.potentialRolesMap.containsKey(businessRoleRef.toString()) ?
+			this.potentialRolesMap.get(businessRoleRef.toString()) :
 			new HashMap<String, NodeRef>();
-		
+
 		if (orgElementRoles.containsKey(orgElementRef.toString())) {
 			updatePotentialRole(orgElementRoles.get(orgElementRef.toString()), employeesRefs);
 		} else {
 			createPotentialRole(businessRoleRef, orgElementRef, employeesRefs);
 		}
 	}
-	
+
 	@Override
 	public NodeRef updatePotentialRole(NodeRef potentialRoleRef, List<NodeRef> employeesRefs) {
 		if (potentialRoleRef == null) {
@@ -162,36 +164,36 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 		}
 		return potentialRoleRef;
 	}
-	
+
 	@Override
 	public NodeRef createPotentialRole(NodeRef businessRoleRef, NodeRef orgElementRef, List<NodeRef> employeesRefs) {
 		if (businessRoleRef == null || orgElementRef == null || employeesRefs == null ||
 			employeesRefs.isEmpty() || nodeService.getType(orgElementRef).equals(orgstructureService.TYPE_ORGANIZATION)) {
 			return null;
 		}
-		
+
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
 		NodeRef potentialRoleRef = nodeService.createNode(
-			potentialRolesDictionary, 
+			potentialRolesDictionary,
 			ContentModel.ASSOC_CONTAINS,
-			QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()), 
+			QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
 			TYPE_POTENTIAL_ROLE).getChildRef();
-		
+
 		nodeService.createAssociation(potentialRoleRef, businessRoleRef, ASSOC_POTENTIAL_ROLE_BUSINESS_ROLE);
 		nodeService.createAssociation(potentialRoleRef, orgElementRef, ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT);
-		
-		for (NodeRef employeeRef : employeesRefs) { 
+
+		for (NodeRef employeeRef : employeesRefs) {
 			nodeService.createAssociation(potentialRoleRef, employeeRef, ASSOC_POTENTIAL_ROLE_EMPLOYEE);
 		}
-		
+
 		updatePotentialRolesMap(businessRoleRef.toString(), orgElementRef.toString(), potentialRoleRef);
 		return potentialRoleRef;
 	}
-	
+
 	@Override
 	public NodeRef getSettingsNode() {
-        final NodeRef rootFolder = getServiceRootFolder();		
-		
+        final NodeRef rootFolder = getServiceRootFolder();
+
         NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
         if (settings != null) {
             return settings;
@@ -239,4 +241,21 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         }
         return false;
     }
+
+	@Override
+	public List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId) {
+		List<NodeRef> registrars;
+		if (isRegistrationCenralized()) {
+			registrars = orgstructureService.getEmployeesByBusinessRole(businessRoleId);
+		} else {
+			registrars = new ArrayList<NodeRef>();
+			//получаем основную должностную позицию
+			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(employeeRef);
+			if (primaryStaff != null) {
+				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
+				registrars.addAll(getPotentialWorkers(businessRoleId, unit));
+			}
+		}
+		return registrars;
+	}
 }

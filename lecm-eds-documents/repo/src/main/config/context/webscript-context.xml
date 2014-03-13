@@ -9,5 +9,6 @@
 	<bean id="eds.global-settings.script" parent="baseScript" class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
 	      depends-on="nodeService, eds.global-settings.service"
 		  p:extensionName="edsGlobalSettings"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"/>
+		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
+                  p:orgstructureService-ref="serviceOrgstructure"/>
 </beans>
