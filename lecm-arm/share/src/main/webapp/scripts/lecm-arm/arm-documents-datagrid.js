@@ -81,9 +81,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     this.options.initialPage = this.armMenuState.pageNum;
                 }
             }
-            if(!this.deferredListPopulation.fulfil("armNodeSelected")){
-                this.populateDataGrid();
-            }
+            this.deferredListPopulation.fulfil("armNodeSelected");
         },
 
         onActiveFiltersChanged: function (layer, args) {
