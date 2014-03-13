@@ -129,7 +129,11 @@
 			<includePermissionGroup type="sys:base" permissionGroup="ReadProperties" />
 		</permissionGroup>
 
-		<permissionGroup name="lecmPerm_AttrEdit" expose="true" allowFullControl="false">
+       <permissionGroup name="lecmPerm_InnerAttrList" expose="true" allowFullControl="false">
+           <includePermissionGroup type="sys:base" permissionGroup="ReadProperties" />
+       </permissionGroup>
+
+       <permissionGroup name="lecmPerm_AttrEdit" expose="true" allowFullControl="false">
 			<includePermissionGroup type="sys:base" permissionGroup="WriteProperties" />
 		</permissionGroup>
 
@@ -454,6 +458,10 @@
 			<grantedToGroup permissionGroup="lecmPerm_AttrList" />
 		</permission>
 
+       <permission name="_lecmPerm_InnerAttrList" expose="false" >
+			<grantedToGroup permissionGroup="lecmPerm_InnerAttrList" />
+		</permission>
+
 	  <!-- Изменение атрибутивного состава -->
 		<permission name="_lecmPerm_AttrEdit" expose="false" >
 			<grantedToGroup permissionGroup="lecmPerm_AttrEdit" />
@@ -672,6 +680,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -717,6 +726,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" />
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <!--<includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />-->
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -762,6 +772,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <!--
          <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
@@ -813,6 +824,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -858,6 +870,7 @@
          <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -903,6 +916,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -949,6 +963,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" />
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -995,6 +1010,7 @@
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
          <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+         <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
          <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
          <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />
@@ -1040,6 +1056,7 @@
 		   <!-- <includePermissionGroup permissionGroup="lecmPerm_DocCreate" type="sys:base" /> -->
 		   <!-- <includePermissionGroup permissionGroup="lecmPerm_DocDelete" type="sys:base" /> -->
 		   <includePermissionGroup permissionGroup="lecmPerm_AttrList" type="sys:base" />
+		   <includePermissionGroup permissionGroup="lecmPerm_InnerAttrList" type="sys:base" />
 
 		   <!-- <includePermissionGroup permissionGroup="lecmPerm_AttrEdit" type="sys:base" /> -->
 		   <includePermissionGroup permissionGroup="lecmPerm_ContentList" type="sys:base" />

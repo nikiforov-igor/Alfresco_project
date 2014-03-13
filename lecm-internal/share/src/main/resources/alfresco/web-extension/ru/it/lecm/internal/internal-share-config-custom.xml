@@ -65,10 +65,10 @@
                     <show id="lecm-internal-table-structure:answers-assoc"/>
                 </field-visibility>
                 <appearance>
-
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
+                    <set id="exist-permissions" parent="approval-and-signing" appearance="~_lecmPerm_InnerAttrList" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
 
                     <field id="lecm-internal:custom-style" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
@@ -147,10 +147,8 @@
                         </control>
                     </field>
 
-                    <field id="lecm-internal:approval-list" set="approval-and-signing" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
-                            <control-param name="hideIfGlobalSettingsTrue">true</control-param>
-                        </control>
+                    <field id="lecm-internal:approval-list" set="exist-permissions" label="Согласование">
+                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
                     </field>
 
                     <field id="lecm-internal:signing-list" set="approval-and-signing" label="Подписание">

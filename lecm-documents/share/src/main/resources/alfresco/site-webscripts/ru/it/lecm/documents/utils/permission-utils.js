@@ -1,6 +1,7 @@
 const PERM_DOC_CREATE = "_lecmPerm_DocCreate";
 const PERM_DOC_DELETE = "_lecmPerm_DocDelete";
 const PERM_ATTR_LIST = "_lecmPerm_AttrList";
+const PERM_INNER_ATTR_LIST = "_lecmPerm_InnerAttrList";
 const PERM_ATTR_EDIT = "_lecmPerm_AttrEdit";
 const PERM_CONTENT_LIST = "_lecmPerm_ContentList";
 const PERM_CONTENT_ADD = "_lecmPerm_ContentAdd";
