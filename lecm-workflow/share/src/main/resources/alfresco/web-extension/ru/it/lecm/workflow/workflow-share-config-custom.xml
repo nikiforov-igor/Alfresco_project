@@ -226,7 +226,9 @@
 					<show id="cm:title" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="cm:title" mandatory="true"/>
+					<field id="cm:title" mandatory="true">
+						<control template="/org/alfresco/components/form/controls/textfield.ftl"/>
+					</field>
 				</appearance>
 			</form>
 		</forms>
