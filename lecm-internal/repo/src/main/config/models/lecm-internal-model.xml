@@ -83,7 +83,7 @@
                     </source>
                     <target>
                         <class>cm:cmobject</class>
-                        <mandatory>false</mandatory>
+                        <mandatory>true</mandatory>
                         <many>true</many>
                     </target>
                 </association>
@@ -95,7 +95,7 @@
                     </source>
                     <target>
                         <class>lecm-internal-doc-type:dictionary</class>
-                        <mandatory>true</mandatory>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>
