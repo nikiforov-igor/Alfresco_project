@@ -102,41 +102,39 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		return null;
 	}
 
-	@Override
-	public List<NodeRef> getArmAccordions(NodeRef arm) {
-        Set<NodeRef> result = new TreeSet<NodeRef>(comparator);
+    @Override
+    public List<NodeRef> getArmAccordions(NodeRef arm) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
 
-		Set<QName> typeSet = new HashSet<QName>(1);
-		typeSet.add(TYPE_ARM_ACCORDION);
-		List<ChildAssociationRef> accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
-		if (accordionsAssocs != null) {
-			for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
-				result.add(accordionAssoc.getChildRef());
-			}
-		}
-        List<NodeRef> nodes = new ArrayList<NodeRef>(result.size());
-        nodes.addAll(result);
-        return nodes;
-	}
+        Set<QName> typeSet = new HashSet<QName>(1);
+        typeSet.add(TYPE_ARM_ACCORDION);
+        List<ChildAssociationRef> accordionsAssocs = nodeService.getChildAssocs(arm, typeSet);
+        if (accordionsAssocs != null) {
+            for (ChildAssociationRef accordionAssoc : accordionsAssocs) {
+                result.add(accordionAssoc.getChildRef());
+            }
+        }
+        Collections.sort(result, comparator);
+        return result;
+    }
 
-	@Override
-	public List<NodeRef> getChildNodes(NodeRef node) {
-		Set<NodeRef> result = new TreeSet<NodeRef>(comparator);
+    @Override
+    public List<NodeRef> getChildNodes(NodeRef node) {
+        List<NodeRef> result = new ArrayList<NodeRef>();
 
-		Set<QName> typeSet = new HashSet<QName>(1);
-		typeSet.add(TYPE_ARM_ACCORDION);
-		typeSet.add(TYPE_ARM_NODE);
-		typeSet.add(TYPE_ARM_REPORTS_NODE);
-		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
-		if (childAssocs != null) {
-			for (ChildAssociationRef child : childAssocs) {
-				result.add(child.getChildRef());
-			}
-		}
-        List<NodeRef> nodes = new ArrayList<NodeRef>(result.size());
-        nodes.addAll(result);
-		return nodes;
-	}
+        Set<QName> typeSet = new HashSet<QName>(1);
+        typeSet.add(TYPE_ARM_ACCORDION);
+        typeSet.add(TYPE_ARM_NODE);
+        typeSet.add(TYPE_ARM_REPORTS_NODE);
+        List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
+        if (childAssocs != null) {
+            for (ChildAssociationRef child : childAssocs) {
+                result.add(child.getChildRef());
+            }
+        }
+        Collections.sort(result, comparator);
+        return result;
+    }
 
 	@Override
 	public List<String> getNodeTypes(NodeRef node) {
