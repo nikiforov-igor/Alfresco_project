@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-eds-document-aspects:aspects" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+
+    <description>EDS Document aspects</description>
+    <author>IKhalikov</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/eds-document/aspects/1.0" prefix="lecm-eds-document-aspects"/>
+    </namespaces>
+
+    <aspects>
+        <!-- Аспект для регистраторов -->
+        <aspect name="lecm-eds-document-aspects:registrars">
+            <properties>
+                <property name="lecm-eds-document-aspects:registrar-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-eds-document-aspects:registrar-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
+            <associations>
+                <association name="lecm-eds-document-aspects:registrar-assoc">
+                    <title>Регистратор</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+        </aspect>
+    </aspects>
+
+</model>

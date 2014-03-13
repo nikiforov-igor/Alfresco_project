@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -21,6 +24,11 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private OrgstructureBean orgstructureService;
+	private NodeService nodeService;
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
 
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
@@ -56,6 +64,20 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		// централизованная ли регистрация
 		List<NodeRef> registrars = edsGlobalSettingsService.getRegistras(currentEmployee, businessRoleId);
 		return createScriptable(registrars);
+	}
+
+	public void setRegistrar(final ScriptNode docNode, final ScriptNode employee) {
+		NodeRef docRef = docNode.getNodeRef();
+		NodeRef employeeRef = employee.getNodeRef();
+		List<AssociationRef> assocs = nodeService.getTargetAssocs(docRef, EDSDocumentService.ASSOC_REGISTRARS);
+		if (assocs.isEmpty()) {
+			nodeService.createAssociation(docRef, employeeRef, EDSDocumentService.ASSOC_REGISTRARS);
+		} else {
+//			String presentString = (String) nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING);
+//			String shortname = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+//			String template = "Association between document %s[%s] and registrar %s[%s] already exists!";
+//			logger.error(String.format(template, ordRef.toString(), presentString, employeeRef.toString(), shortname));
+		}
 	}
 
 	public void savePotentialWorkers(String businessRoleId, JSONObject employeesJsonMap) throws JSONException {
