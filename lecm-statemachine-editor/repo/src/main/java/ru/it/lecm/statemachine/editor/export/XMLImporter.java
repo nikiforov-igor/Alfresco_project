@@ -274,6 +274,7 @@ public class XMLImporter {
         NodeRef rolesNodeRef = recreateNode(stateMachineNodeRef, ContentModel.TYPE_FOLDER, properties);
         nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_STATIC_ROLES_FOLDER, rolesNodeRef);
         nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_DYNAMIC_ROLES_FOLDER, rolesNodeRef);
+        nodeService.addAspect(rolesNodeRef, ContentModel.ASPECT_TEMPORARY, null);
         return rolesNodeRef;
     }
 
@@ -281,6 +282,7 @@ public class XMLImporter {
         Map<QName, Serializable> properties = getBaseProperties(StatemachineEditorModel.ALTERNATIVES);
         NodeRef alternativesRef = recreateNode(stateMachineNodeRef, ContentModel.TYPE_FOLDER, properties);
         nodeService.setProperty(stateMachineNodeRef, StatemachineEditorModel.PROP_ALTERNATIVES_FOLDER, alternativesRef.toString());
+        nodeService.addAspect(alternativesRef, ContentModel.ASPECT_TEMPORARY, null);
         return alternativesRef;
     }
 

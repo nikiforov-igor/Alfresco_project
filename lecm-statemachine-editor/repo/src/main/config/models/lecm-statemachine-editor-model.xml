@@ -38,7 +38,8 @@
 		<type name="lecm-stmeditor:statemachine">
 			<title>Logic ECM Base Document</title>
 			<parent>cm:folder</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:archiveFolder">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -85,13 +86,15 @@
 		<type name="lecm-stmeditor:roles">
 			<title>Logic ECM Base Roles</title>
 			<parent>cm:folder</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- Deprecated: Роль для машины состояний -->
 		<type name="lecm-stmeditor:role">
 			<title>Logic ECM Role</title>
 			<parent>cm:content</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:creationDocument">
 					<type>d:boolean</type>
 					<mandatory>true</mandatory>
@@ -106,6 +109,7 @@
         <type name="lecm-stmeditor:static-role-item">
             <title>Logic ECM Static Role Item</title>
             <parent>cm:content</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:isCreator">
                     <type>d:boolean</type>
@@ -121,6 +125,7 @@
         <type name="lecm-stmeditor:dynamic-role-item">
             <title>Logic ECM Dynamic Role Item</title>
             <parent>cm:content</parent>
+            <archive>false</archive>
             <mandatory-aspects>
                 <aspect>lecm-stmeditor:business-role</aspect>
             </mandatory-aspects>
@@ -130,6 +135,7 @@
 		<type name="lecm-stmeditor:static-role">
 			<title>Logic ECM Static Role</title>
 			<parent>cm:content</parent>
+            <archive>false</archive>
 
 			<mandatory-aspects>
 				<aspect>lecm-stmeditor:business-role</aspect>
@@ -141,7 +147,8 @@
 		<type name="lecm-stmeditor:dynamic-role">
 			<title>Logic ECM Dynamic Role</title>
 			<parent>cm:content</parent>
-			<mandatory-aspects>
+            <archive>false</archive>
+            <mandatory-aspects>
 				<aspect>lecm-stmeditor:business-role</aspect>
 				<aspect>lecm-stmeditor:permissionTypeAspect</aspect>
 			</mandatory-aspects>
@@ -151,24 +158,28 @@
 		<type name="lecm-stmeditor:statuses">
 			<title>Logic ECM Base Statuses</title>
 			<parent>cm:folder</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- Список действий для для статуса -->
 		<type name="lecm-stmeditor:actions">
 			<title>Logic ECM Base Actions</title>
 			<parent>cm:folder</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<type name="lecm-stmeditor:status">
 			<title>Logic ECM Base Status</title>
 			<parent>cm:folder</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- Объект Статус -->
 		<type name="lecm-stmeditor:taskStatus">
 			<title>Logic ECM Base Document</title>
 			<parent>lecm-stmeditor:status</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:startStatus">
 					<type>d:boolean</type>
 					<mandatory>false</mandatory>
@@ -269,7 +280,8 @@
 		<type name="lecm-stmeditor:endEvent">
 			<title>Logic ECM End Event</title>
 			<parent>lecm-stmeditor:status</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<!-- Ссылки на действия -->
 				<property name="lecm-stmeditor:endEventScriptAction">
 					<type>d:text</type>
@@ -282,7 +294,8 @@
 		<type name="lecm-stmeditor:action">
 			<title>Logic ECM Statemachine Action Object</title>
 			<parent>cm:folder</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:actionId">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -298,7 +311,8 @@
 		<type name="lecm-stmeditor:transition">
 			<title>Logic ECM Statemachine Transition Object</title>
 			<parent>cm:content</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:transitionExpression">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -313,12 +327,14 @@
 		<type name="lecm-stmeditor:StartWorkflow">
 			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<type name="lecm-stmeditor:StartWorkflowEntity">
 			<title>Logic ECM Statemachine StartWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-			<mandatory-aspects>
+            <archive>false</archive>
+            <mandatory-aspects>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
 				<aspect>lecm-stmeditor:assigneeAspect</aspect>
 			</mandatory-aspects>
@@ -328,7 +344,8 @@
 		<type name="lecm-stmeditor:FinishStateWithTransition">
 			<title>Logic ECM Statemachine FinishStateWithTransition Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:transitionVariable">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -340,18 +357,21 @@
 		<type name="lecm-stmeditor:WaitForDocumentChange">
 			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- Объект действие UserWorkflow -->
 		<type name="lecm-stmeditor:UserWorkflow">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<type name="lecm-stmeditor:UserWorkflowEntity">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:workflowLabel">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -366,18 +386,21 @@
 		<type name="lecm-stmeditor:TransitionAction">
 			<title>Logic ECM Statemachine UserWorkflow Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- Объект действие TimerAction -->
 		<type name="lecm-stmeditor:TimerAction">
 			<title>Logic ECM Statemachine Timer Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<!-- User Transition -->
 		<type name="lecm-stmeditor:userTransition">
 			<title>Logic ECM Statemachine User Transition Object</title>
-			<parent>cm:folder</parent>
+            <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:transition-script">
                     <type>d:text</type>
@@ -394,12 +417,14 @@
 		<type name="lecm-stmeditor:ScriptAction">
 			<title>Logic ECM Statemachine Script Action Object</title>
 			<parent>lecm-stmeditor:action</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<type name="lecm-stmeditor:ScriptActionEntity">
 			<title>Logic ECM Statemachine Script Action Object</title>
 			<parent>cm:content</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:scriptLabel">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -415,7 +440,8 @@
 		<type name="lecm-stmeditor:transitionWorkflow">
 			<title>Logic ECM Statemachine WaitForDocumentChange Action Object</title>
 			<parent>cm:folder</parent>
-			<mandatory-aspects>
+            <archive>false</archive>
+            <mandatory-aspects>
 				<aspect>lecm-stmeditor:transitionStatusAspect</aspect>
 				<aspect>lecm-stmeditor:transitionLabelAspect</aspect>
 				<aspect>lecm-stmeditor:workflowAspect</aspect>
@@ -426,6 +452,7 @@
         <type name="lecm-stmeditor:transitionForm">
             <title>Logic ECM Statemachine Form Action Object</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <mandatory-aspects>
                 <aspect>lecm-stmeditor:transitionLabelAspect</aspect>
                 <aspect>lecm-stmeditor:transitionFormAspect</aspect>
@@ -436,6 +463,7 @@
         <type name="lecm-stmeditor:transitionFormTrans">
             <title>Logic ECM Statemachine Form Action Object</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <mandatory-aspects>
                 <aspect>lecm-stmeditor:transitionLabelAspect</aspect>
                 <aspect>lecm-stmeditor:transitionFormAspect</aspect>
@@ -448,12 +476,14 @@
 		<type name="lecm-stmeditor:workflowVariableData">
 			<title>Logic ECM Statemachine Workflow Variable</title>
 			<parent>cm:content</parent>
-		</type>
+            <archive>false</archive>
+        </type>
 
 		<type name="lecm-stmeditor:inputVariable">
 			<title>Logic ECM Statemachine Input Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:inputToType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -482,6 +512,7 @@
         <type name="lecm-stmeditor:inputFormVariable">
             <title>Logic ECM Statemachine Input Form Variable</title>
             <parent>lecm-stmeditor:workflowVariableData</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:formInputToValue">
                     <type>d:text</type>
@@ -504,7 +535,8 @@
 		<type name="lecm-stmeditor:outputVariable">
 			<title>Logic ECM Statemachine Output Workflow Variable</title>
 			<parent>lecm-stmeditor:workflowVariableData</parent>
-			<properties>
+            <archive>false</archive>
+            <properties>
 				<property name="lecm-stmeditor:outputToType">
 					<type>d:text</type>
 					<mandatory>true</mandatory>
@@ -534,6 +566,7 @@
         <type name="lecm-stmeditor:documentField">
             <title>Logic ECM Statemachine Document Field</title>
             <parent>cm:content</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:editableField">
                     <type>d:boolean</type>
@@ -546,6 +579,7 @@
         <type name="lecm-stmeditor:conditionAccess">
             <title>Condition Access Object</title>
             <parent>cm:content</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:condition">
                     <type>d:text</type>
@@ -566,6 +600,7 @@
         <type name="lecm-stmeditor:versions">
             <title>Versions Root</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:last_version">
                     <type>d:long</type>
@@ -578,6 +613,7 @@
         <type name="lecm-stmeditor:versionContainer">
             <title>Version Object</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:version">
                     <type>d:long</type>
@@ -597,6 +633,7 @@
         <type name="lecm-stmeditor:alternative">
             <title>Version Object</title>
             <parent>cm:folder</parent>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:alternativeExpression">
                     <type>d:text</type>
@@ -624,6 +661,7 @@
 
 		<aspect name="lecm-stmeditor:transitionStatusAspect">
 			<title>Transition Status Aspect</title>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:stopSubWorkflows">
                     <type>d:boolean</type>
@@ -646,6 +684,7 @@
 
 		<aspect name="lecm-stmeditor:transitionLabelAspect">
 			<title>Transition Label Aspect</title>
+            <archive>false</archive>
 			<properties>
 				<property name="lecm-stmeditor:transitionLabel">
 					<type>d:text</type>
@@ -656,6 +695,7 @@
 
         <aspect name="lecm-stmeditor:transitionFormAspect">
             <title>Transition Label Form</title>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:transitionFormType">
                     <type>d:text</type>
@@ -670,6 +710,7 @@
 
         <aspect name="lecm-stmeditor:workflowAspect">
 			<title>Workflow Aspect</title>
+            <archive>false</archive>
 			<properties>
 				<property name="lecm-stmeditor:workflowId">
 					<type>d:text</type>
@@ -680,6 +721,7 @@
 
         <aspect name="lecm-stmeditor:assigneeAspect">
             <title>Assignee Aspect</title>
+            <archive>false</archive>
             <properties>
                 <property name="lecm-stmeditor:assignee">
                     <type>d:text</type>
@@ -690,6 +732,7 @@
 
 		<aspect name="lecm-stmeditor:business-role">
 			<title>Business Role Association</title>
+            <archive>false</archive>
 			<associations>
 				<association name="lecm-stmeditor:role-assoc">
 					<source>
@@ -707,6 +750,7 @@
 
 		<aspect name="lecm-stmeditor:permissionTypeAspect">
 			<title>Business Role PermissionType</title>
+            <archive>false</archive>
 			<properties>
 				<property name="lecm-stmeditor:permissionTypeValue">
 					<type>d:text</type>
