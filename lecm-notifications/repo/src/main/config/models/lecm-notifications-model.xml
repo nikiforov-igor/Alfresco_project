@@ -23,6 +23,7 @@
 		<type name="lecm-notf:generalized-notification">
 			<title>Notification</title>
 			<parent>cm:content</parent>
+            <archive>false</archive>
 			<properties>
 				<property name="lecm-notf:general-author">
 					<title>Autor</title>
@@ -146,6 +147,7 @@
 		<type name="lecm-notf:notification-unit-base">
 			<title>Notification</title>
 			<parent>cm:content</parent>
+            <archive>false</archive>
 			<properties>
 				<property name="lecm-notf:author">
 					<title>Autor</title>
