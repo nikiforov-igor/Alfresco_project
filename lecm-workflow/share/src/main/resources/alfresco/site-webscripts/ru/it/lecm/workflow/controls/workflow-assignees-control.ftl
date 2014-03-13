@@ -90,30 +90,28 @@
 	(function() {
 		LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 
-		function init() {
-			var loader = new YAHOO.util.YUILoader({
-				require: [
-					"lecmDatagrid",
-					"lecmWorkflowAssigneesControl"
-				],
-				skin: {}
-			});
+		var loader = new YAHOO.util.YUILoader({
+			require: [
+				"lecmDatagrid",
+				"lecmWorkflowAssigneesControl"
+			],
+			skin: {}
+		});
 
-			loader.addModule({
-				name: 'lecmDatagrid',
-				type: 'js',
-				fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-base/components/lecm-datagrid.js'
-			});
+		loader.addModule({
+			name: 'lecmDatagrid',
+			type: 'js',
+			fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-base/components/lecm-datagrid.js'
+		});
 
-			loader.addModule({
-				name: 'lecmWorkflowAssigneesControl',
-				type: 'js',
-				fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-workflow/workflow-assignee-control.js'
-			});
+		loader.addModule({
+			name: 'lecmWorkflowAssigneesControl',
+			type: 'js',
+			fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-workflow/workflow-assignee-control.js'
+		});
 
-			loader.onSuccess = createControl;
-			loader.insert();
-		}
+		loader.onSuccess = createControl;
+		loader.insert();
 
 		function createControl() {
 			var workflowList, initOptions = {
@@ -143,7 +141,5 @@
 			LogicECM.CurrentModules['${containerId}'] = new LogicECM.module.Workflow.WorkflowList(initOptions);
 			Alfresco.util.PopupManager.zIndex += 100;
 		}
-
-		YAHOO.util.Event.onDOMReady(init);
 	})();
 </script>

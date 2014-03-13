@@ -667,4 +667,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public String getAssigneesListConcurrency(NodeRef assigneesListRef) {
 		return (String)nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 	}
+
+	@Override
+	public void setAssigneesListConcurrency(NodeRef assigneesListRef, String concurrency) {
+		nodeService.setProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
+	}
 }

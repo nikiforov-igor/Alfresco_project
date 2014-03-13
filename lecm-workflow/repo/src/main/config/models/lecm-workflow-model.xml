@@ -59,6 +59,7 @@
 			<mandatory-aspects>
 				<aspect>lecm-workflow:workflow-type-aspect</aspect>
 				<aspect>lecm-workflow:owner-aspect</aspect>
+				<aspect>lecm-workflow:workflow-concurrency-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 

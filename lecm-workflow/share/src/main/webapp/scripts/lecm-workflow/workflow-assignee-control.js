@@ -94,12 +94,20 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 		this.setOptions(initOptions);
 
+		YAHOO.Bubbling.on('datagridVisible', this._hackTheRecordSet, this);
+		YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
+		YAHOO.Bubbling.on('GridRendered', this._setInitialConcurrency, this);
+
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Workflow.WorkflowList, Alfresco.component.Base);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Workflow.WorkflowList.prototype, {
+		initialConcurrencySetted: false,
+		calendarHacked: false,
+		destructorHacked: false,
+		validationHacked: false,
 		_initControl: function() {
 			var dimmer = YAHOO.util.Dom.get(this.options.dimmerId);
 
@@ -412,6 +420,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var workflowList = this;
 			var datagrid = workflowList.widgets.datagrid;
 			var dataTable = datagrid.widgets.dataTable;
+			var currentConcurrency;
 
 			var SEQUENTIAL = {concurrency: 'sequential'};
 			var PARALLEL = {concurrency: 'parallel'};
@@ -421,13 +430,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var input = YAHOO.util.Dom.get(this.options.concurrencyInputId);
 
 			if (value === 'user' || value === 'sequential') {
+				currentConcurrency = SEQUENTIAL;
 
-				if (input !== null && input !== undefined) {
-					input.value = 'SEQUENTIAL';
-				}
-
-				workflowList.setOptions(SEQUENTIAL);
-				datagrid.setOptions(SEQUENTIAL);
 				dataTable.showColumn(0);
 				dataTable.showColumn(1);
 
@@ -435,13 +439,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					btnComputeTerms.setStyle('display', '');
 				}
 			} else {
+				currentConcurrency = PARALLEL;
 
-				if (input !== null && input !== undefined) {
-					input.value = 'PARALLEL';
-				}
-
-				workflowList.setOptions(PARALLEL);
-				datagrid.setOptions(PARALLEL);
 				dataTable.hideColumn(0);
 				dataTable.hideColumn(1);
 
@@ -449,9 +448,38 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					btnComputeTerms.setStyle('display', 'none');
 				}
 			}
+
+			workflowList.setOptions(currentConcurrency);
+			datagrid.setOptions(currentConcurrency);
+
+			if (input !== null && input !== undefined) {
+				input.value = currentConcurrency.concurrency.toUpperCase();
+			}
+			this._persistConcurrency(currentConcurrency.concurrency.toUpperCase());
 		},
 		_setInitialConcurrency: function() {
-			this._setConcurrency(this.options.concurrency);
+			if (!this.initialConcurrencySetted) {
+				this._setConcurrency(this.options.concurrency);
+				this.initialConcurrencySetted = true;
+			}
+		},
+		_persistConcurrency: function(concurrencyStr) {
+			var listRef = this.options.currentListRef;
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/setAssigneesListConcurrency',
+				dataObj: {
+					nodeRef: listRef,
+					concurrency: concurrencyStr
+				},
+				failureCallback: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось сохранить тип списка'
+						});
+					}
+				}
+			});
 		},
 		_onListsMenuClick: function(eventType, args) {
 			var text, value;
@@ -471,7 +499,11 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			this._refreshDatagrid();
 		},
 		_hackTheDestructor: function(layer, args) {
-			YAHOO.Bubbling.unsubscribe('afterFormRuntimeInit', this._hackTheDestructor);
+			if (this.destructorHacked) {
+				return;
+			}
+
+			this.destructorHacked = true;
 
 			this.widgets.simpleDialog.dialog.unsubscribeAll('destroy');
 			this.widgets.simpleDialog.dialog.subscribe('destroy', this._destructor, null, this);
@@ -479,38 +511,54 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		/**
 		 * Метод будет вызван столько раз, сколько раз контрол будет определён на форме. TODO...
 		 */
-		_hackTheCalendar: function(layer, args) {
+		_hackTheCalendar: function() {
 			function getYahooDateString(date) {
 				return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+			}
+
+			if (this.calendarHacked) {
+				return;
 			}
 
 			var zeroDate, todayDate, restrictedRangeString;
 			var cm = Alfresco.util.ComponentManager;
 
-			if (args[1].fieldId === this.options.dueDateId + '-cntrl-date') {
-				YAHOO.Bubbling.unsubscribe('registerValidationHandler', this._hackTheCalendar);
+			var datePickers = cm.find({name: "LogicECM.DatePicker"});
+			var datePickersLength = datePickers.length;
 
-				zeroDate = new Date(0);
-				todayDate = new Date();
-				restrictedRangeString = getYahooDateString(zeroDate) + '-' + getYahooDateString(todayDate);
+			for (var i = 0; i < datePickersLength; i++) {
+				var currentDatePicker = datePickers[i];
+				if (currentDatePicker.id === this.options.dueDateId + '-cntrl') {
+					this.calendarHacked = true;
 
-				this.widgets.calendar = cm.get(this.options.dueDateId + '-cntrl').widgets.calendar;
-				this.widgets.calendar.addRenderer(restrictedRangeString, this.widgets.calendar.renderCellStyleHighlight3);
+					zeroDate = new Date(0);
+					todayDate = new Date();
+					restrictedRangeString = getYahooDateString(zeroDate) + '-' + getYahooDateString(todayDate);
 
-				this.widgets.calendar.selectEvent.subscribe(this.validateForm, this, true);
-				this.widgets.calendar.deselectEvent.subscribe(this.validateForm, this, true);
+					this.widgets.calendar = currentDatePicker.widgets.calendar;
+					this.widgets.calendar.addRenderer(restrictedRangeString, this.widgets.calendar.renderCellStyleHighlight3);
+
+					this.widgets.calendar.selectEvent.subscribe(this.validateForm, this, true);
+					this.widgets.calendar.deselectEvent.subscribe(this.validateForm, this, true);
+
+					this.widgets.calendar.render();
+				}
 			}
 		},
-		_hackTheValidation: function(layer, args) {
+		_hackTheValidation: function() {
 			function isDueDateValidator(vldtn) {
 				return vldtn.handler === LogicECM.module.Workflow.workflowDueDateValidator;
 			}
 
-			var formsRuntime = args[1].runtime;
+			if (this.validationHacked) {
+				return;
+			}
+
+			var formsRuntime = this.widgets.form.formsRuntime;
 			var validations = formsRuntime.validations;
 
 			if (formsRuntime.formId === this.options.formId) {
-				YAHOO.Bubbling.unsubscribe('afterFormRuntimeInit', this._hackTheValidation);
+				this.validationHacked = true;
 
 				// На afterFormRuntimeInit подписывается каждый экземпляр WorkflowList, и каждый пытается inject-ить этот
 				// валидатор. Чтобы не создавать копии одного и тоже валидатора, inject-им только при отсутствии.
@@ -869,13 +917,9 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		onReady: function() {
 			this._initButtons();
 			this._initControl();
-
-			YAHOO.Bubbling.on('afterFormRuntimeInit', this._hackTheValidation, this);
-			YAHOO.Bubbling.on('afterFormRuntimeInit', this._hackTheDestructor, this);
-			YAHOO.Bubbling.on('registerValidationHandler', this._hackTheCalendar, this);
-			YAHOO.Bubbling.on('datagridVisible', this._hackTheRecordSet, this);
-			YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
-			YAHOO.Bubbling.on('datagridVisible', this._setInitialConcurrency, this);
+			this._hackTheDestructor();
+			this._hackTheCalendar();
+			this._hackTheValidation();
 		}
 	}, true);
 })();

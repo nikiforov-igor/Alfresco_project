@@ -90,7 +90,7 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 		if (item[PROP_DUE_DATE] && item[PROP_DUE_DATE].value) {
 			itemDate = Alfresco.util.fromISO8601(item[PROP_DUE_DATE].value);
 
-			if(!isValue(itemDate) && !isValue(calendarDate)) {
+			if(!isValue(itemDate) || !isValue(calendarDate)) {
 				return true;
 			}
 

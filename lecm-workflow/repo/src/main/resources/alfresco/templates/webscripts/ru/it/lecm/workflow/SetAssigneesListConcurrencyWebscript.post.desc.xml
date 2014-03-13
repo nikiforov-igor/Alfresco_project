@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+	<shortname>Set assignees list concurrency</shortname>
+	<url>/lecm/workflow/setAssigneesListConcurrency</url>
+	<authentication>user</authentication>
+	<format default="json">extension</format>
+	<transaction>required</transaction>
+</webscript>

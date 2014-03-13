@@ -100,4 +100,6 @@ public interface WorkflowAssigneesListService {
 	Date calculateAssigneesDueDatesByCompletionDays(final NodeRef assigneesListRef);
 
 	String getAssigneesListConcurrency(final NodeRef assigneesListRef);
+
+	void setAssigneesListConcurrency(final NodeRef assigneesListRef, final String concurrency);
 }
