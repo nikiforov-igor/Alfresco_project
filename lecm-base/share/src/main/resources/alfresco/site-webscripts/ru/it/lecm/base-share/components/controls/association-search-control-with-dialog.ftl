@@ -114,6 +114,9 @@
 				</#list>
 			},
 		</#if>
+        <#if field.control.params.additionalFilter?has_content>
+            additionalFilter:"${field.control.params.additionalFilter}",
+        </#if>
 		showSelectedItems: ${showSelectedItems?string},
 		<#if field.control.params.itemType??>
 			itemType: "${field.control.params.itemType}"

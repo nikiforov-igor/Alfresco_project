@@ -31,7 +31,7 @@
         </constraint>
         <constraint name="lecm-ord:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name}, №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}, автор {!~AUTHOR}]]></value>
+                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name}, №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-ord:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
@@ -55,11 +55,7 @@
             <title>Logic Ecm ORD</title>
             <parent>lecm-eds-document:base</parent>
             <properties>
-                <property name="lecm-ord:shared">
-                    <type>d:boolean</type>
-                </property>
                 <!--Служебные свойства-->
-                    
                 <property name="lecm-ord:registrar-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
