@@ -21,6 +21,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
@@ -488,15 +489,16 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public void saveAssigneesList(NodeRef assigneesListRef, String assigneesListName) {
+		String validAssigneesListName = FileNameValidator.getValidFileName(assigneesListName);
 		NodeRef resultAssigneesList;
 		if (nodeService.hasAspect(assigneesListRef, LecmWorkflowModel.ASPECT_TEMP)) {
 			resultAssigneesList = assigneesListRef;
 		} else {
 			List<ChildAssociationRef> parentAssocs = nodeService.getParentAssocs(assigneesListRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
-			resultAssigneesList = copyAssigneesList(assigneesListRef, parentAssocs.get(0).getParentRef(), assigneesListName, false);
+			resultAssigneesList = copyAssigneesList(assigneesListRef, parentAssocs.get(0).getParentRef(), validAssigneesListName, false);
 		}
 		nodeService.removeAspect(resultAssigneesList, LecmWorkflowModel.ASPECT_TEMP);
-		nodeService.setProperty(resultAssigneesList, ContentModel.PROP_NAME, assigneesListName);
+		nodeService.setProperty(resultAssigneesList, ContentModel.PROP_NAME, validAssigneesListName);
 	}
 
 	@Override
