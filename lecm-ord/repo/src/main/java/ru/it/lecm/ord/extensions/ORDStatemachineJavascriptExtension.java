@@ -197,28 +197,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	/**
-	 * установить в атрибутах документа ассоциацию на того сотрудника который
-	 * выполнил регистрацию документа
-	 *
-	 * @param ord ссылка на ОРД документ из машины состояний
-	 * @param employee пользователь который выполнил действие "зарегистрировать"
-	 * и перевел документ в статус "зарегистрирован"
-	 */
-	public void setRegistrar(final ScriptNode ord, final ScriptNode employee) {
-		NodeRef ordRef = ord.getNodeRef();
-		NodeRef employeeRef = employee.getNodeRef();
-		List<AssociationRef> assocs = nodeService.getTargetAssocs(ordRef, ORDModel.ASSOC_ORD_REGISTRAR);
-		if (assocs.isEmpty()) {
-			nodeService.createAssociation(ordRef, employeeRef, ORDModel.ASSOC_ORD_REGISTRAR);
-		} else {
-			String presentString = (String) nodeService.getProperty(ordRef, DocumentService.PROP_PRESENT_STRING);
-			String shortname = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			String template = "Association between document %s[%s] and registrar %s[%s] already exists!";
-			logger.error(String.format(template, ordRef.toString(), presentString, employeeRef.toString(), shortname));
-		}
-	}
-
-	/**
 	 * Подготовить уведомление сотруднику о том, что он выбран в качестве
 	 * Контролера ОРД документа
 	 *
@@ -329,12 +307,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
 				NodeRef pointPerformanceStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_PERFORMANCE_STATUS);
-				List<AssociationRef> pointStatusAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
-				if (pointStatusAssocs.size() > 0) {
-					NodeRef status = pointStatusAssocs.get(0).getTargetRef();
-					nodeService.removeAssociation(ord, status, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
-				}
-				nodeService.createAssociation(point, pointPerformanceStatus, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
+				List<NodeRef> targetStatus = Arrays.asList(pointPerformanceStatus);
+				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
 			}
 		}
 	}

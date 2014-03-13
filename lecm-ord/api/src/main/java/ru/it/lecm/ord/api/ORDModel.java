@@ -13,8 +13,9 @@ public final class ORDModel {
 	public final static String ORD_NAMESPACE = "http://www.it.ru/lecm/ORD/1.0";
 	public final static String ORD_TABLE_NAMESPACE = "http://www.it.ru/lecm/ORD/table-structure/1.0";
 
+	public final static String DOCUMENT_FILE_REGISTER_NAMESPACE = "http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0";
+
 	public final static QName TYPE_ORD = QName.createQName(ORD_NAMESPACE, "document");
-	public final static QName ASSOC_ORD_REGISTRAR = QName.createQName(ORD_NAMESPACE, "registrar-assoc");
 	public final static QName ASSOC_ORD_CONTROLLER = QName.createQName(ORD_NAMESPACE, "controller-assoc");
 
 	public final static QName ASSOC_ORD_TABLE_ITEMS = QName.createQName(ORD_TABLE_NAMESPACE, "items-assoc");
@@ -24,6 +25,8 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_TABLE_EXECUTOR = QName.createQName(ORD_TABLE_NAMESPACE, "executor-assoc");
 	public final static QName ASSOC_ORD_TABLE_ERRAND = QName.createQName(ORD_TABLE_NAMESPACE, "errand-assoc");
 	public final static QName ASSOC_ORD_TABLE_ITEM_STATUS = QName.createQName(ORD_TABLE_NAMESPACE, "item-status-assoc");
+
+	public final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
 	public static final String ORD_POINT_PERFORMANCE_STATUS = "На исполнении";
