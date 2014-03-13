@@ -21,12 +21,16 @@
 	padding-left: 10px;
 }
 
+.arm-filters-bar .arm-filters-label {
+    font-weight: bold;
+}
+
 .arm-filters-bar .arm-filters-label a {
-	font-size: 11px;
+    /*font-size: 12px;*/
 }
 
 .arm-filters-bar .arm-filter-item {
-	font-size: 11px;
+    /*font-size: 12px;*/
 	font-style: italic;
 	padding: 0 10px;
 }
@@ -34,6 +38,7 @@
 .arm-filters-bar .arm-filter-item .arm-filter-remove {
 	padding-left: 5px;
 	cursor: pointer;
+    font-weight: bold;
 	font-style: normal;
 	color: #E66E00;
 }
@@ -44,8 +49,8 @@
     padding-left: 24px;
 }
 
-.datalist-toolbar .filters span.first-child button,
-.datalist-toolbar .group-actions span.first-child button {
+.datalist-toolbar .filters span.first-child,
+.datalist-toolbar .group-actions span.first-child {
     width: 180px;
 	text-align: left;
 }
