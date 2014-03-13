@@ -137,14 +137,16 @@
             
             <!-- Форма атрибутивного поиска -->
             <form id="search">
-                <field-visibility>
-                    <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-                    <show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
-                    <show id="lecm-document:regnum"/>																	<!-- Номер проекта -->
-                    <show id="lecm-document:doc-date"/>																	<!-- Дата регистрации & Регистрационный номер -->
-                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                </field-visibility>
-            </form>
+				<field-visibility>
+					<show id="lecm-eds-document:document-type-assoc-ref"/>												<!-- Вид документа -->
+					<show id="lecm-document:title"/>																	<!-- Заголовок -->
+					<show id="cm:created"/>
+					<show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
+					<show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
+					<show id="lecm-document:author-assoc-ref"/>
+					<show id="lecm-ord:signers-assoc-ref"/>
+				</field-visibility>
+			</form>
 
         </forms>
     </config>

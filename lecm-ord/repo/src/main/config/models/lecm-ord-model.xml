@@ -55,6 +55,7 @@
             <title>Logic Ecm ORD</title>
             <parent>lecm-eds-document:base</parent>
             <properties>
+				
                 <!--Служебные свойства-->
                 <property name="lecm-ord:registrar-assoc-ref">
                     <type>d:text</type>
@@ -82,6 +83,23 @@
                     </index>
                 </property>
                 <property name="lecm-ord:controller-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				
+				<property name="lecm-ord:signers-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-ord:signers-assoc-text-content">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -139,9 +157,20 @@
                         <many>false</many>
                     </target>
                 </association>
-
-
+                <association name="lecm-ord:signers-assoc">
+                    <title>Document signers</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-orgstr:employee</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
             </associations>
+			
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
                 <aspect>lecm-ord-table-structure:table-items-aspect</aspect>

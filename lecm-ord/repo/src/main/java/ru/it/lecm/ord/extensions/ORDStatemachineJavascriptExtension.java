@@ -12,6 +12,7 @@ import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -35,6 +36,9 @@ import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
+import ru.it.lecm.workflow.AssigneesList;
+import ru.it.lecm.workflow.AssigneesListItem;
+import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 
 /**
  *
@@ -49,6 +53,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private DocumentConnectionService documentConnectionService;
 	private DictionaryBean lecmDictionaryService;
+	private WorkflowAssigneesListService workflowAssigneesListService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -64,6 +69,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
+	}
+	
+	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
+		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
 
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
@@ -311,5 +320,72 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
 			}
 		}
+	}
+	
+	
+	/**
+	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
+	 * 
+	 * @param documentNode документ
+	 * @param signersList список подписантов
+	 */
+	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ActivitiScriptNodeList signersList) {
+		NodeRef documentRef = documentNode.getNodeRef();
+		List<NodeRef> signersRefs = signersList.getNodeReferences();
+		
+		updateDocumentToSignersAssocs(documentRef, signersRefs);
+	}
+	
+	/**
+	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
+	 * 
+	 * @param documentNode документ
+	 * @param listNode нода списка подписантов
+	 */
+	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ScriptNode listNode) {
+		NodeRef documentRef = documentNode.getNodeRef();
+		NodeRef listRef = listNode.getNodeRef();
+		AssigneesList assigneesList = workflowAssigneesListService.getAssigneesListDetail(listRef);
+		List<AssigneesListItem> itemsList = assigneesList.getListItems();
+		
+		updateDocumentToSignersAssocs(documentRef, itemsList);
+	}
+	
+	/**
+	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
+	 * 
+	 * @param documentRef документ
+	 * @param signers список NodeRef-ов подписантов либо связанных с ними элементов результирующего списка
+	 */
+	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List signers) {
+		List<NodeRef> documentSignersRefs = getDocumentToSignersAssocs(documentRef);
+		Set<NodeRef> signersForDeleteRefs = new HashSet<NodeRef>(documentSignersRefs);
+		
+		for (Object signer : signers) {
+			NodeRef signerRef = null;
+			if (signer instanceof AssigneesListItem) {
+				signerRef = ((AssigneesListItem)signer).getEmployeeRef();
+			} else if (signer instanceof NodeRef) {
+				signerRef = (NodeRef) signer;
+			}
+			
+			if (signerRef != null && !signersForDeleteRefs.remove(signerRef)) {
+				nodeService.createAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNER);
+			}
+		}
+		for (NodeRef signerRef : signersForDeleteRefs) {
+			nodeService.removeAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNER);
+		}
+	}
+	
+	private List<NodeRef> getDocumentToSignersAssocs(NodeRef documentRef) {
+		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<AssociationRef> signersAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_SIGNER);
+		for (AssociationRef signerAssoc : signersAssocs) {
+			NodeRef signerRef = signerAssoc.getTargetRef();
+			if (signerRef != null) result.add(signerRef);
+		}
+		
+		return result;
 	}
 }

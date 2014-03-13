@@ -25,6 +25,7 @@ public final class ORDModel {
 	public final static QName ASSOC_ORD_TABLE_EXECUTOR = QName.createQName(ORD_TABLE_NAMESPACE, "executor-assoc");
 	public final static QName ASSOC_ORD_TABLE_ERRAND = QName.createQName(ORD_TABLE_NAMESPACE, "errand-assoc");
 	public final static QName ASSOC_ORD_TABLE_ITEM_STATUS = QName.createQName(ORD_TABLE_NAMESPACE, "item-status-assoc");
+	public final static QName ASSOC_ORD_SIGNER = QName.createQName(ORD_NAMESPACE, "signer-assoc");
 
 	public final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 

@@ -226,6 +226,11 @@
                 <property name="lecm-document-aspects:reg-project-data-date">
                     <title>Дата регистрации проекта</title>
                     <type>d:date</type>
+					<index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Регистрационный номер-->
                 <property name="lecm-document-aspects:reg-project-data-number">
