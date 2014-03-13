@@ -10,6 +10,5 @@
 	      depends-on="nodeService, eds.global-settings.service"
 		  p:extensionName="edsGlobalSettings"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
-                  p:nodeService-ref="nodeService"
                   p:orgstructureService-ref="serviceOrgstructure"/>
 </beans>

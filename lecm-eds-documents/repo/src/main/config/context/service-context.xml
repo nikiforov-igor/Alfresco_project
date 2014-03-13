@@ -8,7 +8,6 @@
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<util:list id="eds.models">
-                <value>alfresco/module/${artifactId}/models/lecm-eds-aspects.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
 	</util:list>
