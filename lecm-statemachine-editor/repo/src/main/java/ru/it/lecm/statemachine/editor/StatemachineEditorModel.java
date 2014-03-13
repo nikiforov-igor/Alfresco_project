@@ -73,6 +73,7 @@ public class StatemachineEditorModel {
     public final static QName PROP_ALTERNATIVE_EXPRESSION = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativeExpression");
     public final static QName PROP_ALTERNATIVES_FOLDER = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativesFolder");
     public final static QName PROP_TRANSITION_SCRIPT = QName.createQName(STATEMACHINE_EDITOR_URI, "transition-script");
+    public final static QName PROP_TRANSITION_DOCUMENT_CHANGE_SCRIPT = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionDocumentChangeScript");
 
 	public final static QName ASSOC_TRANSITION_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "transitionStatus");
     public final static QName ASSOC_ALTERNATIVE_STATUS = QName.createQName(STATEMACHINE_EDITOR_URI, "alternativeStatus");

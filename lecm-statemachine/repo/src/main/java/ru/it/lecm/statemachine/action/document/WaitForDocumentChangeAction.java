@@ -37,7 +37,8 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 			String expression = expressionElement.attribute(PROP_EXPRESSION);
 			String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
 			boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
-			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows));
+            String script = expressionElement.getText();
+			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows, script));
 		}
 	}
 
@@ -86,12 +87,14 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 		private String outputVariable = null;
 		private String outputValue = null;
         private boolean stopSubWorkflows = false;
+        private String script = null;
 
-        public Expression(String expression, String outputVariable, String outputValue, boolean stopSubWorkflows) {
+        public Expression(String expression, String outputVariable, String outputValue, boolean stopSubWorkflows, String script) {
 			this.expression = expression;
 			this.outputVariable = outputVariable;
 			this.outputValue = outputValue;
             this.stopSubWorkflows = stopSubWorkflows;
+            this.script = script;
         }
 
 		public String getExpression() {
@@ -109,5 +112,9 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
         public boolean isStopSubWorkflows() {
             return stopSubWorkflows;
         }
-	}
+
+        public String getScript() {
+            return script;
+        }
+    }
 }

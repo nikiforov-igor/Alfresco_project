@@ -821,13 +821,14 @@
 		</forms>
 	</config>
 
-    <config evaluator="model-type" condition="lecm-stmeditor:transition">
+    <config evaluator="node-type" condition="lecm-stmeditor:transition">
 		<forms>
 			<form>
 				<field-visibility>
 					<show id="lecm-stmeditor:transitionExpression" force="true"/>
 					<show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+                    <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:transitionExpression" />
@@ -839,33 +840,53 @@
 						</control>
 					</field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
+                    <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">20</control-param>
+                            <control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>
 	</config>
 
-	<config evaluator="node-type" condition="lecm-stmeditor:transition">
-		<forms>
-			<form>
-				<field-visibility>
-					<show id="lecm-stmeditor:transitionExpression" force="true"/>
-					<show id="lecm-stmeditor:transitionStatus" force="true"/>
+    <config evaluator="model-type" condition="lecm-stmeditor:transition">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionExpression" force="true"/>
+                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
-				</field-visibility>
-				<appearance>
-					<field id="lecm-stmeditor:transitionExpression" />
-					<field id="lecm-stmeditor:transitionStatus">
-						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
-							<control-param name="webscriptType">server</control-param>
-							<control-param name="webscript">/lecm/statemachine/editor/status</control-param>
-							<control-param name="withEmpty">true</control-param>
-						</control>
-					</field>
+                    <show id="lecm-stmeditor:transitionDocumentChangeScript" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-stmeditor:transitionExpression" />
+                    <field id="lecm-stmeditor:transitionStatus">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/status</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
-				</appearance>
-			</form>
-		</forms>
-	</config>
+                    <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">20</control-param>
+                            <control-param name="style">width: 100%; max-height: 300px; white-space: nowrap;</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-stmeditor:transitionExpression" force="true"/>
+                    <show id="lecm-stmeditor:transitionStatus" force="true"/>
+                    <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 
 	<config evaluator="node-type" condition="lecm-stmeditor:statemachine">
 		<forms>

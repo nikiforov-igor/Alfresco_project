@@ -4,6 +4,7 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -44,8 +45,8 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-            String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
-            StateMachineHelper helper = new StateMachineHelper();
+            final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
+            final StateMachineHelper helper = new StateMachineHelper();
             List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
 
             WaitForDocumentChangeAction.Expression result = null;
@@ -64,14 +65,26 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
             }
 
             if (result != null) {
-                HashMap<String, Object> parameters = new HashMap<String, Object>();
-                parameters.put(result.getOutputVariable(), result.getOutputValue());
-                helper.setExecutionParamentersByTaskId(taskId, parameters);
-                if (result.isStopSubWorkflows()) {
-                    String statemachineId = helper.getCurrentExecutionId(taskId);
-                    helper.stopDocumentSubWorkflows(statemachineId);
+                if (result.getScript() != null && !"".equals(result.getScript())) {
+                    final String script = result.getScript();
+                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                        @Override
+                        public Object doWork() throws Exception {
+                            helper.executeScript(script, helper.getCurrentExecutionId(taskId));
+                            return null;
+                        }
+                    });
                 }
-                helper.stopDocumentProcessing(taskId);
+                if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
+                    HashMap<String, Object> parameters = new HashMap<String, Object>();
+                    parameters.put(result.getOutputVariable(), result.getOutputValue());
+                    helper.setExecutionParamentersByTaskId(taskId, parameters);
+                    if (result.isStopSubWorkflows()) {
+                        String statemachineId = helper.getCurrentExecutionId(taskId);
+                        helper.stopDocumentSubWorkflows(statemachineId);
+                    }
+                    helper.stopDocumentProcessing(taskId);
+                }
             }
         }
     }

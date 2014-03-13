@@ -552,18 +552,25 @@ public class BPMNGenerator {
             Element expressionElement = doc.createElement("lecm:expression");
             String expressionValue = (String) nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_EXPRESSION);
             expressionElement.setAttribute("expression", expressionValue);
-            AssociationRef statusRef = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS).get(0);
-            String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
-            expressionElement.setAttribute("outputValue", target);
+            List<AssociationRef> statuses = nodeService.getTargetAssocs(expression.getChildRef(), StatemachineEditorModel.ASSOC_TRANSITION_STATUS);
+            if (statuses.size() > 0) {
+                AssociationRef statusRef = statuses.get(0);
+                String target = "id" + statusRef.getTargetRef().getId().replace("-", "");
+                expressionElement.setAttribute("outputValue", target);
 
-            Boolean stopSubWorkflows = getStopSubWorkflowsProperty(expression.getChildRef());
-            expressionElement.setAttribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
+                Boolean stopSubWorkflows = getStopSubWorkflowsProperty(expression.getChildRef());
+                expressionElement.setAttribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS, stopSubWorkflows.toString());
 
+                String var = "var" + actionVar;
+                result.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
+            }
+            Object script = nodeService.getProperty(expression.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_DOCUMENT_CHANGE_SCRIPT);
+            if (script != null) {
+                CDATASection cdata = doc.createCDATASection(script.toString());
+                expressionElement.appendChild(cdata);
+            }
             expressionsElement.appendChild(expressionElement);
-            String var = "var" + actionVar;
-            result.add(new Flow(statusVar, target, "${!empty " + var + " && " + var + " == '" + target + "'}"));
         }
-
         return result;
     }
 
