@@ -10,7 +10,6 @@
 		  p:extensionName="outgoingStatemachine"
 		  p:nodeService-ref="nodeService"
 		  p:documentService-ref="documentService"
-		  p:orgstructureService-ref="serviceOrgstructure"
-		  p:edsGlobalSettingsService-ref="eds.global-settings.service"/>
+		  p:orgstructureService-ref="serviceOrgstructure"/>
 
 </beans>

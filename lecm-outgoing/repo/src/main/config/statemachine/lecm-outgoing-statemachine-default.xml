@@ -8056,7 +8056,7 @@
 (function(){
     var i,
         outgoing = stm_document, //исходящий документ
-        registrars = outgoingStatemachine.getRegistrars("DA_REGISTRAR", outgoing),//получение списка регистраторов по документу
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRAR", outgoing),//получение списка регистраторов по документу
         registrarsCount = registrars.length,
         notification;
     //раздаем права регистраторам
@@ -8159,7 +8159,6 @@
 (function() {
     var outgoing = stm_document;
     regnumbers.registerDocument(outgoing, "OUTGOING_DOC_NUMBER");
-    outgoingStatemachine.setRegistrar(outgoing, orgstructure.getCurrentEmployee());
     outgoing.save();
 })();
 ]]>

@@ -6,9 +6,9 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="eds.global-settings.script" parent="baseScript" class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
-	      depends-on="nodeService, eds.global-settings.service"
+	<bean id="eds.global-settings.script" parent="baseScript"
+		  class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
 		  p:extensionName="edsGlobalSettings"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
-                  p:orgstructureService-ref="serviceOrgstructure"/>
+		  p:orgstructureService-ref="serviceOrgstructure"/>
 </beans>

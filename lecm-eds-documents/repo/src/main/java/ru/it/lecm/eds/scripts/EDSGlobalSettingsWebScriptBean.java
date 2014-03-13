@@ -37,17 +37,17 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		}
 		NodeRef organizationElementRef = new NodeRef(organizationElementStrRef);
 		Collection<NodeRef> result = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef);
-		return createScriptable(new ArrayList(result));
+		return createScriptable(new ArrayList<NodeRef>(result));
 	}
 
 	public Scriptable getPotentialWorkers(ScriptNode businessRoleRef, ScriptNode organizationElementRef) {
 		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleRef.getNodeRef(), organizationElementRef.getNodeRef());
-		return createScriptable(new ArrayList(potentialWorkers));
+		return createScriptable(new ArrayList<NodeRef>(potentialWorkers));
 	}
 
 	public Scriptable getPotentialWorkers(String businessRoleId, ScriptNode organizationElementRef) {
 		Collection<NodeRef> potentialWorkers = edsGlobalSettingsService.getPotentialWorkers(businessRoleId, organizationElementRef.getNodeRef());
-		return createScriptable(new ArrayList(potentialWorkers));
+		return createScriptable(new ArrayList<NodeRef>(potentialWorkers));
 	}
 
 	public Scriptable getRegistrars(final String businessRoleId, final ScriptNode ordRef) {

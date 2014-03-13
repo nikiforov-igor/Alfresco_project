@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.mozilla.javascript.Context;
@@ -15,10 +14,8 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.outgoing.api.OutgoingModel;
 
 /**
  *
@@ -35,7 +32,6 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	private NodeService nodeService;
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
-	private EDSGlobalSettingsService edsGlobalSettingsService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -47,10 +43,6 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setOrgstructureService(final OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
-	}
-
-	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
-		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
 
 	private String getOutgoingURL(final ScriptNode outgoingRef) {
@@ -92,34 +84,6 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		notification.setObjectRef(outgoingRef.getNodeRef());
 		notification.setRecipientEmployeeRefs(recipients);
 		return notification;
-	}
-
-	/**
-	 * подготовить список регистраторов для последующей раздачи им прав
-	 *
-	 * @param businessRoleId идентификатор бизнес-роли, которая содержит потенциальных регистраторов
-	 * @param outgoingRef ссылка на исходящее из машины состояний
-	 * @return объект Scriptable пригодный для работы из яваскрипта машины состояний
-	 */
-	public Scriptable getRegistrars(final String businessRoleId, final ScriptNode outgoingRef) {
-		List<NodeRef> registrars;
-		//получаем текущего пользователя
-		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		// централизованная ли регистрация
-		Boolean registrationCenralized = edsGlobalSettingsService.isRegistrationCenralized();
-
-		if (registrationCenralized) {
-			registrars =  orgstructureService.getEmployeesByBusinessRole(businessRoleId);
-		} else {
-			registrars = new ArrayList<NodeRef>();
-			//получаем основную должностную позицию
-			NodeRef primaryStaff = orgstructureService.getEmployeePrimaryStaff(currentEmployee);
-			if (primaryStaff != null) {
-				NodeRef unit = orgstructureService.getUnitByStaff(primaryStaff);
-				registrars.addAll(edsGlobalSettingsService.getPotentialWorkers(businessRoleId, unit));
-			}
-		}
-		return createScriptable(registrars);
 	}
 
 	/**
@@ -200,26 +164,5 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		notification.setObjectRef(outgoingRef.getNodeRef());
 		notification.setRecipientEmployeeRefs(senders);
 		return notification;
-	}
-
-	/**
-	 * установить в атрибутах документа ассоциацию на того сотрудника который выполнил регистрацию документа
-	 *
-	 * @param outgoing ссылка на исходящее из машины состояний
-	 * @param employee пользователь который выполнил действие "зарегистрировать" и перевел документ в статус
-	 * "зарегистрирован"
-	 */
-	public void setRegistrar(final ScriptNode outgoing, final ScriptNode employee) {
-		NodeRef outgoingRef = outgoing.getNodeRef();
-		NodeRef employeeRef = employee.getNodeRef();
-		List<AssociationRef> assocs = nodeService.getTargetAssocs(outgoingRef, OutgoingModel.ASSOC_OUTGOING_REGISTRAR);
-		if (assocs.isEmpty()) {
-			nodeService.createAssociation(outgoingRef, employeeRef, OutgoingModel.ASSOC_OUTGOING_REGISTRAR);
-		} else {
-			String presentString = (String) nodeService.getProperty(outgoingRef, DocumentService.PROP_PRESENT_STRING);
-			String shortname = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-			String template = "Association between document %s[%s] and registrar %s[%s] already exists!";
-			logger.error(String.format(template, outgoingRef.toString(), presentString, employeeRef.toString(), shortname));
-		}
 	}
 }

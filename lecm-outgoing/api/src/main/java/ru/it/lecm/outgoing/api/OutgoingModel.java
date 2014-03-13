@@ -13,8 +13,6 @@ public final class OutgoingModel {
 
 	public final static QName TYPE_OUTGOING = QName.createQName(OUTGOING_NAMESPACE, "document");
 
-	public final static QName ASSOC_OUTGOING_REGISTRAR = QName.createQName(OUTGOING_NAMESPACE, "registrar-assoc");
-
 	private OutgoingModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of OutgoingModel class.");
 	}
