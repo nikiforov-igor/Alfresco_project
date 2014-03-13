@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="internal-reg-journal">
+        <l18>
+            <item key="RU_RU"><![CDATA[Журнал регистрации внутренних документов]]></item>
+        </l18>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="PROV_GENERIC_PROVIDER">
+            <l18>
+                <item key="RU_RU"><![CDATA[genericProvider]]></item>
+            </l18>
+        </provider>
+        <templates>
+            <template filename="internal-reg-journal.jrxml"
+                mnem="default" type="JASPER">
+                <l18>
+                    <item key="RU_RU"><![CDATA[Шаблон]]></item>
+                </l18>
+            </template>
+        </templates>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU"><![CDATA[963293f1-4a45-48c3-a473-d314d4bf40ee]]></item>
+            </l18>
+        </datasource.descriptor>
+        <roles/>
+    </report.descriptor>
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[+TYPE:"lecm-internal:document"]]></queryText>
+        <querySort/>
+        <allVersions>true</allVersions>
+        <preferedType>lecm-internal:document</preferedType>
+        <isMultiRow>true</isMultiRow>
+        <isCustom>false</isCustom>
+        <flags/>
+    </query.descriptor>
+    <fields>
+        <field alfrescoType="d:text" displayName="Дата документа"
+            javaValueClass="java.util.Date" jrFldName="docDate" queryFldName="{lecm-document:doc-date}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Дата документа]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Регистрационный номер"
+            javaValueClass="java.lang.String" jrFldName="regNum" queryFldName="{~REGNUM}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Регистрационный номер]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Получатели"
+            javaValueClass="java.lang.String" jrFldName="docRecipients" queryFldName="{lecm-eds-document:recipients-assoc-text-content}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Получатели]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Заголовок"
+            javaValueClass="java.lang.String" jrFldName="docTitle" queryFldName="{lecm-document:title}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Заголовок]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Автор"
+            javaValueClass="java.lang.String" jrFldName="docAuthor" queryFldName="{lecm-document:creator}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Автор]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Статус"
+            javaValueClass="java.lang.String" jrFldName="docStatus" queryFldName="{lecm-statemachine:status}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Статус]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Тематика"
+            javaValueClass="java.lang.String" jrFldName="docThematic" queryFldName="{lecm-document:subject-assoc/cm:name}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Тематика]]></item>
+            </l18>
+        </field>
+    </fields>
+</ds.config>
