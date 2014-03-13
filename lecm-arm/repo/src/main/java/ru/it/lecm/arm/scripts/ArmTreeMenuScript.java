@@ -117,7 +117,11 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private JSONObject toJSON(ArmNode node, boolean isAccordionNode, Map<String, Boolean> isStarterHash) {
         JSONObject result = new JSONObject();
         try {
-            result.put(ID, node.getNodeRef() != null ? node.getNodeRef().getId() : node.getTitle());
+            result.put(ID, node.getNodeRef() != null ?
+                    node.getNodeRef().getId() :
+                    (node.getArmNodeRef() != null ?
+                            node.getArmNodeRef().getId() + "-" + node.getTitle():
+                            node.getTitle()));
             result.put(NODE_REF, node.getNodeRef() != null ? node.getNodeRef().toString() : null);
 	        result.put(NODE_TYPE, node.getNodeType() != null ? node.getNodeType() : null);
 
