@@ -53,6 +53,7 @@
         <property name="createOrUpdateDictionaries">
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-br-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-rn-items.xml</value>
             </list>
         </property>
     </bean>

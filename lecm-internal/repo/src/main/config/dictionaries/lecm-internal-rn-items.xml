@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны регистрационных номеров" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:Номер проекта внутреннего" type="lecm-regnum:template">
+                <property name="cm:name">Номер проекта внутреннего</property>
+                <property name="lecm-regnum:template-string">ВНУТР-{#formatNumber('00000', doc.counterYearDoctype('project'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера проекта внутреннего</property>
+                <property name="lecm-regnum:template-service-id">INTERNAL_PRJ_NUMBER</property>
+            </item>
+            <item name="cm:Номер внутреннего" type="lecm-regnum:template">
+                <property name="cm:name">Номер внутреннего</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-doc-dic-fr:index').isEmpty() ? "" : doc.associatedAttributePath('lecm-eds-document:file-register-assoc/lecm-doc-dic-fr:index') + "-"}{#formatNumber('00000', doc.counterYearDoctype)}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера внутреннего</property>
+                <property name="lecm-regnum:template-service-id">INTERNAL_DOC_NUMBER</property>
+            </item>
+        </items>
+    </item>
+</items>
