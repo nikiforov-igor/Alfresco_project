@@ -915,9 +915,14 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document;
-                                                                regnumbers.registerProject(outgoing, "OUTGOING_PRJ_NUMBER");
-                                                                outgoing.save();]]></value>
+                                                                <value><![CDATA[
+(function(){
+    var outgoing = stm_document;
+    regnumbers.registerProject(outgoing, "OUTGOING_PRJ_NUMBER");
+    outgoing.save();
+})();
+]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -4314,9 +4319,14 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document,
-                                                                        notification = outgoingStatemachine.prepareNotificationAboutRework(outgoing);
-                                                                        notifications.sendNotification(notification);]]></value>
+                                                                <value><![CDATA[
+(function(){
+    var outgoing = stm_document,
+        notification = outgoingStatemachine.prepareNotificationAboutRework(outgoing);
+    notifications.sendNotification(notification);
+})();
+]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -7236,22 +7246,27 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var i,
-                                                                                    outgoing = stm_document, //исходящий документ
-                                                                                    registrars = outgoingStatemachine.getRegistrars("DA_REGISTRAR", outgoing),//получение списка регистраторов по документу
-                                                                                    registrarsCount = registrars.length,
-                                                                                    notification;
+                                                                <value><![CDATA[
+(function(){
+    var i,
+        outgoing = stm_document, //исходящий документ
+        registrars = edsGlobalSettings.getRegistrars("DA_REGISTRAR", outgoing),//получение списка регистраторов по документу
+        registrarsCount = registrars.length,
+        notification;
 
-                                                                                    //раздаем права регистраторам
-                                                                                    for(i = 0; i < registrarsCount; ++i) {
-                                                                                        statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYNAMIC");
-                                                                                    }
+    //раздаем права регистраторам
+    for(i = 0; i < registrarsCount; ++i) {
+        statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYNAMIC");
+    }
 
-                                                                                    //подготавливаем уведомление
-                                                                                    notification = outgoingStatemachine.prepareNotificationAboutRegistration(outgoing, registrars);
+    //подготавливаем уведомление
+    notification = outgoingStatemachine.prepareNotificationAboutRegistration(outgoing, registrars);
 
-                                                                                    //рассылаем уведомление
-                                                                                    notifications.sendNotification(notification);]]></value>
+    //рассылаем уведомление
+    notifications.sendNotification(notification);
+})();
+]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -8056,10 +8071,14 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document;
-                                                                    regnumbers.registerDocument(outgoing, "OUTGOING_DOC_NUMBER");
-                                                                    outgoingStatemachine.setRegistrar(outgoing, orgstructure.getCurrentEmployee());
-                                                                    outgoing.save();]]></value>
+                                                                <value><![CDATA[
+(function(){
+    var outgoing = stm_document;
+    regnumbers.registerDocument(outgoing, "OUTGOING_DOC_NUMBER");
+    outgoing.save();
+})();
+]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
@@ -8860,9 +8879,14 @@
                                                         <properties>
                                                             <property>
                                                                 <name>actionScript</name>
-                                                                <value><![CDATA[var outgoing = stm_document,
-                                                            notification = outgoingStatemachine.prepareNotificationAboutSending(outgoing);
-                                                            notifications.sendNotification(notification);]]></value>
+                                                                <value><![CDATA[
+(function(){
+    var outgoing = stm_document,
+        notification = outgoingStatemachine.prepareNotificationAboutSending(outgoing);
+    notifications.sendNotification(notification);
+})();
+]]>
+                                                                </value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
