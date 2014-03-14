@@ -9,6 +9,7 @@
 		            <#if document??>
 			            <#assign trCount = trCount + 1/>
 		                <tr>
+				            <td style="width:80px;">&nbsp;</td>
 				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"]}</td>
 				            <td class="connection-present-column">
 				                <a href="/share/page/document?nodeRef=${document.nodeRef}">
@@ -29,6 +30,7 @@
 		            <#if document??>
 			            <#assign trCount = trCount + 1/>
 		                <tr>
+                            <td style="width:80px;">&nbsp;</td>
 				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"]}</td>
 				            <td class="connection-present-column">
 				                <a href="/share/page/document?nodeRef=${document.nodeRef}">
@@ -44,6 +46,7 @@
 
 		<#if trCount == 0>
 			<tr class="no-records">
+                <td style="width:80px;">&nbsp;</td>
 				<td>Нет связанных документов</td>
 			</tr>
 		</#if>
