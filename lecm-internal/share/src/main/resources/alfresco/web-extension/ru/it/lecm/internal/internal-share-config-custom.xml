@@ -462,6 +462,16 @@
             <form id="statemachine-editable-fields">
                 <field-visibility>
                     <show id="lecm-document-aspects:is-shared-folder"/>
+                    <show id="lecm-internal:response-date"/>
+                    <show id="lecm-internal:recipients-assoc"/>
+                    <show id="lecm-internal:doc-type-assoc"/>
+                    <show id="lecm-eds-document:note"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <show id="lecm-eds-document:summaryContent"/>
+                    <show id="lecm-document:title"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-document-aspects:response-to-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>
                 </field-visibility>
             </form>
         </forms>

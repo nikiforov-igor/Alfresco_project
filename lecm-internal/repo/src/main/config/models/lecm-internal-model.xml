@@ -26,9 +26,8 @@
 		<constraint name="lecm-internal:attachment-categories" type="LIST">
 			<parameter name="allowedValues">
 				<list>
-					<value>Документ</value>
+					<value>Внутренний</value>
 					<value>Прочее</value>
-					<value>Согласование</value>
 				</list>
 			</parameter>
 		</constraint>
