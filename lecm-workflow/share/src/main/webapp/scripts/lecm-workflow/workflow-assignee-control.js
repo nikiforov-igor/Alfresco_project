@@ -455,7 +455,9 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			workflowList.setOptions(currentConcurrency);
 			datagrid.setOptions(currentConcurrency);
 
-			this.widgets.radioWorkflowType.check(buttonToCheck);
+			if (this.widgets.radioWorkflowType !== null && this.widgets.radioWorkflowType !== undefined) {
+				this.widgets.radioWorkflowType.check(buttonToCheck);
+			}
 
 			if (input !== null && input !== undefined) {
 				input.value = currentConcurrency.concurrency.toUpperCase();
