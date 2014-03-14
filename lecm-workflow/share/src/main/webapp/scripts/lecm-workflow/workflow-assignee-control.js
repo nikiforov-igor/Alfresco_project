@@ -465,7 +465,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			}
 		},
 		_setInitialConcurrency: function() {
-			if (!this.initialConcurrencySetted) {
+			if (!this.initialConcurrencySetted && this.widgets.datagrid && this.widgets.datagrid.widgets.dataTable) {
 				this._setConcurrency(this.options.concurrency, true);
 				this.initialConcurrencySetted = true;
 			}
