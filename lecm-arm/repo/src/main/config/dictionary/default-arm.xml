@@ -559,13 +559,6 @@
 								<property name="lecm-arm:field-title"><![CDATA[Вид внутреннего документа]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-internal:doc-type-assoc]]></property>
 							</item>
-							<item name="cm:70db2168-5015-40b9-beaa-745225a93c41" type="lecm-arm:field">
-								<property name="lecm-arm:field-title"><![CDATA[Срок ответа]]></property>
-								<property name="cm:name"><![CDATA[be342317-eabd-4390-90f5-1279058a666c]]></property>
-								<property name="lecm-arm:field-name"><![CDATA[lecm-internal:response-date]]></property>
-								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-							</item>
 							<item name="cm:49fd30f3-94b9-44eb-b5b2-c7f1a0c1a82f" type="lecm-arm:field">
 								<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
 								<property name="cm:name"><![CDATA[49fd30f3-94b9-44eb-b5b2-c7f1a0c1a82f]]></property>
