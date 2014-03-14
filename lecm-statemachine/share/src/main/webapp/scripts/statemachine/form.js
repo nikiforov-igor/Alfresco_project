@@ -266,6 +266,7 @@ LogicECM.module = LogicECM.module || {};
                                 isDefault: true
                             }]
                     });
+                    this.doubleClickLock = false;
             }
         },
 
@@ -275,6 +276,7 @@ LogicECM.module = LogicECM.module || {};
                 Alfresco.util.populateHTML(
                     [contId + "_h", taskName]
                 );
+                this.doubleClickLock = false;
             };
 
             var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&formUI={formUI}&submitType={submitType}&showCancelButton=true",
