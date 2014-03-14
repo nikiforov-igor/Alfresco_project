@@ -42,8 +42,14 @@
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true"/>
-					<field id="lecm-workflow:fake-workflow-list-approval">
+					<set id="route1" appearance=""/>
+					<set id="route2" appearance=""/>
+					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
+					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
+					<set id="route3" appearance=""/>
+					<field id="cm:name" set="route1"/>
+					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true" set="route2"/>
+					<field id="lecm-workflow:fake-workflow-list-approval" set="approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
@@ -53,7 +59,7 @@
 							<control-param name="itemType">route</control-param>
 						</control>
 					</field>
-					<field id="lecm-workflow:fake-workflow-list-signing">
+					<field id="lecm-workflow:fake-workflow-list-signing" set="signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
@@ -64,6 +70,7 @@
 							<control-param name="showComputeTermsButton">false</control-param>
 						</control>
 					</field>
+					<field id="lecm-workflow:is-register-after-signed" set="route3"/>
 				</appearance>
 			</form>
 			<form id="createNewCommonRouteForm">
@@ -75,7 +82,13 @@
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" mandatory="true">
+					<set id="route1" appearance=""/>
+					<set id="route2" appearance=""/>
+					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
+					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
+					<set id="route3" appearance=""/>
+					<field id="cm:name" set="route1"/>
+					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" mandatory="true" set="route2">
 						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="showCreateNewLink">false</control-param>
@@ -87,7 +100,7 @@
 							<control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
 						</control>
 					</field>
-					<field id="lecm-workflow:fake-workflow-list-approval">
+					<field id="lecm-workflow:fake-workflow-list-approval" set="approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
@@ -97,7 +110,7 @@
 							<control-param name="itemType">route</control-param>
 						</control>
 					</field>
-					<field id="lecm-workflow:fake-workflow-list-signing">
+					<field id="lecm-workflow:fake-workflow-list-signing" set="signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
@@ -108,6 +121,7 @@
 							<control-param name="showComputeTermsButton">false</control-param>
 						</control>
 					</field>
+					<field id="lecm-workflow:is-register-after-signed" set="route3"/>
 				</appearance>
 			</form>
 			<form id="createNewPrivateRouteForm">
@@ -118,7 +132,12 @@
 					<show id="lecm-workflow:is-register-after-signed"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-workflow:fake-workflow-list-approval">
+					<set id="route1" appearance=""/>
+					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
+					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
+					<set id="route3" appearance=""/>
+					<field id="cm:name" set="route1"/>
+					<field id="lecm-workflow:fake-workflow-list-approval" set="approval">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">approval</control-param>
@@ -128,7 +147,7 @@
 							<control-param name="itemType">route</control-param>
 						</control>
 					</field>
-					<field id="lecm-workflow:fake-workflow-list-signing">
+					<field id="lecm-workflow:fake-workflow-list-signing" set="signing">
 						<control template="/ru/it/lecm/workflow/controls/workflow-assignees-control.ftl">
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="namespace">signing</control-param>
@@ -139,6 +158,7 @@
 							<control-param name="showComputeTermsButton">false</control-param>
 						</control>
 					</field>
+					<field id="lecm-workflow:is-register-after-signed" set="route3"/>
 				</appearance>
 			</form>
 		</forms>
