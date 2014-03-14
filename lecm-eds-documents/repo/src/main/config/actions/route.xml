@@ -4,7 +4,7 @@
 		<property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/3154f781-fbca-4933-97b5-dabdea6cb952]]></property>
 		<property name="cm:name"><![CDATA[Отправить по маршруту]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[Проект; На доработке]]></property>
-		<property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>
+		<property name="lecm-group-actions:type"><![CDATA[lecm-document-aspects:routes-avaliable]]></property>
 		<property name="lecm-group-actions:order"><![CDATA[0]]></property>
 		<property name="lecm-group-actions:expression"><![CDATA[]]></property>
 		<property name="lecm-group-actions:isGroup"><![CDATA[false]]></property>
@@ -12,17 +12,28 @@
 		<property name="lecm-group-actions:script"><![CDATA[//запуск согласования по маршруту
 (function() {
     var jsonUtils = new Packages.org.springframework.extensions.webscripts.json.JSONUtils(),
-        variables = jsonUtils.toJSONObject({
-            documentAttachmentCategoryName: "Исходящее",
+        documentType = "" + document.typeShort, //для того чтобы java.lang.String превратился в js native string
+        variables = null,
+        workflowVariables = {
             workflowRole: "DA_APPROVER",
-            commentFileAttachmentCategoryName: "Согласование",
             workflowDefinition: "lecmApprovalWorkflow",
+            commentFileAttachmentCategoryName: "Согласование",
             documentRef: document.nodeRef,
             routeRef: routeRef.nodeRef
-        });
+        };
+    switch(documentType) {
+        case "lecm-internal:document":
+            workflowVariables.documentAttachmentCategoryName = "Документ";
+            break;
+        case "lecm-outgoing:document":
+            workflowVariables.documentAttachmentCategoryName = "Исходящее";
+            break;
+    }
+    variables = jsonUtils.toJSONObject(workflowVariables);
     routeWorkflow.makeDocumentRoutable(document, routeRef);
     routeWorkflow.startWorkflow(variables);
 })();
+
 ]]>
 		</property>
 		<items>

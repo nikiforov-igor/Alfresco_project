@@ -305,5 +305,7 @@
             </properties>
         </aspect>
 
+		<!-- Аспект обозначающий доступность групповой операции "отправить по маршруту" -->
+		<aspect name="lecm-document-aspects:routes-avaliable"/>
     </aspects>
 </model>

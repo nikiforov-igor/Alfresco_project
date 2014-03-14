@@ -11,18 +11,16 @@
 		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
 	</util:list>
-
 	<util:list id="eds.models.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
 	</util:list>
-
 	<bean id="eds.models.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
-          			  documents.LogicEcmModelsBootstrap,
-		              ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
-				      documents.dictionaries.LogicEcmModelsBootstrap,
-				      dictionary.fileRegister.LogicEcmModelsBootstrap"
+					  documents.LogicEcmModelsBootstrap,
+					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					  documents.dictionaries.LogicEcmModelsBootstrap,
+					  dictionary.fileRegister.LogicEcmModelsBootstrap"
 		  p:models-ref="eds.models"
 		  p:labels-ref="eds.models.labels"/>
 
@@ -30,7 +28,6 @@
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
 	</util:list>
-
 	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
@@ -42,14 +39,20 @@
 	<util:map id="eds.global-settings.folders">
 		<entry key="#{EDS_GLOBAL_SETTINGS_FOLDER_ID}" value="#{EDS_GLOBAL_SETTINGS_FOLDER_NAME}"/>
 	</util:map>
+	<bean id="eds.global-settings.service" init-method="init" parent="baseBean"
+		  class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:namespaceService-ref="namespaceService"
+		  p:dictionaryService-ref="serviceDictionary"
+		  p:transactionService-ref="transactionService"
+		  p:folders-ref="eds.global-settings.folders"/>
 
-	<bean id="eds.global-settings.service" init-method="init" class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, documentService, serviceDictionary"
-			p:nodeService-ref="nodeService"
-			p:orgstructureService-ref="serviceOrgstructure"
-			p:namespaceService-ref="namespaceService"
-			p:dictionaryService-ref="serviceDictionary"
-			p:transactionService-ref="transactionService"
-			p:folders-ref="eds.global-settings.folders"/>
+	<util:list id="eds.groupOperations">
+		<value>alfresco/module/${artifactId}/actions/route.xml</value>
+	</util:list>
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:createOrUpdateDictionaries-ref="eds.groupOperations"/>
 
 </beans>

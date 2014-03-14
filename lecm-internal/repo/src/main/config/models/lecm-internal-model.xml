@@ -1,110 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model name="lecm-internal:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
-    <description>Внутренние</description>
-    <author>Logic ECM</author>
-    <version>1.0</version>
-    <imports>
-        <import uri="http://www.it.ru/logicECM/internal-doc-type/1.0" prefix="lecm-internal-doc-type"/>
-        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
-        <import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
-        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
-        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
-        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
-        <import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
-    </imports>
-    <namespaces>
-        <namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
-    </namespaces>
+	<description>Внутренние</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.it.ru/logicECM/internal-doc-type/1.0" prefix="lecm-internal-doc-type"/>
+		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+		<import uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/internal/1.0" prefix="lecm-internal"/>
+	</namespaces>
 
-    <constraints>
-        <constraint name="lecm-internal:present-string-constraint"
-                    type="ru.it.lecm.documents.constraints.PresentStringConstraint">
-            <parameter name="presentString">
-                <value><![CDATA[Внутренний от {cm:created?dd-MM-yyyy}, номер {~REGNUM}]]></value>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-internal:attachment-categories" type="LIST">
-            <parameter name="allowedValues">
-                <list>
-                    <value>Документ</value>
-                    <value>Прочее</value>
-                    <value>Согласование</value>
-                </list>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-internal:author-property-constraint"
-                    type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
-            <parameter name="authorProperty">
-                <value>lecm-document:creator-ref</value>
-            </parameter>
-        </constraint>
-        <constraint name="lecm-internal:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
-            <parameter name="armUrl">
-                <value>arm?code=SED</value>
-            </parameter>
-        </constraint>
-    </constraints>
+	<constraints>
+		<constraint name="lecm-internal:present-string-constraint"
+					type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+			<parameter name="presentString">
+				<value><![CDATA[Внутренний от {cm:created?dd-MM-yyyy}, номер {~REGNUM}]]></value>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-internal:attachment-categories" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>Документ</value>
+					<value>Прочее</value>
+					<value>Согласование</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-internal:author-property-constraint"
+					type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+			<parameter name="authorProperty">
+				<value>lecm-document:creator-ref</value>
+			</parameter>
+		</constraint>
+		<constraint name="lecm-internal:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+			<parameter name="armUrl">
+				<value>arm?code=SED</value>
+			</parameter>
+		</constraint>
+	</constraints>
 
-    <types>
-        <type name="lecm-internal:document">
-            <title>Внутренний</title>
-            <parent>lecm-eds-document:base</parent>
-            <properties>
-                <property name="lecm-internal:doc-type-assoc-ref">
-                    <title>Вид внутреннего документа</title>
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-internal:doc-type-assoc-text-content">
-                    <title>Вид внутреннего документа</title>
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-internal:response-date">
-                    <title>Срок ответа</title>
-                    <type>d:date</type>
-                </property>
-            </properties>
-            <associations>
-                <!-- Получатель (сотрудник или подразделение) -->
-                <association name="lecm-internal:recipients-assoc">
-                    <title>Получатель</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>cm:cmobject</class>
-                        <mandatory>true</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-                <association name="lecm-internal:doc-type-assoc">
-                    <title>Вид внутреннего документа</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-internal-doc-type:dictionary</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-            </associations>
-            <mandatory-aspects>
-                <aspect>lecm-document-aspects:response-to-aspect</aspect>
-                <aspect>lecm-document-aspects:temp-attachments</aspect>
-                <aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
-            </mandatory-aspects>
-        </type>
-    </types>
+	<types>
+		<type name="lecm-internal:document">
+			<title>Внутренний</title>
+			<parent>lecm-eds-document:base</parent>
+			<properties>
+				<property name="lecm-internal:doc-type-assoc-ref">
+					<title>Вид внутреннего документа</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-internal:doc-type-assoc-text-content">
+					<title>Вид внутреннего документа</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-internal:response-date">
+					<title>Срок ответа</title>
+					<type>d:date</type>
+				</property>
+			</properties>
+			<associations>
+				<!-- Получатель (сотрудник или подразделение) -->
+				<association name="lecm-internal:recipients-assoc">
+					<title>Получатель</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:cmobject</class>
+						<mandatory>true</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-internal:doc-type-assoc">
+					<title>Вид внутреннего документа</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-internal-doc-type:dictionary</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>lecm-document-aspects:response-to-aspect</aspect>
+				<aspect>lecm-document-aspects:temp-attachments</aspect>
+				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
+				<aspect>lecm-document-aspects:routes-avaliable</aspect>
+			</mandatory-aspects>
+		</type>
+	</types>
 </model>
