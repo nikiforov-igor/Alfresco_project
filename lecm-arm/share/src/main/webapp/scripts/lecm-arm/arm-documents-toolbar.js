@@ -150,6 +150,18 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 for (var i in datagridItems) {
                     items.push(datagridItems[i].nodeRef);
                 }
+                var loadItem = [];
+                loadItem.push({
+                    text: "Загрузка...",
+                    disabled: true
+                });
+                if (YAHOO.util.Dom.inDocument(menu.element)) {
+                    menu.clearContent();
+                    menu.addItems(loadItem);
+                    menu.render();
+                } else {
+                    menu.itemData = loadItem;
+                }
                 var me = this;
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
