@@ -474,7 +474,8 @@ public class ReportsManager {
         templateFileData.setEncoding("UTF-8");
         templateFileData.setMimeType(findMimeType(extension));
 
-        templateFileData.setFilename(getTemplateFileName(desc, template, extension));
+        final String templateFileName = template.getFileName();
+        templateFileData.setFilename(templateFileName != null ? templateFileName : getTemplateFileName(desc, template, extension));
         return storeAsContent(templateFileData, reportRef);
     }
 
@@ -870,7 +871,7 @@ public class ReportsManager {
         for (ReportTemplate template : desc.getReportTemplates()) {
             final String rtag = getReportTypeTag(template.getReportType());
             final ReportDefaultsDesc def = getReportDefaults().get(rtag);
-
+            final String templateFileName = template.getFileName();
 		    /* сохранение в репозиторий "шаблона отчёта"... */
             try {
                 byte[] templateRawData = null;
@@ -882,7 +883,7 @@ public class ReportsManager {
 
                     final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
 
-                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, getTemplateFileName(desc, template, ext));
+                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, templateFileName != null ? templateFileName : getTemplateFileName(desc, template, ext));
 
                     templateRawData = byteStream.toByteArray();
 
@@ -925,13 +926,13 @@ public class ReportsManager {
         for (ReportTemplate template : descriptor.getReportTemplates()) {
             final String rtag = getReportTypeTag(template.getReportType());
             final ReportDefaultsDesc def = getReportDefaults().get(rtag);
-
+            final String templateFileName = template.getFileName();
 		/* сохранение в репозиторий "шаблона отчёта"... */
             InputStream baStm = null;
             byte[] templateRawData;
             try {
                 final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
-                final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(descriptor, getTemplateFileName(descriptor, template, ext));
+                final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(descriptor, templateFileName != null ? templateFileName : getTemplateFileName(descriptor, template, ext));
 
                 if (fromStorage.exists(id) && (!toStorage.exists(id) || reWrite)) {
                     ContentReader fromReader = fromStorage.loadContent(id);

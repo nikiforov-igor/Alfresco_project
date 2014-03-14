@@ -215,7 +215,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         try {
             JasperCompileManager.compileReportToStream(inData, outData);
-            final IdRContent id = IdRContent.createId(desc, getReportsManager().getTemplateFileName(desc, template, ".jasper"));
+            final IdRContent id = IdRContent.createId(desc, template.getFileName().replace("jrxml", "jasper"));
             storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
         } catch (JRException ex) {
             final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());

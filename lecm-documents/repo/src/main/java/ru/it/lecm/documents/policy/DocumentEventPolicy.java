@@ -149,36 +149,38 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
             if (pendingDocs != null) {
                 while (!pendingDocs.isEmpty()) {
                     final NodeRef docRef = pendingDocs.remove(0);
-                    List<AssociationRef> listeners = nodeService.getTargetAssocs(docRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
-                    for (AssociationRef listener : listeners) {
-                        final NodeRef node = listener.getTargetRef();
-                        Runnable runnable = new Runnable() {
-                            public void run() {
-                                try {
-                                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                                        @Override
-                                        public Void doWork() throws Exception {
-                                            return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                                @Override
-                                                public Void execute() throws Throwable {
-                                                    String senders = nodeService.getProperty(node, DocumentEventService.PROP_EVENT_SENDER).toString();
-                                                    if ("".equals(senders)) {
-                                                        senders = docRef.toString();
-                                                    } else {
-                                                        senders += "," + docRef.toString();
+                    if (nodeService.exists(docRef)) {
+                        List<AssociationRef> listeners = nodeService.getTargetAssocs(docRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
+                        for (AssociationRef listener : listeners) {
+                            final NodeRef node = listener.getTargetRef();
+                            Runnable runnable = new Runnable() {
+                                public void run() {
+                                    try {
+                                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                            @Override
+                                            public Void doWork() throws Exception {
+                                                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                                    @Override
+                                                    public Void execute() throws Throwable {
+                                                        String senders = nodeService.getProperty(node, DocumentEventService.PROP_EVENT_SENDER).toString();
+                                                        if ("".equals(senders)) {
+                                                            senders = docRef.toString();
+                                                        } else {
+                                                            senders += "," + docRef.toString();
+                                                        }
+                                                        nodeService.setProperty(node, DocumentEventService.PROP_EVENT_SENDER, senders);
+                                                        return null;
                                                     }
-                                                    nodeService.setProperty(node, DocumentEventService.PROP_EVENT_SENDER, senders);
-                                                    return null;
-                                                }
-                                            }, false, true);
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                    logger.error("Error while send document events", e);
+                                                }, false, true);
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        logger.error("Error while send document events", e);
+                                    }
                                 }
-                            }
-                        };
-                        threadPoolExecutor.execute(runnable);
+                            };
+                            threadPoolExecutor.execute(runnable);
+                        }
                     }
                 }
             }

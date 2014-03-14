@@ -98,7 +98,6 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
             templateFile = targetAssocs.get(0).getTargetRef();
             if (nodeService.exists(templateFile)) {
                 nodeService.addAspect(templateFile, ContentModel.ASPECT_TEMPORARY, null);
-                nodeService.deleteNode(templateFile);
             }
         }
     }
