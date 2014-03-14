@@ -11,25 +11,27 @@
 }
 
 #yui-main .arm-filters-bar .datalist-toolbar {
-	background-color: #DEF1A0;
-	height: 40px;
+	background-color: #DFF1A1;
+    color: #303030;
+	height: 44px;
 }
 
 .arm-filters-bar .datalist-toolbar .header-bar > div {
-	padding-top: 10px;
+	padding-top: 14px;
 	padding-left: 10px;
 }
 
 .arm-filters-bar .arm-filters-label {
     font-weight: bold;
+    font-size: 12px;
 }
 
 .arm-filters-bar .arm-filters-label a {
-    /*font-size: 12px;*/
+    font-size: 12px;
 }
 
 .arm-filters-bar .arm-filter-item {
-    /*font-size: 12px;*/
+    font-size: 12px;
 	font-style: italic;
 	padding: 0 10px;
 }
