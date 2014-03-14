@@ -16,6 +16,10 @@
 	height: 44px;
 }
 
+.filters-block .filters {
+    margin-left: 9px;
+}
+
 .arm-filters-bar .datalist-toolbar .header-bar > div {
 	padding-top: 14px;
 	padding-left: 10px;
@@ -46,15 +50,10 @@
 
 .datalist-toolbar .filters span.first-child
 {
-    background: url('/share/res/images/lecm-arm/filter-16.png') no-repeat 12px 4px;
-    padding-left: 24px;
+    background: url('/share/res/images/lecm-arm/filter-16.png') no-repeat 4px 4px;
+    padding-left: 14px;
 }
 
-.datalist-toolbar .filters span.first-child,
-.datalist-toolbar .group-actions span.first-child {
-    width: 180px;
-	text-align: left;
-}
 
 div.arm-tree-menu .arm-accordion {
 	padding-top: 0.5em;
