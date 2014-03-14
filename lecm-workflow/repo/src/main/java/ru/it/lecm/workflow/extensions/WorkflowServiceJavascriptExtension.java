@@ -83,7 +83,8 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 	 "listsFolder": "папка, которая содержит списки участников",
 	 "lists": [ {
 	 "title": "название списка",
-	 "nodeRef": "NodeRef списка"
+	 "nodeRef": "NodeRef списка",
+	 "concurrency": "параллельны или последовательный"
 	 }]
 	 }
 	 */
@@ -109,12 +110,14 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 			for (NodeRef assigneesListRef : assingeesLists) {
 				String assigneesListName = workflowAssigneesListService.getNodeRefName(assigneesListRef);
+				String assigneesListConcurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesListRef);
 
 				JSONObject jsonItem = new JSONObject();
 
 				// для каждого строим JSON-объект
 				jsonItem.put("title", assigneesListName);
 				jsonItem.put("nodeRef", assigneesListRef);
+				jsonItem.put("concurrency", assigneesListConcurrency);
 
 				// складываем в json-array
 				listsJSONArray.put(jsonItem);

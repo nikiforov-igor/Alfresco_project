@@ -161,7 +161,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		},
 		_onConcurrencyChange: function(event) {
 			var newConcurrencyValue = event.newValue;
-			this._setConcurrency(newConcurrencyValue);
+			this._setConcurrency(newConcurrencyValue, true);
 			this.validateForm();
 		},
 		_onSaveListButtonClick: function() {
@@ -416,11 +416,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				}
 			});
 		},
-		_setConcurrency: function(value) {
-			var workflowList = this;
+		_setConcurrency: function(value, needsPersisting) {
+			var workflowList = this, currentConcurrency, buttonToCheck;
 			var datagrid = workflowList.widgets.datagrid;
 			var dataTable = datagrid.widgets.dataTable;
-			var currentConcurrency;
 
 			var SEQUENTIAL = {concurrency: 'sequential'};
 			var PARALLEL = {concurrency: 'parallel'};
@@ -432,6 +431,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			if (value === 'user' || value === 'sequential') {
 				currentConcurrency = SEQUENTIAL;
 
+				buttonToCheck = 0;
+
 				dataTable.showColumn(0);
 				dataTable.showColumn(1);
 
@@ -440,6 +441,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				}
 			} else {
 				currentConcurrency = PARALLEL;
+
+				buttonToCheck = 1;
 
 				dataTable.hideColumn(0);
 				dataTable.hideColumn(1);
@@ -452,14 +455,18 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			workflowList.setOptions(currentConcurrency);
 			datagrid.setOptions(currentConcurrency);
 
+			this.widgets.radioWorkflowType.check(buttonToCheck);
+
 			if (input !== null && input !== undefined) {
 				input.value = currentConcurrency.concurrency.toUpperCase();
 			}
-			this._persistConcurrency(currentConcurrency.concurrency.toUpperCase());
+			if (needsPersisting) {
+				this._persistConcurrency(currentConcurrency.concurrency.toUpperCase());
+			}
 		},
 		_setInitialConcurrency: function() {
 			if (!this.initialConcurrencySetted) {
-				this._setConcurrency(this.options.concurrency);
+				this._setConcurrency(this.options.concurrency, true);
 				this.initialConcurrencySetted = true;
 			}
 		},
@@ -482,7 +489,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			});
 		},
 		_onListsMenuClick: function(eventType, args) {
-			var text, value;
+			var text, value, concurrency;
 			var event = args[0];
 			var menuItem = args[1];
 
@@ -491,11 +498,12 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			}
 
 			text = menuItem.cfg.getProperty('text');
+			concurrency = menuItem.concurrency;
 			value = menuItem.value;
 
 			this.widgets.btnSelectList.set('label', text);
 
-			this._setCurrentListRef(value);
+			this._setCurrentListRef(value, concurrency);
 			this._refreshDatagrid();
 		},
 		_hackTheDestructor: function(layer, args) {
@@ -614,9 +622,12 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		validateForm: function() {
 			this.widgets.form.formsRuntime.updateSubmitElements();
 		},
-		_setCurrentListRef: function(ref) {
+		_setCurrentListRef: function(ref, concurrency) {
 			this.options.currentListRef = ref;
 			this.widgets.currentListRefInput.value = ref;
+			if (concurrency) {
+				this._setConcurrency(concurrency, false);
+			}
 		},
 		_setCurrentEmployee: function(ref) {
 			this.options.currentEmployee = ref;
@@ -671,7 +682,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				},
 				successCallback: {
 					fn: function(response) {
-						var i, title, items;
+						var i, title, items, currentList, addedMenuItem;
 						var lists = response.json.lists;
 						var listsLg = lists.length;
 
@@ -685,21 +696,24 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 						}
 
 						for (i = 0; i < listsLg; i++) {
+							currentList = lists[i];
 							// TERNARY? NO!
-							if (lists[i].nodeRef === response.json.defaultList) {
+							if (currentList.nodeRef === response.json.defaultList) {
 								title = 'Список по умолчанию';
 							} else {
-								title = lists[i].title;
+								title = currentList.title;
 							}
 
-							menu.addItem({
+							addedMenuItem = menu.addItem({
 								text: title,
-								value: lists[i].nodeRef
+								value: currentList.nodeRef
 							});
+
+							addedMenuItem.concurrency = currentList.concurrency ? currentList.concurrency.toLowerCase() : null;
 
 							items = menu.getItems();
 
-							if (refToSelect === lists[i].nodeRef) {
+							if (refToSelect === currentList.nodeRef) {
 								btnSelectList.set('label', items[items.length - 1].cfg.getProperty('text'));
 							}
 						}
