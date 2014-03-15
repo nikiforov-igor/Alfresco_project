@@ -13,6 +13,7 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:documentConnectionService-ref="documentConnectionService"
-		  p:lecmDictionaryService-ref="serviceDictionary"/>
+		  p:lecmDictionaryService-ref="serviceDictionary"
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
 
 </beans>

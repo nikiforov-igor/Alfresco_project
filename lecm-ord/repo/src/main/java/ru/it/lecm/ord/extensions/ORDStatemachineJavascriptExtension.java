@@ -18,6 +18,7 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -345,9 +346,18 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ScriptNode listNode) {
 		NodeRef documentRef = documentNode.getNodeRef();
 		NodeRef listRef = listNode.getNodeRef();
-		AssigneesList assigneesList = workflowAssigneesListService.getAssigneesListDetail(listRef);
-		List<AssigneesListItem> itemsList = assigneesList.getListItems();
-		
+		List<NodeRef> itemsList = new ArrayList<NodeRef>();
+ 		List<ChildAssociationRef> itemsAssocs = nodeService.getChildAssocs(listRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
+		for (ChildAssociationRef itemAssoc : itemsAssocs) {
+			NodeRef itemRef = itemAssoc.getChildRef();
+			if (itemRef != null) {
+				List<AssociationRef> employeesAssocs = nodeService.getTargetAssocs(itemRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+				for (AssociationRef employeeAssoc : employeesAssocs) {
+					NodeRef employeeRef = employeeAssoc.getTargetRef();
+					itemsList.add(employeeRef);
+				}
+			}
+		}
 		updateDocumentToSignersAssocs(documentRef, itemsList);
 	}
 	
@@ -355,32 +365,25 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
 	 * 
 	 * @param documentRef документ
-	 * @param signers список NodeRef-ов подписантов либо связанных с ними элементов результирующего списка
+	 * @param signersRefs список NodeRef-ов подписантов 
 	 */
-	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List signers) {
+	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List<NodeRef> signersRefs) {
 		List<NodeRef> documentSignersRefs = getDocumentToSignersAssocs(documentRef);
 		Set<NodeRef> signersForDeleteRefs = new HashSet<NodeRef>(documentSignersRefs);
 		
-		for (Object signer : signers) {
-			NodeRef signerRef = null;
-			if (signer instanceof AssigneesListItem) {
-				signerRef = ((AssigneesListItem)signer).getEmployeeRef();
-			} else if (signer instanceof NodeRef) {
-				signerRef = (NodeRef) signer;
-			}
-			
-			if (signerRef != null && !signersForDeleteRefs.remove(signerRef)) {
-				nodeService.createAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNER);
+		for (NodeRef signerRef : signersRefs) {
+			if (!signersForDeleteRefs.remove(signerRef)) {
+				nodeService.createAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
 			}
 		}
 		for (NodeRef signerRef : signersForDeleteRefs) {
-			nodeService.removeAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNER);
+			nodeService.removeAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
 		}
 	}
 	
 	private List<NodeRef> getDocumentToSignersAssocs(NodeRef documentRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
-		List<AssociationRef> signersAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_SIGNER);
+		List<AssociationRef> signersAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_SIGNERS);
 		for (AssociationRef signerAssoc : signersAssocs) {
 			NodeRef signerRef = signerAssoc.getTargetRef();
 			if (signerRef != null) result.add(signerRef);
