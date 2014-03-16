@@ -1,41 +1,90 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xmlns:util="http://www.springframework.org/schema/util"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
-    
+
     <util:list id="nd.models">
-		<value>alfresco/module/${artifactId}/models/lecm-nd-model.xml</value>
-	</util:list>
-    
+        <value>alfresco/module/${artifactId}/models/lecm-nd-model.xml</value>
+    </util:list>
+
     <util:list id="nd.models.labels">
-		<value>alfresco/module/${artifactId}/messages/lecm-nd-model</value>
-	</util:list>
-    
+        <value>alfresco/module/${artifactId}/messages/lecm-nd-model</value>
+    </util:list>
+
     <util:list id="nd.dictionaries">
-		<value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type.xml</value>
-	</util:list>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type.xml</value>
+    </util:list>
     <util:list id="nd.dictionaries.items">
-		<value>alfresco/module/${artifactId}/dictionaries/lecm-nd-regnumbers-items.xml</value>
-	</util:list>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-regnumbers-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-br-items.xml</value>
+    </util:list>
     <!-- Registration of orgStructure models -->
     <bean id="nd.document.models.bootstrap" parent="modelsToRepositoryLoader"
           depends-on="
             ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
-            eds.models.bootstrap, documents.LogicEcmModelsBootstrap"
+            eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
+            documents.LogicEcmModelsBootstrap"
           p:models-ref="nd.models"
-		  p:labels-ref="nd.models.labels"/>
+          p:labels-ref="nd.models.labels"/>
 
-	<bean id="nd.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+    <bean id="nd.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
                       nd.document.models.bootstrap,
 					  businessJournalLogEventsPolicy,
                       documents.LogicEcmConnectionTypesBootstrap,
 					  regNumbers.regNumbersTemplatesDicBootstrap"
-		  p:dictionaries-ref="nd.dictionaries"
+          p:dictionaries-ref="nd.dictionaries"
           p:createOrUpdateDictionaries-ref="nd.dictionaries.items"
-          />
-		  
+    />
+
+    <bean id="nd.statemachine.bootstrap" parent="defaultStatemachines"
+          p:statemachineName="lecm-nd:document"
+          p:path="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml"/>
+
+    <bean id="nd.start.schedule" class="ru.it.lecm.nd.scheduler.InWorkScheduler"
+          p:transactionMode="ISOLATED_TRANSACTIONS"
+          p:compensatingActionMode="IGNORE"
+          p:jobName="switch-nd-status"
+          p:jobGroup="nd"
+          p:triggerName="switch-nd-status-trigger"
+          p:triggerGroup="nd-trigger"
+          p:cronExpression="0 /1 * * * ? *"
+          p:scheduler-ref="schedulerFactory"
+          p:actionService-ref="ActionService"
+          p:transactionService-ref="TransactionService"
+          p:searchService-ref="searchService"
+          p:runAsUser="System"
+    />
+
+    <bean id="inWorkExecutor" class="ru.it.lecm.nd.scheduler.InWorkExecutor" parent="action-executer"
+          p:ignoreLock="false"
+          p:publicAction="false"
+          p:nodeService-ref="nodeService"
+    />
+
+    <bean id="nd.cancel.schedule" class="ru.it.lecm.nd.scheduler.CancelScheduler"
+          p:transactionMode="ISOLATED_TRANSACTIONS"
+          p:compensatingActionMode="IGNORE"
+          p:jobName="cancel-nd-status"
+          p:jobGroup="nd-cancel"
+          p:triggerName="cancel-nd-status-trigger"
+          p:triggerGroup="cancel-nd-trigger"
+          p:cronExpression="0 /1 * * * ? *"
+          p:scheduler-ref="schedulerFactory"
+          p:actionService-ref="ActionService"
+          p:transactionService-ref="TransactionService"
+          p:searchService-ref="searchService"
+          p:runAsUser="System"
+    />
+
+    <bean id="cancelExecutor" class="ru.it.lecm.nd.scheduler.CancelExecutor" parent="action-executer"
+          p:ignoreLock="false"
+          p:publicAction="false"
+          p:nodeService-ref="nodeService"
+    />
+
+
 </beans>

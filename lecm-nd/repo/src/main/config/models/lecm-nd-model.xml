@@ -21,14 +21,13 @@
             <parameter name="allowedValues">
                 <list>
                     <value>Документ</value>
-                    <value>Согласования</value>
                     <value>Прочее</value>
                 </list>
             </parameter>
         </constraint>
         <constraint name="lecm-nd:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
             <parameter name="presentString">
-                <value><![CDATA[{lecm-nd:nd-type-assoc}, №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}, автор {lecm-document:creator-ref}]]></value>
+                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name}, №{~REGNUM|Не присвоено} от {cm:created?dd-MM-yyyy}, автор {lecm-document:creator-ref}]]></value>
             </parameter>
         </constraint>
         <constraint name="lecm-nd:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
@@ -52,27 +51,7 @@
             <title>Logic Ecm ND</title>
             <parent>lecm-eds-document:base</parent>
             <properties>
-                <property name="lecm-nd:shared">
-                    <type>d:boolean</type>
-                </property>
                 <!--Служебные свойства-->
-
-                <property name="lecm-nd:registrar-assoc-ref">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
-                <property name="lecm-nd:registrar-assoc-text-content">
-                    <type>d:text</type>
-                    <index enabled="true">
-                        <atomic>true</atomic>
-                        <stored>false</stored>
-                        <tokenised>both</tokenised>
-                    </index>
-                </property>
                 <!-- Дата начала действия -->
                 <property name="lecm-nd:begin-date">
                     <type>d:date</type>
@@ -92,35 +71,9 @@
                     </index>
                 </property>
             </properties>
-            <associations>
-                <association name="lecm-nd:registrar-assoc">
-                    <title>Регистратор</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:employee</class>
-                        <mandatory>false</mandatory>
-                        <many>false</many>
-                    </target>
-                </association>
-                <!-- Подразделения -->
-                <association name="lecm-nd:org-unit-assoc">
-                    <title>Подразделения</title>
-                    <source>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </source>
-                    <target>
-                        <class>lecm-orgstr:organization-unit</class>
-                        <mandatory>false</mandatory>
-                        <many>true</many>
-                    </target>
-                </association>
-            </associations>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
+                <aspect>lecm-document-aspects:finalize-to-unit</aspect>
             </mandatory-aspects>
         </type>
     </types>

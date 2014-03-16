@@ -106,9 +106,9 @@
             <!-- Форма с набором полей, редактируемых в машине состояний -->
             <form id="statemachine-editable-fields">
                 <field-visibility>
+                    <show id="lecm-document-aspects:registrator-assoc"/>
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-                    <show id="lecm-nd:registrar-assoc"/>                                                           	<!-- Регистратор -->
                     <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
@@ -147,11 +147,13 @@
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-nd:org-unit-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-internal:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
-                    <show id="lecm-internal:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
-                    <show id="lecm-internal:style-for-approval-and-signing-tab" force="true" for-mode="view"/>
+                    <show id="lecm-nd:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
+                    <show id="lecm-nd:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
+                    <show id="lecm-nd:style-for-approval-and-signing-tab" force="true" for-mode="view"/>
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>
+                    <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
                 <appearance>
 
@@ -165,6 +167,7 @@
                     <set id="dates" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="nd7" parent="common"/>
                     <set id="nd8" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="nd9" parent="common"/>
 
 
                     <!-- Вкладка Атрибуты -->
@@ -189,6 +192,7 @@
                     </field>
                     <field id="lecm-eds-document:note" label="Примечание" set="nd7"/>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="nd8"/>
+                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="nd8"/>
                     <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
@@ -201,20 +205,29 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
+                    <field id="lecm-document-aspects:is-shared-folder" set="nd9"/>
                     <!-- Вкладка "Согласование/подписание" -->
-                    <field id="lecm-internal:approval-list" set="approval-and-signing" label="Согласование">
+                    <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
                     </field>
-                    <field id="lecm-internal:signing-list" set="approval-and-signing" label="Подписание">
+                    <field id="lecm-nd:signing-list" set="approval-and-signing" label="Подписание">
                         <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
                     </field>
 
-                    <field id="lecm-internal:style-for-approval-and-signing-tab" set="approval-and-signing">
+                    <field id="lecm-nd:style-for-approval-and-signing-tab" set="approval-and-signing">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
                         </control>
                     </field>
                 </appearance>
+            </form>
+            <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
+            <form id="document">
+                <field-visibility>
+                    <show id="lecm-eds-document:document-type-assoc"/>
+                    <show id="lecm-document:title"/>
+                    <show id="lecm-statemachine:status"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

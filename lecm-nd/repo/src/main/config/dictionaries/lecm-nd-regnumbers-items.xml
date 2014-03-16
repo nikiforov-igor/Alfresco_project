@@ -4,7 +4,7 @@
         <items>
             <item name="cm:Номер проекта НД" type="lecm-regnum:template">
                 <property name="cm:name">Номер проекта НД</property>
-                <property name="lecm-regnum:template-string">{lecm-eds-document:document-type-assoc}-{#formatNumber('00000', doc.counterYearDoctype('ndProject'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-string">НД-{#formatNumber('00000', doc.counterYearDoctype('Project'))}/{#formatDate('yy', doc.creationDate)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера проекта НД</property>
                 <property name="lecm-regnum:template-service-id">ND_PROJECT_NUMBER</property>
             </item>
