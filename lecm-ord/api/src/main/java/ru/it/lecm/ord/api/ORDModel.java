@@ -33,6 +33,8 @@ public final class ORDModel {
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
 	public static final String ORD_POINT_PERFORMANCE_STATUS = "На исполнении";
 	public static final String ORD_POINT_EXECUTED_STATUS = "Исполнен";
+	public static final String ORD_POINT_NOT_EXECUTED_STATUS = "Не исполнен";
+	public static final String ORD_POINT_EXPIRED_STATUS = "Просрочен";
 
 	private ORDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of ORDModel class.");

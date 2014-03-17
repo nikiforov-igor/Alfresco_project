@@ -47,14 +47,16 @@ public class DocumentEventServiceImpl implements DocumentEventService {
 
     @Override
     public Set<NodeRef> getEventSenders(NodeRef listener) {
-        String sendersStr = nodeService.getProperty(listener, PROP_EVENT_SENDER).toString();
-        String[] senders = sendersStr.split(",");
-        Set<NodeRef> result = new HashSet<NodeRef>();
-        for (String sender : senders) {
-            if (NodeRef.isNodeRef(sender.trim())) {
-                result.add(new NodeRef(sender.trim()));
-            }
-        }
+        String sendersStr = (String) nodeService.getProperty(listener, PROP_EVENT_SENDER);
+		Set<NodeRef> result = new HashSet<NodeRef>();
+		if (null != sendersStr){
+			String[] senders = sendersStr.split(",");
+			for (String sender : senders) {
+				if (NodeRef.isNodeRef(sender.trim())) {
+					result.add(new NodeRef(sender.trim()));
+				}
+			}
+		}
         return result;
     }
 

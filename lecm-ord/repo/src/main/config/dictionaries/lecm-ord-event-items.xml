@@ -6,6 +6,10 @@
                 <property name="cm:name">Отмена документа</property>
                 <property name="lecm-busjournal:eventCategory-code">CANCEL_DOCUMENT</property>
             </item>
+            <item name="cm:Смена статуса пункта" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Смена статуса пункта</property>
+                <property name="lecm-busjournal:eventCategory-code">POINT_STATUS_CHANGE</property>
+            </item>
         </items>
     </item>
 </items>

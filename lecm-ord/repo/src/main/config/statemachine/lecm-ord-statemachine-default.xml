@@ -1190,6 +1190,37 @@ ord.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>78c00a6a-22e1-43b3-9867-9ed41a236de2</name>
+																		<nodeRef>workspace://SpacesStore/053c289c-5f43-428e-91cf-d353ffe652bf</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value><![CDATA[signersListRef]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value><![CDATA[resultListRef]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -2840,6 +2871,37 @@ ord.save();]]>
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>1c89087f-b83c-4d50-a3d9-094c615710f4</name>
+																		<nodeRef>workspace://SpacesStore/1379703d-3226-4c54-9868-a39d3f81d35f</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value><![CDATA[signersListRef]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value><![CDATA[resultListRef]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -3847,6 +3909,37 @@ notifications.sendNotification(notification);]]>
 																			<property>
 																				<name>outputFromValue</name>
 																				<value><![CDATA[isSigned]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>outputVariable</type>
+																		<name>121c5b16-06fc-4960-8dc1-c98af34aec67</name>
+																		<nodeRef>workspace://SpacesStore/f1e9cefd-c6da-4dc8-b5be-74b83d5920c3</nodeRef>
+																		<properties>
+																			<property>
+																				<name>outputFromType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToValue</name>
+																				<value><![CDATA[signersListRef]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputToType</name>
+																				<value><![CDATA[VARIABLE]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>outputFromValue</name>
+																				<value><![CDATA[resultListRef]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -5272,7 +5365,34 @@ notifications.sendNotification(notification);]]>
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>ScriptActionEntity</type>
+														<name>63683301-63d5-4eef-9237-0c83c5536cbf</name>
+														<nodeRef>workspace://SpacesStore/d583ecf1-0c7e-42f8-886f-cc305d292d23</nodeRef>
+														<properties>
+															<property>
+																<name>actionScript</name>
+																<value><![CDATA[ordStatemachine.updateDocumentToSignersAssocs(stm_document, signersListRef);]]>
+																</value>
+															</property>
+															<property>
+																<name>scriptLabel</name>
+																<value><![CDATA[Подключение подписантов к документу]]>
+																</value>
+															</property>
+														</properties>
+														<aspects/>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -7656,7 +7776,41 @@ ordStatemachine.repealDocuments(ord);]]>
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>63c44c93-0146-4ec4-bf32-782207dc9443</name>
+														<nodeRef>workspace://SpacesStore/a0c53ca9-862e-48a6-a08e-b9c70ea7a691</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value><![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value><![CDATA[doc.attr("lecm-document-aspects:event-sender") != ""]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value><![CDATA[ordStatemachine.changePointStatus(stm_document);]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>
@@ -7929,6 +8083,32 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 																			<property>
 																				<name>formInputToValue</name>
 																				<value><![CDATA[assoc_lecm-document_subject-assoc]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>84bf8008-99fe-4a41-a3c3-6abb3bf80b74</name>
+																		<nodeRef>workspace://SpacesStore/1fb16045-dbb7-4b15-86a0-5f72a7df1e2f</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Поручение уже создано]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[!doc.hasConnectionDocuments("onBasis","lecm-errands:document")]]>
 																				</value>
 																			</property>
 																		</properties>

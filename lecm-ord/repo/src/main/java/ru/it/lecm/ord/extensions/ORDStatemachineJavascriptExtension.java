@@ -38,10 +38,9 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.AssigneesList;
-import ru.it.lecm.workflow.AssigneesListItem;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 
 /**
@@ -60,6 +59,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private WorkflowAssigneesListService workflowAssigneesListService;
 	private BusinessJournalService businessJournalService;
 	private DocumentEventService documentEventService;
+	private LecmPermissionService lecmPermissionService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -95,6 +95,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setDocumentEventService(DocumentEventService documentEventService) {
 		this.documentEventService = documentEventService;
+	}
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
 	}
 
 	private String getOrdURL(final ScriptNode ordRef) {
@@ -289,9 +293,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				//ассоциации поручения
 				Map<String, String> associations = new HashMap<String, String>();
 				//инициатор поручения
+				NodeRef errandInitiator = null;
 				List<AssociationRef> controllerAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CONTROLLER);
 				if (controllerAssocs.size() > 0) {
 					NodeRef controller = controllerAssocs.get(0).getTargetRef();
+					errandInitiator = controller;
 					associations.put("lecm-errands:initiator-assoc", controller.toString());
 				}
 				//исполнитель
@@ -308,6 +314,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				}
 
 				NodeRef errand = documentService.createDocument("lecm-errands:document", properties, associations);
+
+				// выдадим права контролеру
+				if (null != errandInitiator){
+					lecmPermissionService.grantDynamicRole("BR_INITIATOR", errand, errandInitiator.getId(), "LECM_BASIC_PG_Initiator");
+				}
 
 				// срок поручения
 				Date limitationDate = (Date) nodeService.getProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE);
@@ -329,9 +340,9 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
-				NodeRef pointPerformanceStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_PERFORMANCE_STATUS);
-				List<NodeRef> targetStatus = Arrays.asList(pointPerformanceStatus);
-				nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+				changePointStatus(point,ORDModel.ORD_POINT_PERFORMANCE_STATUS);
+				//подпишем ОРД в качестве наблюдателя за поручением
+				documentEventService.subscribe(errand, ord);
 			}
 		}
 	}
@@ -378,7 +389,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
 	 *
 	 * @param documentRef документ
-	 * @param signersRefs список NodeRef-ов подписантов 
+	 * @param signersRefs список NodeRef-ов подписантов
 	 */
 	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List<NodeRef> signersRefs) {
 		List<NodeRef> documentSignersRefs = getDocumentToSignersAssocs(documentRef);
@@ -429,17 +440,59 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		for (NodeRef sender : senders){
 			if (ErrandsService.TYPE_ERRANDS.equals(nodeService.getType(sender))){
 				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
-				if ("Исполнено".equals(errandStatus)){
-					List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(sender, ORDModel.ASSOC_ORD_TABLE_ERRAND);
-					for (AssociationRef pointAssoc : pointAssocs){
-						NodeRef point = pointAssoc.getSourceRef();
+				NodeRef point = getErrandLinkedPoint(sender);
+				if (null!=point){
+					if ("Исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Исполнен"
-						NodeRef pointExecutedStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_EXECUTED_STATUS);
-						List<NodeRef> targetStatus = Arrays.asList(pointExecutedStatus);
-						nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+						changePointStatus(point,ORDModel.ORD_POINT_EXECUTED_STATUS);
+						//установим атрибут дату исполнеия
+						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
+						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Исполнен", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+					}
+					if ("Не исполнено".equals(errandStatus)){
+						// переведем пункт в статус "Не исполнен"
+						changePointStatus(point,ORDModel.ORD_POINT_NOT_EXECUTED_STATUS);
+						//установим атрибут дата исполнеия
+						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
+						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Не исполнен", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
+					}
+
+					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
+					if (!"Исполнено".equals(errandStatus) && is_expired){
+						// переведем пункт в статус "Просрочен"
+						changePointStatus(point,ORDModel.ORD_POINT_EXPIRED_STATUS);
+						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
+						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
+						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
+						List<String> secondaryObj = Arrays.asList(point.toString());
+						businessJournalService.log("System", ord, "POINT_STATUS_CHANGE", bjMessage, secondaryObj);
 					}
 				}
 			}
+			// удалим отправителей из списка, чтобы в следующий раз были только новые
+			documentEventService.removeEventSender(ord, sender);
 		}
+	}
+
+	private void changePointStatus(NodeRef point, String status){
+		NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
+		List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+		nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+	}
+
+	private NodeRef getErrandLinkedPoint(NodeRef errand){
+		List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
+		if (pointAssocs.size()>0){
+			return pointAssocs.get(0).getSourceRef();
+		}
+		return null;
 	}
 }
