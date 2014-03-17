@@ -56,10 +56,11 @@
             <!-- Форма редатирования-->
             <form>
                 <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
-                    <show id="lecm-document-aspects:reg-data-date" force="true"/>
+                    <show id="lecm-document-aspects:reg-data-date"/>
                     <show id="lecm-document:creator"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-internal:doc-type-assoc"/>
@@ -69,12 +70,11 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
-                    <show id="lecm-internal:custom-style" force="true"/>   <!-- Костыль для кастомного стиля-->
+                    <show id="lecm-internal:custom-style"/>   <!-- Костыль для кастомного стиля-->
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
-                    <show id="lecm-internal:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
-                    <show id="lecm-internal:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
-                    <show id="lecm-internal:style-for-approval-and-signing-tab" force="true" for-mode="view"/>
-
+                    <show id="lecm-internal:approval-list"/><!-- Листы согласования-->
+                    <show id="lecm-internal:signing-list"/>	<!-- Листы подписания-->
+                    <show id="lecm-internal:style-for-approval-and-signing-tab"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
                 </field-visibility>
                 <appearance>
@@ -82,12 +82,6 @@
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
                     <set id="exist-permissions" parent="approval-and-signing" appearance="~_lecmPerm_InnerAttrList" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
-
-                    <field id="lecm-internal:custom-style" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/create-form.css</control-param>
-                        </control>
-                    </field>
                     <set id="header" parent="common" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
                     <set id="title" parent="common" appearance=""/>
                     <set id="typeAndDate" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl" />
@@ -98,11 +92,16 @@
                     <set id="uploader" parent="common" appearance=""/>
                     <set id="note" parent="common" appearance=""/>
 
+                    <field id="lecm-eds-document:note" set="note">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:regnum" set="header"/>
                     <field id="lecm-document-aspects:reg-data-date" set="header"/>
-                    <field id="lecm-document:creator" set="header"/>
-
+                    <field id="lecm-document:creator" set="header" readonly="true"/>
                     <field id="lecm-document:title" set="title"/>
+
                     <field id="lecm-internal:doc-type-assoc" set="typeAndDate"/>
                     <field id="lecm-eds-document:execution-date" set="typeAndDate">
                         <constraint-handlers>
@@ -110,6 +109,7 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
+
                     <field id="lecm-internal:recipients-assoc" set="recipients">
                         <control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
                             <control-param name="firstItemType">lecm-orgstr:employee</control-param>
@@ -135,6 +135,7 @@
                     <field id="lecm-eds-document:summaryContent" set="content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
+
                     <field id="lecm-document-aspects:response-to-assoc" set="responseTo">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
@@ -143,8 +144,17 @@
                             <control-param name="itemType">lecm-internal:document</control-param>
                         </control>
                     </field>
+
                     <field id="lecm-document:subject-assoc" mandatory="true" set="subjectAndRegister"/>
+
                     <field id="lecm-eds-document:file-register-assoc" set="subjectAndRegister"/>
+
+                    <field id="lecm-internal:custom-style" set="common">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="cssFile">lecm-internal/create-form.css</control-param>
+                        </control>
+                    </field>
+
                     <field id="lecm-document-aspects:attachments-temp-assoc" set="uploader" label="Вложения">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
@@ -166,12 +176,6 @@
                         </control>
                     </field>
 
-                    <field id="lecm-eds-document:note" set="note">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
-                    </field>
-
                     <field id="lecm-internal-table-structure:answers-assoc" set="answers">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="datagridFormId">answers-datagrid</control-param>
@@ -182,7 +186,6 @@
                             <control-param name="showCreateButton">false</control-param>
                         </control>
                     </field>
-
                 </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
