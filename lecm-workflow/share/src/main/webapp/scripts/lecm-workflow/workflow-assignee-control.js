@@ -966,7 +966,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var datagrid = widgets.datagrid;
 			var rs = datagrid.widgets.dataTable.getRecordSet();
 
-			if (this.widges.simpleDialog) {
+			if (this.widgets.simpleDialog) {
 				this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
 			}
 
