@@ -73,13 +73,18 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				}
 			});
 		},
+
 		onMoveUp: function(items) {
 			this._moveTo('up', items.nodeRef);
 		},
+
 		onMoveDown: function(items) {
 			this._moveTo('down', items.nodeRef);
-		}
+		},
 
+		onActionDelete: function (p_items, owner, actionsConfig, fnDeleteComplete) {
+			this.onDelete(p_items, owner, actionsConfig, this.refresh, null);
+		}
 	}, true);
 
 
