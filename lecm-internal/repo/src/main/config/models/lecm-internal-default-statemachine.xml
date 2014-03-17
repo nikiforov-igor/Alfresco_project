@@ -2654,7 +2654,22 @@
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+
+var notificationText = "Проект документа {lecm-internal:doc-type-assoc/cm:name} ";
+notificationText += documentScript.wrapperDocumentLink(document, "{lecm-document:regnum}");
+notificationText += " направлен вам на доработку";
+
+var recipients = [];
+
+var authorAssoc = document.assocs["lecm-document:author-assoc"];
+if (authorAssoc != null) {
+    for (var i = 0; i < authorAssoc.length; i++) {
+        recipients.push(authorAssoc[i].nodeRef.toString());     
+    }
+}
+
+notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -5860,7 +5875,21 @@
                                                             </property>
                                                             <property>
                                                                 <name>transitionDocumentChangeScript</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+
+var notificationText = "Проект документа {lecm-internal:doc-type-assoc/cm:name} ";
+notificationText += documentScript.wrapperDocumentLink(document, "{lecm-document:regnum}");
+notificationText += " направлен вам на доработку";
+
+var recipients = [];
+var authorAssoc = document.assocs["lecm-document:author-assoc"];
+if (authorAssoc != null) {
+    for (var i = 0; i < authorAssoc.length; i++) {
+        recipients.push(authorAssoc[i].nodeRef.toString());     
+    }
+}
+
+notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
