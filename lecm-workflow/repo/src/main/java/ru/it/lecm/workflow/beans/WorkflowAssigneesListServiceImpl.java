@@ -672,4 +672,9 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public void setAssigneesListConcurrency(NodeRef assigneesListRef, String concurrency) {
 		nodeService.setProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY, concurrency);
 	}
+
+	@Override
+	public void setAssigneesListDayToComplete(final NodeRef assigneesListRef, int daysToComplete) {
+		nodeService.setProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE, daysToComplete);
+	}
 }

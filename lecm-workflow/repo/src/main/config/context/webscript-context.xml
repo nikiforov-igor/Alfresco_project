@@ -18,4 +18,8 @@
 		  class="ru.it.lecm.workflow.webscripts.SetAssigneesListConcurrencyWebscript" parent="webscript"
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
 
+	<bean id="webscript.ru.it.lecm.workflow.SetDaysToComplete.post"
+		  class="ru.it.lecm.workflow.webscripts.SetDaysToCompleteWebscript" parent="webscript"
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
+
 </beans>

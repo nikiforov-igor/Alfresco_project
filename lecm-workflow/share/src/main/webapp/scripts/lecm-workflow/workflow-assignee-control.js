@@ -98,6 +98,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
 		YAHOO.Bubbling.on('GridRendered', this._setInitialConcurrency, this);
 
+		if (this.options.isRoute) {
+			YAHOO.Bubbling.on('GridRendered', this._calculateDayToComplete, this);
+		}
+
 		return this;
 	};
 
@@ -116,8 +120,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				concurrency: this.options.concurrency.toUpperCase()
 			};
 
-			if (this.options.routeRefHasContent) {
+			if (this.options.isRoute) {
 				dataObj.routeRef = this.options.routeRef;
+				this.widgets.daysToCompleteField = YAHOO.util.Dom.get(this.options.daysToCompleteFieldId);
+				YAHOO.util.Event.on(this.widgets.daysToCompleteField, "change", this._onDaysToCompleteChange, this, true);
 			}
 
 			this.widgets.currentListRefInput = YAHOO.util.Dom.get(this.options.listNodeRefInput);
@@ -162,6 +168,9 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		_onConcurrencyChange: function(event) {
 			var newConcurrencyValue = event.newValue;
 			this._setConcurrency(newConcurrencyValue, true);
+			if (this.options.isRoute) {
+				this._onDaysToCompleteChange();
+			}
 			this.validateForm();
 		},
 		_onSaveListButtonClick: function() {
@@ -455,6 +464,8 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			workflowList.setOptions(currentConcurrency);
 			datagrid.setOptions(currentConcurrency);
 
+			this.options.concurrency = currentConcurrency.concurrency;
+
 			if (this.widgets.radioWorkflowType !== null && this.widgets.radioWorkflowType !== undefined) {
 				this.widgets.radioWorkflowType.check(buttonToCheck);
 			}
@@ -464,6 +475,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			}
 			if (needsPersisting) {
 				this._persistConcurrency(currentConcurrency.concurrency.toUpperCase());
+			}
+
+			if (this.options.isRoute) {
+				this._switchDaysToCompleteFieldRO();
 			}
 		},
 		_setInitialConcurrency: function() {
@@ -485,6 +500,58 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
 							text: 'Не удалось сохранить тип списка'
+						});
+					}
+				}
+			});
+		},
+		_switchDaysToCompleteFieldRO: function() {
+			if (this.options.concurrency === 'parallel') {
+				this.widgets.daysToCompleteField.readOnly = false;
+				// раскомментируй, если надо очищать поле при переключении
+//				this.widgets.daysToCompleteField.value = "";
+			} else {
+				this.widgets.daysToCompleteField.readOnly = true;
+				this._calculateDayToComplete();
+			}
+		},
+		_calculateDayToComplete: function() {
+			if (!this.widgets.datagrid || !this.widgets.datagrid.widgets.dataTable) {
+				return;
+			}
+
+			var tableRows = this.widgets.datagrid.widgets.dataTable.getRecordSet().getRecords(),
+					propDaysToComplete = "prop_lecm-workflow_assignee-days-to-complete",
+					i, tableRow, value, daysToComplete = 0;
+
+			// Перебираем все строки датагрида
+			for (var i = 0; i < tableRows.length; i++) {
+				tableRow = tableRows[i].getData("itemData");
+				value = tableRow[propDaysToComplete].value;
+				daysToComplete += value;
+			}
+			this.widgets.daysToCompleteField.value = daysToComplete;
+
+		},
+		_onDaysToCompleteChange: function() {
+			var daysToCompleteValue = this.widgets.daysToCompleteField.value,
+					listRef = this.options.currentListRef;
+
+			if (isNaN(daysToCompleteValue) || daysToCompleteValue < 0) {
+				return;
+			}
+
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/setDaysToComplete',
+				dataObj: {
+					nodeRef: listRef,
+					daysToComplete: daysToCompleteValue
+				},
+				failureCallback: {
+					fn: function() {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось сохранить значение срока'
 						});
 					}
 				}
@@ -667,6 +734,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		},
 		/**
 		 * Заполняет меню выбора списка бизнес-процесса
+		 * @argument {string} refToSelect NodeRef на список участников, который должен быть выбран
 		 */
 		_updateListsMenu: function(refToSelect) {
 			var workflowList = this;
@@ -735,7 +803,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		/**
 		 * Метод создаёт датагрид
 		 */
-		_initDatagrid: function(options) {
+		_initDatagrid: function() {
 
 			this.widgets.datagrid = new LogicECM.module.Workflow.WorkflowDatagrid(this.options.datagridId, this.options.namespaceId);
 
@@ -807,7 +875,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		 * Обработчик клика по кнопке 'Добавить сотрудника' и 'Добавить должность'
 		 * Показывает форму создания типа, который отображает датагрид. Destination для формы тот же, что у датагрида.
 		 */
-		_onAddAssigneeButtonClick: function(options) {
+		_onAddAssigneeButtonClick: function() {
 			var ignoreNodesArray = this._getIgnoreNodes();
 			var ignoreNodesString = ignoreNodesArray.join();
 

@@ -15,7 +15,7 @@ import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
  *
  * @author vlevin
  */
-public class SetAssigneesListConcurrencyWebscript extends AbstractWebScript {
+public class SetDaysToCompleteWebscript extends AbstractWebScript {
 
 	private WorkflowAssigneesListService workflowAssigneesListService;
 
@@ -27,14 +27,15 @@ public class SetAssigneesListConcurrencyWebscript extends AbstractWebScript {
 	public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
 		final JSONObject jsonRequest;
 		final Content content = req.getContent();
-		final String concurrencyStr, nodeRefStr;
+		final String nodeRefStr;
+		final int daysToComplete;
 
 		if (content == null) {
 			throw new WebScriptException("Empty JSON content. Sorry.");
 		}
 		try {
 			jsonRequest = new JSONObject(content.getContent());
-			concurrencyStr = jsonRequest.getString("concurrency");
+			daysToComplete = jsonRequest.getInt("daysToComplete");
 			nodeRefStr = jsonRequest.getString("nodeRef");
 		} catch (IOException ex) {
 			throw new WebScriptException("Can't read request content as json string", ex);
@@ -42,6 +43,6 @@ public class SetAssigneesListConcurrencyWebscript extends AbstractWebScript {
 			throw new WebScriptException("Can't marshall request content as json object", ex);
 		}
 
-		workflowAssigneesListService.setAssigneesListConcurrency(new NodeRef(nodeRefStr), concurrencyStr);
+		workflowAssigneesListService.setAssigneesListDayToComplete(new NodeRef(nodeRefStr), daysToComplete);
 	}
 }

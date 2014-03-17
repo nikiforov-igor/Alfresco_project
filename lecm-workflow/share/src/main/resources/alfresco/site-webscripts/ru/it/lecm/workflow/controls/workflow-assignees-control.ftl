@@ -18,6 +18,7 @@
 <#assign saveListButtonId = namespaceId + '-save-list-button'>
 <#assign deleteListButtonId = namespaceId + '-delete-list-button'>
 <#assign datagridId = namespaceId + '-datagrid'>
+<#assign daysToCompleteFieldId = namespaceId + '-days-to-complete-field'>
 
 <#-- SCC -->
 <#assign workflowTypeShareConfig = field.control.params.workflowType ? lower_case>
@@ -42,6 +43,7 @@
 
 <#-- Состояния -->
 <#assign routeRef = (form.mode == 'edit') ? string(args.itemId, '')>
+<#assign isRoute = routeRef?has_content>
 
 <div id='${containerId}' class="workflow-list-control-container">
 	<#-- Элемент-затемнитель контрола, который показывается на время его инициализации -->
@@ -84,6 +86,12 @@
 	<div class='form-field with-grid'>
 	<@grid.datagrid datagridId false />
 	</div>
+
+<#if isRoute>
+	<div class='form-field'>
+		Срок <input type="text" id="${daysToCompleteFieldId}" style="width: 3em; float: none;"> дней после отправки по маршруту
+	</div>
+</#if>
 </div>
 
 <script>
@@ -121,18 +129,19 @@
 				concurrencyInputId: '${concurrencyInputId}',
 				containerId: '${containerId}',
 				datagridId: '${datagridId}',
+				daysToCompleteFieldId: '${daysToCompleteFieldId}',
 				deleteListButtonId: '${deleteListButtonId}',
 				dimmerId: '${dimmerId}',
 				dueDateId: '${dueDateId}',
 				formId: '${formId}',
 				formItemType: '${itemType}',
 				htmlId: '${htmlId}',
+				isRoute: ${isRoute?string},
 				listNodeRefInput: '${listNodeRefInput}',
 				menuContainerId: '${menuContainerId}',
 				namespaceId: '${namespaceId}',
 				radioWorkflowTypeId: '${radioWorkflowTypeId}',
 				routeRef: '${routeRef}',
-				routeRefHasContent: ${routeRef?has_content?string},
 				saveListButtonId: '${saveListButtonId}',
 				showComputeTermsButton: ${showComputeTermsButton?string},
 				showListSelectMenu: ${showListSelectMenu?string},
