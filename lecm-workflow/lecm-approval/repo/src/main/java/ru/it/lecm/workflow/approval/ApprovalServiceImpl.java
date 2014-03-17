@@ -177,32 +177,36 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		nodeService.setProperties(approvalListRef, properties);
 	}
 
-	private void notifyAssigneeDeadline(WorkflowTask userTask, final DocumentInfo docInfo) {
+	private void notifyAssigneeDeadline(final String processInstanceId, final WorkflowTask userTask, final DocumentInfo docInfo) {
 		Map<QName, Serializable> props = userTask.getProperties();
 		Date dueDate = (Date) props.get(org.alfresco.repo.workflow.WorkflowModel.PROP_DUE_DATE);
 		String owner = (String) props.get(ContentModel.PROP_OWNER);
-		NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
-		List<NodeRef> recipients = new ArrayList<NodeRef>();
-		recipients.add(employee);
-		Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
-		Date currentDate = new Date();
-		if (comingSoonDate != null) {
-			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
-			int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-			Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
-			if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
-				fakeProps.put(FAKE_PROP_COMINGSOON, "");
-				String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-				sendNotification(description, docInfo.getDocumentRef(), recipients);
+		if(docInfo.getDocumentRef() != null) {
+			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
+			List<NodeRef> recipients = new ArrayList<NodeRef>();
+			recipients.add(employee);
+			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
+			Date currentDate = new Date();
+			if (comingSoonDate != null) {
+				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+				Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+				if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
+					fakeProps.put(FAKE_PROP_COMINGSOON, "");
+					String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+					sendNotification(description, docInfo.getDocumentRef(), recipients);
+				}
+				if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
+					fakeProps.put(FAKE_PROP_OVERDUE, "");
+					String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+					sendNotification(description, docInfo.getDocumentRef(), recipients);
+				}
+				if (!fakeProps.isEmpty()) {
+					workflowService.updateTask(userTask.getId(), fakeProps, null, null);
+				}
 			}
-			if (!props.containsKey(FAKE_PROP_OVERDUE) && overdue > 0) {
-				fakeProps.put(FAKE_PROP_OVERDUE, "");
-				String description = String.format("Внимание: Вы не согласовали документ %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-				sendNotification(description, docInfo.getDocumentRef(), recipients);
-			}
-			if (!fakeProps.isEmpty()) {
-				workflowService.updateTask(userTask.getId(), fakeProps, null, null);
-			}
+		} else {
+			logger.error("Can't notify assignee {} about deadline, because there is no document in bpmPackage. Perhaps it was deleted. Check your workflow instance {}", owner, processInstanceId);
 		}
 	}
 
@@ -217,7 +221,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 			List<WorkflowTask> tasks = workflowService.queryTasks(taskQuery);
 			for (WorkflowTask task : tasks) {
 				logger.trace(task.toString());
-				notifyAssigneeDeadline(task, docInfo);
+				notifyAssigneeDeadline(processInstanceId, task, docInfo);
 			}
 		} catch (Exception ex) {
 			logger.error("Internal error while notifying Assignees", ex);
@@ -229,30 +233,34 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		try {
 			boolean isDocumentApproval = Utils.isDocument(Utils.getDocumentFromBpmPackage(bpmPackage));
 			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
-			Set<NodeRef> recipients = new HashSet<NodeRef>();
-			recipients.add(docInfo.getInitiatorRef());
-			WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
-			Date dueDate = workflowInstance.getDueDate();
-			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
-			Date currentDate = new Date();
-			if (comingSoonDate != null) {
-				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
-				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-				if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
-					variableScope.setVariable("initiatorComingSoon", "");
-					String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
-				}
-				if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
-					variableScope.setVariable("initiatorOverdue", "");
-					String people = getIncompleteAssignees(processInstanceId);
-					String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
-					if (isDocumentApproval) {
-						//получить список кураторов и добавить его в recipients
-						recipients.addAll(Utils.getCurators());
+			if (docInfo.getDocumentRef() != null) {
+				Set<NodeRef> recipients = new HashSet<NodeRef>();
+				recipients.add(docInfo.getInitiatorRef());
+				WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
+				Date dueDate = workflowInstance.getDueDate();
+				Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(docInfo.getInitiatorRef(), dueDate, -1);
+				Date currentDate = new Date();
+				if (comingSoonDate != null) {
+					int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
+					int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
+					if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
+						variableScope.setVariable("initiatorComingSoon", "");
+						String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
+						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 					}
-					sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+					if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
+						variableScope.setVariable("initiatorOverdue", "");
+						String people = getIncompleteAssignees(processInstanceId);
+						String description = String.format("Внимание: проект документа %s не согласован в срок %s. Следующие сотрудники не приняли решение: %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate), people);
+						if (isDocumentApproval) {
+							//получить список кураторов и добавить его в recipients
+							recipients.addAll(Utils.getCurators());
+						}
+						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+					}
 				}
+			} else {
+				logger.error("Can't notify initiators about deadline, because there is no document in bpmPackage. Perhaps it was deleted. Check your workflow instance {}", processInstanceId);
 			}
 		} catch (Exception ex) {
 			logger.error("Internal error while notifying initiator and curators", ex);

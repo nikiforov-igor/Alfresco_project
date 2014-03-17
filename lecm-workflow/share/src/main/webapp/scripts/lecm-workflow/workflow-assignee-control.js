@@ -1,5 +1,5 @@
 /* global Alfresco, LogicECM, YAHOO */
-if (typeof LogicECM === "undefined" || !LogicECM) {
+if (typeof LogicECM === 'undefined' || !LogicECM) {
 	var LogicECM = {};
 }
 
@@ -97,7 +97,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		YAHOO.Bubbling.on('datagridVisible', this._hackTheRecordSet, this);
 		YAHOO.Bubbling.on('datagridVisible', this._initAllowedNodes, this);
 		YAHOO.Bubbling.on('GridRendered', this._setInitialConcurrency, this);
-
+		YAHOO.Bubbling.on('GridRendered', this._signalDatagridReady, this);
 		if (this.options.isRoute) {
 			YAHOO.Bubbling.on('GridRendered', this._calculateDayToComplete, this);
 		}
@@ -600,7 +600,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var zeroDate, todayDate, restrictedRangeString;
 			var cm = Alfresco.util.ComponentManager;
 
-			var datePickers = cm.find({name: "LogicECM.DatePicker"});
+			var datePickers = cm.find({name: 'LogicECM.DatePicker'});
 			var datePickersLength = datePickers.length;
 
 			for (var i = 0; i < datePickersLength; i++) {
@@ -919,6 +919,14 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 			this.widgets.formAddAssignee.show();
 		},
+
+		_signalDatagridReady: function(event, args) {
+			YAHOO.Bubbling.unsubscribe('GridRendered', this._signalDatagridReady, this);
+			YAHOO.Bubbling.fire('assigneesListDatagridReady', {
+				bubblingLabel: this.options.datagridId
+			});
+		},
+
 		_destructor: function() {
 			function removeAllBubbles(obj) {
 				var event;

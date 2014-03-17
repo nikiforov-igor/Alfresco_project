@@ -2498,18 +2498,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.editDialogOpening = true;
                 var me = this;
-                // Intercept before dialog show
-                var doBeforeDialogShow = function DataGrid_onActionEdit_doBeforeDialogShow(p_form, p_dialog) {
-                    var contId = p_dialog.id + "-form-container";
-                    Alfresco.util.populateHTML(
-                        [contId + "_h", this.msg(this.options.editFormTitleMsg)]
-                    );
-                    if (item.type && item.type != "") {
-                        Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
-                    }
-	                me.editDialogOpening = false;
-                };
-
 				var templateUrl = "lecm/components/form"
 							+ "?itemKind={itemKind}"
 							+ "&itemId={itemId}"
@@ -2537,7 +2525,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{
-                            fn:doBeforeDialogShow,
+                            fn: function(p_form, p_dialog) {
+								p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
+								this.editDialogOpening = false;
+							},
                             scope:this
                         },
                         onSuccess:{

@@ -7,15 +7,42 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 (function() {
 
-	LogicECM.module.Routes.Toolbar = function(containerId) {
-		return  LogicECM.module.Routes.Toolbar.superclass.constructor.call(this, 'LogicECM.module.Routes.Toolbar', containerId, ['button', 'container', 'connection', 'json', 'selector']);
-	};
+	var __datagridId__ = null;
+	var __defferedCenterDialog__ = null;
 
-	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
-		options: {
+	LogicECM.module.Routes.Toolbar = function(containerId) {
+		LogicECM.module.Routes.Toolbar.superclass.constructor.call(this, 'LogicECM.module.Routes.Toolbar', containerId, ['button', 'container', 'connection', 'json', 'selector']);
+		this.setOptions({
 			pageId: null,
 			datagridBubblingLabel: null,
 			inEngineer: false
+		});
+		YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
+		return this;
+	};
+
+	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
+		_onAssigneesListDatagridReady: function(event, args) {
+			var bubblingLabel = args[1].bubblingLabel;
+			if (!__datagridId__) {
+				__datagridId__ = bubblingLabel;
+				__defferedCenterDialog__.fulfil('datagrid1');
+			} else if(__datagridId__ != bubblingLabel) {
+				__datagridId__ = null;
+				__defferedCenterDialog__.fulfil('datagrid2');
+			} else {
+				__datagridId__ = null;
+			}
+		},
+
+		_centerDialog: function() {
+			var newRouteForm = this.newRouteForm;
+			var centerDialogInternal = function() {
+				if (newRouteForm) {
+					newRouteForm.dialog.center();
+				}
+			};
+			setTimeout(centerDialogInternal, 50);
 		},
 
 		_createNewPrivateRoute: function() {
@@ -82,7 +109,13 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					});
 
 					newRouteForm.show();
+					this.newRouteForm = newRouteForm;
 				}
+
+				__defferedCenterDialog__ = new Alfresco.util.Deferred(['datagrid1', 'datagrid2'], {
+					fn: this._centerDialog,
+					scope: this
+				});
 
 				var routeType = isCommon ? 'UNIT' : 'EMPLOYEE';
 
