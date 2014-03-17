@@ -1349,34 +1349,6 @@
                                                                         <subFolders/>
                                                                     </node>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>1ab230d2-8dbd-4877-9ad0-de37ea6be916
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/5326a831-0f2b-4ff3-bd74-048379dff1ec
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Документ".]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
                                                                         <type>inputVariable</type>
                                                                         <name>20832c17-bd49-44e6-a327-f10b5e823584
                                                                         </name>
@@ -4406,8 +4378,8 @@
                                 <nodes>
                                     <node>
                                         <type>static-role</type>
-                                        <name>5ecc268b-349f-4896-9e7c-136cd5500af1</name>
-                                        <nodeRef>workspace://SpacesStore/5615c0a2-265a-402d-9206-004c727b797a</nodeRef>
+                                        <name>6e0f8856-8323-4a38-8af8-170ac6497d14</name>
+                                        <nodeRef>workspace://SpacesStore/1291b8a0-4663-492b-b6d8-5e2937e521ff</nodeRef>
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
@@ -4422,7 +4394,7 @@
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>DA_USER</businessRoleName>
+                                                <businessRoleName>INNER_INITIATOR</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -4967,192 +4939,7 @@
                                         <aspects/>
                                         <associations/>
                                         <roleAssociations/>
-                                        <subFolders>
-                                            <subFolder>
-                                                <name>transitions</name>
-                                                <nodes>
-                                                    <node>
-                                                        <type>UserWorkflowEntity</type>
-                                                        <name>ed6eddef-566b-4597-956d-ae7fcbba89e8</name>
-                                                        <nodeRef>
-                                                            workspace://SpacesStore/dea6c17c-1158-4ba1-a969-1b72b00bb10e
-                                                        </nodeRef>
-                                                        <properties>
-                                                            <property>
-                                                                <name>workflowId</name>
-                                                                <value><![CDATA[activiti$regnumReservation]]></value>
-                                                            </property>
-                                                            <property>
-                                                                <name>workflowLabel</name>
-                                                                <value><![CDATA[Запросить номер]]></value>
-                                                            </property>
-                                                        </properties>
-                                                        <aspects>
-                                                            <workflowAspect/>
-                                                        </aspects>
-                                                        <associations/>
-                                                        <roleAssociations/>
-                                                        <subFolders>
-                                                            <subFolder>
-                                                                <name>variables</name>
-                                                                <nodes>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>0bca95db-8b38-40a7-ac84-511151a9bc37
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/1db6a357-557c-495a-a9ac-f53ebbe59f6e
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Номер уже присвоен]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-document-aspects:reg-data-number")==null]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>2618d9ed-94f3-4710-bf0a-c262e93b8dd9
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/37bbd533-1745-4193-bb9c-248b055f015e
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Запрос уже выполняется]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.attr("lecm-reservation-aspects:isReservationRunning") == null OR !doc.attr("lecm-reservation-aspects:isReservationRunning")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>a48428e4-7e52-4c2b-87dc-0681167aa320
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/a57649b1-3178-4ad2-8b27-0af8744e6c69
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[DA_REGISTRAR_DYNAMIC]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[registrarDynamicRole]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>cd147af3-40ce-4c3c-837f-1cd708b187bd
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/241f5a71-493f-49c3-b4ec-d915ad69860e
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[OUTGOING_DOC_NUMBER]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value>
-                                                                                    <![CDATA[regnumTemplateId]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
-                                                                        <type>inputVariable</type>
-                                                                        <name>032b6474-dbd8-404d-8c37-86c4391ebf65
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/03608baa-834f-44e5-94f8-39007310e295
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>inputFromType</name>
-                                                                                <value><![CDATA[VALUE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToType</name>
-                                                                                <value><![CDATA[VARIABLE]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[DA_REGISTRAR]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[registrarRole]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                </nodes>
-                                                            </subFolder>
-                                                        </subFolders>
-                                                    </node>
-                                                </nodes>
-                                            </subFolder>
-                                        </subFolders>
+                                        <subFolders/>
                                     </node>
                                     <node>
                                         <type>StartWorkflow</type>
@@ -5607,7 +5394,7 @@
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
@@ -7447,6 +7234,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>3e747b03-df08-40b4-b9fc-214d8a3a2050</name>
+                                        <nodeRef>workspace://SpacesStore/3e747b03-df08-40b4-b9fc-214d8a3a2050</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -7655,7 +7465,7 @@
 
     //раздаем права регистраторам
     for(i = 0; i < registrarsCount; ++i) {
-        statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "INNER_REGISTAR");
+        statemachine.grandDynamicRoleForEmployee(outgoing, registrars[i], "DA_REGISTRAR_DYNAMIC");
     }
 
     //подготавливаем уведомление
@@ -7776,7 +7586,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_REGISTAR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasDynamicBusinessRole(doc.getNodeRef(), "DA_REGISTRAR_DYNAMIC")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -8299,6 +8109,29 @@
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>INNER_SIGNER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>cedf9406-40c8-4a50-b8b8-37ab376e3c99</name>
+                                        <nodeRef>workspace://SpacesStore/cedf9406-40c8-4a50-b8b8-37ab376e3c99</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Employee]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -10411,6 +10244,45 @@
                             <roleAssociation>
                                 <type>role-assoc</type>
                                 <businessRoleName>INNER_SIGNER</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>dynamic-role-item</type>
+                        <name>5ccd3318-6f15-45bf-ab80-81446b6b35aa</name>
+                        <nodeRef>workspace://SpacesStore/353e8f2f-a0c6-44c4-98f8-dd85d9fb24fa</nodeRef>
+                        <properties/>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
+                            </roleAssociation>
+                        </roleAssociations>
+                        <subFolders/>
+                    </node>
+                    <node>
+                        <type>static-role-item</type>
+                        <name>97f95eb1-00d3-45d5-afd6-3b20b5dc7d1e</name>
+                        <nodeRef>workspace://SpacesStore/3972c7bf-8079-4b3f-a467-4f0bb172c87c</nodeRef>
+                        <properties>
+                            <property>
+                                <name>isCreator</name>
+                                <value><![CDATA[false]]></value>
+                            </property>
+                        </properties>
+                        <aspects>
+                            <business-role/>
+                        </aspects>
+                        <associations/>
+                        <roleAssociations>
+                            <roleAssociation>
+                                <type>role-assoc</type>
+                                <businessRoleName>DA_REGISTRAR</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
