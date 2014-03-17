@@ -17,17 +17,17 @@
         <templates>
             <template type="JASPER" filename="outgoing-cover_a4.jrxml" mnem="out_cover_a4">
                 <l18>
-                    <item key="RU_RU"><![CDATA[outgoing-cover-template-a4]]></item>
+                    <item key="RU_RU"><![CDATA[Конверт a4]]></item>
                 </l18>
             </template>
             <template type="JASPER" filename="outgoing-cover_a4_port.jrxml" mnem="out-cover_a4p">
                 <l18>
-                    <item key="RU_RU"><![CDATA[outgoing-cover-template-a4-portrait]]></item>
+                    <item key="RU_RU"><![CDATA[Конверт a4-portrait]]></item>
                 </l18>
             </template>
             <template type="JASPER" filename="outgoing-cover_a5.jrxml" mnem="out-cover_a5">
                 <l18>
-                    <item key="RU_RU"><![CDATA[outgoing-cover-template-a5]]></item>
+                    <item key="RU_RU"><![CDATA[Конверт a5]]></item>
                 </l18>
             </template>
         </templates>
