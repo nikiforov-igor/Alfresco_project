@@ -2132,8 +2132,9 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:visited,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:hover
 {
-	background-color:blue;
-	color:white;
+	background-color:#C9EBF6;
+	color:black;
+    width:100%;
 }
 
 .tree .ygtv-highlight a.ygtvspacer {
@@ -2718,4 +2719,8 @@ div.form-field table.formFieldControlParamsTable {
 
 .workflow-list-control-container .yuimenu ul {
 	background-color: #fff;
+}
+
+.boolean-true {
+    background: url(images/complete-16.png) no-repeat;
 }
