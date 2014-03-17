@@ -274,6 +274,25 @@
             </properties>
         </aspect>
 
+        <aspect name="lecm-document-aspects:cancelled">
+            <properties>
+                <property name="lecm-document-aspects:cancel-meanless-field">
+                    <title>Бессмысленное поле</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
+        <aspect name="lecm-document-aspects:in-work">
+            <properties>
+                <property name="lecm-document-aspects:work-meanless-field">
+                    <title>Бессмысленное поле</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
+
 		<!-- аспект, который будет являться признаком, что это вложение в lecm-документ-->
 		<aspect name="lecm-document-aspects:lecm-attachment">
 		</aspect>
