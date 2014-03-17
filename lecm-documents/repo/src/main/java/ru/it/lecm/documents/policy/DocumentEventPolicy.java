@@ -75,7 +75,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
     @Override
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
         NodeRef node = nodeAssocRef.getSourceRef();
-        if (nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
+        if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
             fireEvent(node);
         }
     }
