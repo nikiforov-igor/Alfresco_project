@@ -2526,6 +2526,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         destroyOnHide:true,
                         doBeforeDialogShow:{
                             fn: function(p_form, p_dialog) {
+                                var contId = p_dialog.id + "-form-container";
+                                if (item.type && item.type != "") {
+                                    Dom.addClass(contId, item.type.replace(":", "_") + "_edit");
+                                }
 								p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
 								this.editDialogOpening = false;
 							},
