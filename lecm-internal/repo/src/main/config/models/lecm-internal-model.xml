@@ -27,6 +27,7 @@
 			<parameter name="allowedValues">
 				<list>
 					<value>Внутренний</value>
+					<value>Согласование</value>
 					<value>Прочее</value>
 				</list>
 			</parameter>
