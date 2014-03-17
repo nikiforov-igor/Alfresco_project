@@ -12,13 +12,18 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 	LogicECM.module.Routes.DataGrid = function(containerId) {
 		LogicECM.module.Routes.DataGrid.superclass.constructor.call(this, containerId);
-		YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Routes.DataGrid, LogicECM.module.Base.DataGrid);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Routes.DataGrid.prototype, {
+		_onEditRouteFormDestroyed: function(event, args) {
+			YAHOO.Bubbling.unsubscribe('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
+			YAHOO.Bubbling.unsubscribe('formContainerDestroyed', this._onEditRouteFormDestroyed, this);
+			__defferedCenterDialog__.expire();
+		},
+
 		_onAssigneesListDatagridReady: function(event, args) {
 			var bubblingLabel = args[1].bubblingLabel;
 			if (!__datagridId__) {
@@ -49,6 +54,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			}
 			this.editDialogOpening = true;
 
+			YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
+			YAHOO.Bubbling.on('formContainerDestroyed', this._onEditRouteFormDestroyed, this);
 			__defferedCenterDialog__ = new Alfresco.util.Deferred(['datagrid1', 'datagrid2'], {
 				fn: this._centerDialog,
 				scope: this

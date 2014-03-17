@@ -103,6 +103,7 @@ public interface WorkflowAssigneesListService {
 
 	void setAssigneesListConcurrency(final NodeRef assigneesListRef, final String concurrency);
 
-	public void setAssigneesListDayToComplete(final NodeRef assigneesListRef, final int daysToComplete);
+	void setAssigneesListDaysToComplete(final NodeRef assigneesListRef, final int daysToComplete);
 
+	int getAssigneesListDaysToComplete(final NodeRef assigneesListRef);
 }

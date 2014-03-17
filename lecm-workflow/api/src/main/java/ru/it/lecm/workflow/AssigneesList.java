@@ -23,6 +23,7 @@ public class AssigneesList {
 	private NodeRef nodeRef;
 	private String concurrency;
 	private String listName;
+	private int daysToComplete;
 	private final List<AssigneesListItem> listItems = new ArrayList<AssigneesListItem>();
 
 	public NodeRef getNodeRef() {
@@ -51,6 +52,14 @@ public class AssigneesList {
 
 	public List<AssigneesListItem> getListItems() {
 		return listItems;
+	}
+
+	public int getDaysToComplete() {
+		return daysToComplete;
+	}
+
+	public void setDaysToComplete(int daysToComplete) {
+		this.daysToComplete = daysToComplete;
 	}
 
 	@Override

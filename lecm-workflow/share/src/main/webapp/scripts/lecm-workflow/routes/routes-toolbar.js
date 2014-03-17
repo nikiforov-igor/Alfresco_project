@@ -17,11 +17,16 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			datagridBubblingLabel: null,
 			inEngineer: false
 		});
-		YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
 		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
+		_onNewRouteFormDestroyed: function(event, args) {
+			YAHOO.Bubbling.unsubscribe('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
+			YAHOO.Bubbling.unsubscribe('formContainerDestroyed', this._onNewRouteFormDestroyed, this);
+			__defferedCenterDialog__.expire();
+		},
+
 		_onAssigneesListDatagridReady: function(event, args) {
 			var bubblingLabel = args[1].bubblingLabel;
 			if (!__datagridId__) {
@@ -112,6 +117,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					this.newRouteForm = newRouteForm;
 				}
 
+				YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
+				YAHOO.Bubbling.on('formContainerDestroyed', this._onNewRouteFormDestroyed, this);
 				__defferedCenterDialog__ = new Alfresco.util.Deferred(['datagrid1', 'datagrid2'], {
 					fn: this._centerDialog,
 					scope: this

@@ -323,6 +323,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		assigneesList.setNodeRef(assigneesListRef);
 		assigneesList.setListName(getNodeRefName(assigneesListRef));
 		assigneesList.setConcurrency(getAssigneesListConcurrency(assigneesListRef));
+		assigneesList.setDaysToComplete(getAssigneesListDaysToComplete(assigneesListRef));
 
 		List<NodeRef> listItemsNodes = getAssigneesListItems(assigneesListRef);
 
@@ -645,8 +646,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		List<AssigneesListItem> items = assigneesList.getListItems();
 		Date workflowDueDate = new Date();
 		if (LecmWorkflowModel.CONCURRENCY_PAR.equals(concurrency)) { //параллельный процесс
-			//по идее у списка должно быть проперти в котором хранится общий срок
-			//здесь мы должны этот общий срок посчитать, вернуть и каждому раздать
+			workflowDueDate = DateUtils.addDays(workflowDueDate, assigneesList.getDaysToComplete());
 			for (AssigneesListItem item : items) {
 				nodeService.setProperty(item.getNodeRef(), LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE, workflowDueDate);
 			}
@@ -674,7 +674,13 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	@Override
-	public void setAssigneesListDayToComplete(final NodeRef assigneesListRef, int daysToComplete) {
+	public void setAssigneesListDaysToComplete(final NodeRef assigneesListRef, int daysToComplete) {
 		nodeService.setProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE, daysToComplete);
+	}
+
+	@Override
+	public int getAssigneesListDaysToComplete(final NodeRef assigneesListRef) {
+		Integer daysToComplete = (Integer) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_ASSIGNEE_DAYS_TO_COMPLETE);
+		return (daysToComplete != null) ? daysToComplete : 0;
 	}
 }

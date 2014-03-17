@@ -43,6 +43,6 @@ public class SetDaysToCompleteWebscript extends AbstractWebScript {
 			throw new WebScriptException("Can't marshall request content as json object", ex);
 		}
 
-		workflowAssigneesListService.setAssigneesListDayToComplete(new NodeRef(nodeRefStr), daysToComplete);
+		workflowAssigneesListService.setAssigneesListDaysToComplete(new NodeRef(nodeRefStr), daysToComplete);
 	}
 }

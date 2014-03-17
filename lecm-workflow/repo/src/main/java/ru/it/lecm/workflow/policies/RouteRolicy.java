@@ -16,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 
@@ -46,6 +47,11 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 	@Override
 	public void onUpdateNode(final NodeRef routeRef) {
 		if (nodeService.exists(routeRef)) {
+			String name = (String) nodeService.getProperty(routeRef, ContentModel.PROP_NAME);
+			String title = (String) nodeService.getProperty(routeRef, ContentModel.PROP_TITLE);
+			String[] parts = StringUtils.split(name, '_');
+			String newName = String.format("%s_%s", parts[0], title);
+			nodeService.setProperty(routeRef, ContentModel.PROP_NAME, newName);
 			boolean hasTempAspect = nodeService.hasAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
 			List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
 			int assigneesCount = 0;
