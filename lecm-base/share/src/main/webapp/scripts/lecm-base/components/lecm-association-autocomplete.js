@@ -67,6 +67,8 @@ LogicECM.module = LogicECM.module || {};
 
 	            childrenDataSource: "lecm/forms/picker",
 
+                defaultValue: null,
+
 	            defaultValueDataSource: null,
 
                 allowedNodes:null,
@@ -188,7 +190,11 @@ LogicECM.module = LogicECM.module || {};
             },
 
 	        loadDefaultValue: function AssociationAutoComplete__loadDefaultValue() {
-		        if (this.options.defaultValueDataSource != null) {
+		        if (this.options.defaultValue != null) {
+                     this.defaultValue = this.options.defaultValue;
+                     this.loadSelectedItems();
+                } else 
+                if (this.options.defaultValueDataSource != null) {
 			        var me = this;
 
 			        Alfresco.util.Ajax.request(

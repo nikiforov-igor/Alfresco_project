@@ -1,4 +1,22 @@
 <#assign isTrue=false>
+<#assign defaultValue="">
+<#if field.control.params.defaultValue?has_content>
+    <#assign defaultValue=false>
+    <#if field.control.params.defaultValue?is_boolean>
+		<#assign defaultValue=field.control.params.defaultValue>
+	<#elseif field.control.params.defaultValue?is_string && field.control.params.defaultValue == "true">
+		<#assign defaultValue=true>
+	</#if>
+</#if>
+<#if form.arguments[field.name]?has_content>
+    <#assign defaultValue=false>
+    <#if form.arguments[field.name]?is_boolean>
+		<#assign defaultValue=form.arguments[field.name]>
+	<#elseif form.arguments[field.name]?is_string && form.arguments[field.name] == "true">
+		<#assign defaultValue=true>
+	</#if>
+</#if>
+
 <#if field.value??>
 	<#if field.value?is_boolean>
 		<#assign isTrue=field.value>
@@ -22,6 +40,9 @@
 			</#if>
 			<#if field.control.params.defaultValueDataSource??>
 				defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+			</#if>
+            <#if defaultValue?has_content>
+				defaultValue: "${defaultValue?string}",
 			</#if>
 			<#if field.control.params.disabledFieldsIfSelect??>
 				disabledFieldsIfSelect: "${field.control.params.disabledFieldsIfSelect}".split(","),

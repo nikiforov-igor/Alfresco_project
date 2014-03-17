@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:Отмена документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Отмена документа</property>
+                <property name="lecm-busjournal:eventCategory-code">CANCEL_DOCUMENT</property>
+            </item>
+        </items>
+    </item>
+</items>

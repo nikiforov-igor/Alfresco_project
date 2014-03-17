@@ -23,6 +23,7 @@
     <util:list id="ord.dictionaries.items">
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-regnumbers-items.xml</value>
 		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-ord-event-items.xml</value>
 	</util:list>
     <!-- Registration of orgStructure models -->
     <bean id="ord.document.models.bootstrap" parent="modelsToRepositoryLoader"

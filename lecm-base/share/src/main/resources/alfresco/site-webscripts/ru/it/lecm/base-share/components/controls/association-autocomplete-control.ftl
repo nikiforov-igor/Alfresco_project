@@ -1,6 +1,12 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 <#include "association-tree-picker-dialog.inc.ftl">
 
+
+<#assign defaultValue=field.control.params.defaultValue!"">
+<#if form.arguments[field.name]?has_content>
+    <#assign defaultValue=form.arguments[field.name]>
+</#if>
+
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
 
@@ -116,6 +122,9 @@
     </#if>
     <#if field.control.params.defaultValueDataSource??>
 	    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+    </#if>
+    <#if defaultValue?has_content>
+	    defaultValue: "${defaultValue?string}",
     </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
         additionalFilter: "${field.control.params.additionalFilter!''}"

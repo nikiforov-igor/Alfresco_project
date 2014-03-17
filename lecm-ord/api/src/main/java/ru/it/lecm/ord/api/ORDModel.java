@@ -17,6 +17,7 @@ public final class ORDModel {
 
 	public final static QName TYPE_ORD = QName.createQName(ORD_NAMESPACE, "document");
 	public final static QName ASSOC_ORD_CONTROLLER = QName.createQName(ORD_NAMESPACE, "controller-assoc");
+	public final static QName ASSOC_ORD_CANCELED = QName.createQName(ORD_NAMESPACE, "canceled-assoc");
 
 	public final static QName ASSOC_ORD_TABLE_ITEMS = QName.createQName(ORD_TABLE_NAMESPACE, "items-assoc");
 	public final static QName TYPE_ORD_TABLE_ITEM = QName.createQName(ORD_TABLE_NAMESPACE, "item");
@@ -31,6 +32,7 @@ public final class ORDModel {
 
 	public static final String ORD_POINT_DICTIONARY_NAME = "Статусы пунктов ОРД";
 	public static final String ORD_POINT_PERFORMANCE_STATUS = "На исполнении";
+	public static final String ORD_POINT_EXECUTED_STATUS = "Исполнен";
 
 	private ORDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of ORDModel class.");

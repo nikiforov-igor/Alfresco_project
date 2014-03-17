@@ -62,6 +62,10 @@ LogicECM.module = LogicECM.module || {};
 
 			options:
 			{
+                defaultValue: null,
+
+	            defaultValueDataSource: null,
+                
 				changeItemsFireAction: null,
 
 				selectedValue: null,
@@ -132,7 +136,8 @@ LogicECM.module = LogicECM.module || {};
 				this.options.controlId = this.id + '-cntrl';
 				this.options.pickerId = this.id + '-cntrl-picker';
 
-				this._loadSelectedItems();
+				//this._loadSelectedItems();
+				this._loadDefaultValue();
 
 				// Create button if control is enabled
 				if(!this.options.disabled)
@@ -155,6 +160,34 @@ LogicECM.module = LogicECM.module || {};
 					this._loadSearchProperties();
 				}
 			},
+
+            _loadDefaultValue: function AssociationSearch__loadDefaultValue() {
+		        if (this.options.defaultValue != null) {
+                     this.defaultValue = this.options.defaultValue;
+                     this._loadSelectedItems();
+                } else 
+                if (this.options.defaultValueDataSource != null) {
+			        var me = this;
+
+			        Alfresco.util.Ajax.request(
+				        {
+					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+					        successCallback: {
+						        fn: function (response) {
+							        var oResults = eval("(" + response.serverResponse.responseText + ")");
+							        if (oResults != null && oResults.nodeRef != null ) {
+								        me.defaultValue = oResults.nodeRef;
+							        }
+							        me._loadSelectedItems();
+						        }
+					        },
+					        failureMessage: "message.failure"
+				        });
+		        } else {
+			        this._loadSelectedItems();
+		        }
+	        },
+
 
 			_loadSearchProperties: function AssociationSearchViewer__loadSearchProperties() {
 				Alfresco.util.Ajax.jsonGet(
@@ -192,6 +225,8 @@ LogicECM.module = LogicECM.module || {};
 					});
 			},
 
+
+
 			_loadSelectedItems: function AssociationSearchViewer__loadSelectedItems()
 			{
 				var arrItems = "";
@@ -203,6 +238,10 @@ LogicECM.module = LogicECM.module || {};
 				{
 					arrItems = this.options.currentValue;
 				}
+                
+                if (arrItems == "" && this.defaultValue != null) {
+		            arrItems += this.defaultValue;
+	            }
 
 				var onSuccess = function AssociationSearchViewer__loadSelectedItems_onSuccess(response)
 				{

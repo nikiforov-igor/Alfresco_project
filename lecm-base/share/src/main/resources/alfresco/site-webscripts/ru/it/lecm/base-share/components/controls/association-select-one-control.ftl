@@ -3,6 +3,11 @@
 <#assign fieldValue=field.value!"">
 <#assign fieldId=field.id!"">
 
+<#assign defaultValue=field.control.params.defaultValue!"">
+<#if form.arguments[field.name]?has_content>
+    <#assign defaultValue=form.arguments[field.name]>
+</#if>
+
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
     <#if context.properties[field.control.params.defaultValueContextProperty]??>
         <#assign fieldValue = context.properties[field.control.params.defaultValueContextProperty]>
@@ -80,6 +85,9 @@
 	            <#if field.control.params.defaultValueDataSource??>
 		            defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
 	            </#if>
+                <#if defaultValue?has_content>
+                    defaultValue: "${defaultValue?string}",
+                </#if>
                 fieldId: "${fieldId}"
             });
 })();

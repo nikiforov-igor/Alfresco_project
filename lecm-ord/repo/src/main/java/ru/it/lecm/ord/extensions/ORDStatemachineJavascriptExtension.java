@@ -26,8 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
+import ru.it.lecm.documents.beans.DocumentEventService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
@@ -36,6 +38,7 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
@@ -55,6 +58,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private DocumentConnectionService documentConnectionService;
 	private DictionaryBean lecmDictionaryService;
 	private WorkflowAssigneesListService workflowAssigneesListService;
+	private BusinessJournalService businessJournalService;
+	private DocumentEventService documentEventService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -71,7 +76,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
 	}
-	
+
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
 		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
@@ -82,6 +87,14 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setLecmDictionaryService(DictionaryBean lecmDictionaryService) {
 		this.lecmDictionaryService = lecmDictionaryService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
+	}
+
+	public void setDocumentEventService(DocumentEventService documentEventService) {
+		this.documentEventService = documentEventService;
 	}
 
 	private String getOrdURL(final ScriptNode ordRef) {
@@ -322,24 +335,24 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 * 
+	 *
 	 * @param documentNode документ
 	 * @param signersList список подписантов
 	 */
 	public void updateDocumentToSignersAssocs(final ScriptNode documentNode, final ActivitiScriptNodeList signersList) {
 		NodeRef documentRef = documentNode.getNodeRef();
 		List<NodeRef> signersRefs = signersList.getNodeReferences();
-		
+
 		updateDocumentToSignersAssocs(documentRef, signersRefs);
 	}
-	
+
 	/**
 	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 * 
+	 *
 	 * @param documentNode документ
 	 * @param listNode нода списка подписантов
 	 */
@@ -360,17 +373,17 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 		updateDocumentToSignersAssocs(documentRef, itemsList);
 	}
-	
+
 	/**
 	 * Обновление ассоциаций с подписантами на основании данных в результирующем списке подписантов
-	 * 
+	 *
 	 * @param documentRef документ
 	 * @param signersRefs список NodeRef-ов подписантов 
 	 */
 	public void updateDocumentToSignersAssocs(final NodeRef documentRef, final List<NodeRef> signersRefs) {
 		List<NodeRef> documentSignersRefs = getDocumentToSignersAssocs(documentRef);
 		Set<NodeRef> signersForDeleteRefs = new HashSet<NodeRef>(documentSignersRefs);
-		
+
 		for (NodeRef signerRef : signersRefs) {
 			if (!signersForDeleteRefs.remove(signerRef)) {
 				nodeService.createAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
@@ -380,7 +393,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 			nodeService.removeAssociation(documentRef, signerRef, ORDModel.ASSOC_ORD_SIGNERS);
 		}
 	}
-	
+
 	private List<NodeRef> getDocumentToSignersAssocs(NodeRef documentRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		List<AssociationRef> signersAssocs = nodeService.getTargetAssocs(documentRef, ORDModel.ASSOC_ORD_SIGNERS);
@@ -388,7 +401,45 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 			NodeRef signerRef = signerAssoc.getTargetRef();
 			if (signerRef != null) result.add(signerRef);
 		}
-		
+
 		return result;
+	}
+
+	public void repealDocuments(ScriptNode ordSNode){
+		NodeRef ord = ordSNode.getNodeRef();
+		List<AssociationRef> repealProjAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CANCELED);
+		for (AssociationRef repealProjAssoc:repealProjAssocs){
+			NodeRef repealProj = repealProjAssoc.getTargetRef();
+			nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, "Отменен");
+
+			//запись в бизнес журнал о том, что документ отменен
+			String ordPresentStr = getOrdURL(ordSNode);
+	 		String bjMessage = String.format("Документ #mainobject отменен документом %s", ordPresentStr);
+			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
+			businessJournalService.log("System", repealProj, "CANCEL_DOCUMENT", bjMessage, null);
+
+			//создадим связь
+			documentConnectionService.createConnection(ord, repealProj, "cancel", true, true);
+		}
+	}
+
+	public void changePointStatus(ScriptNode ordSNode){
+		NodeRef ord = ordSNode.getNodeRef();
+        Set<NodeRef> senders = documentEventService.getEventSenders(ord);
+		for (NodeRef sender : senders){
+			if (ErrandsService.TYPE_ERRANDS.equals(nodeService.getType(sender))){
+				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
+				if ("Исполнено".equals(errandStatus)){
+					List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(sender, ORDModel.ASSOC_ORD_TABLE_ERRAND);
+					for (AssociationRef pointAssoc : pointAssocs){
+						NodeRef point = pointAssoc.getSourceRef();
+						// переведем пункт в статус "Исполнен"
+						NodeRef pointExecutedStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, ORDModel.ORD_POINT_EXECUTED_STATUS);
+						List<NodeRef> targetStatus = Arrays.asList(pointExecutedStatus);
+						nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+					}
+				}
+			}
+		}
 	}
 }

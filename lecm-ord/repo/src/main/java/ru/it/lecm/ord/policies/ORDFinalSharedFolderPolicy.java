@@ -23,7 +23,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *
  * @author snovikov
  */
-public class ORDFinalSharedFolderPolicy implements NodeServicePolicies.OnUpdatePropertiesPolicy, NodeServicePolicies.OnCreateAssociationPolicy{
+public class ORDFinalSharedFolderPolicy {
 	private final static Logger logger = LoggerFactory.getLogger(ORDFinalSharedFolderPolicy.class);
 
 	private PolicyComponent policyComponent;
@@ -54,9 +54,12 @@ public class ORDFinalSharedFolderPolicy implements NodeServicePolicies.OnUpdateP
 				ORDModel.TYPE_ORD, EDSDocumentService.ASSOC_FILE_REGISTER,
 				new JavaBehaviour(this, "onCreateAssociation"));
 
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
+				ORDModel.TYPE_ORD, EDSDocumentService.ASSOC_FILE_REGISTER,
+				new JavaBehaviour(this, "onDeleteAssociation"));
+
 	}
 
-	@Override
 	public void onUpdateProperties(NodeRef ord, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		if (before.get(DocumentService.PROP_IS_SHARED_FOLDER)!=null && after.get(DocumentService.PROP_IS_SHARED_FOLDER)!=null){
 			if (!before.get(DocumentService.PROP_IS_SHARED_FOLDER).equals(after.get(DocumentService.PROP_IS_SHARED_FOLDER))){
@@ -78,13 +81,19 @@ public class ORDFinalSharedFolderPolicy implements NodeServicePolicies.OnUpdateP
 								nodeService.setAssociations(ord, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, targetUnit);
 							}
 						}
+					}else{
+						//очистим ассоциацию на подразделение (по-умолчанию)
+						List<AssociationRef> orgUnitAssocs = nodeService.getTargetAssocs(ord, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+						for (AssociationRef orgUnitAssoc:orgUnitAssocs){
+							NodeRef orgUnit = orgUnitAssoc.getTargetRef();
+							nodeService.removeAssociation(ord, orgUnit, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	@Override
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef ord = nodeAssocRef.getSourceRef();
 		NodeRef fileRegister = nodeAssocRef.getTargetRef();
@@ -97,6 +106,23 @@ public class ORDFinalSharedFolderPolicy implements NodeServicePolicies.OnUpdateP
 					NodeRef fileRegisterUnit = fileRegisterUnitAssocs.get(0).getTargetRef();
 					List<NodeRef> targetUnit = Arrays.asList(fileRegisterUnit);
 					nodeService.setAssociations(ord, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, targetUnit);
+				}
+			}
+		}
+	}
+
+	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
+		NodeRef ord = nodeAssocRef.getSourceRef();
+		Boolean isShared = (Boolean) nodeService.getProperty(ord, DocumentService.PROP_IS_SHARED_FOLDER);
+		if (null!=isShared && !isShared){
+			//проверка, не была ли создана новая ассоциация после удаления предыдущей
+			List<AssociationRef> fileRegisterAssocs = nodeService.getTargetAssocs(ord, EDSDocumentService.ASSOC_FILE_REGISTER);
+			if (fileRegisterAssocs.isEmpty()){
+				//очистим ассоциацию на подразделение (по-умолчанию)
+				List<AssociationRef> orgUnitAssocs = nodeService.getTargetAssocs(ord, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+				for (AssociationRef orgUnitAssoc:orgUnitAssocs){
+					NodeRef orgUnit = orgUnitAssoc.getTargetRef();
+					nodeService.removeAssociation(ord, orgUnit, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
 				}
 			}
 		}

@@ -12,4 +12,11 @@
 		  parent="logicEcmAssociationPolicy"
 		  depends-on="ord.document.models.bootstrap"/>
 
+	<bean id="ord.ORDFinalSharedFolderPolicy"
+		  class="ru.it.lecm.ord.policies.ORDFinalSharedFolderPolicy"
+		  init-method="init" depends-on="ord.document.models.bootstrap"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:orgstructureService-ref="serviceOrgstructure"/>
+
 </beans>

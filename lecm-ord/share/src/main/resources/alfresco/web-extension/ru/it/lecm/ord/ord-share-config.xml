@@ -7,7 +7,7 @@
             </dependencies>
         </forms>
     </config>
-    
+
     <config evaluator="model-type" condition="lecm-ord:document">
         <forms>
             <form>
@@ -23,8 +23,8 @@
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-ord:canceled-assoc"/>
                     <show id="lecm-ord:accepted-assoc"/>
-                    
-                    <show id="lecm-ord:css" force="true"/> 
+
+                    <show id="lecm-ord:css" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="ord0" template="/ru/it/lecm/base-share/components/preview-set.ftl"/>
@@ -43,7 +43,10 @@
 
                     <field id="lecm-ord:css" set="ord1">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="css">.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block input.autocomplete-input {width: 350px;}</control-param>
+                            <control-param name="css">.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block input.autocomplete-input {width: 350px;}
+                            .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {width: 387px;}
+                                .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width  div.form-field label {float: none;}
+                            </control-param>
                         </control>
                     </field>
                     
@@ -52,7 +55,7 @@
                             <control-param name="directoryName">Документ</control-param>
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                         </control>
-                    </field>                    
+                    </field>
                     <field id="lecm-document:title" label="Заголовок" set="ord3"/>
                     <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord4">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
@@ -68,7 +71,7 @@
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
-                    </field>	
+                    </field>
                     <field id="lecm-ord:controller-assoc" label="Контролёр" set="ord6"/>
                     <field id="lecm-eds-document:note" label="Примечание" set="ord7">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
@@ -76,7 +79,7 @@
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="ord8"/>
-                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура дел" set="ord8"/>
+                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура дел" mandatory="true" set="ord8"/>
                     <field id="lecm-ord:canceled-assoc" label="Отменяемые документы" set="ord9">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
@@ -97,7 +100,7 @@
                     </field>
                 </appearance>
             </form>
-            
+
             <!-- Форма для табличного представления (набор столбцов) -->
             <form id="datagrid">
                 <field-visibility>
@@ -120,7 +123,6 @@
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
                     <show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
                     <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-                    <show id="lecm-ord:registrar-assoc"/>                                                           	<!-- Регистратор -->
                     <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                     <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
@@ -131,10 +133,10 @@
                     <show id="lecm-eds-document:note"/>                                                                 <!-- Примечание -->
                     <show id="lecm-ord:canceled-assoc"/>                                                                <!-- Отменённые документы -->
                     <show id="lecm-ord:accepted-assoc"/>                                                                <!-- Принимаемые документы -->
-                    <show id="lecm-ord-table-structure:items-assoc"/>                                                   
+                    <show id="lecm-ord-table-structure:items-assoc"/>
                 </field-visibility>
             </form>
-            
+
             <!-- Форма атрибутивного поиска -->
             <form id="search">
 				<field-visibility>
@@ -198,7 +200,7 @@
                     <show id="lecm-eds-document:execution-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
                     <show id="lecm-ord:controller-assoc"/>
-                    <show id="lecm-document-aspects:is-shared-folder"/>                    
+                    <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
@@ -275,7 +277,7 @@
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc" set="ord5"/>
-                    <field id="lecm-eds-document:file-register-assoc" set="ord5"/>
+                    <field id="lecm-eds-document:file-register-assoc" mandatory="true" set="ord5"/>
 
                     <field id="lecm-ord:canceled-assoc" set="ord6">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
@@ -329,11 +331,11 @@
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
             </form>
-         
-         
+
+
         </forms>
     </config>
-    
+
     <config evaluator="node-type" condition="lecm-ord-table-structure:item">
         <forms>
             <form>
@@ -356,7 +358,7 @@
                     <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
                     <set id="item3" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="item4" parent="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
-                    
+
                     <field id="lecm-ord:css" set="item-container">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">
@@ -383,14 +385,14 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row .two-column div.form-field input[type="text"]{
                                 width: 6em;
                                 }
-							
+
                                 .yui-skin-lecmTheme .yui-panel .item-container .item1 {
                                 clear: both;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 .form-field {
                                 padding: 0.5em 0;
                                 }
-							
+
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field  span.viewmode-label{
                                 display: none;
                                 }
@@ -407,7 +409,7 @@
                                 margin-top: 3px;
                                 height: 0;
                                 }
-                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field input[type="text"]		
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field input[type="text"]
                                 {
                                 width: 20em;
                                 }
@@ -419,7 +421,7 @@
                             </control-param>
                         </control>
                     </field>
-                    
+
                     <field id="lecm-document:indexTableRow" set="item0"/>
                     <field id="lecm-ord-table-structure:item-status-assoc" set="item0">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
@@ -435,20 +437,20 @@
                     <field id="lecm-ord-table-structure:execution-date" set="item2"/>
                     <field id="lecm-ord-table-structure:execution-date-real" set="item2">
                         <control template="/org/alfresco/components/form/controls/info.ftl"/>
-                    </field> 
+                    </field>
                     <field id="lecm-ord-table-structure:item-comment" set="item3">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
-                    </field>	
+                    </field>
                     <field id="lecm-ord-table-structure:errand-assoc" set="item4">
                         <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
                             <control-param name="formatString">{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</control-param>
                         </control>
                     </field>
                 </appearance>
-				
-            </form>        
+
+            </form>
             <form id="table-structure-info">
                 <field-visibility>
                     <show id="lecm-ord-table-structure:item-content"/>
@@ -473,7 +475,7 @@
                     <set id="item1" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="item2" parent="item-container" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
                     <set id="item3" parent="item-container" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-                    
+
                     <field id="lecm-ord:css" set="item0">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">
@@ -494,7 +496,7 @@
                                 {
                                 width: 20em;
                                 }
-							
+
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
                                 width: 23em;
                                 height: 20px;
@@ -503,7 +505,7 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field label {
                                 float: left;
                                 width: auto;
-								
+
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field input[type="text"] {
                                 width: 6em;
@@ -511,7 +513,7 @@
                             </control-param>
                         </control>
                     </field>
-                    
+
                     <field id="lecm-document:indexTableRow" set="item0"/>
 
                     <field id="lecm-ord-table-structure:item-content" set="item1">
@@ -525,10 +527,10 @@
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
-                    </field>	
-                    
+                    </field>
+
                 </appearance>
-            </form>        
+            </form>
             <form id="datagrid">
                 <field-visibility>
                     <show id="lecm-document:indexTableRow" force="true"/>
