@@ -1063,7 +1063,11 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
@@ -1083,7 +1087,41 @@
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>27e0123c-d95e-4045-84e2-5fcb1740537e
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/c71874b4-94cd-4378-9520-a1c271189a74
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                     <node>
                                                         <type>transitionWorkflow</type>
@@ -1172,7 +1210,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[Документ]]></value>
+                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -1335,7 +1373,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[Документ]]></value>
+                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -1415,7 +1453,41 @@
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>afb0a5a0-fdbe-4bc0-85ee-7a79da02bb44
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/debc1ff0-806b-471a-b785-b4735f0026bd
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -1928,6 +2000,29 @@
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>INNER_SIGNER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>d5fb8091-13ea-40ed-bcc2-538aa5197f73</name>
+                                        <nodeRef>workspace://SpacesStore/d5fb8091-13ea-40ed-bcc2-538aa5197f73</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -3344,6 +3439,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>4f601dfd-a392-4012-92a2-890b7694b963</name>
+                                        <nodeRef>workspace://SpacesStore/4f601dfd-a392-4012-92a2-890b7694b963</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -4273,6 +4391,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>fb1fc981-40d0-49b0-a54a-52de5e11a058</name>
+                                        <nodeRef>workspace://SpacesStore/fb1fc981-40d0-49b0-a54a-52de5e11a058</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -4632,34 +4773,6 @@
                                                                 <name>variables</name>
                                                                 <nodes>
                                                                     <node>
-                                                                        <type>conditionAccess</type>
-                                                                        <name>ae7007e9-90e4-40c4-a2d6-835446b089dd
-                                                                        </name>
-                                                                        <nodeRef>
-                                                                            workspace://SpacesStore/08977898-ffae-4c64-9238-7fe17abd5925
-                                                                        </nodeRef>
-                                                                        <properties>
-                                                                            <property>
-                                                                                <name>conditionErrorMessage</name>
-                                                                                <value>
-                                                                                    <![CDATA[Для совершения этого действия необходимо добавить вложение в категорию "Исходящее".]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>condition</name>
-                                                                                <value>
-                                                                                    <![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
-                                                                            </property>
-                                                                        </properties>
-                                                                        <aspects/>
-                                                                        <associations/>
-                                                                        <roleAssociations/>
-                                                                        <subFolders/>
-                                                                    </node>
-                                                                    <node>
                                                                         <type>inputVariable</type>
                                                                         <name>e35756b4-c75c-4cf9-ac10-9fce0773f68e
                                                                         </name>
@@ -4677,7 +4790,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[Исходящее]]></value>
+                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -4871,7 +4984,7 @@
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[Исходящее]]></value>
+                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputToValue</name>
@@ -5429,6 +5542,29 @@
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>INNER_RECIPIENT</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>d349de82-5351-4ce0-8a8e-dd0d9dc32232</name>
+                                        <nodeRef>workspace://SpacesStore/d349de82-5351-4ce0-8a8e-dd0d9dc32232</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -6312,6 +6448,29 @@
                                         </roleAssociations>
                                         <subFolders/>
                                     </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>72a89449-392b-4799-bf71-f4a48bad24fb</name>
+                                        <nodeRef>workspace://SpacesStore/72a89449-392b-4799-bf71-f4a48bad24fb</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -6707,7 +6866,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR") or user.currentUser().hasBusinessRole("INNER_REGISTAR")]]></value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR") or user.currentUser().hasBusinessRole("DA_REGISTRAR")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -7538,7 +7697,7 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[true]]></value>
+                                                                <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transition-script</name>
@@ -9276,11 +9435,15 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
-                                                                <value><![CDATA[Принять]]></value>
+                                                                <value><![CDATA[Закрыть]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -9296,7 +9459,41 @@
                                                             </association>
                                                         </associations>
                                                         <roleAssociations/>
-                                                        <subFolders/>
+                                                        <subFolders>
+                                                            <subFolder>
+                                                                <name>variables</name>
+                                                                <nodes>
+                                                                    <node>
+                                                                        <type>conditionAccess</type>
+                                                                        <name>e512bb5c-70ee-4403-acf6-890b656b9441
+                                                                        </name>
+                                                                        <nodeRef>
+                                                                            workspace://SpacesStore/585083f9-619f-46f4-98f4-3a7b0d139f7d
+                                                                        </nodeRef>
+                                                                        <properties>
+                                                                            <property>
+                                                                                <name>conditionErrorMessage</name>
+                                                                                <value>
+                                                                                    <![CDATA[Действие доступно только инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>condition</name>
+                                                                                <value>
+                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR")]]></value>
+                                                                            </property>
+                                                                        </properties>
+                                                                        <aspects/>
+                                                                        <associations/>
+                                                                        <roleAssociations/>
+                                                                        <subFolders/>
+                                                                    </node>
+                                                                </nodes>
+                                                            </subFolder>
+                                                        </subFolders>
                                                     </node>
                                                 </nodes>
                                             </subFolder>
@@ -9843,6 +10040,29 @@
                                             <roleAssociation>
                                                 <type>role-assoc</type>
                                                 <businessRoleName>INNER_SIGNER</businessRoleName>
+                                            </roleAssociation>
+                                        </roleAssociations>
+                                        <subFolders/>
+                                    </node>
+                                    <node>
+                                        <type>dynamic-role</type>
+                                        <name>bfb612b9-da33-4438-a8d5-59b06eb95b18</name>
+                                        <nodeRef>workspace://SpacesStore/bfb612b9-da33-4438-a8d5-59b06eb95b18</nodeRef>
+                                        <properties>
+                                            <property>
+                                                <name>permissionTypeValue</name>
+                                                <value><![CDATA[LECM_BASIC_PG_Reader]]></value>
+                                            </property>
+                                        </properties>
+                                        <aspects>
+                                            <permissionTypeAspect/>
+                                            <business-role/>
+                                        </aspects>
+                                        <associations/>
+                                        <roleAssociations>
+                                            <roleAssociation>
+                                                <type>role-assoc</type>
+                                                <businessRoleName>DA_REGISTRAR_DYNAMIC</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
