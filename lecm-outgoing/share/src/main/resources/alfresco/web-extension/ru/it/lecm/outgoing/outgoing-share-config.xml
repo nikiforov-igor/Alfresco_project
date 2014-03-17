@@ -278,6 +278,11 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-document:doc-date">
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                </appearance>
 			</form>
 
 			<!-- Форма с набором полей, редактируемых в машине состояний -->

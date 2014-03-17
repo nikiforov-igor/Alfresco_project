@@ -128,6 +128,11 @@
                     <show id="lecm-document:doc-date"/>																	<!-- Дата регистрации & Регистрационный номер -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:doc-date">
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                </appearance>
             </form>
 
         </forms>

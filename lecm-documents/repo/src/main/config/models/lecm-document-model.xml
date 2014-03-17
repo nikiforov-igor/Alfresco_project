@@ -82,6 +82,11 @@
                 <property name="lecm-document:doc-date">
                     <title>Дата</title>
                     <type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-document:employee-ref">
                     <type>d:text</type>

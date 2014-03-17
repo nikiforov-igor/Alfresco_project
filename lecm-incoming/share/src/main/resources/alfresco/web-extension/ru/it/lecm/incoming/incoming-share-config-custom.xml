@@ -344,6 +344,11 @@
                     <show id="lecm-incoming:outgoing-number"/>
                     <show id="lecm-document:subject-assoc"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-document:doc-date">
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                </appearance>
             </form>
             <!-- Форма с набором полей, редактируемых в машине состояний-->
             <form id="statemachine-editable-fields">

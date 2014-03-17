@@ -169,6 +169,11 @@
                 <property name="lecm-document-aspects:reg-data-date">
                     <title>Дата регистрации</title>
                     <type>d:date</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <!-- Регистрационный номер-->
                 <property name="lecm-document-aspects:reg-data-number">
