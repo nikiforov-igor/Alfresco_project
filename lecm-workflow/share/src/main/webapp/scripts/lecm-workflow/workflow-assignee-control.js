@@ -582,8 +582,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 			this.destructorHacked = true;
 
-			this.widgets.simpleDialog.dialog.unsubscribeAll('destroy');
-			this.widgets.simpleDialog.dialog.subscribe('destroy', this._destructor, null, this);
+			if (this.widgets.simpleDialog) {
+				this.widgets.simpleDialog.dialog.unsubscribeAll('destroy');
+				this.widgets.simpleDialog.dialog.subscribe('destroy', this._destructor, null, this);
+			}
 		},
 		/**
 		 * Метод будет вызван столько раз, сколько раз контрол будет определён на форме. TODO...
@@ -959,7 +961,9 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var datagrid = widgets.datagrid;
 			var rs = datagrid.widgets.dataTable.getRecordSet();
 
-			this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
+			if (this.widges.simpleDialog) {
+				this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
+			}
 
 			Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged, datagrid);
 			Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated, datagrid);
