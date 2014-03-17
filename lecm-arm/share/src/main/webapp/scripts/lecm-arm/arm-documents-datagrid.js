@@ -378,9 +378,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                                         case "boolean":
                                             if (data.value) {
-                                                columnContent += '<div style="text-align: center;">'
-                                                columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                                columnContent += '</div>'
+                                                columnContent += '<div style="text-align: center;">';
+//                                                columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                columnContent += '<span class="boolean-true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+                                                columnContent += '</div>';
                                             }
                                             break;
 
@@ -392,7 +393,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                                     columnContent += $html(data.displayValue);
                                                 } else {
                                                     if (data.displayValue == "true") {
-                                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+//                                                        columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                        columnContent += '<span class="boolean-true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
                                                     }
                                                 }
                                             }
