@@ -66,18 +66,15 @@ div.arm-tree-menu .arm-accordion div.accordion-head {
     border-bottom: 1px solid #D7D7D7;
     border-top: 1px solid #FFFFFF;
     border-right: 1px solid #FFFFFF;
-	height: 29px;
 	font-size: 13px;
 	font-weight: bold;
 	font-style: normal;
 	color: #333333;
+	padding: 8px 0 8px 10px;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
-div.arm-tree-menu .arm-accordion div.accordion-head span.accordion-label {
-	position: absolute;
-	margin-left: 10px;
-	margin-top: 6px;
-}
 div.arm-tree-menu .arm-accordion span.accordion-counter-label {
 	margin-left: 5px;
     color: #EE801F;

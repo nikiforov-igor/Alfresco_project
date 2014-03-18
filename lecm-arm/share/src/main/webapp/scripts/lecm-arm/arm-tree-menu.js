@@ -94,9 +94,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    getAccordionItemHtml: function(node) {
 			var result = "";
-		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'><span id='" + "ac-label-" + node.id + "' class='accordion-label'>";
+		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'>";
 		    result += node.label;
-		    result += "</span></div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
+		    result += "</div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
 		    return result;
 	    },
 
