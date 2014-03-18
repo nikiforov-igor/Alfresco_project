@@ -149,50 +149,43 @@ public class StatusChangeAction extends StateMachineAction {
         final NodeRef nodeRef = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
         NodeService nodeService = getServiceRegistry().getNodeService();
         //Выставляем статус
-        List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
-        for (ChildAssociationRef child : children) {
-            String statusValue = nodeService.getProperty(child.getChildRef(), StatemachineModel.PROP_STATUS).toString();
-            if (!status.equals(statusValue)) {
-                nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATUS, status);
-                nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
-                //запись в БЖ
-                try {
-                    String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
-                    List<String> objects = new ArrayList<String>(1);
-                    objects.add(status);
-                    if (!forDraft) {
-                        getBusinessJournalService().log(initiator, child.getChildRef(),
-                                EventCategory.CHANGE_DOCUMENT_STATUS,
-                                "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
-                    }
-                } catch (Exception e) {
-                    logger.error("Не удалось создать запись бизнес-журнала", e);
+        ChildAssociationRef child = nodeService.getChildAssocs(nodeRef).get(0);
+
+        String statusValue = nodeService.getProperty(child.getChildRef(), StatemachineModel.PROP_STATUS).toString();
+        if (!status.equals(statusValue)) {
+            nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATUS, status);
+            nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_STATEMACHINE_VERSION, version);
+            //запись в БЖ
+            try {
+                String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
+                List<String> objects = new ArrayList<String>(1);
+                objects.add(status);
+                if (!forDraft) {
+                    getBusinessJournalService().log(initiator, child.getChildRef(),
+                            EventCategory.CHANGE_DOCUMENT_STATUS,
+                            "#initiator перевел(а) документ \"#mainobject\" в статус \"#object1\"", objects);
                 }
+            } catch (Exception e) {
+                logger.error("Не удалось создать запись бизнес-журнала", e);
             }
         }
 
         //Проверяем наличие аспекта указывающего на черновик
-        for (ChildAssociationRef child : children) {
-            if (!nodeService.hasAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT)) {
-                nodeService.addAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT, null);
-            }
+        if (!nodeService.hasAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT)) {
+            nodeService.addAspect(child.getChildRef(), StatemachineModel.ASPECT_IS_DRAFT, null);
         }
         //Устанавливаем флаг черновика
-        for (ChildAssociationRef child : children) {
-            nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_IS_DRAFT, forDraft);
-        }
+        nodeService.setProperty(child.getChildRef(), StatemachineModel.PROP_IS_DRAFT, forDraft);
+
         //Если стартовый статус, то ничего никуда не перемещаем
         if (forDraft) return;
 
         //Перемещаем в нужную папку
-        for (ChildAssociationRef child : children) {
-            String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
-            nodeService.moveNode(child.getChildRef(), statusFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-        }
+        String name = (String) nodeService.getProperty(child.getChildRef(), ContentModel.PROP_NAME);
+        nodeService.moveNode(child.getChildRef(), statusFolder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
 
         // Установка динамических ролей для файла
-        children = nodeService.getChildAssocs(nodeRef);
-        execBuildInTransactDynamic(children, dynamicPrivileges);
+        execBuildInTransactDynamic(child, dynamicPrivileges);
     }
 
 
@@ -250,7 +243,7 @@ public class StatusChangeAction extends StateMachineAction {
         //permissionsBuilder.rebuildStaticACL(folder, permissions);
     }
 
-    private void execBuildInTransactDynamic(final List<ChildAssociationRef> children
+    private void execBuildInTransactDynamic(final ChildAssociationRef child
             , final Map<String, LecmPermissionGroup> permissions) {
         final LecmPermissionService permissionsBuilder = getLecmPermissionService();
 //		getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(
@@ -263,9 +256,7 @@ public class StatusChangeAction extends StateMachineAction {
 //						return null;
 //					}
 //				}, false, true);
-        for (ChildAssociationRef child : children) {
             permissionsBuilder.rebuildACL(child.getChildRef(), permissions);
-        }
     }
 
 }

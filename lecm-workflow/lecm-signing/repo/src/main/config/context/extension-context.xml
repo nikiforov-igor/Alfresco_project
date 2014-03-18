@@ -8,6 +8,8 @@
 		  class="ru.it.lecm.workflow.signing.extensions.SigningWorkflowJavascriptExtension"
 		  p:extensionName="signingWorkflow"
 		  p:nodeService-ref="nodeService"
+          p:orgstructureBean-ref="serviceOrgstructure"
+          p:workflowResultListService-ref="workflowResultListService"
 		  p:signingWorkflowService-ref="signingWorkflowService"
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
 
