@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="outgoing-cover" pageWidth="595" pageHeight="421" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e563a73c-21f2-4919-9dbf-1c626f8578fc">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="outgoing-cover" pageWidth="649" pageHeight="459" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="649" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e563a73c-21f2-4919-9dbf-1c626f8578fc">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -31,28 +31,17 @@
 	<field name="area" class="java.lang.String"/>
 	<field name="index" class="java.lang.String"/>
 	<field name="district" class="java.lang.String"/>
-	<title>
-		<band height="30" splitType="Stretch">
-			<staticText>
-				<reportElement uuid="66bb1dc4-66c1-4a55-88fc-2b549a8a0f09" x="14" y="0" width="530" height="30"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Конверт]]></text>
-			</staticText>
-		</band>
-	</title>
 	<detail>
-		<band height="350" splitType="Stretch">
+		<band height="459" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="a30bed20-4c76-4324-bc2e-fb93cb56855f" stretchType="RelativeToTallestObject" x="14" y="12" width="530" height="40"/>
+				<reportElement uuid="a30bed20-4c76-4324-bc2e-fb93cb56855f" stretchType="RelativeToTallestObject" x="169" y="190" width="454" height="25"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Адресат " + ($F{recipient} != null ? $F{recipient} : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{recipient}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement uuid="b5bc3005-065e-424f-96a5-532d2094511b" stretchType="RelativeToTallestObject" x="158" y="63" width="386" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="b5bc3005-065e-424f-96a5-532d2094511b" stretchType="RelativeToTallestObject" x="169" y="228" width="454" height="25" isPrintWhenDetailOverflows="true"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
@@ -61,35 +50,28 @@
 ", кв. " + ($F{apartment} != null ?  $F{apartment} : "")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8b870041-3cb8-4002-aa37-ed4100d42ba9" stretchType="RelativeToTallestObject" x="158" y="106" width="386" height="30"/>
+				<reportElement uuid="8b870041-3cb8-4002-aa37-ed4100d42ba9" stretchType="RelativeToTallestObject" x="169" y="265" width="454" height="25"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{settlement}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="bd422885-f9a8-4cbc-ad37-3fd05f82fe08" stretchType="RelativeToTallestObject" x="158" y="146" width="386" height="30"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{region}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="9a5b41d3-d2dd-4e95-9595-1ebe591de8a1" stretchType="RelativeToTallestObject" x="158" y="240" width="386" height="30"/>
+				<reportElement uuid="9a5b41d3-d2dd-4e95-9595-1ebe591de8a1" stretchType="RelativeToTallestObject" x="169" y="351" width="454" height="25"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{district}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b431deae-d499-4e9f-9024-feb4511a9cb1" stretchType="RelativeToTallestObject" x="158" y="287" width="386" height="30"/>
+				<reportElement uuid="b431deae-d499-4e9f-9024-feb4511a9cb1" stretchType="RelativeToTallestObject" x="169" y="398" width="454" height="25"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{index}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="0e5c7fce-31a2-4cd8-a2e1-de72dc8a0ba8" stretchType="RelativeToTallestObject" x="158" y="192" width="386" height="30"/>
+				<reportElement uuid="0e5c7fce-31a2-4cd8-a2e1-de72dc8a0ba8" stretchType="RelativeToTallestObject" x="169" y="305" width="454" height="25"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="14" isBold="true"/>
 				</textElement>

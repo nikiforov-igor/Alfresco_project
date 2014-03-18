@@ -15,19 +15,14 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="outgoing-cover_a4.jrxml" mnem="out_cover_a4">
+            <template type="JASPER" filename="outgoing-cover_c5.jrxml" mnem="outgoing-cover_c5">
                 <l18>
-                    <item key="RU_RU"><![CDATA[Конверт a4]]></item>
+                    <item key="RU_RU"><![CDATA[Конверт С5]]></item>
                 </l18>
             </template>
-            <template type="JASPER" filename="outgoing-cover_a4_port.jrxml" mnem="out-cover_a4p">
+            <template type="JASPER" filename="outgoing-cover_dl.jrxml" mnem="outgoing-cover_dl">
                 <l18>
-                    <item key="RU_RU"><![CDATA[Конверт a4-portrait]]></item>
-                </l18>
-            </template>
-            <template type="JASPER" filename="outgoing-cover_a5.jrxml" mnem="out-cover_a5">
-                <l18>
-                    <item key="RU_RU"><![CDATA[Конверт a5]]></item>
+                    <item key="RU_RU"><![CDATA[Конверт DL]]></item>
                 </l18>
             </template>
         </templates>
