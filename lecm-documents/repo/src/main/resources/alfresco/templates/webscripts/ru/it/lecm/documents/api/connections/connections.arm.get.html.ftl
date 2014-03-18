@@ -31,7 +31,7 @@
 			            <#assign trCount = trCount + 1/>
 		                <tr>
                             <td style="width:80px;">&nbsp;</td>
-				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["cm:name"]}</td>
+				            <td class="connection-type-column">${item.assocs["lecm-connect:connection-type-assoc"][0].properties["lecm-connect-types:reverse-name"]}</td>
 				            <td class="connection-present-column">
 				                <a href="/share/page/document?nodeRef=${document.nodeRef}">
 				                    ${document.properties["lecm-document:ext-present-string"]!''}
