@@ -190,8 +190,8 @@
 			</form>
 			<form id="sequential">
 				<field-visibility>
-					<show id="lecm-workflow:assignee-due-date"/>
 					<show id="lecm-workflow:assignee-employee-assoc"/>
+					<show id="lecm-workflow:assignee-due-date"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-workflow:assignee-employee-assoc">
