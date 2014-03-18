@@ -87,9 +87,7 @@
 		            <field id="lecm-incoming:outgoing-date" set="incoming6"/>
 
 		            <field id="lecm-eds-document:summaryContent" set="incoming7">
-			            <control template="/org/alfresco/components/form/controls/textarea.ftl">
-                            <control-param name="rows">6</control-param>
-			            </control>
+			            <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 		            </field>
 
 		            <field id="lecm-incoming:recipient-assoc" set="incoming8">
@@ -290,7 +288,7 @@
 		            <field id="lecm-incoming:outgoing-number" set="incoming6"/>
 		            <field id="lecm-incoming:outgoing-date" set="incoming6"/>
 		            <field id="lecm-eds-document:summaryContent" set="incoming7">
-			            <control template="/org/alfresco/components/form/controls/textarea.ftl"/>
+			            <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 		            </field>
 		            <field id="lecm-document:subject-assoc" set="incoming8" mandatory="true"/>
 		            <field id="lecm-eds-document:file-register-assoc" set="incoming8"/>
