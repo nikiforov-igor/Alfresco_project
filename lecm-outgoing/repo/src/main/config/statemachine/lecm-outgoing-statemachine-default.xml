@@ -60,7 +60,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -452,7 +452,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -469,7 +469,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -486,7 +486,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -605,7 +605,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -622,7 +622,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -639,7 +639,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -656,7 +656,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -673,7 +673,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -690,7 +690,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -724,7 +724,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
