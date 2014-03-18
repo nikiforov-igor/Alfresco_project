@@ -12,6 +12,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.expression.BeanFactoryResolver;
 
 /**
  * User: PMelnikov
@@ -27,13 +29,15 @@ public class Expression {
 	private static OrgstructureBean orgstructureBean;
 	private static DocumentService documentService;
 	private static StateMachineServiceBean stateMachineHelper;
+	private ApplicationContext applicationContext;
 
     private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
 
     public Expression() {
     }
 
-    public Expression(NodeRef document, ServiceRegistry serviceRegistry) {
+    public Expression(NodeRef document, ServiceRegistry serviceRegistry, ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
         NodeRef documentRef = document;
         this.doc = new ExpressionDocument(documentRef, serviceRegistry);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
@@ -42,6 +46,7 @@ public class Expression {
             this.state = stateMachineHelper.getVariables(executionId);
         }
         this.context = new StandardEvaluationContext(this);
+		this.context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
     }
 
 	public boolean execute(String expression) {

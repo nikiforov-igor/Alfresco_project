@@ -29,10 +29,13 @@ import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.expression.Expression;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,7 +43,7 @@ import java.util.*;
  * Date: 28.02.13
  * Time: 16:28
  */
-public class DocumentServiceImpl extends BaseBean implements DocumentService {
+public class DocumentServiceImpl extends BaseBean implements DocumentService, ApplicationContextAware {
     private static final transient Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     private OrgstructureBean orgstructureService;
@@ -53,6 +56,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
     private SearchService searchService;
     private DocumentAttachmentsService documentAttachmentsService;
     private CopyService copyService;
+	private ApplicationContext applicationContext;
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+	}
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
@@ -664,7 +673,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService {
 
     @Override
     public boolean execExpression(NodeRef document, String expression) {
-        Expression evaluator = new Expression(document, serviceRegistry);
+        Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
         return evaluator.execute(expression);
     }
 }
