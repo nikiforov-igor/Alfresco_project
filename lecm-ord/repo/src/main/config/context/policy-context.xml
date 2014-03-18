@@ -7,7 +7,7 @@
 							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="ord.association-handler.policy"
-		  class="ru.it.lecm.ord.policy.AssociationHandlerPolicy"
+		  class="ru.it.lecm.ord.policies.AssociationHandlerPolicy"
 		  init-method="init"
 		  parent="logicEcmAssociationPolicy"
 		  depends-on="ord.document.models.bootstrap"/>

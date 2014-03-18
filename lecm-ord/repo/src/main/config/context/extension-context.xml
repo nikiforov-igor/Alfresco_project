@@ -14,7 +14,6 @@
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:documentConnectionService-ref="documentConnectionService"
 		  p:lecmDictionaryService-ref="serviceDictionary"
-		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentEventService-ref="documentEventService"
 		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>

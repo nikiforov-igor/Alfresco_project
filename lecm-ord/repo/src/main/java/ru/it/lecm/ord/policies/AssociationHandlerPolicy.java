@@ -1,9 +1,8 @@
-package ru.it.lecm.ord.policy;
+package ru.it.lecm.ord.policies;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import ru.it.lecm.base.policies.LogicECMAssociationPolicy;
-import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.ord.api.ORDModel;
 
 /**

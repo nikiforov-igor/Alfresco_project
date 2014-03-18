@@ -56,5 +56,38 @@
 		  depends-on="outgoing.model.bootstrap"
 		  p:documentType="lecm-ord:document"
 		  p:tags-ref="ord.taggedCounterRegistrator.tags"/>
+		
+	<!--service for various document utils-->
+	<bean id="ordDocumentService" parent="baseBean"
+		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"
+		  p:nodeService-ref="nodeService"/>
 
+	<!--notification-->
+	<bean id="ordNotificationService" parent="baseBean"
+		  class="ru.it.lecm.ord.ORDNotificationServiceImpl"
+		  p:workCalendarService-ref="WorkCalendarService"
+		  p:notificationsService-ref="notificationsService"
+		  p:ordDocumentService-ref="ordDocumentService"/>
+
+	<!--notification scheduler-->
+	<bean id="ord.notification.schedule" class="ru.it.lecm.ord.scheduler.ORDNotificationScheduler"
+          p:transactionMode="ISOLATED_TRANSACTIONS"
+          p:compensatingActionMode="IGNORE"
+          p:jobName="ord-notification"
+          p:jobGroup="ord"
+          p:triggerName="ord-notification-trigger"
+          p:triggerGroup="ord-trigger"
+          p:cronExpression="0 0 8/12 * * ? *"
+          p:scheduler-ref="schedulerFactory"
+          p:actionService-ref="ActionService"
+          p:transactionService-ref="TransactionService"
+          p:searchService-ref="searchService"
+          p:runAsUser="System"/>
+
+	<!--notification executor for scheduler-->
+    <bean id="ordNotificationExecutor" class="ru.it.lecm.ord.scheduler.ORDNotificationExecutor" parent="action-executer"
+          p:ignoreLock="false"
+          p:publicAction="false"
+		  p:ordNotificationService-ref="ordNotificationService"/>
+	
 </beans>

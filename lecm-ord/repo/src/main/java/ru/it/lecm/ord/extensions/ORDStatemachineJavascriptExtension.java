@@ -41,7 +41,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 
 /**
  *
@@ -56,7 +55,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private EDSGlobalSettingsService edsGlobalSettingsService;
 	private DocumentConnectionService documentConnectionService;
 	private DictionaryBean lecmDictionaryService;
-	private WorkflowAssigneesListService workflowAssigneesListService;
 	private BusinessJournalService businessJournalService;
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
@@ -75,10 +73,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setEdsGlobalSettingsService(EDSGlobalSettingsService edsGlobalSettingsService) {
 		this.edsGlobalSettingsService = edsGlobalSettingsService;
-	}
-
-	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
-		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
 
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
