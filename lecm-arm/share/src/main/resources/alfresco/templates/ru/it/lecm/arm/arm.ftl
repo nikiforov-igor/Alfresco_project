@@ -38,6 +38,7 @@
         (function(){
             function initArmResizer() {
                 var resizer = new LogicECM.module.Base.Resizer('ArmResizer');
+	            resizer.marginLeft = 10;
                 resizer.setOptions({
                     initialWidth: 300
                 });

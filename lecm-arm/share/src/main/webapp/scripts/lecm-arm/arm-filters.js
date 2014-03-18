@@ -50,7 +50,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onReady: function () {
                 YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
-                YAHOO.util.Dom.setStyle(this.id + "-body", "display", "none");
+                YAHOO.util.Dom.setStyle(this.id, "display", "none");
 
                 YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
 
@@ -190,7 +190,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 });
 
                 var filtersExist = this.currentFilters.length > 0;
-                Dom.setStyle(this.id + "-body", "display", filtersExist ? "" : "none");
+                Dom.setStyle(this.id, "display", filtersExist ? "" : "none");
 
                 if (filtersExist) {
                     var currentFiltersConteiner = Dom.get(this.id + "-current-filters");

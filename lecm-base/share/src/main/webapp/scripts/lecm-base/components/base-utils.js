@@ -226,6 +226,8 @@ LogicECM.module.Base.Util = {
     };
 
     YAHOO.extend(LogicECM.module.Base.Resizer, Alfresco.widget.Resizer, {
+	    marginLeft: 8,
+
         onResize: function(width){
             var cn = Dom.get(this.options.divLeft).childNodes,
                 handle = cn[cn.length - 1];
@@ -243,7 +245,7 @@ LogicECM.module.Base.Util = {
 
             if (width !== undefined) {
                 // 8px breathing space for resize gripper
-                Dom.setStyle(this.options.divRight, "margin-left", 8 + width + "px");
+                Dom.setStyle(this.options.divRight, "margin-left", this.marginLeft + width + "px");
             }
             YAHOO.Bubbling.fire("SetHeaderWidth");
         }
