@@ -97,6 +97,11 @@
 							<control-param name="options">APPROVED|Согласовать#alf#APPROVED_WITH_REMARK|Согласовать с замечаниями#alf#REJECTED|Отклонить</control-param>
 						</control>
 					</field>
+					<field id="bpm:comment">
+						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+							<control-param name="rows">4</control-param>
+						</control>
+					</field>
 					<field id="lecmApprove2:approveTaskCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
