@@ -81,6 +81,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     this.options.initialPage = this.armMenuState.pageNum;
                 }
             }
+	        this.selectedItems = {};
+	        var selectAll = Dom.get(this.id + '-select-all-records');
+	        if (selectAll != null) {
+		        selectAll.checked = false;
+	        }
             this.deferredListPopulation.fulfil("armNodeSelected");
         },
 
