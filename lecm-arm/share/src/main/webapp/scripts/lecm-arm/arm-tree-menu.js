@@ -40,6 +40,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    accordionItems: null,
 
+	    accordionHeight: null,
+
         onReady: function () {
             var menu = this;
             this.preferences.request(this.PREFERENCE_KEY,
@@ -171,7 +173,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	    },
 
 	    getAccordionHeight: function() {
-		    return Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 30 * this.accordionItems.length;
+		    if (this.accordionHeight == null) {
+			    this.accordionHeight = Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 30 * this.accordionItems.length;
+		    }
+		    return this.accordionHeight;
 	    },
 
         _createTree: function (node) {
