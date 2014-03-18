@@ -36,6 +36,10 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
         return lecmPermissionService.hasPermission(permission, new NodeRef(nodeRef), authService.getCurrentUserName());
     }
 
+	public boolean hasReadAccess(ScriptNode node) {
+        return lecmPermissionService.hasReadAccess(node.getNodeRef());
+    }
+
 	public boolean hasPermission(String nodeRef, String permission, String userLogin) {
         return lecmPermissionService.hasPermission(permission, new NodeRef(nodeRef), userLogin);
     }
