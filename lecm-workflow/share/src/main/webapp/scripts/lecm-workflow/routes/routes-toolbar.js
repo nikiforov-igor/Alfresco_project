@@ -87,6 +87,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 							fn: function(form, simpleDialog) {
 								var titleId = isCommon ? 'label.routes.new-common-route.title' : 'label.routes.new-private-route.title';
 								simpleDialog.dialog.setHeader(this.msg(titleId));
+								this.createDialogOpening = false;
 							},
 							scope: that
 						},
@@ -116,6 +117,12 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					newRouteForm.show();
 					this.newRouteForm = newRouteForm;
 				}
+
+				// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку создания)
+				if (this.createDialogOpening) {
+					return;
+				}
+				this.createDialogOpening = true;
 
 				YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
 				YAHOO.Bubbling.on('formContainerDestroyed', this._onNewRouteFormDestroyed, this);
