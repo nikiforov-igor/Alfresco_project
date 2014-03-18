@@ -262,9 +262,8 @@ LogicECM.control = LogicECM.control || {};
 										var preview = Dom.get(previewId);
 										var container = Dom.get(me.id + "-uploader-preview-container-previewer-div");
 
-										container.innerHTML = "";
                                         preview.setAttribute("style", "");
-										container.appendChild(preview);
+										container.innerHTML = preview.innerHTML;
 									}, {}, me);
 								},
 								scope: this
