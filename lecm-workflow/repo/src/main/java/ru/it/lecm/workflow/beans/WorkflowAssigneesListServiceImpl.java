@@ -88,7 +88,12 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public void setDueDates(NodeRef assigneeListNodeRef, Date workflowDueDate) {
-		List<NodeRef> assigneeListItems = sortAssigneesListItems(getAssigneesListItems(assigneeListNodeRef));
+		AssigneesList assigneesList = getAssigneesListDetail(assigneeListNodeRef);
+		List<NodeRef> assigneeListItems = new ArrayList<NodeRef>(assigneesList.getListItems().size());
+		for (AssigneesListItem item : assigneesList.getListItems()) {
+			assigneeListItems.add(item.getNodeRef());
+		}
+
 		Date workflowDueDateTruncated = DateUtils.truncate(workflowDueDate, Calendar.DATE);
 		Date today = DateUtils.truncate(new Date(), Calendar.DATE);
 
@@ -206,22 +211,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		}
 		setAssigneesListItemDueDate(assigneeListItem, effectiveDueDate);
 
-	}
-
-	private List<NodeRef> sortAssigneesListItems(List<NodeRef> assigneesListItems) {
-		List<NodeRef> sortedAssigneesListItems = new ArrayList<NodeRef>(assigneesListItems);
-
-		Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
-			@Override
-			public int compare(NodeRef o1, NodeRef o2) {
-				int order1 = getAssigneesListItemOrder(o1);
-				int order2 = getAssigneesListItemOrder(o2);
-				return (order1 < order2) ? -1 : ((order1 == order2) ? 0 : 1);
-			}
-		};
-		Collections.sort(sortedAssigneesListItems, comparator);
-
-		return sortedAssigneesListItems;
 	}
 
 	@Override
@@ -425,31 +414,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	}
 
 	@Override
-	public void calculateAssigneesListDueDates(NodeRef assigneesList, Date dueDate) {
-		List<NodeRef> assigneesListItems = getAssigneesListItems(assigneesList);
-
-		if (assigneesListItems.isEmpty()) {
-			return;
-		}
-
-		dueDate = DateUtils.truncate(dueDate, Calendar.DATE);
-		Date today = DateUtils.truncate(new Date(), Calendar.DATE);
-
-		long diffDays = (dueDate.getTime() - today.getTime()) / 86400000;
-		int period = (int) (diffDays / assigneesListItems.size());
-
-		Date previousDate;
-		Date currentDate;
-
-		setAssigneesListItemDueDate(assigneesListItems.get(0), DateUtils.addDays(today, period));
-		for (int i = 1; i < assigneesListItems.size(); i++) {
-			previousDate = getAssigneesListItemDueDate(assigneesListItems.get(i - 1));
-			currentDate = DateUtils.addDays(previousDate, period);
-			setAssigneesListItemDueDate(assigneesListItems.get(i), currentDate);
-		}
-	}
-
-	@Override
 	public NodeRef getServiceRootFolder() {
 		return getAssigneesListsFolder();
 	}
@@ -531,7 +495,12 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		nodeService.setProperty(workingCopyAssigneesListNode, ContentModel.PROP_NAME, executionID);
 		nodeService.removeAspect(workingCopyAssigneesListNode, LecmWorkflowModel.ASPECT_TEMP);
 
-		return getAssigneesListItems(workingCopyAssigneesListNode);
+		AssigneesList assigneesList = getAssigneesListDetail(workingCopyAssigneesListNode);
+		List<NodeRef> result = new ArrayList<NodeRef>(assigneesList.getListItems().size());
+		for (AssigneesListItem item : assigneesList.getListItems()) {
+			result.add(item.getNodeRef());
+		}
+		return result;
 	}
 
 	private NodeRef copyAssigneesList(NodeRef source, NodeRef targetDir, boolean isAnonymous) {
@@ -617,7 +586,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 				nodeService.addAspect(assignee, ContentModel.ASPECT_TEMPORARY, null);
 				nodeService.deleteNode(assignee);
 			} else {
-			// задач сотруднику не назначалось. работаем дальше
+				// задач сотруднику не назначалось. работаем дальше
 				// добавим в новый список участников
 				actualizedAssigneesList.add(assignee);
 				// запомним, что уже видели его
@@ -665,7 +634,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public String getAssigneesListConcurrency(NodeRef assigneesListRef) {
-		return (String)nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
+		return (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_CONCURRENCY);
 	}
 
 	@Override

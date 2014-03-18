@@ -32,8 +32,6 @@ public interface WorkflowAssigneesListService {
 
 	boolean changeAssigneeOrder(NodeRef assigneeNodeRef, String direction); // JSONObject changeOrder(final JSONObject json);
 
-	void calculateAssigneesListDueDates(NodeRef assigneeList, Date dueDate); //calculateApprovalDueDate(JSONObject json);
-
 	int getAssigneesListItemOrder(NodeRef listItemNodeRef);
 
 	void setAssigneesListItemOrder(NodeRef listItemNodeRef, int order);

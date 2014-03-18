@@ -1,6 +1,5 @@
 package ru.it.lecm.workflow.extensions;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -252,25 +251,6 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 		return result;
 
-	}
-
-	public void calculateAssigneesListDueDates(final JSONObject json) {
-		String assigneesListNodeRefStr, dueDateStr;
-		Date dueDate;
-
-		try {
-			assigneesListNodeRefStr = json.getString("assigneesListNodeRef");
-			dueDateStr = json.getString("dueDate");
-		} catch (JSONException ex) {
-			throw new WebScriptException("Insufficient params in JSON", ex);
-		}
-		try {
-			dueDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse(dueDateStr);
-		} catch (ParseException ex) {
-			throw new WebScriptException("Invalid date format", ex);
-		}
-
-		workflowAssigneesListService.calculateAssigneesListDueDates(new NodeRef(assigneesListNodeRefStr), dueDate);
 	}
 
 	public void clearAssigneesList(JSONObject json) {
