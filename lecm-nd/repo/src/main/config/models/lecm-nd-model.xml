@@ -21,6 +21,7 @@
             <parameter name="allowedValues">
                 <list>
                     <value>Документ</value>
+                    <value>Согласование</value>
                     <value>Прочее</value>
                 </list>
             </parameter>

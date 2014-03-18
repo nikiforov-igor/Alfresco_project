@@ -23,7 +23,7 @@
                 <list>
                     <value>Документ</value>
                     <value>Приложения</value>
-                    <value>Согласования</value>
+                    <value>Согласование</value>
                     <value>Подлинник</value>
                     <value>Прочее</value>
                 </list>
@@ -55,7 +55,7 @@
             <title>Logic Ecm ORD</title>
             <parent>lecm-eds-document:base</parent>
             <properties>
-				
+
                 <!--Служебные свойства-->
                 <property name="lecm-ord:controller-assoc-ref">
                     <type>d:text</type>
@@ -73,7 +73,7 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-				
+
 				<property name="lecm-ord:signers-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
@@ -141,7 +141,7 @@
                     </target>
                 </association>
             </associations>
-			
+
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>
                 <aspect>lecm-ord-table-structure:table-items-aspect</aspect>

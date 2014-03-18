@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.alfresco.repo.policy.BehaviourFilter;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
@@ -115,13 +116,13 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		nodeService.setProperties(approvalListItemRef, properties);
 
 		if (commentRef != null && documentRef != null && commentFileAttachmentCategoryName != null && documentProjectNumber != null) {
-			NodeRef attachmentCategoryRef = documentAttachmentsService.getCategory(commentFileAttachmentCategoryName, documentRef);
+			final NodeRef attachmentCategoryRef = documentAttachmentsService.getCategory(commentFileAttachmentCategoryName, documentRef);
 			if (attachmentCategoryRef != null) {
 				StringBuilder commentFileName = new StringBuilder();
-				commentFileName.append(nodeService.getProperty(documentRef, QName.createQName(documentProjectNumber, serviceRegistry.getNamespaceService())));
+				commentFileName.append(documentProjectNumber);
 				commentFileName.append(", ");
 
-				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date())).append(" + ");
+				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH.mm").format(new Date())).append(" + ");
 				commentFileName.append("Согласование сотрудником");
 
 				NodeRef employeeRef = findNodeByAssociationRef(approvalListItemRef, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
@@ -140,33 +141,29 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 					commentFileNameStr += " " + i;
 				}
 
-				final NodeRef commentRefFinal = commentRef;
 				final String commentFileNameFinal = commentFileNameStr;
 				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+				transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
 					@Override
-					public Object execute() throws Throwable {
-						nodeService.setProperty(commentRefFinal, ContentModel.PROP_NAME, commentFileNameFinal);
-						return null;
+					public ChildAssociationRef execute() throws Throwable {
+						nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameFinal);
+						QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameFinal);
+						return nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
 					}
 				}, false, true);
 
-				QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameStr);
-				nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
-			}
-
-			List<NodeRef> targetRefs = new ArrayList<NodeRef>();
-			targetRefs.add(commentRef);
-			behaviourFilter.disableBehaviour(documentRef);
-			behaviourFilter.disableBehaviour(commentRef);
-			try {
-				nodeService.setAssociations(approvalListItemRef, ApprovalResultModel.ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
-			} finally {
-				behaviourFilter.enableBehaviour(documentRef);
-				behaviourFilter.enableBehaviour(commentRef);
+				List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+				targetRefs.add(commentRef);
+				behaviourFilter.disableBehaviour(documentRef);
+				behaviourFilter.disableBehaviour(commentRef);
+				try {
+					nodeService.setAssociations(approvalListItemRef, ApprovalResultModel.ASSOC_APPROVAL_ITEM_COMMENT, targetRefs);
+				} finally {
+					behaviourFilter.enableBehaviour(documentRef);
+					behaviourFilter.enableBehaviour(commentRef);
+				}
 			}
 		}
-
 	}
 
 	@Override
@@ -181,7 +178,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		Map<QName, Serializable> props = userTask.getProperties();
 		Date dueDate = (Date) props.get(org.alfresco.repo.workflow.WorkflowModel.PROP_DUE_DATE);
 		String owner = (String) props.get(ContentModel.PROP_OWNER);
-		if(docInfo.getDocumentRef() != null) {
+		if (docInfo.getDocumentRef() != null) {
 			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
 			List<NodeRef> recipients = new ArrayList<NodeRef>();
 			recipients.add(employee);
