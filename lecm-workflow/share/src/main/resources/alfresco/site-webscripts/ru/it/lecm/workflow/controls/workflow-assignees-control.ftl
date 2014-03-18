@@ -30,6 +30,7 @@
 <#assign itemType = field.control.params.itemType!''>
 
 <#assign shouldInitAllowed = allowedBusinessRoleId ? has_content>
+<#assign formAddAssigneeTitle = (field.control.params.formAddAssigneeTitle) ! 'Добавить участника'>
 
 <#-- Отправка данных -->
 <#assign concurrencyInputId = namespaceId + '-concurrency-input'>
@@ -145,7 +146,8 @@
 				saveListButtonId: '${saveListButtonId}',
 				showComputeTermsButton: ${showComputeTermsButton?string},
 				showListSelectMenu: ${showListSelectMenu?string},
-				workflowType: '${workflowTypeShareConfig}'
+				workflowType: '${workflowTypeShareConfig}',
+				formAddAssigneeTitle: '${formAddAssigneeTitle}'
 			};
 			LogicECM.CurrentModules['${containerId}'] = new LogicECM.module.Workflow.WorkflowList(initOptions);
 			Alfresco.util.PopupManager.zIndex += 100;

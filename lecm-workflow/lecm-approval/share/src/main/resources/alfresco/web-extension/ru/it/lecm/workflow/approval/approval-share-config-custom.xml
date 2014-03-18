@@ -64,6 +64,7 @@
 							<control-param name="showListSelectMenu">true</control-param>
 							<control-param name="showComputeTermsButton">true</control-param>
 							<!--<control-param name="allowedBusinessRoleId">DA_APPROVER</control-param>-->
+							<control-param name="formAddAssigneeTitle">Добавить сотрудника для согласования</control-param>
 						</control>
 					</field>
 					<field id="packageItems">

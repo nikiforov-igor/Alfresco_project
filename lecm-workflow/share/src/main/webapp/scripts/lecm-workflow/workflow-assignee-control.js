@@ -907,15 +907,17 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
+					scope: this,
 					fn: function(form, simpleDialog) {
-						simpleDialog.dialog.setHeader('Добавить элемент списка бизнес-процесса');
+						simpleDialog.dialog.setHeader(this.options.formAddAssigneeTitle);
 					}
 				},
 				onSuccess: {
-					fn: this._refreshDatagrid,
-					scope: this
+					scope: this,
+					fn: this._refreshDatagrid
 				},
 				onFailure: {
+					scope: this,
 					fn: function() {
 						Alfresco.util.PopupManager.displayMessage({
 							text: 'При добавлении элемента произошла ошибка, попробуйте переоткрыть форму'

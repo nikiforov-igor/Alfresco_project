@@ -21,6 +21,7 @@
 							<control-param name="concurrency">PARALLEL</control-param>
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="showListSelectMenu">true</control-param>
+							<control-param name="formAddAssigneeTitle">Добавить сотрудника для ознакомления</control-param>
 						</control>
 					</field>
 					<field id="bpm:workflowDescription">
