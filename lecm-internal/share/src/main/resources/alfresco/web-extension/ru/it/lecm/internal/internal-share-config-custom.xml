@@ -191,15 +191,21 @@
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
                 <field-visibility>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:recipients-assoc"/>
+                    <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:execution-date"/>
+                    <show id="lecm-statemachine:status"/>
                 </field-visibility>
-                <appearance>
-                </appearance>
             </form>
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
                 <field-visibility>
-                    <show id="lecm-statemachine:status"/>
+                    <show id="lecm-document:author-assoc"/>
+                    <show id="lecm-eds-document:recipients-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
+                    <show id="lecm-eds-document:execution-date"/>
+                    <show id="lecm-statemachine:status"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-statemachine:status">
