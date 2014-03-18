@@ -2728,3 +2728,8 @@ div.form-field table.formFieldControlParamsTable {
 .boolean-true {
     background: url(images/complete-16.png) no-repeat;
 }
+
+.yui-skin-lecmTheme {
+	font-family: Arial;
+	font-size: 13px;
+}
