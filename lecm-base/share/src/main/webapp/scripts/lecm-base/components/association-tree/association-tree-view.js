@@ -137,6 +137,10 @@ LogicECM.module = LogicECM.module || {};
 
 			additionalFilter: "",
 
+            defaultValue: null,
+
+	        defaultValueDataSource: null,
+
             ignoreNodes: null,
 
 			childrenDataSource: "lecm/forms/picker",
@@ -204,10 +208,38 @@ LogicECM.module = LogicECM.module || {};
                 this.populateDataWithAllowedScript();
                 this.createPickerDialog();
                 this._loadSearchProperties();
+                this.loadDefaultValue();
             } else {
 	            this.updateViewForm();
             }
 		},
+
+        loadDefaultValue: function AssociationAutoComplete__loadDefaultValue() {
+		        if (this.options.defaultValue != null) {
+                     this.defaultValue = this.options.defaultValue;
+                     this.updateViewForm();
+                } else 
+                if (this.options.defaultValueDataSource != null) {
+			        var me = this;
+
+			        Alfresco.util.Ajax.request(
+				        {
+					        url: Alfresco.constants.PROXY_URI + this.options.defaultValueDataSource,
+					        successCallback: {
+						        fn: function (response) {
+							        var oResults = eval("(" + response.serverResponse.responseText + ")");
+							        if (oResults != null && oResults.nodeRef != null ) {
+								        me.defaultValue = oResults.nodeRef;
+							        }
+							        me.updateViewForm();
+						        }
+					        },
+					        failureMessage: "message.failure"
+				        });
+		        } else {
+			        this.updateViewForm();
+		        }
+	    },
 
         showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
             if (this.doubleClickLock) return;
@@ -287,6 +319,10 @@ LogicECM.module = LogicECM.module || {};
             {
                 arrItems = this.options.currentValue;
             }
+
+            if (arrItems == "" && this.defaultValue != null) {
+		        arrItems += this.defaultValue;
+	        }
 
             var onSuccess = function AssociationTreeViewer__loadSelectedItems_onSuccess(response)
             {

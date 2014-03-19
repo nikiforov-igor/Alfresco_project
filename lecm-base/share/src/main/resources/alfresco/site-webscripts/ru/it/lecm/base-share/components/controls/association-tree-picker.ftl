@@ -8,6 +8,12 @@
     <#assign plane = false>
 </#if>
 
+<#assign defaultValue=field.control.params.defaultValue!"">
+<#if form.arguments[field.name]?has_content>
+    <#assign defaultValue=form.arguments[field.name]>
+</#if>
+
+
 <#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
     <#assign showCreateNewLink = false>
 <#else>
@@ -145,6 +151,12 @@
         plane: ${plane?string},
         currentValue: "${field.value!''}",
         showSelectedItemsPath: ${showSelectedItemsPath?string},
+        <#if field.control.params.defaultValueDataSource??>
+            defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
+        </#if>
+        <#if defaultValue?has_content>
+            defaultValue: "${defaultValue?string}",
+        </#if>
         <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
 	    <#if field.control.params.fireAction?? && field.control.params.fireAction != "">
 	    fireAction: {
