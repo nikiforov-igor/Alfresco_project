@@ -224,3 +224,8 @@ div.error-item
 .yui-skin-lecmTheme .filters-block .yui-panel-container.shadow .underlay {
 	background-color: white;
 }
+
+.group-actions span.group-actions-counter {
+	margin: 0 5px;
+	color: #EE801F;
+}

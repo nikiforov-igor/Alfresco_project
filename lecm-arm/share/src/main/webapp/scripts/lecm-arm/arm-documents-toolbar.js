@@ -139,13 +139,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             },
             onCheckDocument: function onCheckDocumentFunction() {
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
+
+	            var buttonName = this.msg("button.group-actions");
                 var items = this.modules.dataGrid.getSelectedItems();
                 if (items.length == 0) {
                     button.set("disabled", true);
                 } else {
                     button.set("disabled", false);
+	                buttonName += "<span class=\"group-actions-counter\">";
+	                buttonName += "(" + items.length + ")";
+	                buttonName += "</span>";
                 }
 
+	            button.set("label", buttonName);
             },
 
             onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
