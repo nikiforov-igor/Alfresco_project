@@ -20,6 +20,7 @@ public final class NDModel {
 
 	public final static QName PROP_ND_BEGIN = QName.createQName(ND_NAMESPACE, "begin-date");
 	public final static QName PROP_ND_END = QName.createQName(ND_NAMESPACE, "end-date");
+	public final static QName PROP_ND_MEANLESS = QName.createQName("http://www.it.ru/lecm/document/aspects/1.0", "work-meanless-field");
 
 	public final static QName ASSOC_ND_REGISTRAR = QName.createQName(ND_NAMESPACE, "registrar-assoc");
 

@@ -86,6 +86,7 @@ public class InWorkScheduler extends AbstractScheduledAction {
 
 	@Override
 	public List<NodeRef> getNodes() {
+
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
 		Date now = new Date();
 		SearchParameters sp = new SearchParameters();
