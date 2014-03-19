@@ -57,6 +57,9 @@
 	        var container,
                 dashletResizer;
 
+		    var loadItemsCount = 50;
+		    var skipItemsCount = 0;
+
             function setMenuHeight(menuId) {
                 if (dashletResizer) {
                     var height = parseInt(Dom.getStyle(dashletResizer.dashletBody, "height"));
@@ -143,8 +146,25 @@
 
 	            makeSelect('${id}-days', SELECT_DAYS);
 	            makeWhoseSelect();
+
+		        YAHOO.util.Event.addListener("${id}-results-container", "scroll", onBusinessJournalContainerScroll);
 	        }
-	        function refreshResults() {
+
+		    function onBusinessJournalContainerScroll () {
+			    var container = event.currentTarget;
+			    if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+				    Dom.setStyle("${id}-results-loading", "visibility", "visible");
+				    loadBusinessJournalRecords(false);
+			    }
+		    }
+
+	        function loadBusinessJournalRecords(clearList) {
+		        var container = Dom.get('${id}_results');
+		        if (clearList) {
+			        skipItemsCount = 0;
+			        container.scrollTop = 0;
+		        }
+
 	            var data = "";
 	            var inputs = Selector.query('#${id}_controls input[type=hidden]');
 
@@ -153,7 +173,7 @@
 
 	                data += (i == 0 ? '' : '&') + item.name + '=' + item.value;
 	            }
-                data += "&maxItems=100&skipCount=0&checkMainObject=false";
+                data += "&maxItems=" + loadItemsCount + "&skipCount=" + skipItemsCount + "&checkMainObject=false";
 
 	            Alfresco.util.Ajax.jsonGet({
 	                url: Alfresco.constants.PROXY_URI + "lecm/business-journal/api/search?" + data,
@@ -162,8 +182,10 @@
 	                        var results = response.json;
 
 	                        if (results) {
-	                            var container = Dom.get('${id}_results');
-	                            container.innerHTML = '';
+		                        skipItemsCount += results.length;
+		                        if (clearList) {
+	                                container.innerHTML = '';
+		                        }
 
 	                            if (results.length > 0) {
 	                                for (var i = 0; i < results.length; i++) { // [].forEach() не работает в IE
@@ -177,10 +199,9 @@
 	                                    div.innerHTML = div.innerHTML + '<br />' + Alfresco.util.relativeTime(new Date(item.date));
 	                                    container.appendChild(div);
 	                                }
-	                            } else {
-	                                container.appendChild(createRow('${msg("label.no.records")}'));
 	                            }
 	                        }
+		                    Dom.setStyle("${id}-results-loading", "visibility", "hidden");
 	                    },
 	                    scope: this
 	                },
@@ -197,7 +218,7 @@
 	            var onOptionClick = function (p_sType, p_aArgs, p_oItem) {
 	                selectButton.set("label", p_oItem.cfg.getProperty("text"));
 	                hidden.value = p_oItem.value;
-	                refreshResults();
+		            loadBusinessJournalRecords(true);
 	            };
 
 	            for (var i = 0; i < options.length; i++) { // [].forEach() не работает в IE
@@ -215,7 +236,7 @@
                 });
 
 	            hidden.value = defaultOption.value;
-	            refreshResults();
+		        loadBusinessJournalRecords(true);
 	        }
 	        function makeWhoseSelect() {
 	            Alfresco.util.Ajax.jsonGet({
@@ -267,7 +288,12 @@
 	        <input type="hidden" id="${id}-days-hidden" name="days">
 	        <input type="hidden" id="${id}-whose-hidden" name="whose">
 	    </div>
-	    <div class="body scrollableList" id="${id}_results"></div>
+		<div class="body scrollableList" id="${id}-results-container">
+			<div id="${id}_results"></div>
+			<div id="${id}-results-loading" style="text-align: center; visibility: hidden;">
+				<img src="/share/res/components/images/lightbox/loading.gif">
+			</div>
+		</div>
 	<#else>
 		${msg("label.no.access")}
 	</#if>
