@@ -4,7 +4,6 @@
 
 <script type="text/javascript">//<![CDATA[
 (function() {
-	<#if form.mode == "edit">
 		function checkPointExecutedStatus (){
 			Alfresco.util.Ajax.jsonRequest({
 				method: "GET",
@@ -42,26 +41,35 @@
 		}
 
 		function createExecutedPointButton(){
-			var simpleDialog = Alfresco.util.ComponentManager.get("${htmlId}");
-			var executePointButton = new YAHOO.widget.Button({
-											 container: "${buttonsContainerId}",
-											 type: "submit",
-											 label: "${msg('ord.item.execute.button')}",
-											 onclick: {
-											  fn: function(){executePoint();},
-											  scope: this
-											 }
-											});
+			<#if form.mode == "edit">
+				var executePointButton = new YAHOO.widget.Button({
+												 container: "${buttonsContainerId}",
+												 type: "submit",
+												 label: "${msg('ord.item.execute.button')}",
+												 onclick: {
+												  fn: function(){executePoint();},
+												  scope: this
+												 }
+												});
+			</#if>
+			<#if form.mode == "view">
+				var executePointButton = new YAHOO.widget.Button({
+								 container: "${buttonsContainerId}",
+								 type: "button",
+								 label: "${msg('ord.item.execute.button')}",
+								 onclick: {
+								  fn: function(){executePoint(); hideViewDialog(); },
+								  scope: this
+								 }
+								});
+			</#if>
 		}
 
 		YAHOO.util.Event.onDOMReady(checkPointExecutedStatus);
 
-	</#if>
 })();
 //]]></script>
 
 <div class="form-field">
-	<#if form.mode == "edit">
-		<div id='${buttonsContainerId}' style="margin-bottom: 10px;"></div>
-	</#if>
+	<div id='${buttonsContainerId}' style="margin-bottom: 10px;"></div>
 </div>

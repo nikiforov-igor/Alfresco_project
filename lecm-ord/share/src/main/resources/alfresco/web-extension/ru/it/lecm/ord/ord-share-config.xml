@@ -303,7 +303,7 @@
                     </field>
                     <field id="lecm-ord-table-structure:items-assoc" set="items">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
-                            <control-param name="attributeForShow">lecm-ord-table-structure:item-content</control-param>
+                            <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="expandable">true</control-param>
                             <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
