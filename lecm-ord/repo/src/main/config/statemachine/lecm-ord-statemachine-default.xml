@@ -7037,6 +7037,10 @@ ordStatemachine.enactDocuments(ord);]]>
                                                         <roleAssociations/>
                                                         <subFolders/>
                                                     </node>
+												</nodes>
+											</subFolder>
+										</subFolders>
+									</node>
 									<node>
 										<type>TimerAction</type>
 										<name>cda2f2bd-7d5a-43ef-a0fd-6f047b5bc8e6</name>
