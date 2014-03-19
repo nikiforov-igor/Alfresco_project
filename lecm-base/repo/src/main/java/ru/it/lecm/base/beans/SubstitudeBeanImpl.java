@@ -62,7 +62,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 Date regDate = docService.getDocumentActualDate(object);
                 if (regDate != null) {
-                    DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    DateFormat dFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
                     return dFormat.format(regDate);
                 }
                 return "";
@@ -74,7 +74,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 String dateValue = getFormatStringByPseudoProp(object, docService, services);
                 if (!dateValue.isEmpty()) {
                     try {
-                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                        return new SimpleDateFormat(Constants.DATE_FORMAT).parse(dateValue);
                     } catch (ParseException e) {
                         logger.debug(e.getMessage());
                     }
@@ -108,7 +108,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 Date regDate = docService.getProjectRegDate(object);
                 if (regDate != null) {
-                    DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
+                    DateFormat dFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
                     return dFormat.format(regDate);
                 }
 
@@ -120,7 +120,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 String dateValue = getFormatStringByPseudoProp(object, docService, services);
                 if (!dateValue.isEmpty()) {
                     try {
-                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                        return new SimpleDateFormat(Constants.DATE_FORMAT).parse(dateValue);
                     } catch (ParseException e) {
                         logger.debug(e.getMessage());
                     }
@@ -134,7 +134,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
                 Date regDate = docService.getDocumentRegDate(object);
                 if (regDate != null) {
-                    DateFormat dFormat = new SimpleDateFormat(Constants.YYYY_MM_DD);
+                    DateFormat dFormat = new SimpleDateFormat(Constants.DATE_FORMAT);
                     return dFormat.format(regDate);
                 }
 
@@ -146,7 +146,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 String dateValue = getFormatStringByPseudoProp(object, docService, services);
                 if (!dateValue.isEmpty()) {
                     try {
-                        return new SimpleDateFormat(Constants.YYYY_MM_DD).parse(dateValue);
+                        return new SimpleDateFormat(Constants.DATE_FORMAT).parse(dateValue);
                     } catch (ParseException e) {
                         logger.debug(e.getMessage());
                     }
@@ -198,7 +198,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         }
 
         private static class Constants {
-            public static final String YYYY_MM_DD = "yyyy-MM-dd";
+            public static final String DATE_FORMAT = "dd.MM.yyyy";
         }
     }
 
