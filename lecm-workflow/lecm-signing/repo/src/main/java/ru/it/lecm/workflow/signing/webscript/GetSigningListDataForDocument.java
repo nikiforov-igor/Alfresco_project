@@ -46,7 +46,7 @@ public class GetSigningListDataForDocument extends DeclarativeWebScript {
 
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-		NodeRef signingList= null;
+		NodeRef signingList;
 		Map<String, Object> result = new HashMap<String, Object>();
 		JSONObject json = new JSONObject();
 
@@ -56,6 +56,8 @@ public class GetSigningListDataForDocument extends DeclarativeWebScript {
 
 		if (childAssocs != null && !childAssocs.isEmpty()) {
 			signingList = childAssocs.get(0).getChildRef();
+		} else {
+			signingList = signingContainer;
 		}
 
 		try {
