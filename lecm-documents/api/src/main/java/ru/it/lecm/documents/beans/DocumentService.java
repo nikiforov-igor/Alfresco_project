@@ -307,4 +307,16 @@ public interface DocumentService {
      * @return
      */
     public boolean execExpression(NodeRef document, String expression);
+
+    /**
+     * Установить настройки финализации в папку подразделения
+     * @param document - ссылка на документ
+     * @param sharedFolder - финализировать в общую папку подразделения
+     * @param primaryUnit - основное подразделение
+     * @param additionalUnits - дополнительные подразделения
+     */
+    public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit, List<NodeRef> additionalUnits);
+    public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit);
+    public void finalizeToUnit(NodeRef document, NodeRef primaryUnit, List<NodeRef> additionalUnits);
+    public void finalizeToUnit(NodeRef document, NodeRef primaryUnit);
 }

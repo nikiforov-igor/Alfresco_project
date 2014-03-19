@@ -371,4 +371,21 @@ public class DocumentWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+    public void finalizeToUnit(ScriptNode document, Boolean sharedFolder, ScriptNode primaryUnit, Scriptable additionalUnits) {
+        List<NodeRef> additionalUnitsRefs = getNodeRefsFromScriptableCollection(additionalUnits);
+        documentService.finalizeToUnit(document.getNodeRef(), sharedFolder, primaryUnit.getNodeRef(), additionalUnitsRefs);
+    }
+
+    public void finalizeToUnit(ScriptNode document, Boolean sharedFolder, ScriptNode primaryUnit) {
+        finalizeToUnit(document, sharedFolder, primaryUnit, null);
+    }
+
+    public void finalizeToUnit(ScriptNode document, ScriptNode primaryUnit, Scriptable additionalUnits) {
+        finalizeToUnit(document, null, primaryUnit, additionalUnits);
+    }
+
+    public void finalizeToUnit(ScriptNode document, ScriptNode primaryUnit) {
+        finalizeToUnit(document, null, primaryUnit, null);
+    }
 }

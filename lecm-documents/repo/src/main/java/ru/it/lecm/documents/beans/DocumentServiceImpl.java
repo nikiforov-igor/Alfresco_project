@@ -20,6 +20,9 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
@@ -29,13 +32,10 @@ import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.expression.Expression;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import org.springframework.context.ApplicationContext;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * Created with IntelliJ IDEA.
@@ -675,5 +675,41 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     public boolean execExpression(NodeRef document, String expression) {
         Expression evaluator = new Expression(document, serviceRegistry, applicationContext);
         return evaluator.execute(expression);
+    }
+
+    @Override
+    public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit, List<NodeRef> additionalUnits) {
+        if (!nodeService.hasAspect(document, DocumentService.ASPECT_FINALIZE_TO_UNIT)) {
+            nodeService.addAspect(document, DocumentService.ASPECT_FINALIZE_TO_UNIT, null);
+        }
+
+        if (sharedFolder != null) {
+            nodeService.setProperty(document, DocumentService.PROP_IS_SHARED_FOLDER, sharedFolder);
+        }
+
+        if (primaryUnit != null) {
+            List<NodeRef> units = new ArrayList<NodeRef>(1);
+            units.add(primaryUnit);
+            nodeService.setAssociations(document, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, units);
+        }
+
+        if (additionalUnits != null) {
+            nodeService.setAssociations(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC, additionalUnits);
+        }
+    }
+
+    @Override
+    public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit) {
+        finalizeToUnit(document, sharedFolder, primaryUnit, null);
+    }
+
+    @Override
+    public void finalizeToUnit(NodeRef document, NodeRef primaryUnit, List<NodeRef> additionalUnits) {
+        finalizeToUnit(document, null, primaryUnit, additionalUnits);
+    }
+
+    @Override
+    public void finalizeToUnit(NodeRef document, NodeRef primaryUnit) {
+        finalizeToUnit(document, null, primaryUnit, null);
     }
 }
