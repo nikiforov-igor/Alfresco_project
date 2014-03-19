@@ -178,8 +178,8 @@ div.arm-tree-menu .arm-accordion .wait-container {
 	width: 150px;
 }
 
-.arm-reports-list {
-	margin: 15px;
+.arm-reports-list .datagrid {
+	padding-top: 10px;
 }
 
 div.noerror-item
