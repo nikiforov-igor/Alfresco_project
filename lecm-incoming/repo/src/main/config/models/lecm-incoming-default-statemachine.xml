@@ -1771,7 +1771,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
@@ -2589,7 +2589,7 @@ if (addressee != null) {
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
@@ -3499,7 +3499,7 @@ if (fileRegister != null && fileRegister.length == 1) {
 														<properties>
 															<property>
 																<name>stopSubWorkflows</name>
-																<value><![CDATA[true]]></value>
+																<value><![CDATA[false]]></value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
