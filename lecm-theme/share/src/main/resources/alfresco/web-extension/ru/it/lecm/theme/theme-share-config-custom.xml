@@ -32,6 +32,7 @@
                         <!--<item type="link" id="errands-list">/errands-list</item>-->
                         <!--<item type="link" id="scaner">/document-scanner</item>-->
                         <item type="link" id="arm">/arm?code=SED</item>
+						<item type="link" id="routes-settings">/routes</item>
                     </container-group>
                      <container-group id="alfrescos" label="Standard">
                          <item type="link" id="my-dashboard">{userdashboardpage}</item>
@@ -57,7 +58,6 @@
                         <item type="link" id="reports-editor">/reports-editor</item>
                         <item type="link" id="arm-settings">/arm-settings</item>
                         <item type="link" id="group-actions">/group-actions</item>
-						<item type="link" id="routes-settings">/routes</item>
                         <item type="link" id="more" icon="">/console/admin-console/</item>
                     </container-group>
                 </item>
