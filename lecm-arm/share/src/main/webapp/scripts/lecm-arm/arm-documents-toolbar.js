@@ -76,6 +76,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			    );
 			    this.filtersDialog.render();
 			    YAHOO.util.Event.onAvailable(this.id + "-filters-dialog_mask", function () {
+				    Dom.addClass(this.id + "-filters-dialog_mask", "arm-filters-mask");
 				    YAHOO.util.Event.on(this.id + "-filters-dialog_mask", 'click', this.filtersDialog.hide, null, this.filtersDialog);
 			    }, null, this);
 		    },

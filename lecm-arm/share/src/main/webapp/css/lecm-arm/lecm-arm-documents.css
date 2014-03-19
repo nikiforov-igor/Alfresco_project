@@ -216,3 +216,11 @@ div.error-item
 .yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-col-expand {
 	width: 16px;
 }
+
+.yui-skin-lecmTheme .mask.arm-filters-mask {
+	opacity: 0;
+}
+
+.yui-skin-lecmTheme .filters-block .yui-panel-container.shadow .underlay {
+	background-color: white;
+}
