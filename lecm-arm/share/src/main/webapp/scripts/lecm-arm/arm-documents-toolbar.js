@@ -96,10 +96,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            this.filtersDialog.hide();
             },
 
+	        onCancelFilterClick: function () {
+		        this.filtersDialog.hide();
+	        },
+
             _initButtons: function () {
 	            this._drawFiltersPanel();
                 this.toolbarButtons["defaultActive"].filtersButton = Alfresco.util.createYUIButton(this, "filtersButton", this.onFiltersClick);
 	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-apply-button", this.onApplyFilterClick);
+	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-cancel-button", this.onCancelFilterClick);
 
                 this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
                     this.id + "-groupActionsButton",

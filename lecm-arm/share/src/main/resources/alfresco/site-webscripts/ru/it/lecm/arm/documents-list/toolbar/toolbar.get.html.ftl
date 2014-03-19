@@ -33,6 +33,11 @@
 	                    <button type="button" tabindex="0">${msg("filter.button.ok")}</button>
 	                </span>
 	            </span>
+				<span id="${id}-filters-cancel-button" class="yui-button yui-push-button filters-icon">
+	                <span class="first-child">
+	                    <button type="button" tabindex="0">${msg("filter.button.cancel")}</button>
+	                </span>
+	            </span>
 			</div>
 		</div>
 	</div>
