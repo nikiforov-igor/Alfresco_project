@@ -75,4 +75,51 @@
         <property name="policyComponent" ref="policyComponent"/>
     </bean>
 
+    <bean id="internalService" class="ru.it.lecm.internal.beans.InternalServiceImpl" parent="baseBean">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="transactionService" ref="transactionService"/>
+    </bean>
+
+    <bean id="internalNotificationTrigger" class="org.alfresco.util.CronTriggerBean">
+        <property name="jobDetail">
+            <bean id="internalNotificationJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+                <property name="jobClass">
+                    <value>ru.it.lecm.internal.schedule.InternalNotificationExecutor</value>
+                </property>
+                <property name="jobDataAsMap">
+                    <map>
+                        <entry key="documentService">
+                            <ref bean="documentService"/>
+                        </entry>
+                        <entry key="transactionService">
+                            <ref bean="transactionService"/>
+                        </entry>
+                        <entry key="nodeService">
+                            <ref bean="nodeService"/>
+                        </entry>
+                        <entry key="calendarBean">
+                            <ref bean="WorkCalendarService"/>
+                        </entry>
+                        <entry key="notificationsService">
+                            <ref bean="notificationsService"/>
+                        </entry>
+                        <entry key="internalService">
+                            <ref bean="internalService"/>
+                        </entry>
+                        <entry key="connectionService">
+                            <ref bean="documentConnectionService"/>
+                        </entry>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory" />
+        </property>
+        <property name="cronExpression">
+            <value>0 0 3 */1 * ?</value>
+        </property>
+    </bean>
 </beans>
