@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -54,9 +55,7 @@ public class NDCreatePolicy implements NodeServicePolicies.OnUpdatePropertiesPol
 //		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 //				NDModel.TYPE_ND,
 //				new JavaBehaviour(this,"onUpdateProperties"));
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				NDModel.TYPE_ND, EDSDocumentService.ASSOC_FILE_REGISTER,
-				new JavaBehaviour(this, "onCreateNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME, NDModel.TYPE_ND, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
