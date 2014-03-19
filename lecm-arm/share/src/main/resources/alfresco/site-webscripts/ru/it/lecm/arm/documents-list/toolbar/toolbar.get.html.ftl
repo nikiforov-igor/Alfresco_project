@@ -17,7 +17,7 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 <@comp.baseToolbar id true true true>
 <div class="filters-block">
-	<div class="filters">
+	<div id="${id}-filters-button-container" class="filters">
 	    <span id="${id}-filtersButton" class="yui-button yui-push-button yui-menu-button">
 	       <span class="first-child">
 	          <button type="button" title="${msg("btn.filters")}">${msg("btn.filters")}</button>

@@ -50,6 +50,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             filtersDiv.innerHTML = oResponse.serverResponse.responseText;
                             if (toolbar.filtersDialog != null) {
                                 toolbar.filtersDialog.show();
+	                            toolbar.toolbarButtons["defaultActive"].filtersButton.set("disabled", true);
+	                            Dom.addClass(toolbar.id + "-filters-button-container", "showed");
                             }
                         }
                     },
@@ -77,13 +79,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			    this.filtersDialog.render();
 			    YAHOO.util.Event.onAvailable(this.id + "-filters-dialog_mask", function () {
 				    Dom.addClass(this.id + "-filters-dialog_mask", "arm-filters-mask");
-				    YAHOO.util.Event.on(this.id + "-filters-dialog_mask", 'click', this.filtersDialog.hide, null, this.filtersDialog);
+				    YAHOO.util.Event.on(this.id + "-filters-dialog_mask", 'click', this.hideFiltersDialog, null, this);
 			    }, null, this);
 		    },
 
             onFiltersClick: function () {
                 this._renderFilters(this.avaiableFilters);
             },
+
+	        hideFiltersDialog: function () {
+		        this.filtersDialog.hide();
+		        this.toolbarButtons["defaultActive"].filtersButton.set("disabled", false);
+		        Dom.removeClass(this.id + "-filters-button-container", "showed");
+	        },
 
             onApplyFilterClick: function () {
                 //update current filters
@@ -94,11 +102,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     });
                 }
 
-	            this.filtersDialog.hide();
+	            this.hideFiltersDialog();
             },
 
 	        onCancelFilterClick: function () {
-		        this.filtersDialog.hide();
+		        this.hideFiltersDialog();
 	        },
 
             _initButtons: function () {

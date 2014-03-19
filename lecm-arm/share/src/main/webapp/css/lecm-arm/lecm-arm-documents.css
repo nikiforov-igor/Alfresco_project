@@ -17,6 +17,21 @@
 
 .filters-block .filters {
     margin-left: 9px;
+	border: none;
+	background-color: transparent;
+	position: inherit;
+}
+
+.filters-block .filters.showed {
+	background-color: white;
+	border: 1px solid #777777;
+	border-bottom: none;
+	position: relative;
+	z-index: 1000;
+}
+
+.filters-block .filters.showed button {
+	color: #333;
 }
 
 .arm-filters-bar {
@@ -104,8 +119,8 @@ div.arm-tree-menu .arm-accordion .wait-container {
 
 .filters-block .filters-dialog {
 	visibility: hidden;
-	margin-top: 30px;
-	margin-left: 10px;
+	margin-top: 25px;
+	margin-left: 8px;
 }
 
 .datalist-toolbar .filters-block .filters-dialog div {
