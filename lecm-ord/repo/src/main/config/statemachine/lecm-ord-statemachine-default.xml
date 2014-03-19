@@ -7013,6 +7013,55 @@ ordStatemachine.repealDocuments(ord);]]>
 														<roleAssociations/>
 														<subFolders/>
 													</node>
+													<node>
+                                                        <type>ScriptActionEntity</type>
+                                                        <name>50d24ffc-9bf8-4fa1-97dc-ac08070d662d</name>
+                                                        <nodeRef>workspace://SpacesStore/6556256e-97ec-4dab-b73c-18990ab9fad1</nodeRef>
+                                                        <properties>
+                                                            <property>
+                                                                <name>actionScript</name>
+                                                                <value>
+                                                                    <![CDATA[var list = stm_document.assocs["lecm-ord:canceled-assoc"];
+if (list != null) {
+for (var i = 0; i < list.length; i++) {
+    var el = list[i];
+    if (el.type == "{http://www.it.ru/lecm/ND/1.0}document") {
+        var currentStatus = el.properties["lecm-statemachine:status"];
+        if (currentStatus != null && currentStatus == "Действует") {
+            el.properties["lecm-statemachine:status"] = "Отменен";
+            el.save();
+        } 
+    }
+}
+}
+
+var workList = stm_document.assocs["lecm-ord:accepted-assoc"];
+if (workList != null) {
+for (var i = 0; i < workList.length; i++) {
+    var el = workList[i];
+    if (el.type == "{http://www.it.ru/lecm/ND/1.0}document") {
+        el.addAspect('lecm-document-aspects:in-work');
+    }
+}
+}
+
+
+
+]]>
+                                                                </value>
+                                                            </property>
+                                                            <property>
+                                                                <name>scriptLabel</name>
+                                                                <value>
+                                                                    <![CDATA[Отмена/Введение связанных НД]]>
+                                                                </value>
+                                                            </property>
+                                                        </properties>
+                                                        <aspects/>
+                                                        <associations/>
+                                                        <roleAssociations/>
+                                                        <subFolders/>
+                                                    </node>
 												</nodes>
 											</subFolder>
 										</subFolders>
