@@ -8,14 +8,14 @@
             <table class="filters-table" cellspacing="0">
 	            <tr>
 		            <#list filters as item>
-			            <th id="${item.code}" class="filter-title <#if item_index % 2 != 0>colored</#if>" title="${item.name}">
-				            ${item.name}
+			            <th id="${item.code}" class="filter-title <#if item_index == 0>first</#if>" title="${item.name}">
+				            ${item.name}:
 			            </th>
 		            </#list>
 	            </tr>
                 <tr class="detail-list-item" style="border: 1px solid;">
                     <#list filters as item>
-                        <td id="${item.code}" class="filter <#if item_index % 2 != 0>colored</#if>">
+                        <td id="${item.code}" class="filter <#if item_index == 0>first</#if>">
                             <#if item.values??>
                                 <#list item.values as fValue>
                                     <div>
