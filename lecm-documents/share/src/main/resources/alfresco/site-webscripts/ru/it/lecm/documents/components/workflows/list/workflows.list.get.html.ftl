@@ -5,7 +5,7 @@
     <div class="body scrollableList" id="${id}_results">
 
         <div class="list-category">
-            <div class="list-category-title">${msg("tasklist.label.workflows.active")}</div>
+            <div class="list-workflows-title">${msg("tasklist.label.workflows.active")}</div>
 
             <#list data.activeWorkflows as workflow>
                 <div class="workflow-task-item">
@@ -18,7 +18,7 @@
         </div>
 
         <div class="list-category">
-            <div class="list-category-title">${msg("tasklist.label.workflows.completed")}</div>
+            <div class="list-workflows-title">${msg("tasklist.label.workflows.completed")}</div>
 
             <#list data.completedWorkflows as workflow>
                 <div class="workflow-task-item">
