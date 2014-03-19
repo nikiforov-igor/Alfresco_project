@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 
 /**
  * User: PMelnikov
@@ -157,9 +158,12 @@ public class StateMachineHandler {
                                 action.execute(execution);
                             }
                         }
+                    } catch (InvalidNodeRefException ex) {
+						logger.error("Something goes wrong while changing status", ex);
+						throw ex;
                     } catch (Exception e) {
                         logger.error("Error while action execution", e);
-                    }
+					}
                     return null;
                 }
             });
