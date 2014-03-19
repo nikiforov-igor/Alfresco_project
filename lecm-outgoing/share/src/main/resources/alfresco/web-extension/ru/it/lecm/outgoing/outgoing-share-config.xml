@@ -14,7 +14,7 @@
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
-					<show id="lecm-document-aspects:reg-data-date" force="true"/>										<!-- Дата регистрации -->
+					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
@@ -33,23 +33,19 @@
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
 					<set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
 
-					<set id="outgoing1" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
+					<set id="outgoing1" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
 					<set id="outgoing2" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing3" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-					<set id="outgoing4" parent="common" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-					<set id="outgoing5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing3" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
+					<set id="outgoing4" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl" appearance="whitespace"/>	<!-- сет будет отмечен стилем set-whitespace -->
 					<set id="outgoing6" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl" appearance="whitespace"/>	<!-- сет будет отмечен стилем set-whitespace -->
 					<set id="outgoing8" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing9" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
 					<!-- outgoing1:full-width-set -->
 					<field id="lecm-document:regnum" set="outgoing1"/>
-					<field id="lecm-document-aspects:reg-data-date" set="outgoing1">
-						<control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-							<control-param name="formatString">{~REGDATE}</control-param>
-						</control>
-					</field>
+					<field id="lecm-document:doc-date" set="outgoing1"/>
 
 					<!-- outgoing2:full-width-set -->
 					<field id="lecm-document:title" set="outgoing2"/>
@@ -108,7 +104,7 @@
 
 					<field id="lecm-outgoing:style-for-approval-and-signing-tab" set="approval-and-signing">
 						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-							<control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
+							<control-param name="cssFile">lecm-outgoing/outgoing-view-form.css</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -278,11 +274,11 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
 				</field-visibility>
-                <appearance>
-                    <field id="lecm-document:doc-date">
-                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
-                    </field>
-                </appearance>
+				<appearance>
+					<field id="lecm-document:doc-date">
+						<control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+					</field>
+				</appearance>
 			</form>
 
 			<!-- Форма с набором полей, редактируемых в машине состояний -->
@@ -304,10 +300,10 @@
 		</forms>
 	</config>
 
-    <config evaluator="string-compare" condition="Workflow">
-        <hidden-workflows>
-            <workflow name="activiti$lecm-outgoing_document"/>
-        </hidden-workflows>
-    </config>
+	<config evaluator="string-compare" condition="Workflow">
+		<hidden-workflows>
+			<workflow name="activiti$lecm-outgoing_document"/>
+		</hidden-workflows>
+	</config>
 
 </alfresco-config>
