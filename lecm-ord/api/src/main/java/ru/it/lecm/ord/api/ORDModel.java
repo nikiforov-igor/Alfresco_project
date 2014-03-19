@@ -20,6 +20,7 @@ public final class ORDModel {
 	public final static QName TYPE_ORD = QName.createQName(ORD_NAMESPACE, "document");
 	public final static QName ASSOC_ORD_CONTROLLER = QName.createQName(ORD_NAMESPACE, "controller-assoc");
 	public final static QName ASSOC_ORD_CANCELED = QName.createQName(ORD_NAMESPACE, "canceled-assoc");
+	public final static QName ASSOC_ORD_ACCEPT = QName.createQName(ORD_NAMESPACE, "accepted-assoc");
 
 	public final static QName ASSOC_ORD_TABLE_ITEMS = QName.createQName(ORD_TABLE_NAMESPACE, "items-assoc");
 	public final static QName TYPE_ORD_TABLE_ITEM = QName.createQName(ORD_TABLE_NAMESPACE, "item");

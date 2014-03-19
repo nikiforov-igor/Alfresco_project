@@ -428,6 +428,24 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 	}
 
+	public void enactDocuments(ScriptNode ordSNode){
+		NodeRef ord = ordSNode.getNodeRef();
+		List<AssociationRef> enactAssoc = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_ACCEPT);
+		for (AssociationRef enactProjAssoc:enactAssoc){
+			NodeRef repealProj = enactProjAssoc.getTargetRef();
+			nodeService.addAspect(repealProj, DocumentService.ASPECT_DOC_ACCEPT, null);
+
+			//запись в бизнес журнал о том, что документ введён в действие
+			String ordPresentStr = getOrdURL(ordSNode);
+	 		String bjMessage = String.format("Документ #mainobject введен в действие документом %s", ordPresentStr);
+			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
+			businessJournalService.log("System", repealProj, "ACCEPT_DOCUMENT", bjMessage, null);
+
+			//создадим связь
+			documentConnectionService.createConnection(ord, repealProj, "accept", true, true);
+		}
+	}
+
 	public void changePointStatusByErrand(ScriptNode ordSNode){
 		NodeRef ord = ordSNode.getNodeRef();
         Set<NodeRef> senders = documentEventService.getEventSenders(ord);
