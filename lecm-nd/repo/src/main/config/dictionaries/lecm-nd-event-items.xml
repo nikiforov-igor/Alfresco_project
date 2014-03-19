@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:Введение в действие" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Введение в действие</property>
+                <property name="lecm-busjournal:eventCategory-code">ACCEPT_DOCUMENT</property>
+            </item>
+        </items>
+    </item>
+</items>

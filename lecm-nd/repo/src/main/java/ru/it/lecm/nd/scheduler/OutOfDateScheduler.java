@@ -33,7 +33,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author ikhalikov
  */
-public class CancelScheduler extends AbstractScheduledAction {
+public class OutOfDateScheduler extends AbstractScheduledAction {
 
 	private String jobName = "switch-nd-status";
 	private String jobGroup = "nd";
@@ -44,7 +44,7 @@ public class CancelScheduler extends AbstractScheduledAction {
 	private SearchService searchService;
 	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-M\\-dd'T'HH");
 	private String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND @%s:\"Действует\"";
-	private final static Logger logger = LoggerFactory.getLogger(CancelScheduler.class);
+	private final static Logger logger = LoggerFactory.getLogger(OutOfDateScheduler.class);
 
 	public void setScheduler(Scheduler scheduler) {
 		this.scheduler = scheduler;
@@ -78,7 +78,7 @@ public class CancelScheduler extends AbstractScheduledAction {
 		return cronExpression;
 	}
 
-	public CancelScheduler() {
+	public OutOfDateScheduler() {
 		super();
 	}
 
@@ -108,7 +108,7 @@ public class CancelScheduler extends AbstractScheduledAction {
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {
-		return getActionService().createAction("cancelExecutor");
+		return getActionService().createAction("outOfDateExecutor");
 	}
 
 	@Override

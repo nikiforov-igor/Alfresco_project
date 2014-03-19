@@ -20,7 +20,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
  *
  * @author ikhalikov
  */
-public class CancelExecutor extends ActionExecuterAbstractBase {
+public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 
 	private final static Logger logger = LoggerFactory.getLogger(InWorkExecutor.class);
 	private NodeService nodeService;

@@ -106,16 +106,21 @@
             <!-- Форма с набором полей, редактируемых в машине состояний -->
             <form id="statemachine-editable-fields">
                 <field-visibility>
-                    <show id="lecm-document-aspects:registrator-assoc"/>
+                    <show id="lecm-document-aspects:reg-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-eds-document:regdate"/>
                     <show id="lecm-document:creator"/>																	<!-- Автор -->
-                    <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-                    <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
                     <show id="lecm-document:title"/>																	<!-- Заголовок -->
-                    <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
-                    <show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
                     <show id="lecm-eds-document:document-type-assoc"/>                                                                <!-- Вид документа НД -->
-                    <show id="lecm-eds-document:execution-date"/>                                                       <!-- Срок исполнения -->
+                    <show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
+                    <show id="lecm-document-aspects:registrator-assoc"/>
+                    <show id="lecm-document-aspects:additional-organization-unit-assoc"/>
+                    <show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
                     <show id="lecm-eds-document:note"/>                                                                 <!-- Примечание -->
+                    <show id="lecm-nd:begin-date"/>
+                    <show id="lecm-nd:end-date"/>
+                    <show id="lecm-document-aspects:is-shared-folder"/>
+                    <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
                 </field-visibility>
             </form>
 

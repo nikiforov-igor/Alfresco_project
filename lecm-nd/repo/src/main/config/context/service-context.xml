@@ -20,6 +20,8 @@
     <util:list id="nd.dictionaries.items">
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-regnumbers-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-br-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-event-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
     </util:list>
     <!-- Registration of orgStructure models -->
     <bean id="nd.document.models.bootstrap" parent="modelsToRepositoryLoader"
@@ -66,13 +68,13 @@
           p:policyFilter-ref="policyBehaviourFilter"
     />
 
-    <bean id="nd.cancel.schedule" class="ru.it.lecm.nd.scheduler.CancelScheduler"
+    <bean id="nd.outOfDate.schedule" class="ru.it.lecm.nd.scheduler.OutOfDateScheduler"
           p:transactionMode="ISOLATED_TRANSACTIONS"
           p:compensatingActionMode="IGNORE"
-          p:jobName="cancel-nd-status"
-          p:jobGroup="nd-cancel"
-          p:triggerName="cancel-nd-status-trigger"
-          p:triggerGroup="cancel-nd-trigger"
+          p:jobName="out-of-date-nd-status"
+          p:jobGroup="nd-out-of-date"
+          p:triggerName="out-of-date-nd-status-trigger"
+          p:triggerGroup="out-of-date-nd-trigger"
           p:cronExpression="0 /1 * * * ? *"
           p:scheduler-ref="schedulerFactory"
           p:actionService-ref="ActionService"
@@ -81,7 +83,7 @@
           p:runAsUser="System"
     />
 
-    <bean id="cancelExecutor" class="ru.it.lecm.nd.scheduler.CancelExecutor" parent="action-executer"
+    <bean id="outOfDateExecutor" class="ru.it.lecm.nd.scheduler.OutOfDateExecutor" parent="action-executer"
           p:ignoreLock="false"
           p:publicAction="false"
           p:nodeService-ref="nodeService"
@@ -92,7 +94,4 @@
           p:orgstructureService-ref="serviceOrgstructure"
           p:policyComponent-ref="policyComponent"
     />
-
-
-
 </beans>
