@@ -334,7 +334,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
-				changePointStatus(point,ORDModel.ORD_POINT_PERFORMANCE_STATUS);
+				changePointStatus(point,ORDModel.P_STATUSES.PERFORMANCE_STATUS);
 				//подпишем ОРД в качестве наблюдателя за поручением
 				documentEventService.subscribe(errand, ord);
 			}
@@ -428,7 +428,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-	public void changePointStatus(ScriptNode ordSNode){
+	public void changePointStatusByErrand(ScriptNode ordSNode){
 		NodeRef ord = ordSNode.getNodeRef();
         Set<NodeRef> senders = documentEventService.getEventSenders(ord);
 		for (NodeRef sender : senders){
@@ -438,7 +438,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				if (null!=point){
 					if ("Исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Исполнен"
-						changePointStatus(point,ORDModel.ORD_POINT_EXECUTED_STATUS);
+						changePointStatus(point,ORDModel.P_STATUSES.EXECUTED_STATUS);
 						//установим атрибут дату исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
@@ -449,7 +449,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					}
 					if ("Не исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Не исполнен"
-						changePointStatus(point,ORDModel.ORD_POINT_NOT_EXECUTED_STATUS);
+						changePointStatus(point,ORDModel.P_STATUSES.NOT_EXECUTED_STATUS);
 						//установим атрибут дата исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
@@ -462,7 +462,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
 					if (!"Исполнено".equals(errandStatus) && is_expired){
 						// переведем пункт в статус "Просрочен"
-						changePointStatus(point,ORDModel.ORD_POINT_EXPIRED_STATUS);
+						changePointStatus(point,ORDModel.P_STATUSES.EXPIRED_STATUS);
 						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
@@ -476,10 +476,22 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-	private void changePointStatus(NodeRef point, String status){
-		NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-		List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-		nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+	private void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
+		String status = ORDModel.POINT_STATUSES.get(statusKey);
+		if (null != status){
+			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
+			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
+			nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
+		}
+	}
+
+	public void changePointStatus(String sPointRef, String status){
+		if (null!=sPointRef && !sPointRef.isEmpty()){
+			NodeRef point = new NodeRef(sPointRef);
+			if (nodeService.exists(point)){
+				changePointStatus(point,ORDModel.P_STATUSES.valueOf(status));
+			}
+		}
 	}
 
 	private NodeRef getErrandLinkedPoint(NodeRef errand){
@@ -488,5 +500,33 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 			return pointAssocs.get(0).getSourceRef();
 		}
 		return null;
+	}
+
+	public String getPointStatus(NodeRef point){
+		List<AssociationRef> statusAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
+		if (statusAssocs.size()>0){
+			NodeRef status =  statusAssocs.get(0).getTargetRef();
+			String statusName = (String) nodeService.getProperty(status, ContentModel.PROP_NAME);
+			return statusName;
+		}
+		return null;
+	}
+
+	public Boolean checkPointExecutedStatus(String sPointRef){
+		if (null!=sPointRef && !sPointRef.isEmpty()){
+			NodeRef point = new NodeRef(sPointRef);
+			if (nodeService.exists(point)){
+				String status = getPointStatus(point);
+				if (null != status){
+					if ( ORDModel.POINT_STATUSES.get(ORDModel.P_STATUSES.EXECUTED_STATUS).equals(status) ){
+						return true;
+					}
+					else{
+						return false;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

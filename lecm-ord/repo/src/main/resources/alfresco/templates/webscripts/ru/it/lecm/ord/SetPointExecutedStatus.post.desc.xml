@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webscript>
+    <shortname>Change point executed status</shortname>
+    <description>Change ORD point executed status</description>
+    <url>/lecm/ord/SetPointExecutedStatus</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>required</transaction>
+    <lifecycle>internal</lifecycle>
+</webscript>
