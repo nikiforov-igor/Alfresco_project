@@ -44,7 +44,7 @@
                     <field id="lecm-ord:css" set="ord1">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block input.autocomplete-input {width: 350px;}
-                            .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {width: 387px;}
+                                .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {width: 387px;}
                                 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width  div.form-field label {float: none;}
                             </control-param>
                         </control>
@@ -82,11 +82,11 @@
                     <field id="lecm-eds-document:file-register-assoc" label="Номенклатура дел" mandatory="true" set="ord8"/>
                     <field id="lecm-ord:canceled-assoc" label="Отменяемые документы" set="ord9">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="itemType">lecm-document:base</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
+                            <control-param name="itemType">lecm-eds-document:base</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-                            <control-param name="additionalFilter">TYPE:\"lecm-ord:document\" OR TYPE:\"lecm-nd:document\"</control-param>
+                            <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm-statemachine\\:status:\"Действует\" OR @lecm-statemachine\\:status:\"Введён в действие\"))) </control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc" label="Принимаемые документы" set="ord10">
@@ -95,7 +95,7 @@
                             <control-param name="itemType">lecm-nd:document</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="additionalFilter">(@lecm-statemachine\\:status:\"Зарегистрирован\")</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -139,20 +139,20 @@
 
             <!-- Форма атрибутивного поиска -->
             <form id="search">
-				<field-visibility>
-					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-					<show id="lecm-document:title"/>																	<!-- Заголовок -->
-					<show id="cm:created"/>																				<!-- Дата создания -->
-					<show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
-					<show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
-					<show id="lecm-document:author-assoc"/>																<!-- Автор -->
-					<show id="lecm-ord:signers-assoc"/>																	<!-- Подписанты -->
-					<show id="form-css"/>																				<!-- Стили -->
-				</field-visibility>
-				<appearance>
-					<set id="ord-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
+                <field-visibility>
+                    <show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+                    <show id="lecm-document:title"/>																	<!-- Заголовок -->
+                    <show id="cm:created"/>																				<!-- Дата создания -->
+                    <show id="lecm-document-aspects:reg-project-data-date"/>											<!-- Дата регистрации -->
+                    <show id="lecm-document-aspects:reg-project-data-number"/>											<!-- Номер проекта -->
+                    <show id="lecm-document:author-assoc"/>																<!-- Автор -->
+                    <show id="lecm-ord:signers-assoc"/>																	<!-- Подписанты -->
+                    <show id="form-css"/>																				<!-- Стили -->
+                </field-visibility>
+                <appearance>
+                    <set id="ord-document-search-common-set" template="/ru/it/lecm/ord/components/class-set.ftl"/>
 
-					<field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord-document-search-common-set">
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="ord-document-search-common-set">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_ОРД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -161,32 +161,32 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-					<field id="lecm-document:title" set="ord-document-search-common-set" />
-					<field id="cm:created" set="ord-document-search-common-set" >
-						<control template="/org/alfresco/components/form/controls/daterange.ftl"/>
-					</field>
-					<field id="lecm-document-aspects:reg-project-data-date" set="ord-document-search-common-set" >
-						<control template="/org/alfresco/components/form/controls/daterange.ftl"/>
-					</field>
-					<field id="lecm-document-aspects:reg-project-data-number" set="ord-document-search-common-set" />
-					<field id="lecm-document:author-assoc" set="ord-document-search-common-set" />
-					<field id="lecm-ord:signers-assoc" set="ord-document-search-common-set" />
+                    <field id="lecm-document:title" set="ord-document-search-common-set" />
+                    <field id="cm:created" set="ord-document-search-common-set" >
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="ord-document-search-common-set" >
+                        <control template="/org/alfresco/components/form/controls/daterange.ftl"/>
+                    </field>
+                    <field id="lecm-document-aspects:reg-project-data-number" set="ord-document-search-common-set" />
+                    <field id="lecm-document:author-assoc" set="ord-document-search-common-set" />
+                    <field id="lecm-ord:signers-assoc" set="ord-document-search-common-set" />
 
-					<field id="form-css" set="ord-document-search-common-set">
-						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                    <field id="form-css" set="ord-document-search-common-set">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">
-								.ord-document-search-common-set .selectone-control select,
-								.ord-document-search-common-set .form-field input	{
-									width: 460px !important;
-								}
-								.ord-document-search-common-set .autocomplete-block .autocomplete-input {
-									width: 425px !important;
-								}
-							</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
+                                .ord-document-search-common-set .selectone-control select,
+                                .ord-document-search-common-set .form-field input	{
+                                width: 460px !important;
+                                }
+                                .ord-document-search-common-set .autocomplete-block .autocomplete-input {
+                                width: 425px !important;
+                                }
+                            </control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
         </forms>
     </config>
     <config evaluator="node-type" condition="lecm-ord:document">
@@ -281,11 +281,11 @@
 
                     <field id="lecm-ord:canceled-assoc" set="ord6">
                         <control template="/ru/it/lecm/base-share/components/controls/association-search-control-with-dialog.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
-                            <control-param name="itemType">lecm-document:base</control-param>
+                            <control-param name="rootLocation">/app:company_home</control-param>
+                            <control-param name="itemType">lecm-eds-document:base</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-                            <control-param name="additionalFilter">TYPE:\"lecm-ord:document\" OR TYPE:\"lecm-nd:document\"</control-param>
+                            <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm-statemachine\\:status:\"Действует\" OR @lecm-statemachine\\:status:\"Введён в действие\"))) </control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc" set="ord7">
@@ -294,7 +294,7 @@
                             <control-param name="itemType">lecm-nd:document</control-param>
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
-                            <control-param name="additionalFilter"></control-param>
+                            <control-param name="additionalFilter">(@lecm-statemachine\\:status:\"Зарегистрирован\")</control-param>
                         </control>
                     </field>
 
@@ -349,7 +349,7 @@
                     <show id="lecm-ord-table-structure:item-comment"/>
                     <show id="lecm-ord-table-structure:errand-assoc"/>
                     <show id="lecm-ord:css" />
-					<show id="lecm-ord:executed-button" force="true" />
+                    <show id="lecm-ord:executed-button" force="true" />
                 </field-visibility>
                 <appearance>
                     <set id="item-container" template="/ru/it/lecm/ord/components/class-set.ftl"/>
@@ -449,7 +449,7 @@
                             <control-param name="formatString">{lecm-ord-table-structure:errand-assoc/lecm-document:present-string}</control-param>
                         </control>
                     </field>
-					<field id="lecm-ord:executed-button" set="item4">
+                    <field id="lecm-ord:executed-button" set="item4">
                         <control template="/ru/it/lecm/ord/components/controls/execute-point-control.ftl"/>
                     </field>
                 </appearance>
