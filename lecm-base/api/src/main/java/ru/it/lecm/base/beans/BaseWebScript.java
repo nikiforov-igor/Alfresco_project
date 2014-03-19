@@ -8,8 +8,10 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -99,4 +101,32 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 	public String wrapperTitle(String text, String title) {
 		return  "<span class=\"wrapper-title\" title=\"" + title + "\">" + text + "</span>";
 	}
+
+    /**
+     * Извлекает nodeRef`ы из коллекции, представленной в виде Scriptable
+     * @param scriptableCollection Scriptable, являющийся коллекцией ScriptNode или строковых NodeRef
+     * @return
+     */
+    public List<NodeRef> getNodeRefsFromScriptableCollection(Scriptable scriptableCollection) {
+        List<NodeRef> additionalUnitsRefs = null;
+        if (scriptableCollection != null) {
+            Object[] elements = Context.getCurrentContext().getElements(scriptableCollection);
+            additionalUnitsRefs = new ArrayList<NodeRef>(elements.length);
+            for (Object element : elements) {
+                if (element != null) {
+                    if (element instanceof NativeJavaObject) {
+                        Object unwrappedObj = ((NativeJavaObject) element).unwrap();
+                        if (unwrappedObj != null && unwrappedObj instanceof ScriptNode) {
+                            additionalUnitsRefs.add(((ScriptNode) unwrappedObj).getNodeRef());
+                        }
+                    } else if (element instanceof String) {
+                        if (NodeRef.isNodeRef((String) element)) {
+                            additionalUnitsRefs.add(new NodeRef((String) element));
+                        }
+                    }
+                }
+            }
+        }
+        return additionalUnitsRefs;
+    }
 }
