@@ -97,6 +97,9 @@ public interface DocumentService {
 
 	public static final QName PROP_SYS_WORKFLOWS = QName.createQName(DOCUMENT_NAMESPACE_URI, "sys_workflows");
 
+	public static final QName ASPECT_DOC_CANCELLED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "cancelled");
+	public static final QName ASPECT_DOC_ACCEPT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "in-work");
+
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
