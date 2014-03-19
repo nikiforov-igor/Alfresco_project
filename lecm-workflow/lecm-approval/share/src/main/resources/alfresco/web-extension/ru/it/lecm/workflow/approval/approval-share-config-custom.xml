@@ -200,7 +200,21 @@
 					<field id="lecmApprovalResult:approvalResultItemCommentAssoc" label-id="field.comment.file"/>
 				</appearance>
 			</form>
-
+            <form id="internal-datagrid">
+                <field-visibility>
+                    <show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>
+                    <show id="lecmApprovalResult:approvalResultItemDecision"/>
+                    <show id="lecm-workflow-result:workflow-result-item-finish-date"/>
+                    <show id="lecmApprovalResult:approvalResultItemCommentAssoc"/>
+                    <show id="lecmApprovalResult:approvalResultItemComment"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-workflow-result:workflow-result-item-employee-assoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+                    <field id="lecm-workflow-result:workflow-result-item-finish-date" label-id="field.date"/>
+                    <field id="lecmApprovalResult:approvalResultItemCommentAssoc" label=""/>
+                    <field id="lecmApprovalResult:approvalResultItemComment" label=""/>
+                </appearance>
+            </form>
 			<form id="approvalItemsDataGridControl">
 				<field-visibility>
 					<show id="lecm-workflow-result:workflow-result-item-employee-assoc"/>

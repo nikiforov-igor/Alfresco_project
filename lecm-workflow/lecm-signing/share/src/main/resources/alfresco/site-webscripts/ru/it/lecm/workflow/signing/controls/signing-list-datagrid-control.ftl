@@ -41,6 +41,7 @@
 		LogicECM.CurrentModules["signingListDatagridControl"].setMessages(${messages});
 		LogicECM.CurrentModules["signingListDatagridControl"].setOptions({
 			usePagination: false,
+            datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
 			bubblingLabel: "SigningListDatagridControl",

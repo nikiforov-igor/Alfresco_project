@@ -28,7 +28,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 								datagridMeta: {
 									itemType: me.approvalListType,
 									nodeRef: me.approvalContainer,
-									datagridFormId: "approvalListDataGridControl",
+									datagridFormId: me.options.approvalListDatagridId, //"approvalListDataGridControl",
 									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
 									searchConfig: {
 										filter: '+PATH:"' + me.approvalContainerPath + '//*"'
@@ -61,6 +61,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/workflow/approval/approvalListItemsDatagrid",
 				dataObj: {
 					nodeRef: nodeRef,
+                    datagridFormId: me.options.approvalItemsDatagridId,
 					approvalItemType: this.approvalItemType
 				},
 				successCallback: {
@@ -89,7 +90,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				datagridMeta: {
 					itemType: me.approvalItemType,
 					nodeRef: me.approvalListNodeRef,
-					datagridFormId: "approvalItemsDataGridControl",
+					datagridFormId: me.options.datagridFormId,
 					sort: 'lecm-workflow:assignee-order|true'
 				},
 				bubblingLabel: containerId

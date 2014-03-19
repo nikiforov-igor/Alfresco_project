@@ -163,11 +163,15 @@
                     </field>
 
                     <field id="lecm-internal:approval-list" set="exist-permissions" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
+                            <control-param name="approvalItemsDatagridId">internal-datagrid</control-param>
+                        </control>
                     </field>
 
                     <field id="lecm-internal:signing-list" set="approval-and-signing" label="Подписание">
-                        <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
+                        <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl">
+                            <control-param name="datagridFormId">internal</control-param>
+                        </control>
                     </field>
 
                     <field id="lecm-internal:style-for-approval-and-signing-tab" set="approval-and-signing">

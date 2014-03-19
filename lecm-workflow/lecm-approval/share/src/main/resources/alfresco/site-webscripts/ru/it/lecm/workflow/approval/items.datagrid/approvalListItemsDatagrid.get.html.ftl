@@ -11,6 +11,7 @@
 	LogicECM.CurrentModules["${id}"].setOptions({
 		usePagination: false,
 		showExtendSearchBlock: false,
+        datagridFormId: "${formId!"approvalItemsDataGridControl"}",
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		expandable: false,

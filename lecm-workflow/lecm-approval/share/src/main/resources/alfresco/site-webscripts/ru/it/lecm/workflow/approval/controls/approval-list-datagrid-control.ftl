@@ -43,6 +43,8 @@
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
+            approvalListDatagridId: "${field.control.params.approvalListDatagridId!"approvalListDataGridControl"}",
+            approvalItemsDatagridId: "${field.control.params.approvalItemsDatagridId!"approvalItemsDataGridControl"}",
 			bubblingLabel: "ApprovalListDataGridControl",
 			expandable: true,
 			showActionColumn: true,
