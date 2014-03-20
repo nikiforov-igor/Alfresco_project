@@ -149,7 +149,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
 
 	            var buttonName = this.msg("button.group-actions");
-                var items = this.modules.dataGrid.getSelectedItems();
+                var items = this.modules.dataGrid.getAllSelectedItems();
                 if (items.length == 0) {
                     button.set("disabled", true);
                 } else {
@@ -165,11 +165,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             onCheckDocumentFinished: function onCheckDocumentFinished_Function() {
                 var button = this.toolbarButtons["defaultActive"].groupActionsButton;
                 var menu = button.getMenu();
-                var datagridItems = this.modules.dataGrid.getSelectedItems();
-                var items = [];
-                for (var i in datagridItems) {
-                    items.push(datagridItems[i].nodeRef);
-                }
+                var items = this.modules.dataGrid.getAllSelectedItems();
                 var loadItem = [];
                 loadItem.push({
                     text: "Загрузка...",
@@ -429,6 +425,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	                this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isReportNode || types.length != 1);
 	                this.currentType = types[0];
                 }
+	            this.onCheckDocument();
             },
 
             _buildPreferencesValue: function () {

@@ -432,6 +432,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
                 elCell.innerHTML = html;
             };
-        }
+        },
+
+	    getAllSelectedItems: function DataGrid_getSelectedItems()
+	    {
+		    var items = [];
+		    for (var item in this.selectedItems) {
+			    if (this.selectedItems.hasOwnProperty(item)) {
+				    items.push(item);
+			    }
+		    }
+		    return items;
+	    }
     }, true);
 })();
