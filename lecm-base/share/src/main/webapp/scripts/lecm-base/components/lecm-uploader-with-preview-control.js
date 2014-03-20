@@ -48,6 +48,8 @@ LogicECM.control = LogicECM.control || {};
 
 			selectedItems: null,
 
+			flashUploaderWasShow: true,
+
 			onReady:function () {
 				if (!this.options.disabled) {
 					LogicECM.LecmUploaderInitializer.initLecmUploaders();
@@ -258,14 +260,19 @@ LogicECM.control = LogicECM.control || {};
 									Dom.get(me.id + "-uploader-preview-container").innerHTML = response.serverResponse.responseText;
                                     var previewId = me.id + "-uploader-preview-container-full-window-div";
 
-									Event.onAvailable(previewId, function() {
-										var preview = Dom.get(previewId);
-										var container = Dom.get(me.id + "-uploader-preview-container-previewer-div");
+									if (me.flashUploaderWasShow) {
+										me.flashUploaderWasShow = false;
+										Event.onAvailable(previewId, function() {
+											var preview = Dom.get(previewId);
+											var container = Dom.get(me.id + "-uploader-preview-container-previewer-div");
+											container.innerHTML = "";
 
-                                        preview.setAttribute("style", "");
-										container.innerHTML = preview.innerHTML;
-										preview.innerHTML = "";
-									}, {}, me);
+											preview.setAttribute("style", "");
+											container.appendChild(preview);
+
+											me.flashUploaderWasShow = true;
+										}, {}, me);
+									}
 								},
 								scope: this
 							},
