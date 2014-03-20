@@ -7,6 +7,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
+	var $combine = Alfresco.util.combinePaths;
+
     LogicECM.module.ARM.DataGrid = function (containerId) {
         LogicECM.module.ARM.DataGrid.superclass.constructor.call(this, containerId)
 
