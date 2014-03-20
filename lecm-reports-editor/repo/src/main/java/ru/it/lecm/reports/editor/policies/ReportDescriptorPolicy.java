@@ -92,17 +92,19 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         // выражение заглушка по определенным правилам {{subreport::<код_подотчета>}}
         properties.put(ReportsEditorModel.PROP_REPORT_DATA_COLUMN_EXPRESSION, "{{subreport::" + subReportCode + "}}");
 
-        NodeRef column = nodeService.createNode(mainDS, ContentModel.ASSOC_CONTAINS,
-                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-                ReportsEditorModel.TYPE_REPORT_DATA_COLUMN, properties).getChildRef();
+        NodeRef column = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, subReportName);
+        if (column == null) {
+            column = nodeService.createNode(mainDS, ContentModel.ASSOC_CONTAINS,
+                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
+                    ReportsEditorModel.TYPE_REPORT_DATA_COLUMN, properties).getChildRef();
 
-        NodeRef dataColumnStringType = null;
-        List<NodeRef> types = reportsEditorService.getDataColumnTypeByClass(String.class.getName());
-        if (types.size() > 0) {
-            dataColumnStringType = types.get(0);
+            NodeRef dataColumnStringType = null;
+            List<NodeRef> types = reportsEditorService.getDataColumnTypeByClass(String.class.getName());
+            if (types.size() > 0) {
+                dataColumnStringType = types.get(0);
+            }
+            nodeService.createAssociation(column, dataColumnStringType, ReportsEditorModel.ASSOC_REPORT_DATA_COLUMN_COLUMN_TYPE);
         }
-        nodeService.createAssociation(column, dataColumnStringType, ReportsEditorModel.ASSOC_REPORT_DATA_COLUMN_COLUMN_TYPE);
-
         return column;
     }
 
