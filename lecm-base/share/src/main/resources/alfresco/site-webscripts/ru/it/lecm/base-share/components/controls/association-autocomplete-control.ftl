@@ -195,7 +195,7 @@
         <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
         <input type="hidden" id="${controlId}-selectedItems"/>
 
-        <div class="autocomplete-block <#if showCreateNewButton>with-two-buttons</#if>">
+        <div class="autocomplete-block <#if showCreateNewLink>with-two-buttons</#if>">
             <div id="${controlId}-autocomplete">
                 <input id="${controlId}-autocomplete-input" name="${field.name}-autocomplete-input" type="text" class="autocomplete-input"/>
                 <div class="show-picker">
