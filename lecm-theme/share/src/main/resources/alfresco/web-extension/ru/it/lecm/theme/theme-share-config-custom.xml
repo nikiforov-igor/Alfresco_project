@@ -18,7 +18,6 @@
                 <item type="link" id="contracts">/contracts-main</item>
                 <item type="link" id="errands-list-32">/errands-list</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
-                <item type="js" id="messenger">LogicECM.module.LecmIM.Messenger</item>
                 <item type="js" id="sites" icon="lecm-sites.png">Alfresco.module.Sites</item>
                 <item type="container" id="more" icon="lecm-more.png">
                     <container-group id="lecms" label="LogicECM" >
@@ -83,9 +82,6 @@
                 <js src="/modules/header/sites.js" />
                 <js src="/scripts/notifications.js" />
                 <js src="/yui/event-simulate/event-simulate.js" />
-                <js src="/scripts/lecm_im/lecm_im_config.js" />
-                <js src="/scripts/lecm-im-header.js" />
-                <js src="/scripts/lecm_im/lecm_im.nocache.js" />
 				<js src="/scripts/lecm-calendar/absence/absence-instant.js"/>
             </dependencies>
         </header>

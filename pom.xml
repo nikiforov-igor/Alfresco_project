@@ -589,12 +589,6 @@
 			</build>
 		</profile>
 		<profile>
-			<id>lecmIM</id>
-			<modules>
-				<module>lecm-im</module>
-			</modules>
-		</profile>
-		<profile>
 			<id>logger-all-debug</id>
 			<properties>
 				<module.log.level>debug</module.log.level>

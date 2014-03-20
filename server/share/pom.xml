@@ -472,18 +472,6 @@
 
 	<profiles>
 		<profile>
-			<id>lecmIM</id>
-			<dependencies>
-				<dependency>
-					<groupId>ru.it.lecm.lecm-im</groupId>
-					<artifactId>lecm-im-share</artifactId>
-					<version>${platform.version}</version>
-					<type>amp</type>
-					<scope>runtime</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-		<profile>
 			<id>non-production-modules</id>
 			<dependencies>
 				<dependency>
