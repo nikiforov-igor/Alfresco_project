@@ -1,13 +1,8 @@
 package ru.it.lecm.nd.scheduler;
 
-
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
@@ -30,7 +25,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author ikhalikov
@@ -44,7 +38,6 @@ public class InWorkScheduler extends AbstractScheduledAction {
 	private Scheduler scheduler;
 	private String cronExpression = "0 1 * * * ? *"; // каждый час в xx:01
 	private SearchService searchService;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-M\\-dd'T'HH");
 	private final String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND =@%s:\"Введен в действие\"";
 	private final static Logger logger = LoggerFactory.getLogger(InWorkScheduler.class);
 
@@ -58,10 +51,6 @@ public class InWorkScheduler extends AbstractScheduledAction {
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
-	}
-
-	public void setDateFormat(DateFormat dateFormat) {
-		this.dateFormat = dateFormat;
 	}
 
 	@Override
@@ -88,7 +77,6 @@ public class InWorkScheduler extends AbstractScheduledAction {
 	public List<NodeRef> getNodes() {
 
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
-		Date now = new Date();
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
@@ -100,6 +88,12 @@ public class InWorkScheduler extends AbstractScheduledAction {
 			for (ResultSetRow row : results) {
 				NodeRef currentNodeRef = row.getNodeRef();
 				nodes.add(currentNodeRef);
+			}
+		} catch (Exception ex) {
+			if (logger.isDebugEnabled()) {
+				logger.error(ex.getMessage(), ex);
+			} else {
+				logger.error(ex.getMessage());
 			}
 		} finally {
 			if (results != null) {

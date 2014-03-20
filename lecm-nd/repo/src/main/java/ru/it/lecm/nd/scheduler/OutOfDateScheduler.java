@@ -6,11 +6,8 @@
 
 package ru.it.lecm.nd.scheduler;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
@@ -42,8 +39,7 @@ public class OutOfDateScheduler extends AbstractScheduledAction {
 	private Scheduler scheduler;
 	private String cronExpression = "0 1 * * * ? *"; // каждый час в xx:01
 	private SearchService searchService;
-	private DateFormat dateFormat = new SimpleDateFormat("yyyy\\-M\\-dd'T'HH");
-	private String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND @%s:\"Действует\"";
+	private final String searchQueryFormat = "TYPE:\"%s\" AND @%s:[MIN TO NOW] AND @%s:\"Действует\"";
 	private final static Logger logger = LoggerFactory.getLogger(OutOfDateScheduler.class);
 
 	public void setScheduler(Scheduler scheduler) {
@@ -56,10 +52,6 @@ public class OutOfDateScheduler extends AbstractScheduledAction {
 
 	public void setSearchService(SearchService searchService) {
 		this.searchService = searchService;
-	}
-
-	public void setDateFormat(DateFormat dateFormat) {
-		this.dateFormat = dateFormat;
 	}
 
 	@Override
@@ -85,7 +77,6 @@ public class OutOfDateScheduler extends AbstractScheduledAction {
 	@Override
 	public List<NodeRef> getNodes() {
 		List<NodeRef> nodes = new ArrayList<NodeRef>();
-		Date now = new Date();
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
@@ -97,6 +88,12 @@ public class OutOfDateScheduler extends AbstractScheduledAction {
 			for (ResultSetRow row : results) {
 				NodeRef currentNodeRef = row.getNodeRef();
 				nodes.add(currentNodeRef);
+			}
+		} catch (Exception ex) {
+			if (logger.isDebugEnabled()) {
+				logger.error(ex.getMessage(), ex);
+			} else {
+				logger.error(ex.getMessage());
 			}
 		} finally {
 			if (results != null) {
