@@ -122,6 +122,19 @@
 						},
 						scope: this
 					},
+					doBeforeDialogShow: {
+						fn: function (p_form, p_dialog) {
+							var message;
+							if (this.options.createNewMessage) {
+								message = this.options.createNewMessage;
+							} else {
+								message = this.msg("dialog.createNew.title");
+							}
+							p_dialog.dialog.setHeader(message);
+						},
+						scope: this
+					},
+
 					onSuccess: {
 						fn: function( response ) {
 
@@ -390,6 +403,12 @@
 		});
 	})();
 
-	new LogicECM.module.SelectRepresentativeForContractor("${controlId}");
+	new LogicECM.module.SelectRepresentativeForContractor("${controlId}").setOptions({
+		<#if field.control.params.createNewMessage??>
+			createNewMessage: "${field.control.params.createNewMessage}"
+		<#elseif field.control.params.createNewMessageId??>
+			createNewMessage: "${msg(field.control.params.createNewMessageId)}"
+		</#if>
+	});
 //]]>
 </script>

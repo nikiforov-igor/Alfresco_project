@@ -75,11 +75,13 @@
 				            <control-param name="nameSubstituteString">{cm:name}</control-param>
 				            <control-param name="showCreateNewLink">true</control-param>
 				            <control-param name="showCreateNewButton">true</control-param>
+							<control-param name="createNewMessageId">label.new-contractor</control-param>
 			            </control>
 		            </field>
 		            <field id="lecm-incoming:addressee-assoc" set="incoming5">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
+							<control-param name="createNewMessage">Новый адресант</control-param>
 			            </control>
 		            </field>
 
@@ -247,11 +249,13 @@
 				            <control-param name="nameSubstituteString">{cm:name}</control-param>
 				            <control-param name="showCreateNewLink">true</control-param>
 				            <control-param name="showCreateNewButton">true</control-param>
+							<control-param name="createNewMessageId">label.new-contractor</control-param>
 			            </control>
 		            </field>
 		            <field id="lecm-incoming:addressee-assoc" set="incoming5">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
+							<control-param name="createNewMessage">Новый адресант</control-param>
 			            </control>
 		            </field>
 
