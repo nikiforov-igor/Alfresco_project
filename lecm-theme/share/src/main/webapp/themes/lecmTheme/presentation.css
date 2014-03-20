@@ -928,7 +928,7 @@ span.navigation-separator-alt
 
 .yui-skin-lecmTheme .yui-navset .yui-content {
     background: #f4f6fe;
-    overflow: hidden;
+    overflow: auto;
     margin-bottom: 5px;
 }
 

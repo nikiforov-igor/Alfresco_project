@@ -13,21 +13,21 @@
 			<form>
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
-					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
-					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации -->
-					<show id="lecm-document:title"/>																	<!-- Заголовок -->
-					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
-					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
-					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
-					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
-					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
-					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
-					<show id="lecm-document:creator"/>																	<!-- Автор -->
-					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
-					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
-					<show id="lecm-outgoing:style-for-approval-and-signing-tab" force="true" for-mode="view"/>			<!-- Костыль, обходящий странное поведение base-form-tabs.ftl-->
+					<show id="lecm-document:regnum"/>												<!-- Рег. номер -->
+					<show id="lecm-document:doc-date"/>												<!-- Дата регистрации -->
+					<show id="lecm-document:title"/>												<!-- Заголовок -->
+					<show id="lecm-eds-document:document-type-assoc"/>								<!-- Вид документа -->
+					<show id="lecm-outgoing:delivery-method-assoc"/>								<!-- Способ доставки -->
+					<show id="lecm-outgoing:contractor-assoc" force="true"/>						<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>										<!-- Адресат -->
+					<show id="lecm-eds-document:summaryContent"/>									<!-- Содержание -->
+					<show id="lecm-document:subject-assoc"/>										<!-- Тематика -->
+					<show id="lecm-eds-document:note"/>												<!-- Примечание -->
+					<show id="lecm-eds-document:file-register-assoc"/>								<!-- Номенклатура дел -->
+					<show id="lecm-document:creator"/>												<!-- Автор -->
+					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>			<!-- Листы согласования-->
+					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>			<!-- Листы подписания-->
+					<show id="lecm-outgoing:outgoing-view-form" force="true" for-mode="view"/>		<!-- Костыль, обходящий странное поведение base-form-tabs.ftl и жутких стилей для формы просмотра-->
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -102,7 +102,7 @@
 						<control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
 					</field>
 
-					<field id="lecm-outgoing:style-for-approval-and-signing-tab" set="approval-and-signing">
+					<field id="lecm-outgoing:outgoing-view-form" set="approval-and-signing">
 						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
 							<control-param name="cssFile">lecm-outgoing/outgoing-view-form.css</control-param>
 						</control>

@@ -6,5 +6,5 @@
 </#if>
 
 <#if cssFile?string != "">
-    <link rel="stylesheet" type="text/css" href="/share/res/css/${cssFile}" />
+	<link rel="stylesheet" type="text/css" href="/share/res/css/${cssFile}" />
 </#if>
