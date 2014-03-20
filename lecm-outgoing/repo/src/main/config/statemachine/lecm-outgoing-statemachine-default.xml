@@ -707,7 +707,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -718,7 +718,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/4267c834-e5ae-4784-ad54-b2b9fa513893</nodeRef>
 										<properties>
 											<property>
@@ -1993,7 +1993,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -2004,7 +2004,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/ae781769-27ba-48b3-92b0-d93fa47efad9</nodeRef>
 										<properties>
 											<property>
@@ -2490,7 +2490,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/04ee43b4-7f93-47c2-98a3-adecdf744386</nodeRef>
 										<properties>
 											<property>
@@ -3483,7 +3483,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -3494,7 +3494,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/57f104ed-38db-49fd-afce-7a68222890bd</nodeRef>
 										<properties>
 											<property>
@@ -4595,7 +4595,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -4606,7 +4606,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/b779821e-6663-4cd1-b0db-8683712a53ab</nodeRef>
 										<properties>
 											<property>
@@ -5962,7 +5962,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -5973,7 +5973,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/cf524633-b1e7-416f-b49e-b63cfa45dd4b</nodeRef>
 										<properties>
 											<property>
@@ -6996,7 +6996,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -7007,7 +7007,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/ce89977f-7046-4208-aa96-da85cd9fa264</nodeRef>
 										<properties>
 											<property>
@@ -7777,7 +7777,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -7788,7 +7788,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/07d3d23e-d5d7-4250-804e-ec069e589eb7</nodeRef>
 										<properties>
 											<property>
@@ -8573,7 +8573,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -8584,7 +8584,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/207741a7-6654-4343-b054-6b5218cead5e</nodeRef>
 										<properties>
 											<property>
@@ -9324,7 +9324,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -9335,7 +9335,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/393c280e-1178-4d92-8fdd-e38881f00185</nodeRef>
 										<properties>
 											<property>
@@ -10124,7 +10124,7 @@
 											<property>
 												<name>editableField</name>
 												<value>
-													<![CDATA[false]]>
+													<![CDATA[true]]>
 												</value>
 											</property>
 										</properties>
@@ -10135,7 +10135,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/8f4963bb-9f81-4c31-bfee-2d412ae9c802</nodeRef>
 										<properties>
 											<property>
@@ -10621,7 +10621,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/1e88f294-c23b-4808-86f2-f1e7a4897432</nodeRef>
 										<properties>
 											<property>
@@ -11027,7 +11027,7 @@
 									</node>
 									<node>
 										<type>documentField</type>
-										<name>lecm-outgoing_registrar-assoc</name>
+										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/c004672e-7069-474a-aa2b-276f0cdeb5a7</nodeRef>
 										<properties>
 											<property>

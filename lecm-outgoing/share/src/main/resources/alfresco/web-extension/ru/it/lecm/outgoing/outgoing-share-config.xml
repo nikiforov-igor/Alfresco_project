@@ -289,12 +289,13 @@
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель|адресант -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
-					<show id="lecm-outgoing:registrar-assoc"/>															<!-- Регистратор -->
+					<show id="lecm-document-aspects:registrator-assoc"/>												<!-- Регистратор -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Краткое содержание -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
+					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 				</field-visibility>
 			</form>
 		</forms>
