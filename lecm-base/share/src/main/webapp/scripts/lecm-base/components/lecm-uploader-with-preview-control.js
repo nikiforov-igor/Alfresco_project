@@ -264,6 +264,7 @@ LogicECM.control = LogicECM.control || {};
 
                                         preview.setAttribute("style", "");
 										container.innerHTML = preview.innerHTML;
+										preview.innerHTML = "";
 									}, {}, me);
 								},
 								scope: this
