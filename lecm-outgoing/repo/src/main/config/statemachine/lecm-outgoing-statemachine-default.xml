@@ -174,7 +174,7 @@
 (function(){
     var outgoing = stm_document,
         currentEmployee = orgstructure.getCurrentEmployee();
-    statemachine.grandDynamicRoleForEmployee(outgoing, currentEmployee, "OUTGOING_CREATOR");
+    lecmPermission.grantDynamicRole(outgoing, currentEmployee, "OUTGOING_CREATOR", "LECM_BASIC_PG_Owner");
 })();
 ]]>
 																</value>
