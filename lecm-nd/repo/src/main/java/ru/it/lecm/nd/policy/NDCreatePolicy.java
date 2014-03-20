@@ -12,6 +12,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -66,9 +67,8 @@ public class NDCreatePolicy implements NodeServicePolicies.OnUpdatePropertiesPol
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef doc = childAssocRef.getChildRef();
-		NodeRef employee = orgstructureService.getCurrentEmployee();
-		List<NodeRef> orgUnitList = orgstructureService.getEmployeeUnits(employee, false);
-		nodeService.createAssociation(doc, orgUnitList.get(0), DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+		List<AssociationRef> orgList = nodeService.getTargetAssocs(doc, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC);
+		nodeService.createAssociation(doc, orgList.get(0).getTargetRef(), DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
 	}
 
 }
