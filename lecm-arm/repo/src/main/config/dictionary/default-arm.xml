@@ -9,7 +9,7 @@
 				<property name="lecm-arm:order"><![CDATA[10]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<property
-						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-nd:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<items>
 					<item name="cm:Входящие" type="lecm-arm:node">
@@ -120,51 +120,51 @@
 								</items>
 							</item>
 							<item name="cm:74d3af86-d584-4e10-b1be-9e3af768add6" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[0fad7aff-0c67-423b-8bb2-6ac826ca81e2]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+								<property name="cm:name"><![CDATA[0fad7aff-0c67-423b-8bb2-6ac826ca81e2]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:f030e0fd-7074-4039-a1e1-deb2882bed28" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[828a4c0f-b2bd-4b7e-95d2-efafdce002fd]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+								<property name="cm:name"><![CDATA[828a4c0f-b2bd-4b7e-95d2-efafdce002fd]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:106ecd0c-83ba-4f1d-a9e9-2b87e3fe388a" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[106ecd0c-83ba-4f1d-a9e9-2b87e3fe388a]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Контроль]]></property>
+								<property name="cm:name"><![CDATA[106ecd0c-83ba-4f1d-a9e9-2b87e3fe388a]]></property>
 								<property
 										name="lecm-arm:field-name"><![CDATA[lecm-document-aspects:is-on-control]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:fe736425-8ab3-4278-b267-8e8e10f6dfb9" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[cd857398-41f8-4266-b9f2-495e2982bfea]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+								<property name="cm:name"><![CDATA[cd857398-41f8-4266-b9f2-495e2982bfea]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-incoming:execution-date]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:a47a6060-36ee-404c-afa4-12494761dd50" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[60390dbc-032f-48c9-85eb-2f3dd37b4b5d]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[60390dbc-032f-48c9-85eb-2f3dd37b4b5d]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:4dafe976-cf86-4c61-8e36-884d0d8b2252" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[4dafe976-cf86-4c61-8e36-884d0d8b2252]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+								<property name="cm:name"><![CDATA[4dafe976-cf86-4c61-8e36-884d0d8b2252]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:62f1c2a3-81c6-4a26-a963-e4843baee18c" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[8f2d654f-8595-4ce1-95e9-3afcb8fa83f3]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
+								<property name="cm:name"><![CDATA[8f2d654f-8595-4ce1-95e9-3afcb8fa83f3]]></property>
 								<property
 										name="lecm-arm:field-name"><![CDATA[lecm-incoming:recipient-assoc]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
@@ -357,68 +357,68 @@
 										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Закрыт']]></property>
 							</item>
 							<item name="cm:90146913-8510-4cf1-82fc-5e6f66421759" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[03a8e274-c991-41ed-99f2-1a0764fad45f]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+								<property name="cm:name"><![CDATA[03a8e274-c991-41ed-99f2-1a0764fad45f]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 							</item>
 							<item name="cm:9d3d9e45-974d-4e95-8038-2eaa9308babf" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[2fe0f24f-61af-4e50-b0cf-72b565c4b5fa]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[2fe0f24f-61af-4e50-b0cf-72b565c4b5fa]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 							</item>
 							<item name="cm:5894d91f-eda8-4cdc-b191-196b46e1236b" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[1b855373-d85b-4443-8809-157fff042e99]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+								<property name="cm:name"><![CDATA[1b855373-d85b-4443-8809-157fff042e99]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 							</item>
 							<item name="cm:506f81a0-feb9-4da4-af20-8a0a06575035" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[21be5a42-3962-4740-89c7-77a63052b4f3]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+								<property name="cm:name"><![CDATA[21be5a42-3962-4740-89c7-77a63052b4f3]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 							</item>
 							<item name="cm:edadc8fa-fb96-4386-8c32-238f934c2672" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[3f6b7c75-8e25-486e-bd2a-d9c47f6e49ff]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+								<property name="cm:name"><![CDATA[3f6b7c75-8e25-486e-bd2a-d9c47f6e49ff]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:1f548519-5842-45a5-af7f-2780a219b05c" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[b1064b77-4c33-48c1-9e45-d866fa450250]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+								<property name="cm:name"><![CDATA[b1064b77-4c33-48c1-9e45-d866fa450250]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:fb925945-13a1-4aed-9c35-61c5441e3a45" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[ca3f28a3-035f-423a-876c-5bc22ab79700]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+								<property name="cm:name"><![CDATA[ca3f28a3-035f-423a-876c-5bc22ab79700]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:063be830-e848-4412-9844-90f9331aacf5" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[1872aae5-d4e5-4760-a85f-4746ad6c9206]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[1872aae5-d4e5-4760-a85f-4746ad6c9206]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:38997060-708e-4908-abb6-58dd5254f465" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[38997060-708e-4908-abb6-58dd5254f465]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+								<property name="cm:name"><![CDATA[38997060-708e-4908-abb6-58dd5254f465]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
-                            <item name="cm:755cf330-0ffb-4864-ad0f-3acc93e86a42" type="lecm-arm:field">
-                                <property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
-                                <property name="cm:name"><![CDATA[0a1904cb-0c8d-45cd-8fc8-72792577d2c4]]></property>
-                                <property name="lecm-arm:field-name">
-                                    <![CDATA[lecm-outgoing:contractor-assoc]]></property>
-                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
-                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
-                            </item>
+							<item name="cm:755cf330-0ffb-4864-ad0f-3acc93e86a42" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Получатель]]></property>
+								<property name="cm:name"><![CDATA[0a1904cb-0c8d-45cd-8fc8-72792577d2c4]]></property>
+								<property
+										name="lecm-arm:field-name"><![CDATA[lecm-outgoing:contractor-assoc]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+							</item>
 						</items>
 						<assocs>
 							<assoc type="lecm-arm:fields-assoc"
@@ -535,28 +535,28 @@
 										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Направлен']]></property>
 							</item>
 							<item name="cm:b9ce3da2-1ed5-437d-a192-ee4d648eb17e" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[0412d630-809c-4e95-9946-19412b030f81]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+								<property name="cm:name"><![CDATA[0412d630-809c-4e95-9946-19412b030f81]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 							</item>
 							<item name="cm:106e9aa3-33e8-4ce2-b16f-f5aaf8745963" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[63d9cf36-3b52-4d37-9dd9-7d36fdcc8aba]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+								<property name="cm:name"><![CDATA[63d9cf36-3b52-4d37-9dd9-7d36fdcc8aba]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 							</item>
 							<item name="cm:5262d102-1b3f-473f-9326-d3b5b5a2fe6c" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[bb97383b-8791-484b-8320-fce3fe13b7f6]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+								<property name="cm:name"><![CDATA[bb97383b-8791-484b-8320-fce3fe13b7f6]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 							</item>
 							<item name="cm:fb895b9e-7088-437a-8b41-3be7f51304cf" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[195bc1aa-4a38-4a48-9fca-40d77f29f3ad]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[195bc1aa-4a38-4a48-9fca-40d77f29f3ad]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 							</item>
 							<item name="cm:d455703f-c7f1-4c14-990d-e477487a9bbb" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[43d8968b-a00a-4496-be15-3438878c9231]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Вид внутреннего документа]]></property>
+								<property name="cm:name"><![CDATA[43d8968b-a00a-4496-be15-3438878c9231]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-internal:doc-type-assoc]]></property>
 							</item>
 							<item name="cm:49fd30f3-94b9-44eb-b5b2-c7f1a0c1a82f" type="lecm-arm:field">
@@ -585,8 +585,6 @@
 							<assoc type="lecm-arm:fields-assoc"
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Внутренние/43d8968b-a00a-4496-be15-3438878c9231"/>
 							<assoc type="lecm-arm:fields-assoc"
-							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Внутренние/be342317-eabd-4390-90f5-1279058a666c"/>
-							<assoc type="lecm-arm:fields-assoc"
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Внутренние/49fd30f3-94b9-44eb-b5b2-c7f1a0c1a82f"/>
 							<assoc type="lecm-arm:fields-assoc"
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/Внутренние/ce8184b5-f69b-46a8-b4b5-6aec3ec65aed"/>
@@ -602,40 +600,40 @@
 						<property name="lecm-arm:search-query"><![CDATA[]]></property>
 						<items>
 							<item name="cm:a23b9c43-ab1b-4996-ba24-67768f083391" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[77efe101-9016-422e-bbd6-28c6dc66f2fc]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
+								<property name="cm:name"><![CDATA[77efe101-9016-422e-bbd6-28c6dc66f2fc]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:8180b447-3f6e-4481-a89f-052011f93ac9" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[469236a5-f773-4119-b77b-532c1b365153]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
+								<property name="cm:name"><![CDATA[469236a5-f773-4119-b77b-532c1b365153]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
 							</item>
 							<item name="cm:32fa8457-e33e-4a6f-ad2f-46a6789511e4" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[ef0584b5-5adf-4467-8cb9-b5c4e5750f37]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
+								<property name="cm:name"><![CDATA[ef0584b5-5adf-4467-8cb9-b5c4e5750f37]]></property>
 								<property
 										name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc]]></property>
 							</item>
 							<item name="cm:b4958edf-2177-4739-b84a-880789071f82" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[eb3ff738-c510-4561-acf1-6444413a8db4]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[eb3ff738-c510-4561-acf1-6444413a8db4]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 							</item>
 							<item name="cm:1735234b-a622-4ba7-b0b9-9832fffbbed0" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[b6992bd1-7f5c-41f4-809d-cbf9628c9258]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Контролёр]]></property>
+								<property name="cm:name"><![CDATA[b6992bd1-7f5c-41f4-809d-cbf9628c9258]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-ord:controller-assoc]]></property>
 							</item>
 							<item name="cm:b7796235-64af-49b1-b9c0-49af896adf8f" type="lecm-arm:field">
-								<property name="cm:name"><![CDATA[b7796235-64af-49b1-b9c0-49af896adf8f]]></property>
 								<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+								<property name="cm:name"><![CDATA[b7796235-64af-49b1-b9c0-49af896adf8f]]></property>
 								<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
 								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -816,6 +814,233 @@
 							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/ОРД/b7796235-64af-49b1-b9c0-49af896adf8f"/>
 						</assocs>
 					</item>
+					<item name="cm:НД" type="lecm-arm:node">
+						<property name="cm:name"><![CDATA[НД]]></property>
+						<property name="lecm-arm:order"><![CDATA[50]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+						<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+						<property name="lecm-arm:search-query"><![CDATA[]]></property>
+						<items>
+							<item name="cm:6938aa17-403b-4187-873b-0796b9de8280" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Регистрационный номер]]></property>
+								<property name="cm:name"><![CDATA[d6541293-3135-4dc7-bec3-e55a335de954]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+							</item>
+							<item name="cm:8bfbff35-f65f-4690-a1eb-b3596431b514" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Дата регистрации]]></property>
+								<property name="cm:name"><![CDATA[8bfbff35-f65f-4690-a1eb-b3596431b514]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:9a4135bb-4fc5-41ab-a9ff-bdd19bb839d7" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
+								<property name="cm:name"><![CDATA[9a4135bb-4fc5-41ab-a9ff-bdd19bb839d7]]></property>
+								<property
+										name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[false]]></property>
+							</item>
+							<item name="cm:9c13e90a-e29a-42e2-bd7e-e567ac7fcf75" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+								<property name="cm:name"><![CDATA[9c13e90a-e29a-42e2-bd7e-e567ac7fcf75]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+							</item>
+							<item name="cm:0b557eed-3e9b-4f60-83be-776f0a2bb1e3" type="lecm-arm:field">
+								<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+								<property name="cm:name"><![CDATA[0b557eed-3e9b-4f60-83be-776f0a2bb1e3]]></property>
+								<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
+								<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+								<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+							</item>
+							<item name="cm:Новый" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Новый]]></property>
+								<property name="lecm-arm:order"><![CDATA[10]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Проект']]></property>
+							</item>
+							<item name="cm:В работе" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[В работе]]></property>
+								<property name="lecm-arm:order"><![CDATA[20]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На согласовании' OR @lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке']]></property>
+								<items>
+									<item name="cm:Статусы" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Статусы]]></property>
+										<property name="lecm-arm:order"><![CDATA[0]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+										<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<items>
+											<item name="cm:83f6b98e-9f29-4b88-b5e8-789289dd6edc"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[83f6b98e-9f29-4b88-b5e8-789289dd6edc]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[На согласовании,Согласован,На доработке]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+											       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/В работе/Статусы/83f6b98e-9f29-4b88-b5e8-789289dd6edc"/>
+										</assocs>
+									</item>
+								</items>
+							</item>
+							<item name="cm:На подписании" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[На подписании]]></property>
+								<property name="lecm-arm:order"><![CDATA[30]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На подписании' OR @lecm\-statemachine\:status:'Подписан']]></property>
+								<items>
+									<item name="cm:Статусы" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Статусы]]></property>
+										<property name="lecm-arm:order"><![CDATA[0]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+										<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<items>
+											<item name="cm:f0276fff-5eb1-47a1-83b0-98be7de531b1"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[f0276fff-5eb1-47a1-83b0-98be7de531b1]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[На подписании,Подписан]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+											       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/На подписании/Статусы/f0276fff-5eb1-47a1-83b0-98be7de531b1"/>
+										</assocs>
+									</item>
+								</items>
+							</item>
+							<item name="cm:На обработке регистратором" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[На обработке регистратором]]></property>
+								<property name="lecm-arm:order"><![CDATA[40]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На регистрации' OR @lecm\-statemachine\:status:'Зарегистрирован']]></property>
+								<items>
+									<item name="cm:Статусы" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Статусы]]></property>
+										<property name="lecm-arm:order"><![CDATA[0]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+										<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<items>
+											<item name="cm:1ed9eac3-d6d3-422e-a02c-8464e482e23a"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[1ed9eac3-d6d3-422e-a02c-8464e482e23a]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[На регистрации,Зарегистрирован]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+											       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/На обработке регистратором/Статусы/1ed9eac3-d6d3-422e-a02c-8464e482e23a"/>
+										</assocs>
+									</item>
+								</items>
+							</item>
+							<item name="cm:На исполнении" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[На исполнении]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'На исполнении']]></property>
+							</item>
+							<item name="cm:Закрыт" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[Закрыт]]></property>
+								<property name="lecm-arm:order"><![CDATA[60]]></property>
+								<property name="lecm-arm:types"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property
+										name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\:status:'Исполнен' OR @lecm\-statemachine\:status:'Отменён']]></property>
+								<items>
+									<item name="cm:Статусы" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Статусы]]></property>
+										<property name="lecm-arm:order"><![CDATA[0]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+										<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<items>
+											<item name="cm:48faa5f3-2a4a-4844-8213-7d180001c5f1"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[48faa5f3-2a4a-4844-8213-7d180001c5f1]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[Исполнен,Отменён]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+											<item name="cm:8bafa0c8-d5ed-4841-92c3-1f804680d991"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[8bafa0c8-d5ed-4841-92c3-1f804680d991]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[Исполнен,Отменён]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+											       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/Закрыт/Статусы/8bafa0c8-d5ed-4841-92c3-1f804680d991"/>
+										</assocs>
+									</item>
+								</items>
+							</item>
+						</items>
+						<assocs>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/d6541293-3135-4dc7-bec3-e55a335de954"/>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/8bfbff35-f65f-4690-a1eb-b3596431b514"/>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/9a4135bb-4fc5-41ab-a9ff-bdd19bb839d7"/>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/9c13e90a-e29a-42e2-bd7e-e567ac7fcf75"/>
+							<assoc type="lecm-arm:fields-assoc"
+							       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По видам документов/НД/0b557eed-3e9b-4f60-83be-776f0a2bb1e3"/>
+						</assocs>
+					</item>
 				</items>
 				<assocs>
 					<assoc type="lecm-arm:filters-assoc"
@@ -833,7 +1058,7 @@
 				<property name="lecm-arm:order"><![CDATA[20]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<property
-						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-nd:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<items>
 					<item name="cm:Новые" type="lecm-arm:node">
@@ -844,7 +1069,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 						<property
-								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'Новый' OR @lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На обработке регистратором')) OR (+TYPE:"lecm-outgoing:document" AND (@lecm\-statemachine\:status:'Черновик' OR @lecm\-statemachine\:status:'Проект')) OR ((+TYPE:"lecm-internal:document" OR +TYPE:"lecm-ord:document") AND @lecm\-statemachine\:status:'Проект')]]></property>
+								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'Новый' OR @lecm\-statemachine\:status:'Зарегистрирован' OR @lecm\-statemachine\:status:'На обработке регистратором')) OR (+TYPE:"lecm-outgoing:document" AND (@lecm\-statemachine\:status:'Черновик' OR @lecm\-statemachine\:status:'Проект')) OR ((+TYPE:"lecm-internal:document" OR +TYPE:"lecm-ord:document" OR +TYPE:"lecm-nd:document") AND @lecm\-statemachine\:status:'Проект')]]></property>
 						<items>
 							<item name="cm:Входящие" type="lecm-arm:node">
 								<property name="cm:name"><![CDATA[Входящие]]></property>
@@ -933,6 +1158,15 @@
 								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 								<property name="lecm-arm:search-query"><![CDATA[]]></property>
 							</item>
+							<item name="cm:НД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[НД]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+							</item>
 						</items>
 					</item>
 					<item name="cm:В работе" type="lecm-arm:node">
@@ -943,7 +1177,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 						<property
-								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На рассмотрении' OR @lecm\-statemachine\:status:'На исполнении')) OR (+TYPE:"lecm-outgoing:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан')) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан')) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан'))]]></property>
+								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На рассмотрении' OR @lecm\-statemachine\:status:'На исполнении')) OR (+TYPE:"lecm-outgoing:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан')) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан')) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан')) OR (+TYPE:"lecm-nd:document" AND (@lecm\-statemachine\:status:'Согласован' OR @lecm\-statemachine\:status:'На доработке' OR @lecm\-statemachine\:status:'Подписан' OR @lecm\-statemachine\:status:'Действует' OR @lecm\-statemachine\:status:'Введен в действие'))]]></property>
 						<items>
 							<item name="cm:Входящие" type="lecm-arm:node">
 								<property name="cm:name"><![CDATA[Входящие]]></property>
@@ -1081,13 +1315,47 @@
 									</item>
 								</items>
 							</item>
+							<item name="cm:НД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[НД]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+								<items>
+									<item name="cm:Статусы" type="lecm-arm:node">
+										<property name="cm:name"><![CDATA[Статусы]]></property>
+										<property name="lecm-arm:order"><![CDATA[0]]></property>
+										<property name="lecm-arm:types"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+										<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+										<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+										<property name="lecm-arm:search-query"><![CDATA[]]></property>
+										<items>
+											<item name="cm:0045356f-a0e0-4b12-b87c-480db83d52d5"
+											      type="lecm-arm:statuses-child-rule">
+												<property
+														name="cm:name"><![CDATA[0045356f-a0e0-4b12-b87c-480db83d52d5]]></property>
+												<property
+														name="lecm-arm:selected-statuses"><![CDATA[Согласован,На доработке,Подписан,Действует,Введен в действие]]></property>
+												<property name="lecm-arm:statuses-rule"><![CDATA[SELECTED]]></property>
+											</item>
+										</items>
+										<assocs>
+											<assoc type="lecm-arm:node-child-rule-assoc"
+											       path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/НД/Статусы/0045356f-a0e0-4b12-b87c-480db83d52d5"/>
+										</assocs>
+									</item>
+								</items>
+							</item>
 						</items>
 					</item>
 					<item name="cm:На подписании" type="lecm-arm:node">
 						<property name="cm:name"><![CDATA[На подписании]]></property>
 						<property name="lecm-arm:order"><![CDATA[40]]></property>
 						<property
-								name="lecm-arm:types"><![CDATA[lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+								name="lecm-arm:types"><![CDATA[lecm-ord:document,lecm-internal:document,lecm-outgoing:document,lecm-nd:document]]></property>
 						<property name="lecm-arm:counter-description"><![CDATA[]]></property>
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
@@ -1121,6 +1389,15 @@
 								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 								<property name="lecm-arm:search-query"><![CDATA[]]></property>
 							</item>
+							<item name="cm:НД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[НД]]></property>
+								<property name="lecm-arm:order"><![CDATA[40]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+							</item>
 						</items>
 					</item>
 					<item name="cm:На регистрации" type="lecm-arm:node">
@@ -1131,7 +1408,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 						<property
-								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'Новый' OR @lecm\-statemachine\:status:'На обработке регистратором')) OR ((+TYPE:"lecm-outgoing:document" OR +TYPE:"lecm-internal:document" OR +TYPE:"lecm-ord:document") AND (@lecm\-statemachine\:status:"На регистрации"))]]></property>
+								name="lecm-arm:search-query"><![CDATA[(+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'Новый' OR @lecm\-statemachine\:status:'На обработке регистратором')) OR ((+TYPE:"lecm-outgoing:document" OR +TYPE:"lecm-internal:document" OR +TYPE:"lecm-ord:document" OR +TYPE:"lecm-nd:document") AND (@lecm\-statemachine\:status:"На регистрации"))]]></property>
 						<items>
 							<item name="cm:Входящие" type="lecm-arm:node">
 								<property name="cm:name"><![CDATA[Входящие]]></property>
@@ -1194,6 +1471,15 @@
 								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 								<property name="lecm-arm:search-query"><![CDATA[]]></property>
 							</item>
+							<item name="cm:НД" type="lecm-arm:node">
+								<property name="cm:name"><![CDATA[НД]]></property>
+								<property name="lecm-arm:order"><![CDATA[50]]></property>
+								<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
+								<property name="lecm-arm:counter-description"><![CDATA[]]></property>
+								<property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
+								<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
+								<property name="lecm-arm:search-query"><![CDATA[]]></property>
+							</item>
 						</items>
 					</item>
 					<item name="cm:Черновики" type="lecm-arm:node">
@@ -1207,51 +1493,51 @@
 								name="lecm-arm:search-query"><![CDATA[@lecm\-statemachine\-aspects\:is\-draft:true AND NOT @lecm\-statemachine\:status:"Удален"]]></property>
 					</item>
 					<item name="cm:9b4eacb5-6529-4445-af0a-5cc1287df685" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[ea609ad5-79fb-4d33-89ea-1a9367da583b]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+						<property name="cm:name"><![CDATA[ea609ad5-79fb-4d33-89ea-1a9367da583b]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:50fe463c-f645-4907-b636-51c24614fdcd" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[af22a4e8-118a-4879-980a-62a12d7ad942]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+						<property name="cm:name"><![CDATA[af22a4e8-118a-4879-980a-62a12d7ad942]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:466280bd-4e73-43d0-9d94-cefff8d1d99e" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[2e94d871-6407-4253-a4ec-60c80da0c5d5]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
+						<property name="cm:name"><![CDATA[2e94d871-6407-4253-a4ec-60c80da0c5d5]]></property>
 						<property
 								name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:6319c272-9b11-46c7-b682-8c42c41141ce" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[c9efd705-49b9-42a2-a692-1ebb4c45027d]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+						<property name="cm:name"><![CDATA[c9efd705-49b9-42a2-a692-1ebb4c45027d]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:ac7880f1-2e7f-4d94-ac4f-3954c159e5b7" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[4335c29e-eb48-4db3-be85-1c3e07899fed]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+						<property name="cm:name"><![CDATA[4335c29e-eb48-4db3-be85-1c3e07899fed]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:286e7d27-65e6-4ea7-b89a-b47908d51baf" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[286e7d27-65e6-4ea7-b89a-b47908d51baf]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+						<property name="cm:name"><![CDATA[286e7d27-65e6-4ea7-b89a-b47908d51baf]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:ccc78aea-5450-494f-8bca-adaea9062d1b" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[c91fca27-9e6d-4bb4-b927-31376f741c0d]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+						<property name="cm:name"><![CDATA[c91fca27-9e6d-4bb4-b927-31376f741c0d]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-incoming:execution-date]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
@@ -1284,7 +1570,7 @@
 						<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 						<property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
 						<property
-								name="lecm-arm:search-query"><![CDATA[((+TYPE:"lecm-incoming:document" AND NOT @lecm\-statemachine\:status:'Новый' AND NOT @lecm\-statemachine\:status:'Зарегистрирован' AND NOT @lecm\-statemachine\:status:'На обработке регистратором' AND NOT @lecm\-statemachine\:status:'На рассмотрении' AND NOT @lecm\-statemachine\:status:'На исполнении') OR (+TYPE:"lecm-outgoing:document" AND NOT @lecm\-statemachine\:status:'Черновик' AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации') OR (+TYPE:"lecm-internal:document" AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации') OR (+TYPE:"lecm-ord:document" AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации')) AND NOT @lecm\-statemachine\:status:'На подписании' AND NOT @lecm\-document\:sys_workflows:'*lecmApprovalWorkflow*' AND NOT @lecm\-document\:sys_workflows:'*lecmReview*' AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
+								name="lecm-arm:search-query"><![CDATA[((+TYPE:"lecm-incoming:document" AND NOT @lecm\-statemachine\:status:'Новый' AND NOT @lecm\-statemachine\:status:'Зарегистрирован' AND NOT @lecm\-statemachine\:status:'На обработке регистратором' AND NOT @lecm\-statemachine\:status:'На рассмотрении' AND NOT @lecm\-statemachine\:status:'На исполнении') OR (+TYPE:"lecm-outgoing:document" AND NOT @lecm\-statemachine\:status:'Черновик' AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации') OR (+TYPE:"lecm-internal:document" AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации') OR (+TYPE:"lecm-ord:document" AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'На регистрации') OR (+TYPE:"lecm-nd:document" AND NOT @lecm\-statemachine\:status:'Проект' AND NOT @lecm\-statemachine\:status:'Согласован' AND NOT @lecm\-statemachine\:status:'На доработке' AND NOT @lecm\-statemachine\:status:'Подписан' AND NOT @lecm\-statemachine\:status:'Действует' AND NOT @lecm\-statemachine\:status:'Введен в действие' AND NOT @lecm\-statemachine\:status:'На регистрации')) AND NOT @lecm\-statemachine\:status:'На подписании' AND NOT @lecm\-document\:sys_workflows:'*lecmApprovalWorkflow*' AND NOT @lecm\-document\:sys_workflows:'*lecmReview*' AND NOT @lecm\-statemachine\-aspects\:is\-draft:true]]></property>
 					</item>
 				</items>
 				<assocs>
@@ -1315,45 +1601,45 @@
 				<property name="lecm-arm:order"><![CDATA[30]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<property
-						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-nd:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<items>
 					<item name="cm:cf58f4c7-9ad9-4014-a01c-e5d85f61dbff" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[cd71d967-2fe5-4bac-947b-e2bae2bd538a]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
+						<property name="cm:name"><![CDATA[cd71d967-2fe5-4bac-947b-e2bae2bd538a]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:regnum]]></property>
 					</item>
 					<item name="cm:0853caf3-18b7-4e24-b8a4-59111412b4c3" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[747d0759-38dd-48a7-a2a8-2ab2fd13cd6c]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Дата]]></property>
+						<property name="cm:name"><![CDATA[747d0759-38dd-48a7-a2a8-2ab2fd13cd6c]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-date]]></property>
 					</item>
 					<item name="cm:7cb204d7-7ce9-4563-9d58-9909d542c768" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[9f3c7ceb-de5b-4354-8756-4835ce4a163f]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Вид документа]]></property>
+						<property name="cm:name"><![CDATA[9f3c7ceb-de5b-4354-8756-4835ce4a163f]]></property>
 						<property
 								name="lecm-arm:field-name"><![CDATA[lecm-eds-document:document-type-assoc]]></property>
 					</item>
 					<item name="cm:f102d04d-b4ef-44d7-86ce-c3a2c93ec660" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[4d7a63f2-fcb6-4201-ae12-5197c6aa2b48]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Автор]]></property>
+						<property name="cm:name"><![CDATA[4d7a63f2-fcb6-4201-ae12-5197c6aa2b48]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:creator]]></property>
 					</item>
 					<item name="cm:a4650c99-ca74-4d24-87f0-bd4de027eeb3" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[61aecf26-63eb-4752-b212-40f92c6d4c0b]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Заголовок]]></property>
+						<property name="cm:name"><![CDATA[61aecf26-63eb-4752-b212-40f92c6d4c0b]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-document:title]]></property>
 					</item>
 					<item name="cm:0144c7f6-a3b3-4985-9208-2c4f4369f9b4" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[0144c7f6-a3b3-4985-9208-2c4f4369f9b4]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
+						<property name="cm:name"><![CDATA[0144c7f6-a3b3-4985-9208-2c4f4369f9b4]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
 						<property name="lecm-arm:field-format-string"><![CDATA[]]></property>
 						<property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
 					</item>
 					<item name="cm:e6d9a523-5758-4d27-bd9f-b97baa5d01a1" type="lecm-arm:field">
-						<property name="cm:name"><![CDATA[03ec0c28-bbc4-4c21-84e1-becc371db90f]]></property>
 						<property name="lecm-arm:field-title"><![CDATA[Срок исполнения]]></property>
+						<property name="cm:name"><![CDATA[03ec0c28-bbc4-4c21-84e1-becc371db90f]]></property>
 						<property name="lecm-arm:field-name"><![CDATA[lecm-incoming:execution-date]]></property>
 					</item>
 					<item name="cm:Тематики" type="lecm-arm:node">
@@ -1408,7 +1694,7 @@
 				<property name="lecm-arm:order"><![CDATA[100]]></property>
 				<property name="lecm-arm:search-query"><![CDATA[]]></property>
 				<property
-						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document]]></property>
+						name="lecm-arm:types"><![CDATA[lecm-incoming:document,lecm-internal:document,lecm-outgoing:document,lecm-ord:document,lecm-nd:document]]></property>
 				<property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
 				<items>
 					<item name="cm:Входящие" type="lecm-arm:reports-node">
@@ -1430,6 +1716,11 @@
 						<property name="cm:name"><![CDATA[ОРД]]></property>
 						<property name="lecm-arm:order"><![CDATA[40]]></property>
 						<property name="lecm-arm:types"><![CDATA[lecm-ord:document]]></property>
+					</item>
+					<item name="cm:НД" type="lecm-arm:reports-node">
+						<property name="cm:name"><![CDATA[НД]]></property>
+						<property name="lecm-arm:order"><![CDATA[50]]></property>
+						<property name="lecm-arm:types"><![CDATA[lecm-nd:document]]></property>
 					</item>
 				</items>
 			</item>
