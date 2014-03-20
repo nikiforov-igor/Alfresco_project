@@ -1286,6 +1286,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                 }
 
+	            var selectAllChbx = Dom.get(this.id + '-select-all-records');
+	            if (selectAllChbx != null) {
+		            selectAllChbx.checked = false;
+	            }
+
                 var params = this.search.buildSearchParams(this.datagridMeta.nodeRef, null,
                     this.datagridMeta.itemType, sort, this.datagridMeta.searchConfig, this.dataRequestFields.join(","),
                     this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
