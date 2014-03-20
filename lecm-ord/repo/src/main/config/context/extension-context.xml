@@ -16,6 +16,7 @@
 		  p:lecmDictionaryService-ref="serviceDictionary"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:documentEventService-ref="documentEventService"
-		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"
+		  p:ordDocumentService-ref="ordDocumentService"/>
 
 </beans>

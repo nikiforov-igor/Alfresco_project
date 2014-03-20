@@ -56,11 +56,12 @@
 		  depends-on="outgoing.model.bootstrap"
 		  p:documentType="lecm-ord:document"
 		  p:tags-ref="ord.taggedCounterRegistrator.tags"/>
-		
+
 	<!--service for various document utils-->
 	<bean id="ordDocumentService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"
-		  p:nodeService-ref="nodeService"/>
+		  p:nodeService-ref="nodeService"
+		  p:lecmDictionaryService-ref="serviceDictionary"/>
 
 	<!--notification-->
 	<bean id="ordNotificationService" parent="baseBean"
@@ -89,5 +90,5 @@
           p:ignoreLock="false"
           p:publicAction="false"
 		  p:ordNotificationService-ref="ordNotificationService"/>
-	
+
 </beans>

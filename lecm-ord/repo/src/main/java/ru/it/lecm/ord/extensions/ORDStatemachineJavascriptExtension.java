@@ -36,6 +36,7 @@ import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.Notification;
+import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -58,6 +59,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private BusinessJournalService businessJournalService;
 	private DocumentEventService documentEventService;
 	private LecmPermissionService lecmPermissionService;
+	private ORDDocumentService ordDocumentService;
 
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -93,6 +95,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
+	}
+
+	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
+		this.ordDocumentService = ordDocumentService;
 	}
 
 	private String getOrdURL(final ScriptNode ordRef) {
@@ -334,7 +340,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 				// создадим ассоциацию пункта с поручением
 				nodeService.createAssociation(point, errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
 				// переведем пункт в статус "на исполнениии"
-				changePointStatus(point,ORDModel.P_STATUSES.PERFORMANCE_STATUS);
+				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.PERFORMANCE_STATUS);
 				//подпишем ОРД в качестве наблюдателя за поручением
 				documentEventService.subscribe(errand, ord);
 			}
@@ -452,11 +458,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		for (NodeRef sender : senders){
 			if (ErrandsService.TYPE_ERRANDS.equals(nodeService.getType(sender))){
 				String errandStatus = (String) nodeService.getProperty(sender, StatemachineModel.PROP_STATUS);
-				NodeRef point = getErrandLinkedPoint(sender);
+				NodeRef point = ordDocumentService.getErrandLinkedPoint(sender);
 				if (null!=point){
 					if ("Исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Исполнен"
-						changePointStatus(point,ORDModel.P_STATUSES.EXECUTED_STATUS);
+						ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.EXECUTED_STATUS);
 						//установим атрибут дату исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
@@ -467,7 +473,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					}
 					if ("Не исполнено".equals(errandStatus)){
 						// переведем пункт в статус "Не исполнен"
-						changePointStatus(point,ORDModel.P_STATUSES.NOT_EXECUTED_STATUS);
+						ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.NOT_EXECUTED_STATUS);
 						//установим атрибут дата исполнеия
 						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
@@ -480,7 +486,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 					Boolean is_expired = (Boolean) nodeService.getProperty(sender,ErrandsService.PROP_ERRANDS_IS_EXPIRED);
 					if (!"Исполнено".equals(errandStatus) && is_expired){
 						// переведем пункт в статус "Просрочен"
-						changePointStatus(point,ORDModel.P_STATUSES.EXPIRED_STATUS);
+						ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.EXPIRED_STATUS);
 						//запись в бизнес журнал о том, что пункт перешел в статус просрочен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String bjMessage = String.format("Исполнение пункта № %s документа #mainobject просрочено", pointNumber);
@@ -494,57 +500,23 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 	}
 
-	private void changePointStatus(NodeRef point, ORDModel.P_STATUSES statusKey){
-		String status = ORDModel.POINT_STATUSES.get(statusKey);
-		if (null != status){
-			NodeRef newPointStatus = lecmDictionaryService.getDictionaryValueByParam(ORDModel.ORD_POINT_DICTIONARY_NAME, ContentModel.PROP_NAME, status);
-			List<NodeRef> targetStatus = Arrays.asList(newPointStatus);
-			nodeService.setAssociations(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS, targetStatus);
-		}
-	}
-
 	public void changePointStatus(String sPointRef, String status){
 		if (null!=sPointRef && !sPointRef.isEmpty()){
 			NodeRef point = new NodeRef(sPointRef);
 			if (nodeService.exists(point)){
-				changePointStatus(point,ORDModel.P_STATUSES.valueOf(status));
+				ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.valueOf(status));
 			}
 		}
-	}
-
-	private NodeRef getErrandLinkedPoint(NodeRef errand){
-		List<AssociationRef> pointAssocs = nodeService.getSourceAssocs(errand, ORDModel.ASSOC_ORD_TABLE_ERRAND);
-		if (pointAssocs.size()>0){
-			return pointAssocs.get(0).getSourceRef();
-		}
-		return null;
-	}
-
-	public String getPointStatus(NodeRef point){
-		List<AssociationRef> statusAssocs = nodeService.getTargetAssocs(point, ORDModel.ASSOC_ORD_TABLE_ITEM_STATUS);
-		if (statusAssocs.size()>0){
-			NodeRef status =  statusAssocs.get(0).getTargetRef();
-			String statusName = (String) nodeService.getProperty(status, ContentModel.PROP_NAME);
-			return statusName;
-		}
-		return null;
 	}
 
 	public Boolean checkPointExecutedStatus(String sPointRef){
 		if (null!=sPointRef && !sPointRef.isEmpty()){
 			NodeRef point = new NodeRef(sPointRef);
 			if (nodeService.exists(point)){
-				String status = getPointStatus(point);
-				if (null != status){
-					if ( ORDModel.POINT_STATUSES.get(ORDModel.P_STATUSES.EXECUTED_STATUS).equals(status) ){
-						return true;
-					}
-					else{
-						return false;
-					}
-				}
+				return ordDocumentService.checkPointStatus(point, ORDModel.P_STATUSES.EXECUTED_STATUS);
 			}
 		}
 		return false;
 	}
+
 }
