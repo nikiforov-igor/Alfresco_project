@@ -27,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Генератор шаблонов документов для OpenOffice-отчётов: формируется документ с
@@ -191,62 +193,70 @@ public class OpenOfficeTemplateGenerator extends OOTemplateGenerator {
         XTextTablesSupplier tablesSupplier = UnoRuntime.queryInterface(XTextTablesSupplier.class, xDoc);
 
         XTextTable xDocTable = TableManager.getTable(tablesSupplier, propName);
+        if (xDocTable != null) {
+            int firstRowIndex = xDocTable.getRows().getCount() > 1 ? 1 : 0;
 
-        int firstRowIndex = xDocTable.getRows().getCount() > 1 ? 1 : 0;
+            String[] columnsExpressions = new String[xDocTable.getColumns().getCount()];
 
-        String[] columnsExpressions = new String[xDocTable.getColumns().getCount()];
+            for (int i = 0; i < xDocTable.getColumns().getCount(); i++) {
+                String cellName = TableManager.getColumnName(i, firstRowIndex + 1); // нумерация имен начинается с 1, а не 0
 
-        for (int i = 0; i < xDocTable.getColumns().getCount(); i++) {
-            String cellName = TableManager.getColumnName(i, firstRowIndex + 1); // нумерация имен начинается с 1, а не 0
+                XCell cell = xDocTable.getCellByName(cellName);
+                XText text = UnoRuntime.queryInterface(XText.class, cell);
 
-            XCell cell = xDocTable.getCellByName(cellName);
-            XText text = UnoRuntime.queryInterface(XText.class, cell);
+                String cellText = text.getString();
+                columnsExpressions[i] = cellText;
+            }
 
-            String cellText = text.getString();
-            columnsExpressions[i] = cellText;
-        }
+            Pattern p = Pattern.compile("[{]([^}]+)[}]");
 
-        int rowIndex = firstRowIndex + 1;
-        for (Object listObject : listObjects) {
-            rowIndex++;
-            if (listObject != null) {
-                if (listObject instanceof Map) {
-                    Map<String, Object> objMap = (Map<String, Object>) listObject;
+            int rowIndex = firstRowIndex + 1;
+            for (Object listObject : listObjects) {
+                rowIndex++;
+                if (listObject != null) {
+                    if (listObject instanceof Map) {
+                        Map<String, Object> objMap = (Map<String, Object>) listObject;
 
-                    //добавляем строку
-                    xDocTable.getRows().insertByIndex(xDocTable.getRows().getCount(), 1);
+                        //добавляем строку
+                        xDocTable.getRows().insertByIndex(xDocTable.getRows().getCount(), 1);
 
-                    //заполняем её данными из объекта
-                    for (int j = 0; j < xDocTable.getColumns().getCount(); j++) {
-                        String cellName = TableManager.getColumnName(j, rowIndex);
-                        XCell cell = xDocTable.getCellByName(cellName);
-                        XText text = UnoRuntime.queryInterface(XText.class, cell);
-                        String cellExpression = columnsExpressions[j];
-                        if (cellExpression.startsWith(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) &&
-                                cellExpression.endsWith(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL)) {
+                        //заполняем её данными из объекта
+                        for (int j = 0; j < xDocTable.getColumns().getCount(); j++) {
+                            String cellName = TableManager.getColumnName(j, rowIndex);
+                            XCell cell = xDocTable.getCellByName(cellName);
+                            XText text = UnoRuntime.queryInterface(XText.class, cell);
+
                             // в строке должно находиться выражение вида: {SR_CODE.SR_COLUMN_CODE}
                             // SR_CODE - код подотчета, SR_COLUMN_CODE - код колонки в подотчете
-                            String subColumnCode =
-                                    cellExpression.
-                                            replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").
-                                            replace(propName + ".", "").
-                                            replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+                            String cellExpression = columnsExpressions[j];
+                            Matcher m = p.matcher(cellExpression);
 
-                            Object valueToWrite = objMap.get(subColumnCode);
-                            if (valueToWrite instanceof Date) {
-                                DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
-                                valueToWrite = dFormat.format(valueToWrite);
+                            while (m.find()) {
+                                String subExpression = m.group();
+                                String subColumnCode =
+                                        subExpression.
+                                                replace(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL, "").
+                                                replace(propName + ".", "").
+                                                replace(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL, "");
+
+                                Object valueToWrite = objMap.get(subColumnCode);
+                                if (valueToWrite instanceof Date) {
+                                    DateFormat dFormat = new SimpleDateFormat(DD_MM_YYYY);
+                                    valueToWrite = dFormat.format(valueToWrite);
+                                }
+                                String replacedValue = valueToWrite != null ? String.valueOf(valueToWrite) : "";
+                                if (!replacedValue.equals(subExpression)) {
+                                    cellExpression = cellExpression.replace(subExpression, replacedValue);
+                                }
                             }
-                            text.setString(valueToWrite != null ? String.valueOf(valueToWrite) : "");
-                        } else {
-                            text.setString(columnsExpressions[j]);
+                            text.setString(cellExpression);
                         }
                     }
                 }
             }
-        }
 
-        xDocTable.getRows().removeByIndex(firstRowIndex, 1); // удаляем строку, которую дублировали
+            xDocTable.getRows().removeByIndex(firstRowIndex, 1); // удаляем строку, которую дублировали
+        }
     }
 
     protected static class TableManager {
