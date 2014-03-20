@@ -155,7 +155,7 @@ LogicECM.module = LogicECM.module || {};
             var me = this;
             LogicECM.CurrentModules = {};
             LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                width:"55em",
+                width:"80em",
                 templateUrl:templateUrl,
                 actionUrl:null,
                 destroyOnHide:true,

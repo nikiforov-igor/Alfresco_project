@@ -419,6 +419,9 @@
                                 height: 20px;
                                 margin-bottom: 10px;
                                 }
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
+                                    max-width: 19em;
+                                }
                             </control-param>
                         </control>
                     </field>
@@ -506,6 +509,11 @@
                                 height: 20px;
                                 margin-bottom: 10px;
                                 }
+                                
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
+                                    max-width: 19em;
+                                }
+                                
                                 .yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field label {
                                 float: left;
                                 width: auto;
