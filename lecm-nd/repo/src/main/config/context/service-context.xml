@@ -23,6 +23,10 @@
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-event-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
     </util:list>
+
+    <util:list id="nd.rn.tags">
+        <value>project</value>
+    </util:list>
     <!-- Registration of orgStructure models -->
     <bean id="nd.document.models.bootstrap" parent="modelsToRepositoryLoader"
           depends-on="
@@ -53,7 +57,7 @@
           p:jobGroup="nd"
           p:triggerName="switch-nd-status-trigger"
           p:triggerGroup="nd-trigger"
-          p:cronExpression="15 /1 * * * ? *"
+          p:cronExpression="0 1 * * * ? *"
           p:scheduler-ref="schedulerFactory"
           p:actionService-ref="actionService"
           p:transactionService-ref="transactionService"
@@ -75,7 +79,7 @@
           p:jobGroup="nd-out-of-date"
           p:triggerName="out-of-date-nd-status-trigger"
           p:triggerGroup="out-of-date-nd-trigger"
-          p:cronExpression="45 /1 * * * ? *"
+          p:cronExpression="15 1 * * * ? *"
           p:scheduler-ref="schedulerFactory"
           p:actionService-ref="actionService"
           p:transactionService-ref="transactionService"
@@ -93,5 +97,10 @@
           p:nodeService-ref="nodeService"
           p:orgstructureService-ref="serviceOrgstructure"
           p:policyComponent-ref="policyComponent"
+    />
+
+    <bean id="nd.LogicEcmNdTaggedCounterRegistrator" parent="regNumbersTaggedCounterRegistrator" depends-on="nd.document.models.bootstrap"
+        p:documentType="lecm-nd:document"
+        p:tags-ref="nd.rn.tags"
     />
 </beans>
