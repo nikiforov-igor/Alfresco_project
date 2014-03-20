@@ -1,9 +1,11 @@
 <#assign documentRef = "${form.arguments.itemId}"?string/>
 <#assign id = documentRef?replace("workspace://SpacesStore/", "")?replace("-", "")/>
-<div class="metadata-form">
-    <div class="lecm-dashlet-actions">
-        <a id="documentMetadata-${id}-action-edit" onclick="LogicECM.module.Document.editDocument('${id}', '${documentRef}')" class="edit"
-           title="Редактировать сведения"></a>
+<div class="edit-button">
+    <div class="metadata-form">
+        <div class="lecm-dashlet-actions">
+            <a id="documentMetadata-${id}-action-edit" onclick="LogicECM.module.Document.editDocument('${id}', '${documentRef}')" class="edit"
+               title="Редактировать сведения"></a>
+        </div>
     </div>
 </div>
 

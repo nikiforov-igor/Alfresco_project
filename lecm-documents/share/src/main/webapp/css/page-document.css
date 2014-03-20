@@ -380,3 +380,7 @@ div.yui-panel.form-container .form-fields {
     margin: 0;
 }
 
+.edit-button .metadata-form  .lecm-dashlet-actions{
+    padding-right: 0;
+}
+
