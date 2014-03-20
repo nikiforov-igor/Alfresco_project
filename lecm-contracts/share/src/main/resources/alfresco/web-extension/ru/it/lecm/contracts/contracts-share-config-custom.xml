@@ -136,7 +136,7 @@
                             <control-param name="showCreateNewButton">true</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:representative-assoc" set="counterparty-info-1">
+                    <field id="lecm-contract:representative-assoc" set="counterparty-info-1" label="Представитель">
                         <!--<control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">-->
                         <!--<control-param name="updateOnAction">lecm-contract-representative-assoc</control-param>-->
                         <!--</control>-->
@@ -362,7 +362,7 @@
                             <control-param name="createDialogClass">lecm-contractor_contractor-type_edit</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contract:representative-assoc" set="counterparty-info-1">
+                    <field id="lecm-contract:representative-assoc" set="counterparty-info-1" label="Представитель">
                         <!--<control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">-->
                         <!--<control-param name="updateOnAction">lecm-contract-representative-assoc</control-param>-->
                         <!--</control>-->

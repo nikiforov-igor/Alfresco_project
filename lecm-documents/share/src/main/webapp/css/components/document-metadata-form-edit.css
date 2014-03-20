@@ -81,6 +81,9 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
     width: 190px;
 }
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block.with-two-buttons input.autocomplete-input {
+    width: 130px;
+}
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item span.person > a,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.association-auto-complete-selected-item-even span.person > a {
     max-width: 178px;
