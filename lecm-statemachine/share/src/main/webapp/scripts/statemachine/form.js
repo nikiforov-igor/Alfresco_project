@@ -293,7 +293,7 @@ LogicECM.module = LogicECM.module || {};
             var taskDetails = new Alfresco.module.SimpleDialog(this.id + "-taskDetails");
             taskDetails.setOptions(
                 {
-                    width:"50em",
+                    width:"55em",
                     templateUrl:templateUrl,
                     actionUrl:null,
                     destroyOnHide:true,
@@ -345,7 +345,7 @@ LogicECM.module = LogicECM.module || {};
             var scriptForm = new Alfresco.module.SimpleDialog(this.id + "-scriptForm");
             scriptForm.setOptions(
                 {
-                    width: "40em",
+                    width: "55em",
                     templateUrl: templateUrl,
                     actionUrl: null,
                     destroyOnHide: true,
