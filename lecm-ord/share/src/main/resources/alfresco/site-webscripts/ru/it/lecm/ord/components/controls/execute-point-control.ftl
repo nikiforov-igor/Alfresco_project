@@ -28,12 +28,20 @@
 		}
 
 		function executePoint (){
-			Alfresco.util.Ajax.jsonRequest({
-				method: "POST",
+			Alfresco.util.Ajax.jsonPost({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/ord/SetPointExecutedStatus',
 				dataObj: {
 					pointRef: "${form.arguments.itemId}"
 				},
+                successCallback: {
+                     fn:function(response){
+                         YAHOO.Bubbling.fire("dataItemUpdated",
+                         {
+                            item: response.json,
+                         }); 
+                     },
+                     scope: this
+                },
 				failureMessage: "${msg('message.failure')}",
 				execScripts: true,
 				scope: this
