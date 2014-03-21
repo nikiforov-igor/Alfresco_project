@@ -21,7 +21,7 @@
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
-                    <show id="lecm-nd:nd-css-fix" force="true" for-mode="view"/> <!-- Костыль для стилей -->
+                    <show id="lecm-nd:nd-css-fix" force="true"/> <!-- Костыль для стилей -->
                 </field-visibility>
                 <appearance>
                     <set id="common"/>
