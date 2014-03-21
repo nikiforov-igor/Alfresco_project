@@ -165,7 +165,7 @@
 	</columnHeader>
 	<detail>
 		<band height="26" splitType="Stretch">
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="97" height="26"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
