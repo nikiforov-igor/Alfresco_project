@@ -112,10 +112,12 @@
                                     for (var i in files) {
                                         var file = search.findNode(files[i]);
                                         document.createAssociation(file, "lecm-document-aspects:attachments-temp-assoc");
+                                        answerObject.createAssociation(file, "lecm-internal-table-structure:answer-attachment-assoc");
                                     }
                                 }
 							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
 							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-details-clean"] = answerText;
 							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
 							    answerObject.save();
 

@@ -244,6 +244,25 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-internal-table-structure:answer">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-internal-table-structure:answer-details-clean" force="true"/>
+                    <show id="lecm-internal-table-structure:answer-attachment-assoc" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-internal-table-structure:answer-attachment-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl" >
+                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+                            <control-param name="directoryName">Вложения</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="model-type" condition="lecm-internal-doc-type:dictionary">
         <forms>
             <form>

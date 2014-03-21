@@ -40,6 +40,9 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+                <property name="lecm-internal-table-structure:answer-details-clean">
+                    <type>d:text</type>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-internal-table-structure:employee-assoc">
