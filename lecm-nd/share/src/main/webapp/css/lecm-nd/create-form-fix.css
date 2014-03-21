@@ -9,7 +9,7 @@ div.selectone-control select {
 }
 
 /*Выранивание кнопки удаления по нижней границе. Слишком общий селектор, но конкретно для этой формы пойдёт.*/
-div.yui-u.first .set {
+div.yui-u.first .set, div.form-field.dnd-uploader {
 	height: 100% !important;
 }
 
