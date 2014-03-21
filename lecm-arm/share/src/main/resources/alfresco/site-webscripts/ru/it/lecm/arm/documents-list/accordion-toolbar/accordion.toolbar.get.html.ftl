@@ -6,7 +6,9 @@
 <script type="text/javascript">
 (function(){
     function init() {
-        new LogicECM.module.ARM.AccordionToolbar("${id}").setMessages(${messages});
+        new LogicECM.module.ARM.AccordionToolbar("${id}").setMessages(${messages}).setOptions({
+            bubblingLabel:"accordion-toolbar"
+        });
     }
 
     YAHOO.util.Event.onDOMReady(init);

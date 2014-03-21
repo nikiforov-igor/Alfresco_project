@@ -6,7 +6,9 @@
 <script type="text/javascript">
 (function(){
     function init() {
-        new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages});
+        new LogicECM.module.ARM.DocumentsToolbar("${id}").setMessages(${messages}).setOptions({
+            bubblingLabel: "documents-arm"
+        });
     }
 
     YAHOO.util.Event.onDOMReady(init);

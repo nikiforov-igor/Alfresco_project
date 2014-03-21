@@ -53,6 +53,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
         this.dataGrid = grid;
         YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
         YAHOO.Bubbling.on("doSearch", this.onSearch, this);
+        YAHOO.Bubbling.on("clearAttributesSearch", this.onClearSearchClick, this);
     };
 
     YAHOO.extend(LogicECM.AdvancedSearch, Alfresco.component.Base,
@@ -95,78 +96,81 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @param form {Object} Form descriptor to render template for
              * @param repopulate {boolean} If true, repopulate form instance based on supplied data
              */
-            renderFormTemplate:function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
+            renderFormTemplate: function ADVSearch_renderFormTemplate(form, isClearSearch, e, obj) {
                 if (isClearSearch == undefined) {
                     isClearSearch = false;
                 }
                 // update current form state
                 this.currentForm = form;
 
-                var formDiv = Dom.get("searchBlock-forms"); // элемент в который будет отрисовываться форма
-                form.htmlid = this.options.searchFormId + "-" + form.type.split(":").join("_");
+                if (this.currentForm != null) {
+                    var formDiv = Dom.get("searchBlock-forms"); // элемент в который будет отрисовываться форма
+                    form.htmlid = this.options.searchFormId + "-" + form.type.split(":").join("_");
 
-                // load the form component for the appropriate type
-                var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
+                    // load the form component for the appropriate type
+                    var formUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "/components/form?itemKind=type&itemId={itemId}&formId={formId}&mode=edit&showSubmitButton=false&showCancelButton=false",
+                        {
+                            itemId: form.type,
+                            formId: form.id
+                        });
+                    var formData =
                     {
-                        itemId:form.type,
-                        formId:form.id
-                    });
-                var formData =
-                {
-                    htmlid:form.htmlid
-                };
-                Alfresco.util.Ajax.request(
-                    {
-                        url:formUrl,
-                        dataObj:formData,
-                        successCallback:{
-                            fn:function ADVSearch_onFormTemplateLoaded(response) {
-                                formDiv.innerHTML = response.serverResponse.responseText;
-                                if (this.searchDialog != null) {
-                                    if (isClearSearch) {
-                                        //сбрасываем на значение по умолчанию
-                                        if (this.dataGrid.datagridMeta.searchConfig) {
-                                            // сбрасываем данные формы
-                                            this.dataGrid.datagridMeta.searchConfig.formData = {
-                                                datatype:this.dataGrid.datagridMeta.itemType
-                                            };
+                        htmlid: form.htmlid
+                    };
+                    Alfresco.util.Ajax.request(
+                        {
+                            url: formUrl,
+                            dataObj: formData,
+                            successCallback: {
+                                fn: function ADVSearch_onFormTemplateLoaded(response) {
+                                    formDiv.innerHTML = response.serverResponse.responseText;
+                                    if (this.searchDialog != null) {
+                                        if (isClearSearch) {
+                                            //сбрасываем на значение по умолчанию
+                                            if (this.dataGrid.datagridMeta.searchConfig) {
+                                                // сбрасываем данные формы
+                                                this.dataGrid.datagridMeta.searchConfig.formData = {
+                                                    datatype: this.dataGrid.datagridMeta.itemType
+                                                };
 
-                                            // если у нас не задан терм поиска, значит делаем полный сброс полнотекстового поиска
-                                            if (this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
-                                                if(typeof this.dataGrid.datagridMeta.searchConfig.fullTextSearch == "string") {
-                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch =
-                                                        YAHOO.lang.JSON.parse(this.dataGrid.datagridMeta.searchConfig.fullTextSearch);
+                                                // если у нас не задан терм поиска, значит делаем полный сброс полнотекстового поиска
+                                                if (this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
+                                                    if (typeof this.dataGrid.datagridMeta.searchConfig.fullTextSearch == "string") {
+                                                        this.dataGrid.datagridMeta.searchConfig.fullTextSearch =
+                                                            YAHOO.lang.JSON.parse(this.dataGrid.datagridMeta.searchConfig.fullTextSearch);
+                                                    }
+                                                    if (!this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm ||
+                                                        this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm.length <= 0) {
+                                                        this.dataGrid.datagridMeta.searchConfig.fullTextSearch = null;
+                                                    }
                                                 }
-                                                if (!this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm ||
-                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch.searchTerm.length <= 0) {
-                                                    this.dataGrid.datagridMeta.searchConfig.fullTextSearch = null;
-                                                }
+
+                                                this.performSearch({
+                                                    parent: this.dataGrid.datagridMeta.nodeRef,
+                                                    searchNodes: this.dataGrid.datagridMeta.searchNodes,
+                                                    sort: this.dataGrid.datagridMeta.sort,
+                                                    itemType: this.dataGrid.datagridMeta.itemType,
+                                                    searchConfig: this.dataGrid.datagridMeta.searchConfig,
+                                                    searchShowInactive: this.dataGrid.options.searchShowInactive
+                                                });
+
                                             }
-
-                                            this.performSearch({
-                                                parent:this.dataGrid.datagridMeta.nodeRef,
-	                                            searchNodes: this.dataGrid.datagridMeta.searchNodes,
-                                                sort:this.dataGrid.datagridMeta.sort,
-                                                itemType:this.dataGrid.datagridMeta.itemType,
-                                                searchConfig:this.dataGrid.datagridMeta.searchConfig,
-                                                searchShowInactive:this.dataGrid.options.searchShowInactive
-                                            });
-
+                                            if (!this.dataGrid.datagridMeta.searchConfig || !this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
+                                                YAHOO.Bubbling.fire("hideFilteredLabel");
+                                            }
+                                            YAHOO.Bubbling.fire("hideSearchByAttributesLabel");
+                                        } else {
+                                            this.searchDialog.show();
                                         }
-                                        if (!this.dataGrid.datagridMeta.searchConfig || !this.dataGrid.datagridMeta.searchConfig.fullTextSearch) {
-                                            YAHOO.Bubbling.fire("hideFilteredLabel");
-                                        }
-                                    } else {
-                                        this.searchDialog.show();
                                     }
-                                }
+                                },
+                                scope: this
                             },
-                            scope:this
-                        },
-                        failureMessage:"Could not load form component '" + formUrl + "'.",
-                        scope:this,
-                        execScripts:true
-                    });
+                            failureMessage: "Could not load form component '" + formUrl + "'.",
+                            scope: this,
+                            execScripts: true
+                        });
+                }
             },
 
             /**
@@ -220,6 +224,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                     if (showFilteredLabel) {
                         YAHOO.Bubbling.fire("showFilteredLabel");
+                        YAHOO.Bubbling.fire("showSearchByAttributesLabel");
                     }
 
                     this.searchDialog.hide();
@@ -236,6 +241,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
             onClearSearchClick:function ADVSearch_onSearchClick(e, obj) {
                 this.renderFormTemplate(this.currentForm, true, e, obj);
                 YAHOO.Bubbling.fire("hideFilteredLabel");
+                YAHOO.Bubbling.fire("hideSearchByAttributesLabel");
             },
 
             /**
@@ -478,6 +484,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     this.renderFormTemplate(this.currentForm, true);
                 }
                 YAHOO.Bubbling.fire("hideFilteredLabel");
+                YAHOO.Bubbling.fire("hideSearchByAttributesLabel");
             }
         });
 })();

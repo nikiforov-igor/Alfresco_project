@@ -4,7 +4,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 
-LogicECM.module.ARM = LogicECM.module.ARM|| {};
+LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 (function () {
     var Dom = YAHOO.util.Dom;
@@ -15,9 +15,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.avaiableFilters = [];
         this.currentFilters = [];
         this.currentQuery = null;
-        this.bubblingLabel = null;
         this.currentNode = null;
-
         // Preferences service
         this.preferences = new Alfresco.service.Preferences();
 
@@ -29,6 +27,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         YAHOO.Bubbling.on("updateArmFilters", this.onUpdateAvaiableFilters, this);
         YAHOO.Bubbling.on("updateCurrentFilters", this.onUpdateCurrentFilters, this);
+
+        YAHOO.Bubbling.on("showSearchByAttributesLabel", this.onShowSearchByAttributes, this);
+        YAHOO.Bubbling.on("hideSearchByAttributesLabel", this.onHideSearchByAttributes, this);
+        YAHOO.Bubbling.on("showFullTextSearchLabel", this.onShowFullTextSearch, this);
+        YAHOO.Bubbling.on("hideFullTextSearchLabel", this.onHideFullTextSearch, this);
         return this;
     };
 
@@ -46,7 +49,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             currentNode: null,
 
-            bubblingLabel: null,
+            options: {},
+
+            attrSearchApplied: false,
+            fullTextSearchApplied: false,
 
             onReady: function () {
                 YAHOO.util.Dom.setStyle(this.id + "-body", "visibility", "inherit");
@@ -153,10 +159,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return -1;
             },
 
-            updateCurrentFiltersForm: function (updatePrefs) {
-                var context = this;
-
-                var filtersExist = this.currentFilters.length > 0;
+            updateCurrentFormView: function () {
+                var filtersExist = this.currentFilters.length > 0 || this.fullTextSearchApplied || this.attrSearchApplied;
                 Dom.setStyle(this.id, "display", filtersExist ? "" : "none");
 
                 if (filtersExist) {
@@ -181,12 +185,33 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             filtersHTML += this.getRemoveFilterButton(curFilter);
                             filtersHTML += "</span>";
                         }
+
+                        if (this.attrSearchApplied) {
+                            filtersHTML += "<span class='arm-filter-item' title='По атрибутам'>";
+                            filtersHTML += "По атрибутам";
+                            filtersHTML += this.getRemoveAttrFilterButton();
+                            filtersHTML += "</span>";
+                        }
+
+                        if (this.fullTextSearchApplied) {
+                            filtersHTML += "<span class='arm-filter-item' title='По тексту'>";
+                            filtersHTML += "По тексту";
+                            filtersHTML += this.getRemoveFullTextFilterButton();
+                            filtersHTML += "</span>";
+                        }
+
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
                 }
+            },
+
+            updateCurrentFiltersForm: function (updatePrefs) {
+                var context = this;
+
+                this.updateCurrentFormView();
 
                 YAHOO.Bubbling.fire("activeFiltersChanged", {
-                    bubblingLabel: context.bubblingLabel,
+                    bubblingLabel: context.options.bubblingLabel,
                     filters: this.currentFilters ? this.currentFilters : []
                 });
 
@@ -196,7 +221,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             },
 
-            _findFilterValueTitle: function(code, valuesList) {
+            _findFilterValueTitle: function (code, valuesList) {
                 for (var i = 0; i < valuesList.length; i++) {
                     if (valuesList[i].code == code) {
                         return valuesList[i].name;
@@ -221,7 +246,59 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             deleteAllFilters: function () {
                 this.currentFilters = [];
+                this.deleteAttributesFilter();
+                this.deleteFullTextFilter();
                 this.updateCurrentFiltersForm(true);
+            },
+
+            onShowSearchByAttributes: function () {
+                this.attrSearchApplied = true;
+                this.updateCurrentFormView();
+            },
+
+            onHideSearchByAttributes: function () {
+                this.attrSearchApplied = false;
+                this.updateCurrentFormView();
+            },
+
+            onShowFullTextSearch: function () {
+                this.fullTextSearchApplied = true;
+                this.updateCurrentFormView();
+            },
+
+            onHideFullTextSearch: function () {
+                this.fullTextSearchApplied = false;
+                this.updateCurrentFormView();
+            },
+
+            getRemoveAttrFilterButton: function () {
+                var id = Dom.generateId();
+                var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
+                YAHOO.util.Event.onAvailable(id, function () {
+                    YAHOO.util.Event.on(id, 'click', this.deleteAttributesFilter, null, this);
+                }, null, this);
+                return result;
+            },
+
+            getRemoveFullTextFilterButton: function () {
+                var id = Dom.generateId();
+                var result = "<span id='" + id + "' class='arm-filter-remove'>✕</span>";
+                YAHOO.util.Event.onAvailable(id, function () {
+                    YAHOO.util.Event.on(id, 'click', this.deleteFullTextFilter, null, this);
+                }, null, this);
+                return result;
+            },
+
+            deleteFullTextFilter: function () {
+                YAHOO.Bubbling.fire("clearFullTextSearch", {
+                    bubblingLabel: this.options.bubblingLabel
+                });
+            },
+
+            deleteAttributesFilter: function () {
+                YAHOO.Bubbling.fire("clearAttributesSearch", {
+                    bubblingLabel: this.options.bubblingLabel
+                });
             }
         }, true);
 })();

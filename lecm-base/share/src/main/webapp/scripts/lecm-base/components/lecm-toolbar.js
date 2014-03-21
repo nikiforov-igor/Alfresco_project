@@ -62,6 +62,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         YAHOO.Bubbling.on("refreshButtonState", this.onRefreshButtonState, this);
         YAHOO.Bubbling.on("changeSearchState", this.onChangeSearchState, this);
         YAHOO.Bubbling.on("selectedItemsChanged", this.onSelectedItemsChanged, this);
+        YAHOO.Bubbling.on("clearFullTextSearch", this.onClearFullText, this);
         return this;
     };
 
@@ -252,6 +253,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         sort: datagridMeta.sort
                     });
                     YAHOO.Bubbling.fire("showFilteredLabel");
+                    YAHOO.Bubbling.fire("showFullTextSearchLabel");
                 } else {
                     this.onClearSearch();
                 }
@@ -396,6 +398,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     Dom.setStyle(this.id + "-clearSearchInput", "visibility", "hidden");
                 }
             },
+
+            onClearFullText: function (layer, args) {
+                var obj = args[1];
+                var label = obj.bubblingLabel;
+                if (this._hasEventInterest(label)) {
+                    this.onClearSearch();
+                }
+            },
+
             /**
              * Очистка поиска
              * @constructor
@@ -442,6 +453,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     if (!datagridMeta.searchConfig || !datagridMeta.searchConfig.fullTextSearch) {
                         YAHOO.Bubbling.fire("hideFilteredLabel");
                     }
+                    YAHOO.Bubbling.fire("hideFullTextSearchLabel");
                     this.checkShowClearSearch();
                 }
             },

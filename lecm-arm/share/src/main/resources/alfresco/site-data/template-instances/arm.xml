@@ -11,7 +11,7 @@
             <url>/lecm/arm/documents/title</url>
             <properties>
                 <code>{code}</code>
-                <filteredLabel>arm.title.filteredLabel</filteredLabel>
+                <filteredLabel> </filteredLabel>
             </properties>
         </component>
         <!-- Toolbar -->

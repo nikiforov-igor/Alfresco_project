@@ -406,7 +406,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	                if (this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
 		                Dom.get(this.id + "-full-text-search").value = "";
-		                YAHOO.Bubbling.fire("hideFilteredLabel");
+                        YAHOO.Bubbling.fire("hideFullTextSearchLabel");
 		                this.checkShowClearSearch();
 	                }
 
