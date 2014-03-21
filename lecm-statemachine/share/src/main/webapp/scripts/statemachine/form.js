@@ -125,7 +125,7 @@ LogicECM.module = LogicECM.module || {};
                 },
                 timeout: 60000
             };
-            YAHOO.util.Connect.asyncRequest('GET', url, callback);
+            YAHOO.util.Connect.asyncRequest('GET', encodeURI(url), callback);
 		},
 
         showForm: function showForm_action(action) {
@@ -379,7 +379,7 @@ LogicECM.module = LogicECM.module || {};
 				actionType: type,
 				taskId:taskId,
 				formResponse: encodeURIComponent(formResponse),
-				actionId: actionId ? actionId : ""
+				actionId: actionId ? encodeURIComponent(actionId) : ""
 			});
             this._showSplash()
 			callback = {
