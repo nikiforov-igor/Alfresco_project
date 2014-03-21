@@ -24,6 +24,10 @@
 	margin-left: 0;
 }
 
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > div.format-info {
+	margin-top: 22px;
+}
+
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block input.autocomplete-input,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field div.object-finder .current-values{
 	width: 149px;
