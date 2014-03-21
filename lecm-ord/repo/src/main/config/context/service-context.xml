@@ -57,6 +57,12 @@
 		  p:documentType="lecm-ord:document"
 		  p:tags-ref="ord.taggedCounterRegistrator.tags"/>
 
+	<bean id="ordReportsService" parent="baseBean"
+		  class="ru.it.lecm.ord.ORDReportsServiceImpl"
+		  p:nodeService-ref="nodeService"
+		  p:reportsManager-ref="reportsManager"
+		  p:documentAttachmentsService-ref="documentAttachmentsService"/>
+
 	<!--service for various document utils-->
 	<bean id="ordDocumentService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"

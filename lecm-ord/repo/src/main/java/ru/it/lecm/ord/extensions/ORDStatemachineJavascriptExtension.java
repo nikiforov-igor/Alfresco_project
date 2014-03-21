@@ -38,6 +38,7 @@ import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
+import ru.it.lecm.ord.api.ORDReportsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -61,6 +62,8 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private LecmPermissionService lecmPermissionService;
 	private ORDDocumentService ordDocumentService;
 
+	private ORDReportsService ordReportsService;
+	
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
@@ -96,7 +99,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-
+	
+	public void setOrdReportsService(ORDReportsService ordReportsService) {
+		this.ordReportsService = ordReportsService;
+	}
+	
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
 	}
@@ -518,5 +525,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 		return false;
 	}
-
+	
+	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
+		NodeRef reportNodeRef = ordReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
+		
+		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
+	}
 }

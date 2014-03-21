@@ -56,7 +56,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 			int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 			if (comingSoon >= 0) {
 				String message = createInitiatorDeadlineComingMessage(documentRef, deadlineDate);
-				//sendNotification(message, documentRef, new ArrayList<NodeRef>(recipients));
+				
 				notificationsService.sendNotification(
 					AuthenticationUtil.getSystemUserName(), 
 					documentRef, 
@@ -97,7 +97,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 						
 			if (comingSoon >= 0) {
 				String message = createAssigneeDeadlineComingMessage(documentRef, deadlineDate);
-				//sendNotification(message, documentRef, recipients);
+				
 				notificationsService.sendNotification(
 					AuthenticationUtil.getSystemUserName(), 
 					documentRef, 

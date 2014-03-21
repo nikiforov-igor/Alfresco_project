@@ -41,11 +41,20 @@ public final class ORDModel {
 
 	public static enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS };
 	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
-																	put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
-																	put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
-																	put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
-																	put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
-																}};
+		put(P_STATUSES.PERFORMANCE_STATUS, "На исполнении");
+		put(P_STATUSES.EXECUTED_STATUS, "Исполнен");
+		put(P_STATUSES.NOT_EXECUTED_STATUS, "Не исполнен");
+		put(P_STATUSES.EXPIRED_STATUS, "Просрочен");
+	}};
+
+	public static enum ATTACHMENT_CATEGORIES { DOCUMENT, APPLICATIONS, AGREEMENTS, ORIGINAL, OTHERS };
+	public static final EnumMap<ATTACHMENT_CATEGORIES,String> ATTACHMENT_CATEGORIES_MAP = new EnumMap<ATTACHMENT_CATEGORIES,String>(ATTACHMENT_CATEGORIES.class){{
+		put(ATTACHMENT_CATEGORIES.DOCUMENT, "Документ");
+		put(ATTACHMENT_CATEGORIES.APPLICATIONS, "Приложения");
+		put(ATTACHMENT_CATEGORIES.AGREEMENTS, "Согласования");
+		put(ATTACHMENT_CATEGORIES.ORIGINAL, "Подлинник");
+		put(ATTACHMENT_CATEGORIES.OTHERS, "Прочее");
+	}};
 
 	private ORDModel() throws IllegalAccessException {
 		throw new IllegalAccessException("You cannot create any instance of ORDModel class.");
