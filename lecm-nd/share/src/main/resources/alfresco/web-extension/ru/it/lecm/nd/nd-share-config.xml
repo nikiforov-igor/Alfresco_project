@@ -292,103 +292,16 @@
                 </field-visibility>
             </form>
             <!-- Форма просмотра на главной странице-->
-            <form id="main-page-dashlets">
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <field-visibility>
-                    <show id="lecm-document:regnum"/>                                                                   <!-- Рег. номер -->
-                    <show id="lecm-document-aspects:reg-data-date" force="true"/>
-                    <show id="lecm-eds-document:summaryContent"/>
-                    <show id="lecm-eds-document:note"/>
-                    <show id="lecm-document:title"/>
-                    <show id="lecm-eds-document:document-type-assoc"/>
-                    <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
-                    <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-nd:approval-list" force="true" for-mode="view"/>                             <!-- Листы согласования-->
-                    <show id="lecm-nd:signing-list" force="true" for-mode="view"/>                              <!-- Листы подписания-->
-                    <show id="lecm-nd:style-for-approval-and-signing-tab" force="true" for-mode="view"/>
-                    <show id="lecm-nd:begin-date"/>
-                    <show id="lecm-nd:end-date"/>
-                    <show id="lecm-eds-document:file-register-assoc"/>
-                    <show id="lecm-document-aspects:is-shared-folder"/>
-                    <show id="lecm-document:edit-document" for-mode="view"/>
-                    <show id="lecm-nd:nd-css-fix" force="true" for-mode="view"/> <!-- Костыль для стилей -->
-                </field-visibility>
-                <appearance>
-                    <set id="common" appearance="" label="Атрибуты"/>
-                    <set id="approval-and-signing" appearance="" label="Согласование/подписание"/>
-
-                    <set id="edit-document" parent="common" appearance=""/>
-                    <set id="regData" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd3" parent="common"/>
-                    <set id="nd4" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd5" parent="common"/>
-                    <set id="dates" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd7" parent="common"/>
-                    <set id="nd8" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd9" parent="common"/>
-
-                    <!-- Вкладка Атрибуты -->
-                    <field id="lecm-nd:nd-css-fix" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-nd/nd-fix.css</control-param>
-                        </control>
-                    </field>
-
-                     <field id="lecm-document:edit-document" set="edit-document">
-                        <control template="/ru/it/lecm/documents/controls/edit-document-button.ftl"/>
-                    </field>
-
-
-                    <field id="lecm-document:regnum" set="regData"/>
-                    <field id="lecm-document-aspects:reg-data-date" set="regData"/>
-
-                    <field id="lecm-document:title" label="Заголовок" set="nd3"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="nd4"/>
-                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" set="nd4" mandatory="true">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание" set="nd5">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
-                            <control-param name="rows">4</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-eds-document:note" label="Примечание" set="nd7"/>
-                    <field id="lecm-document:subject-assoc" label="Тематика" set="nd8"/>
-                    <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="nd8"/>
-                    <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
-                    <field id="lecm-nd:end-date" label="Дата окончания действия" set="dates">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
-                    <field id="lecm-document-aspects:is-shared-folder" set="nd9"/>
-                    <!-- Вкладка "Согласование/подписание" -->
-                    <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
-                    </field>
-                    <field id="lecm-nd:signing-list" set="approval-and-signing" label="Подписание">
-                        <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
-                    </field>
-
-                    <field id="lecm-nd:style-for-approval-and-signing-tab" set="approval-and-signing">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
-                        </control>
-                    </field>
-                </appearance>
-            </form>
+	        <form id="main-page-dashlets">
+		        <field-visibility>
+			        <show id="viewMetadata"/>
+		        </field-visibility>
+		        <appearance>
+			        <field id="viewMetadata">
+				        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
+			        </field>
+		        </appearance>
+	        </form>
         </forms>
     </config>
 

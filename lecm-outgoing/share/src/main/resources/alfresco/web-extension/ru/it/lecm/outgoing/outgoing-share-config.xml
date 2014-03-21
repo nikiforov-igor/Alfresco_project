@@ -37,9 +37,9 @@
 					<set id="outgoing2" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing3" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
 					<set id="outgoing4" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl" appearance="whitespace"/>	<!-- сет будет отмечен стилем set-whitespace -->
+					<set id="outgoing5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing6" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl" appearance="whitespace"/>	<!-- сет будет отмечен стилем set-whitespace -->
+					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing8" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing9" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 

@@ -331,7 +331,17 @@
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
             </form>
-
+	        <!-- Форма просмотра на главной странице-->
+	        <form id="main-page-dashlets">
+		        <field-visibility>
+			        <show id="viewMetadata"/>
+		        </field-visibility>
+		        <appearance>
+			        <field id="viewMetadata">
+				        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
+			        </field>
+		        </appearance>
+	        </form>
 
         </forms>
     </config>
