@@ -135,3 +135,12 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer.PdfJs .viewer.documentView {
 	max-height: 500px !important;
 }
+
+.yui-panel.metadata-form-edit .from-with-preview .two-column div.association-auto-complete-selected-item > span.not-person,
+.yui-panel.metadata-form-edit .from-with-preview .two-column div.association-auto-complete-selected-item > span > a {
+	max-width: 120px;
+}
+
+.yui-panel.metadata-form-edit .from-with-preview div.association-auto-complete-selected-item > span > a, .yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span.not-person {
+	max-width: 260px;
+}
