@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="register-sending" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="17427ef3-5123-40fd-9bcf-75ce6a972ed6">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-register-sending.xml"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="NODE_ID" class="java.lang.Long" isForPrompting="false"/>
+	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[$P!{PREPARED_QUERY}]]>
+	</queryString>
+	<field name="autonomous-okrug" class="java.lang.String">
+		<fieldDescription><![CDATA[Автономный округ]]></fieldDescription>
+	</field>
+	<field name="region" class="java.lang.String">
+		<fieldDescription><![CDATA[Область]]></fieldDescription>
+	</field>
+	<field name="area" class="java.lang.String">
+		<fieldDescription><![CDATA[Район]]></fieldDescription>
+	</field>
+	<field name="settlement" class="java.lang.String">
+		<fieldDescription><![CDATA[Населенный пункт]]></fieldDescription>
+	</field>
+	<field name="street" class="java.lang.String">
+		<fieldDescription><![CDATA[Улица]]></fieldDescription>
+	</field>
+	<field name="house" class="java.lang.String">
+		<fieldDescription><![CDATA[Дом]]></fieldDescription>
+	</field>
+	<field name="apartment" class="java.lang.String">
+		<fieldDescription><![CDATA[Квартира]]></fieldDescription>
+	</field>
+	<field name="surname" class="java.lang.String">
+		<fieldDescription><![CDATA[Фамилия]]></fieldDescription>
+	</field>
+	<field name="firstname" class="java.lang.String">
+		<fieldDescription><![CDATA[Имя]]></fieldDescription>
+	</field>
+	<field name="middlename" class="java.lang.String">
+		<fieldDescription><![CDATA[Отчество]]></fieldDescription>
+	</field>
+	<title>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="88" y="1" width="136" height="20" uuid="650300c9-6fc3-44a4-bd25-fa9838dcd550"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans Mono" size="10"/>
+				</textElement>
+				<text><![CDATA[Реестр писем №]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="21" width="136" height="20" uuid="2e888dbb-c2b4-4bce-b413-b1679f83daa4"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans Mono" size="10"/>
+				</textElement>
+				<text><![CDATA[Адрес отправителя:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="241" y="21" width="171" height="1" uuid="7778b0ec-b6d4-4a41-9aa8-ccdaf38c2647"/>
+			</line>
+			<line>
+				<reportElement x="241" y="40" width="171" height="1" uuid="94b6e1b6-58a9-4a86-b327-17d37493d18c"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="18" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="0" y="0" width="42" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="d2334534-0ee4-43cb-82d6-fd1d4e4ed21a"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["№ п/п"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="84" y="0" width="140" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="84455162-a3e0-4705-b1f5-dd5e4836f7b0"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Номер идентификатора Информация клиента"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="990" y="0" width="120" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="0ac75f38-2377-46c2-9f0f-afb21f4a5422"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Имя"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="1110" y="0" width="120" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="99f92051-2e2f-4850-9954-25ca0dfb86fc"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Отчество"]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="42" y="0" width="42" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="4d03683c-eadc-45dd-8981-bc99c880cfa9"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["№ исх."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="224" y="0" width="146" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="117f1fe0-c5aa-4442-b286-06a4a4e30940"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Адресат"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="370" y="0" width="185" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="84a45627-f63c-4995-8b08-adf9e04fec23"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Адрес получателя"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="42" height="26" isPrintWhenDetailOverflows="true" uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT} + "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="84" y="0" width="140" height="26" uuid="060c62e0-43a6-4d8c-a8f3-3c54bc7640f7"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="990" y="0" width="120" height="26" uuid="fbcf48a6-2b6a-481f-86b8-2e12a16e785e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firstname}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1110" y="0" width="120" height="26" uuid="55742563-cf14-4572-a1cf-2179335e97fc"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{middlename}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="42" y="0" width="42" height="26" isPrintWhenDetailOverflows="true" uuid="e623fdfb-b4c9-4d5d-9727-ee84a7014403"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="224" y="0" width="146" height="26" uuid="d93f7da8-bfb6-43aa-8f36-88e61d5b75d1"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(!$F{surname}.isEmpty() ? $F{surname} + " " : "") +
+(!$F{firstname}.isEmpty() ? $F{firstname} + " " : "") +
+(!$F{middlename}.isEmpty() ? $F{middlename} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="370" y="0" width="185" height="26" uuid="aeebdc0a-9e05-44b7-8b34-26a420a80d5b"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(!$F{autonomous-okrug}.isEmpty() ?  $F{autonomous-okrug} + ", " : "") +
+(!$F{region}.isEmpty() ? $F{region} + ", " : "") +
+(!$F{area}.isEmpty() ? $F{area} + ", " : "") +
+(!$F{settlement}.isEmpty() ? $F{settlement} : "") +
+(!$F{street}.isEmpty() ?  ", ул. " + $F{street} : "") +
+(!$F{house}.isEmpty() ? ", д. " + $F{house} : "") +
+(!$F{apartment}.isEmpty() ? ", кв. " + $F{apartment} : "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="54">
+			<staticText>
+				<reportElement x="0" y="29" width="98" height="22" uuid="78d64856-0942-49f8-ba99-51faa19ed3a8"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans Mono" size="10"/>
+				</textElement>
+				<text><![CDATA[ОТПРАВИТЕЛЬ:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="150" y="50" width="171" height="1" uuid="44fd2e98-27f2-4189-bd83-4951598d3e3a"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

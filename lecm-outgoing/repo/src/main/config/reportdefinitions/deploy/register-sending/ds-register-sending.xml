@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="register-sending">
+        <l18>
+            <item key="RU_RU"><![CDATA[Реестр на отправку]]></item>
+        </l18>
+        <provider
+            javaClass="ru.it.lecm.reports.generators.GenericDSProviderBase" mnem="PROV_GENERIC_PROVIDER">
+            <l18>
+                <item key="RU_RU"><![CDATA[genericProvider]]></item>
+            </l18>
+        </provider>
+        <templates>
+            <template filename="register-sending_list.jrxml"
+                mnem="List" type="JASPER">
+                <l18>
+                    <item key="RU_RU"><![CDATA[Список]]></item>
+                </l18>
+            </template>
+            <template
+                filename="register-sending_letter-registry.jrxml"
+                mnem="letter-registry" type="JASPER">
+                <l18>
+                    <item key="RU_RU"><![CDATA[Реестр писем]]></item>
+                </l18>
+            </template>
+        </templates>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU"><![CDATA[f985b646-b7a9-4008-998d-486e955ca6e0]]></item>
+            </l18>
+        </datasource.descriptor>
+        <roles/>
+    </report.descriptor>
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[]]></queryText>
+        <querySort/>
+        <allVersions>true</allVersions>
+        <preferedType>lecm-outgoing:document</preferedType>
+        <isMultiRow>false</isMultiRow>
+        <isCustom>false</isCustom>
+        <flags/>
+    </query.descriptor>
+    <fields>
+        <field alfrescoType="d:text" displayName="Автономный округ"
+            javaValueClass="java.lang.String"
+            jrFldName="autonomous-okrug" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:auto-district}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Автономный округ]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Область"
+            javaValueClass="java.lang.String" jrFldName="region" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:region}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Область]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Район"
+            javaValueClass="java.lang.String" jrFldName="area" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:area}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Район]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Населенный пункт"
+            javaValueClass="java.lang.String" jrFldName="settlement" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:settlement}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Населенный пункт]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Улица"
+            javaValueClass="java.lang.String" jrFldName="street" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:street}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Улица]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Дом"
+            javaValueClass="java.lang.String" jrFldName="house" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:house-number}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Дом]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Квартира"
+            javaValueClass="java.lang.String" jrFldName="apartment" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:apartment-number}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Квартира]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Фамилия"
+            javaValueClass="java.lang.String" jrFldName="surname" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:surname}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Фамилия]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Имя"
+            javaValueClass="java.lang.String" jrFldName="firstname" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:firstname}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Имя]]></item>
+            </l18>
+        </field>
+        <field alfrescoType="d:text" displayName="Отчество"
+            javaValueClass="java.lang.String" jrFldName="middlename" queryFldName="{lecm-outgoing:recipient-assoc/lecm-representative:middlename}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Отчество]]></item>
+            </l18>
+        </field>
+    </fields>
+</ds.config>
