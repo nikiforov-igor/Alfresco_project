@@ -116,7 +116,7 @@
                                 }
 							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
 							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-details"] = answerText;
+							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
 							    answerObject.save();
 
       							var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";

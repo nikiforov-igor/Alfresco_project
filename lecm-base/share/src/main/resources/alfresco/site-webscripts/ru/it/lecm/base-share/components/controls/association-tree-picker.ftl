@@ -2,6 +2,8 @@
 <#include "association-tree-picker-dialog.inc.ftl">
 
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#assign selectedValue = "">
+<#assign params = field.control.params>
 <#if field.control.params.plane?? && field.control.params.plane == "true">
     <#assign plane = true>
 <#else>
@@ -89,16 +91,29 @@
 <script type="text/javascript">
     <#if field.control.params.selectedValueContextProperty??>
         <#if context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
         <#elseif args[field.control.params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = args[field.control.params.selectedValueContextProperty]>
+            <#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
         <#elseif context.properties[field.control.params.selectedValueContextProperty]??>
-            <#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+            <#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
         </#if>
     </#if>
     <#assign optionSeparator="|">
     <#assign labelSeparator=":">
-
+    <#if selectedValue == "" && params.selectedItemsFormArgs??>
+        <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+        <#list selectedItemsFormArgs as selectedItemsFormArg>
+            <#if form.arguments[selectedItemsFormArg]??>
+                <#if !selectedValue??>
+                    <#assign selectedValue = ""/>
+                </#if>
+                <#if (selectedValue?length > 0)>
+                    <#assign selectedValue = selectedValue + ","/>
+                </#if>
+                <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
+            </#if>
+        </#list>
+    </#if>
 
     new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" ).setOptions({
         <#if disabled>
@@ -150,6 +165,9 @@
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
+        <#if selectedValue != "">
+            selectedValue: "${selectedValue}",
+        </#if>
         showSelectedItemsPath: ${showSelectedItemsPath?string},
         <#if field.control.params.defaultValueDataSource??>
             defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
@@ -157,7 +175,7 @@
         <#if defaultValue?has_content>
             defaultValue: "${defaultValue?string}",
         </#if>
-        <#if renderPickerJSSelectedValue??>selectedValue: "${renderPickerJSSelectedValue}",</#if>
+        <#if selectedValue??>selectedValue: "${selectedValue}",</#if>
 	    <#if field.control.params.fireAction?? && field.control.params.fireAction != "">
 	    fireAction: {
 		    <#list field.control.params.fireAction?split(optionSeparator) as typeValue>

@@ -111,7 +111,7 @@ LogicECM.module = LogicECM.module || {};
                     });
                 },
                 addDocument: function addDocement_function() {
-                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}&nodeRef={nodeRef}&initFields={initFields}";
+                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}&nodeRef={nodeRef}";
                     templateUrl = YAHOO.lang.substitute(templateUrl, {
                         itemKind: "type",
                         destination: this.destination,
@@ -119,7 +119,7 @@ LogicECM.module = LogicECM.module || {};
                         mode: "create",
                         submitType: "json",
                         formId: "workflow-form",
-                        initFields: this.initFields
+                        args: this.initFields
                     });
 
                     var me = this;

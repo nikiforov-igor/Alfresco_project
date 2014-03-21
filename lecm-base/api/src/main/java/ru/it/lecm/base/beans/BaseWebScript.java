@@ -72,7 +72,22 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 				+ description + "</a>";
 	}
 
-	/**
+    public String wrapperAttribute(ScriptNode node, String description) {
+        return wrapperAttribute(node.getNodeRef(), description);
+    }
+
+    /**
+     * Оборачиваем узел в ссылку для просмотра атрибутов
+     * @param nodeRef
+     * @param description
+     * @return
+     */
+    public String wrapperAttribute(NodeRef nodeRef, String description) {
+        return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef.toString() + "', null, null)\">" + description + "</a>";
+    }
+
+
+    /**
 	 * Оборачиваем узел в ссылку на view-metadata
 	 * @param node
 	 * @param description

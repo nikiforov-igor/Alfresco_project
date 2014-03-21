@@ -2,6 +2,8 @@
 <#include "association-search-control-dialog.inc.ftl">
 
 <#assign controlId = fieldHtmlId + "-cntrl">
+<#assign selectedValue = "">
+<#assign params = field.control.params>
 
 <#if field.control.params.showViewIncompleteWarning?? && field.control.params.showViewIncompleteWarning == "false">
 	<#assign showViewIncompleteWarning = false>
@@ -59,15 +61,29 @@
 <script type="text/javascript">
 	<#if field.control.params.selectedValueContextProperty??>
 		<#if context.properties[field.control.params.selectedValueContextProperty]??>
-			<#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+			<#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
 		<#elseif args[field.control.params.selectedValueContextProperty]??>
-			<#assign renderPickerJSSelectedValue = args[field.control.params.selectedValueContextProperty]>
+			<#assign selectedValue = args[field.control.params.selectedValueContextProperty]>
 		<#elseif context.properties[field.control.params.selectedValueContextProperty]??>
-			<#assign renderPickerJSSelectedValue = context.properties[field.control.params.selectedValueContextProperty]>
+			<#assign selectedValue = context.properties[field.control.params.selectedValueContextProperty]>
 		</#if>
 	</#if>
 	<#assign optionSeparator="|">
 	<#assign labelSeparator=":">
+    <#if selectedValue == "" && params.selectedItemsFormArgs??>
+        <#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
+        <#list selectedItemsFormArgs as selectedItemsFormArg>
+            <#if form.arguments[selectedItemsFormArg]??>
+                <#if !selectedValue??>
+                    <#assign selectedValue = ""/>
+                </#if>
+                <#if (selectedValue?length > 0)>
+                    <#assign selectedValue = selectedValue + ","/>
+                </#if>
+                <#assign selectedValue = selectedValue + form.arguments[selectedItemsFormArg]/>
+            </#if>
+        </#list>
+    </#if>
 
 
 	new LogicECM.module.AssociationSearchViewer( "${fieldHtmlId}" ).setOptions({
@@ -101,8 +117,8 @@
 			ignoreNodes: "${args.ignoreNodes}".split(","),
 		</#if>
 			currentValue: "${field.value!''}",
-		<#if renderPickerJSSelectedValue??>
-			selectedValue: "${renderPickerJSSelectedValue}",
+		<#if selectedValue != "">
+			selectedValue: "${selectedValue}",
 		</#if>
         <#if field.control.params.defaultValueDataSource??>
             defaultValueDataSource: "${field.control.params.defaultValueDataSource}",

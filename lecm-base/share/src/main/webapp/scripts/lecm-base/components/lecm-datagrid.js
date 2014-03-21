@@ -684,7 +684,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                             case "text":
 												var hexColorPattern = /^#[0-9a-f]{6}$/i;
-												if (hexColorPattern.test(data.displayValue)) {
+                                                if (data.displayValue.indexOf("!html ") == 0) {
+                                                    columnContent += data.displayValue.substring(6);
+                                                } else if (hexColorPattern.test(data.displayValue)) {
 													columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
 												} else {
 													columnContent += $links($html(data.displayValue));

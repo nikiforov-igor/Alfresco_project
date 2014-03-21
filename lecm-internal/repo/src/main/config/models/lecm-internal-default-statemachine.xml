@@ -233,12 +233,12 @@
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Зарегистрировать проект]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Зарегистрировать проект]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -267,13 +267,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только автору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1066,12 +1066,12 @@
                                                                 <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Удалить]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Удалить]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -1100,13 +1100,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[true]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только инициатору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[true]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -1178,13 +1178,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Согласование]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[commentFileAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Согласование]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1209,13 +1209,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Внутренний]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[documentAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1270,12 +1270,12 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[workflowRole]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[DA_APPROVER]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[workflowRole]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1372,13 +1372,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Внутренний]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[documentAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1403,12 +1403,12 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[workflowRole]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[DA_SIGNER]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[workflowRole]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3829,13 +3829,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Документ]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[documentAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Документ]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -3860,12 +3860,12 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[workflowRole]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[DA_SIGNER]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[workflowRole]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4831,13 +4831,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Внутренний]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[documentAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4862,13 +4862,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Согласование]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[commentFileAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Согласование]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4923,12 +4923,12 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[workflowRole]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[DA_APPROVER]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[workflowRole]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5025,13 +5025,13 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
+                                                                                <name>inputFromValue</name>
+                                                                                <value><![CDATA[Внутренний]]></value>
+                                                                            </property>
+                                                                            <property>
                                                                                 <name>inputToValue</name>
                                                                                 <value>
                                                                                     <![CDATA[documentAttachmentCategoryName]]></value>
-                                                                            </property>
-                                                                            <property>
-                                                                                <name>inputFromValue</name>
-                                                                                <value><![CDATA[Внутренний]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5056,12 +5056,12 @@
                                                                                 <value><![CDATA[VARIABLE]]></value>
                                                                             </property>
                                                                             <property>
-                                                                                <name>inputToValue</name>
-                                                                                <value><![CDATA[workflowRole]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value><![CDATA[DA_SIGNER]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>inputToValue</name>
+                                                                                <value><![CDATA[workflowRole]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6794,12 +6794,12 @@
                                                                 <value><![CDATA[false]]></value>
                                                             </property>
                                                             <property>
-                                                                <name>transitionLabel</name>
-                                                                <value><![CDATA[Направить на регистрацию]]></value>
-                                                            </property>
-                                                            <property>
                                                                 <name>transition-script</name>
                                                                 <value><![CDATA[]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transitionLabel</name>
+                                                                <value><![CDATA[Направить на регистрацию]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -6828,13 +6828,13 @@
                                                                         </nodeRef>
                                                                         <properties>
                                                                             <property>
-                                                                                <name>hideAction</name>
-                                                                                <value><![CDATA[false]]></value>
-                                                                            </property>
-                                                                            <property>
                                                                                 <name>conditionErrorMessage</name>
                                                                                 <value>
                                                                                     <![CDATA[Действие доступно только автору]]></value>
+                                                                            </property>
+                                                                            <property>
+                                                                                <name>hideAction</name>
+                                                                                <value><![CDATA[false]]></value>
                                                                             </property>
                                                                             <property>
                                                                                 <name>condition</name>
@@ -8575,9 +8575,9 @@ for each (var sender in senders) {
         }
     } else {
         var answer = sender.sourceAssocs["lecm-internal-table-structure:answer-document-assoc"][0];
-        if (answer != null && sender.properties["lecm-statemachine:status"] == "Проект") {
+        if (answer != null && sender.properties["lecm-statemachine:status"] == "Направлен") {
             answer.properties["lecm-internal-table-structure:answer-complete"] = true;
-            answer.properties["lecm-internal-table-structure:answer-details"] = sender.properties["lecm-document:title"];
+            answer.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(sender, sender.properties["lecm-document:title"]);
             answer.save();
         }
     }
