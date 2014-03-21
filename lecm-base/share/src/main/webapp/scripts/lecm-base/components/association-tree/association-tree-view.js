@@ -236,8 +236,6 @@ LogicECM.module = LogicECM.module || {};
 					        },
 					        failureMessage: "message.failure"
 				        });
-		        } else {
-			        this.updateViewForm();
 		        }
 	    },
 
