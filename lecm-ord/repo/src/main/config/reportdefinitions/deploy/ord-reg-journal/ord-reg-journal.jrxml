@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+			  name="ord-reg-journal"
+			  pageWidth="842" pageHeight="595" orientation="Landscape"
+			  whenNoDataType="AllSectionsNoDetail"
+			  columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+			  uuid="f6a885b6-955a-427d-91a7-84e6883ae188">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-ord-reg-journal.xml"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/ord-reg-journal/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["+TYPE:\"lecm-ord:document\""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[$P!{PREPARED_QUERY}]]>
+	</queryString>
+	<field name="docDate" class="java.util.Date">
+		<fieldDescription><![CDATA[Дата документа]]></fieldDescription>
+	</field>
+	<field name="regNum" class="java.lang.String">
+		<fieldDescription><![CDATA[Регистрационный номер]]></fieldDescription>
+	</field>
+	<field name="docType" class="java.lang.String">
+		<fieldDescription><![CDATA[Вид документа]]></fieldDescription>
+	</field>
+	<field name="docTitle" class="java.lang.String">
+		<fieldDescription><![CDATA[Заголовок]]></fieldDescription>
+	</field>
+	<field name="docAuthor" class="java.lang.String">
+		<fieldDescription><![CDATA[Автор]]></fieldDescription>
+	</field>
+	<field name="docStatus" class="java.lang.String">
+		<fieldDescription><![CDATA[Статус]]></fieldDescription>
+	</field>
+	<field name="signatory" class="java.util.List">
+		<fieldDescription><![CDATA[Подписанты]]></fieldDescription>
+	</field>
+	<title>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="26" uuid="bacb6c19-0aa0-48cd-96c1-60db03aac67a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="16" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Журнал регистрации организационно-распорядительных документов]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="1" y="0" width="88" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="85bafb88-d725-4441-9b14-fbed91ca015a"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Дата документа"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="89" y="0" width="88" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="39430e69-d449-40f3-b5a3-eddc2be70840"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Регистрационный номер"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="177" y="0" width="119" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="96c44703-e628-4747-bc23-b57f1cb89645"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Вид документа"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="296" y="0" width="158" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="73a6b1c5-795c-4be2-ab63-fb21bfd9b83f"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Заголовок"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="454" y="0" width="121" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="e960bd92-bb47-475f-93d2-b90bda53d3ec"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Автор"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="714" y="0" width="88" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="82acc163-2923-4c3f-a965-36929ae9b4c3"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="575" y="0" width="139" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="c463df8f-c872-46a8-9e1d-6cc24dba3e0c"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Подписанты"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26" uuid="519c73f5-65fc-4868-9cce-cbca9bb75b87"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docDate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="89" y="0" width="88" height="26" uuid="1e07a117-3216-433c-836e-eb06289004db"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{regNum}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="177" y="0" width="119" height="26" uuid="1fed07b7-d093-4b8e-a3a9-97893b53b32e"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docType}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="296" y="0" width="158" height="26" uuid="156bbdf9-2986-4c68-83bf-257484247ab6"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docTitle}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="454" y="0" width="121" height="26" uuid="bf9269f6-3bb1-4dcc-9792-15d57403a174"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docAuthor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="714" y="0" width="88" height="26" uuid="95badbf2-670d-4c46-9256-69cf702f0635"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{docStatus}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="575" y="0" width="140" height="26" isPrintWhenDetailOverflows="true" uuid="0bd7c3aa-6762-474d-8102-e405a7ab918d"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{signatory}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "ord-signatory.jasper"]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="575" y="0" width="140" height="26" uuid="66a3af34-30c4-4a4a-a9bf-e881f010fa34"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</detail>
+</jasperReport>
