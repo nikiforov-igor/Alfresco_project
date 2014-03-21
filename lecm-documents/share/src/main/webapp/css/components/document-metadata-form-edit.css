@@ -78,9 +78,6 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
     margin-right: 3px;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
-    width: 190px;
-}
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block.with-two-buttons input.autocomplete-input {
     width: 130px;
 }
@@ -117,6 +114,10 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field input.autocomplete-input[type="text"],
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
+	width: 165px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.autocomplete-block input.autocomplete-input {
 	width: 165px;
 }
 
