@@ -39,6 +39,12 @@
     <#assign showCreateNewLink = true>
 </#if>
 
+<#if field.control.params.showCreateNewButton?? && field.control.params.showCreateNewButton == "false">
+	<#assign showCreateNewButton = false>
+<#else>
+	<#assign showCreateNewButton = true>
+</#if>
+
 <#if field.control.params.showSearch?? && field.control.params.showSearch == "false">
 	<#assign showSearch = false>
 <#else>
@@ -169,7 +175,13 @@
     <#if field.control.params.defaultValueDataSource??>
 	    defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
     </#if>
+	<#if field.control.params.createNewMessage??>
+		createNewMessage: "${field.control.params.createNewMessage}",
+	<#elseif field.control.params.createNewMessageId??>
+		createNewMessage: "${msg(field.control.params.createNewMessageId)}",
+	</#if>
         showCreateNewLink: ${showCreateNewLink?string},
+		showCreateNewButton: ${showCreateNewButton?string},
         showSearch: ${showSearch?string},
         changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
         plane: true,
@@ -195,14 +207,14 @@
         <input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
         <input type="hidden" id="${controlId}-selectedItems"/>
 
-        <div class="autocomplete-block <#if showCreateNewLink>with-two-buttons</#if>">
+        <div class="autocomplete-block <#if showCreateNewButton>with-two-buttons</#if>">
             <div id="${controlId}-autocomplete">
                 <input id="${controlId}-autocomplete-input" name="${field.name}-autocomplete-input" type="text" class="autocomplete-input"/>
                 <div class="show-picker">
                     <span class="tree-picker-button">
                         <input type="button" id="${controlId}-tree-picker-button" name="${field.name}-tree-picker-button" value="..."/>
                     </span>
-                    <#if showCreateNewLink>
+                    <#if showCreateNewButton>
                     <span class="create-new-button">
                         <input type="button" id="${controlId}-tree-picker-create-new-button" name="-" value=""/>
                     </span>
