@@ -51,15 +51,13 @@
     border-radius: 3px;
     overflow: hidden;
 }
-.yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.form-field div.viewmode-field span.viewmode-value {
-    width: 230px;
-}
-.yui-skin-lecmTheme div.metadata-form div.set div div.form-field div.viewmode-field span.viewmode-value {
-    width: 687px;
-}
+.yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.form-field div.viewmode-field span.viewmode-value,
+.yui-skin-lecmTheme div.metadata-form div.set div div.form-field div.viewmode-field span.viewmode-value,
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
-    width: 687px;
+    width: auto;
+	float: none;
 }
+
 .yui-skin-lecmTheme div.metadata-form div.form-field {
     float: left;
 }
@@ -120,4 +118,8 @@
 
 #main-region > div > div > div.form-container > div.form-fields {
 	padding: 0;
+}
+
+.metadata-form .form-field {
+	width: 100%;
 }

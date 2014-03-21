@@ -36,10 +36,10 @@
 		            <set id="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming3" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming4" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming5"/>
+		            <set id="incoming5" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming6" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming7" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-		            <set id="incoming8"/>
+		            <set id="incoming8" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="incoming9" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming10" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming11" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>

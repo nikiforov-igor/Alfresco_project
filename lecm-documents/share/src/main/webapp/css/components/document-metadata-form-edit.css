@@ -117,8 +117,19 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field input.autocomplete-input[type="text"],
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
-	width: 189px;
+	width: 165px;
 }
+
+.yui-panel.metadata-form-edit .two-column div.association-auto-complete-selected-item > span.not-person,
+.yui-panel.metadata-form-edit .two-column div.association-auto-complete-selected-item > span > a {
+	max-width: 135px;
+}
+
+.yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span > a,
+.yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span.not-person {
+	max-width: 430px;
+}
+
 .yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span.not-person,
 .yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span.not-person,
 .yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span.not-person,
