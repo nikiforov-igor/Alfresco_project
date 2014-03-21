@@ -70,8 +70,10 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
+	                <show id="lecm-document-aspects:reg-project-data-number"/>
+	                <show id="lecm-document-aspects:reg-project-data-date"/>
+	                <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-internal:custom-style"/>   <!-- Костыль для кастомного стиля-->
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-internal:approval-list"/><!-- Листы согласования-->
                     <show id="lecm-internal:signing-list"/>	<!-- Листы подписания-->
                     <show id="lecm-internal:style-for-approval-and-signing-tab"/>
@@ -89,8 +91,8 @@
                     <set id="content" parent="common" appearance=""/>
                     <set id="responseTo" parent="common" appearance=""/>
                     <set id="subjectAndRegister" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="uploader" parent="common" appearance=""/>
                     <set id="note" parent="common" appearance=""/>
+	                <set id="footer" parent="common" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
 
                     <field id="lecm-eds-document:note" set="note">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
@@ -149,16 +151,15 @@
 
                     <field id="lecm-eds-document:file-register-assoc" set="subjectAndRegister"/>
 
+                    <field id="lecm-document-aspects:reg-project-data-number" set="footer"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="footer"/>
+	                <field id="lecm-document-aspects:is-shared-folder" set="footer">
+		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+	                </field>
+
                     <field id="lecm-internal:custom-style" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/create-form.css</control-param>
-                        </control>
-                    </field>
-
-                    <field id="lecm-document-aspects:attachments-temp-assoc" set="uploader" label="Вложения">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">Вложения</control-param>
+                            <control-param name="cssFile">lecm-internal/edit-form.css</control-param>
                         </control>
                     </field>
 
@@ -233,8 +234,10 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
+	                <show id="lecm-document-aspects:reg-project-data-number"/>
+	                <show id="lecm-document-aspects:reg-project-data-date"/>
+	                <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-internal:custom-style"/>   <!-- Костыль для кастомного стиля-->
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-internal:approval-list"/><!-- Листы согласования-->
                     <show id="lecm-internal:signing-list"/>	<!-- Листы подписания-->
                     <show id="lecm-internal:style-for-approval-and-signing-tab"/>
@@ -254,10 +257,10 @@
                     <set id="content" parent="common" appearance=""/>
                     <set id="responseTo" parent="common" appearance=""/>
                     <set id="subjectAndRegister" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="uploader" parent="common" appearance=""/>
                     <set id="note" parent="common" appearance=""/>
+	                <set id="footer" parent="common" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
 
-                    <field id="lecm-document:edit-document" set="edit-document">
+	                <field id="lecm-document:edit-document" set="edit-document">
                         <control template="/ru/it/lecm/documents/controls/edit-document-button.ftl"/>
                    </field>
 
@@ -318,16 +321,15 @@
 
                     <field id="lecm-eds-document:file-register-assoc" set="subjectAndRegister"/>
 
+	                <field id="lecm-document-aspects:reg-project-data-number" set="footer"/>
+	                <field id="lecm-document-aspects:reg-project-data-date" set="footer"/>
+	                <field id="lecm-document-aspects:is-shared-folder" set="footer">
+		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+	                </field>
+
                     <field id="lecm-internal:custom-style" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/create-form.css</control-param>
-                        </control>
-                    </field>
-
-                    <field id="lecm-document-aspects:attachments-temp-assoc" set="uploader" label="Вложения">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                            <control-param name="directoryName">Вложения</control-param>
+                            <control-param name="cssFile">lecm-internal/edit-form.css</control-param>
                         </control>
                     </field>
 

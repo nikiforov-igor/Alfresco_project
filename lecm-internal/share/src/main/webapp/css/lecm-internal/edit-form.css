@@ -12,7 +12,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder.with-two-buttons .current-values {
-	width: 92% !important;
+	width: 775px !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.form-field div.object-finder.with-two-buttons .current-values {
@@ -20,7 +20,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .yui-skin-lecmTheme .yui-panel .yui-u div.form-field input[type=text]:not(.autocomplete-input) {
-	width: 94% !important;
+	width: 405px !important;
 }
 
 .format-info {
@@ -28,7 +28,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .defaultSkin table.mceLayout {
-	width: 1005px !important;
+	width: 848px !important;
 }
 
 .datepicker-icon {
@@ -37,23 +37,23 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 
 .yui-skin-lecmTheme .yui-panel div.set > div.form-field input[type=text]:not(.autocomplete-input)
 {
-	width: 1005px !important;
+	width: 848px !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder .current-values {
-	width: 969px !important;
+	width: 813px !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
-	width: 91% !important;
+	width: 813px !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.object-finder.with-two-buttons div.current-values {
-	width: 83% !important;
+	width: 340px !important;
 }
 
 .yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.current-values {
-	width: 453px !important;
+	width: 370px !important;
 }
 
 .uploader-block {
@@ -61,7 +61,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 }
 
 .attachments-list {
-	width: 800px !important;
+	width: 76% !important;
 }
 
 div.metadata-form ul.attachments-list {
@@ -83,9 +83,49 @@ div.yui-gb div.yui-u.first {
 }
 
 div.form-field textarea {
-	width: 100% !important;
+	width: 848px !important;
 }
 
 tr.yui-dt-first.yui-dt-last > th {
 	width: 50px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel.yui-module .form-field iframe {
+	max-width: none !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field.checkbox-control {
+	margin-top: 25px;
+	text-align: right;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field.checkbox-control input[type='checkbox'] {
+	float: right;
+	margin-top: 8px;
+}
+
+.yui-skin-lecmTheme div.form-field div.viewmode-field span.viewmode-value {
+	font-weight: bold;
+	padding: 2px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	overflow: hidden;
+
+	height: 28px;
+	line-height: 22px;
+	display: block;
+	vertical-align: middle;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.yui-gc .tab-common .set .yui-g {
+	float: none;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.yui-gc .yui-gb .yui-u {
+	float: left;
 }
