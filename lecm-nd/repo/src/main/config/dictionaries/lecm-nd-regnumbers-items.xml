@@ -10,7 +10,7 @@
             </item>
             <item name="cm:Номер НД" type="lecm-regnum:template">
                 <property name="cm:name">Номер НД</property>
-                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:documentType-code')}-{#formatNumber('00000', doc.counterDoctype)}</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:documentType-code')}-{#formatNumber('00000', doc.counterPlainDoctype)}</property>
                 <property name="lecm-regnum:template-comment">Шаблон для номера НД</property>
                 <property name="lecm-regnum:template-service-id">ND_NUMBER</property>
             </item>
