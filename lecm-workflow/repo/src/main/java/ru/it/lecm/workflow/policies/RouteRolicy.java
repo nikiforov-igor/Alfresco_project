@@ -15,6 +15,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -51,7 +52,8 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 			String title = (String) nodeService.getProperty(routeRef, ContentModel.PROP_TITLE);
 			String[] parts = StringUtils.split(name, '_');
 			String newName = String.format("%s_%s", parts[0], title);
-			nodeService.setProperty(routeRef, ContentModel.PROP_NAME, newName);
+			String validName = FileNameValidator.getValidFileName(newName);
+			nodeService.setProperty(routeRef, ContentModel.PROP_NAME, validName);
 			boolean hasTempAspect = nodeService.hasAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
 			List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
 			int assigneesCount = 0;
