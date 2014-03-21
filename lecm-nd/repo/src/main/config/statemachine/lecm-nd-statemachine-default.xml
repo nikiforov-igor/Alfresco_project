@@ -8226,7 +8226,7 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
                         <roleAssociations>
                             <roleAssociation>
                                 <type>role-assoc</type>
-                                <businessRoleName>ORD_CREATOR</businessRoleName>
+                                <businessRoleName>ND_CREATOR</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
