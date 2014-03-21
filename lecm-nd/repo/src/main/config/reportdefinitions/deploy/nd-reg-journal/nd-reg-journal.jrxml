@@ -14,7 +14,7 @@
 		<defaultValueExpression><![CDATA["ds-nd-reg-journal.xml"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["reportdefinitions/deploy/nd-reg-journal/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["+TYPE:\"lecm-nd:document\""]]></defaultValueExpression>
@@ -22,6 +22,9 @@
 	<queryString language="SQL">
 		<![CDATA[$P!{PREPARED_QUERY}]]>
 	</queryString>
+	<field name="signatory" class="java.util.List">
+		<fieldDescription><![CDATA[Подписант]]></fieldDescription>
+	</field>
 	<field name="docDate" class="java.util.Date">
 		<fieldDescription><![CDATA[Дата документа]]></fieldDescription>
 	</field>
@@ -36,9 +39,6 @@
 	</field>
 	<field name="docAuthor" class="java.lang.String">
 		<fieldDescription><![CDATA[Автор]]></fieldDescription>
-	</field>
-	<field name="docSigner" class="java.lang.String">
-		<fieldDescription><![CDATA[Подписант]]></fieldDescription>
 	</field>
 	<field name="docStatus" class="java.lang.String">
 		<fieldDescription><![CDATA[Статус]]></fieldDescription>
@@ -202,7 +202,7 @@
 	<detail>
 		<band height="26" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="dccf144b-f874-4498-92c3-c90febce18b7" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="441" y="0" width="88" height="26"/>
+				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -214,7 +214,7 @@
 					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{docSigner}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{docDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26"/>
@@ -336,6 +336,17 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docBeginDate}]]></textFieldExpression>
 			</textField>
+			<subreport>
+				<reportElement uuid="e8b530a6-f531-4617-9a0b-1536aefff345" positionType="Float" stretchType="RelativeToBandHeight" x="442" y="0" width="88" height="26" isPrintWhenDetailOverflows="true"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{signatory}, false)]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "nd-signatory.jasper"]]></subreportExpression>
+			</subreport>
+			<rectangle>
+				<reportElement uuid="5ad5d27e-d3d7-4184-bc72-fd11353773f3" stretchType="RelativeToTallestObject" mode="Transparent" x="441" y="0" width="89" height="26"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+				</graphicElement>
+			</rectangle>
 		</band>
 	</detail>
 </jasperReport>

@@ -38,8 +38,14 @@
         <flags/>
     </query.descriptor>
     <fields>
+        <field alfrescoType="d:text" displayName="Подписант"
+            javaValueClass="java.util.List" jrFldName="signatory" queryFldName="{{subreport::signatory}}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Подписант]]></item>
+            </l18>
+        </field>
         <field alfrescoType="d:text" displayName="Дата документа"
-            javaValueClass="java.util.Date" jrFldName="docDate" queryFldName="{lecm-document:doc-date}">
+            javaValueClass="java.util.Date" jrFldName="docDate" queryFldName="{cm:created}">
             <l18>
                 <item key="RU_RU"><![CDATA[Дата документа]]></item>
             </l18>
@@ -68,12 +74,6 @@
                 <item key="RU_RU"><![CDATA[Автор]]></item>
             </l18>
         </field>
-        <field alfrescoType="d:text" displayName="Подписант"
-            javaValueClass="java.lang.String" jrFldName="docSigner" queryFldName="{lecm-document:creator}">
-            <l18>
-                <item key="RU_RU"><![CDATA[Подписант]]></item>
-            </l18>
-        </field>
         <field alfrescoType="d:text" displayName="Статус"
             javaValueClass="java.lang.String" jrFldName="docStatus" queryFldName="{lecm-statemachine:status}">
             <l18>
@@ -93,4 +93,14 @@
             </l18>
         </field>
     </fields>
+    <subreports>
+        <subreport destColumnName="signatory" name="signatory">
+            <sublist.source><![CDATA[{cm:contains(cm:name=Подписание)/cm:contains/cm:contains/}]]></sublist.source>
+            <sublist.item>
+                <map>
+                    <item key="signatory"><![CDATA[{lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}]]></item>
+                </map>
+            </sublist.item>
+        </subreport>
+    </subreports>
 </ds.config>
