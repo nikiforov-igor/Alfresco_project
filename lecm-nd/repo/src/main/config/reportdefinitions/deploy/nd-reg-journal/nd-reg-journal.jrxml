@@ -216,7 +216,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docDate}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
 				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -306,7 +306,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docStatus}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
 				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="704" y="0" width="96" height="26"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -321,7 +321,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{docEndDate}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
 				<reportElement uuid="d5779dac-37a1-4f36-8abe-3894589ed59f" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="616" y="0" width="88" height="26"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
