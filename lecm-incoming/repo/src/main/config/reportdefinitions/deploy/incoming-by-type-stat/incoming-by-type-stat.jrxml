@@ -34,7 +34,7 @@
 	<variable name="col_DocType_Total" class="java.lang.Integer" resetType="Group" resetGroup="grp_byKind" calculation="Count">
 		<variableExpression><![CDATA[$F{col_DocType}]]></variableExpression>
 	</variable>
-	<group name="grp_byKind">
+	<group name="grp_byKind" isStartNewPage="true">
 		<groupExpression><![CDATA[$F{col_DocKind}]]></groupExpression>
 		<groupHeader>
 			<band height="60">
