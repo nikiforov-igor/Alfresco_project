@@ -20,7 +20,7 @@
 <beans>
 
     <bean id="contracts.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
-          depends-on="contracts.LogicEcmContractsDictionariesBootstrap,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,dictionary.LogicEcmDictionaryCurrencyModelBootstrap">
+          depends-on="documents.LogicEcmModelsBootstrap,contracts.LogicEcmContractsDictionariesBootstrap,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,dictionary.LogicEcmDictionaryCurrencyModelBootstrap">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-contracts-table-structure-model.xml</value>
