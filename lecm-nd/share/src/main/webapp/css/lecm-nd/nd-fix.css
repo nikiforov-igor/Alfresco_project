@@ -7,7 +7,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 	width: 100% !important;
 }
 
-.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(#workflow-form-form-fields div.form-field input) {
 	margin-left: 0 !important;
 }
 
@@ -23,7 +23,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 	width: 90% !important;
 }
 
-.format-info {
+.format-info:not(#workflow-form-form-fields div.form-field input) {
 	top: 55px !important;
 }
 
@@ -35,7 +35,7 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 	margin-top: 5px !important;
 }
 
-.yui-skin-lecmTheme .yui-panel div.set > div.form-field input[type=text]:not(.autocomplete-input)
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field input[type=text]:not(#workflow-form-form-fields div.form-field input)
 {
 	width: 100% !important;
 }
