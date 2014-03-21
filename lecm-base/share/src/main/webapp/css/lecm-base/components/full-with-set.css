@@ -10,13 +10,22 @@
 	width: 387px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field select {
 	width: 350px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder.with-two-buttons .current-values {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
+	width: 615px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.object-finder.with-two-buttons .current-values {
 	width: 314px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 578px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .show-picker {

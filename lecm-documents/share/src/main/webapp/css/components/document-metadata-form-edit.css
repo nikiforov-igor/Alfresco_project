@@ -54,7 +54,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > input.date-entry + a {
     float: left;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field > input.date-entry ~ div.format-info {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.set div.form-field > input.date-entry ~ div.format-info {
     height: 16px;
     line-height: 16px;
     position: absolute;
