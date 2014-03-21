@@ -252,22 +252,28 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
             },
 
             onShowSearchByAttributes: function () {
-                this.attrSearchApplied = true;
-                this.updateCurrentFormView();
+                this._updateAttrSearchState(true)
             },
 
             onHideSearchByAttributes: function () {
-                this.attrSearchApplied = false;
-                this.updateCurrentFormView();
+                this._updateAttrSearchState(false);
             },
 
             onShowFullTextSearch: function () {
-                this.fullTextSearchApplied = true;
-                this.updateCurrentFormView();
+                this._updateFullTextSearchState(true);
             },
 
             onHideFullTextSearch: function () {
-                this.fullTextSearchApplied = false;
+                this._updateFullTextSearchState(false);
+            },
+
+            _updateAttrSearchState: function (active) {
+                this.attrSearchApplied = active;
+                this.updateCurrentFormView();
+            },
+
+            _updateFullTextSearchState: function (active) {
+                this.fullTextSearchApplied = active;
                 this.updateCurrentFormView();
             },
 
