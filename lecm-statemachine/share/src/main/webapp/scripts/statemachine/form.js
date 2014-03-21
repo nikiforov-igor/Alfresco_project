@@ -130,7 +130,9 @@ LogicECM.module = LogicECM.module || {};
 
         showForm: function showForm_action(action) {
             var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}&nodeRef={nodeRef}";
+            formWidth = "55em";
             if (action.isForm) {
+                formWidth = "80em";
                 templateUrl = YAHOO.lang.substitute(templateUrl, {
                     itemKind: "type",
                     itemId: action.formType,
@@ -155,7 +157,7 @@ LogicECM.module = LogicECM.module || {};
             var me = this;
             LogicECM.CurrentModules = {};
             LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                width:"80em",
+                width:formWidth,
                 templateUrl:templateUrl,
                 actionUrl:null,
                 destroyOnHide:true,
