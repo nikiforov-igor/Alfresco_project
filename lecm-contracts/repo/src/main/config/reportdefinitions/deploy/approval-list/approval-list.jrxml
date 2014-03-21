@@ -157,7 +157,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="36" y="2" width="170" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 				</textElement>
@@ -165,7 +165,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="210" y="2" width="170" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 				</textElement>
@@ -173,7 +173,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" x="384" y="2" width="230" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
 				</textElement>
