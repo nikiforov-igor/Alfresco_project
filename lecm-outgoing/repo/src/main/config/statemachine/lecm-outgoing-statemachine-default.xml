@@ -4791,7 +4791,7 @@
 									<node>
 										<type>WaitForDocumentChange</type>
 										<name>ab24542b-a8e4-4d4a-8a8a-891c94791bfb</name>
-										<nodeRef>workspace://SpacesStore/0cd9147c-4158-4828-b3f5-24473ddeeb06</nodeRef>
+										<nodeRef>workspace://SpacesStore/a62e6656-aae9-4e1f-b8d4-52139be8e82f</nodeRef>
 										<properties>
 											<property>
 												<name>actionId</name>
@@ -4809,7 +4809,49 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>transition</type>
+														<name>a1fba658-b25a-4671-ad47-01219a0d6574</name>
+														<nodeRef>workspace://SpacesStore/8a52f721-962e-461a-98f3-2341789243a5</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionExpression</name>
+																<value>
+																	<![CDATA[doc.hasAspect("lecm-document-route:routable") == true]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionDocumentChangeScript</name>
+																<value>
+																	<![CDATA[]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+														</aspects>
+														<associations>
+															<association>
+																<type>transitionStatus</type>
+																<reference>workspace://SpacesStore/75534773-3bcb-4789-b5e6-8a18c2fc00c2</reference>
+															</association>
+														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>ScriptAction</type>

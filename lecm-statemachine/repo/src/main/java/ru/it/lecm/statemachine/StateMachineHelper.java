@@ -240,8 +240,8 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 ProcessInstance process = runtimeService.createProcessInstanceQuery().processInstanceId(task.getProcessInstanceId()).singleResult();
                 String processDefinitionId = process.getProcessDefinitionId();
                 result = getStateMachineActions(processDefinitionId, activityId, onFire);
+				}
             }
-        }
         return result;
     }
 
@@ -1200,7 +1200,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
         if (listeners != null) {
             for (ExecutionListener listener : listeners) {
                 if (listener instanceof StateMachineHandler.StatemachineTaskListener) {
-                    result = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get(onFire);
+					List<StateMachineAction> actions = ((StateMachineHandler.StatemachineTaskListener) listener).getEvents().get(onFire);
+                    if (actions != null) {
+						result = actions;
+					}
                 }
             }
         }
