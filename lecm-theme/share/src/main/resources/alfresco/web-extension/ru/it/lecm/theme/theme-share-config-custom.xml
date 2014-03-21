@@ -15,6 +15,7 @@
         <header>
             <app-items>
                  <!--defaults: icon="{id}.png" label="header.{id}.label" description="header.{id}.description"-->
+                <item type="link" id="arm-eds">/arm?code=SED</item>
                 <item type="link" id="contracts">/contracts-main</item>
                 <item type="link" id="errands-list-32">/errands-list</item>
                 <item type="js" id="notifications">LogicECM.module.Header.Notifications</item>
@@ -30,7 +31,6 @@
                         <item type="link" id="business-journal">/business-journal</item>
                         <!--<item type="link" id="errands-list">/errands-list</item>-->
                         <!--<item type="link" id="scaner">/document-scanner</item>-->
-                        <item type="link" id="arm">/arm?code=SED</item>
 						<item type="link" id="routes-settings">/routes</item>
                     </container-group>
                      <container-group id="alfrescos" label="Standard">
