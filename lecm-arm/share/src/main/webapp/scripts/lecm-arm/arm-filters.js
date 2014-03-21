@@ -71,7 +71,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             scope: this
                         },
                         failureCallback: {
-                            fn: function (p_oResponse) {
+                            fn: function () {
                                 filters.filtersFromPref = [];
                                 filters.currentFilters = filters.filtersFromPref.slice(0);
                                 filters.deferredListPopulation.fulfil("onReady");
@@ -155,39 +155,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             updateCurrentFiltersForm: function (updatePrefs) {
                 var context = this;
-                Alfresco.util.Ajax.jsonRequest({
-                    method: "POST",
-                    url: Alfresco.constants.PROXY_URI + "lecm/arm/query-by-filters",
-                    dataObj: {
-                        armNode: YAHOO.lang.JSON.stringify((this.currentNode && this.currentNode.data) ? this.currentNode.data : {}),
-                        filters: context._buildFiltersJSON()
-                    },
-                    successCallback: {
-                        fn: function (oResponse) {
-                            if (oResponse) {
-                                YAHOO.Bubbling.fire("activeFiltersChanged", {
-                                    bubblingLabel: context.bubblingLabel,
-                                    filtersMeta: {
-                                        query: oResponse.json.query
-                                    }
-                                });
-                                context.currentQuery = oResponse.json.query;
-                            }
-                        }
-                    },
-                    failureCallback: {
-                        fn: function () {
-                            YAHOO.Bubbling.fire("activeFiltersChanged", {
-                                bubblingLabel: context.bubblingLabel,
-                                filterMeta: {
-                                    query: ""
-                                }
-                            });
-                        }
-                    },
-                    scope: this,
-                    execScripts: true
-                });
 
                 var filtersExist = this.currentFilters.length > 0;
                 Dom.setStyle(this.id, "display", filtersExist ? "" : "none");
@@ -217,14 +184,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         currentFiltersConteiner.innerHTML = filtersHTML;
                     }
                 }
+
+                YAHOO.Bubbling.fire("activeFiltersChanged", {
+                    bubblingLabel: context.bubblingLabel,
+                    filters: this.currentFilters ? this.currentFilters : []
+                });
+
                 if (updatePrefs) {
-                    this.preferences.set(this.PREFERENCE_KEY, this._buildFiltersJSON());
+                    this.preferences.set(this.PREFERENCE_KEY, YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : []));
                     this.filtersFromPref = this.currentFilters.slice(0);
                 }
-            },
-
-            _buildFiltersJSON: function() {
-                return YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : [])
             },
 
             _findFilterValueTitle: function(code, valuesList) {

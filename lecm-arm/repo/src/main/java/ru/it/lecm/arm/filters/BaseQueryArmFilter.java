@@ -2,8 +2,7 @@ package ru.it.lecm.arm.filters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
-import ru.it.lecm.arm.beans.filters.ArmDocumenstFilter;
+import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 
 import java.util.List;
 
@@ -12,13 +11,13 @@ import java.util.List;
  * Date: 20.02.14
  * Time: 10:30
  */
-public class BaseQueryArmFilter implements ArmDocumenstFilter {
+public class BaseQueryArmFilter implements ArmDocumentsFilter {
     final private static Logger logger = LoggerFactory.getLogger(BaseQueryArmFilter.class);
 
     final public static String VALUE = "#value";
 
     @Override
-    public String getQuery(Object armNode, String baseQuery, List<String> args) {
+    public String getQuery(String baseQuery, List<String> args) {
         String resultedQuery = "";
         if (baseQuery != null) {
             logger.debug("Filter baseQuery: " + baseQuery);

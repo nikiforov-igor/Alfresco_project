@@ -20,8 +20,7 @@ var Filters =
      * @param parsedArgs {object} Parsed arguments object literal
      * @return {object} Object literal containing parameters to be used in Lucene search
      */
-    getFilterParams: function Filter_getFilterParams(filter)
-    {
+    getFilterParams: function Filter_getFilterParams(filter) {
         var filterParams =
         {
             query: "",
@@ -30,23 +29,25 @@ var Filters =
                 {
                     column: "@cm:name",
                     ascending: true
-                }],
-            language: "lucene",
+                }
+            ],
+            language: "fts",
             templates: null
         };
 
         // Max returned results specified?
-        var argMax = args.max;
-        if ((argMax !== null) && !isNaN(argMax))
-        {
+        var argMax = filter.max;
+        if ((argMax !== null) && !isNaN(argMax)) {
             filterParams.limitResults = argMax;
         }
 
         // Create query based on passed-in arguments
-        var filterData = String(filter.filterData || ""),
+        var isSimpleFilter = (filter.fromUrl != null && ("" + filter.fromUrl == "true"));
+
+        var filterData = String(filter.curValue || ""),
             filterQuery = filterParams.query;
 
-        var filterId = filter.filterId;
+        var filterId = filter.code ? filter.code : "custom";
 
         switch (String(filterId)) {
             case "my":
@@ -62,8 +63,8 @@ var Filters =
                 break;
 
             default:
-                var query = documentScript.getFilterQuery(filterId + "|" + filterData);
-                filterParams.query = (query && query != "") ? query : filterQuery
+                var query = isSimpleFilter ? documentScript.getFilterQuery(filterId + "|" + filterData) : arm.getQueryByFilter(filter);
+                filterParams.query = (query && query != "") ? query : filterQuery;
                 break;
         }
 

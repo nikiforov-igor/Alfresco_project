@@ -6,7 +6,7 @@ import org.alfresco.service.cmr.security.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.arm.beans.filters.ArmDocumenstFilter;
+import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import java.util.*;
  * Date: 20.02.14
  * Time: 10:30
  */
-public class AuthorArmFilter implements ArmDocumenstFilter {
+public class AuthorArmFilter implements ArmDocumentsFilter {
     final private static Logger logger = LoggerFactory.getLogger(AuthorArmFilter.class);
 
     public static enum AuthorEnum {
@@ -44,7 +44,7 @@ public class AuthorArmFilter implements ArmDocumenstFilter {
     }
 
     @Override
-    public String getQuery(Object armNode, String authorProperties, List<String> args) {
+    public String getQuery(String authorProperties, List<String> args) {
         String resultedQuery = "";
         if (args != null && !args.isEmpty()) {
             logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));

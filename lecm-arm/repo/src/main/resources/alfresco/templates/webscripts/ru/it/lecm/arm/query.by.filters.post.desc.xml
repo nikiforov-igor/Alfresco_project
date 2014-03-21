@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>ARM Query By Filters</shortname>
-    <description>ARM Query By Filters</description>
-    <url>/lecm/arm/query-by-filters</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction>none</transaction>
-</webscript>

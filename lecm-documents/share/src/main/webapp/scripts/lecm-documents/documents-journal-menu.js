@@ -50,9 +50,12 @@
 
         doChangeFilter: function (filter) {
             location.hash = '#filter=' + filter.filterId + "|" + filter.filterData;
+            var filters = [];
+            filters.push(filter);
+
             YAHOO.Bubbling.fire("datagridRefresh",
                 {
-                    filter: filter,
+                    filter: filters,
                     bubblingLabel: "documents-journal"
                 });
         }

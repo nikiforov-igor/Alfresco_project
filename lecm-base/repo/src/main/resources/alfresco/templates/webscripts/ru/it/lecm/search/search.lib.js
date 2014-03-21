@@ -126,6 +126,19 @@ function escapeString(value) {
     return result;
 }
 
+function getFiltersQuery(filters) {
+    var resQuery = "";
+    for (var index in filters) {
+        var filter = filters[index];
+        if (filter.query != null && ("" + filter.query).length > 0) {
+            resQuery = resQuery + "(" + filter.query + ") AND ";
+        }
+    }
+    resQuery =  resQuery.length > 5 ? resQuery.substring(0, resQuery.length - 5) : resQuery;
+
+    return resQuery.length > 0 ? ("(" + resQuery + ")") : resQuery;
+}
+
 /**
  * Return Search results with the given search terms.
  *
@@ -168,10 +181,12 @@ function getSearchResults(params) {
         sortField.ascending = asc;
     }
 
-    var filterObj = null;
+    var filterObjs = [];
     if (filterStr != null && ("" + filterStr).length > 0) {
-        var additionalFilter = jsonUtils.toObject(filterStr);
-        filterObj = Filters.getFilterParams(additionalFilter);
+        var filtersJSON = eval('(' + filterStr.toString() + ')');
+        for (var index in filtersJSON) {
+            filterObjs.push(Filters.getFilterParams(filtersJSON[index]));
+        }
     }
 
     // Advanced search form data search.
@@ -322,12 +337,16 @@ function getSearchResults(params) {
                     }
                 }
             }
-            ftsQuery = (typesQuery.length !== 0  ? '(' + typesQuery + ')' : '(+TYPE:"cm:content" +TYPE:"cm:folder")') +
+            ftsQuery = (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '(+TYPE:"cm:content" +TYPE:"cm:folder")') +
                 (formQuery.length !== 0 ? ' AND (' + formQuery + ')' : '') +
                 (filter != null && filter.length > 0 ? ' AND (' + filter + ')' : '') +
-                ((filterObj != null && filterObj.query != null && ('' + filterObj.query).length > 0)? ' AND (' + filterObj.query + ')' : '') +
                 (ftsQuery.length !== 0 ? ' AND (' + ftsQuery + ')' : '') +
                 (fullTextSearchQuery.length !== 0 ? ' AND (' + fullTextSearchQuery + ')' : '');
+
+            var filtersQuery = filterObjs != null && filterObjs.length > 0 ? getFiltersQuery(filterObjs) : null;
+            if (filtersQuery && filtersQuery.length > 0) {
+                ftsQuery += (' AND ' + filtersQuery);
+            }
         }
 
         if (ftsQuery.length !== 0) {

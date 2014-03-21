@@ -242,44 +242,46 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * Поиск
              * args - Объект с настройками поиска
              */
-            performSearch:function ADVSearch__performSearch(args) {
+            performSearch: function ADVSearch__performSearch(args) {
                 var searchConfig = args.searchConfig,
                     searchShowInactive = args.searchShowInactive,
                     parent = args.parent,
-	                searchNodes = args.searchNodes,
+                    searchNodes = args.searchNodes,
                     itemType = args.itemType,
                     sort = args.sort,
                     offset = args.offset ? args.offset : -1;
+
                 // дополнительный фильтр из адресной строки (или параметров)
-                var successFilter = args.filter;
-                if (!successFilter) {
-                    var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                    if (bookmarkedFilter){
-                        try {
-                            while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
-                            }
+                var successFilters = args.filter;
+                if (!successFilters) {
+                    successFilters = this.dataGrid.currentFilters;
+                }
+                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                if (bookmarkedFilter) {
+                    try {
+                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
                         }
-                        catch (e) {
-                            // Catch "malformed URI sequence" exception
-                        }
-                        var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                            var filters = strFilter.split("|"),
-                                filterObj =
-                                {
-                                    filterId: window.unescape(filters[0] || ""),
-                                    filterData: window.unescape(filters[1] || "")
-                                };
-                            return filterObj;
-                        };
-
-                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-                        this.dataGrid.currentFilter = successFilter;
                     }
+                    catch (e) {
+                        // Catch "malformed URI sequence" exception
+                    }
+                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                        var filters = strFilter.split("|");
+                        return {
+                            code: window.unescape(filters[0] || ""),
+                            curValue: window.unescape(filters[1] || ""),
+                            fromUrl:true
+                        };
+                    };
+
+                    var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                    var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
+                    if (index >= 0) {
+                        successFilters.splice(index, 1);
+                    }
+                    successFilters.push(filterFromUrl);
                 }
 
-                if (!successFilter) {
-                    successFilter = this.dataGrid.currentFilter;
-                }
                 // вернуть следующие поля для элемента(строки)
                 var reqFields = [];
                 var reqNameSubstituteStrings = [];
@@ -304,7 +306,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     noEscape: true
                 });
 
-                loadingMessage.subscribe("hide", function() {
+                loadingMessage.subscribe("hide", function () {
                     //Временное решение. Необходимо дальнейшее исследование.
                     // loadingMessage.unsubscribeAll("hide");
                     // loadingMessage.destroy();
@@ -318,7 +320,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     // update current state on success
                     me.currentSearchConfig = searchConfig;
 
-                    if (oResponse.meta.startIndex > oResponse.meta.totalRecords){
+                    if (oResponse.meta.startIndex > oResponse.meta.totalRecords) {
                         oResponse.meta.startIndex = 0;
                     }
                     oResponse.meta.pagination =
@@ -327,7 +329,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         recordOffset: oResponse.meta.startIndex
                     };
 
-                    YAHOO.Bubbling.fire("filterChanged", successFilter);
                     var sotredBy = me.dataTable.get("sortedBy");
                     me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
                     me.dataTable.set("sortedBy", sotredBy);
@@ -336,15 +337,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
 
                     //выводим предупреждающее сообщение, если достигли лимита
-                    if (oResponse.results && oResponse.results.length  >= me.options.maxSearchResults) {
+                    if (oResponse.results && oResponse.results.length >= me.options.maxSearchResults) {
                         Alfresco.util.PopupManager.displayMessage(
                             {
-                                displayTime:3,
+                                displayTime: 3,
                                 text: this.msg("label.limit_reached")
                             });
                     }
 
-	                me.dataGrid.addFooter();
+                    me.dataGrid.addFooter();
                 }
 
                 // Обработчик на неудачу
@@ -373,12 +374,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilter);
+                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
-                        success:successHandler,
-                        failure:failureHandler,
-                        scope:this
+                        success: successHandler,
+                        failure: failureHandler,
+                        scope: this
                     });
             },
 
@@ -392,7 +393,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilter) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilters) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -405,9 +406,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     startIndex = offset;
                 }
 
-                var filter = null;
-                if (additionalFilter && additionalFilter.filterId) {
-                    filter = YAHOO.lang.JSON.stringify(additionalFilter);
+                var filters = [];
+                if (additionalFilters && additionalFilters.length > 0) {
+                    filters = YAHOO.lang.JSON.stringify(additionalFilters);
                 }
                 return {
                     params: {
@@ -421,7 +422,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         showInactive: searchShowInactive != null ? searchShowInactive : "false",
                         startIndex: startIndex,
                         sort: sort != null ? sort : "",
-                        filter: filter ? filter : ""
+                        filter: filters ? filters : ""
                     }
                 };
             },

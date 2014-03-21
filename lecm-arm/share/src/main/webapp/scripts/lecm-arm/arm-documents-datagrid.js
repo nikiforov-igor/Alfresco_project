@@ -12,7 +12,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     LogicECM.module.ARM.DataGrid = function (containerId) {
         LogicECM.module.ARM.DataGrid.superclass.constructor.call(this, containerId)
 
-        this.filtersMeta = null;
         YAHOO.Bubbling.on("activeFiltersChanged", this.onActiveFiltersChanged, this);
         YAHOO.Bubbling.on("armNodeSelected", this.onArmNodeSelected, this);
 
@@ -33,8 +32,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         doubleClickLock: false,
 
         PREFERENCE_KEY: "ru.it.lecm.arm.menu-state",
-
-        filtersMeta: null,
 
         armMenuState: {},
 
@@ -97,7 +94,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 // Если метка не задана, или метки совпадают - дергаем метод
                 var label = obj.bubblingLabel;
                 if(this._hasEventInterest(label)){
-                    this.filtersMeta = obj.filtersMeta;
+                    this.currentFilters = obj.filters;
                     if (!this.deferredListPopulation.fulfil("activeFiltersChanged")) {
                         this.sendRequestToUpdateGrid();
                     }
@@ -105,7 +102,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
         },
 
-        _setupPaginatior: function DataGrid_setupPaginatior() {
+        _setupPaginatior: function () {
             if (this.options.usePagination) {
                 var handlePagination = function DataGrid_handlePagination(state, me) {
                     me.widgets.paginator.setState(state);
@@ -151,19 +148,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 };
             }
 
-            var updatedSearchConfig = YAHOO.lang.merge(searchConfig, {});
-
-            if (this.filtersMeta && this.filtersMeta.query != null) {
-                if (updatedSearchConfig.filter.length > 0 && this.filtersMeta.query.length > 0) {
-                    updatedSearchConfig.filter = updatedSearchConfig.filter + " AND " + this.filtersMeta.query;
-                } else if (this.filtersMeta.query.length > 0){
-                    updatedSearchConfig.filter = this.filtersMeta.query;
-                }
-                if (updatedSearchConfig.filter) {
-                    updatedSearchConfig.filter.trim()
-                }
-            }
-
             var offset = 0;
             if (this.widgets.paginator) {
                 offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
@@ -176,14 +160,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
 
             this.search.performSearch({
-                searchConfig: updatedSearchConfig,
+                searchConfig: searchConfig,
                 searchShowInactive: this.options.searchShowInactive,
                 parent: this.datagridMeta.nodeRef,
                 searchNodes: this.datagridMeta.searchNodes,
                 itemType: this.datagridMeta.itemType,
                 sort: this.datagridMeta.sort,
                 offset: offset,
-                filter: null
+                filter: this.currentFilters
             });
         },
 
@@ -434,15 +418,14 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             };
         },
 
-	    getAllSelectedItems: function DataGrid_getSelectedItems()
-	    {
-		    var items = [];
-		    for (var item in this.selectedItems) {
-			    if (this.selectedItems.hasOwnProperty(item)) {
-				    items.push(item);
-			    }
-		    }
-		    return items;
-	    }
+        getAllSelectedItems: function DataGrid_getSelectedItems() {
+            var items = [];
+            for (var item in this.selectedItems) {
+                if (this.selectedItems.hasOwnProperty(item)) {
+                    items.push(item);
+                }
+            }
+            return items;
+        }
     }, true);
 })();

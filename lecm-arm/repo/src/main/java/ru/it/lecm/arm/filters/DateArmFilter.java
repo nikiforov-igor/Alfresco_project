@@ -3,7 +3,7 @@ package ru.it.lecm.arm.filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.arm.beans.filters.ArmDocumenstFilter;
+import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.text.DateFormat;
@@ -17,7 +17,7 @@ import java.util.List;
  * Date: 04.03.14
  * Time: 9:27
  */
-public class DateArmFilter implements ArmDocumenstFilter {
+public class DateArmFilter implements ArmDocumentsFilter {
 	final private static Logger logger = LoggerFactory.getLogger(DateArmFilter.class);
 	public static final DateFormat DateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -35,7 +35,7 @@ public class DateArmFilter implements ArmDocumenstFilter {
 	}
 
 	@Override
-	public String getQuery(Object armNode, String fields, List<String> args) {
+	public String getQuery(String fields, List<String> args) {
 		String resultedQuery = "";
 		if (args != null && !args.isEmpty() && fields != null && !fields.isEmpty()) {
 			logger.debug("Filter args: " + StringUtils.collectionToCommaDelimitedString(args));

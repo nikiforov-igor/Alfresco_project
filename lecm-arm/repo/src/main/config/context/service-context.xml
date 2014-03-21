@@ -89,11 +89,6 @@
 		<property name="documentService" ref="documentService"/>
 	</bean>
 
-    <bean id="webscript.ru.it.lecm.arm.query.by.filters.post"
-          class="ru.it.lecm.arm.scripts.ArmQueryByFiltersScript"
-          parent="webscript">
-    </bean>
-
 	<bean id="armWrapperService"
 		  class="ru.it.lecm.arm.beans.ArmWrapperServiceImpl">
 		<property name="nodeService" ref="NodeService" />

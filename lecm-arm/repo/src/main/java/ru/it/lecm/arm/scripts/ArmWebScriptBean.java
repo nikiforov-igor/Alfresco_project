@@ -10,13 +10,20 @@ import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.NativeObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.arm.beans.ArmColumn;
 import ru.it.lecm.arm.beans.ArmService;
+import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
+import ru.it.lecm.arm.filters.BaseQueryArmFilter;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -24,8 +31,16 @@ import java.util.*;
  * Date: 04.02.14
  * Time: 10:35
  */
-public class ArmWebScriptBean extends BaseWebScript {
+public class ArmWebScriptBean extends BaseWebScript implements ApplicationContextAware {
 	private static final Logger logger = LoggerFactory.getLogger(ArmWebScriptBean.class);
+
+    public static final String CLASS = "class";
+    public static final String QUERY = "query";
+    public static final String CUR_VALUE = "curValue";
+    public static final String MULTIPLE = "multiple";
+    public static final String BASE_QUERY_ARM_FILTER = "baseQueryArmFilter";
+
+    private static ApplicationContext ctx;
 
 	private ArmService armService;
 	private DictionaryService dictionaryService;
@@ -53,12 +68,23 @@ public class ArmWebScriptBean extends BaseWebScript {
 		this.documentService = documentService;
 	}
 
+    @Override
+    public void setApplicationContext(ApplicationContext appContext) throws BeansException {
+        ctx = appContext;
+    }
+
+    public static ApplicationContext getApplicationContext() {
+        return ctx;
+    }
+
+    @SuppressWarnings("unused")
 	public ScriptNode getDictionaryArmSettings() {
 		NodeRef dictionary = armService.getDictionaryArmSettings();
 
 		return (dictionary == null) ? null : new ScriptNode(dictionary, serviceRegistry, getScope());
 	}
 
+    @SuppressWarnings("unused")
 	public JSONObject getAvailableNodeFields(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
@@ -124,6 +150,7 @@ public class ArmWebScriptBean extends BaseWebScript {
 		return result;
 	}
 
+    @SuppressWarnings("unused")
 	public Map<String, String> getTypes(String itemId, String destination) {
 		Map<String, String> results = new HashMap<String, String>();
 
@@ -149,9 +176,76 @@ public class ArmWebScriptBean extends BaseWebScript {
 		return results;
 	}
 
+    @SuppressWarnings("unused")
 	public ScriptNode getArmByCode(String code) {
 		NodeRef arm = armService.getArmByCode(code);
 
 		return (arm == null) ? null : new ScriptNode(arm, serviceRegistry, getScope());
 	}
+
+    @SuppressWarnings("unused")
+    public String getQueryByFilter(Object objFilter) {
+        String result = "";
+        try {
+            JSONObject filter = nativeObjectToJSON((NativeObject)objFilter);
+            String filterId = filter.has(CLASS) ? (String) filter.get(CLASS) : null;
+
+            ArmDocumentsFilter filterBean = null;
+            List<String> values = new ArrayList<String>();
+            if (filterId != null) {
+                try {
+                    filterBean = (ArmDocumentsFilter) getApplicationContext().getBean(filterId);
+                } catch (BeansException ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
+            } else { // не задано - берем по умолчанию
+                filterBean = (BaseQueryArmFilter) getApplicationContext().getBean(BASE_QUERY_ARM_FILTER);
+            }
+
+            if (filterBean != null) {
+                if (Boolean.valueOf(String.valueOf(filter.has(MULTIPLE) ? filter.get(MULTIPLE) : false))) {
+                    Object curValues = filter.has(CUR_VALUE) ? filter.get(CUR_VALUE) : null;
+                    if (curValues != null) {
+                        if (curValues instanceof JSONArray) {
+                            JSONArray currentValueArray = (JSONArray) filter.get(CUR_VALUE);
+                            for (int j = 0; j < currentValueArray.length(); j++) {
+                                String v = (String) currentValueArray.get(j);
+                                values.add(v);
+                            }
+                        } else {
+                            values.addAll(Arrays.asList(((String) curValues).split(",")));
+                        }
+
+                    }
+                } else {
+                    String currentValueStr = filter.has(CUR_VALUE) ? (String) filter.get(CUR_VALUE) : null;
+                    if (currentValueStr != null) {
+                        values.addAll(Arrays.asList(currentValueStr.split(",")));
+                    }
+                }
+
+                String params = filter.has(QUERY) ? (String) filter.get(QUERY) : null;
+
+                result = filterBean.getQuery(params, values);
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return result;
+    }
+
+    private JSONObject nativeObjectToJSON(NativeObject nativeObject) throws IOException {
+        JSONObject result = new JSONObject();
+        final Object[] ids = nativeObject.getIds();
+        for (Object id : ids) {
+            String key = id.toString();
+            Object value = nativeObject.get(key, nativeObject);
+            try {
+                result.put(key, value);
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+        return result;
+    }
 }

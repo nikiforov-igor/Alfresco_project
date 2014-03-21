@@ -978,7 +978,6 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			Bubb.unsubscribe('dataItemsDeleted', datagrid.onDataItemsDeleted, datagrid);
 			Bubb.unsubscribe('datagridRefresh', datagrid.onDataGridRefresh, datagrid);
 			Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked, datagrid);
-			Bubb.unsubscribe('changeFilter', datagrid.onFilterChanged, datagrid);
 
 			rs.unsubscribeAll();
 

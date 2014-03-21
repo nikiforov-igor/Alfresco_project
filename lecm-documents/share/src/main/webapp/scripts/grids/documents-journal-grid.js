@@ -29,9 +29,6 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
 
     LogicECM.module.DocumentsJournal.DataGrid = function (containerId) {
         LogicECM.module.DocumentsJournal.DataGrid.superclass.constructor.call(this, containerId);
-
-        YAHOO.Bubbling.on("filterChanged", this.onFilterChanged, this);
-
         return this;
     };
 
@@ -253,33 +250,6 @@ LogicECM.module.DocumentsJournal = LogicECM.module.DocumentsJournal || {};
 
             // Show grid
             Dom.setStyle(this.id + "-body", "visibility", "visible");
-        }/*,
-
-        _setupFilter: function DL_setupFilter() {
-            var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-            bookmarkedFilter = bookmarkedFilter || "path|/";
-
-            try {
-                while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
-                }
-            }
-            catch (e) {
-                // Catch "malformed URI sequence" exception
-            }
-
-            var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                var filters = strFilter.split("|"),
-                    filterObj =
-                    {
-                        filterId: window.unescape(filters[0] || ""),
-                        filterData: window.unescape(filters[1] || "")
-                    };
-
-                filterObj.filterOwner = Alfresco.util.FilterManager.getOwner(filterObj.filterId);
-                return filterObj;
-            };
-
-            this.options.filter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-        }*/
+        }
     }, true);
 })();

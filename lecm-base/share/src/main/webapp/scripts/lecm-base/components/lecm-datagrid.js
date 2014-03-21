@@ -88,10 +88,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         this.afterDataGridUpdate = [];
         this.search = null;
         this.initialSearchConfig = null;
-        this.currentFilter = {
-            filterId: "none",
-            filterData: ""
-        };
+        this.currentFilters = [];
 
         /**
          * Decoupled event listeners
@@ -102,7 +99,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
         Bubbling.on("dataItemsDeleted", this.onDataItemsDeleted, this);
         Bubbling.on("datagridRefresh", this.onDataGridRefresh, this);
         Bubbling.on("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
-        Bubbling.on("changeFilter", this.onFilterChanged, this);
         Bubbling.on("reСreateDatagrid", this.onReCreateDatagrid, this);
 
         /* Deferred list population until DOM ready */
@@ -322,7 +318,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             showActionsCount: 3,
             splitActionsAtStore: 3,
 
-            currentFilter: null,
+            currentFilters: [],
 
             /**
              * Total number of records (documents + folders) in the currentPath.
@@ -1247,6 +1243,16 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
+            _filterInArray: function (filterCode, filtersArray) {
+                for (var i = 0; i < filtersArray.length; i++) {
+                    var filter = filtersArray[i];
+                    if (filter.code == filterCode) {
+                        return i;
+                    }
+                }
+                return -1;
+            },
+
             _generatePaginatorRequest: function (oState, oSelf) {
                 this.widgets.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON)
 
@@ -1262,10 +1268,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
 
                 // дополнительный фильтр из адресной строки (или параметров)
-                var successFilter = this.currentFilter;
-                if (!successFilter) {
+                if (!this.currentFilters || this.currentFilters.length == 0) {
                     var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                    if (bookmarkedFilter){
+                    if (bookmarkedFilter) {
                         try {
                             while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
                             }
@@ -1276,24 +1281,29 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
                             var filters = strFilter.split("|");
                             return {
-                                filterId: window.unescape(filters[0] || ""),
-                                filterData: window.unescape(filters[1] || "")
+                                code: window.unescape(filters[0] || ""),
+                                curValue: window.unescape(filters[1] || ""),
+                                fromUrl:true
                             };
                         };
 
-                        successFilter = fnDecodeBookmarkedFilter(bookmarkedFilter);
-                        this.currentFilter = successFilter;
+                        var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                        var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
+                        if (index >= 0) {
+                            this.currentFilters.splice(index, 1);
+                        }
+                        this.currentFilters.push(filterFromUrl);
                     }
                 }
 
-	            var selectAllChbx = Dom.get(this.id + '-select-all-records');
-	            if (selectAllChbx != null) {
-		            selectAllChbx.checked = false;
-	            }
+                var selectAllChbx = Dom.get(this.id + '-select-all-records');
+                if (selectAllChbx != null) {
+                    selectAllChbx.checked = false;
+                }
 
                 var params = this.search.buildSearchParams(this.datagridMeta.nodeRef, null,
                     this.datagridMeta.itemType, sort, this.datagridMeta.searchConfig, this.dataRequestFields.join(","),
-                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, successFilter);
+                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, this.currentFilters);
                 return YAHOO.lang.JSON.stringify(params);
             },
 
@@ -2011,7 +2021,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (!obj || this._hasEventInterest(obj.bubblingLabel)){
                     this._updateDataGrid.call(this,
                         {
-                            filter: obj.filter ? obj.filter : null
+                            filters: obj.filter ? obj.filter : null
                         });
                     Bubbling.fire("itemsListChanged");
                 }
@@ -2149,13 +2159,13 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              */
             _updateDataGrid: function DataGrid__updateDataGrid(p_obj)
             {
-                var successFilter = p_obj.filter ? p_obj.filter: null;
+                var successFilters = p_obj.filters ? p_obj.filters: null;
 
                 // Reset the custom error messages
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
 
                 // More Actions menu no longer relevant
-                this.showingMoreActionsshowingMoreActions = false;
+                this.showingMoreActions = false;
 
                 var searchConfig = this.datagridMeta.searchConfig;
                 if (searchConfig) { // Поиск через SOLR
@@ -2184,7 +2194,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     itemType: this.datagridMeta.itemType,
                     sort:this.datagridMeta.sort,
                     offset:offset,
-                    filter: successFilter
+                    filter: successFilters
                 });
             },
 
@@ -2758,15 +2768,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 Event.on(elMoreActions, "mouseover", onMouseOver, elMoreActions);
                 Event.on(elMoreActions, "mouseout", onMouseOut, elMoreActions);
-            },
-
-            onFilterChanged: function DataGrid_onFilterChanged(layer, args) {
-                var obj = args[1];
-                if (obj && obj.filterId) {
-                    obj.filterOwner = obj.filterOwner || Alfresco.util.FilterManager.getOwner(obj.filterId);
-                    // Should be a filterId in the arguments
-                    this.currentFilter = Alfresco.util.cleanBubblingObject(obj);
-                }
             },
 
 	        isActiveItem: function DataGrid_isActiveItem(itemData) {
