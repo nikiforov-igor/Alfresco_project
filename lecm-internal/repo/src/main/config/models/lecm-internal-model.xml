@@ -72,6 +72,11 @@
 					<title>Срок ответа</title>
 					<type>d:date</type>
 				</property>
+                <property name="lecm-internal:all-answers-complete">
+                    <title>Получены все ответы</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
 			</properties>
 			<associations>
 				<!-- Получатель (сотрудник или подразделение) -->

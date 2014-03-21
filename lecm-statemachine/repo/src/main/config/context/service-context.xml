@@ -136,6 +136,8 @@
 		</property>
 		<property name="serviceRegistry" ref="ServiceRegistry"/>
         <property name="documentService" ref="documentService"/>
+        <property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
+        <property name="transactionService" ref="transactionService"/>
     </bean>
 
 	<bean id="workflowUtil" class="ru.it.lecm.statemachine.util.DocumentWorkflowUtil" >

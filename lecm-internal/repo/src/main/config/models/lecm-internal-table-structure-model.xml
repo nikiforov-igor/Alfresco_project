@@ -6,7 +6,9 @@
     <imports>
         <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/lecm-internal-typical-answer/1.0" prefix="lecm-internal-typical-answer"/>
     </imports>
     <namespaces>
         <namespace uri="http://www.it.ru/logicECM/internal/table-structure/1.0" prefix="lecm-internal-table-structure"/>
@@ -17,9 +19,19 @@
             <title>Ответ на внутренний документ</title>
             <parent>lecm-document:tableDataRow</parent>
             <properties>
+                <!-- Статус получения ответа -->
                 <property name="lecm-internal-table-structure:answer-status">
                     <type>d:boolean</type>
+                    <default>false</default>
                 </property>
+
+                <!-- Статус завершения ответа -->
+                <property name="lecm-internal-table-structure:answer-complete">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+
+                <!-- Результат ответа -->
                 <property name="lecm-internal-table-structure:answer-details">
                     <type>d:text</type>
                     <index enabled="true">
@@ -39,6 +51,42 @@
                     <target>
                         <class>lecm-orgstr:employee</class>
                         <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-internal-table-structure:answer-document-assoc">
+                    <title>Документ</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-document:base</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-internal-table-structure:answer-attachment-assoc">
+                    <title>Документ</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>cm:content</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-internal-table-structure:answer-typical-assoc">
+                    <title>Типовой ответ</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-internal-typical-answer:dictionary</class>
+                        <mandatory>false</mandatory>
                         <many>false</many>
                     </target>
                 </association>

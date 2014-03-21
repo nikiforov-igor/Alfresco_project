@@ -31,7 +31,8 @@ LogicECM.control = LogicECM.control || {};
 
 	YAHOO.extend(LogicECM.control.DndUploader, Alfresco.component.Base,
 		{
-			options:{
+			disabled: false,
+            options:{
 				disabled: false,
 				uploadDirectoryPath: null,
 				multipleMode: true,
@@ -41,7 +42,8 @@ LogicECM.control = LogicECM.control || {};
 				showUploadNewVersion: false,
 				checkRights: false,
 				itemNodeRef: false,
-                suppressRefreshEvent: false
+                suppressRefreshEvent: false,
+                useDnD: true
 			},
 
 			currentValueHtmlId: "",
@@ -210,6 +212,7 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			showUploader: function () {
+                if (this.disabled) return;
 				if (this.rootNodeRef != null) {
 					if (this.fileUpload == null)
 					{
@@ -234,6 +237,7 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			initUploader: function() {
+                if (!this.options.useDnD) return;
 				var uploader = new LogicECM.DndUploader(this.id + "-uploader-block");
 				uploader.initUploader({
 					disabled: this.options.disabled,
@@ -284,6 +288,7 @@ LogicECM.control = LogicECM.control || {};
 			},
 
 			removeSelectedElement: function(event, node) {
+                if (this.disabled) return;
 				delete this.selectedItems[node.nodeRef];
 				this.updateSelectedItems();
 				this.updateFormFields();
@@ -426,6 +431,7 @@ LogicECM.control = LogicECM.control || {};
 				for (var i in addItems) {
 					el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
 				}
+                el.click();
 
 				var removedItems = this.getRemovedItems();
 				el = Dom.get(this.id + "-removed");
@@ -433,6 +439,7 @@ LogicECM.control = LogicECM.control || {};
 				for (i in removedItems) {
 					el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
 				}
+                el.click();
 
 				var selectedItems = this.getSelectedItems();
 				Dom.get(this.currentValueHtmlId).value = selectedItems.toString();
@@ -495,6 +502,14 @@ LogicECM.control = LogicECM.control || {};
 					}
 				}
 				return removedItems;
-			}
+			},
+
+            enable: function enable_function() {
+                this.disabled = false;
+            },
+
+            disable: function disable_function() {
+                this.disabled = true;
+            }
 		});
 })();

@@ -662,6 +662,7 @@
 
     <bean id="documentEventService" class="ru.it.lecm.documents.beans.DocumentEventServiceImpl" depends-on="nodeService">
         <property name="nodeService" ref="nodeService"/>
+        <property name="behaviourFilter" ref="policyBehaviourFilter"/>
     </bean>
 
     <bean id="documentsEventPolicy" class="ru.it.lecm.documents.policy.DocumentEventPolicy" init-method="init">

@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xmlns:util="http://www.springframework.org/schema/util"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="eds.global-settings.script" parent="baseScript"
 		  class="ru.it.lecm.eds.scripts.EDSGlobalSettingsWebScriptBean"
 		  p:extensionName="edsGlobalSettings"
 		  p:edsGlobalSettingsService-ref="eds.global-settings.service"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
+
+    <bean id="eds.document.script" parent="baseScript"
+          class="ru.it.lecm.eds.scripts.EDSDocumentWebScriptBean"
+          p:extensionName="edsDocument"
+          p:orgstructureService-ref="serviceOrgstructure"
+          p:nodeService-ref="nodeService"/>
+
 </beans>

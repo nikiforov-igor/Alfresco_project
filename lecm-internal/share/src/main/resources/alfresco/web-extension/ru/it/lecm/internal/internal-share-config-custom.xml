@@ -620,4 +620,54 @@
         </forms>
     </config>
 
+    <config evaluator="string-compare" condition="activiti$lecmInternalDirect">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="warning"/>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="warning">
+                        <control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+                            <control-param name="msg">ru.it.internal.direct</control-param>
+                        </control>
+                    </field>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="task-type" condition="internalDirect:answerTask">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="packageItems"/>
+                    <show id="internalDirect:formData"/>
+                    <show id="internalDirect:answerResult"/>
+                    <show id="transitions" force="true" />
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="internalDirect:formData">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
+                    </field>
+                    <field id="internalDirect:answerResult">
+                        <control template="/ru/it/lecm/internal/controls/direct-answer.ftl" />
+                    </field>
+                    <field id="transitions">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+                            <control-param name="fieldValue">Next</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

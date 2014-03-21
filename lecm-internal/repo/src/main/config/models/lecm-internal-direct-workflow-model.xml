@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="internalDirect:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Workflow model for Direct og Internal Document</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+
+    <imports>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
+        <import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
+    </imports>
+
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/model/internalDirect/wokflow/1.0" prefix="internalDirect"/>
+    </namespaces>
+
+    <types>
+        <type name="internalDirect:direct">
+            <parent>bpm:startTask</parent>
+        </type>
+
+        <type name="internalDirect:answerTask">
+            <parent>bpm:activitiOutcomeTask</parent>
+            <properties>
+                <property name="internalDirect:answerResult">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default></default>
+                </property>
+                <property name="internalDirect:formData">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+            </properties>
+            <overrides>
+                <property name="bpm:reassignable">
+                    <default>false</default>
+                </property>
+            </overrides>
+        </type>
+    </types>
+</model>

@@ -55,6 +55,28 @@ public class Form extends FormUIGet {
                 logger.warn("Cannot parse input arguments");
             }
         }
+
+        String fields = req.getParameter("initFields");
+        if (fields != null) {
+            try {
+                JSONObject argsObject = new JSONObject(fields);
+                HashMap<String, String> fieldsValues = new HashMap<String, String>();
+                Iterator<String> it = argsObject.keys();
+                while(it.hasNext()) {
+                    String key = it.next();
+                    String value = argsObject.getString(key);
+                    fieldsValues.put(key, value);
+                }
+                Map<String, Field> formFields =  (Map) ((Map) model.get("form")).get("fields");
+                for (Field field : formFields.values()) {
+                    if (fieldsValues.containsKey(field.getConfigName())) {
+                        field.setValue(fieldsValues.get(field.getConfigName()));
+                    }
+                }
+            } catch (JSONException e) {
+                logger.warn("Cannot parse input arguments");
+            }
+        }
 	    arguments.put("documentNodeRef", req.getParameter("nodeRef"));
         return model;
     }

@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.beans;
 
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -17,11 +18,15 @@ import java.util.Set;
 public class DocumentEventServiceImpl implements DocumentEventService {
 
     private NodeService nodeService;
+    private BehaviourFilter behaviourFilter;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
+    public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+        this.behaviourFilter = behaviourFilter;
+    }
 
     @Override
     public void subscribe(NodeRef object, NodeRef listener) {
@@ -72,7 +77,12 @@ public class DocumentEventServiceImpl implements DocumentEventService {
                 senders += "," + node.toString();
             }
         }
-        nodeService.setProperty(listener, PROP_EVENT_SENDER, senders);
+        try {
+            behaviourFilter.disableBehaviour(listener);//блокируем повторный вызов
+            nodeService.setProperty(listener, PROP_EVENT_SENDER, senders);
+        } finally {
+            behaviourFilter.enableBehaviour(listener);
+        }
     }
 
 }
