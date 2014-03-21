@@ -29,6 +29,7 @@
         <limit>-1</limit>
         <pgsize>-1</pgsize>
         <queryText><![CDATA[+TYPE:"lecm-incoming:document"]]></queryText>
+        <querySort>col_ReceiveDate|ASC</querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-incoming:document</preferedType>
         <isMultiRow>true</isMultiRow>
