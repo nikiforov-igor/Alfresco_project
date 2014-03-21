@@ -1,6 +1,13 @@
 /* Договор - основные сведения */
 .metadata-form .set {
     overflow: hidden;
+	padding-bottom: 0;
+}
+.metadata-form .form-container .viewmode-field {
+	margin-bottom: 0;
+}
+.metadata-form .form-container .form-field {
+	margin-bottom: 10px;
 }
 .metadata-form .set .yui-g {
     width: 100%;
@@ -107,10 +114,10 @@
     margin-right: 3px;
 }
 
-.yui-skin-lecmTheme div.metadata-form .form-fields .yui-content .tab-common {
-	padding-top: 2em;
+.metadata-form-control {
+	padding-top: 20px;
 }
 
-/*.yui-skin-lecmTheme div[id*="-view-repsesentative"] {*/
-    /*margin-left: 25px;*/
-/*}*/
+#main-region > div > div > div.form-container > div.form-fields {
+	padding: 0;
+}

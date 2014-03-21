@@ -562,6 +562,9 @@ h4 .lighter
     margin-bottom: 10px;
     float: left;
 }
+.yui-skin-lecmTheme .yui-panel div.form-field .show-picker {
+	line-height: 0;
+}
 .yui-skin-lecmTheme div.form-field {
 	line-height: 25px;
 }

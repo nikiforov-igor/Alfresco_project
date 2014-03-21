@@ -104,21 +104,6 @@ tr.yui-dt-first.yui-dt-last > th {
 	margin-top: 8px;
 }
 
-.yui-skin-lecmTheme div.form-field div.viewmode-field span.viewmode-value {
-	font-weight: bold;
-	padding: 2px;
-	border: 1px solid #ccc;
-	border-radius: 3px;
-	overflow: hidden;
-
-	height: 28px;
-	line-height: 22px;
-	display: block;
-	vertical-align: middle;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
 .yui-gc .tab-common .set .yui-g {
 	float: none;
 	width: 100%;

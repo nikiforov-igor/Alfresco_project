@@ -10,7 +10,7 @@
     padding-top: 20px;
 }
 
-#custom-region div.metadata-form div.lecm-dashlet-actions + div {
+div.metadata-form div.lecm-dashlet-actions + div {
     clear: both;
     overflow-x: auto;
 }
