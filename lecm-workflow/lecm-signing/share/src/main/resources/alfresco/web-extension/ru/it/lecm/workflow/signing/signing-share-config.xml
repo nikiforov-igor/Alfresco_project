@@ -1,12 +1,4 @@
 <alfresco-config>
-	<config>
-		<forms>
-			<dependencies>
-				<js src="/scripts/lecm-workflow/workflow-validators.js" />
-			</dependencies>
-		</forms>
-	</config>
-
 	<config evaluator="string-compare" condition="activiti$lecmSign">
 		<forms>
 			<form>

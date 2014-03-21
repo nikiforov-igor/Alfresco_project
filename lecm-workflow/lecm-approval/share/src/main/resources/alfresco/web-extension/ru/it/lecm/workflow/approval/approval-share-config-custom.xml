@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <alfresco-config>
-	<config>
-		<forms>
-			<dependencies>
-				<js src="/scripts/lecm-approval/approval-validators.js"/>
-				<css src="/css/lecm-approval/sequential-approval-form.css"/>
-			</dependencies>
-		</forms>
-	</config>
-
 	<config evaluator="model-type" condition="lecm-orgstr:employees">
 		<forms>
 			<form id="reassign-override-form">

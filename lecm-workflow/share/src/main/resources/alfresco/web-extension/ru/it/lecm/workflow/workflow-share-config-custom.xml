@@ -13,8 +13,8 @@
 				</type>
 			</default-controls>
 			<dependencies>
-				<css src="/css/lecm-workflow/result-list.css" />
 				<js src="/scripts/lecm-workflow/lecm-package-items-finder.js" />
+				<js src="/scripts/lecm-workflow/workflow-validators.js" />
 			</dependencies>
 		</forms>
 	</config>

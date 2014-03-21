@@ -102,7 +102,8 @@
 		var loader = new YAHOO.util.YUILoader({
 			require: [
 				"lecmDatagrid",
-				"lecmWorkflowAssigneesControl"
+				"lecmWorkflowAssigneesControl",
+				"lecmWorkflowAssigneesControlCSS"
 			],
 			skin: {}
 		});
@@ -117,6 +118,12 @@
 			name: 'lecmWorkflowAssigneesControl',
 			type: 'js',
 			fullpath: Alfresco.constants.URL_RESCONTEXT + 'scripts/lecm-workflow/workflow-assignee-control.js'
+		});
+
+		loader.addModule({
+			name: 'lecmWorkflowAssigneesControlCSS',
+			type: 'css',
+			fullpath: Alfresco.constants.URL_RESCONTEXT + 'css/lecm-workflow/result-list.css'
 		});
 
 		loader.onSuccess = createControl;
