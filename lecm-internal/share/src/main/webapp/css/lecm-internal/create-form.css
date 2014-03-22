@@ -27,6 +27,12 @@ div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode
 	top: 55px !important;
 }
 
+span.mceEditor.defaultSkin {
+	float: left;
+	clear: left;
+	width: 100%;
+}
+
 .defaultSkin table.mceLayout {
 	width: 1005px !important;
 }
