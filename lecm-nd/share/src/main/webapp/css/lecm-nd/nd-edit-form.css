@@ -1,0 +1,122 @@
+.yui-skin-lecmTheme .yui-panel div.form-field > label, .yui-skin-lecmTheme .yui-panel div.form-field div.viewmode-field span.viewmode-label,
+div.metadata-form div.form-field span.viewmode-label {
+	width: auto !important;
+}
+
+div.metadata-form div.form-field, div.metadata-form div.form-field span.viewmode-value, div.form-field div.selectone-control select {
+	width: 100% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe) {
+	margin-left: 0 !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 775px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 83% !important;
+}
+
+.yui-skin-lecmTheme .yui-panel .yui-u div.form-field input[type=text]:not(.autocomplete-input) {
+	width: 405px !important;
+}
+
+.format-info {
+	margin-left: 0 !important;
+	margin-top: 23px;;
+}
+
+.defaultSkin table.mceLayout {
+	width: 848px !important;
+}
+
+.datepicker-icon {
+	margin-top: 5px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field input[type=text]:not(.autocomplete-input)
+{
+	width: 848px !important;
+}
+
+#workflow-form-form-fields input
+{
+	width: 140px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.set > div.form-field div.object-finder .current-values {
+	width: 813px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.autocomplete-block input.autocomplete-input {
+	width: 813px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.object-finder.with-two-buttons div.current-values {
+	width: 340px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.yui-g div.yui-u div.form-field div.current-values {
+	width: 280px !important;
+}
+
+.uploader-block {
+	margin-top: -13px !important;
+}
+
+.attachments-list {
+	width: 76% !important;
+}
+
+div.metadata-form ul.attachments-list {
+	width: 100% !important;
+}
+
+div.form-field.dnd-uploader label {
+	padding-right: 210px !important;
+}
+
+div.yui-gb div.yui-u {
+	width: 31% !important;
+	margin-left: 2% !important;
+}
+
+div.yui-gb div.yui-u.first {
+	margin-left: 0 !important;
+	margin-right: 0px !important;
+}
+
+div.form-field textarea {
+	width: 848px !important;
+}
+
+tr.yui-dt-first.yui-dt-last > th {
+	width: 50px !important;
+}
+
+.yui-skin-lecmTheme .yui-panel.yui-module .form-field iframe {
+	max-width: none !important;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field.checkbox-control {
+	margin-top: 25px;
+	text-align: right;
+}
+
+.yui-skin-lecmTheme .yui-panel div.form-field.checkbox-control input[type='checkbox'] {
+	float: right;
+	margin-top: 8px;
+}
+
+.yui-gc .tab-common .set .yui-g {
+	float: none;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.yui-gc .yui-gb .yui-u {
+	float: left;
+}

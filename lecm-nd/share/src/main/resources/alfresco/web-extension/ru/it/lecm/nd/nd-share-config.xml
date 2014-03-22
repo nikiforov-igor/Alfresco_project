@@ -198,6 +198,8 @@
                     <show id="lecm-nd:end-date"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-document:creator"/>
+                    <show id="lecm-document-aspects:reg-project-data-number"/>
+                    <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-nd:nd-css-fix" force="true" for-mode="view"/> <!-- Костыль для стилей -->
                 </field-visibility>
@@ -213,7 +215,8 @@
                     <set id="dates" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="nd7" parent="common"/>
                     <set id="nd8" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd9" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="author" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
+                    <set id="footer" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
 
                     <!-- Вкладка Атрибуты -->
                     <field id="lecm-document:regnum" set="regData"/>
@@ -243,7 +246,11 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:note" label="Примечание" set="nd7"/>
+                    <field id="lecm-eds-document:note" label="Примечание" set="nd7">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="nd8"/>
                     <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="nd8"/>
                     <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates">
@@ -258,14 +265,18 @@
                         </constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
-                    <field id="lecm-document:creator" set="nd9">
+                    <field id="lecm-document:creator" set="author">
                         <control template="/org/alfresco/components/form/controls/readonly.ftl"/>
                     </field>
-                    <field id="lecm-document-aspects:is-shared-folder" set="nd9"/>
+                    <field id="lecm-document-aspects:reg-project-data-number" set="footer"/>
+                    <field id="lecm-document-aspects:reg-project-data-date" set="footer"/>
+                    <field id="lecm-document-aspects:is-shared-folder" set="footer">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+                    </field>
             
                     <field id="lecm-nd:nd-css-fix" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-nd/nd-fix.css</control-param>
+                            <control-param name="cssFile">lecm-nd/nd-edit-form.css</control-param>
                         </control>
                     </field>
                     <!-- Вкладка "Согласование/подписание" -->
