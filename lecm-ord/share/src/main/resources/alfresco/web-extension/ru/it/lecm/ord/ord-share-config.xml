@@ -250,6 +250,13 @@
                                 width: 173px;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .tab-approval-and-signing { height: auto; }
+								
+								.yui-skin-lecmTheme .yui-panel.yui-panel.metadata-form-edit  .tab-ord-document-form-common-set .autocomplete-block .autocompleteCurrentValueDisplayInvisible {
+                                	width: 215px !important;
+                                }
+                                .yui-skin-lecmTheme .yui-panel.yui-panel.metadata-form-edit  .tab-ord-document-form-common-set .autocomplete-block .association-auto-complete-selected-item a:not(.remove-item){
+                                	width: 150px !important;
+                                }
                             </control-param>
                         </control>
                     </field>
