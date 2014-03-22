@@ -165,7 +165,7 @@
 	    showSearch: ${showSearch?string},
         plane: ${plane?string},
         currentValue: "${field.value!''}",
-        <#if selectedValue != "">
+        <#if selectedValue?has_content>
             selectedValue: "${selectedValue}",
         </#if>
         showSelectedItemsPath: ${showSelectedItemsPath?string},
@@ -175,7 +175,6 @@
         <#if defaultValue?has_content>
             defaultValue: "${defaultValue?string}",
         </#if>
-        <#if selectedValue??>selectedValue: "${selectedValue}",</#if>
 	    <#if field.control.params.fireAction?? && field.control.params.fireAction != "">
 	    fireAction: {
 		    <#list field.control.params.fireAction?split(optionSeparator) as typeValue>

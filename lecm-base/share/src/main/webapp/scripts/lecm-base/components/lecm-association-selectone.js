@@ -371,7 +371,11 @@ LogicECM.module = LogicECM.module || {};
 
             populateSelect: function AssociationSelectOne_populateSelect() {
                 this._createDataSource();
-                this.loadDefaultValue();
+                if (!this.options.disabled) {
+                    this.loadDefaultValue();
+                } else {
+                    this.fillContent();
+                }
             },
 
             populateCurrentValue: function AssociationSelectOne_populateCurrentValue() {

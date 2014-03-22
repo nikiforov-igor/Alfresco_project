@@ -44,7 +44,7 @@ LogicECM.module = LogicECM.module || {};
                 externalCreateId: null,
                 refreshAfterCreate: false,
                 showActions: true,
-				deleteMessageFunction: true,
+				deleteMessageFunction: null,
 				editFormTitleMsg: "label.edit-row.title",
 				createFormTitleMsg: "label.create-row.title",
                 viewFormTitleMsg: "logicecm.view",

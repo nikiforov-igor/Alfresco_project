@@ -102,8 +102,8 @@ LogicECM.module = LogicECM.module || {};
             onReady:function AssociationAutoComplete_onReady() {
                 if (!this.options.disabled) {
                     this.populateDataWithAllowedScript();
+                    this.loadDefaultValue();
                 }
-	            this.loadDefaultValue();
             },
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)

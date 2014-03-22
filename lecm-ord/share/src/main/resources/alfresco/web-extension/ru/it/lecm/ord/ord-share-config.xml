@@ -309,7 +309,7 @@
                             <control-param name="expandDataSource">components/form?formId=table-structure-info</control-param>
                             <control-param name="isTableSortable">false</control-param>
                             <control-param name="refreshAfterCreate">true</control-param>
-                            <control-param name="deleteMessageFunction"></control-param>
+                            <!--<control-param name="deleteMessageFunction"></control-param>-->
                             <control-param name="editFormTitleMsg">ord.item.edit.form.title</control-param>
                             <control-param name="createFormTitleMsg">ord.item.create.form.title</control-param>
                             <control-param name="viewFormTitleMsg">ord.item.view.form.title</control-param>

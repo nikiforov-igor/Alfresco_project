@@ -135,9 +135,12 @@ LogicECM.module = LogicECM.module || {};
 			{
 				this.options.controlId = this.id + '-cntrl';
 				this.options.pickerId = this.id + '-cntrl-picker';
-
-				//this._loadSelectedItems();
-				this._loadDefaultValue();
+                
+                if (!this.options.disabled) {
+    				this._loadDefaultValue();
+                } else {
+                    this._loadSelectedItems();
+                }    
 
 				// Create button if control is enabled
 				if(!this.options.disabled)
