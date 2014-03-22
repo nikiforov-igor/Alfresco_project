@@ -40,7 +40,7 @@
 	<field name="doc-type" class="java.lang.String">
 		<fieldDescription><![CDATA[Вид документа]]></fieldDescription>
 	</field>
-	<field name="doc-created-date" class="java.util.Date">
+	<field name="doc-created-date" class="java.lang.String">
 		<fieldDescription><![CDATA[Дата документа]]></fieldDescription>
 	</field>
 	<field name="doc-regnumber" class="java.lang.String">

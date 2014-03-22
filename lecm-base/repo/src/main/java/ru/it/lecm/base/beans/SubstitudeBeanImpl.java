@@ -295,15 +295,16 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 }
                 String result = formatString;
                 List<String> nameParams = splitSubstitudeFieldsString(formatString, OPEN_SUBSTITUDE_SYMBOL, CLOSE_SUBSTITUDE_SYMBOL);
-                if (nameParams.size() > 1) { // сложная строка (не одно поле), значит у нас на выходе будет строка
+				//проверка на сложную строку (не одно поле) - определяем, что будет на выходе
+				Boolean objectExpected = nameParams.size() == 1 && result.replace(OPEN_SUBSTITUDE_SYMBOL + nameParams.get(0) + CLOSE_SUBSTITUDE_SYMBOL, "").isEmpty();
+                if (objectExpected) { //возвращаем объект
+                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
+                } else { //возвращаем строку
                     for (String param : nameParams) {
                         result = result.replace(OPEN_SUBSTITUDE_SYMBOL + param + CLOSE_SUBSTITUDE_SYMBOL, getSubstitudeField(node, param, dFormat, timeZoneOffset).toString());
                     }
-                } else if (nameParams.size() == 1) {
-                    return getSubstitudeField(node, nameParams.get(0), dFormat, timeZoneOffset, true);
-                }
-
-                return result;
+				}
+				return result;
             }
         };
         return AuthenticationUtil.runAsSystem(substitudeString);
@@ -490,7 +491,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                                 result = cal.getTime();
                             }
 
-                            if (!returnRealTypes) {
+                            if (!returnRealTypes || fieldFormat != null) {
                                 DateFormat dFormat = new SimpleDateFormat(fieldFormat != null ? fieldFormat : dateFormat);
                                 result = dFormat.format(result);
                             }

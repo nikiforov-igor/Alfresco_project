@@ -32,7 +32,7 @@
         <limit>-1</limit>
         <pgsize>-1</pgsize>
         <queryText><![CDATA[TYPE:"lecm-outgoing:document"]]></queryText>
-        <querySort/>
+		<querySort><![CDATA[doc-created-date|ASC]]></querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-outgoing:document</preferedType>
         <isMultiRow>true</isMultiRow>
@@ -78,7 +78,7 @@
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Дата документа"
-            javaValueClass="java.util.Date" jrFldName="doc-created-date" queryFldName="{cm:created}">
+            jrFldName="doc-created-date" queryFldName="{cm:created?dd.MM.yyyy}">
             <l18>
                 <item key="RU_RU"><![CDATA[Дата документа]]></item>
             </l18>
@@ -92,10 +92,10 @@
     </fields>
     <subreports>
         <subreport destColumnName="outgoing-signatory" name="outgoing-signatory">
-            <sublist.source><![CDATA[{cm:contains/cm:contains/cm:contains/lecm-workflow-result:workflow-result-item-employee-assoc/}]]></sublist.source>
+            <sublist.source><![CDATA[{cm:contains/cm:contains/cm:contains/}]]></sublist.source>
             <sublist.item>
                 <map>
-                    <item key="signatory"><![CDATA[{lecm-orgstr:employee-short-name}]]></item>
+                    <item key="signatory"><![CDATA[{lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}]]></item>
                 </map>
             </sublist.item>
         </subreport>
