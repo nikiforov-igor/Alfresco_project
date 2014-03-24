@@ -16,7 +16,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         this.splashScreen = null;
         this.avaiableFilters = [];
 
-	    YAHOO.Bubbling.on("updateArmFilters", this.onToolbarUpdate, this);
+        this.deferredListPopulation = new Alfresco.util.Deferred(["updateArmFilters", "initDatagrid"],
+            {
+                fn: this.onToolbarUpdate,
+                scope: this
+            });
+
+        YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
 	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         return this;
     };
@@ -34,6 +40,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             avaiableFilters:[],
             currentType: null,
+
+            onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
+                LogicECM.module.ARM.DocumentsToolbar.superclass.onInitDataGrid.call(this,layer, args);
+                this.deferredListPopulation.fulfil("initDatagrid");
+            },
 
             _renderFilters: function (filters) {
                 var filtersDiv = Dom.get(this.id + "-filters-dialog-content");
@@ -388,27 +399,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             },
 
-            onToolbarUpdate: function(layer, args) {
+            onUpdateArmFilters: function (layer, args) {
                 var currentNode = args[1].currentNode;
                 if (currentNode !== null) {
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
 
-	                this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
-	                this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isReportNode);
+                    this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
+                    this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isReportNode);
 
-	                var searchInput = Dom.get(this.id + "-full-text-search");
-	                if (args[1].isReportNode) {
-		                searchInput.setAttribute("disabled", true);
-	                } else {
-		                searchInput.removeAttribute("disabled");
-	                }
-
-	                if (this.modules.dataGrid != null && this.modules.dataGrid.search != null) {
-		                Dom.get(this.id + "-full-text-search").value = "";
-                        YAHOO.Bubbling.fire("hideFullTextSearchLabel");
-		                this.checkShowClearSearch();
-	                }
+                    var searchInput = Dom.get(this.id + "-full-text-search");
+                    if (args[1].isReportNode) {
+                        searchInput.setAttribute("disabled", true);
+                    } else {
+                        searchInput.removeAttribute("disabled");
+                    }
 
                     if (hasFilters) {
                         this.avaiableFilters = [];
@@ -418,14 +423,27 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         }
                     }
 
-	                var types = [];
-	                if (currentNode.data.types != null) {
-		                types = currentNode.data.types.split(",");
-	                }
-	                this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isReportNode || types.length != 1);
-	                this.currentType = types[0];
+                    var types = [];
+                    if (currentNode.data.types != null) {
+                        types = currentNode.data.types.split(",");
+                    }
+                    this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isReportNode || types.length != 1);
+                    this.currentType = types[0];
                 }
-	            this.onCheckDocument();
+                if (!this.deferredListPopulation.fulfil("updateArmFilters")){
+                    this.onToolbarUpdate();
+                }
+            },
+
+            onToolbarUpdate: function() {
+                if (this.modules.dataGrid != null) {
+                    if (this.modules.dataGrid.search != null) {
+                        Dom.get(this.id + "-full-text-search").value = "";
+                        YAHOO.Bubbling.fire("hideFullTextSearchLabel");
+                        this.checkShowClearSearch();
+                    }
+                    this.onCheckDocument();
+                }
             },
 
             _buildPreferencesValue: function () {
