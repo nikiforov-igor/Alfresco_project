@@ -46,6 +46,15 @@
     float: left;
 }
 
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor.defaultSkin {
+	float: left;
+	width: 387px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor.defaultSkin table {
+	width: 100%;
+}
+
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
 	position: absolute;

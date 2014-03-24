@@ -161,3 +161,11 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-gb div.form-field input[type=text]:not(.autocomplete-input) {
  	width: 100px;
 }
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor.defaultSkin table {
+	width: 575px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor.defaultSkin table iframe {
+	max-width: none;
+}
