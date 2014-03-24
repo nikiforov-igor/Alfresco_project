@@ -189,10 +189,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 YAHOO.Bubbling.fire ("armNodeSelected", {
                     armNode: null,
                     bubblingLabel: "documents-arm",
-                    menuState:this.menuState
-                });
-                YAHOO.Bubbling.fire ("updateArmFilters", {
-                    currentNode: null
+                    menuState:this.menuState,
+                    isReportNode:false
                 });
             }
             var root = this.tree.getRoot();
@@ -346,7 +344,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            YAHOO.Bubbling.fire ("armNodeSelected", {
 		            armNode: node,
 		            bubblingLabel: "documents-arm",
-                    menuState:this.menuState
+                    menuState:this.menuState,
+                    isReportNode: isReportNode
 	            });
 
 	            var parent = node;
@@ -366,11 +365,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	            YAHOO.Bubbling.fire ("updateArmToolbar", {
 		            createTypes: createTypes
 	            });
-
-                YAHOO.Bubbling.fire ("updateArmFilters", {
-                    currentNode: node,
-	                isReportNode: isReportNode
-                });
             }
             // сбрасываем после того, как отослали запрос к гриду
             this.menuState.pageNum = 1;

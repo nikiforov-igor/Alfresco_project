@@ -42,7 +42,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
         },
 
-        onArmNodeSelected: function(layer, args) {
+        onArmNodeSelected: function (layer, args) {
             if (args[1].armNode) {
                 var datagridMeta = this.datagridMeta;
                 var node = args[1].armNode;
@@ -56,14 +56,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (node.data.columns != null && node.data.columns.length > 0) {
                     datagridMeta.columns = node.data.columns;
                 } else {
-                    datagridMeta.columns = [{
-                        dataType:"text",
-                        formsName:"prop_cm_name",
-                        name:"cm:name",
-                        label:"Имя",
-                        sortable: true,
-                        type:"property"
-                    }];
+                    datagridMeta.columns = [
+                        {
+                            dataType: "text",
+                            formsName: "prop_cm_name",
+                            name: "cm:name",
+                            label: "Имя",
+                            sortable: true,
+                            type: "property"
+                        }
+                    ];
                 }
 
                 if (node.data.types != null && node.data.types.length > 0) {
@@ -80,12 +82,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     this.options.initialPage = this.armMenuState.pageNum;
                 }
             }
-	        this.selectedItems = {};
-	        var selectAll = Dom.get(this.id + '-select-all-records');
-	        if (selectAll != null) {
-		        selectAll.checked = false;
-	        }
-            this.deferredListPopulation.fulfil("armNodeSelected");
+            this.selectedItems = {};
+            var selectAll = Dom.get(this.id + '-select-all-records');
+            if (selectAll != null) {
+                selectAll.checked = false;
+            }
+            YAHOO.Bubbling.fire("updateArmFilters", {
+                currentNode: args[1].armNode,
+                isReportNode: args[1].isReportNode
+            });
+
         },
 
         onActiveFiltersChanged: function (layer, args) {
@@ -93,11 +99,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             if (obj !== null) {
                 // Если метка не задана, или метки совпадают - дергаем метод
                 var label = obj.bubblingLabel;
-                if(this._hasEventInterest(label)){
+                if (this._hasEventInterest(label)) {
                     this.currentFilters = obj.filters;
-                    if (!this.deferredListPopulation.fulfil("activeFiltersChanged")) {
-                        this.sendRequestToUpdateGrid();
-                    }
+                    this.populateDataGrid();
                 }
             }
         },
