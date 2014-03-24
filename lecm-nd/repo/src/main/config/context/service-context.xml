@@ -22,6 +22,7 @@
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-br-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-event-items.xml</value>
         <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type-items.xml</value>
     </util:list>
 
     <util:list id="nd.rn.tags">

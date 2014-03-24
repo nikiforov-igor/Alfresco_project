@@ -7,15 +7,5 @@
         <property name="lecm-dic:attributeForShow">cm:name</property>
         <property name="lecm-dic:plane">true</property>
         <property name="lecm-dic:active">true</property>
-		<items>
-			<item name="cm:Вид 1" type="lecm-doc-dic-dt:documentType">
-				<property name="cm:name">Вид 1</property>
-				<property name="lecm-doc-dic-dt:documentType-code">TYPE1</property>
-			</item>
-			<item name="cm:Вид 2" type="lecm-doc-dic-dt:documentType">
-				<property name="cm:name">Вид 2</property>
-				<property name="lecm-doc-dic-dt:documentType-code">TYPE2</property>
-			</item>
-		</items>
 	</item>
 </items>
