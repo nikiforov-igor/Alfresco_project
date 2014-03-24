@@ -250,9 +250,9 @@ LogicECM.control = LogicECM.control || {};
 
 				var divClass = (num++) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
 				if(this.options.multiple) {
-					el.innerHTML += '<div class="' + divClass + '"><span>' + displayName + '</span></div>';
+					el.innerHTML += '<div class="' + divClass + '"><span class="not-person" title="' + displayName + '">' + displayName + '</span></div>';
 				} else {
-					el.innerHTML = '<div class="' + divClass + '"><span>' + displayName + '</span></div>';
+					el.innerHTML = '<div class="' + divClass + '"><span class="not-person" title="' + displayName + '">' + displayName + '</span></div>';
 				}
 			}
 
