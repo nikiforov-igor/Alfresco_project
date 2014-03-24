@@ -49,7 +49,7 @@
 		<property name="createOrUpdateDictionaries">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-orgstructure-business-roles-items.xml</value>
-                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-docTypes-items.xml</value>
 			</list>
 		</property>
 	</bean>
