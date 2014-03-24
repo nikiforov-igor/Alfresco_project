@@ -425,7 +425,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         getAllSelectedItems: function DataGrid_getSelectedItems() {
             var items = [];
             for (var item in this.selectedItems) {
-                if (this.selectedItems.hasOwnProperty(item)) {
+                if (this.selectedItems.hasOwnProperty(item) && this.selectedItems[item]) {
                     items.push(item);
                 }
             }
