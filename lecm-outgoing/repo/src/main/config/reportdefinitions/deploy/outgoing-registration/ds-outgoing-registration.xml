@@ -2,7 +2,7 @@
 <ds.config>
     <report.descriptor mnem="outgoing-registration">
         <l18>
-            <item key="RU_RU"><![CDATA[Журнал регистрации исходящих]]></item>
+            <item key="RU_RU"><![CDATA[Журнал регистрации исходящих документов]]></item>
         </l18>
         <type mnem="JASPER">
             <l18>
