@@ -462,8 +462,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			List<ChildAssociationRef> parentAssocs = nodeService.getParentAssocs(assigneesListRef, ContentModel.ASSOC_CONTAINS, RegexQNamePattern.MATCH_ALL);
 			resultAssigneesList = copyAssigneesList(assigneesListRef, parentAssocs.get(0).getParentRef(), validAssigneesListName, false);
 		}
-		nodeService.removeAspect(resultAssigneesList, LecmWorkflowModel.ASPECT_TEMP);
 		nodeService.setProperty(resultAssigneesList, ContentModel.PROP_NAME, validAssigneesListName);
+		nodeService.removeAspect(resultAssigneesList, LecmWorkflowModel.ASPECT_TEMP);
 	}
 
 	@Override
