@@ -206,7 +206,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="26" splitType="Prevent">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="26" isPrintWhenDetailOverflows="true" uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a"/>
 				<box>
@@ -334,38 +334,38 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="287">
+		<band height="300">
 			<staticText>
 				<reportElement x="0" y="253" width="187" height="17" uuid="dc8e496f-e961-4d6b-9984-2ed9cabf0984"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОТПРАВИТЕЛЬ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="213" y="269" width="218" height="17" uuid="c2ee000d-ba15-4e60-ab01-5a683cf20088"/>
+				<reportElement x="210" y="271" width="218" height="17" uuid="c2ee000d-ba15-4e60-ab01-5a683cf20088"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[(подпись ответственного работника)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="149" width="187" height="17" uuid="c42c32cd-14f7-4379-b7fa-5f7ed30f1c01"/>
-				<textElement>
+				<reportElement x="0" y="150" width="187" height="17" uuid="c42c32cd-14f7-4379-b7fa-5f7ed30f1c01"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОБЩАЯ СУММА ПЛАТЫ ЗА ПЕРЕСЫЛКУ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="218" width="187" height="18" uuid="f5ec927f-0820-48cb-9ec8-028f5e4d0b78"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[СУММА НАЛОГА С ПРОДАЖ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="47" width="187" height="17" uuid="da4e9085-f77a-4b49-a967-f3fa6c37f356"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОБЩЕЕ КОЛИЧЕСТВО ОТПРАВЛЕНИЙ]]></text>
@@ -379,21 +379,21 @@
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="183" width="187" height="18" uuid="d62a4245-2e2b-4708-84fb-ee55b133dd13"/>
-				<textElement>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[СУММА НДС]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="81" width="210" height="17" uuid="5bd15615-0af5-42d5-ac0d-55cf72db16fd"/>
-				<textElement>
+				<reportElement x="0" y="80" width="210" height="17" uuid="5bd15615-0af5-42d5-ac0d-55cf72db16fd"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОБЩАЯ СУММА ОБЪЯВЛЕННОЙ ЦЕННОСТИ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="115" width="187" height="17" uuid="364fc474-a5fe-4605-9ba4-15c80c439671"/>
-				<textElement>
+				<reportElement x="0" y="116" width="187" height="17" uuid="364fc474-a5fe-4605-9ba4-15c80c439671"/>
+				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОБЩАЯ СУММА НАЛОЖЕННОГО ПЛАТЕЖА]]></text>
@@ -411,7 +411,7 @@
 				<reportElement x="236" y="201" width="171" height="1" uuid="45ab4f03-e1ca-43d9-b652-848d5d38b481"/>
 			</line>
 			<line>
-				<reportElement x="236" y="268" width="171" height="1" uuid="fc5fcd0b-0758-48e0-9cb0-3c1c1e3cec45"/>
+				<reportElement x="236" y="270" width="171" height="1" uuid="fc5fcd0b-0758-48e0-9cb0-3c1c1e3cec45"/>
 			</line>
 			<line>
 				<reportElement x="236" y="64" width="171" height="1" uuid="8d334f8f-169a-400b-88ef-561100a25d5e"/>

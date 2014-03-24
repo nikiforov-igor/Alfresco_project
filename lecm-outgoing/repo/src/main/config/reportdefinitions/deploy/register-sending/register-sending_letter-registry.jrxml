@@ -56,26 +56,26 @@
 	</field>
 	<title>
 		<band height="60" splitType="Stretch">
+			<line>
+				<reportElement x="241" y="21" width="171" height="1" uuid="7778b0ec-b6d4-4a41-9aa8-ccdaf38c2647"/>
+			</line>
+			<line>
+				<reportElement x="241" y="43" width="171" height="1" uuid="94b6e1b6-58a9-4a86-b327-17d37493d18c"/>
+			</line>
 			<staticText>
-				<reportElement x="88" y="1" width="136" height="20" uuid="650300c9-6fc3-44a4-bd25-fa9838dcd550"/>
+				<reportElement x="98" y="1" width="136" height="20" uuid="bb3ee757-cdae-4dc8-a9eb-46928a9f4cfe"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[Реестр писем №]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="88" y="21" width="136" height="20" uuid="2e888dbb-c2b4-4bce-b413-b1679f83daa4"/>
+				<reportElement x="98" y="23" width="136" height="20" uuid="c780da9d-876f-46c1-a3d2-ff7f5bb03360"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[Адрес отправителя:]]></text>
 			</staticText>
-			<line>
-				<reportElement x="241" y="21" width="171" height="1" uuid="7778b0ec-b6d4-4a41-9aa8-ccdaf38c2647"/>
-			</line>
-			<line>
-				<reportElement x="241" y="40" width="171" height="1" uuid="94b6e1b6-58a9-4a86-b327-17d37493d18c"/>
-			</line>
 		</band>
 	</title>
 	<pageHeader>
@@ -191,7 +191,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="26" splitType="Prevent">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="42" height="26" isPrintWhenDetailOverflows="true" uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a"/>
 				<box>
@@ -309,14 +309,14 @@
 	<summary>
 		<band height="54">
 			<staticText>
-				<reportElement x="0" y="29" width="98" height="22" uuid="78d64856-0942-49f8-ba99-51faa19ed3a8"/>
+				<reportElement x="0" y="27" width="98" height="22" uuid="78d64856-0942-49f8-ba99-51faa19ed3a8"/>
 				<textElement verticalAlignment="Bottom">
 					<font fontName="DejaVu Sans Mono" size="10"/>
 				</textElement>
 				<text><![CDATA[ОТПРАВИТЕЛЬ:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="150" y="50" width="171" height="1" uuid="44fd2e98-27f2-4189-bd83-4951598d3e3a"/>
+				<reportElement x="110" y="49" width="171" height="1" uuid="44fd2e98-27f2-4189-bd83-4951598d3e3a"/>
 			</line>
 		</band>
 	</summary>
