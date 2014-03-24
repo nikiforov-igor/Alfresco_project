@@ -51,12 +51,14 @@
     border-radius: 3px;
     overflow: hidden;
 }
+.yui-skin-lecmTheme div.metadata-form div.form-field div.viewmode-field span.viewmode-value p {
+	padding: 0;
+}
 .yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.form-field div.viewmode-field span.viewmode-value,
 .yui-skin-lecmTheme div.metadata-form div.set div div.form-field div.viewmode-field span.viewmode-value,
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
     width: auto;
 	float: none;
-    height: auto;
 }
 
 .yui-skin-lecmTheme div.metadata-form div.form-field {
