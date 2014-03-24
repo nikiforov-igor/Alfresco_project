@@ -157,7 +157,12 @@ public class ModelsListBeanImpl extends BaseBean {
 										if (modelActive != null && Boolean.TRUE.equals(modelActive)) {
 											modelObject.put("isDocumentModel", false);
 										} else {
-											modelObject.put("isDocumentModel", DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(firstType.getParentName()));
+											if("lecm-eds-document:base".equals(firstType.getParentName())
+												|| DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService).equals(firstType.getParentName())) {
+												modelObject.put("isDocumentModel", true);
+											} else {
+												modelObject.put("isDocumentModel", false);
+											}
 										}
 										modelObject.put("modelName", model.getName());
 										modelObject.put("isRestorable", lecmModelsService.isRestorable(model.getName()));

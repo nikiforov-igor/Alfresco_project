@@ -117,6 +117,9 @@ IT.component = IT.component || {};
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type[0].title
 						this.prop_type_name = (this.modelObject.model.types.type[0]._name.substr(this.modelObject.model.types.type[0]._name.indexOf(":")+1,this.modelObject.model.types.type[0]._name.length));
+
+						this.parent_ref = this.modelObject.model.types.type[0].parent;
+
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type[0]["mandatory-aspects"])) {
 							if(YAHOO.lang.isArray(this.modelObject.model.types.type[0]["mandatory-aspects"].aspect)) {
 								for(var v in this.modelObject.model.types.type[0]["mandatory-aspects"].aspect) {
@@ -135,6 +138,9 @@ IT.component = IT.component || {};
 					} else if(YAHOO.lang.isObject(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type.title;
 						this.prop_type_name = (this.modelObject.model.types.type._name.substr(this.modelObject.model.types.type._name.indexOf(":")+1,this.modelObject.model.types.type._name.length));
+
+						this.parent_ref = this.modelObject.model.types.type.parent;
+
 						if(YAHOO.lang.isObject(this.modelObject.model.types.type["mandatory-aspects"])) {
 							if(YAHOO.lang.isArray(this.modelObject.model.types.type["mandatory-aspects"].aspect)) {
 								for(var v in this.modelObject.model.types.type["mandatory-aspects"].aspect) {
@@ -503,6 +509,7 @@ IT.component = IT.component || {};
 			var modelDescription = args.description;
 			var typeName = (YAHOO.lang.isString(args.prop_type_name) ? args.prop_type_name : args.prop_cm_name);
 			var typeTitle = args.typeTitle;
+			var parentRef = args.parentRef;
 			var userName = args.options.currentUser;
 			var modelPublished = new Date();
 			//modelObject.model.types.type[0].properties.property
@@ -526,6 +533,7 @@ IT.component = IT.component || {};
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/content/1.0","_prefix":"cm"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.alfresco.org/model/system/1.0","_prefix":"sys"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/document/1.0","_prefix":"lecm-document"});
+				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/logicECM/eds-document/1.0","_prefix":"lecm-eds-document"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/document/aspects/1.0","_prefix":"lecm-document-aspects"});
 				args.modelObject.model.imports["import"].push({"_uri":"http://www.it.ru/lecm/model/signed-docflow/1.0","_prefix":"lecm-signed-docflow"});
 				var records = args.widgets.associationsDataTable.getRecordSet().getRecords();
@@ -635,7 +643,7 @@ IT.component = IT.component || {};
 				args.modelObject.model.types.type = {
 						"_name":namespace+":"+typeName,
 						"title":(typeTitle||""),
-						"parent":"lecm-document:base"
+						"parent":(parentRef||"lecm-document:base"),
 				};
 			}
 			//properties
@@ -999,6 +1007,11 @@ IT.component = IT.component || {};
 			//Заголовок
 			var oSpan = document.createElement("span");
 			var input = new IT.widget.Input({ name: "typeTitle", label: "<b>Описание документа</b>", value: (this.typeTitle||""), help:"Описание документа" } );
+			input.render(oSpan);
+			Dom.get(this.id+"_title").appendChild(oSpan);
+			//Родительский документ
+			var oSpan = document.createElement("span");
+			var input = new IT.widget.Select({ name: "parentRef", label: "<b>Родительский документ</b>", help:"Родительский документ", options: [{label:"LECM BASE",value:"lecm-document:base"},{label:"LECM EDS BASE",value:"lecm-eds-document:base"}], value: (this.parent_ref||"lecm-document:base"), showdefault: false });
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Шаблон строки представления
