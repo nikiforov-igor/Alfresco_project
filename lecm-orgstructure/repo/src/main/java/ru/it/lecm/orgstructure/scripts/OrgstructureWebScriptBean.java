@@ -986,6 +986,17 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }
 
     /**
+     * Получение подразделения, где сотрудник числится на основной должностной позиции
+     */
+    public ScriptNode getPrimaryOrgUnit(ScriptNode employeeRef) {
+        ParameterCheck.mandatory("employeeRef", employeeRef);
+        NodeRef unit = orgstructureService.getPrimaryOrgUnit(employeeRef.getNodeRef());
+        if (unit != null) {
+            return new ScriptNode(unit, serviceRegistry, getScope());
+        }
+        return null;
+    }
+    /**
      * Проверяет наличие бизнес-роли у сотрудника
      * @param employeeRef ссылка на сотрудника
      * @param businessRole бизнес роль
