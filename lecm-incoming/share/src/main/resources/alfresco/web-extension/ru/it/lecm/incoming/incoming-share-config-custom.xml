@@ -46,7 +46,7 @@
 
 		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
 		            <field id="lecm-document-aspects:is-on-control" set="incoming1"/>
-		            <field id="lecm-eds-document:execution-date" set="incoming1" mandatory="true">
+		            <field id="lecm-eds-document:execution-date" set="incoming1">
 			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
 				            <control-param name="minLimitCurrentDate">true</control-param>
 			            </control>

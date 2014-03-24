@@ -314,6 +314,9 @@ public class DocumentPolicy extends BaseBean
         String presentStringValue = AuthenticationUtil.runAsSystem(stringValue);
         if (presentStringValue != null) {
             setPropertyAsSystem(nodeRef, DocumentService.PROP_PRESENT_STRING, presentStringValue);
+	        if (presentStringValue.endsWith(".")) {
+		        presentStringValue = presentStringValue.substring(0, presentStringValue.length() - 1);
+	        }
             setPropertyAsSystem(nodeRef, ContentModel.PROP_NAME, FileNameValidator.getValidFileName(presentStringValue + " " + nodeRef.getId()));
 
             TypeDefinition typeDef = dictionaryService.getType(type);
