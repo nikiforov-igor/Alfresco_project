@@ -407,7 +407,11 @@ LogicECM.module = LogicECM.module || {};
 	                        }
 	                    });
 	            } else if (this.options.notSelectedOptionShow){
-                    this.currentDisplayValueElement.innerHTML = this.options.notSelectedText;
+		            if (this.options.notSelectedText.length > 0) {
+                        this.currentDisplayValueElement.innerHTML = this.options.notSelectedText;
+		            } else {
+			            this.currentDisplayValueElement.innerHTML = "&nbsp;";
+		            }
                 }
             },
 

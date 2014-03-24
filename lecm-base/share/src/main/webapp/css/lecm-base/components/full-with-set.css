@@ -4,8 +4,8 @@
 	overflow: hidden;
 	overflow-y: auto;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .tab-common .full-width div.form-field input[type=text]:not(.autocomplete-input),
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .tab-common .full-width div.form-field textarea {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field input[type=text]:not(.autocomplete-input),
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field textarea {
 	width: 765px;
 }
 
@@ -16,7 +16,7 @@
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.object-finder .current-values,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field select {
-	width: 350px;
+	width: 352px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.association-auto-complete-selected-item > span > a .yui-skin-lecmTheme .yui-panel div.form-field div.association-auto-complete-selected-item-even > span > a ,
@@ -30,8 +30,8 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
 	width: 735px;
 }
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .tab-common .full-width div.form-field div.object-finder .current-values,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .tab-common .full-width div.form-field select {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field select {
 	width: 730px;
 }
 

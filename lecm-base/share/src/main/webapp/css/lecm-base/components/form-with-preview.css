@@ -30,7 +30,7 @@
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .two-column div.form-field div.autocomplete-block input.autocomplete-input,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.form-field div.object-finder .current-values{
-	width: 149px;
+	width: 143px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field div.object-finder .show-picker,
@@ -50,7 +50,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
 	position: absolute;
 	bottom: 8px;
-	right: 0;
+	left: 160px;
 }
 
 .yui-skin-lecmTheme .yui-panel .from-with-preview .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span > a,
@@ -138,7 +138,7 @@
 
 .yui-panel.metadata-form-edit .from-with-preview .two-column div.association-auto-complete-selected-item > span.not-person,
 .yui-panel.metadata-form-edit .from-with-preview .two-column div.association-auto-complete-selected-item > span > a {
-	max-width: 120px;
+	max-width: 115px;
 }
 
 .yui-panel.metadata-form-edit .from-with-preview div.association-auto-complete-selected-item > span > a, .yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span.not-person {
