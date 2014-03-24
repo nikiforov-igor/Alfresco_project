@@ -8,9 +8,9 @@
 }
 
 .datagrid .action-set .onMoveUp a {
-	background-image: url(/share/res/images/lecm-workflow/arrow-up.png);
+	background-image: url(/share/res/images/lecm-workflow/arrow-up.png) !important;
 }
 
 .datagrid .action-set .onMoveDown a {
-	background-image: url(/share/res/images/lecm-workflow/arrow-down.png);
+	background-image: url(/share/res/images/lecm-workflow/arrow-down.png) !important;
 }
