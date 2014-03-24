@@ -37,7 +37,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field input[type=text]:not(.autocomplete-input),
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.selectone-control select,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
-    width: 200px;
+    width: 255px;
     overflow: hidden;
 }
 
@@ -69,6 +69,15 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
     width: 80%;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field div.object-finder .current-values,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field input.autocomplete-input[type="text"],
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field div.autocompleteCurrentValueDisplayInvisible,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
+    width: 220px;
+}
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field div.object-finder.with-two-buttons .current-values {
+    width: 200px;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.object-finder .show-picker,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.show-picker {
@@ -110,37 +119,16 @@
     margin-bottom: 16px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.object-finder .current-values,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field input.autocomplete-input[type="text"],
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
-	width: 165px;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .two-column div.form-field div.autocomplete-block input.autocomplete-input {
-	width: 165px;
-}
-
-.yui-panel.metadata-form-edit .two-column div.association-auto-complete-selected-item > span.not-person,
-.yui-panel.metadata-form-edit .two-column div.association-auto-complete-selected-item > span > a {
-	max-width: 135px;
-}
-
 .yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span > a,
 .yui-panel.metadata-form-edit div.association-auto-complete-selected-item > span.not-person {
 	max-width: 430px;
 }
 
-.yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span.not-person,
-.yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span.not-person,
-.yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span.not-person,
-.yui-skin-lecmTheme .yui-panel .two-column div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span.not-person {
+.yui-panel.metadata-form-edit .yui-u div.association-auto-complete-selected-item > span > a,
+.yui-panel.metadata-form-edit .yui-u div.association-auto-complete-selected-item > span.not-person {
 	max-width: 170px;
-	display: inline-block;
-	white-space: nowrap;
-	overflow-x: hidden;
-	text-overflow: ellipsis;
 }
+
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field {
 	margin-bottom: 10px;
 }
@@ -157,3 +145,15 @@
 	padding-bottom: 0;
 }
 
+.yui-skin-lecmTheme .metadata-form .yui-gb .yui-u,
+.yui-skin-lecmTheme .metadata-form-edit .yui-gb .yui-u {
+	width: 31%;
+}
+
+.yui-skin-lecmTheme div.metadata-form .yui-gb div.form-field div.viewmode-field span.viewmode-value {
+	white-space: nowrap;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-gb div.form-field input[type=text]:not(.autocomplete-input) {
+ 	width: 100px;
+}

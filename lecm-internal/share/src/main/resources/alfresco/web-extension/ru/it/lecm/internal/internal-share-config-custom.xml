@@ -73,7 +73,6 @@
 	                <show id="lecm-document-aspects:reg-project-data-number"/>
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
 	                <show id="lecm-document-aspects:is-shared-folder"/>
-                    <show id="lecm-internal:custom-style"/>   <!-- Костыль для кастомного стиля-->
                     <show id="lecm-internal:approval-list"/><!-- Листы согласования-->
                     <show id="lecm-internal:signing-list"/>	<!-- Листы подписания-->
                     <show id="lecm-internal:style-for-approval-and-signing-tab"/>
@@ -84,15 +83,15 @@
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
                     <set id="exist-permissions" parent="approval-and-signing" appearance="~_lecmPerm_InnerAttrList" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
-                    <set id="header" parent="common" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
-                    <set id="title" parent="common" appearance=""/>
-                    <set id="typeAndDate" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl" />
-                    <set id="recipients" parent="common" appearance=""/>
-                    <set id="content" parent="common" appearance=""/>
-                    <set id="responseTo" parent="common" appearance=""/>
-                    <set id="subjectAndRegister" parent="common" appearance="" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="note" parent="common" appearance=""/>
-	                <set id="footer" parent="common" appearance=""  template="/org/alfresco/components/form/3-column-set.ftl"/>
+                    <set id="header" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
+                    <set id="title" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="typeAndDate" parent="common" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="recipients" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="content" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="responseTo" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="subjectAndRegister" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="note" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+	                <set id="footer" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
 
                     <field id="lecm-eds-document:note" set="note">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
@@ -156,12 +155,6 @@
 	                <field id="lecm-document-aspects:is-shared-folder" set="footer">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 	                </field>
-
-                    <field id="lecm-internal:custom-style" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/edit-form.css</control-param>
-                        </control>
-                    </field>
 
                     <field id="lecm-internal:approval-list" set="exist-permissions" label="Согласование">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
@@ -366,22 +359,16 @@
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
-                    <show id="lecm-internal:custom-style" force="true"/>   <!-- Костыль для кастомного стиля-->
                     <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-internal:custom-style">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/create-form.css</control-param>
-                        </control>
-                    </field>
-                    <set id="title" appearance=""/>
-                    <set id="typeAndDate" appearance="" template="/org/alfresco/components/form/2-column-set.ftl" />
-                    <set id="recipients" appearance=""/>
-                    <set id="content" appearance=""/>
-                    <set id="responseTo" appearance=""/>
-                    <set id="subjectAndRegister" appearance="" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="uploader" appearance=""/>
+                    <set id="title" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="typeAndDate" template="/org/alfresco/components/form/2-column-set.ftl" />
+                    <set id="recipients" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="content" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="responseTo" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+                    <set id="subjectAndRegister" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="uploader" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 
                     <field id="lecm-document:title" set="title"/>
                     <field id="lecm-internal:doc-type-assoc" set="typeAndDate"/>
@@ -444,8 +431,6 @@
                             <control-param name="directoryName">Вложения</control-param>
                         </control>
                     </field>
-
-
                 </appearance>
             </form>
             <!-- Форма для табличного представления (набор столбцов)-->

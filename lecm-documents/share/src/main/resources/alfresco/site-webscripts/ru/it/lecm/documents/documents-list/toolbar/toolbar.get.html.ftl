@@ -48,7 +48,7 @@ function init() {
         itemType: "${args.itemType!'lecm-document:base'}",
         destination:LogicECM.module.Documents.SETTINGS.nodeRef,
         newRowDialogTitle:"${newRowTitle}",
-        createDialogWidth:"${args.createDialogWidth!"70em"}",
+        createDialogWidth:"${args.createDialogWidth!"80em"}",
         createDialogClass:"${args.createDialogClass!""}"
     });
 }
