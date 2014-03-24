@@ -7,15 +7,5 @@
 		<property name="lecm-dic:active">true</property>
 		<property name="lecm-dic:plane">true</property>
 		<property name="lecm-dic:description">Способ доставки</property>
-        <items>
-            <item name="cm:Письмо" type="lecm-doc-dic-dm:deliveryMethod">
-                <property name="cm:name">Письмо</property>
-                <property name="lecm-doc-dic-dm:deliveryMethod-code">MAIL</property>
-            </item>
-            <item name="cm:Электронная почта" type="lecm-doc-dic-dm:deliveryMethod">
-                <property name="cm:name">Электронная почта</property>
-                <property name="lecm-doc-dic-dm:deliveryMethod-code">EMAIL</property>
-            </item>
-        </items>
 	</item>
 </items>
