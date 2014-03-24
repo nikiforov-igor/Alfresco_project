@@ -43,7 +43,7 @@
                         var document = bpm_package.children[0];
                         var table = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
                         var employee = orgstructure.getEmployeeByLogin(task.getVariable("assignee"));
-                        documentMembers.addMember(document, employee, "LECM_BASIC_PG_ActionPerformer");
+                        documentMembers.addMemberWithoutCheckPermission(document, employee, "LECM_BASIC_PG_ActionPerformer");
                         var initiator = orgstructure.getCurrentEmployee();
                         var answer = table.createNode(null, "lecm-internal-table-structure:answer", "cm:contains");
                         answer.setPermission("Editor", task.getVariable("assignee"));

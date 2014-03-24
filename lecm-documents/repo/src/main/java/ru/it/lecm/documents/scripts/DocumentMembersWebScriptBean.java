@@ -53,6 +53,14 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
 		return addMember(document.getNodeRef(), employee.getNodeRef(), permGroup);
 	}
 
+	public ScriptNode addMemberWithoutCheckPermission(ScriptNode document, ScriptNode employee, String permGroup) {
+		ParameterCheck.mandatory("document", document);
+		ParameterCheck.mandatory("employee", employee);
+
+		NodeRef member = documentMembersService.addMemberWithoutCheckPermission(document.getNodeRef(), employee.getNodeRef(), permGroup);
+		return member != null ? new ScriptNode(member, serviceRegistry, getScope()) : null;
+	}
+
 	public boolean delete(String documentRef, String employeeRef) {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
