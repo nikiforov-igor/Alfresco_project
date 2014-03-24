@@ -173,6 +173,7 @@
 			    <value>alfresco/module/${artifactId}/models/lecm-file-register-objectType-items.xml</value>
 			    <value>alfresco/module/${artifactId}/models/lecm-reg-data-objectType-items.xml</value>
 	            <value>alfresco/module/${artifactId}/models/lecm-document-roles.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-document-type-items.xml</value>
 		    </list>
 	    </property>
     </bean>
