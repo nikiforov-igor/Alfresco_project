@@ -47,9 +47,9 @@
 		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
 		            <field id="lecm-document-aspects:is-on-control" set="incoming1"/>
 		            <field id="lecm-eds-document:execution-date" set="incoming1" mandatory="true">
-			            <constraint-handlers>
-				            <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
-			            </constraint-handlers>
+			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+				            <control-param name="minLimitCurrentDate">true</control-param>
+			            </control>
 		            </field>
 
 		            <field id="lecm-document-aspects:reg-data-number" set="incoming2" label="Регистрационный номер">
@@ -300,10 +300,10 @@
 		            </field>
 		            <field id="lecm-document-aspects:is-on-control" set="incoming10"/>
 		            <field id="lecm-incoming:is-not-registered" set="incoming10"/>
-		            <field id="lecm-eds-document:execution-date" set="incoming11" mandatory="true">
-			            <constraint-handlers>
-				            <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
-			            </constraint-handlers>
+		            <field id="lecm-eds-document:execution-date" set="incoming11">
+			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+			                <control-param name="minLimitCurrentDate">true</control-param>
+			            </control>
 		            </field>
 	            </appearance>
             </form>
