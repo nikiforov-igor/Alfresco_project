@@ -33,7 +33,7 @@
         </constraint>
         <constraint name="lecm-nd:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
             <parameter name="armUrl">
-                <value>documents-list?doctype=lecm-nd:document</value>
+                <value>arm?code=SED</value>
             </parameter>
         </constraint>
         <constraint name="lecm-nd:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
