@@ -169,7 +169,7 @@
                     </field>
 
                     <field id="lecm-internal:style-for-approval-and-signing-tab" set="approval-and-signing">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/">
                             <control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
                         </control>
                     </field>
@@ -309,7 +309,6 @@
                     <show id="lecm-internal-answers:content"/>
                     <show id="lecm-internal-answers:attachment"/>
                     <show id="lecm-internal-answers:answer-date" for-mode="view"/>
-                    <show id="lecm-internal-answers:custom-style" force="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="answerAndAuthor" appearance="" template="/org/alfresco/components/form/2-column-set.ftl" />
@@ -336,11 +335,6 @@
                         </control>
                     </field>
                     <field id="lecm-internal-answers:answer-date" set="date"/>
-                    <field id="lecm-internal-answers:custom-style">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-internal/answers-form.css</control-param>
-                        </control>
-                    </field>
                 </appearance>
             </form>
         </forms>
