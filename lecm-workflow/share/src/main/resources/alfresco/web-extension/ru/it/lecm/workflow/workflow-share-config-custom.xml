@@ -79,7 +79,7 @@
 			</form>
 			<form id="createNewCommonRouteForm">
 				<field-visibility>
-					<show id="cm:title"/>
+					<show id="prop_cm_title" force="true"/>
 					<show id="lecm-workflow:workflow-assignees-list-owner-assoc"/>
 					<show id="lecm-workflow:fake-workflow-list-approval" force="true"/>
 					<show id="lecm-workflow:fake-workflow-list-signing" force="true"/>
@@ -91,7 +91,7 @@
 					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
 					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
 					<set id="route3" appearance=""/>
-					<field id="cm:title" set="route1">
+					<field id="prop_cm_title" set="route1" label="Заголовок">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl"/>
 					</field>
 					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" mandatory="true" set="route2">
