@@ -128,25 +128,24 @@
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
             <form id="document">
-                <field-visibility>
-                    <show id="lecm-statemachine:status"/>
-                    <show id="lecm-document-aspects:is-on-control"/>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-document:doc-date"/>
-                    <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-document:subject-assoc"/>
-                </field-visibility>
+	            <field-visibility>
+		            <show id="lecm-eds-document:document-type-assoc"/>
+		            <show id="lecm-incoming:outgoing-number"/>
+		            <show id="lecm-incoming:outgoing-date"/>
+		            <show id="lecm-document:subject-assoc"/>
+		            <show id="lecm-incoming:delivery-method-assoc"/>
+	            </field-visibility>
             </form>
             <!-- Форма с набором полей для дашлета Общие сведения на карточке документа-->
             <form id="document-dashlet">
-                <field-visibility>
-                    <show id="lecm-statemachine:status"/>
-                    <show id="lecm-document-aspects:is-on-control"/>
-                    <show id="lecm-document:regnum"/>
-                    <show id="lecm-document:doc-date"/>
-                    <show id="lecm-incoming:outgoing-number"/>
-                    <show id="lecm-document:subject-assoc"/>
-                </field-visibility>
+	            <field-visibility>
+		            <show id="lecm-document:title"/>
+		            <show id="lecm-incoming:sender-assoc"/>
+		            <show id="lecm-incoming:addressee-assoc"/>
+		            <show id="lecm-statemachine:status"/>
+		            <show id="lecm-document-aspects:is-on-control"/>
+		            <show id="lecm-incoming:recipient-assoc"/>
+	            </field-visibility>
 	            <appearance>
 		            <field id="lecm-statemachine:status">
 			            <control template="/ru/it/lecm/documents/controls/history/status-history.ftl"/>
