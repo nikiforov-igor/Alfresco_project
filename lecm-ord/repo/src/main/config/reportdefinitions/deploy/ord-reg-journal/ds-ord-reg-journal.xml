@@ -30,6 +30,7 @@
 		<limit>-1</limit>
 		<pgsize>-1</pgsize>
 		<queryText><![CDATA[+TYPE:"lecm-ord:document"]]></queryText>
+		<querySort><![CDATA[docDate|ASC]]></querySort>
 		<querySort/>
 		<allVersions>true</allVersions>
 		<preferedType>lecm-ord:document</preferedType>
