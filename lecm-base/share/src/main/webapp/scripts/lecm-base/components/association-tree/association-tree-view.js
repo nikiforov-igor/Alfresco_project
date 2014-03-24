@@ -1254,11 +1254,11 @@ LogicECM.module = LogicECM.module || {};
         },
 
 		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
-			return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+			return "<span class='person'><a href='javascript:void(0);' title='" + displayValue + "' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 		},
 
         getDefaultView: function (displayValue) {
-            return "<span class='not-person'>" + displayValue + "</span>";
+            return "<span class='not-person' title='" + displayValue + "'>" + displayValue + "</span>";
         },
 
         updateAddButtons: function AssociationTreeViewer_updateAddButtons() {
