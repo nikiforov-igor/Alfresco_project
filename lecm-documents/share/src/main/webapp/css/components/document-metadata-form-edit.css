@@ -162,10 +162,10 @@
  	width: 100px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor.defaultSkin table {
-	width: 575px;
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor > table {
+	width: 770px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor.defaultSkin table iframe {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor > table iframe {
 	max-width: none;
 }

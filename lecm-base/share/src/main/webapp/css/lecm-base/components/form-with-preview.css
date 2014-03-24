@@ -46,12 +46,12 @@
     float: left;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor.defaultSkin {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor {
 	float: left;
 	width: 387px;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor.defaultSkin table {
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field .mceEditor > table {
 	width: 100%;
 }
 
