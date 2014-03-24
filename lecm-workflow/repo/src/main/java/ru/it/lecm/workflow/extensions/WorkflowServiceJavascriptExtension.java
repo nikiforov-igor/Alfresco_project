@@ -39,17 +39,29 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 	public JSONObject getDefaultAssigneesList(JSONObject json) {
 		String workflowType;
+		String concurrency;
 		JSONObject result = new JSONObject();
 		try {
 			workflowType = json.getString("workflowType");
+			concurrency = json.getString("concurrency");
 			boolean hasRouteRef = json.has("routeRef");
+			NodeRef assigneesList;
 			if (hasRouteRef) {
 				NodeRef parentRef = new NodeRef(json.getString("routeRef"));
-				result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType));
+				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType);
 			} else {
-				result.put("defaultList", workflowAssigneesListService.getDefaultAssigneesList(workflowType));
+				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(workflowType);
 			}
+			String assigneesListConcurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesList);
+			if (!LecmWorkflowModel.CONCURRENCY_PAR.equals(assigneesListConcurrency) && !LecmWorkflowModel.CONCURRENCY_SEQ.equals(assigneesListConcurrency)) {
+				workflowAssigneesListService.setAssigneesListConcurrency(assigneesList, concurrency);
+			} else {
+				concurrency = assigneesListConcurrency;
+			}
+
+			result.put("defaultList", assigneesList);
 			result.put("currentEmployee", orgstructureService.getCurrentEmployee());
+			result.put("concurrency", concurrency);
 		} catch (JSONException ex) {
 			throw new WebScriptException("Error parsing JSON", ex);
 		}

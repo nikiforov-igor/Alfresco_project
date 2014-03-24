@@ -141,6 +141,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				dataObj: dataObj,
 				successCallback: {
 					fn: function(r) {
+						this.options.concurrency = r.json.concurrency.toLowerCase();
 						this._setCurrentListRef(r.json.defaultList);
 						this._setCurrentEmployee(r.json.currentEmployee);
 
@@ -471,13 +472,15 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 			this.options.concurrency = currentConcurrency.concurrency;
 
-			if (this.widgets.radioWorkflowType !== null && this.widgets.radioWorkflowType !== undefined) {
-				this.widgets.radioWorkflowType.check(buttonToCheck);
-			}
-
-			if (input !== null && input !== undefined) {
+			if (input && currentConcurrency.concurrency.toUpperCase() !== input.value) {
+				if (this.widgets.radioWorkflowType) {
+					this.widgets.radioWorkflowType.unsubscribe('valueChange', this._onConcurrencyChange);
+					this.widgets.radioWorkflowType.check(buttonToCheck);
+					this.widgets.radioWorkflowType.subscribe('valueChange', this._onConcurrencyChange, null, this);
+				}
 				input.value = currentConcurrency.concurrency.toUpperCase();
 			}
+
 			if (needsPersisting) {
 				this._persistConcurrency(currentConcurrency.concurrency.toUpperCase());
 			}
@@ -488,7 +491,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		},
 		_setInitialConcurrency: function() {
 			if (!this.initialConcurrencySetted && this.widgets.datagrid && this.widgets.datagrid.widgets.dataTable) {
-				this._setConcurrency(this.options.concurrency, true);
+				this._setConcurrency(this.options.concurrency, false);
 				this.initialConcurrencySetted = true;
 			}
 		},
