@@ -874,22 +874,22 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
 
-                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
-                                var index = me.widgets.dataTable.getRecordIndex(rowId);
+                                var oDataRecord1 = me.widgets.dataTable.getRecord(rowId);
+                                var index = me.widgets.dataTable.getRecordIndex(oDataRecord1);
 
                                 if (index != 0) {
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(index-1).getData();
+                                    var oDataRecord2 = me.widgets.dataTable.getRecord(index-1);
 
                                     // удаляем верхнюю запись
-                                    me.widgets.dataTable.deleteRow(index-1);
+                                    me.widgets.dataTable.deleteRow(oDataRecord2);
                                     // так как в таблице стало на 1 запись меньше то удаляем с тем же индексом
-                                    me.widgets.dataTable.deleteRow(index-1);
+                                    me.widgets.dataTable.deleteRow(oDataRecord1);
 
-                                    me.widgets.dataTable.addRow(oDataRow1, index-1);
-                                    me.widgets.dataTable.addRow(oDataRow2, index);
+                                    me.widgets.dataTable.addRow(oDataRecord1.getData(), index-1);
+                                    me.widgets.dataTable.addRow(oDataRecord2.getData(), index);
 
-                                    me._itemUpdate(oDataRow1.nodeRef);
-                                    me._itemUpdate(oDataRow2.nodeRef);
+                                    me._itemUpdate(oDataRecord1.getData().nodeRef);
+                                    me._itemUpdate(oDataRecord2.getData().nodeRef);
                                 }
                             }
                         }
@@ -917,20 +917,20 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             if (response.json. isMoveDown == "true") {
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
-                                var oDataRow1 = me.widgets.dataTable.getRecord(rowId).getData();
-                                var index = me.widgets.dataTable.getRecordIndex(rowId);
+                                var oDataRecord1 = me.widgets.dataTable.getRecord(rowId);
+                                var index = me.widgets.dataTable.getRecordIndex(oDataRecord1);
 
                                 var count = me.widgets.dataTable.getRecordSet()._records.length;
                                 if (index < count) {
-                                    var oDataRow2 = me.widgets.dataTable.getRecord(index+1).getData();
-                                    me.widgets.dataTable.deleteRow(index);
-                                    me.widgets.dataTable.deleteRow(index);
+                                    var oDataRecord2 = me.widgets.dataTable.getRecord(index+1);
+                                    me.widgets.dataTable.deleteRow(oDataRecord1);
+                                    me.widgets.dataTable.deleteRow(oDataRecord2);
 
-                                    me.widgets.dataTable.addRow(oDataRow2, index);
-                                    me.widgets.dataTable.addRow(oDataRow1, index+1);
+                                    me.widgets.dataTable.addRow(oDataRecord2.getData(), index);
+                                    me.widgets.dataTable.addRow(oDataRecord1.getData(), index+1);
 
-	                                me._itemUpdate(oDataRow1.nodeRef);
-	                                me._itemUpdate(oDataRow2.nodeRef);
+	                                me._itemUpdate(oDataRecord1.getData().nodeRef);
+	                                me._itemUpdate(oDataRecord2.getData().nodeRef);
                                 }
                             }
                         }
