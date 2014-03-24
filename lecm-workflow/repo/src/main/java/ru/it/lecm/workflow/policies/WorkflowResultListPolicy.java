@@ -46,7 +46,9 @@ public class WorkflowResultListPolicy implements NodeServicePolicies.OnCreateNod
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
 		NodeRef resultList = childAssocRef.getChildRef();
 		NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
-		nodeService.createAssociation(resultList, currentEmployee, WorkflowResultModel.ASSOCWORKFLOW_RESULT_LIST_INITIATOR);
+		if (currentEmployee != null) {
+			nodeService.createAssociation(resultList, currentEmployee, WorkflowResultModel.ASSOCWORKFLOW_RESULT_LIST_INITIATOR);
+		}
 	}
 
 }

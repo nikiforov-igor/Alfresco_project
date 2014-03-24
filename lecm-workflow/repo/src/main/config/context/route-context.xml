@@ -10,12 +10,13 @@
 		  class="ru.it.lecm.workflow.beans.AbstractWorkflowRunner"
 		  p:nodeService-ref="nodeService"
 		  p:workflowService-ref="WorkflowService"
-		  p:orgstructureBean-ref="serviceOrgstructure"
 		  p:alfrescoProcessEngineConfiguration-ref="activitiProcessEngineConfiguration"
 		  p:stateMachineService-ref="stateMachineHelper"
 		  p:businessJournalService-ref="businessJournalService"
 		  p:routeService-ref="routeService"
-		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
+		  p:authenticationService-ref="authenticationService"
+		  p:personService-ref="personService"/>
 
 	<util:list id="approval.inputVariables">
 		<value>documentAttachmentCategoryName</value>

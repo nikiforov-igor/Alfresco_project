@@ -12,6 +12,9 @@ import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.NoSuchPersonException;
+import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.cmr.workflow.WorkflowDefinition;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowPath;
@@ -20,9 +23,10 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.ParameterCheck;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineEventCategory;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
@@ -40,16 +44,18 @@ import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
 public abstract class AbstractWorkflowRunner implements WorkflowRunner, InitializingBean {
 
 	protected final static String ACTIVITI_PREFIX = "activiti$";
+	private final static Logger logger = LoggerFactory.getLogger(AbstractWorkflowRunner.class);
 
 	protected NodeService nodeService;
 	protected WorkflowService workflowService;
-	protected OrgstructureBean orgstructureBean;
 	protected AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration;
 	protected RuntimeService runtimeService;
 	protected StateMachineServiceBean stateMachineService;
 	protected BusinessJournalService businessJournalService;
 	protected RouteService routeService;
 	protected WorkflowAssigneesListService workflowAssigneesListService;
+	protected AuthenticationService authenticationService;
+	protected PersonService personService;
 
 	protected WorkflowType workflowType;
 	protected List<String> inputVariables;
@@ -60,10 +66,6 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 
 	public void setWorkflowService(final WorkflowService workflowService) {
 		this.workflowService = workflowService;
-	}
-
-	public void setOrgstructureBean(final OrgstructureBean orgstructureBean) {
-		this.orgstructureBean = orgstructureBean;
 	}
 
 	public void setAlfrescoProcessEngineConfiguration(final AlfrescoProcessEngineConfiguration alfrescoProcessEngineConfiguration) {
@@ -84,6 +86,14 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
 		this.workflowAssigneesListService = workflowAssigneesListService;
+	}
+
+	public void setAuthenticationService(AuthenticationService authenticationService) {
+		this.authenticationService = authenticationService;
+	}
+
+	public void setPersonService(PersonService personService) {
+		this.personService = personService;
 	}
 
 	@Override
@@ -140,6 +150,23 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		new DocumentWorkflowUtil().addWorkflow(documentRef, instance.getId(), descriptor);
 	}
 
+	private NodeRef getCurrentPerson() {
+		String currentUserName = authenticationService.getCurrentUserName();
+		NodeRef personRef;
+		try {
+			personRef = personService.getPerson(currentUserName, false);
+		} catch (NoSuchPersonException ex) {
+			String msg = String.format("[%s] Can't get person for username %s", this.getClass().getName(), currentUserName);
+			if (logger.isDebugEnabled()) {
+				logger.error(msg, ex);
+			} else {
+				logger.error(msg);
+			}
+			personRef = null;
+		}
+		return personRef;
+	}
+
 	protected abstract Map<QName, Serializable> runImpl(final Map<String, Object> variables, final Map<QName, Serializable> properties);
 
 	protected abstract QName getWorkflowIdPropQName();
@@ -161,9 +188,7 @@ public abstract class AbstractWorkflowRunner implements WorkflowRunner, Initiali
 		nodeService.addChild(subprocessPackage, documentRef, ContentModel.ASSOC_CONTAINS, qname);
 		properties.put(WorkflowModel.ASSOC_PACKAGE, subprocessPackage);
 		//assignee
-		NodeRef currentEmployeeRef = orgstructureBean.getCurrentEmployee();
-		NodeRef personRef = orgstructureBean.getPersonForEmployee(currentEmployeeRef);
-		properties.put(WorkflowModel.ASSOC_ASSIGNEE, personRef);
+		properties.put(WorkflowModel.ASSOC_ASSIGNEE, getCurrentPerson());
 
 		return properties;
 	}
