@@ -150,6 +150,10 @@
 	width: 31%;
 }
 
+.yui-skin-lecmTheme .metadata-form .yui-gb .yui-u {
+	float: left;
+}
+
 .yui-skin-lecmTheme div.metadata-form .yui-gb div.form-field div.viewmode-field span.viewmode-value {
 	white-space: nowrap;
 }
