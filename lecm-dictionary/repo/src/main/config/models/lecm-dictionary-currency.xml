@@ -23,6 +23,21 @@
                 <property name="lecm-currency:alphabetic-code">EUR</property>
                 <property name="lecm-currency:digital-code">978</property>
             </item>
+            <item name="cm:Гривна" type="lecm-currency:currency">
+                <property name="cm:name">Гривна</property>
+                <property name="lecm-currency:alphabetic-code">UAH</property>
+                <property name="lecm-currency:digital-code">344</property>
+            </item>
+            <item name="cm:Фунт" type="lecm-currency:currency">
+                <property name="cm:name">Фунт</property>
+                <property name="lecm-currency:alphabetic-code">GBP</property>
+                <property name="lecm-currency:digital-code">826</property>
+            </item>
+            <item name="cm:Юань" type="lecm-currency:currency">
+                <property name="cm:name">Юань</property>
+                <property name="lecm-currency:alphabetic-code">CNY</property>
+                <property name="lecm-currency:digital-code">156</property>
+            </item>
         </items>
     </item>
 </items>
