@@ -21,7 +21,6 @@
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
-                    <show id="lecm-nd:nd-css-fix" force="true"/> <!-- Костыль для стилей -->
                 </field-visibility>
                 <appearance>
                     <set id="common"/>
@@ -37,12 +36,6 @@
                     <set id="dates" parent="nd2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
                     <set id="nd7" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="nd8" parent="nd2" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-
-                    <field id="lecm-nd:nd-css-fix" set="nd2">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-nd/create-form-fix.css</control-param>
-                        </control>
-                    </field>
 
                     <field id="lecm-document-aspects:attachments-temp-assoc" set="nd1">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl">
@@ -201,7 +194,6 @@
                     <show id="lecm-document-aspects:reg-project-data-number"/>
                     <show id="lecm-document-aspects:reg-project-data-date"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
-                    <show id="lecm-nd:nd-css-fix" force="true" for-mode="view"/> <!-- Костыль для стилей -->
                 </field-visibility>
                 <appearance>
 
@@ -209,13 +201,13 @@
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание"/>
 
                     <set id="regData" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd3" parent="common"/>
+                    <set id="nd3" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="nd4" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd5" parent="common"/>
+                    <set id="nd5" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="dates" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="nd7" parent="common"/>
+                    <set id="nd7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="nd8" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
-                    <set id="author" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
+                    <set id="author" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="footer" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
 
                     <!-- Вкладка Атрибуты -->
@@ -274,11 +266,6 @@
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
             
-                    <field id="lecm-nd:nd-css-fix" set="common">
-                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-                            <control-param name="cssFile">lecm-nd/nd-edit-form.css</control-param>
-                        </control>
-                    </field>
                     <!-- Вкладка "Согласование/подписание" -->
                     <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
