@@ -36,11 +36,11 @@
                 <value>alfresco/module/${artifactId}/models/dictionaries/specialization-dictionary.xml</value>
             </list>
         </property>
-        <!--<property name="createOrUpdateDictionaries">-->
-            <!--<list>-->
-                <!--<value>alfresco/module/${artifactId}/models/contractor-items.xml</value>-->
-            <!--</list>-->
-        <!--</property>-->
+        <property name="createOrUpdateDictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary-items.xml</value>
+            </list>
+        </property>
     </bean>
 
     <!-- Registration of contractor models -->
