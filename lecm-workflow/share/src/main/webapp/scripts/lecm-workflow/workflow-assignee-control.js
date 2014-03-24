@@ -876,7 +876,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			var formItemType = this.options.formItemType;
 
 			if (formItemType === 'route') {
-				return 'route';
+				return 'route-' + this.options.concurrency;
 			}
 
 			return this.options.concurrency;
