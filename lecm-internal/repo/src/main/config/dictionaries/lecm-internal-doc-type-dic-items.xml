@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Вид внутреннего документа" type="lecm-dic:dictionary">
+        <items>
+            <item name="cm:Служебная записка" type="lecm-internal-doc-type:dictionary">
+                <property name="cm:name"><![CDATA[Служебная записка]]></property>
+            </item>
+            <item name="cm:Аналитическая записка" type="lecm-internal-doc-type:dictionary">
+                <property name="cm:name"><![CDATA[Аналитическая записка]]></property>
+            </item>
+            <item name="cm:Докладная записка" type="lecm-internal-doc-type:dictionary">
+                <property name="cm:name"><![CDATA[Докладная записка]]></property>
+            </item>
+            <item name="cm:Объяснительная записка" type="lecm-internal-doc-type:dictionary">
+                <property name="cm:name"><![CDATA[Объяснительная записка]]></property>
+            </item>
+            <item name="cm:Заявка" type="lecm-internal-doc-type:dictionary">
+                <property name="cm:name"><![CDATA[Заявка]]></property>
+            </item>
+        </items>
+    </item>
+</items>

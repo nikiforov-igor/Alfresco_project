@@ -53,6 +53,7 @@
             <list>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-br-items.xml</value>
                 <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-rn-items.xml</value>
+                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-items.xml</value>
             </list>
         </property>
     </bean>
