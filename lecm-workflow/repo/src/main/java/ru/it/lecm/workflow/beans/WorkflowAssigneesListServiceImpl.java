@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
@@ -52,6 +53,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	private WorkflowFoldersService workflowFoldersService;
 	private CopyService copyService;
 	private IDelegation delegationService;
+	private BehaviourFilter behaviourFilter;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
@@ -75,6 +77,10 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	public void setDelegationService(IDelegation delegationService) {
 		this.delegationService = delegationService;
+	}
+
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+		this.behaviourFilter = behaviourFilter;
 	}
 
 	private NodeRef getEmployeeFromAssigneeListItem(NodeRef assigneeListItem) {
@@ -522,10 +528,15 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		nodeService.setProperty(newAssigneesList, LecmWorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
 		//пробегаемся по детишкам, создаем элементы и копируем их
 		List<NodeRef> assigneeRefs = getAssigneesListItems(source);
-		for (NodeRef assigneeRef : assigneeRefs) {
-			String assigneeName = (String) nodeService.getProperty(assigneeRef, ContentModel.PROP_NAME);
-			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assigneeName);
-			copyService.copy(assigneeRef, newAssigneesList, ContentModel.ASSOC_CONTAINS, assocQName);
+		behaviourFilter.disableBehaviour(newAssigneesList, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST);
+		try {
+			for (NodeRef assigneeRef : assigneeRefs) {
+				String assigneeName = (String) nodeService.getProperty(assigneeRef, ContentModel.PROP_NAME);
+				QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assigneeName);
+				copyService.copy(assigneeRef, newAssigneesList, ContentModel.ASSOC_CONTAINS, assocQName);
+			}
+		} finally {
+			behaviourFilter.enableBehaviour(LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST);
 		}
 
 		return newAssigneesList;

@@ -53,7 +53,8 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
 		  p:copyService-ref="copyService"
-		  p:delegationService-ref="delegationService"/>
+		  p:delegationService-ref="delegationService"
+		  p:behaviourFilter-ref="policyBehaviourFilter"/>
 
 	<bean id="workflowResultListService" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.WorkflowResultListServiceImpl"
