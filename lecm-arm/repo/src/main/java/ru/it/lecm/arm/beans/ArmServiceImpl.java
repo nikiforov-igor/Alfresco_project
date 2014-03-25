@@ -171,43 +171,45 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         List<NodeRef> filters = findNodesByAssociationRef(node, ASSOC_NODE_FILTERS, null, ASSOCIATION_TYPE.TARGET);
         if (filters != null) {
             for (NodeRef ref : filters) {
-                ArmFilter filter = new ArmFilter();
-                Map<QName, Serializable> props = nodeService.getProperties(ref);
-                filter.setTitle((String) props.get(ContentModel.PROP_NAME));
-                filter.setCode((String) props.get(PROP_FILTER_CODE));
+                if (!isArchive(ref)) {
+                    ArmFilter filter = new ArmFilter();
+                    Map<QName, Serializable> props = nodeService.getProperties(ref);
+                    filter.setTitle((String) props.get(ContentModel.PROP_NAME));
+                    filter.setCode((String) props.get(PROP_FILTER_CODE));
 
-                Object multipleValue = props.get(PROP_FILTER_MULTIPLE);
-                if (multipleValue != null) {
-                    filter.setMultipleSelect((Boolean) multipleValue);
-                }
+                    Object multipleValue = props.get(PROP_FILTER_MULTIPLE);
+                    if (multipleValue != null) {
+                        filter.setMultipleSelect((Boolean) multipleValue);
+                    }
 
-                List<ArmFilterValue> valueList = new ArrayList<ArmFilterValue>();
-                String valuesStr = (String) props.get(PROP_FILTER_VALUES);
-                if (!valuesStr.isEmpty())  {
-                    String[] valuesArray = valuesStr.split(",");
+                    List<ArmFilterValue> valueList = new ArrayList<ArmFilterValue>();
+                    String valuesStr = (String) props.get(PROP_FILTER_VALUES);
+                    if (!valuesStr.isEmpty())  {
+                        String[] valuesArray = valuesStr.split(",");
 
-                    for(String value :valuesArray){
-                        if (!value.trim().isEmpty()) {
-                            String[] v = value.trim().split("\\|");
-                            if (v.length >= 2) {
-                                valueList.add(new ArmFilterValue(v[1],v[0]));
+                        for(String value :valuesArray){
+                            if (!value.trim().isEmpty()) {
+                                String[] v = value.trim().split("\\|");
+                                if (v.length >= 2) {
+                                    valueList.add(new ArmFilterValue(v[1],v[0]));
+                                }
                             }
                         }
                     }
-                }
 
-                filter.setValues(valueList);
+                    filter.setValues(valueList);
 
-                Object query = props.get(PROP_FILTER_QUERY);
-                if (query != null) {
-                    filter.setQuery((String) query);
-                }
+                    Object query = props.get(PROP_FILTER_QUERY);
+                    if (query != null) {
+                        filter.setQuery((String) query);
+                    }
 
-                Object fClass = props.get(PROP_FILTER_CLASS);
-                if (fClass != null) {
-                    filter.setFilterClass((String) fClass);
+                    Object fClass = props.get(PROP_FILTER_CLASS);
+                    if (fClass != null) {
+                        filter.setFilterClass((String) fClass);
+                    }
+                    result.add(filter);
                 }
-                result.add(filter);
             }
         }
 
