@@ -88,8 +88,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				    }
 			    );
 			    this.filtersDialog.render();
+
+			    var hideMaskCss = document.createElement("style");
+			    hideMaskCss.type = "text/css";
+			    hideMaskCss.innerHTML = "#" + this.id + "-filters-dialog_mask { opacity: 0; }";
+			    document.body.appendChild(hideMaskCss);
+
 			    YAHOO.util.Event.onAvailable(this.id + "-filters-dialog_mask", function () {
-				    Dom.addClass(this.id + "-filters-dialog_mask", "arm-filters-mask");
 				    YAHOO.util.Event.on(this.id + "-filters-dialog_mask", 'click', this.hideFiltersDialog, null, this);
 			    }, null, this);
 		    },
