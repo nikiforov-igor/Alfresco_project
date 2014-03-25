@@ -5,7 +5,7 @@
  */
 // Ensure LogicECM root object exists
 if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
+	var LogicECM = {};
 }
 
 /**
@@ -31,115 +31,111 @@ LogicECM.module.Base = LogicECM.module.Base || {};
  * @namespace LogicECM
  */
 LogicECM.module.Base.Util = {
-    /*
-     * Set common block height
-     */
-    setHeight: function() {
-        var Dom = YAHOO.util.Dom,
-            Bubbling = YAHOO.Bubbling;
-        var bd = Dom.get('bd');
-        var block = Dom.get('lecm-page');
-        var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
+	/*
+	 * Set common block height
+	 */
+	setHeight: function() {
+		var Dom = YAHOO.util.Dom,
+				Bubbling = YAHOO.Bubbling;
+		var bd = Dom.get('bd');
+		var block = Dom.get('lecm-page');
+		var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
 
-        Bubbling.fire("HeightSetting");
-        Dom.setStyle(block, 'height', 'auto');
+		Bubbling.fire("HeightSetting");
+		Dom.setStyle(block, 'height', 'auto');
 
-        var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
-            - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
+		var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
+				- parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
 
-        Dom.setStyle(block, 'min-height', h + 'px');
-        Bubbling.fire("HeightSetted");
-    },
+		Dom.setStyle(block, 'min-height', h + 'px');
+		Bubbling.fire("HeightSetted");
+	},
+	/*
+	 * Set document page height
+	 */
+	setDocPageHeight: function() {
+		var Dom = YAHOO.util.Dom;
+		var doc = Dom.get('doc-bd');
+		var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
 
-    /*
-     * Set document page height
-     */
-    setDocPageHeight: function() {
-        var Dom = YAHOO.util.Dom;
-        var doc = Dom.get('doc-bd');
-        var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
+		Dom.setStyle(doc, 'height', 'auto');
 
-        Dom.setStyle(doc, 'height', 'auto');
+		var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(doc)
+				- parseInt(Dom.getStyle(doc, 'margin-bottom'))
+				- parseInt(Dom.getStyle(doc, 'border-top-width')) - parseInt(Dom.getStyle(doc, 'border-bottom-width'));
 
-        var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(doc)
-            - parseInt(Dom.getStyle(doc, 'margin-bottom'))
-            - parseInt(Dom.getStyle(doc, 'border-top-width')) - parseInt(Dom.getStyle(doc, 'border-bottom-width'));
+		Dom.setStyle(doc, 'min-height', h + 'px');
+	},
+	setDashletsHeight: function(dashletsBlockId) {
+		var Dom = YAHOO.util.Dom;
+		var page = Dom.get('lecm-page');
+		var dashletsBlock = Dom.get(dashletsBlockId);
 
-        Dom.setStyle(doc, 'min-height', h + 'px');
-    },
+		if (!dashletsBlock) {
+			return;
+		}
+		var pageHeight = parseInt(Dom.getStyle(page, 'height')) || parseInt(Dom.getStyle(page, 'min-height'));
 
-    setDashletsHeight: function(dashletsBlockId) {
-        var Dom = YAHOO.util.Dom;
-        var page = Dom.get('lecm-page');
-        var dashletsBlock = Dom.get(dashletsBlockId);
+		pageHeight = pageHeight - parseInt(Dom.getElementsByClassName('header-bar', 'div', page)[0].offsetHeight)
+				- parseInt(Dom.get('lecm-content-ft').offsetHeight);
+		Dom.setStyle(dashletsBlock, 'height', 'auto');
+		Dom.setStyle(dashletsBlock, 'min-height', pageHeight + 'px');
 
-        if (!dashletsBlock) {
-             return;
-        }
-        var pageHeight = parseInt(Dom.getStyle(page, 'height')) || parseInt(Dom.getStyle(page, 'min-height'));
+		var dashlets = Dom.getElementsByClassName('dashlet', 'div', dashletsBlock);
+		var dashletsCount = Math.round(dashlets.length / 2);
+		var dashlet = dashlets[0];
+		var dashletHeader = Dom.getElementsByClassName('dashlet-title', 'div', dashlet);
+		var dashletMarginTop = parseInt(Dom.getStyle(dashlet, 'margin-top'));
+		var dashletMarginBottom = parseInt(Dom.getStyle(dashlet, 'margin-bottom'));
 
-        pageHeight = pageHeight - parseInt(Dom.getElementsByClassName('header-bar', 'div', page)[0].offsetHeight)
-            - parseInt(Dom.get('lecm-content-ft').offsetHeight);
-        Dom.setStyle(dashletsBlock, 'height', 'auto');
-        Dom.setStyle(dashletsBlock, 'min-height', pageHeight + 'px');
+		var h = (pageHeight - dashletMarginTop - dashletMarginBottom - (dashletsCount - 1) * Math.max(dashletMarginTop, dashletMarginBottom)) / dashletsCount;
+		h = h - parseInt(parseInt(dashletHeader[0].offsetHeight));
 
-        var dashlets = Dom.getElementsByClassName('dashlet', 'div', dashletsBlock);
-        var dashletsCount = Math.round(dashlets.length / 2);
-        var dashlet = dashlets[0];
-        var dashletHeader = Dom.getElementsByClassName('dashlet-title', 'div', dashlet);
-        var dashletMarginTop = parseInt(Dom.getStyle(dashlet, 'margin-top'));
-        var dashletMarginBottom = parseInt(Dom.getStyle(dashlet, 'margin-bottom'));
+		for (var i = 0; i < dashlets.length; i++) {
+			dashlet = dashlets[i];
+			Dom.setStyle(Dom.getElementsByClassName('dashlet-body', 'div', dashlet), 'height', Math.floor(h) + 'px');
+		}
+	},
+	/**
+	 * Get the URL parameter by key
+	 * @param key - string : the key of parameter
+	 */
+	getUrlParam: function(key) {
+		var query = document.location.search.split("+").join(" ");
 
-        var h = (pageHeight - dashletMarginTop - dashletMarginBottom - (dashletsCount - 1) * Math.max(dashletMarginTop, dashletMarginBottom))/dashletsCount;
-        h = h - parseInt(parseInt(dashletHeader[0].offsetHeight));
+		var params = {}, tokens,
+				re = /[?&]?([^=]+)=([^&]*)/g;
 
-        for (var i = 0; i < dashlets.length; i++) {
-            dashlet = dashlets[i];
-            Dom.setStyle(Dom.getElementsByClassName('dashlet-body', 'div', dashlet), 'height', Math.floor(h) + 'px');
-        }
-    },
+		while (tokens = re.exec(query)) {
+			params[decodeURIComponent(tokens[1])]
+					= decodeURIComponent(tokens[2]);
+		}
 
-    /**
-     * Get the URL parameter by key
-     * @param key - string : the key of parameter
-     */
-    getUrlParam: function(key) {
-        var query = document.location.search.split("+").join(" ");
-
-        var params = {}, tokens,
-            re = /[?&]?([^=]+)=([^&]*)/g;
-
-        while (tokens = re.exec(query)) {
-            params[decodeURIComponent(tokens[1])]
-                = decodeURIComponent(tokens[2]);
-        }
-
-        return params[key];
-    },
-
-    /**
-     * Add a URL parameter (or changing it if it already exists)
-     * @param {search} string  this is typically document.location.search
-     * @param {key}    string  the key to set
-     * @param {val}    string  value
-     */
-    addUrlParam: function(search, key, val){
-        var newParam = key + '=' + val,
-            params = '?' + newParam;
+		return params[key];
+	},
+	/**
+	 * Add a URL parameter (or changing it if it already exists)
+	 * @param {search} string  this is typically document.location.search
+	 * @param {key}    string  the key to set
+	 * @param {val}    string  value
+	 */
+	addUrlParam: function(search, key, val) {
+		var newParam = key + '=' + val,
+				params = '?' + newParam;
 
 
-        // If the "search" string exists, then build params from it
-        if (search) {
-            if (search.match(key + '[^&]*') != null) {
-                // Try to replace an existance instance
-                params = search.replace(new RegExp(key + '[^&]*'), newParam);
-            } else {
-                // If nothing was replaced, then add the new param to the end
-                params = search + '&' + newParam;
-            }
-        }
-        location.search = params;
-    },
+		// If the "search" string exists, then build params from it
+		if (search) {
+			if (search.match(key + '[^&]*') != null) {
+				// Try to replace an existance instance
+				params = search.replace(new RegExp(key + '[^&]*'), newParam);
+			} else {
+				// If nothing was replaced, then add the new param to the end
+				params = search + '&' + newParam;
+			}
+		}
+		location.search = params;
+	},
 	/**
 	 * Найти на странице компонент, имеющий определенный bubbling label.
 	 * @param {string} p_sName название компонента. Например, "LogicECM.module.Base.DataGrid"
@@ -182,7 +178,7 @@ LogicECM.module.Base.Util = {
 			successCallback: {
 				fn: function(response) {
 					window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText,
-						"report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+							"report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
 
 					Alfresco.util.PopupManager.displayMessage({
 						text: Alfresco.component.Base.prototype.msg("message.report.success")
@@ -197,58 +193,136 @@ LogicECM.module.Base.Util = {
 				}
 			}
 		});
+	},
+	/**
+	 * Деструктор для форм
+	 * @param {Object} event собитие, на которое мы срегировали (обычно, destroy)
+	 * @param {Object} args дополнительные параметры, переданные при иницировании события. обычно, null
+	 * @param {Object} params объект, имеющий следующие атрибуты:
+	 *  {String} moduleId - ID модуля, по которому его можно найти в ComponentManager, обязательный
+	 *  {Function} callback - функция, выполняющаяся перед основной работой деструктора, опциональный
+	 *  {Object} callbackArg объект, передающийся параметром в callback, опциональный
+	 */
+	formDestructor: function(event, args, params) {
+		function removeAllBubbles(obj) {
+			var event;
+			var bubble = YAHOO.Bubbling.bubble;
+
+			for (event in bubble) {
+				if (bubble.hasOwnProperty(event)) {
+					bubble[event].subscribers.forEach(function(s) {
+						if (s.obj === obj) {
+							YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
+						}
+					});
+				}
+			}
+		}
+
+		var moduleId = params.moduleId, callback = params.callback, callbackArg = params.callbackArg;
+
+		var k, w;
+
+		var isFn = YAHOO.lang.isFunction;
+
+		var comMan = Alfresco.util.ComponentManager;
+		var components = comMan.list();
+
+		var form = comMan.get(moduleId);
+		var formIndex = components.indexOf(form); // IE9+
+
+		var widgets = form.widgets;
+
+		var formRelatedElementsSelectorTemplate = "[id^='{moduleId}']";
+
+
+		if (isFn(callback)) {
+			callback.call(this, callbackArg);
+		}
+
+		for (k in widgets) {
+			if (widgets.hasOwnProperty(k)) {
+				w = widgets[k];
+
+				if (w.hasOwnProperty('nodeName') && w.hasOwnProperty('tagName')) {
+					$(w).remove();
+					continue;
+				}
+
+				if (isFn(w.get)) {
+					if (w.get('element') === null) {
+						continue;
+					}
+				}
+
+				if (isFn(w.destroy)) {
+					w.destroy();
+				}
+			}
+		}
+
+		// жесточайшим образом убить все элементы, ID которых начинается c moduleId
+		$(YAHOO.lang.substitute(formRelatedElementsSelectorTemplate, {
+			moduleId: moduleId
+		})).remove();
+
+		if (formIndex > -1) {
+			while (components.length > formIndex) { // Не оптимизируй...
+				removeAllBubbles(components[formIndex]);
+				comMan.unregister(components[formIndex]);
+			}
+		}
 	}
 
 };
 
-(function(){
-    /**
-     * YUI Library aliases
-     */
-    var Dom = YAHOO.util.Dom,
-        Event = YAHOO.util.Event;
+(function() {
+	/**
+	 * YUI Library aliases
+	 */
+	var Dom = YAHOO.util.Dom,
+			Event = YAHOO.util.Event;
 
-    // Recalculate the vertical size on a browser window resize event
-    Event.on(window, "resize", function(e) {
-        LogicECM.module.Base.Util.setHeight();
-    }, this, true);
+	// Recalculate the vertical size on a browser window resize event
+	Event.on(window, "resize", function(e) {
+		LogicECM.module.Base.Util.setHeight();
+	}, this, true);
 
-    Event.onDOMReady(function() {
-        LogicECM.module.Base.Util.setHeight();
-    });
+	Event.onDOMReady(function() {
+		LogicECM.module.Base.Util.setHeight();
+	});
 
-    /**
-     * Base resizer
-     */
-    LogicECM.module.Base.Resizer = function(name) {
-        LogicECM.module.Base.Resizer.superclass.constructor.call(this, name);
-        return this;
-    };
+	/**
+	 * Base resizer
+	 */
+	LogicECM.module.Base.Resizer = function(name) {
+		LogicECM.module.Base.Resizer.superclass.constructor.call(this, name);
+		return this;
+	};
 
-    YAHOO.extend(LogicECM.module.Base.Resizer, Alfresco.widget.Resizer, {
-	    marginLeft: 8,
+	YAHOO.extend(LogicECM.module.Base.Resizer, Alfresco.widget.Resizer, {
+		marginLeft: 8,
+		onResize: function(width) {
+			var cn = Dom.get(this.options.divLeft).childNodes,
+					handle = cn[cn.length - 1];
 
-        onResize: function(width){
-            var cn = Dom.get(this.options.divLeft).childNodes,
-                handle = cn[cn.length - 1];
+			Dom.setStyle(this.options.divLeft, "height", "auto");
+			Dom.setStyle(handle, "height", "");
 
-            Dom.setStyle(this.options.divLeft, "height", "auto");
-            Dom.setStyle(handle, "height", "");
+			var h = Dom.getY("lecm-content-ft") - Dom.getY("lecm-content-main");
 
-            var h = Dom.getY("lecm-content-ft") - Dom.getY("lecm-content-main");
+			if (h < this.MIN_FILTER_PANEL_HEIGHT) {
+				h = this.MIN_FILTER_PANEL_HEIGHT;
+			}
 
-            if (h < this.MIN_FILTER_PANEL_HEIGHT) {
-                h = this.MIN_FILTER_PANEL_HEIGHT;
-            }
+			Dom.setStyle(handle, "height", h + "px");
 
-            Dom.setStyle(handle, "height", h + "px");
-
-            if (width !== undefined) {
-                // 8px breathing space for resize gripper
-                Dom.setStyle(this.options.divRight, "margin-left", this.marginLeft + width + "px");
-            }
-            YAHOO.Bubbling.fire("SetHeaderWidth");
-        }
-    });
+			if (width !== undefined) {
+				// 8px breathing space for resize gripper
+				Dom.setStyle(this.options.divRight, "margin-left", this.marginLeft + width + "px");
+			}
+			YAHOO.Bubbling.fire("SetHeaderWidth");
+		}
+	});
 
 })();

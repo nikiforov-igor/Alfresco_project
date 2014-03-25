@@ -180,7 +180,10 @@ LogicECM.module = LogicECM.module || {};
 						} else {
 							Dom.addClass(contId, "no-form-type");
 						}
+
 						this.doubleClickLock = false;
+
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 					}
 				},
 				doBeforeFormSubmit: {
@@ -264,8 +267,7 @@ LogicECM.module = LogicECM.module || {};
 								},
 								{
 									text: "Отмена",
-									handler: function dlA_onActionDelete_cancel()
-									{
+									handler: function() {
 										this.destroy();
 									},
 									isDefault: true
@@ -297,11 +299,13 @@ LogicECM.module = LogicECM.module || {};
 					fn: function(p_form, p_dialog) {
 						p_dialog.dialog.setHeader(taskName);
 						this.doubleClickLock = false;
+
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 					}
 				},
 				onSuccess: {
 					scope: this,
-					fn: function DataGrid_onActionCreate_success(response) {
+					fn: function(response) {
 						document.location.href = document.location.href;
 					}
 				}
@@ -334,6 +338,8 @@ LogicECM.module = LogicECM.module || {};
 						var contId = p_dialog.id + "-form-container";
 						Dom.addClass(contId, "metadata-form-edit");
 						this.doubleClickLock = false;
+
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 					}
 				},
 				onSuccess: {
@@ -501,6 +507,8 @@ LogicECM.module = LogicECM.module || {};
 						fn: function(p_form, p_dialog) {
 							p_dialog.dialog.setHeader(this.msg("document.main.form.edit"));
 							Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+
+							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 						}
 					},
 					onSuccess: {

@@ -73,16 +73,13 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				}
 			});
 		},
-
 		onMoveUp: function(items) {
 			this._moveTo('up', items.nodeRef);
 		},
-
 		onMoveDown: function(items) {
 			this._moveTo('down', items.nodeRef);
 		},
-
-		onActionDelete: function (p_items, owner, actionsConfig, fnDeleteComplete) {
+		onActionDelete: function(p_items, owner, actionsConfig, fnDeleteComplete) {
 			this.onDelete(p_items, owner, actionsConfig, this.refresh, null);
 		}
 	}, true);
@@ -591,9 +588,34 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			this.destructorHacked = true;
 
 			if (this.widgets.simpleDialog) {
-				this.widgets.simpleDialog.dialog.unsubscribeAll('destroy');
-				this.widgets.simpleDialog.dialog.subscribe('destroy', this._destructor, null, this);
+				this.widgets.simpleDialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {
+					moduleId: this.options.formId,
+					callback: function() {
+						var isVl = YAHOO.lang.isValue;
+						var Bubb = YAHOO.Bubbling;
+						var datagrid = this.widgets.datagrid;
+						var rs = datagrid.widgets.dataTable.getRecordSet();
+
+						if (this.widgets.simpleDialog) {
+							this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
+						}
+
+						Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged, datagrid);
+						Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated, datagrid);
+						Bubb.unsubscribe('dataItemUpdated', datagrid.onDataItemUpdated, datagrid);
+						Bubb.unsubscribe('dataItemsDeleted', datagrid.onDataItemsDeleted, datagrid);
+						Bubb.unsubscribe('datagridRefresh', datagrid.onDataGridRefresh, datagrid);
+						Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked, datagrid);
+						rs.unsubscribeAll();
+
+						if (isVl(this.widgets.calendar)) {
+							this.widgets.calendar.selectEvent.unsubscribeAll();
+							this.widgets.calendar.deselectEvent.unsubscribeAll();
+						}
+					}
+				}, this);
 			}
+
 		},
 		/**
 		 * Метод будет вызван столько раз, сколько раз контрол будет определён на форме. TODO...
@@ -931,89 +953,11 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 			this.widgets.formAddAssignee.show();
 		},
-
 		_signalDatagridReady: function(event, args) {
 			YAHOO.Bubbling.unsubscribe('GridRendered', this._signalDatagridReady, this);
 			YAHOO.Bubbling.fire('assigneesListDatagridReady', {
 				bubblingLabel: this.options.datagridId
 			});
-		},
-
-		_destructor: function() {
-			function removeAllBubbles(obj) {
-				var event;
-				var bubble = YAHOO.Bubbling.bubble;
-
-				for (event in bubble) {
-					if (bubble.hasOwnProperty(event)) {
-						bubble[event].subscribers.forEach(function(s) {
-							if (s.obj === obj) {
-								YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
-							}
-						});
-					}
-				}
-			}
-
-			var k, w;
-
-			var isFn = YAHOO.lang.isFunction;
-			var isVl = YAHOO.lang.isValue;
-			var Bubb = YAHOO.Bubbling;
-
-			var comMan = Alfresco.util.ComponentManager;
-			var components = comMan.list();
-
-			var form = comMan.get(this.options.formId);
-			var formIndex = components.indexOf(form); // IE9+
-
-			var widgets = this.widgets;
-			var datagrid = widgets.datagrid;
-			var rs = datagrid.widgets.dataTable.getRecordSet();
-
-			if (this.widgets.simpleDialog) {
-				this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
-			}
-
-			Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged, datagrid);
-			Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated, datagrid);
-			Bubb.unsubscribe('dataItemUpdated', datagrid.onDataItemUpdated, datagrid);
-			Bubb.unsubscribe('dataItemsDeleted', datagrid.onDataItemsDeleted, datagrid);
-			Bubb.unsubscribe('datagridRefresh', datagrid.onDataGridRefresh, datagrid);
-			Bubb.unsubscribe('archiveCheckBoxClicked', datagrid.onArchiveCheckBoxClicked, datagrid);
-
-			rs.unsubscribeAll();
-
-			if (isVl(this.widgets.calendar)) {
-				this.widgets.calendar.selectEvent.unsubscribeAll();
-				this.widgets.calendar.deselectEvent.unsubscribeAll();
-			}
-
-			for (k in this.widgets) {
-				if (widgets.hasOwnProperty(k)) {
-					w = widgets[k];
-
-					if (w.hasOwnProperty('nodeName') && w.hasOwnProperty('tagName')) {
-						$(w).remove();
-						continue;
-					}
-
-					if (isFn(w.get)) {
-						if (w.get('element') === null) {
-							continue;
-						}
-					}
-
-					if (isFn(w.destroy)) {
-						w.destroy();
-					}
-				}
-			}
-
-			while (components.length > formIndex) { // Не оптимизируй...
-				removeAllBubbles(components[formIndex]);
-				comMan.unregister(components[formIndex]);
-			}
 		},
 		/**
 		 * Метод onReady вызывается внутренними механизмами Alfreso и YUI, когда все модули, от которых зависит данный
