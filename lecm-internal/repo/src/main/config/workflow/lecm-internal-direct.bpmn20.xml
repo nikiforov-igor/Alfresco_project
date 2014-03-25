@@ -69,6 +69,13 @@
                         formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\"}";
                         //Сохраняем
                         task.setVariableLocal("internalDirect_formData", formData);
+
+                        var curators = [];
+                        curators.push(employee.nodeRef.toString());
+					    var notificationText = documentScript.wrapperLink(initiator, initiator.properties["lecm-orgstr:employee-short-name"]) + " направил вам документ ";
+                        notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:ext-present-string}");
+                        notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
