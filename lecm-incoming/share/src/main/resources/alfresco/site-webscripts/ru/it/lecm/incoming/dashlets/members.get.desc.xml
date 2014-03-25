@@ -1,0 +1,6 @@
+<webscript>
+    <shortname>Участники документа</shortname>
+    <description>Компонент "Участники документа"</description>
+    <family>document-dashlet</family>
+    <url>/lecm/incoming/components/dashlets/document-members</url>
+</webscript>

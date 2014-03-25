@@ -183,12 +183,25 @@
                 <appearance>
                     <field id="line1">
                         <control template="/ru/it/lecm/documents/controls/document-dashlet-control.ftl">
-                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/components/dashlets/document-members</control-param>
+                            <control-param name="first">/lecm/components/dashlets/document-main;/lecm/incoming/components/dashlets/document-members</control-param>
                             <control-param name="second">/lecm/components/dashlets/document-attachments;/lecm/components/dashlets/document-my-tasks</control-param>
                         </control>
                     </field>
                 </appearance>
             </form>
+	        <!-- Форма для участников документа-->
+	        <form id="document-members">
+		        <field-visibility>
+			        <show id="lecm-eds-document:recipients-assoc" force="true"/>
+			        <show id="lecm-eds-document:reviewers-assoc" force="true"/>
+			        <show id="lecm-document-aspects:registrator-assoc" force="true"/>
+		        </field-visibility>
+		        <appearance>
+			        <field id="lecm-eds-document:recipients-assoc" label-id="На исполнение сотруднику"/>
+			        <field id="lecm-eds-document:reviewers-assoc" label-id="Рассмотрел" />
+			        <field id="lecm-document-aspects:registrator-assoc" label-id="Регистратор" />
+		        </appearance>
+	        </form>
         </forms>
     </config>
 
