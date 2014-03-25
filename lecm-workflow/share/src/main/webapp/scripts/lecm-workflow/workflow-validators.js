@@ -43,8 +43,8 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 
 	function hasNoTerm(record) {
 		var PROP_ASSIGNEE_DAYS_TO_COMPLETE = 'prop_lecm-workflow_assignee-days-to-complete';
-		var value = record.getData('itemData')[PROP_ASSIGNEE_DAYS_TO_COMPLETE].value;
-		return !isValue(value);
+		var propAssigneeDaysToComplete = record.getData('itemData')[PROP_ASSIGNEE_DAYS_TO_COMPLETE];
+		return (propAssigneeDaysToComplete) ? !isValue(propAssigneeDaysToComplete.value) : false;
 	}
 
 	function hasNoDate(record) {

@@ -521,19 +521,20 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			}
 		},
 		_calculateDayToComplete: function() {
-			if (!this.widgets.datagrid || !this.widgets.datagrid.widgets.dataTable) {
+			if (this.options.concurrency === 'parallel' || !this.widgets.datagrid || !this.widgets.datagrid.widgets.dataTable) {
 				return;
 			}
 
 			var tableRows = this.widgets.datagrid.widgets.dataTable.getRecordSet().getRecords(),
 					propDaysToComplete = "prop_lecm-workflow_assignee-days-to-complete",
-					i, tableRow, value, daysToComplete = 0;
+					i, tableRow, daysToComplete = 0;
 
 			// Перебираем все строки датагрида
 			for (var i = 0; i < tableRows.length; i++) {
 				tableRow = tableRows[i].getData("itemData");
-				value = tableRow[propDaysToComplete].value;
-				daysToComplete += value;
+				if (tableRow[propDaysToComplete]) {
+					daysToComplete += tableRow[propDaysToComplete].value;
+				}
 			}
 			this.widgets.daysToCompleteField.value = daysToComplete;
 
