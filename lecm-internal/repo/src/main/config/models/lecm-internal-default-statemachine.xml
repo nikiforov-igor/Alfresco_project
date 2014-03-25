@@ -278,7 +278,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5789,7 +5789,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[user.currentUser().hasBusinessRole("INNER_INITIATOR")]]></value>
+                                                                                    <![CDATA[user.currentUser().getEmployee().toString() == doc.attr("lecm-document:author-assoc-ref")]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
