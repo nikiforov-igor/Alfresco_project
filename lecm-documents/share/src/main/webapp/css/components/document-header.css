@@ -72,7 +72,7 @@
     border: 1px solid;
 }
 
-.document-header .document-action .transfer-right span.first-child {
+.document-header .document-action .admin-tools-right span.first-child {
     background: url('../../images/lecm-documents/alf_transmit_document_16.png') no-repeat 5px 5px;
     padding-left: 7px;
     border: 1px solid;
@@ -83,7 +83,7 @@
 	padding: 0.1em 0.5em 0.1em 0;
 }
 
-.transfer-right {
+.admin-tools-right {
     float: right;
 }
 .subscribe-header {

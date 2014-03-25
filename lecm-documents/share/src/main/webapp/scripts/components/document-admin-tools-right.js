@@ -56,28 +56,41 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 
             onReady: function()
             {
-                this.transfers.transferButton = Alfresco.util.createYUIButton(this, this.controlId + "-transfer-right-button", this.getIgnoredNode,{},Dom.get(this.controlId + "-transfer-right-button"));
-
+				this.transfers.adminToolsButton = new YAHOO.widget.Button(
+														this.controlId + "-admin-tools-right-button",
+														{
+															type: "menu",
+															menu: [{
+																		text: this.msg("button.transfer.right"),
+																		value: 1,
+																		onclick: {
+																			fn: this.getIgnoredNode,
+																			scope: this
+																		}
+																	}],
+															disabled: false
+														}
+												  );
             },
             getIgnoredNode: function()
             {
                 Alfresco.util.Ajax.request(
-                    {
-                        method: "GET",
-                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/getProperties",
-                        dataObj: {
-                            nodeRef: this.options.documentRef
-                        },
-                        successCallback: {
-                            fn:function(response){
-                                this.options.creatorRef = response.json[0]["creator-ref"];
-                                this.findFormEmployee();
-                            },
-                            scope: this
-                        },
-                        failureMessage: "message.failure",
-                        execScripts:true
-                    });
+				{
+					method: "GET",
+					url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/api/getProperties",
+					dataObj: {
+						nodeRef: this.options.documentRef
+					},
+					successCallback: {
+						fn:function(response){
+							this.options.creatorRef = response.json[0]["creator-ref"];
+							this.findFormEmployee();
+						},
+						scope: this
+					},
+					failureMessage: "message.failure",
+					execScripts:true
+				});
             },
             findFormEmployee: function (e, p_obj) {
 

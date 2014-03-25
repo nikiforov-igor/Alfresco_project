@@ -51,10 +51,10 @@
                 })();
                 //]]></script>
 
-                <div class="transfer-right">
-                    <span id="${controlId}-transfer-right-button" class="yui-button yui-push-button">
+                <div class="admin-tools-right">
+                    <span id="${controlId}-admin-tools-right-button" class="yui-button yui-push-button">
                        <span class="first-child">
-                          <button type="button" title="${msg("button.transfer.right")}"></button>
+                          <button type="button" title="${msg("button.admin.tools.right")}"></button>
                        </span>
                     </span>
                 </div>
