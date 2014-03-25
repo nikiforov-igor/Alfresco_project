@@ -1,5 +1,4 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign params = field.control.params/>
 
@@ -43,8 +42,8 @@
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
-            approvalListDatagridId: "${field.control.params.approvalListDatagridId!"approvalListDataGridControl"}",
-            approvalItemsDatagridId: "${field.control.params.approvalItemsDatagridId!"approvalItemsDataGridControl"}",
+			approvalListDatagridId: "${field.control.params.approvalListDatagridId!"approvalListDataGridControl"}",
+			approvalItemsDatagridId: "${field.control.params.approvalItemsDatagridId!"approvalItemsDataGridControl"}",
 			bubblingLabel: "ApprovalListDataGridControl",
 			expandable: true,
 			showActionColumn: true,

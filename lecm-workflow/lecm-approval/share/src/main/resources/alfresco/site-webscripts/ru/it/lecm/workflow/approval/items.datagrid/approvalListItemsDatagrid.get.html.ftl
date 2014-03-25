@@ -1,5 +1,4 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign datagridId = id + "-dtgrd">
 
@@ -11,7 +10,7 @@
 	LogicECM.CurrentModules["${id}"].setOptions({
 		usePagination: false,
 		showExtendSearchBlock: false,
-        datagridFormId: "${formId!"approvalItemsDataGridControl"}",
+		datagridFormId: "${formId!"approvalItemsDataGridControl"}",
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		expandable: false,

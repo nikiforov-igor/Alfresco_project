@@ -1,5 +1,4 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
-<#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <#assign params = field.control.params/>
 
@@ -41,7 +40,7 @@
 		LogicECM.CurrentModules["signingListDatagridControl"].setMessages(${messages});
 		LogicECM.CurrentModules["signingListDatagridControl"].setOptions({
 			usePagination: false,
-            datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
+			datagridFormId: '${field.control.params.datagridFormId!"datagrid"}',
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
 			bubblingLabel: "SigningListDatagridControl",
