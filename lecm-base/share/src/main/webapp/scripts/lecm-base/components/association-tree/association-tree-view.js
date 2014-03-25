@@ -172,7 +172,7 @@ LogicECM.module = LogicECM.module || {};
 			if (this.options.prefixPickerId == null) {
 				this.options.prefixPickerId = this.options.controlId;
 			}
-			this.eventGroup = this.options.prefixPickerId;
+			this.eventGroup = this.options.prefixPickerId + Dom.generateId();
 
 			this.options.pickerId = this.options.prefixPickerId + '-picker';
 			Dom.setStyle(this.options.pickerId, "display", "block");
@@ -1200,11 +1200,7 @@ LogicECM.module = LogicECM.module || {};
                     this.singleSelectedItem = obj.item;
 
 	                this.updateAddedSelectedItem(obj.item);
-	                if (this.addItemButtons.hasOwnProperty(obj.item.nodeRef))
-	                {
-		                var button = this.addItemButtons[obj.item.nodeRef];
-		                Dom.setStyle(button, "display", this.canItemBeSelected(obj.item.nodeRef) ? "inline" : "none");
-	                }
+	                this.updateAddButtons();
                 }
             }
         },
