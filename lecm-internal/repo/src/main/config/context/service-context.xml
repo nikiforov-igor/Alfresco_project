@@ -70,6 +70,14 @@
         <property name="nodeService" ref="NodeService"/>
     </bean>
 
+    <bean  id="internalCreateAnswerPolicy" class="ru.it.lecm.internal.policy.InternalCreateAnswerDocumentPolicy"
+           init-method="init" depends-on="internal.LogicEcmInternalBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentMembersService" ref="documentMembersService"/>
+        <property name="nodeService" ref="NodeService"/>
+        <property name="signingWorkflowService" ref="signingWorkflowService"/>
+    </bean>
+
     <bean id="internalWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
         <property name="workflowDefinitions">
             <list>

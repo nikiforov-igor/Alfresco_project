@@ -119,6 +119,16 @@
             <artifactId>eds-documents-repo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.workflow.signing</groupId>
+            <artifactId>signing-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.workflow</groupId>
+            <artifactId>workflow-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--
