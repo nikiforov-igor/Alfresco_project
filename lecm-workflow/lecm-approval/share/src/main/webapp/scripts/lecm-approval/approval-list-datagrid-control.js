@@ -8,42 +8,10 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 (function() {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
-		var me = this;
+		this.documentNodeRef = documentNodeRef;
 
-		Alfresco.util.Ajax.request({
-			method: "GET",
-			url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/approval/GetApprovalListDataForDocument',
-			dataObj: {
-				documentNodeRef: documentNodeRef
-			},
-			successCallback: {
-				fn: function(response) {
-					if (response) {
-						me.approvalListType = response.json.approvalListType;
-						me.approvalContainer = response.json.approvalContainer;
-						me.approvalItemType = response.json.approvalItemType;
-						me.approvalContainerPath = response.json.approvalContainerPath;
-						YAHOO.util.Event.onContentReady(containerId, function() {
-							YAHOO.Bubbling.fire("activeGridChanged", {
-								datagridMeta: {
-									itemType: me.approvalListType,
-									nodeRef: me.approvalContainer,
-									datagridFormId: me.options.approvalListDatagridId, //"approvalListDataGridControl",
-									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
-									searchConfig: {
-										filter: '+PATH:"' + me.approvalContainerPath + '//*"'
-									}
-								},
-								bubblingLabel: "ApprovalListDataGridControl"
-							});
-						});
-					}
-				}
-			},
-			failureMessage: "message.failure",
-			execScripts: true,
-			scope: this
-		});
+		YAHOO.util.Event.onContentReady(containerId, this.renewDatagrid, this, true);
+		YAHOO.Bubbling.on("activeTabChange", this.renewDatagrid, this);
 
 		return LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 	};
@@ -51,6 +19,63 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 	YAHOO.lang.extend(LogicECM.module.Approval.ApprovalListDataGridControl, LogicECM.module.Base.DataGrid);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Approval.ApprovalListDataGridControl.prototype, {
+		approvalListType: null,
+		approvalContainer: null,
+		approvalItemType: null,
+		approvalContainerPath: null,
+		renewDatagrid: function(event, args) {
+			function isDescendant(parent, child) {
+				var node = child.parentNode;
+				while (node !== null) {
+					if (node === parent) {
+						return true;
+					}
+					node = node.parentNode;
+				}
+				return false;
+			}
+
+			var currentTabDiv;
+			if (event && event === "activeTabChange" && args) {
+				currentTabDiv = args[1].newValue.get('contentEl');
+				if (!isDescendant(currentTabDiv, document.getElementById(this.id))) {
+					return;
+				}
+			}
+			Alfresco.util.Ajax.request({
+				method: "GET",
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/approval/GetApprovalListDataForDocument',
+				dataObj: {
+					documentNodeRef: this.documentNodeRef
+				},
+				successCallback: {
+					scope: this,
+					fn: function(response) {
+						if (response) {
+							this.approvalListType = response.json.approvalListType;
+							this.approvalContainer = response.json.approvalContainer;
+							this.approvalItemType = response.json.approvalItemType;
+							this.approvalContainerPath = response.json.approvalContainerPath;
+							YAHOO.Bubbling.fire("activeGridChanged", {
+								datagridMeta: {
+									itemType: this.approvalListType,
+									nodeRef: this.approvalContainer,
+									datagridFormId: this.options.approvalListDatagridId, //"approvalListDataGridControl",
+									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
+									searchConfig: {
+										filter: '+PATH:"' + this.approvalContainerPath + '//*"'
+									}
+								},
+								bubblingLabel: "ApprovalListDataGridControl"
+							});
+						}
+					}
+				},
+				failureMessage: "message.failure",
+				execScripts: true,
+				scope: this
+			});
+		},
 		onActionPrint: function(item) {
 			LogicECM.module.Base.Util.printReport(item.nodeRef, 'approval-list');
 		},
@@ -61,7 +86,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/workflow/approval/approvalListItemsDatagrid",
 				dataObj: {
 					nodeRef: nodeRef,
-                    datagridFormId: me.options.approvalItemsDatagridId,
+					datagridFormId: me.options.approvalItemsDatagridId,
 					approvalItemType: this.approvalItemType
 				},
 				successCallback: {
@@ -78,24 +103,21 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		}
 	}, true);
 
-
-
 	LogicECM.module.Approval.ApprovalItemsDataGridControl = function(containerId, approvalNodeRef, approvalItemType) {
-		var me = this;
 		this.approvalListNodeRef = approvalNodeRef;
 		this.approvalItemType = approvalItemType;
 
 		YAHOO.util.Event.onContentReady(containerId, function() {
 			YAHOO.Bubbling.fire("activeGridChanged", {
 				datagridMeta: {
-					itemType: me.approvalItemType,
-					nodeRef: me.approvalListNodeRef,
-					datagridFormId: me.options.datagridFormId,
+					itemType: this.approvalItemType,
+					nodeRef: this.approvalListNodeRef,
+					datagridFormId: this.options.datagridFormId,
 					sort: 'lecm-workflow:assignee-order|true'
 				},
 				bubblingLabel: containerId
 			});
-		});
+		}, this, true);
 
 		return LogicECM.module.Approval.ApprovalItemsDataGridControl.superclass.constructor.call(this, containerId);
 	};

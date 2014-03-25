@@ -36,9 +36,10 @@
 	}
 
 	function createDatagrid() {
-		LogicECM.CurrentModules["signingListDatagridControl"] = new LogicECM.module.Signing.SigningListDatagridControl("${controlId}", "${itemId}");
-		LogicECM.CurrentModules["signingListDatagridControl"].setMessages(${messages});
-		LogicECM.CurrentModules["signingListDatagridControl"].setOptions({
+		var controlId = "${controlId}";
+		LogicECM.CurrentModules[controlId] = new LogicECM.module.Signing.SigningListDatagridControl(controlId, "${itemId}");
+		LogicECM.CurrentModules[controlId].setMessages(${messages});
+		LogicECM.CurrentModules[controlId].setOptions({
 			usePagination: false,
 			datagridFormId: '${field.control.params.datagridFormId!"datagrid"}',
 			showExtendSearchBlock: false,

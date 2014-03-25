@@ -36,9 +36,10 @@
 	}
 
 	function createDatagrid() {
-		LogicECM.CurrentModules["approvalListDatagridControl"] = new LogicECM.module.Approval.ApprovalListDataGridControl("${controlId}", "${itemId}");
-		LogicECM.CurrentModules["approvalListDatagridControl"].setMessages(${messages});
-		LogicECM.CurrentModules["approvalListDatagridControl"].setOptions({
+		var controlId = "${controlId}";
+		LogicECM.CurrentModules[controlId] = new LogicECM.module.Approval.ApprovalListDataGridControl(controlId, "${itemId}");
+		LogicECM.CurrentModules[controlId].setMessages(${messages});
+		LogicECM.CurrentModules[controlId].setOptions({
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
