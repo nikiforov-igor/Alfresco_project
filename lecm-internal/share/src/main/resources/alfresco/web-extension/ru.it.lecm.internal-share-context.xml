@@ -12,7 +12,7 @@
 		</property>
 	</bean>
 
-    <bean id="incomingResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+    <bean id="internalResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
         <property name="resourceBundles">
             <list>
                 <value>alfresco.web-extension.ru.it.lecm.internal.internal</value>
