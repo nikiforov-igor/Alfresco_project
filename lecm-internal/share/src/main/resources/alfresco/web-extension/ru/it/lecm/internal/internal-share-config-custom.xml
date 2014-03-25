@@ -168,7 +168,7 @@
                     </field>
 
                     <field id="lecm-internal:style-for-approval-and-signing-tab" set="approval-and-signing">
-                        <control template="/ru/it/lecm/base-share/components/controls/">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">.tab-approval-and-signing { height: auto !important; }</control-param>
                         </control>
                     </field>
