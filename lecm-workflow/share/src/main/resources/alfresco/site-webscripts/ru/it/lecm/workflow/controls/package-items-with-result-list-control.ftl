@@ -28,6 +28,14 @@
             });
 })();
 //]]></script>
+<#-- Лютый костыль для правки отображения формы как поля (иначе отображается с рамкой и выползает) -->
+<style type="text/css">
+    div#lecm-result-list-span div.form-fields {
+        border: none !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+</style>
 
 <div class="form-field">
     <div id="${controlId}" class="viewmode-field">
