@@ -1199,8 +1199,12 @@ LogicECM.module = LogicECM.module || {};
                     this.selectedItems[obj.item.nodeRef] = obj.item;
                     this.singleSelectedItem = obj.item;
 
-                    this.updateSelectedItems();
-                    this.updateAddButtons();
+	                this.updateAddedSelectedItem(obj.item);
+	                if (this.addItemButtons.hasOwnProperty(obj.item.nodeRef))
+	                {
+		                var button = this.addItemButtons[obj.item.nodeRef];
+		                Dom.setStyle(button, "display", this.canItemBeSelected(obj.item.nodeRef) ? "inline" : "none");
+	                }
                 }
             }
         },
@@ -1252,6 +1256,40 @@ LogicECM.module = LogicECM.module || {};
 	            }
             }
         },
+
+		updateAddedSelectedItem: function(item) {
+			var fieldId = this.options.pickerId + "-selected-elements";
+			var num = Object.keys(this.selectedItems).length + 1;
+			if (this.options.plane || !this.options.showSelectedItemsPath) {
+				var displayName = item.selectedName;
+			} else {
+				displayName = item.displayPath + "/" + item.selectedName;
+				if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
+					var rootNodeDisplayName = this.rootNode.data.displayPath + "/" + this.rootNode.label + "/";
+					if (rootNodeDisplayName !== "") {
+						displayName = displayName.replace(rootNodeDisplayName, "");
+					}
+				}
+			}
+
+			var divClass = (num) % 2 > 0 ? "association-auto-complete-selected-item-even" : "association-auto-complete-selected-item";
+
+			if (this.options.itemType == "lecm-orgstr:employee") {
+				Dom.get(fieldId).innerHTML
+					+= '<div class="' + divClass + '"> ' + this.getEmployeeView(item.nodeRef, displayName) +
+					(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(item.nodeRef) : ' ') + this.getRemoveButtonHTML(item) + '</div>';
+			} else {
+				Dom.get(fieldId).innerHTML
+					+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
+			}
+
+			var items = this.selectedItems;
+			for (i in items) {
+				if (typeof(items[i]) != "function") {
+					YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + item.nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
+				}
+			}
+		},
 
 		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
 			return "<span class='person'><a href='javascript:void(0);' title='" + displayValue + "' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
