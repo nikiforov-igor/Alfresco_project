@@ -55,15 +55,19 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:execution-date" label="Срок исполнения" set="ord4"/>
+                    <field id="lecm-eds-document:execution-date" label="Срок исполнения" set="ord4">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:summaryContent" label="Содержание" set="ord5">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:controller-assoc" label="Контролёр" set="ord6"/>
                     <field id="lecm-eds-document:note" label="Примечание" set="ord7">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -202,7 +206,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="ord-document-form-common-set" label-id="label.ord.common"/>
-                    <set id="items" label-id="label.ord.items"/>
+                    <set id="ord-document-items" label-id="label.ord.items"/>
                     <set id="approval-and-signing" label-id="label.ord.approval-and-signing"/>
 
                     <set id="ord0" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
@@ -225,16 +229,20 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:execution-date" set="ord1"/>
+                    <field id="lecm-eds-document:execution-date" set="ord1">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-eds-document:summaryContent" set="ord2">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:controller-assoc" set="ord3"/>
                     <field id="lecm-document-aspects:is-shared-folder" set="ord3"/>
                     <field id="lecm-eds-document:note"  set="ord4">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -263,7 +271,7 @@
                     <field id="lecm-document:creator" set="ord8">
                         <control template="/org/alfresco/components/form/controls/info.ftl"/>
                     </field>
-                    <field id="lecm-ord-table-structure:items-assoc" set="items">
+                    <field id="lecm-ord-table-structure:items-assoc" set="ord-document-items">
                         <control template="/ru/it/lecm/documents/controls/document-table-control.ftl">
                             <control-param name="attributeForShow">lecm-document:indexTableRow</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
@@ -293,17 +301,17 @@
                     <show id="lecm-statemachine:status"/>
                 </field-visibility>
             </form>
-	        <!-- Форма просмотра на главной странице-->
-	        <form id="main-page-dashlets">
-		        <field-visibility>
-			        <show id="viewMetadata"/>
-		        </field-visibility>
-		        <appearance>
-			        <field id="viewMetadata">
-				        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
-			        </field>
-		        </appearance>
-	        </form>
+            <!-- Форма просмотра на главной странице-->
+            <form id="main-page-dashlets">
+                <field-visibility>
+                    <show id="viewMetadata"/>
+                </field-visibility>
+                <appearance>
+                    <field id="viewMetadata">
+                        <control template="/ru/it/lecm/documents/controls/document-view-metadata-control.ftl"/>
+                    </field>
+                </appearance>
+            </form>
 
         </forms>
     </config>
@@ -348,7 +356,9 @@
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field span.viewmode-value {
                                 float:right;
-                                margin-right: 30px;
+                                }
+                                .yui-skin-lecmTheme .yui-panel .item-container .first-row .first div.form-field div.viewmode-field span.viewmode-value {
+                                float:left;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field span.viewmode-label,
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field .help-icon {
@@ -365,12 +375,15 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 .form-field {
                                 padding: 0.5em 0;
                                 }
-
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field  span.viewmode-label{
                                 display: none;
                                 }
+                                .yui-skin-lecmTheme .yui-panel .item-container div.form-field div.viewmode-field span.viewmode-label{
+                                float: none;
+                                display: block;
+                                }
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
-                                width: 46em;
+                                width: 48em;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.document-preview) {
                                 margin-left:0;
@@ -394,6 +407,7 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
                                 max-width: 19em;
                                 }
+                                
                             </control-param>
                         </control>
                     </field>
@@ -405,7 +419,7 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:item-content" set="item1">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -415,7 +429,7 @@
                         <control template="/org/alfresco/components/form/controls/info.ftl"/>
                     </field>
                     <field id="lecm-ord-table-structure:item-comment" set="item3">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -428,12 +442,34 @@
                         <control template="/ru/it/lecm/ord/components/controls/execute-point-control.ftl"/>
                     </field>
                 </appearance>
-
             </form>
             <form id="table-structure-info">
                 <field-visibility>
                     <show id="lecm-ord-table-structure:item-content"/>
+                    <show id="lecm-ord-table-structure:css"/>
                 </field-visibility>
+                <appearance>
+                    <field id="lecm-ord-table-structure:css">
+                        <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+                            <control-param name="css">
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-field {
+                                margin:0 20px;
+                                }
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-field div.viewmode-field span.viewmode-label {
+                                text-align: left;
+                                float:none;
+                                text-align:left;
+                                }
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-ord-table-structure:item-content">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                            <control-param name="rows">4</control-param>
+                            <control-param name="columns">155</control-param>
+                        </control>
+                    </field>
+                </appearance>
             </form>
         </forms>
     </config>
@@ -459,7 +495,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
                             <control-param name="css">
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
-                                width: 46em;
+                                width: 48em;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.document-preview) {
                                 margin-left:0;
@@ -475,24 +511,23 @@
                                 {
                                 width: 20em;
                                 }
-
-                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
                                 width: 23em;
                                 height: 20px;
                                 margin-bottom: 10px;
                                 }
-                                
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
                                 max-width: 19em;
                                 }
-                                
                                 .yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field label {
                                 float: left;
                                 width: auto;
-
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .item0 div.form-field input[type="text"] {
                                 width: 6em;
+                                }
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.viewmode-field span.viewmode-label {
+                                    width:110px;
                                 }
                             </control-param>
                         </control>
@@ -501,14 +536,14 @@
                     <field id="lecm-document:indexTableRow" set="item0"/>
 
                     <field id="lecm-ord-table-structure:item-content" set="item1">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
                     <field id="lecm-ord-table-structure:execution-date" set="item2"/>
                     <field id="lecm-ord-table-structure:item-comment" set="item3">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
