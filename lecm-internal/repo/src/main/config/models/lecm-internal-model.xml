@@ -110,6 +110,7 @@
 				<aspect>lecm-document-aspects:temp-attachments</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:routes-avaliable</aspect>
+				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>
 			</mandatory-aspects>
 		</type>
 	</types>

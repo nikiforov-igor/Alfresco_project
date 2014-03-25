@@ -1,6 +1,7 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 <#include "/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-container.ftl">
 
+<#assign htmlid=args.htmlid?html>
 <#assign hideValue = false>
 <#assign typicalId = fieldHtmlId + "-typical-control">
 <#assign uploaderId = fieldHtmlId + "-upload-control">
@@ -146,6 +147,7 @@ LogicECM.module = LogicECM.module || {};
                             fn: function (response) {
                                 me.persistedObject = response.json.persistedObject;
                                 me.saveDocumentAnswer();
+                                Dom.get("${htmlid}-form-submit").click();
                             },
                             scope: this
                         }
@@ -280,7 +282,7 @@ LogicECM.module = LogicECM.module || {};
                         <span id="${fieldHtmlId}-addDocument" class="yui-button yui-push-button">
                             <span class="first-child">
                                 <button type="button"
-                                        title="${msg('button.import-xml')}">+
+                                        title="Создать внутренний документ">+
                                 </button>
                             </span>
                         </span>

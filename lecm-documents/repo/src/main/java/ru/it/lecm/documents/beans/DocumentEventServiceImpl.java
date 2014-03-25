@@ -1,14 +1,20 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.repo.policy.BehaviourFilter;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.TransactionListener;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * User: pmelnikov
@@ -19,6 +25,17 @@ public class DocumentEventServiceImpl implements DocumentEventService {
 
     private NodeService nodeService;
     private BehaviourFilter behaviourFilter;
+    private ThreadPoolExecutor threadPoolExecutor;
+    private TransactionListener transactionListener;
+    private TransactionService transactionService;
+
+    final static Logger logger = LoggerFactory.getLogger(DocumentEventServiceImpl.class);
+
+    private static final String DOCUMENT_EVENTS_SERVICE_TRANSACTION_LISTENER = "document_events_service_transaction_listener";
+
+    public void init() {
+        transactionListener = new DocumentEventServiceTransactionListener();
+    }
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -28,19 +45,31 @@ public class DocumentEventServiceImpl implements DocumentEventService {
         this.behaviourFilter = behaviourFilter;
     }
 
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
+        this.threadPoolExecutor = threadPoolExecutor;
+    }
+
     @Override
     public void subscribe(NodeRef object, NodeRef listener) {
-        if (!nodeService.hasAspect(object, ASPECT_EVENT_LISTENERS)) {
-            nodeService.addAspect(object, ASPECT_EVENT_LISTENERS, new HashMap<QName, Serializable>());
+        AlfrescoTransactionSupport.bindListener(this.transactionListener);
+
+        // Add the pending action to the transaction resource
+        List<DocumentListener> pendingActions = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_SERVICE_TRANSACTION_LISTENER);
+        if (pendingActions == null) {
+            pendingActions = new ArrayList<DocumentListener>();
+            AlfrescoTransactionSupport.bindResource(DOCUMENT_EVENTS_SERVICE_TRANSACTION_LISTENER, pendingActions);
         }
 
-        nodeService.createAssociation(object, listener, ASSOC_EVENT_LISTENERS);
-
-        if (!nodeService.hasAspect(listener, ASPECT_EVENT_SENDER)) {
-            HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
-            props.put(PROP_EVENT_SENDER, "");
-            nodeService.addAspect(listener, ASPECT_EVENT_SENDER, props);
+        // Check that action has only been added to the list once
+        DocumentListener dl = new DocumentListener(object, listener);
+        if (!pendingActions.contains(dl)) {
+            pendingActions.add(dl);
         }
+
     }
 
     @Override
@@ -53,15 +82,15 @@ public class DocumentEventServiceImpl implements DocumentEventService {
     @Override
     public Set<NodeRef> getEventSenders(NodeRef listener) {
         String sendersStr = (String) nodeService.getProperty(listener, PROP_EVENT_SENDER);
-		Set<NodeRef> result = new HashSet<NodeRef>();
-		if (null != sendersStr){
-			String[] senders = sendersStr.split(",");
-			for (String sender : senders) {
-				if (NodeRef.isNodeRef(sender.trim())) {
-					result.add(new NodeRef(sender.trim()));
-				}
-			}
-		}
+        Set<NodeRef> result = new HashSet<NodeRef>();
+        if (null != sendersStr) {
+            String[] senders = sendersStr.split(",");
+            for (String sender : senders) {
+                if (NodeRef.isNodeRef(sender.trim())) {
+                    result.add(new NodeRef(sender.trim()));
+                }
+            }
+        }
         return result;
     }
 
@@ -84,5 +113,89 @@ public class DocumentEventServiceImpl implements DocumentEventService {
             behaviourFilter.enableBehaviour(listener);
         }
     }
+
+    private class DocumentEventServiceTransactionListener implements TransactionListener {
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void beforeCommit(boolean readOnly) {
+
+        }
+
+        @Override
+        public void beforeCompletion() {
+
+        }
+
+        @Override
+        public void afterCommit() {
+            List<DocumentListener> pendingDocs = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_SERVICE_TRANSACTION_LISTENER);
+            if (pendingDocs != null) {
+                while (!pendingDocs.isEmpty()) {
+                    final DocumentListener dl = pendingDocs.remove(0);
+                    Runnable runnable = new Runnable() {
+                        public void run() {
+                            try {
+                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                    @Override
+                                    public Void doWork() throws Exception {
+                                        return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                            @Override
+                                            public Void execute() throws Throwable {
+                                                if (!nodeService.hasAspect(dl.getObject(), ASPECT_EVENT_LISTENERS)) {
+                                                    nodeService.addAspect(dl.getObject(), ASPECT_EVENT_LISTENERS, new HashMap<QName, Serializable>());
+                                                }
+
+                                                nodeService.createAssociation(dl.getObject(), dl.getListener(), ASSOC_EVENT_LISTENERS);
+
+                                                if (!nodeService.hasAspect(dl.getListener(), ASPECT_EVENT_SENDER)) {
+                                                    HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
+                                                    props.put(PROP_EVENT_SENDER, "");
+                                                    nodeService.addAspect(dl.getListener(), ASPECT_EVENT_SENDER, props);
+                                                }
+                                                return null;
+                                            }
+                                        }, false, true);
+                                    }
+                                });
+                            } catch (Exception e) {
+                                logger.error("Error while subscribe document events", e);
+                            }
+                        }
+                    };
+                    threadPoolExecutor.execute(runnable);
+                }
+            }
+        }
+
+        @Override
+        public void afterRollback() {
+
+        }
+    }
+
+    private class DocumentListener {
+
+        private NodeRef object;
+        private NodeRef listener;
+
+        private DocumentListener(NodeRef object, NodeRef listener) {
+            this.object = object;
+            this.listener = listener;
+        }
+
+        public NodeRef getObject() {
+            return object;
+        }
+
+        public NodeRef getListener() {
+            return listener;
+        }
+    }
+
 
 }

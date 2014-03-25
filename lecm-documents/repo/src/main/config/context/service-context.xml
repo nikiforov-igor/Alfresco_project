@@ -662,9 +662,11 @@
 		</property>
 	</bean>
 
-    <bean id="documentEventService" class="ru.it.lecm.documents.beans.DocumentEventServiceImpl" depends-on="nodeService">
+    <bean id="documentEventService" class="ru.it.lecm.documents.beans.DocumentEventServiceImpl" depends-on="nodeService" init-method="init">
         <property name="nodeService" ref="nodeService"/>
         <property name="behaviourFilter" ref="policyBehaviourFilter"/>
+        <property name="threadPoolExecutor" ref="notificationsAsyncThreadPool"/>
+        <property name="transactionService" ref="transactionService"/>
     </bean>
 
     <bean id="documentsEventPolicy" class="ru.it.lecm.documents.policy.DocumentEventPolicy" init-method="init">
