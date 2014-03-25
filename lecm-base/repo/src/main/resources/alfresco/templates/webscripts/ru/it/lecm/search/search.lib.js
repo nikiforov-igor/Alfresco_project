@@ -373,6 +373,18 @@ function getSearchResults(params) {
 		        ftsQuery += " AND (" + query + ")";
 	        }
 
+            if (ftsQuery.indexOf("#current-user") >= 0) {
+                var employeeRef = orgstructure.getCurrentEmployee().getNodeRef().toString();
+                ftsQuery = ftsQuery.split("#current-user").join(employeeRef);
+            }
+
+            if (ftsQuery.indexOf("#current-date") >= 0) {
+                var curDate = new Date();
+                var nDays = notifications.getSettingsNDays();
+                var limitDate = workCalendar.getNextWorkingDate(new Date(), nDays);
+                ftsQuery = ftsQuery.split("#current-date").join(base.dateToISOString(limitDate));
+            }
+
             if (logger.isLoggingEnabled())
                 logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
 

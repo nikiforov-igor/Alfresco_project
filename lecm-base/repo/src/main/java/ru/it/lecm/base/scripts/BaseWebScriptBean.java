@@ -182,6 +182,11 @@ public class BaseWebScriptBean extends BaseWebScript {
         return registeredTypes.toArray();
     }
 
+    public String dateToISOString(Object dateObj) {
+        Date date = (Date) Context.jsToJava(dateObj, Date.class);
+        return date != null ? DateFormatISO8601.format(date) : null;
+    }
+
     public class TypeMapper {
         private String name;
         private String title;

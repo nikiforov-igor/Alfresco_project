@@ -107,7 +107,14 @@ public class ArchiveDocumentAction extends StateMachineAction {
 
 		nodeService.setProperty(document, StatemachineModel.PROP_STATUS, status);
 
-		try {
+        //Проверяем наличие аспекта указывающего на черновик
+        if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_FINAL)) {
+            nodeService.addAspect(document, StatemachineModel.ASPECT_IS_FINAL, null);
+        }
+        //Устанавливаем флаг финального статуса
+        nodeService.setProperty(document, StatemachineModel.PROP_IS_FINAL, true);
+
+        try {
 			String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
 			List<String> objects = new ArrayList<String>(1);
 			objects.add(status);

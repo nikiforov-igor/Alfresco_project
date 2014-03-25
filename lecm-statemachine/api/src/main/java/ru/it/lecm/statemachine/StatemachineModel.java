@@ -31,8 +31,10 @@ public class StatemachineModel {
 	public final static QName PROP_STATEMACHINE_ID = QName.createQName(STATEMACHINE_URI, "statemachineId");
 	public final static QName PROP_STATEMACHINE_VERSION = QName.createQName(STATEMACHINE_URI, "statemachineVersion");
     public final static QName PROP_IS_DRAFT = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-draft");
+    public final static QName PROP_IS_FINAL = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-final");
 
     public final static QName ASPECT_IS_DRAFT = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-draft-aspect");
+    public final static QName ASPECT_IS_FINAL = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-final-aspect");
 	public final static QName ASPECT_IS_SYSTEM_WORKFLOW = QName.createQName(STATEMACHINE_ASPECTS_URI, "is-service-workflow");
 
 }

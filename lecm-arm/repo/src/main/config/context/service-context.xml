@@ -43,6 +43,7 @@
 		<property name="createOrUpdateDictionaries">
 			<list>
                 <value>alfresco/module/${artifactId}/dictionary/default-arm.xml</value>
+                <value>alfresco/module/${artifactId}/dictionary/default-arm-2.xml</value>
 			</list>
 		</property>
 	</bean>

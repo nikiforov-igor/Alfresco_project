@@ -11,6 +11,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 
+    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
     /**
      * Service registry
      */

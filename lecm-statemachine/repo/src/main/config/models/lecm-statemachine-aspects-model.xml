@@ -20,5 +20,13 @@
                 </property>
             </properties>
         </aspect>
+        <aspect name="lecm-statemachine-aspects:is-final-aspect">
+            <properties>
+                <property name="lecm-statemachine-aspects:is-final">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+            </properties>
+        </aspect>
 	</aspects>
 </model>

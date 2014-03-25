@@ -233,4 +233,8 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	public ScriptNode getGlobalSettingsNode() {
 		return new ScriptNode(service.getGlobalSettingsNode(), serviceRegistry, getScope());
 	}
+
+    public int getSettingsNDays() {
+        return service.getSettingsNDays();
+    }
 }
