@@ -2150,6 +2150,10 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight a.ygtvspacer {
 	text-decoration: none;
 }
+.tree .ygtvspacer {
+	display: block;
+	width: 18px;
+}
 
 /*datagrid control*/
 .yui-skin-lecmTheme .yui-panel div.form-field.with-grid > label {
