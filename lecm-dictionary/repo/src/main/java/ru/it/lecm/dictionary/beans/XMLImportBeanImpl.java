@@ -93,7 +93,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
         public XMLImporterInfo readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException {
 	        this.importInfo = new XMLImporterInfo();
 
-            logger.info("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
+            logger.debug("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
             try {
@@ -229,7 +229,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     try {
                         nodeService.createAssociation(parent, targetRef, assocType);
                     } catch (AssociationExistsException ignored) {
-                        logger.warn("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
+                        logger.debug("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
                     }
                 }
             } else {
@@ -294,11 +294,11 @@ public class XMLImportBeanImpl implements XMLImportBean {
                         itemType,
                         properties).getChildRef();
 	            this.importInfo.setCreatedElementsCount(this.importInfo.getCreatedElementsCount() + 1);
-                logger.info("Item '{}' created", name);
+                logger.trace("Item '{}' created", name);
             } else if (!doNotUpdateIfExist) {
                 nodeService.addProperties(node, properties);
 	            this.importInfo.setUpdatedElementsCount(this.importInfo.getUpdatedElementsCount() + 1);
-                logger.info("Item '{}' updated", name);
+                logger.trace("Item '{}' updated", name);
             }
             return node;
         }

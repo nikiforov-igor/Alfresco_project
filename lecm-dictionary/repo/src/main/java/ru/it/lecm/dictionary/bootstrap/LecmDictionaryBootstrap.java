@@ -67,7 +67,6 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	}
 
 	public void bootstrap() {
-        logger.info("Bootstraping dictionaries");
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
