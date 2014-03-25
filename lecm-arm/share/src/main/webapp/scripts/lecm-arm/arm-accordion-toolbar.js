@@ -69,7 +69,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		        var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
 		        createDetails.setOptions(
 			        {
-				        width: "80em",
+				        width: "84em",
 				        templateUrl: templateUrl,
 				        actionUrl: null,
 				        destroyOnHide: true,

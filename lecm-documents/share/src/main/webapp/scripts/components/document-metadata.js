@@ -132,7 +132,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
 
                 new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
-                    width: "80em",
+                    width: "84em",
                     templateUrl: templateUrl,
                     actionUrl: null,
                     destroyOnHide: true,

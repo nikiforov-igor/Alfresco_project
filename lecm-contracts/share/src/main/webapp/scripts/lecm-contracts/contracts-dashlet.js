@@ -257,7 +257,7 @@
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createContractDetails");
                 createDetails.setOptions(
                     {
-                        width: "80em",
+                        width: "84em",
                         templateUrl: templateUrl,
                         actionUrl: null,
                         destroyOnHide: true,

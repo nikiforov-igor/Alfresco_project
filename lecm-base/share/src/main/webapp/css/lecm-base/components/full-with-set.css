@@ -1,12 +1,12 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field input[type=text]:not(.autocomplete-input),
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field textarea {
-	width: 770px;
+	width: 825px;
 	overflow: hidden;
 	overflow-y: auto;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field input[type=text]:not(.autocomplete-input),
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field textarea {
-	width: 765px;
+	width: 815px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u .full-width div.form-field input[type=text]:not(.autocomplete-input),
@@ -28,11 +28,11 @@
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .current-values,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field select {
-	width: 735px;
+	width: 790px;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field div.object-finder .current-values,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field select {
-	width: 730px;
+	width: 780px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.object-finder.with-two-buttons .current-values {
@@ -40,7 +40,11 @@
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder.with-two-buttons .current-values {
-	width: 695px;
+	width: 750px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field div.object-finder.with-two-buttons .current-values {
+	width: 740px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.object-finder .show-picker {
@@ -48,6 +52,18 @@
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field .attachments-list {
- 	width: 405px;
+ 	width: 620px;
 	margin-top: 15px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field.dnd-uploader div.uploader-block  {
+ 	margin-left: 0;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field .mceEditor > table {
+	width: 825px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field .mceEditor > table {
+	width: 815px;
 }

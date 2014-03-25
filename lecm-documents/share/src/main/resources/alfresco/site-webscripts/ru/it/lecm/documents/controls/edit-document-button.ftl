@@ -36,7 +36,7 @@
         var templateUrl = LogicECM.module.Document.generateCreateNewUrl(nodeRef, currentFormId);
 
         new Alfresco.module.SimpleDialog("documentMetadata-" + id + "_results").setOptions({
-            width: "80em",
+            width: "84em",
             templateUrl: templateUrl,
             actionUrl: null,
             destroyOnHide: true,

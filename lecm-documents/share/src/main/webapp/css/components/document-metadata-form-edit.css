@@ -37,7 +37,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field input[type=text]:not(.autocomplete-input),
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field div.selectone-control select,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-g div.yui-u div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
-    width: 255px;
+    width: 280px;
     overflow: hidden;
 }
 
@@ -74,7 +74,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field input.autocomplete-input[type="text"],
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field div.autocompleteCurrentValueDisplayInvisible,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.yui-navset div.form-field div.autocompleteCurrentValueDisplayInvisible {
-    width: 220px;
+    width: 247px;
 }
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-u div.form-field div.object-finder.with-two-buttons .current-values {
     width: 200px;
@@ -126,7 +126,7 @@
 
 .yui-panel.metadata-form-edit .yui-u div.association-auto-complete-selected-item > span > a,
 .yui-panel.metadata-form-edit .yui-u div.association-auto-complete-selected-item > span.not-person {
-	max-width: 170px;
+	max-width: 220px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field {
@@ -159,11 +159,7 @@
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .yui-gb div.form-field input[type=text]:not(.autocomplete-input) {
- 	width: 100px;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor > table {
-	width: 770px;
+ 	width: 115px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor > table iframe {

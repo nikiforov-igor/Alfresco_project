@@ -23,7 +23,7 @@
                 <bubblingLabel>documents-list</bubblingLabel>
                 <showExSearchBtn>true</showExSearchBtn>
                 <showCreateBtn>true</showCreateBtn>
-                <createDialogWidth>80em</createDialogWidth>
+                <createDialogWidth>84em</createDialogWidth>
                 <createDialogClass>documents-list-create-dialog-container</createDialogClass>
             </properties>
         </component>
