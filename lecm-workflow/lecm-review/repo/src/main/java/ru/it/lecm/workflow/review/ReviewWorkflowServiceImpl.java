@@ -201,7 +201,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 					int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
 					if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 						variableScope.setVariable("initiatorComingSoon", "");
-						String template = "Напоминание: Вы направили на ознакомление документ %s, срок подписания %s";
+						String template = "Напоминание: Вы направили на ознакомление документ %s, срок ознакомления %s";
 						String description = String.format(template, docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
 						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
 					}
