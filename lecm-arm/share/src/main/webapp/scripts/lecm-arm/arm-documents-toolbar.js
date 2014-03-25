@@ -31,8 +31,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DocumentsToolbar.prototype,
         {
-            PREFERENCE_KEY: "ru.it.lecm.arm.current-filters",
-
             filtersDialog: null,
             splashScreen: null,
             gridBubblingLabel: "documents-arm",
@@ -54,7 +52,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-filters",
                     dataObj: {
                         htmlId: Alfresco.util.generateDomId(),
-                        filters: YAHOO.lang.JSON.stringify(this.avaiableFilters)
+                        filters: YAHOO.lang.JSON.stringify(this.avaiableFilters),
+                        armCode: LogicECM.module.ARM.SETTINGS.ARM_CODE
                     },
                     successCallback: {
                         fn: function (oResponse) {

@@ -1,6 +1,6 @@
 function main() {
     var filtersArray = [];
-    var PREF_FILTERS = "ru.it.lecm.arm.current-filters";
+    var PREF_FILTERS = "ru.it.lecm.arm." + json.get("armCode") + ".current-filters";
 
     if (typeof json !== "undefined" && json.has("filters")) {
         // список фильтров

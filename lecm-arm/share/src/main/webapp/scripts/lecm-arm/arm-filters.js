@@ -39,7 +39,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
     YAHOO.lang.augmentObject(LogicECM.module.ARM.Filters.prototype,
         {
-            PREFERENCE_KEY: "ru.it.lecm.arm.current-filters",
+            PREFERENCE_KEY: "ru.it.lecm.arm.",
 
             avaiableFilters: [],
             currentFilters: [],
@@ -61,11 +61,11 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 YAHOO.util.Event.on(this.id + "-delete-all-link", 'click', this.deleteAllFilters, null, this);
 
                 var filters = this;
-                this.preferences.request(this.PREFERENCE_KEY,
+                this.preferences.request(this._buildPreferencesKey(),
                     {
                         successCallback: {
                             fn: function (p_oResponse) {
-                                var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters.PREFERENCE_KEY);
+                                var filtersPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, filters._buildPreferencesKey());
                                 if (filtersPref != null && filtersPref != "") {
                                     filters.filtersFromPref = YAHOO.lang.JSON.parse(filtersPref);
                                 } else {
@@ -216,7 +216,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 });
 
                 if (updatePrefs) {
-                    this.preferences.set(this.PREFERENCE_KEY, YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : []));
+                    this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this.currentFilters ? this.currentFilters : []));
                     this.filtersFromPref = this.currentFilters.slice(0);
                 }
             },
@@ -305,6 +305,12 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
                 YAHOO.Bubbling.fire("clearAttributesSearch", {
                     bubblingLabel: this.options.bubblingLabel
                 });
+            },
+
+
+
+            _buildPreferencesKey: function () {
+                return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".current-filters";
             }
         }, true);
 })();

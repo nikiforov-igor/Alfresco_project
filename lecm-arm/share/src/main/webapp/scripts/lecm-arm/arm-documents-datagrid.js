@@ -31,7 +31,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DataGrid.prototype, {
         doubleClickLock: false,
 
-        PREFERENCE_KEY: "ru.it.lecm.arm.menu-state",
+        PREFERENCE_KEY: "ru.it.lecm.arm.",
 
         armMenuState: {},
 
@@ -223,7 +223,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         _generatePaginatorRequest: function (oState, oSelf) {
             var request = LogicECM.module.ARM.DataGrid.superclass._generatePaginatorRequest.call(this, oState, oSelf);
             this.armMenuState.pageNum = oState.pagination.page;
-            this.preferences.set(this.PREFERENCE_KEY, YAHOO.lang.JSON.stringify(this.armMenuState));
+            this.preferences.set(this._buildPreferencesKey(), YAHOO.lang.JSON.stringify(this.armMenuState));
 
             return request;
         },
@@ -430,6 +430,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             }
             return items;
+        },
+
+        _buildPreferencesKey: function () {
+            return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".menu-state";
         }
     }, true);
 })();

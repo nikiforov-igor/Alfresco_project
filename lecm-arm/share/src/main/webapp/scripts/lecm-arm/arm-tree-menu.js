@@ -26,7 +26,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
     YAHOO.extend(LogicECM.module.ARM.TreeMenu, Alfresco.component.Base, {
 
-        PREFERENCE_KEY: "ru.it.lecm.arm.menu-state",
+        PREFERENCE_KEY: "ru.it.lecm.arm.",
 
         tree: null,
 
@@ -44,25 +44,34 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         onReady: function () {
             var menu = this;
-            this.preferences.request(this.PREFERENCE_KEY,
-                {
-                    successCallback: {
-                        fn: function (p_oResponse) {
-                            var menuPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, menu.PREFERENCE_KEY);
-                            if (menuPref !== null) {
-                                menu.menuState = YAHOO.lang.JSON.parse(menuPref);
-                            } else {
-                                menu.menuState = {
-	                                accordion: "",
-                                    selected: "",
-                                    pageNum: 1
-                                };
-                            }
-                            menu.createAccordion();
-                        },
-                        scope: this
-                    }
-                });
+            try {
+                this.preferences.request(this._buildPreferencesKey(),
+                    {
+                        successCallback: {
+                            fn: function (p_oResponse) {
+                                var menuPref = Alfresco.util.findValueByDotNotation(p_oResponse.json, menu._buildPreferencesKey());
+                                if (menuPref !== null) {
+                                    menu.menuState = YAHOO.lang.JSON.parse(menuPref);
+                                } else {
+                                    menu.menuState = {
+                                        accordion: "",
+                                        selected: "",
+                                        pageNum: 1
+                                    };
+                                }
+                                menu.createAccordion();
+                            },
+                            scope: this
+                        }
+                    });
+            } catch (ex) {
+                menu.menuState = {
+                    accordion: "",
+                    selected: "",
+                    pageNum: 1
+                };
+                menu.createAccordion();
+            }
         },
 
 	    createAccordion: function() {
@@ -368,7 +377,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
             // сбрасываем после того, как отослали запрос к гриду
             this.menuState.pageNum = 1;
-            this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue());
+            this.preferences.set(this._buildPreferencesKey(), this._buildPreferencesValue());
         },
 
         drawCounterValue: function (data, query, labelElement) {
@@ -451,6 +460,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
         _buildPreferencesValue: function () {
             return YAHOO.lang.JSON.stringify(this.menuState);
+        },
+
+        _buildPreferencesKey: function () {
+            return this.PREFERENCE_KEY +  LogicECM.module.ARM.SETTINGS.ARM_CODE + ".menu-state";
         },
 
         _isNodeExpanded: function (nodeId) {
