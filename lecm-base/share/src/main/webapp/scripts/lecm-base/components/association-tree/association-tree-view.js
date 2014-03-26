@@ -1200,7 +1200,12 @@ LogicECM.module = LogicECM.module || {};
                     this.singleSelectedItem = obj.item;
 
 	                this.updateAddedSelectedItem(obj.item);
-	                this.updateAddButtons();
+	                if (!this.options.multipleSelectMode) {
+		                this.updateAddButtons();
+	                } else if (this.addItemButtons.hasOwnProperty(obj.item.nodeRef)) {
+		                var button = this.addItemButtons[obj.item.nodeRef];
+		                Dom.setStyle(button, "display", this.canItemBeSelected(obj.item.nodeRef) ? "inline" : "none");
+	                }
                 }
             }
         },
