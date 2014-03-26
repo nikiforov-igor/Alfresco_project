@@ -464,6 +464,9 @@
                                 .tab-ord-document-items .datagrid tr.expand-row div.form-field {
                                 margin:0 20px;
                                 }
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-fields {
+                                padding: 0;
+                                }
                                 .tab-ord-document-items .datagrid tr.expand-row div.form-field div.viewmode-field span.viewmode-label {
                                 display:block;
                                 text-align: left;
@@ -472,7 +475,7 @@
                                 }
                                 
                                 .tab-ord-document-items .datagrid tr.expand-row div.form-field textarea{ 
-                                    width: auto;
+                                width: auto;
                                 }
                             </control-param>
                         </control>
@@ -525,7 +528,7 @@
                                 {
                                 width: 20em;
                                 }
-                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible {
                                 width: 23em;
                                 height: 20px;
                                 margin-bottom: 10px;
@@ -541,7 +544,7 @@
                                 width: 6em;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.viewmode-field span.viewmode-label {
-                                    width:110px;
+                                width:110px;
                                 }
                             </control-param>
                         </control>
