@@ -2008,6 +2008,10 @@ div.current-values,
     float: left;
 }
 
+.workflow-form div.current-values {
+	float: none;
+}
+
 .yui-skin-lecmTheme .yui-panel .form-container .viewmode-field .current-values div {
     padding: 0;
 }
