@@ -77,7 +77,6 @@
                     var datagrid = new LogicECM.module.ReportsEditor.TemplateEditGrid('${gridId}').setOptions(
                             {
                                 usePagination: true,
-                                useDynamicPagination: true,
                                 showExtendSearchBlock: false,
                                 forceSubscribing: true,
                                 actions: [

@@ -39,7 +39,6 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                 YAHOO.util.Event.onContentReady ('${id}', function () {
                     new LogicECM.module.ARM.DataGrid('${id}').setOptions({
                         usePagination: true,
-                        useDynamicPagination:true,
                         pageSize: 20,
                         showExtendSearchBlock: true,
                         actions: [

@@ -16,7 +16,6 @@
                         var datagrid = new LogicECM.module.BusinessJournal.SettingsGrid('${id}').setOptions(
                                 {
                                     usePagination:true,
-                                    useDynamicPagination :true,
                                     showExtendSearchBlock:false,
                                     bubblingLabel: "${bubblingLabel}",
                                     showCheckboxColumn: true,

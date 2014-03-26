@@ -12,7 +12,6 @@
 				var datagrid = new LogicECM.module.BusinessJournal.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
-							useDynamicPagination :true,
 							showExtendSearchBlock:true,
 							actions: [
 								{

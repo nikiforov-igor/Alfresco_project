@@ -91,7 +91,6 @@
 				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
-							useDynamicPagination:true,
 							showExtendSearchBlock:true,
                             showActionColumn: LogicECM.module.OrgStructure.IS_ENGINEER ? true : false,
 							actions: [

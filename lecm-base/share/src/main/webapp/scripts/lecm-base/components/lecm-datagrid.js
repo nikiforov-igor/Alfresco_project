@@ -138,8 +138,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 usePagination: false,
 
-                useDynamicPagination: false,
-
                 showExtendSearchBlock: true,
 
                 /**
@@ -1234,7 +1232,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	                    if (me.options.useCookieForSort) {
 		                    me.setCookie(this.getSortCookieName(), datagridMeta.sort);
 	                    }
-                        if (!me.options.useDynamicPagination) {
+                        if (!me.options.usePagination) {
                             this.search.performSearch({
                                 searchConfig: datagridMeta.searchConfig,
                                 searchShowInactive: me.options.searchShowInactive,
@@ -1324,7 +1322,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         generateRequest: this._generatePaginatorRequest.bind(this),
                         initialLoad: false,
-                        dynamicData: (this.options.usePagination && this.options.useDynamicPagination),
+                        dynamicData: this.options.usePagination,
                         "MSG_EMPTY": this.msg("message.empty"),
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),

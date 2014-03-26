@@ -11,7 +11,6 @@
 
                 new LogicECM.module.Documents.DataGrid('${id}').setOptions({
                     usePagination: true,
-                    useDynamicPagination:true,
                     pageSize: 20,
                     showExtendSearchBlock: true,
                     actions: [

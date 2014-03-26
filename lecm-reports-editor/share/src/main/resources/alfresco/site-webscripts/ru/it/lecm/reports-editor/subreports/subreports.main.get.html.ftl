@@ -187,7 +187,6 @@
                 var datagrid = new LogicECM.module.ReportsEditor.SubGrid('${gridId}').setOptions(
                         {
                             usePagination: true,
-                            useDynamicPagination: true,
                             showExtendSearchBlock: false,
                             forceSubscribing: true,
                             actions: [

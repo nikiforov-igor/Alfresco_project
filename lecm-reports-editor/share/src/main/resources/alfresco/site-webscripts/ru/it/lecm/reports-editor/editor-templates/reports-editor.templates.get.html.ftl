@@ -43,7 +43,6 @@
                 var datagrid = new LogicECM.module.Base.DataGrid('${gridId}').setOptions(
                         {
                             usePagination: true,
-                            useDynamicPagination: true,
                             showExtendSearchBlock: false,
                             forceSubscribing: true,
                             actions: [

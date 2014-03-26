@@ -408,7 +408,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchConfig.fullTextSearch);
                 }
                 var startIndex = 0;
-                if (offset >= 0 && this.dataGrid.options.useDynamicPagination) {
+                if (offset >= 0 && this.dataGrid.options.usePagination) {
                     startIndex = offset;
                 }
 
@@ -422,7 +422,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	                    searchNodes: searchNodes != null ? searchNodes.toString() : "",
                         itemType: itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
-                        maxResults: this.dataGrid.options.useDynamicPagination ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,
+                        maxResults: this.dataGrid.options.usePagination ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,
                         fields: searchFields != null ? searchFields : "",
                         nameSubstituteStrings: dataRequestNameSubstituteStrings,
                         showInactive: searchShowInactive != null ? searchShowInactive : "false",

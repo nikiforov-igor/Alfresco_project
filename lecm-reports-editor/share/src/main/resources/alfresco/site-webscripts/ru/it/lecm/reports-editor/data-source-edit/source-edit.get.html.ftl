@@ -96,7 +96,6 @@
                     var datagrid = new LogicECM.module.ReportsEditor.ColumnsGrid('${gridId}').setOptions(
                             {
                                 usePagination: true,
-                                useDynamicPagination: false,
                                 showExtendSearchBlock: false,
                                 overrideSortingWith: false,
                                 forceSubscribing: true,

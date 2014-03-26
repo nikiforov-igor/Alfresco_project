@@ -21,7 +21,6 @@
 				var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 						{
 							usePagination:true,
-							useDynamicPagination:${dynamicPagination?string},
 							showExtendSearchBlock:true,
                             showActionColumn: ${showActions?string},
 							actions: [

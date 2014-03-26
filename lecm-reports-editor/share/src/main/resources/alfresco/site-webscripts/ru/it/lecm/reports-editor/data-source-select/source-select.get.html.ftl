@@ -35,7 +35,6 @@
                             var datagrid = new LogicECM.module.ReportsEditor.ColumnsGrid("${columnsGridId}").setOptions(
                                     {
                                         usePagination: true,
-                                        useDynamicPagination: false,
                                         showExtendSearchBlock: false,
                                         showActionColumn: true,
                                         overrideSortingWith: false,
@@ -98,7 +97,6 @@
                             var datagrid = new LogicECM.module.ReportsEditor.SourcesGrid("${sourceGridId}").setOptions(
                                     {
                                         usePagination: true,
-                                        useDynamicPagination: false,
                                         showExtendSearchBlock: false,
                                         showActionColumn: true,
                                         overrideSortingWith: false,
