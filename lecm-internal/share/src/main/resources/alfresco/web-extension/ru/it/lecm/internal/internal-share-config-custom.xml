@@ -73,16 +73,15 @@
 	                <show id="lecm-document-aspects:reg-project-data-number"/>
 	                <show id="lecm-document-aspects:reg-project-data-date"/>
 	                <show id="lecm-document-aspects:is-shared-folder"/>
-                    <show id="lecm-internal:approval-list"/><!-- Листы согласования-->
-                    <show id="lecm-internal:signing-list"/>	<!-- Листы подписания-->
-                    <show id="lecm-internal:style-for-approval-and-signing-tab"/>
+                    <show id="lecm-internal:approval-list" for-mode="view"/><!-- Листы согласования-->
+                    <show id="lecm-internal:signing-list" for-mode="view"/>	<!-- Листы подписания-->
+                    <show id="lecm-internal:style-for-approval-and-signing-tab" for-mode="view"/>
                     <show id="lecm-internal-table-structure:answers-assoc"/>
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
-                    <set id="exist-permissions" parent="approval-and-signing" appearance="~_lecmPerm_InnerAttrList" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
                     <set id="header" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
                     <set id="title" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="typeAndDate" parent="common" template="/org/alfresco/components/form/2-column-set.ftl" />
@@ -155,9 +154,10 @@
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 	                </field>
 
-                    <field id="lecm-internal:approval-list" set="exist-permissions" label="Согласование">
+                    <field id="lecm-internal:approval-list" set="approval-and-signing" label="Согласование">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
                             <control-param name="approvalItemsDatagridId">internal-datagrid</control-param>
+                            <control-param name="permission">~_lecmPerm_InnerAttrList</control-param>
                         </control>
                     </field>
 
