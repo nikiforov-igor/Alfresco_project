@@ -244,7 +244,7 @@
                         <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                         <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                         <property name="lecm-arm:search-query">
-                            <![CDATA[((ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"]) OR (+TYPE:"lecm-errands:document" AND ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"]) ) AND NOT @lecm\-statemachine\-aspects\:is\-final:true]]></property>
+                            <![CDATA[(ISNOTNULL:"lecm-errands:limitation-date" AND @lecm\-errands\:limitation\-date:[MIN TO "#current-date"]) OR (@lecm\-document\:sys_workflows:'*lecmReview*' OR (TYPE:"lecm-incoming:document" AND @lecm\-statemachine\:status:'На рассмотрении' AND @lecm\-eds\-document\:reviewers\-assoc\-ref:"*#current-user*")  OR @lecm\-document\:sys_workflows:'*lecmApprovalWorkflow*' OR @lecm\-document\:sys_workflows:'*lecmSign*' OR (+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Направлен' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-ord\:controller\-assoc\-ref:"*#current-user*"))) AND (ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"])]]></property>
                         <items>
                             <item name="cm:Поручения" type="lecm-arm:node">
                                 <property name="cm:name"><![CDATA[Поручения]]></property>
@@ -353,7 +353,7 @@
                                 <property name="lecm-arm:counter-enable"><![CDATA[true]]></property>
                                 <property name="lecm-arm:counter-limitation"><![CDATA[]]></property>
                                 <property name="lecm-arm:search-query">
-                                    <![CDATA[ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"]]]></property>
+                                    <![CDATA[(@lecm\-document\:sys_workflows:'*lecmReview*' OR (TYPE:"lecm-incoming:document" AND @lecm\-statemachine\:status:'На рассмотрении' AND @lecm\-eds\-document\:reviewers\-assoc\-ref:"*#current-user*")  OR @lecm\-document\:sys_workflows:'*lecmApprovalWorkflow*' OR @lecm\-document\:sys_workflows:'*lecmSign*' OR (+TYPE:"lecm-incoming:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-internal:document" AND (@lecm\-statemachine\:status:'Направлен' AND @lecm\-eds\-document\:recipients\-assoc\-ref:"*#current-user*")) OR (+TYPE:"lecm-ord:document" AND (@lecm\-statemachine\:status:'На исполнении' AND @lecm\-ord\:controller\-assoc\-ref:"*#current-user*"))) AND (ISNOTNULL:"lecm-eds-document:execution-date" AND @lecm\-eds\-document\:execution\-date:[MIN TO "#current-date"])]]></property>
                                 <items>
                                     <item name="cm:49ee10e5-5b61-4106-b89e-ef67d9dacc64" type="lecm-arm:field">
                                         <property name="lecm-arm:field-title"><![CDATA[Номер]]></property>
