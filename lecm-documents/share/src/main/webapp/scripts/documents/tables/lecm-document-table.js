@@ -879,7 +879,7 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
 
                                 if (index != 0) {
                                     var oDataRecord2 = me.widgets.dataTable.getRecord(index-1);
-
+                                    
                                     // удаляем верхнюю запись
                                     me.widgets.dataTable.deleteRow(oDataRecord2);
                                     // так как в таблице стало на 1 запись меньше то удаляем с тем же индексом

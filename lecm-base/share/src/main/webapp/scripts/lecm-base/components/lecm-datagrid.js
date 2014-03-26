@@ -497,7 +497,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        elCell.innerHTML = '<span id="expand-' + oRecord.getId() + '" class="expand-table-icon">+</span>';
 
 			        YAHOO.util.Event.onAvailable("expand-" + oRecord.getId(), function () {
-				        YAHOO.util.Event.on("expand-" + oRecord.getId(), 'click', scope.onExpandClick, oRecord, this);
+                        //Проверка нужна, т.к. при перемещении строк есть шанс добавить ещё один листенер.
+                        if (YAHOO.util.Event.getListeners ("expand-" + oRecord.getId(), 'click')==null) {
+                            YAHOO.util.Event.on("expand-" + oRecord.getId(), 'click', scope.onExpandClick, oRecord, this);
+                        }
 			        }, null, scope);
 		        };
 	        },
