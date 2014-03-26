@@ -1,0 +1,25 @@
+#error-tooltip {
+	position: absolute;
+	width:150px;
+	color: #FFFFFF;
+	background: #FF8585;
+	height: 47px;
+	line-height: 15px;
+	text-align: center;
+	border-radius: 6px;
+	z-index: 9999;
+	visibility: hidden;
+	padding: 5px;
+	margin-top: -60px;
+}
+#error-tooltip:after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -8px;
+	width: 0; height: 0;
+	border-top: 8px solid #FF8585;
+	border-right: 8px solid transparent;
+	border-left: 8px solid transparent;
+}

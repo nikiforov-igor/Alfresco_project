@@ -4,6 +4,7 @@
             <dependencies>
                 <css src="/css/lecm-base/base-styles.css" />
                 <css src="/css/font-awesome.css" />
+				<js src="/scripts/lecm-nd/nd-date-validator.js" />
             </dependencies>
         </forms>
     </config>
@@ -19,8 +20,8 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
-                    <show id="lecm-nd:begin-date"/>
-                    <show id="lecm-nd:end-date"/>
+                    <show id="lecm-nd:begin-date" mandatory="true"/>
+                    <show id="lecm-nd:end-date" mandatory="true"/>
                 </field-visibility>
                 <appearance>
                     <set id="common"/>
@@ -67,16 +68,16 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates">
+                    <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
+						</constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
-                    <field id="lecm-nd:end-date" label="Дата окончания действия" set="dates">
+                    <field id="lecm-nd:end-date" label="Дата окончания действия" set="dates" mandatory="true">
                         <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
+						</constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
                     <field id="lecm-eds-document:note" label="Примечание" set="nd7">
@@ -265,7 +266,7 @@
                     <field id="lecm-document-aspects:is-shared-folder" set="footer">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-            
+
                     <!-- Вкладка "Согласование/подписание" -->
                     <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
                         <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
