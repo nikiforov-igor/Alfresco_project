@@ -17,6 +17,10 @@
     float:left;
 }
 
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.yui-g div.yui-u .full-width div.form-field .with-one-button select {
+	width: 350px;
+}
+
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.object-finder .current-values,
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .full-width div.form-field div.autocomplete-block input.autocomplete-input{
 	width: 350px;

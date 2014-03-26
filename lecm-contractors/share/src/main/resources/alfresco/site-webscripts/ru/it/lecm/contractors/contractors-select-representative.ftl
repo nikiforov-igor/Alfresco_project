@@ -32,7 +32,7 @@
 <div id="${fieldId}" class="form-field">
 	<label for="${selectId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 
-	<div class="object-finder">
+	<div class="object-finder with-one-button">
 		<select id="${selectId}" name="${field.name}"></select>
 
 		<div class="show-picker">

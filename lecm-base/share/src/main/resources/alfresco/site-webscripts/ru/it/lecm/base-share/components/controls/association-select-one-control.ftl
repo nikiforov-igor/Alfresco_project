@@ -108,7 +108,7 @@
         <label for="${fieldHtmlId}-added">${field.label?html}:<#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
 	    <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
         <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-        <div id="${fieldHtmlId}-controls" class="selectone-control">
+        <div id="${fieldHtmlId}-controls" class="selectone-control <#if showCreateNewButton>with-one-button</#if>">
             <select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
                     <#if field.description??>title="${field.description}"</#if>
                     <#if field.control.params.size??>size="${field.control.params.size}"</#if>
