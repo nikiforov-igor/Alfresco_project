@@ -219,6 +219,7 @@ LogicECM.module.Base.Util = {
 			}
 		}
 
+		var formRelatedElementsSelectorTemplate = "[id^='{moduleId}']";
 		var moduleId = params.moduleId, callback = params.callback, callbackArg = params.callbackArg;
 
 		var k, w;
@@ -228,17 +229,13 @@ LogicECM.module.Base.Util = {
 		var comMan = Alfresco.util.ComponentManager;
 		var components = comMan.list();
 
-		var form = comMan.get(moduleId);
-		var formIndex = components.indexOf(form); // IE9+
-
-		var widgets = form.widgets;
-
-		var formRelatedElementsSelectorTemplate = "[id^='{moduleId}']";
-
-
 		if (isFn(callback)) {
 			callback.call(this, callbackArg);
 		}
+
+		var form = comMan.get(moduleId);
+		var formIndex = components.indexOf(form); // IE9+
+		var widgets = (form) ? form.widgets : [];
 
 		for (k in widgets) {
 			if (widgets.hasOwnProperty(k)) {
@@ -261,19 +258,18 @@ LogicECM.module.Base.Util = {
 			}
 		}
 
-		// жесточайшим образом убить все элементы, ID которых начинается c moduleId
-		$(YAHOO.lang.substitute(formRelatedElementsSelectorTemplate, {
-			moduleId: moduleId
-		})).remove();
-
 		if (formIndex > -1) {
 			while (components.length > formIndex) { // Не оптимизируй...
 				removeAllBubbles(components[formIndex]);
 				comMan.unregister(components[formIndex]);
 			}
 		}
-	}
 
+		// жесточайшим образом убить все элементы, ID которых начинается c moduleId
+		$(YAHOO.lang.substitute(formRelatedElementsSelectorTemplate, {
+			moduleId: moduleId
+		})).remove();
+	}
 };
 
 (function() {

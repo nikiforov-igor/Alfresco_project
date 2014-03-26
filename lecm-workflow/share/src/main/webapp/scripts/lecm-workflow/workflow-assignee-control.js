@@ -590,16 +590,12 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 
 			if (this.widgets.simpleDialog) {
 				this.widgets.simpleDialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {
-					moduleId: this.options.formId,
+					moduleId: this.options.htmlId,
 					callback: function() {
 						var isVl = YAHOO.lang.isValue;
 						var Bubb = YAHOO.Bubbling;
 						var datagrid = this.widgets.datagrid;
 						var rs = datagrid.widgets.dataTable.getRecordSet();
-
-						if (this.widgets.simpleDialog) {
-							this.widgets.simpleDialog.dialog.unsubscribe('destroy', this._destructor);
-						}
 
 						Bubb.unsubscribe('activeGridChanged', datagrid.onGridTypeChanged, datagrid);
 						Bubb.unsubscribe('dataItemCreated', datagrid.onDataItemCreated, datagrid);
