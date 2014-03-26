@@ -5,9 +5,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.ND = LogicECM.module.ND || {};
 
+var YUITooltip;
+
 (function () {
 	var loader = new YAHOO.util.YUILoader({
-		require: ["errorTooltipStyle"],
+		require: ["errorTooltipStyle", "container"],
 		skin: {}
 	});
 	loader.addModule({
@@ -20,16 +22,6 @@ LogicECM.module.ND = LogicECM.module.ND || {};
 
 LogicECM.module.ND.dateIntervalValidation =
 	function ND_dateIntervalValidation(field, args, event, form, silent, message) {
-		var toolTip = document.getElementById('error-tooltip');
-		if (!toolTip) {
-			toolTip = document.createElement('span');
-			toolTip.id = 'error-tooltip';
-			field.parentNode.appendChild(toolTip);
-			toolTip.innerHTML = 'Дата начала не может быть больше, чем дата окончания';
-
-		}
-
-		toolTip.style.visibility = 'hidden';
 
 		var valid = true;
 
@@ -40,7 +32,10 @@ LogicECM.module.ND.dateIntervalValidation =
 		IDElements.splice(-1, 1);
 		var commonID = IDElements.join("_");
 
-		var beginField, endField;
+		visibleBeginField = YAHOO.util.Dom.get(commonID + "_begin-date-cntrl-date");
+		visibleEndField = YAHOO.util.Dom.get(commonID + "_end-date-cntrl-date");
+
+		var beginField, endField, visibleBeginField, visibleEndField;
 
 		if (myField.toString() == "begin-date") {
 			beginField = field;
@@ -52,6 +47,7 @@ LogicECM.module.ND.dateIntervalValidation =
 			return false;
 		}
 
+
 		var beginValue = beginField.value;
 		var endValue = endField.value;
 
@@ -61,9 +57,18 @@ LogicECM.module.ND.dateIntervalValidation =
 
 			if (beginDate > endDate) {
 				valid = false;
-				toolTip.style.visibility = 'visible';
+				visibleBeginField.style.background = 'bisque';
+				visibleEndField.style.background = 'bisque';
+				YUITooltip = new YAHOO.widget.Tooltip("error-tooltip",
+					{
+						context:[visibleBeginField, visibleEndField],
+						text:'Дата начала не может быть больше, чем дата окончания' 
+					});
+			} else {
+				visibleBeginField.style.background = 'white';
+				visibleEndField.style.background = 'white';
+				YUITooltip.destroy();
 			}
-
 		}
 		return valid;
 }
