@@ -360,8 +360,14 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row .first div.form-field div.viewmode-field span.viewmode-value {
                                 float:left;
                                 }
-                                .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field span.viewmode-label,
-                                .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field .help-icon {
+                                
+                                .yui-skin-lecmTheme .yui-panel .item-container div.form-field div.viewmode-field span.viewmode-label{
+                                float: none;
+                                display: block;
+                                }
+                                
+                                .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field span.viewmode-label,
+                                .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field .help-icon {
                                 display: none;
                                 }
 
@@ -375,12 +381,8 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 .form-field {
                                 padding: 0.5em 0;
                                 }
-                                .yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field  span.viewmode-label{
+                                .yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field div.viewmode-field span.viewmode-label{
                                 display: none;
-                                }
-                                .yui-skin-lecmTheme .yui-panel .item-container div.form-field div.viewmode-field span.viewmode-label{
-                                float: none;
-                                display: block;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
                                 width: 48em;
@@ -403,6 +405,9 @@
                                 width: 23em;
                                 height: 20px;
                                 margin-bottom: 10px;
+                                }
+                                .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.viewmode-field span.viewmode-value.auto-complete a {
+                                max-width: 19em;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
                                 max-width: 19em;
@@ -460,9 +465,14 @@
                                 margin:0 20px;
                                 }
                                 .tab-ord-document-items .datagrid tr.expand-row div.form-field div.viewmode-field span.viewmode-label {
+                                display:block;
                                 text-align: left;
                                 float:none;
                                 text-align:left;
+                                }
+                                
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-field textarea{ 
+                                    width: auto;
                                 }
                             </control-param>
                         </control>
