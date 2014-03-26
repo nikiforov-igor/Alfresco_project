@@ -13,21 +13,22 @@
 			<form>
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
-					<show id="lecm-document:regnum"/>												<!-- Рег. номер -->
-					<show id="lecm-document:doc-date"/>												<!-- Дата регистрации -->
-					<show id="lecm-document:title"/>												<!-- Заголовок -->
-					<show id="lecm-eds-document:document-type-assoc"/>								<!-- Вид документа -->
-					<show id="lecm-outgoing:delivery-method-assoc"/>								<!-- Способ доставки -->
-					<show id="lecm-outgoing:contractor-assoc" force="true"/>						<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>										<!-- Адресат -->
-					<show id="lecm-eds-document:summaryContent"/>									<!-- Содержание -->
-					<show id="lecm-document:subject-assoc"/>										<!-- Тематика -->
-					<show id="lecm-eds-document:note"/>												<!-- Примечание -->
-					<show id="lecm-eds-document:file-register-assoc"/>								<!-- Номенклатура дел -->
-					<show id="lecm-document:creator"/>												<!-- Автор -->
-					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>			<!-- Листы согласования-->
-					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>			<!-- Листы подписания-->
-					<show id="lecm-outgoing:outgoing-view-form" force="true" for-mode="view"/>		<!-- Костыль, обходящий странное поведение base-form-tabs.ftl и жутких стилей для формы просмотра-->
+					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
+					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации -->
+					<show id="lecm-document:title"/>																	<!-- Заголовок -->
+					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
+					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
+					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- Организация-получатель -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
+					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
+					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
+					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
+					<show id="lecm-document:creator"/>																	<!-- Автор -->
+					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
+					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
+					<show id="lecm-outgoing:outgoing-view-form" force="true" for-mode="view"/>							<!-- Костыль, обходящий странное поведение base-form-tabs.ftl и жутких стилей для формы просмотра-->
+					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -41,7 +42,7 @@
 					<set id="outgoing6" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing7" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 					<set id="outgoing8" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-					<set id="outgoing9" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
+					<set id="outgoing9" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
 					<!-- outgoing1:full-width-set -->
 					<field id="lecm-document:regnum" set="outgoing1"/>
@@ -94,8 +95,10 @@
 
 					<!-- outgoing9:full-width-set -->
 					<field id="lecm-document:creator" set="outgoing9">
-						<control template="/org/alfresco/components/form/controls/readonly.ftl"/>
+						<control template="/org/alfresco/components/form/controls/info.ftl"/>
 					</field>
+
+					<field id="lecm-document-aspects:is-shared-folder" set="outgoing9"/>
 
 					<field id="lecm-outgoing:approval-list" set="approval-and-signing" label="Согласование">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
@@ -300,6 +303,7 @@
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
+					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
 				</field-visibility>
 			</form>
 		</forms>

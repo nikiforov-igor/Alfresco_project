@@ -718,6 +718,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/70097a71-9389-45b4-af7c-b92aa8dc25d7</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/4267c834-e5ae-4784-ad54-b2b9fa513893</nodeRef>
 										<properties>
@@ -2004,6 +2021,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/3cc50310-4990-4e72-8a55-27617682f74b</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/ae781769-27ba-48b3-92b0-d93fa47efad9</nodeRef>
 										<properties>
@@ -2475,6 +2509,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/fc86654b-344a-4a8c-8505-cc652c00a70c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[false]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/a037f084-f0e2-4187-91c0-c118e94b8c73</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3479,6 +3530,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/7f725a2d-f997-4750-8862-db031b565bbf</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/63a3fca2-102a-43ec-a541-c2494832b27e</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -4591,6 +4659,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/400eeac6-30df-4645-bcd8-cc89230eef7c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/cb14844d-9726-410f-a2d7-7b7220e7197b</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -6015,6 +6100,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/ee42f0a0-908e-49e6-addb-78db50ccc2da</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/cf524633-b1e7-416f-b49e-b63cfa45dd4b</nodeRef>
 										<properties>
@@ -7049,6 +7151,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/20b27d71-967c-413c-a28f-cc1863100a60</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/ce89977f-7046-4208-aa96-da85cd9fa264</nodeRef>
 										<properties>
@@ -7815,6 +7934,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/39ef178e-e42f-438d-a6ce-202a8055a19e</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/b451209c-cac6-4be8-a1a0-a340dbdb9e3f</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -8626,6 +8762,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/523a96c2-8256-47af-8821-4d63cfe616af</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/207741a7-6654-4343-b054-6b5218cead5e</nodeRef>
 										<properties>
@@ -9362,6 +9515,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/a62a5b14-e186-494c-81e4-8953bbc75591</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/1d34aa3d-729d-4710-bfc5-80897a76f070</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -10177,6 +10347,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/0778ebbe-340d-430c-83c8-3929d06a7eee</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[true]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/8f4963bb-9f81-4c31-bfee-2d412ae9c802</nodeRef>
 										<properties>
@@ -10663,6 +10850,23 @@
 									</node>
 									<node>
 										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/ce3811ec-d72d-4739-b39e-ac7c59bd2d26</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[false]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
 										<name>lecm-document-aspects_registrator-assoc</name>
 										<nodeRef>workspace://SpacesStore/1e88f294-c23b-4808-86f2-f1e7a4897432</nodeRef>
 										<properties>
@@ -11054,6 +11258,23 @@
 										<type>documentField</type>
 										<name>lecm-eds-document_note</name>
 										<nodeRef>workspace://SpacesStore/2f4d2797-b079-4bec-8d48-659f5bf608ad</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value>
+													<![CDATA[false]]>
+												</value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document-aspects_is-shared-folder</name>
+										<nodeRef>workspace://SpacesStore/64cd0cf5-4f6a-4d81-93ee-dcdd6e07ea72</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
