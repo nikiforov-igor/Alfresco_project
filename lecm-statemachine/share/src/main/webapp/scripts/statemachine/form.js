@@ -136,7 +136,11 @@ LogicECM.module = LogicECM.module || {};
 			var templateRequestParams;
 			var formWidth = "55em";
 			if (action.isForm) {
-				formWidth = "84em";
+				if (action.formType != null && action.formType == "lecm-errands:document") {
+					formWidth = "60em"; //костыль для формы с поручениями
+				} else {
+					formWidth = "84em";
+				}
 				templateUrl += "lecm/components/form";
 				templateRequestParams = {
 					itemKind: "type",
