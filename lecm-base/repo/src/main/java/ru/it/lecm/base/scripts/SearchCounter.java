@@ -134,7 +134,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 // execute search based on search definition
                 result = query(sp, exceptionOnError, maxResults, skipResults);
 
-                logger.error("COUNTER QUERY: " + query + ",/n RESULT:" + result);
+                logger.debug("COUNTER QUERY: " + query + ",/n RESULT:" + result);
             }
         }
 
