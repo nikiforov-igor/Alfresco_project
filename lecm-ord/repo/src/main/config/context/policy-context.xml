@@ -18,12 +18,20 @@
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure"/>
-    
+
 	<bean id="ord.ORDItemCreatePolicy"
 		  class="ru.it.lecm.ord.policies.ORDItemCreatePolicy"
 		  init-method="init" depends-on="ord.document.models.bootstrap"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"
 		  p:dictionaryService-ref="serviceDictionary"/>
+
+	<bean id="ord.ORDControllerPolicy"
+		  class="ru.it.lecm.ord.policies.ORDControllerPolicy"
+		  init-method="init" depends-on="ord.document.models.bootstrap"
+		  p:policyComponent-ref="policyComponent"
+		  p:nodeService-ref="nodeService"
+		  p:stateMachineService-ref="stateMachineHelper"
+		  p:lecmPermissionService-ref="lecmPermissionServiceBean"/>
 
 </beans>
