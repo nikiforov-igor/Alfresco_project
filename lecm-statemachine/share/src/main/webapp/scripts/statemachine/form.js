@@ -153,7 +153,7 @@ LogicECM.module = LogicECM.module || {};
 					showCancelButton: true
 				};
 			} else {
-				templateUrl += "components/form";
+				templateUrl += "lecm/components/form";
 				templateRequestParams = {
 					itemKind: "workflow",
 					itemId: action.workflowId,
