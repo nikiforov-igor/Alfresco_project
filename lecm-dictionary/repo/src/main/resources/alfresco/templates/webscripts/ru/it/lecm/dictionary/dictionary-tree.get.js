@@ -32,16 +32,16 @@ function addItems(branch, items) {
 			nodeRef = item.getNodeRef().toString();
 
 			var childs = item.childAssocs[assocType];
-			var activeChildsCount = 0;
+            var isLeaf = true;
 			if (childs != null) {
 				for (var j = 0; j < childs.length; j++) {
 					if (childs[j].isSubType("lecm-dic:hierarchical_dictionary_values") && childs[j].properties["lecm-dic:active"]) {
-						activeChildsCount++;
+						isLeaf = false;
+                        break;
 					}
 				}
 			}
 
-			isLeaf = activeChildsCount == 0;
 			branch.push({
 				title: substitude.getObjectDescription(item),
 				type: item.typeShort,
