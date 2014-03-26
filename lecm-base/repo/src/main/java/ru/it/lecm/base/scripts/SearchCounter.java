@@ -12,8 +12,13 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -27,6 +32,9 @@ public class SearchCounter extends BaseScopableProcessorExtension {
 
     protected ServiceRegistry services;
     protected StoreRef storeRef;
+    private OrgstructureBean orgstructureService;
+    private NotificationsService notificationsService;
+    private IWorkCalendar workCalendarService;
 
     public void setServiceRegistry(ServiceRegistry services) {
         this.services = services;
@@ -87,8 +95,19 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 SearchParameters sp = new SearchParameters();
                 sp.addStore(store != null ? new StoreRef(store) : this.storeRef);
                 sp.setLanguage(language != null ? language : SearchService.LANGUAGE_LUCENE);
-                sp.setQuery(query);
 
+
+                // обработка спец-выражений
+                if (query.contains("#current-user")) {
+                    query = query.replaceAll("#current-user",orgstructureService.getCurrentEmployee().toString());
+                }
+                if (query.contains("#current-date")) {
+                    int limitDays = notificationsService.getSettingsNDays();
+                    Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays);
+                    query = query.replaceAll("#current-date",  DocumentService.DateFormatISO8601.format(nextWorkDate));
+                }
+
+                sp.setQuery(query);
                 if (namespace != null) {
                     sp.setNamespace(namespace);
                 }
@@ -114,6 +133,8 @@ public class SearchCounter extends BaseScopableProcessorExtension {
 
                 // execute search based on search definition
                 result = query(sp, exceptionOnError, maxResults, skipResults);
+
+                logger.error("COUNTER QUERY: " + query + ",/n RESULT:" + result);
             }
         }
 
@@ -150,5 +171,17 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         }
 
         return 0L;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+        this.workCalendarService = workCalendarService;
     }
 }

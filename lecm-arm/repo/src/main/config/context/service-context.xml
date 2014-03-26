@@ -42,8 +42,8 @@
         <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
 		<property name="createOrUpdateDictionaries">
 			<list>
-                <value>alfresco/module/${artifactId}/dictionary/default-arm.xml</value>
-                <value>alfresco/module/${artifactId}/dictionary/default-arm-2.xml</value>
+                <value>alfresco/module/${artifactId}/dictionary/default-arm-old.xml</value>
+                <value>alfresco/module/${artifactId}/dictionary/default-arm-sed.xml</value>
 			</list>
 		</property>
 	</bean>

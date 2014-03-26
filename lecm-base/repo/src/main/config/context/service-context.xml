@@ -310,6 +310,9 @@
         <property name="storeUrl">
             <value>${spaces.store}</value>
         </property>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="workCalendarService" ref="WorkCalendarService"/>
     </bean>
 
 	<bean id="webscript.ru.it.lecm.config.repoShareConfig.get"

@@ -91,6 +91,16 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>ru.it.lecm.notifications</groupId>
+            <artifactId>notifications-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.calendar</groupId>
+            <artifactId>lecm-calendar-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
     <!--
        The scm is required for the buildnumber-maven-plugin which is required

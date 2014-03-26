@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:АРМ СЭД 2" type="lecm-arm:arm">
-        <property name="cm:name"><![CDATA[АРМ СЭД 2]]></property>
-        <property name="lecm-arm:code"><![CDATA[SED2]]></property>
+    <item name="cm:АРМ СЭД" type="lecm-arm:arm">
+        <property name="cm:name"><![CDATA[АРМ СЭД]]></property>
+        <property name="lecm-arm:code"><![CDATA[SED]]></property>
         <items>
             <item name="cm:Моя работа" type="lecm-arm:accordion">
                 <property name="cm:name"><![CDATA[Моя работа]]></property>
@@ -98,19 +98,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/66f5a87e-8e56-47ee-8b5b-c30a71722ad9"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/66f5a87e-8e56-47ee-8b5b-c30a71722ad9"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/38bb5d01-4ad0-4f60-b0c8-99ac3ddcae20"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/38bb5d01-4ad0-4f60-b0c8-99ac3ddcae20"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/9c07f15c-f638-4b6b-86b8-46a3815c7c28"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/9c07f15c-f638-4b6b-86b8-46a3815c7c28"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/ac977bf8-e5e4-4a3d-a978-06eb52a860f3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/ac977bf8-e5e4-4a3d-a978-06eb52a860f3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/97d4ff48-eab2-4bc3-abc6-2163be028e58"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/97d4ff48-eab2-4bc3-abc6-2163be028e58"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/e02401f7-553d-4e62-b12d-5cdc7d8640f5"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/e02401f7-553d-4e62-b12d-5cdc7d8640f5"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Документы/7a06efe8-aba5-4b5d-b557-c00992c0aa51"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Документы/7a06efe8-aba5-4b5d-b557-c00992c0aa51"/>
                                 </assocs>
                             </item>
                             <item name="cm:Поручения" type="lecm-arm:node">
@@ -210,17 +210,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/aa6afe58-99dc-491a-8c4b-ae6fd59ba35b"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/aa6afe58-99dc-491a-8c4b-ae6fd59ba35b"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/66da7724-4f71-40d7-9d85-4f828418ae6d"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/66da7724-4f71-40d7-9d85-4f828418ae6d"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/b57f9872-de21-4ceb-b8ed-70cdb05dd1ae"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/b57f9872-de21-4ceb-b8ed-70cdb05dd1ae"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/6f6e0940-5f5b-46ee-ae49-22976ee126c7"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/6f6e0940-5f5b-46ee-ae49-22976ee126c7"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/d8715324-2a9c-47ee-a71b-11ad4354057d"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/d8715324-2a9c-47ee-a71b-11ad4354057d"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/Поручения/7a9f545a-9dbd-4e59-b54f-6ddca10937d8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/Поручения/7a9f545a-9dbd-4e59-b54f-6ddca10937d8"/>
                                 </assocs>
                             </item>
                             <item name="cm:6f53d89b-5012-41c8-a872-64ab2c839315" type="lecm-arm:field">
@@ -233,7 +233,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Черновики/7db12059-6330-427c-ad01-beaa3decd6ab"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Черновики/7db12059-6330-427c-ad01-beaa3decd6ab"/>
                         </assocs>
                     </item>
                     <item name="cm:Срочная работа" type="lecm-arm:node">
@@ -331,17 +331,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/ca6c82f2-8796-4bc2-b203-0fa8343b288f"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/ca6c82f2-8796-4bc2-b203-0fa8343b288f"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/afd43831-b617-4c6b-888f-e6783d55ea06"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/afd43831-b617-4c6b-888f-e6783d55ea06"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/a6b6ea2a-5389-45d7-b02b-e6f40ddc47b8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/a6b6ea2a-5389-45d7-b02b-e6f40ddc47b8"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/c561e4ea-6d51-4a5d-9315-50202ed2a98a"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/c561e4ea-6d51-4a5d-9315-50202ed2a98a"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/064c682d-af42-45fe-ad23-27621d9b657b"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/064c682d-af42-45fe-ad23-27621d9b657b"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Поручения/f2913bcf-e0f7-42bb-b57e-a3b3751db8d8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Поручения/f2913bcf-e0f7-42bb-b57e-a3b3751db8d8"/>
                                 </assocs>
                             </item>
                             <item name="cm:Документы" type="lecm-arm:node">
@@ -417,19 +417,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/5cadc3f8-0f5c-4bf1-98c6-ea584e829dce"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/5cadc3f8-0f5c-4bf1-98c6-ea584e829dce"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/26fb6645-4c06-45d7-9245-b7e8b9ff5d41"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/26fb6645-4c06-45d7-9245-b7e8b9ff5d41"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/44acfb12-b05b-4505-930c-938531658773"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/44acfb12-b05b-4505-930c-938531658773"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/08e04c84-3a89-41c1-8b15-2852c4549fdb"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/08e04c84-3a89-41c1-8b15-2852c4549fdb"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/47f64b49-c5c4-416e-b29e-3ab39c07f4ce"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/47f64b49-c5c4-416e-b29e-3ab39c07f4ce"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/3dae1350-eccc-4487-b3e5-542baba2a443"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/3dae1350-eccc-4487-b3e5-542baba2a443"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/Документы/c827529d-dd81-401e-9f2b-c4758414dea1"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/Документы/c827529d-dd81-401e-9f2b-c4758414dea1"/>
                                 </assocs>
                             </item>
                             <item name="cm:589520ef-e6f9-4f33-b5cf-dc179766f543" type="lecm-arm:field">
@@ -442,7 +442,7 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Срочная работа/ab97571a-4c0a-434e-a725-c2810eb76721"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/ab97571a-4c0a-434e-a725-c2810eb76721"/>
                         </assocs>
                     </item>
                     <item name="cm:Документы в работе" type="lecm-arm:node">
@@ -591,19 +591,19 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/cd14fec7-ee3f-4cf8-bab7-6a5c5f4a18e5"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/cd14fec7-ee3f-4cf8-bab7-6a5c5f4a18e5"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/1b7623c1-ccbc-4458-8ae6-3d1a67b74dde"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/1b7623c1-ccbc-4458-8ae6-3d1a67b74dde"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/db0cb47e-b3df-4fa3-a81d-02b6143d5a6a"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/db0cb47e-b3df-4fa3-a81d-02b6143d5a6a"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/c86cf260-f33a-4805-8686-5f90b67c71cb"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/c86cf260-f33a-4805-8686-5f90b67c71cb"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/cae6dec2-a711-413b-9300-72c7062e6d61"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/cae6dec2-a711-413b-9300-72c7062e6d61"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/e0929fa9-28c2-459c-bc94-9526913a09b9"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/e0929fa9-28c2-459c-bc94-9526913a09b9"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Документы в работе/69d6afdc-251b-4e81-ba93-be98fa77fb04"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Документы в работе/69d6afdc-251b-4e81-ba93-be98fa77fb04"/>
                         </assocs>
                     </item>
                     <item name="cm:Поручения в работе" type="lecm-arm:node">
@@ -690,17 +690,17 @@
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/7e6e1fe7-2cae-40f2-a138-256afb8dcaa6"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/7e6e1fe7-2cae-40f2-a138-256afb8dcaa6"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/66c6ab7f-99f4-4a99-964a-08626f80f9e7"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/66c6ab7f-99f4-4a99-964a-08626f80f9e7"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/fb2d45e1-b3b4-436e-82d3-73e0c1a3d64e"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/fb2d45e1-b3b4-436e-82d3-73e0c1a3d64e"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/53b10c1a-9ec2-43cd-bc96-5c06da600cb2"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/53b10c1a-9ec2-43cd-bc96-5c06da600cb2"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/7639730a-9ac5-4203-99c6-7327e393d340"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/7639730a-9ac5-4203-99c6-7327e393d340"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Моя работа/Поручения в работе/22023dcb-0fab-400d-b6c1-b17207e96470"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Поручения в работе/22023dcb-0fab-400d-b6c1-b17207e96470"/>
                         </assocs>
                     </item>
                     <item name="cm:4099526f-d2ca-4010-8935-5dbf337e27a7" type="lecm-arm:field">
@@ -857,7 +857,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/Работа завершена/Закрытые статусы/554bb302-9535-40eb-bc52-30904f3236cd"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/Работа завершена/Закрытые статусы/554bb302-9535-40eb-bc52-30904f3236cd"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -885,19 +885,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/22b0083c-792d-44c3-961a-e94321899fef"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/22b0083c-792d-44c3-961a-e94321899fef"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/2e1da774-b089-4209-9edc-42a5c085f145"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/2e1da774-b089-4209-9edc-42a5c085f145"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/27030c9e-88bc-4614-a367-30b4ec0377fa"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/27030c9e-88bc-4614-a367-30b4ec0377fa"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/da5df7c7-e6b6-4e89-ac93-3ffb6b0ef38a"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/da5df7c7-e6b6-4e89-ac93-3ffb6b0ef38a"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/f539a76a-ea99-46df-b0ea-ffd236d0b4c3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/f539a76a-ea99-46df-b0ea-ffd236d0b4c3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/fc91e81d-c7c3-4d98-9718-85536ccf9f49"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/fc91e81d-c7c3-4d98-9718-85536ccf9f49"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Входящие/dfe8eb00-cf6d-42ba-a011-916fc36e4bc6"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Входящие/dfe8eb00-cf6d-42ba-a011-916fc36e4bc6"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По принадлежности"/>
                                     <assoc type="lecm-arm:filters-assoc"
@@ -996,7 +996,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/Новый/Новые статусы/2996a7a9-adba-47a4-ac16-49924f75b5d8"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/Новый/Новые статусы/2996a7a9-adba-47a4-ac16-49924f75b5d8"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1032,7 +1032,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/В работе/Статусы В Работе/2b0eeb06-a8f8-4f79-ae48-548f04a25b06"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/В работе/Статусы В Работе/2b0eeb06-a8f8-4f79-ae48-548f04a25b06"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1068,7 +1068,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/На подписании/На подписании статусы/791510ca-171e-4a4a-b781-29cd4e64e7d3"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/На подписании/На подписании статусы/791510ca-171e-4a4a-b781-29cd4e64e7d3"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1105,7 +1105,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/На обработке регистратором/На обработке регистратором статусы/9e7886fa-3a96-433a-a260-88068da8682f"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/На обработке регистратором/На обработке регистратором статусы/9e7886fa-3a96-433a-a260-88068da8682f"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1153,17 +1153,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/c3f141c9-0b39-4dc3-8d95-c8953f5001fa"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/c3f141c9-0b39-4dc3-8d95-c8953f5001fa"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/bad6eef1-4a9c-4ff3-bb2e-d290e5f5a606"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/bad6eef1-4a9c-4ff3-bb2e-d290e5f5a606"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/9afe75b6-1fb2-4a3b-a220-8dc2ac4511ee"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/9afe75b6-1fb2-4a3b-a220-8dc2ac4511ee"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/246016ce-bec4-4d24-9b82-925d40fb2377"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/246016ce-bec4-4d24-9b82-925d40fb2377"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/45fa9b26-b461-4cd8-86e9-0d83398862e3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/45fa9b26-b461-4cd8-86e9-0d83398862e3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Исходящие/07966af8-a649-4226-9f5e-52bce6121b8a"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Исходящие/07966af8-a649-4226-9f5e-52bce6121b8a"/>
                                     <assoc type="lecm-arm:filters-assoc"
                                            path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Требующие визы"/>
                                 </assocs>
@@ -1288,7 +1288,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/В работе/В работе статусы/00639f79-5a27-4cf7-836e-f7659468d0fc"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/В работе/В работе статусы/00639f79-5a27-4cf7-836e-f7659468d0fc"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1324,7 +1324,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/На подписании/На подписании статусы/b43c6c48-45c9-48ee-8792-a2a164793cb3"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/На подписании/На подписании статусы/b43c6c48-45c9-48ee-8792-a2a164793cb3"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1352,19 +1352,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/add8be59-f865-482b-9b1e-5a387556ef30"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/add8be59-f865-482b-9b1e-5a387556ef30"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/2eca9e0d-7428-49f3-b194-58d89cca9527"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/2eca9e0d-7428-49f3-b194-58d89cca9527"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/ed493d7b-ce91-4cf9-a5c1-1c3db0092697"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/ed493d7b-ce91-4cf9-a5c1-1c3db0092697"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/f2cf925f-eb3e-44c9-b2c6-cc99298c2acb"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/f2cf925f-eb3e-44c9-b2c6-cc99298c2acb"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/16ef5131-8077-469f-94b7-08751e7afbd8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/16ef5131-8077-469f-94b7-08751e7afbd8"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/901c05bf-64ac-449f-8ad2-4f02aefb072f"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/901c05bf-64ac-449f-8ad2-4f02aefb072f"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/Внутренние/cb61d9d2-a0b0-49d0-9da7-1c83c8b0a8de"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/Внутренние/cb61d9d2-a0b0-49d0-9da7-1c83c8b0a8de"/>
                                 </assocs>
                             </item>
                             <item name="cm:ОРД" type="lecm-arm:node">
@@ -1477,7 +1477,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/В работе/В работе статусы/f3290836-d675-4d1a-a9c8-2c45cd9246eb"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/В работе/В работе статусы/f3290836-d675-4d1a-a9c8-2c45cd9246eb"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1545,7 +1545,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/На обработке регистратором/На обработке статусы/bd7ca503-dd1e-439f-8b11-94319f46264b"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/На обработке регистратором/На обработке статусы/bd7ca503-dd1e-439f-8b11-94319f46264b"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1591,7 +1591,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/Работа завершена/Завершенные статусы/efc7fa1d-7624-48bb-95e4-dea64c4b97ef"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/Работа завершена/Завершенные статусы/efc7fa1d-7624-48bb-95e4-dea64c4b97ef"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1609,17 +1609,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/a2dca0ed-6979-4a13-8b0e-46f8907db3cb"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/a2dca0ed-6979-4a13-8b0e-46f8907db3cb"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/6d3c687f-9a24-40d2-8d48-c68a7cd5155e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/6d3c687f-9a24-40d2-8d48-c68a7cd5155e"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/5f5d37d1-0f83-4a8a-9035-a89693d9ce07"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/5f5d37d1-0f83-4a8a-9035-a89693d9ce07"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/6ab1c41a-d048-4a6d-84ff-b5a233228ca2"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/6ab1c41a-d048-4a6d-84ff-b5a233228ca2"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/2c1df049-52f3-4cf6-8145-46c3a542d700"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/2c1df049-52f3-4cf6-8145-46c3a542d700"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/ОРД/46383f2a-985a-401e-802a-5828733ab7e6"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/ОРД/46383f2a-985a-401e-802a-5828733ab7e6"/>
                                 </assocs>
                             </item>
                             <item name="cm:НД" type="lecm-arm:node">
@@ -1756,7 +1756,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/На подписании/На подписании статусы/df4039f5-6845-496e-914e-62d3b9ad5e83"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/На подписании/На подписании статусы/df4039f5-6845-496e-914e-62d3b9ad5e83"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1792,7 +1792,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/На обработке регистратором/На обработке статусы/135998f5-13ee-4c10-ba0b-3e0fef4e8e41"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/На обработке регистратором/На обработке статусы/135998f5-13ee-4c10-ba0b-3e0fef4e8e41"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1838,7 +1838,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/Работа завершена/Работа завершена статусы/721fc5b1-b6a5-406a-8e4b-3f39af04f720"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/Работа завершена/Работа завершена статусы/721fc5b1-b6a5-406a-8e4b-3f39af04f720"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -1856,15 +1856,15 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/62c45a14-e154-44ca-8805-bb270beb5ed3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/62c45a14-e154-44ca-8805-bb270beb5ed3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/1aa883ea-f83e-4b37-b9c4-891ee5563829"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/1aa883ea-f83e-4b37-b9c4-891ee5563829"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/f5f6c0a7-4944-484d-8e13-154396a9b341"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/f5f6c0a7-4944-484d-8e13-154396a9b341"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/d3f53c78-a8f3-4b25-ab32-ff6dbf50c1a4"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/d3f53c78-a8f3-4b25-ab32-ff6dbf50c1a4"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/НД/f3f92dbc-c156-4210-ba40-e9ad7dc0ead2"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/НД/f3f92dbc-c156-4210-ba40-e9ad7dc0ead2"/>
                                 </assocs>
                             </item>
                             <item name="cm:dc9a38c5-8d5a-4e43-954d-0794e2437a90" type="lecm-arm:field">
@@ -1980,19 +1980,19 @@
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Требующие визы"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/41e5fd16-2a09-4dcc-bb60-77732f43b352"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/41e5fd16-2a09-4dcc-bb60-77732f43b352"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/e7648a81-c399-4aa6-ae7f-e1edfeeb86be"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/e7648a81-c399-4aa6-ae7f-e1edfeeb86be"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/174415b5-0ee4-48b2-a881-bce43cdd84ba"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/174415b5-0ee4-48b2-a881-bce43cdd84ba"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/d874a4c9-2784-4cbe-b216-afdbfc2eb6d2"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/d874a4c9-2784-4cbe-b216-afdbfc2eb6d2"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/db1745a3-7071-4267-88cd-a718fe58f52f"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/db1745a3-7071-4267-88cd-a718fe58f52f"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/a089a537-4b60-48e8-ae64-94b7c3de5acd"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/a089a537-4b60-48e8-ae64-94b7c3de5acd"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По видам документов/dc47ddce-0d51-4003-9c3b-3b963f1b0d5c"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По видам документов/dc47ddce-0d51-4003-9c3b-3b963f1b0d5c"/>
                         </assocs>
                     </item>
                     <item name="cm:По состоянию" type="lecm-arm:node">
@@ -2043,7 +2043,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/Новые/Входящие/Входящие статусы/77870c11-6ea0-4861-a8c9-6cb7a6562c77"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/Новые/Входящие/Входящие статусы/77870c11-6ea0-4861-a8c9-6cb7a6562c77"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2078,7 +2078,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/Новые/Исходящие/Статусы/753af963-0a1d-4679-8acc-205f3dc227eb"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/Новые/Исходящие/Статусы/753af963-0a1d-4679-8acc-205f3dc227eb"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2114,7 +2114,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/Новые/Внутренние/Статусы/75c4b668-702f-42d2-aa03-c878065c017d"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/Новые/Внутренние/Статусы/75c4b668-702f-42d2-aa03-c878065c017d"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2179,7 +2179,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/Входящие/Статусы/ddcb47f5-0eb3-4cb0-89cc-a5e3544adebd"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/Входящие/Статусы/ddcb47f5-0eb3-4cb0-89cc-a5e3544adebd"/>
                                                 </assocs>
                                             </item>
                                             <item name="cm:Входящие статусы" type="lecm-arm:node">
@@ -2203,7 +2203,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/Входящие/Входящие статусы/ddcb47f5-0eb3-4cb0-89cc-a5e3544adebd"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/Входящие/Входящие статусы/ddcb47f5-0eb3-4cb0-89cc-a5e3544adebd"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2238,7 +2238,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/Исходящие/Статусы/ea225a72-f7d3-464b-87f5-dec35a923a3c"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/Исходящие/Статусы/ea225a72-f7d3-464b-87f5-dec35a923a3c"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2273,7 +2273,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/Внутренние/Статусы/fa969d26-786e-4625-baca-698e1528c552"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/Внутренние/Статусы/fa969d26-786e-4625-baca-698e1528c552"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2308,7 +2308,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/ОРД/Статусы/d1861ec5-38bb-4f89-b292-6c5f887311ce"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/ОРД/Статусы/d1861ec5-38bb-4f89-b292-6c5f887311ce"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2343,7 +2343,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/В работе/НД/Статусы/0045356f-a0e0-4b12-b87c-480db83d52d5"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/В работе/НД/Статусы/0045356f-a0e0-4b12-b87c-480db83d52d5"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2439,7 +2439,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По состоянию/На регистрации/Входящие/Статусы/2c42a34b-e7d1-4000-94a5-15978534ffe2"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По состоянию/На регистрации/Входящие/Статусы/2c42a34b-e7d1-4000-94a5-15978534ffe2"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2492,7 +2492,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/На регистрации/Исходящие/Статусы/77ab14ae-7729-4646-a6c1-8b47071cff68"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/На регистрации/Исходящие/Статусы/77ab14ae-7729-4646-a6c1-8b47071cff68"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2527,7 +2527,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/На регистрации/Внутренние/Статусы/33329759-e26d-4d4a-be97-cd8e35cf7aec"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/На регистрации/Внутренние/Статусы/33329759-e26d-4d4a-be97-cd8e35cf7aec"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2562,7 +2562,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/На регистрации/ОРД/Статусы/dfa3f1b5-8b64-41ac-a8ed-b5ee5483d4f7"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/На регистрации/ОРД/Статусы/dfa3f1b5-8b64-41ac-a8ed-b5ee5483d4f7"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2597,7 +2597,7 @@
                                                 </items>
                                                 <assocs>
                                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/На регистрации/НД/Статусы/373d9f99-2924-4efc-9da8-8feb1178b4c9"/>
+                                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/На регистрации/НД/Статусы/373d9f99-2924-4efc-9da8-8feb1178b4c9"/>
                                                 </assocs>
                                             </item>
                                         </items>
@@ -2770,19 +2770,19 @@
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/Вид документа"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/b300fe27-0a20-4143-a507-f397e93177b9"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/b300fe27-0a20-4143-a507-f397e93177b9"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/20178434-61e3-41d0-9607-501c32d2935e"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/20178434-61e3-41d0-9607-501c32d2935e"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/1fe0b72e-853b-4ef4-80d0-99ca98f8fa23"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/1fe0b72e-853b-4ef4-80d0-99ca98f8fa23"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/125e8a76-2cb2-418b-b5d2-f5f3ad37b8c9"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/125e8a76-2cb2-418b-b5d2-f5f3ad37b8c9"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/6529a280-5956-4818-bb34-d6ce8393474f"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/6529a280-5956-4818-bb34-d6ce8393474f"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/845f9b7b-7be7-40a4-a5b5-f6b5c4487170"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/845f9b7b-7be7-40a4-a5b5-f6b5c4487170"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Навигатор/По состоянию/f486098a-5402-4678-974b-7222aeaed4f2"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Навигатор/По состоянию/f486098a-5402-4678-974b-7222aeaed4f2"/>
                         </assocs>
                     </item>
                     <item name="cm:По тематикам" type="lecm-arm:node">
@@ -2854,25 +2854,25 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:node-child-rule-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/Тематики/eef7c43b-1147-4aff-b368-b95e8857a08e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/Тематики/eef7c43b-1147-4aff-b368-b95e8857a08e"/>
                                 </assocs>
                             </item>
                         </items>
                         <assocs>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/cd71d967-2fe5-4bac-947b-e2bae2bd538a"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/cd71d967-2fe5-4bac-947b-e2bae2bd538a"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/747d0759-38dd-48a7-a2a8-2ab2fd13cd6c"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/747d0759-38dd-48a7-a2a8-2ab2fd13cd6c"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/9f3c7ceb-de5b-4354-8756-4835ce4a163f"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/9f3c7ceb-de5b-4354-8756-4835ce4a163f"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/4d7a63f2-fcb6-4201-ae12-5197c6aa2b48"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/4d7a63f2-fcb6-4201-ae12-5197c6aa2b48"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/61aecf26-63eb-4752-b212-40f92c6d4c0b"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/61aecf26-63eb-4752-b212-40f92c6d4c0b"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/0144c7f6-a3b3-4985-9208-2c4f4369f9b4"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/0144c7f6-a3b3-4985-9208-2c4f4369f9b4"/>
                             <assoc type="lecm-arm:fields-assoc"
-                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/По тематикам/03ec0c28-bbc4-4c21-84e1-becc371db90f"/>
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД-old/По тематикам/03ec0c28-bbc4-4c21-84e1-becc371db90f"/>
                             <assoc type="lecm-arm:filters-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Фильтры АРМ/По принадлежности"/>
                             <assoc type="lecm-arm:filters-assoc"
@@ -2960,7 +2960,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/Статусы/92af1641-5605-4077-ad03-8acff6430a82"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/Статусы/92af1641-5605-4077-ad03-8acff6430a82"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:f399effd-940c-43b4-9c82-bc045ea82880" type="lecm-arm:field">
@@ -3027,19 +3027,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/90100e41-ab47-41ce-ac05-47fadbb40887"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/90100e41-ab47-41ce-ac05-47fadbb40887"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/c13970fc-ff32-4353-a93c-e0b87b774bc8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/c13970fc-ff32-4353-a93c-e0b87b774bc8"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/066be3f6-725b-4045-8e75-7fa0a31136f8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/066be3f6-725b-4045-8e75-7fa0a31136f8"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/e6897924-b4d8-44e8-8614-c41d6847b63e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/e6897924-b4d8-44e8-8614-c41d6847b63e"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/57a8f9bf-b813-49b7-b378-80e2461174da"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/57a8f9bf-b813-49b7-b378-80e2461174da"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/fcb16079-4c91-477f-a220-03885c5656e9"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/fcb16079-4c91-477f-a220-03885c5656e9"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Входящие/c1291457-925b-41b3-8dc3-bfa41c1bf351"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Входящие/c1291457-925b-41b3-8dc3-bfa41c1bf351"/>
                                 </assocs>
                             </item>
                             <item name="cm:Исходящие" type="lecm-arm:node">
@@ -3068,7 +3068,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/Статусы/99038bf3-664c-4b31-a68f-ed9f5c309f13"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/Статусы/99038bf3-664c-4b31-a68f-ed9f5c309f13"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:02aef0c3-248c-43b1-80e2-3f5964ec7df1" type="lecm-arm:field">
@@ -3126,17 +3126,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/a1d14b2b-212b-4aab-8128-2945150defd7"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/a1d14b2b-212b-4aab-8128-2945150defd7"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/999d0051-4a4c-4f16-bcc3-17c7bab368b7"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/999d0051-4a4c-4f16-bcc3-17c7bab368b7"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/233a12cc-e29c-436b-9a79-fd618e1c30f3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/233a12cc-e29c-436b-9a79-fd618e1c30f3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/9e199c77-dd4b-4e13-847b-0a0768b3f55e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/9e199c77-dd4b-4e13-847b-0a0768b3f55e"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/ff72718c-e587-4610-bd88-8e52a96c7670"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/ff72718c-e587-4610-bd88-8e52a96c7670"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Исходящие/02398d2f-d0c1-45c5-9716-5d4a1736a954"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Исходящие/02398d2f-d0c1-45c5-9716-5d4a1736a954"/>
                                 </assocs>
                             </item>
                             <item name="cm:Внутренние" type="lecm-arm:node">
@@ -3165,7 +3165,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/Статусы/55ce63d7-d678-460c-96d3-2b9ed4c117dc"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/Статусы/55ce63d7-d678-460c-96d3-2b9ed4c117dc"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:60417ec2-4786-4c31-8b43-735d29919cec" type="lecm-arm:field">
@@ -3233,19 +3233,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/196177be-28e7-439d-ab09-f206e2f60245"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/196177be-28e7-439d-ab09-f206e2f60245"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/c5348ac8-6654-4595-acb5-8c5d414793cd"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/c5348ac8-6654-4595-acb5-8c5d414793cd"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/ecfc4e6d-9416-4b44-ab64-1b2d503ee698"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/ecfc4e6d-9416-4b44-ab64-1b2d503ee698"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/ddebc9f8-30ac-4297-8ecf-9448a689eec3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/ddebc9f8-30ac-4297-8ecf-9448a689eec3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/b5f99fbf-5c1f-4d4d-985c-3206e1a44ff6"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/b5f99fbf-5c1f-4d4d-985c-3206e1a44ff6"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/da137710-3593-40cf-bf46-973d850e5580"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/da137710-3593-40cf-bf46-973d850e5580"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/Внутренние/e647d9a1-4729-441b-86e3-d7408fef6ad8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/Внутренние/e647d9a1-4729-441b-86e3-d7408fef6ad8"/>
                                 </assocs>
                             </item>
                             <item name="cm:ОРД" type="lecm-arm:node">
@@ -3274,7 +3274,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/Статусы/4acea322-4d20-4f00-829b-3d1ce8ce94cb"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/Статусы/4acea322-4d20-4f00-829b-3d1ce8ce94cb"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:c8c68afb-2c66-433e-b4ef-0b680a2b5824" type="lecm-arm:field">
@@ -3333,17 +3333,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/f15146ab-5a7a-4f97-88f0-64290e619bba"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/f15146ab-5a7a-4f97-88f0-64290e619bba"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/7602733a-75b1-4e6e-ad35-d9b576fc5f35"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/7602733a-75b1-4e6e-ad35-d9b576fc5f35"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/7d8f7478-5b77-4530-92ef-5cec200b7218"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/7d8f7478-5b77-4530-92ef-5cec200b7218"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/613a4cfd-22d3-4335-aa5d-0088d8df170d"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/613a4cfd-22d3-4335-aa5d-0088d8df170d"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/173c7171-9e5b-49b7-8156-2b47de989952"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/173c7171-9e5b-49b7-8156-2b47de989952"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/ОРД/7c452430-5a60-4d5a-9e1a-694e05d7b2bc"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/ОРД/7c452430-5a60-4d5a-9e1a-694e05d7b2bc"/>
                                 </assocs>
                             </item>
                             <item name="cm:НД" type="lecm-arm:node">
@@ -3380,7 +3380,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/Статусы/7a1e2dc3-e5b7-4a27-862d-da741eb78fc9"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/Статусы/7a1e2dc3-e5b7-4a27-862d-da741eb78fc9"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:b7cd33fb-d2ad-43b6-8bf5-d079d4342204" type="lecm-arm:field">
@@ -3429,15 +3429,15 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/cf4def57-654a-42da-af2a-4f7d94b8b1f0"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/cf4def57-654a-42da-af2a-4f7d94b8b1f0"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/72a1e0ae-b834-4118-933f-fd2f6e3b0d8e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/72a1e0ae-b834-4118-933f-fd2f6e3b0d8e"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/4937d0c9-f439-4947-a449-1d115ab892d5"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/4937d0c9-f439-4947-a449-1d115ab892d5"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/0e9458c7-295f-4683-b924-9852163791cc"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/0e9458c7-295f-4683-b924-9852163791cc"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/На регистрации/НД/a17b8ae1-832e-41e6-bc53-92977bd72caf"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/На регистрации/НД/a17b8ae1-832e-41e6-bc53-92977bd72caf"/>
                                 </assocs>
                             </item>
                         </items>
@@ -3483,7 +3483,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/Статус зарегистрирован/b4ff8b96-1dcc-4b61-8b49-4f7d3c38151f"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/Статус зарегистрирован/b4ff8b96-1dcc-4b61-8b49-4f7d3c38151f"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:a0fffaaa-cc9f-45f9-a369-e4996cb57379" type="lecm-arm:field">
@@ -3550,19 +3550,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/89978622-f3e6-4ea7-a8c5-5902237d58b5"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/89978622-f3e6-4ea7-a8c5-5902237d58b5"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/08ccffe0-cefe-4880-b02d-418911943165"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/08ccffe0-cefe-4880-b02d-418911943165"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/1bc2a2a1-dec9-4d0e-a52f-25c3ac49fe03"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/1bc2a2a1-dec9-4d0e-a52f-25c3ac49fe03"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/9bc8b055-37a9-4527-8054-027eafe75876"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/9bc8b055-37a9-4527-8054-027eafe75876"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/56b42422-cbc9-4620-9ef6-f0acca7f1a52"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/56b42422-cbc9-4620-9ef6-f0acca7f1a52"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/19c7525e-5ffc-447b-b206-7b9a54656f7d"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/19c7525e-5ffc-447b-b206-7b9a54656f7d"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Входящие/c3d77035-39e2-468b-b1f4-61db1ea5afcd"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Входящие/c3d77035-39e2-468b-b1f4-61db1ea5afcd"/>
                                 </assocs>
                             </item>
                             <item name="cm:Исходящие" type="lecm-arm:node">
@@ -3598,7 +3598,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/Статус зарегистрирован/2c63d4ac-25ca-4d10-a1eb-7e7a37aecdf3"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/Статус зарегистрирован/2c63d4ac-25ca-4d10-a1eb-7e7a37aecdf3"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:d33c7144-61b6-41fe-b056-c65b98a341ff" type="lecm-arm:field">
@@ -3656,17 +3656,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/f41bb16a-46fa-4d9e-ae46-1b724da317f3"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/f41bb16a-46fa-4d9e-ae46-1b724da317f3"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/c39fcbd8-16b8-47af-aeaf-2cc1ed1f2ccd"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/c39fcbd8-16b8-47af-aeaf-2cc1ed1f2ccd"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/4794e79c-ac5d-4dd4-a3d9-79f17e934283"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/4794e79c-ac5d-4dd4-a3d9-79f17e934283"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/20ad0f71-c915-4a52-97f1-35bf12b224dd"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/20ad0f71-c915-4a52-97f1-35bf12b224dd"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/aee1b1e1-e16d-4a7b-8acc-2ebdbaff6ddc"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/aee1b1e1-e16d-4a7b-8acc-2ebdbaff6ddc"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Исходящие/af49f3f5-76c5-41a5-9edc-76b67dfd48ad"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Исходящие/af49f3f5-76c5-41a5-9edc-76b67dfd48ad"/>
                                 </assocs>
                             </item>
                             <item name="cm:Внутренние" type="lecm-arm:node">
@@ -3702,7 +3702,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/Статус зарегистрирован/9c93d71c-1be8-4902-810e-926e7d70d754"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/Статус зарегистрирован/9c93d71c-1be8-4902-810e-926e7d70d754"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:9b606626-c1a8-40d7-bd95-1e2264756004" type="lecm-arm:field">
@@ -3770,19 +3770,19 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/7f1cef5d-0c8b-4edc-be35-978fb21c9dd2"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/7f1cef5d-0c8b-4edc-be35-978fb21c9dd2"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/77a83a58-bdb7-4f6b-94bf-e801c5f5c1a7"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/77a83a58-bdb7-4f6b-94bf-e801c5f5c1a7"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/9e3254de-1233-43b2-b3f0-bc3c9217d2fb"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/9e3254de-1233-43b2-b3f0-bc3c9217d2fb"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/1282355b-b1d5-44e0-bd8a-1fb3e5f4bc5f"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/1282355b-b1d5-44e0-bd8a-1fb3e5f4bc5f"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/caa78bd5-b0b9-4cdc-8376-128bcebd4755"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/caa78bd5-b0b9-4cdc-8376-128bcebd4755"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/03a3fbe4-9b9c-4377-9cd3-792ef66fa381"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/03a3fbe4-9b9c-4377-9cd3-792ef66fa381"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/Внутренние/ab7b0cf4-e13b-40cb-b20e-b6801297730e"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/Внутренние/ab7b0cf4-e13b-40cb-b20e-b6801297730e"/>
                                 </assocs>
                             </item>
                             <item name="cm:ОРД" type="lecm-arm:node">
@@ -3810,7 +3810,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/Статус зарегистрирован/b5b306e7-ab32-461a-a297-ae39de797877"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/Статус зарегистрирован/b5b306e7-ab32-461a-a297-ae39de797877"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:0c598006-adeb-4fff-82fd-8f926270bf41" type="lecm-arm:field">
@@ -3868,17 +3868,17 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/37e668da-3a9d-4c09-87c6-aafb683f17ee"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/37e668da-3a9d-4c09-87c6-aafb683f17ee"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/e3430ea5-f222-4330-9092-e4629ffaeba8"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/e3430ea5-f222-4330-9092-e4629ffaeba8"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/3b5ed2cc-2199-450b-8c92-e95d49eda750"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/3b5ed2cc-2199-450b-8c92-e95d49eda750"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/44778772-d620-41b1-9f98-8feb3f595e1d"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/44778772-d620-41b1-9f98-8feb3f595e1d"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/42144616-da53-4366-aea5-922cc5612037"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/42144616-da53-4366-aea5-922cc5612037"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/ОРД/8161af02-89dc-4059-8f7e-6ba86c3f89f6"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/ОРД/8161af02-89dc-4059-8f7e-6ba86c3f89f6"/>
                                 </assocs>
                             </item>
                             <item name="cm:НД" type="lecm-arm:node">
@@ -3906,7 +3906,7 @@
                                         </items>
                                         <assocs>
                                             <assoc type="lecm-arm:node-child-rule-assoc"
-                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/Статус зарегистрирован/4338dfe4-8b78-4d4d-b1ac-d34cec4becc6"/>
+                                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/Статус зарегистрирован/4338dfe4-8b78-4d4d-b1ac-d34cec4becc6"/>
                                         </assocs>
                                     </item>
                                     <item name="cm:c8853ff0-98ca-4bf7-8825-851b0bc4f4d7" type="lecm-arm:field">
@@ -3953,15 +3953,15 @@
                                 </items>
                                 <assocs>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/e8ed3625-5d58-4812-ae4a-47a977765d41"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/e8ed3625-5d58-4812-ae4a-47a977765d41"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/285ab818-792a-4ce2-bd01-c9d5f2bc7a65"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/285ab818-792a-4ce2-bd01-c9d5f2bc7a65"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/2cf7be29-9f9e-4b88-ace9-d645e3479c8f"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/2cf7be29-9f9e-4b88-ace9-d645e3479c8f"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/4944feef-3850-4e95-a47a-458b14447ef5"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/4944feef-3850-4e95-a47a-458b14447ef5"/>
                                     <assoc type="lecm-arm:fields-assoc"
-                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/Зарегистрирован/НД/82ecf8de-0c8e-4f8f-84ea-73bb660d2bbb"/>
+                                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/Зарегистрирован/НД/82ecf8de-0c8e-4f8f-84ea-73bb660d2bbb"/>
                                 </assocs>
                             </item>
                         </items>
@@ -4027,19 +4027,19 @@
                     <assoc type="lecm-arm:business-roles-assoc"
                            path="/Business platform/LECM/Сервис Справочники/Бизнес роли/Внутренние. Регистратор"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/f65dfd06-dc94-4d6e-96c4-7eeefae24099"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/f65dfd06-dc94-4d6e-96c4-7eeefae24099"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/e6481c0d-b8c4-4a9c-a688-39a27763e372"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/e6481c0d-b8c4-4a9c-a688-39a27763e372"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/15302e54-1fa6-4ecc-aef0-91b048c018a7"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/15302e54-1fa6-4ecc-aef0-91b048c018a7"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/fffd0e04-0b09-411c-b685-71c51d14a872"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/fffd0e04-0b09-411c-b685-71c51d14a872"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/58967694-f37a-4bc8-a7e6-29b5d9de0177"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/58967694-f37a-4bc8-a7e6-29b5d9de0177"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/964e040c-604f-4076-a417-d9e3dd0f1f9b"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/964e040c-604f-4076-a417-d9e3dd0f1f9b"/>
                     <assoc type="lecm-arm:fields-assoc"
-                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД 2/Работа регистратора/ba29ee8f-2442-42e2-abfa-6bffe0c6cf5c"/>
+                           path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Работа регистратора/ba29ee8f-2442-42e2-abfa-6bffe0c6cf5c"/>
                 </assocs>
             </item>
         </items>
