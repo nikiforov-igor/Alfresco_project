@@ -15,7 +15,7 @@
 }
 .metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item,
 .metadata-form .set .viewmode-field .viewmode-value > .association-auto-complete-selected-item-even {
-    display: inline-block;
+    display: block;
     width: 100%;
 }
 
@@ -59,6 +59,8 @@
 .yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value {
     width: auto;
 	float: none;
+    height: auto;
+    min-height: 28px;
 }
 
 .yui-skin-lecmTheme div.metadata-form div.set div.yui-g div.form-field div.viewmode-field textarea.viewmode-value,

@@ -424,7 +424,11 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
-                    <field id="lecm-ord-table-structure:execution-date" set="item2"/>
+                    <field id="lecm-ord-table-structure:execution-date" set="item2">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-ord-table-structure:execution-date-real" set="item2">
                         <control template="/org/alfresco/components/form/controls/info.ftl"/>
                     </field>
@@ -541,7 +545,11 @@
                         </control>
                     </field>
                     <field id="lecm-ord-table-structure:executor-assoc" set="item2"/>
-                    <field id="lecm-ord-table-structure:execution-date" set="item2"/>
+                    <field id="lecm-ord-table-structure:execution-date" set="item2">
+                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                            <control-param name="minLimitCurrentDate">true</control-param>
+                        </control>
+                    </field>
                     <field id="lecm-ord-table-structure:item-comment" set="item3">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
