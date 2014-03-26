@@ -440,9 +440,16 @@
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                             </item>
                             <item name="cm:af32f35b-63ba-46b3-9653-9a4dea916304" type="lecm-arm:field">
-                                <property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
                                 <property name="cm:name"><![CDATA[af32f35b-63ba-46b3-9653-9a4dea916304]]></property>
+                                <property name="lecm-arm:field-title"><![CDATA[Статус]]></property>
                                 <property name="lecm-arm:field-name"><![CDATA[lecm-statemachine:status]]></property>
+                                <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
+                                <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
+                            </item>
+                            <item name="cm:40ec08b4-454d-4a8f-b63b-33ab36209c1d" type="lecm-arm:field">
+                                <property name="lecm-arm:field-title"><![CDATA[Тип]]></property>
+                                <property name="cm:name"><![CDATA[fe7a2fd5-2105-443a-9a60-95fcbfed1f88]]></property>
+                                <property name="lecm-arm:field-name"><![CDATA[lecm-document:doc-type]]></property>
                                 <property name="lecm-arm:field-format-string"><![CDATA[]]></property>
                                 <property name="lecm-arm:field-sortable"><![CDATA[true]]></property>
                             </item>
@@ -452,6 +459,8 @@
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/ab97571a-4c0a-434e-a725-c2810eb76721"/>
                             <assoc type="lecm-arm:fields-assoc"
                                    path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/af32f35b-63ba-46b3-9653-9a4dea916304"/>
+                            <assoc type="lecm-arm:fields-assoc"
+                                   path="/Business platform/LECM/Сервис АРМ/Настройки АРМ/АРМ СЭД/Моя работа/Срочная работа/fe7a2fd5-2105-443a-9a60-95fcbfed1f88"/>
                         </assocs>
                     </item>
                     <item name="cm:Документы в работе" type="lecm-arm:node">
