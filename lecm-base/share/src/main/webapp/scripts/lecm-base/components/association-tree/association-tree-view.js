@@ -1029,19 +1029,17 @@ LogicECM.module = LogicECM.module || {};
                     return;
                 }
 
-                template += '<h3 class="item-name">{name}</h3>';
+                if (oRecord.getData("type") == "lecm-orgstr:employee") {
+                    template += '<h3 class="item-name">'+scope.getEmployeeView("{nodeRef}","{name}", true)+'</h3>';
+                } else {
+                    template += '<h3 class="item-name">{name}</h3>';
+                }
 
                 if (!scope.options.compactMode)
                 {
                     template += '<div class="description">{description}</div>';
                 }
-
-	            if (oRecord.getData("type") == "lecm-orgstr:employee")
-	            {
-		            elCell.innerHTML = scope.getEmployeeView(oRecord.getData("nodeRef"), scope.renderItem(oRecord.getData(), template));
-	            } else {
-		            elCell.innerHTML = scope.renderItem(oRecord.getData(), template);
-	            }
+	            elCell.innerHTML = scope.renderItem(oRecord.getData(), template);
             };
         },
 
