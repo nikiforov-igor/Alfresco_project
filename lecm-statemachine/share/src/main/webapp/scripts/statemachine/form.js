@@ -136,7 +136,7 @@ LogicECM.module = LogicECM.module || {};
 			var templateRequestParams;
 			var formWidth = "55em";
 			if (action.isForm) {
-				formWidth = "80em";
+				formWidth = "84em";
 				templateUrl += "lecm/components/form";
 				templateRequestParams = {
 					itemKind: "type",
