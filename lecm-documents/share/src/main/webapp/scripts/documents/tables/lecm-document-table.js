@@ -90,7 +90,6 @@ LogicECM.module = LogicECM.module || {};
 							successCallback: {
 								fn: function (response) {
 									this.tableData = response.json;
-
 									this.createToolbar();
 									this.createDataGrid();
                                     this.externalCreateButton();
@@ -103,7 +102,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			createToolbar: function() {
-				if (this.tableData != null && this.tableData.rowType != null && this.options.toolbarId != null) {
+				if (this.tableData != null && this.tableData.rowType != null && this.options.toolbarId != null && this.options.mode=="edit") {
 					new LogicECM.module.Base.Toolbar(null, this.options.toolbarId).setMessages(this.options.messages).setOptions({
 						bubblingLabel: this.options.bubblingLabel,
 						itemType: this.tableData.rowType,
@@ -123,7 +122,7 @@ LogicECM.module = LogicECM.module || {};
 				if (this.tableData != null && this.tableData.rowType != null) {
 					var actions = [];
 					var actionType = "datagrid-action-link-" + this.options.bubblingLabel;
-					if (!this.options.disabled) {
+					if (!this.options.disabled && this.options.mode=="edit") {
 						actions.push({
 							type: actionType,
 							id: "onActionEdit",
@@ -139,7 +138,7 @@ LogicECM.module = LogicECM.module || {};
 					}
                     var splitActionAt = actions.length;
 
-                    if (!this.options.isTableSortable && this.options.showActions) {
+                    if (!this.options.isTableSortable && this.options.showActions && this.options.mode=="edit" && !this.options.disabled) {
                         var otherActions = [];
                         otherActions.push({
                             type: actionType,

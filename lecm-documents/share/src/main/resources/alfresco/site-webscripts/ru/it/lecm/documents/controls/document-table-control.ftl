@@ -89,7 +89,7 @@
 			});
 })();
 //]]></script>
-<#if toolbar == "true">
+<#if toolbar == "true" && form.mode?string=="edit">
 <div id="${toolbarId}">
 	<@comp.baseToolbar toolbarId true true false>
         <#if showCreateButton>
