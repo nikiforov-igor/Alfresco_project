@@ -55,6 +55,8 @@
                 setTimeout(function () {
                     LogicECM.module.Base.Util.setHeight();
                 }, 10);
+
+                YAHOO.Bubbling.fire("activeTabChange", e);
             }
 
             tabs.addListener('beforeActiveTabChange', onBeforeActive);
