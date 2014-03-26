@@ -1246,7 +1246,7 @@ LogicECM.module = LogicECM.module || {};
 
 		            if (this.options.itemType == "lecm-orgstr:employee") {
 			            Dom.get(fieldId).innerHTML
-				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName) +
+				            += '<div class="' + divClass + '"> ' + this.getEmployeeView(items[i].nodeRef, displayName, true) +
 							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            } else {
 			            Dom.get(fieldId).innerHTML
@@ -1277,7 +1277,7 @@ LogicECM.module = LogicECM.module || {};
 
 			if (this.options.itemType == "lecm-orgstr:employee") {
 				Dom.get(fieldId).innerHTML
-					+= '<div class="' + divClass + '"> ' + this.getEmployeeView(item.nodeRef, displayName) +
+					+= '<div class="' + divClass + '"> ' + this.getEmployeeView(item.nodeRef, displayName, true) +
 					(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(item.nodeRef) : ' ') + this.getRemoveButtonHTML(item) + '</div>';
 			} else {
 				Dom.get(fieldId).innerHTML
@@ -1292,8 +1292,12 @@ LogicECM.module = LogicECM.module || {};
 			}
 		},
 
-		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue) {
-			return "<span class='person'><a href='javascript:void(0);' title='" + displayValue + "' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+		getEmployeeView: function DataGrid_getSortFunction(employeeNodeRef, displayValue, showTitle) {
+			var title = "";
+			if (showTitle) {
+				title = "title='" + displayValue + "'";
+			}
+			return "<span class='person'><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 		},
 
         getDefaultView: function (displayValue) {
