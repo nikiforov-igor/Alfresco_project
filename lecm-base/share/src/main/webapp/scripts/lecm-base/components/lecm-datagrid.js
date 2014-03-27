@@ -138,6 +138,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 usePagination: false,
 
+                disableDynamicPagination: false,
+
                 showExtendSearchBlock: true,
 
                 /**
@@ -1322,7 +1324,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         generateRequest: this._generatePaginatorRequest.bind(this),
                         initialLoad: false,
-                        dynamicData: this.options.usePagination,
+                        dynamicData: this.options.usePagination && !this.options.disableDynamicPagination,
                         "MSG_EMPTY": this.msg("message.empty"),
                         "MSG_ERROR": this.msg("message.error"),
                         "MSG_LOADING" : this.msg("message.loading"),
