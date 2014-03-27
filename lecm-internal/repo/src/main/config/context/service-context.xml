@@ -151,4 +151,33 @@
             <value>0 0 3 */1 * ?</value>
         </property>
     </bean>
+
+    <bean id="internalCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-document:title</value>
+                <value>lecm-eds-document:summaryContent</value>
+                <value>lecm-document-aspects:is-on-control</value>
+                <value>lecm-internal:response-date</value>
+                <value>lecm-internal:all-answers-complete</value>
+                <value>lecm-eds-document:execution-date</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-eds-document:file-register-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+                <value>lecm-internal:recipients-assoc</value>
+                <value>lecm-internal:doc-type-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="internalCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-internal:document" value-ref="internalCopySettings"/>
+            </map>
+        </property>
+    </bean>
 </beans>
