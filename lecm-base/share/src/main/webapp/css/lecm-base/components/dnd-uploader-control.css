@@ -10,6 +10,7 @@
 }
 .yui-panel .dnd-uploader ul.attachments-list {
 	float: left;
+	margin-top: 15px;
 }
 .dnd-uploader ul.attachments-list li img {
     margin: 0 5px;

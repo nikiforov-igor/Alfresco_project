@@ -39,7 +39,7 @@
     margin-top: 5px;
 }
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field > div.autocomplete-block:not(.datagrid):not(.viewmode-field):not(.subscribe),
-.yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe),
+.yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.uploader-block),
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-field input[type="checkbox"],
 .yui-skin-lecmTheme div.yui-panel.metadata-form-edit.lecm-errands_document form div.form-fields div.set > span.yui-button {
     margin-left: 140px;
@@ -62,4 +62,12 @@
 /* Форма атрибутивного поиска */
 #searchBlock  div.form-field input.formsCheckBox {
     margin-left: 160px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit.lecm-errands_document div.set > div.form-field.dnd-uploader > div.uploader-block  {
+	margin-left: 0;
+}
+
+.form-container.lecm-errands_document .datepicker {
+	margin-top: -100px;
 }
