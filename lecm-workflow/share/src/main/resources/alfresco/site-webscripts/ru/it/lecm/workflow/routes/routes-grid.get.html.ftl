@@ -7,6 +7,7 @@
 var datagrid = new LogicECM.module.Routes.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
+    disableDynamicPagination: true,
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
 	bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,

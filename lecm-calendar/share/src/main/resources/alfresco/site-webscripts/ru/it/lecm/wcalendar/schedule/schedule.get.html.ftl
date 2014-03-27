@@ -20,6 +20,7 @@ function notDefaultSchedule(oData) {
 var datagrid = new LogicECM.module.WCalendar.Schedule.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
+    disableDynamicPagination: true,
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL,

@@ -8,6 +8,7 @@
 var datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
+    disableDynamicPagination:true,
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
     bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL,

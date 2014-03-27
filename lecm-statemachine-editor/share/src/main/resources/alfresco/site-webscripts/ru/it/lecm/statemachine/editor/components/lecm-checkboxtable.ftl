@@ -33,6 +33,7 @@
         YAHOO.util.Event.onDOMReady(function (){
             var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
                 usePagination: ${usePagination?string},
+                disableDynamicPagination: true,
                 showExtendSearchBlock: false,
                 actions: [{
                     type: "datagrid-action-link-${containerId}",
