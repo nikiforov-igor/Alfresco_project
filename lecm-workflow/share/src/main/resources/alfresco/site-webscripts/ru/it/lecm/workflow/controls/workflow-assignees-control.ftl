@@ -101,9 +101,9 @@
 
 		var loader = new YAHOO.util.YUILoader({
 			require: [
-				"lecmDatagrid",
-				"lecmWorkflowAssigneesControl",
-				"lecmWorkflowAssigneesControlCSS"
+				'lecmDatagrid',
+				'lecmWorkflowAssigneesControl',
+				'lecmWorkflowAssigneesControlCSS'
 			],
 			skin: {}
 		});

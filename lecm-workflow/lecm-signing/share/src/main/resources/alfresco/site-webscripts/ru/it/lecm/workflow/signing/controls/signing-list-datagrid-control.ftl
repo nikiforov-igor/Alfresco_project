@@ -13,8 +13,8 @@
 	function init() {
 		var loader = new YAHOO.util.YUILoader({
 			require: [
-				"lecmDatagrid",
-				"lecmSigningListDataGridControl"
+				'lecmDatagrid',
+				'lecmSigningListDataGridControl'
 			],
 			skin: {}
 		});
@@ -36,15 +36,15 @@
 	}
 
 	function createDatagrid() {
-		var controlId = "${controlId}";
-		LogicECM.CurrentModules[controlId] = new LogicECM.module.Signing.SigningListDatagridControl(controlId, "${itemId}");
+		var controlId = '${controlId}';
+		LogicECM.CurrentModules[controlId] = new LogicECM.module.Signing.SigningListDatagridControl(controlId, '${itemId}');
 		LogicECM.CurrentModules[controlId].setMessages(${messages});
 		LogicECM.CurrentModules[controlId].setOptions({
 			usePagination: false,
 			datagridFormId: '${field.control.params.datagridFormId!"datagrid"}',
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
-			bubblingLabel: "SigningListDatagridControl",
+			bubblingLabel: 'SigningListDatagridControl',
 			expandable: false,
 			showActionColumn: false
 		});
