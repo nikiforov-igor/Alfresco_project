@@ -16,3 +16,10 @@
 	border-style: solid;
 	border-radius: 3px;
 }
+
+.arm-metadata div.association-auto-complete-selected-item > span > a,
+.arm-metadata div.association-auto-complete-selected-item-even > span > a,
+.arm-metadata div.association-auto-complete-selected-item > span.not-person,
+.arm-metadata div.association-auto-complete-selected-item-even > span.not-person {
+	max-width: 320px;
+}
