@@ -55,11 +55,10 @@
 	width: 100%;
 }
 
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column div.date-block + a,
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .two-column input.date-entry + a {
-	position: absolute;
-	bottom: 8px;
-	left: 160px;
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.set div.form-field > input.date-entry ~ div.format-info {
+	height: 10px;
+	margin-top: 55px;
+	position: static;
 }
 
 .yui-skin-lecmTheme .yui-panel .from-with-preview .two-column div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span > a,
@@ -122,10 +121,6 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.set div.yui-g div.yui-u {
 	padding-bottom: 0;
 	padding-top: 0;
-}
-
-.yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > input.date-entry ~ div.format-info {
-	top: 55px;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview .web-preview .previewer {
