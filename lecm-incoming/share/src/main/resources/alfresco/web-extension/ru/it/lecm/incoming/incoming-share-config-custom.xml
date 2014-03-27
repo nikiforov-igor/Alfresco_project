@@ -197,8 +197,8 @@
 			        <show id="lecm-document-aspects:registrator-assoc" force="true"/>
 		        </field-visibility>
 		        <appearance>
-			        <field id="lecm-eds-document:recipients-assoc" label-id="На исполнение сотруднику"/>
-			        <field id="lecm-eds-document:reviewers-assoc" label-id="Рассмотрел" />
+			        <field id="lecm-eds-document:recipients-assoc" label-id="Исполнитель"/>
+			        <field id="lecm-eds-document:reviewers-assoc" label-id="Рассматривающий" />
 			        <field id="lecm-document-aspects:registrator-assoc" label-id="Регистратор" />
 		        </appearance>
 	        </form>
