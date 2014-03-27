@@ -5,8 +5,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.ND = LogicECM.module.ND || {};
 
-var YUITooltip;
-
 (function () {
 	var loader = new YAHOO.util.YUILoader({
 		require: ["errorTooltipStyle", "container"],
@@ -19,6 +17,8 @@ var YUITooltip;
 	});
 	loader.insert();
 })();
+
+var YUITooltip = null;
 
 LogicECM.module.ND.dateIntervalValidation =
 	function ND_dateIntervalValidation(field, args, event, form, silent, message) {
@@ -50,7 +50,7 @@ LogicECM.module.ND.dateIntervalValidation =
 
 		var beginValue = beginField.value;
 		var endValue = endField.value;
-
+		
 		if (beginValue && endValue) {
 			var endDate = new Date(endValue);
 			var beginDate = new Date(beginValue);
@@ -67,7 +67,10 @@ LogicECM.module.ND.dateIntervalValidation =
 			} else {
 				visibleBeginField.style.background = 'white';
 				visibleEndField.style.background = 'white';
-				YUITooltip.destroy();
+				if(YUITooltip != null) {
+					YUITooltip.destroy();
+					YUITooltip = null;
+				}
 			}
 		}
 		return valid;
