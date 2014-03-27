@@ -116,7 +116,7 @@
 				<appearance>
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.schedule.form.set.work-time" />
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
-						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/time-picker.ftl">
 							<control-param name="style">position: relative;</control-param>
 						</control>
 						<constraint-handlers>
@@ -125,7 +125,7 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:std-end" mandatory="true" set="time">
-						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/time-picker.ftl">
 							<control-param name="style">position: relative;</control-param>
 						</control>
 						<constraint-handlers>
@@ -198,7 +198,7 @@
 						</control>
 					</field>
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
-						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/time-picker.ftl">
 							<control-param name="style">position: relative;</control-param>
 						</control>
 						<constraint-handlers>
@@ -207,7 +207,7 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:std-end" mandatory="true" set="time">
-						<control template="/ru/it/lecm/wcalendar/controls/time-picker.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/time-picker.ftl">
 							<control-param name="style">position: relative;</control-param>
 						</control>
 						<constraint-handlers>
