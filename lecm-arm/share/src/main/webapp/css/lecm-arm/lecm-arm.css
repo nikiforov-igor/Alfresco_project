@@ -23,3 +23,13 @@
 .arm-metadata div.association-auto-complete-selected-item-even > span.not-person {
 	max-width: 320px;
 }
+
+.arm-settings-fields-control span.create-field-button .yui-button .first-child {
+	background: url(/share/res/images/lecm-arm/create-field.png) no-repeat center center;
+	width: 26px;
+}
+
+.arm-settings-fields-control span.add-from-model-button .yui-button .first-child {
+	background: url(/share/res/images/lecm-arm/add-from-model.png) no-repeat center center;
+	width: 26px;
+}

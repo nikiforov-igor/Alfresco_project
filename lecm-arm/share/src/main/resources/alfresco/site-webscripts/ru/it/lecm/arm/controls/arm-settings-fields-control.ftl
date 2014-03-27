@@ -16,7 +16,7 @@
 	</div>
 <#else>
 	<label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-	<div id="${controlId}" class="object-finder with-two-buttons">
+	<div id="${controlId}" class="object-finder with-two-buttons arm-settings-fields-control">
 
 		<div id="${controlId}-currentValueDisplay" class="current-values"></div>
 
@@ -26,12 +26,12 @@
 			<input type="hidden" id="${controlId}-selectedItems"/>
 
 			<div id="${controlId}-itemGroupActions" class="show-picker">
-				<span class="create-new-button">
-                    <input type="button" id="${controlId}-create-new-button" name="-" value=""/>
+				<span class="create-field-button">
+                    <input type="button" id="${controlId}-create-new-button" name="-" value="" title="${msg('title.field.create')}"/>
                 </span>
 
-				<span class="create-new-button">
-                    <input type="button" id="${controlId}-add-from-model-button" name="-" value=""/>
+				<span class="add-from-model-button">
+                    <input type="button" id="${controlId}-add-from-model-button" name="-" value="" title="${msg('title.field.addFromModel')}"/>
                 </span>
 			</div>
 
