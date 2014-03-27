@@ -1,24 +1,7 @@
 <#assign formId=args.htmlid?js_string + "-form">
 
-<script type="text/javascript">//<![CDATA[
-	if (!Array.prototype.indexOf) {
-		Array.prototype.indexOf = function(needle) {
-			for (var i = 0; i < this.length; i++) {
-				if (this[i] === needle) {
-					return i;
-				}
-			}
-			return -1;
-		};
-	}
-
-	YAHOO.util.Event.onContentReady("${formId}", function () {
-		var formatInfosArray = YAHOO.util.Dom.getElementsByClassName('format-info', 'div');
-		for (var i = 0; i < formatInfosArray.length; i++) {
-			var formatInfo = formatInfosArray[i];
-			formatInfo.style.display = "none";
-		}
-	}, true);
+<script type="text/javascript">
+(function() {
 
 	YAHOO.Bubbling.on("reiterationRulesUpdated", LogicECM.module.WCalendar.Schedule.reiterationRulesValidation);
 
@@ -48,9 +31,7 @@
 		}
 	});
 
-	YAHOO.util.Event.onContentReady("reiteration-control-container", function() {
-		fireElementChanged();
-	});
+	YAHOO.util.Event.onContentReady("reiteration-control-container", fireElementChanged);
 
 	function fireElementChanged() {
 		YAHOO.Bubbling.fire("reiterationRulesUpdated", this);
@@ -109,7 +90,8 @@
 
 		fireElementChanged();
 	}
-//]]></script>
+})();
+</script>
 
 <div class="control-container" id="reiteration-control-container">
 	<#-- TODO: добавить локализацию для дней недели -->

@@ -1,4 +1,4 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
+if (typeof LogicECM === "undefined" || !LogicECM) {
 	var LogicECM = {};
 }
 

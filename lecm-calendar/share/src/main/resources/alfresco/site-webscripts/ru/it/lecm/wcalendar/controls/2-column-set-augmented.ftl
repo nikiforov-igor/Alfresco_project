@@ -1,6 +1,6 @@
 <style>
 	.lecm-2-column-set-augmented label {
-		width: initial !important;
+		width: auto !important;
 	}
 
 	.lecm-2-column-set-augmented .yui-g .yui-u {

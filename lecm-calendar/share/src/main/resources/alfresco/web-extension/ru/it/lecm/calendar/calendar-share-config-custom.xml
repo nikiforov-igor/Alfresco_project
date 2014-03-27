@@ -134,34 +134,40 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:sched-employee-link-assoc" mandatory="true">
-						<control template="/ru/it/lecm/wcalendar/controls/double-picker-control.ftl">
-							<control-param name="startLocation1">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
-							<control-param name="startLocation2">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="pickerLabel1">label.schedule.form.picker.orgstructure</control-param>
-							<control-param name="pickerLabel2">label.schedule.form.picker.employee</control-param>
-							<control-param name="itemType1">lecm-orgstr:organization-unit</control-param>
-							<control-param name="itemType2">lecm-orgstr:employee</control-param>
-							<control-param name="plane1">false</control-param>
-							<control-param name="plane2">true</control-param>
-							<control-param name="endpointMandatory">true</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="multipleSelectMode">false</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+
+							<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">false</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
 						</control>
 					</field>
 					<field id="lecm-sched:type">
-						<control template="/ru/it/lecm/wcalendar/controls/hidden-patiently-value.ftl">
-							<control-param name="value">COMMON</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">COMMON</control-param>
 						</control>
 					</field>
 				</appearance>
 			</form>
 			<form id="createNewSpecialScheduleForm">
 				<field-visibility>
+					<show id="lecm-sched:css" force="true"/>
 					<show id="lecm-sched:sched-employee-link-assoc"/>
 					<show id="lecm-sched:time-limit-start"/>
 					<show id="lecm-sched:time-limit-end"/>
-					<show id="reiteration-rules"/>
+					<show id="lecm-sched:reiteration-rules" force="true"/>
 					<show id="lecm-sched:std-begin"/>
 					<show id="lecm-sched:std-end"/>
 					<show id="lecm-sched:type"/>
@@ -171,19 +177,24 @@
 					<set id="reiteration-rules"  appearance="title" label-id="label.schedule.form.reiteration-rules" />
 					<set id="time" template="/org/alfresco/components/form/2-column-set.ftl" appearance="title" label-id="label.schedule.form.set.work-time" />
 					<field id="lecm-sched:sched-employee-link-assoc" mandatory="true">
-						<control template="/ru/it/lecm/wcalendar/controls/double-picker-control.ftl">
-							<control-param name="startLocation1">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
-							<control-param name="startLocation2">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
-							<control-param name="pickerLabel1">label.schedule.form.picker.orgstructure</control-param>
-							<control-param name="pickerLabel2">label.schedule.form.picker.employee</control-param>
-							<control-param name="itemType1">lecm-orgstr:organization-unit</control-param>
-							<control-param name="itemType2">lecm-orgstr:employee</control-param>
-							<control-param name="plane1">false</control-param>
-							<control-param name="plane2">true</control-param>
-							<control-param name="endpointMandatory">true</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="multipleSelectMode">false</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
+							<control-param name="firstItemType">lecm-orgstr:employee</control-param>
+							<control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
+							<control-param name="firstNameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
+							<control-param name="firstPlane">true</control-param>
+							<control-param name="firstShowSearch">true</control-param>
+							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
+							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+
+							<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+							<control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
+							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
+							<control-param name="secondPlane">false</control-param>
+							<control-param name="secondShowSearch">true</control-param>
+							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
+							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>
 						</control>
 					</field>
 					<field id="lecm-sched:std-begin" mandatory="true" set="time">
@@ -205,8 +216,8 @@
 						</constraint-handlers>
 					</field>
 					<field id="lecm-sched:type">
-						<control template="/ru/it/lecm/wcalendar/controls/hidden-patiently-value.ftl">
-							<control-param name="value">SPECIAL</control-param>
+						<control template="/ru/it/lecm/base-share/components/controls/hidden-value.ftl">
+							<control-param name="fieldValue">SPECIAL</control-param>
 						</control>
 					</field>
 					<field id="lecm-sched:time-limit-start" label-id="label.schedule.form.set.date-interval.begin" mandatory="true" set="time-limit">
@@ -229,8 +240,13 @@
 										event="keyup" message-id="message.error.schedule.schedule-date-limit-validation.early-end" />
 						</constraint-handlers>
 					</field>
-					<field id="reiteration-rules" label-id="label.schedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
+					<field id="lecm-sched:reiteration-rules" label-id="label.schedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
 						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
+					</field>
+					<field id="lecm-sched:css">
+						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
+							<control-param name="css">.date-format { display: none; }</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
