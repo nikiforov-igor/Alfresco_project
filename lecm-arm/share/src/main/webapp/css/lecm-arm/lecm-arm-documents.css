@@ -189,7 +189,10 @@ div.arm-tree-menu .arm-accordion .wait-container {
 }
 
 .yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data .arm-connections-table td.connection-present-column {
-	padding: 10px 0;
+	padding: 5px 0;
+}
+.yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data .arm-connections-table td.connection-present-column p {
+	padding: 0;
 }
 
 .yui-skin-lecmTheme .datagrid .grid.yui-dt .yui-dt-data .arm-connections-table td.connection-type-column {
