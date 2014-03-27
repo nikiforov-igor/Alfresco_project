@@ -268,11 +268,21 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		return stateMachineHelper.isFinal(new NodeRef(nodeRef));
 	}
 
+	/**
+     * Возвращает номер процесса машины состояний, по которому запущен документ
+     * @param node
+     * @return
+     */
+    public String getStatemachineId(ScriptNode node) {
+        return stateMachineHelper.getStatemachineId(node.getNodeRef());
+    }
+
     /**
      * Возвращает номер версии машины состояний
      * @param node
      * @return
      */
+	
     public String getStatemachineVersion(ScriptNode node) {
         return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
     }

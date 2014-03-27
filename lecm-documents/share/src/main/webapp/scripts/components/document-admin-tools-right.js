@@ -60,18 +60,44 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 														this.controlId + "-admin-tools-right-button",
 														{
 															type: "menu",
-															menu: [{
-																		text: this.msg("button.transfer.right"),
+															menu: [
+																	{
+																		text: this.msg("menu.button.transfer.document"),
 																		value: 1,
 																		onclick: {
 																			fn: this.getIgnoredNode,
 																			scope: this
 																		}
-																	}],
+																	},
+																	{
+																		text: this.msg("menu.button.show.service.information"),
+																		value: 2,
+																		onclick: {
+																			fn: this.showServiceDocInfo,
+																			scope: this
+																		}
+																	},
+
+																  ],
 															disabled: false
 														}
 												  );
             },
+
+			showServiceDocInfo: function()
+			{
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/document/information/showServiceInformation?nodeRef="+this.options.documentRef;
+				Alfresco.util.PopupManager.displayWebscript(
+					{
+						title: this.msg("title.service.information"),
+						method: "GET",
+						url: templateUrl,
+						properties: {}
+					}
+				);
+
+			},
+
             getIgnoredNode: function()
             {
                 Alfresco.util.Ajax.request(

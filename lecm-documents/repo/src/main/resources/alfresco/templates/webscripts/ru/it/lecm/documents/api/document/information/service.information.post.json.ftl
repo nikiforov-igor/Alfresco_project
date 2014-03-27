@@ -1,0 +1,4 @@
+{
+	 "statemachineVer" : "${statemachineVer}"
+	,"statemachineId" : "${statemachineId}"
+}
