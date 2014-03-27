@@ -255,7 +255,7 @@ LogicECM.module = LogicECM.module || {};
                     checkRights: false,
                     itemNodeRef: "",
                     currentValue: "",
-                    suppressRefreshEvent: false,
+                    suppressRefreshEvent: true,
                     useDnD: false
                 });
         uploader.disable();
