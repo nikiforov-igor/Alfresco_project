@@ -546,4 +546,26 @@
         </forms>
     </config>
 
+    <config evaluator="task-type" condition="internalDirect:direct">
+        <forms>
+            <form id="workflow-details">
+                <field-visibility>
+                    <show id="packageItems"/>
+                </field-visibility>
+                <appearance>
+                    <field id="packageItems">
+                        <control template="/ru/it/lecm/workflow/controls/package-items-with-result-list-control.ftl">
+                            <control-param name="nameSubstituteString">{lecm-document:present-string}</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+            <form>
+                <field-visibility>
+                    <hide id="packageItems"/>
+                    <hide id="lecm-workflow:assigneesListAssoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
 </alfresco-config>

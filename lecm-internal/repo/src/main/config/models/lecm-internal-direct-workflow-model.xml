@@ -9,6 +9,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
         <import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
+        <import uri="http://www.it.ru/logicECM/statemachine/aspects/1.0" prefix="lecm-statemachine-aspects"/>
     </imports>
 
     <namespaces>
@@ -18,6 +19,9 @@
     <types>
         <type name="internalDirect:direct">
             <parent>bpm:startTask</parent>
+            <mandatory-aspects>
+                <aspect>lecm-statemachine-aspects:is-service-workflow</aspect>
+            </mandatory-aspects>
         </type>
 
         <type name="internalDirect:answerTask">
