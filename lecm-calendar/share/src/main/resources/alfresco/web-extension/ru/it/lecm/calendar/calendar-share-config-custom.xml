@@ -474,9 +474,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-absence:color">
-						<control template="/ru/it/lecm/wcalendar/controls/color-picker.ftl">
-							<control-param name="styleClass">color</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/color-picker.ftl"/>
 					</field>
 					<field id="lecm-absence:code">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl">
@@ -504,9 +502,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-absence:color">
-						<control template="/ru/it/lecm/wcalendar/controls/color-picker.ftl">
-							<control-param name="styleClass">color</control-param>
-						</control>
+						<control template="/ru/it/lecm/base-share/components/controls/color-picker.ftl"/>
 					</field>
 				</appearance>
 			</form>
