@@ -74,12 +74,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.integrotest</groupId>
-			<artifactId>lecm-integrotest-api</artifactId>
-			<version>${project.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.dictionary</groupId>
 			<artifactId>dictionary-repo-api</artifactId>
 			<version>${project.version}</version>

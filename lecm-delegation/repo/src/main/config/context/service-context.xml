@@ -31,19 +31,6 @@
         </property>
     </bean>
 
-	<bean id="testSearch" class="ru.it.lecm.delegation.beans.TestSearchBean" depends-on="nodeService, NodeService, repositoryHelper, WorkflowService">
-		<property name="serviceRegistry" ref="ServiceRegistry" />
-		<property name="repositoryHelper" ref="repositoryHelper"/>
-
-		<property name="secureNodeService" ref="NodeService" />
-		<property name="fastNodeService" ref="nodeService" />
-		<property name="authorityService" ref="authorityService" />
-
-		<property name="namespaceService" ref="namespaceService"/>
-		<property name="workflowService" ref="WorkflowService"/>
-		<property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
-	</bean>
-
 	<util:constant id="delegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.DELEGATION_FOLDER"/>
 	<util:constant id="tasksDelegationFolder" static-field="ru.it.lecm.delegation.beans.DelegationBean.TASKS_DELEGATION_FOLDER"/>
 	<bean id="delegationService" class="ru.it.lecm.delegation.beans.DelegationBean"
@@ -82,10 +69,6 @@
             </list>
         </property>
     </bean>
-
-    <bean id="webscript.ru.it.lecm.delegation.DelegationRepoWebScript.post" class="ru.it.lecm.delegation.beans.DelegationRepoWebScript" parent="webscript">
-		<property name="tester" ref="testSearch"/>
-	</bean>
 
 	<bean id="delegationOptsPolicy" class="ru.it.lecm.delegation.policies.DelegationOptsPolicy" init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
