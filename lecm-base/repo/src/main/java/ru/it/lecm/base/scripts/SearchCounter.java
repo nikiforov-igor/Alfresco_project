@@ -40,6 +40,18 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         this.services = services;
     }
 
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+        this.workCalendarService = workCalendarService;
+    }
+
     public void setStoreUrl(String storeRef) {
         // ensure this is not set again by a script instance!
         if (this.storeRef != null) {
@@ -67,7 +79,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 String language = (String) def.get("language");
                 String namespace = (String) def.get("namespace");
                 String onerror = (String) def.get("onerror");
-                Map<Serializable, Serializable> page = (Map<Serializable, Serializable>)def.get("page");
+                Map<Serializable, Serializable> page = (Map<Serializable, Serializable>) def.get("page");
 
                 // Выставляем в 0 - чтобы получать только общее число записей
                 int maxResults = -1;
@@ -99,12 +111,12 @@ public class SearchCounter extends BaseScopableProcessorExtension {
 
                 // обработка спец-выражений
                 if (query.contains("#current-user")) {
-                    query = query.replaceAll("#current-user",orgstructureService.getCurrentEmployee().toString());
+                    query = query.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
                 }
                 if (query.contains("#current-date")) {
                     int limitDays = notificationsService.getSettingsNDays();
                     Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays);
-                    query = query.replaceAll("#current-date",  DocumentService.DateFormatISO8601.format(nextWorkDate));
+                    query = query.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
                 }
 
                 sp.setQuery(query);
@@ -173,15 +185,66 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         return 0L;
     }
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
+    public boolean hasChildren(String parentRef, String childType) {
+        return  hasChildren(parentRef, childType, null);
     }
 
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
-    }
+    public boolean hasChildren(String parentRef, String childType, Object additionalQueryObj) {
+        StringBuilder queryBuffer = new StringBuilder();
 
-    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
-        this.workCalendarService = workCalendarService;
+        String additionalQuery = null;
+
+        if (additionalQueryObj != null) {
+            if (additionalQueryObj instanceof String) {
+                additionalQuery = (String) additionalQueryObj;
+            } else if (additionalQueryObj instanceof Serializable) {
+                Serializable obj = new ValueConverter().convertValueForRepo((Serializable) additionalQueryObj);
+                if (obj instanceof Map) {
+                    Map<Serializable, Serializable> def = (Map<Serializable, Serializable>) obj;
+                    additionalQuery = (String) def.get("queryBuffer");
+                }
+            }
+        }
+
+        if (additionalQuery != null && !additionalQuery.isEmpty()) {
+            // обработка спец-выражений
+            if (additionalQuery.contains("#current-user")) {
+                additionalQuery = additionalQuery.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
+            }
+            if (additionalQuery.contains("#current-date")) {
+                int limitDays = notificationsService.getSettingsNDays();
+                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays);
+                additionalQuery = additionalQuery.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
+            }
+
+            queryBuffer.append("(").append(additionalQuery).append(")");
+        }
+
+        if (queryBuffer.length() > 0) {
+            queryBuffer.append(" AND (");
+        } else {
+            queryBuffer.append("(");
+        }
+
+        //родитель
+        queryBuffer.append("PARENT:\"").append(parentRef).append("\"");
+
+        if (childType != null && !childType.isEmpty()) {
+            queryBuffer.append(" AND TYPE:\"").append(childType).append("\"");
+        }
+        queryBuffer.append(")");
+
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+
+        sp.setQuery(queryBuffer.toString());
+
+        logger.debug("Has Children queryBuffer: " + queryBuffer);
+
+        // execute search based on search definition
+        Long count = query(sp, true, -1, 0);
+
+        return count > 0;
     }
 }

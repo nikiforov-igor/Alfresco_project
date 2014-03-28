@@ -4,7 +4,7 @@
 <#if items??>
 	<items>
 		<#list items as item>
-			<item name="${item.node.getName()}" nodeRef="${item.node.nodeRef}" type="${item.node.typeShort}" hasChildren="${item.node.hasChildren?string}">
+			<item name="${item.node.getName()}" nodeRef="${item.node.nodeRef}" type="${item.node.typeShort}" hasChildren="${item.hasChildren?string}">
 				<@itemLib.renderProperties item=item/>
 			</item>
 		</#list>

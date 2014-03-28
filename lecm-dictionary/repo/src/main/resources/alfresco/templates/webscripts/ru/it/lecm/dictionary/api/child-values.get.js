@@ -9,6 +9,7 @@ if (children != null && children.length > 0) {
         var child = children[i];
         var item = {
             node: child,
+            hasChildren:searchCounter.hasChildren(child.getNodeRef().toString(), null),
             propertiesName: getTypePropertiesName(child)
         };
 

@@ -65,7 +65,7 @@ function main()
             title: resultNode.properties[titleProperty],
             type: resultNode.getTypeShort(),
             nodeRef: resultNode.getNodeRef().toString(),
-            isLeaf: "" + !resultNode.hasChildren,
+            isLeaf: "" + !searchCounter.hasChildren(resultNode.getNodeRef().toString(), null),
             isContainer: "" + resultNode.isContainer
         };
     }

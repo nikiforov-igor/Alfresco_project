@@ -16,7 +16,7 @@ if (parentNode != null) {
 	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 	            type: item.getTypeShort(),
 	            nodeRef: item.getNodeRef().toString(),
-	            isLeaf: "" + !item.hasChildren,
+	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), null),
 	            isContainer: "" + item.isContainer
 	        });
 		}
