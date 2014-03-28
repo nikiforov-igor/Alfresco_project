@@ -52,6 +52,7 @@
 
                         answer.setInheritsPermissions(false);
                         lecmPermission.grantDynamicRole(answer, employee, "INNER_RECIPIENT", "LECM_BASIC_PG_ActionPerformer");
+                        lecmPermission.grantDynamicRole(document, employee, "INNER_RECIPIENT", "LECM_BASIC_PG_Employee");
                         lecmPermission.grantDynamicRole(answer, initiator, "INITIATOR", "LECM_BASIC_PG_Owner");
 
                         answer.createAssociation(employee, "lecm-internal-table-structure:employee-assoc");
