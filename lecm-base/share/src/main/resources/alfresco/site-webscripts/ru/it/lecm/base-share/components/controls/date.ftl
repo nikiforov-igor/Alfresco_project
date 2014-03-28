@@ -6,6 +6,12 @@
     <#assign disabled=false>
 </#if>
 
+<#if field.control.params.hideDateFormat?? && field.control.params.hideDateFormat == "true">
+	<#assign hideDateFormat=true>
+<#else>
+	<#assign hideDateFormat=false>
+</#if>
+
 <#assign multiValued=false>
 <#if field.value != "" && field.value?index_of(",") != -1>
     <#assign multiValued=true>
@@ -69,7 +75,7 @@
                <#else>tabindex="0"</#if> />
 
         <div class="format-info">
-            <span class="date-format">${msg("form.control.date-picker.entry.datetime.format.nojs")}</span>
+            <span class="date-format <#if hideDateFormat>hidden</#if>">${msg("form.control.date-picker.entry.datetime.format.nojs")}</span>
         </div>
     <#else>
         <#assign controlId = fieldHtmlId + "-cntrl">
@@ -114,7 +120,7 @@
         <@formLib.renderFieldHelp field=field />
 
         <div class="format-info">
-            <span class="date-format">${msg("form.control.date-picker.display.date.format")}</span>
+            <span class="date-format <#if hideDateFormat>hidden</#if>">${msg("form.control.date-picker.display.date.format")}</span>
             <#if showTime><span
                     class="time-format<#if disabled>-disabled</#if>">${msg("form.control.date-picker.display.time.format")}</span></#if>
         </div>

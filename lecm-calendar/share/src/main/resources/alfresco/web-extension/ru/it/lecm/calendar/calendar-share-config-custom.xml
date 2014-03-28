@@ -163,7 +163,6 @@
 			</form>
 			<form id="createNewSpecialScheduleForm">
 				<field-visibility>
-					<show id="lecm-sched:css" force="true"/>
 					<show id="lecm-sched:sched-employee-link-assoc"/>
 					<show id="lecm-sched:time-limit-start"/>
 					<show id="lecm-sched:time-limit-end"/>
@@ -224,6 +223,7 @@
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
+							<control-param name="hideDateFormat">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.scheduleLimitValidation"
@@ -234,6 +234,7 @@
 						<control template="/ru/it/lecm/wcalendar/controls/date-augmented.ftl">
 							<control-param name="showTime">false</control-param>
 							<control-param name="dateMaxWidth">8em</control-param>
+							<control-param name="hideDateFormat">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.WCalendar.Schedule.scheduleLimitValidation"
@@ -242,11 +243,6 @@
 					</field>
 					<field id="lecm-sched:reiteration-rules" label-id="label.schedule.form.reiteration-rules" mandatory="true" set="reiteration-rules">
 						<control template="/ru/it/lecm/wcalendar/controls/reiteration-rules-control.ftl"/>
-					</field>
-					<field id="lecm-sched:css">
-						<control template="/ru/it/lecm/base-share/components/controls/css-hidden-control.ftl">
-							<control-param name="css">.date-format { display: none; }</control-param>
-						</control>
 					</field>
 				</appearance>
 			</form>
