@@ -161,6 +161,7 @@ function getSearchResults(params) {
         sort = params.sort,
         filterStr = params.filter;
 
+    var total = 0;
     //настройки сортировки
     // sort field - expecting field to in one of the following formats:
     //  - short QName form such as: cm:name
@@ -385,7 +386,7 @@ function getSearchResults(params) {
             language: "fts-alfresco",
             onerror: "no-results"
         };
-        var total = searchCounter.query(queryDef);
+        total = searchCounter.query(queryDef);
 
         var sortColumns = [];
         if (sortField.column.charAt(0) == '.') {

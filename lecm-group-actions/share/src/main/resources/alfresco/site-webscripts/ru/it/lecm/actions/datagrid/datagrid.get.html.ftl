@@ -289,6 +289,7 @@
                     itemType: "lecm-group-actions:action",
                     nodeRef: "${nodeRef!""}",
                     datagridFormId: "datagrid",
+                    useChildQuery:true,
                     actionsConfig: {
                         fullDelete: "true"
                     },
