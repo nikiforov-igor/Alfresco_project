@@ -330,6 +330,8 @@ LogicECM.module = LogicECM.module || {};
 				}
 				p_dialog.dialog.setHeader(message);
 
+				p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
 				Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
 				if (this.options.createDialogClass != "") {
 					Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
@@ -411,22 +413,26 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			editNode: function (event, node) {
-				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&fields={fields}";
-				templateUrl = YAHOO.lang.substitute(templateUrl, {
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+				var templateRequestParams = {
 					itemKind:"node",
 					itemId: node.nodeRef,
 					mode:"edit",
 					submitType:"json",
-					formId: ""
-				});
+					formId: "",
+					showCancelButton: true
+				};
 				new Alfresco.module.SimpleDialog("arm-element-edit-form").setOptions({
 					width:"50em",
-					templateUrl:templateUrl,
+					templateUrl: templateUrl,
+					templateRequestParams: templateRequestParams,
 					actionUrl:null,
 					destroyOnHide:true,
 					doBeforeDialogShow:{
 						fn: function(p_form, p_dialog) {
 							p_dialog.dialog.setHeader(this.msg("dialog.edit.title"));
+
+							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 
 							Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
 						},

@@ -2517,30 +2517,26 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
                 this.editDialogOpening = true;
                 var me = this;
-				var templateUrl = "lecm/components/form"
-							+ "?itemKind={itemKind}"
-							+ "&itemId={itemId}"
-							+ "&mode={mode}"
-							+ "&submitType={submitType}"
-							+ "&showCancelButton=true";
-				//если мы задали ИД-шник формы, то передаем и его
-				if (this.options.editForm) {
-					templateUrl += "&formId=" + this.options.editForm;
-				}
 
-				var url = YAHOO.lang.substitute (Alfresco.constants.URL_SERVICECONTEXT + templateUrl, {
-					itemKind: "node",
-					itemId: item.nodeRef,
-					mode: "edit",
-					submitType: "json"
-				});
+	            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind: "node",
+		            itemId: item.nodeRef,
+		            mode: "edit",
+		            submitType: "json",
+		            showCancelButton: true
+	            };
+	            if (this.options.editForm) {
+		            templateRequestParams.formId = this.options.editForm;
+	            }
 
                 // Using Forms Service, so always create new instance
                 var editDetails = new Alfresco.module.SimpleDialog(this.id + "-editDetails");
                 editDetails.setOptions(
                     {
                         width: this.options.editFormWidth,
-                        templateUrl:url,
+                        templateUrl:templateUrl,
+	                    templateRequestParams:templateRequestParams,
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{
@@ -2551,7 +2547,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 }
 								p_dialog.dialog.setHeader(this.msg(this.options.editFormTitleMsg));
 								this.editDialogOpening = false;
-							},
+
+	                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                            },
                             scope:this
                         },
                         onSuccess:{
@@ -2612,17 +2610,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         Dom.addClass(contId, meta.itemType.replace(":", "_") + "_edit");
                     }
                     me.editDialogOpening = false;
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                    {
-                        itemKind:"type",
-                        itemId:meta.itemType,
-                        destination:meta.nodeRef,
-                        mode:"create",
-                        formId: meta.createFormId != null ? meta.createFormId : "",
-                        submitType:"json"
-                    });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams =  {
+		            itemKind:"type",
+		            itemId:meta.itemType,
+		            destination:meta.nodeRef,
+		            mode:"create",
+		            formId: meta.createFormId != null ? meta.createFormId : "",
+		            submitType:"json",
+		            showCancelButton: true
+	            };
 
                 // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -2630,6 +2630,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     {
                         width:"50em",
                         templateUrl:templateUrl,
+	                    templateRequestParams:templateRequestParams,
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{

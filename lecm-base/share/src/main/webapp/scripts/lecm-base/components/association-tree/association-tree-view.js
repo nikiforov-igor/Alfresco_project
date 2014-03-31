@@ -996,7 +996,9 @@ LogicECM.module = LogicECM.module || {};
             }
             p_dialog.dialog.setHeader( message );
 
-            Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+	        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
+	        Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
             if (this.options.createDialogClass != "") {
                 Dom.addClass(p_dialog.id + "-form-container", this.options.createDialogClass);
             }

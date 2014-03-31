@@ -906,17 +906,20 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                         }
                     }
                     this.doubleClickLock = false;
+
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                    {
-                        itemKind:"type",
-                        itemId:itemType,
-                        destination:destination,
-                        mode:"create",
-                        formId: "addTableRow",
-                        submitType:"json"
-                    });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind:"type",
+		            itemId:itemType,
+		            destination:destination,
+		            mode:"create",
+		            formId: "addTableRow",
+		            submitType:"json",
+		            showCancelButton: true
+	            };
 
                 // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -924,6 +927,7 @@ LogicECM.module.Base.DataGridAssociation = LogicECM.module.Base.DataGridAssociat
                     {
                         width:"50em",
                         templateUrl:templateUrl,
+	                    templateRequestParams:templateRequestParams,
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{

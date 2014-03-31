@@ -178,11 +178,21 @@ LogicECM.module = LogicECM.module || {};
             showCreateNewItemWindow: function AssociationTreeViewer_showCreateNewItemWindow() {
                 if (this.doubleClickLock) return;
                 this.doubleClickLock = true;
-                var templateUrl = this.generateCreateNewUrl(this.options.parentNodeRef, this.options.itemType);
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind: "type",
+		            itemId: this.options.itemType,
+		            destination: this.options.parentNodeRef,
+		            mode: "create",
+		            submitType: "json",
+		            formId: "association-create-new-node-form",
+		            showCancelButton: true
+	            };
 
                 new Alfresco.module.SimpleDialog("create-new-form-dialog-" + this.eventGroup).setOptions({
                     width:"40em",
                     templateUrl:templateUrl,
+	                templateRequestParams: templateRequestParams,
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
@@ -213,18 +223,7 @@ LogicECM.module = LogicECM.module || {};
 					message = this.msg("dialog.createNew.title");
 				}
 				p_dialog.dialog.setHeader(message);
-            },
-
-            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, itemType) {
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-                return YAHOO.lang.substitute(templateUrl, {
-                    itemKind: "type",
-                    itemId: itemType,
-                    destination: nodeRef,
-                    mode: "create",
-                    submitType: "json",
-                    formId: "association-create-new-node-form"
-                });
+	            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
             },
 
             _loadParentNode: function AssociationTreeViewer__loadRootNode() {
