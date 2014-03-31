@@ -179,17 +179,19 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 						[ p_dialog.id + "-form-container_h", this.msg("label.subscribe.title") ]
 					);
                     this.doubleClickLock = false;
+					p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 				};
 
-				var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-					{
-						itemKind:"type",
-						itemId:"lecm-subscr:subscription-to-object",
-						destination: this.root.nodeRef,
-						mode:"create",
-						formId: this.id + "-create-form",
-						submitType:"json"
-					});
+				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+				var templateRequestParams = {
+					itemKind:"type",
+					itemId:"lecm-subscr:subscription-to-object",
+					destination: this.root.nodeRef,
+					mode:"create",
+					formId: this.id + "-create-form",
+					submitType:"json",
+					showCancelButton: true
+				};
 
 				// Using Forms Service, so always create new instance
 				var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -197,6 +199,7 @@ LogicECM.module.Subscriptions = LogicECM.module.Subscriptions || {};
 					{
 						width:"20em",
 						templateUrl:templateUrl,
+						templateRequestParams: templateRequestParams,
 						actionUrl:null,
 						destroyOnHide:true,
 						doBeforeDialogShow:{
