@@ -709,6 +709,10 @@
                     <type>d:text</type>
                     <mandatory>false</mandatory>
                 </property>
+                <property name="lecm-stmeditor:transitionFormConnection">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                </property>
             </properties>
         </aspect>
 

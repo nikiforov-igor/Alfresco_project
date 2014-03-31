@@ -772,6 +772,14 @@ public class BPMNGenerator {
                 attribute.appendChild(parameter);
             }
 
+            Object formConnection = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_FORM_CONNECTION);
+            if (formConnection != null) {
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "formConnection");
+                parameter.setAttribute("value", formConnection.toString());
+                attribute.appendChild(parameter);
+            }
+
             Object transitionScript = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_SCRIPT);
             if (transitionScript != null) {
                 parameter = doc.createElement("lecm:parameter");

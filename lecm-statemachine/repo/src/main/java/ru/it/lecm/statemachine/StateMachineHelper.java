@@ -42,6 +42,7 @@ import org.alfresco.service.transaction.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -82,6 +83,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
     private static BusinessJournalService businessJournalService;
     private static TransactionService transactionService;
     private static DocumentService documentService;
+    private static DocumentConnectionService documentConnectionService;
     private static LecmPermissionService lecmPermissionService;
     private static String BPM_PACKAGE_PREFIX = "bpm_";
 
@@ -121,6 +123,10 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
     }
 
 
@@ -1326,6 +1332,9 @@ public class StateMachineHelper implements StateMachineServiceBean {
             } else {
                 if (NodeRef.isNodeRef(persistedResponse)) {
                     response.setRedirect("document?nodeRef=" + persistedResponse);
+                    if (nextState.getFormConnection() != null && !"".equals(nextState.getFormConnection())) {
+                        documentConnectionService.createConnection(document, new NodeRef(persistedResponse), nextState.getFormConnection(), true);
+                    }
                 }
             }
         } else {
@@ -1484,5 +1493,4 @@ public class StateMachineHelper implements StateMachineServiceBean {
         }
         return statuses;
     }
-
 }

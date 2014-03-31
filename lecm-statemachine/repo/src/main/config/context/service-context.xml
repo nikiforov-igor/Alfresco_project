@@ -98,6 +98,7 @@
         <property name="transactionService" ref="transactionService" />
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
         <property name="documentService" ref="documentService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
 	</bean>
 
     <bean id="timerActionHelper" class="ru.it.lecm.statemachine.TimerActionHelper" depends-on="activitiProcessEngineConfiguration, statemachine.LogicEcmModelsBootstrap, stateMachineHelper">
