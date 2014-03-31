@@ -700,4 +700,11 @@ public interface OrgstructureBean {
     List<NodeRef> getEmployeeLinks(NodeRef employeeRef, boolean includeArchived);
 
     List<NodeRef> getUnitEmployees(NodeRef unitRef);
+
+    /**
+     *  Возвращает Authority для папки подразделения
+     *
+     */
+    public String getOrgstructureUnitAuthority(NodeRef unit, boolean shared);
+
 }

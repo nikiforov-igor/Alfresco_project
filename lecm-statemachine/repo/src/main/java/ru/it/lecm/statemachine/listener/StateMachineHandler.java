@@ -5,6 +5,8 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
@@ -20,7 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 
 /**
  * User: PMelnikov
@@ -42,6 +43,7 @@ public class StateMachineHandler {
 	private OrgstructureBean orgstructureBean;
     private TimerActionHelper timerActionHelper;
     private DocumentService documentService;
+    private PermissionService permissionService;
 
 	private String processId = "";
 
@@ -111,6 +113,7 @@ public class StateMachineHandler {
 			action.setTimerActionHelper(timerActionHelper);
             action.setOrgstructureBean(orgstructureBean);
             action.setDocumentService(documentService);
+            action.setPermissionService(permissionService);
 			final StateMachineAction currentAction = action;
 			try {
 				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
@@ -130,6 +133,10 @@ public class StateMachineHandler {
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
+    }
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
     }
 
     public class StatemachineTaskListener implements ExecutionListener {

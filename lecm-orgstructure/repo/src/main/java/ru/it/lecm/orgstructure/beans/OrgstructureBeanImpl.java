@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.policies.PolicyUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -1923,4 +1924,14 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		Serializable fullName = nodeService.getProperty(getOrganization(), PROP_ORG_ELEMENT_FULL_NAME);
 		return fullName != null ? (String) fullName : null;
 	}
+
+    @Override
+    public String getOrgstructureUnitAuthority(NodeRef unit, boolean shared) {
+        if (shared) {
+            return "GROUP_" + PolicyUtils.makeOrgUnitPos(unit, nodeService).getAlfrescoSuffix();
+        } else {
+            return "GROUP_" + PolicyUtils.makeOrgUnitPrivatePos(unit, nodeService).getAlfrescoSuffix();
+        }
+    }
+
 }

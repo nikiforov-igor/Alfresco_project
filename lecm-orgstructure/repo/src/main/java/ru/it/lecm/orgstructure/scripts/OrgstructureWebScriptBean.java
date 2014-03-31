@@ -1067,4 +1067,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         return  new ScriptNode(orgstructureService.getEmployeeByPerson(login), serviceRegistry, getScope());
     }
 
+    public String getOrgstructureUnitAuthority(ScriptNode unit, boolean shared) {
+        return orgstructureService.getOrgstructureUnitAuthority(unit.getNodeRef(), shared);
+    }
+
 }

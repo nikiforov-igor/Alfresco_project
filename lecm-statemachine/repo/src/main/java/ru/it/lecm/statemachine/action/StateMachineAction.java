@@ -8,6 +8,7 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
@@ -42,6 +43,7 @@ abstract public class StateMachineAction {
     private TimerActionHelper timerActionHelper;
     private OrgstructureBean orgstructureBean;
     private DocumentService documentService;
+    private PermissionService permissionService;
 
     public TimerActionHelper getTimerActionHelper() {
         return timerActionHelper;
@@ -107,7 +109,15 @@ abstract public class StateMachineAction {
 		return StateMachineActionsImpl.getActionNameByClass(getClass());
 	}
 
-	protected NodeRef createFolder(NodeRef parent, String name) {
+    public PermissionService getPermissionService() {
+        return permissionService;
+    }
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    protected NodeRef createFolder(NodeRef parent, String name) {
 		return createFolder(parent, name, null);
 	}
 

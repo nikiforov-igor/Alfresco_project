@@ -124,6 +124,7 @@
         <property name="timerActionHelper" ref="timerActionHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="documentService" ref="documentService"/>
+        <property name="permissionService" ref="permissionService"/>
     </bean>
 
     <bean id="workflowPolicy" class="ru.it.lecm.statemachine.action.document.WaitForDocumentChangeListenerPolicy"

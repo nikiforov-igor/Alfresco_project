@@ -6,6 +6,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
@@ -24,7 +25,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 
 /**
  * User: PMelnikov Date: 10.01.13 Time: 14:32
@@ -86,6 +86,8 @@ public class ArchiveDocumentAction extends StateMachineAction {
 					additionalFolder = createAdditionalPath(document, additionalFolder);
 					try {
 						nodeService.addChild(additionalFolder, document, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(additionalFolder.getId())));
+                        String authority = getOrgstructureBean().getOrgstructureUnitAuthority(additionalUnit.getTargetRef(), isSharedFolder);
+                        getPermissionService().setPermission(document, authority, "LECM_BASIC_PG_Reader", true);
 					} catch (Exception e) {
 						System.out.println();
 					}
