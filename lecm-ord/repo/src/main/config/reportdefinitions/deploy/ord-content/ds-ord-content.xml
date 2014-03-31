@@ -12,14 +12,14 @@
         </provider>
         <templates>
             <template
-                filename="ord-content_ord-content-order-tmpl-4.odt"
+                filename="ord-content_ord-content-order-tmpl.odt"
                 mnem="ord-content-order-tmpl" type="OOFFICE">
                 <l18>
                     <item key="RU_RU"><![CDATA[Приказ]]></item>
                 </l18>
             </template>
             <template
-                filename="ord-content_ord-content-command-tmpl-3.odt"
+                filename="ord-content_ord-content-command-tmpl.odt"
                 mnem="ord-content-command-tmpl" type="OOFFICE">
                 <l18>
                     <item key="RU_RU"><![CDATA[Распоряжение]]></item>
