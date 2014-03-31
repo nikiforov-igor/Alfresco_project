@@ -23,7 +23,14 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, documents.dictionaries.LogicEcmModelsBootstrap, links.LogicEcmContractsBootstrap,ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap, documents.LogicEcmModelsConnectionAspectBootstrap,documents-members.LogicEcmModelsBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap">
+          depends-on="dictionaryBootstrap, 
+                        documents.dictionaries.LogicEcmModelsBootstrap, 
+                        links.LogicEcmContractsBootstrap,
+                        ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
+                        documents.LogicEcmModelsConnectionAspectBootstrap,
+                        documents-members.LogicEcmModelsBootstrap, 
+                        ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+                        ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
             <list>
                 <value>alfresco/module/${artifactId}/models/lecm-document-model.xml</value>
@@ -48,7 +55,7 @@
     </bean>
 
 	<bean id="documents.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap">
+	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-document-dictionaries-model.xml</value>
