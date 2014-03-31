@@ -83,23 +83,26 @@ LogicECM.module.Errands = LogicECM.module.Errands|| {};
                     var form = Dom.get(this.id + "-createDetails-form");
                     form.setAttribute("action", Alfresco.constants.PROXY_URI_RELATIVE + "lecm/errands/api/createLinks");
                     this._formAddElemet(form, "input", "isExecute", this.isExecute);
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-                    {
-                        itemKind:"type",
-                        itemId:"lecm-links:link",
-                        destination: this.options.destination,
-                        mode:"create",
-                        formId: this.id + "-create-form",
-                        submitType:"json"
-                    });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form";
+	            var templateRequestParams = {
+		            itemKind:"type",
+		            itemId:"lecm-links:link",
+		            destination: this.options.destination,
+		            mode:"create",
+		            formId: this.id + "-create-form",
+		            submitType:"json",
+		            showCancelButton: true
+	            };
 
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
                 createDetails.setOptions(
                     {
                         width:"50em",
                         templateUrl:templateUrl,
+	                    templateRequestParams: templateRequestParams,
                         actionUrl:null,
                         destroyOnHide:true,
                         doBeforeDialogShow:{

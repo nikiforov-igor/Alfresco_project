@@ -133,18 +133,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							primaryDocumentInput.value = this.options.documentNodeRef;
 						}
                         this.doubleClickLock = false;
+						p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 					};
 
-					var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
-						{
-							itemKind:"type",
-							itemId:"lecm-connect:connection",
-							destination: this.rootRef,
-							mode:"create",
-							formId: this.id + "-create-form",
-							submitType:"json",
-							ignoreNodes: this.options.documentNodeRef
-						});
+					var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+					var templateRequestParams = {
+						itemKind:"type",
+						itemId:"lecm-connect:connection",
+						destination: this.rootRef,
+						mode:"create",
+						formId: this.id + "-create-form",
+						submitType:"json",
+						ignoreNodes: this.options.documentNodeRef,
+						showCancelButton: true
+					};
 
 					//				// Using Forms Service, so always create new instance
 					var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -152,6 +154,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						{
 							width:"50em",
 							templateUrl:templateUrl,
+							templateRequestParams:templateRequestParams,
 							actionUrl:null,
 							destroyOnHide:true,
 							doBeforeDialogShow:{

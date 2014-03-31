@@ -169,17 +169,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			Alfresco.util.populateHTML(
 				[contId + "_h", taskName]
 			);
+			p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 		};
 
-		var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&formUI={formUI}&submitType={submitType}&showCancelButton=true",
-			{
-				itemKind: "task",
-				itemId: taskId,
-				mode: "edit",
-				formUI: "true",
-				submitType: "json",
-				showCancelButton: "true"
-			});
+		var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+		var templateRequestParams = {
+			itemKind: "task",
+			itemId: taskId,
+			mode: "edit",
+			formUI: "true",
+			submitType: "json",
+			showCancelButton: true
+		};
 
 		// Using Forms Service, so always create new instance
 		var taskDetails = new Alfresco.module.SimpleDialog(this.id + "-taskDetails");
@@ -187,6 +188,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			{
 				width:"50em",
 				templateUrl:templateUrl,
+				templateRequestParams: templateRequestParams,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{

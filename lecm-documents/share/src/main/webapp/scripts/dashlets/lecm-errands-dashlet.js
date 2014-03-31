@@ -35,18 +35,20 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
                     Dom.addClass(p_dialog.id + "-form-container", "lecm-errands_document");
                     this.doubleClickLock = false;
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}",
-                    {
-                        itemKind: "type",
-                        itemId: itemType,
-                        destination: destination,
-                        mode: "create",
-                        formId: "workflow-form",
-                        submitType: "json",
-                        args: args ? YAHOO.lang.JSON.stringify(args) : {}
-                    });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind: "type",
+		            itemId: itemType,
+		            destination: destination,
+		            mode: "create",
+		            formId: "workflow-form",
+		            submitType: "json",
+		            args: args ? YAHOO.lang.JSON.stringify(args) : {},
+		            showCancelButton: true
+	            };
 
                 // Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createErrandDetails");
@@ -54,6 +56,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
                     {
                         width: "60em",
                         templateUrl: templateUrl,
+	                    templateRequestParams: templateRequestParams,
                         actionUrl: null,
                         destroyOnHide: true,
                         doBeforeDialogShow: {

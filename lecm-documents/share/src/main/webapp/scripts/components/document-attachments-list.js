@@ -286,17 +286,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	        },
 
 	        onAddLink: function() {
-		        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-		        templateUrl = YAHOO.lang.substitute(templateUrl, {
+		        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+		        var templateRequestParams = {
 			        itemKind: "node",
 			        itemId: this.options.nodeRef,
 			        mode: "edit",
-			        submitType: "json"
-		        });
+			        submitType: "json",
+			        showCancelButton: true
+		        };
 
 		        new Alfresco.module.SimpleDialog(this.id + "-addLink").setOptions({
 			        width:"60em",
 			        templateUrl:templateUrl,
+			        templateRequestParams:templateRequestParams,
 			        actionUrl:null,
 			        destroyOnHide:true,
 			        doBeforeDialogShow:{
@@ -305,6 +307,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					        Alfresco.util.populateHTML(
 						        [ p_dialog.id + "-form-container_h", fileSpan]
 					        );
+					        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 				        },
 				        scope: this
 			        }

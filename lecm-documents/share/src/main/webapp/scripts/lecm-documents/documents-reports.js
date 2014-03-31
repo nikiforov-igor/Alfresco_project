@@ -48,25 +48,19 @@
                     });
                 }
             }
+	        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
             //YAHOO.util.Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
         };
 
-        var url = "/lecm/components/form/report" +
-            "?itemKind={itemKind}" +
-            "&itemId={itemId}" +
-            "&formId={formId}" +
-            "&mode={mode}" +
-            "&submitType={submitType}" +
-            "&showCancelButton=true" +
-            "&showResetButton=false" +
-            "&showSubmitButton=true";
-        var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url, {
-            itemKind: "type",
-            itemId: reportCode,
-            formId: "printReportForm",
-            mode: "create",
-            submitType: "json"
-        });
+        var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/report";
+	    var templateRequestParams = {
+		    itemKind: "type",
+		    itemId: reportCode,
+		    formId: "printReportForm",
+		    mode: "create",
+		    submitType: "json",
+		    showCancelButton: true
+	    };
 
         var printReportForm = new Alfresco.module.SimpleDialog(reportCode + "-reportForm");
 
@@ -74,6 +68,7 @@
             //actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportCode,
             width: "50em",
             templateUrl: templateUrl,
+	        templateRequestParams: templateRequestParams,
             destroyOnHide: true,
             doBeforeDialogShow: {
                 fn: doBeforeDialogShow,

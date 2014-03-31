@@ -129,11 +129,20 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (moveStartPage != undefined || moveStartPage != null) {
                     this.options.moveStartPage = moveStartPage;
                 }
-                var templateUrl = this.generateCreateNewUrl(this.options.nodeRef, "NodeMetadata-" + this.id);
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind: "node",
+		            itemId: this.options.nodeRef,
+		            formId: "NodeMetadata-" + this.id,
+		            mode: "edit",
+		            submitType: "json",
+		            showCancelButton: true
+	            };
 
                 new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
                     width: "84em",
                     templateUrl: templateUrl,
+	                templateRequestParams: templateRequestParams,
                     actionUrl: null,
                     destroyOnHide: true,
                     doBeforeDialogShow: {
@@ -177,22 +186,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
-            generateCreateNewUrl: function AssociationTreeViewer_generateCreateNewUrl(nodeRef, formId) {
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT +
-                    "lecm/components/form"
-                    + "?itemKind={itemKind}"
-                    + "&itemId={itemId}"
-                    + "&mode={mode}"
-                    + "&submitType={submitType}"
-                    + "&showCancelButton=true";
-                return YAHOO.lang.substitute(templateUrl, {
-                    itemKind: "node",
-                    itemId: nodeRef,
-                    formId: formId,
-                    mode: "edit",
-                    submitType: "json"
-                });
-            },
             beforeDialogShow: function(p_form, p_dialog) {
                 var fileSpan = '<span class="light">' + this.msg("document.main.form.edit") + '</span>';
                 Alfresco.util.populateHTML(
@@ -200,6 +193,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 );
 
                 Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+	            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
             }
         }, true);
 })();

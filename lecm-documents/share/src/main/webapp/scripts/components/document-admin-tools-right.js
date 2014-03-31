@@ -126,17 +126,19 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                     Alfresco.util.populateHTML(
                         [ p_dialog.id + "-form-container_h", this.msg("label.transfer.edit.title") ]
                     );
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&ignoreNodes={ignoreNodes}&showCancelButton=true",
-                    {
-                        itemKind: "node",
-                        itemId: this.options.documentRef,
-                        mode: "edit",
-                        formId: "transfer-right",
-                        submitType: "json",
-                        ignoreNodes: this.options.creatorRef
-                    });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	            var templateRequestParams = {
+		            itemKind: "node",
+		            itemId: this.options.documentRef,
+		            mode: "edit",
+		            formId: "transfer-right",
+		            submitType: "json",
+		            ignoreNodes: this.options.creatorRef,
+		            showCancelButton: true
+	            };
 
 //				// Using Forms Service, so always create new instance
                 var createDetails = new Alfresco.module.SimpleDialog(this.id + "-createDetails");
@@ -144,6 +146,7 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                     {
                         width: "50em",
                         templateUrl: templateUrl,
+	                    templateRequestParams: templateRequestParams,
                         actionUrl: null,
                         destroyOnHide: true,
                         doBeforeDialogShow: {
