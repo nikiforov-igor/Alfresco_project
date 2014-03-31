@@ -99,7 +99,7 @@ public class BusinessJournalArchiveSchedule extends AbstractScheduledAction {
 
 	@Override
 	public List<NodeRef> getNodes() {
-		int days = Integer.valueOf(getArchiverSettings().getDeep());
+		int days = Integer.parseInt(getArchiverSettings().getDeep());
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DATE, -days);
         List<BusinessJournalRecord> records = businessJournalService.getRecordsByInterval(null, calendar.getTime());

@@ -1,16 +1,5 @@
 package ru.it.lecm.wcalendar.calendar.beans;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -24,11 +13,15 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
-import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
+
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -178,7 +171,7 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 		boolean result;
 		List<NodeRef> daysList;
 
-		int year = Integer.valueOf(yearParser.format(day));
+		int year = Integer.parseInt(yearParser.format(day));
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(day);

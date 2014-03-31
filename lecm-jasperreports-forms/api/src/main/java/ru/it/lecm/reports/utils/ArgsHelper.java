@@ -60,7 +60,7 @@ public class ArgsHelper {
         }
 
         value = value.replaceAll(",", ".");
-        return value.indexOf(".") > 0 ? Double.valueOf(value) : Long.valueOf(value);
+        return value.indexOf(".") > 0 ? Double.parseDouble(value) : Long.parseLong(value);
     }
 
     public static String dateToStr(final Date value, final String ifNULL) {

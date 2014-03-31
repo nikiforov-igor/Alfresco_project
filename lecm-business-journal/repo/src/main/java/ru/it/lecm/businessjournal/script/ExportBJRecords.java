@@ -46,7 +46,7 @@ public class ExportBJRecords extends AbstractWebScript {
         try {
             int timeZoneOffset = TimeZone.getDefault().getRawOffset();
             try {
-                timeZoneOffset = - Integer.valueOf(req.getParameter("timeZoneOffset")) * 1000 * 60;
+                timeZoneOffset = - Integer.parseInt(req.getParameter("timeZoneOffset")) * 1000 * 60;
             } catch (Exception ignored) {}
             List<BusinessJournalRecord> bjRecordbjRecords = null;
             String fileName = null;

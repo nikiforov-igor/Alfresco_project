@@ -10,18 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.ReportsManager;
-import ru.it.lecm.reports.api.model.*;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
+import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.ParameterTypedValue;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.*;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
-import ru.it.lecm.reports.model.impl.ItemsFormatDescriptor;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
-import javax.xml.soap.Node;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -384,7 +383,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         Object orderValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_ORDER);
         if (orderValue != null) {
-            result.setOrder(Integer.valueOf(orderValue.toString()));
+            result.setOrder(Integer.parseInt(orderValue.toString()));
         } else {
             result.setOrder(0);
         }
