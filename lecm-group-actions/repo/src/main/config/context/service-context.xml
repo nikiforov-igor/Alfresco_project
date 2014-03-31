@@ -81,7 +81,6 @@
                         <value>lecm-group-actions:isGroup</value>
                         <value>lecm-group-actions:forCollection</value>
                         <value>lecm-group-actions:order</value>
-                        <value>lecm-group-actions:form-fields-ref</value>
                         <value>lecm-group-actions:script</value>
                     </list>
                 </entry>
