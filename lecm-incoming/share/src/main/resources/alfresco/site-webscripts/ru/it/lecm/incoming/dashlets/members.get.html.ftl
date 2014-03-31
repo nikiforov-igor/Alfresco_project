@@ -1,19 +1,5 @@
 <#assign id = args.htmlid>
 
-<style type="text/css">
-	.incoming-members-dashlet {
-		padding: 5px 10px;
-	}
-
-	.incoming-members-dashlet .form-container .form-field {
-		margin: 0;
-	}
-
-	.incoming-members-dashlet .form-container .viewmode-field {
-		margin: 0;
-	}
-</style>
-
 <div class="dashlet document bordered members">
     <div class="title dashlet-title">
         <span>${msg("label.title")}</span>
