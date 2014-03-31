@@ -133,6 +133,7 @@
             datagridMeta: {
                 itemType: "${field.control.params.itemType!""}",
                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
+                useChildQuery: true,
                 createFormId: "${field.control.params.createFormId!""}",
                 nodeRef: nodeRef,
                 actionsConfig: {

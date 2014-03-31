@@ -151,6 +151,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                                     sort: this.dataGrid.datagridMeta.sort,
                                                     itemType: this.dataGrid.datagridMeta.itemType,
                                                     searchConfig: this.dataGrid.datagridMeta.searchConfig,
+                                                    useChildQuery:this.dataGrid.datagridMeta.useChildQuery,
                                                     searchShowInactive: this.dataGrid.options.searchShowInactive
                                                 });
 
@@ -218,6 +219,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         {
                             searchConfig:sConfig,
 	                        searchNodes: me.dataGrid.datagridMeta.searchNodes,
+                            useChildQuery:me.dataGrid.datagridMeta.useChildQuery,
                             searchShowInactive: me.dataGrid.options.searchShowInactive,
                             sort:me.dataGrid.datagridMeta.sort
                         });
@@ -255,6 +257,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     searchNodes = args.searchNodes,
                     itemType = args.itemType,
                     sort = args.sort,
+                    useChildQuery = args.useChildQuery ? args.useChildQuery : false,
                     offset = args.offset ? args.offset : -1;
 
                 // дополнительный фильтр из адресной строки (или параметров)
@@ -380,7 +383,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters);
+                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters, useChildQuery);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success: successHandler,
@@ -399,7 +402,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilters) {
+            buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilters, useChildQuery) {
                 // ВСЕГДА должно существовать значение по умолчанию. Для объектов и строк - это должна быть пустая строка
                 if (searchConfig && searchConfig.formData && typeof searchConfig.formData == "object") {
                     searchConfig.formData = YAHOO.lang.JSON.stringify(searchConfig.formData);
@@ -428,7 +431,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         showInactive: searchShowInactive != null ? searchShowInactive : "false",
                         startIndex: startIndex,
                         sort: sort != null ? sort : "",
-                        filter: filters ? filters : ""
+                        filter: filters ? filters : "",
+                        useChildQuery: useChildQuery != null ?  useChildQuery : false
                     }
                 };
             },

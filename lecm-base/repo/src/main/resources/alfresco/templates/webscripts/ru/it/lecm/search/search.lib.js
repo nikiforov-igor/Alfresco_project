@@ -157,207 +157,9 @@ function getSearchResults(params) {
         itemType = params.itemType,
         startIndex = params.startIndex,
         pageSize = params.maxResults,
+        useChildQuery = params.useChildQuery,
         sort = params.sort,
         filterStr = params.filter;
-
-    var typesQuery = "", formQuery = "", fullTextSearchQuery = "", filter = "", filtersQuery ="";
-    // вытаскивае6м инфу из searchConfig
-    if (searchConfigString != null && searchConfigString.length() > 0) {
-        var searchConfig = jsonUtils.toObject(searchConfigString);
-
-        // данные из формы атрибутивного поиска
-        var formData = searchConfig.formData;
-        if (formData != null && formData.length > 0) {
-            var formJson = jsonUtils.toObject(formData);
-            itemType = formJson.datatype; // заменяем пришедший тип на тип из формы
-
-            // extract form data and generate search query
-            var first = true;
-            for (var p in formJson) {
-                // retrieve value and check there is someting to search for
-                // currently all values are returned as strings
-                var propValue = formJson[p];
-                if (propValue.length !== 0) {
-                    if (p.indexOf("prop_") === 0) {
-                        // found a property - is it namespace_propertyname or pseudo property format?
-                        var propName = p.substr(5);
-                        if (propName.indexOf("_") !== -1) {
-                            // property name - convert to DD property name format
-                            propName = propName.replace("_", ":");
-
-                            // special case for range packed properties
-                            if (propName.match("-range$") == "-range") {
-                                // currently support text based ranges (usually numbers) or date ranges
-                                // range value is packed with a | character separator
-
-                                // if neither value is specified then there is no need to add the term
-                                if (propValue.length > 1) {
-                                    var from, to, sepindex = propValue.indexOf("|");
-                                    if (propName.match("-date-range$") == "-date-range") {
-                                        // date range found
-                                        propName = propName.substr(0, propName.length - "-date-range".length)
-
-                                        // work out if "from" and/or "to" are specified - use MIN and MAX otherwise;
-                                        // we only want the "YYYY-MM-DD" part of the ISO date value - so crop the strings
-                                        from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
-                                        to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, sepindex + 10));
-                                    }
-                                    else {
-                                        // simple range found
-                                        propName = propName.substr(0, propName.length - "-range".length);
-
-                                        // work out if "min" and/or "max" are specified - use MIN and MAX otherwise
-                                        from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
-                                        to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
-                                    }
-                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + from + '".."' + to + '"';
-                                    first = false;
-                                }
-                            }
-                            else {
-                                formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"*' + propValue + '*"';
-                                first = false;
-                            }
-                        }
-                        else {
-                            // pseudo cm:content property - e.g. mimetype, size or encoding
-                            formQuery += (first ? '' : ' AND ') + 'cm:content.' + propName + ':"' + propValue + '"';
-                            first = false;
-                        }
-                    } else if (p.indexOf("assoc_") == 0 && p.lastIndexOf("_added") == p.length - 6) {
-                        //поиск по ассоциациям
-                        var assocName = p.substring(6);
-                        assocName = assocName.substring(0, assocName.lastIndexOf("_added"));
-                        if (assocName.indexOf("_") !== -1) {
-                            assocName = assocName.replace("_", ":") + "-ref"; //выведение имя свойства, в котором искать
-                            formQuery += (first ? '(' : ' AND (');
-                            var assocValues = propValue.split(",");
-                            var firstAssoc = true;
-                            for (var k = 0; k < assocValues.length; k++) {
-                                var assocValue = assocValues[k];
-                                if (!firstAssoc) {
-                                    formQuery += " OR ";    //ищем по "или"
-                                }
-                                formQuery += escapeQName(assocName) + ':"' + assocValue + '"';
-                                firstAssoc = false;
-                            }
-                            formQuery += ") ";
-                            first = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        //полнотекстовый поиск
-        if (searchConfig.fullTextSearch != null && searchConfig.fullTextSearch.length > 0) {
-            var fullTextSearch = searchConfig.fullTextSearch;
-            var fullTextSearchJson = jsonUtils.toObject(fullTextSearch);
-
-            var parentNodeRef = fullTextSearchJson["parentNodeRef"];
-            logger.log("parentNodeRef = " + parentNodeRef);
-            if (parentNodeRef != null && parentNodeRef.length > 0) {
-                var parentNode = search.findNode(parentNodeRef);
-                if (parentNode != null && (!searchConfig.filter || searchConfig.filter && searchConfig.filter.indexOf('PATH') == -1)) {
-                    var xpath = parentNode.getQnamePath();
-                    fullTextSearchQuery += " +PATH:\"" + xpath + "//*\"";
-                }
-            }
-
-            var ftsFields = fullTextSearchJson["fields"];
-            logger.log("ftsFields = " + ftsFields);
-            var searchTerm = fullTextSearchJson["searchTerm"];
-            logger.log("searchTerm = " + searchTerm);
-            if (ftsFields != null && ftsFields.length > 0 && searchTerm != null && searchTerm.length > 0) {
-                var columns = ftsFields.split(",");
-                var fieldsQuery = "";
-
-                for (var i = 0; i < columns.length; i++) {
-                    fieldsQuery += this.escapeQName(columns[i]) + ':"*' + searchTerm + '*" OR ';
-                }
-                if (fieldsQuery.length > 5) {
-                    fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
-                    fullTextSearchQuery += (fullTextSearchQuery.length > 0 ? " AND " : "") + " (" + fieldsQuery + ")";
-                }
-            }
-        }
-
-        logger.log("fullTextSearchQuery = " + fullTextSearchQuery);
-
-        // фильтры
-        filter = searchConfig.filter != null ? searchConfig.filter : '';
-        var filterObjs = [];
-        if (filterStr != null && ("" + filterStr).length > 0) {
-            var filtersJSON = eval('(' + filterStr.toString() + ')');
-            for (var index in filtersJSON) {
-                filterObjs.push(Filters.getFilterParams(filtersJSON[index]));
-            }
-        }
-        filtersQuery = filterObjs != null && filterObjs.length > 0 ? getFiltersQuery(filterObjs) : '';
-
-        logger.log("filtersQuery = " + filtersQuery);;
-    }
-
-    // extract data type for this search - advanced search query is type specific
-    if (itemType != null && ("" + itemType).length > 0) {
-        var typesArray = itemType.split(",");
-        var numTypes = typesArray.length;
-
-        for (var count = 0; count < numTypes; count++) {
-            var type = typesArray[count];
-            if (type != null && type.length > 0) {
-                if (typesQuery.length > 0) {
-                    typesQuery += " ";
-                }
-                typesQuery += '+TYPE:"' + type + '"'
-            }
-        }
-    }
-
-    ftsQuery += (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '');
-    ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + formQuery + ')') : '');
-    ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filter + ')') : '');
-    ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filtersQuery + ')') : '');
-    ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + fullTextSearchQuery + ')') : '')
-
-    //фильтр по родителю
-    // TODO последняя проверка - временное решение для поиска по вложенным элементам. Нужно ввести доп параметр
-    if (parent != null && ("" + parent).length > 0 && (ftsQuery.length == 0 || ftsQuery.indexOf("PATH") < 0)) {
-        ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' PARENT:"' + parent + '"';
-    }
-
-    // по активности
-    if (!showInactive) {
-        ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + '(NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
-    }
-
-
-    //фильтр по доступным нодам
-    if (searchNodes != null) {
-        var query = "";
-        for (i = 0; i < searchNodes.length; i++) {
-            query += "ID:" + searchNodes[i].replace(":", "\\:");
-            if (i < searchNodes.length - 1) {
-                query += " OR "
-            }
-        }
-        ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' ' + query + ')';
-    }
-
-    //спец сочетания
-    if (ftsQuery.indexOf("#current-user") >= 0) {
-        var employeeRef = orgstructure.getCurrentEmployee().getNodeRef().toString();
-        ftsQuery = ftsQuery.split("#current-user").join(employeeRef);
-    }
-
-    if (ftsQuery.indexOf("#current-date") >= 0) {
-        var nDays = notifications.getSettingsNDays();
-        var limitDate = workCalendar.getNextWorkingDate(new Date(), nDays);
-        ftsQuery = ftsQuery.split("#current-date").join(base.dateToISOString(limitDate));
-    }
-
-    if (logger.isLoggingEnabled())
-        logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
 
     //настройки сортировки
     // sort field - expecting field to in one of the following formats:
@@ -377,33 +179,249 @@ function getSearchResults(params) {
         sortField.ascending = asc;
     }
 
-    var sortColumns = [];
-    if (sortField.column.charAt(0) == '.') {
-        // handle pseudo cm:content fields
-        sortField.column = "@{http://www.alfresco.org/model/content/1.0}content" + sortField.column;
-    }
-    else if (sortField.column.indexOf(":") != -1) {
-        // handle attribute field sort
-        sortField.column = "@" + utils.longQName(sortField.column);
-    }
-    sortColumns.push(sortField);
+    if (!useChildQuery) {
+        var typesQuery = "", formQuery = "", fullTextSearchQuery = "", filter = "", filtersQuery ="";
+        // вытаскивае6м инфу из searchConfig
+        if (searchConfigString != null && searchConfigString.length() > 0) {
+            var searchConfig = jsonUtils.toObject(searchConfigString);
 
-    // Получаем число всех записей
-    var queryDef = {
-        query: ftsQuery,
-        language: "fts-alfresco",
-        onerror: "no-results"
-    };
-    var total = searchCounter.query(queryDef);
+            // данные из формы атрибутивного поиска
+            var formData = searchConfig.formData;
+            if (formData != null && formData.length > 0) {
+                var formJson = jsonUtils.toObject(formData);
+                itemType = formJson.datatype; // заменяем пришедший тип на тип из формы
 
-    // выполняем запрос с ограничением
-    queryDef = {
-        query: ftsQuery,
-        language: "fts-alfresco",
-        page: {maxItems: pageSize, skipCount: (startIndex < total ? startIndex : 0)},
-        onerror: "no-results",
-        sort: sortColumns
-    };
-    nodes = search.query(queryDef);
+                // extract form data and generate search query
+                var first = true;
+                for (var p in formJson) {
+                    // retrieve value and check there is someting to search for
+                    // currently all values are returned as strings
+                    var propValue = formJson[p];
+                    if (propValue.length !== 0) {
+                        if (p.indexOf("prop_") === 0) {
+                            // found a property - is it namespace_propertyname or pseudo property format?
+                            var propName = p.substr(5);
+                            if (propName.indexOf("_") !== -1) {
+                                // property name - convert to DD property name format
+                                propName = propName.replace("_", ":");
+
+                                // special case for range packed properties
+                                if (propName.match("-range$") == "-range") {
+                                    // currently support text based ranges (usually numbers) or date ranges
+                                    // range value is packed with a | character separator
+
+                                    // if neither value is specified then there is no need to add the term
+                                    if (propValue.length > 1) {
+                                        var from, to, sepindex = propValue.indexOf("|");
+                                        if (propName.match("-date-range$") == "-date-range") {
+                                            // date range found
+                                            propName = propName.substr(0, propName.length - "-date-range".length)
+
+                                            // work out if "from" and/or "to" are specified - use MIN and MAX otherwise;
+                                            // we only want the "YYYY-MM-DD" part of the ISO date value - so crop the strings
+                                            from = (sepindex === 0 ? "MIN" : propValue.substr(0, 10));
+                                            to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1, sepindex + 10));
+                                        }
+                                        else {
+                                            // simple range found
+                                            propName = propName.substr(0, propName.length - "-range".length);
+
+                                            // work out if "min" and/or "max" are specified - use MIN and MAX otherwise
+                                            from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));
+                                            to = (sepindex === propValue.length - 1 ? "MAX" : propValue.substr(sepindex + 1));
+                                        }
+                                        formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + from + '".."' + to + '"';
+                                        first = false;
+                                    }
+                                }
+                                else {
+                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"*' + propValue + '*"';
+                                    first = false;
+                                }
+                            }
+                            else {
+                                // pseudo cm:content property - e.g. mimetype, size or encoding
+                                formQuery += (first ? '' : ' AND ') + 'cm:content.' + propName + ':"' + propValue + '"';
+                                first = false;
+                            }
+                        } else if (p.indexOf("assoc_") == 0 && p.lastIndexOf("_added") == p.length - 6) {
+                            //поиск по ассоциациям
+                            var assocName = p.substring(6);
+                            assocName = assocName.substring(0, assocName.lastIndexOf("_added"));
+                            if (assocName.indexOf("_") !== -1) {
+                                assocName = assocName.replace("_", ":") + "-ref"; //выведение имя свойства, в котором искать
+                                formQuery += (first ? '(' : ' AND (');
+                                var assocValues = propValue.split(",");
+                                var firstAssoc = true;
+                                for (var k = 0; k < assocValues.length; k++) {
+                                    var assocValue = assocValues[k];
+                                    if (!firstAssoc) {
+                                        formQuery += " OR ";    //ищем по "или"
+                                    }
+                                    formQuery += escapeQName(assocName) + ':"' + assocValue + '"';
+                                    firstAssoc = false;
+                                }
+                                formQuery += ") ";
+                                first = false;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //полнотекстовый поиск
+            if (searchConfig.fullTextSearch != null && searchConfig.fullTextSearch.length > 0) {
+                var fullTextSearch = searchConfig.fullTextSearch;
+                var fullTextSearchJson = jsonUtils.toObject(fullTextSearch);
+
+                var parentNodeRef = fullTextSearchJson["parentNodeRef"];
+                logger.log("parentNodeRef = " + parentNodeRef);
+                if (parentNodeRef != null && parentNodeRef.length > 0) {
+                    var parentNode = search.findNode(parentNodeRef);
+                    if (parentNode != null && (!searchConfig.filter || searchConfig.filter && searchConfig.filter.indexOf('PATH') == -1)) {
+                        var xpath = parentNode.getQnamePath();
+                        fullTextSearchQuery += " +PATH:\"" + xpath + "//*\"";
+                    }
+                }
+
+                var ftsFields = fullTextSearchJson["fields"];
+                logger.log("ftsFields = " + ftsFields);
+                var searchTerm = fullTextSearchJson["searchTerm"];
+                logger.log("searchTerm = " + searchTerm);
+                if (ftsFields != null && ftsFields.length > 0 && searchTerm != null && searchTerm.length > 0) {
+                    var columns = ftsFields.split(",");
+                    var fieldsQuery = "";
+
+                    for (var i = 0; i < columns.length; i++) {
+                        fieldsQuery += this.escapeQName(columns[i]) + ':"*' + searchTerm + '*" OR ';
+                    }
+                    if (fieldsQuery.length > 5) {
+                        fieldsQuery = fieldsQuery.substring(0, fieldsQuery.length - 4);
+                        fullTextSearchQuery += (fullTextSearchQuery.length > 0 ? " AND " : "") + " (" + fieldsQuery + ")";
+                    }
+                }
+            }
+
+            logger.log("fullTextSearchQuery = " + fullTextSearchQuery);
+
+            // фильтры
+            filter = searchConfig.filter != null ? searchConfig.filter : '';
+            var filterObjs = [];
+            if (filterStr != null && ("" + filterStr).length > 0) {
+                var filtersJSON = eval('(' + filterStr.toString() + ')');
+                for (var index in filtersJSON) {
+                    filterObjs.push(Filters.getFilterParams(filtersJSON[index]));
+                }
+            }
+            filtersQuery = filterObjs != null && filterObjs.length > 0 ? getFiltersQuery(filterObjs) : '';
+
+            logger.log("filtersQuery = " + filtersQuery);;
+        }
+
+        // extract data type for this search - advanced search query is type specific
+        if (itemType != null && ("" + itemType).length > 0) {
+            var typesArray = itemType.split(",");
+            var numTypes = typesArray.length;
+
+            for (var count = 0; count < numTypes; count++) {
+                var type = typesArray[count];
+                if (type != null && type.length > 0) {
+                    if (typesQuery.length > 0) {
+                        typesQuery += " ";
+                    }
+                    typesQuery += '+TYPE:"' + type + '"'
+                }
+            }
+        }
+
+        ftsQuery += (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '');
+        ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + formQuery + ')') : '');
+        ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filter + ')') : '');
+        ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filtersQuery + ')') : '');
+        ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + fullTextSearchQuery + ')') : '')
+
+        //фильтр по родителю
+        // TODO последняя проверка - временное решение для поиска по вложенным элементам. Нужно ввести доп параметр
+        if (parent != null && ("" + parent).length > 0 && (ftsQuery.length == 0 || ftsQuery.indexOf("PATH") < 0)) {
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' PARENT:"' + parent + '"';
+        }
+
+        // по активности
+        if (!showInactive) {
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + '(NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
+        }
+
+
+        //фильтр по доступным нодам
+        if (searchNodes != null) {
+            var query = "";
+            for (i = 0; i < searchNodes.length; i++) {
+                query += "ID:" + searchNodes[i].replace(":", "\\:");
+                if (i < searchNodes.length - 1) {
+                    query += " OR "
+                }
+            }
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' ' + query + ')';
+        }
+
+        //спец сочетания
+        if (ftsQuery.indexOf("#current-user") >= 0) {
+            var employeeRef = orgstructure.getCurrentEmployee().getNodeRef().toString();
+            ftsQuery = ftsQuery.split("#current-user").join(employeeRef);
+        }
+
+        if (ftsQuery.indexOf("#current-date") >= 0) {
+            var nDays = notifications.getSettingsNDays();
+            var limitDate = workCalendar.getNextWorkingDate(new Date(), nDays);
+            ftsQuery = ftsQuery.split("#current-date").join(base.dateToISOString(limitDate));
+        }
+
+        if (logger.isLoggingEnabled())
+            logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
+
+        // Получаем число всех записей
+        var queryDef = {
+            query: ftsQuery,
+            language: "fts-alfresco",
+            onerror: "no-results"
+        };
+        var total = searchCounter.query(queryDef);
+
+        var sortColumns = [];
+        if (sortField.column.charAt(0) == '.') {
+            // handle pseudo cm:content fields
+            sortField.column = "@{http://www.alfresco.org/model/content/1.0}content" + sortField.column;
+        }
+        else if (sortField.column.indexOf(":") != -1) {
+            // handle attribute field sort
+            sortField.column = "@" + utils.longQName(sortField.column);
+        }
+        sortColumns.push(sortField);
+
+        // выполняем запрос с ограничением
+        queryDef = {
+            query: ftsQuery,
+            language: "fts-alfresco",
+            page: {maxItems: pageSize, skipCount: (startIndex < total ? startIndex : 0)},
+            onerror: "no-results",
+            sort: sortColumns
+        };
+        nodes = search.query(queryDef);
+    } else { // ищем не используя SOLR
+        nodes = [];
+        if (parent != null && parent.length() > 0 && parent != 'NOT_LOAD') {
+            var node = search.findNode(parent);
+            if (node) {
+                if (logger.isLoggingEnabled())
+                    logger.log("Get childs for node:\r\n" + parent + "\r\nItemType: " + (itemType != null ? itemType : ""));
+                var childsPaged = base.getChilds(node, itemType, pageSize, startIndex, utils.shortQName(sortField.column), sortField.ascending, !showInactive);
+                nodes = childsPaged.page;
+                total = childsPaged.totalResultCountUpper;
+                if (logger.isLoggingEnabled())
+                    logger.log("[Results]Found:\r\n" + nodes.length + "\r\nTotal: " + (total != null ? total : ""));
+            }
+        }
+    }
+
     return processResults(nodes, fields, nameSubstituteStrings, startIndex, total);
 }

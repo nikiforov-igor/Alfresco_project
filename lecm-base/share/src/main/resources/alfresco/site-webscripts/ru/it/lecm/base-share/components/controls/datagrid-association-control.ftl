@@ -159,6 +159,7 @@
                 itemType: "${field.control.params.itemType!""}",
                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
                 createFormId: "${field.control.params.createFormId!""}",
+                useChildQuery: true,
                 nodeRef: nodeRef,
                 actionsConfig: {
                     fullDelete: "${field.control.params.fullDelete!"true"}"

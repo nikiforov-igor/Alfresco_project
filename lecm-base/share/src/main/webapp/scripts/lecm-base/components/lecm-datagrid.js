@@ -1241,7 +1241,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                 parent: datagridMeta.nodeRef,
 	                            searchNodes: this.datagridMeta.searchNodes,
                                 itemType: datagridMeta.itemType,
-                                sort:datagridMeta.sort
+                                sort:datagridMeta.sort,
+                                useChildQuery:this.datagridMeta.useChildQuery
                             });
                         }
                     }
@@ -1308,7 +1309,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 var params = this.search.buildSearchParams(this.datagridMeta.nodeRef, null,
                     this.datagridMeta.itemType, sort, this.datagridMeta.searchConfig, this.dataRequestFields.join(","),
-                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, this.currentFilters);
+                    this.dataRequestNameSubstituteStrings.join(","), this.options.searchShowInactive, oState.pagination.recordOffset, this.currentFilters, this.datagridMeta.useChildQuery);
                 return YAHOO.lang.JSON.stringify(params);
             },
 
@@ -1509,6 +1510,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig:searchConfig,
                     itemType: this.datagridMeta.itemType,
                     searchShowInactive: searchShowInactive,
+                    useChildQuery:this.datagridMeta.useChildQuery,
                     sort:sort
                 });
             },
@@ -2198,6 +2200,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     itemType: this.datagridMeta.itemType,
                     sort: this.datagridMeta.sort,
                     offset: offset,
+                    useChildQuery:this.datagridMeta.useChildQuery,
                     filter: successFilters
                 });
             },

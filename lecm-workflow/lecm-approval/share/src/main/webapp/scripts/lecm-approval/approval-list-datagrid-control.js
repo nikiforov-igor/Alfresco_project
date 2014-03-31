@@ -60,6 +60,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 								datagridMeta: {
 									itemType: this.approvalListType,
 									nodeRef: this.approvalContainer,
+                                    useChildQuery: true,
 									datagridFormId: this.options.approvalListDatagridId, //"approvalListDataGridControl",
 									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
 									searchConfig: {
@@ -112,6 +113,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				datagridMeta: {
 					itemType: this.approvalItemType,
 					nodeRef: this.approvalListNodeRef,
+                    useChildQuery: true,
 					datagridFormId: this.options.datagridFormId,
 					sort: 'lecm-workflow:assignee-order|true'
 				},

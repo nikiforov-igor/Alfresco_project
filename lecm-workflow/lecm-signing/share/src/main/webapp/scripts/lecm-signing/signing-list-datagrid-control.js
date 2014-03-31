@@ -38,6 +38,7 @@ LogicECM.module.Signing = LogicECM.module.Signing || {};
 								YAHOO.Bubbling.fire("activeGridChanged", {
 									datagridMeta: {
 										itemType: this.signingItemType,
+                                        useChildQuery: true,
 										nodeRef: this.signingListRef,
 										datagridFormId: this.options.datagridFormId,
 										sort: 'lecm-workflow:assignee-order|true'

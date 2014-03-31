@@ -284,6 +284,11 @@
                     <title>Data Column Code</title>
                     <type>d:text</type>
                     <mandatory>true</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
                 </property>
                 <property name="lecm-rpeditor:dataColumnExpression">
                     <title>Data Column Expression</title>

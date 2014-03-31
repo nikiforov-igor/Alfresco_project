@@ -871,6 +871,7 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				datagridMeta: {
 					datagridFormId: this._getDatagridFormId(),
 					itemType: 'lecm-workflow:assignee',
+                    useChildQuery: true,
 					nodeRef: this.options.currentListRef,
 					sort: 'lecm-workflow:assignee-order|true',
 					actionsConfig: {

@@ -65,6 +65,7 @@
 						],
 						datagridMeta:{
 							itemType: "lecm-forms-editor:attr",
+                            useChildQuery: true,
 							nodeRef: "${form.arguments.itemId}",
 							actionsConfig:{
 								fullDelete:true

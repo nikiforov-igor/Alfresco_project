@@ -87,6 +87,7 @@
 				actions: [],
 				datagridMeta: {
 					itemType: "${itemType}",
+                    useChildQuery: true,
 					datagridFormId: "datagrid",
 					nodeRef: "${form.arguments.itemId}",
 					sort: "lecm-workflow:assignee-order|true",

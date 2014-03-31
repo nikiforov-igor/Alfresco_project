@@ -22,6 +22,7 @@ function main() {
 			searchNodes: (pars.get("searchNodes").length() > 0)  ? pars.get("searchNodes").split(",") : null,
             itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
             startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX,
+            useChildQuery: pars.has("useChildQuery") ? ("" + pars.get("useChildQuery") == "true") : false,
             filter: pars.has("filter")  ? pars.get("filter") : null
         };
     }
