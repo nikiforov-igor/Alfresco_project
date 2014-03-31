@@ -33,6 +33,11 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#assign useDynamicLoading = true>
+<#if field.control.params.useDynamicLoading?? && field.control.params.useDynamicLoading == "false">
+	<#assign useDynamicLoading = false>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <script type="text/javascript">//<![CDATA[
@@ -69,7 +74,8 @@
 		childrenDataSource: "${field.control.params.childrenDataSource}",
 	</#if>
 		nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-		additionalFilter: "${field.control.params.additionalFilter!''}"
+		additionalFilter: "${field.control.params.additionalFilter!''}",
+		useDynamicLoading: ${useDynamicLoading?string}
 	});
 
 	LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );

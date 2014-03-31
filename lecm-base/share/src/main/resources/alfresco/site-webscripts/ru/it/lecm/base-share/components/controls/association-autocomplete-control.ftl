@@ -57,6 +57,11 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#assign useDynamicLoading = true>
+<#if field.control.params.useDynamicLoading?? && field.control.params.useDynamicLoading == "false">
+	<#assign useDynamicLoading = false>
+</#if>
+
 <#assign isFieldMandatory = false>
 <#if field.control.params.mandatory??>
     <#if field.control.params.mandatory == "true">
@@ -133,7 +138,8 @@
 	    defaultValue: "${defaultValue?string}",
     </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
-        additionalFilter: "${field.control.params.additionalFilter!''}"
+        additionalFilter: "${field.control.params.additionalFilter!''}",
+	    useDynamicLoading: ${useDynamicLoading?string}
     });
 
     LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );

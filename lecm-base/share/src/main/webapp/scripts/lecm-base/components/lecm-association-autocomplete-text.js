@@ -30,6 +30,7 @@ LogicECM.module = LogicECM.module || {};
 		this.dataArray = [];
         this.allowedNodes = null;
         this.allowedNodesScript = null;
+		this.searchProperties = {};
 		return this;
 	};
 
@@ -60,7 +61,9 @@ LogicECM.module = LogicECM.module || {};
 
                 allowedNodes:null,
 
-                allowedNodesScript: null
+                allowedNodesScript: null,
+
+				useDynamicLoading: false
 			},
 
 			dataArray: null,
@@ -71,9 +74,14 @@ LogicECM.module = LogicECM.module || {};
 
 			dataSource:null,
 
+			searchProperties: null,
+
 			onReady:function () {
 				if (!this.options.disabled) {
 					this.populateDataWithAllowedScript();
+					if (this.options.useDynamicLoading) {
+						this._loadSearchProperties();
+					}
 				}
 			},
 
@@ -92,9 +100,38 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			makeAutocomplete: function() {
-				var oDS = new YAHOO.util.LocalDataSource(this.dataArray);
-				oDS.responseSchema = {fields:["name", "nodeRef"]};
+				var me = this;
+				var oDS;
+
+				if (me.options.useDynamicLoading) {
+					var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily + this._generateChildrenUrlPath(this.options.parentNodeRef);
+					oDS = new YAHOO.util.XHRDataSource(url);
+					oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+					oDS.responseSchema = {
+						resultsList: "data.items",
+						fields:["name", "selectedName", "nodeRef"]
+					};
+				} else {
+					oDS = new YAHOO.util.LocalDataSource(this.dataArray);
+					oDS.responseSchema = {fields:["name", "nodeRef"]};
+				}
+
 				var oAC = new YAHOO.widget.AutoComplete(this.currentValueHtmlId, this.controlId + "-autocomplete-container", oDS);
+				if (me.options.useDynamicLoading) {
+					oAC.generateRequest = function(sQuery) {
+						var searchData = "";
+						for(var column in me.searchProperties) {
+							searchData += column + ":" + decodeURIComponent(sQuery) + "#";
+						}
+						if (searchData != "") {
+							searchData = searchData.substring(0,(searchData.length)-1);
+						}
+
+						return me._generateChildrenUrlParams(searchData);
+					};
+					oAC.queryDelay = 1;
+				}
+
 				oAC.prehighlightClassName = "yui-ac-prehighlight";
 				oAC.useShadow = true;
 				oAC.forceSelection = false;
@@ -294,14 +331,22 @@ LogicECM.module = LogicECM.module || {};
                         successCallback: {
                             fn: function (response) {
                                 context.options.allowedNodes = response.json.nodes;
-                                context.populateData();
+	                            if (context.options.useDynamicLoading) {
+		                            context.makeAutocomplete();
+	                            } else {
+		                            context.populateData();
+	                            }
                             },
                             scope: this
                         },
                         failureCallback: {
                             fn: function onFailure(response) {
                                 context.options.allowedNodes = null;
-                                context.populateData();
+	                            if (context.options.useDynamicLoading) {
+		                            context.makeAutocomplete();
+	                            } else {
+		                            context.populateData();
+	                            }
                             },
                             scope: this
                         },
@@ -311,6 +356,40 @@ LogicECM.module = LogicECM.module || {};
                 } else {
                     context.populateData();
                 }
-            }
+            },
+
+			_loadSearchProperties: function AssociationTreeViewer__loadSearchProperties() {
+				Alfresco.util.Ajax.jsonGet(
+					{
+						url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.options.itemType)),
+						successCallback:
+						{
+							fn: function (response) {
+								var columns = response.json.columns;
+								for (var i = 0; i < columns.length; i++) {
+									var column = columns[i];
+									if (column.dataType == "text") {
+										this.searchProperties[column.name] = column.name;
+									}
+								}
+							},
+							scope: this
+						},
+						failureCallback:
+						{
+							fn: function (oResponse) {
+								var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+								this.widgets.dataTable.set("MSG_ERROR", response.message);
+								this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+							},
+							obj:
+							{
+								title: this.msg("message.error.columns.title"),
+								text: this.msg("message.error.columns.description")
+							},
+							scope: this
+						}
+					});
+			}
         });
 })();
