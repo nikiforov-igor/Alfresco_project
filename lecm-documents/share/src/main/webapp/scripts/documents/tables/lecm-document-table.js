@@ -178,7 +178,7 @@ LogicECM.module = LogicECM.module || {};
 								fullDelete: true
 					        },
 							sort: "lecm-document:indexTableRow",
-							searchConfig: {}
+							useChildQuery: true
 						},
 						bubblingLabel: this.options.bubblingLabel,
 						showActionColumn: this.options.showActions,
