@@ -209,35 +209,6 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 	    },
 
         /**
-         * Формирование адреса при редактировании или создании элемента дерева
-         * @param type {string} тип действия edit - редактирование элемента
-         * @param nodeRef {string} ссылка на узел
-         * @param childNodeType childNodeType {string} ссылка на дочерний узел
-         * @return {*}
-         * @private
-         */
-        _createUrl:function (type, nodeRef, childNodeType) {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true";
-            if (type == "create") {
-                return YAHOO.lang.substitute(templateUrl, {
-                    itemKind:"type",
-                    itemId:childNodeType,
-                    destination:nodeRef,
-                    mode:"create",
-                    submitType:"json",
-                    formId:"dictionary-node-form"
-                });
-            } else {
-                return YAHOO.lang.substitute(templateUrl, {
-                    itemKind:"node",
-                    itemId:nodeRef,
-                    mode:"edit",
-                    submitType:"json",
-                    formId:"dictionary-node-form"
-                });
-            }
-        },
-        /**
          * Получение корневого узла
          * @private
          */
@@ -341,10 +312,19 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         _editNode:function editNodeByEvent(event) {
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
-            var templateUrl = this._createUrl("edit", event.node.data.nodeRef);
+            var templateUrl =  Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	        var templateRequestParams = {
+		        itemKind:"node",
+		        itemId:event.node.data.nodeRef,
+		        mode:"edit",
+		        submitType:"json",
+		        formId:"dictionary-node-form",
+		        showCancelButton: true
+	        };
             new Alfresco.module.SimpleDialog("form-dialog").setOptions({
                 width:"40em",
                 templateUrl:templateUrl,
+	            templateRequestParams:templateRequestParams,
                 actionUrl:null,
                 destroyOnHide:true,
                 doBeforeDialogShow:{
@@ -382,6 +362,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 [ p_dialog.id + "-form-container_h", fileSpan]
             );
             this.doubleClickLock = false;
+	        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
         }
     });
 
