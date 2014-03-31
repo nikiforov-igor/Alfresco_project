@@ -79,8 +79,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             }
             this.afterDataGridUpdate = [];
         },
-        setupDataTable: function (columns) {
-            // YUI DataTable colum
+        setupDataTable: function () {
             var columnDefinitions = this.getDataTableColumnDefinitions();
             // DataTable definition
             var me = this;
@@ -89,7 +88,7 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
                 this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                 this.widgets.dataTable.subscribe("beforeRenderEvent", function () {
                         me.beforeRenderFunction();
-                        YAHOO.Bubbling.fire("refreshButtonState",{
+                        YAHOO.Bubbling.fire("refreshButtonState", {
                             bubblingLabel: "workForce",
                             disabledButtons: ["activeOnParentTableClick"]
                         });
@@ -107,39 +106,36 @@ LogicECM.module.Orgstructure = LogicECM.module.Orgstructure || {};
             var searchConfig = this.datagridMeta.searchConfig;
             var sort = this.datagridMeta.sort;
             var searchShowInactive;
-            if (this.datagridMeta.hasOwnProperty ("searchShowInactive")) {
+            if (this.datagridMeta.hasOwnProperty("searchShowInactive")) {
                 searchShowInactive = this.datagridMeta.searchShowInactive;
             } else {
                 searchShowInactive = this.options.searchShowInactive;
             }
-            if (searchConfig) { // Поиск через SOLR
-                if (searchConfig.formData) {
-                    searchConfig.formData.datatype = this.datagridMeta.itemType;
-                } else {
-                    searchConfig.formData = {
-                        datatype: this.datagridMeta.itemType
-                    };
-                }
-                //при первом поиске сохраняем настройки
-                if (this.initialSearchConfig == null) {
-                    this.initialSearchConfig = {fullTextSearch: null};
-                    this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
-                }
 
-                this.search.performSearch({
-                    parent: this.datagridMeta.nodeRef,
-                    searchConfig:searchConfig,
-                    searchShowInactive: searchShowInactive,
-                    sort:sort
-                });
-            } else { // Поиск без использования SOLR
-                this.search.performSearch({
-                    parent: this.datagridMeta.nodeRef,
-                    itemType: this.datagridMeta.itemType,
-                    searchShowInactive: searchShowInactive,
-                    sort:sort
-                });
+            if (!searchConfig) {
+                searchConfig = {};
+
             }
+            if (searchConfig.formData) {
+                searchConfig.formData.datatype = this.datagridMeta.itemType;
+            } else {
+                searchConfig.formData = {
+                    datatype: this.datagridMeta.itemType
+                };
+            }
+            //при первом поиске сохраняем настройки
+            if (this.initialSearchConfig == null) {
+                this.initialSearchConfig = {fullTextSearch: null};
+                this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+            }
+
+            this.search.performSearch({
+                parent: this.datagridMeta.nodeRef,
+                itemType: this.datagridMeta.itemType,
+                searchConfig: searchConfig,
+                searchShowInactive: searchShowInactive,
+                sort: sort
+            });
         },
         /**
          * Выделение строки в таблице

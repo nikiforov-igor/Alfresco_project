@@ -1473,6 +1473,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var searchConfig = this.datagridMeta.searchConfig;
                 var sort = this.datagridMeta.sort;
 				var searchShowInactive;
+
 				//если в datagridMeta существует searchShowInactive
 				if (this.datagridMeta.hasOwnProperty ("searchShowInactive")) {
 					searchShowInactive = this.datagridMeta.searchShowInactive;
@@ -1480,39 +1481,36 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 					searchShowInactive = this.options.searchShowInactive;
 				}
 
-                if (searchConfig) { // Поиск через SOLR
-                    if (searchConfig.formData) {
-                        if (typeof searchConfig.formData == "string") {
-                            searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
-                        }
-                        searchConfig.formData.datatype = this.datagridMeta.itemType;
-                    } else {
-                        searchConfig.formData = {
-                            datatype: this.datagridMeta.itemType
-                        };
-                    }
-                    //при первом поиске сохраняем настройки
-                    if (this.initialSearchConfig == null) {
-                        this.initialSearchConfig = {fullTextSearch: null};
-                        this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
-                    }
-
-                    this.search.performSearch({
-                        parent: this.datagridMeta.nodeRef,
-	                    searchNodes: this.datagridMeta.searchNodes,
-                        searchConfig:searchConfig,
-                        searchShowInactive: searchShowInactive,
-                        sort:sort
-                    });
-                } else { // Поиск без использования SOLR
-                    this.search.performSearch({
-                        parent: this.datagridMeta.nodeRef,
-	                    searchNodes: this.datagridMeta.searchNodes,
-                        itemType: this.datagridMeta.itemType,
-                        searchShowInactive: searchShowInactive,
-                        sort:sort
-                    });
+                if (!searchConfig) {
+                    searchConfig = {};
                 }
+
+                // фиксируем тип
+                if (searchConfig.formData) {
+                    if (typeof searchConfig.formData == "string") {
+                        searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
+                    }
+                    searchConfig.formData.datatype = this.datagridMeta.itemType;
+                } else {
+                    searchConfig.formData = {
+                        datatype: this.datagridMeta.itemType
+                    };
+                }
+
+                //при первом поиске сохраняем настройки
+                if (this.initialSearchConfig == null) {
+                    this.initialSearchConfig = {fullTextSearch: null};
+                    this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+                }
+
+                this.search.performSearch({
+                    parent: this.datagridMeta.nodeRef,
+                    searchNodes: this.datagridMeta.searchNodes,
+                    searchConfig:searchConfig,
+                    itemType: this.datagridMeta.itemType,
+                    searchShowInactive: searchShowInactive,
+                    sort:sort
+                });
             },
 
 	        getDatableSortBy: function(columnDefinitions) {
@@ -2162,9 +2160,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
              * @private
              * @param p_obj.filter {object} Optional filter to navigate with
              */
-            _updateDataGrid: function DataGrid__updateDataGrid(p_obj)
-            {
-                var successFilters = p_obj.filters ? p_obj.filters: null;
+            _updateDataGrid: function DataGrid__updateDataGrid(p_obj) {
+                var successFilters = p_obj.filters ? p_obj.filters : null;
 
                 // Reset the custom error messages
                 this._setDefaultDataTableErrors(this.widgets.dataTable);
@@ -2173,21 +2170,23 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 this.showingMoreActions = false;
 
                 var searchConfig = this.datagridMeta.searchConfig;
-                if (searchConfig) { // Поиск через SOLR
-                    if (searchConfig.formData) {
-                        if (typeof searchConfig.formData == "string") {
-                            searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
-                        }
-                        searchConfig.formData.datatype = this.datagridMeta.itemType;
-                    } else {
-                        searchConfig.formData = {
-                            datatype:this.datagridMeta.itemType
-                        };
-                    }
+                if (!searchConfig) {
+                    searchConfig = {};
                 }
+                if (searchConfig.formData) {
+                    if (typeof searchConfig.formData == "string") {
+                        searchConfig.formData = YAHOO.lang.JSON.parse(searchConfig.formData);
+                    }
+                    searchConfig.formData.datatype = this.datagridMeta.itemType;
+                } else {
+                    searchConfig.formData = {
+                        datatype: this.datagridMeta.itemType
+                    };
+                }
+
                 // Update the DataSource
                 var offset = 0;
-                if (this.widgets.paginator){
+                if (this.widgets.paginator) {
                     offset = ((this.widgets.paginator.getCurrentPage() - 1) * this.options.pageSize);
                 }
 
@@ -2195,10 +2194,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     searchConfig: this.datagridMeta.searchConfig,
                     searchShowInactive: this.options.searchShowInactive,
                     parent: this.datagridMeta.nodeRef,
-	                searchNodes: this.datagridMeta.searchNodes,
+                    searchNodes: this.datagridMeta.searchNodes,
                     itemType: this.datagridMeta.itemType,
-                    sort:this.datagridMeta.sort,
-                    offset:offset,
+                    sort: this.datagridMeta.sort,
+                    offset: offset,
                     filter: successFilters
                 });
             },

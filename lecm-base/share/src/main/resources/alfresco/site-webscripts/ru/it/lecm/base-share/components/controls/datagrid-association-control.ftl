@@ -164,7 +164,7 @@
                     fullDelete: "${field.control.params.fullDelete!"true"}"
                 },
                 sort: "${field.control.params.sort!"lecm-document:indexTableRow"}",
-                searchConfig: null
+                searchConfig: {}
             },
             bubblingLabel: "${bubblingId}",
         <#if field.control.params.height??>

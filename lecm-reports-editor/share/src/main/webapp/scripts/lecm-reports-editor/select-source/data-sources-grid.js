@@ -45,7 +45,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
         }
     },
 
-    setupDataTable: function (columns) {
+    setupDataTable: function () {
         var columnDefinitions = this.getDataTableColumnDefinitions();
         var me = this;
         if (!this.widgets.dataTable) {
@@ -66,34 +66,30 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
         var searchConfig = this.datagridMeta.searchConfig;
         var sort = this.datagridMeta.sort;
         var searchShowInactive = false;
-        if (searchConfig) { // Поиск через SOLR
-            if (searchConfig.formData) {
-                searchConfig.formData.datatype = this.datagridMeta.itemType;
-            } else {
-                searchConfig.formData = {
-                    datatype: this.datagridMeta.itemType
-                };
-            }
-            //при первом поиске сохраняем настройки
-            if (this.initialSearchConfig == null) {
-                this.initialSearchConfig = {fullTextSearch: null};
-                this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
-            }
 
-            this.search.performSearch({
-                parent: this.datagridMeta.nodeRef,
-                searchConfig: searchConfig,
-                searchShowInactive: searchShowInactive,
-                sort: sort
-            });
-        } else { // Поиск без использования SOLR
-            this.search.performSearch({
-                parent: this.datagridMeta.nodeRef,
-                itemType: this.datagridMeta.itemType,
-                searchShowInactive: searchShowInactive,
-                sort: sort
-            });
+        if (!searchConfig) {
+            searchConfig = {};
         }
+        if (searchConfig.formData) {
+            searchConfig.formData.datatype = this.datagridMeta.itemType;
+        } else {
+            searchConfig.formData = {
+                datatype: this.datagridMeta.itemType
+            };
+        }
+        //при первом поиске сохраняем настройки
+        if (this.initialSearchConfig == null) {
+            this.initialSearchConfig = {fullTextSearch: null};
+            this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+        }
+
+        this.search.performSearch({
+            parent: this.datagridMeta.nodeRef,
+            itemType: this.datagridMeta.itemType,
+            searchConfig: searchConfig,
+            searchShowInactive: searchShowInactive,
+            sort: sort
+        });
     },
 
     onEventSelectRow: function DataGrid_onEventSelectRow(oArgs) {

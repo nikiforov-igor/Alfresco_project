@@ -134,59 +134,55 @@ LogicECM.module.WCalendar.Calendar.Years = LogicECM.module.WCalendar.Calendar.Ye
 				});
 			}
 		},
-		setupDataTable: function DataGrid_setupDataTable(columns) {
-			// YUI DataTable colum
-			var columnDefinitions = this.getDataTableColumnDefinitions();
-			// DataTable definition
-			var me = this;
-			if (!this.widgets.dataTable) {
+        setupDataTable: function DataGrid_setupDataTable() {
+            // YUI DataTable colum
+            var columnDefinitions = this.getDataTableColumnDefinitions();
+            // DataTable definition
+            var me = this;
+            if (!this.widgets.dataTable) {
                 this._setupPaginatior();
-				this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
-				this.widgets.dataTable.subscribe("beforeRenderEvent", function() {
-					me.beforeRenderFunction();
-				},
-						me.widgets.dataTable, true);
-				if (this._hasEventInterest(LogicECM.module.WCalendar.Calendar.YEARS_LABEL)) {
-					this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
-				}
-			}
-			this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
-				showExtendSearchBlock: this.options.showExtendSearchBlock
-			});
+                this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                this.widgets.dataTable.subscribe("beforeRenderEvent", function () {
+                        me.beforeRenderFunction();
+                    },
+                    me.widgets.dataTable, true);
+                if (this._hasEventInterest(LogicECM.module.WCalendar.Calendar.YEARS_LABEL)) {
+                    this.widgets.dataTable.subscribe("rowClickEvent", this.onEventSelectRow, this, true);
+                }
+            }
+            this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
+                showExtendSearchBlock: this.options.showExtendSearchBlock
+            });
 
             var searchConfig = this.datagridMeta.searchConfig;
             var sort = this.datagridMeta.sort;
             var searchShowInactive = false;
 
-            if (searchConfig) { // Поиск через SOLR
-                if (searchConfig.formData) {
-                    searchConfig.formData.datatype = this.datagridMeta.itemType;
-                } else {
-                    searchConfig.formData = {
-                        datatype: this.datagridMeta.itemType
-                    };
-                }
-                //при первом поиске сохраняем настройки
-                if (this.initialSearchConfig == null) {
-                    this.initialSearchConfig = {fullTextSearch: null};
-                    this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
-                }
-
-                this.search.performSearch({
-                    parent: this.datagridMeta.nodeRef,
-                    searchConfig:searchConfig,
-                    searchShowInactive: searchShowInactive,
-                    sort:sort
-                });
-            } else { // Поиск без использования SOLR
-                this.search.performSearch({
-                    parent: this.datagridMeta.nodeRef,
-                    itemType: this.datagridMeta.itemType,
-                    searchShowInactive: searchShowInactive,
-                    sort:sort
-                });
+            if (!searchConfig) {
+                searchConfig = {};
             }
-		}
+
+            if (searchConfig.formData) {
+                searchConfig.formData.datatype = this.datagridMeta.itemType;
+            } else {
+                searchConfig.formData = {
+                    datatype: this.datagridMeta.itemType
+                };
+            }
+            //при первом поиске сохраняем настройки
+            if (this.initialSearchConfig == null) {
+                this.initialSearchConfig = {fullTextSearch: null};
+                this.initialSearchConfig = YAHOO.lang.merge(searchConfig, this.initialSearchConfig);
+            }
+
+            this.search.performSearch({
+                parent: this.datagridMeta.nodeRef,
+                itemType:this.datagridMeta.itemType,
+                searchConfig: searchConfig,
+                searchShowInactive: searchShowInactive,
+                sort: sort
+            });
+        }
 	}, true);
 
 })();

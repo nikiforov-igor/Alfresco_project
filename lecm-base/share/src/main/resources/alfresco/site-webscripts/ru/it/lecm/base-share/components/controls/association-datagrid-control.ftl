@@ -139,7 +139,7 @@
                     fullDelete: "${field.control.params.fullDelete!"true"}"
                 },
                 sort: "${field.control.params.sort!""}",
-                searchConfig: null
+                searchConfig: {}
             },
             bubblingLabel: "${bubblingId}",
         <#if field.control.params.height??>
