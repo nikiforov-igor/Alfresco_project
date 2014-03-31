@@ -569,4 +569,11 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="string-compare" condition="Workflow">
+        <hidden-workflows>
+            <workflow name="activiti$lecm-internal_document"/>
+            <workflow name="activiti$lecmInternalDirect"/>
+        </hidden-workflows>
+    </config>
 </alfresco-config>
