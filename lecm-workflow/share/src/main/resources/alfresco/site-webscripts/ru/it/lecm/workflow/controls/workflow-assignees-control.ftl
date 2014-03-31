@@ -127,7 +127,8 @@
 		});
 
 		loader.onSuccess = createControl;
-		loader.insert();
+		loader.insert(null, 'css');
+		loader.insert(null, 'js');
 
 		function createControl() {
 			var workflowList, initOptions = {
