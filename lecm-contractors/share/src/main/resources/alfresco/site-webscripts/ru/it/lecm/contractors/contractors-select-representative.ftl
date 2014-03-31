@@ -6,6 +6,11 @@
 	<#assign fieldId = fieldId + "-view-repsesentative">
 </#if>
 
+<#assign emptyMessageId = field.control.params.emptyMessageId ! "">
+<#assign emptyMessage = (field.control.params.emptyMessage) ! msg(emptyMessageId)>
+<#if emptyMessage?length == 0>
+	<#assign emptyMessage = "Без адресанта...">
+</#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
@@ -278,7 +283,7 @@
 				if( selectedContractors.length === 0 ) {
 
 					selectElement.options.length = 1; // FUTURE: JSHint-friendly.
-					selectElement.options[ 0 ] = new Option( "Без адресанта...", "", true );
+					selectElement.options[ 0 ] = new Option( this.options.emptyMessage, "", true );
 					selectElement.disabled = true;
 
 					this.previousSelected = null;
@@ -326,7 +331,7 @@
 
 							// Очищаем список.
 							selectElement.options.length = 1; // FUTURE: JSHint-friendly...
-							selectElement.options[ 0 ] = new Option( "Без адресанта...", "", true, true );
+							selectElement.options[ 0 ] = new Option( this.options.emptyMessage, "", true, true );
 
 							// Если представители отсутствуют.
 							if( lg == 0 ) {
@@ -404,6 +409,7 @@
 	})();
 
 	new LogicECM.module.SelectRepresentativeForContractor("${controlId}").setOptions({
+		emptyMessage: '${emptyMessage}',
 		<#if field.control.params.createNewMessage??>
 			createNewMessage: "${field.control.params.createNewMessage}"
 		<#elseif field.control.params.createNewMessageId??>

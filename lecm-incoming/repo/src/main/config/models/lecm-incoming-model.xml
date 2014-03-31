@@ -198,9 +198,9 @@
 						<many>false</many>
 					</target>
 				</association>
-				<!--Адресат -->
+				<!-- Отправитель -->
 				<association name="lecm-incoming:addressee-assoc">
-					<title>Адресат</title>
+					<title>Отправитель</title>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>

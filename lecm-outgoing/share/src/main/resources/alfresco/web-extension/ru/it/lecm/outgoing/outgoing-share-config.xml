@@ -19,7 +19,7 @@
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
 					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
@@ -69,7 +69,8 @@
 					<field id="lecm-outgoing:recipient-assoc" set="outgoing4">
 						<control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 							<control-param name="updateOnAction">lecm-outgoing-addressee-assoc</control-param>
-							<control-param name="createNewMessage">Новый адресат</control-param>
+							<control-param name="createNewMessage">Новый Получатель</control-param>
+							<control-param name="emptyMessage">Без получателя...</control-param>
 						</control>
 					</field>
 
@@ -119,7 +120,7 @@
 			<form id="document">
 				<field-visibility>
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
@@ -130,7 +131,7 @@
 			<form id="document-dashlet">
 				<field-visibility>
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-statemachine:status"/>																<!-- Статус -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
@@ -169,7 +170,7 @@
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
 					<show id="lecm-outgoing:contractor-assoc" force="true"/>											<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
 					<show id="lecm-eds-document:summaryContent"/>														<!-- Содержание -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
@@ -218,7 +219,8 @@
 					<field id="lecm-outgoing:recipient-assoc" set="outgoing5">
 						<control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 							<control-param name="updateOnAction">lecm-outgoing-addressee-assoc</control-param>
-							<control-param name="createNewMessage">Новый адресат</control-param>
+							<control-param name="createNewMessage">Новый Получатель</control-param>
+							<control-param name="emptyMessage">Без получателя...</control-param>
 						</control>
 					</field>
 
@@ -262,7 +264,7 @@
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-statemachine:status"/>																<!-- Статус -->
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 				</field-visibility>
 				<appearance>
 					<field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM}"/>
@@ -279,7 +281,7 @@
 					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации & Регистрационный номер -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Адресат -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 				</field-visibility>
 				<appearance>
 					<field id="lecm-document:doc-date">
@@ -293,7 +295,7 @@
 				<field-visibility>
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Контрагент -->
-					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель|адресант -->
+					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-document-aspects:registrator-assoc"/>												<!-- Регистратор -->

@@ -81,7 +81,8 @@
 		            <field id="lecm-incoming:addressee-assoc" set="incoming5">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
-							<control-param name="createNewMessage">Новый адресант</control-param>
+							<control-param name="createNewMessage">Новый отправитель</control-param>
+							<control-param name="emptyMessage">Без отправителя...</control-param>
 			            </control>
 		            </field>
 
@@ -267,7 +268,8 @@
 		            <field id="lecm-incoming:addressee-assoc" set="incoming5">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
-							<control-param name="createNewMessage">Новый адресант</control-param>
+							<control-param name="createNewMessage">Новый отправитель</control-param>
+							<control-param name="emptyMessage">Без отправителя...</control-param>
 			            </control>
 		            </field>
 
