@@ -322,25 +322,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                     Dom.addClass(contId, "metadata-form-edit");
                     this.doubleClickLock = false;
+
+	                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 };
 
-                var url = "/lecm/components/form/script" +
-                    "?itemKind={itemKind}" +
-                    "&itemId={itemId}" +
-                    "&formId={formId}" +
-                    "&mode={mode}" +
-                    "&submitType={submitType}" +
-                    "&items={items}";
-
-                var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + url,
-                {
-                    itemKind: "type",
-                    itemId: item.actionId,
-                    formId: "scriptForm",
-                    mode: "create",
-                    submitType: "json",
-                    items: JSON.stringify(item.items)
-                });
+                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/script";
+	            var templateRequestParams = {
+		            itemKind: "type",
+		            itemId: item.actionId,
+		            formId: "scriptForm",
+		            mode: "create",
+		            submitType: "json",
+		            items: JSON.stringify(item.items)
+	            };
 
                 // Using Forms Service, so always create new instance
                 var scriptForm = new Alfresco.module.SimpleDialog(this.id + "-scriptForm");
@@ -348,6 +342,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     {
                         width: "40em",
                         templateUrl: templateUrl,
+	                    templateRequestParams: templateRequestParams,
                         actionUrl: null,
                         destroyOnHide: true,
                         doBeforeDialogShow: {

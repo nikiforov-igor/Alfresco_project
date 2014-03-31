@@ -112,22 +112,24 @@ LogicECM.module = LogicECM.module || {};
                     });
                 },
                 addDocument: function addDocement_function() {
-                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true&args={args}&nodeRef={nodeRef}";
-                    templateUrl = YAHOO.lang.substitute(templateUrl, {
-                        itemKind: "type",
-                        destination: this.destination,
-                        itemId: "lecm-internal:document",
-                        mode: "create",
-                        submitType: "json",
-                        formId: "workflow-form",
-                        args: this.initFields
-                    });
+                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+	                var templateRequestParams = {
+		                itemKind: "type",
+		                destination: this.destination,
+		                itemId: "lecm-internal:document",
+		                mode: "create",
+		                submitType: "json",
+		                formId: "workflow-form",
+		                args: this.initFields,
+		                showCancelButton: true
+	                };
 
                     var me = this;
                     LogicECM.CurrentModules = {};
                     LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
                         width: "84em",
                         templateUrl: templateUrl,
+	                    templateRequestParams: templateRequestParams,
                         actionUrl: null,
                         destroyOnHide: true,
                         doBeforeDialogShow: {
@@ -138,7 +140,9 @@ LogicECM.module = LogicECM.module || {};
                                         [contId + "_h", dialogName]
                                 );
 
-                                Dom.addClass(contId, "metadata-form-edit");
+	                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+
+	                            Dom.addClass(contId, "metadata-form-edit");
                                 Dom.addClass(contId, "lecm-internal_document");
                                 me.doubleClickLock = false;
                             }

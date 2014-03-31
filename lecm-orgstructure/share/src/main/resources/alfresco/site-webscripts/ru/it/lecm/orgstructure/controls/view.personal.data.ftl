@@ -38,17 +38,19 @@ function showDialogCreate(nodeRef){
 		Alfresco.util.populateHTML(
 				[ "${id}-dialogTitle", "Personal Data" ]
 		);
+		p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 	};
 
 	// Using Forms Service, so always create new instance
-	var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&destination={destination}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-			{
-				itemKind:"type",
-				itemId:"lecm-orgstr:personal-data",
-				destination:nodeRef,
-				mode:"create",
-				submitType:"json"
-			});
+	var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form";
+	var templateRequestParams = {
+		itemKind:"type",
+		itemId:"lecm-orgstr:personal-data",
+		destination:nodeRef,
+		mode:"create",
+		submitType:"json",
+		showCancelButton: true
+	};
 
 	// Using Forms Service, so always create new instance
 	var createDetails = new Alfresco.module.SimpleDialog("${id}-personalDataDialog");
@@ -56,6 +58,7 @@ function showDialogCreate(nodeRef){
 			{
 				width:"50em",
 				templateUrl:templateUrl,
+				templateRequestParams:templateRequestParams,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{
@@ -108,16 +111,18 @@ function showDialogEdit(nodeRef){
 		Alfresco.util.populateHTML(
 				[ "${id}-dialogTitle", "Personal Data" ]
 		);
+		p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 	};
 
 	// Using Forms Service, so always create new instance
-	var templateUrl = YAHOO.lang.substitute(Alfresco.constants.URL_SERVICECONTEXT + "components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&submitType={submitType}&formId={formId}&showCancelButton=true",
-			{
-				itemKind:"node",
-				itemId:nodeRef,
-				mode:"edit",
-				submitType:"json"
-			});
+	var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "components/form";
+	var templateRequestParams = {
+		itemKind:"node",
+		itemId:nodeRef,
+		mode:"edit",
+		submitType:"json",
+		showCancelButton: true
+	};
 
 	// Using Forms Service, so always create new instance
 	var editDetails = new Alfresco.module.SimpleDialog("${id}-personalDataDialog");
@@ -125,6 +130,7 @@ function showDialogEdit(nodeRef){
 			{
 				width:"50em",
 				templateUrl:templateUrl,
+				templateRequestParams:templateRequestParams,
 				actionUrl:null,
 				destroyOnHide:true,
 				doBeforeDialogShow:{
