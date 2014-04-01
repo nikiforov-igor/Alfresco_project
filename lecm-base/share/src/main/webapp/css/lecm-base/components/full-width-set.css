@@ -73,3 +73,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .form-tabs .full-width div.form-field .mceEditor > table {
 	width: 815px;
 }
+
+.yui-skin-lecmTheme .metadata-form .full-width .viewmode-value div.association-auto-complete-selected-item > span > a {
+ 	max-width: 650px;
+}
