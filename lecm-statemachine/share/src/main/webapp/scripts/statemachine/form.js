@@ -56,6 +56,10 @@ LogicECM.module = LogicECM.module || {};
 						var container = document.getElementById(parent.id + "-formContainer");
 						oResults.actions.forEach(function(action) {
 							var div = document.createElement("div");
+                            if (action.dueDate != null) {
+                                div.title = "Срок исполнения: " + Alfresco.util.formatDate(action.dueDate, "ddd d mmm yyyy");
+
+                            }
 							div.className = "widget-button-grey text-cropped";
 							div.innerHTML = action.label;
 							div.onclick = function() {

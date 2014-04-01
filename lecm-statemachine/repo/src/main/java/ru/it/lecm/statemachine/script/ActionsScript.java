@@ -166,6 +166,8 @@ public class ActionsScript extends DeclarativeWebScript {
                             taskStruct.put("label", userTask.getTitle());
                             taskStruct.put("count", Long.MAX_VALUE);
                             taskStruct.put("isForm", false);
+                            Serializable dueDate = userTask.getProperties().get(QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate"));
+                            taskStruct.put("dueDate", dueDate);
                             actionsList.add(taskStruct);
                         }
                     }
