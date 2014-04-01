@@ -60,7 +60,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 								datagridMeta: {
 									itemType: this.approvalListType,
 									nodeRef: this.approvalContainer,
-                                    useChildQuery: true,
 									datagridFormId: this.options.approvalListDatagridId, //"approvalListDataGridControl",
 									sort: 'lecm-workflow-result:workflow-result-list-complete-date|true',
 									searchConfig: {
