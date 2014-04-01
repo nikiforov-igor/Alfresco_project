@@ -77,3 +77,12 @@
 .yui-skin-lecmTheme .metadata-form .full-width .viewmode-value div.association-auto-complete-selected-item > span > a {
  	max-width: 650px;
 }
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.viewmode-field span.viewmode-value {
+	max-width: 800px;
+}
+
+.yui-panel.metadata-form-edit .full-width div.association-auto-complete-selected-item > span > a,
+.yui-panel.metadata-form-edit .full-width div.association-auto-complete-selected-item > span.not-person {
+	max-width: 700px;
+}
