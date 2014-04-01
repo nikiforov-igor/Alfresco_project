@@ -47,7 +47,11 @@
                         </control>
                     </field>
                     <field id="lecm-orgstr:employee-sex" set="commonOther"/>
-                    <field id="lecm-orgstr:employee-email" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-email" set="commonOther">
+		                <constraint-handlers>
+			                <constraint type="REGEX" validation-handler="LogicECM.module.repoRegexMatchColor" event="keyup" />
+		                </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
                     <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
@@ -228,7 +232,11 @@
                         </control>
                     </field>
                     <field id="lecm-orgstr:employee-sex" set="commonOther"/>
-                    <field id="lecm-orgstr:employee-email" set="commonOther"/>
+                    <field id="lecm-orgstr:employee-email" set="commonOther">
+	                    <constraint-handlers>
+		                    <constraint type="REGEX" validation-handler="LogicECM.module.repoRegexMatchColor" event="keyup" />
+	                    </constraint-handlers>
+                    </field>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
                     <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
