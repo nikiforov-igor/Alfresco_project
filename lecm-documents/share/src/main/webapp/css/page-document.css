@@ -384,3 +384,11 @@ div.yui-panel.form-container .form-fields {
     padding-right: 0;
 }
 
+.task-marker {
+    background-image: url(/share/images/lecm-documents/task-marker.png);
+    background-repeat: no-repeat;
+    background-position-y: 3px;
+    background-position-x: 3px;
+    padding-left: 22px;
+}
+
