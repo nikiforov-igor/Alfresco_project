@@ -355,11 +355,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                             break;
 
                                         case "datetime":
-                                            columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default"));
+                                            columnContent += '<span class="datagrid-datetime">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.default")) + '</span>';
                                             break;
 
                                         case "date":
-                                            columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly"));
+                                            columnContent += '<span class="datagrid-date">' + Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), scope.msg("date-format.defaultDateOnly")) + '</span>';
                                             break;
 
                                         case "text":

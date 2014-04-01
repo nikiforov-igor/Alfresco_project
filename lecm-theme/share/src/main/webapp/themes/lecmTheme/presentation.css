@@ -2747,3 +2747,11 @@ div.form-field table.formFieldControlParamsTable {
 	font-family: Arial;
 	font-size: 13px;
 }
+
+.datagrid-date {
+    white-space: nowrap;
+}
+
+.datagrid-datetime {
+    white-space: nowrap;
+}
