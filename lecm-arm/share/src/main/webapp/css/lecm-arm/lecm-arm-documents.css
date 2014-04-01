@@ -263,3 +263,7 @@ div.error-item
 	border: none;
 	border-radius: 0;
 }
+
+.yui-dt-col-prop_lecm-document_regnum {
+    white-space: nowrap;
+}
