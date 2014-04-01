@@ -23,8 +23,10 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
+import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowResultListService;
@@ -40,10 +42,12 @@ import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
 public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implements SigningWorkflowService {
 
 	private final static String RESULT_LIST_NAME_FORMAT = "Лист подписания версии %s";
+	private final static String BJ_SIGN_MESSAGE = "#initiator подписал(а) документ: #mainobject";
 	private final static Logger logger = LoggerFactory.getLogger(SigningWorkflowServiceImpl.class);
 
 	private IWorkCalendar workCalendarService;
 	private WorkflowResultListService workflowResultListService;
+	private BusinessJournalService businessJournalService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
@@ -51,6 +55,10 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	public void setWorkflowResultListService(WorkflowResultListService workflowResultListService) {
 		this.workflowResultListService = workflowResultListService;
+	}
+
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+		this.businessJournalService = businessJournalService;
 	}
 
 	@Override
@@ -103,7 +111,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		task.setVariable("decisionsMap", decisionsMap);//decisionsMap может быть null, поэтому если она создана, ее надо перезаписать
 		task.setVariable("taskDecision", decision);
 
-		return  taskDecision;
+		return taskDecision;
 	}
 
 	@Override
@@ -266,5 +274,13 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 			resultListRoot = createFolder(parentRef, "Подписание");
 		}
 		return resultListRoot;
+	}
+
+	@Override
+	public void addSignBusinessJournalRecord(NodeRef bpmPackage, NodeRef employee) {
+		NodeRef document = Utils.getDocumentFromBpmPackage(bpmPackage);
+		if (document != null) {
+			businessJournalService.log(orgstructureService.getEmployeeLogin(employee), document, "EDIT", BJ_SIGN_MESSAGE, null);
+		}
 	}
 }

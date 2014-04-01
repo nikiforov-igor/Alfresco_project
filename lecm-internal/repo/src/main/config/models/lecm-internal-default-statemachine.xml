@@ -7365,18 +7365,17 @@ for each (var answer in answers) {
                                                             <property>
                                                                 <name>actionScript</name>
                                                                 <value><![CDATA[if (statemachine.getPreviousStatusName(stm_document) == "Проект") {
-    var currentEmploye = orgstructure.getCurrentEmployee();
+    var currentEmployee = orgstructure.getCurrentEmployee();
 
     var resultList = signingWorkflow.createEmptyResultList(bpm_package, "Внутренний");
-    signingWorkflow.createResultItem(resultList, currentEmploye);
+    signingWorkflow.createResultItem(resultList, currentEmployee);
 
-    var taskDecision = signingWorkflow.getSignedDecision(currentEmploye);
+    var taskDecision = signingWorkflow.getSignedDecision(currentEmployee);
     signingWorkflow.logDecision(resultList, taskDecision);
 
     signingWorkflow.deleteTempAssigneesList(execution);
 
-    var logText = "#initiator подписал(а) документ: #mainobject";
-    businessJournal.log(bpm_package.children[0].getNodeRef().toString(), "EDIT", logText, []);
+    signingWorkflow.addSignBusinessJournalRecord(bpm_package, currentEmployee);
 }]]></value>
                                                             </property>
                                                             <property>
