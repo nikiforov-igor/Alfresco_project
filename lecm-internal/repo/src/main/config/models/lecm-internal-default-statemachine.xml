@@ -921,7 +921,18 @@
                                                             </property>
                                                             <property>
                                                                 <name>transition-script</name>
-                                                                <value><![CDATA[]]></value>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+var fileRegister = document.assocs["lecm-eds-document:file-register-assoc"];
+var unit = null;
+if (fileRegister != null && fileRegister.length == 1) {
+    unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
+}
+
+if (unit == null) {
+unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
+}
+
+documentScript.finalizeToUnit(document, unit);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
@@ -4009,11 +4020,26 @@
                                                         <properties>
                                                             <property>
                                                                 <name>stopSubWorkflows</name>
-                                                                <value><![CDATA[false]]></value>
+                                                                <value><![CDATA[true]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>transitionLabel</name>
                                                                 <value><![CDATA[Удалить]]></value>
+                                                            </property>
+                                                            <property>
+                                                                <name>transition-script</name>
+                                                                <value><![CDATA[var document = bpm_package.children[0];
+var fileRegister = document.assocs["lecm-eds-document:file-register-assoc"];
+var unit = null;
+if (fileRegister != null && fileRegister.length == 1) {
+    unit = fileRegister[0].getParent().assocs["lecm-doc-dic-fr:organization-unit-assoc"][0];
+}
+
+if (unit == null) {
+unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
+}
+
+documentScript.finalizeToUnit(document, unit);]]></value>
                                                             </property>
                                                         </properties>
                                                         <aspects>
