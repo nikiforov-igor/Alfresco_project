@@ -7,9 +7,9 @@ ${msg("heading")}
     </span>
 </h2>
 
-<div style="position: relative;">
-    <div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>
-</div>
+<#--<div style="position: relative;">-->
+    <#--<div class="total-tasks-count-right" <#if data.myTasksTotalCount == 0> style="display: none;" </#if>>${data.myTasksTotalCount}</div>-->
+<#--</div>-->
 
 <div id="${id}-formContainer">
 <#if data??>
