@@ -108,7 +108,11 @@ LogicECM.module = LogicECM.module || {};
 
 			treeItemType: null,
 
-            maxSearchResults: 1000,
+            maxSearchResults: 100,
+
+            maxSearchResultsWithSearch: 20,
+
+			minSearchTermLength: 3,
 
             treeRoteNodeTitleProperty: "cm:name",
 
@@ -545,24 +549,32 @@ LogicECM.module = LogicECM.module || {};
 
         onSearch: function()
         {
-            var nodeRef = this.options.rootNodeRef;
-            if (this.currentNode != null) {
-                nodeRef = this.currentNode.data.nodeRef;
-            }
-            var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
-            var searchData = "";
+	        var searchTerm = Dom.get(this.options.pickerId + "-searchText").value;
 
-            if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
-                for(var column in this.searchProperties) {
-                    searchData += column + ":" + searchTerm + "#";
-                }
-                if (searchData != "") {
-                    searchData = searchData.substring(0,(searchData.length)-1);
-                }
-            }
-			if (this.option)
-            this.isSearch = true;
-            this._updateItems(nodeRef, searchData);
+	        if (searchTerm.length >= this.options.minSearchTermLength) {
+	            var nodeRef = this.options.rootNodeRef;
+	            if (this.currentNode != null) {
+	                nodeRef = this.currentNode.data.nodeRef;
+	            }
+	            var searchData = "";
+
+	            if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
+	                for(var column in this.searchProperties) {
+	                    searchData += column + ":" + searchTerm + "#";
+	                }
+	                if (searchData != "") {
+	                    searchData = searchData.substring(0,(searchData.length)-1);
+	                }
+	            }
+				if (this.option)
+	            this.isSearch = true;
+	            this._updateItems(nodeRef, searchData);
+	        } else {
+		        Alfresco.util.PopupManager.displayMessage(
+			        {
+				        text: this.msg("form.control.object-picker.search.enter-more", this.options.minSearchTermLength)
+			        }, Dom.get(this.widgets.dialog.id));
+	        }
         },
 
         // Render dialog with tree picker
@@ -1183,7 +1195,7 @@ LogicECM.module = LogicECM.module || {};
         _generateChildrenUrlParams: function AssociationTreeViewer__generatePickerChildrenUrlParams(searchTerm)
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                "&size=" + this.getMaxSearchResult() + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
         },
@@ -1661,6 +1673,15 @@ LogicECM.module = LogicECM.module || {};
             } else {
                 context._createSelectedControls();
             }
-        }
+        },
+
+		getMaxSearchResult: function() {
+			if (this.options.showSearch && this.options.plane && this.options.maxSearchResultsWithSearch != null) {
+				return this.options.maxSearchResultsWithSearch;
+			} else if (this.options.maxSearchResults != null) {
+				return this.options.maxSearchResults;
+			}
+			return 100;
+		}
 	});
 })();
