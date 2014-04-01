@@ -224,10 +224,10 @@
 
             <div class="form-field field-status">
                 <div class="read-only-status">
-                    <a onclick="showViewStatusDialog();" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
+                    <a onclick="LogicECM.module.DocumentStatusHistory.showDialog('form-errans-history-status', '${nodeRef}');" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
                 </div>
             </div>
-            <@historyStatus.showDialog formId="form-errans-history-status" nodeRef="${nodeRef}" />
+            <@historyStatus.showDialog formId="form-errans-history-status"/>
         </div>
         <div class="clear"></div>
         <div class="main-info">

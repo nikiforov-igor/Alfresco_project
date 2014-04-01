@@ -493,6 +493,7 @@
 	            <js src="/scripts/documents/tables/lecm-document-table.js"/>
                 <js src="/scripts/lecm-documents/select-status-control.js"/>
                 <js src="/scripts/lecm-documents/lecm-document-preview-control.js"/>
+                <js src="/scripts/lecm-documents/document-status-dialog-history.js"/>
             </dependencies>
             <default-controls>
 	            <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
