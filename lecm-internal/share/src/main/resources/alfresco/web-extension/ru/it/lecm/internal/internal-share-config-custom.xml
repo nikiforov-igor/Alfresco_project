@@ -82,7 +82,8 @@
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
                     <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
-                    <set id="header" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
+	                <set id="header" parent="common" template="/org/alfresco/components/form/2-column-set.ftl" />
+	                <set id="author" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="title" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="typeAndDate" parent="common" template="/org/alfresco/components/form/2-column-set.ftl" />
                     <set id="recipients" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
@@ -90,7 +91,7 @@
                     <set id="responseTo" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="subjectAndRegister" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="note" parent="common" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
-	                <set id="footer" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
+	                <set id="footer" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
                     <field id="lecm-eds-document:note" set="note">
                         <control template="/org/alfresco/components/form/controls/textarea.ftl">
@@ -99,7 +100,7 @@
                     </field>
                     <field id="lecm-document:regnum" set="header"/>
                     <field id="lecm-document-aspects:reg-data-date" set="header"/>
-                    <field id="lecm-document:creator" set="header" readonly="true"/>
+                    <field id="lecm-document:creator" set="author" readonly="true"/>
                     <field id="lecm-document:title" set="title"/>
 
                     <field id="lecm-internal:doc-type-assoc" set="typeAndDate"/>

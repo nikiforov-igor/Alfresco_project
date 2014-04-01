@@ -138,3 +138,7 @@
 .metadata-form .form-field {
 	width: 100%;
 }
+
+.yui-skin-lecmTheme .metadata-form .yui-navset .yui-content {
+	padding: 15px 15px 5px 15px;
+}

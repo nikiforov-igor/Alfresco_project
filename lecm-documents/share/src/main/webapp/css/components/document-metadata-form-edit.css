@@ -165,3 +165,7 @@
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit div.form-field .mceEditor > table iframe {
 	max-width: none;
 }
+
+.yui-skin-lecmTheme .metadata-form-edit .yui-navset .yui-content {
+	padding: 15px 0 5px 15px;
+}
