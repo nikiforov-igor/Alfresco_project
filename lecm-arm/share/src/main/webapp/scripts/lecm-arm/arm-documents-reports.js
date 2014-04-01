@@ -28,6 +28,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/registeredReports?forCollection=true&docType=" + types;
 						var callback = {
 							success: function (oResponse) {
+                                container.innerHTML = "";
                                 var oResults = eval("(" + oResponse.responseText + ")");
                                 if (oResults != null && oResults.list != null) {
 	                                var resultLength = oResults.list.length;
