@@ -123,8 +123,10 @@
         itemType: "${field.control.params.itemType!field.endpointType}",
         currentValue: "${field.value!''}",
         itemFamily: "node",
-        maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
-        selectedValueNodeRef: "${fieldValue}",
+    <#if field.control.params.maxSearchResults??>
+        maxSearchResults: ${field.control.params.maxSearchResults},
+    </#if>
+	    selectedValueNodeRef: "${fieldValue}",
     <#if field.control.params.selectedItemsNameSubstituteString??>
         selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
     </#if>

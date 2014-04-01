@@ -49,7 +49,7 @@ LogicECM.module = LogicECM.module || {};
 
 				itemFamily:"node",
 
-				maxSearchResults:1000,
+				maxSearchResults:10,
 
 				nameSubstituteString:"{cm:name}",
 

@@ -69,7 +69,9 @@
     </#if>
 		itemType: "${field.control.params.itemType!field.endpointType}",
 		itemFamily: "node",
-		maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
+	<#if field.control.params.maxSearchResults??>
+		maxSearchResults: ${field.control.params.maxSearchResults},
+	</#if>
 	<#if field.control.params.childrenDataSource??>
 		childrenDataSource: "${field.control.params.childrenDataSource}",
 	</#if>

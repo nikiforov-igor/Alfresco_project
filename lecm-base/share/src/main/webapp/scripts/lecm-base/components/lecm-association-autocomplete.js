@@ -56,7 +56,7 @@ LogicECM.module = LogicECM.module || {};
 
                 selectedValueNodeRef:"",
 
-                maxSearchResults:1000,
+                maxSearchResults:10,
 
                 nameSubstituteString:"{cm:name}",
 
