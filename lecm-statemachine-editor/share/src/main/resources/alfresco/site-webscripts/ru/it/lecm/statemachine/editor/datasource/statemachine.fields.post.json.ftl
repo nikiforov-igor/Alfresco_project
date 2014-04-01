@@ -25,7 +25,6 @@
                 "value": "",
                 "displayValue": ""
             },
-            "actionSet": "",
             "tags": [],
             "permissions": {
                 "userAccess": {
@@ -33,8 +32,6 @@
                     "edit": false,
                     "create": false
                 }
-            },
-            "actionLabels": {
             },
             "itemData": {
             <#list items as field>

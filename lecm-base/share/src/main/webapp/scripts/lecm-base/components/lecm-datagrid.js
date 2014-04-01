@@ -1746,8 +1746,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         Dom.addClass(clone, "simple");
 
                         // фильтруем по правам
-                        var userAccess = record.getData("permissions").userAccess,
-                            actionLabels = record.getData("actionLabels") || {};
+                        var userAccess = record.getData("permissions").userAccess;
 
                         // Remove any actions the user doesn't have permission for
                         var actions = YAHOO.util.Selector.query("div", clone),
@@ -1760,9 +1759,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             action = actions[i];
                             aTag = action.firstChild;
                             spanTag = aTag.firstChild;
-                            if (spanTag && actionLabels[action.className]) {
-                                spanTag.innerHTML = $html(actionLabels[action.className]);
-                            }
 
                             if (aTag.rel !== "") {
                                 actionPermissions = aTag.rel.split(",");

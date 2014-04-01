@@ -1,23 +1,8 @@
 <#macro itemJSON item>
     <#escape x as jsonUtils.encodeJSONString(x)>
-        <#assign node = item.node>
-        <#assign tags><#list item.tags as tag>"${tag}"<#if tag_has_next>,</#if></#list></#assign>
+    <#assign node = item.node>
     "nodeRef": "${node.nodeRef}",
     "type": "${node.typeShort}",
-    "createdOn": "${xmldate(node.properties.created)}",
-    "createdBy":
-    {
-    "value": "${item.createdBy.userName}",
-    "displayValue": "${item.createdBy.displayName}"
-    },
-    "modifiedOn": "${xmldate(node.properties.modified)}",
-    "modifiedBy":
-    {
-    "value": "${item.modifiedBy.userName}",
-    "displayValue": "${item.modifiedBy.displayName}"
-    },
-    "actionSet": "${item.actionSet}",
-    "tags": <#noescape>[${tags}]</#noescape>,
     "permissions":
     {
     "userAccess":
@@ -28,15 +13,6 @@
             </#if>
         </#list>
     }
-    },
-        <#if item.custom??>"custom": <#noescape>${item.custom}</#noescape>,</#if>
-    "actionLabels":
-    {
-        <#if item.actionLabels??>
-            <#list item.actionLabels?keys as actionLabel>
-            "${actionLabel?string}": "${item.actionLabels[actionLabel]}"<#if actionLabel_has_next>,</#if>
-            </#list>
-        </#if>
     },
     "itemData":
     {

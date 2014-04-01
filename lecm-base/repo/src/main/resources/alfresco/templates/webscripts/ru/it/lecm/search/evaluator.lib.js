@@ -23,12 +23,13 @@ var Evaluator = {
 	 */
 	PeopleObjectCache: {},
 
-	/**
-	 * Gets / caches a person object
-	 *
-	 * @method getPersonObject
-	 * @param nodeRef {string} NodeRef of a cm:person object
-	 */
+    /**
+     * Gets / caches a person object
+     *
+     * @method getPersonObject
+     * @param nodeRef {string} NodeRef of a cm:person object
+     * @return {null}
+     */
 	getPersonObject: function Evaluator_getPersonObject(nodeRef) {
 		if (nodeRef == null || nodeRef == "") {
 			return null;
@@ -55,12 +56,13 @@ var Evaluator = {
 	 */
 	ContentObjectCache: {},
 
-	/**
-	 * Gets / caches a content object
-	 *
-	 * @method getContentObject
-	 * @param nodeRef {string} NodeRef
-	 */
+    /**
+     * Gets / caches a content object
+     *
+     * @method getContentObject
+     * @param nodeRef {string} NodeRef
+     * @return {null}
+     */
 	getContentObject: function Evaluator_getContentObject(nodeRef) {
 		if (nodeRef == null || nodeRef == "") {
 			return null;
@@ -79,95 +81,103 @@ var Evaluator = {
 		return Evaluator.ContentObjectCache[nodeRef];
 	},
 
-	/**
-	 * Generate displayValue and any extra metadata for this field
-	 *
-	 * @method decorateFieldData
-	 * @param objData {object} Object literal containing this field's data
-	 * @param node {ScriptNode} The list item node for this field
-	 * @return {Boolean} false to prevent this field being added to the output stream.
-	 */
-	decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString) {
-		var value = objData.value,
-			type = objData.type,
-			obj;
-		var substituteNode = null;
-		var includeRef = false;
-		if (nameSubstituteString != null && nameSubstituteString.indexOf("$parent") == 0) {
-			nameSubstituteString = nameSubstituteString.replace("$parent", "");
-			substituteNode = node;
-		}
-		if (nameSubstituteString != null && nameSubstituteString.indexOf("$includeRef") == 0) {
-			nameSubstituteString = nameSubstituteString.replace("$includeRef", "");
-			includeRef = true;
-		}
-		if (type == "cm:person") {
-			obj = Evaluator.getPersonObject(value);
-			if (obj == null) {
-				return false;
-			}
-			if (nameSubstituteString == null) {
-				objData.displayValue = obj.displayName;
-			} else {
-				objData.displayValue = substitude.formatNodeTitle(value, nameSubstituteString);
-			}
-			objData.metadata = obj.userName;
-		}
-		else if (type == "cm:folder") {
-			obj = Evaluator.getContentObject(value);
-			if (obj == null) {
-				return false;
-			}
-			objData.displayValue = obj.displayPath.substring(companyhome.name.length() + 1);
-			objData.metadata = "container";
-		}
-		else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject")) {
-			obj = Evaluator.getContentObject(value);
-			if (obj == null || obj.nodeRef.toString().startsWith("archive")) {
-				return false;
-			}
-			if (substituteNode == null) {
-				substituteNode = obj;
-			}
-			if (nameSubstituteString == null) {
-				objData.displayValue = substitude.getObjectDescription(obj);
-			} else {
-				objData.displayValue = substitude.formatNodeTitle(substituteNode, nameSubstituteString);
-			}
-			objData.metadata = obj.isContainer ? "container" : "document";
-		} else if (nameSubstituteString != null) {
-			objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
-			if (!includeRef) {
-				objData.value = objData.displayValue;
-			} else {
-				var refs = substitude.getObjectsByTitle(node, nameSubstituteString);
-				objData.value = refs.length > 0 ? refs[0].nodeRef.toString() : node.nodeRef.toString();
-			}
-		}
-		return true;
-	},
+    /**
+     * Generate displayValue and any extra metadata for this field
+     *
+     * @method decorateFieldData
+     * @param objData {object} Object literal containing this field's data
+     * @param node {ScriptNode} The list item node for this field
+     * @return {Boolean} false to prevent this field being added to the output stream.
+     * @param nameSubstituteString
+     */
+    decorateFieldData: function Evaluator_decorateFieldData(objData, node, nameSubstituteString) {
+        var value = objData.value,
+            type = objData.type,
+            obj;
 
-	/**
-	 * Translates a List fieldDefinition
-	 *
-	 * @method translateField
-	 * @param objDef {FieldDefinition} objDef
-	 * @param value {String} default value
-	 */
-	translateField: function Evaluator_translateField(objDef, value) {
-		if (objDef == null || objDef == "") {
+        if (value == null && nameSubstituteString == null) {
+            return false;
+        }
+
+        var substituteNode = null;
+        var includeRef = false;
+        if (nameSubstituteString != null && nameSubstituteString.indexOf("$parent") == 0) {
+            nameSubstituteString = nameSubstituteString.replace("$parent", "");
+            substituteNode = node;
+        }
+        if (nameSubstituteString != null && nameSubstituteString.indexOf("$includeRef") == 0) {
+            nameSubstituteString = nameSubstituteString.replace("$includeRef", "");
+            includeRef = true;
+        }
+        if (type == "cm:person") {
+            obj = Evaluator.getPersonObject(value);
+            if (obj == null) {
+                return false;
+            }
+            if (nameSubstituteString == null) {
+                objData.displayValue = obj.displayName;
+            } else {
+                objData.displayValue = substitude.formatNodeTitle(value, nameSubstituteString);
+            }
+            objData.metadata = obj.userName;
+        }
+        else if (type == "cm:folder") {
+            obj = Evaluator.getContentObject(value);
+            if (obj == null) {
+                return false;
+            }
+            objData.displayValue = obj.displayPath.substring(companyhome.name.length() + 1);
+            objData.metadata = "container";
+        }
+        else if (type.indexOf(":") > 0 && node.isSubType("cm:cmobject")) {
+            obj = Evaluator.getContentObject(value);
+            if (obj == null || obj.nodeRef.toString().startsWith("archive")) {
+                return false;
+            }
+            if (substituteNode == null) {
+                substituteNode = obj;
+            }
+            if (nameSubstituteString == null) {
+                objData.displayValue = substitude.getObjectDescription(obj);
+            } else {
+                objData.displayValue = substitude.formatNodeTitle(substituteNode, nameSubstituteString);
+            }
+            objData.metadata = obj.isContainer ? "container" : "document";
+        } else if (nameSubstituteString != null) {
+            objData.displayValue = substitude.formatNodeTitle(node, nameSubstituteString);
+            if (!includeRef) {
+                objData.value = objData.displayValue;
+            } else {
+                var refs = substitude.getObjectsByTitle(node, nameSubstituteString);
+                objData.value = refs.length > 0 ? refs[0].nodeRef.toString() : node.nodeRef.toString();
+            }
+        }
+        return true;
+    },
+
+    /**
+     * Translates a List fieldDefinition
+     *
+     * @method translateField
+     * @param propertyDef {PropertyDefinition} objDef
+     * @param value {String} default value
+     * @return {String}
+     */
+	translateField: function Evaluator_translateField(propertyDef, value) {
+		if (propertyDef == null || propertyDef == "") {
 			return null;
 		}
-		if (objDef.constraints != null) {
-			for (var i = 0, len = objDef.constraints.size(); i < len; ++i) {
-				if ("LIST" == objDef.constraints.get(i).type) {
-					var allowedV = objDef.constraints.get(i).parameters.allowedValues;
+		if (propertyDef.getConstraints() != null) {
+			for (var i = 0, len = propertyDef.getConstraints().size(); i < len; ++i) {
+                var constraint = propertyDef.getConstraints().get(i).getConstraint();
+				if ("LIST" == constraint.getType()) {
+					var allowedV = constraint.getAllowedValues();
 					for (var j = 0; j < allowedV.size(); ++j) {
 						var allowedVasString = "" + allowedV.get(j);
 						var allValSplit = allowedVasString.split("|");
-						if (value == allValSplit[0]) {
-							return allValSplit[1];
-						}
+                        if (value == allValSplit[0]) {
+                            return allValSplit.length > 1 ? allValSplit[1] :  allValSplit[0];
+                        }
 					}
 				}
 			}
@@ -178,109 +188,119 @@ var Evaluator = {
 	/**
 	 * Node Evaluator - main entrypoint
 	 */
-	run: function Evaluator_run(node, fields, nameSubstituteStrings) {
-		var permissions = {},
-			actionSet = "",
-			actionLabels = {},
-			createdBy = Common.getPerson(node.properties["cm:creator"]),
-			modifiedBy = Common.getPerson(node.properties["cm:modifier"]),
-			nodeData = {};
+    run: function Evaluator_run(node, fields, nameSubstituteStrings, ctx) {
+        var permissions = {},
+            nodeData = {};
 
-		/**
-		 * PERMISSIONS
-		 */
+        /**
+         * PERMISSIONS
+         */
+        var deletePermission = node.hasPermission("Delete");
+        if (statemachine.hasStatemachine(node)) {
+            deletePermission = deletePermission && statemachine.isDraft(node);
+        }
+        permissions = {
+            "create": node.hasPermission("CreateChildren"),
+            "edit": node.hasPermission("Write"),
+            "delete": deletePermission
+        };
 
-		var deletePermission = node.hasPermission("Delete");
-		if (statemachine.hasStatemachine(node)) {
-			deletePermission = deletePermission && statemachine.isDraft(node);
-		}
-		permissions = {
-			"create": node.hasPermission("CreateChildren"),
-			"edit": node.hasPermission("Write"),
-			"delete": deletePermission
-		};
+        //сервисы
+        var dictionaryService = ctx.getBean("dictionaryService");
+        var namespaceService = ctx.getBean("namespaceService");
 
-		// Use the form service to parse the required properties
-		scriptObj = formService.getForm("node", node.nodeRef, fields, fields);
+        for (var i = 0; i < fields.length; i++) {
+            //fields[i] = напримери, cm_name
+            var fName = fields[i];
+            var realFieldName = fields[i].replace("_", ":");
+            var fieldQName = Packages.org.alfresco.service.namespace.QName.createQName(realFieldName, namespaceService);
 
-		// Make sure we can quickly look-up the Field Definition within the formData loop...
-		var objDefinitions = {};
-		var nameSubstituteStringDefs = {};
-		for (var i = 0; i < fields.length; i++) {
-			var fName = fields[i].replace(":", "_");
-			if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
-				nameSubstituteStringDefs[fName] = nameSubstituteStrings[i];
-			}
-		}
-		for each(formDef in scriptObj.fieldDefinitions) {
-			objDefinitions[formDef.dataKeyName] = formDef;
-		}
+            var nameSubstituteStringDef = null;
+            if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
+                nameSubstituteStringDef = nameSubstituteStrings[i];
+            }
 
-		// Populate the data model
-		var formData = scriptObj.formData.data;
-		for (var k in formData) {
-			var isAssoc = k.indexOf("assoc") == 0,
-				value = formData[k].value,
-				values,
-				type = isAssoc ? objDefinitions[k].endpointType : objDefinitions[k].dataType,
-				endpointMany = isAssoc ? objDefinitions[k].endpointMany : false,
-				objData = {
-					type: type
-				};
-			var fieldName = isAssoc ? k.substring("assoc_".length) : k.substring("prop_".length);
-			var nameSubstituteString = nameSubstituteStringDefs[fieldName];
+            var fieldData;
 
-			if (value instanceof java.util.Date) {
-				objData.value = utils.toISO8601(value);
-				objData.displayValue = objData.value;
-				nodeData[k] = objData;
-			}
-			else if (endpointMany) {
-				if (value.length() > 0) {
-					values = value.split(",");
-					nodeData[k] = [];
-					for each(value in values) {
-						var objLoop = {
-							type: objData.type,
-							value: value,
-							displayValue: value
-						};
+            // вытащить дефинишены
+            var propDefinition = null, assocDefinition = null;
 
-						if (Evaluator.decorateFieldData(objLoop, node, nameSubstituteString)) {
-							nodeData[k].push(objLoop);
-						}
-					}
-				}
-			}
-			else {
-				objData.value = value;
-				objData.displayValue = isAssoc ? value : Evaluator.translateField(objDefinitions[k], value);
+            propDefinition = dictionaryService.getProperty(fieldQName);
+            if (propDefinition == null) {
+                assocDefinition = dictionaryService.getAssociation(fieldQName);
+            }
 
-				if (Evaluator.decorateFieldData(objData, node, nameSubstituteString)) {
-					nodeData[k] = objData;
-				}
-			}
-		}
-		for (var j = 0; j < fields.length; j++) {
-			var obj = fields[j].replace(":", "_");
-			if (nameSubstituteStringDefs[obj] != null) {
-				var fieldData = {
-					type: "text"
-				};
-				Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDefs[obj]);
-				nodeData["prop_" + obj] = fieldData;
-			}
-		}
+            if (propDefinition != null || assocDefinition != null) {
+                var isAssoc = assocDefinition != null,
+                    type = isAssoc ?
+                        assocDefinition.getTargetClass().getName().toPrefixString(namespaceService) :
+                        propDefinition.getDataType().getName().toPrefixString(namespaceService),
+                    endpointMany = isAssoc ? assocDefinition.isTargetMany() : false;
 
-		return({
-			node: node,
-			nodeData: nodeData,
-			actionSet: actionSet,
-			actionPermissions: permissions,
-			createdBy: createdBy,
-			modifiedBy: modifiedBy,
-			tags: node.tags,
-			actionLabels: actionLabels
-		});
-	}
+                if (!isAssoc && type.indexOf("d:") == 0) {
+                    type = type.substring("d:".length);
+                }
+
+                fieldData = {
+                    type: type
+                };
+
+                var value = null;
+                if (!isAssoc) {
+                    value = node.properties[realFieldName];
+                    if (value != null && propDefinition.getDataType().getJavaClassName() == "java.util.Date") {
+                        value = utils.toISO8601(value);
+                    }
+                } else {
+                    var associationNodes = node.assocs[realFieldName];
+                    if (associationNodes != null) {
+                        value = "";
+                        for (var ii = 0; ii < associationNodes.length; ii++) {
+                            value = value + associationNodes[ii].nodeRef.toString() + ",";
+                        }
+                        value = value.length > 0 ? value.substring(0, value.length - 1) : "";
+                    }
+                }
+
+                if (endpointMany) {
+                    if (value != null && value.length > 0) {
+                        var values = value.split(",");
+                        nodeData["assoc_" + fName] = [];
+                        for each(value in values) {
+                            var objLoop = {
+                                type: fieldData.type,
+                                value: value,
+                                displayValue: value
+                            };
+
+                            if (Evaluator.decorateFieldData(objLoop, node, nameSubstituteStringDef)) {
+                                nodeData["assoc_" + fName].push(objLoop);
+                            }
+                        }
+                    }
+                } else {
+                    fieldData.value = value;
+                    fieldData.displayValue =  isAssoc ? value : Evaluator.translateField(propDefinition, value);
+
+                    if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
+                        nodeData[(isAssoc ? "assoc_" : "prop_") + fName] = fieldData;
+                    }
+                }
+            } else { // работает сразу через substitute сервис
+                fieldData = {
+                    type: "text"
+                };
+                if (Evaluator.decorateFieldData(fieldData, node, nameSubstituteStringDef)) {
+                    nodeData["prop_" + fName] = fieldData; // prop_cm_name
+                }
+            }
+        }
+
+
+        return({
+            node: node,
+            nodeData: nodeData,
+            actionPermissions: permissions
+        });
+    }
 };

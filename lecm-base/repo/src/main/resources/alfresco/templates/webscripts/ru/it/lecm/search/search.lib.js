@@ -30,8 +30,6 @@
  * @return the final search results object
  */
 function processResults(nodes, fields, nameSubstituteStrings, startIndex, total) {
-    // empty cache state
-    processedCache = {};
     var results = [],
         added = 0,
         item,
@@ -54,15 +52,14 @@ function processResults(nodes, fields, nameSubstituteStrings, startIndex, total)
 
         for (var count = 0; count < numFields; count++) {
             var field = arrayFields[count];
-            var index = field.indexOf("_");
-            var part1 = field.substring(0, index);
-            var part2 = field.substring(index + 1);
-            flds.push(part1 + ":" + part2); // do not need escape
+            flds.push(field); // do not need escape
         }
     }
 
+    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+
     for (i = 0, j = nodes.length; i < j; i++) {
-        results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(",")));
+        results.push(Evaluator.run(nodes[i], flds, nameSubstituteStrings == null ? null : nameSubstituteStrings.split(","), ctx));
         added++;
     }
     var versionable = false;
@@ -316,7 +313,7 @@ function getSearchResults(params) {
             }
             filtersQuery = filterObjs != null && filterObjs.length > 0 ? getFiltersQuery(filterObjs) : '';
 
-            logger.log("filtersQuery = " + filtersQuery);;
+            logger.log("filtersQuery = " + filtersQuery);
         }
 
         // extract data type for this search - advanced search query is type specific

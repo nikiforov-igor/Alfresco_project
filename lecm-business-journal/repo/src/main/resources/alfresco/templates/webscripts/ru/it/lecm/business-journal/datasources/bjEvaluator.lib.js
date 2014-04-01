@@ -194,11 +194,8 @@ var BJEvaluator =
     /**
      * Node BJEvaluator - main entrypoint
      */
-    run: function BJEvaluator_run(record, fields, nameSubstituteStrings)
-    {
+    run: function BJEvaluator_run(record, fields, nameSubstituteStrings) {
         var permissions = {},
-            actionSet = "",
-            actionLabels = {},
             createdBy = record.getInitiator() != null ? Common.getPerson(record.getInitiator().properties["cm:creator"]) : Common.getPerson("System"),
             modifiedBy = record.getInitiator() != null ? Common.getPerson(record.getInitiator().properties["cm:modifier"]) : Common.getPerson("System"),
             nodeData = {};
@@ -206,7 +203,6 @@ var BJEvaluator =
         /**
          * PERMISSIONS
          */
-
         permissions =
         {
             "create": true,
@@ -215,143 +211,141 @@ var BJEvaluator =
         };
 
         // Make sure we can quickly look-up the Field Definition within the formData loop...
-        var objDefinitions = {};
         var nameSubstituteStringDefs = {};
         for (var i = 0; i < fields.length; i++) {
-            var fName = fields[i].replace(":","_");
+            var fName = fields[i].replace(":", "_");
             if (nameSubstituteStrings != null && nameSubstituteStrings[i] != null && nameSubstituteStrings[i] != "") {
                 nameSubstituteStringDefs[fName] = nameSubstituteStrings[i];
             }
         }
 
+        var type, value, displayValue, objData, key;
         // Populate the data model
-        for (var k in fields)
-        {
+        for (var k in fields) {
             if (fields[k] == "lecm-busjournal:bjRecord-date") {
-                var type = "datetime";
-                var value = utils.toISO8601(record.getDate());
-                var displayValue = value;
+                type = "datetime";
+                value = utils.toISO8601(record.getDate());
+                displayValue = value;
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "prop_" + fields[k].replace(":","_");
+                key = "prop_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
-
             } else if (fields[k] == "lecm-busjournal:bjRecord-description") {
-                var type = "text";
-                var value = record.getRecordDescription();
-                var displayValue = record.getRecordDescription();
+                type = "text";
+                value = record.getRecordDescription();
+                displayValue = record.getRecordDescription();
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
-                var key = "prop_" + fields[k].replace(":","_");
+                };
+                key = "prop_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
 
             } else if (fields[k] == "lecm-busjournal:bjRecord-objType-assoc") {
-                var type = "lecm-busjournal:objectType";
-                var value = record.getObjectTypeText();
-                var displayValue = record.getObjectTypeText();
+                type = "lecm-busjournal:objectType";
+                value = record.getObjectTypeText();
+                displayValue = record.getObjectTypeText();
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "assoc_" + fields[k].replace(":","_");
+                key = "assoc_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
 
             } else if (fields[k] == "lecm-busjournal:bjRecord-evCategory-assoc") {
-                var type = "lecm-busjournal:eventCategory";
-                var value = record.getEventCategoryText();
-                var displayValue = record.getEventCategoryText();
+                type = "lecm-busjournal:eventCategory";
+                value = record.getEventCategoryText();
+                displayValue = record.getEventCategoryText();
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "assoc_" + fields[k].replace(":","_");
+                key = "assoc_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             } else if (fields[k] == "lecm-busjournal:bjRecord-mainObject-assoc") {
-                var type = "cm:cmobject";
-	            var value = "";
-	            if (record.getMainObject() != null && record.getMainObject().exists()) {
+                type = "cm:cmobject";
+                value = "";
+                if (record.getMainObject() != null && record.getMainObject().exists()) {
                     value = record.getMainObject().nodeRef.toString();
-	            }
-                var displayValue = record.getMainObjectDescription();
+                }
+                displayValue = record.getMainObjectDescription();
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "assoc_" + fields[k].replace(":","_");
+                key = "assoc_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             } else if (fields[k] == "lecm-busjournal:secondary-objects") {
-                var type = "text";
-                var value = record.getObject1() + " " + record.getObject2() + " " + record.getObject3() + " " + record.getObject4() + " " + record.getObject5();
-                var displayValue = value;
+                type = "text";
+                value = record.getObject1() + " " + record.getObject2() + " " + record.getObject3() + " " + record.getObject4() + " " + record.getObject5();
+                displayValue = value;
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "prop_" + fields[k].replace(":","_");
+                key = "prop_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             } else if (fields[k] == "lecm-busjournal:bjRecord-initiator-assoc") {
-                var type = "lecm-orgstr:employee";
-                var value = "";
-                var displayValue = "";
+                type = "lecm-orgstr:employee";
+                value = "";
+                displayValue = "";
                 if (record.getInitiator() != null) {
                     value = record.getInitiator().nodeRef.toString();
                     displayValue = record.getInitiator().properties["cm:name"];
                 }
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "assoc_" + fields[k].replace(":","_");
+                key = "assoc_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             } else if (fields[k] == "cm:versionLabel") {
-                var type = "";
-                var value = "";
-                var displayValue = value;
+                type = "";
+                value = "";
+                displayValue = value;
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "prop_" + fields[k].replace(":","_");
+                key = "prop_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             } else if (fields[k] == "lecm-dic:active") {
-                var type = "boolean";
-                var value = record.isActive();
-                var displayValue = record.isActive();
+                type = "boolean";
+                value = record.isActive();
+                displayValue = record.isActive();
 
-                var objData = {
+                objData = {
                     type: type,
                     value: value,
                     displayValue: displayValue
-                }
+                };
 
-                var key = "prop_" + fields[k].replace(":","_");
+                key = "prop_" + fields[k].replace(":", "_");
                 nodeData[key] = objData;
             }
 
@@ -368,12 +362,10 @@ var BJEvaluator =
                 }
             },
             nodeData: nodeData,
-            actionSet: actionSet,
             actionPermissions: permissions,
             createdBy: createdBy,
             modifiedBy: modifiedBy,
-            tags: [],
-            actionLabels: actionLabels
+            tags: []
         });
     }
 };
