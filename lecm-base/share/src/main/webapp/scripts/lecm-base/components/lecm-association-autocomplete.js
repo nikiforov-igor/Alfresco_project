@@ -256,6 +256,7 @@ LogicECM.module = LogicECM.module || {};
 					};
 		            oAC.queryDelay = 1;
 	            }
+	            oAC.minQueryLength = 3;
 	            oAC.prehighlightClassName = "yui-ac-prehighlight";
                 oAC.useShadow = true;
                 oAC.forceSelection = true;
