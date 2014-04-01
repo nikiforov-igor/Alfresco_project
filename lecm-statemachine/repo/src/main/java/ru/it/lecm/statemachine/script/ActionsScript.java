@@ -46,6 +46,7 @@ public class ActionsScript extends DeclarativeWebScript {
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
     private static DocumentService documentService;
+    private static final QName PROP_DUE_DATE = QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate");
     private GroupActionsService groupActionsService;
     private AuthenticationService authService;
     private LecmPermissionService lecmPermissionService;
@@ -166,7 +167,7 @@ public class ActionsScript extends DeclarativeWebScript {
                             taskStruct.put("label", userTask.getTitle());
                             taskStruct.put("count", Long.MAX_VALUE);
                             taskStruct.put("isForm", false);
-                            Serializable dueDate = userTask.getProperties().get(QName.createQName(NamespaceService.BPM_MODEL_1_0_URI, "dueDate"));
+                            Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
                             taskStruct.put("dueDate", dueDate);
                             actionsList.add(taskStruct);
                         }
