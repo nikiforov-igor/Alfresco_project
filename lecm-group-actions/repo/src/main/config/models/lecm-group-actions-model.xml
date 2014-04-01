@@ -46,10 +46,6 @@
                     <mandatory>false</mandatory>
                     <default>0</default>
                 </property>
-                <property name="lecm-group-actions:form-fields-ref">
-                    <type>d:text</type>
-                    <mandatory>false</mandatory>
-                </property>
                 <property name="lecm-group-actions:script">
                     <type>d:text</type>
                     <mandatory>true</mandatory>

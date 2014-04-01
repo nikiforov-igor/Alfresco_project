@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="cm:Печать конвертов" type="lecm-group-actions:action">
-        <property name="lecm-group-actions:form-fields-ref">
-            <![CDATA[workspace://SpacesStore/f7623cfd-9811-4579-acd8-4e839df641b1]]></property>
         <property name="cm:name"><![CDATA[Печать конвертов]]></property>
         <property name="lecm-group-actions:statuses">
             <![CDATA[На регистрации;Зарегистрирован;На отправке;Закрыт]]></property>

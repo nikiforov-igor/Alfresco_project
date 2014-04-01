@@ -53,13 +53,6 @@
         <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
-    <bean id="actionCreatePolicy" class="ru.it.lecm.actions.ActionCreatePolicy" init-method="init">
-        <property name="policyComponent">
-            <ref bean="policyComponent"/>
-        </property>
-        <property name="nodeService" ref="nodeService"/>
-    </bean>
-
     <bean id="webscript.ru.it.lecm.actions.action.exec.post"
           class="ru.it.lecm.actions.script.GroupActionExecutor"
           parent="webscript">

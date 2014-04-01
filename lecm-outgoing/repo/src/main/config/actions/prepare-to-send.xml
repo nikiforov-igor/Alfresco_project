@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="cm:Подготовка к отправке" type="lecm-group-actions:action">
-        <property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/0038defa-3d15-4bed-a2ce-7a753df01382]]></property>
         <property name="cm:name"><![CDATA[Подготовка к отправке]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[Зарегистрирован]]></property>
         <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>

@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
     <item name="cm:Отправить" type="lecm-group-actions:action">
-        <property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/15f06db2-3019-416b-9bc5-c69e2519bf26]]></property>
         <property name="cm:name"><![CDATA[Отправить]]></property>
         <property name="lecm-group-actions:statuses"><![CDATA[На отправке]]></property>
         <property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]></property>

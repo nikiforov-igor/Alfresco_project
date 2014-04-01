@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
 	<item name="cm:Отправить по маршруту" type="lecm-group-actions:action">
-		<property name="lecm-group-actions:form-fields-ref"><![CDATA[workspace://SpacesStore/3154f781-fbca-4933-97b5-dabdea6cb952]]></property>
 		<property name="cm:name"><![CDATA[Отправить по маршруту]]></property>
 		<property name="lecm-group-actions:statuses"><![CDATA[Проект; На доработке]]></property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-document-aspects:routes-avaliable]]></property>
