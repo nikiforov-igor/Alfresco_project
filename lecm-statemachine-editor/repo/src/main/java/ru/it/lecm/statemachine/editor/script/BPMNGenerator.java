@@ -780,6 +780,14 @@ public class BPMNGenerator {
                 attribute.appendChild(parameter);
             }
 
+            Object isSystemformConnection = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_IS_SYSTEM_FORM_CONNECTION);
+            if (isSystemformConnection != null) {
+                parameter = doc.createElement("lecm:parameter");
+                parameter.setAttribute("name", "systemFormConnection");
+                parameter.setAttribute("value", isSystemformConnection.toString());
+                attribute.appendChild(parameter);
+            }
+
             Object transitionScript = nodeService.getProperty(transition.getChildRef(), StatemachineEditorModel.PROP_TRANSITION_SCRIPT);
             if (transitionScript != null) {
                 parameter = doc.createElement("lecm:parameter");

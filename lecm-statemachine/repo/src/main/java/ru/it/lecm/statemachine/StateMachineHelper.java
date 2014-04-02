@@ -1333,7 +1333,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
                 if (NodeRef.isNodeRef(persistedResponse)) {
                     response.setRedirect("document?nodeRef=" + persistedResponse);
                     if (nextState.getFormConnection() != null && !"".equals(nextState.getFormConnection())) {
-                        documentConnectionService.createConnection(document, new NodeRef(persistedResponse), nextState.getFormConnection(), true);
+                        documentConnectionService.createConnection(new NodeRef(persistedResponse), document, nextState.getFormConnection(), nextState.isSystemFormConnection());
                     }
                 }
             }

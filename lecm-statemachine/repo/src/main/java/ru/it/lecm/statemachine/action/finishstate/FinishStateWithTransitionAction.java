@@ -29,6 +29,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 	private static String PROP_FORM_FOLDER = "formFolder";
 	private static String PROP_FORM_TYPE = "formType";
 	private static String PROP_FORM_CONNECTION = "formConnection";
+    private static String PROP_IS_SYSTEM_FORM_CONNECTION = "systemFormConnection";
 	private static String PROP_SCRIPT = "script";
 
 	@Override
@@ -43,6 +44,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			String formFolder = null;
 			String formType = null;
 			String formConnection = null;
+            boolean isSystemFormConnection = true;
 			String variableValue = "";
 			String conditionAccess = "";
 			String script = "";
@@ -60,6 +62,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
                     formFolder = value;
                 } else if (PROP_FORM_CONNECTION.equalsIgnoreCase(name)) {
                     formConnection = value;
+                } else if (PROP_IS_SYSTEM_FORM_CONNECTION.equalsIgnoreCase(name)) {
+                    isSystemFormConnection = Boolean.valueOf(value);
                 } else if (PROP_OUTPUT_VARIABLE_VALUE.equalsIgnoreCase(name)) {
 					variableValue = value;
 				} else if (PROP_CONDITION_ACCESS.equalsIgnoreCase(name)) {
@@ -72,7 +76,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 			}
             Conditions conditions = new Conditions(attribute.element("conditions"));
 			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, script);
+			NextState nextState = new NextState(actionId, label, workflowId, conditions, outputVariable, variableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, script);
 			states.add(nextState);
 		}
 	}
@@ -102,8 +106,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
 		private String script;
 		private WorkflowVariables variables;
 		private boolean stopSubWorkflows;
+		private boolean isSystemFormConnection;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, String script) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, String script) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -115,6 +120,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
             this.formType = formType;
             this.formFolder = formFolder;
             this.formConnection = formConnection;
+            this.isSystemFormConnection = isSystemFormConnection;
             this.script = script;
         }
 
@@ -169,5 +175,10 @@ public class FinishStateWithTransitionAction extends StateMachineAction {
         public String getFormConnection() {
             return formConnection;
         }
+
+        public boolean isSystemFormConnection() {
+            return isSystemFormConnection;
+        }
+
     }
 }
