@@ -4,8 +4,8 @@ function main() {
 	var pointRef = json.get("pointRef");
 	ordStatemachine.changePointStatus(pointRef,"EXECUTED_STATUS");
     node = search.findNode(pointRef);
-    
-    model.item = Evaluator.run(node, [], null);
+    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+    model.item = Evaluator.run(node, [], null, ctx);
 }
 
 main();

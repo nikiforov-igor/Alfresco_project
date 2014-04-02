@@ -69,7 +69,8 @@ function getData()
    {
       try
       {
-         item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields.split(","));
+        var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+         item = Evaluator.run(node, fields, substituteFields == null ? null : substituteFields.split(","), ctx);
          if (node.hasAspect("cm:versionable")) {
             versionable = true;
          }
