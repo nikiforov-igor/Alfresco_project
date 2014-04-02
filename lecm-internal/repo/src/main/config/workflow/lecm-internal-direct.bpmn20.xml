@@ -106,7 +106,7 @@
 							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
 							    answerObject.save();
 							    //Добавляем инициатора процесса в участники нового документа
-							    documentMembers.addMember(newDocument, curator, "LECM_BASIC_PG_Reader");
+							    documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
 							    //Добавляем слушателя
 							    documentEvent.subscribe(newDocument, document);
                             } else if (answer.type == "answer") {
