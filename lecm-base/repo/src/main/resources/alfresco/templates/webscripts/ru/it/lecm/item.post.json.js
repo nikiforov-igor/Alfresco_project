@@ -52,7 +52,7 @@ function getData()
       numFields = jsonFields.length();
       for (count = 0; count < numFields; count++)
       {
-         fields.push(jsonFields.get(count).replaceFirst("_", ":"));
+         fields.push(jsonFields.get(count));
       }
    }
    var substituteFields = null;
