@@ -323,7 +323,7 @@ function getSearchResults(params) {
 
             for (var count = 0; count < numTypes; count++) {
                 var type = typesArray[count];
-                if (type != null && type.length > 0) {
+                if (type != null && ("" + type).length > 0) {
                     if (typesQuery.length > 0) {
                         typesQuery += " ";
                     }
