@@ -88,7 +88,7 @@
 					<show id="lecm-d8n:procuracy-trustee-assoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecm-d8n:procuracy-business-role-assoc" substituteString="cm:name"/>
+					<field id="lecm-d8n:procuracy-business-role-assoc" substituteString="{cm:name}"/>
 					<field id="lecm-d8n:procuracy-business-role-assoc-description" substituteString="{lecm-d8n:procuracy-business-role-assoc/lecm-orgstr:business-role-description}"></field>
 					<field id="lecm-d8n:procuracy-trustee-assoc" substituteString="{lecm-orgstr:employee-short-name}">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
