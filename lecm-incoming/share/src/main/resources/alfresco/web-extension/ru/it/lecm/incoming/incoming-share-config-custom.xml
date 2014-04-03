@@ -12,9 +12,6 @@
             <!-- Форма редатирования-->
             <form>
                 <field-visibility>
-	                <show id="lecm-incoming:is-not-registered"/>
-	                <show id="lecm-document-aspects:is-on-control"/>
-	                <show id="lecm-eds-document:execution-date"/>
 	                <show id="lecm-document-aspects:reg-data-number"/>
 	                <show id="lecm-document-aspects:reg-data-date"/>
 	                <show id="lecm-document:title"/>
@@ -26,13 +23,15 @@
 	                <show id="lecm-incoming:outgoing-date"/>
                     <show id="lecm-eds-document:summaryContent"/>
 	                <show id="lecm-incoming:recipient-assoc"/>
+	                <show id="lecm-eds-document:execution-date"/>
+	                <show id="lecm-document-aspects:is-on-control"/>
 	                <show id="lecm-eds-document:file-register-assoc"/>
 	                <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-eds-document:note"/>
+	                <show id="lecm-incoming:is-not-registered"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
 	            <appearance>
-		            <set id="incoming1" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming3" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming4" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
@@ -43,14 +42,6 @@
                     <set id="incoming9" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 		            <set id="incoming10" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
 		            <set id="incoming11" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-
-		            <field id="lecm-incoming:is-not-registered" set="incoming1"/>
-		            <field id="lecm-document-aspects:is-on-control" set="incoming1"/>
-		            <field id="lecm-eds-document:execution-date" set="incoming1">
-			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
-				            <control-param name="minLimitCurrentDate">true</control-param>
-			            </control>
-		            </field>
 
 		            <field id="lecm-document-aspects:reg-data-number" set="incoming2" label="Регистрационный номер">
 			            <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
@@ -115,6 +106,13 @@
 			            </control>
 		            </field>
 
+		            <field id="lecm-eds-document:execution-date" set="incoming9">
+			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
+				            <control-param name="minLimitCurrentDate">true</control-param>
+			            </control>
+		            </field>
+		            <field id="lecm-document-aspects:is-on-control" set="incoming9"/>
+
 		            <field id="lecm-eds-document:file-register-assoc" set="incoming9"/>
 		            <field id="lecm-document:subject-assoc" set="incoming9" mandatory="true"/>
 
@@ -124,6 +122,7 @@
                         </control>
 		            </field>
 
+		            <field id="lecm-incoming:is-not-registered" set="incoming11"/>
 		            <field id="lecm-document-aspects:is-shared-folder" set="incoming11"/>
 	            </appearance>
             </form>
