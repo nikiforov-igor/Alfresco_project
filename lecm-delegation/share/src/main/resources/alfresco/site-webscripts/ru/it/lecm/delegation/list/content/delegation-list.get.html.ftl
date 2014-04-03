@@ -17,7 +17,11 @@
 			attributeForShow: 'lecm-d8n:delegation-opts-owner-assoc',
 			dataSource: 'lecm/delegation/list',
 			expandable: true,
-			procuracyItemType: 'lecm-d8n:procuracy',
+			expandDataSource: 'lecm/delegation/procuraciesDatagrid',
+			expandDataObj: {
+				itemType: 'lecm-d8n:procuracy',
+				filter: ' AND @lecm\-dic\:active:true'
+			},
 			actions: [
 				{
 					type: 'datagrid-action-link-delegation-list-datagrid',

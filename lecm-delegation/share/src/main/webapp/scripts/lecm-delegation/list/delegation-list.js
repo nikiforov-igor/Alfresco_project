@@ -32,30 +32,6 @@ LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.Delegatio
 				delegator: item.nodeRef // доверенное лицо, тот кто создает доверенность
 			});
 			window.location.href = url;
-		},
-
-		onExpand: function(record) {
-			var nodeRef = record.getData("nodeRef");
-			Alfresco.util.Ajax.request({
-				method: "GET",
-				url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/delegation/procuraciesDatagrid",
-				dataObj: {
-					nodeRef: nodeRef,
-					itemType: this.options.procuracyItemType,
-					filter: ' AND @lecm\-dic\:active:true'
-				},
-				successCallback: {
-					scope: this,
-					fn: function(response) {
-						if (response.serverResponse) {
-							this.addExpandedRow(record, response.serverResponse.responseText);
-						}
-					}
-				},
-				failureMessage: "message.failure",
-				execScripts: true,
-				scope: this
-			});
 		}
 	}, true);
 })();

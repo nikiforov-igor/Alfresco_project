@@ -312,7 +312,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            expandable: false,
 
-	            expandDataSource: "components/form"
+	            expandDataSource: "components/form",
+
+				expandDataObj: {}
             },
 
             showActionsCount: 3,
@@ -505,56 +507,55 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        };
 	        },
 
-	        onExpandClick: function (e, record) {
-		        var row = this.widgets.dataTable.getRow(record);
-		        if (Dom.hasClass(row, "expanded")) {
-			        this.onCollapse(record);
-		        } else {
-			    	this.onExpand(record);
-		        }
-	        },
+			onExpandClick: function(e, record) {
+				var row = this.widgets.dataTable.getRow(record);
+				if (Dom.hasClass(row, "expanded")) {
+					Dom.get("expand-" + record.getId()).innerHTML = "+";
+					Dom.removeClass(row, "expanded");
+					this.onCollapse(record);
+				} else {
+					Dom.addClass(row, "expanded");
+					Dom.get("expand-" + record.getId()).innerHTML = "-";
+					this.onExpand(record);
+				}
+			},
 
 	        onCollapse: function (record) {
 		        var row = this.widgets.dataTable.getRow(record);
 		        var nextRow = Dom.getNextSibling(row);
 		        nextRow.parentNode.removeChild(nextRow);
-
-		        Dom.get("expand-" + record.getId()).innerHTML = "+";
-		        Dom.removeClass(row, "expanded");
 	        },
 
-	        onExpand: function(record) {
-		        var nodeRef = record.getData("nodeRef");
-		        if (nodeRef != null) {
-			        var me = this;
-			        Alfresco.util.Ajax.request(
-				        {
-					        url: Alfresco.constants.URL_SERVICECONTEXT + me.options.expandDataSource,
-					        dataObj: {
-						        htmlid: this.id + nodeRef,
-						        itemKind: "node",
-						        itemId: nodeRef,
-						        mode: "view"
-					        },
-					        successCallback: {
-						        fn: function(response) {
-							        if (response.serverResponse != null) {
-								    	me.addExpandedRow(record, response.serverResponse.responseText);
-							        }
-						        }
-					        },
-					        failureMessage: "message.failure",
-					        execScripts: true,
-					        scope: this
-				        });
-		        }
-	        },
+			onExpand: function(record) {
+				var dataObj;
+				var nodeRef = record.getData("nodeRef");
+				if (nodeRef) {
+					dataObj = YAHOO.lang.merge({
+						htmlid: this.id + nodeRef,
+						itemKind: "node",
+						itemId: nodeRef,
+						mode: "view"
+					}, this.options.expandDataObj);
+					Alfresco.util.Ajax.request({
+						url: Alfresco.constants.URL_SERVICECONTEXT + this.options.expandDataSource,
+						dataObj: dataObj,
+						successCallback: {
+							scope: this,
+							fn: function(response) {
+								if (response.serverResponse != null) {
+									this.addExpandedRow(record, response.serverResponse.responseText);
+								}
+							}
+						},
+						failureMessage: "message.failure",
+						execScripts: true,
+						scope: this
+					});
+				}
+			},
 
 	        addExpandedRow: function(record, text) {
 		        var row = this.widgets.dataTable.getRow(record);
-		        Dom.addClass(row, "expanded");
-
-		        Dom.get("expand-" + record.getId()).innerHTML = "-";
 
 		        var colSpan = this.datagridColumns.length;
 		        if (this.options.showCheckboxColumn) {
