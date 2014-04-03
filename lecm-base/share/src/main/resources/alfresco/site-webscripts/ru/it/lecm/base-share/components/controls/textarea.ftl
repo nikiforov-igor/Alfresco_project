@@ -12,11 +12,15 @@
          <#if fieldValue == "">
             <#assign fieldValue=msg("form.control.novalue")>
          </#if>
-            <textarea class="viewmode-value<#if field.control.params.styleClass??> ${field.control.params.styleClass}</#if>" id="${fieldHtmlId}" name="${field.name}" rows="${rows}" cols="${columns}" tabindex="0" readonly="1"
+            <span class="viewmode-value<#if field.control.params.styleClass??> ${field.control.params.styleClass}</#if>" id="${fieldHtmlId}" name="${field.name}" tabindex="0"
                    <#if field.description??>title="${field.description}"</#if>
                    <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-            >${fieldValue}</textarea>
-         
+            >
+	            <#list fieldValue?split("\n") as value>
+                    <p>${value}</p>
+	            </#list>
+            </span>
+
       </div>
    <#else>
       <label for="${fieldHtmlId}">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>

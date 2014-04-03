@@ -86,3 +86,12 @@
 .yui-panel.metadata-form-edit .full-width div.association-auto-complete-selected-item > span.not-person {
 	max-width: 700px;
 }
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field div.autocompleteCurrentValueDisplayInvisible,
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit div.yui-navset .full-width div.form-field div.autocompleteCurrentValueDisplayInvisible {
+	width: 815px;
+}
+
+.yui-skin-lecmTheme .yui-panel.metadata-form-edit .full-width div.form-field input.autocomplete-input[type="text"] {
+	width: 780px;
+}
