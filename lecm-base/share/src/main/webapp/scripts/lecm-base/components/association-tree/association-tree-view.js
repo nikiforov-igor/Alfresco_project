@@ -159,7 +159,9 @@ LogicECM.module = LogicECM.module || {};
 
 			pickerButtonLabel: null,
 
-			pickerButtonTitle: null
+			pickerButtonTitle: null,
+
+			showAssocViewForm: false
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -1262,7 +1264,7 @@ LogicECM.module = LogicECM.module || {};
 							(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ') + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            } else {
 			            Dom.get(fieldId).innerHTML
-				            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
+				            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, items[i]) + ' ' + this.getRemoveButtonHTML(items[i]) + '</div>';
 		            }
 
 	                YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + items[i].nodeRef, this.attachRemoveClickListener, {node: items[i], dopId: "", updateForms: false}, this);
@@ -1293,7 +1295,7 @@ LogicECM.module = LogicECM.module || {};
 					(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(item.nodeRef) : ' ') + this.getRemoveButtonHTML(item) + '</div>';
 			} else {
 				Dom.get(fieldId).innerHTML
-					+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
+					+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, item) + ' ' + this.getRemoveButtonHTML(item) + '</div>';
 			}
 
 			var items = this.selectedItems;
@@ -1312,8 +1314,16 @@ LogicECM.module = LogicECM.module || {};
 			return "<span class='person'><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 		},
 
-        getDefaultView: function (displayValue) {
-            return "<span class='not-person' title='" + displayValue + "'>" + displayValue + "</span>";
+        getDefaultView: function (displayValue, item) {
+	        var result = "<span class='not-person' title='" + displayValue + "'>";
+	        if (this.options.showAssocViewForm && item.nodeRef != null) {
+		        result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
+	        } else {
+		        result += displayValue;
+	        }
+	        result += "</span>";
+
+            return result;
         },
 
         updateAddButtons: function AssociationTreeViewer_updateAddButtons() {
@@ -1377,7 +1387,7 @@ LogicECM.module = LogicECM.module || {};
 			            if (this.options.itemType == "lecm-orgstr:employee") {
 				            el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
 			            } else {
-				            el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + '</div>';
+				            el.innerHTML += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, this.selectedItems[i]) + ' ' + '</div>';
 			            }
 		            } else {
 			            if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1386,7 +1396,7 @@ LogicECM.module = LogicECM.module || {};
 								(this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ') + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            } else {
 				            el.innerHTML
-					            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+					            += '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, this.selectedItems[i]) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 			            }
 			            YAHOO.util.Event.onAvailable("t-" + this.options.prefixPickerId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 		            }

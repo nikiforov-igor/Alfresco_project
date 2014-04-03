@@ -14,7 +14,7 @@
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
-					<show id="lecm-document:doc-date"/>																	<!-- Дата регистрации -->
+					<show id="lecm-document-aspects:reg-data-date"/>																<!-- Дата регистрации -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
@@ -24,11 +24,13 @@
 					<show id="lecm-document:subject-assoc"/>															<!-- Тематика -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
-					<show id="lecm-document:creator"/>																	<!-- Автор -->
+					<show id="lecm-document:author-assoc"/>																<!-- Автор -->
+					<show id="lecm-document-aspects:reg-project-data-number"/>
+					<show id="lecm-document-aspects:reg-project-data-date"/>
+					<show id="lecm-document-aspects:is-shared-folder"/>
 					<show id="lecm-outgoing:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
 					<show id="lecm-outgoing:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
 					<show id="lecm-outgoing:outgoing-view-form" force="true" for-mode="view"/>							<!-- Костыль, обходящий странное поведение base-form-tabs.ftl и жутких стилей для формы просмотра-->
-					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
@@ -46,7 +48,7 @@
 
 					<!-- outgoing1:full-width-set -->
 					<field id="lecm-document:regnum" set="outgoing1"/>
-					<field id="lecm-document:doc-date" set="outgoing1"/>
+					<field id="lecm-document-aspects:reg-data-date" set="outgoing1"/>
 
 					<!-- outgoing2:full-width-set -->
 					<field id="lecm-document:title" set="outgoing2"/>
@@ -64,6 +66,7 @@
 							<control-param name="showCreateNewLink">true</control-param>
 							<control-param name="showCreateNewButton">true</control-param>
 							<control-param name="createNewMessageId">label.new-contractor</control-param>
+							<control-param name="showAssocViewForm">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-outgoing:recipient-assoc" set="outgoing4">
@@ -93,12 +96,10 @@
 
 					<!-- outgoing8:full-width-set -->
 					<field id="lecm-eds-document:file-register-assoc" set="outgoing8"/>
+					<field id="lecm-document:author-assoc" set="outgoing8" readonly="true"/>
 
-					<!-- outgoing9:full-width-set -->
-					<field id="lecm-document:creator" set="outgoing9">
-						<control template="/org/alfresco/components/form/controls/info.ftl"/>
-					</field>
-
+					<field id="lecm-document-aspects:reg-project-data-number" set="outgoing9"/>
+					<field id="lecm-document-aspects:reg-project-data-date" set="outgoing9"/>
 					<field id="lecm-document-aspects:is-shared-folder" set="outgoing9"/>
 
 					<field id="lecm-outgoing:approval-list" set="approval-and-signing" label="Согласование">

@@ -46,6 +46,12 @@
 	<#assign showViewIncompleteWarning = true>
 </#if>
 
+<#if field.control.params.showAssocViewForm?? && field.control.params.showAssocViewForm == "true">
+	<#assign showAssocViewForm = true>
+<#else>
+	<#assign showAssocViewForm = false>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <div class="form-field">
@@ -190,6 +196,7 @@
 		    </#list>
 	    },
 	    </#if>
-        itemType: "${field.control.params.endpointType ! field.endpointType}"
+        itemType: "${field.control.params.endpointType ! field.endpointType}",
+	    showAssocViewForm: ${showAssocViewForm?string},
     }).setMessages( ${messages} );
 </script>

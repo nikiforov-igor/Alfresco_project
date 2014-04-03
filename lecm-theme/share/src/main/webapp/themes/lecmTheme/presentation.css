@@ -303,7 +303,11 @@ a:hover {
 .sticky-wrapper .person a,
 .sticky-wrapper .person a:visited,
 .yui-panel-container .person a,
-.yui-panel-container .person a:visited{
+.yui-panel-container .person a:visited,
+.sticky-wrapper .not-person a,
+.sticky-wrapper .not-person a:visited,
+.yui-panel-container .not-person a,
+.yui-panel-container .not-person a:visited{
     color: #333333;
 }
 
