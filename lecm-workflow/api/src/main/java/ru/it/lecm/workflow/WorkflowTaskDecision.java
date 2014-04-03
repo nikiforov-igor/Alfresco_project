@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class WorkflowTaskDecision {
 
+	private String id;
 	private String userName;
 	private String previousUserName;
 	private String decision;
@@ -16,6 +17,14 @@ public class WorkflowTaskDecision {
 	private Date dueDate;
 
 	public WorkflowTaskDecision() {
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getUserName() {

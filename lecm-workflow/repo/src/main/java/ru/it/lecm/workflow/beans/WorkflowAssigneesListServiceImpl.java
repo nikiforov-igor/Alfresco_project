@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +22,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.FileNameValidator;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -550,61 +548,6 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	@Override
 	public NodeRef getEmployeeByAssignee(NodeRef assigneeListItem) {
 		return findNodeByAssociationRef(assigneeListItem, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-	}
-
-	@Override
-	public List<NodeRef> actualizeAssigneesUsingDelegation(final List<NodeRef> assigneesList, final String workflowRole) {
-		final List<NodeRef> actualizedAssigneesList = new ArrayList<NodeRef>();
-		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
-		Set<NodeRef> seenEmployees = new HashSet<NodeRef>();
-		for (NodeRef assignee : assigneesList) {
-			NodeRef seenEmployee;
-			NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-			NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
-			boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
-			if (isDelegationActive) {
-				NodeRef effectiveEmployee;
-				if (delegateAll) {
-					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-				} else {
-					effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
-					//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
-					if (employee.equals(effectiveEmployee)) {
-						effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-					}
-				}
-				if (effectiveEmployee != null) {
-					// задач сотруднику не назначалось. работаем дальше
-					nodeService.removeAssociation(assignee, employee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
-					nodeService.createAssociation(assignee, effectiveEmployee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
-					String userName = orgstructureService.getEmployeeLogin(effectiveEmployee);
-					if (StringUtils.isNotEmpty(userName)) {
-						nodeService.setProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, userName);
-					}
-					// запомним, что уже видели его
-					seenEmployee = effectiveEmployee;
-				} else {
-					// не отделегировалось. работаем, как будто ничего не произошло
-					seenEmployee = employee;
-				}
-			} else {
-				seenEmployee = employee;
-			}
-
-			// этому сотруднику уже назначалась задача?
-			if (seenEmployees.contains(seenEmployee)) {
-				// удалить участника совсем
-				nodeService.addAspect(assignee, ContentModel.ASPECT_TEMPORARY, null);
-				nodeService.deleteNode(assignee);
-			} else {
-				// задач сотруднику не назначалось. работаем дальше
-				// добавим в новый список участников
-				actualizedAssigneesList.add(assignee);
-				// запомним, что уже видели его
-				seenEmployees.add(seenEmployee);
-			}
-		}
-		return actualizedAssigneesList;
 	}
 
 	@Override

@@ -59,8 +59,7 @@
 		  p:documentAttachmentsService-ref="documentAttachmentsService"
 		  p:workCalendar-ref="WorkCalendarService"
 		  p:behaviourFilter-ref="policyBehaviourFilter"
-		  p:workflowAssigneesListService-ref="workflowAssigneesListService"
-		  p:workflowResultListService-ref="workflowResultListService"/>
+		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>
 
 	<bean id="lecm.approval2.utils" class="ru.it.lecm.workflow.approval.Utils"
 		  depends-on="nodeService, dictionaryService, serviceOrgstructure" />

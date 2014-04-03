@@ -20,6 +20,8 @@ public interface WorkflowResultListService {
 
 	NodeRef getResultItemByUserName(NodeRef resultListRef, String userName);
 
+	NodeRef getResultItemByTaskId(NodeRef resultListRef, String taskId);
+
 	NodeRef getResultListRef(DelegateTask task);
 
 	NodeRef getServiceRootFolder();

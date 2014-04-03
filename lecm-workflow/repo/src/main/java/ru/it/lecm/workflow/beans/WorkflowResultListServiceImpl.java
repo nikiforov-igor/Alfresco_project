@@ -10,6 +10,7 @@ import java.util.Map;
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
@@ -53,6 +54,22 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		String itemTitle = String.format(RESULT_ITEM_FORMAT, userName);
 
 		return nodeService.getChildByName(resultListRef, ContentModel.ASSOC_CONTAINS, itemTitle);
+	}
+
+	@Override
+	public NodeRef getResultItemByTaskId(NodeRef resultListRef, String taskId) {
+		List<ChildAssociationRef> assocs = nodeService.getChildAssocsByPropertyValue(resultListRef, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_TASK_ID, taskId);
+		NodeRef result;
+		if (assocs.isEmpty()) {
+			result = null;
+			logger.warn("there is no items in result list!");
+		} else {
+			result = assocs.get(0).getChildRef();
+			if (assocs.size() > 1) {
+				logger.warn("result list contains multiple items for single task");
+			}
+		}
+		return result;
 	}
 
 	@Override

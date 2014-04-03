@@ -75,7 +75,6 @@
 					<show id="lecmApprove2:approveTaskResult" />
 					<show id="bpm:comment" />
 					<show id="lecmApprove2:approveTaskCommentAssoc" />
-					<show id="reassignScriptField" force="true" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmApprove2:presentString">
@@ -98,9 +97,6 @@
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
-					</field>
-					<field id="reassignScriptField">
-						<control template="/ru/it/lecm/workflow/approval/controls/reassign-override-script-field.ftl" />
 					</field>
 				</appearance>
 			</form>

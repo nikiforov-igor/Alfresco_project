@@ -5,7 +5,6 @@ import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -28,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
@@ -40,7 +40,6 @@ import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
-import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 
@@ -54,7 +53,6 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	private DocumentAttachmentsService documentAttachmentsService;
 
 	private IWorkCalendar workCalendar;
-	private WorkflowResultListService workflowResultListService;
 	private WorkflowAssigneesListService workflowAssigneesListService;
 	private BehaviourFilter behaviourFilter;
 
@@ -64,9 +62,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	private final static String APPROVAL_TYPE_SEQUENTIAL = "SEQUENTIAL";
 	private final static String APPROVAL_TYPE_PARALLEL = "PARALLEL";
 	private final static String APPROVAL_TYPE_CUSTOM = "CUSTOM";
-	private final static String ASSEGNEE_ITEM_FORMAT = "Согласующий %s";
 	private final static String APPROVAL_LIST_NAME = "Лист согласования версия %s";
-	private final static String BUSINESS_ROLE_CONTRACT_CURATOR_ID = "CONTRACT_CURATOR";
 
 	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
 		this.documentAttachmentsService = documentAttachmentsService;
@@ -74,10 +70,6 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	public void setWorkCalendar(IWorkCalendar workCalendar) {
 		this.workCalendar = workCalendar;
-	}
-
-	public void setWorkflowResultListService(WorkflowResultListService workflowResultListService) {
-		this.workflowResultListService = workflowResultListService;
 	}
 
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService assigneesListService) {
@@ -90,7 +82,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	private void logDecision(final NodeRef approvalListRef, final TaskDecision taskDecision) {
 		Date startDate, completionDate;
-		final String comment, decision, userName, commentFileAttachmentCategoryName, documentProjectNumber;
+		final String comment, decision, commentFileAttachmentCategoryName, documentProjectNumber;
 		final NodeRef commentRef, documentRef, approvalListItemRef;
 		final Map<QName, Serializable> properties;
 
@@ -98,13 +90,12 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
 		comment = taskDecision.getComment();
 		decision = taskDecision.getDecision();
-		userName = taskDecision.getUserName();
 		commentRef = taskDecision.getCommentRef();
 		documentRef = taskDecision.getDocumentRef();
 		commentFileAttachmentCategoryName = taskDecision.getCommentFileAttachmentCategoryName();
 		documentProjectNumber = taskDecision.getDocumentProjectNumber();
 
-		approvalListItemRef = workflowResultListService.getResultItemByUserName(approvalListRef, userName);
+		approvalListItemRef = workflowResultListService.getResultItemByTaskId(approvalListRef, taskDecision.getId());
 
 		properties = nodeService.getProperties(approvalListItemRef);
 
@@ -291,7 +282,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	@Override
 	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
 		String decision = (String) task.getVariableLocal("lecmApprove2_approveTaskResult");
-		ActivitiScriptNode commentScriptNode = (ActivitiScriptNode) task.getVariableLocal("lecmApprove2_approveTaskCommentAssoc");
+		ScriptNode commentScriptNode = (ScriptNode) task.getVariableLocal("lecmApprove2_approveTaskCommentAssoc");
 		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
 
@@ -300,13 +291,13 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	@Override
 	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		String commentFileAttachmentCategoryName = (String) execution.getVariable("commentFileAttachmentCategoryName");
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+		String commentFileAttachmentCategoryName = (String) task.getVariable("commentFileAttachmentCategoryName");
 
 		String documentProjectNumber = documentService.getDocumentActualNumber(Utils.getDocumentFromBpmPackage(bpmPackage));
 
 		TaskDecision taskDecision = new TaskDecision();
+		taskDecision.setId(String.format("activiti$%s$%s", task.getProcessInstanceId(), task.getId()));
 		taskDecision.setUserName(task.getAssignee());
 		taskDecision.setDecision(decision);
 		taskDecision.setStartDate(task.getCreateTime());
@@ -318,14 +309,14 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		taskDecision.setDueDate(dueDate);
 		taskDecision.setPreviousUserName((String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME));
 
-		Map<String, String> decisionsMap = (Map<String, String>) execution.getVariable("decisionsMap");
+		Map<String, String> decisionsMap = (Map<String, String>) task.getVariable("decisionsMap");
 		decisionsMap = addDecision(decisionsMap, taskDecision);
-		execution.setVariable("decisionsMap", decisionsMap);
+		task.setVariable("decisionsMap", decisionsMap);
 
 		NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
 		logDecision(approvalListRef, taskDecision);
 
-		execution.setVariable("taskDecision", decision);
+		task.setVariable("taskDecision", decision);
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		revokeReviewerPermissions(employeeRef, bpmPackage);
@@ -403,33 +394,14 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	@Override
 	public void assignTask(NodeRef assignee, DelegateTask task) {
+		actualizeTaskAssignee(assignee, task);
 		Date dueDate = task.getDueDate();
 		if (dueDate == null) {
 			dueDate = workflowAssigneesListService.getAssigneesListItemDueDate(assignee);
 			task.setDueDate(dueDate);
 		}
 
-		String currentUserName = task.getAssignee();
-		String previousUserName = workflowAssigneesListService.getAssigneesListItemUserName(assignee);
-
-		if (!currentUserName.equals(previousUserName)) {
-			int order = 0;
-			NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
-			NodeRef oldApprovalListItem = workflowResultListService.getResultItemByUserName(approvalListRef, previousUserName);
-			if (oldApprovalListItem != null) {
-				order = (Integer) nodeService.getProperty(oldApprovalListItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER);
-				nodeService.setProperty(oldApprovalListItem, ApprovalResultModel.PROP_APPROVAL_ITEM_DECISION, DecisionResult.REASSIGNED.name());
-				nodeService.setProperty(oldApprovalListItem, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, new Date());
-			}
-			NodeRef approvalListItemRef = workflowResultListService.getResultItemByUserName(approvalListRef, currentUserName);
-			if (approvalListItemRef == null) {
-				String newItemTitle = String.format(ASSEGNEE_ITEM_FORMAT, currentUserName);
-				workflowResultListService.createResultItem(approvalListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, order, ApprovalResultModel.TYPE_APPROVAL_ITEM);
-			}
-		}
-
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantReviewerPermissions(employeeRef, bpmPackage, true);
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);

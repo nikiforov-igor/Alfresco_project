@@ -25,23 +25,15 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
-import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.approval.DecisionResult;
 
 public class ApprovalJavascriptExtension extends BaseWebScript {
-
-	/**
-	 * переменная регламента в которой хранится идентификатор
-	 * бизнес роли, через которую будут находится исполнители регламента с учетом делегирования
-	 */
-	private final static String WORKFLOW_ROLE = "workflowRole";
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalJavascriptExtension.class);
 	private NodeService nodeService;
 	private OrgstructureBean orgstructureService;
 	private ApprovalService approvalService;
 	private StateMachineServiceBean stateMachineHelper;
-	private WorkflowAssigneesListService workflowAssigneesListService;
 
 	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
 		this.stateMachineHelper = stateMachineHelper;
@@ -57,10 +49,6 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public void setApprovalService(ApprovalService approvalListService) {
 		this.approvalService = approvalListService;
-	}
-
-	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
-		this.workflowAssigneesListService = workflowAssigneesListService;
 	}
 
 	public ActivitiScriptNode createApprovalList(ActivitiScriptNode bpmPackage, String documentAttachmentCategoryName, String approvalType) {
@@ -197,11 +185,6 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
 		List<NodeRef> assigneesList = approvalService.createAssigneesList(assigneesListNode.getNodeRef(), execution);
-		//у нас есть рабочая копия списка участников процесса подписания
-		//нам надо пробежаться по участникам этого списка, через сервис делегирования найти актуальных исполнителей
-		//актуализировать ассоциацию на сотрудника и userName
-		String workflowRole = (String)execution.getVariable(WORKFLOW_ROLE);
-		assigneesList = workflowAssigneesListService.actualizeAssigneesUsingDelegation(assigneesList, workflowRole);
 		ActivitiScriptNodeList assigneesActivitiList = new ActivitiScriptNodeList();
 		for (NodeRef assigneeNode : assigneesList) {
 			assigneesActivitiList.add(new ActivitiScriptNode(assigneeNode, serviceRegistry));

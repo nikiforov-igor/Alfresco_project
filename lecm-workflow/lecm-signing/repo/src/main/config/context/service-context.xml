@@ -39,6 +39,5 @@
 		  depends-on="signing.workflow.bootstrap"
 		  class="ru.it.lecm.workflow.signing.SigningWorkflowServiceImpl"
 		  p:workCalendarService-ref="WorkCalendarService"
-		  p:workflowResultListService-ref="workflowResultListService"
 		  p:businessJournalService-ref="businessJournalService"/>
 </beans>

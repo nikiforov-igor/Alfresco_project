@@ -10,6 +10,5 @@
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:stateMachineHelper-ref="stateMachineHelper"
-		  p:approvalService-ref="approvalWorkflowService"
-		  p:workflowAssigneesListService-ref="workflowAssigneesListService" />
+		  p:approvalService-ref="approvalWorkflowService"/>
 </beans>

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -14,9 +15,11 @@ import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
@@ -26,8 +29,11 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
 import ru.it.lecm.workflow.api.LecmWorkflowService;
+import ru.it.lecm.workflow.api.WorkflowResultListService;
+import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
  *
@@ -49,6 +55,8 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	protected NotificationsService notificationsService;
 	protected WorkflowService workflowService;
 	protected WorkflowFoldersService workflowFoldersService;
+	protected IDelegation delegationService;
+	protected WorkflowResultListService workflowResultListService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -78,38 +86,13 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		this.workflowFoldersService = workflowFoldersService;
 	}
 
-	/*
-	@Override
-	public void assignTask(NodeRef assignee, DelegateTask task) {
-		Date dueDate = task.getDueDate();
-		if (dueDate == null) {
-			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
-			task.setDueDate(dueDate);
-		}
-
-//		String currentUserName = task.getAssignee();
-//		String previousUserName = (String) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME);
-//
-//		if (!currentUserName.equals(previousUserName)) {
-//			NodeRef resultListRef = getResultListRef(task);
-//			NodeRef resultItemRef = getResultItemByUserName(resultListRef, currentUserName);
-//			if (resultItemRef == null) {
-//				String newItemTitle = String.format(RESULT_ITEM_FORMAT, currentUserName);
-//				createResultItem(resultListRef, orgstructureService.getEmployeeByPerson(currentUserName), newItemTitle, dueDate, getResultItemType());
-//			}
-//			NodeRef oldResultListItemRef = getResultItemByUserName(resultListRef, previousUserName);
-//			if (oldResultListItemRef != null) {
-//				onTaskReassigned(oldResultListItemRef, resultItemRef);
-//			}
-//		}
-
-		DelegateExecution execution = task.getExecution();
-		NodeRef bpmPackage = ((ScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReviewerPermissions(employeeRef, bpmPackage);
-		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
+	public void setDelegationService(IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
-	*/
+
+	public void setWorkflowResultListService(WorkflowResultListService workflowResultListService) {
+		this.workflowResultListService = workflowResultListService;
+	}
 
 	@Override
 	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) {
@@ -238,6 +221,50 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 
 		currentDecisionMap.put(userName, decision);
 		return currentDecisionMap;
+	}
+
+	protected void actualizeTaskAssignee(NodeRef assignee, DelegateTask task) {
+		//находить настоящего employee согласно логике делегирования
+		//находить его usename
+		//поменять ссылку на employee
+		//поменять username
+		String workflowRole = (String)task.getVariable("workflowRole");
+		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
+		NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+		String userName = orgstructureService.getEmployeeLogin(employee);
+		//находим ResultItem
+		NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
+		NodeRef approvalListItemRef = workflowResultListService.getResultItemByUserName(approvalListRef, userName);
+		//привязали к задаче
+		String taskId = String.format("activiti$%s$%s", task.getProcessInstanceId(), task.getId());
+		nodeService.setProperty(approvalListItemRef, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_TASK_ID, taskId);
+		NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
+		boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+		if (isDelegationActive) {
+			NodeRef effectiveEmployee;
+			if (delegateAll) {
+				effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			} else {
+				effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+				//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+				if (employee.equals(effectiveEmployee)) {
+					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				}
+			}
+			if (effectiveEmployee != null) {
+				nodeService.removeAssociation(assignee, employee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+				nodeService.createAssociation(assignee, effectiveEmployee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+				String effectiveUserName = orgstructureService.getEmployeeLogin(effectiveEmployee);
+				if (StringUtils.isNotEmpty(effectiveUserName)) {
+					nodeService.setProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_USERNAME, effectiveUserName);
+					task.setAssignee(effectiveUserName);
+					task.setOwner(effectiveUserName); //???
+				}
+				//меняем ассоциацию на employee в result list item
+				nodeService.removeAssociation(approvalListItemRef, employee, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+				nodeService.createAssociation(approvalListItemRef, effectiveEmployee, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+			}
+		}
 	}
 
 	abstract protected String getWorkflowStartedMessage(String documentLink, Date dueDate);

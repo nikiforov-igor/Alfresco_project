@@ -29,7 +29,6 @@ import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
-import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
@@ -46,15 +45,10 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	private final static Logger logger = LoggerFactory.getLogger(SigningWorkflowServiceImpl.class);
 
 	private IWorkCalendar workCalendarService;
-	private WorkflowResultListService workflowResultListService;
 	private BusinessJournalService businessJournalService;
 
 	public void setWorkCalendarService(IWorkCalendar workCalendarService) {
 		this.workCalendarService = workCalendarService;
-	}
-
-	public void setWorkflowResultListService(WorkflowResultListService workflowResultListService) {
-		this.workflowResultListService = workflowResultListService;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -63,6 +57,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	public void assignTask(NodeRef assignee, DelegateTask task) {
+		actualizeTaskAssignee(assignee, task);
 		Date dueDate = task.getDueDate();
 		if (dueDate == null) {
 			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
@@ -100,6 +95,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		sendNotification(message, docInfo.getDocumentRef(), recipients);
 
 		WorkflowTaskDecision taskDecision = new WorkflowTaskDecision();
+		taskDecision.setId(String.format("activiti$%s$%s", task.getProcessInstanceId(), task.getId()));
 		taskDecision.setUserName(task.getAssignee());
 		taskDecision.setDecision(decision);
 		taskDecision.setStartDate(task.getCreateTime());
@@ -119,7 +115,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		final NodeRef resultListItemRef;
 		final Map<QName, Serializable> properties;
 
-		resultListItemRef = workflowResultListService.getResultItemByUserName(resultListRef, taskDecision.getUserName());
+		resultListItemRef = workflowResultListService.getResultItemByTaskId(resultListRef, taskDecision.getId());
 
 		properties = nodeService.getProperties(resultListItemRef);
 

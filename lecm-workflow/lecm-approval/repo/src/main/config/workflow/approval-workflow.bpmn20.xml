@@ -55,7 +55,7 @@
 		</sequenceFlow>
 		<userTask id="sequential-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmApprove2:approveTask">
 			<extensionElements>
-				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							approvalWorkflow.assignTask(assignee, task);
@@ -76,7 +76,7 @@
 		</userTask>
 		<userTask id="parallel-approvement-task" name="Согласовать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmApprove2:approveTask">
 			<extensionElements>
-				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							var dueDate = bpm_workflowDueDate;

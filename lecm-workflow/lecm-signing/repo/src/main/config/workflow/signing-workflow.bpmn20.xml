@@ -49,7 +49,7 @@
 		</serviceTask>
 		<userTask id="sequential-signing-task" name="Подписать документ" activiti:assignee='${assignee.properties["{http://www.it.ru/logicECM/model/workflow/1.0}userName"]}' activiti:formKey="lecmSign:signTask">
 			<extensionElements>
-				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							signingWorkflow.assignTask(assignee, task);
