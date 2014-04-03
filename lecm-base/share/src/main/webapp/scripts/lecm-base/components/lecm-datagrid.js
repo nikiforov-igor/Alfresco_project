@@ -524,6 +524,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	        },
 
 	        onExpand: function(record) {
+                        var row = this.widgets.dataTable.getRow(record);
+		        Dom.addClass(row, "expanded");
 		        var nodeRef = record.getData("nodeRef");
 		        if (nodeRef != null) {
 			        var me = this;
@@ -552,7 +554,6 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	        addExpandedRow: function(record, text) {
 		        var row = this.widgets.dataTable.getRow(record);
-		        Dom.addClass(row, "expanded");
 
 		        Dom.get("expand-" + record.getId()).innerHTML = "-";
 
