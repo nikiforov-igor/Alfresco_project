@@ -13,6 +13,7 @@ import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
+import org.alfresco.repo.policy.Behaviour;
 
 /**
  * Policy которая обеспечивает автоматическое создание параметров делегирования для сотрудников
@@ -36,7 +37,7 @@ public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 	public final void init () {
 		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
 
-		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour (this, "onUpdateNode"));
+		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour (this, "onUpdateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void setPolicyComponent (PolicyComponent policyComponent) {

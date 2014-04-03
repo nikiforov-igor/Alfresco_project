@@ -3,32 +3,35 @@
 <#assign id = args.htmlid/>
 <#assign showViewForm = true/>
 
-<script type="text/javascript">//<![CDATA[
+<script type='text/javascript'>//<![CDATA[
 	(function () {
-		"use strict";
+		'use strict';
 		var datagrid = new LogicECM.module.Delegation.DelegationList.Grid('${id}');
 		datagrid.setOptions({
-			bubblingLabel: "delegation-list-datagrid",
+			bubblingLabel: 'delegation-list-datagrid',
 			usePagination:true,
-            disableDynamicPagination: true,
+			disableDynamicPagination: true,
 			showExtendSearchBlock:true,
 			showCheckboxColumn: false,
 			searchShowInactive: true,
-			attributeForShow: "lecm-d8n:delegation-opts-owner-assoc",
-			dataSource: "lecm/delegation/list",
+			attributeForShow: 'lecm-d8n:delegation-opts-owner-assoc',
+			dataSource: 'lecm/delegation/list',
+			expandable: true,
+			procuracyItemType: 'lecm-d8n:procuracy',
 			actions: [
 				{
-					type: "datagrid-action-link-delegation-list-datagrid",
-					id: "onActionEdit",
-					permission: "edit",
-					label: "делегировать полномочия"
+					type: 'datagrid-action-link-delegation-list-datagrid',
+					id: 'onActionEdit',
+					permission: 'edit',
+					label: 'делегировать полномочия'
 				}
 			]
 		});
 		datagrid.setMessages(${messages});
 		YAHOO.util.Event.onContentReady (datagrid.id, function () {
-			YAHOO.Bubbling.fire ("activeGridChanged", {
+			YAHOO.Bubbling.fire ('activeGridChanged', {
 				datagridMeta:{
+					useChildQuery: true,
 					itemType: LogicECM.module.Delegation.Const.itemType,
 					nodeRef: LogicECM.module.Delegation.Const.nodeRef
 				}
