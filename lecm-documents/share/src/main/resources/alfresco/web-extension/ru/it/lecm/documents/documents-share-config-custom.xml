@@ -512,6 +512,7 @@
                 <js src="/scripts/lecm-documents/lecm-document-preview-control.js"/>
                 <js src="/scripts/lecm-documents/document-status-dialog-history.js"/>
                 <js src="/scripts/documents/select-document-category-control.js"/>
+	            <css src="/css/lecm-documents/attach-to-document-set.css" />
             </dependencies>
             <default-controls>
 	            <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
@@ -1005,7 +1006,9 @@
 					<show id="category"/>
 				</field-visibility>
 				<appearance>
-					<field id="document" label-id="label.attach-to-document.document">
+					<set id="set" template="/ru/it/lecm/documents/sets/attach-to-document-set.ftl"/>
+
+					<field id="document" label-id="label.attach-to-document.document" set="set">
 						<control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
 							<control-param name="itemType">lecm-document:base</control-param>
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
@@ -1014,7 +1017,7 @@
 							<control-param name="changeItemsFireAction">changeAttachToDocument</control-param>
 						</control>
 					</field>
-					<field id="category" label-id="label.attach-to-document.category">
+					<field id="category" label-id="label.attach-to-document.category" set="set">
 						<control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
 							<control-param name="notSelectedOptionShow">true</control-param>
 							<control-param name="notSelectedOptionLabel"></control-param>
