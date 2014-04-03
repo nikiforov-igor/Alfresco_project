@@ -61,7 +61,7 @@
                     <show id="lecm-eds-document:note"/>
                     <show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
                     <show id="lecm-document-aspects:reg-data-date"/>
-                    <show id="lecm-document:creator"/>
+                    <show id="lecm-document:author-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-internal:doc-type-assoc"/>
                     <show id="lecm-eds-document:execution-date"/>
@@ -100,7 +100,7 @@
                     </field>
                     <field id="lecm-document:regnum" set="header"/>
                     <field id="lecm-document-aspects:reg-data-date" set="header"/>
-                    <field id="lecm-document:creator" set="author" readonly="true"/>
+                    <field id="lecm-document:author-assoc" set="author" readonly="true"/>
                     <field id="lecm-document:title" set="title"/>
 
                     <field id="lecm-internal:doc-type-assoc" set="typeAndDate"/>
