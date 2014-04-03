@@ -112,10 +112,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         initAccordion: function () {
             var context = this;
             if (this.accordionItems != null) {
+                var forceAvailable = false;
                 for (var i = 0; i < this.accordionItems.length; i++) {
                     var node = this.accordionItems[i];
 
                     var forceExpand = this.menuState.accordion == node.id || ((this.menuState.accordion == null || this.menuState.accordion.length == 0) && i == 0);
+                    forceAvailable = forceAvailable || forceExpand;
 
                     Event.onAvailable("ac-head-" + node.id, function (obj) {
                         Event.on("ac-head-" + obj.node.id, 'click', this.onAccordionClick, obj.node, this);
@@ -126,6 +128,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                             obj.context.drawCounterValue(obj.node, obj.context.getSearchQuery(obj.node), YAHOO.util.Dom.get("ac-label-" + obj.node.id));
                         }, {node: obj.node, context: context}, this);
                     }, {node: node, forceExpand: forceExpand}, this);
+                }
+                if (!forceAvailable) {
+                    var node = this.accordionItems[0];
+                    if (node != null) {
+                        this.onAccordionClick(null, node);
+                    }
                 }
             }
         },
