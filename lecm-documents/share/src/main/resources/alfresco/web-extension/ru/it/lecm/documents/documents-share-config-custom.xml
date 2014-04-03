@@ -358,6 +358,21 @@
                 <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
                 <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
             </action>
+
+	        <action id="lecm-attach-to-document" type="javascript" label="label.action.attach-to-document">
+		        <param name="function">onActionFormDialog</param>
+		        <param name="itemKind">action</param>
+		        <param name="itemId">attach-to-document</param>
+		        <param name="mode">create</param>
+		        <param name="destination">{node.nodeRef}</param>
+		        <permissions>
+			        <permission allow="true">Delete</permission>
+		        </permissions>
+		        <param name="successMessage">message.attachToDocument.success</param>
+		        <param name="failureMessage">message.attachToDocument.failure</param>
+		        <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+		        <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+	        </action>
         </actions>
 
         <!--
@@ -390,6 +405,7 @@
                 <action index="300" id="document-publish" />
                 <action index="310" id="document-view-googlemaps" />
                 <action index="320" id="document-view-in-source-repository" />
+                <action index="330" id="lecm-attach-to-document" />
             </actionGroup>
 
             <actionGroup id="document-details">
@@ -419,6 +435,7 @@
                 <action index="330" id="document-view-in-source-repository" />
                 <action index="340" id="document-publish" />
                 <action index="350" id="document-view-googlemaps" />
+                <action index="360" id="lecm-attach-to-document" />
             </actionGroup>
 
             <actionGroup id="folder-browse">
@@ -978,4 +995,27 @@
             </form>
         </forms>
     </config>
+
+	<config evaluator="string-compare" condition="attach-to-document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="document"/>
+					<show id="category"/>
+				</field-visibility>
+				<appearance>
+					<field id="document" label-id="label.attach-to-document.document">
+						<control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+							<control-param name="itemType">lecm-document:base</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+							<control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+							<control-param name="changeItemsFireAction">changeAttachToDocument</control-param>
+						</control>
+					</field>
+					<field id="category" label-id="label.attach-to-document.category"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

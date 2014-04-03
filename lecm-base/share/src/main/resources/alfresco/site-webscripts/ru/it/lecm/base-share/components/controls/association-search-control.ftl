@@ -115,9 +115,10 @@
         <#if field.control.params.additionalFilter?has_content>
             additionalFilter:"${field.control.params.additionalFilter}",
         </#if>
-		itemType: "${field.endpointType}"
-        
-
-        
+		<#if field.control.params.itemType??>
+			itemType: "${field.control.params.itemType}"
+		<#else>
+			itemType: "${field.endpointType}"
+		</#if>
 	}).setMessages( ${messages} );
 </script>
