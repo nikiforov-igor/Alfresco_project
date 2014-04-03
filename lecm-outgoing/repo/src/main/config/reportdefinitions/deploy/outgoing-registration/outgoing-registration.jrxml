@@ -208,7 +208,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="26" splitType="Prevent">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="26" isPrintWhenDetailOverflows="true" uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a"/>
 				<box>

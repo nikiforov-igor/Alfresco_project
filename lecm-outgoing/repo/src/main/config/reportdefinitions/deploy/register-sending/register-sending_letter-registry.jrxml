@@ -65,14 +65,14 @@
 			<staticText>
 				<reportElement x="98" y="1" width="136" height="20" uuid="bb3ee757-cdae-4dc8-a9eb-46928a9f4cfe"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="DejaVu Sans Mono" size="10"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<text><![CDATA[Реестр писем №]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="98" y="23" width="136" height="20" uuid="c780da9d-876f-46c1-a3d2-ff7f5bb03360"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom">
-					<font fontName="DejaVu Sans Mono" size="10"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<text><![CDATA[Адрес отправителя:]]></text>
 			</staticText>
@@ -93,7 +93,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA["№ п/п"]]></textFieldExpression>
@@ -108,40 +108,10 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Номер идентификатора Информация клиента"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="990" y="0" width="120" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="0ac75f38-2377-46c2-9f0f-afb21f4a5422"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Имя"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement mode="Opaque" x="1110" y="0" width="120" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="99f92051-2e2f-4850-9954-25ca0dfb86fc"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Отчество"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Opaque" x="42" y="0" width="42" height="45" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6" uuid="4d03683c-eadc-45dd-8981-bc99c880cfa9"/>
@@ -153,7 +123,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA["№ исх."]]></textFieldExpression>
@@ -168,7 +138,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Адресат"]]></textFieldExpression>
@@ -183,7 +153,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Адрес получателя"]]></textFieldExpression>
@@ -202,7 +172,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT} + "."]]></textFieldExpression>
@@ -217,39 +187,9 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="990" y="0" width="120" height="26" uuid="fbcf48a6-2b6a-481f-86b8-2e12a16e785e"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{firstname}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1110" y="0" width="120" height="26" uuid="55742563-cf14-4572-a1cf-2179335e97fc"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{middlename}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement style="styleOdd" stretchType="RelativeToTallestObject" x="42" y="0" width="42" height="26" isPrintWhenDetailOverflows="true" uuid="e623fdfb-b4c9-4d5d-9727-ee84a7014403"/>
@@ -261,7 +201,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
@@ -276,7 +216,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[(!$F{surname}.isEmpty() ? $F{surname} + " " : "") +
@@ -293,7 +233,7 @@
 					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<font fontName="Times New Roman" size="10" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[(!$F{autonomous-okrug}.isEmpty() ?  $F{autonomous-okrug} + ", " : "") +
@@ -311,7 +251,7 @@
 			<staticText>
 				<reportElement x="0" y="27" width="98" height="22" uuid="78d64856-0942-49f8-ba99-51faa19ed3a8"/>
 				<textElement verticalAlignment="Bottom">
-					<font fontName="DejaVu Sans Mono" size="10"/>
+					<font fontName="Times New Roman" size="10"/>
 				</textElement>
 				<text><![CDATA[ОТПРАВИТЕЛЬ:]]></text>
 			</staticText>
