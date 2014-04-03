@@ -57,7 +57,7 @@ LogicECM.module = LogicECM.module || {};
 						oResults.actions.forEach(function(action) {
 							var div = document.createElement("div");
                             if (action.dueDate != null) {
-                                div.title = "Срок исполнения: " + Alfresco.util.formatDate(action.dueDate, "ddd d mmm yyyy");
+                                div.title = "Срок исполнения: " + action.dueDate;
                             }
 							div.className = "widget-button-grey text-cropped";
                             if (action.type == "task") {

@@ -33,6 +33,7 @@ import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionActio
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -50,6 +51,7 @@ public class ActionsScript extends DeclarativeWebScript {
     private GroupActionsService groupActionsService;
     private AuthenticationService authService;
     private LecmPermissionService lecmPermissionService;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         ActionsScript.orgstructureService = orgstructureService;
@@ -168,7 +170,7 @@ public class ActionsScript extends DeclarativeWebScript {
                             taskStruct.put("count", Long.MAX_VALUE);
                             taskStruct.put("isForm", false);
                             Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
-                            taskStruct.put("dueDate", dueDate);
+                            taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
                             actionsList.add(taskStruct);
                         }
                     }
