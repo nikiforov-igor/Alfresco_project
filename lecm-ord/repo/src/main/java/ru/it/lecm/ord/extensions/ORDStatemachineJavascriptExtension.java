@@ -63,7 +63,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private ORDDocumentService ordDocumentService;
 
 	private ORDReportsService ordReportsService;
-	
+
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
@@ -99,11 +99,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-	
+
 	public void setOrdReportsService(ORDReportsService ordReportsService) {
 		this.ordReportsService = ordReportsService;
 	}
-	
+
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
 	}
@@ -471,7 +471,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						// переведем пункт в статус "Исполнен"
 						ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.EXECUTED_STATUS);
 						//установим атрибут дату исполнеия
-						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
+						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE_REAL, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Исполнен", pointNumber);
@@ -482,7 +482,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 						// переведем пункт в статус "Не исполнен"
 						ordDocumentService.changePointStatus(point,ORDModel.P_STATUSES.NOT_EXECUTED_STATUS);
 						//установим атрибут дата исполнеия
-						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE, new Date());
+						nodeService.setProperty(point, ORDModel.PROP_ORD_TABLE_EXECUTION_DATE_REAL, new Date());
 						//запись в бизнес журнал о том, что пункт перешел в статус не исполнен
 						Integer pointNumber = (Integer) nodeService.getProperty(point, DocumentTableService.PROP_INDEX_TABLE_ROW);
 						String bjMessage = String.format("Пункт номер %s документа #mainobject перешел в статус Не исполнен", pointNumber);
@@ -525,10 +525,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 		return false;
 	}
-	
+
 	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
 		NodeRef reportNodeRef = ordReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
-		
+
 		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
 	}
 }
