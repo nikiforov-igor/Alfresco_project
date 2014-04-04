@@ -1,11 +1,14 @@
 package ru.it.lecm.outgoing.extensions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
@@ -14,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
@@ -27,6 +31,9 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 * код бизнес роли "Исходящие. Отправляющий" Сотрудник, ответственный за отправку исходящих документов
 	 */
 	private final static String OUTGOING_SENDER = "OUTGOING_SENDER";
+	private final static String DOCUMENT_FILE_REGISTER_NAMESPACE = "http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0";
+	private final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
+
 	private final static Logger logger = LoggerFactory.getLogger(OutgoingStatemachineJavascriptExtension.class);
 
 	private NodeService nodeService;
@@ -52,8 +59,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	/**
-	 * подговить уведомление Автору исходящего о доработке
-	 * будет подготовлено уведомление с сообщением "Проект документа
+	 * подговить уведомление Автору исходящего о доработке будет подготовлено уведомление с сообщением "Проект документа
 	 * &lt;Вид документа&gt; № &lt;Номер документа&gt; направлен Вам на доработку"
 	 *
 	 * @param outgoingRef ссылка на исходящее из машины состояний
@@ -87,8 +93,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	/**
-	 * подготовить уведомление регистраторам о том, что надо зарегистрировать Исходящий
-	 * будет подготовлено уведомление с
+	 * подготовить уведомление регистраторам о том, что надо зарегистрировать Исходящий будет подготовлено уведомление с
 	 * сообщением "Документ &lt;Вид документа&gt; № &lt;Номер документа&gt; поступил Вам на регистрацию"
 	 *
 	 * @param outgoingRef ссылка на исходящее из машины состояний
@@ -134,8 +139,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	}
 
 	/**
-	 * подготовить уведомление отправителям о том, что надо отправить Исходящий документ
-	 * будет подготовлено уведомление
+	 * подготовить уведомление отправителям о том, что надо отправить Исходящий документ будет подготовлено уведомление
 	 * с сообщением "На отправку поступил документ &lt;Вид документа&gt; № &lt;Номер документа&gt;"
 	 *
 	 * @param outgoingRef ссылка на исходящее из машины состояний
@@ -164,5 +168,34 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 		notification.setObjectRef(outgoingRef.getNodeRef());
 		notification.setRecipientEmployeeRefs(senders);
 		return notification;
+	}
+
+	/**
+	 * проставить исходящему ассоциацию на подразделение для финализации, в зависимости от наличия/отсутствия
+	 * номенклатуры дел
+	 *
+	 * @param outgoing исходящий документ
+	 */
+	public void configurePostSendingFinalization(final ScriptNode outgoing) {
+		NodeRef outgoingRef = outgoing.getNodeRef();
+		List<AssociationRef> assocs = nodeService.getTargetAssocs(outgoingRef, EDSDocumentService.ASSOC_FILE_REGISTER);
+		if (assocs.isEmpty()) {
+			NodeRef rootUnit = orgstructureService.getRootUnit();
+			nodeService.setAssociations(outgoingRef, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, Arrays.asList(rootUnit));
+		} else {
+			if (assocs.size() > 1) {
+				logger.warn("lecm-outgoing:document {} has multiple associations with file-register", outgoing);
+			}
+			NodeRef fileRegisterRef = assocs.get(0).getTargetRef();
+			NodeRef fileRegisterDicUnit = nodeService.getPrimaryParent(fileRegisterRef).getParentRef();
+			if (fileRegisterDicUnit != null) {
+				List<AssociationRef> fileRegisterUnitAssocs = nodeService.getTargetAssocs(fileRegisterDicUnit, ASSOC_DOCUMENT_FILE_REGISTER_UNIT);
+				if (fileRegisterUnitAssocs.size() > 0) {
+					NodeRef fileRegisterUnit = fileRegisterUnitAssocs.get(0).getTargetRef();
+					List<NodeRef> targetUnit = Arrays.asList(fileRegisterUnit);
+					nodeService.setAssociations(outgoingRef, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC, targetUnit);
+				}
+			}
+		}
 	}
 }

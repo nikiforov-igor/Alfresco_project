@@ -8675,6 +8675,17 @@
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[//проставить исходящему ассоциацию на подразделение для финализации
+(function(){
+    var outgoing = stm_document;
+    outgoingStatemachine.configurePostSendingFinalization(outgoing);
+})();
+]]>
+																</value>
+															</property>
+															<property>
 																<name>transitionLabel</name>
 																<value><![CDATA[Отправить]]></value>
 															</property>
@@ -8700,6 +8711,17 @@
 															<property>
 																<name>stopSubWorkflows</name>
 																<value><![CDATA[false]]></value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[//проставить исходящему ассоциацию на подразделение для финализации
+(function(){
+    var outgoing = stm_document;
+    outgoingStatemachine.configurePostSendingFinalization(outgoing);
+})();
+]]>
+																</value>
 															</property>
 															<property>
 																<name>transitionLabel</name>
