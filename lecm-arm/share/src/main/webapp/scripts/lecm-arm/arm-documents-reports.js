@@ -37,7 +37,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	                                Dom.setStyle(this.id + "-empty", "display", resultLength == 0 ? "" : "none");
 
 									for (var i = 0; i < oResults.list.length; i++) {
-										container.innerHTML += this.getReportTr(oResults.list[i], i, oResults.list.length);
+										container.appendChild(this.getReportTr(oResults.list[i], i, oResults.list.length));
 									}
 								}
 							},
@@ -63,16 +63,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					trClasses += " yui-dt-odd";
 				}
 
-				var result = "<tr class=\"" + trClasses + "\">";
-				result += "<td>";
-				result += "<div class=\"yui-dt-liner\">";
+				var tr = document.createElement("tr");
+				tr.className = trClasses;
+				var td = document.createElement("td");
+				var div = document.createElement("div");
+				div.className = "yui-dt-liner";
 
-				result += '<a href="#" onClick=\'LogicECM.module.Documents.Reports.reportLinkClicked(null, {"reportCode": "' + report.code + '"});\'>' + report.name + '</a>';
+				div.innerHTML = '<a href="#" onClick=\'LogicECM.module.Documents.Reports.reportLinkClicked(null, {"reportCode": "' + report.code + '"});\'>' + report.name + '</a>';
 
-				result += "</div>";
-				result += "</td>";
-				result += "</tr>";
-				return result;
+				tr.appendChild(td);
+                td.appendChild(div);
+				return tr;
 			}
 		}, true);
 })();
