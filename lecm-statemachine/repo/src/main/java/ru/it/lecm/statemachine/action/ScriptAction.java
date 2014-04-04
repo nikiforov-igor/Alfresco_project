@@ -1,8 +1,11 @@
 package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.impl.el.FixedValue;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.statemachine.StateMachineHelper;
@@ -18,8 +21,24 @@ public class ScriptAction extends StateMachineAction implements PostponedAction 
     private String script = "";
 
 	@Override
-	public void execute(DelegateExecution execution) {
-
+	public void execute(final DelegateExecution execution) {
+        if (execution.getEventName().equals(ExecutionListener.EVENTNAME_END)) {
+            if (!"".equals(script)) {
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        ScriptExecutionListener base = new ScriptExecutionListener();
+                        base.setScript(new FixedValue(script));
+                        try {
+                            base.notify(execution);
+                        } catch (Exception e) {
+                            logger.error("Error while script execution", e);
+                        }
+                        return null;
+                    }
+                });
+            }
+        }
     }
 
 	@Override
