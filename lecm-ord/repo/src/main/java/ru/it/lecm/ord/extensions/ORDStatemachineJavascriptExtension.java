@@ -1,5 +1,6 @@
 package ru.it.lecm.ord.extensions;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
+import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
@@ -428,7 +430,18 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		List<AssociationRef> repealProjAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CANCELED);
 		for (AssociationRef repealProjAssoc:repealProjAssocs){
 			NodeRef repealProj = repealProjAssoc.getTargetRef();
-			nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, "Отменен");
+			if (ORDModel.TYPE_ORD.equals(nodeService.getType(repealProj))){
+				nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, ORDModel.STATUSES.get(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS));
+			}
+			if (NDModel.TYPE_ND.equals(nodeService.getType(repealProj))){
+				String ndStatus = (String) nodeService.getProperty(repealProj, StatemachineModel.PROP_STATUS);
+				if (NDModel.STATUSES.get(NDModel.ND_STATUSES.ACTIVE_STATUS).equals(ndStatus)){
+					nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, NDModel.STATUSES.get(NDModel.ND_STATUSES.CANCELED_STATUS));
+				}
+				else{
+					nodeService.addAspect(repealProj, DocumentService.ASPECT_DOC_CANCELLED, new HashMap<QName, Serializable>());
+				}
+			}
 
 			//запись в бизнес журнал о том, что документ отменен
 			String ordPresentStr = getOrdURL(ordSNode);

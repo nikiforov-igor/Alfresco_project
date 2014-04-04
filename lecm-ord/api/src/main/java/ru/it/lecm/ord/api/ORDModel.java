@@ -1,7 +1,6 @@
 package ru.it.lecm.ord.api;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import org.alfresco.service.namespace.QName;
 
 /**
@@ -39,6 +38,11 @@ public final class ORDModel {
 	public static final String ORD_POINT_EXECUTED_STATUS = "Исполнен";
 	public static final String ORD_POINT_NOT_EXECUTED_STATUS = "Не исполнен";
 	public static final String ORD_POINT_EXPIRED_STATUS = "Просрочен";
+
+	public static enum ORD_STATUSES { CANCELED_FAKE_STATUS };
+	public static final EnumMap<ORD_STATUSES,String> STATUSES = new EnumMap<ORD_STATUSES,String>(ORD_STATUSES.class){{
+		put(ORD_STATUSES.CANCELED_FAKE_STATUS, "Отменен");
+	}};
 
 	public static enum P_STATUSES { PERFORMANCE_STATUS, EXECUTED_STATUS, NOT_EXECUTED_STATUS, EXPIRED_STATUS };
 	public static final EnumMap<P_STATUSES,String> POINT_STATUSES = new EnumMap<P_STATUSES,String>(P_STATUSES.class){{
