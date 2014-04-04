@@ -2,7 +2,7 @@
 <items>
 	<item name="cm:Реестр на отправку" type="lecm-group-actions:action">
 		<property name="cm:name"><![CDATA[Реестр на отправку]]>	</property>
-		<property name="lecm-group-actions:statuses"><![CDATA[]]> </property>
+		<property name="lecm-group-actions:statuses"><![CDATA[На регистрации;Зарегистрирован;Закрыт]]> </property>
 		<property name="lecm-group-actions:type"><![CDATA[lecm-outgoing:document]]> </property>
 		<property name="lecm-group-actions:order"><![CDATA[10]]> </property>
 		<property name="lecm-group-actions:expression"><![CDATA[]]> </property>
