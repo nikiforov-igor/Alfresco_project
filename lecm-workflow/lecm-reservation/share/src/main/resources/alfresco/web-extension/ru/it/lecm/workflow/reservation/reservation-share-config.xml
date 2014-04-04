@@ -39,7 +39,7 @@
 					<field id="reservationWf:presentString">
 						<control template="/ru/it/lecm/workflow/controls/document-present-string.ftl" />
 					</field>
-					<field id="reservationWf:isReservate">
+					<field id="reservationWf:isReservate" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
 							<control-param name="options">RESERVED|Зарезервировать#alf#REJECTED|Отклонить</control-param>
 						</control>

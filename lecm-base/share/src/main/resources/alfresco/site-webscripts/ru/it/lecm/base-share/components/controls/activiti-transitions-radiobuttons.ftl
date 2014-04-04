@@ -1,18 +1,22 @@
 <#if form.mode == "edit">
 
-<script type="text/javascript">//<![CDATA[
+<#assign containerId = fieldHtmlId + "-container">
+<#assign hiddenFieldId = fieldHtmlId>
+<#assign hiddenFieldName = field.name>
+
+<script type='text/javascript'>//<![CDATA[
 (function() {
-   new LogicECM.module.ActivitiTransitionRadiobuttons("${fieldHtmlId}").setOptions({
-      currentValue: "${field.control.params.options?js_string}",
-      hiddenFieldName: "${field.name}"
-   }).setMessages(
-      ${messages}
-   );
+	new LogicECM.module.ActivitiTransitionRadiobuttons('${containerId}').setOptions({
+		currentValue: '${field.control.params.options?js_string}',
+		hiddenFieldName: '${hiddenFieldName}',
+		hiddenFieldId: '${hiddenFieldId}'
+	}).setMessages(${messages});
 })();
 //]]></script>
 
-<div class="form-field suggested-actions" id="${fieldHtmlId}">
-   <div id="${fieldHtmlId}-buttons">
-   </div>
+<div class='form-field'>
+	<div id='${containerId}'>
+		<input id='${hiddenFieldId}' type='hidden' name='${hiddenFieldName}'>
+	</div>
 </div>
 </#if>

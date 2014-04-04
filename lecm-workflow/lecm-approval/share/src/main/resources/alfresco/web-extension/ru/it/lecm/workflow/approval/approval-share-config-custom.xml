@@ -83,7 +83,7 @@
 					<field id="bpm:dueDate" label-id="workflow.field.due">
 						<control template="/org/alfresco/components/form/controls/info.ftl" />
 					</field>
-					<field id="lecmApprove2:approveTaskResult">
+					<field id="lecmApprove2:approveTaskResult" mandatory="true">
 						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
 							<control-param name="options">APPROVED|Согласовать#alf#APPROVED_WITH_REMARK|Согласовать с замечаниями#alf#REJECTED|Отклонить</control-param>
 						</control>
