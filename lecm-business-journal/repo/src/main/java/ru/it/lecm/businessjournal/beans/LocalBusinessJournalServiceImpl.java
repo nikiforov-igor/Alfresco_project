@@ -670,7 +670,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
             String categoryRef = (String) nodeService.getProperty(ref, QName.createQName(BusinessJournalService.BJ_NAMESPACE_URI, "bjRecord-evCategory-assoc-ref"));
             NodeRef category = null;
             String categoryText = "";
-            if (NodeRef.isNodeRef(categoryRef)) {
+            if (categoryRef != null && NodeRef.isNodeRef(categoryRef)) {
                 category = new NodeRef(categoryRef);
                 categoryText = nodeService.getProperty(category, ContentModel.PROP_NAME).toString();
             }
