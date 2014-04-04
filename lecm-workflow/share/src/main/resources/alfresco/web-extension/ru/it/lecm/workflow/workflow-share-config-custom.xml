@@ -47,7 +47,7 @@
 					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
 					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
 					<set id="route3" appearance=""/>
-					<field id="cm:title" set="route1">
+					<field id="cm:title" mandatory="true" set="route1">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl"/>
 					</field>
 					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" read-only="true" set="route2"/>
@@ -91,7 +91,7 @@
 					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
 					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
 					<set id="route3" appearance=""/>
-					<field id="prop_cm_title" set="route1" label="Заголовок">
+					<field id="prop_cm_title" mandatory="true" set="route1" label="Заголовок">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl"/>
 					</field>
 					<field id="lecm-workflow:workflow-assignees-list-owner-assoc" mandatory="true" set="route2">
@@ -144,7 +144,7 @@
 					<set id="approval" appearance="bordered-panel" label-id="workflow.route.set.approval.title"/>
 					<set id="signing" appearance="bordered-panel" label-id="workflow.route.set.signing.title"/>
 					<set id="route3" appearance=""/>
-					<field id="cm:title" set="route1">
+					<field id="cm:title" mandatory="true" set="route1">
 						<control template="/org/alfresco/components/form/controls/textfield.ftl"/>
 					</field>
 					<field id="lecm-workflow:fake-workflow-list-approval" set="approval">

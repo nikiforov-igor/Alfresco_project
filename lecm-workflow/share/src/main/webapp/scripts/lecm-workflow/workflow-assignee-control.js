@@ -656,6 +656,10 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 				return vldtn.handler === LogicECM.module.Workflow.workflowDueDateValidator;
 			}
 
+			function isworkflowListValidator(vldtn) {
+				return vldtn.handler === LogicECM.module.Workflow.workflowListValidator;
+			}
+
 			if (this.validationHacked) {
 				return;
 			}
@@ -673,16 +677,19 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 							LogicECM.module.Workflow.workflowDueDateValidator, // validationHandler
 							null, // validationArgs
 							'change', // when
-							null // message
-							);
+							null); // message
 				}
 
 				// Каждый экземпляр WorkflowList добавляет свой валидатор в коллекцию FormsRuntime, передавая себя (this)
 				// через validationArgs. Это позволит валидировать именно ту таблицу, которая относится к текущему
 				// экземпляру.
-				formsRuntime.addValidation(this.options.listNodeRefInput, LogicECM.module.Workflow.workflowListValidator, {
-					workflowListControl: this
-				}, 'change', null);
+				if (!validations.some(isworkflowListValidator)) {
+					formsRuntime.addValidation(this.options.listNodeRefInput,
+							LogicECM.module.Workflow.workflowListValidator,
+							{workflowListControl: this},
+							'change',
+							null);
+				}
 			}
 		},
 		_hackTheRecordSet: function(layer, args) {
