@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
  * @author vmalygin
@@ -130,16 +131,21 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public ActivitiScriptNode createResultItem(final ActivitiScriptNode resultListRef, final ScriptNode currentEmployee) {
-		String itemTitle = String.format(WorkflowServiceAbstract.RESULT_ITEM_FORMAT, orgstructureBean.getEmployeeLogin(currentEmployee.getNodeRef()));
-		return new ActivitiScriptNode(workflowResultListService.createResultItem(resultListRef.getNodeRef(), currentEmployee.getNodeRef(), itemTitle, new Date(), 1, SigningWorkflowModel.TYPE_SIGN_RESULT_ITEM), serviceRegistry);
+		NodeRef currentEmployeeRef = currentEmployee.getNodeRef();
+		String itemTitle = String.format(WorkflowServiceAbstract.RESULT_ITEM_FORMAT, orgstructureBean.getEmployeeLogin(currentEmployeeRef));
+		NodeRef resultItem = workflowResultListService.createResultItem(resultListRef.getNodeRef(), currentEmployeeRef, itemTitle, new Date(), 1, SigningWorkflowModel.TYPE_SIGN_RESULT_ITEM);
+		nodeService.setProperty(resultItem, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_TASK_ID, currentEmployeeRef.getId());
+		return new ActivitiScriptNode(resultItem, serviceRegistry);
 	}
 
 	public WorkflowTaskDecision getSignedDecision(final ScriptNode currentEmployee) {
+		NodeRef currentEmployeeRef = currentEmployee.getNodeRef();
 		WorkflowTaskDecision decision = new WorkflowTaskDecision();
 		decision.setDecision("SIGNED");
 		decision.setStartDate(new Date());
 		decision.setDueDate(new Date());
-		decision.setUserName(orgstructureBean.getEmployeeLogin(currentEmployee.getNodeRef()));
+		decision.setUserName(orgstructureBean.getEmployeeLogin(currentEmployeeRef));
+		decision.setId(currentEmployeeRef.getId());
 
 		return decision;
 	}
