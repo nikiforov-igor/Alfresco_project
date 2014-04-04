@@ -260,8 +260,15 @@ LogicECM.module.Base.Util = {
 
 		if (formIndex > -1) {
 			while (components.length > formIndex) { // Не оптимизируй...
-				removeAllBubbles(components[formIndex]);
-				comMan.unregister(components[formIndex]);
+				if (components[formIndex].name != "Alfresco.HtmlUpload" &&
+					components[formIndex].name != "LogicECM.DndUploader" &&
+					components[formIndex].name != "Alfresco.FlashUpload" &&
+					components[formIndex].name != "Alfresco.FileUpload") {
+					removeAllBubbles(components[formIndex]);
+					comMan.unregister(components[formIndex]);
+				} else {
+					formIndex++;
+				}
 			}
 		}
 
