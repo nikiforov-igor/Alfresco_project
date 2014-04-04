@@ -3,8 +3,10 @@ package ru.it.lecm.workflow.extensions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import org.alfresco.model.ContentModel;
 import org.json.JSONObject;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +26,7 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 
 	private WorkflowAssigneesListService workflowAssigneesListService;
 	private OrgstructureBean orgstructureService;
+	private NodeService nodeService;
 
 	public void setWorkflowAssigneesListService(WorkflowAssigneesListService workflowAssigneesListService) {
 		this.workflowAssigneesListService = workflowAssigneesListService;
@@ -37,6 +40,10 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		this.orgstructureService = orgstructureService;
 	}
 
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
+	}
+
 	public JSONObject getDefaultAssigneesList(JSONObject json) {
 		String workflowType;
 		String concurrency;
@@ -48,7 +55,9 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 			NodeRef assigneesList;
 			if (hasRouteRef) {
 				NodeRef parentRef = new NodeRef(json.getString("routeRef"));
-				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType);
+				String creator  = (String)nodeService.getProperty(parentRef, ContentModel.PROP_CREATOR);
+				NodeRef employeeRef = orgstructureService.getEmployeeByPerson(creator);
+				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType, employeeRef);
 			} else {
 				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(workflowType);
 			}

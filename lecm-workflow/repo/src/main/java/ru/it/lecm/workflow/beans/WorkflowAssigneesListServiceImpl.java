@@ -239,8 +239,14 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public NodeRef getDefaultAssigneesList(final NodeRef parentRef, final String workflowType) {
+		NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
+		return getDefaultAssigneesList(parentRef, workflowType, currentEmployeeRef);
+	}
+
+	@Override
+	public NodeRef getDefaultAssigneesList(final NodeRef parentRef, final String workflowType, final NodeRef employeeRef) {
 		NodeRef result = null;
-		List<NodeRef> assigneesLists = getAssingeesListsForCurrentEmployee(parentRef, workflowType);
+		List<NodeRef> assigneesLists = getAssingeesListsForEmployee(parentRef, workflowType, employeeRef);
 		for (NodeRef assigneesList : assigneesLists) {
 			if (isTempAssigneesList(assigneesList)) {
 				result = assigneesList;
@@ -249,7 +255,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		}
 
 		if (result == null) {
-			result = createAssigneesList(parentRef, workflowType, null);
+			result = createAssigneesList(parentRef, workflowType, employeeRef, null);
 		} else {
 			if (!nodeService.hasAspect(result, LecmWorkflowModel.ASPECT_WORKFLOW_ROUTE)) {
 				clearAssigneesList(result);
@@ -266,9 +272,15 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	@Override
 	public List<NodeRef> getAssingeesListsForCurrentEmployee(final NodeRef parentRef, final String workflowType) {
+		NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
+		return getAssingeesListsForEmployee(parentRef, workflowType, currentEmployeeRef);
+	}
+
+	@Override
+	public List<NodeRef> getAssingeesListsForEmployee(final NodeRef parentRef, final String workflowType, final NodeRef employeeRef) {
 		List<NodeRef> result = new ArrayList<NodeRef>();
 
-		List<NodeRef> allEmployeeAssigneesList = getAllAssingeesListsForCurrentEmployee(parentRef);
+		List<NodeRef> allEmployeeAssigneesList = getAllAssingeesListsForEmployee(parentRef, employeeRef);
 		for (NodeRef assigneeListRef : allEmployeeAssigneesList) {
 			if (workflowType.equalsIgnoreCase(getAssigneesListWorkflowType(assigneeListRef))) {
 				result.add(assigneeListRef);
@@ -278,9 +290,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return result;
 	}
 
-	private List<NodeRef> getAllAssingeesListsForCurrentEmployee(final NodeRef parentRef) {
-		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-		List<NodeRef> allEmployeeAssigneesList = findNodesByAssociationRef(currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, ASSOCIATION_TYPE.SOURCE);
+	private List<NodeRef> getAllAssingeesListsForEmployee(final NodeRef parentRef, final NodeRef employeeRef) {
+		List<NodeRef> allEmployeeAssigneesList = findNodesByAssociationRef(employeeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, ASSOCIATION_TYPE.SOURCE);
 		List<NodeRef> result = new ArrayList<NodeRef>();
 		for (NodeRef assigneeList : allEmployeeAssigneesList) {
 			NodeRef primaryParentRef = nodeService.getPrimaryParent(assigneeList).getParentRef();
@@ -422,20 +433,20 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 		return getAssigneesListsFolder();
 	}
 
-	private NodeRef createEmptyAssigneesList(final NodeRef parentRef, final String name, final boolean isAnonymous) {
+	private NodeRef createEmptyAssigneesList(final NodeRef parentRef, final NodeRef employeeRef, final String name, final boolean isAnonymous) {
 		Map<QName, Serializable> props = null;
 		if (name != null) {
 			props = new HashMap<QName, Serializable>();
 			props.put(ContentModel.PROP_NAME, name);
 		}
-		return createAssigneesList(parentRef, "", props, isAnonymous);
+		return createAssigneesList(parentRef, "", employeeRef, props, isAnonymous);
 	}
 
-	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final Map<QName, Serializable> properties) {
-		return createAssigneesList(parentRef, workflowType, properties, false);
+	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
+		return createAssigneesList(parentRef, workflowType, employeeRef, properties, false);
 	}
 
-	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final Map<QName, Serializable> properties, final boolean isAnonymous) {
+	private NodeRef createAssigneesList(final NodeRef parentRef, final String workflowType, final NodeRef employeeRef, final Map<QName, Serializable> properties, final boolean isAnonymous) {
 		Map<QName, Serializable> props = (properties == null) ? new HashMap<QName, Serializable>() : properties;
 
 		props.put(LecmWorkflowModel.PROP_WORKFLOW_TYPE, workflowType);
@@ -448,9 +459,8 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 		nodeService.addAspect(result, LecmWorkflowModel.ASPECT_TEMP, null);
 
-		if (!isAnonymous) {
-			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-			nodeService.createAssociation(result, currentEmployee, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
+		if (!isAnonymous && employeeRef != null) {
+			nodeService.createAssociation(result, employeeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER);
 		}
 
 		return result;
@@ -513,7 +523,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	private NodeRef copyAssigneesList(NodeRef source, NodeRef targetDir, String name, boolean isAnonymous) {
 		//создаем новый список во временной папке
-		NodeRef newAssigneesList = createEmptyAssigneesList(targetDir, name, isAnonymous);
+		NodeRef newAssigneesList = createEmptyAssigneesList(targetDir, null, name, isAnonymous);
 		//копируем навешанные аспекты
 		Set<QName> aspects = nodeService.getAspects(source);
 		for (QName aspect : aspects) {
