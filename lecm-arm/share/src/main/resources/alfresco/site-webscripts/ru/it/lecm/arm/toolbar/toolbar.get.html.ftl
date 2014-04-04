@@ -32,6 +32,13 @@ YAHOO.util.Event.onDOMReady(init);
             </span>
         </span>
     </div>
+	<div class="create-row">
+        <span id="${id}-newHtmlNodeButton" class="yui-button yui-push-button">
+            <span class="first-child">
+                <button type="button">${msg('lecm.arm.html-node.add')}</button>
+            </span>
+        </span>
+    </div>
 	<div class="delete-node">
         <span id="${id}-deleteNodeButton" class="yui-button yui-push-button">
             <span class="first-child">

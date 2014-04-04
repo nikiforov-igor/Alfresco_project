@@ -107,6 +107,26 @@
 			</overrides>
 		</type>
 
+		<type name="lecm-arm:html-node">
+			<parent>lecm-arm:base-node</parent>
+			<properties>
+				<property name="lecm-arm:html-url">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<overrides>
+				<property name="lecm-dic:valueContainsType">
+					<default>lecm-arm:node</default>
+				</property>
+			</overrides>
+		</type>
+
 		<type name="lecm-arm:base-node">
 			<parent>lecm-dic:hierarchical_dictionary_values</parent>
 			<properties>

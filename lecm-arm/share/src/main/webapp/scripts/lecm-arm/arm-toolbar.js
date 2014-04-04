@@ -39,6 +39,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 				this.toolbarButtons["defaultActive"].newReportsNode = Alfresco.util.createYUIButton(this, "newReportsNodeButton", this.onNewReportNode);
 
+				this.toolbarButtons["defaultActive"].newHtmlNode = Alfresco.util.createYUIButton(this, "newHtmlNodeButton", this.onNewHtmlNode);
+
 				this.toolbarButtons["defaultActive"].deleteNodeButton = Alfresco.util.createYUIButton(this, "deleteNodeButton", this.onDeleteNode);
 
 				this.toolbarButtons["defaultActive"].exportButton = Alfresco.util.createYUIButton(this, "exportArmButton", this.onExport);
@@ -57,6 +59,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 			onNewReportNode: function() {
 				this.onNewRow(null, null, "lecm-arm:reports-node");
+			},
+
+			onNewHtmlNode: function() {
+				this.onNewRow(null, null, "lecm-arm:html-node");
 			},
 
 			onNewRow: function(e, target, itemType){
@@ -192,7 +198,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("label", "Удалить выбранный " + this.getTypeName(this.node.currentItemType));
 
 					this.toolbarButtons["defaultActive"].deleteNodeButton.set("disabled", this.node.itemType == "lecm-arm:arm");
-					this.toolbarButtons["defaultActive"].newReportsNode.set("disabled", this.node.itemType != "lecm-arm:node" && this.node.itemType != "lecm-arm:reports-node");
+					this.toolbarButtons["defaultActive"].newReportsNode.set("disabled", this.node.itemType != "lecm-arm:node" && this.node.itemType != "lecm-arm:reports-node" && this.node.itemType != "lecm-arm:html-node" );
+					this.toolbarButtons["defaultActive"].newHtmlNode.set("disabled", this.node.itemType == "lecm-arm:arm" || this.node.itemType == "lecm-arm:accordion");
 
 					this.toolbarButtons["defaultActive"].exportButton.set("disabled", this.node.currentItemType != "lecm-arm:arm");
 					this.toolbarButtons["defaultActive"].importButton.set("disabled", this.node.currentItemType != "lecm-dic:dictionary");

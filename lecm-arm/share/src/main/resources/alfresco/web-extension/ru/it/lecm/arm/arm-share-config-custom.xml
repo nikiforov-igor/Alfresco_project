@@ -256,6 +256,30 @@
 		</forms>
 	</config>
 
+	<config evaluator="node-type" condition="lecm-arm:html-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:html-url" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:html-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:html-url" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="node-type" condition="lecm-arm:field">
 		<forms>
 			<form>
