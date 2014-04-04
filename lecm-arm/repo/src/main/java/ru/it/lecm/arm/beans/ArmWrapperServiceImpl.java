@@ -162,6 +162,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (searchQuery != null) {
 	        node.setSearchQuery(searchQuery);
         }
+	    node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
 
         return node;
     }
@@ -185,6 +186,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 	    if (parentNode.getSearchQuery() != null) {
             node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
 	    }
+	    node.setHtmlUrl(parentNode.getHtmlUrl());
         return node;
     }
 

@@ -207,7 +207,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     armNode: null,
                     bubblingLabel: "documents-arm",
                     menuState:this.menuState,
-                    isReportNode:false
+	                isNotGridNode:false
                 });
             }
             var root = this.tree.getRoot();
@@ -252,7 +252,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counter: oResults[nodeIndex].counter,
                                 counterLimit: oResults[nodeIndex].counterLimit,
                                 counterDesc: oResults[nodeIndex].counterDesc,
-	                            createTypes: oResults[nodeIndex].createTypes
+	                            createTypes: oResults[nodeIndex].createTypes,
+	                            htmlUrl: oResults[nodeIndex].htmlUrl
                             };
 
                             // добавляем элемент в дерево
@@ -349,12 +350,21 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             if (node) {
 	            var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
-	            Dom.setStyle("arm-documents-grid", "display", isReportNode ? "none" : "block");
+	            var isHtmlNode = node.data.nodeType == "lecm-arm:html-node";
+	            var isNotGridNode = isReportNode || isHtmlNode;
+
+	            Dom.setStyle("arm-documents-grid", "display", isNotGridNode ? "none" : "block");
 	            Dom.setStyle("arm-documents-reports", "display", !isReportNode ? "none" : "block");
+	            Dom.setStyle("arm-documents-html", "display", !isHtmlNode ? "none" : "block");
 
 	            if (isReportNode) {
 		            YAHOO.Bubbling.fire ("updateArmReports", {
 			            types: node.data.types
+		            });
+	            }
+	            if (isHtmlNode) {
+		            YAHOO.Bubbling.fire ("updateArmHtmlNode", {
+			            url: node.data.htmlUrl
 		            });
 	            }
 
@@ -362,7 +372,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            armNode: node,
 		            bubblingLabel: "documents-arm",
                     menuState:this.menuState,
-                    isReportNode: isReportNode
+		            isNotGridNode: isNotGridNode
 	            });
 
 	            var parent = node;

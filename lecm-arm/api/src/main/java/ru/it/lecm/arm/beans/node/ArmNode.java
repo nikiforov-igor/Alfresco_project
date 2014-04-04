@@ -25,6 +25,7 @@ public class ArmNode {
     private ArmCounter counter;
     private boolean hasChilds = false;
 	private List<String> createTypes;
+	private String htmlUrl;
 
     private ArmBaseChildRule nodeQuery;
 
@@ -137,5 +138,13 @@ public class ArmNode {
 
 	public void setCreateTypes(List<String> createTypes) {
 		this.createTypes = createTypes;
+	}
+
+	public String getHtmlUrl() {
+		return htmlUrl;
+	}
+
+	public void setHtmlUrl(String htmlUrl) {
+		this.htmlUrl = htmlUrl;
 	}
 }

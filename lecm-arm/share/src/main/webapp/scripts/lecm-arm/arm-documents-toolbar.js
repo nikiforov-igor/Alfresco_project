@@ -404,11 +404,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
 
-                    this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isReportNode || !hasFilters);
-                    this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isReportNode);
+                    this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isNotGridNode || !hasFilters);
+                    this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isNotGridNode);
 
                     var searchInput = Dom.get(this.id + "-full-text-search");
-                    if (args[1].isReportNode) {
+                    if (args[1].isNotGridNode) {
                         searchInput.setAttribute("disabled", true);
                     } else {
                         searchInput.removeAttribute("disabled");
@@ -426,7 +426,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (currentNode.data.types != null) {
                         types = currentNode.data.types.split(",");
                     }
-                    this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isReportNode || types.length != 1);
+                    this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isNotGridNode || types.length != 1);
                     this.currentType = types[0];
                 }
                 if (!this.deferredListPopulation.fulfil("updateArmFilters")){

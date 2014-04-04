@@ -36,6 +36,10 @@
             <url>/lecm/arm/reports</url>
         </component>
 	    <component>
+            <region-id>arm-html-node</region-id>
+            <url>/lecm/arm/htmlNode</url>
+        </component>
+	    <component>
             <region-id>documents-tree</region-id>
             <url>/lecm/arm/documents-tree-menu</url>
         </component>

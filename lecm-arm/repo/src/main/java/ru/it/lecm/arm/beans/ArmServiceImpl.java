@@ -79,6 +79,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         types.add(TYPE_ARM_ACCORDION);
         types.add(TYPE_ARM_NODE);
 		types.add(TYPE_ARM_REPORTS_NODE);
+		types.add(TYPE_ARM_HTML_NODE);
 		return isProperType(ref, types);
 	}
 
@@ -126,6 +127,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         typeSet.add(TYPE_ARM_ACCORDION);
         typeSet.add(TYPE_ARM_NODE);
         typeSet.add(TYPE_ARM_REPORTS_NODE);
+        typeSet.add(TYPE_ARM_HTML_NODE);
         List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(node, typeSet);
         if (childAssocs != null) {
             for (ChildAssociationRef child : childAssocs) {

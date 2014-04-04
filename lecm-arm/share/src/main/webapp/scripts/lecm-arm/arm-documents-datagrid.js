@@ -89,7 +89,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             }
             YAHOO.Bubbling.fire("updateArmFilters", {
                 currentNode: args[1].armNode,
-                isReportNode: args[1].isReportNode
+	            isNotGridNode: args[1].isNotGridNode
             });
 
         },

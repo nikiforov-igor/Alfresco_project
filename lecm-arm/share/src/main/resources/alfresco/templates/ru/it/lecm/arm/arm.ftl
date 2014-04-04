@@ -63,6 +63,9 @@
 	                <div id="arm-documents-reports" style="display: none">
                         <@region id="reports" scope="template" />
 	                </div>
+	                <div id="arm-documents-html" style="display: none">
+                        <@region id="arm-html-node" scope="template" />
+	                </div>
                 </div>
             </div>
             <div id="alf-filters" class="yui-u first column1 tree">
