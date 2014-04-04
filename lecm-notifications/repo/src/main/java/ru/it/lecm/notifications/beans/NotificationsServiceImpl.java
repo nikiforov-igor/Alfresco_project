@@ -38,8 +38,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	private static final String NOTIFICATION_POST_TRANSACTION_PENDING_OBJECTS = "notification_post_transaction_pending_objects";
 
 	final private static Logger logger = LoggerFactory.getLogger(NotificationsServiceImpl.class);
+    private static final int DEFAULT_N_DAYS = 5;
 
-	private OrgstructureBean orgstructureService;
+    private OrgstructureBean orgstructureService;
 	private DictionaryBean dictionaryService;
 	private SubstitudeBean substituteService;
 
@@ -484,11 +485,15 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 
 	public NodeRef getGlobalSettingsNode() {
+        return getGlobalSettingsNode(false);
+    }
+
+	public NodeRef getGlobalSettingsNode(boolean doNotCreate) {
 		final NodeRef rootFolder = this.getServiceRootFolder();
 		final String settingsObjectName = NOTIFICATIONS_SETTINGS_NODE_NAME;
 
 		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-		if (settings != null) {
+		if (settings != null || doNotCreate) {
 			return settings;
 		} else {
 			return createNode(rootFolder, TYPE_NOTIFICATIONS_GLOBAL_SETTINGS, settingsObjectName, null);
@@ -496,11 +501,21 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	}
 
 	public boolean isEnablePassiveNotifications() {
-		return (Boolean) nodeService.getProperty(getGlobalSettingsNode(), PROP_ENABLE_PASSIVE_NOTIFICATIONS);
-	}
+        NodeRef globalSettingsNode = getGlobalSettingsNode(true);
+        if (globalSettingsNode != null) {
+            return (Boolean) nodeService.getProperty(globalSettingsNode, PROP_ENABLE_PASSIVE_NOTIFICATIONS);
+        } else {
+            return false;
+        }
+    }
 
 	public int getSettingsNDays() {
-		return (Integer) nodeService.getProperty(getGlobalSettingsNode(), PROP_N_DAYS);
+        NodeRef globalSettingsNode = getGlobalSettingsNode(true);
+        if (globalSettingsNode != null) {
+            return (Integer) nodeService.getProperty(globalSettingsNode, PROP_N_DAYS);
+        } else {
+            return DEFAULT_N_DAYS;
+        }
 	}
 
     @Override
