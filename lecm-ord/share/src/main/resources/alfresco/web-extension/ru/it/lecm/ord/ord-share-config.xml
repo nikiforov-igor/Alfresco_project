@@ -261,6 +261,7 @@
                             <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
                             <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
                             <control-param name="additionalFilter">((TYPE:\"lecm-ord:document\" AND @lecm-statemachine\\:status:\"Исполнен\") OR (TYPE:\"lecm-nd:document\" AND (@lecm-statemachine\\:status:\"Действует\" OR @lecm-statemachine\\:status:\"Введен в действие\"))) </control-param>
+                            <control-param name="viewUrl">document?nodeRef={nodeRef}</control-param>
                         </control>
                     </field>
                     <field id="lecm-ord:accepted-assoc" set="ord6">

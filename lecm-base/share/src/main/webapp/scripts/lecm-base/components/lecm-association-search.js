@@ -24,7 +24,8 @@ LogicECM.module = LogicECM.module || {};
 
 	var $html = Alfresco.util.encodeHTML,
 		$combine = Alfresco.util.combinePaths,
-		$hasEventInterest = Alfresco.util.hasEventInterest;
+		$hasEventInterest = Alfresco.util.hasEventInterest,
+		$siteURL = Alfresco.util.siteURL;
 
 	LogicECM.module.AssociationSearchViewer = function(htmlId)
 	{
@@ -117,7 +118,9 @@ LogicECM.module = LogicECM.module || {};
 
 				createDialog: false,
 
-				childrenDataSource: "lecm/forms/picker"
+				childrenDataSource: "lecm/forms/picker",
+
+				viewUrl: null
 			},
 
 			onReady: function AssociationSearchViewer_onReady()
@@ -701,8 +704,19 @@ LogicECM.module = LogicECM.module || {};
 				return "<span class='person'><a href='javascript:void(0);' onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
 			},
 
-            getDefaultView: function (displayValue, width100) {
-				return "<span class='not-person" + (width100 ? " width100" : "") + "'>" + displayValue + "</span>";
+            getDefaultView: function (displayValue, width100, item) {
+				var result = "<span class='not-person" + (width100 ? " width100" : "") + "'>";
+	            if (this.options.viewUrl != null && item != null && item.nodeRef != null) {
+		            var href = YAHOO.lang.substitute(this.options.viewUrl, {
+			            nodeRef: item.nodeRef
+		            });
+
+		            result += "<a href='" + href + "'>" + displayValue + "</a>";
+	            } else {
+		            result += displayValue;
+	            }
+	            result += "</span>";
+	            return result;
 			},
 
 			updateAddButtons: function AssociationSearchViewer_updateAddButtons() {
@@ -751,7 +765,7 @@ LogicECM.module = LogicECM.module || {};
 							if (this.options.itemType == "lecm-orgstr:employee") {
 								el.innerHTML += '<div class="' + divClass + '"> ' +  this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + '</div>';
 							} else {
-								el.innerHTML += '<div class="' + divClass + '">' + this.getDefaultView(displayName, true) + ' ' + '</div>';
+								el.innerHTML += '<div class="' + divClass + '">' + this.getDefaultView(displayName, true, this.selectedItems[i]) + ' ' + '</div>';
 							}
 						} else {
 							if (this.options.itemType == "lecm-orgstr:employee") {
@@ -759,7 +773,7 @@ LogicECM.module = LogicECM.module || {};
 									+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 							} else {
 								el.innerHTML
-									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
+									+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, false, this.selectedItems[i]) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 							}
 							YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef + "_c", this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "_c", updateForms: true}, this);
 						}
@@ -1016,7 +1030,7 @@ LogicECM.module = LogicECM.module || {};
 								+= '<div class="' + divClass + '"> ' + this.getEmployeeView(this.selectedItems[i].nodeRef, displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i], "_c") + '</div>';
 						} else {
 							Dom.get(fieldId).innerHTML
-								+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i]) + '</div>';
+								+= '<div class="' + divClass + '"> ' + this.getDefaultView(displayName, false, this.selectedItems[i]) + ' ' + this.getRemoveButtonHTML(this.selectedItems[i]) + '</div>';
 						}
 						YAHOO.util.Event.onAvailable("t-" + this.options.controlId + this.selectedItems[i].nodeRef, this.attachRemoveClickListener, {node: this.selectedItems[i], dopId: "", updateForms: false}, this);
 					}
