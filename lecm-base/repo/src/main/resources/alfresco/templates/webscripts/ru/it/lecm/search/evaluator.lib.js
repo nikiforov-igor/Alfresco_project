@@ -174,9 +174,8 @@ var Evaluator = {
 					var allowedV = constraint.getAllowedValues();
 					for (var j = 0; j < allowedV.size(); ++j) {
 						var allowedVasString = "" + allowedV.get(j);
-						var allValSplit = allowedVasString.split("|");
-                        if (value == allValSplit[0]) {
-                            return allValSplit.length > 1 ? allValSplit[1] :  allValSplit[0];
+                        if (value == allowedVasString) {
+                            return constraint.getDisplayLabel(allowedVasString);
                         }
 					}
 				}
