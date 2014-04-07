@@ -99,4 +99,11 @@
           p:publicAction="false"
 		  p:ordNotificationService-ref="ordNotificationService"/>
 
+	<util:list id="ord.groupOperations">
+		<value>alfresco/module/${artifactId}/actions/create-ord-content.xml</value>
+	</util:list>
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:createOrUpdateDictionaries-ref="ord.groupOperations"/>
+	
 </beans>
