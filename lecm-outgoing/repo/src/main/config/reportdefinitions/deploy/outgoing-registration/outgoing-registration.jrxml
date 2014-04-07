@@ -53,7 +53,7 @@
 				<textElement>
 					<font fontName="DejaVu Sans" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[Журнал регистрации исходящих]]></text>
+				<text><![CDATA[Журнал регистрации исходящих документов]]></text>
 			</staticText>
 		</band>
 	</title>
