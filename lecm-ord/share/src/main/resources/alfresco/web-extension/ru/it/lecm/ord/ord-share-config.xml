@@ -127,6 +127,7 @@
                     <show id="lecm-ord:canceled-assoc"/>                                                                <!-- Отменённые документы -->
                     <show id="lecm-ord:accepted-assoc"/>                                                                <!-- Принимаемые документы -->
                     <show id="lecm-ord-table-structure:items-assoc"/>
+                    <show id="lecm-document:regnum"/>
                 </field-visibility>
             </form>
 
@@ -221,7 +222,12 @@
                     <set id="ord6" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/full-width-set.ftl"/>
                     <set id="ord9" parent="ord-document-form-common-set" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
 
-	                <field id="lecm-document:regnum" set="ord00"/>
+					<field id="lecm-document:regnum" set="ord00" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
+										event="keyup" />
+						</constraint-handlers>
+					</field>
 	                <field id="lecm-document-aspects:reg-data-date" set="ord00"/>
 
                     <field id="lecm-document:title" set="ord0"/>
@@ -368,12 +374,12 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row .first div.form-field div.viewmode-field span.viewmode-value {
                                 float:left;
                                 }
-                                
+
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field div.viewmode-field span.viewmode-label{
                                 float: none;
                                 display: block;
                                 }
-                                
+
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field span.viewmode-label,
                                 .yui-skin-lecmTheme .yui-panel .item-container .first-row div.form-field div.viewmode-field .help-icon {
                                 display: none;
@@ -420,7 +426,7 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .two-column div.form-field div.autocomplete-block div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a {
                                 max-width: 19em;
                                 }
-                                
+
                             </control-param>
                         </control>
                     </field>
@@ -483,8 +489,8 @@
                                 float:none;
                                 text-align:left;
                                 }
-                                
-                                .tab-ord-document-items .datagrid tr.expand-row div.form-field textarea{ 
+
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-field textarea{
                                 width: auto;
                                 }
                             </control-param>

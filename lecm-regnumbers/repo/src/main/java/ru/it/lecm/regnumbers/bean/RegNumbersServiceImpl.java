@@ -1,6 +1,9 @@
 package ru.it.lecm.regnumbers.bean;
 
-
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -27,19 +30,18 @@ import ru.it.lecm.regnumbers.template.ParserImpl;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 /**
  *
  * @author vlevin
  */
 public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService, ApplicationContextAware {
 
-	final private static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
-	private final String searchQuery = "TYPE:\"%s\" AND ALL:\"%s\"";
+	private final static Logger logger = LoggerFactory.getLogger(RegNumbersServiceImpl.class);
+	private final static String SEARCH_QUERY_TEMPLATE = "TYPE:\"%s\" AND regnumberTemplate:\"%s\"";
+	/**
+	 * Ищем регистрационные номера в этих полях документа
+	 */
+	private final static String REGNUMBER_SEARCH_TEMPLATE = "%(lecm\\-document:regnum lecm\\-contract:regNumSystem)";
 	private ApplicationContext applicationContext;
 	private SearchService searchService;
 	private NamespaceService namespaceService;
@@ -78,9 +80,9 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		this.documentService = documentService;
 	}
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
-    }
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
 
 	@Override
 	public String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException {
@@ -99,19 +101,20 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		sp.setQuery(String.format(searchQuery, DocumentService.TYPE_BASE_DOCUMENT.toString(), number));
+		sp.setQuery(String.format(SEARCH_QUERY_TEMPLATE, DocumentService.TYPE_BASE_DOCUMENT.toString(), number));
+		sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
 
 		ResultSet results = null;
 		try {
-            sp.setMaxItems(0);
+			sp.setMaxItems(0);
 			results = searchService.query(sp);
-            if (results instanceof SolrJSONResultSet) {
-                isUnique = ((SolrJSONResultSet) results).getNumberFound() == 0;
-            } else {
-                sp.setMaxItems(-1);
-                results = searchService.query(sp);
-                isUnique = results.length() == 0;
-            }
+			if (results instanceof SolrJSONResultSet) {
+				isUnique = ((SolrJSONResultSet) results).getNumberFound() == 0;
+			} else {
+				sp.setMaxItems(-1);
+				results = searchService.query(sp);
+				isUnique = results.length() == 0;
+			}
 		} finally {
 			if (results != null) {
 				results.close();
@@ -170,7 +173,6 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		}
 	}
 
-
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -182,118 +184,119 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		return dictionaryService.getDictionaryValueByParam(RegNumbersService.REGNUMBERS_TEMPLATE_DICTIONARY_NAME, RegNumbersService.PROP_TEMPLATE_SERVICE_ID, dictionaryTemplateCode);
 	}
 
-    @Override
-    public void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException {
-        registerProject(documentNode, dictionaryTemplateCode, false);
-    }
+	@Override
+	public void registerProject(NodeRef documentNode, String dictionaryTemplateCode) throws TemplateParseException, TemplateRunException {
+		registerProject(documentNode, dictionaryTemplateCode, false);
+	}
 
-    @Override
-    public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException{
-        registerDocument(documentNode, dictionaryTemplateCode, false);
-    }
+	@Override
+	public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode) throws TemplateParseException, TemplateRunException {
+		registerDocument(documentNode, dictionaryTemplateCode, false);
+	}
 
-    @Override
-    public void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        register(documentNode, dictionaryTemplateCode, onlyReserve, true);
-    }
+	@Override
+	public void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
+		register(documentNode, dictionaryTemplateCode, onlyReserve, true);
+	}
 
-    @Override
-    public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
-        register(documentNode, dictionaryTemplateCode, onlyReserve, false);
-    }
+	@Override
+	public void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException {
+		register(documentNode, dictionaryTemplateCode, onlyReserve, false);
+	}
 
-    @Override
-    public void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
-        registerProject(documentNode, getTemplateString(templateRef));
-    }
+	@Override
+	public void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException {
+		registerProject(documentNode, getTemplateString(templateRef));
+	}
 
-    @Override
-    public void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException {
-        registerDocument(documentNode, getTemplateString(templateRef));
-    }
+	@Override
+	public void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException {
+		registerDocument(documentNode, getTemplateString(templateRef));
+	}
 
-    @Override
-    public boolean isRegistered(NodeRef documentNode, boolean isProject) {
-        QName regAspectName = isProject ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+	@Override
+	public boolean isRegistered(NodeRef documentNode, boolean isProject) {
+		QName regAspectName = isProject ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
 
-        if (nodeService.hasAspect(documentNode, regAspectName)) {
-            if (isProject) {
-                Serializable projectNumber = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_PROJECT_NUMBER);
-                return projectNumber != null && !DocumentService.DEFAULT_REG_NUM.equals(projectNumber.toString());
-            } else {
-                Serializable isRegistered = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED);
-                if (isRegistered != null) {
-                    return (Boolean) isRegistered;
-                }
-            }
-        }
-        return false;
-    }
+		if (nodeService.hasAspect(documentNode, regAspectName)) {
+			if (isProject) {
+				Serializable projectNumber = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_PROJECT_NUMBER);
+				return projectNumber != null && !DocumentService.DEFAULT_REG_NUM.equals(projectNumber.toString());
+			} else {
+				Serializable isRegistered = nodeService.getProperty(documentNode, DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED);
+				if (isRegistered != null) {
+					return (Boolean) isRegistered;
+				}
+			}
+		}
+		return false;
+	}
 
-    /**
-     * Получить регистрационный номер для документа по указанному шаблону и
-     * записать его в документа.
-     *
-     *
-     * @param documentNode ссылка на экземпляр документа, которому необходимо
-     * присвоить номер.
-     * @param onlyReserve флаг нужно ли реально регистрировать документ
-     * или только зарезервировать номер
-     * @param isProjectRegister флаг, происходит ли регистрация проекта документа. Если false - значит регистрируется документ
-     * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
-     * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
-     * функций. Детали см. в эксепшене.
-     * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
-     * неверное имя метода, функции или объекта, неверные параметры функции или
-     * метода. Детали см. в эксепшене.
-     */
-    private void register(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve, boolean isProjectRegister)  throws TemplateParseException, TemplateRunException {
-        if (isRegistered(documentNode, isProjectRegister)) {
-            return;
-        }
-        NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
-        if (templateDictionary != null && documentNode != null) {
-            QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
-            QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
-            QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
-            QName propIsRegistered = isProjectRegister ? null : DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED;
+	/**
+	 * Получить регистрационный номер для документа по указанному шаблону и
+	 * записать его в документа.
+	 *
+	 *
+	 * @param documentNode ссылка на экземпляр документа, которому необходимо
+	 * присвоить номер.
+	 * @param onlyReserve флаг нужно ли реально регистрировать документ
+	 * или только зарезервировать номер
+	 * @param isProjectRegister флаг, происходит ли регистрация проекта документа. Если false - значит регистрируется
+	 * документ
+	 * @throws TemplateParseException В шаблоне есть синтаксическа ошибка:
+	 * незакрытые одинарные скобки, пропушен плюс, неверные символы в названии
+	 * функций. Детали см. в эксепшене.
+	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
+	 * неверное имя метода, функции или объекта, неверные параметры функции или
+	 * метода. Детали см. в эксепшене.
+	 */
+	private void register(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve, boolean isProjectRegister) throws TemplateParseException, TemplateRunException {
+		if (isRegistered(documentNode, isProjectRegister)) {
+			return;
+		}
+		NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
+		if (templateDictionary != null && documentNode != null) {
+			QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+			QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
+			QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
+			QName propIsRegistered = isProjectRegister ? null : DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED;
 
-            if (!nodeService.hasAspect(documentNode, regAspectName)) {
-                nodeService.addAspect(documentNode, regAspectName, null);
-            }
+			if (!nodeService.hasAspect(documentNode, regAspectName)) {
+				nodeService.addAspect(documentNode, regAspectName, null);
+			}
 
-            Serializable number = nodeService.getProperty(documentNode, propNumber);
-            if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
-                //номер уже есть
-                if (propIsRegistered != null && !onlyReserve) {
-                    nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
-                }
-            } else {
-                //регистрируем
-                String regNumber;
-                NodeRef repeatedDocument = getRepeatedDocument(documentNode);
-                if (repeatedDocument != null) {
-                    regNumber = getRepeatedNumber(documentNode);
-                } else {
-                    regNumber = getNumber(documentNode, templateDictionary);
-                }
-                Date date = new Date();
-                nodeService.setProperty(documentNode, propNumber, regNumber);
-                nodeService.setProperty(documentNode, propDate, date);
-                documentService.setDocumentActualNumber(documentNode, regNumber);
-                documentService.setDocumentActualDate(documentNode, date);
-                if (propIsRegistered != null) {
-                    nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
-                }
-                NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-                if (currentEmployee != null) {
-                    List<NodeRef> targetRefs = new ArrayList<NodeRef>();
-                    targetRefs.add(currentEmployee);
-                    nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
-                }
-            }
-        }
-    }
+			Serializable number = nodeService.getProperty(documentNode, propNumber);
+			if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
+				//номер уже есть
+				if (propIsRegistered != null && !onlyReserve) {
+					nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
+				}
+			} else {
+				//регистрируем
+				String regNumber;
+				NodeRef repeatedDocument = getRepeatedDocument(documentNode);
+				if (repeatedDocument != null) {
+					regNumber = getRepeatedNumber(documentNode);
+				} else {
+					regNumber = getNumber(documentNode, templateDictionary);
+				}
+				Date date = new Date();
+				nodeService.setProperty(documentNode, propNumber, regNumber);
+				nodeService.setProperty(documentNode, propDate, date);
+				documentService.setDocumentActualNumber(documentNode, regNumber);
+				documentService.setDocumentActualDate(documentNode, date);
+				if (propIsRegistered != null) {
+					nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
+				}
+				NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+				if (currentEmployee != null) {
+					List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+					targetRefs.add(currentEmployee);
+					nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
+				}
+			}
+		}
+	}
 
 	private NodeRef getRepeatedDocument(NodeRef documentRef) {
 		QName documentType = nodeService.getType(documentRef);
@@ -311,7 +314,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 
 	private String getRepeatedNumber(NodeRef documentRef) {
 		List<NodeRef> connectedDocumentSequence = getAllRepeated(documentRef);
-		Integer maxIndex = connectedDocumentSequence.size()-1;
+		Integer maxIndex = connectedDocumentSequence.size() - 1;
 		if (maxIndex > 0) {
 			NodeRef originDocumentRef = connectedDocumentSequence.get(maxIndex);
 
@@ -355,8 +358,9 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 			if (connectedDocumentRefs.isEmpty()) {
 				originIsReached = Boolean.TRUE;
 			} else {
-				if (connectedDocumentRefs.size() > 1)
+				if (connectedDocumentRefs.size() > 1) {
 					logger.warn(String.format("Document %s has more than 1 repeated documents", currentDocumentRef.toString()));
+				}
 
 				currentDocumentRef = connectedDocumentRefs.get(0);
 			}

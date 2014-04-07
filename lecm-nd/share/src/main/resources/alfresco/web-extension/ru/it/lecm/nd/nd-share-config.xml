@@ -123,6 +123,7 @@
                     <show id="lecm-nd:end-date"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
+                    <show id="lecm-document:regnum"/>
                 </field-visibility>
             </form>
 
@@ -212,7 +213,12 @@
                     <set id="footer" parent="common" template="/org/alfresco/components/form/3-column-set.ftl"/>
 
                     <!-- Вкладка Атрибуты -->
-                    <field id="lecm-document:regnum" set="regData"/>
+					<field id="lecm-document:regnum" set="regData" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
+										event="keyup" />
+						</constraint-handlers>
+					</field>
                     <field id="lecm-document-aspects:reg-data-date" set="regData"/>
 
                     <field id="lecm-document:title" label="Заголовок" set="nd3"/>

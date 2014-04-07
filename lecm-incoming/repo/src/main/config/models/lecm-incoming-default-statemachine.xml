@@ -751,6 +751,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/f88abc6b-f6a4-4aad-bfab-f6ac94362280</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -1606,6 +1621,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/96a372a5-ecda-4891-8af2-97e60fb8eae1</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -2504,6 +2534,21 @@ documentScript.finalizeToUnit(incoming, false, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/83202b4d-b4c1-469b-b6e2-1a8bac934a76</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -3530,6 +3575,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/8900849a-f094-4fc7-8a11-710d28af4aaf</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -4386,6 +4446,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/d25c4d58-21da-4cf3-9666-35150e3e96ce</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -5343,6 +5418,21 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/c84032dc-aa85-414e-9e3d-4d3e0c2afe8a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -6097,6 +6187,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/dac2a1c1-b1bc-402c-a551-58929c8c7e71</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7027,6 +7132,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/c33af25e-93b0-4ff2-a736-b642d5e1554c</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                             <subFolder>
@@ -7423,6 +7543,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/c881a370-df12-490b-b723-933b0a0fe376</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -7768,6 +7903,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/fda47b7d-4626-47b6-87cb-6e8f2d98c268</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -8113,6 +8263,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/8e95b192-67ba-4179-8af0-154a2930077e</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                         </subFolders>
@@ -8458,6 +8623,21 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
                                         <roleAssociations/>
                                         <subFolders/>
                                     </node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/1e12f355-cd0f-40de-b36d-fff5f1df81b8</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
                                 </nodes>
                             </subFolder>
                         </subFolders>

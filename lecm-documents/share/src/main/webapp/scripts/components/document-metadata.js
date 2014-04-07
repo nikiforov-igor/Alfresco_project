@@ -146,9 +146,15 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     actionUrl: null,
                     destroyOnHide: true,
                     doBeforeDialogShow: {
-                        fn: this.beforeDialogShow
+						scope: this,
+                        fn: function(p_form, p_dialog) {
+							p_dialog.dialog.setHeader(this.msg("document.main.form.edit"));
+							Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+						}
                     },
                     onSuccess: {
+                        scope: this,
                         fn: function (response) {
                             if (this.options.moveStartPage) {
                                 window.location.reload();
@@ -156,9 +162,32 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                                 //формируем путь с параметрами. Осуществляем переход
                                 LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
                             }
-                        },
-                        scope: this
-                    }
+                        }
+                    },
+					onFailure: {
+						scope: this,
+						fn: function(response) {
+							var regnumberDuplicateRegex = /REGNUMBER_DUPLICATE_EXCEPTION/, errorMessage;
+
+							if (regnumberDuplicateRegex.test(response.serverResponse.responseText)) {
+								errorMessage = "Документ с указанным регистрационным номером уже существует в системе! Сохранение невозможно.";
+							} else {
+								errorMessage = "Не получилось сохранить документ";
+							}
+
+							Alfresco.util.PopupManager.displayPrompt({
+								title: "Ошибка сохранения документа",
+								text: errorMessage,
+								buttons: [{
+									text: "OK",
+									handler: function() {
+										this.destroy();
+									},
+									isDefault: true
+								}]
+							});
+						}
+					}
                 }).show();
             },
 
@@ -184,16 +213,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         htmlId: response.json.persistedObject,
                         containerId: containerId
                     });
-            },
-
-            beforeDialogShow: function(p_form, p_dialog) {
-                var fileSpan = '<span class="light">' + this.msg("document.main.form.edit") + '</span>';
-                Alfresco.util.populateHTML(
-                    [p_dialog.id + "-form-container_h", fileSpan]
-                );
-
-                Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
-	            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
             }
         }, true);
 })();

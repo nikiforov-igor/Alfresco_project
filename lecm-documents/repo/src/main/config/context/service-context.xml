@@ -23,12 +23,12 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="documents.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-          depends-on="dictionaryBootstrap, 
-                        documents.dictionaries.LogicEcmModelsBootstrap, 
+          depends-on="dictionaryBootstrap,
+                        documents.dictionaries.LogicEcmModelsBootstrap,
                         links.LogicEcmContractsBootstrap,
                         ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap,
                         documents.LogicEcmModelsConnectionAspectBootstrap,
-                        documents-members.LogicEcmModelsBootstrap, 
+                        documents-members.LogicEcmModelsBootstrap,
                         ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
                         ru.it.lecm.dictionary.dictionary-repo.dictionary">
         <property name="models">
@@ -458,6 +458,7 @@
 	    <property name="serviceRegistry" ref="ServiceRegistry"/>
 	    <property name="templateService" ref="templateService"/>
 	    <property name="behaviourFilter" ref="policyBehaviourFilter" />
+		<property name="regNumbersService" ref="regNumbersService" />
     </bean>
 
     <bean  id="initiatorDocumentPolicy" class="ru.it.lecm.documents.policy.InitiatorDocumentPolicy"

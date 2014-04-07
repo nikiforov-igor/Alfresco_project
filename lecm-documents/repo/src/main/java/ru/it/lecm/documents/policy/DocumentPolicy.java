@@ -36,6 +36,7 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -74,6 +75,7 @@ public class DocumentPolicy extends BaseBean
     private NamespaceService namespaceService;
 	private TemplateService templateService;
 	private BehaviourFilter behaviourFilter;
+	private RegNumbersService regNumbersService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -135,6 +137,10 @@ public class DocumentPolicy extends BaseBean
 
 	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
+	}
+
+	public void setRegNumbersService(RegNumbersService regNumbersService) {
+		this.regNumbersService = regNumbersService;
 	}
 
 	final public void init() {
@@ -226,6 +232,37 @@ public class DocumentPolicy extends BaseBean
     }
 
     public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
+		/*
+		 изменился регистрационный номер документа
+		 есть вероятность, что его поменяли руками
+		 надо проверить, что этот номер никому больше не присвоем
+		 */
+		if (isChangeProperty(before, after, DocumentService.PROP_DOCUMENT_REGNUM)) {
+			String documentRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_DOC_NUMBER),
+					projectRegNumber = (String) after.get(DocumentService.PROP_REG_DATA_PROJECT_NUMBER),
+					newRegNumber = (String) after.get(DocumentService.PROP_DOCUMENT_REGNUM);
+			if (newRegNumber != null && !newRegNumber.equals("Не присвоено") && !newRegNumber.equals(documentRegNumber) && !newRegNumber.equals(projectRegNumber)) {
+				// изменился только актуальный регистрационный номер. кто-то поменял его руками.
+				if (!regNumbersService.isNumberUnique(newRegNumber)) {
+					// кто-то пытается записать уже существующий регистрационный номер. надо громко упасть
+					throw new IllegalArgumentException(String.format("REGNUMBER_DUPLICATE_EXCEPTION Regnumber %s is already in use", newRegNumber));
+				} else {
+					// выясняем, откуда взялся регистрационный номер
+					String oldRegNumber = (String) before.get(DocumentService.PROP_DOCUMENT_REGNUM);
+					QName regNumberProp;
+					if (oldRegNumber.equals(documentRegNumber)) {
+						regNumberProp = DocumentService.PROP_REG_DATA_DOC_NUMBER;
+					} else if (oldRegNumber.equals(projectRegNumber)) {
+						regNumberProp = DocumentService.PROP_REG_DATA_PROJECT_NUMBER;
+					} else {
+						// что-то пошло не так
+						throw new IllegalStateException(String.format("Error persisting regnumber %s", documentRegNumber));
+					}
+					setPropertyAsSystem(nodeRef, regNumberProp, newRegNumber);
+				}
+			}
+		}
+
         NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         if (employeeRef != null) {
             setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));

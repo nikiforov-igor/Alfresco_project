@@ -14,6 +14,7 @@
 	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree.js"></@script>
+	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js" />
 
     <#-- IMPORTANT for IE ! -->
     <#-- В IE9 следующие файлы подключаются только при использовании тэга <link>,

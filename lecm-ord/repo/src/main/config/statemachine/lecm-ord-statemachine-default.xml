@@ -587,6 +587,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/54402380-33f8-4831-a020-ee351d0d3ecd</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1567,6 +1582,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/fa8ed6c9-ffea-4e31-9bed-f07395f43ca1</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2301,6 +2331,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/dcabe013-482e-4138-8565-3cad5afeeb92</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -3148,6 +3193,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/409a8f57-3191-424a-b671-5b5e9e809c4d</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4202,6 +4262,21 @@ notifications.sendNotification(notification);]]></value>
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/80cd8958-42c7-4ffc-8fba-f58d12f11c19</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -4888,6 +4963,21 @@ notifications.sendNotification(notification);]]></value>
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/ca4190ab-2ffc-4f8b-9d27-f55a77f641b3</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -5648,6 +5738,21 @@ notifications.sendNotification(notification);]]></value>
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/54dc365c-4bf2-4453-beba-a54ea6403cf9</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -6390,6 +6495,21 @@ notifications.sendNotification(notification);]]></value>
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/6e0bf935-945e-4e2b-8335-1ce8979bc858</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -7161,6 +7281,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/80ab3aae-0fa1-41db-a074-911d21ff7188</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -8122,6 +8257,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/3aedb720-4898-4c05-82b7-de43a910da26</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -8579,6 +8729,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/1108a79c-202c-4c78-85b7-05fe5e390f54</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -8928,6 +9093,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<type>documentField</type>
 										<name>lecm-document-aspects_is-shared-folder</name>
 										<nodeRef>workspace://SpacesStore/ccc1b37e-ea02-4aaa-b81d-75f5456865ed</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/a43718f5-294a-4fc7-a1a5-0f386994f748</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>

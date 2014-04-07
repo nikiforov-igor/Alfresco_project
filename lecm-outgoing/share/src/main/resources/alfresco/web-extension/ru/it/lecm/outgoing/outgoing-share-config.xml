@@ -14,7 +14,7 @@
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
-					<show id="lecm-document-aspects:reg-data-date"/>																<!-- Дата регистрации -->
+					<show id="lecm-document-aspects:reg-data-date"/>													<!-- Дата регистрации -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
 					<show id="lecm-eds-document:document-type-assoc"/>													<!-- Вид документа -->
 					<show id="lecm-outgoing:delivery-method-assoc"/>													<!-- Способ доставки -->
@@ -47,7 +47,12 @@
 					<set id="outgoing9" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
 
 					<!-- outgoing1:full-width-set -->
-					<field id="lecm-document:regnum" set="outgoing1"/>
+					<field id="lecm-document:regnum" set="outgoing1" mandatory="true">
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
+										event="keyup" />
+						</constraint-handlers>
+					</field>
 					<field id="lecm-document-aspects:reg-data-date" set="outgoing1"/>
 
 					<!-- outgoing2:full-width-set -->
@@ -307,6 +312,7 @@
 					<show id="lecm-document-aspects:response-to-assoc"/>												<!-- В ответ на -->
 					<show id="lecm-eds-document:note"/>																	<!-- Примечание -->
 					<show id="lecm-document-aspects:is-shared-folder"/>													<!-- Общая область хранения -->
+					<show id="lecm-document:regnum"/>																	<!-- Регистрационный номер -->
 				</field-visibility>
 			</form>
 		</forms>

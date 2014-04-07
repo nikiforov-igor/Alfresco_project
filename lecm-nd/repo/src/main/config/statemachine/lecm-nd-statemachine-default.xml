@@ -692,6 +692,21 @@
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/3580b33f-1d0b-4993-a1fc-60750f80765a</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -1693,6 +1708,21 @@ ord.save();]]></value>
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/115ed324-334e-4faf-9697-4f180842592d</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -2505,6 +2535,21 @@ ord.save();]]></value>
 										<type>documentField</type>
 										<name>lecm-document-aspects_is-shared-folder</name>
 										<nodeRef>workspace://SpacesStore/4cc627d8-0dff-4af1-8127-e0adaf7bced1</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/221d18d3-f248-4825-8740-3178908101d5</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -3411,6 +3456,21 @@ ord.save();]]></value>
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/21690ca6-4073-4432-9129-7035688ea281</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -4493,6 +4553,21 @@ notifications.sendNotification(notification);]]></value>
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/3ac0559c-81b1-4dfb-b160-6c7d41924208</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -5257,6 +5332,21 @@ notifications.sendNotification(notification);]]></value>
 										<type>documentField</type>
 										<name>lecm-document-aspects_is-shared-folder</name>
 										<nodeRef>workspace://SpacesStore/c5decbb5-fc75-4f42-b226-46084484a8b0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/b9865121-f66f-4f8b-96b3-742aa9aafb8d</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -6067,6 +6157,21 @@ notifications.sendNotification(notification);]]></value>
 										<type>documentField</type>
 										<name>lecm-document-aspects_is-shared-folder</name>
 										<nodeRef>workspace://SpacesStore/1a300190-e331-49d1-9ab3-8f4426d856de</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/17810e93-e403-4838-b3e2-f17efa818f24</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
@@ -6902,6 +7007,21 @@ notifications.sendNotification(notification);]]></value>
 											<property>
 												<name>editableField</name>
 												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/7a1169d9-2af4-4516-bac6-07a663860328</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
 											</property>
 										</properties>
 										<aspects/>
@@ -7798,6 +7918,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/6665df79-acc0-48f9-86da-e69995b72eb9</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[true]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -8555,6 +8690,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/b3b0ad93-a095-4809-9258-a5fc5e9b4e1f</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 							<subFolder>
@@ -8924,6 +9074,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/7066ff8d-c53f-4a8b-bbc1-ba3fa363b111</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -9219,6 +9384,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<roleAssociations/>
 										<subFolders/>
 									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/8f84de75-7493-4ee0-b13d-f2ac78bdc267</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
 								</nodes>
 							</subFolder>
 						</subFolders>
@@ -9503,6 +9683,21 @@ if (controllerAssoc!=null && controllerAssoc.length > 0) {
 										<type>documentField</type>
 										<name>lecm-document-aspects_is-shared-folder</name>
 										<nodeRef>workspace://SpacesStore/43f60a08-2294-479d-b2b1-7fa1c355cce0</nodeRef>
+										<properties>
+											<property>
+												<name>editableField</name>
+												<value><![CDATA[false]]></value>
+											</property>
+										</properties>
+										<aspects/>
+										<associations/>
+										<roleAssociations/>
+										<subFolders/>
+									</node>
+									<node>
+										<type>documentField</type>
+										<name>lecm-document_regnum</name>
+										<nodeRef>workspace://SpacesStore/ef813e8a-8316-4b77-ba3a-fd229e3a9664</nodeRef>
 										<properties>
 											<property>
 												<name>editableField</name>
