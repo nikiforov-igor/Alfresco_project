@@ -137,16 +137,16 @@ public interface DocumentTableService {
      * Переместить запись вверх, присвоить текущей табличной записи номер предыдущей табличной записи,
      * а предыдущей присвоить номер текущей
      * @param tableRow строка табличных данных
-     * @return true или false
+     * @return NodeRef Записи с которой произошёл обмен
      */
-    public boolean moveTableRowUp(NodeRef tableRow);
+    public String moveTableRowUp(NodeRef tableRow);
 
     /**
      * Переместить запись вниз, присвоить текущей табличной записи номер следующей табличной записи,
      * а следующей присвоить номер текущей
      * @param tableRow строка табличных данных
-     * @return true или false
+     * @return NodeRef Записи с которой произошёл обмен
      */
-    public boolean moveTableRowDown(NodeRef tableRow);
+    public String moveTableRowDown(NodeRef tableRow);
 
 }
