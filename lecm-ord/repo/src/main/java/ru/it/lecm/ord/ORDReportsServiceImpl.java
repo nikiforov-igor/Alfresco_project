@@ -106,22 +106,26 @@ public class ORDReportsServiceImpl extends BaseBean implements ORDReportsService
 		}
 		
 		if (reportRef == null) {
-			if (!nodeService.hasAspect(resultRef, ContentModel.ASPECT_VERSIONABLE))
-				nodeService.addAspect(resultRef, ContentModel.ASPECT_VERSIONABLE, null);
-			
-			nodeService.setProperty(resultRef, ContentModel.PROP_NAME, reportNodeFullName);
+			reportRef = resultRef;
+						
+			//saving new created report under necessary name
+			nodeService.setProperty(reportRef, ContentModel.PROP_NAME, reportNodeFullName);
 		} else {
-			if (!nodeService.hasAspect(reportRef, ContentModel.ASPECT_VERSIONABLE))
-				nodeService.addAspect(reportRef, ContentModel.ASPECT_VERSIONABLE, null);
-			
+			//moving content of created report to existing file
 			Serializable newContent = nodeService.getProperty(resultRef, ContentModel.PROP_CONTENT);
 			if (newContent != null) 
 				nodeService.setProperty(reportRef, ContentModel.PROP_CONTENT, newContent);
 			
+			//deleting of new created file of report
+			nodeService.addAspect(resultRef, ContentModel.ASPECT_TEMPORARY, null);
 			nodeService.deleteNode(resultRef);
 		}
         
-		return resultRef;
+		//adding necessary aspects
+		nodeService.addAspect(reportRef, ContentModel.ASPECT_VERSIONABLE, null);
+		nodeService.addAspect(reportRef, ContentModel.ASPECT_TEMPORARY, null);
+		
+		return reportRef;
 	}
 	
 }
