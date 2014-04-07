@@ -14,6 +14,12 @@
     <#assign expandable = params.expandable/>
 </#if>
 
+<#assign showSearch=false/>
+<#if params.showSearch?has_content>
+    <#assign showSearch = params.showSearch=="true"/>
+</#if>
+
+
 <#assign expandDataSource=""/>
 <#if params.expandDataSource?has_content>
     <#assign expandDataSource = params.expandDataSource/>
@@ -91,7 +97,7 @@
 //]]></script>
 <#if toolbar == "true" && form.mode?string=="edit">
 <div id="${toolbarId}">
-	<@comp.baseToolbar toolbarId true true false>
+	<@comp.baseToolbar toolbarId true showSearch false>
         <#if showCreateButton>
 	    <div class="new-row">
 	        <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
