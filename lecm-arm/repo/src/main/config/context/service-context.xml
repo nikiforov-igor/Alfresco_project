@@ -207,6 +207,13 @@
                         <value>lecm-arm:lecm-arm:filter-values</value>
                     </list>
                 </entry>
+                <entry key="lecm-arm:html-node">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-arm:html-url</value>
+                        <value>lecm-arm:order</value>
+                    </list>
+                </entry>
             </map>
         </constructor-arg>
     </bean>
