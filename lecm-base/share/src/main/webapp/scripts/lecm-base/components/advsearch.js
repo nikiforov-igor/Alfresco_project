@@ -309,16 +309,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var me = this;
 
                 var loadingMessage = Alfresco.util.PopupManager.displayMessage({
-                    displayTime: 0,
+                    displayTime: 1,
                     text: $html(this.msg("label.loading")),
                     spanClass: "wait",
                     noEscape: true
-                });
-
-                loadingMessage.subscribe("hide", function () {
-                    //Временное решение. Необходимо дальнейшее исследование.
-                    // loadingMessage.unsubscribeAll("hide");
-                    // loadingMessage.destroy();
                 });
 
                 //Обработчик на успех

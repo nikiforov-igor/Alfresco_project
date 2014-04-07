@@ -1456,6 +1456,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // DataTable definition
                 var me = this;
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+	                if (!this.widgets.dataTable) {
+		                this.destroyDatatable();
+	                }
                     this._setupPaginatior();
                     this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                     if (!this.search) {
@@ -2970,7 +2973,23 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.datagridMeta.recreate = true;
                     this.populateDataGrid();
                 }
-            }
+            },
+
+	        destroyDatatable: function () {
+		        var dTable = this.widgets.dataTable;
+		        if (dTable != null) {
+			        if (this.options.showCheckboxColumn) {
+				        YAHOO.util.Event.removeListener(this.id + "-select-all-records", 'click');
+
+				        var records = dTable.getRecordSet().getRecords();
+				        for (var i = 0; i < records.length; i++) {
+					        YAHOO.util.Event.removeListener("expand-" + records[i].getId(), 'click');
+				        }
+			        }
+
+			        dTable.destroy();
+		        }
+	        }
         }, true);
 })();
 

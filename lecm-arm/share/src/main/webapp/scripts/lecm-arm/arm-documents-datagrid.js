@@ -234,6 +234,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             // DataTable definition
             var me = this;
             if (!this.widgets.dataTable || this.datagridMeta.recreate) {
+	            if (!this.widgets.dataTable) {
+		            this.destroyDatatable();
+	            }
+
                 this._setupPaginatior();
                 this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
                 if (!this.search) {
