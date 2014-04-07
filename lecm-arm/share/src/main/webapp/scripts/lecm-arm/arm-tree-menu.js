@@ -105,6 +105,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			var result = "";
 		    result += "<li><div id='ac-head-" + node.id +"' class='accordion-head'>";
 		    result += node.label;
+            result += "<span id='" + "ac-label-" + node.id + "' class='accordion-label'></span>";
 		    result += "</div><div id='ac-content-" + node.id + "' class='accordion-content wait-container'><div class='wait'></div></div></li>";
 		    return result;
 	    },
