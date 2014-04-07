@@ -61,14 +61,14 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-    public boolean onMoveTableRowUp(String tableRowStr) {
+    public String onMoveTableRowUp(String tableRowStr) {
         org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
         NodeRef tableRow = new NodeRef(tableRowStr);
 
         return this.documentTableService.moveTableRowUp(tableRow);
     }
 
-    public boolean onMoveTableRowDown(String tableRowStr) {
+    public String onMoveTableRowDown(String tableRowStr) {
         org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
         NodeRef tableRow = new NodeRef(tableRowStr);
 

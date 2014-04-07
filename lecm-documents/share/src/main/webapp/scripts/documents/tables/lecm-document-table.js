@@ -868,32 +868,37 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                             if (response.json. isMoveUp == "true") {
                                 var me = response.config.scope;
                                 var rowId = response.serverResponse.argument.config.rowId;
-
+                                
                                 var oDataRecord1 = me.widgets.dataTable.getRecord(rowId);
                                 var index = me.widgets.dataTable.getRecordIndex(oDataRecord1);
 
-                                if (index != 0) {
+                                if (index > 0) {
                                     var oDataRecord2 = me.widgets.dataTable.getRecord(index-1);
                                     
-                                    // удаляем верхнюю запись
+                                    // удаляем верхнюю запись(Если она осталась на другой странице, не страшно)
                                     me.widgets.dataTable.deleteRow(oDataRecord2);
-                                    // так как в таблице стало на 1 запись меньше то удаляем с тем же индексом
+                                    //сначала добавляем запись с которой обменялись, т.к. если на странице не остаётся записей, скрипт падает.
+                                    me.widgets.dataTable.addRow(response.json.secondItem, index);
+                                    //удаляем "исходную" запись
                                     me.widgets.dataTable.deleteRow(oDataRecord1);
 
-                                    me.widgets.dataTable.addRow(oDataRecord1.getData(), index-1);
-                                    me.widgets.dataTable.addRow(oDataRecord2.getData(), index);
-
-                                    me._itemUpdate(oDataRecord1.getData().nodeRef);
-                                    me._itemUpdate(oDataRecord2.getData().nodeRef);
+                                    if (index % me.widgets.dataTable.configs.paginator.getRowsPerPage() !== 0) {
+                                        //если запись не самая верхняя, добавляем ее
+                                        me.widgets.dataTable.addRow(oDataRecord1.getData(), index-1);
+                                    } 
+                                    
+                                    me._itemUpdate(response.json.firstNodeRef);
+                                    me._itemUpdate(response.json.secondNodeRef);
                                 }
                             }
                         }
                     },
                     failureCallback: {
                         fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
+                            var me = response.config.scope;
                             Alfresco.util.PopupManager.displayMessage(
                                 {
-                                    text:this.msg("message.details.failure")
+                                    text:me.msg("message.details.failure")
                                 });
                         }
                     },
@@ -918,23 +923,25 @@ LogicECM.module.DocumentTableDataGrid= LogicECM.module.DocumentTableDataGrid  ||
                                 var count = me.widgets.dataTable.getRecordSet()._records.length;
                                 if (index < count) {
                                     var oDataRecord2 = me.widgets.dataTable.getRecord(index+1);
-                                    me.widgets.dataTable.deleteRow(oDataRecord1);
+                                    
                                     me.widgets.dataTable.deleteRow(oDataRecord2);
-
-                                    me.widgets.dataTable.addRow(oDataRecord2.getData(), index);
+                                    me.widgets.dataTable.addRow(response.json.secondItem, index);
+                                    
+                                    me.widgets.dataTable.deleteRow(oDataRecord1);
                                     me.widgets.dataTable.addRow(oDataRecord1.getData(), index+1);
 
-	                                me._itemUpdate(oDataRecord1.getData().nodeRef);
-	                                me._itemUpdate(oDataRecord2.getData().nodeRef);
+                                    me._itemUpdate(response.json.firstNodeRef);
+                                    me._itemUpdate(response.json.secondNodeRef);
                                 }
                             }
                         }
                     },
                     failureCallback: {
                         fn:function DataGrid_onDataItemCreated_refreshFailure(response) {
+                            var me = response.config.scope;
                             Alfresco.util.PopupManager.displayMessage(
                                 {
-                                    text:this.msg("message.details.failure")
+                                    text:me.msg("message.details.failure")
                                 });
                         }
                     },

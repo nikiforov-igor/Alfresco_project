@@ -18,280 +18,278 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * User: AIvkin
- * Date: 18.10.13
- * Time: 13:47
+ * User: AIvkin Date: 18.10.13 Time: 13:47
  */
 public class DocumentTableServiceImpl extends BaseBean implements DocumentTableService {
-	private DocumentService documentService;
-	private LecmPermissionService lecmPermissionService;
-	private DictionaryService dictionaryService;
-	private NamespaceService namespaceService;
-	private Map<String, TableTotalRowCalculator> calculators = new HashMap<String, TableTotalRowCalculator>();
 
-	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
-	}
+    private DocumentService documentService;
+    private LecmPermissionService lecmPermissionService;
+    private DictionaryService dictionaryService;
+    private NamespaceService namespaceService;
+    private Map<String, TableTotalRowCalculator> calculators = new HashMap<String, TableTotalRowCalculator>();
 
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
+    }
 
-	public void setNamespaceService(NamespaceService namespaceService) {
-		this.namespaceService = namespaceService;
-	}
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
-	}
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
-	@Override
-	public NodeRef getRootFolder(final NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
-
-		final String attachmentsRootName = DOCUMENT_TABLES_ROOT_NAME;
-
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-						if (attachmentsRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-							ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-							attachmentsRef = associationRef.getChildRef();
-                            hideNode(attachmentsRef, true);
-						}
-						return attachmentsRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
-	}
-
-	@Override
-	public boolean isDocumentTableDataRow(NodeRef nodeRef) {
-		QName refType = nodeService.getType(nodeRef);
-		return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA_ROW);
-	}
-
-	@Override
-	public boolean isDocumentTableData(NodeRef nodeRef) {
-		QName refType = nodeService.getType(nodeRef);
-		return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA);
-	}
-
-	@Override
-	public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef) {
-		if (nodeService.exists(tableDataRowRef)) {
-			NodeRef tableDataRef = getTableDataByRow(tableDataRowRef);
-			return getDocumentByTableData(tableDataRef);
-		}
-		return null;
-	}
+    // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return null;
+    }
 
     @Override
-    public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
-        if (tableDataRef != null && nodeService.exists(tableDataRef)) {
-	        ChildAssociationRef tableDataRootAssoc = nodeService.getPrimaryParent(tableDataRef);
-	        if (tableDataRootAssoc != null) {
-	            NodeRef tableDataRoot = tableDataRootAssoc.getParentRef();
-	            if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
-	                ChildAssociationRef documentToTableDataAssociation = nodeService.getPrimaryParent(tableDataRoot);
-	                NodeRef document = documentToTableDataAssociation.getParentRef();
-	                if (document != null && documentService.isDocument(document)) {
-	                    return documentToTableDataAssociation.getParentRef();
-	                }
-	            }
-	        }
+    public NodeRef getRootFolder(final NodeRef documentRef) {
+        this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
+
+        final String attachmentsRootName = DOCUMENT_TABLES_ROOT_NAME;
+
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+            @Override
+            public NodeRef doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+                        if (attachmentsRef == null) {
+                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
+                            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+                            properties.put(ContentModel.PROP_NAME, attachmentsRootName);
+                            ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                            attachmentsRef = associationRef.getChildRef();
+                            hideNode(attachmentsRef, true);
+                        }
+                        return attachmentsRef;
+                    }
+                });
+            }
+        };
+        return AuthenticationUtil.runAsSystem(raw);
+    }
+
+    @Override
+    public boolean isDocumentTableDataRow(NodeRef nodeRef) {
+        QName refType = nodeService.getType(nodeRef);
+        return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA_ROW);
+    }
+
+    @Override
+    public boolean isDocumentTableData(NodeRef nodeRef) {
+        QName refType = nodeService.getType(nodeRef);
+        return refType != null && dictionaryService.isSubClass(refType, TYPE_TABLE_DATA);
+    }
+
+    @Override
+    public NodeRef getDocumentByTableDataRow(NodeRef tableDataRowRef) {
+        if (nodeService.exists(tableDataRowRef)) {
+            NodeRef tableDataRef = getTableDataByRow(tableDataRowRef);
+            return getDocumentByTableData(tableDataRef);
         }
         return null;
     }
 
     @Override
-	public NodeRef getTableDataByRow(NodeRef tableDataRowRef) {
-		if (nodeService.exists(tableDataRowRef)) {
-			NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();
-			if (isDocumentTableData(tableDataRef)) {
-				return tableDataRef;
-			}
-		}
-		return null;
-	}
-
+    public NodeRef getDocumentByTableData(NodeRef tableDataRef) {
+        if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+            ChildAssociationRef tableDataRootAssoc = nodeService.getPrimaryParent(tableDataRef);
+            if (tableDataRootAssoc != null) {
+                NodeRef tableDataRoot = tableDataRootAssoc.getParentRef();
+                if (tableDataRoot != null && nodeService.getProperty(tableDataRoot, ContentModel.PROP_NAME).equals(DOCUMENT_TABLES_ROOT_NAME)) {
+                    ChildAssociationRef documentToTableDataAssociation = nodeService.getPrimaryParent(tableDataRoot);
+                    NodeRef document = documentToTableDataAssociation.getParentRef();
+                    if (document != null && documentService.isDocument(document)) {
+                        return documentToTableDataAssociation.getParentRef();
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
-	public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
-	    QName totalRowType = getTableDataTotalRowType(tableDataRef);
-	    if (totalRowType != null) {
-		    Set<QName> totalTypes = new HashSet<QName>();
-		    totalTypes.add(totalRowType);
-		    List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
+    public NodeRef getTableDataByRow(NodeRef tableDataRowRef) {
+        if (nodeService.exists(tableDataRowRef)) {
+            NodeRef tableDataRef = nodeService.getPrimaryParent(tableDataRowRef).getParentRef();
+            if (isDocumentTableData(tableDataRef)) {
+                return tableDataRef;
+            }
+        }
+        return null;
+    }
 
-		    if (totalRowsAssocs != null) {
-			    List<NodeRef> result = new ArrayList<NodeRef>();
-			    for (ChildAssociationRef assoc: totalRowsAssocs) {
-					result.add(assoc.getChildRef());
-			    }
-			    return result;
-		    }
-	    }
+    @Override
+    public List<NodeRef> getTableDataTotalRows(NodeRef tableDataRef) {
+        QName totalRowType = getTableDataTotalRowType(tableDataRef);
+        if (totalRowType != null) {
+            Set<QName> totalTypes = new HashSet<QName>();
+            totalTypes.add(totalRowType);
+            List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
 
-		return null;
-	}
+            if (totalRowsAssocs != null) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                for (ChildAssociationRef assoc : totalRowsAssocs) {
+                    result.add(assoc.getChildRef());
+                }
+                return result;
+            }
+        }
 
-	@Override
-	public List<NodeRef> getTableDataRows(NodeRef tableDataRef) {
-		QName totalRowType = getTableDataRowType(tableDataRef);
-		if (totalRowType != null) {
-			Set<QName> totalTypes = new HashSet<QName>();
-			totalTypes.add(totalRowType);
-			List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
+        return null;
+    }
 
-			if (totalRowsAssocs != null) {
-				List<NodeRef> result = new ArrayList<NodeRef>();
-				for (ChildAssociationRef assoc: totalRowsAssocs) {
-					result.add(assoc.getChildRef());
-				}
-				return result;
-			}
-		}
+    @Override
+    public List<NodeRef> getTableDataRows(NodeRef tableDataRef) {
+        QName totalRowType = getTableDataRowType(tableDataRef);
+        if (totalRowType != null) {
+            Set<QName> totalTypes = new HashSet<QName>();
+            totalTypes.add(totalRowType);
+            List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
 
-		return null;
-	}
+            if (totalRowsAssocs != null) {
+                List<NodeRef> result = new ArrayList<NodeRef>();
+                for (ChildAssociationRef assoc : totalRowsAssocs) {
+                    result.add(assoc.getChildRef());
+                }
+                return result;
+            }
+        }
 
-	public QName getTableDataRowType(NodeRef tableDataRef) {
-		if (tableDataRef != null && nodeService.exists(tableDataRef)) {
-			String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_ROW_TYPE);
-			if (propType != null && propType.length() > 0) {
-				return QName.createQName(propType, namespaceService);
-			}
-		}
-		return null;
-	}
+        return null;
+    }
 
-	public QName getTableDataTotalRowType(NodeRef tableDataRef) {
-		if (tableDataRef != null && nodeService.exists(tableDataRef)) {
-			String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_TOTAL_ROW_TYPE);
-			if (propType != null && propType.length() > 0) {
-				return QName.createQName(propType, namespaceService);
-			}
-		}
-		return null;
-	}
+    public QName getTableDataRowType(NodeRef tableDataRef) {
+        if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+            String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_ROW_TYPE);
+            if (propType != null && propType.length() > 0) {
+                return QName.createQName(propType, namespaceService);
+            }
+        }
+        return null;
+    }
 
-	@Override
-	public NodeRef createTotalRow(NodeRef tableDataRef) {
-		QName totalRowType = getTableDataTotalRowType(tableDataRef);
-		if (totalRowType != null) {
-			return createNode(tableDataRef, totalRowType, null, null);
-		}
-		return null;
-	}
+    public QName getTableDataTotalRowType(NodeRef tableDataRef) {
+        if (tableDataRef != null && nodeService.exists(tableDataRef)) {
+            String propType = (String) nodeService.getProperty(tableDataRef, PROP_TABLE_TOTAL_ROW_TYPE);
+            if (propType != null && propType.length() > 0) {
+                return QName.createQName(propType, namespaceService);
+            }
+        }
+        return null;
+    }
 
-	@Override
-	public void recalculateTotalRows(NodeRef tableDataRef) {
-		recalculateTotalRows(tableDataRef, null);
-	}
+    @Override
+    public NodeRef createTotalRow(NodeRef tableDataRef) {
+        QName totalRowType = getTableDataTotalRowType(tableDataRef);
+        if (totalRowType != null) {
+            return createNode(tableDataRef, totalRowType, null, null);
+        }
+        return null;
+    }
 
-	@Override
-	public void recalculateTotalRows(NodeRef tableDataRef, Set<QName> properties) {
-		List<NodeRef> totalRows = getTableDataTotalRows(tableDataRef);
-		if (totalRows != null) {
-			for (NodeRef row: totalRows) {
-				recalculateTotalRow(tableDataRef, row, properties);
-			}
-		}
-	}
+    @Override
+    public void recalculateTotalRows(NodeRef tableDataRef) {
+        recalculateTotalRows(tableDataRef, null);
+    }
 
-	@Override
-	public void recalculateTotalRow(NodeRef tableDataRef, NodeRef row, Set<QName> properties) {
-		if (row != null) {
-			if (properties == null) {
-				properties = getAllTypeProperties(getTableDataRowType(tableDataRef));
-			}
-			Set<QName> totalProperties = getAllTypeProperties(nodeService.getType(row));
+    @Override
+    public void recalculateTotalRows(NodeRef tableDataRef, Set<QName> properties) {
+        List<NodeRef> totalRows = getTableDataTotalRows(tableDataRef);
+        if (totalRows != null) {
+            for (NodeRef row : totalRows) {
+                recalculateTotalRow(tableDataRef, row, properties);
+            }
+        }
+    }
 
-			if (totalProperties != null && properties != null) {
-				List<NodeRef> tableRows = getTableDataRows(tableDataRef);
-				Map<NodeRef, Map<QName, Serializable>> tableRowsProperties = new HashMap<NodeRef, Map<QName, Serializable>>();
+    @Override
+    public void recalculateTotalRow(NodeRef tableDataRef, NodeRef row, Set<QName> properties) {
+        if (row != null) {
+            if (properties == null) {
+                properties = getAllTypeProperties(getTableDataRowType(tableDataRef));
+            }
+            Set<QName> totalProperties = getAllTypeProperties(nodeService.getType(row));
 
-				for (QName tableDataProperty: properties) {
-					String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
+            if (totalProperties != null && properties != null) {
+                List<NodeRef> tableRows = getTableDataRows(tableDataRef);
+                Map<NodeRef, Map<QName, Serializable>> tableRowsProperties = new HashMap<NodeRef, Map<QName, Serializable>>();
 
-					Map<QName, TableTotalRowCalculator> calculators = getAvailableCalculators(tableDataPropertyName, totalProperties);
-					if (calculators != null) {
-						List<Serializable> data = new ArrayList<Serializable>();
-						for (NodeRef tableRow: tableRows) {
-							Map<QName, Serializable> propertiesValue;
-							if (tableRowsProperties.containsKey(tableRow)) {
-								propertiesValue = tableRowsProperties.get(tableRow);
-							} else {
-								propertiesValue = nodeService.getProperties(tableRow);
-								tableRowsProperties.put(tableRow, propertiesValue);
-							}
-							if (propertiesValue != null) {
-								Serializable value = propertiesValue.get(tableDataProperty);
-								if (value != null) {
-									data.add(value);
-								}
-							}
-						}
+                for (QName tableDataProperty : properties) {
+                    String tableDataPropertyName = tableDataProperty.toPrefixString(namespaceService);
 
-						for (Map.Entry<QName, TableTotalRowCalculator> entry: calculators.entrySet()) {
-							Serializable result = entry.getValue().calculate(data);
-							nodeService.setProperty(row, entry.getKey(), result);
-						}
-					}
-				}
-			}
-		}
-	}
+                    Map<QName, TableTotalRowCalculator> calculators = getAvailableCalculators(tableDataPropertyName, totalProperties);
+                    if (calculators != null) {
+                        List<Serializable> data = new ArrayList<Serializable>();
+                        for (NodeRef tableRow : tableRows) {
+                            Map<QName, Serializable> propertiesValue;
+                            if (tableRowsProperties.containsKey(tableRow)) {
+                                propertiesValue = tableRowsProperties.get(tableRow);
+                            } else {
+                                propertiesValue = nodeService.getProperties(tableRow);
+                                tableRowsProperties.put(tableRow, propertiesValue);
+                            }
+                            if (propertiesValue != null) {
+                                Serializable value = propertiesValue.get(tableDataProperty);
+                                if (value != null) {
+                                    data.add(value);
+                                }
+                            }
+                        }
 
-	private Map<QName, TableTotalRowCalculator> getAvailableCalculators(String tableDataPropertyName, Set<QName> totalProperties) {
-		Map<QName, TableTotalRowCalculator> result = new HashMap<QName, TableTotalRowCalculator>();
-		for (QName totalRowProperty: totalProperties) {
-			String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
+                        for (Map.Entry<QName, TableTotalRowCalculator> entry : calculators.entrySet()) {
+                            Serializable result = entry.getValue().calculate(data);
+                            nodeService.setProperty(row, entry.getKey(), result);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-			if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
-				String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
+    private Map<QName, TableTotalRowCalculator> getAvailableCalculators(String tableDataPropertyName, Set<QName> totalProperties) {
+        Map<QName, TableTotalRowCalculator> result = new HashMap<QName, TableTotalRowCalculator>();
+        for (QName totalRowProperty : totalProperties) {
+            String totalRowPropertyName = totalRowProperty.toPrefixString(namespaceService);
 
-				TableTotalRowCalculator calculator = calculators.get(postfix);
-				if (calculator != null) {
-					result.put(totalRowProperty, calculator);
-				}
-			}
-		}
+            if (totalRowPropertyName.startsWith(tableDataPropertyName)) {
+                String postfix = totalRowPropertyName.substring(tableDataPropertyName.length());
 
-		return  result;
-	}
+                TableTotalRowCalculator calculator = calculators.get(postfix);
+                if (calculator != null) {
+                    result.put(totalRowProperty, calculator);
+                }
+            }
+        }
 
-	private Set<QName> getAllTypeProperties(QName type) {
-		if (type != null) {
-			TypeDefinition typeDefinition = dictionaryService.getType(type);
-			if (typeDefinition != null) {
-				Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
-				if (allProperties != null) {
-					return allProperties.keySet();
-				}
-			}
-		}
-		return null;
-	}
+        return result;
+    }
+
+    private Set<QName> getAllTypeProperties(QName type) {
+        if (type != null) {
+            TypeDefinition typeDefinition = dictionaryService.getType(type);
+            if (typeDefinition != null) {
+                Map<QName, PropertyDefinition> allProperties = typeDefinition.getProperties();
+                if (allProperties != null) {
+                    return allProperties.keySet();
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public List<NodeRef> getTableDataRows(NodeRef tableDataRef, int beginIndex) {
@@ -325,59 +323,65 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
         return result;
     }
 
-    @Override
-    public boolean moveTableRowUp(final NodeRef tableRow) {
+    public String moveTableRow(final NodeRef tableRow, final Boolean up) {
 
-        AuthenticationUtil.RunAsWork<Boolean> moveUp = new AuthenticationUtil.RunAsWork<Boolean>() {
+        AuthenticationUtil.RunAsWork<String> move = new AuthenticationUtil.RunAsWork<String>() {
             @Override
-            public Boolean doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
+            public String doWork() throws Exception {
+                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>() {
                     @Override
-                    public Boolean execute() throws Throwable {
+                    public String execute() throws Throwable {
                         int index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
-                        if (index != 1) {
-                            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, (index - 1));
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
-                });
-            }
-        };
-        return AuthenticationUtil.runAsSystem(moveUp);
-    }
 
-    @Override
-    public boolean moveTableRowDown(final NodeRef tableRow) {
+                        int newIndex = up ? (index - 1) : (index + 1);
 
-        AuthenticationUtil.RunAsWork<Boolean> moveDown = new AuthenticationUtil.RunAsWork<Boolean>() {
-            @Override
-            public Boolean doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
-                    @Override
-                    public Boolean execute() throws Throwable {
-                        int index = (Integer) nodeService.getProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW);
                         NodeRef tableDataRef = getTableDataByRow(tableRow);
-                        List<NodeRef> tableRows = getTableDataRows(tableDataRef);
-                        if (tableRows != null && index < tableRows.size()) {
-                            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, (index + 1));
-                            return true;
+                        NodeRef exchangeRef = getTableRowByIndex(tableDataRef, newIndex);
+                        if (null != exchangeRef) {
+                            nodeService.setProperty(tableRow, DocumentTableService.PROP_INDEX_TABLE_ROW, newIndex);
+                            return exchangeRef.toString();
                         } else {
-                            return false;
+                            return null;
                         }
                     }
                 });
             }
         };
-        return AuthenticationUtil.runAsSystem(moveDown);
+        return AuthenticationUtil.runAsSystem(move);
     }
 
+    public NodeRef getTableRowByIndex(NodeRef tableDataRef, Integer index) {
+        QName totalRowType = getTableDataRowType(tableDataRef);
+        if (totalRowType != null) {
+            Set<QName> totalTypes = new HashSet<QName>();
+            totalTypes.add(totalRowType);
+            List<ChildAssociationRef> totalRowsAssocs = nodeService.getChildAssocs(tableDataRef, totalTypes);
+            if (totalRowsAssocs != null) {
+                for (ChildAssociationRef assoc : totalRowsAssocs) {
+                    NodeRef row = assoc.getChildRef();
+                    if (index.equals(nodeService.getProperty(row, DocumentTableService.PROP_INDEX_TABLE_ROW))) {
+                        return row;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
-	public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
-		if (!calculators.containsKey(postfix)) {
-			calculators.put(postfix, calculator);
-		}
-	}
+    public String moveTableRowUp(final NodeRef tableRow) {
+        return moveTableRow(tableRow, Boolean.TRUE);
+    }
+
+    @Override
+    public String moveTableRowDown(final NodeRef tableRow) {
+        return moveTableRow(tableRow, Boolean.FALSE);
+    }
+
+    @Override
+    public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
+        if (!calculators.containsKey(postfix)) {
+            calculators.put(postfix, calculator);
+        }
+    }
 }
