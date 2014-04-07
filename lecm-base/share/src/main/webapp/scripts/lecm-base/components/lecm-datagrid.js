@@ -1456,7 +1456,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 // DataTable definition
                 var me = this;
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
-	                if (!this.widgets.dataTable) {
+	                if (this.widgets.dataTable) {
 		                this.destroyDatatable();
 	                }
                     this._setupPaginatior();
