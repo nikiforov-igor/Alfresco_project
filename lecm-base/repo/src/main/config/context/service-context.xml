@@ -1,23 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
-<!--
-	Licensed to the Apache Software Foundation (ASF) under one or more
-	contributor license agreements.  See the NOTICE file distributed with
-	this work for additional information regarding copyright ownership.
-	The ASF licenses this file to You under the Apache License, Version 2.0
-	(the "License"); you may not use this file except in compliance with
-	the License.  You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
-
--->
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="repositoryStructureHelper" class="ru.it.lecm.base.beans.RepositoryStructureHelperImpl" init-method="init">
 		<property name="nodeService" ref="nodeService"/>
@@ -67,6 +53,15 @@
         <property name="documentService" ref="documentService"/>
         <property name="dateFormat">
             <value>${lecm.base.date.format}</value>
+        </property>
+        <property name="objTypeCache">
+            <ref bean="objTypeCache"/>
+        </property>
+        <property name="typeTemplateCache">
+            <ref bean="typeTemplateCache"/>
+        </property>
+        <property name="typeListTemplateCache">
+            <ref bean="typeListTemplateCache"/>
         </property>
     </bean>
 
@@ -344,4 +339,75 @@
         <property name="namespaceService" ref="NamespaceService" />
     </bean>
 
+    <bean name="objTypeSharedCache" class="org.alfresco.repo.cache.EhCacheAdapter">
+        <property name="cache">
+            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+                <property name="cacheManager">
+                    <ref bean="internalEHCacheManager" />
+                </property>
+                <property name="cacheName">
+                    <value>ru.it.lecm.cache.objTypeCache</value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="objTypeCache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache">
+            <ref bean="objTypeSharedCache" />
+        </property>
+        <property name="name">
+            <value>ru.it.lecm.cache.objTypeTransactionalCache</value>
+        </property>
+        <property name="maxCacheSize" value="300" />
+        <property name="mutable" value="true" />
+    </bean>
+
+    <bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.EhCacheAdapter">
+        <property name="cache">
+            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+                <property name="cacheManager">
+                    <ref bean="internalEHCacheManager" />
+                </property>
+                <property name="cacheName">
+                    <value>ru.it.lecm.cache.typeTemplateCache</value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="typeTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache">
+            <ref bean="typeTemplateSharedCache" />
+        </property>
+        <property name="name">
+            <value>ru.it.lecm.cache.typeTemplateTransactionalCache</value>
+        </property>
+        <property name="maxCacheSize" value="300" />
+        <property name="mutable" value="true" />
+    </bean>
+
+    <bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.EhCacheAdapter">
+        <property name="cache">
+            <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
+                <property name="cacheManager">
+                    <ref bean="internalEHCacheManager" />
+                </property>
+                <property name="cacheName">
+                    <value>ru.it.lecm.cache.typeListTemplateCache</value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean name="typeListTemplateCache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache">
+            <ref bean="typeListTemplateSharedCache" />
+        </property>
+        <property name="name">
+            <value>ru.it.lecm.cache.typeListTemplateTransactionalCache</value>
+        </property>
+        <property name="maxCacheSize" value="300" />
+        <property name="mutable" value="true" />
+    </bean>
 </beans>

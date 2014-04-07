@@ -1,6 +1,7 @@
 package ru.it.lecm.base.beans;
 
 import org.alfresco.repo.admin.SysAdminParams;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -18,7 +19,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 /**
  * @author dbashmakov
  *         Date: 28.12.12
@@ -211,6 +211,21 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
     private DocumentService documentService;
 
+    private SimpleCache<String, NodeRef> objTypeCache;
+    private SimpleCache<NodeRef, String> typeTemplateCache;
+    private SimpleCache<NodeRef, String> typeListTemplateCache;
+
+    public void setObjTypeCache(SimpleCache<String, NodeRef> objTypeCache) {
+        this.objTypeCache = objTypeCache;
+    }
+
+    public void setTypeTemplateCache(SimpleCache<NodeRef, String> typeTemplateCache) {
+        this.typeTemplateCache = typeTemplateCache;
+    }
+
+    public void setTypeListTemplateCache(SimpleCache<NodeRef, String> typeListTemplateCache) {
+        this.typeListTemplateCache = typeListTemplateCache;
+    }
     /**
      * Получение заголовка элемента в соответствии с форматной строкой.
      * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
@@ -649,7 +664,15 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * @return ссылка на объект справочника или NULL
      */
     private NodeRef getObjectTypeByClass(String type) {
-        return dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CLASS, type);
+        // получаем Тип Объекта
+        NodeRef typeRef = objTypeCache.get(type);
+        if (typeRef == null) {
+            typeRef = dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CLASS, type);
+            if (typeRef != null) {
+                objTypeCache.put(type, typeRef);
+            }
+        }
+        return typeRef;
     }
 
     /**
@@ -658,11 +681,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * @param objectType - ссылка на тип объекта
      * @return сформированное описание или DEFAULT_OBJECT_TYPE_TEMPLATE, если для типа не задан шаблон
      */
-    private String getTemplateStringByType(NodeRef objectType, boolean forList, boolean returnDefauktIfNull) {
+    private String getTemplateStringByType(NodeRef objectType, boolean forList, boolean returnDefaultIfNull) {
+        String template;
         if (objectType != null) {
-            Object template = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
-            return template != null ? (String) template : DEFAULT_OBJECT_TYPE_TEMPLATE;
-        } else if (returnDefauktIfNull) {
+            template = forList ? typeListTemplateCache.get(objectType) : typeTemplateCache.get(objectType);
+            if (template == null) {
+                Object templateObj = nodeService.getProperty(objectType, forList ? PROP_OBJ_TYPE_LIST_TEMPLATE : PROP_OBJ_TYPE_TEMPLATE);
+                if (templateObj != null) {
+                    if (forList) {
+                        typeListTemplateCache.put(objectType, templateObj.toString());
+                    } else {
+                        typeTemplateCache.put(objectType, templateObj.toString());
+                    }
+                }
+                template = templateObj != null ? (String) templateObj : DEFAULT_OBJECT_TYPE_TEMPLATE;
+            }
+            return template;
+        } else if (returnDefaultIfNull) {
             return forList ? DEFAULT_OBJECT_TYPE_LIST_TEMPLATE : DEFAULT_OBJECT_TYPE_TEMPLATE;
         }
         return null;

@@ -56,6 +56,7 @@ public interface BusinessJournalService {
 	QName PROP_OBJ_TYPE_CODE = QName.createQName(BJ_NAMESPACE_URI, "objectType-code");
 	QName PROP_OBJ_TYPE_CLASS = QName.createQName(BJ_NAMESPACE_URI, "objectType-class");
 	QName PROP_OBJ_TYPE_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-template");
+	QName PROP_OBJ_TYPE_LIST_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "objectType-list-template");
 	QName PROP_EVENT_CAT_CODE = QName.createQName(BJ_NAMESPACE_URI, "eventCategory-code");
 	QName PROP_EVENT_CAT_ON = QName.createQName(BJ_NAMESPACE_URI, "eventCategory-on");
 	QName PROP_MESSAGE_TEMP_TEMPLATE = QName.createQName(BJ_NAMESPACE_URI, "messageTemplate-template");

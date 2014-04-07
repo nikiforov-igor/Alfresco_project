@@ -445,4 +445,20 @@
             <ref bean="businessJournalService" />
         </property>
     </bean>
+
+    <bean id="updateObjTypePolicy" class="ru.it.lecm.businessjournal.policies.BusinessJournalObjTypeUpdatePolicy"
+          init-method="init">
+        <property name="policyComponent">
+            <ref bean="policyComponent"/>
+        </property>
+        <property name="objTypeCache">
+            <ref bean="objTypeCache"/>
+        </property>
+        <property name="typeTemplateCache">
+            <ref bean="typeTemplateCache"/>
+        </property>
+        <property name="typeListTemplateCache">
+            <ref bean="typeListTemplateCache"/>
+        </property>
+    </bean>
 </beans>
