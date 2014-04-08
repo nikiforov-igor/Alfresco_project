@@ -63,12 +63,14 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
 		<property name="contentService" ref="contentService"/>
         <property name="fileFolderService" ref="FileFolderService"/>
+        <property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.export.get"
 		  class="ru.it.lecm.statemachine.editor.export.Export"
 		  parent="webscript">
         <property name="nodeService" ref="nodeService"/>
+        <property name="propertiesService" ref="propertiesService"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.post"
@@ -79,6 +81,7 @@
         <property name="defaultStatemachines" ref="defaultStatemachines"/>
         <property name="contentService" ref="contentService"/>
         <property name="serviceDictionary" ref="serviceDictionary"/>
+        <property name="propertiesService" ref="propertiesService"/>
     </bean>
 
     <bean id="webscript.ru.it.lecm.statemachine.editor.statemachine.import.get"
@@ -89,6 +92,7 @@
         <property name="defaultStatemachines" ref="defaultStatemachines"/>
         <property name="contentService" ref="contentService"/>
         <property name="serviceDictionary" ref="serviceDictionary"/>
+        <property name="propertiesService" ref="propertiesService"/>
     </bean>
 
 </beans>

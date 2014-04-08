@@ -1,8 +1,5 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -10,11 +7,15 @@ import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author dbashmakov
@@ -24,7 +25,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureStaffPositionPolicy
 		extends SecurityJournalizedPolicyBase
 {
-	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+    private LecmBasePropertiesService propertiesService;
+
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
 
@@ -32,7 +35,11 @@ public class OrgstructureStaffPositionPolicy
 		this.policyComponent = policyComponent;
 	}
 
-	public final void init() {
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
+
+    public final void init() {
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -44,9 +51,23 @@ public class OrgstructureStaffPositionPolicy
 	}
 
 	public void onCreateStaffPosLog(ChildAssociationRef childAssocRef) {
-		final NodeRef staffPos = childAssocRef.getChildRef();
-		businessJournalService.log(staffPos, EventCategory.ADD, "#initiator добавил(а) новый элемент в справочник «Должностные позиции» -  #mainobject");
-	}
+        try {
+            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.staff.editor.enabled");
+            boolean enabled;
+            if (editorEnabled == null) {
+                enabled = true;
+            } else {
+                enabled = Boolean.valueOf((String) editorEnabled);
+            }
+
+            if (enabled) {
+                final NodeRef staffPos = childAssocRef.getChildRef();
+                businessJournalService.log(staffPos, EventCategory.ADD, "#initiator добавил(а) новый элемент в справочник «Должностные позиции» -  #mainobject");
+            }
+        } catch (LecmBaseException e) {
+            throw new IllegalStateException("Cannot read orgstructure properties");
+        }
+    }
 
 	public void onUpdateStaffPosLog(NodeRef staffPos, Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);

@@ -16,6 +16,7 @@ public class ContractorsLegalFormPolicy implements NodeServicePolicies.OnUpdateN
 
     private PolicyComponent policyComponent;
     private NodeService nodeService;
+    private String propertiesService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
@@ -42,5 +43,13 @@ public class ContractorsLegalFormPolicy implements NodeServicePolicies.OnUpdateN
 
         String title = nodeService.getProperty(legalform, QName.createQName("http://www.it.ru/lecm/contractors/model/legalform/1.0", "full-title")).toString();
         nodeService.setProperty(legalform, ContentModel.PROP_NAME, title.replaceAll("[^_\\-\\dA-Za-zА-Яа-я ]", ""));
+    }
+
+    public void setPropertiesService(String propertiesService) {
+        this.propertiesService = propertiesService;
+    }
+
+    public String getPropertiesService() {
+        return propertiesService;
     }
 }

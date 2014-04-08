@@ -73,4 +73,10 @@
 	</bean>
 
     <bean id="webscript.ru.it.lecm.subclasses.get" class="org.alfresco.repo.web.scripts.dictionary.SubClassesGet" parent="webscript.dictionary"/>
+
+    <bean id="modelUpdatePolicy" class="ru.it.lecm.modelEditor.policy.UpdateModelPolicy" init-method="init">
+        <property name="propertiesService" ref="propertiesService"/>
+        <property name="policyComponent" ref="policyComponent"/>
+    </bean>
+
 </beans>

@@ -88,4 +88,9 @@
 
 	<bean id="delegationAssociationPolicy" class="ru.it.lecm.delegation.policies.DelegationAssociationPolicy" init-method="init" parent="logicEcmAssociationPolicy"/>
 
+    <bean id="updateProcuracyPolicy" class="ru.it.lecm.delegation.policies.UpdateProcuracyPolicy" init-method="init">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="propertiesService" ref="propertiesService"/>
+    </bean>
+
 </beans>

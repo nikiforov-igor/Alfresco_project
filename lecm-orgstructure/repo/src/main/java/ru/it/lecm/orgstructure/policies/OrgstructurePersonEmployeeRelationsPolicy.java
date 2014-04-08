@@ -12,15 +12,17 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import ru.it.lecm.wcalendar.schedule.ISchedule;
 
 /**
  * Полиси, которые регулируют отношения между lecm-orgstr:employee (сотрудником)
@@ -33,11 +35,13 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
 	private ISchedule scheduleService;
 	private BehaviourFilter behaviourFilter;
+    private LecmBasePropertiesService propertiesService;
+
 	// атрибуты cm:person, при изменении которых мы будем проводить синхронизацию cm:person -> lecm-orgstr:employee
 	private final static QName[] AFFECTED_PERSON_PROPERTIES = {ContentModel.PROP_FIRSTNAME, ContentModel.PROP_LASTNAME,
 		ContentModel.PROP_EMAIL, ContentModel.PROP_TELEPHONE};
 
-	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+    public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
 	}
 
@@ -45,7 +49,11 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 		this.scheduleService = scheduleService;
 	}
 
-	@Override
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
+
+    @Override
 	public final void init() {
 		super.init();
 
@@ -129,25 +137,39 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	 * Атрибуты сотрудника переключены. Сотрудник помечен как неактивный
 	 */
 	public void onUpdateEmployeeProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
-		final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
-		final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
-		if (changed) { // произошло переключение активности -> отработать ...
-			notifyEmploeeTie(nodeRef, nowActive);
-		}
-
-        //если сотрудник удаляется
-        if (changed && !nowActive) {
-            List<NodeRef> employeeLinks = orgstructureService.getEmployeeLinks(nodeRef, true);
-            for (NodeRef employeeLink : employeeLinks) {
-                nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
-                nodeService.deleteNode(employeeLink);
+        try {
+            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
+            boolean enabled;
+            if (editorEnabled == null) {
+                enabled = true;
+            } else {
+                enabled = Boolean.valueOf((String) editorEnabled);
             }
-			NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
-			if (schedule != null) {
-				nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
-				nodeService.deleteNode(schedule);
-			}
+
+            if (enabled) {
+                final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+                final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+                final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
+                if (changed) { // произошло переключение активности -> отработать ...
+                    notifyEmploeeTie(nodeRef, nowActive);
+                }
+
+                //если сотрудник удаляется
+                if (changed && !nowActive) {
+                    List<NodeRef> employeeLinks = orgstructureService.getEmployeeLinks(nodeRef, true);
+                    for (NodeRef employeeLink : employeeLinks) {
+                        nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
+                        nodeService.deleteNode(employeeLink);
+                    }
+                    NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+                    if (schedule != null) {
+                        nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
+                        nodeService.deleteNode(schedule);
+                    }
+                }
+            }
+        } catch (LecmBaseException e) {
+            throw new IllegalStateException("Cannot read orgstructure properties");
         }
     }
 
@@ -405,4 +427,5 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 				&& (email != null && !email.isEmpty());
 
 	}
+
 }

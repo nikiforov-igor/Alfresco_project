@@ -1,11 +1,13 @@
 package ru.it.lecm.statemachine.editor.export;
 
 import org.alfresco.service.cmr.repository.NodeService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.LecmBasePropertiesService;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -23,9 +25,14 @@ public class Export extends AbstractWebScript {
     private static final String STATUSES_NODE_REF = "statusesNodeRef";
 
     private NodeService nodeService;
+    private LecmBasePropertiesService propertiesService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
+    }
+
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
     }
 
     @Override
@@ -44,15 +51,25 @@ public class Export extends AbstractWebScript {
 
             resOutputStream = res.getOutputStream();
 
-            XMLExporter xmlExporter = new XMLExporter(resOutputStream, nodeService);
-            xmlExporter.write(statusesNodeRef);
-            xmlExporter.close();
-
+            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.statemachine.editor.enabled");
+            boolean enabled;
+            if (editorEnabled == null) {
+                enabled = true;
+            } else {
+                enabled = Boolean.valueOf((String) editorEnabled);
+            }
+            if (enabled) {
+                XMLExporter xmlExporter = new XMLExporter(resOutputStream, nodeService);
+                xmlExporter.write(statusesNodeRef);
+                xmlExporter.close();
+            }
             resOutputStream.flush();
         } catch (XMLStreamException e) {
 	        log.error(e.getMessage(), e);
         } catch (IOException e) {
 	        log.error(e.getMessage(), e);
+        } catch (LecmBaseException e) {
+            log.error("Error while export statemachine");
         } finally {
             if (resOutputStream != null) {
                 resOutputStream.close();
@@ -61,4 +78,5 @@ public class Export extends AbstractWebScript {
 
         log.info("Export complete");
     }
+
 }

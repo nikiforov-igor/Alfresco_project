@@ -20,6 +20,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
@@ -47,6 +49,7 @@ public class OrgstructureUnitPolicy
 	private ISchedule scheduleService;
     private Repository repositoryHelper;
     private PermissionService permissionService;
+    private LecmBasePropertiesService propertiesService;
 
     @Override
 	public void init() {
@@ -80,23 +83,37 @@ public class OrgstructureUnitPolicy
 
 	@Override
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-        final NodeRef unit = childAssocRef.getChildRef();
-        NodeRef parent = orgstructureService.getParentUnit(unit);
-        if (parent == null) {
-            NodeRef root = orgstructureService.getRootUnit();
-            if (root != null && !root.equals(unit)) {
-                throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
+        try {
+            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.editor.enabled");
+            boolean enabled;
+            if (editorEnabled == null) {
+                enabled = true;
+            } else {
+                enabled = Boolean.valueOf((String) editorEnabled);
             }
+
+            if (enabled) {
+                final NodeRef unit = childAssocRef.getChildRef();
+                NodeRef parent = orgstructureService.getParentUnit(unit);
+                if (parent == null) {
+                    NodeRef root = orgstructureService.getRootUnit();
+                    if (root != null && !root.equals(unit)) {
+                        throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
+                    }
+                }
+                // оповещение securityService по Департаменту ...
+                notifyChangedOU(unit, parent);
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        createOrganizationUnitStore(unit);
+                        return null;
+                    }
+                });
+            }
+        } catch (LecmBaseException e) {
+            throw new IllegalStateException("Cannot read orgstructure properties");
         }
-        // оповещение securityService по Департаменту ...
-        notifyChangedOU(unit, parent);
-        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-            @Override
-            public Object doWork() throws Exception {
-                createOrganizationUnitStore(unit);
-                return null;
-            }
-        });
     }
 
 	public void onUpdateUnitLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
@@ -290,5 +307,9 @@ public class OrgstructureUnitPolicy
 
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
+    }
+
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
     }
 }

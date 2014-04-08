@@ -180,4 +180,10 @@
             </map>
         </property>
     </bean>
+
+    <bean id="contractorsCreatePolicy" class="ru.it.lecm.contractors.policies.ContractorsCreatePolicy" init-method="init" depends-on="${groupId}.${artifactId}.contractors-dictionary-bootstrap">
+        <property name="propertiesService" ref="propertiesService"/>
+        <property name="policyComponent" ref="policyComponent"/>
+    </bean>
+
 </beans>

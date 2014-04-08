@@ -11,6 +11,8 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.springframework.extensions.webscripts.servlet.FormData;
+import ru.it.lecm.base.beans.LecmBaseException;
+import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.statemachine.DefaultStatemachines;
@@ -31,6 +33,7 @@ public class Import extends AbstractWebScript {
     private DefaultStatemachines defaultStatemachines;
     private ContentService contentService;
     private DictionaryBean serviceDictionary;
+    private LecmBasePropertiesService propertiesService;
 
     public void setRepositoryStructureHelper(RepositoryStructureHelper repositoryStructureHelper) {
         this.repositoryStructureHelper = repositoryStructureHelper;
@@ -52,6 +55,10 @@ public class Import extends AbstractWebScript {
         this.serviceDictionary = serviceDictionary;
     }
 
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
+
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         String stateMachineId = req.getParameter("stateMachineId");
@@ -63,31 +70,43 @@ public class Import extends AbstractWebScript {
         }
         InputStream inputStream = null;
         try {
-            if (defaultStatemachine) {
-                String path = defaultStatemachines.getPath(stateMachineId);
-                inputStream = this.getClass().getClassLoader().getResourceAsStream(path);
-            } else if (versionStatemachine) {
-                String receivedVersion = req.getParameter("version");
-                String nodeRef = req.getParameter("nodeRef");
-                NodeRef statemachine = new NodeRef(nodeRef);
-                NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
-                NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, "versions");
-                NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, stateMachineId);
-                NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, "version_" + receivedVersion);
-                NodeRef backup = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, "backup.xml");
-                ContentReader reader = contentService.getReader(backup, ContentModel.PROP_CONTENT);
-                inputStream = reader.getContentInputStream();
+            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.statemachine.editor.enabled");
+            boolean enabled;
+            if (editorEnabled == null) {
+                enabled = true;
             } else {
-                FormData formData = (FormData) req.parseContent();
-                FormData.FormField[] fields = formData.getFields();
-                inputStream = fields[0].getInputStream();
+                enabled = Boolean.valueOf((String) editorEnabled);
             }
 
-            if (inputStream != null) {
-                XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary, stateMachineId);
-                xmlImporter.importStateMachine();
-                xmlImporter.close();
+            if (enabled) {
+                if (defaultStatemachine) {
+                    String path = defaultStatemachines.getPath(stateMachineId);
+                    inputStream = this.getClass().getClassLoader().getResourceAsStream(path);
+                } else if (versionStatemachine) {
+                    String receivedVersion = req.getParameter("version");
+                    String nodeRef = req.getParameter("nodeRef");
+                    NodeRef statemachine = new NodeRef(nodeRef);
+                    NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
+                    NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, "versions");
+                    NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, stateMachineId);
+                    NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, "version_" + receivedVersion);
+                    NodeRef backup = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, "backup.xml");
+                    ContentReader reader = contentService.getReader(backup, ContentModel.PROP_CONTENT);
+                    inputStream = reader.getContentInputStream();
+                } else {
+                    FormData formData = (FormData) req.parseContent();
+                    FormData.FormField[] fields = formData.getFields();
+                    inputStream = fields[0].getInputStream();
+                }
+
+                if (inputStream != null) {
+                    XMLImporter xmlImporter = new XMLImporter(inputStream, repositoryStructureHelper, nodeService, serviceDictionary, stateMachineId);
+                    xmlImporter.importStateMachine();
+                    xmlImporter.close();
+                }
             }
+        } catch (LecmBaseException e) {
+            log.error("Error while import statemachine");
         } catch (Exception e) {
             throw new IOException("Failed to import State Machine!", e);
         } finally {

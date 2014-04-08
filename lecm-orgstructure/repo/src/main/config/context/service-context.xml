@@ -137,6 +137,7 @@
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="behaviourFilter" ref="policyBehaviourFilter" />
 		<property name="scheduleService" ref="ScheduleService"/>
+        <property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
 	<bean id="orgstructureEmployeeLinkPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeLinkPolicy"
@@ -161,6 +162,8 @@
         <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="permissionService" ref="permissionService"/>
         <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="propertiesService" ref="propertiesService"/>
     </bean>
 
 	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"
@@ -185,6 +188,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
+        <property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
 	<bean id="orgstructureWorkGroupPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureWorkGroupPolicy"

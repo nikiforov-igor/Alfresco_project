@@ -339,6 +339,20 @@
         <property name="namespaceService" ref="NamespaceService" />
     </bean>
 
+    <bean id="propertiesImpl" class="ru.it.lecm.base.beans.LecmBasePropertiesServiceImpl"></bean>
+
+    <bean id="propertiesService"  class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="proxyInterfaces" value="ru.it.lecm.base.beans.LecmBasePropertiesService"/>
+        <property name="target" ref="propertiesImpl"/>
+        <property name="interceptorNames">
+            <list>
+                <value>propertiesInterceptor</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="propertiesInterceptor" class="ru.it.lecm.base.utils.LecmBasePropertiesInterceptor"/>
+
     <bean name="objTypeSharedCache" class="org.alfresco.repo.cache.EhCacheAdapter">
         <property name="cache">
             <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
