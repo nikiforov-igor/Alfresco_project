@@ -2989,6 +2989,27 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 			        dTable.destroy();
 		        }
+	        },
+
+	        destroy: function ()
+	        {
+		        try
+		        {
+			        Bubbling.unsubscribe("activeGridChanged", this.onGridTypeChanged, this);
+			        Bubbling.unsubscribe("dataItemCreated", this.onDataItemCreated, this);
+			        Bubbling.unsubscribe("dataItemUpdated", this.onDataItemUpdated, this);
+			        Bubbling.unsubscribe("dataItemsDeleted", this.onDataItemsDeleted, this);
+			        Bubbling.unsubscribe("datagridRefresh", this.onDataGridRefresh, this);
+			        Bubbling.unsubscribe("archiveCheckBoxClicked", this.onArchiveCheckBoxClicked, this);
+			        Bubbling.unsubscribe("reСreateDatagrid", this.onReCreateDatagrid, this);
+
+			        this.destroyDatatable();
+		        }
+		        catch (e)
+		        {
+			        // Ignore
+		        }
+		        LogicECM.module.Base.DataGrid.superclass.destroy.call(this);
 	        }
         }, true);
 })();
