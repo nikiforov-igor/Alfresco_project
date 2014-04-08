@@ -516,6 +516,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				} else {
 					Dom.addClass(row, "expanded");
 					Dom.get("expand-" + record.getId()).innerHTML = "-";
+                                        this.prepareExpandedRow(record);
 					this.onExpand(record);
 				}
 			},
@@ -554,6 +555,15 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				}
 			},
 
+                prepareExpandedRow: function(record) {
+                    var row = this.widgets.dataTable.getRow(record);
+
+                    var newRow = document.createElement('tr');
+                    newRow.className = "expand-row";
+                    newRow.style.display="none";
+                    Dom.insertAfter(newRow, row);
+                },        
+
 	        addExpandedRow: function(record, text) {
 		        var row = this.widgets.dataTable.getRow(record);
 
@@ -568,15 +578,14 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        colSpan++;
 		        }
 
-		        var newRow = document.createElement('tr');
-		        newRow.className = "expand-row";
-
-		        var newColumn = document.createElement('td');
-		        newColumn.colSpan = colSpan;
-		        newColumn.innerHTML = text;
-		        newRow.appendChild(newColumn);
-
-		        Dom.insertAfter(newRow, row);
+		        var newRow = Dom.getNextSibling(row);
+                        if (Dom.hasClass(newRow, "expand-row")) {
+                            var newColumn = document.createElement('td');
+                            newColumn.colSpan = colSpan;
+                            newColumn.innerHTML = text;
+                            newRow.appendChild(newColumn);
+                            newRow.style.display="";
+                        }
 	        },
 
             /**
