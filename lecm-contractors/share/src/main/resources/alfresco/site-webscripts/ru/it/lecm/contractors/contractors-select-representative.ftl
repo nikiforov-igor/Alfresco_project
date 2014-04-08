@@ -14,6 +14,11 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
+<#assign defaultValue=field.control.params.defaultValue!"">
+<#if form.arguments[field.name]?has_content>
+	<#assign defaultValue=form.arguments[field.name]>
+</#if>
+
 <#assign fieldValue=field.value!"">
 <#if fieldValue?string == "" && field.control.params.defaultValueContextProperty??>
 	<#if context.properties[field.control.params.defaultValueContextProperty]??>
@@ -347,6 +352,8 @@
 								if( representativeToSelect ) {
 									// representativeToSelect это [link-representative-and-contractor], НЕ [representative-type]
 									mustBeSelected = response.json.representatives[ i ].linkRef === representativeToSelect;
+								} else if (this.options.defaultValue) { // нам было передано значение по умолчанию
+									mustBeSelected = this.options.defaultValue === response.json.representatives[ i ].nodeRef;
 								} else if( currentInputEl.value === "" ) { // Если c сервера ничего не пришло или мы выбрали "Без адресанта".
 									// То выбираем основного адресанта (согласно требованиям).
 									mustBeSelected = response.json.representatives[ i ].isPrimary;
@@ -409,6 +416,9 @@
 	})();
 
 	new LogicECM.module.SelectRepresentativeForContractor("${controlId}").setOptions({
+		<#if defaultValue?has_content>
+			defaultValue: "${defaultValue?string}",
+		</#if>
 		emptyMessage: '${emptyMessage}',
 		<#if field.control.params.createNewMessage??>
 			createNewMessage: "${field.control.params.createNewMessage}"
