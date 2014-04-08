@@ -1,10 +1,5 @@
 package ru.it.lecm.reports.extensions;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -12,12 +7,17 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
-
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.reports.api.ReportInfo;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ReportManagerJavascriptExtension extends BaseWebScript {
     public final static String REPORTS_EDITOR_URI = "http://www.it.ru/logicECM/reports/editor/1.0";
@@ -63,21 +63,33 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
 
     @SuppressWarnings("unused")
     public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection) {
+        return getRegisteredReports(docTypes, forCollection, null, false);
+    }
+
+    public List<ReportInfo> getRegisteredReports(String docTypes, boolean forCollection, String reportCodes, boolean dontFilterByRole) {
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
 
         final List<ReportInfo> reports = new ArrayList<ReportInfo>();
 
         final String[] types = (docTypes != null && !docTypes.isEmpty()) ? docTypes.split(",") : null;
+        final String[] codes = (reportCodes != null && !reportCodes.isEmpty()) ? reportCodes.split(",") : null;
+        if (codes != null) {
+            Arrays.sort(codes);
+        }
 
-        final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection);
+        final List<ReportDescriptor> found = getReportsManager().getRegisteredReports(types, forCollection, dontFilterByRole);
         if (found != null) {
             for (ReportDescriptor rd : found) {
+                String rdMnem = rd.getMnem();
+                if (codes != null && Arrays.binarySearch(codes, rdMnem) < 0) {
+                    continue;   //если задана фильтрация по кодам - отфильтровываем
+                }
                 final ReportInfo ri = new ReportInfo(
-                        rd.getMnem(),
+                        rdMnem,
                         (rd.getFlags() == null) ? null
                                 : StringUtils.collectionToCommaDelimitedString(rd.getFlags().getSupportedNodeTypes())
                 );
-                ri.setReportName(rd.get(null, rd.getMnem()));
+                ri.setReportName(rd.get(null, rdMnem));
                 reports.add(ri);
             }
         }

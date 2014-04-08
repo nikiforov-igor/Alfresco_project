@@ -17,7 +17,10 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
-import ru.it.lecm.reports.model.impl.*;
+import ru.it.lecm.reports.model.impl.ReportDefaultsDesc;
+import ru.it.lecm.reports.model.impl.ReportTemplate;
+import ru.it.lecm.reports.model.impl.ReportType;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -213,6 +216,10 @@ public class ReportsManager {
      * при любом состоянии параметра docType)
      */
     public List<ReportDescriptor> getRegisteredReports(String docType) {
+        return getRegisteredReports(docType, false);
+    }
+
+    public List<ReportDescriptor> getRegisteredReports(String docType, boolean dontFilterByRole) {
         final Map<String, ReportDescriptor> list = this.getDescriptors();
         if (list == null || list.isEmpty()) {
             return new ArrayList<ReportDescriptor>();
@@ -223,13 +230,15 @@ public class ReportsManager {
         }
 
         final HashSet<String> employeeRoles = new HashSet<String>();
-        NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+        if (!dontFilterByRole) {
+            NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
 
-        if (currentEmployee != null) {
-            List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
-            for (NodeRef role : roleRefs) {
-                String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-                employeeRoles.add(name);
+            if (currentEmployee != null) {
+                List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
+                for (NodeRef role : roleRefs) {
+                    String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+                    employeeRoles.add(name);
+                }
             }
         }
 
@@ -239,7 +248,7 @@ public class ReportsManager {
                 // не задано фильтрование -> вернуть сразу всё целиком ... без подотчетов
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
-                        if (hasPermissionToReport(desc, employeeRoles)) {
+                        if (dontFilterByRole || hasPermissionToReport(desc, employeeRoles)) {
                             found.add(desc);
                         }
                     }
@@ -248,7 +257,7 @@ public class ReportsManager {
                 for (ReportDescriptor desc : list.values()) {
                     if (!desc.isSubReport()) {
                         final boolean okDocType = (desc.getFlags() == null) || desc.getFlags().isTypeSupported(docType);
-                        if (okDocType && hasPermissionToReport(desc, employeeRoles)) {
+                        if (okDocType && (dontFilterByRole || hasPermissionToReport(desc, employeeRoles))) {
                             found.add(desc);
                         }
                     }
@@ -266,11 +275,9 @@ public class ReportsManager {
         if (reportRoles.isEmpty()) {
             return true;
         }
-        if (!reportRoles.isEmpty()) {
-            for (String reportRole : reportRoles) {
-                if (employeeRoles.contains(reportRole)) {
-                    return true;
-                }
+        for (String reportRole : reportRoles) {
+            if (employeeRoles.contains(reportRole)) {
+                return true;
             }
         }
         return false;
@@ -285,6 +292,10 @@ public class ReportsManager {
      * @return список зарегистрированных отчётов
      */
     public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection) {
+        return getRegisteredReports(docTypes, forCollection, false);
+    }
+
+    public List<ReportDescriptor> getRegisteredReports(String[] docTypes, boolean forCollection, boolean dontFilterByRole) {
         final Set<ReportDescriptor> unFilteredReports = new HashSet<ReportDescriptor>();
         if (docTypes != null) {
             // указаны типы отчётов
@@ -293,11 +304,11 @@ public class ReportsManager {
                     if (docType.startsWith(String.valueOf(QName.NAMESPACE_BEGIN))) {
                         docType = QName.createQName(docType).toPrefixString(serviceRegistry.getNamespaceService());
                     }
-                    unFilteredReports.addAll(getRegisteredReports(docType));
+                    unFilteredReports.addAll(getRegisteredReports(docType, dontFilterByRole));
                 }
             }
         } else {
-            unFilteredReports.addAll(getRegisteredReports());
+            unFilteredReports.addAll(getRegisteredReports((String) null, dontFilterByRole));
         }
 
         final List<ReportDescriptor> resultedReports = new ArrayList<ReportDescriptor>();

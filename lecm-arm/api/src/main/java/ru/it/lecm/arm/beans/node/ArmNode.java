@@ -26,6 +26,7 @@ public class ArmNode {
     private boolean hasChilds = false;
 	private List<String> createTypes;
 	private String htmlUrl;
+	private String reportCodes;
 
     private ArmBaseChildRule nodeQuery;
 
@@ -147,4 +148,12 @@ public class ArmNode {
 	public void setHtmlUrl(String htmlUrl) {
 		this.htmlUrl = htmlUrl;
 	}
+
+    public String getReportCodes() {
+        return reportCodes;
+    }
+
+    public void setReportCodes(String reportCodes) {
+        this.reportCodes = reportCodes;
+    }
 }

@@ -48,7 +48,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 
 			loadValues: function() {
 				var me = this;
-				var url = Alfresco.constants.PROXY_URI + this.options.dataSource + "?itemId=" + encodeURIComponent(this.options.itemId);
+				var url = Alfresco.constants.PROXY_URI + this.options.dataSource + (this.options.dataSource.indexOf("?") != -1 ? "&" : "?") + "itemId=" + encodeURIComponent(this.options.itemId);
 				if (this.options.destination != null) {
 					url += "&destination=" + encodeURIComponent(this.options.destination);
 				}

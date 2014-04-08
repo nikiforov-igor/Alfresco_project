@@ -162,6 +162,7 @@
                         <value>lecm-arm:order</value>
                         <value>lecm-arm:node-child-rule-assoc</value>
                         <value>lecm-arm:types</value>
+                        <value>lecm-arm:reportCodes</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:field">

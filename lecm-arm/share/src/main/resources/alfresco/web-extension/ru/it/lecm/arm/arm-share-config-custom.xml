@@ -225,11 +225,17 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:reportCodes" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:reportCodes">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -244,6 +250,7 @@
 					<show id="cm:name" force="true"/>
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:reportCodes" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:types">
@@ -251,6 +258,11 @@
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
 						</control>
 					</field>
+                    <field id="lecm-arm:reportCodes">
+                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                            <control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>

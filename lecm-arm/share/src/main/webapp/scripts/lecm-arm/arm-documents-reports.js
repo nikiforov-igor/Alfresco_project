@@ -20,12 +20,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		{
 			onUpdateArmReports: function(layer, args) {
 				var types = args[1].types;
-				if (types !== null) {
+				var reportCodes = args[1].reportCodes;
+                if (types == null) {
+                    types = "";
+                }
+                if (reportCodes == null) {
+                    reportCodes = "";
+                }
+//				if (types !== null) {
 					var container = Dom.get(this.id + "-data");
 
 					if (container != null) {
 						container.innerHTML = "";
-						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/registeredReports?forCollection=true&docType=" + types;
+						var sUrl = Alfresco.constants.PROXY_URI + "/lecm/reports/rptmanager/registeredReports?forCollection=true&docType=" + types + "&reportCodes=" + reportCodes;
 						var callback = {
 							success: function (oResponse) {
                                 container.innerHTML = "";
@@ -46,7 +53,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 						};
 						YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 					}
-				}
+//				}
 			},
 
 			getReportTr: function(report, index, allCount) {

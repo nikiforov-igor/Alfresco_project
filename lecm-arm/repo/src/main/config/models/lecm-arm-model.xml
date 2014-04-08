@@ -100,6 +100,11 @@
 
 		<type name="lecm-arm:reports-node">
 			<parent>lecm-arm:base-node</parent>
+            <properties>
+                <property name="lecm-arm:reportCodes">
+                    <type>d:text</type>
+                </property>
+            </properties>
 			<overrides>
 				<property name="lecm-dic:valueContainsType">
 					<default>lecm-arm:reports-node</default>

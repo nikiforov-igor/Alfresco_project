@@ -254,7 +254,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counterLimit: oResults[nodeIndex].counterLimit,
                                 counterDesc: oResults[nodeIndex].counterDesc,
 	                            createTypes: oResults[nodeIndex].createTypes,
-	                            htmlUrl: oResults[nodeIndex].htmlUrl
+	                            htmlUrl: oResults[nodeIndex].htmlUrl,
+                                reportCodes: oResults[nodeIndex].reportCodes
                             };
 
                             // добавляем элемент в дерево
@@ -360,7 +361,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	            if (isReportNode) {
 		            YAHOO.Bubbling.fire ("updateArmReports", {
-			            types: node.data.types
+			            types: node.data.types,
+                        reportCodes: node.data.reportCodes
 		            });
 	            }
 	            if (isHtmlNode) {

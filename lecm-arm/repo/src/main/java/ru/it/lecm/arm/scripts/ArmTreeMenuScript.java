@@ -56,6 +56,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 
 	public static final String CREATE_TYPES = "createTypes";
 	public static final String HTML_URL = "htmlUrl";
+	public static final String REPORT_CODES = "reportCodes";
 
     private ArmWrapperServiceImpl service;
 	private DictionaryService dictionaryService;
@@ -150,6 +151,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
             }
 	        result.put(CREATE_TYPES, getCreateTypes(node, isAccordionNode, isStarterHash));
 	        result.put(HTML_URL,node.getHtmlUrl());
+	        result.put(REPORT_CODES,node.getReportCodes());
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }
