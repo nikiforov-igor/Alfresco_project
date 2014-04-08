@@ -105,6 +105,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				execScripts: true,
 				scope: this
 			});
+		},
+
+		getExpandedFormId: function (record) {
+			var nodeRef = record.getData("nodeRef");
+			return nodeRef.replace(/:|\//g, '_') + "-dtgrd";
 		}
 	}, true);
 

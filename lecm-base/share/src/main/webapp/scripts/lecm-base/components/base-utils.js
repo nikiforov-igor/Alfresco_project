@@ -204,21 +204,6 @@ LogicECM.module.Base.Util = {
 	 *  {Object} callbackArg объект, передающийся параметром в callback, опциональный
 	 */
 	formDestructor: function(event, args, params) {
-		function removeAllBubbles(obj) {
-			var event;
-			var bubble = YAHOO.Bubbling.bubble;
-
-			for (event in bubble) {
-				if (bubble.hasOwnProperty(event)) {
-					bubble[event].subscribers.forEach(function(s) {
-						if (s.obj === obj) {
-							YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
-						}
-					});
-				}
-			}
-		}
-
 		var formRelatedElementsSelectorTemplate = "[id^='{moduleId}']";
 		var moduleId = params.moduleId, callback = params.callback, callbackArg = params.callbackArg;
 
@@ -264,7 +249,7 @@ LogicECM.module.Base.Util = {
 					components[formIndex].name != "LogicECM.DndUploader" &&
 					components[formIndex].name != "Alfresco.FlashUpload" &&
 					components[formIndex].name != "Alfresco.FileUpload") {
-					removeAllBubbles(components[formIndex]);
+					this.removeAllBubbles(components[formIndex]);
 //					if (components[formIndex].destroy != undefined) {
 //						components[formIndex].destroy();
 //					}
@@ -279,6 +264,42 @@ LogicECM.module.Base.Util = {
 		$(YAHOO.lang.substitute(formRelatedElementsSelectorTemplate, {
 			moduleId: moduleId
 		})).remove();
+	},
+
+	removeAllBubbles: function (obj) {
+		var event;
+		var bubble = YAHOO.Bubbling.bubble;
+
+		for (event in bubble) {
+			if (bubble.hasOwnProperty(event)) {
+				bubble[event].subscribers.forEach(function(s) {
+					if (s.obj === obj) {
+						YAHOO.Bubbling.unsubscribe(event, s.fn, s.obj);
+					}
+				});
+			}
+		}
+	},
+
+	destroyForm: function(formId) {
+		var comMan = Alfresco.util.ComponentManager;
+		var components = comMan.list();
+
+		for (var i = components.length - 1; i >= 0; i--) {
+			var component = components[i];
+			if (component.id != null &&
+				component.id.indexOf(formId) == 0 &&
+				component.name != "Alfresco.HtmlUpload" &&
+				component.name != "LogicECM.DndUploader" &&
+				component.name != "Alfresco.FlashUpload" &&
+				component.name != "Alfresco.FileUpload") {
+					this.removeAllBubbles(component);
+					if (typeof component.destroy == "function") {
+						component.destroy();
+					}
+					comMan.unregister(component);
+			}
+		}
 	}
 };
 

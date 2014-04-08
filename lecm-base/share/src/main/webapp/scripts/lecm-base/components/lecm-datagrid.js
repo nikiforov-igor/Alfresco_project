@@ -529,6 +529,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			},
 
 	        onCollapse: function (record) {
+		        //Можно переопределять для полного удаления схлопываемой строки
+//		        var expandedRow = Dom.get(this.getExpandedRecordId(record));
+//		        LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
+//		        expandedRow.parentNode.removeChild(expandedRow);
+
+		        //Строка не удаляется, а скрывается
 		        Dom.setStyle(this.getExpandedRecordId(record), "display", "none");
 	        },
 
@@ -540,7 +546,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				if (nodeRef) {
 					var me = this;
 					var dataObj = YAHOO.lang.merge({
-						htmlid: this.id + nodeRef,
+						htmlid: this.getExpandedFormId(record),
 						itemKind: "node",
 						itemId: nodeRef,
 						mode: "view"
@@ -597,6 +603,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	        getExpandedRecordId: function(record) {
 		        return record.getId() + "-expanded";
+	        },
+
+	        getExpandedFormId: function(record) {
+		        return this.id + record.getData("nodeRef");
 	        },
 
             /**
