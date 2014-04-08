@@ -390,6 +390,7 @@ public class DocumentPolicy extends BaseBean
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_DATE, new Date());
+        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
 
 	    nodeService.createAssociation(childAssocRef.getChildRef(), employeeRef, DocumentService.ASSOC_AUTHOR);
 

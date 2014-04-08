@@ -99,7 +99,6 @@
                 </property>
 				<property name="lecm-document:regnum">
 					<type>d:text</type>
-                    <default>Не присвоено</default>
 					<index enabled="true">
 						<atomic>true</atomic>
 						<stored>false</stored>
