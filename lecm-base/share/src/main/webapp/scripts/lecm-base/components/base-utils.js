@@ -265,7 +265,9 @@ LogicECM.module.Base.Util = {
 					components[formIndex].name != "Alfresco.FlashUpload" &&
 					components[formIndex].name != "Alfresco.FileUpload") {
 					removeAllBubbles(components[formIndex]);
-					components[formIndex].destroy();
+//					if (components[formIndex].destroy != undefined) {
+//						components[formIndex].destroy();
+//					}
 					comMan.unregister(components[formIndex]);
 				} else {
 					formIndex++;
