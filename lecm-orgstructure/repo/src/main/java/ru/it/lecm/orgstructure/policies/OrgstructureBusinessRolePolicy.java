@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import org.alfresco.repo.node.NodeServicePolicies;
+import org.alfresco.repo.policy.Behaviour.NotificationFrequency;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -18,7 +19,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 public class OrgstructureBusinessRolePolicy
 		extends SecurityNotificationsPolicyBase
 		implements NodeServicePolicies.OnCreateNodePolicy
-				, NodeServicePolicies.OnDeleteNodePolicy
+				, NodeServicePolicies.BeforeDeleteNodePolicy
 				, NodeServicePolicies.OnUpdatePropertiesPolicy
 
 {
@@ -38,8 +39,8 @@ public class OrgstructureBusinessRolePolicy
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "onCreateNode"));
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "onDeleteNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "beforeDeleteNode"));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				OrgstructureBean.TYPE_BUSINESS_ROLE, new JavaBehaviour(this, "onUpdateProperties"));
@@ -88,17 +89,16 @@ public class OrgstructureBusinessRolePolicy
 	}
 
 	@Override
-	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-		final NodeRef nodeBR = childAssocRef.getChildRef();
-		logger.debug("deleting business role "+ nodeBR);
+	public void beforeDeleteNode(NodeRef nodeRef) {
+		logger.debug("deleting business role "+ nodeRef);
 
 		// оповещение securityService по БР ...
-		notifyNodeDeactivated( PolicyUtils.makeBRPos(nodeBR, nodeService));
+		notifyNodeDeactivated( PolicyUtils.makeBRPos(nodeRef, nodeService));
 	}
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeBR,
-			Map<QName, Serializable> before, Map<QName, Serializable> after) 
+			Map<QName, Serializable> before, Map<QName, Serializable> after)
 	{
 		final Object oldDetails = before.get( OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
 		final Object newDetails = after.get( OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
@@ -107,11 +107,11 @@ public class OrgstructureBusinessRolePolicy
 			logger.debug( String.format( "updating details for business role '%s'\n\t from '%s'\n\t to '%s'", nodeBR, oldDetails, newDetails));
 			notifyNodeCreated( PolicyUtils.makeBRPos(nodeBR, nodeService) );
 		}
-	} 
+	}
 
 	public class PolicyBRLinkNotifier
 			implements NodeServicePolicies.OnCreateAssociationPolicy
-					, NodeServicePolicies.OnDeleteAssociationPolicy 
+					, NodeServicePolicies.OnDeleteAssociationPolicy
 	{
 		final String tag;
 
