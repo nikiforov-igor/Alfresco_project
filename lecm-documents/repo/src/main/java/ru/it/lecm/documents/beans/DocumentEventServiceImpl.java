@@ -195,6 +195,26 @@ public class DocumentEventServiceImpl implements DocumentEventService {
         public NodeRef getListener() {
             return listener;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            DocumentListener that = (DocumentListener) o;
+
+            if (listener != null ? !listener.equals(that.listener) : that.listener != null) return false;
+            if (object != null ? !object.equals(that.object) : that.object != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = object != null ? object.hashCode() : 0;
+            result = 31 * result + (listener != null ? listener.hashCode() : 0);
+            return result;
+        }
     }
 
 
