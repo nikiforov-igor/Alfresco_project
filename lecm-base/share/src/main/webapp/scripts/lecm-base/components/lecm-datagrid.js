@@ -447,6 +447,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
             errorMessageDialog: null,
 
+	        doubleClickLock: false,
+
             onArchiveCheckBoxClicked: function (layer, args) {
                 var cbShowArchive = YAHOO.util.Dom.get(this.id + "-cbShowArchive");
                 if (cbShowArchive) {
@@ -516,22 +518,28 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				} else {
 					Dom.addClass(row, "expanded");
 					Dom.get("expand-" + record.getId()).innerHTML = "-";
-                                        this.prepareExpandedRow(record);
-					this.onExpand(record);
+					var rowId = this.getExpandedRecordId(record);
+					if (Dom.get(rowId) != null) {
+						Dom.setStyle(rowId, "display", "table-row");
+					} else {
+						this.prepareExpandedRow(record);
+						this.onExpand(record);
+					}
 				}
 			},
 
 	        onCollapse: function (record) {
-		        var row = this.widgets.dataTable.getRow(record);
-		        var nextRow = Dom.getNextSibling(row);
-		        nextRow.parentNode.removeChild(nextRow);
+		        Dom.setStyle(this.getExpandedRecordId(record), "display", "none");
 	        },
 
 			onExpand: function(record) {
-				var dataObj;
+				if (this.doubleClickLock) return;
+				this.doubleClickLock = true;
+
 				var nodeRef = record.getData("nodeRef");
 				if (nodeRef) {
-					dataObj = YAHOO.lang.merge({
+					var me = this;
+					var dataObj = YAHOO.lang.merge({
 						htmlid: this.id + nodeRef,
 						itemKind: "node",
 						itemId: nodeRef,
@@ -544,8 +552,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 							scope: this,
 							fn: function(response) {
 								if (response.serverResponse != null) {
-									this.addExpandedRow(record, response.serverResponse.responseText);
+									me.addExpandedRow(record, response.serverResponse.responseText);
 								}
+								me.doubleClickLock = false;
 							}
 						},
 						failureMessage: "message.failure",
@@ -555,18 +564,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				}
 			},
 
-                prepareExpandedRow: function(record) {
-                    var row = this.widgets.dataTable.getRow(record);
+            prepareExpandedRow: function(record) {
+                var row = this.widgets.dataTable.getRow(record);
 
-                    var newRow = document.createElement('tr');
-                    newRow.className = "expand-row";
-                    newRow.style.display="none";
-                    Dom.insertAfter(newRow, row);
-                },        
+                var newRow = document.createElement('tr');
+                newRow.className = "expand-row";
+                newRow.id = this.getExpandedRecordId(record);
+                newRow.style.display="none";
+                Dom.insertAfter(newRow, row);
+            },
 
 	        addExpandedRow: function(record, text) {
-		        var row = this.widgets.dataTable.getRow(record);
-
 		        var colSpan = this.datagridColumns.length;
 		        if (this.options.showCheckboxColumn) {
 			        colSpan++;
@@ -578,14 +586,17 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			        colSpan++;
 		        }
 
-		        var newRow = Dom.getNextSibling(row);
-                        if (Dom.hasClass(newRow, "expand-row")) {
-                            var newColumn = document.createElement('td');
-                            newColumn.colSpan = colSpan;
-                            newColumn.innerHTML = text;
-                            newRow.appendChild(newColumn);
-                            newRow.style.display="";
-                        }
+		        var newRow = Dom.get(this.getExpandedRecordId(record));
+
+                var newColumn = document.createElement('td');
+                newColumn.colSpan = colSpan;
+                newColumn.innerHTML = text;
+                newRow.appendChild(newColumn);
+                newRow.style.display="";
+	        },
+
+	        getExpandedRecordId: function(record) {
+		        return record.getId() + "-expanded";
 	        },
 
             /**

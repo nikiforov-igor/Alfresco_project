@@ -23,6 +23,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		approvalContainer: null,
 		approvalItemType: null,
 		approvalContainerPath: null,
+		doubleClickLock: false,
 		renewDatagrid: function(event, args) {
 			function isDescendant(parent, child) {
 				var node = child.parentNode;
@@ -80,6 +81,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			LogicECM.module.Base.Util.printReport(item.nodeRef, 'approval-list');
 		},
 		onExpand: function(record) {
+			if (this.doubleClickLock) return;
+			this.doubleClickLock = true;
+
 			var me = this, nodeRef = record.getData("nodeRef");
 			Alfresco.util.Ajax.request({
 				method: "GET",
@@ -94,6 +98,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 						if (response.serverResponse) {
 							me.addExpandedRow(record, response.serverResponse.responseText);
 						}
+						me.doubleClickLock = false;
 					}
 				},
 				failureMessage: "message.failure",
