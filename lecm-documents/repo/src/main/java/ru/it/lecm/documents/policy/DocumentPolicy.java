@@ -29,10 +29,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.beans.DocumentConnectionService;
-import ru.it.lecm.documents.beans.DocumentConnectionServiceImpl;
-import ru.it.lecm.documents.beans.DocumentMembersServiceImpl;
-import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -393,6 +390,20 @@ public class DocumentPolicy extends BaseBean
         nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
 
 	    nodeService.createAssociation(childAssocRef.getChildRef(), employeeRef, DocumentService.ASSOC_AUTHOR);
+
+        NodeRef attachmentsRef = nodeService.getChildByName(childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
+        if (attachmentsRef == null) {
+            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
+            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties.put(ContentModel.PROP_NAME, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
+            ChildAssociationRef associationRef = nodeService.createNode(childAssocRef.getChildRef(), assocTypeQName, assocQName, nodeTypeQName, properties);
+            attachmentsRef = associationRef.getChildRef();
+            //не индексируем свойства папки
+            disableNodeIndex(attachmentsRef);
+        }
 
         // заполняем тип
         final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));

@@ -65,7 +65,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
         if (ref != null) {
             return ref;
         }
-
+        //оставлено для подстраховки, создание папки происходит при создании документа
         AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
