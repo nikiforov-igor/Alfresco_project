@@ -141,9 +141,13 @@ public class ModelsListBeanImpl extends BaseBean {
 							if (contentReader != null) {
 								M2Model model = M2Model.createModel(contentReader.getContentInputStream());
 
-								M2Type firstType = model.getTypes().get(0);
+                                List<M2Type> types = model.getTypes();
+                                M2Type firstType = null;
+                                if (types != null && !types.isEmpty()) {    //для случая, если в модели нет типов (например только аспекты)
+                                    firstType = types.get(0);
+                                }
 
-								if (firstType != null) {
+                                if (firstType != null) {
 									if (models.containsKey(firstType.getName())) {
 										models.get(firstType.getName()).put("nodeRef", child.toString());
 									} else {
