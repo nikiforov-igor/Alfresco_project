@@ -282,6 +282,7 @@ LogicECM.module.Base.Util = {
 	},
 
 	destroyForm: function(formId) {
+		var isFn = YAHOO.lang.isFunction;
 		var comMan = Alfresco.util.ComponentManager;
 		var components = comMan.list();
 
@@ -294,7 +295,7 @@ LogicECM.module.Base.Util = {
 				component.name != "Alfresco.FlashUpload" &&
 				component.name != "Alfresco.FileUpload") {
 					this.removeAllBubbles(component);
-					if (typeof component.destroy == "function") {
+					if (isFn(component.destroy)) {
 						component.destroy();
 					}
 					comMan.unregister(component);
