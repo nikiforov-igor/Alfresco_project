@@ -62,8 +62,8 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onCreateEmployeeNodeLog",
 				Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onDeleteEmployeeNode"));
+		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "beforeDeleteEmployeeNode"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateEmployeeProperties"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
@@ -127,10 +127,9 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	/**
 	 * Удаление ноды сотрудника. Оповестить SG
 	 */
-	public void onDeleteEmployeeNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
-		final NodeRef employee = childAssocRef.getChildRef();
-		final NodeRef person = orgstructureService.getPersonForEmployee(employee);
-		notifyEmploeeDown(employee, person);
+	public void beforeDeleteEmployeeNode(NodeRef nodeRef) {
+		final NodeRef person = orgstructureService.getPersonForEmployee(nodeRef);
+		notifyEmploeeDown(nodeRef, person);
 	}
 
 	/**
