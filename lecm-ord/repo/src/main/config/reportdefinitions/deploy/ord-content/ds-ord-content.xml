@@ -40,7 +40,7 @@
         <queryText><![CDATA[]]></queryText>
         <querySort/>
         <allVersions>true</allVersions>
-        <preferedType>lecm-ord:document</preferedType>
+        <preferedType>lecm-ord:document-fake</preferedType>
         <isMultiRow>false</isMultiRow>
         <isCustom>false</isCustom>
         <flags/>
