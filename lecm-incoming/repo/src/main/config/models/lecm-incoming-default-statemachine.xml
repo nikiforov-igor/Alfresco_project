@@ -4980,8 +4980,10 @@ documentScript.finalizeToUnit(incoming, unit);]]></value>
 var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
 if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
+    incoming.removeAssociation(recipient[0], "lecm-eds-document:recipients-assoc");
 }
 var currentUser =  orgstructure.getCurrentEmployee();
+incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
 lecmPermission.revokeDynamicRole(incoming, currentUser, "INCOMING_RECIPIENT");
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_RECORDER", true);
 var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул документ ";
@@ -5156,9 +5158,11 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, incomi
 var recipient = incoming.assocs["lecm-incoming:recipient-assoc"];
 if (recipient != null && recipient.length == 1) {
     lecmPermission.revokeDynamicRole(incoming, recipient[0], "INCOMING_RECIPIENT");
+    incoming.removeAssociation(recipient[0], "lecm-eds-document:recipients-assoc");
 }
 var currentUser =  orgstructure.getCurrentEmployee();
 lecmPermission.revokeDynamicRole(incoming, currentUser, "INCOMING_RECIPIENT");
+incoming.removeAssociation(currentUser, "lecm-eds-document:recipients-assoc");
 var curators =  orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWER", true);
 var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " вернул документ ";
 notificationText += documentScript.wrapperDocumentLink(incoming , "№ {~REGNUM} от {~REGDATE?dd-MM-yyyy}");
