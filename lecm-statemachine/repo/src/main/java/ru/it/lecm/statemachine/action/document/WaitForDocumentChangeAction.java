@@ -4,11 +4,14 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.impl.util.xml.Element;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.StatemachineActionConstants;
 import ru.it.lecm.statemachine.StatemachineModel;
@@ -64,18 +67,22 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
                 WorkflowService workflowService = getServiceRegistry().getWorkflowService();
                 WorkflowTask task = workflowService.getTaskById(StateMachineHelper.ACTIVITI_PREFIX + taskId.replace(StateMachineHelper.ACTIVITI_PREFIX, ""));
 
+                DictionaryService dictionaryService = getServiceRegistry().getDictionaryService();
+
                 NodeRef wfPackage = (NodeRef) task.getProperties().get(WorkflowModel.ASSOC_PACKAGE);
 
-                NodeRef document = null;
                 List<ChildAssociationRef> documents = nodeService.getChildAssocs(wfPackage);
                 for (ChildAssociationRef item : documents) {
-                    document = item.getChildRef();
+                    NodeRef itemRef = item.getChildRef();
+                    QName itemType = nodeService.getType(itemRef);
+                    if (dictionaryService.isSubClass(itemType, DocumentService.TYPE_BASE_DOCUMENT)) {
+                        if (!nodeService.hasAspect(itemRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
+                            nodeService.addAspect(itemRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
+                        }
+                        nodeService.setProperty(itemRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
+                    }
                 }
 
-                if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
-                    nodeService.addAspect(document, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK, null);
-                }
-                nodeService.setProperty(document, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS, taskId);
                 return null;
             }
         }, AuthenticationUtil.SYSTEM_USER_NAME);
