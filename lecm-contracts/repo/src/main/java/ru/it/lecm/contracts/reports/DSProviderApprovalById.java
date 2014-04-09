@@ -55,7 +55,6 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         final ApprovalItemsDS result = new ApprovalItemsDS(iterator);
-        result.getContext().setSubstitudeService(getServices().getSubstitudeService());
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
         if (conf() != null) {

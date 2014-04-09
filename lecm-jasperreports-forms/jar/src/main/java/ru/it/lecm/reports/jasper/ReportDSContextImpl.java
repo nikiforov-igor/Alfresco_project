@@ -15,8 +15,6 @@ import java.util.*;
 public class ReportDSContextImpl implements ReportDSContext {
     private ServiceRegistry serviceRegistry;
 
-    final private ProxySubstitudeBean substitudeService = new ProxySubstitudeBean();
-
     private DataFilter filter; // может быть NULL
     private Map<String, DataFieldColumn> metaFields; // ключ = имя колонки данных в НД
 
@@ -51,10 +49,6 @@ public class ReportDSContextImpl implements ReportDSContext {
 
     public void setRegistryService(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
-    }
-
-    public void setSubstitudeService(SubstitudeBean substitudeServiceBean) {
-        this.substitudeService.setRealBean(substitudeServiceBean);
     }
 
     public Iterator<ResultSetRow> getRsIter() {

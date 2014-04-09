@@ -100,7 +100,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
-        result.getContext().setSubstitudeService(getServices().getSubstitudeService());
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
         result.getContext().setMetaFields(conf().getMetaFields());

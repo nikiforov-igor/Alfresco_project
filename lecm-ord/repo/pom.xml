@@ -121,9 +121,8 @@
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.reports</groupId>
-            <artifactId>lecm-reports-api</artifactId>
-            <version>1.1.0</version>
-            <type>jar</type>
+            <artifactId>lecm-reports-jar</artifactId>
+            <version>${project.version}</version>
         </dependency>
 		<dependency>
             <groupId>ru.it.lecm.nd</groupId>

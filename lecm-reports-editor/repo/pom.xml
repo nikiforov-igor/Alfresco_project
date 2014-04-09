@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>ru.it.lecm.reports</groupId>
-            <artifactId>lecm-reports-api</artifactId>
+            <artifactId>lecm-reports-jar</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

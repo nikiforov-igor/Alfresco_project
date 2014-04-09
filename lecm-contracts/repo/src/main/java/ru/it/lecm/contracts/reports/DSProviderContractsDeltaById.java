@@ -44,7 +44,6 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         final LinkedDocumentsDS result = new LinkedDocumentsDS(iterator);
-        result.getContext().setSubstitudeService(getServices().getSubstitudeService());
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
         result.getContext().setMetaFields(conf().getMetaFields());

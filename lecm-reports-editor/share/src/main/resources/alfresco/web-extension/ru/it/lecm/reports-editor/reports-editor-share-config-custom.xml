@@ -45,7 +45,7 @@
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_провайдера</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">false</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>

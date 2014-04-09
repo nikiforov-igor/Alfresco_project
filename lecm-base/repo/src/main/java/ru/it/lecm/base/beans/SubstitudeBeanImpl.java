@@ -19,12 +19,17 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author dbashmakov
  *         Date: 28.12.12
  *         Time: 11:44
  */
 public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
+    final private static String XSYNTAX_MARKER_OPEN = "{{";
+    final private static String XSYNTAX_MARKER_CLOSE = "}}";
 
     enum PseudoProps {
         AUTHOR {
@@ -239,9 +244,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         final AuthenticationUtil.RunAsWork<String> substitudeString = new AuthenticationUtil.RunAsWork<String>() {
             @Override
             public String doWork() throws Exception {
-                if (node == null) {
+                if (node == null || formatString == null) {
                     return "";
                 }
+                if (isExtendedSyntax(formatString)) {
+                    return extendedFormatNodeTitle(node, formatString);
+                }
+
                 String dFormat = dateFormat;
                 if (dFormat == null) {
                     dFormat = getDateFormat();
@@ -301,9 +310,14 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         final AuthenticationUtil.RunAsWork<Object> substitudeString = new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
-                if (node == null) {
+                if (node == null || formatString == null) {
                     return null;
                 }
+
+                if (isExtendedSyntax(formatString)) {
+                    return extendedFormatNodeTitle(node, formatString);
+                }
+
                 String dFormat = dateFormat;
                 if (dFormat == null) {
                     dFormat = getDateFormat();
@@ -323,6 +337,44 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
             }
         };
         return AuthenticationUtil.runAsSystem(substitudeString);
+    }
+
+    private boolean isExtendedSyntax(String fmt) {
+        return (fmt != null) && fmt.contains(XSYNTAX_MARKER_OPEN) && fmt.contains(XSYNTAX_MARKER_CLOSE);
+    }
+
+    /**
+     * Функция расширенной обработки. Вызывается когда выражение начинается
+     * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
+     * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
+     * нему отсавшуюся часть выражения.
+     */
+    private String extendedFormatNodeTitle(final NodeRef node, String fmt) {
+        String begAuthorRef = "\\{\\{@AUTHOR.*?}}";
+        Pattern authorPattern = Pattern.compile(begAuthorRef);
+        //создаем Matcher
+        Matcher m = authorPattern.matcher(fmt);
+        NodeRef authorNode = null;
+        while (m.find()) {
+            // замена node на узел Автора
+            if (authorNode == null) {
+                final List<NodeRef> list = getObjectByPseudoProp(node, AUTHOR);
+                authorNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
+            }
+            String groupText = m.group();
+            int startPos = "{{@AUTHOR".length();
+            if (groupText.charAt(startPos) == '/') {
+                startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
+            }
+            final String shortFmt = "{" + groupText.substring(startPos, groupText.length() - 1);
+            if (shortFmt.equals("{}")) {
+                fmt = fmt.replace(groupText, getObjectDescription(authorNode));
+            } else {
+                fmt = fmt.replace(groupText, formatNodeTitle(authorNode, shortFmt));
+            }
+
+        }
+        return formatNodeTitle(node, fmt);
     }
 
     /**

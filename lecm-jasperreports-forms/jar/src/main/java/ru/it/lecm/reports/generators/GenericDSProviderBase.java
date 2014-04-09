@@ -298,7 +298,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      */
     protected void fillContext(ReportDSContextImpl context) {
         if (context != null) {
-            context.setSubstitudeService(getServices().getSubstitudeService());
             context.setRegistryService(getServices().getServiceRegistry());
             context.setJrSimpleProps(getColumnNames(this.alfrescoQuery.argsByProps()));
             context.setMetaFields(JRUtils.getDataFields(this.getReportDescriptor()));

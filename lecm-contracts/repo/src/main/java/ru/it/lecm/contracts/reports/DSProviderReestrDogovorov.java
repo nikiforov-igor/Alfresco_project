@@ -21,35 +21,10 @@ import java.util.Iterator;
 public class DSProviderReestrDogovorov extends GenericDSProviderBase {
 
     private Boolean contractActualOnly;
-    private String JRFLD_Executor_Name = "col_Executor";
 
     @SuppressWarnings("unused")
     public void setContractActualOnly(String value) {
         contractActualOnly = Utils.isStringEmpty(value) ? null : Boolean.parseBoolean(value);
-    }
-
-    @Override
-    protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
-        final AlfrescoJRDataSource dataSource = new AlfrescoJRDataSource(iterator) {
-            @Override
-            protected boolean loadAlfNodeProps(NodeRef id) {
-                final boolean flag = super.loadAlfNodeProps(id);
-                if (flag) {
-                    // подгрузим автора - он же исполнгитель в договорах!
-                    final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
-                    final NodeRef executorId = getServices().getDocumentService().getDocumentAuthor(id);
-                    if (executorId != null) {
-                        final BasicEmployeeInfo docExecutor = new BasicEmployeeInfo(executorId);
-                        docExecutor.loadProps(nodeSrv, getServices().getOrgstructureService());
-                        // сохраним ФИО ...
-                        context.getCurNodeProps().put(getAlfAttrNameByJRKey(JRFLD_Executor_Name), docExecutor.ФамилияИО());
-                    }
-                }
-                return flag;
-            }
-        };
-
-        return dataSource;
     }
 
     @Override

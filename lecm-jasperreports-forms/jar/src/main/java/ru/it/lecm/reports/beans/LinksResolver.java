@@ -5,7 +5,6 @@ import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.generators.SubreportBuilder;
-import ru.it.lecm.reports.jasper.ProxySubstitudeBean;
 import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 
@@ -53,9 +52,6 @@ public class LinksResolver {
         PropertyCheck.mandatory(this, "services", services);
         PropertyCheck.mandatory(this, "services.getSubstitudeService", services.getSubstitudeService());
 
-        final ProxySubstitudeBean substService = new ProxySubstitudeBean();
-        substService.setRealBean(services.getSubstitudeService());
-
 		/*
          * если название имеется среди готовых свойств (прогруженных или вычисленных заранее) ...
 		 */
@@ -65,7 +61,7 @@ public class LinksResolver {
         if (curProps != null && curProps.containsKey(linkExpression)) {
             value = curProps.get(linkExpression);
         } else if (isSubstCalcExpr(linkExpression)) { // ссылка или выражение ...
-            value = substService.getNodeFieldByFormat(docId, linkExpression);
+            value = services.getSubstitudeService().getNodeFieldByFormat(docId, linkExpression);
         } else { // считаем явно заданной константой ...
             value = linkExpression;
         }
