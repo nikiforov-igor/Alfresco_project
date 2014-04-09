@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+   <shortname>Routes picker datasource</shortname>
+   <description>List routes for picker control depending on routes engineer business role</description>
+   <url>/lecm/workflow/routes/pickerDatasource/{type}/children</url>
+   <authentication>user</authentication>
+   <format default="json"/>
+   <transaction allow="readonly">required</transaction>
+</webscript>

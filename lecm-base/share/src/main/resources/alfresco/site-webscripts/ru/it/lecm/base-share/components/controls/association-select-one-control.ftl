@@ -76,6 +76,9 @@
                 showCreateNewButton: ${showCreateNewButton?string},
 	            notSelectedOptionShow: ${notSelectedOptionShow?string},
 	            notSelectedText: "${notSelectedText?string}",
+				<#if field.control.params.customDatasource??>
+					customDatasource: "${field.control.params.customDatasource}",
+				</#if>
 	            <#if field.control.params.primaryCascading??>
                     primaryCascading: ${field.control.params.primaryCascading},
 		        </#if>

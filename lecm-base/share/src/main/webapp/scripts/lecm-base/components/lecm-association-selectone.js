@@ -78,7 +78,9 @@ LogicECM.module = LogicECM.module || {};
 
 	            defaultValueDataSource: null,
 
-                changeItemsFireAction: null
+                changeItemsFireAction: null,
+
+				customDatasource: null
             },
 
             rootNode: null,
@@ -294,7 +296,7 @@ LogicECM.module = LogicECM.module || {};
 		        if (this.options.defaultValue != null) {
                      this.defaultValue = this.options.defaultValue;
                      this.fillContent();
-                } else 
+                } else
                 if (this.options.defaultValueDataSource != null) {
 			        var me = this;
 
@@ -415,9 +417,10 @@ LogicECM.module = LogicECM.module || {};
             },
 
             _createDataSource: function AssociationSelectOne__createDataSource() {
-                var me = this;
+                var  me = this,
+					pickerChildrenUrl = Alfresco.constants.PROXY_URI +
+						(this.options.customDatasource ? this.options.customDatasource : "lecm/forms/picker/") + this.options.itemFamily;
 
-                var pickerChildrenUrl = Alfresco.constants.PROXY_URI + "lecm/forms/picker/" + this.options.itemFamily;
                 this.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
                     {
                         responseType: YAHOO.util.DataSource.TYPE_JSON,
