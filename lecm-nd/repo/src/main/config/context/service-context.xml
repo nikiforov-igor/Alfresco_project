@@ -105,4 +105,8 @@
         p:documentType="lecm-nd:document"
         p:tags-ref="nd.rn.tags"
     />
+
+	<bean id="NDDocumentService" class="ru.it.lecm.nd.NDDocumentServiceImpl"
+          p:nodeService-ref="nodeService"
+    />
 </beans>

@@ -969,8 +969,8 @@ ord.save();]]></value>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -997,12 +997,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[workflowRole]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[DA_APPROVER]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[workflowRole]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1024,12 +1024,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Документ]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1051,12 +1051,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[commentFileAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Согласование]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[commentFileAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1115,8 +1115,8 @@ ord.save();]]></value>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -1143,12 +1143,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[workflowRole]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[DA_SIGNER]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[workflowRole]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1170,12 +1170,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Договор]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -1224,12 +1224,12 @@ ord.save();]]></value>
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Подписать и направить]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Подписать и направить]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -1253,12 +1253,12 @@ ord.save();]]></value>
 																		<nodeRef>workspace://SpacesStore/8404fbce-2134-4611-bd9a-f20bb8f4b513</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Действие доступно только инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -2897,8 +2897,8 @@ ord.save();]]></value>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -2925,12 +2925,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[workflowRole]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[DA_SIGNER]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[workflowRole]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -2952,12 +2952,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Договор]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3006,12 +3006,12 @@ ord.save();]]></value>
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Подписать и направить]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Подписать и направить]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -3035,12 +3035,12 @@ ord.save();]]></value>
 																		<nodeRef>workspace://SpacesStore/25e963f2-e9ce-4156-8f7f-b73f6354d415</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Действие доступно только инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -3841,8 +3841,8 @@ notifications.sendNotification(notification);]]></value>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -3869,12 +3869,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[workflowRole]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[DA_APPROVER]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[workflowRole]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3896,12 +3896,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[commentFileAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Согласование]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[commentFileAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3923,12 +3923,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Договор]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -3987,8 +3987,8 @@ notifications.sendNotification(notification);]]></value>
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -4015,12 +4015,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[workflowRole]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[DA_SIGNER]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[workflowRole]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4042,12 +4042,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Договор]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -4096,12 +4096,12 @@ notifications.sendNotification(notification);]]></value>
 																<value><![CDATA[false]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Подписать и направить]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Подписать и направить]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -4125,12 +4125,12 @@ notifications.sendNotification(notification);]]></value>
 																		<nodeRef>workspace://SpacesStore/869e2d1d-76d9-45c8-82f8-768a4d4824e9</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value><![CDATA[true]]></value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value><![CDATA[Действие доступно только инициатору]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
 																			</property>
 																			<property>
 																				<name>condition</name>
@@ -5790,12 +5790,12 @@ notifications.sendNotification(notification);]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Документ]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6613,12 +6613,12 @@ notifications.sendNotification(notification);]]></value>
 																<value><![CDATA[true]]></value>
 															</property>
 															<property>
-																<name>transitionLabel</name>
-																<value><![CDATA[Зарегистрировать]]></value>
-															</property>
-															<property>
 																<name>transition-script</name>
 																<value><![CDATA[]]></value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value><![CDATA[Зарегистрировать]]></value>
 															</property>
 														</properties>
 														<aspects>
@@ -7452,6 +7452,10 @@ ord.save();]]></value>
 																<name>transitionFormFolder</name>
 																<value><![CDATA[]]></value>
 															</property>
+															<property>
+																<name>transitionFormConnection</name>
+																<value><![CDATA[]]></value>
+															</property>
 														</properties>
 														<aspects>
 															<transitionFormAspect/>
@@ -7473,12 +7477,12 @@ ord.save();]]></value>
 																				<value><![CDATA[lecm-document:subject-assoc-ref]]></value>
 																			</property>
 																			<property>
-																				<name>formInputToValue</name>
-																				<value><![CDATA[assoc_lecm-document_subject-assoc]]></value>
-																			</property>
-																			<property>
 																				<name>formInputFromType</name>
 																				<value><![CDATA[FIELD]]></value>
+																			</property>
+																			<property>
+																				<name>formInputToValue</name>
+																				<value><![CDATA[assoc_lecm-document_subject-assoc]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -7496,12 +7500,35 @@ ord.save();]]></value>
 																				<value><![CDATA[stm_document]]></value>
 																			</property>
 																			<property>
+																				<name>formInputFromType</name>
+																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
 																				<name>formInputToValue</name>
 																				<value><![CDATA[assoc_lecm-ord_accepted-assoc]]></value>
 																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>0a00d1a1-9eec-4be6-9c8c-3b297c7b7a04</name>
+																		<nodeRef>workspace://SpacesStore/0ef0fd03-b15b-4393-b6b8-fdc4073ddc31</nodeRef>
+																		<properties>
 																			<property>
-																				<name>formInputFromType</name>
-																				<value><![CDATA[VARIABLE]]></value>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[ОРД документ уже создан]]></value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[true]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[@NDDocumentService.checkApprovalORDExists(doc.nodeRef) == false]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -8260,12 +8287,12 @@ ord.save();]]></value>
 																				<value><![CDATA[stm_document]]></value>
 																			</property>
 																			<property>
-																				<name>formInputToValue</name>
-																				<value><![CDATA[assoc_lecm-ord_canceled-assoc]]></value>
-																			</property>
-																			<property>
 																				<name>formInputFromType</name>
 																				<value><![CDATA[VARIABLE]]></value>
+																			</property>
+																			<property>
+																				<name>formInputToValue</name>
+																				<value><![CDATA[assoc_lecm-ord_canceled-assoc]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -8283,12 +8310,12 @@ ord.save();]]></value>
 																				<value><![CDATA[lecm-document:subject-assoc-ref]]></value>
 																			</property>
 																			<property>
-																				<name>formInputToValue</name>
-																				<value><![CDATA[assoc_lecm-document_subject-assoc]]></value>
-																			</property>
-																			<property>
 																				<name>formInputFromType</name>
 																				<value><![CDATA[FIELD]]></value>
+																			</property>
+																			<property>
+																				<name>formInputToValue</name>
+																				<value><![CDATA[assoc_lecm-document_subject-assoc]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -8362,12 +8389,12 @@ ord.save();]]></value>
 																				<value><![CDATA[VARIABLE]]></value>
 																			</property>
 																			<property>
-																				<name>inputToValue</name>
-																				<value><![CDATA[documentAttachmentCategoryName]]></value>
-																			</property>
-																			<property>
 																				<name>inputFromValue</name>
 																				<value><![CDATA[Документ]]></value>
+																			</property>
+																			<property>
+																				<name>inputToValue</name>
+																				<value><![CDATA[documentAttachmentCategoryName]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
