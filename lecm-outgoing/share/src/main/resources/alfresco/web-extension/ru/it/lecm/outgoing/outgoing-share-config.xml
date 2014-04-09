@@ -263,8 +263,8 @@
 			<!-- Форма для табличного представления (набор столбцов) -->
 			<form id="datagrid">
 				<field-visibility>
-					<show id="lecm-eds-document:regnum" force="true"/>													<!-- Номер проекта | Номер исходящего -->
-					<show id="lecm-eds-document:regdate" force="true"/>													<!-- Дата регистрации проекта | Дата регистрации исходящего -->
+					<show id="lecm-document-aspects:reg-data-number"/>													<!-- Номер проекта | Номер исходящего -->
+					<show id="lecm-document-aspects:reg-project-data-number"/>													<!-- Дата регистрации проекта | Дата регистрации исходящего -->
 					<show id="lecm-document:creator"/>																	<!-- Автор -->
 					<show id="lecm-document:creator-ref"/>																<!-- Автор Ссылка -->
 					<show id="lecm-document:title"/>																	<!-- Заголовок -->
@@ -272,10 +272,6 @@
 					<show id="lecm-outgoing:contractor-assoc"/>															<!-- Организация-получатель -->
 					<show id="lecm-outgoing:recipient-assoc"/>															<!-- Получатель -->
 				</field-visibility>
-				<appearance>
-					<field id="lecm-eds-document:regnum" label="Номер" substituteString="{~REGNUM}"/>
-					<field id="lecm-eds-document:regdate" label="Дата" substituteString="{~REGDATE}"/>
-				</appearance>
 			</form>
 
 			<!-- Форма атрибутивного поиска -->
