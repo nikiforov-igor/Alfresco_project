@@ -5,6 +5,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.TransactionListener;
+import org.alfresco.service.cmr.repository.AssociationExistsException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
@@ -146,16 +147,20 @@ public class DocumentEventServiceImpl implements DocumentEventService {
                                         return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                             @Override
                                             public Void execute() throws Throwable {
-                                                if (!nodeService.hasAspect(dl.getObject(), ASPECT_EVENT_LISTENERS)) {
-                                                    nodeService.addAspect(dl.getObject(), ASPECT_EVENT_LISTENERS, new HashMap<QName, Serializable>());
-                                                }
+                                                try {
+                                                    if (!nodeService.hasAspect(dl.getObject(), ASPECT_EVENT_LISTENERS)) {
+                                                        nodeService.addAspect(dl.getObject(), ASPECT_EVENT_LISTENERS, new HashMap<QName, Serializable>());
+                                                    }
 
-                                                nodeService.createAssociation(dl.getObject(), dl.getListener(), ASSOC_EVENT_LISTENERS);
+                                                    nodeService.createAssociation(dl.getObject(), dl.getListener(), ASSOC_EVENT_LISTENERS);
 
-                                                if (!nodeService.hasAspect(dl.getListener(), ASPECT_EVENT_SENDER)) {
-                                                    HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
-                                                    props.put(PROP_EVENT_SENDER, "");
-                                                    nodeService.addAspect(dl.getListener(), ASPECT_EVENT_SENDER, props);
+                                                    if (!nodeService.hasAspect(dl.getListener(), ASPECT_EVENT_SENDER)) {
+                                                        HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
+                                                        props.put(PROP_EVENT_SENDER, "");
+                                                        nodeService.addAspect(dl.getListener(), ASPECT_EVENT_SENDER, props);
+                                                    }
+                                                } catch (AssociationExistsException e) {
+                                                    logger.debug("Event subscription already exists", e);
                                                 }
                                                 return null;
                                             }
