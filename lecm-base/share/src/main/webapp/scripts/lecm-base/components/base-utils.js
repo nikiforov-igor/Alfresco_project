@@ -249,7 +249,7 @@ LogicECM.module.Base.Util = {
 					components[formIndex].name != "LogicECM.DndUploader" &&
 					components[formIndex].name != "Alfresco.FlashUpload" &&
 					components[formIndex].name != "Alfresco.FileUpload") {
-					this.removeAllBubbles(components[formIndex]);
+					LogicECM.module.Base.Util.removeAllBubbles(components[formIndex]);
 //					if (components[formIndex].destroy != undefined) {
 //						components[formIndex].destroy();
 //					}
