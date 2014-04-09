@@ -61,7 +61,12 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 		final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
 
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+        NodeRef ref = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
+        if (ref != null) {
+            return ref;
+        }
+
+        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
 				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
