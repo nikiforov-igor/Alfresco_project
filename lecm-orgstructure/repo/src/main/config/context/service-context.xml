@@ -173,6 +173,7 @@
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
 		<property name="businessJournalService" ref="businessJournalService"/>
+        <property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
 	<bean id="orgstructureOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOrganizationPolicy"
