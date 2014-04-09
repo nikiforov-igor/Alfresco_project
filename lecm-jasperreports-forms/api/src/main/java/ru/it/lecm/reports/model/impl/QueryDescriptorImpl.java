@@ -129,14 +129,6 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
             }
         }
 
-		/* точного соот-вия нет - проверяем вхождение */
-        // (NOTE: можно подумать, чтобы иметь набор SET<QName>)
-        for (String s : getSupportedNodeTypes()) {
-            if (s.toLowerCase().contains(qname.toLowerCase())) {
-                return true;
-            }
-        }
-
         return false;
     }
 
