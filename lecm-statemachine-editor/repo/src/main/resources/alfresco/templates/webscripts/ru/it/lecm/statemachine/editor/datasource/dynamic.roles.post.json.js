@@ -57,6 +57,7 @@ function main() {
 			showInactive: pars.get("showInactive") == true,
 			parent: (pars.get("parent").length() > 0)  ? pars.get("parent") : null,
 			itemType:(pars.get("itemType").length() > 0)  ? pars.get("itemType") : null,
+            useChildQuery: pars.has("useChildQuery") ? ("" + pars.get("useChildQuery") == "true") : false,
 			startIndex: pars.has("startIndex") ? parseInt(pars.get("startIndex"), 10) : DEFAULT_INDEX
 		};
 }
