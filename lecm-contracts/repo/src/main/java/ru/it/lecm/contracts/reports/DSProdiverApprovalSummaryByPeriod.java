@@ -57,7 +57,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 
         // выполненные Согласования -> вне статуса 'NO_DECISION'
         builder.emmit(hasData ? " AND " : "").
-                emmitFieldCond("NOT", ApprovalResultModel.PROP_APPROVAL_LIST_DECISION.toString(), VALUE_STATUS_NOTREADY);
+                emmitFieldCond("NOT", ApprovalResultModel.PROP_APPROVAL_LIST_DECISION.toPrefixString(getServices().getServiceRegistry().getNamespaceService()), VALUE_STATUS_NOTREADY);
 
         result.setLuceneQueryText(builder.toString());
         return result;
