@@ -103,7 +103,6 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
-                    <show id="lecm-rpeditor:businessRolesAssoc"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:parentReportTemplateAssoc"/>
                     <show id="lecm-rpeditor:reportQuery"/>
@@ -135,16 +134,6 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:reportQuerySort" help-id="report.sort.help"/>
-                    <field id="lecm-rpeditor:businessRolesAssoc">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="showCreateNewLink">false</control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="showViewIncompleteWarning">false</control-param>
-                            <control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
-                        </control>
-                    </field>
                 </appearance>
             </form>
         </forms>

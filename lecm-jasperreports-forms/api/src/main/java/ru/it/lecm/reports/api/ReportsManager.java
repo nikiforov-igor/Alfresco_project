@@ -580,6 +580,23 @@ public class ReportsManager {
             throw new RuntimeException(String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName));
         }
 
+        Set<String> bRoles = reportDesc.getBusinessRoles();
+
+        if (!bRoles.isEmpty()) {
+            final HashSet<String> employeeRoles = new HashSet<String>();
+            NodeRef currentEmployee = orgstructureBean.getCurrentEmployee();
+
+            if (currentEmployee != null) {
+                List<NodeRef> roleRefs = orgstructureBean.getEmployeeRoles(currentEmployee, true, true);
+                for (NodeRef role : roleRefs) {
+                    String name = (String) serviceRegistry.getNodeService().getProperty(role, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+                    employeeRoles.add(name);
+                }
+            }
+            if (!hasPermissionToReport(reportDesc, employeeRoles)) {
+                throw new RuntimeException(String.format("Current Employee has not permission to view report '%s' !!!", reportName));
+            }
+        }
         // (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
         reportDesc = Utils.clone(reportDesc);
 
