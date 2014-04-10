@@ -14,7 +14,7 @@
                             var incoming = bpm_package.children[0];
                             var recipientAssoc = execution.getVariable("lecmIncomingWf_recipient");
                             if (recipientAssoc != null) {
-                                statemachine.grandDynamicRoleForEmployee(incoming, recipientAssoc, "INCOMING_RECIPIENT");
+                                statemachine.grandDynamicRoleForEmployee(incoming, recipientAssoc, "DA_RECIPIENT_DYN");
                                 incoming.createAssociation(recipientAssoc, "lecm-eds-document:recipients-assoc");
                                 var notificationText = "Вам поступил документ: " + documentScript.wrapperDocumentLink(incoming, "{lecm-eds-document:document-type-assoc/cm:name} от {lecm-incoming:sender-assoc/cm:name}");
                                 var recipients = [];

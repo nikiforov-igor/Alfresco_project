@@ -1,43 +1,25 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
-        <items>
-            <item name="cm:Входящие. Регистратор" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Регистратор</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_RECORDER</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за регистрацию документов</property>
-            </item>
-            <item name="cm:Входящие. Создатель" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Создатель</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_CREATOR</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за создание входящих документов. </property>
-            </item>
-            <item name="cm:Входящие. Получатель" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Получатель</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_RECIPIENT</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, являющийся Получателем входящего документа.</property>
-            </item>
-            <item name="cm:Входящие. Рассматривающий входящие" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Рассматривающий входящие</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWER</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за первичное рассмотрение входящих документов.</property>
-            </item>
-            <item name="cm:Входящие. Рассматривающий в подразделении" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Рассматривающий в подразделении</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWER_IN_UNIT</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Сотрудник, отвечающий за первичное рассмотрение входящих документов в подразделении.</property>
-            </item>
-	        <item name="cm:Входящие. Рассматривающий. Динамическая роль" type="lecm-orgstr:business-role">
-                <property name="cm:name">Входящие. Рассматривающий. Динамическая роль</property>
-                <property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWER_DYNAMIC</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">true</property>
-                <property name="lecm-orgstr:business-role-description">.</property>
-            </item>
-        </items>
-    </item>
+	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+		<items>
+			<item name="cm:Входящие. Рассматривающие" type="lecm-orgstr:business-role">
+				<property name="cm:name">Входящие. Рассматривающие</property>
+				<property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWERS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, отвечающий за первичное рассмотрение входящих документов.</property>
+			</item>
+			<item name="cm:Входящие. Рассматривающие в подразделении" type="lecm-orgstr:business-role">
+				<property name="cm:name">Входящие. Рассматривающие в подразделении</property>
+				<property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWERS_IN_UNIT</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, отвечающий за первичное рассмотрение входящих документов в подразделении.</property>
+			</item>
+			<item name="cm:Входящие. Рассматривающий" type="lecm-orgstr:business-role">
+				<property name="cm:name">Входящие. Рассматривающий</property>
+				<property name="lecm-orgstr:business-role-identifier">INCOMING_REVIEWER_DYN</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудник, ведущий работу по рассмотрению документа.</property>
+			</item>
+		</items>
+	</item>
 </items>

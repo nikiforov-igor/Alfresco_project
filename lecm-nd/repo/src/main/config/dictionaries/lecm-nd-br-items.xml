@@ -2,9 +2,9 @@
 <items>
 	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
 		<items>
-			<item name="cm:НД. Создатель" type="lecm-orgstr:business-role">
-				<property name="cm:name">НД. Создатель</property>
-				<property name="lecm-orgstr:business-role-identifier">ND_CREATOR</property>
+			<item name="cm:НД. Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">НД. Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">ND_CREATORS</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
 				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право на создание НД документов.</property>
 			</item>

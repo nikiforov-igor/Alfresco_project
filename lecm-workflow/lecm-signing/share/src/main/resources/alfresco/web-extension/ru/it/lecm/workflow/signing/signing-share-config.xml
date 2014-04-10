@@ -26,7 +26,7 @@
 							<control-param name="concurrencyInputName">prop_lecm-workflow_workflowConcurrency</control-param>
 							<control-param name="showListSelectMenu">true</control-param>
 							<control-param name="showComputeTermsButton">true</control-param>
-							<control-param name="allowedBusinessRoleId">DA_SIGNER</control-param>
+							<control-param name="allowedBusinessRoleId">DA_SIGNERS</control-param>
 							<control-param name="formAddAssigneeTitle">Добавить сотрудника для подписания</control-param>
 						</control>
 					</field>

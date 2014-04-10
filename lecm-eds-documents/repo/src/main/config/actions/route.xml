@@ -14,7 +14,7 @@
         documentType = "" + document.typeShort, //для того чтобы java.lang.String превратился в js native string
         variables = null,
         workflowVariables = {
-            workflowRole: "DA_APPROVER",
+            workflowRole: "DA_APPROVERS",
             workflowDefinition: "lecmApprovalWorkflow",
             commentFileAttachmentCategoryName: "Согласование",
             documentRef: document.nodeRef,

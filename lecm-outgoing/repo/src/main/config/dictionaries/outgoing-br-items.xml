@@ -2,23 +2,17 @@
 <items>
 	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
 		<items>
-			<item name="cm:Исходящие. Подписант" type="lecm-orgstr:business-role">
-				<property name="cm:name">Исходящие. Подписант</property>
-				<property name="lecm-orgstr:business-role-identifier">OUTGOING_SIGNER</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудники, ответственные за подписание документа</property>
-			</item>
-			<item name="cm:Исходящие. Отправляющий" type="lecm-orgstr:business-role">
-				<property name="cm:name">Исходящие. Отправляющий</property>
-				<property name="lecm-orgstr:business-role-identifier">OUTGOING_SENDER</property>
+			<item name="cm:Исходящие. Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">Исходящие. Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">OUTGOING_CREATORS</property>
 				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, ответственный за отправку исходящих документов</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право создания исходящих документов</property>
 			</item>
-			<item name="cm:Исходящие. Создатель" type="lecm-orgstr:business-role">
-				<property name="cm:name">Исходящие. Создатель</property>
-				<property name="lecm-orgstr:business-role-identifier">OUTGOING_CREATOR</property>
-				<property name="lecm-orgstr:business-role-is-dynamic">true</property>
-				<property name="lecm-orgstr:business-role-description">Сотрудник, создавший исходящий документ</property>
+			<item name="cm:Исходящие. Отправляющие" type="lecm-orgstr:business-role">
+				<property name="cm:name">Исходящие. Отправляющие</property>
+				<property name="lecm-orgstr:business-role-identifier">OUTGOING_SENDERS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющий право отправки документов</property>
 			</item>
 		</items>
 	</item>

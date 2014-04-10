@@ -30,8 +30,8 @@
 					 eds.models.bootstrap">
         <property name="models">
             <list>
-                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-typical-answers-dic-model.xml</value>
-                <value>alfresco/module/${artifactId}/dictionaries/lecm-internal-doc-type-dic-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-internal-typical-answers-dic-model.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-internal-doc-type-dic-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-table-structure-model.xml</value>
                 <value>alfresco/module/${artifactId}/models/lecm-internal-model.xml</value>
             </list>

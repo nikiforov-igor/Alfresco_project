@@ -2362,7 +2362,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 																			</property>
 																			<property>
 																				<name>inputFromValue</name>
-																				<value><![CDATA[DA_APPROVER]]></value>
+																				<value><![CDATA[DA_APPROVERS]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -5428,7 +5428,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 																			</property>
 																			<property>
 																				<name>inputFromValue</name>
-																				<value><![CDATA[DA_APPROVER]]></value>
+																				<value><![CDATA[DA_APPROVERS]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

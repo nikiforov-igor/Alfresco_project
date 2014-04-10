@@ -2645,7 +2645,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>inputFromValue</name>
-																				<value><![CDATA[DA_APPROVER]]></value>
+																				<value><![CDATA[DA_APPROVERS]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
@@ -6078,7 +6078,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																			</property>
 																			<property>
 																				<name>inputFromValue</name>
-																				<value><![CDATA[DA_APPROVER]]></value>
+																				<value><![CDATA[DA_APPROVERS]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

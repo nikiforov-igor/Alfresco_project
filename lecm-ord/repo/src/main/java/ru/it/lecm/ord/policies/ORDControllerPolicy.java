@@ -58,12 +58,12 @@ public class ORDControllerPolicy {
 	public void onCreateAssociation(AssociationRef nodeAssocRef) {
 		NodeRef ord = nodeAssocRef.getSourceRef();
 		NodeRef controller = nodeAssocRef.getTargetRef();
-		stateMachineService.grandDynamicRoleForEmployee(ord, controller, "ORD_CONTROLLER_DYNAMIC");
+		stateMachineService.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN");
 	}
 
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		NodeRef ord = nodeAssocRef.getSourceRef();
 		NodeRef controller = nodeAssocRef.getTargetRef();
-		lecmPermissionService.revokeDynamicRole("ORD_CONTROLLER_DYNAMIC", ord, controller.getId());
+		lecmPermissionService.revokeDynamicRole("DA_CONTROLLER_DYN", ord, controller.getId());
 	}
 }

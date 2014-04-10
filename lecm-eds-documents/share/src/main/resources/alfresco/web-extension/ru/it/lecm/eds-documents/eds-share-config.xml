@@ -35,7 +35,7 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="showSearch">false</control-param>
-							<control-param name="businessRoleId">DA_REGISTRAR</control-param>
+							<control-param name="businessRoleId">DA_REGISTRARS</control-param>
 							<control-param name="forceEditable">true</control-param>
 							<control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>
@@ -60,7 +60,7 @@
 							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="showSearch">false</control-param>
-							<control-param name="businessRoleId">DA_REGISTRAR</control-param>
+							<control-param name="businessRoleId">DA_REGISTRARS</control-param>
 							<control-param name="forceEditable">true</control-param>
 							<control-param name="employeesLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}</control-param>

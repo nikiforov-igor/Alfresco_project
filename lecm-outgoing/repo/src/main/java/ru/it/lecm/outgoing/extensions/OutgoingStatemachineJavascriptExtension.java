@@ -30,7 +30,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	/**
 	 * код бизнес роли "Исходящие. Отправляющий" Сотрудник, ответственный за отправку исходящих документов
 	 */
-	private final static String OUTGOING_SENDER = "OUTGOING_SENDER";
+	private final static String OUTGOING_SENDERS = "OUTGOING_SENDERS";
 	private final static String DOCUMENT_FILE_REGISTER_NAMESPACE = "http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0";
 	private final static QName ASSOC_DOCUMENT_FILE_REGISTER_UNIT = QName.createQName(DOCUMENT_FILE_REGISTER_NAMESPACE, "organization-unit-assoc");
 
@@ -160,7 +160,7 @@ public class OutgoingStatemachineJavascriptExtension extends BaseWebScript {
 	 */
 	public Notification prepareNotificationAboutSending(final ScriptNode outgoingRef, final String description) {
 		//получаем список сотрудников включенных в статическую роль "Отправляющий" с учетом делегирования
-		List<NodeRef> senders = orgstructureService.getEmployeesByBusinessRole(OUTGOING_SENDER, true);
+		List<NodeRef> senders = orgstructureService.getEmployeesByBusinessRole(OUTGOING_SENDERS, true);
 
 		Notification notification = new Notification();
 		notification.setAuthor(AuthenticationUtil.getSystemUserName());
