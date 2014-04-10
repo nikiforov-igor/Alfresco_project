@@ -223,19 +223,21 @@ public class ParameterMapper {
         return nodeIds;
     }
 
-    static private List<String> getTextContentsList(List<String> refsValue, SubstitudeBean sustituteService) {
-        List<String> texts = null;
+    static private String getTextContentsList(List<String> refsValue, SubstitudeBean sustituteService) {
+        StringBuilder texts = new StringBuilder();
         if (refsValue != null) {
-            texts = new ArrayList<String>();
             if (!((List) refsValue).isEmpty()) {
                 for (String nodeRef : refsValue) {
                     if (NodeRef.isNodeRef(nodeRef)) {
-                        texts.add(sustituteService.getObjectDescription(new NodeRef(nodeRef)));
+                        texts.append(sustituteService.getObjectDescription(new NodeRef(nodeRef))).append(";");
                     }
+                }
+                if (texts.length() > 0) {
+                    texts.delete(texts.length()-1, texts.length());
                 }
             }
         }
-        return texts;
+        return texts.toString();
     }
 
     static private Long getId(String refValue, NodeService nodeService) {

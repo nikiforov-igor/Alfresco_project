@@ -14,7 +14,7 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
 
     private String text;
     private String sort;
-    private int offset, limit, pgSize;
+    private int offset = 0, limit = -1, pgSize = -1;
     private boolean allVersions = true;
 
     private List<String> supportedNodeTypes = new ArrayList<String>();
@@ -24,9 +24,7 @@ public class QueryDescriptorImpl extends MnemonicNamedItem implements QueryDescr
         List<String> newSupportedList = null;
         if (value != null && value.length() > 0) {
             final String[] items = value.split("\\s*[,;]\\s*");
-            if (items != null) {
-                newSupportedList = Arrays.asList(items);
-            }
+            newSupportedList = Arrays.asList(items);
         }
         this.setSupportedNodeTypes(newSupportedList);
     }
