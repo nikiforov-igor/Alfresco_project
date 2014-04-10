@@ -255,28 +255,28 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 	 * @return Множество атомарных уведомлений
 	 */
 	private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
-        long start = System.currentTimeMillis();
-        logger.warn("createAtomicNotifications start: {}", start);
+		long start = System.currentTimeMillis();
+		logger.warn("createAtomicNotifications start: {}", start);
 		Set<NotificationUnit> result = new HashSet<NotificationUnit>();
 		if (generalizedNotification != null) {
 			Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
 			if (generalizedNotification.getRecipientEmployeeRefs() != null) {
 				employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
-                logger.warn("Recipients added. Current size: {}", employeeRefs.size());
+				logger.warn("Recipients added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
 				for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
 					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
 				}
-                logger.warn("Units added. Current size: {}", employeeRefs.size());
+				logger.warn("Units added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
 				for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
 					employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
 				}
-                logger.warn("Groups added. Current size: {}", employeeRefs.size());
+				logger.warn("Groups added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientPositionRefs() != null) {
@@ -285,51 +285,53 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 						employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
 					}
 				}
-                logger.warn("Positions added. Current size: {}", employeeRefs.size());
+				logger.warn("Positions added. Current size: {}", employeeRefs.size());
 			}
 
 			if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
 				for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
 					employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
 				}
-                logger.warn("Roles added. Current size: {}", employeeRefs.size());
+				logger.warn("Roles added. Current size: {}", employeeRefs.size());
 			}
 
-                        //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
-			//если таковые имеются, то добавляем их в в общий перечень
-                        for (NodeRef employee : employeeRefs) {
-                            NodeRef delegationOpts = findNodeByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
-                            if (delegationOpts != null) {
-                                Boolean active = (Boolean) nodeService.getProperty(delegationOpts, IS_ACTIVE);
-                                if(active) {
-                                    NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
-                                    if(trustee != null){
-                                        employeeRefs.add(trustee);
-                                    }
+			// пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
+			// если таковые имеются, то добавляем их в в общий перечень
+			// временный сет нужен для того, чтобы избежать ConcurrentModificationException при модификации коллекции во время итерации по ней
+			Set<NodeRef> tmpEmployeeRefs = new HashSet<NodeRef>(employeeRefs);
+			for (NodeRef employee : tmpEmployeeRefs) {
+				NodeRef delegationOpts = findNodeByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+				if (delegationOpts != null) {
+					Boolean active = (Boolean) nodeService.getProperty(delegationOpts, IS_ACTIVE);
+					if (active) {
+						NodeRef trustee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+						if (trustee != null) {
+							employeeRefs.add(trustee);
+						}
 
-                                    Set<QName> types = new HashSet<QName>();
-                                    types.add(IDelegation.TYPE_PROCURACY);
+						Set<QName> types = new HashSet<QName>();
+						types.add(IDelegation.TYPE_PROCURACY);
 
-                                    List<ChildAssociationRef> procuraciesList = nodeService.getChildAssocs(delegationOpts, types);
+						List<ChildAssociationRef> procuraciesList = nodeService.getChildAssocs(delegationOpts, types);
 
-                                    for (ChildAssociationRef procuaryAssoc : procuraciesList) {
-                                        NodeRef procuary = procuaryAssoc.getChildRef();
-                                        Boolean procuaryActive = (Boolean) nodeService.getProperty(procuary, IS_ACTIVE);
+						for (ChildAssociationRef procuaryAssoc : procuraciesList) {
+							NodeRef procuary = procuaryAssoc.getChildRef();
+							Boolean procuaryActive = (Boolean) nodeService.getProperty(procuary, IS_ACTIVE);
 
-                                        if(procuaryActive){
-                                            NodeRef procuaryTrustee = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+							if (procuaryActive) {
+								NodeRef procuaryTrustee = findNodeByAssociationRef(procuary, IDelegation.ASSOC_PROCURACY_TRUSTEE, TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
-                                            if(procuaryTrustee != null){
-                                                employeeRefs.add(procuaryTrustee);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-            logger.warn("Delegates added. Current size: {}", employeeRefs.size());
+								if (procuaryTrustee != null) {
+									employeeRefs.add(procuaryTrustee);
+								}
+							}
+						}
+					}
+				}
+			}
+			logger.warn("Delegates added. Current size: {}", employeeRefs.size());
 			result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
-            logger.warn("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
+			logger.warn("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
 		}
 		return result;
 	}
