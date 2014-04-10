@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.statemachine.bean.LecmWorkflowDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
@@ -171,7 +172,7 @@ public class BPMNDiagramScript extends AbstractWebScript {
                     lecmWorkflowDeployer.redeploy();
                     logger.debug("Process is deployed");
                 }
-            } catch (Exception e) {
+            } catch (LecmBaseException e) {
                 logger.error("Error while deployed statemachine");
             }
         } else if (statemachineNodeRef != null && "diagram".equals(type)) {
