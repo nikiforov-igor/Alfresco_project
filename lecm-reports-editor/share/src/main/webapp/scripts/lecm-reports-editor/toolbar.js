@@ -22,6 +22,16 @@
                         disabled: this.options.newRowButtonType != 'defaultActive',
                         value: 'create'
                     });
+
+	            this.toolbarButtons['defaultActive'].push(
+		            Alfresco.util.createYUIButton(this, "importXmlButton", this.showImportDialog)
+	            );
+	            this.importFromSubmitButton = Alfresco.util.createYUIButton(this, "import-form-submit", this.onImportXML,{
+		            disabled: true
+	            });
+	            Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+	            YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
+	            YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
             },
 
             onNewRow: function () {

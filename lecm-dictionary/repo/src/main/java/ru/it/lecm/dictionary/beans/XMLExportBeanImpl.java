@@ -5,12 +5,18 @@ import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.ExportSettings;
 import ru.it.lecm.dictionary.export.ExportNamespace;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.*;
@@ -21,6 +27,8 @@ import java.util.*;
  * Time: 10:24
  */
 public class XMLExportBeanImpl implements XMLExportBean {
+	private static final transient Logger log = LoggerFactory.getLogger(XMLExportBeanImpl.class);
+
     private static final Set<String> ignoredNamespaces = new HashSet<String>();
     private static final Set<QName> ignoredTypes = new HashSet<QName>();
 
@@ -35,6 +43,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
     private ExportSettings exportSettings;
     private NodeService nodeService;
     private NamespaceService namespaceService;
+	private ContentService contentService;
 
     public void setExportSettings(ExportSettings exportSettings) {
         this.exportSettings = exportSettings;
@@ -48,7 +57,11 @@ public class XMLExportBeanImpl implements XMLExportBean {
         this.namespaceService = namespaceService;
     }
 
-    @Override
+	public void setContentService(ContentService contentService) {
+		this.contentService = contentService;
+	}
+
+	@Override
     public XMLExporter getXMLExporter(OutputStream outputStream) throws XMLStreamException {
         return new XMLExporterImpl(outputStream);
     }
@@ -108,6 +121,9 @@ public class XMLExportBeanImpl implements XMLExportBean {
                 xmlw.writeAttribute(ExportNamespace.ATTR_TYPE, typeAttr);
                 List<String> fieldsForType = exportSettings.getFieldsForType(typeAttr);
                 writeProperties(childRef, fieldsForType);
+	            if (typeQName.equals(ContentModel.TYPE_CONTENT)) {
+		            writeContent(childRef);
+	            }
                 writeChildItems(childRef);
                 writeAssocs(childRef, fieldsForType);
             }
@@ -186,6 +202,29 @@ public class XMLExportBeanImpl implements XMLExportBean {
             xmlw.writeCData(value);
             xmlw.writeEndElement();
         }
+
+	    private void writeContent(NodeRef fileRef) throws XMLStreamException {
+		    ContentReader reader = contentService.getReader(fileRef, ContentModel.PROP_CONTENT);
+		    String contentBase64 = "";
+		    InputStream contentStream = reader.getContentInputStream();
+		    try {
+			    byte[] bytes = IOUtils.toByteArray(contentStream);
+			    contentBase64 = Base64.encodeBase64String(bytes);
+		    } catch (IOException e) {
+			    log.error("Error read content", e);
+		    } finally {
+			    try {
+				    contentStream.close();
+			    } catch (IOException e) {
+				    log.error("Error close content reader", e);
+			    }
+		    }
+
+		    xmlw.writeStartElement(ExportNamespace.TAG_PROPERTY);
+		    xmlw.writeAttribute(ExportNamespace.ATTR_NAME, ContentModel.PROP_CONTENT.toPrefixString(namespaceService));
+		    xmlw.writeCData(contentBase64);
+		    xmlw.writeEndElement();
+	    }
 
         public void close() throws XMLStreamException {
             xmlw.writeEndDocument();

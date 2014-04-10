@@ -6,6 +6,9 @@
 
 <#assign toolbarId = "re-reports-toolbar-" + id/>
 <#assign reportsLabel ="reports-" + aDateTime?iso_utc>
+<#assign importFormId = toolbarId + "-import-form">
+<#assign importInfoFormId = toolbarId + "-import-info-form">
+<#assign importErrorFormId = toolbarId + "-import-error-form">
 
 <div id="${toolbarId}">
     <@comp.baseToolbar toolbarId true false false>
@@ -16,6 +19,69 @@
                    </span>
             </span>
         </div>
+
+	    <div class="import-xml"  title="${msg('button.import-xml')}">
+	        <span id="${toolbarId}-importXmlButton" class="yui-button yui-push-button">
+	            <span class="first-child">
+	                <button type="button">${msg('button.import-xml')}</button>
+	            </span>
+	        </span>
+	    </div>
+
+	    <div id="${importInfoFormId}" class="yui-panel">
+		    <div id="${importInfoFormId}-head" class="hd">${msg("title.import.info")}</div>
+		    <div id="${importInfoFormId}-body" class="bd">
+			    <div id="${importInfoFormId}-content" class="import-info-content"></div>
+		    </div>
+	    </div>
+
+	    <div id="${importErrorFormId}" class="yui-panel">
+		    <div id="${importErrorFormId}-head" class="hd">${msg("title.import.info")}</div>
+		    <div id="${importErrorFormId}-body" class="bd">
+			    <div id="${importErrorFormId}-content" class="import-info-content">
+				    <div class="import-error-header">
+					    <h3>${msg("import.failure")}</h3>
+					    <a href="javascript:void(0);" id="${importErrorFormId}-show-more-link">${msg("import.failure.showMore")}</a>
+				    </div>
+				    <div id="${importErrorFormId}-more" class="import-error-more">
+					    <div class="import-error-exception">
+					    ${msg("import.failure.exception")}:
+						    <div class="import-error-exception-content" id="${importErrorFormId}-exception">
+						    </div>
+					    </div>
+					    <div class="import-error-stack-trace">
+					    ${msg("import.failure.stack-trace")}:
+						    <div class="import-error-stack-trace-content" id="${importErrorFormId}-stack-trace">
+						    </div>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+	    </div>
+
+	    <div id="${importFormId}" class="yui-panel">
+		    <div id="${importFormId}-head" class="hd">${msg("title.import")}</div>
+		    <div id="${importFormId}-body" class="bd">
+			    <div id="${importFormId}-content">
+				    <form method="post" id="${toolbarId}-import-xml-form" enctype="multipart/form-data">
+					    <ul class="import-form">
+						    <li>
+							    <label for="${importFormId}-import-file">${msg("label.import-file")}*</label>
+							    <input id="${importFormId}-import-file" type="file" name="file" accept=".xml,application/xml,text/xml">
+						    </li>
+						    <li>
+							    <label for="${importFormId}-chbx-ignore">${msg("label.ignore-errors")}</label>
+							    <input id="${importFormId}-chbx-ignore" type="checkbox" name="ignoreErrors" value="true"/>
+						    </li>
+					    </ul>
+					    <div class="bdft">
+						    <button id="${importFormId}-submit" disabled="true" tabindex="0">${msg("button.import-xml")}</button>
+						    <button id="${importFormId}-cancel" tabindex="1">${msg("button.cancel")}</button>
+					    </div>
+				    </form>
+			    </div>
+		    </div>
+	    </div>
     </@comp.baseToolbar>
 </div>
 
@@ -24,7 +90,8 @@
         new LogicECM.module.ReportsEditor.Toolbar("${toolbarId}").setMessages(${messages}).setOptions({
             bubblingLabel: "${reportsLabel}",
             createFormId: "${args.createFormId!''}",
-            newRowDialogTitle: "label.create-report.title"
+            newRowDialogTitle: "label.create-report.title",
+	        showImportXml: true
         });
     }
     YAHOO.util.Event.onContentReady("${toolbarId}", initToolbar);
@@ -290,7 +357,11 @@
                             }
                             elCell.innerHTML = html;
                         };
-                    }
+                    },
+
+	                onActionExportXML: function(item) {
+			            document.location.href = Alfresco.constants.PROXY_URI + "lecm/dictionary/get/export?nodeRef=" + item.nodeRef;
+		            }
                 }, true);
 
                 function createDatagrid() {
@@ -311,7 +382,13 @@
                                         id: "onActionDelete",
                                         permission: "delete",
                                         label: "${msg("actions.delete-row")}"
-                                    }
+                                    },
+	                                {
+		                                type:"datagrid-action-link-${reportsLabel}",
+		                                id:"onActionExportXML",
+		                                permission:"edit",
+		                                label:"${msg("actions.export-xml")}"
+	                                }
                                 ],
                                 bubblingLabel: "${reportsLabel}",
                                 showCheckboxColumn: false
@@ -320,6 +397,7 @@
                     YAHOO.Bubbling.fire("activeGridChanged", {
                         datagridMeta: {
                             itemType: "lecm-rpeditor:reportDescriptor",
+	                        useChildQuery:true,
                             nodeRef: LogicECM.module.ReportsEditor.SETTINGS.reportsContainer,
                             actionsConfig: {
                                 fullDelete: true,

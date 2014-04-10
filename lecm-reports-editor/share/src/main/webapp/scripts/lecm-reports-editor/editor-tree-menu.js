@@ -19,6 +19,7 @@
 
         YAHOO.Bubbling.on("newReportCreated", this.onNewReportCreated, this);
         YAHOO.Bubbling.on("dataItemsDeleted", this.onUpdateTree, this);
+        YAHOO.Bubbling.on("importFileSuccess", this.onUpdateTree, this);
         return this;
     };
 

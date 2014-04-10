@@ -32,6 +32,7 @@
         <property name="nodeService" ref="nodeService"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="exportSettings" ref="dictionary.exportSettings"/>
+        <property name="contentService" ref="contentService"/>
     </bean>
 
     <bean id="lecmDictionaryImportBean" class="ru.it.lecm.dictionary.beans.XMLImportBeanImpl">
@@ -39,6 +40,8 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="repositoryHelper" ref="repositoryHelper"/>
+	    <property name="contentService" ref="contentService"/>
+	    <property name="mimetypeService" ref="mimetypeService"/>
     </bean>
 
     <bean id="lecmDictionaryBootstrap" init-method="bootstrap" abstract="true"

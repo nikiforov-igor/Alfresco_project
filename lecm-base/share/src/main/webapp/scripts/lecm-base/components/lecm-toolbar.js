@@ -520,6 +520,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 						        me.importErrorDialog.show();
 					        }
 
+					        YAHOO.Bubbling.fire("importFileSuccess");
 					        YAHOO.Bubbling.fire("datagridRefresh",
 						        {
 							        bubblingLabel: me.options.bubblingLabel
@@ -533,6 +534,18 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	        errorFormShowMore: function() {
 		        Dom.setStyle(this.id + "-import-error-form-more", "display", "block");
+	        },
+
+	        getStackTraceString: function(callstack) {
+		        var result = "";
+		        if (callstack != null) {
+			        for (var i = 0; i < callstack.length; i++) {
+				        if (callstack[i].length > 0) {
+					        result += callstack[i] + "<br/>";
+				        }
+			        }
+		        }
+		        return result;
 	        }
         }, true);
 })();

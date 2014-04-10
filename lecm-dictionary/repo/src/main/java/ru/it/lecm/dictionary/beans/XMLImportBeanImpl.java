@@ -6,12 +6,10 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.repository.AssociationExistsException;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.apache.axiom.om.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.export.ExportNamespace;
@@ -20,12 +18,10 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * User: AZinovin
@@ -39,6 +35,8 @@ public class XMLImportBeanImpl implements XMLImportBean {
     private NamespaceService namespaceService;
     private DictionaryService dictionaryService;
     private Repository repositoryHelper;
+	private ContentService contentService;
+	private MimetypeService mimetypeService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -56,7 +54,15 @@ public class XMLImportBeanImpl implements XMLImportBean {
         this.repositoryHelper = repositoryHelper;
     }
 
-    @Override
+	public void setContentService(ContentService contentService) {
+		this.contentService = contentService;
+	}
+
+	public void setMimetypeService(MimetypeService mimetypeService) {
+		this.mimetypeService = mimetypeService;
+	}
+
+	@Override
     public XMLImporter getXMLImporter(InputStream inputStream) {
         return new XMLImporterImpl(inputStream);
     }
@@ -65,12 +71,15 @@ public class XMLImportBeanImpl implements XMLImportBean {
         private InputStream inputStream;
 	    private XMLImporterInfo importInfo;
 
+	    private HashMap<NodeRef, Map<String, List<String>>> assocs;
+
         /**
          * Конструктор загрузчика XML
          * @param inputStream входной XML поток
          */
         private XMLImporterImpl(InputStream inputStream) {
             this.inputStream = inputStream;
+	        this.assocs = new HashMap<NodeRef, Map<String, List<String>>>();
         }
 
         /**
@@ -106,6 +115,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 if (str.equals(ExportNamespace.TAG_ITEMS)) {
                     readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
                 }
+	            createAssocs(doNotUpdateIfExist);
             } finally {
                 xmlr.close();
             }
@@ -174,12 +184,12 @@ public class XMLImportBeanImpl implements XMLImportBean {
             properties.putAll(getProperties(xmlr));
             NodeRef current = createItem(parent, itemName, itemType, properties, doNotUpdateIfExist);
             readItems(xmlr, current, doNotUpdateIfExist);
-            readAssocs(xmlr, current, doNotUpdateIfExist);
+            readAssocs(xmlr, current);
             xmlr.nextTag();//выходим из </item>
             return true;
         }
 
-        private boolean readAssocs(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
+        private boolean readAssocs(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ASSOCS))) {
                 return false;
@@ -187,7 +197,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
             xmlr.nextTag();//входим в <assocs>
             try {
                 while (true) {
-                    if (!(readAssoc(xmlr, parent, doNotUpdateIfExist))) break;
+                    if (!(readAssoc(xmlr, parent))) break;
                 }
                 xmlr.nextTag();//выходим из </assocs>
             } catch (XMLStreamException e) {
@@ -196,49 +206,73 @@ public class XMLImportBeanImpl implements XMLImportBean {
             return true;
         }
 
-        private boolean readAssoc(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
+        private boolean readAssoc(XMLStreamReader xmlr, NodeRef parent) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ASSOC))) {
                 return false;
             }
             String assocTypeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_TYPE);
             String assocPathAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_PATH);
-            QName assocType = QName.createQName(assocTypeAttr, namespaceService);
-            NodeRef targetRef = getNodeByPath(assocPathAttr);
-            if (targetRef != null) {
-                AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
-                List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
-                boolean create = true;
-                if (doNotUpdateIfExist) {
-                    for (AssociationRef existingAssoc : existingAssocs) {
-                        if (existingAssoc.getTargetRef().equals(targetRef)) {
-                            create = false;
-                            break;
-                        }
-                        if (!associationDefinition.isTargetMany()) {
-                            create = false;
-                            break;
-                        }
-                    }
-                } else if (!associationDefinition.isTargetMany()) {
-                    for (AssociationRef existingAssoc : existingAssocs) {
-                        nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
-                    }
-                }
-                if (create) {
-                    try {
-                        nodeService.createAssociation(parent, targetRef, assocType);
-                    } catch (AssociationExistsException ignored) {
-                        logger.debug("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
-                    }
-                }
-            } else {
-	            this.importInfo.addAssocNotFoundError(assocTypeAttr, assocPathAttr);
-            }
+
+	        Map<String, List<String>> assocMap = this.assocs.get(parent);
+	        if (assocMap == null) {
+		        assocMap = new HashMap<String, List<String>>();
+		        this.assocs.put(parent, assocMap);
+	        }
+	        if (assocMap.get(assocTypeAttr) == null) {
+		        assocMap.put(assocTypeAttr, new ArrayList<String>());
+	        }
+	        assocMap.get(assocTypeAttr).add(assocPathAttr);
+
             xmlr.nextTag();//выходим из </assoc>
             xmlr.nextTag();//выходим из </assoc>
             return true;
         }
+
+	    private void createAssocs(boolean doNotUpdateIfExist) {
+		    for (NodeRef nodeRef: this.assocs.keySet()) {
+			    for (String assocType: this.assocs.get(nodeRef).keySet()) {
+				    for (String assocPath: this.assocs.get(nodeRef).get(assocType)) {
+					    createAssoc(nodeRef, assocType, assocPath, doNotUpdateIfExist);
+				    }
+			    }
+		    }
+	    }
+
+	    private void createAssoc(NodeRef parent,  String assocTypeAttr, String assocPathAttr, boolean doNotUpdateIfExist) {
+		    QName assocType = QName.createQName(assocTypeAttr, namespaceService);
+		    NodeRef targetRef = getNodeByPath(assocPathAttr);
+		    if (targetRef != null) {
+			    AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
+			    List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
+			    boolean create = true;
+			    if (doNotUpdateIfExist) {
+				    for (AssociationRef existingAssoc : existingAssocs) {
+					    if (existingAssoc.getTargetRef().equals(targetRef)) {
+						    create = false;
+						    break;
+					    }
+					    if (!associationDefinition.isTargetMany()) {
+						    create = false;
+						    break;
+					    }
+				    }
+			    } else if (!associationDefinition.isTargetMany()) {
+				    for (AssociationRef existingAssoc : existingAssocs) {
+					    nodeService.removeAssociation(parent, existingAssoc.getTargetRef(), assocType);
+				    }
+			    }
+			    if (create) {
+				    try {
+					    nodeService.createAssociation(parent, targetRef, assocType);
+				    } catch (AssociationExistsException ignored) {
+					    logger.debug("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
+				    }
+			    }
+		    } else {
+			    this.importInfo.addAssocNotFoundError(assocTypeAttr, assocPathAttr);
+		    }
+	    }
 
         private NodeRef getNodeByPath(String path) {
             NodeRef result = null;
@@ -289,10 +323,30 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 if (assocQName == null) {
                     assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name == null ? parentNodeRef.getId() : name);
                 }
+
+	            String contentValue = null;
+	            if (itemType.equals(ContentModel.TYPE_CONTENT)) {
+		            contentValue = (String) properties.get(ContentModel.PROP_CONTENT);
+		            properties.remove(ContentModel.PROP_CONTENT);
+	            }
+
                 node = nodeService.createNode(parentNodeRef, ContentModel.ASSOC_CONTAINS,
                         assocQName,
                         itemType,
                         properties).getChildRef();
+
+	            if (contentValue != null) {
+		            ContentWriter writer = contentService.getWriter(node, ContentModel.PROP_CONTENT, true);
+
+		            String mimeType = mimetypeService.guessMimetype((String) nameProp);
+		            if (mimeType != null) {
+			            writer.setMimetype(mimeType);
+		            }
+
+		            InputStream is = new ByteArrayInputStream(Base64.decode(contentValue));
+		            writer.putContent(is);
+	            }
+
 	            this.importInfo.setCreatedElementsCount(this.importInfo.getCreatedElementsCount() + 1);
                 logger.trace("Item '{}' created", name);
             } else if (!doNotUpdateIfExist) {
