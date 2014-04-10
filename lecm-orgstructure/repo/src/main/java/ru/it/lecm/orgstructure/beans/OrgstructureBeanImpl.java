@@ -1553,7 +1553,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         List<NodeRef> procuracies = getActiveProcuracies(employeeRef);
         for (NodeRef procuracy : procuracies) {
             NodeRef role = findNodeByAssociationRef(procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
-            roles.add(role);
+            if (role != null) {
+                roles.add(role);
+            }
         }
         //получаем список delegation-opts, где employeeRef участвует в виде доверенного лица
         List<NodeRef> delegationOptsList = findNodesByAssociationRef(employeeRef, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
