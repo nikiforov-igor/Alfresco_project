@@ -65,7 +65,8 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             stm = null;
 
 			/* Создание Провайдера */
-            final String dataSourceClass = jasperReport.getProperty("dataSource");
+            final String dataSourceClass = reportDesc.getProviderDescriptor() != null ?
+                    reportDesc.getProviderDescriptor().getClassName() : jasperReport.getProperty("dataSource");
             final JRDataSourceProvider dsProvider = super.createDsProvider(reportDesc, dataSourceClass, parameters);
 
 			/* построение отчёта */
