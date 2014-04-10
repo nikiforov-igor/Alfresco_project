@@ -41,14 +41,13 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
+<#assign notSelectedText = "">
 <#if notSelectedOptionShow>
     <#if field.control.params.notSelectedOptionLabel??>
         <#assign notSelectedText = field.control.params.notSelectedOptionLabel>
     <#elseif field.control.params.notSelectedOptionLabelCode??>
         <#assign notSelectedText = msg(field.control.params.notSelectedOptionLabelCode)>
     </#if>
-<#else>
-    <#assign notSelectedText = "">
 </#if>
 
 <script type="text/javascript">//<![CDATA[
