@@ -169,4 +169,100 @@
         <!--<property name="authService" ref="authenticationService"/>-->
     </bean>
 
+	<bean id="reportsEditor.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+		<constructor-arg>
+			<map>
+				<entry key="lecm-rpeditor:reportType">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportTypeCode</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportProvider">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportProviderCode</value>
+						<value>lecm-rpeditor:reportProviderClass</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportColumnType">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportColumnTypeCode</value>
+						<value>lecm-rpeditor:reportColumnTypeClass</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportParameterType">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportParameterTypeCode</value>
+						<value>lecm-rpeditor:reportParameterTypeLabel1</value>
+						<value>lecm-rpeditor:reportParameterTypeLabel2</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportTemplate">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:templateCode</value>
+						<value>lecm-rpeditor:reportTemplateFile</value>
+						<value>lecm-rpeditor:reportTemplateType</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportDescriptor">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportCode</value>
+						<value>lecm-rpeditor:reportDocType</value>
+						<value>lecm-rpeditor:reportObjectsMultiplicity</value>
+						<value>lecm-rpeditor:reportQuery</value>
+						<value>lecm-rpeditor:reportQueryOffset</value>
+						<value>lecm-rpeditor:reportQueryLimit</value>
+						<value>lecm-rpeditor:reportQueryPgSize</value>
+						<value>lecm-rpeditor:reportQuerySort</value>
+						<value>lecm-rpeditor:reportIsDeployed</value>
+						<value>lecm-rpeditor:reportProviderAssoc</value>
+						<value>lecm-rpeditor:reportTemplateAssoc</value>
+						<value>lecm-rpeditor:businessRolesAssoc</value>
+						<value>lecm-rpeditor:reportExtFlags</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:subReportDescriptor">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:reportCode</value>
+						<value>lecm-rpeditor:reportDocType</value>
+						<value>lecm-rpeditor:reportObjectsMultiplicity</value>
+						<value>lecm-rpeditor:reportQuery</value>
+						<value>lecm-rpeditor:reportQueryOffset</value>
+						<value>lecm-rpeditor:reportQueryLimit</value>
+						<value>lecm-rpeditor:reportQueryPgSize</value>
+						<value>lecm-rpeditor:reportQuerySort</value>
+						<value>lecm-rpeditor:reportIsDeployed</value>
+						<value>lecm-rpeditor:reportProviderAssoc</value>
+						<value>lecm-rpeditor:reportTemplateAssoc</value>
+						<value>lecm-rpeditor:businessRolesAssoc</value>
+						<value>lecm-rpeditor:reportExtFlags</value>
+						<value>lecm-rpeditor:parentReportTemplateAssoc</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportDataSource">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:dataSourceCode</value>
+					</list>
+				</entry>
+				<entry key="lecm-rpeditor:reportDataColumn">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-rpeditor:dataColumnCode</value>
+						<value>lecm-rpeditor:dataColumnExpression</value>
+						<value>lecm-rpeditor:dataColumnClass</value>
+						<value>lecm-rpeditor:dataColumnOrder</value>
+						<value>lecm-rpeditor:columnTypeAssoc</value>
+						<value>lecm-rpeditor:columnParameterTypeAssoc</value>
+					</list>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
 </beans>
