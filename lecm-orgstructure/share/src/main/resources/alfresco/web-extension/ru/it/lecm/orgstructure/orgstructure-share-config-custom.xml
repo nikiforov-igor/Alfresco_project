@@ -1053,6 +1053,7 @@
 							<control-param name="showSearch">false</control-param>
 							<control-param name="showSelectedItemsPath">false</control-param>
 							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="checkType">false</control-param>
 						</control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation" event="change" message="Сотрудник имеет активные отсутствия."/>
@@ -1069,6 +1070,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showSelectedItemsPath">false</control-param>
 							<control-param name="showSearch">false</control-param>
+							<control-param name="checkType">false</control-param>
 						</control>
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.noderefsHasNoAbsenceValidation" event="change" message="Сотрудник имеет активные отсутствия."/>

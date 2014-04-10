@@ -51,6 +51,11 @@
 <#else>
 	<#assign showAssocViewForm = false>
 </#if>
+<#if field.control.params.checkType?? && field.control.params.checkType == "false">
+	<#assign checkType = false>
+<#else>
+	<#assign checkType = true>
+</#if>
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
@@ -198,5 +203,6 @@
 	    </#if>
         itemType: "${field.control.params.endpointType ! field.endpointType}",
 	    showAssocViewForm: ${showAssocViewForm?string},
+	    checkType: ${checkType?string}
     }).setMessages( ${messages} );
 </script>

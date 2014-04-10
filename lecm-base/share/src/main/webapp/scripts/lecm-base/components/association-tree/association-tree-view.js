@@ -161,7 +161,9 @@ LogicECM.module = LogicECM.module || {};
 
 			pickerButtonTitle: null,
 
-			showAssocViewForm: false
+			showAssocViewForm: false,
+
+			checkType: true
 		},
 
 		onReady: function AssociationTreeViewer_onReady()
@@ -337,7 +339,7 @@ LogicECM.module = LogicECM.module || {};
 	            this.singleSelectedItem = null;
                 for (var i = 0, il = items.length; i < il; i++) {
                     item = items[i];
-	                if (item.type == this.options.itemType) {
+	                if (!this.options.checkType || item.type == this.options.itemType) {
                         this.selectedItems[item.nodeRef] = item;
 
 		                if (!this.options.multipleSelectMode && this.singleSelectedItem == null) {
