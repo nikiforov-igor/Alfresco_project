@@ -10,8 +10,6 @@
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
 
-	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/yahoo-datatable.css"/>
-	<@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js" />
@@ -21,6 +19,8 @@
         при подключении макросом - не работают.
         Причина не выявлена, возможно, как-то связано с местом расположения файлов (/css/...)
     -->
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/yahoo-datatable.css"/>
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
