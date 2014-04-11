@@ -233,9 +233,10 @@ LogicECM.module = LogicECM.module || {};
 		            oDS = new YAHOO.util.XHRDataSource(url);
 		            oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
 		            oDS.responseSchema = {
-			            resultsList: "data.items",
+			            resultsList: "items",
 			            fields:["name", "selectedName", "nodeRef"]
 		            };
+		            oDS.doBeforeParseData = this._doBeforeParseData();
 	            } else {
 		            oDS = new YAHOO.util.LocalDataSource(this.dataArray);
 		            oDS.responseSchema = {fields:["name", "selectedName", "nodeRef"]};
@@ -319,8 +320,6 @@ LogicECM.module = LogicECM.module || {};
             },
 
             _createDataSource: function AssociationSelectOne__createDataSource() {
-                var me = this;
-
                 var pickerChildrenUrl = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily;
                 this.dataSource = new YAHOO.util.DataSource(pickerChildrenUrl,
                     {
@@ -336,72 +335,77 @@ LogicECM.module = LogicECM.module || {};
                         }
                     });
 
-                this.dataSource.doBeforeParseData = function (oRequest, oFullResponse)
-                {
-                    var updatedResponse = oFullResponse;
-
-                    if (oFullResponse)
-                    {
-                        var items = oFullResponse.data.items;
-
-                        if (me.options.maxSearchResults > -1 && items.length > me.options.maxSearchResults)
-                        {
-                            items = items.slice(0, me.options.maxSearchResults-1);
-                        }
-
-                        var index, item;
-                        for (index in items)
-                        {
-                            if (items.hasOwnProperty(index))
-                            {
-                                item = items[index];
-                                if (item.type == "cm:category" && item.displayPath.indexOf("/categories/Tags") !== -1)
-                                {
-                                    item.type = "tag";
-                                    oFullResponse.data.parent.type = "tag";
-                                }
-                            }
-                        }
-
-                        var ignoreItems = me.options.ignoreNodes;
-                        if (ignoreItems != null) {
-                            var tempItems = [];
-                            var k = 0;
-                            for (index in items) {
-                                item = items[index];
-                                var ignore = false;
-                                for (var i = 0; i < ignoreItems.length; i++) {
-                                    if (ignoreItems[i] == item.nodeRef) {
-                                        ignore = true;
-                                    }
-                                }
-                                if (!ignore) {
-                                    tempItems[k] = item;
-                                    k++;
-                                }
-                            }
-                            items = tempItems;
-                        }
-
-                        var allowedNodes = me.options.allowedNodes;
-                        if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
-                            for(i = 0; item = items[i]; i++) {
-                                if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                    items.splice(i--, 1);
-                                }
-                            }
-                        }
-
-                        updatedResponse =
-                        {
-                            parent: oFullResponse.data.parent,
-                            items: items
-                        };
-                    }
-
-                    return updatedResponse;
-                };
+                this.dataSource.doBeforeParseData = this._doBeforeParseData();
             },
+
+	        _doBeforeParseData: function() {
+		        var me = this;
+
+		        return function (oRequest, oFullResponse) {
+			        var updatedResponse = oFullResponse;
+
+			        if (oFullResponse)
+			        {
+				        var items = oFullResponse.data.items;
+
+				        if (me.options.maxSearchResults > -1 && items.length > me.options.maxSearchResults)
+				        {
+					        items = items.slice(0, me.options.maxSearchResults-1);
+				        }
+
+				        var index, item;
+				        for (index in items)
+				        {
+					        if (items.hasOwnProperty(index))
+					        {
+						        item = items[index];
+						        if (item.type == "cm:category" && item.displayPath.indexOf("/categories/Tags") !== -1)
+						        {
+							        item.type = "tag";
+							        oFullResponse.data.parent.type = "tag";
+						        }
+					        }
+				        }
+
+				        var ignoreItems = me.options.ignoreNodes;
+				        if (ignoreItems != null) {
+					        var tempItems = [];
+					        var k = 0;
+					        for (index in items) {
+						        item = items[index];
+						        var ignore = false;
+						        for (var i = 0; i < ignoreItems.length; i++) {
+							        if (ignoreItems[i] == item.nodeRef) {
+								        ignore = true;
+							        }
+						        }
+						        if (!ignore) {
+							        tempItems[k] = item;
+							        k++;
+						        }
+					        }
+					        items = tempItems;
+				        }
+
+				        var allowedNodes = me.options.allowedNodes;
+				        if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
+					        for(i = 0; item = items[i]; i++) {
+						        if(allowedNodes.indexOf(item.nodeRef) < 0) {
+							        items.splice(i--, 1);
+						        }
+					        }
+				        }
+
+				        updatedResponse =
+				        {
+					        parent: oFullResponse.data.parent,
+					        items: items
+				        };
+			        }
+
+			        return updatedResponse;
+		        };
+	        },
 
             _generateChildrenUrlPath: function AssociationSelectOne__generateChildrenUrlPath(nodeRef)
             {
