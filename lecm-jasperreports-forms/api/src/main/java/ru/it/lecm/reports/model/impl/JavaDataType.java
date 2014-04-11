@@ -36,12 +36,18 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
         DATE(Date.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return null;
+                }
                 return (value instanceof Date ? value : ArgsHelper.tryMakeDate(value.toString(), null));
             }
         },
         BOOL(Boolean.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
+                if (value == null || value.toString().isEmpty()) {
+                    return null;
+                }
                 return (value instanceof Boolean ? value : Boolean.valueOf(value.toString()));
             }
         },

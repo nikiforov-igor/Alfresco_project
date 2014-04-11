@@ -16,9 +16,10 @@ import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
 import ru.it.lecm.reports.xml.DSXMLProducer;
-import ru.it.lecm.reports.xml.XmlHelper;
 
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -32,16 +33,9 @@ public class ReportForm extends FormUIGet {
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
 
-    private enum AlfrescoTypes {
-        d_text,
-        d_int,
-        d_float,
-        d_long,
-        d_boolean,
-        d_date,
-        d_datetime,
-        d_any,
-        d_double,
+    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+
+    private enum CustomTypes {
         STATUS,
         TEMPLATES
     }
@@ -114,6 +108,8 @@ public class ReportForm extends FormUIGet {
         for (String parameter : parameters) {
             arguments.put(parameter, request.getParameter(parameter));
         }
+
+        arguments.put("current-date", DateFormatISO8601.format(new Date()));
 
         form.put(MODEL_MODE, Mode.CREATE);
         form.put(MODEL_ARGUMENTS, arguments);
@@ -243,7 +239,7 @@ public class ReportForm extends FormUIGet {
                     control.getParams().put(param.getName(), param.getValue());
                 }
 
-                if (alfrescoType.toUpperCase().equals(AlfrescoTypes.STATUS.name())) {
+                if (alfrescoType.toUpperCase().equals(CustomTypes.STATUS.name())) {
                     String resultedValue = "";
                     if (desc.getFlags().getSupportedNodeTypes() != null) {
                         for (String type : desc.getFlags().getSupportedNodeTypes()) {
@@ -292,7 +288,9 @@ public class ReportForm extends FormUIGet {
     }
 
     private boolean isNotAssoc(String typeKey) {
-        return typeKey != null && enumHasValue(AlfrescoTypes.class, typeKey.replaceAll(":", "_"));
+        return typeKey != null &&
+                (typeKey.startsWith("d:") ||
+                        enumHasValue(CustomTypes.class, typeKey));
     }
 
     public void setReportManager(ReportManagerApi reportManager) {

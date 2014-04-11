@@ -11,6 +11,13 @@
                     <control-param name="notSelectedOption">false</control-param>
                     <control-param name="fromParent">false</control-param>
                 </type>
+                <type name="datetime-limit" template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                    <control-param name="showTime">true</control-param>
+                    <control-param name="minLimitArg">current-date</control-param>
+                </type>
+                <type name="date-limit" template="/ru/it/lecm/base-share/components/controls/date.ftl">
+                    <control-param name="minLimitArg">current-date</control-param>
+                </type>
             </default-controls>
         </forms>
     </config>

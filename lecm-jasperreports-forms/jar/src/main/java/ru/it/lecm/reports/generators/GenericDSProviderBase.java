@@ -32,6 +32,7 @@ import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -65,6 +66,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * null означает, что ограничений нет.
      */
     protected Set<String> jrSimpleProps;
+
+    final public static SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     public WKServiceKeeper getServices() {
         return services;
