@@ -1,20 +1,19 @@
 package ru.it.lecm.security.beans;
 
-import java.util.Set;
-
 import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.AuthorityType;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGKind;
 import ru.it.lecm.security.Types.SGPosition;
 import ru.it.lecm.security.Types.SGPrivateBusinessRole;
 import ru.it.lecm.security.Types.SGPrivateMeOfUser;
 import ru.it.lecm.security.events.IOrgStructureNotifiers;
+
+import java.util.Set;
 
 public class LECMSecurityGroupsBean
 		implements InitializingBean, IOrgStructureNotifiers
@@ -82,8 +81,8 @@ public class LECMSecurityGroupsBean
 		if (sgnm.hasAuth(simpleName)) {
 			sgFullName = this.authorityService.getName(AuthorityType.GROUP, simpleName);
 			// пропишем human-oriented данные, если они имеются
-			if (details != null)
-				this.authorityService.setAuthorityDisplayName( sgFullName, details);
+			/*if (details != null)
+				this.authorityService.setAuthorityDisplayName( sgFullName, details);*/
 			logger.debug(String.format("Alfresco security-group '%s' already exists for object '%s'", sgFullName, simpleName));
 		} else {
 			// sgFullName = this.authorityService.createAuthority(AuthorityType.GROUP, simpleName, details, null);
