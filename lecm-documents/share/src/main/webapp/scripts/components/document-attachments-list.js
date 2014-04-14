@@ -266,6 +266,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	        onFileUpload: function DocumentAttachmentsList_onFileUpload(e, obj)
 	        {
+				var uploaderDialogTitle = YAHOO.lang.substitute(this.options.uploaderDialogHeaderTemplate, {
+					categoryName: this.options.categoryName
+				});
+
 		        if (this.fileUpload == null)
 		        {
 			        this.fileUpload = Alfresco.getFileUploadInstance();
@@ -284,9 +288,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        }
 		        };
 		        this.fileUpload.show(multiUploadConfig);
-				this.fileUpload.uploader.titleText.innerHTML = YAHOO.lang.substitute(this.options.uploaderDialogHeaderTemplate, {
-					categoryName: this.options.categoryName
-				});
+				if (this.fileUpload.uploader.titleText) {
+					this.fileUpload.uploader.titleText.innerHTML = uploaderDialogTitle;
+				} else if (this.fileUpload.uploader.widgets && this.fileUpload.uploader.widgets.panel) {
+					this.fileUpload.uploader.widgets.panel.setHeader(uploaderDialogTitle);
+				}
 		        Event.preventDefault(e);
 	        },
 
