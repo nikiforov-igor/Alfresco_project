@@ -2,7 +2,6 @@ package ru.it.lecm.reports.generators;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignField;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.ReportsManager;
@@ -13,6 +12,7 @@ import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.utils.Utils;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +33,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     private LinksResolver resolver;
     private ReportDescriptor reportDescriptor;
     private ReportsManager reportManager;
-    private BasicDataSource basicDataSource;
+    private DataSource basicDataSource;
 
     @Override
     public boolean supportsGetFieldsOperation() {
@@ -128,7 +128,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
         this.resolver = resolver;
     }
 
-    public void setBaseDataSource(BasicDataSource basicDS) {
+    public void setBaseDataSource(DataSource basicDS) {
         this.basicDataSource = basicDS;
     }
 }

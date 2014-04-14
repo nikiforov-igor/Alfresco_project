@@ -1,7 +1,6 @@
 package ru.it.lecm.reports.generators;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -19,6 +18,7 @@ import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.XmlHelper;
 
+import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -182,7 +182,7 @@ public class XMLMacroGenerator {
     private ReportDescriptor reportDesc;
     private ReportTemplate templateDesc;
 
-    private BasicDataSource dataSourceContext;
+    private DataSource dataSourceContext;
 
     /**
      * Глобальные переменные для генерации.
@@ -191,7 +191,7 @@ public class XMLMacroGenerator {
      */
     private MacroValues globals;
 
-    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, BasicDataSource ds) {
+    public XMLMacroGenerator(ReportDescriptor rdesc, ReportTemplate template, DataSource ds) {
         setReportDesc(rdesc);
         this.templateDesc = template;
         this.dataSourceContext = ds;

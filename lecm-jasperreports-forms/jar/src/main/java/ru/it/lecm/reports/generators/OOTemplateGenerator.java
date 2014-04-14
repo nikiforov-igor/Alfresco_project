@@ -14,7 +14,6 @@ import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.DateTime;
 import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
@@ -24,6 +23,7 @@ import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 import ru.it.lecm.reports.utils.Utils;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,14 +51,14 @@ public abstract class OOTemplateGenerator {
      */
     final static public short DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE = PropertyAttribute.REMOVEABLE; // 128;
 
-    protected BasicDataSource dataSource;
+    protected DataSource dataSource;
     protected OpenOfficeConnection connection;
 
-    public BasicDataSource getDataSource() {
+    public DataSource getDataSource() {
         return dataSource;
     }
 
-    public void setDataSource(BasicDataSource dataSource) {
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

@@ -3,7 +3,6 @@ package ru.it.lecm.reports.generators;
 import net.sf.jasperreports.engine.JRDataSourceProvider;
 import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -21,6 +20,7 @@ import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
 
+import javax.sql.DataSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,7 +35,7 @@ import java.util.Map;
 public abstract class ReportGeneratorBase implements ReportGenerator, ApplicationContextAware {
     private static final transient Logger log = LoggerFactory.getLogger(ReportGeneratorBase.class);
 
-    private BasicDataSource targetDataSource;
+    private DataSource targetDataSource;
 
     /**
      * префикс названия для конвертирующего свойства
@@ -85,11 +85,11 @@ public abstract class ReportGeneratorBase implements ReportGenerator, Applicatio
         this.resolver = resolver;
     }
 
-    public BasicDataSource getTargetDataSource() {
+    public DataSource getTargetDataSource() {
         return targetDataSource;
     }
 
-    public void setTargetDataSource(BasicDataSource targetDataSource) {
+    public void setTargetDataSource(DataSource targetDataSource) {
         this.targetDataSource = targetDataSource;
     }
     /**
