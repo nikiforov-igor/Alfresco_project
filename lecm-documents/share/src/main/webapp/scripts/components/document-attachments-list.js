@@ -167,6 +167,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	            hasAddAttachmentPerm: false,
 
+				uploaderDialogHeaderTemplate: 'Загрузить в категорию "{categoryName}"',
+
 	            showActions: [
 		            {
 			            id: "document-download",
@@ -282,6 +284,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			        }
 		        };
 		        this.fileUpload.show(multiUploadConfig);
+				this.fileUpload.uploader.titleText.innerHTML = YAHOO.lang.substitute(this.options.uploaderDialogHeaderTemplate, {
+					categoryName: this.options.categoryName
+				});
 		        Event.preventDefault(e);
 	        },
 
