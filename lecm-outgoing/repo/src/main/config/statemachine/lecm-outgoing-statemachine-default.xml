@@ -7826,7 +7826,7 @@
 											<property>
 												<name>permissionTypeValue</name>
 												<value>
-													<![CDATA[LECM_BASIC_PG_Reader]]>
+													<![CDATA[LECM_BASIC_PG_Employee]]>
 												</value>
 											</property>
 										</properties>
@@ -10586,6 +10586,31 @@
 											<roleAssociation>
 												<type>role-assoc</type>
 												<businessRoleName>DA_ENGINEER</businessRoleName>
+											</roleAssociation>
+										</roleAssociations>
+										<subFolders/>
+									</node>
+									<node>
+										<type>static-role</type>
+										<name>5cb994b7-8781-47f7-ae0d-9f93939af08a</name>
+										<nodeRef>workspace://SpacesStore/ff31eb56-f5bc-45a7-a217-435eb87a51b8</nodeRef>
+										<properties>
+											<property>
+												<name>permissionTypeValue</name>
+												<value>
+													<![CDATA[LECM_BASIC_PG_Employee]]>
+												</value>
+											</property>
+										</properties>
+										<aspects>
+											<permissionTypeAspect/>
+											<business-role/>
+										</aspects>
+										<associations/>
+										<roleAssociations>
+											<roleAssociation>
+												<type>role-assoc</type>
+												<businessRoleName>OUTGOING_SENDERS</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
