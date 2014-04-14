@@ -33,7 +33,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
     private static final Logger logger = LoggerFactory.getLogger(DSProdiverApprovalSummaryByPeriod.class);
 
     final static String VALUE_STATUS_NOTREADY = "NO_DECISION";
-    final static String FLD_DOC_PROJECTNUM = "lecm-contract:regNumProject"; // <!-- Регистрационный номер проекта договора-->
+    final static String FLD_DOC_PROJECTNUM = "lecm-document:ext-present-string"; // <!-- Регистрационный номер проекта договора-->
 
     // TODO: заменить потом на модельное значение
     final static float NORMAL_APPROVE_DURATION = 2; // за норму принимаем срок в два дня на задачу (Y)

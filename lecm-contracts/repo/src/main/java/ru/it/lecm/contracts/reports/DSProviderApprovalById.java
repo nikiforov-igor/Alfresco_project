@@ -110,7 +110,7 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
         }
 
         /* Названия полей для JR-jrxml */
-        final static String JRName_DOC_PROJECTNUM = "col_Doc.ProjectNum";
+        final static String JRName_DOC_PROJECTNUM = "col_Doc.ExtPresentString";
         final static String JRName_DOC_VERSION = "col_AproveList.Version";
         final static String JRName_DOC_APPROVE_RESULT = "col_AproveList.ApproveResult";
 

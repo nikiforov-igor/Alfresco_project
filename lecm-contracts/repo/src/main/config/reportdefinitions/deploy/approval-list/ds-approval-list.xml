@@ -59,27 +59,29 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 				вниз по <child-association name="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc">
 				на <target>
 
-	== Согласующий сотрудник ==
-	== ссылка на элемент справочника "Сотрудники" ==
-		col_ItemEmployee.XXX
-				<type name="lecm-orgstr:employee">
-				ссылка из col_Item
-				вниз по <association name=""lecm-workflow-result:workflow-result-item-employee-assoc">
-				на <target>
-  -->
+  == Согласующий сотрудник ==
+  == ссылка на элемент справочника "Сотрудники" ==
+	  col_ItemEmployee.XXX
+			  <type name="lecm-orgstr:employee">
+			  ссылка из col_Item
+			  вниз по <association name=""lecm-workflow-result:workflow-result-item-employee-assoc">
+			  на <target>
+-->
 <ds.config>
 	<report.descriptor mnem="approval-list">
-		<l18> <item key="RU_RU" value="Лист согласования"/>
+		<l18>
+			<item key="RU_RU" value="Лист согласования"/>
 		</l18>
 
 		<provider mnem="DSProviderApprovalById" javaClass="ru.it.lecm.contracts.reports.DSProviderApprovalById" >
-			<l18> <item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
+			<l18>
+				<item key="RU_RU" value="Провайдер Jasper отчётов: Лист согласования"/>
 			</l18>
 		</provider>
-        <templates>
-            <template mnem="approval-list" type="JASPER" filename="approval-list.jrxml"/>
-        </templates>
-        <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
+		<templates>
+			<template mnem="approval-list" type="JASPER" filename="approval-list.jrxml"/>
+		</templates>
+		<roles></roles>
 	</report.descriptor>
 
 	<query.descriptor>
@@ -96,16 +98,16 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 		<queryText><![CDATA[+TYPE:"lecmApprovalResult:approvalResultList"]]></queryText>
 
 		<flags>
-				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
-				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
+			<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
+			<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>
 		</flags>
 
 	</query.descriptor>
 
 	<!-- отображаемые значения для кодов для
-		 результат согласования документа = "lecmApprovalResult:approvalResultListDecision"
-		 locale="RU_RU"
-	  -->
+	   результат согласования документа = "lecmApprovalResult:approvalResultListDecision"
+	   locale="RU_RU"
+	-->
 	<statuses.valueDisplay>
 		<map>
 			<item key="NO_DECISION" value="Нет решения"/>
@@ -120,99 +122,99 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
 	<fields>
 		<field order="1"  alfrescoType="d:text"  javaValueClass="java.lang.String"
-				jrFldName="ID"  queryFldName="{{ID}}">
-				displayName="ID документа"
+			   jrFldName="ID"  queryFldName="{{ID}}">
+			displayName="ID документа"
 			<l18>
 				<item key="RU_RU" value="ID документа"/>
 			</l18>
 		</field>
 
-		<!-- "lecm-contract:document": Регистрационный номер проекта договора-->
-		<field queryFldName="{lecm-contract:regNumProject}"
-				jrFldName="col_Doc.ProjectNum"
-				displayName="Номер проекта договора"/>
+		<!-- lecm-document:ext-present-string -->
+		<field queryFldName="{lecm-document:ext-present-string}"
+			   jrFldName="col_Doc.ExtPresentString"
+			   displayName="Строка представления"/>
 
 		<!-- approval-list: номер версии документа, по которой проводилось согласование -->
 		<field queryFldName="lecm-workflow-result:workflow-result-list-document-version"
-				jrFldName="col_AproveList.Version"
-				displayName="Номер версии документа"/>
+			   jrFldName="col_AproveList.Version"
+			   displayName="Номер версии документа"/>
 
 		<!-- approval-list: результат согласования документа -->
 		<field queryFldName="lecmApprovalResult:approvalResultListDecision"
-				jrFldName="col_AproveList.ApproveResult"
-				displayName="Результат Согласования"/>
+			   jrFldName="col_AproveList.ApproveResult"
+			   displayName="Результат Согласования"/>
 
 		<!-- approval-list: дата начала согласования -->
 		<field queryFldName="lecm-workflow-result:workflow-result-list-start-date"
-				jrFldName="col_AproveList.ApproveStart"
-				displayName="Дата начала согасования по документу" javaValueClass="date"/>
+			   jrFldName="col_AproveList.ApproveStart"
+			   displayName="Дата начала согасования по документу" javaValueClass="date"/>
 
 		<!-- approval-list: дата согласования по документу -->
 		<field queryFldName="lecm-workflow-result:workflow-result-list-complete-date"
-				jrFldName="col_AproveList.ApproveEnd"
-				displayName="Дата согласования по документу" javaValueClass="date"/>
+			   jrFldName="col_AproveList.ApproveEnd"
+			   displayName="Дата согласования по документу" javaValueClass="date"/>
 
 		<!-- Для Сотрудника-Исполнителя: ФИО -->
 		<field queryFldName="{ExecEmployee{lecm-orgstr:employee-short-name}}"
-				jrFldName="col_ExecEmployee"
-				displayName="Исполнитель" />
+			   jrFldName="col_ExecEmployee"
+			   displayName="Исполнитель" />
 
 		<!-- Для Сотрудника-Исполнителя: Должность (!) вычисляемое -->
 		<field queryFldName="{ExecEmployee.StaffPosition{sys:node-uuid}}"
-				jrFldName="col_ExecEmployee.StaffPosition.Id"
-				displayName="Должность Исполнителя.id" javaValueClass="String"/>
+			   jrFldName="col_ExecEmployee.StaffPosition.Id"
+			   displayName="Должность Исполнителя.id" javaValueClass="String"/>
 		<field queryFldName="{ExecEmployee.StaffPosition{cm:name}}"
-				jrFldName="col_ExecEmployee.StaffPosition.Name"
-				displayName="Должность Исполнителя.Название"/>
+			   jrFldName="col_ExecEmployee.StaffPosition.Name"
+			   displayName="Должность Исполнителя.Название"/>
 
 		<!-- Для Сотрудника-Исполнителя: Подразделение (!) вычисляемое -->
 		<field queryFldName="{ExecEmployee.Unit{sys:node-uuid}}"
-				jrFldName="col_ExecEmployee.Unit.Id"
-				displayName="Отдел Исполнителя.id" javaValueClass="String"/>
+			   jrFldName="col_ExecEmployee.Unit.Id"
+			   displayName="Отдел Исполнителя.id" javaValueClass="String"/>
 		<field queryFldName="{Employee.Unit{cm:name}}"
-				jrFldName="col_ExecEmployee.Unit.Name"
-				displayName="Наименование отдела Исполнителя"/>
+			   jrFldName="col_ExecEmployee.Unit.Name"
+			   displayName="Наименование отдела Исполнителя"/>
 
 		<!-- ===
-				отдельные согласования: lecmApprovalResult:approvalResultItem
-			 ===
-		  -->
+			  отдельные согласования: lecmApprovalResult:approvalResultItem
+		   ===
+		-->
 
-		 <!-- "lecmApprovalResult:approvalResultItem": Результат согласования сотрудником -->
+		<!-- "lecmApprovalResult:approvalResultItem": Результат согласования сотрудником -->
 		<field queryFldName="{lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecmApprovalResult:approvalResultItemDecision}"
-				jrFldName="col_Item.ApproveResult"
-				displayName="Результат Согласования Сотрудником"/>
+			   jrFldName="col_Item.ApproveResult"
+			   displayName="Результат Согласования Сотрудником"/>
 
 		<!-- "lecmApprovalResult:approvalResultItem": замечания сотрудника -->
 		<field queryFldName="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecmApprovalResult:approvalResultItemComment"
-				jrFldName="col_Item.ApproveNotes"
-				displayName="Замечания от Сотрудника"/>
+			   jrFldName="col_Item.ApproveNotes"
+			   displayName="Замечания от Сотрудника"/>
 
 		<!-- "lecmApprovalResult:approvalResultItem": Дата согласования сотрудника -->
 		<field queryFldName="lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-finish-date"
-				jrFldName="col_Item.ApproveDate"
-				displayName="Дата согласования Сотрудником" javaValueClass="date"/>
+			   jrFldName="col_Item.ApproveDate"
+			   displayName="Дата согласования Сотрудником" javaValueClass="date"/>
 
 		<!-- Для Сотрудника-Согласующего: ФИО -->
 		<field queryFldName="{{ApproveEmployee} is {lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}}"
-				jrFldName="col_Item.Employee"
-				displayName="Согласующий" />
+			   jrFldName="col_Item.Employee"
+			   displayName="Согласующий" />
 
 		<!-- Для Сотрудника-Согласующего: Должность (!) вычисляемое -->
 		<field queryFldName="{ApproveEmployee.StaffPosition{sys:node-uuid}}"
-				jrFldName="col_Item.Employee.StaffPosition.Id"
-				displayName="Должность Сотрудника" javaValueClass="String"/>
+			   jrFldName="col_Item.Employee.StaffPosition.Id"
+			   displayName="Должность Сотрудника" javaValueClass="String"/>
 		<field queryFldName="{ApproveEmployee.StaffPosition{cm:name}}"
-				jrFldName="col_Item.Employee.StaffPosition.Name"
-				displayName="Должность название" />
+			   jrFldName="col_Item.Employee.StaffPosition.Name"
+			   displayName="Должность название" />
 
 		<!-- Для Сотрудника-Согласующего: Подразделение (!) вычисляемое -->
 		<field queryFldName="{ApproveEmployee.Unit{sys:node-uuid}}"
-				jrFldName="col_Item.Employee.Unit.Id"
-				displayName="Отдел Согласующего.id" javaValueClass="String"/>
+			   jrFldName="col_Item.Employee.Unit.Id"
+			   displayName="Отдел Согласующего.id" javaValueClass="String"/>
 		<field queryFldName="{ApproveEmployee.Unit{cm:name}}"
-				jrFldName="col_Item.Employee.Unit.Name"
-				displayName="Отдел Согласующего.Наименование" />
+			   jrFldName="col_Item.Employee.Unit.Name"
+			   displayName="Отдел Согласующего.Наименование" />
 
 	</fields>
 

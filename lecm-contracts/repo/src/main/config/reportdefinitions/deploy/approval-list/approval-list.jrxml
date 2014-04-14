@@ -34,8 +34,8 @@
 	<field name="ID" class="java.lang.String">
 		<fieldDescription><![CDATA[ID документа]]></fieldDescription>
 	</field>
-	<field name="col_Doc.ProjectNum" class="java.lang.String">
-		<fieldDescription><![CDATA[Номер проекта договора]]></fieldDescription>
+	<field name="col_Doc.ExtPresentString" class="java.lang.String">
+		<fieldDescription><![CDATA[Строка представления]]></fieldDescription>
 	</field>
 	<field name="col_AproveList.Version" class="java.lang.String">
 		<fieldDescription><![CDATA[Номер версии документа]]></fieldDescription>
@@ -115,10 +115,8 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfEncoding="Cp1251"/>
 				</textElement>
-				<textFieldExpression><![CDATA["К договору проект № "
-+ ($F{col_Doc.ProjectNum} != null ? $F{col_Doc.ProjectNum} : "")
-+ ", версия № "
-+ ($F{col_AproveList.Version} != null ? $F{col_AproveList.Version} : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA["К " + ($F{col_Doc.ExtPresentString} != null ? $F{col_Doc.ExtPresentString} : "")
++ ", версия № " + ($F{col_AproveList.Version} != null ? $F{col_AproveList.Version} : "")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement uuid="92c94d2f-ae2f-45d6-826a-4fe022f0baa4" positionType="FixRelativeToBottom" x="2" y="30" width="357" height="32"/>
