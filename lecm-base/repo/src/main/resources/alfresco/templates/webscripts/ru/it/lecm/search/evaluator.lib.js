@@ -189,6 +189,8 @@ var Evaluator = {
 	 */
     run: function Evaluator_run(node, fields, nameSubstituteStrings, ctx) {
         var permissions = {},
+	        createdBy = Common.getPerson(node.properties["cm:creator"]),
+	        modifiedBy = Common.getPerson(node.properties["cm:modifier"]),
             nodeData = {};
 
         /**
@@ -299,7 +301,9 @@ var Evaluator = {
         return({
             node: node,
             nodeData: nodeData,
-            actionPermissions: permissions
+            actionPermissions: permissions,
+	        createdBy: createdBy,
+	        modifiedBy: modifiedBy,
         });
     }
 };

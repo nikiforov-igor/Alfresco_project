@@ -3,6 +3,18 @@
     <#assign node = item.node>
     "nodeRef": "${node.nodeRef}",
     "type": "${node.typeShort}",
+    "createdOn": "${xmldate(node.properties.created)}",
+    "createdBy":
+    {
+    "value": "${item.createdBy.userName}",
+    "displayValue": "${item.createdBy.displayName}"
+    },
+    "modifiedOn": "${xmldate(node.properties.modified)}",
+    "modifiedBy":
+    {
+    "value": "${item.modifiedBy.userName}",
+    "displayValue": "${item.modifiedBy.displayName}"
+    },
     "permissions":
     {
     "userAccess":
