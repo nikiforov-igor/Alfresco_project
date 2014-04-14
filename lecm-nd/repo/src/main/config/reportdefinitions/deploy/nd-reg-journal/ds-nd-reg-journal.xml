@@ -26,18 +26,28 @@
         <roles/>
     </report.descriptor>
     <query.descriptor>
-        <offset>0</offset>
-        <limit>-1</limit>
-        <pgsize>-1</pgsize>
-        <queryText><![CDATA[+TYPE:"lecm-nd:document"]]></queryText>
+        <queryText><![CDATA[TYPE:"lecm-nd:document"  AND  @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></queryText>
         <querySort><![CDATA[docDate|ASC]]></querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-nd:document</preferedType>
         <isMultiRow>true</isMultiRow>
         <isCustom>false</isCustom>
-        <flags/>
     </query.descriptor>
     <fields>
+        <field jrFldName="dateReg" order="0" queryFldName="{lecm-document:doc-date}" displayName="Дата регистрации"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
         <field alfrescoType="d:text" displayName="Подписант"
             javaValueClass="java.util.List" jrFldName="signatory" queryFldName="{{subreport::signatory}}">
             <l18>

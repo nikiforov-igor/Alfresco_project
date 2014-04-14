@@ -19,6 +19,10 @@
 	<parameter name="PREPARED_QUERY" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["+TYPE:\"lecm-nd:document\""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="dateReg_lo" class="java.util.Date" isForPrompting="false"/>
+	<parameter name="dateReg_hi" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new Date()]]></defaultValueExpression>
+	</parameter>
 	<queryString language="SQL">
 		<![CDATA[$P!{PREPARED_QUERY}]]>
 	</queryString>
@@ -50,20 +54,35 @@
 		<fieldDescription><![CDATA[Дата окончания действия]]></fieldDescription>
 	</field>
 	<title>
-		<band height="26" splitType="Stretch">
+		<band height="60" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="800" height="26"/>
+				<reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="802" height="30"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Times New Roman" size="16" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Журнал регистрации нормативных документов]]></text>
 			</staticText>
+			<textField>
+				<reportElement uuid="cf8b8714-e4c0-4944-a16f-52383dbf7660" x="1" y="30" width="802" height="30"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["за период " +
+($P{dateReg_lo} != null ?
+    ("c " + new SimpleDateFormat("dd.MM.yyyy").format($P{dateReg_lo})) : ""
+)
++ " по " +
+($P{dateReg_hi} != null ?
+    new SimpleDateFormat("dd.MM.yyyy").format($P{dateReg_hi}) :
+    new SimpleDateFormat("dd.MM.yyyy").format(new Date())
+)]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="499f11b4-abb5-4b94-8fc1-d4c8c87a2ffd" mode="Opaque" x="1" y="0" width="88" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="499f11b4-abb5-4b94-8fc1-d4c8c87a2ffd" mode="Opaque" x="30" y="0" width="76" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -78,7 +97,7 @@
 				<textFieldExpression><![CDATA["Дата документа"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="550bd138-63b7-4e3e-9784-e722f2812392" mode="Opaque" x="89" y="0" width="88" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="550bd138-63b7-4e3e-9784-e722f2812392" mode="Opaque" x="106" y="0" width="71" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -197,12 +216,27 @@
 				</textElement>
 				<textFieldExpression><![CDATA["Подписант"]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="c235e364-b1dd-4421-89ed-e39eabc40ce4" mode="Opaque" x="0" y="0" width="30" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26"/>
+				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -217,7 +251,7 @@
 				<textFieldExpression><![CDATA[$F{docDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
-				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="1" y="0" width="88" height="26"/>
+				<reportElement uuid="33599d43-23af-40d6-af88-1a8d991fed07" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="30" y="0" width="76" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -232,7 +266,7 @@
 				<textFieldExpression><![CDATA[$F{docDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="73c82851-24c4-4c57-85b9-b374073f23f9" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="89" y="0" width="88" height="26"/>
+				<reportElement uuid="73c82851-24c4-4c57-85b9-b374073f23f9" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="106" y="0" width="71" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -247,7 +281,7 @@
 				<textFieldExpression><![CDATA[$F{regNum}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3c6dcbfc-d0bb-4000-8c5c-19200bf3f855" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="177" y="0" width="88" height="26"/>
+				<reportElement uuid="3c6dcbfc-d0bb-4000-8c5c-19200bf3f855" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="177" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -262,7 +296,7 @@
 				<textFieldExpression><![CDATA[$F{docType}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="55711d14-72d8-49c6-b858-0d0a9f652df6" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="265" y="0" width="88" height="26"/>
+				<reportElement uuid="55711d14-72d8-49c6-b858-0d0a9f652df6" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="265" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -277,7 +311,7 @@
 				<textFieldExpression><![CDATA[$F{docTitle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5c8f696b-8d60-453a-a9fe-3cb5df526c08" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="353" y="0" width="88" height="26"/>
+				<reportElement uuid="5c8f696b-8d60-453a-a9fe-3cb5df526c08" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="353" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -292,7 +326,7 @@
 				<textFieldExpression><![CDATA[$F{docAuthor}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="529" y="0" width="88" height="26"/>
+				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="529" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -307,7 +341,7 @@
 				<textFieldExpression><![CDATA[$F{docStatus}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
-				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="704" y="0" width="96" height="26"/>
+				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="704" y="0" width="96" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -322,7 +356,7 @@
 				<textFieldExpression><![CDATA[$F{docEndDate}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd.MM.yy" isBlankWhenNull="true">
-				<reportElement uuid="d5779dac-37a1-4f36-8abe-3894589ed59f" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="616" y="0" width="88" height="26"/>
+				<reportElement uuid="d5779dac-37a1-4f36-8abe-3894589ed59f" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="616" y="0" width="88" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -337,16 +371,31 @@
 				<textFieldExpression><![CDATA[$F{docBeginDate}]]></textFieldExpression>
 			</textField>
 			<subreport>
-				<reportElement uuid="e8b530a6-f531-4617-9a0b-1536aefff345" positionType="Float" stretchType="RelativeToBandHeight" x="442" y="0" width="88" height="26" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="e8b530a6-f531-4617-9a0b-1536aefff345" style="styleOdd" positionType="Float" stretchType="RelativeToBandHeight" x="442" y="0" width="88" height="30" isPrintWhenDetailOverflows="true"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{signatory}, false)]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "nd-signatory.jasper"]]></subreportExpression>
 			</subreport>
 			<rectangle>
-				<reportElement uuid="5ad5d27e-d3d7-4184-bc72-fd11353773f3" stretchType="RelativeToTallestObject" mode="Transparent" x="441" y="0" width="89" height="26"/>
+				<reportElement uuid="5ad5d27e-d3d7-4184-bc72-fd11353773f3" style="styleOdd" stretchType="RelativeToTallestObject" mode="Transparent" x="441" y="0" width="89" height="30"/>
 				<graphicElement>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 				</graphicElement>
 			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0215d993-e084-4cd3-ba4a-570d09418b8d" style="styleOdd" stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="30" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single" leftIndent="5" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

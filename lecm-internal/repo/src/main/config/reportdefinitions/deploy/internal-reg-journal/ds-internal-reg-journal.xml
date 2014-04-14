@@ -26,22 +26,32 @@
         <roles/>
     </report.descriptor>
     <query.descriptor>
-        <offset>0</offset>
-        <limit>-1</limit>
-        <pgsize>-1</pgsize>
-        <queryText><![CDATA[+TYPE:"lecm-internal:document"]]></queryText>
+        <queryText><![CDATA[TYPE:"lecm-internal:document"  AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></queryText>
         <querySort>docDate|ASC</querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-internal:document</preferedType>
         <isMultiRow>true</isMultiRow>
         <isCustom>false</isCustom>
-        <flags/>
     </query.descriptor>
     <fields>
-        <field alfrescoType="d:text" displayName="Дата документа"
+        <field jrFldName="dateReg" order="0" queryFldName="{lecm-document:doc-date}" displayName="Дата регистрации"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
+        <field alfrescoType="d:text" displayName="Дата регистрации"
             javaValueClass="java.util.Date" jrFldName="docDate" queryFldName="{lecm-document:doc-date}">
             <l18>
-                <item key="RU_RU"><![CDATA[Дата документа]]></item>
+                <item key="RU_RU"><![CDATA[Дата регистрации]]></item>
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Регистрационный номер"

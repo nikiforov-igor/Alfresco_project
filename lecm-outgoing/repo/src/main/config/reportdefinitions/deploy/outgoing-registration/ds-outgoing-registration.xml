@@ -28,18 +28,28 @@
         </datasource.descriptor>
     </report.descriptor>
     <query.descriptor>
-        <offset>0</offset>
-        <limit>-1</limit>
-        <pgsize>-1</pgsize>
-        <queryText><![CDATA[TYPE:"lecm-outgoing:document"]]></queryText>
+        <queryText><![CDATA[TYPE:"lecm-outgoing:document" AND  @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></queryText>
 		<querySort><![CDATA[doc-created-date|ASC]]></querySort>
         <allVersions>true</allVersions>
         <preferedType>lecm-outgoing:document</preferedType>
         <isMultiRow>true</isMultiRow>
         <isCustom>false</isCustom>
-        <flags/>
     </query.descriptor>
     <fields>
+        <field jrFldName="dateReg" order="0" queryFldName="{lecm-document:doc-date}" displayName="Дата регистрации"
+               javaValueClass="java.util.Date" alfrescoType="d:date">
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value="С"/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value="По"/>
+                </label2>
+            </parameter>
+        </field>
         <field alfrescoType="d:text" displayName="Заголовок"
             jrFldName="doc-title" queryFldName="{lecm-document:title}">
             <l18>
@@ -52,11 +62,11 @@
                 <item key="RU_RU"><![CDATA[Адресат]]></item>
             </l18>
         </field>
-        <field alfrescoType="d:text" displayName="Участники"
+        <field alfrescoType="d:text" displayName="Подписанты"
             javaValueClass="java.util.List"
-            jrFldName="outgoing-signatory" queryFldName="{{subreport::members}}">
+            jrFldName="outgoing-signatory" queryFldName="{{subreport::outgoing-signatory}}">
             <l18>
-                <item key="RU_RU"><![CDATA[Участники]]></item>
+                <item key="RU_RU"><![CDATA[Подписанты]]></item>
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Статус"
@@ -92,7 +102,7 @@
     </fields>
     <subreports>
         <subreport destColumnName="outgoing-signatory" name="outgoing-signatory">
-            <sublist.source><![CDATA[{cm:contains/cm:contains/cm:contains/}]]></sublist.source>
+            <sublist.source><![CDATA[{cm:contains(cm:name=Подписание)/cm:contains/cm:contains/}]]></sublist.source>
             <sublist.item>
                 <map>
                     <item key="signatory"><![CDATA[{lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}]]></item>

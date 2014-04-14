@@ -23,11 +23,11 @@
 		<fieldDescription><![CDATA[Подписант]]></fieldDescription>
 	</field>
 	<detail>
-		<band height="26" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="b1a5a5a5-876b-4a37-b246-1bb537d0ed5e" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="88" height="26"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+				<reportElement uuid="b1a5a5a5-876b-4a37-b246-1bb537d0ed5e" style="styleOdd" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="88" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{signatory}]]></textFieldExpression>
