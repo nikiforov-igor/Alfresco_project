@@ -309,7 +309,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 var me = this;
 
                 var loadingMessage = Alfresco.util.PopupManager.displayMessage({
-                    displayTime: 1,
+                    displayTime: 0,
                     text: $html(this.msg("label.loading")),
                     spanClass: "wait",
                     noEscape: true
@@ -359,20 +359,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     if (oResponse.status == 401) {
                         // Our session has likely timed-out, so refresh to offer the login page
                         window.location.reload();
-                    }
-                    else {
-                        try {
-                            var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                            me.dataTable.set("MSG_ERROR", response.message);
-                            me.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                            if (oResponse.status == 404) {
-                                // Site or container not found - deactivate controls
-                                YAHOO.Bubbling.fire("deactivateAllControls");
-                            }
-                        }
-                        catch (e) {
-                            me.dataTable.render();
-                        }
+                    } else {
+	                    Alfresco.util.PopupManager.displayMessage(
+		                    {
+			                    text:me.msg("message.datagrid.load-data.failure")
+		                    });
                     }
                 }
 
