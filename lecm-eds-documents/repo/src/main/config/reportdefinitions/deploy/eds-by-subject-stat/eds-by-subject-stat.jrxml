@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="eds-by-subject-stat" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="dataSource" value="ru.it.lecm.reports.generators.GenericDSProviderBase"/>
+	<style name="styleOdd" mode="Opaque" backcolor="#D2EAF1"/>
+	<parameter name="CMIS_QUERY" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["select * from lecm-contract:document as Contract"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ds-lecm-onk-incoming-type-stat.xml"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="col_DocType" class="java.lang.String">
+		<fieldDescription><![CDATA[Вид документа]]></fieldDescription>
+	</field>
+	<field name="col_DocSubject" class="java.lang.String"/>
+	<field name="col_DocKind" class="java.lang.String">
+		<fieldDescription><![CDATA[Тип документа]]></fieldDescription>
+	</field>
+	<variable name="TYPES_MAP" class="java.util.HashMap" calculation="System">
+		<initialValueExpression><![CDATA[new java.util.HashMap()]]></initialValueExpression>
+	</variable>
+	<group name="grp_Kind" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{col_DocKind}]]></groupExpression>
+		<groupHeader>
+			<band height="60">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
+				<staticText>
+					<reportElement uuid="3762cfd3-8264-4a7e-bdf1-c256503f9e80" mode="Opaque" x="0" y="30" width="269" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Тематика]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="f3ba4dab-407c-4e3d-afb8-77d84ab326fe" mode="Opaque" x="269" y="30" width="134" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Проценты]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4ea5c7d5-7b83-4688-a797-385925f7de79" mode="Opaque" x="403" y="30" width="152" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Количество]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="e5b3283e-e440-4b6d-820a-3e2a4ace188e" x="0" y="0" width="555" height="30" isPrintWhenDetailOverflows="true"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{col_DocKind} != null && $F{col_DocKind} != "") ? $F{col_DocKind} : "Не указан"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="240">
+				<pie3DChart>
+					<chart>
+						<reportElement uuid="51ba2ceb-a253-4e65-be00-68ec199ab778" x="0" y="29" width="555" height="211"/>
+						<chartTitle/>
+						<chartSubtitle/>
+						<chartLegend/>
+					</chart>
+					<pieDataset>
+						<dataset resetType="Group" resetGroup="grp_Kind"/>
+						<keyExpression><![CDATA[($F{col_DocType} != null && !$F{col_DocType}.equals("") ? $F{col_DocType} : "не указан")]]></keyExpression>
+						<valueExpression><![CDATA[$V{TYPES_MAP}.get($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}) == null ? 1 : new java.lang.Integer($V{TYPES_MAP}.get($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}).toString()) + 1]]></valueExpression>
+					</pieDataset>
+					<pie3DPlot isShowLabels="true" isCircular="false" labelFormat="{0} {2}">
+						<plot/>
+						<itemLabel>
+							<font fontName="Times New Roman" size="10" isBold="true"/>
+						</itemLabel>
+					</pie3DPlot>
+				</pie3DChart>
+				<textField evaluationTime="Group" evaluationGroup="grp_byType" isBlankWhenNull="true">
+					<reportElement uuid="66f7c232-0f94-4d55-abb2-6daf1b2b6726" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="269" height="30" isPrintWhenDetailOverflows="true"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ИТОГО:"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Auto" pattern="#,##0.00 %" isBlankWhenNull="true">
+					<reportElement uuid="30df915d-3a64-4cce-90f7-f31836325b10" stretchType="RelativeToTallestObject" mode="Opaque" x="269" y="0" width="134" height="30" isPrintWhenDetailOverflows="true"/>
+					<box>
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Subject" isBlankWhenNull="true">
+					<reportElement uuid="2f04796b-54c6-4110-8fa9-8bb80e2cfc67" stretchType="RelativeToTallestObject" mode="Opaque" x="403" y="0" width="152" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{grp_Kind_COUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="grp_Subject">
+		<groupExpression><![CDATA[$F{col_DocSubject}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Subject" isBlankWhenNull="true">
+					<reportElement uuid="08eb6525-a55c-4a00-b251-6d8c083ae695" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="269" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{col_DocSubject}!= null && $F{col_DocSubject} != "" ) ? $F{col_DocSubject} : "не указан"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0 %" isBlankWhenNull="true">
+					<reportElement uuid="52a23ef5-2ec4-44f1-a81b-8a4e8f94b473" stretchType="RelativeToTallestObject" mode="Opaque" x="269" y="0" width="134" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($V{grp_Subject_COUNT}.doubleValue())/($V{grp_Kind_COUNT}.doubleValue())]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" evaluationTime="Group" evaluationGroup="grp_Subject" isBlankWhenNull="true">
+					<reportElement uuid="50e686ed-391a-4b92-af5a-80132211c731" stretchType="RelativeToTallestObject" mode="Opaque" x="403" y="0" width="152" height="30"/>
+					<box leftPadding="10">
+						<pen lineWidth="1.0" lineColor="#78C0D4"/>
+						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{grp_Subject_COUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="grp_byType">
+		<groupExpression><![CDATA[$F{col_DocType}]]></groupExpression>
+	</group>
+	<title>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f710bbcc-3ec1-4bff-bcaa-19263f08b8a4" x="0" y="0" width="555" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Сводка по тематикам документов]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band>
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} >= 0 && $F{col_DocKind} != null]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="193a1247-ee6a-427f-973e-5db0fe5f4605" x="0" y="0" width="129" height="0"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TYPES_MAP}.get($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}) == null ?
+$V{TYPES_MAP}.put($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}, 1) :
+$V{TYPES_MAP}.put($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}, new java.lang.Integer($V{TYPES_MAP}.get($F{col_DocKind}.toLowerCase() + "_" + $F{col_DocType}).toString()) + new java.lang.Integer(1))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="50">
+			<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="e22180ba-e2fa-4847-b7f5-71db7d83b125" x="0" y="0" width="555" height="50" forecolor="#FF0000">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} < 1]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="14" isBold="true" pdfEncoding="Cp1251"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Нет данных, удовлетворяющих выборке"]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

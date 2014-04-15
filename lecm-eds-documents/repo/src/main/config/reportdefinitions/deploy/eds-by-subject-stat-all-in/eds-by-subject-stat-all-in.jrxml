@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="incoming-statistics" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="eds-by-subject-stat-all-in" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0451b0fd-67d7-4d3d-be14-c579e2f885bb">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -39,7 +39,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="Times New Roman" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Вид документа]]></text>
 				</staticText>
@@ -53,7 +53,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="Times New Roman" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Тематика]]></text>
 				</staticText>
@@ -67,7 +67,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="Times New Roman" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Количество]]></text>
 				</staticText>
@@ -81,7 +81,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="Times New Roman" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Проценты]]></text>
 				</staticText>
@@ -95,7 +95,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono" isBold="true"/>
+						<font fontName="Times New Roman" size="11" isBold="true"/>
 					</textElement>
 					<text><![CDATA[Итого по виду документа]]></text>
 				</staticText>
@@ -123,7 +123,7 @@
 					<bar3DPlot isShowLabels="true">
 						<plot/>
 						<itemLabel>
-							<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfEncoding="Cp1251"/>
+							<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251"/>
 						</itemLabel>
 						<categoryAxisFormat>
 							<axisFormat verticalTickLabels="false"/>
@@ -151,7 +151,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
+						<font fontName="Times New Roman" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{col_DocKind} != null && $F{col_DocKind} != "" ) ? $F{col_DocKind} : "не указан"]]></textFieldExpression>
 				</textField>
@@ -165,7 +165,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
+						<font fontName="Times New Roman" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{grp_Kind_COUNT}]]></textFieldExpression>
 				</textField>
@@ -243,7 +243,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
+						<font fontName="Times New Roman" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[$V{grp_Subject_COUNT}]]></textFieldExpression>
 				</textField>
@@ -257,11 +257,11 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
+						<font fontName="Times New Roman" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($F{col_DocSubject}!= null && $F{col_DocSubject} != "" ) ? $F{col_DocSubject} : "не указан"]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<textField isStretchWithOverflow="true" evaluationTime="Auto" pattern="#,##0 %" isBlankWhenNull="true">
 					<reportElement uuid="52a23ef5-2ec4-44f1-a81b-8a4e8f94b473" stretchType="RelativeToTallestObject" mode="Opaque" x="351" y="0" width="93" height="30"/>
 					<box leftPadding="10">
 						<pen lineWidth="1.0" lineColor="#78C0D4"/>
@@ -271,7 +271,7 @@
 						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
 					</box>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font fontName="DejaVu Sans Mono"/>
+						<font fontName="Times New Roman" size="11"/>
 					</textElement>
 					<textFieldExpression><![CDATA[($V{grp_Subject_COUNT}.doubleValue())/($V{grp_Kind_COUNT}.doubleValue())]]></textFieldExpression>
 				</textField>
@@ -300,9 +300,9 @@
 			<staticText>
 				<reportElement uuid="f710bbcc-3ec1-4bff-bcaa-19263f08b8a4" x="0" y="0" width="555" height="40"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="14" isBold="true"/>
+					<font fontName="Times New Roman" size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Статистический отчет по документам]]></text>
+				<text><![CDATA[Сводка по тематикам документов]]></text>
 			</staticText>
 		</band>
 	</title>

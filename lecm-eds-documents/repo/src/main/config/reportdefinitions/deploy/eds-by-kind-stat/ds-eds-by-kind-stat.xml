@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ds.config>
-    <report.descriptor mnem="incoming-by-type-stat">
+    <report.descriptor mnem="eds-by-kind-stat">
         <l18>
             <item key="RU_RU" value="Сводка по видам документов"/>
         </l18>
@@ -11,9 +11,9 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="incoming-by-type-stat.jrxml" mnem="incoming-by-type-stat.jrxml">
+            <template type="JASPER" filename="eds-by-kind-stat.jrxml" mnem="eds-by-kind-stat.jrxml">
                 <l18>
-                    <item key="RU_RU" value="incoming-by-type-stat.jrxml"/>
+                    <item key="RU_RU" value="eds-by-type-kind.jrxml"/>
                 </l18>
             </template>
         </templates>
@@ -22,19 +22,15 @@
                 <item key="RU_RU" value="ecb7c9b7-ea04-4641-a290-650442e86ee0"/>
             </l18>
         </datasource.descriptor>
-        <roles>DA_REGISTRARS,DA_RECIPIENT_DYN,INCOMING_REVIEWERS,INCOMING_REVIEWERS_IN_UNIT,INCOMING_REVIEWER_DYN</roles>
+        <roles>DA_REGISTRARS,DA_SIGNERS,DA_ENGINEER,ORD_CREATORS,ND_CREATORS,OUTGOING_CREATORS,INTERNAL_CREATORS</roles>
     </report.descriptor>
     <query.descriptor>
-        <offset>0</offset>
-        <limit>-1</limit>
-        <pgsize>-1</pgsize>
-        <queryText><![CDATA[+TYPE:"lecm-eds-document:base"]]></queryText>
+        <queryText><![CDATA[TYPE:"lecm-eds-document:base" AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></queryText>
         <querySort>col_DocKind|ASC,col_DocType|ASC</querySort>
         <allVersions>true</allVersions>
-        <preferedType>lecm-incoming:document</preferedType>
+        <preferedType>lecm-incoming:document,lecm-internal:document,lecm-nd:document,lecm-ord:document,lecm-outgoing:document</preferedType>
         <isMultiRow>true</isMultiRow>
         <isCustom>false</isCustom>
-        <flags/>
     </query.descriptor>
     <fields>
         <field jrFldName="dateReg" order="0" queryFldName="{lecm-document:doc-date}" displayName="Дата регистрации"
@@ -52,20 +48,10 @@
             </parameter>
         </field>
 
-        <field jrFldName="incomingSubject" order="1" queryFldName="{lecm-document:subject-assoc-ref}" displayName="Тематика входящего"
+        <field jrFldName="docSubject" order="1" queryFldName="{lecm-document:subject-assoc-ref}" displayName="Тематика"
                javaValueClass="java.lang.String" alfrescoType="lecm-doc-dic:subjects">
             <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
                 <l18> <item key="RU_RU" value="Список"/> </l18>
-            </parameter>
-        </field>
-
-        <field alfrescoType="d:boolean" order="2" displayName="Только на контроле"
-               javaValueClass="java.lang.Boolean" jrFldName="incomingContractOnly" queryFldName="{lecm-document-aspects:is-on-control}">
-            <l18>
-                <item key="RU_RU" value="Только на контроле"/>
-            </l18>
-            <parameter mnem="PARAM_TYPE_VALUE" paramType="PARAM_TYPE_VALUE">
-                <l18> <item key="RU_RU" value="Значение"/> </l18>
             </parameter>
         </field>
 
