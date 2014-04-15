@@ -9966,7 +9966,7 @@
 															<property>
 																<name>transitionExpression</name>
 																<value>
-																	<![CDATA[(@nodeService.getProperty(doc.nodeRef, T(ru.it.lecm.nd.api.NDModel).PROP_ND_BEGIN) < new java.util.Date()) == true]]>
+																	<![CDATA[(T(org.apache.commons.lang.time.DateUtils).truncate(@nodeService.getProperty(doc.nodeRef, T(ru.it.lecm.nd.api.NDModel).PROP_ND_BEGIN), T(java.util.Calendar).DATE).getTime() <= new java.util.Date().getTime()) == true]]>
 																</value>
 															</property>
 															<property>
