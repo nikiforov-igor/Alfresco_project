@@ -17,24 +17,13 @@ public interface LecmWorkflowService {
 	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task);
 
 	/**
-	 * раздать всем участникам процесса согласования права
-	 * LECM_BASIC_PG_Reviewer
+	 * Добавить участника процесса в динамическую роль
 	 *
 	 * @param employeeRef сотрудник
 	 * @param bpmPackage bpmPackage с документом
-	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
+	 * @param role название динамической роли
 	 */
-	void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember);
-
-	/**
-	 * раздать всем участникам процесса согласования права
-	 * LECM_BASIC_PG_Reviewer
-	 *
-	 * @param employeeRef сотрудник
-	 * @param documentRef документ
-	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
-	 */
-	void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef, final boolean addEmployeeAsMember);
+	void grantDynamicRole(final NodeRef employeeRef, final NodeRef bpmPackage, final String role);
 
 	/**
 	 * раздать всем участникам процесса согласования права
@@ -45,14 +34,6 @@ public interface LecmWorkflowService {
 	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
 	 */
 	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember);
-
-	/**
-	 * Отобрать права LECM_BASIC_PG_Reviewer после завершения задачи
-	 *
-	 * @param employeeRef сотрудник
-	 * @param bpmPackage bpmPackage с документом
-	 */
-	void revokeReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage);
 
 	void notifyWorkflowStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 

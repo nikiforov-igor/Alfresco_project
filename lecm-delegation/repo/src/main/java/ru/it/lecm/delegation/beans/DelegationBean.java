@@ -757,6 +757,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	@Override
+	@Deprecated
 	public NodeRef reassignTaskBackToAssumedExecutor(final NodeRef delegatedTask) {
 		NodeRef result = null;
 		try {
@@ -790,6 +791,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		return (String) nodeService.getProperty(delegatedTask, PROP_TASK_DELEGATION_TASK_ID);
 	}
 
+	@Deprecated
 	private void assignTaskToEmployee(String taskID, NodeRef employeeRef) {
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		NodeRef personForEmployee = orgstructureService.getPersonForEmployee(employeeRef);

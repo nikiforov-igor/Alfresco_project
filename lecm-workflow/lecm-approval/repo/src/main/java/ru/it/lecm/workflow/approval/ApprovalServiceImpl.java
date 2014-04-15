@@ -319,7 +319,6 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		task.setVariable("taskDecision", decision);
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		revokeReviewerPermissions(employeeRef, bpmPackage);
 		grantReaderPermissions(employeeRef, bpmPackage, true);
 		return taskDecision;
 	}
@@ -403,7 +402,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReviewerPermissions(employeeRef, bpmPackage, true);
+		grantDynamicRole(employeeRef, bpmPackage, "DA_APPROVER_DYN");
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 

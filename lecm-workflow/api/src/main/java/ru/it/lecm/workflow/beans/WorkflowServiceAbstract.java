@@ -26,6 +26,7 @@ import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
@@ -57,6 +58,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	protected WorkflowFoldersService workflowFoldersService;
 	protected IDelegation delegationService;
 	protected WorkflowResultListService workflowResultListService;
+	protected StateMachineServiceBean stateMachineService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -94,17 +96,16 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		this.workflowResultListService = workflowResultListService;
 	}
 
-	@Override
-	public void grantReviewerPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) {
-		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
-		if (Utils.isDocument(documentRef)) {
-			this.grantReviewerPermissionsInternal(employeeRef, documentRef, addEmployeeAsMember);
-		}
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	@Override
-	public void grantReviewerPermissionsInternal(final NodeRef employeeRef, final NodeRef documentRef, final boolean addEmployeeAsMember) {
-		grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer", addEmployeeAsMember);
+	public void grantDynamicRole(final NodeRef employeeRef, final NodeRef bpmPackage, final String role) {
+		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
+		if (Utils.isDocument(documentRef)) {
+			stateMachineService.grandDynamicRoleForEmployee(documentRef, employeeRef, role);
+		}
 	}
 
 	@Override
@@ -132,23 +133,6 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 			}
 		} else {
 			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be granted");
-		}
-	}
-
-	@Override
-	public void revokeReviewerPermissions(NodeRef employeeRef, NodeRef bpmPackage) {
-		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
-		if (Utils.isDocument(documentRef)) {
-			this.revokePermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reviewer");
-		}
-	}
-
-	protected void revokePermissions(NodeRef employeeRef, NodeRef documentRef, final String permissionGroup) {
-		if (documentRef != null) {
-			LecmPermissionService.LecmPermissionGroup pgRevoking = lecmPermissionService.findPermissionGroup(permissionGroup);
-			lecmPermissionService.revokeAccess(pgRevoking, documentRef, employeeRef);
-		} else {
-			logger.error("There is no any lecm-contract:document in bpm:package. Permissions won't be revoked");
 		}
 	}
 

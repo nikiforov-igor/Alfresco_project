@@ -46,7 +46,8 @@
 		  p:workflowService-ref="WorkflowService"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap"
 		  p:delegationService-ref="delegationService"
-		  p:workflowResultListService-ref="workflowResultListService"/>
+		  p:workflowResultListService-ref="workflowResultListService"
+		  p:stateMachineService-ref="stateMachineHelper"/>
 
 	<bean id="workflowAssigneesListService" parent="baseBean"
 		  class="ru.it.lecm.workflow.beans.WorkflowAssigneesListServiceImpl"
