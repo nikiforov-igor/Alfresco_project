@@ -84,7 +84,7 @@
 
 					<!-- outgoing5:full-width-set -->
 					<field id="lecm-eds-document:summaryContent" set="outgoing5">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>
@@ -242,7 +242,7 @@
 
 					<!-- outgoing7:full-width-set -->
 					<field id="lecm-eds-document:summaryContent" set="outgoing7">
-						<control template="/org/alfresco/components/form/controls/textarea.ftl">
+						<control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
 					</field>

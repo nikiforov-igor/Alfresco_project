@@ -64,7 +64,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" label="Содержание" set="nd5">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -241,7 +241,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" label="Содержание" set="nd5">
-                        <control template="/org/alfresco/components/form/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>

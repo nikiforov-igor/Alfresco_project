@@ -61,7 +61,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" label="Содержание" set="ord5">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
@@ -246,7 +246,7 @@
                         </control>
                     </field>
                     <field id="lecm-eds-document:summaryContent" set="ord2">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
