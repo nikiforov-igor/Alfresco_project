@@ -9620,7 +9620,7 @@
 											<property>
 												<name>permissionTypeValue</name>
 												<value>
-													<![CDATA[LECM_BASIC_PG_Employee]]>
+													<![CDATA[LECM_BASIC_PG_Reviewer]]>
 												</value>
 											</property>
 										</properties>
@@ -10459,7 +10459,7 @@
 											<property>
 												<name>permissionTypeValue</name>
 												<value>
-													<![CDATA[LECM_BASIC_PG_Employee]]>
+													<![CDATA[LECM_BASIC_PG_Reviewer]]>
 												</value>
 											</property>
 										</properties>
@@ -11388,7 +11388,7 @@
 											<property>
 												<name>permissionTypeValue</name>
 												<value>
-													<![CDATA[LECM_BASIC_PG_Employee]]>
+													<![CDATA[LECM_BASIC_PG_Reviewer]]>
 												</value>
 											</property>
 										</properties>
