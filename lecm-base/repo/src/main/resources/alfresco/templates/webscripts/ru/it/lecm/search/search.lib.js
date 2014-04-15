@@ -333,20 +333,22 @@ function getSearchResults(params) {
         }
 
         ftsQuery += (typesQuery.length !== 0 ? '(' + typesQuery + ')' : '');
-        ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + formQuery + ')') : '');
-        ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filter + ')') : '');
-        ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + filtersQuery + ')') : '');
-        ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND' : '') + '(' + fullTextSearchQuery + ')') : '')
+        ftsQuery += (formQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + '(' + formQuery + ')') : '');
+        var useBr = filter.indexOf("NOT") < 0 || filter.indexOf("NOT") > 0;
+        ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + (useBr ? '(' : '') + filter + (useBr ? ')' : '')) : '');
+        useBr = filtersQuery.indexOf("NOT") < 0 || filtersQuery.indexOf("NOT") > 0;
+        ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : ' ') + (useBr? '(' : '')  + filtersQuery + (useBr ? '(' : '') ) : '');
+        ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + '(' + fullTextSearchQuery + ')') : '');
 
         //фильтр по родителю
         // TODO последняя проверка - временное решение для поиска по вложенным элементам. Нужно ввести доп параметр
         if (parent != null && ("" + parent).length > 0 && (ftsQuery.length == 0 || ftsQuery.indexOf("PATH") < 0)) {
-            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' PARENT:"' + parent + '"';
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + ' PARENT:"' + parent + '"';
         }
 
         // по активности
         if (!showInactive) {
-            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + '(NOT (ASPECT:"lecm-dic:aspect_active") OR ' + this.escapeQName("lecm-dic:active") + ':true)';
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + 'NOT @' + this.escapeQName("lecm-dic:active") + ':false';
         }
 
 
@@ -359,7 +361,7 @@ function getSearchResults(params) {
                     query += " OR "
                 }
             }
-            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' ' + query + ')';
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + ' ' + query + ')';
         }
 
         //спец сочетания

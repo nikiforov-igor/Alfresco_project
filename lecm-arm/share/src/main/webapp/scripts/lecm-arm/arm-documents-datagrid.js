@@ -305,9 +305,11 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 if (buffer) {
                     buffer = buffer.reverse();
 
+                    var useBrack = true;
                     for (var i = 0; i < buffer.length; i++) {
                         var q = buffer[i];
-                        resultedQuery += "(" + q + ") AND "
+                        useBrack = q.indexOf("NOT") < 0;
+                        resultedQuery += (useBrack && buffer.length > 1 ? "(" : "") + q + (useBrack && buffer.length > 1 ? ")" : "")+ " AND "
                     }
                 }
 
