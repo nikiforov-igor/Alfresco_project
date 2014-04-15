@@ -9344,7 +9344,7 @@
 															<property>
 																<name>actionScript</name>
 																<value>
-																	<![CDATA[
+																	<![CDATA[//
 (function(){
     var ord = stm_document;
     var controllerAssoc = ord.assocs["lecm-ord:controller-assoc"];
@@ -9360,16 +9360,18 @@
             }
         }
 
-    // выдадим права контролеру
-    statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN");
+        // выдадим права контролеру
+        statemachine.grandDynamicRoleForEmployee(ord, controller, "DA_CONTROLLER_DYN");
 
-    //подготавливаем уведомление 
-    notification = ordStatemachine.prepareNotificationToController(ord, controller);
+        //подготавливаем уведомление 
+        notification = ordStatemachine.prepareNotificationToController(ord, controller);
 
-    //рассылаем уведомление
-    notifications.sendNotification(notification);
+        //рассылаем уведомление
+        notifications.sendNotification(notification);
+    }
 })();
-}]]></value>
+]]>
+																</value>
 															</property>
 															<property>
 																<name>scriptLabel</name>
