@@ -31,21 +31,31 @@
 				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
 								    	var recipients = [];
+                                        var employees = [];
 
 								    	var allEmployeeInUnit = orgstructure.getEmployeesInUnit(recipient);
 								    	if (allEmployeeInUnit != null) {
 								    	    for (var i = 0; i < allEmployeeInUnit.length; i++) {
 								    	        var employee = allEmployeeInUnit[i];
 								            	if (orgstructure.hasBusinessRole(employee, "INCOMING_REVIEWERS_IN_UNIT")) {
-								                	recipients.push(employee);
+								                	employees.push(employee);
+								                	recipients.push(employee.nodeRef.toString());
 								            	}
 								    	    }
 								    	}
 
+                                        if (recipients.length == 0) {
+                                            var boss = orgstructure.findUnitBoss(recipient.nodeRef.toString());
+                                            if (boss != null) {
+                                                employees.push(boss);
+								                recipients.push(boss.nodeRef.toString());
+                                            }
+                                        }
+
 								    	if (recipients.length > 0) {
-								    	    for (var i = 0; i < recipients.length; i++) {
-								    	        statemachine.grandDynamicRoleForEmployee(document, recipients[i], "INCOMING_REVIEWER_DYN");
-								    	        document.createAssociation(recipients[i], "lecm-eds-document:reviewers-assoc");
+								    	    for (var i = 0; i < employees.length; i++) {
+								    	        statemachine.grandDynamicRoleForEmployee(document, employees[i], "INCOMING_REVIEWER_DYN");
+								    	        document.createAssociation(employees[i], "lecm-eds-document:reviewers-assoc");
 								    	    }
 
 									        var notificationText = "Поступил документ на рассмотрение ";
