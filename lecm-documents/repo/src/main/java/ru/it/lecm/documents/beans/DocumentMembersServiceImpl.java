@@ -8,6 +8,7 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationExistsException;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -248,11 +249,15 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
      */
     public void addMemberToUnit(NodeRef employeeRef, NodeRef document) {
         NodeRef memberUnit = getMembersUnit(nodeService.getType(document));
-        try {
-            nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
-        } catch (AssociationExistsException ex) {
-            logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document));
-        }
+            try {
+                List<AssociationRef> assocs = nodeService.getTargetAssocs(memberUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
+                AssociationRef ref = new AssociationRef(employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, document);
+                if (!assocs.contains(ref)) {
+                    nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
+                }
+            } catch (AssociationExistsException ex) {
+                logger.debug("Сотрудник уже сохранен в участниках документооборота для данного типа документов:" + nodeService.getType(document));
+            }
     }
 
 	public LecmPermissionService.LecmPermissionGroup getMemberPermissionGroup(NodeRef memberRef) {
