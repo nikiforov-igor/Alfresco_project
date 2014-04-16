@@ -251,7 +251,7 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
         NodeRef memberUnit = getMembersUnit(nodeService.getType(document));
             try {
                 List<AssociationRef> assocs = nodeService.getTargetAssocs(memberUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
-                AssociationRef ref = new AssociationRef(employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, document);
+                AssociationRef ref = new AssociationRef(memberUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, employeeRef);
                 if (!assocs.contains(ref)) {
                     nodeService.createAssociation(memberUnit, employeeRef, DocumentMembersService.ASSOC_UNIT_EMPLOYEE);
                 }
