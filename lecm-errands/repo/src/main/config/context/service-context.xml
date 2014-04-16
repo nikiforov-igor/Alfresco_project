@@ -25,7 +25,7 @@
 	</bean>
 
 	<bean id="errands.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="dictionaryBootstrap">
+	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/lecm-errands-dictionaries-model.xml</value>

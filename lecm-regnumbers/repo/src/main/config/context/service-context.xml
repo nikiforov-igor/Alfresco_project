@@ -6,11 +6,10 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="regNumbers.regNumbersBootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap">
+		  depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
 			<list>
 				<value>alfresco/module/${artifactId}/models/regnumbers-model.xml</value>
-
 			</list>
 		</property>
 		<property name="labels">

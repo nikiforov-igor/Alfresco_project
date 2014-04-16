@@ -26,7 +26,7 @@
 					 dictionary.LogicEcmDictionaryCurrencyModelBootstrap,
 					 documents.LogicEcmModelsConnectionsBootstrap,
 					 documents.dictionaries.LogicEcmModelsBootstrap,
-					 lecm.signed-docflow.model-bootstrap
+					 lecm.signed-docflow.model-bootstrap,
 					 eds.models.bootstrap">
         <property name="models">
             <list>
