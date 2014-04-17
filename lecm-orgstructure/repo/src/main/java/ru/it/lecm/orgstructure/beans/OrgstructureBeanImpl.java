@@ -1936,4 +1936,13 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         }
     }
 
+	@Override
+	public boolean isDynamicBusinessRole(NodeRef roleRef) {
+		return roleRef != null && ((Boolean) nodeService.getProperty(roleRef, PROP_BUSINESS_ROLE_IS_DYNAMIC));
+	}
+
+	@Override
+	public String getBusinessRoleIdentifier(NodeRef roleRef) {
+		return (String) nodeService.getProperty(roleRef, PROP_BUSINESS_ROLE_IDENTIFIER);
+	}
 }

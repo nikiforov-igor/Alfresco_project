@@ -868,4 +868,59 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			return createNode(rootFolder, TYPE_DELEGATION_GLOBAL_SETTINGS, settingsObjectName, null);
 		}
 	}
+
+	@Override
+	public Set<NodeRef> getDeletionOwnerEmployees(NodeRef employee, Set<String> roles) {
+		Set<NodeRef> results = new HashSet<NodeRef>();
+		if (roles != null) {
+			List<NodeRef> allInitiatorBusinesRoles = orgstructureService.getEmployeeRoles(employee, false, true);
+			for (NodeRef roleRef: allInitiatorBusinesRoles) {
+				String roleIdentifier = orgstructureService.getBusinessRoleIdentifier(roleRef);
+				if (roleIdentifier != null && roles.contains(roleIdentifier)) {
+					return new HashSet<NodeRef>();
+				}
+			}
+
+			List<NodeRef> delegationOptsList = findNodesByAssociationRef(employee, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, IDelegation.TYPE_DELEGATION_OPTS, ASSOCIATION_TYPE.SOURCE);
+			if (delegationOptsList != null) {
+				for (NodeRef delegationOpts : delegationOptsList) {
+					if (!isArchive(delegationOpts)) {
+						NodeRef owner = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+						if (owner != null) {
+							results.add(owner);
+						}
+					}
+				}
+			}
+
+			List<NodeRef> procuracies = findNodesByAssociationRef(employee, IDelegation.ASSOC_PROCURACY_TRUSTEE, IDelegation.TYPE_PROCURACY, ASSOCIATION_TYPE.SOURCE);
+			if (procuracies != null) {
+				for (NodeRef procuracy: procuracies) {
+					if (!isArchive(procuracy)) {
+						NodeRef roleRef = findNodeByAssociationRef(procuracy, IDelegation.ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
+						String role = orgstructureService.getBusinessRoleIdentifier(roleRef);
+						if (role != null && roles.contains(role)) {
+							ChildAssociationRef parent = nodeService.getPrimaryParent(procuracy);
+							if (parent != null && isDelegationOpts(parent.getParentRef()) && !isArchive(parent.getParentRef())) {
+								NodeRef owner = findNodeByAssociationRef(parent.getParentRef(), IDelegation.ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+								if (owner != null) {
+									results.add(owner);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return results;
+	}
+
+	public boolean getCreateDocumentDelegationSetting() {
+		NodeRef globalSettingsNode = getGlobalSettingsNode(true);
+		if (globalSettingsNode != null) {
+			return (Boolean) nodeService.getProperty(globalSettingsNode, PROP_CREATE_DOCUMENT_DELEGATION_SETTING);
+		} else {
+			return false;
+		}
+	}
 }

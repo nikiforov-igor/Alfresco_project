@@ -707,4 +707,7 @@ public interface OrgstructureBean {
      */
     public String getOrgstructureUnitAuthority(NodeRef unit, boolean shared);
 
+	public boolean isDynamicBusinessRole(NodeRef roleRef);
+
+	public String getBusinessRoleIdentifier(NodeRef roleRef);
 }

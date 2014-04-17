@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Интерфейс для поддержки делегирований.
@@ -347,4 +348,18 @@ public interface IDelegation {
 	 * @return ссылка на объект настроек
 	 */
 	NodeRef getGlobalSettingsNode();
+
+	/**
+	 * Получение настройки "давать делегирующим права на документы, созданные делегатом на основе делегирования"
+	 * @return если true, то нужно давать делегирующим права на документы, созданные делегатом на основе делегирования
+	 */
+	public boolean getCreateDocumentDelegationSetting();
+
+	/**
+	 * Получение доверителей для сотрудника по бизнес роли (Сотрудников, которые делегировали указанную бизнес роль)
+	 * @param employee сотрудник
+	 * @param roles список ролей
+	 * @return список сотрудников
+	 */
+	public Set<NodeRef> getDeletionOwnerEmployees(NodeRef employee, Set<String> roles);
 }

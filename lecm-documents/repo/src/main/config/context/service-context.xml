@@ -466,6 +466,10 @@
         <property name="authenticationService" ref="authenticationService"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean" />
+	    <property name="stateMachineHelper" ref="stateMachineHelper"/>
+	    <property name="namespaceService" ref="namespaceService"/>
+	    <property name="nodeService" ref="nodeService"/>
+	    <property name="delegationService" ref="delegationService"/>
     </bean>
 
     <bean id="documentStatusesFilter" class="ru.it.lecm.documents.beans.DocumentStatusesFilterBean" abstract="true"/>
