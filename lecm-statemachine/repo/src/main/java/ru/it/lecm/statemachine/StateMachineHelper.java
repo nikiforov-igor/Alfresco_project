@@ -361,14 +361,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
      * @return
      */
     public boolean isStarter(String type, NodeRef employee) {
-        Set<String> accessRoles = new HashSet<String>();
-        List<StateMachineAction> actions = getStartActions(type.replace(":", "_"));
-        for (StateMachineAction action : actions) {
-            if (action instanceof DocumentPermissionAction) {
-                DocumentPermissionAction permissions = (DocumentPermissionAction) action;
-                accessRoles.addAll(permissions.getRoles());
-            }
-        }
+        Set<String> accessRoles = getStarterRoles(type);
         if (accessRoles.isEmpty()) {
             return false;
         }
