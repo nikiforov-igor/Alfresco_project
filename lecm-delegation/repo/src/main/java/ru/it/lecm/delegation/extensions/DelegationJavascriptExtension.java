@@ -250,4 +250,8 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 			return null;
 		}
 	}
+
+	public ScriptNode getGlobalSettingsNode() {
+		return new ScriptNode(delegationService.getGlobalSettingsNode(), serviceRegistry, getScope());
+	}
 }

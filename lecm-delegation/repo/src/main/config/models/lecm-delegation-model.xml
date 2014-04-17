@@ -232,6 +232,18 @@
 				</association>
 			</associations>
 		</type>
+
+		<type name="lecm-d8n:global-settings">
+			<title>Delegation global settings</title>
+			<parent>cm:cmobject</parent>
+			<properties>
+				<property name="lecm-d8n:create-document-delegation-setting">
+					<type>d:boolean</type>
+					<mandatory>true</mandatory>
+					<default>false</default>
+				</property>
+			</properties>
+		</type>
 	</types>
 </model>
 

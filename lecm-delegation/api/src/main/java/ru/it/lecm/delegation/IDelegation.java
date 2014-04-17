@@ -100,6 +100,10 @@ public interface IDelegation {
 	 */
 	String BUSINESS_ROLE_OTHER_DESIGNATIONS = "BR_OTHER_DESIGNATIONS";
 
+	public static final QName TYPE_DELEGATION_GLOBAL_SETTINGS = QName.createQName (DELEGATION_NAMESPACE, "global-settings");
+	public static final QName PROP_CREATE_DOCUMENT_DELEGATION_SETTING = QName.createQName(DELEGATION_NAMESPACE, "create-document-delegation-setting");
+	public static final String DELEGATION_SETTINGS_NODE_NAME = "Settings";
+
 	/**
 	 * получение ссылки на папку сервиса делегирования
 	 * если папка отсутствует она будет создана
@@ -337,4 +341,10 @@ public interface IDelegation {
 	 * неудаче
 	 */
 	NodeRef reassignTaskBackToAssumedExecutor(final NodeRef delegatedTask);
+
+	/**
+	 * Получение глобальных настроек
+	 * @return ссылка на объект настроек
+	 */
+	NodeRef getGlobalSettingsNode();
 }

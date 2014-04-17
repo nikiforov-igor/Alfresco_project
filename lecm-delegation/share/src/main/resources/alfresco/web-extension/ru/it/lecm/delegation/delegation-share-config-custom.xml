@@ -131,4 +131,24 @@
 			</form>
 		</forms>
 	</config>
+
+	<config evaluator="node-type" condition="lecm-d8n:global-settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-d8n:create-document-delegation-setting"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-d8n:global-settings">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-d8n:create-document-delegation-setting"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
 </alfresco-config>

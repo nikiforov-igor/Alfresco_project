@@ -852,4 +852,20 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 		return taskOwner.equalsIgnoreCase(employeeUserName);
 	}
+
+	public NodeRef getGlobalSettingsNode() {
+		return getGlobalSettingsNode(false);
+	}
+
+	public NodeRef getGlobalSettingsNode(boolean doNotCreate) {
+		final NodeRef rootFolder = this.getServiceRootFolder();
+		final String settingsObjectName = DELEGATION_SETTINGS_NODE_NAME;
+
+		NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+		if (settings != null || doNotCreate) {
+			return settings;
+		} else {
+			return createNode(rootFolder, TYPE_DELEGATION_GLOBAL_SETTINGS, settingsObjectName, null);
+		}
+	}
 }
