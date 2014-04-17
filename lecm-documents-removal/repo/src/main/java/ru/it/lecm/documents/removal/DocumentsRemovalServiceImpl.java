@@ -10,6 +10,7 @@ import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
@@ -91,7 +92,42 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 	private void removeAssociations(final List<AssociationRef> assocs) {
 		for (AssociationRef assoc : assocs) {
-			nodeService.removeAssociation(assoc.getSourceRef(), assoc.getTargetRef(), assoc.getTypeQName());
+			NodeRef sourceRef = assoc.getSourceRef(),
+					targetRef = assoc.getTargetRef();
+			behaviourFilter.disableBehaviour(sourceRef);
+			behaviourFilter.disableBehaviour(targetRef);
+
+			nodeService.removeAssociation(sourceRef, targetRef, assoc.getTypeQName());
+		}
+	}
+
+	/**
+	 * Жестокое удаление объекта.
+	 * Выключаем все полиси, вешаем темповый аспект и удаляем мимо корзины.
+	 *
+	 * @param node кого удаляем
+	 */
+	private void cruellyDeleteNode(NodeRef node) {
+		behaviourFilter.disableBehaviour(node);
+		nodeService.addAspect(node, ContentModel.ASPECT_TEMPORARY, null);
+		nodeService.deleteNode(node);
+	}
+
+	/**
+	 * Рекурсивно побежать по чайлдовым ассоциациям и жестоко удалить все встретившиеся объекты.
+	 *
+	 * @param dirNode папка, в которую мы будем спускаться.
+	 */
+	private void clearDir(NodeRef dirNode) {
+		List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(dirNode);
+		for (ChildAssociationRef childAssoc : childAssocs) {
+			NodeRef parentRef = childAssoc.getParentRef(),
+					childRef = childAssoc.getChildRef();
+			if (!nodeService.getChildAssocs(childRef).isEmpty()) {
+				clearDir(childRef);
+			}
+			behaviourFilter.disableBehaviour(parentRef);
+			cruellyDeleteNode(childRef);
 		}
 	}
 
@@ -123,7 +159,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 			List<AssociationRef> assocs = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
 			NodeRef employeeRef = assocs.get(0).getTargetRef();
 			String login = orgstructureService.getEmployeeLogin(employeeRef);
-			String shortName = (String)nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+			String shortName = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
 			users.add(String.format("%s(%s)", shortName, login));
 			LecmPermissionGroup permissionGroup = documentMembersService.getMemberPermissionGroup(documentRef);
 			lecmPermissionService.revokeAccess(permissionGroup, documentRef, employeeRef);
@@ -146,17 +182,24 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<String>(definitions), null, null);
 		logger.debug("All workflows {} for document {} are stopped", activities, documentRef);
 
-		//получаем все вложения отключаем их policy и удаляем
-		List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
-		for (NodeRef categoryRef : categories) {
-			String category = documentAttachmentsService.getCategoryName(categoryRef);
-			List<NodeRef> attachments = documentAttachmentsService.getAttachmentsByCategory(documentRef, category);
-			for (NodeRef attachRef : attachments) {
-				behaviourFilter.disableBehaviour(attachRef);
-				nodeService.addAspect(attachRef, ContentModel.ASPECT_TEMPORARY, null);
-				documentAttachmentsService.deleteAttachment(attachRef);
+		try {
+			//получаем все вложения отключаем их policy и удаляем
+			List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
+			for (NodeRef categoryRef : categories) {
+				String category = documentAttachmentsService.getCategoryName(categoryRef);
+				List<NodeRef> attachments = documentAttachmentsService.getAttachmentsByCategory(documentRef, category);
+				for (NodeRef attachRef : attachments) {
+					cruellyDeleteNode(attachRef);
+				}
 			}
+		} catch (Exception ex) {
+			// что-то сломалось при попытке получить категории вложений. это не повод прекращать удаление документа
+			String msg = "Error during deleting document %s";
+			logger.warn(String.format(msg, documentRef), ex);
 		}
+
+		// зачищаем папку документа. удаляются все дочерние элементы, которые не были удалены до этого
+		clearDir(documentRef);
 
 		//удаляем все связи какие есть
 		//разгребаем все ассоциации которые есть по категориям
@@ -193,9 +236,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		removeAssociations(connectionAssocs);
 		//в будущем сработает policy DocumentConnectionPolicy.onDeleteAssociation а пока будем их удалять принудительно
 		for (NodeRef connectionRef : connections) {
-			behaviourFilter.disableBehaviour(connectionRef);
-			nodeService.addAspect(connectionRef, ContentModel.ASPECT_TEMPORARY, null);
-			nodeService.deleteNode(connectionRef);
+			cruellyDeleteNode(connectionRef);
 		}
 		logger.debug("Connections with other documents are removed");
 		//удаляем прочие ассоциации
@@ -204,8 +245,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 		//удаляем сам документ
 		BusinessJournalRecord record = businessJournalService.createBusinessJournalRecord(user, documentRef, EventCategory.DELETE, DOCUMENT_TEMPLATE);
-		nodeService.addAspect(documentRef, ContentModel.ASPECT_TEMPORARY, null);
-		nodeService.deleteNode(documentRef);
+		cruellyDeleteNode(documentRef);
 
 		//сообщаем об удалении в бизнес журнал
 		logger.debug("Document {} of type {} successfully purged", documentRef, documentType);
