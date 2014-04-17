@@ -54,34 +54,39 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
 
             currentEmployee: null,
 
-            onReady: function()
-            {
-				this.transfers.adminToolsButton = new YAHOO.widget.Button(
-														this.controlId + "-admin-tools-right-button",
-														{
-															type: "menu",
-															menu: [
-																	{
-																		text: this.msg("menu.button.transfer.document"),
-																		value: 1,
-																		onclick: {
-																			fn: this.getIgnoredNode,
-																			scope: this
-																		}
-																	},
-																	{
-																		text: this.msg("menu.button.show.service.information"),
-																		value: 2,
-																		onclick: {
-																			fn: this.showServiceDocInfo,
-																			scope: this
-																		}
-																	},
-
-																  ],
-															disabled: false
-														}
-												  );
+            onReady: function () {
+                this.transfers.adminToolsButton = new YAHOO.widget.Button(this.controlId + "-admin-tools-right-button",
+                    {
+                        type: "menu",
+                        menu: [
+                            {
+                                text: this.msg("menu.button.transfer.document"),
+                                value: 1,
+                                onclick: {
+                                    fn: this.getIgnoredNode,
+                                    scope: this
+                                }
+                            },
+                            {
+                                text: this.msg("menu.button.show.service.information"),
+                                value: 2,
+                                onclick: {
+                                    fn: this.showServiceDocInfo,
+                                    scope: this
+                                }
+                            },
+                            {
+                                text: this.msg("menu.button.delete.document"),
+                                value: 3,
+                                onclick: {
+                                    fn: this.deleteDocument,
+                                    scope: this
+                                }
+                            }
+                        ],
+                        disabled: false
+                    }
+                );
             },
 
 			showServiceDocInfo: function()
@@ -175,6 +180,44 @@ LogicECM.module.Transfer = LogicECM.module.Transfer || {};
                             scope: this
                         }
                     }).show();
+            },
+
+            deleteDocument: function () {
+                var me = this;
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: "Безвозвратное удаление",
+                        text: "Внимание! Все связанные с данным документов объекты и процессы будут удалены! Вы уверены, что хотите удалить этот документ?",
+                        buttons: [
+                            {
+                                text: "Да",
+                                handler: function dlA_onAction_action() {
+                                    this.destroy();
+                                    Alfresco.util.Ajax.request(
+                                        {
+                                            method: "DELETE",
+                                            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document-removal/document/delete?nodeRef=" + me.options.documentRef,
+                                            successCallback: {
+                                                fn: function () {
+                                                    window.location.reload();
+                                                },
+                                                scope: this
+                                            },
+                                            failureMessage: "message.failure.delete",
+                                            execScripts: true
+                                        });
+                                }
+                            },
+                            {
+                                text: "Отмена",
+                                handler: function ()
+                                {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }
+                        ]
+                    });
             }
         });
 })();
