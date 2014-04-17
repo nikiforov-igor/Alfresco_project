@@ -141,4 +141,11 @@ public interface StateMachineServiceBean {
 	boolean isServiceWorkflow(WorkflowInstance workflow);
 
 	void sendSignal(String executionId);
+
+    /**
+     * Возвращает бизнес-роли которые могут создавать документ определенного типа
+     * @param type - тип документа
+     * @return
+     */
+    public Set<String> getStarterRoles(String documentType);
 }

@@ -383,6 +383,23 @@ public class StateMachineHelper implements StateMachineServiceBean {
     }
 
     /**
+     * Возвращает бизнес-роли которые могут создавать документ определенного типа
+     * @param type - тип документа
+     * @return
+     */
+    public Set<String> getStarterRoles(String documentType) {
+        Set<String> accessRoles = new HashSet<String>();
+        List<StateMachineAction> actions = getStartActions(documentType.replace(":", "_"));
+        for (StateMachineAction action : actions) {
+            if (action instanceof DocumentPermissionAction) {
+                DocumentPermissionAction permissions = (DocumentPermissionAction) action;
+                accessRoles.addAll(permissions.getRoles());
+            }
+        }
+        return accessRoles;
+    }
+
+    /**
      * Выбирает список действий для старта процесса последней версии.
      *
      * @param definitionKey - Id процесса в схеме BPMN
