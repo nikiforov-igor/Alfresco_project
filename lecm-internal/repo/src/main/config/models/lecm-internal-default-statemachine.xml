@@ -8431,10 +8431,14 @@
     for each (var answer in answers) {
         var employee = answer.assocs["lecm-internal-table-structure:employee-assoc"][0];
         var unit = orgstructure.getPrimaryOrgUnit(employee);
-        var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, isShared); 
-        var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, isShared);
-        answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
-        answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+        if (primaryUnit != null) {
+            var initiatorAuthority = orgstructure.getOrgstructureUnitAuthority(primaryUnit, isShared); 
+            answer.setPermission("LECM_BASIC_PG_Reader", initiatorAuthority);
+        }
+        if (unit != null) {
+            var recipientAuthority = orgstructure.getOrgstructureUnitAuthority(unit, isShared);
+            answer.setPermission("LECM_BASIC_PG_Reader", recipientAuthority);
+        }
     }
 })();
 ]]>
