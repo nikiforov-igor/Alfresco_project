@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.MODULE_GROUP_ID</groupId>
         <artifactId>MODULE_GROUP_ID</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>MODULE_GROUP_ID-repo</artifactId>
