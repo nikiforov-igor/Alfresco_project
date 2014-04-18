@@ -1,7 +1,16 @@
 package ru.it.lecm.wcalendar.beans;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
+import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -9,12 +18,6 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -99,7 +102,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 					logger.warn("No calendar for such year ({})!", getYearByDate(curDay));
 				}
 
-				curDay = addDayToDate(curDay);
+				curDay = DateUtils.addDays(curDay, 1);
 			}
 
 		} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
@@ -114,7 +117,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 							result.add(curElementDay);
 						}
 					}
-					curElementDay = addDayToDate(curElementDay);
+					curElementDay = DateUtils.addDays(curElementDay, 1);
 				}
 			}
 		}
@@ -151,7 +154,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 				}
 
 			} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
-				Date curDayNoTime = resetTime(curDay);
+				Date curDayNoTime = DateUtils.truncate(curDay, Calendar.DATE);
 
 				for (NodeRef scheduleElement : scheduleElements) {
 					Date elementStart = scheduleService.getScheduleElementStart(scheduleElement);
@@ -169,7 +172,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 			if (toBeAdded) {
 				result.add(curDay);
 			}
-			curDay = addDayToDate(curDay);
+			curDay = DateUtils.addDays(curDay, 1);
 		}
 
 		return result;
@@ -216,7 +219,7 @@ public class WorkCalendarBean implements IWorkCalendar {
 			if (i == workingDaysRequired - 1) {
 				result = new Date(curDay.getTime());
 			} else {
-				curDay = addDayToDate(curDay);
+				curDay = DateUtils.addDays(curDay, 1);
 			}
 			// лекарство от бесконечного цикла.
 			if (++j == 1000) {
@@ -227,13 +230,34 @@ public class WorkCalendarBean implements IWorkCalendar {
 	}
 
 	@Override
-	public Date getNextWorkingDate(Date start, int workingDaysNumber) {
+	public Date getNextWorkingDate(Date start, int offset, int timeUnit) {
+		Date result;
+		switch (timeUnit) {
+			case Calendar.DAY_OF_MONTH:
+				result = getNextWorkingDateByDays(start, offset);
+				break;
+			case Calendar.HOUR_OF_DAY:
+				result = getNextWorkingDateByHours(start, offset);
+				break;
+			case Calendar.MINUTE:
+				result = getNextWorkingDateByMinutes(start, offset);
+				break;
+			default:
+				String msg = String.format("Unknown type: %d", timeUnit);
+				throw new AlfrescoRuntimeException(msg);
+		}
+
+		return result;
+	}
+
+	@Override
+	public Date getNextWorkingDateByDays(Date start, int workingDaysNumber) {
 		int i = 0;
 
 		Date curDay = new Date(start.getTime());
 		while (i <= workingDaysNumber) {
 			if (i != workingDaysNumber) {
-				curDay = addDayToDate(curDay);
+				curDay = DateUtils.addDays(curDay, 1);
 			}
 
 			Boolean isWorkingDay = WCalendarService.isWorkingDay(curDay);
@@ -245,6 +269,73 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 		}
 		return curDay;
+	}
+
+	@Override
+	public Date getNextWorkingDateByHours(Date startDate, int hoursAmount) {
+		return getNextWorkingDateByMinutes(startDate, hoursAmount * 60);
+	}
+
+	@Override
+	public Date getNextWorkingDateByMinutes(Date startDate, int minutesAmount) {
+		Date result, actualStartDate;
+
+		int workDayEndHour, workDayEndMinute, workDayDurationInMinutes, daysShift,
+				minutesShift, minutesTillEndOfTheDay, delta;
+
+		NodeRef defaultSchedule = scheduleService.getDefaultSystemSchedule();
+		String workDayEndTime = scheduleService.getScheduleEndTime(defaultSchedule);
+		workDayEndHour = Integer.parseInt(workDayEndTime.split(":")[0]);
+		workDayEndMinute = Integer.parseInt(workDayEndTime.split(":")[1]);
+		workDayDurationInMinutes = scheduleService.getWorkDayDurationInMinutes(defaultSchedule);
+		daysShift = minutesAmount / workDayDurationInMinutes;
+		minutesShift = minutesAmount - (workDayDurationInMinutes * daysShift);
+		minutesTillEndOfTheDay = minutesBetween(startDate,
+				new DateTime(startDate).withHourOfDay(workDayEndHour).withMinuteOfHour(workDayEndMinute).toDate());
+
+		delta = minutesShift - minutesTillEndOfTheDay;
+		if (delta >= 0) {
+			daysShift++;
+			minutesShift = delta;
+			// сбрасываем время на время начала рабочего дня
+			String workDayBeginTime = scheduleService.getScheduleBeginTime(defaultSchedule);
+			int workDayBeginHour = Integer.parseInt(workDayBeginTime.split(":")[0]);
+			int workDayBeginMinute = Integer.parseInt(workDayBeginTime.split(":")[1]);
+
+			actualStartDate = new DateTime(startDate).withHourOfDay(workDayBeginHour).withMinuteOfHour(workDayBeginMinute).toDate();
+		} else {
+			actualStartDate = startDate;
+		}
+
+		result = DateUtils.addMinutes(getNextWorkingDateByDays(actualStartDate, daysShift), minutesShift);
+
+		return result;
+
+	}
+
+	@Override
+	public Date getNextWorkingDate(Date date, String offsetStr) {
+		if (offsetStr == null) {
+			return null;
+		}
+
+		int timeUnit, offset;
+		String modifierStr = offsetStr.substring(offsetStr.length() - 1);
+		if ("m".equals(modifierStr)) {
+			timeUnit = Calendar.MINUTE;
+			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
+		} else if ("h".equals(modifierStr)) {
+			timeUnit = Calendar.HOUR_OF_DAY;
+			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
+		} else if ("d".equals(modifierStr)) {
+			timeUnit = Calendar.DAY_OF_MONTH;
+			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
+		} else {
+			timeUnit = Calendar.DAY_OF_MONTH;
+			offset = Integer.parseInt(offsetStr);
+		}
+
+		return getNextWorkingDate(date, offset, timeUnit);
 	}
 
 	public void setAbsenceService(IAbsence absenceService) {
@@ -259,6 +350,13 @@ public class WorkCalendarBean implements IWorkCalendar {
 		this.WCalendarService = WCalendarService;
 	}
 
+	private int minutesBetween(Date start, Date end) {
+		DateTime startDT = new DateTime(start),
+				endDT = new DateTime(end);
+
+		return Minutes.minutesBetween(startDT, endDT).getMinutes();
+	}
+
 	private int getYearByDate(Date date) {
 		return Integer.parseInt(yearParser.format(date));
 	}
@@ -270,27 +368,6 @@ public class WorkCalendarBean implements IWorkCalendar {
 			schedule = scheduleService.getParentSchedule(node);
 		}
 		return schedule;
-	}
-
-	private Date addDayToDate(Date date) {
-		return shiftDate(date, 1);
-	}
-
-	private Date substractDayFromDate(Date date) {
-		return shiftDate(date, -1);
-	}
-
-	/**
-	 * сдвинуть дату на указанное число дней
-	 * @param date дата которую будем двигать
-	 * @param amount кол-во дней для сдвига. Если больше нуля то в будущее. Если меньше, то в прошлое
-	 * @return новая дата
-	 */
-	private Date shiftDate(Date date, int amount) {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.DAY_OF_MONTH, amount);
-		return c.getTime();
 	}
 
 	private Boolean isEmployeePresent(Date day, NodeRef node) {
@@ -309,24 +386,6 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return result;
 	}
 
-	/**
-	 * Устанавливает часы, минуты, секунды и миллисекунды в 00:00:00.000
-	 *
-	 * @param day Дата, у которой надо сбросить поля времени.
-	 * @return Дата с обнуленными полями времени.
-	 */
-	protected Date resetTime(final Date day) {
-		Date resetDay = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(day);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		resetDay.setTime(cal.getTimeInMillis());
-		return resetDay;
-	}
-
 	@Override
 	public Date getEmployeeNextWorkingDay(NodeRef node, Date initialDate, int offset) {
 		return getEmployeeWorkingDayOffset(node, initialDate, offset, true);
@@ -338,11 +397,11 @@ public class WorkCalendarBean implements IWorkCalendar {
 	}
 
 	private Date getEmployeeWorkingDayOffset(NodeRef node, Date initialDate, int offset, boolean shiftToFuture) {
-		Date curDate = shiftDate(initialDate, offset);
+		Date curDate = DateUtils.addDays(initialDate, offset);
 
 		Calendar calendar = Calendar.getInstance();
 		while (!getEmployeeAvailability(node, curDate)) {
-			curDate = shiftToFuture ? addDayToDate(curDate) : substractDayFromDate(curDate);
+			curDate = shiftToFuture ? DateUtils.addDays(curDate, 1) : DateUtils.addDays(curDate, -1);
 			calendar.setTime(curDate);
 			int year = calendar.get(Calendar.YEAR);
 			if (!WCalendarService.isCalendarExists(year)) {

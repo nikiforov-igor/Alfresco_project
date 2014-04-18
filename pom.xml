@@ -394,8 +394,20 @@
 				<artifactId>bcpkix-jdk15on</artifactId>
 				<version>1.50</version>
 			</dependency>
+			<dependency>
+				<groupId>org.joda</groupId>
+				<artifactId>com.springsource.org.joda.time</artifactId>
+				<version>1.6.2</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.joda</groupId>
+			<artifactId>com.springsource.org.joda.time</artifactId>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<pluginManagement>

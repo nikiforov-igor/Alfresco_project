@@ -195,4 +195,19 @@ public interface ISchedule extends ICommonWCalendar {
 	 * @return дата последнего рабочего дня.
 	 */
 	Date getScheduleElementEnd(NodeRef node);
+
+	/**
+	 * Получить рабочий график по умолчанию для всей организации.
+	 *
+	 * @return график по умолчанию
+	 */
+	NodeRef getDefaultSystemSchedule();
+
+	/**
+	 * Получить длительность рабочего дня в минутах согласно рабочему графику.
+	 *
+	 * @param schedule график работы
+	 * @return длительность рабочего дня
+	 */
+	int getWorkDayDurationInMinutes(NodeRef schedule);
 }

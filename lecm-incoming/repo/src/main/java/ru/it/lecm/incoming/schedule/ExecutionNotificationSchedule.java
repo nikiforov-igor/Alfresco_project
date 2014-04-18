@@ -173,7 +173,7 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
 
         Calendar calendar = Calendar.getInstance();
         int days =  notificationsService.getSettingsNDays();
-        Date end = calendarBean.getNextWorkingDate(new Date(), days);
+        Date end = calendarBean.getNextWorkingDate(new Date(), days, Calendar.DAY_OF_MONTH);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR, 0);

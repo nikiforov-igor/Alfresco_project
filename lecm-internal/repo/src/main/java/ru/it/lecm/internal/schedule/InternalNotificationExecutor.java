@@ -88,7 +88,7 @@ public class InternalNotificationExecutor implements Job {
                             Date internalExecutionDate = (Date) nodeService.getProperty(internal, DocumentService.PROP_EDS_EXECUTION_DATE);
                             internalExecutionDate = normalizeDate(internalExecutionDate);
                             int days = notificationsService.getSettingsNDays();
-                            Date workCalendarDate = calendarBean.getNextWorkingDate(now, days);
+                            Date workCalendarDate = calendarBean.getNextWorkingDate(now, days, Calendar.DAY_OF_MONTH);
 
                             String notificationDescription = null;
                             if (now.after(internalExecutionDate)) {
@@ -131,7 +131,7 @@ public class InternalNotificationExecutor implements Job {
 
         Calendar calendar = Calendar.getInstance();
         int days = notificationsService.getSettingsNDays();
-        Date end = calendarBean.getNextWorkingDate(new Date(), days);
+        Date end = calendarBean.getNextWorkingDate(new Date(), days, Calendar.DAY_OF_MONTH);
         calendar.setTime(end);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         calendar.set(Calendar.HOUR, 0);

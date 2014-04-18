@@ -18,6 +18,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -115,7 +116,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 }
                 if (query.contains("#current-date")) {
                     int limitDays = notificationsService.getSettingsNDays();
-                    Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays);
+                    Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
                     query = query.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
                 }
 
@@ -213,7 +214,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
             }
             if (additionalQuery.contains("#current-date")) {
                 int limitDays = notificationsService.getSettingsNDays();
-                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays);
+                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
                 additionalQuery = additionalQuery.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
             }
 

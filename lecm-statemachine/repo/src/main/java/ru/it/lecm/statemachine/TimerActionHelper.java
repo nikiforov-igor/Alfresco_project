@@ -71,8 +71,8 @@ public class TimerActionHelper implements InitializingBean {
         });
     }
 
-    public void addTimer(String stateMachineExecutionId, int timerDuration, String variable, List<TransitionExpression> expressions) {
-        if (stateMachineExecutionId == null || timerDuration <= 0 || variable == null || expressions.size() == 0) {
+    public void addTimer(String stateMachineExecutionId, String timerDuration, String variable, List<TransitionExpression> expressions) {
+        if (stateMachineExecutionId == null || timerDuration == null || variable == null || expressions.size() == 0) {
             return;
         }
 
@@ -288,16 +288,18 @@ public class TimerActionHelper implements InitializingBean {
         new StateMachineHelper().setExecutionParameters(stateMachineExecutionId, parameters);
     }
 
-    private long calculateFinishTimestamp(int timerDuration) {
+    private long calculateFinishTimestamp(String timerDuration) {
         Date finishDate = workCalendarService.getNextWorkingDate(new Date(), timerDuration);
 
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(finishDate);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
+//        GregorianCalendar calendar = new GregorianCalendar();
+//        calendar.setTime(finishDate);
+//        calendar.set(Calendar.HOUR_OF_DAY, 23);
+//        calendar.set(Calendar.MINUTE, 59);
+//        calendar.set(Calendar.SECOND, 59);
+//
+//        long finishTimestamp = calendar.getTimeInMillis();
 
-        long finishTimestamp = calendar.getTimeInMillis();
+		long finishTimestamp = finishDate.getTime();
 
         //TODO:stub for testing!!!
 /*

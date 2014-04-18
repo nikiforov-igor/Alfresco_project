@@ -372,7 +372,7 @@ function getSearchResults(params) {
 
         if (ftsQuery.indexOf("#current-date") >= 0) {
             var nDays = notifications.getSettingsNDays();
-            var limitDate = workCalendar.getNextWorkingDate(new Date(), nDays);
+            var limitDate = workCalendar.getNextWorkingDateByDays(new Date(), nDays);
             ftsQuery = ftsQuery.split("#current-date").join(base.dateToISOString(limitDate));
         }
 

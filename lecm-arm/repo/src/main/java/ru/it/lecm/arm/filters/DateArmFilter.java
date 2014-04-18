@@ -62,7 +62,7 @@ public class DateArmFilter implements ArmDocumentsFilter {
 					}
 					case WITH_UPCOMING_PERIOD: {
 						Date start = now.getTime();
-						Date end = calendarBean.getNextWorkingDate(start, 2);
+						Date end = calendarBean.getNextWorkingDate(start, 2, Calendar.DAY_OF_MONTH);
 						dateCompareQuery = "[\"" + DateFormat.format(start) + "\" TO \"" + DateFormat.format(end) + "\"]";
 						break;
 					}

@@ -123,7 +123,7 @@ public class ErrandsFilter extends DocumentFilter {
                     case DEADLINE: {
                         Date now = new Date();
 
-                        Date deadlineDate = workCalendar.getNextWorkingDate(now, 5);
+                        Date deadlineDate = workCalendar.getNextWorkingDate(now, 5, Calendar.DAY_OF_MONTH);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(deadlineDate);
                         calendar.set(Calendar.HOUR_OF_DAY, 0);

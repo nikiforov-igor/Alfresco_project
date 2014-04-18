@@ -42,7 +42,7 @@
 			</list>
 		</property>
 	</bean>
-        
+
 	<!-- Добавление новых категорий событий -->
 	<bean id="${groupId}.${artifactId}.businessJournalDictionaryBootstrap"
 			  parent="lecmDictionaryBootstrap"
@@ -54,7 +54,7 @@
 			</list>
 		</property>
 	</bean>
-        
+
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
 	<!--	<bean id="${groupId}.${artifactId}.ScheduleServicePermissions" parent="ServiceFolderPermissionHelper"
 		  depends-on="${groupId}.${artifactId}.wCalendarBootstrap, ${groupId}.${artifactId}.wCalendarBusinessRolesDicBootstrap" >
@@ -88,7 +88,10 @@
 		<property name="yearsNumberToCreate" value="3"/>
 	</bean>
 	<bean id="ScheduleService" class="ru.it.lecm.wcalendar.schedule.beans.ScheduleBean" init-method="init"
-		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap"/>
+		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
+		<property name="defaultScheduleStartTime" value="09:00"/>
+		<property name="defaultScheduleEndTime" value="18:00"/>
+	</bean>
 	<bean id="AbsenceService" class="ru.it.lecm.wcalendar.absence.beans.AbsenceBean" init-method="init"
 		  parent="commonWCalendarBean" depends-on="${groupId}.${artifactId}.wCalendarBootstrap">
 		<property name="delegationService" ref="delegationService"/>

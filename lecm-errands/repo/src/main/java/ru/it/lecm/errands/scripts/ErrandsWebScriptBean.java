@@ -207,7 +207,7 @@ public class ErrandsWebScriptBean extends BaseWebScript {
                     case ISSUED_ERRANDS_DEADLINE: {
                         Date now = new Date();
 
-                        Date deadlineDate = workCalendar.getNextWorkingDate(now, DEADLINE_DAY_COUNT);
+                        Date deadlineDate = workCalendar.getNextWorkingDate(now, DEADLINE_DAY_COUNT, Calendar.DAY_OF_MONTH);
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(deadlineDate);
                         calendar.set(Calendar.HOUR_OF_DAY, 0);

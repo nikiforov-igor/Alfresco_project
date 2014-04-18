@@ -13,7 +13,7 @@ import java.util.List;
 public class TimerAction extends StateMachineAction implements PostponedAction {
 
     private List<TransitionExpression> transitionExpressions = new ArrayList<TransitionExpression>();
-    private int timerDuration = 0;
+    private String timerDuration = null;
     private String variable = null;
 
     @Override
@@ -35,7 +35,7 @@ public class TimerAction extends StateMachineAction implements PostponedAction {
         List<Element> attributes = action.elements("attribute");
         for (Element attribute : attributes) {
             if (StatemachineActionConstants.PROP_TIMER_DURATION.equalsIgnoreCase(attribute.attribute("name"))) {
-                timerDuration = Integer.parseInt(attribute.attribute("value"));
+                timerDuration = attribute.attribute("value");
             }
         }
     }

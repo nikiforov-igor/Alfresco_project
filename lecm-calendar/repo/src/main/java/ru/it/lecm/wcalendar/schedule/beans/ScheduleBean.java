@@ -2,6 +2,7 @@ package ru.it.lecm.wcalendar.schedule.beans;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -18,6 +20,8 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -36,7 +40,9 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 	// Получить логгер, чтобы писать, что с нами происходит.
 
 	private final static Logger logger = LoggerFactory.getLogger(ScheduleBean.class);
-	private NodeRef defaultCalendar;
+	private NodeRef defaultSchedule;
+	private String defaultScheduleStartTime;
+	private String defaultScheduleEndTime;
 
 	@Override
 	public ICommonWCalendar getWCalendarDescriptor() {
@@ -48,6 +54,14 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		return TYPE_SCHEDULE;
 	}
 
+	public void setDefaultScheduleStartTime(String defaultScheduleStartTime) {
+		this.defaultScheduleStartTime = defaultScheduleStartTime;
+	}
+
+	public void setDefaultScheduleEndTime(String defaultScheduleEndTime) {
+		this.defaultScheduleEndTime = defaultScheduleEndTime;
+	}
+
 	/**
 	 * Метод, который запускает Spring при старте Tomcat-а. Создает корневой
 	 * объект для графиков работы.
@@ -57,9 +71,24 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		PropertyCheck.mandatory(this, "nodeService", nodeService);
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-		defaultCalendar = getScheduleByOrgSubject(orgstructureService.getOrganization());
-		if (defaultCalendar == null) {
-			this.defaultCalendar = createDefaultCalendar();
+		PropertyCheck.mandatory(this, "defaultScheduleStartTime", defaultScheduleStartTime);
+		PropertyCheck.mandatory(this, "defaultScheduleEndTime", defaultScheduleEndTime);
+		this.defaultSchedule = getScheduleByOrgSubject(orgstructureService.getOrganization());
+		if (this.defaultSchedule == null) {
+			this.defaultSchedule = createDefaultSchedule();
+		} else {
+			if (!getScheduleBeginTime(defaultSchedule).equals(defaultScheduleStartTime)
+					|| !getScheduleEndTime(defaultSchedule).equals(defaultScheduleEndTime)) {
+
+				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public NodeRef execute() throws Throwable {
+						nodeService.setProperty(defaultSchedule, PROP_SCHEDULE_STD_BEGIN, defaultScheduleStartTime);
+						nodeService.setProperty(defaultSchedule, PROP_SCHEDULE_STD_END, defaultScheduleEndTime);
+						return null;
+					}
+				});
+			}
 		}
 
 		// Создание контейнера (если не существует).
@@ -140,7 +169,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 				QName scheduleEmployeeAssocCMNameQName = QName.createQName(SCHEDULE_NAMESPACE, scheduleEmployeeAssocCMNameStr + "_schedule");
 				DateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
-		// нам не нужно дожидаться страшной ошибки при попытке создания уже существующего расписания
+				// нам не нужно дожидаться страшной ошибки при попытке создания уже существующего расписания
 				// срыгнем эксепш пораньше
 				if (isScheduleAssociated(scheduleEmployeeAssoc)) {
 					throw new WebScriptException(scheduleEmployeeAssoc.toString() + " already has schedule!");
@@ -266,7 +295,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		return scheduleElements;
 	}
 
-    // проверяет, подходит ли день под правила повторяемости для расписаний по дням месяца и недели
+	// проверяет, подходит ли день под правила повторяемости для расписаний по дням месяца и недели
 	// используется только в generateScheduleElements
 	private boolean ifDayToBeAdded(ISpecialScheduleRaw scheduleRawData, Calendar calendar) {
 		boolean result;
@@ -308,7 +337,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 	public NodeRef getScheduleByOrgSubject(NodeRef node) {
 		NodeRef schedule = findNodeByAssociationRef(node, ASSOC_SCHEDULE_EMPLOYEE_LINK, TYPE_SCHEDULE, ASSOCIATION_TYPE.SOURCE);
 		if (schedule == null) {
-			return defaultCalendar;
+			return defaultSchedule;
 		} else {
 			return schedule;
 		}
@@ -451,6 +480,29 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 		return (String) nodeService.getProperty(node, PROP_SCHEDULE_STD_END);
 	}
 
+	@Override
+	public NodeRef getDefaultSystemSchedule() {
+		return this.defaultSchedule;
+	}
+
+	@Override
+	public int getWorkDayDurationInMinutes(NodeRef schedule) {
+		DateTime scheduleBeginTime, scheduleEndTime;
+
+		String scheduleBeginTimeStr = getScheduleBeginTime(schedule);
+		String scheduleEndTimeStr = getScheduleEndTime(schedule);
+		DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+		try {
+			scheduleBeginTime = new DateTime(dateFormat.parse(scheduleBeginTimeStr));
+			scheduleEndTime = new DateTime(dateFormat.parse(scheduleEndTimeStr));
+		} catch (ParseException ex) {
+			String msg = String.format("Error parsing schedule time foe %s", schedule);
+			throw new AlfrescoRuntimeException(msg, ex);
+		}
+
+		return Minutes.minutesBetween(scheduleBeginTime, scheduleEndTime).getMinutes();
+	}
+
 	// класс для представления элементов графика: первый и последний рабочий день в серии
 	private class ScheduleElemetObject {
 
@@ -475,10 +527,9 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 	}
 
 	// Создание календаря по умолчанию
-	private NodeRef createDefaultCalendar() {
-		NodeRef defaultSchedule;
+	private NodeRef createDefaultSchedule() {
 
-		defaultSchedule = transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+		return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 
 			@Override
 			public NodeRef execute() throws Throwable {
@@ -486,11 +537,9 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 				QName assocName = QName.createQName(SCHEDULE_NAMESPACE, "defaultOrgSchedule");
 				Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 
-				DateFormat timeFormat = new SimpleDateFormat("HH:mm");
-
 				properties.put(PROP_SCHEDULE_TYPE, "COMMON");
-				properties.put(PROP_SCHEDULE_STD_BEGIN, "08:00");
-				properties.put(PROP_SCHEDULE_STD_END, "17:00");
+				properties.put(PROP_SCHEDULE_STD_BEGIN, defaultScheduleStartTime);
+				properties.put(PROP_SCHEDULE_STD_END, defaultScheduleEndTime);
 
 				try {
 					createdScheduleChildRef = nodeService.createNode(getWCalendarContainer(), ContentModel.ASSOC_CONTAINS,
@@ -510,8 +559,6 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 
 			}
 		});
-
-		return defaultSchedule;
 	}
 
 }

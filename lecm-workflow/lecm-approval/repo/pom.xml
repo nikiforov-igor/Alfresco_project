@@ -96,8 +96,6 @@
 		<dependency>
 			<groupId>org.joda</groupId>
 			<artifactId>com.springsource.org.joda.time</artifactId>
-			<version>1.6.2</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.workflow</groupId>

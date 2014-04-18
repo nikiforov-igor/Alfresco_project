@@ -494,7 +494,7 @@ public class WorkCalendarJavascriptExtension extends BaseScopableProcessorExtens
 		return workCalendarService.getPlannedJobFinish(nodeRef, start, workingDaysRequired);
 	}
 
-	public Date getNextWorkingDate(final String startStr, final int workingDaysNumber) {
+	public Date getNextWorkingDateByDays(final String startStr, final int workingDaysNumber) {
 		Date start;
 
 		try {
@@ -503,15 +503,74 @@ public class WorkCalendarJavascriptExtension extends BaseScopableProcessorExtens
 			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
 		}
 
-		return workCalendarService.getNextWorkingDate(start, workingDaysNumber);
+		return workCalendarService.getNextWorkingDateByDays(start, workingDaysNumber);
 	}
 
-	public Date getNextWorkingDate(final Object jsStart, final int workingDaysNumber) {
+	public Date getNextWorkingDateByDays(final Object jsStart, final int workingDaysNumber) {
 		Date start;
 
 		start = (Date) Context.jsToJava(jsStart, Date.class);
 
-		return workCalendarService.getNextWorkingDate(start, workingDaysNumber);
+		return workCalendarService.getNextWorkingDateByDays(start, workingDaysNumber);
+	}
+
+	public Date getNextWorkingDateByHours(final String startStr, final int workingHoursNumber) {
+		Date start;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getNextWorkingDateByHours(start, workingHoursNumber);
+	}
+
+	public Date getNextWorkingDateByHours(final Object jsStart, final int workingHoursNumber) {
+		Date start;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+
+		return workCalendarService.getNextWorkingDateByHours(start, workingHoursNumber);
+	}
+	public Date getNextWorkingDateByMinutes(final String startStr, final int workingMinutesNumber) {
+		Date start;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getNextWorkingDateByMinutes(start, workingMinutesNumber);
+	}
+
+	public Date getNextWorkingDateByMinutes(final Object jsStart, final int workingMinutesNumber) {
+		Date start;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+
+		return workCalendarService.getNextWorkingDateByMinutes(start, workingMinutesNumber);
+	}
+
+	public Date getNextWorkingDate(final String startStr, final String offset) {
+		Date start;
+
+		try {
+			start = dateParser.parse(startStr);
+		} catch (ParseException ex) {
+			throw new WebScriptException("Can not parse " + startStr + " as Date! " + ex.getMessage(), ex);
+		}
+
+		return workCalendarService.getNextWorkingDate(start, offset);
+	}
+
+	public Date getNextWorkingDate(final Object jsStart, final String offset) {
+		Date start;
+
+		start = (Date) Context.jsToJava(jsStart, Date.class);
+
+		return workCalendarService.getNextWorkingDate(start, offset);
 	}
 
 	public Date getEmployeeNextWorkingDay(final ScriptNode node, final Object jsInitialDate, int offset) {
