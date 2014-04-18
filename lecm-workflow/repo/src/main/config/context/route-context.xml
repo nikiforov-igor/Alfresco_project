@@ -22,6 +22,7 @@
 		<value>documentAttachmentCategoryName</value>
 		<value>workflowRole</value>
 		<value>commentFileAttachmentCategoryName</value>
+		<value>workflowDynRole</value>
 	</util:list>
 	<util:constant id="APPROVAL" static-field="ru.it.lecm.workflow.WorkflowType.APPROVAL"/>
 	<bean id="approval.workflowRunner" parent="abstract.workflowRunner"
@@ -32,6 +33,7 @@
 	<util:list id="signing.inputVariables">
 		<value>documentAttachmentCategoryName</value>
 		<value>workflowRole</value>
+		<value>workflowDynRole</value>
 	</util:list>
 	<util:constant id="SIGNING" static-field="ru.it.lecm.workflow.WorkflowType.SIGNING"/>
 	<bean id="signing.workflowRunner" parent="abstract.workflowRunner"

@@ -15,6 +15,7 @@
         variables = null,
         workflowVariables = {
             workflowRole: "DA_APPROVERS",
+            workflowDynRole: "DA_APPROVER_DYN",
             workflowDefinition: "lecmApprovalWorkflow",
             commentFileAttachmentCategoryName: "Согласование",
             documentRef: document.nodeRef,

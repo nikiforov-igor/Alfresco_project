@@ -212,7 +212,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		//находить его usename
 		//поменять ссылку на employee
 		//поменять username
-		String workflowRole = (String)task.getVariable("workflowRole");
+		String workflowRole = (String)task.getVariable("workflowDynRole");
 		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
 		NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		String userName = orgstructureService.getEmployeeLogin(employee);
