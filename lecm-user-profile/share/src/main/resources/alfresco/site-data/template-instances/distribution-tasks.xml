@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/user-profile/distribution-tasks</template-type>
+	<properties>
+		<pageFamily>user-profile</pageFamily>
+		<container>user-profile</container>
+	</properties>
+	<components>
+		<!-- Title -->
+		<component>
+			<region-id>title</region-id>
+			<url>/lecm/base/title-with-filter-label</url>
+			<properties>
+				<title>page.user-profile.distribution-tasks.title</title>
+				<filteredLabel>page.user-profile.filteredLabel</filteredLabel>
+			</properties>
+		</component>
+		<!-- Menu -->
+		<component>
+			<region-id>menu</region-id>
+			<url>/ru/it/lecm/user-profile/menu</url>
+			<properties>
+				<selected>userProfileDistributionTasks</selected>
+			</properties>
+		</component>
+		<component>
+			<region-id>content</region-id>
+			<url>/lecm/distribution-tasks/content</url>
+		</component>
+	</components>
+</template-instance>
+

@@ -18,3 +18,6 @@
 #lecm-menu #menu-buttons #menu-buttons-userProfileAppletSettingsBtn span.first-child {
 	background: url('/share/res/images/lecm-user-profile/lecm-user-profile_user-settings-3.png') no-repeat 4px 4px;
 }
+#lecm-menu #menu-buttons #menu-buttons-userProfileDistributionTasksBtn span.first-child {
+	background: url('/share/res/images/lecm-user-profile/lecm-user-profile_user-settings-3.png') no-repeat 4px 4px;
+}

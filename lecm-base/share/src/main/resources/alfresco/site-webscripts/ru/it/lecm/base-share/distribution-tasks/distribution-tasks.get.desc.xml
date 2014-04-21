@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>distribution-tasks</shortname>
+    <description>Distribution tasks</description>
+	<url>/lecm/distribution-tasks/content</url>
+	<format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

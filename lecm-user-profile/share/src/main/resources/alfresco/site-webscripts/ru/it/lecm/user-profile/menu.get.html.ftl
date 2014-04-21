@@ -21,5 +21,6 @@
 	<@comp.baseMenuButton "userProfileErrandsSettings" msg('label.user-profile.menu.errands-settings.btn') selected/>
 	<@comp.baseMenuButton "userProfileNotificationsSettings" msg('label.user-profile.menu.notifications-settings.btn') selected/>
 	<@comp.baseMenuButton "userProfileAppletSettings" msg('label.user-profile.menu.applet-settings.btn') selected/>
+	<@comp.baseMenuButton "userProfileDistributionTasks" msg('label.user-profile.menu.distribution-tasks.btn') selected/>
 </@comp.baseMenu>
 

@@ -74,6 +74,13 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 			}
 		},
 
+		_userProfileDelegationTasksBtnClick: function () {
+			var scope = this;
+			return function (event, obj) {
+				scope._reloadPage ("distribution-tasks");
+			}
+		},
+
 		_onMenuReady: function () {
 			var disableInstantAbsence = true;
 			if (typeof LogicECM.module.WCalendar.Absence.isAbsent != "undefined") {
@@ -90,6 +97,7 @@ LogicECM.module.UserProfile = LogicECM.module.UserProfile || {};
 			Alfresco.util.createYUIButton(this, "userProfileErrandsSettingsBtn", this._userProfileErrandsSettingsBtnClick(), {});
 			Alfresco.util.createYUIButton(this, "userProfileNotificationsSettingsBtn", this._userProfileNotificationsSettingsBtnClick(), {});
 			Alfresco.util.createYUIButton(this, "userProfileAppletSettingsBtn", this._userProfileAppletSettingsBtnClick(), {});
+			Alfresco.util.createYUIButton(this, "userProfileDistributionTasksBtn", this._userProfileDelegationTasksBtnClick(), {});
 		},
 
 		onReady: function () {
