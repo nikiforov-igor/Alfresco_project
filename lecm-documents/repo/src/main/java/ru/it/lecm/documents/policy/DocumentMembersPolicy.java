@@ -175,16 +175,19 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         documentMembersService.addMemberToUnit(employee, docRef);
 
         // уведомление
-        Notification notification = new Notification();
-        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-        employeeList.add(employee);
-        notification.setRecipientEmployeeRefs(employeeList);
-        notification.setAuthor(authService.getCurrentUserName());
-        notification.setDescription("Вы приглашены как новый участник в документ " +
-                wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
-        notification.setObjectRef(docRef);
-        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-        notificationService.sendNotification(notification);
+        Boolean silent = (Boolean) nodeService.getProperty(member, DocumentMembersService.PROP_SILENT);
+        if (silent == null || !silent) {
+            Notification notification = new Notification();
+            ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+            employeeList.add(employee);
+            notification.setRecipientEmployeeRefs(employeeList);
+            notification.setAuthor(authService.getCurrentUserName());
+            notification.setDescription("Вы приглашены как новый участник в документ " +
+                    wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+            notification.setObjectRef(docRef);
+            notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+            notificationService.sendNotification(notification);
+        }
 
         // Обновляем имя ноды
         String newName = generateMemberNodeName(nodeAssocRef.getSourceRef());

@@ -68,24 +68,45 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 
     @Override
     public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {
+        return addMember(document, employeeRef, properties, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+    @Override
+    public NodeRef addMember(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties, boolean silent) {
         lecmPermissionService.checkPermission(LecmPermissionService.PERM_MEMBERS_ADD, document);
-        return addMemberWithoutCheckPermission(document, employeeRef, properties);
+        return addMemberWithoutCheckPermission(document, employeeRef, properties, silent);
     }
 
     @Override
     public NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup) {
+        return addMember(document, employee, permissionGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+    @Override
+    public NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup, boolean silent) {
         lecmPermissionService.checkPermission(LecmPermissionService.PERM_MEMBERS_ADD, document);
         Map<QName,Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, permissionGroup);
-        return addMemberWithoutCheckPermission(document, employee, props);
+        return addMemberWithoutCheckPermission(document, employee, props, silent);
     }
 
 	@Override
 	public NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup) {
+        return addMemberWithoutCheckPermission(document, employee, permissionGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+    @Override
+	public NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup, boolean silent) {
         Map<QName,Serializable> props = new HashMap<QName, Serializable>();
         props.put(DocumentMembersService.PROP_MEMBER_GROUP, permissionGroup);
-        return addMemberWithoutCheckPermission(document, employee, props);
+        return addMemberWithoutCheckPermission(document, employee, props, silent);
 	}
+
+    @Override
+    public NodeRef addMemberWithoutCheckPermission(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties, boolean silent) {
+        properties.put(DocumentMembersService.PROP_SILENT, silent);
+        return addMemberWithoutCheckPermission(document, employeeRef, properties);
+    }
 
     @Override
     public NodeRef addMemberWithoutCheckPermission(final NodeRef document, final NodeRef employeeRef, final Map<QName, Serializable> properties) {

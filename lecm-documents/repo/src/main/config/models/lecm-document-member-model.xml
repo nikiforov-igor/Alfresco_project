@@ -20,6 +20,11 @@
 				<property name="lecm-doc-members:group">
 					<type>d:text</type>
 				</property>
+                <property name="lecm-doc-members:silent">
+					<type>d:boolean</type>
+                    <default>false</default>
+                    <index enabled="false"/>
+				</property>
 			</properties>
             <associations>
                 <association name="lecm-doc-members:employee-assoc">

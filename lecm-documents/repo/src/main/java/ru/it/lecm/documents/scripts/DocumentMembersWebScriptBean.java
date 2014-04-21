@@ -3,14 +3,11 @@ package ru.it.lecm.documents.scripts;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,32 +29,48 @@ public class DocumentMembersWebScriptBean extends BaseWebScript {
     }
 
     public ScriptNode addMember(String documentRef, String employeeRef, String permGroup) {
+        return addMember(documentRef, employeeRef, permGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+    public ScriptNode addMember(String documentRef, String employeeRef, String permGroup, boolean silent) {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
 
-        return addMember(new NodeRef(documentRef), new NodeRef(employeeRef), permGroup);
+        return addMember(new NodeRef(documentRef), new NodeRef(employeeRef), permGroup, silent);
     }
 
 	public ScriptNode addMember(NodeRef documentRef, NodeRef employeeRef, String permGroup) {
+        return addMember(documentRef, employeeRef, permGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+	public ScriptNode addMember(NodeRef documentRef, NodeRef employeeRef, String permGroup, boolean silent) {
         ParameterCheck.mandatory("documentRef", documentRef);
         ParameterCheck.mandatory("employeeRef", employeeRef);
 
-        NodeRef member = documentMembersService.addMember(documentRef, employeeRef, permGroup);
+        NodeRef member = documentMembersService.addMember(documentRef, employeeRef, permGroup, silent);
         return member != null ? new ScriptNode(member, serviceRegistry, getScope()) : null;
     }
 
 	public ScriptNode addMember(ScriptNode document, ScriptNode employee, String permGroup) {
+        return addMember(document, employee, permGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+	public ScriptNode addMember(ScriptNode document, ScriptNode employee, String permGroup, boolean silent) {
 		ParameterCheck.mandatory("document", document);
 		ParameterCheck.mandatory("employee", employee);
 
-		return addMember(document.getNodeRef(), employee.getNodeRef(), permGroup);
+		return addMember(document.getNodeRef(), employee.getNodeRef(), permGroup, silent);
 	}
 
 	public ScriptNode addMemberWithoutCheckPermission(ScriptNode document, ScriptNode employee, String permGroup) {
+        return addMemberWithoutCheckPermission(document, employee, permGroup, DocumentMembersService.PROP_SILENT_DEFAULT_VALUE);
+    }
+
+	public ScriptNode addMemberWithoutCheckPermission(ScriptNode document, ScriptNode employee, String permGroup, boolean silent) {
 		ParameterCheck.mandatory("document", document);
 		ParameterCheck.mandatory("employee", employee);
 
-		NodeRef member = documentMembersService.addMemberWithoutCheckPermission(document.getNodeRef(), employee.getNodeRef(), permGroup);
+		NodeRef member = documentMembersService.addMemberWithoutCheckPermission(document.getNodeRef(), employee.getNodeRef(), permGroup, silent);
 		return member != null ? new ScriptNode(member, serviceRegistry, getScope()) : null;
 	}
 

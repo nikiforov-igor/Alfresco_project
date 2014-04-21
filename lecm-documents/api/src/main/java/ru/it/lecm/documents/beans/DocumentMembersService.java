@@ -22,6 +22,8 @@ public interface DocumentMembersService {
 
     QName TYPE_DOC_MEMBER = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "member");
     QName PROP_MEMBER_GROUP = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "group");
+    QName PROP_SILENT = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "silent");
+    boolean PROP_SILENT_DEFAULT_VALUE = false;
     QName ASSOC_MEMBER_EMPLOYEE = QName.createQName(DOC_MEMBERS_NAMESPACE_URI, "employee-assoc");
     QName ASSOC_DOC_MEMBERS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "doc-members-assoc");
     QName PROP_DOC_MEMBERS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "doc-members-ref");
@@ -38,6 +40,16 @@ public interface DocumentMembersService {
     NodeRef addMember(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
 
     /**
+     * Добавление нового участника с проверкой прав доступа
+     * @param document - ссылка на документ
+     * @param employeeRef - ссылка на сотрудника
+     * @param properties - карта свойств
+     * @param silent - не отправлять уведомление сотруднику о включении его в участники
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMember(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent);
+
+    /**
      * Добавление нового участника  с проверкой прав доступа
      * @param document - ссылка на документ
      * @param employee - ссылка на сотрудника
@@ -50,11 +62,40 @@ public interface DocumentMembersService {
      * Добавление нового участника без проверки прав доступа
      * @param document - ссылка на документ
      * @param employee - ссылка на сотрудника
+     * @param permissionGroup - Группа привилегий
+     * @param silent - не отправлять уведомление сотруднику о включении его в участники
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup, boolean silent);
+
+    /**
+     * Добавление нового участника без проверки прав доступа
+     * @param document - ссылка на документ
+     * @param employeeRef - ссылка на сотрудника
+     * @param properties - карта свойств
+     * @param silent - не отправлять уведомление сотруднику о включении его в участники
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent);
+
+    /**
+     * Добавление нового участника без проверки прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
      * @param properties - карта свойств
      * @return ссылка на созданную ноду участника
      */
-
     NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
+
+    /**
+     * Добавление нового участника  с проверкой прав доступа
+     * @param document - ссылка на документ
+     * @param employee - ссылка на сотрудника
+     * @param permissionGroup - Группа привилегий
+     * @param silent - не отправлять уведомление сотруднику о включении его в участники
+     * @return ссылка на созданную ноду участника
+     */
+    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup, boolean silent);
 
     /**
      * Добавление нового участника без проверки прав доступа
