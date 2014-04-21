@@ -152,14 +152,14 @@
                             <control-param name="bubblingLayer">formValueChanged</control-param>
                             <control-param name="components">
                                 {
-                                    id: 'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_partner-assoc'
+                                    id: 'lecm-contract_partner-assoc'
                                 },
                                 {
-                                    id: 'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_representative-assoc',
+                                    id: 'lecm-contract_representative-assoc',
                                     name: 'LogicECM.module.AssociationAutoComplete'
                                 },
                                 {
-                                    id: 'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_representative-assoc',
+                                    id: 'lecm-contract_representative-assoc',
                                     name: 'AssociationTreeViewer'
                                 }
                             </control-param>
@@ -378,14 +378,14 @@
                             <control-param name="bubblingLayer">formValueChanged</control-param>
                             <control-param name="components">
                                 {
-                                    id: 'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_partner-assoc'
+                                    id: 'lecm-contract_partner-assoc'
                                 },
                                 {
-                                    id: 'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_representative-assoc',
+                                    id: 'lecm-contract_representative-assoc',
                                     name: 'LogicECM.module.AssociationAutoComplete'
                                 },
                                 {
-                                    id: 'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_representative-assoc',
+                                    id: 'lecm-contract_representative-assoc',
                                     name: 'AssociationTreeViewer'
                                 }
                             </control-param>

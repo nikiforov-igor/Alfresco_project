@@ -18,7 +18,7 @@ function Binder(options) {
 	this.handlers      = options.handlers      || throwException('handlers');
 
 	this._onEventFired = function(type, args, obj) { // obj === Binder Instance (this)
-		var currentId;
+		var currentId, handlerKey, currentHandler;
 
 		try {
 			currentId = obj.getIdFn.call(obj, args[1]);
@@ -27,9 +27,16 @@ function Binder(options) {
 			return false;
 		}
 
-		if(obj.handlers[currentId]) {
+		for (var handlerKey in obj.handlers) {
+			if (obj.handlers.hasOwnProperty(handlerKey) && currentId.indexOf(handlerKey) >= 0) {
+				currentHandler = obj.handlers[handlerKey];
+				break;
+			}
+		}
+
+		if(currentHandler) {
 			console.log('Binder: изменилось состояние компонента пучка (' + currentId + ')');
-			obj.handlers[currentId].call(obj, type, args);
+			currentHandler.call(obj, type, args);
 		}
 
 		return true;
@@ -53,19 +60,35 @@ Binder.prototype._getIdDefaultFn = function(obj) {
 Binder.prototype._initComponents = function() {
 	'use strict';
 
-	var i, cmpnt, query;
+	var i, j, cmpnt, query, match, matchedComponent;
 
 	var components = this.components;
 	var componentsLg = components.length;
 
 	var ComponentManager = Alfresco.util.ComponentManager;
+	var componentsList = ComponentManager.list();
+	var componentsListLg = componentsList.length;
 
 	for(i = 0; i < componentsLg; i++) {
 		query = components[i];
-		cmpnt = ComponentManager.find(query)[0];
+		// cmpnt = ComponentManager.find(query)[0];
+		for (j = 0; j < componentsListLg; j++) {
+			cmpnt = componentsList[j];
+			match = true;
 
-		if(cmpnt) {
-			components[i] = cmpnt;
+			for (var key in query) {
+				if (cmpnt[key].indexOf(query[key]) < 0) {
+					match = false;
+				}
+			}
+
+			if (match) {
+				matchedComponent = cmpnt;
+			}
+		}
+
+		if(matchedComponent) {
+			components[i] = matchedComponent;
 		} else {
 			throw 'Binder: не найден компонент (' + query.id + ')';
 		}

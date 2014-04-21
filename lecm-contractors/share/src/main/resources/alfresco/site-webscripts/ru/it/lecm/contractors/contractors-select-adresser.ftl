@@ -29,51 +29,25 @@
 			}
 		}
 
-		var i, k, rprTree, autoComp;
-
-		var rprTreeQueries = [
-			{
-				id: 'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_representative-assoc',
+		var i, k, rprTree, autoComp,
+			rprTreeQuery = {
+				id: 'lecm-contract_representative-assoc',
 				name: 'AssociationTreeViewer'
 			},
-			{
-				id: 'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_representative-assoc',
-				name: 'AssociationTreeViewer'
-			}
-		];
-		var autoCompQueries = [
-			{
-				id: 'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_representative-assoc',
+			autoCompQuery = {
+				id: 'lecm-contract_representative-assoc',
 				name: 'LogicECM.module.AssociationAutoComplete'
-			},
-			{
-				id: 'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_representative-assoc',
-				name: 'LogicECM.module.AssociationAutoComplete'
-			}
-		];
-		var rprTreeIdsLg = rprTreeQueries.length;
-		var autoCompQueriesLg = autoCompQueries.length;
+			};
 
 
-		for(i = 0; i < rprTreeIdsLg; i++) {
-			rprTree = this.components.filter(function(v) {
-				return (v.id == rprTreeQueries[i].id) && (v.name == rprTreeQueries[i].name);
-			})[0];
+		rprTree = this.components.filter(function(v) {
+			return (v.id.indexOf(rprTreeQuery.id) >= 0) && (v.name.indexOf(rprTreeQuery.name) >= 0);
+		})[0];
 
-			if(rprTree) {
-				break;
-			}
-		}
+		autoComp = this.components.filter(function(v) {
+			return (v.id.indexOf(autoCompQuery.id) >= 0) && (v.name.indexOf(autoCompQuery.name) >= 0);
+		})[0];
 
-		for(i = 0; i < autoCompQueriesLg; i++) {
-			autoComp = this.components.filter(function(v) {
-				return (v.id == autoCompQueries[i].id) && (v.name == autoCompQueries[i].name);
-			})[0];
-
-			if(autoComp) {
-				break;
-			}
-		}
 
 		var cntSelected = args[1].selectedItems;
 		var rprSelected = rprTree.selectedItems;
@@ -83,7 +57,7 @@
 
 		if(cntSelected.length == 0) {
 			rprTree.options.allowedNodes.length = 0;
-0
+
 			autoComp.options.allowedNodes.length = 0;
 			autoComp.dataArray.length = 0;
 			autoComp.populateData();
@@ -115,8 +89,7 @@
 		components: [<#list components as cmpnt>${cmpnt}<#if cmpnt_has_next>,</#if></#list>],
 		dialogId: '${dialogId}',
 		handlers: {
-			'template_x002e_toolbar_x002e_contracts-main_x0023_default-createDetails_assoc_lecm-contract_partner-assoc': onContractorChange,
-			'documentMetadata-template_x002e_document-metadata_x002e_document_x0023_default_results_assoc_lecm-contract_partner-assoc': onContractorChange
+			'lecm-contract_partner-assoc': onContractorChange
 		}
 	});
 })();
