@@ -398,7 +398,7 @@
                                 .yui-skin-lecmTheme .yui-panel .item-container .item4 div.form-field div.viewmode-field span.viewmode-label{
                                 display: none;
                                 }
-                                .yui-skin-lecmTheme .yui-panel .item-container div.form-field textarea {
+                                .yui-skin-lecmTheme .yui-panel .item-container div.form-field div.viewmode-field span.viewmode-value {
                                 width: 48em;
                                 }
                                 .yui-skin-lecmTheme .yui-panel .item-container div.form-field > div:not(.datagrid):not(.viewmode-field):not(.subscribe):not(.document-preview) {
@@ -490,9 +490,19 @@
                                 text-align:left;
                                 }
 
-                                .tab-ord-document-items .datagrid tr.expand-row div.form-field textarea{
-                                width: auto;
+                                .tab-ord-document-items .datagrid tr.expand-row div.form-field div.viewmode-field span.viewmode-value{
+                                width: 48em;
+								max-width: none;
+								font-weight: bold;
+								padding: 2px;
+								border: 1px solid #ccc;
+								border-radius: 3px;
+								overflow: hidden;
                                 }
+
+								.yui-skin-lecmTheme div.metadata-form div.form-fields > div.set > div.form-field div.viewmode-field span.viewmode-value{
+								width: 48em;
+								}
                             </control-param>
                         </control>
                     </field>
