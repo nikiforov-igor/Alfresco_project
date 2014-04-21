@@ -179,37 +179,7 @@
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders>
-											<subFolder>
-												<name>transitions</name>
-												<nodes>
-													<node>
-														<type>ScriptActionEntity</type>
-														<name>deb09f38-0156-440f-8481-41dec8a43b9b</name>
-														<nodeRef>workspace://SpacesStore/7081960c-4557-49e4-b7ff-ac8b9c110d7b</nodeRef>
-														<properties>
-															<property>
-																<name>actionScript</name>
-																<value><![CDATA[//Добавление  динамической роли "СЭД.Инициатор"
-(function(){
-    var internal = stm_document,
-        currentEmployee = orgstructure.getCurrentEmployee();
-    lecmPermission.grantDynamicRole(internal, currentEmployee, "DA_INITIATOR_DYN", "LECM_BASIC_PG_Owner");
-})();]]></value>
-															</property>
-															<property>
-																<name>scriptLabel</name>
-																<value><![CDATA[Добавление  динамической роли "СЭД.Инициатор"]]></value>
-															</property>
-														</properties>
-														<aspects/>
-														<associations/>
-														<roleAssociations/>
-														<subFolders/>
-													</node>
-												</nodes>
-											</subFolder>
-										</subFolders>
+										<subFolders/>
 									</node>
 									<node>
 										<type>TimerAction</type>
@@ -1643,7 +1613,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -2801,7 +2771,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -3658,7 +3628,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -4780,7 +4750,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -5560,7 +5530,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -6321,7 +6291,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -7118,7 +7088,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -8055,7 +8025,7 @@
 										<roleAssociations>
 											<roleAssociation>
 												<type>role-assoc</type>
-												<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+												<businessRoleName>BR_INITIATOR</businessRoleName>
 											</roleAssociation>
 										</roleAssociations>
 										<subFolders/>
@@ -8464,7 +8434,7 @@
 						<roleAssociations>
 							<roleAssociation>
 								<type>role-assoc</type>
-								<businessRoleName>DA_INITIATOR_DYN</businessRoleName>
+								<businessRoleName>BR_INITIATOR</businessRoleName>
 							</roleAssociation>
 						</roleAssociations>
 						<subFolders/>

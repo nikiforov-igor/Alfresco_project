@@ -53,7 +53,7 @@
                         answer.setInheritsPermissions(false);
                         lecmPermission.grantDynamicRole(answer, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_ActionPerformer");
                         lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_Employee");
-                        lecmPermission.grantDynamicRole(answer, initiator, "DA_INITIATOR_DYN", "LECM_BASIC_PG_Owner");
+                        lecmPermission.grantDynamicRole(answer, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
 
                         answer.createAssociation(employee, "lecm-internal-table-structure:employee-assoc");
                         //Подписываемся на слушание
