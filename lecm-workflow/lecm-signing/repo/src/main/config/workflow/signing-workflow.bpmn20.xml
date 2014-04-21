@@ -53,8 +53,6 @@
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
 							signingWorkflow.assignTask(assignee, task);
-							var employee = assignee.assocs["{http://www.it.ru/logicECM/model/workflow/1.0}assignee-employee-assoc"][0];
-							statemachine.grandDynamicRoleForEmployee(bpm_package.children[0], employee, "DA_SIGNER_DYN");
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>

@@ -1,10 +1,8 @@
 package ru.it.lecm.workflow.beans;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
+
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -247,6 +245,20 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 				//меняем ассоциацию на employee в result list item
 				nodeService.removeAssociation(approvalListItemRef, employee, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
 				nodeService.createAssociation(approvalListItemRef, effectiveEmployee, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+
+				task.setVariable("assumeExecutor", employee);
+			}
+		}
+	}
+
+	protected void completeTaskAddMembers(NodeRef employeeRef, NodeRef bpmPackage, DelegateTask task) {
+		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
+		if (Utils.isDocument(documentRef)) {
+			documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, new HashMap<QName, Serializable>());
+
+			NodeRef assumeExecutor = (NodeRef) task.getVariable("assumeExecutor");
+			if (assumeExecutor != null) {
+				documentMembersService.addMemberWithoutCheckPermission(documentRef, assumeExecutor, new HashMap<QName, Serializable>());
 			}
 		}
 	}

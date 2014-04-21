@@ -319,7 +319,9 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		task.setVariable("taskDecision", decision);
 
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReaderPermissions(employeeRef, bpmPackage, true);
+
+		completeTaskAddMembers(employeeRef, bpmPackage, task);
+
 		return taskDecision;
 	}
 

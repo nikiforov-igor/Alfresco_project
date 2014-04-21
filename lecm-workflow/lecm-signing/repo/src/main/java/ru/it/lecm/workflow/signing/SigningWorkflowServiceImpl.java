@@ -65,7 +65,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		}
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		grantReaderPermissions(employeeRef, bpmPackage, true);
+		grantDynamicRole(employeeRef, bpmPackage, "DA_SIGNER_DYN");
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
@@ -106,6 +106,8 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		decisionsMap = addDecision(decisionsMap, taskDecision);
 		task.setVariable("decisionsMap", decisionsMap);//decisionsMap может быть null, поэтому если она создана, ее надо перезаписать
 		task.setVariable("taskDecision", decision);
+
+		completeTaskAddMembers(employee, bpmPackage, task);
 
 		return taskDecision;
 	}
