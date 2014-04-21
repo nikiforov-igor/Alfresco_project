@@ -18,7 +18,11 @@
 }
 
 .widget-bordered-panel div.association-auto-complete-selected-item > span > a,
-div.association-auto-complete-selected-item-even > span > a,
+div.association-auto-complete-selected-item-even > span > a {
+    max-width: 250px;
+}
+
+.widget-bordered-panel
 div.association-auto-complete-selected-item > span.not-person,
 div.association-auto-complete-selected-item-even > span.not-person {
     overflow-x: inherit;
