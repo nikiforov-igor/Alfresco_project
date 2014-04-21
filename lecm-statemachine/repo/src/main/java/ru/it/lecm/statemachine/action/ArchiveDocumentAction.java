@@ -103,7 +103,6 @@ public class ArchiveDocumentAction extends StateMachineAction {
 		for (AccessPermission permission : permissions) {
 			if (permission.getPosition() == 0) {
 				getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
-				getServiceRegistry().getPermissionService().setPermission(document, permission.getAuthority(), "LECM_BASIC_PG_Reader", true);
 			}
 		}
 
