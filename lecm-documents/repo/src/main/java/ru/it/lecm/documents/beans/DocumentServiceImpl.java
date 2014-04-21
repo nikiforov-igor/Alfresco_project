@@ -30,8 +30,10 @@ import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.expression.Expression;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,6 +59,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     private DocumentAttachmentsService documentAttachmentsService;
     private CopyService copyService;
 	private ApplicationContext applicationContext;
+    private NotificationsService notificationsService;
+    private IWorkCalendar workCalendarService;
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -92,6 +96,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
+
+    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
+        this.workCalendarService = workCalendarService;
     }
 
     @Override
@@ -388,6 +400,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
 
         if (filterQuery != null && filterQuery.length() > 0) {
+            // обработка спец-выражений
+            if (filterQuery.contains("#current-user")) {
+                filterQuery = filterQuery.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
+            }
+            if (query.contains("#current-date")) {
+                int limitDays = notificationsService.getSettingsNDays();
+                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
+                filterQuery = filterQuery.replaceAll("#current-date", DateFormatISO8601.format(nextWorkDate));
+            }
+
+
             query += (query.length() > 0 ? " AND (": "(") + filterQuery + ") ";
         }
 
@@ -711,5 +734,29 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public void finalizeToUnit(NodeRef document, NodeRef primaryUnit) {
         finalizeToUnit(document, null, primaryUnit, null);
+    }
+
+    @Override
+    public List<NodeRef> getDocumentsByQuery(String query, List<SortDefinition> sort, int skipCount, int loadCount) {
+        //List<String> paths = Arrays.asList(getDraftPath(), getDocumentsFolderPath());
+
+        SearchParameters sp = buildDocumentsSearcParametersByFilter(null, null, null, query, sort);
+
+        sp.setSkipCount(skipCount);
+        sp.setMaxItems(loadCount);
+
+        ResultSet results = null;
+        List<NodeRef> records = new ArrayList<NodeRef>();
+        try {
+            results = searchService.query(sp);
+            for (ResultSetRow row : results) {
+                records.add(row.getNodeRef());
+            }
+        } finally {
+            if (results != null) {
+                results.close();
+            }
+        }
+        return records;
     }
 }

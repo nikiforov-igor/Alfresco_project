@@ -1,11 +1,13 @@
 package ru.it.lecm.documents.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -25,10 +27,7 @@ import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: orakovskaya
@@ -388,4 +387,12 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public void finalizeToUnit(ScriptNode document, ScriptNode primaryUnit) {
         finalizeToUnit(document, null, primaryUnit, null);
     }
+
+   public Scriptable getDocumentsByQuery(String query, int skipCount, int loadCount) {
+       List<SearchParameters.SortDefinition> sort = new ArrayList<SearchParameters.SortDefinition>();
+       sort.add(new SearchParameters.SortDefinition(SearchParameters.SortDefinition.SortType.FIELD, "@" + ContentModel.PROP_MODIFIED.toString(), false));
+
+       List<NodeRef> refs = documentService.getDocumentsByQuery(query, sort, skipCount, loadCount);
+       return createScriptable(refs);
+   }
 }

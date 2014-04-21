@@ -242,7 +242,16 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         return false;
     }
 
-	@Override
+    @Override
+    public NodeRef getArmDashletNode() {
+        NodeRef settings = getSettingsNode();
+        if (settings != null) {
+            return findNodeByAssociationRef(settings,ASSOC_SETTINGS_ARM_DASHLET_NODE, null, ASSOCIATION_TYPE.TARGET);
+        }
+        return null;
+    }
+
+    @Override
 	public List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId) {
 		List<NodeRef> registrars;
 		if (isRegistrationCenralized()) {

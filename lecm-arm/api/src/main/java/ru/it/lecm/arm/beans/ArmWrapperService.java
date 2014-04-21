@@ -19,12 +19,14 @@ public interface ArmWrapperService {
      * возвращает списко объектов Аккордеон по коду АРма
      */
     public List<ArmNode> getAccordionsByArmCode(String armCode);
+    public List<ArmNode> getAccordionsByArmCode(String armCode, boolean onlyMeta);
 
 
     /**
      * возвращает списко объектов Аккордеон по коду АРма
      */
     public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode);
+    public List<ArmNode> getChildNodes(NodeRef armNode, NodeRef parentNode, boolean onlyMeta);
 
     /**
      * проверяет, есть ли у узла дочерние элементы
@@ -36,10 +38,13 @@ public interface ArmWrapperService {
      */
     public ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion);
     public ArmNode wrapArmNodeAsObject(NodeRef armNode);
+    public ArmNode wrapArmNodeAsObject(NodeRef armNode, boolean isAccordion, boolean onlyMeta);
 
     public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent);
+    public ArmNode wrapAnyNodeAsObject(NodeRef node, ArmNode parent, boolean onlyMeta);
 
     public ArmNode wrapStatusAsObject(String status, ArmNode parent);
+    public ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);
 
     public String formatQuery(String templateQuery, NodeRef node);
 }

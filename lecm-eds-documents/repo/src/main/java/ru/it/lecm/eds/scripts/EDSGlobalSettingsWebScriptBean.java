@@ -99,4 +99,12 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	public Boolean isHidePropsForRecipients() {
 		return edsGlobalSettingsService.isHideProperties();
 	}
+
+    public ScriptNode getArmDashletNode() {
+        NodeRef armDN =  edsGlobalSettingsService.getArmDashletNode();
+        if (armDN != null) {
+            return new ScriptNode(armDN, serviceRegistry, getScope());
+        }
+        return null;
+    }
 }

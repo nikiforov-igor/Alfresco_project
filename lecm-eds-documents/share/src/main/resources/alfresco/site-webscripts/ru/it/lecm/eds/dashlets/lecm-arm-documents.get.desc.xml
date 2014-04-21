@@ -1,0 +1,6 @@
+<webscript>
+   <shortname>СЭД: Моя работа</shortname>
+   <description>Дашлет предназначен для работы с содержимым произвольного раздела АРМ.</description>
+   <family>user-dashlet</family>
+   <url>/lecm/eds/dashlets/arm-documents</url>
+</webscript>

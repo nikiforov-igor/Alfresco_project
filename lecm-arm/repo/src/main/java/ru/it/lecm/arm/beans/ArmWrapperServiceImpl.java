@@ -45,13 +45,18 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 	}
 
 	public List<ArmNode> getAccordionsByArmCode(String armCode) {
+        return getAccordionsByArmCode(armCode, false);
+    }
+
+    @Override
+    public List<ArmNode> getAccordionsByArmCode(String armCode, boolean onlyMeta) {
         List<ArmNode> result = new ArrayList<ArmNode>();
 
         NodeRef arm = service.getArmByCode(armCode);
         if (arm != null) {
             List<NodeRef> accords = service.getArmAccordions(arm);
             for (NodeRef accord : accords) {
-                result.add(wrapArmNodeAsObject(accord, true));
+                result.add(wrapArmNodeAsObject(accord, true, onlyMeta));
             }
         }
         return result;
@@ -59,9 +64,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef) {
+        return getChildNodes(node, parentRef, false);
+    }
+
+    @Override
+    public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, boolean onlyMeta) {
         List<ArmNode> result = new ArrayList<ArmNode>();
 
-        ArmNode parent = wrapArmNodeAsObject(parentRef);
+        ArmNode parent = wrapArmNodeAsObject(parentRef, false, onlyMeta);
 
         // 1. Дочерние статические элементы из настроек ARM
         NodeRef parentFromArm = null;
@@ -74,7 +84,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (parentFromArm != null) {
             List<NodeRef> staticChilds = service.getChildNodes(parentFromArm); // узлы АРМа
             for (NodeRef staticChild : staticChilds) {
-                ArmNode stNode = wrapArmNodeAsObject(staticChild);
+                ArmNode stNode = wrapArmNodeAsObject(staticChild, false, onlyMeta);
                 if (stNode.getNodeQuery() != null) {
                     List<ArmNode> queriedChilds = stNode.getNodeQuery().build(this, stNode);
                     for (ArmNode queriedChild : queriedChilds) {
@@ -91,7 +101,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (node != null && !isArmElement(node) && dictionaryService.isDictionaryValue(node)){
             List<NodeRef> dicChilds = dictionaryService.getChildren(node);
             for (NodeRef dicChild : dicChilds) {
-                result.add(wrapAnyNodeAsObject(dicChild, parent));
+                result.add(wrapAnyNodeAsObject(dicChild, parent, onlyMeta));
             }
         }
         return result;
@@ -141,70 +151,95 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion) {
+        return wrapArmNodeAsObject(nodeRef, isAccordion, false);
+    }
+
+    @Override
+    public ArmNode wrapArmNodeAsObject(NodeRef nodeRef) {
+        return wrapArmNodeAsObject(nodeRef, false, false);
+    }
+
+    @Override
+    public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta) {
         ArmNode node = new ArmNode();
         node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
-	    node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
+        node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         if (!isAccordion) {
             node.setArmNodeRef(nodeService.getPrimaryParent(nodeRef).getParentRef()); // для узла Арм - данное поле дублируется. как так узел Арм - реален
         } else {
             node.setArmNodeRef(nodeRef);
         }
-        node.setCounter(service.getNodeCounter(nodeRef));
+
         node.setNodeQuery(!isAccordion ? service.getNodeChildRule(nodeRef) : null);
-
-        node.setColumns(getNodeColumns(nodeRef));
-        node.setAvaiableFilters(getNodeFilters(nodeRef));
         node.setTypes(getNodeTypes(nodeRef));
-        node.setCreateTypes(getNodeCreateTypes(nodeRef));
 
-	    String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+        String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
-	        node.setSearchQuery(searchQuery);
+            node.setSearchQuery(searchQuery);
         }
-	    node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
-	    node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
+        node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
+        node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
+
+        if (!onlyMeta) {
+            node.setCounter(service.getNodeCounter(nodeRef));
+            node.setColumns(getNodeColumns(nodeRef));
+            node.setAvaiableFilters(getNodeFilters(nodeRef));
+            node.setCreateTypes(getNodeCreateTypes(nodeRef));
+        }
 
         return node;
     }
 
-    public ArmNode wrapArmNodeAsObject(NodeRef nodeRef) {
-        return wrapArmNodeAsObject(nodeRef, false);
+    @Override
+    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode) {
+        return wrapAnyNodeAsObject(nodeRef, parentNode, false);
     }
 
     @Override
-    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode) {
+    public ArmNode wrapAnyNodeAsObject(NodeRef nodeRef, ArmNode parentNode, boolean onlyMeta) {
         ArmNode node = new ArmNode();
         node.setTitle(substitudeService.getObjectDescription(nodeRef));
         node.setNodeRef(nodeRef);
         node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());
-        node.setColumns(parentNode.getColumns());
-        node.setAvaiableFilters(parentNode.getAvaiableFilters());
-        node.setCounter(parentNode.getCounter());
         node.setTypes(parentNode.getTypes());
-        node.setCreateTypes(parentNode.getCreateTypes());
-	    if (parentNode.getSearchQuery() != null) {
+        if (parentNode.getSearchQuery() != null) {
             node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
-	    }
-	    node.setHtmlUrl(parentNode.getHtmlUrl());
-	    node.setReportCodes(parentNode.getReportCodes());
+        }
+        node.setHtmlUrl(parentNode.getHtmlUrl());
+        node.setReportCodes(parentNode.getReportCodes());
+
+        if (!onlyMeta) {
+            node.setColumns(parentNode.getColumns());
+            node.setAvaiableFilters(parentNode.getAvaiableFilters());
+            node.setCounter(parentNode.getCounter());
+            node.setCreateTypes(parentNode.getCreateTypes());
+
+        }
         return node;
     }
 
     @Override
     public ArmNode wrapStatusAsObject(String status, ArmNode parentNode) {
+        return wrapStatusAsObject(status, parentNode, false);
+    }
+
+    @Override
+    public ArmNode wrapStatusAsObject(String status, ArmNode parentNode, boolean onlyMeta) {
         ArmNode node = new ArmNode();
         node.setTitle(status);
         node.setNodeRef(null);
         node.setArmNodeRef(parentNode.getNodeRef());
-        node.setColumns(parentNode.getColumns());
-        node.setAvaiableFilters(parentNode.getAvaiableFilters());
-        node.setCounter(parentNode.getCounter());
-        node.setTypes(parentNode.getTypes());
-        node.setCreateTypes(parentNode.getCreateTypes());
         node.setSearchQuery("@lecm\\-statemachine\\:status:'" + status + "'");
-        //node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), status));
+        node.setTypes(parentNode.getTypes());
+
+        if (!onlyMeta) {
+            node.setColumns(parentNode.getColumns());
+            node.setAvaiableFilters(parentNode.getAvaiableFilters());
+            node.setCounter(parentNode.getCounter());
+            node.setCreateTypes(parentNode.getCreateTypes());
+        }
         return node;
     }
 

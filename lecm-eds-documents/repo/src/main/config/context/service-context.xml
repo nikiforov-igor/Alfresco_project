@@ -18,6 +18,7 @@
 	<bean id="eds.models.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
 					  documents.LogicEcmModelsBootstrap,
+					  arm.LogicEcmBootstrap,
 					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
 					  documents.dictionaries.LogicEcmModelsBootstrap,
 					  dictionary.fileRegister.LogicEcmModelsBootstrap"

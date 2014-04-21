@@ -80,6 +80,15 @@
 		<property name="documentService" ref="documentService"/>
 	</bean>
 
+    <bean id="armWrapperScript" parent="baseScript" class="ru.it.lecm.arm.scripts.ArmWrapperWebScriptBean"
+		  depends-on="serviceDictionary, armService">
+		<property name="extensionName">
+			<value>armWrapper</value>
+		</property>
+		<property name="armWrapperService" ref="armWrapperService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
 	<bean id="webscript.ru.it.lecm.arm.tree-menu.get"
 		  class="ru.it.lecm.arm.scripts.ArmTreeMenuScript"
 		  parent="webscript">

@@ -129,6 +129,11 @@
 		    <version>${project.version}</version>
 		    <scope>provided</scope>
 	    </dependency>
+        <dependency>
+            <groupId>ru.it.lecm.calendar</groupId>
+            <artifactId>lecm-calendar-repo-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
     <!--

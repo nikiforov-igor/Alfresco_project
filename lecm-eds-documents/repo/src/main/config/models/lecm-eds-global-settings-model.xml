@@ -9,6 +9,7 @@
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
         <import uri="http://www.it.ru/lecm/dictionary/1.0" prefix="lecm-dic"/>
+        <import uri="http://www.it.ru/logicECM/arm/1.0" prefix="lecm-arm"/>
     </imports>
 
     <namespaces>
@@ -26,13 +27,21 @@
 				    <mandatory>true</mandatory>
 				    <default>true</default>
 			    </property>
-                <!-- Режим регистрации -->
+                <!-- Скрывать свойтсва для получателей -->
                 <property name="lecm-eds-globset:hide-properties-for-recipients">
                     <type>d:boolean</type>
                     <mandatory>true</mandatory>
                     <default>false</default>
                 </property>
 		    </properties>
+            <associations>
+                <association name="lecm-eds-globset:arm-node-for-dashlet-assoc">
+                    <target>
+                        <class>lecm-arm:base-node</class>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
 	    </type>
 		
 		<type name="lecm-eds-globset:potential-role">

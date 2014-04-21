@@ -1,6 +1,7 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.QName;
 
@@ -319,4 +320,6 @@ public interface DocumentService {
     public void finalizeToUnit(NodeRef document, Boolean sharedFolder, NodeRef primaryUnit);
     public void finalizeToUnit(NodeRef document, NodeRef primaryUnit, List<NodeRef> additionalUnits);
     public void finalizeToUnit(NodeRef document, NodeRef primaryUnit);
+
+    List<NodeRef> getDocumentsByQuery(String query, List<SortDefinition> sort, int skipCount, int loadCount);
 }
