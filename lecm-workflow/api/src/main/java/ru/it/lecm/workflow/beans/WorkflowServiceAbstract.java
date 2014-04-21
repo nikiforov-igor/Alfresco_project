@@ -254,11 +254,11 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	protected void completeTaskAddMembers(NodeRef employeeRef, NodeRef bpmPackage, DelegateTask task) {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
-			documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, new HashMap<QName, Serializable>());
+			documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, new HashMap<QName, Serializable>(), true);
 
 			NodeRef assumeExecutor = (NodeRef) task.getVariable("assumeExecutor");
 			if (assumeExecutor != null) {
-				documentMembersService.addMemberWithoutCheckPermission(documentRef, assumeExecutor, new HashMap<QName, Serializable>());
+				documentMembersService.addMemberWithoutCheckPermission(documentRef, assumeExecutor, new HashMap<QName, Serializable>(), true);
 			}
 		}
 	}
