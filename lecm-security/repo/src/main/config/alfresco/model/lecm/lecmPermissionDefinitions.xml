@@ -670,6 +670,8 @@
 			<includePermissionGroup permissionGroup="Editor" type="cm:cmobject" />
 		</permissionGroup>
 
+        <permissionGroup name="LECM_BASIC_PG_None" allowFullControl="false" expose="false" />
+
 		<permissionGroup name="LECM_BASIC_PG_Administrator" allowFullControl="true" expose="false" >
 			<includePermissionGroup permissionGroup="Administrator" type="cm:cmobject" />
 		  <!--

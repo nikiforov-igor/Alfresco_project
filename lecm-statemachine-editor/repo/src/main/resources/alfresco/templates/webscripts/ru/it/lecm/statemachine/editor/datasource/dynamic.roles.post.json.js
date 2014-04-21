@@ -12,7 +12,7 @@ function main() {
 
     var dictionaryRoles = [];
 	for each (var role in roles.getChildren()) {
-        if (role.getTypeShort() == "lecm-stmeditor:dynamic-role-item") {
+        if (role.getTypeShort() == "lecm-stmeditor:dynamic-role-item" && role.assocs["lecm-stmeditor:role-assoc"] != null) {
     	    dictionaryRoles[role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString()] = 1;
         }
 	};
@@ -20,7 +20,9 @@ function main() {
 	var activeRoles = [];
 
 	for each (var role in roleFolder.children) {
-		activeRoles[role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString()] = role;
+	    if (role.assocs["lecm-stmeditor:role-assoc"] != null) {
+            activeRoles[role.assocs["lecm-stmeditor:role-assoc"][0].nodeRef.toString()] = role;
+        }
 	}
 
 	var forDelete = [];
@@ -43,7 +45,7 @@ function main() {
 
 	for each (var node in forCreate) {
 		var newRole = roleFolder.createNode(null, "lecm-stmeditor:dynamic-role", "cm:contains");
-		newRole.properties["lecm-stmeditor:permissionTypeValue"] = "LECM_BASIC_PG_Reader";
+		newRole.properties["lecm-stmeditor:permissionTypeValue"] = "LECM_BASIC_PG_None";
 		newRole.save();
 		var dictionaryRole = search.findNode(node);
 		newRole.createAssociation(dictionaryRole, "lecm-stmeditor:role-assoc");

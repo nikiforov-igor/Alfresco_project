@@ -1328,7 +1328,7 @@
                     <field id="lecm-stmeditor:permissionTypeValue">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
-                            <control-param name="webscript">/lecm/statemachine/editor/privileges</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/privileges?dynamic</control-param>
                             <control-param name="withEmpty">false</control-param>
                         </control>
                     </field>

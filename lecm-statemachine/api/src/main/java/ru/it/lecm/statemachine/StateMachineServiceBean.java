@@ -11,6 +11,7 @@ import java.util.Set;
 public interface StateMachineServiceBean {
 
     public static final String REDIRECT_VARIABLE = "lecm_redirect_url";
+    public static final String ROLE_WITHOUT_PRIVELEGES = "LECM_BASIC_PG_None";
 
     /**
      * Возвращает список полей для документа с флагами "редактируемый/не редактируемый"
