@@ -36,7 +36,7 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
     }
 
     @SuppressWarnings("unused")
-    public List<JSONObject> getArmNodeChilds(ScriptNode node, String childType) {
+    public List<JSONObject> getArmNodeChilds(ScriptNode node) {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
         List<ArmNode> childNodes = armWrapperService.getChildNodes(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false);
         for (ArmNode childNode : childNodes) {

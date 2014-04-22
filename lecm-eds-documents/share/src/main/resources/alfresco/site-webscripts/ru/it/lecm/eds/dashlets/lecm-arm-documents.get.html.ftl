@@ -40,9 +40,11 @@
             </span>
          </span>
             <select id="${id}-filters-menu">
-            <#list settings.filters as filter>
-                <option value="${filter.query?html}">${filter.title}</option>
-            </#list>
+            <#if settings?? && settings.filters??>
+                <#list settings.filters as filter>
+                    <option value="${filter.query?html}">${filter.title}</option>
+                </#list>
+            </#if>
             </select>
 
             <div class="clear"></div>
