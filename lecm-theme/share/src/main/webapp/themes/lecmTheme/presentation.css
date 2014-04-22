@@ -1988,10 +1988,10 @@ div.association-auto-complete-selected-item-even {
 .yui-skin-lecmTheme .yui-panel div.association-auto-complete-selected-item-even {
     padding: 2px 5px;
 }
-div.association-auto-complete-selected-item > span > a,
-div.association-auto-complete-selected-item-even > span > a,
-div.association-auto-complete-selected-item > span.not-person,
-div.association-auto-complete-selected-item-even > span.not-person {
+div:not(.viewmode-field) > div.association-auto-complete-selected-item > span > a,
+div:not(.viewmode-field) > div.association-auto-complete-selected-item-even > span > a,
+div:not(.viewmode-field) > div.association-auto-complete-selected-item > span.not-person,
+div:not(.viewmode-field) > div.association-auto-complete-selected-item-even > span.not-person {
     max-width: 330px;
     display: inline-block;
     white-space: nowrap;
