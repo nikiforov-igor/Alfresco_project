@@ -13,8 +13,10 @@
 						<activiti:string>
 							var document = bpm_package.children[0];
 							var draftRootFolder = contracts.getDraftRoot();
+							var props = new Array();
+							props['lecm-additional-document:date'] = new Date();
 
-							var newAdditionalDocument = draftRootFolder.createNode(null, "lecm-additional-document:additionalDocument");
+							var newAdditionalDocument = draftRootFolder.createNode(null, "lecm-additional-document:additionalDocument", props);
 							newAdditionalDocument.createAssociation(lecmContractWf_documentType, "lecm-additional-document:additionalDocumentType");
 							newAdditionalDocument.createAssociation(document, "lecm-additional-document:document-assoc");
 
