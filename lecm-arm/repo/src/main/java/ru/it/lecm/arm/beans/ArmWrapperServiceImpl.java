@@ -7,6 +7,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private SubstitudeBean substitudeService;
     private DictionaryBean dictionaryService;
 	private NamespaceService namespaceService;
+    private StateMachineServiceBean stateMachineHelper;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -175,10 +177,20 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setTypes(getNodeTypes(nodeRef));
 
         String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
-        if (searchQuery != null) {
-            node.setSearchQuery(searchQuery);
+        String workflowQuery = service.getActiveWorkflowsQuery(nodeRef);
+        if (searchQuery != null || workflowQuery != null) {
+            StringBuilder sb = new StringBuilder();
+            if (searchQuery != null) {
+                sb.append(searchQuery);
+            }
+            if (workflowQuery != null && workflowQuery.length() > 0) {
+                if (sb.length() > 0) {
+                    sb.append(" AND (");
+                }
+                sb.append(workflowQuery).append(")");
+            }
+            node.setSearchQuery(sb.toString());
         }
-        node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
         node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
 
         if (!onlyMeta) {
@@ -315,5 +327,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
 
         return results;
+    }
+
+    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
     }
 }

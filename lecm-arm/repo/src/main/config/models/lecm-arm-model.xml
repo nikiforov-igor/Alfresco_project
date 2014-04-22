@@ -77,6 +77,15 @@
 
 		<type name="lecm-arm:node">
 			<parent>lecm-arm:base-node</parent>
+            <properties>
+                <property name="lecm-arm:is-select-by-activeTasks">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <property name="lecm-arm:activeTasks-filter">
+                    <type>d:text</type>
+                </property>
+            </properties>
 			<associations>
 				<!-- Правило построения узлов -->
 				<association name="lecm-arm:node-child-rule-assoc">

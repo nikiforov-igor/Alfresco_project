@@ -159,6 +159,8 @@
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
+					<show id="lecm-arm:is-select-by-activeTasks"/>
+					<show id="lecm-arm:activeTasks-filter"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecm-arm:types">
@@ -184,6 +186,11 @@
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
+                    <field id="lecm-arm:is-select-by-activeTasks">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="disabledFieldsIfNotSelect">lecm-arm:activeTasks-filter</control-param>
+                        </control>
+                    </field>
 				</appearance>
 			</form>
 		</forms>

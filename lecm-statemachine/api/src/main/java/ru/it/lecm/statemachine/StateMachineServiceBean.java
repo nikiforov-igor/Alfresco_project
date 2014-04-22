@@ -149,4 +149,7 @@ public interface StateMachineServiceBean {
      * @return
      */
     public Set<String> getStarterRoles(String documentType);
+
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee);
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds);
 }

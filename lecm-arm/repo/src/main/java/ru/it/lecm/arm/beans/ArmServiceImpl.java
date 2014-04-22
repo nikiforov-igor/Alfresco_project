@@ -13,6 +13,7 @@ import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
@@ -28,6 +29,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private DictionaryBean dictionaryService;
     private SearchService searchService;
 	private NamespaceService namespaceService;
+    private OrgstructureBean orgstructureBean;
+
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
         public int compare(NodeRef o1, NodeRef o2) {
@@ -46,6 +49,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     };
 
     private StateMachineServiceBean stateMachineHelper;
+
+    public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
+        this.orgstructureBean = orgstructureBean;
+    }
 
     @Override
 	public NodeRef getServiceRootFolder() {
@@ -296,6 +303,36 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		}
 		return null;
 	}
+
+    @Override
+    public String getActiveWorkflowsQuery(NodeRef node) {
+        String result = null;
+        Object isFilterObj = nodeService.getProperty(node, ArmService.PROP_IS_SELECT_BY_ACTIVE_TASKS);
+        boolean isFilterByActiveTasks = isFilterObj != null ? (Boolean) isFilterObj : false;
+        if (isFilterByActiveTasks) {
+            StringBuilder sb = new StringBuilder();
+            Set<String> filterTasks = null;
+            Object tasksFilterObj = nodeService.getProperty(node, ArmService.PROP_ACTIVE_TASKS_FILTER);
+            if (tasksFilterObj != null) {
+                filterTasks = new HashSet<String>();
+                String[] tasksIds = tasksFilterObj.toString().split(",");
+                for (String taskId : tasksIds) {
+                    if (!taskId.isEmpty()) {
+                        filterTasks.add(taskId.trim());
+                    }
+                }
+            }
+            List<NodeRef> documents = stateMachineHelper.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks);
+            for (NodeRef document : documents) {
+                sb.append("ID:\"").append(document.toString()).append("\" OR ");
+            }
+
+            sb.append("ID:\"NOT_REF\""); // выключать поиск, если документы не найдены
+
+            result = sb.toString();
+        }
+        return result;
+    }
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;

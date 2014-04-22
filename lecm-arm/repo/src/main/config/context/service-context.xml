@@ -60,6 +60,7 @@
 		<property name="searchService" ref="searchService"/>
 		<property name="namespaceService" ref="namespaceService"/>
         <property name="stateMachineHelper" ref="stateMachineHelper"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>

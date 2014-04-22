@@ -1456,15 +1456,40 @@ public class StateMachineHelper implements StateMachineServiceBean {
         List<ChildAssociationRef> childAssocs = serviceRegistry.getNodeService().getChildAssocs(wfPackage);
         for (ChildAssociationRef childAssoc : childAssocs) {
             NodeRef document = childAssoc.getChildRef();
+            if (documentTypes == null) {
+                return document;
+            }
             QName documentType = serviceRegistry.getNodeService().getType(document);
             if (documentTypes.contains(documentType.getLocalName())) {
                 return document;
             }
         }
-
         return null;
     }
 
+    public NodeRef getTaskDocument(WorkflowTask task) {
+        return getTaskDocument(task, null);
+    }
+
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee) {
+        return getDocumentsWithActiveTasks(employee, null);
+    }
+
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds) {
+        Set<NodeRef> documents = new HashSet<NodeRef>();
+        String login = orgstructureBean.getEmployeeLogin(employee);
+
+        List<WorkflowTask> tasks = getAssignedAndPooledTasks(login);
+        for (WorkflowTask task : tasks) {
+            if (workflowIds == null || workflowIds.contains(task.getDefinition().getId())) {
+                NodeRef doc = getTaskDocument(task);
+                if (doc != null) {
+                    documents.add(doc);
+                }
+            }
+        }
+        return new ArrayList<NodeRef>(documents);
+    }
     /**
      * Выборка имен статусов для определенного описателя процесса
      * @param processDefinitionEntity

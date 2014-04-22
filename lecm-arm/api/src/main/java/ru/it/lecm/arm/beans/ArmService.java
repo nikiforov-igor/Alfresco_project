@@ -35,6 +35,8 @@ public interface ArmService {
 	public static final QName ASSOC_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "fields-assoc");
 	public static final QName ASSOC_NODE_FILTERS = QName.createQName(ARM_NAMESPACE_URI, "filters-assoc");
 	public static final QName ASSOC_NODE_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "node-child-rule-assoc");
+	public static final QName PROP_IS_SELECT_BY_ACTIVE_TASKS = QName.createQName(ARM_NAMESPACE_URI, "is-select-by-activeTasks");
+	public static final QName PROP_ACTIVE_TASKS_FILTER = QName.createQName(ARM_NAMESPACE_URI, "activeTasks-filter");
 	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
@@ -152,4 +154,6 @@ public interface ArmService {
 	 * @return запрос
 	 */
 	public ArmBaseChildRule getNodeChildRule(NodeRef node);
+
+    public String getActiveWorkflowsQuery(NodeRef node);
 }
