@@ -1,15 +1,20 @@
 package ru.it.lecm.delegation.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.workflow.WorkflowService;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.cmr.workflow.WorkflowTaskState;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
@@ -24,29 +29,17 @@ import ru.it.lecm.delegation.DelegationEventCategory;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.delegation.IDelegationDescriptor;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
-import org.alfresco.repo.admin.SysAdminParams;
-import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.workflow.WorkflowService;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.namespace.NamespaceService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.absence.IAbsence;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class DelegationBean extends BaseBean implements IDelegation, AuthenticationUtil.RunAsWork<NodeRef>, IDelegationDescriptor {
 
@@ -56,6 +49,8 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	public final static String TASKS_DELEGATION_FOLDER = "TASKS_DELEGATION_FOLDER";
 	private final static String REVIEWER_PERMISSION_GROUP = "LECM_BASIC_PG_Reviewer";
 	private final static String READER_PERMISSION_GROUP = "LECM_BASIC_PG_Reader";
+
+    private static final String GRAND_DYNAMIC_ROLE_CODE_INITIATOR = "BR_INITIATOR";
 
 	private OrgstructureBean orgstructureService;
 	private PersonService personService;
@@ -254,7 +249,8 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		Set<NodeRef> uniqueBusinessRoleNodeRefs = new HashSet<NodeRef> (orgstructureService.getEmployeeRoles(employeeNodeRef));
         final List<NodeRef> dynamicBusinessRoles = dictionaryService.getRecordsByParamValue(OrgstructureBean.BUSINESS_ROLES_DICTIONARY_NAME, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC, true);
         for (NodeRef businessRole : dynamicBusinessRoles) {
-            if (!isArchive(businessRole)) {
+            String roleName = nodeService.getProperty(businessRole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER).toString();
+            if (!isArchive(businessRole) && !roleName.equals(GRAND_DYNAMIC_ROLE_CODE_INITIATOR)) {
                 uniqueBusinessRoleNodeRefs.add(businessRole);
             }
         }
@@ -276,7 +272,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public List<NodeRef> getProcuracies (final NodeRef nodeRef, final boolean onlyActive) {
-		NodeRef delegationOptsNodeRef = getDelegationOpts (nodeRef);
+		NodeRef delegationOptsNodeRef = getDelegationOpts(nodeRef);
 		List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef> ();
 		if (delegationOptsNodeRef != null) {
 			List<ChildAssociationRef> childAssociationRefs = nodeService.getChildAssocs (delegationOptsNodeRef, ASSOC_DELEGATION_OPTS_PROCURACY, RegexQNamePattern.MATCH_ALL);
@@ -304,27 +300,27 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 	@Override
 	public List<NodeRef> createEmptyProcuracies (final NodeRef delegationOptsNodeRef, final List<NodeRef> businessRoleNodeRefs) {
-		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-		return transactionHelper.doInTransaction (new RetryingTransactionCallback<List<NodeRef>> () {
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		return transactionHelper.doInTransaction(new RetryingTransactionCallback<List<NodeRef>>() {
 
-			@Override
-			public List<NodeRef> execute () throws Throwable {
-				List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef> ();
-				for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
-					NodeRef parentRef = delegationOptsNodeRef; //the parent node
-					QName assocTypeQName = ASSOC_DELEGATION_OPTS_PROCURACY; //the type of the association to create. This is used for verification against the data dictionary.
-					QName assocQName = QName.createQName (DELEGATION_NAMESPACE, "доверенность_" + UUID.randomUUID ().toString ()); //the qualified name of the association
-					QName nodeTypeQName = TYPE_PROCURACY; //a reference to the node type
-					Map<QName, Serializable> properties = new HashMap<QName, Serializable> (1); //optional map of properties to keyed by their qualified names
-					properties.put (IS_ACTIVE, false);
-					ChildAssociationRef associationRef = nodeService.createNode (parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-					NodeRef procuracyNodeRef = associationRef.getChildRef ();
-					nodeService.createAssociation (procuracyNodeRef, businessRoleNodeRef, ASSOC_PROCURACY_BUSINESS_ROLE);
-					procuracyNodeRefs.add (procuracyNodeRef);
-				}
-				return procuracyNodeRefs;
-			}
-		});
+            @Override
+            public List<NodeRef> execute() throws Throwable {
+                List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef>();
+                for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
+                    NodeRef parentRef = delegationOptsNodeRef; //the parent node
+                    QName assocTypeQName = ASSOC_DELEGATION_OPTS_PROCURACY; //the type of the association to create. This is used for verification against the data dictionary.
+                    QName assocQName = QName.createQName(DELEGATION_NAMESPACE, "доверенность_" + UUID.randomUUID().toString()); //the qualified name of the association
+                    QName nodeTypeQName = TYPE_PROCURACY; //a reference to the node type
+                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1); //optional map of properties to keyed by their qualified names
+                    properties.put(IS_ACTIVE, false);
+                    ChildAssociationRef associationRef = nodeService.createNode(parentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+                    NodeRef procuracyNodeRef = associationRef.getChildRef();
+                    nodeService.createAssociation(procuracyNodeRef, businessRoleNodeRef, ASSOC_PROCURACY_BUSINESS_ROLE);
+                    procuracyNodeRefs.add(procuracyNodeRef);
+                }
+                return procuracyNodeRefs;
+            }
+        });
 	}
 
 	/**
@@ -366,7 +362,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 	}
 
 	private void logSaveDelegationOpts (final NodeRef delegationOptsRef) {
-		final NodeRef initiator = orgstructureService.getPersonForEmployee (orgstructureService.getCurrentEmployee ());
+		final NodeRef initiator = orgstructureService.getPersonForEmployee(orgstructureService.getCurrentEmployee());
 		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		String template = "Сотрудник #mainobject изменил параметры делегирования";
 		businessJournalService.log (initiator, mainObject, DelegationEventCategory.CHANGE_DELEGATION_OPTS, template, null);
@@ -533,7 +529,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, true);
 			logStartDelegation (delegationOptsRef);
 			//нарезка прав согласно сервису Руслана
-			delegate (delegationOptsRef, true);
+			delegate(delegationOptsRef, true);
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
 		}
@@ -553,9 +549,9 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		NodeRef delegationOptsRef = getDelegationOpts (delegator);
 		if (delegationOptsRef != null) {
 			//отбирание ранее нарезанных прав согласно сервису Руслана
-			delegate (delegationOptsRef, false);
+			delegate(delegationOptsRef, false);
 			nodeService.setProperty (delegationOptsRef, IS_ACTIVE, false);
-			logStopDelegation (delegationOptsRef);
+			logStopDelegation(delegationOptsRef);
 		} else {
 			logger.warn (String.format ("there is no any delegation-opts for NodeRef '%s'", delegator));
 		}
