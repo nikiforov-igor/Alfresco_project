@@ -17,7 +17,7 @@
 
       /* Load YUI Components */
       Alfresco.util.YUILoaderHelper.require(["button"], this.onComponentsLoaded, this);
-      
+
       return this;
    };
 
@@ -38,15 +38,24 @@
           * @type string
           */
          currentValue: "",
-         
+
          /**
           * Flag to determine whether a time field should be visible
-          * 
+          *
           * @property showTime
           * @type boolean
           * @default false
           */
-         showTime: false
+         showTime: false,
+
+		  /**
+          * String date format
+          *
+          * @property formatDateStr
+          * @type string
+          * @default null
+          */
+		 formatDateStr: null
       },
 
       /**
@@ -61,7 +70,7 @@
          this.options = YAHOO.lang.merge(this.options, obj);
          return this;
       },
-      
+
       /**
        * Set messages for this component.
        *
@@ -74,7 +83,7 @@
          Alfresco.util.addMessages(obj, this.name);
          return this;
       },
-      
+
       /**
        * Fired by YUILoaderHelper when required component script files have
        * been loaded into the browser.
@@ -99,11 +108,15 @@
              return;
          }
 
-         var theDate = Alfresco.util.fromISO8601(this.options.currentValue);
+		 var theDate = Alfresco.util.fromISO8601(this.options.currentValue);
 
-         var dateEntry = theDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+		 if (this.options.formatDateStr){
+			var dateEntry = Alfresco.util.formatDate(theDate,this._msg(this.options.formatDateStr));
+		 }else{
+			var dateEntry = theDate.toString(this._msg("form.control.date-picker.entry.date.format"));
+		 }
          var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
-         
+
          // populate the input fields
           if (this.options.currentValue !== "") {
               Dom.get(this.id + "-date").innerHTML = dateEntry + (this.options.showTime ? " " + timeEntry : "");

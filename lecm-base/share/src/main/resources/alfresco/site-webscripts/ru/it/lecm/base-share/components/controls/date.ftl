@@ -51,6 +51,9 @@
                              {
                                  currentValue: "${field.value?js_string}",
                                  showTime: ${showTime?string}
+								 <#if field.control.params.dateFormatString??>
+								 ,formatDateStr: "${field.control.params.dateFormatString}"
+								 </#if>
                              }).setMessages(
                              ${messages}
                              );
