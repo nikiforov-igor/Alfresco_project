@@ -26,3 +26,7 @@
 .body.scrollableList .eds-documents {
     width: 100%;
 }
+
+.dashlet .titleBarActions .arm {
+    background-image: url('/share/res/images/lecm-eds-documents/arm.png');
+}
