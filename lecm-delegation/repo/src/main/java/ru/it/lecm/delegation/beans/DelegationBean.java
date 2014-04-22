@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.PersonService;
+import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.PropertyCheck;
@@ -516,6 +517,10 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
             for (NodeRef sourceEmployeeBusinessRole : businessRolesBySourceEmployee){
                 sgNotifierService.notifyBRDelegationChanged (sourceEmployeeBusinessRole, sourceEmployee, bossAssistant, created);
             }
+
+			if (created) {
+				delegateTasks(sourceEmployee, bossAssistant);
+			}
         } else {
 			logger.warn ("boss assistant is null, no security groups changed");
 		}
@@ -921,6 +926,44 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			return (Boolean) nodeService.getProperty(globalSettingsNode, PROP_CREATE_DOCUMENT_DELEGATION_SETTING);
 		} else {
 			return false;
+		}
+	}
+
+	public void delegateTasks(NodeRef sourceEmployeeRef, NodeRef destEmployee) {
+		String destUserName = orgstructureService.getEmployeeLogin(destEmployee);
+		if (destUserName != null) {
+			List<WorkflowTask> tasks = getActiveEmployeeTasks(sourceEmployeeRef);
+			if (tasks != null) {
+				for (WorkflowTask task : tasks) {
+					Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+					properties.put(ContentModel.PROP_OWNER, destUserName);
+					workflowService.updateTask(task.getId(), properties, null, null);
+				}
+
+				String author = AuthenticationUtil.getSystemUserName();
+
+				SysAdminParams params = serviceRegistry.getSysAdminParams();
+
+				String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
+				String link = "<a href=\"" + serverUrl + "/share/page/distribution-tasks\">ссылке</a>";
+
+				String userName = (String) nodeService.getProperty(sourceEmployeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+				String text = "От пользователя " + userName + " вам делегировано " + tasks.size() + " задач. Распределить на других исполнителей можно по " + link;
+
+				List<NodeRef> recipients = new ArrayList<NodeRef>();
+				recipients.add(destEmployee);
+
+				notificationsService.sendNotification(author, sourceEmployeeRef, text, recipients, null);
+			}
+		}
+	}
+
+	public List<WorkflowTask> getActiveEmployeeTasks(NodeRef employeeRef) {
+		String userName = orgstructureService.getEmployeeLogin(employeeRef);
+		if (userName != null) {
+			return workflowService.getAssignedTasks(userName, WorkflowTaskState.IN_PROGRESS);
+		} else {
+			return null;
 		}
 	}
 }
