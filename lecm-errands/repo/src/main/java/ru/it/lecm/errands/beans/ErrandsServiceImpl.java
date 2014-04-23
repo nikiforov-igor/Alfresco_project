@@ -25,6 +25,7 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.security.LecmPermissionService;
 
 /**
  * User: AIvkin
@@ -53,6 +54,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     private LecmObjectsService lecmObjectsService;
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
+	private LecmPermissionService lecmPermissionService;
 
     public void setDocumentService(DocumentService documentService) {
         this.documentService = documentService;
@@ -77,6 +79,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     public void setBusinessJournalService(BusinessJournalService businessJournalService) {
         this.businessJournalService = businessJournalService;
     }
+
+	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+		this.lecmPermissionService = lecmPermissionService;
+	}
 
     @Override
     public NodeRef getServiceRootFolder() {
@@ -230,9 +236,16 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<NodeRef> result = new ArrayList<NodeRef>();
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 
+
         List<AssociationRef> documentErrandsAssocs = nodeService.getSourceAssocs(document, ASSOC_ADDITIONAL_ERRANDS_DOCUMENT);
         for (AssociationRef documentErrandsAssoc : documentErrandsAssocs) {
             NodeRef errand = documentErrandsAssoc.getSourceRef();
+
+			boolean hasPermission = lecmPermissionService.hasPermission("_ReadProperties", errand);
+			hasPermission = hasPermission && lecmPermissionService.hasPermission("_ReadAssociations", errand);
+			if (!hasPermission) {
+				continue;
+			}
 
             if (active != null) {
                 if (active) {

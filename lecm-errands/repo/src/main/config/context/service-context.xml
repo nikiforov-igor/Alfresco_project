@@ -78,6 +78,7 @@
 				<entry key="#{ERRANDS_ROOT_ID}" value="#{ERRANDS_ROOT_NAME}"/>
 			</map>
 		</property>
+		<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
 	</bean>
 
 	<bean id="errandsScript" parent="baseScript" class="ru.it.lecm.errands.scripts.ErrandsWebScriptBean"
