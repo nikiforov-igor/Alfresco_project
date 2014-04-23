@@ -26,81 +26,6 @@
 	</variable>
 	<group name="grp_KindTotal">
 		<groupExpression><![CDATA[""]]></groupExpression>
-		<groupHeader>
-			<band height="30">
-				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
-				<staticText>
-					<reportElement uuid="98fecca2-e1a2-4978-9cc6-d6d85ac31eb4" mode="Opaque" x="0" y="0" width="129" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Вид документа]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="5ca4745a-603d-4069-b776-1c4b2d0ff0e4" mode="Opaque" x="129" y="0" width="135" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Тематика]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="94509782-c440-40c8-bdad-13f05d0e1047" mode="Opaque" x="264" y="0" width="87" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Количество]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="32838331-e8fe-4141-8f6c-5325809daee0" mode="Opaque" x="351" y="0" width="93" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Проценты]]></text>
-				</staticText>
-				<staticText>
-					<reportElement uuid="5331af06-4d7c-4cb3-9b73-4a0664e042ac" mode="Opaque" x="444" y="0" width="111" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-					<box>
-						<pen lineWidth="1.0" lineColor="#78C0D4"/>
-						<topPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
-						<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
-					</box>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font fontName="Times New Roman" size="11" isBold="true"/>
-					</textElement>
-					<text><![CDATA[Итого по виду документа]]></text>
-				</staticText>
-			</band>
-		</groupHeader>
 		<groupFooter>
 			<band height="320" splitType="Stretch">
 				<printWhenExpression><![CDATA[$V{REPORT_COUNT} >=0 && $F{col_DocKind} != null]]></printWhenExpression>
@@ -295,8 +220,8 @@
 	<group name="grp_byType">
 		<groupExpression><![CDATA[$F{col_DocType}]]></groupExpression>
 	</group>
-	<title>
-		<band height="40" splitType="Stretch">
+	<pageHeader>
+		<band height="40">
 			<staticText>
 				<reportElement uuid="f710bbcc-3ec1-4bff-bcaa-19263f08b8a4" x="0" y="0" width="555" height="40"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -305,7 +230,81 @@
 				<text><![CDATA[Сводка по тематикам документов]]></text>
 			</staticText>
 		</band>
-	</title>
+	</pageHeader>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="98fecca2-e1a2-4978-9cc6-d6d85ac31eb4" mode="Opaque" x="0" y="0" width="129" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Вид документа]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5ca4745a-603d-4069-b776-1c4b2d0ff0e4" mode="Opaque" x="129" y="0" width="135" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Тематика]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="94509782-c440-40c8-bdad-13f05d0e1047" mode="Opaque" x="264" y="0" width="87" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Количество]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="32838331-e8fe-4141-8f6c-5325809daee0" mode="Opaque" x="351" y="0" width="93" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Проценты]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5331af06-4d7c-4cb3-9b73-4a0664e042ac" mode="Opaque" x="444" y="0" width="111" height="30" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="1.0" lineColor="#78C0D4"/>
+					<topPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<leftPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="1.0" lineColor="#78C0D4"/>
+					<rightPen lineWidth="1.0" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Итого по виду документа]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
 	<detail>
 		<band>
 			<printWhenExpression><![CDATA[$V{REPORT_COUNT} >= 0 && $F{col_DocKind} != null]]></printWhenExpression>
