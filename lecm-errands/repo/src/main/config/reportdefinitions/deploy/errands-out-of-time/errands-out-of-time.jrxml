@@ -104,7 +104,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="27d34a72-0b4a-4bc1-8c8c-9e1a2c02f3e5" stretchType="RelativeToTallestObject" x="444" y="25" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#FFFF00"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
