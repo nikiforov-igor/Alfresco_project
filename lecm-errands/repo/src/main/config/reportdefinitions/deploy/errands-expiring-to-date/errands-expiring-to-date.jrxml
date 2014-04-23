@@ -10,6 +10,16 @@
 			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
+	<style name="urgentErrand" mode="Opaque" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$F{col_limitDate}.before(new Date())]]></conditionExpression>
+			<style forecolor="#FF0000"/>
+		</conditionalStyle>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style backcolor="#D2EAF1"/>
+		</conditionalStyle>
+	</style>
 	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["ds-internal-reg-journal.xml"]]></defaultValueExpression>
 	</parameter>
@@ -66,18 +76,17 @@
 		<band height="60">
 			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="a0f2e00c-cfa3-4513-94cb-be88a1951403" x="14" y="0" width="323" height="25" isPrintWhenDetailOverflows="true"/>
+				<reportElement uuid="a0f2e00c-cfa3-4513-94cb-be88a1951403" x="0" y="0" width="323" height="60" isPrintWhenDetailOverflows="true"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="12" isBold="false"/>
+					<font fontName="Times New Roman" size="12" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["На дату " +
-$P{expiredDate} != null ?
-    new SimpleDateFormat("dd.MM.yyyy").format($P{expiredDate}) : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{expiredDate} != null ?
+    ("На дату: " + new SimpleDateFormat("dd.MM.yyyy").format($P{expiredDate})) : ""]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement uuid="27d34a72-0b4a-4bc1-8c8c-9e1a2c02f3e5" stretchType="RelativeToTallestObject" x="444" y="25" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#FFFF00"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
-					<font fontName="Times New Roman" size="12" isBold="false"/>
+					<font fontName="Times New Roman" size="12" isBold="false" pdfEncoding="Cp1251"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($P{execUnits_text} != null ? $P{execUnits_text}.replaceAll(";", "\n") : "")]]></textFieldExpression>
@@ -85,7 +94,7 @@ $P{expiredDate} != null ?
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="1e18a26b-1604-4723-a15f-cfab65e69edd" x="444" y="0" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#99FF33"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Times New Roman" size="12" isBold="false"/>
+					<font fontName="Times New Roman" size="12" isBold="false" pdfEncoding="Cp1251"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{execUnits_text} != null ? "По подразделениям:" : ""]]></textFieldExpression>
@@ -324,7 +333,7 @@ $P{expiredDate} != null ?
 				<textFieldExpression><![CDATA[$F{col_Important} ? "Да" : "Нет"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="718" y="0" width="84" height="30"/>
+				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="urgentErrand" stretchType="RelativeToTallestObject" mode="Opaque" x="718" y="0" width="84" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
