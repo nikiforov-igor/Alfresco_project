@@ -929,7 +929,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 		String destUserName = orgstructureService.getEmployeeLogin(destEmployee);
 		if (destUserName != null) {
 			List<WorkflowTask> tasks = getActiveEmployeeTasks(sourceEmployeeRef);
-			if (tasks != null) {
+			if (tasks != null && tasks.size() > 0) {
 				for (WorkflowTask task : tasks) {
 					Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 					properties.put(ContentModel.PROP_OWNER, destUserName);
