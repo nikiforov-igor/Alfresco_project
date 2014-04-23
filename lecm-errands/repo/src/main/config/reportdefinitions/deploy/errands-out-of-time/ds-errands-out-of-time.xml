@@ -130,7 +130,7 @@
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Подразделение"
-               javaValueClass="java.lang.String" jrFldName="col_ExecutorUnit" queryFldName="{lecm-errands:initiator-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}">
+               javaValueClass="java.lang.String" jrFldName="col_ExecutorUnit" queryFldName="{lecm-errands:executor-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}">
             <l18>
                 <item key="RU_RU"><![CDATA[Подразделение]]></item>
             </l18>
