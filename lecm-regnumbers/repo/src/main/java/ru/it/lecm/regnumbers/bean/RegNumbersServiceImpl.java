@@ -96,12 +96,12 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	}
 
 	@Override
-	public boolean isNumberUnique(String number) {
+	public boolean isNumberUnique(String number, QName documentType) {
 		boolean isUnique;
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		sp.setQuery(String.format(SEARCH_QUERY_TEMPLATE, DocumentService.TYPE_BASE_DOCUMENT.toString(), number));
+		sp.setQuery(String.format(SEARCH_QUERY_TEMPLATE, documentType.toString(), number));
 		sp.addQueryTemplate("regnumberTemplate", REGNUMBER_SEARCH_TEMPLATE);
 
 		ResultSet results = null;
@@ -122,6 +122,11 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		}
 
 		return isUnique;
+	}
+
+	@Override
+	public boolean isNumberUnique(String number) {
+		return isNumberUnique(number, DocumentService.TYPE_BASE_DOCUMENT);
 	}
 
 	@Override
@@ -275,11 +280,17 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 				//регистрируем
 				String regNumber;
 				NodeRef repeatedDocument = getRepeatedDocument(documentNode);
-				if (repeatedDocument != null) {
-					regNumber = getRepeatedNumber(documentNode);
-				} else {
-					regNumber = getNumber(documentNode, templateDictionary);
-				}
+				QName documentType = nodeService.getType(documentNode);
+				// нам нужно получить уникальный регистрационный номер документа.
+				// есть вероятность, что сгененрированный номер уже используется, потому что задан руками
+				do {
+					if (repeatedDocument != null) {
+						regNumber = getRepeatedNumber(documentNode);
+					} else {
+						regNumber = getNumber(documentNode, templateDictionary);
+					}
+				} while (!isNumberUnique(regNumber, documentType));
+
 				Date date = new Date();
 				nodeService.setProperty(documentNode, propNumber, regNumber);
 				nodeService.setProperty(documentNode, propDate, date);

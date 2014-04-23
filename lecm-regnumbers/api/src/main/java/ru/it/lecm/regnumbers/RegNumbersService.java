@@ -101,13 +101,23 @@ public interface RegNumbersService {
 	String getNumber(NodeRef documentNode, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
-	 * Проверить, является ли номер документа уникальным
+	 * Проверить, является ли номер документа уникальным для всех документов в системе
 	 *
 	 * @param number номер документа, который необходимо проверить на
 	 * уникальность.
 	 * @return уникальный/не уникальный
 	 */
 	boolean isNumberUnique(String number);
+
+	/**
+	 * Проверить, является ли номер документа уникальным в рамках указанного типа документа
+	 *
+	 * @param number номер документа, который необходимо проверить на
+	 * уникальность.
+	 * @param documentType тип документов, в рамках которого проверять уникальность номера
+	 * @return уникальный/не уникальный
+	 */
+	boolean isNumberUnique(String number, QName documentType);
 
 	/**
 	 * Проверить, является ли шаблон номера синтаксический верным с точки зрения
@@ -144,9 +154,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-     * @deprecated use registerProject|registerDocument instead
-     */
-    @Deprecated
+	 * @deprecated use registerProject|registerDocument instead
+	 */
+	@Deprecated
 	void setDocumentNumber(NodeRef documentNode, QName documentProperty, String templateStr) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -164,9 +174,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-     * @deprecated use registerProject|registerDocument instead
-     */
-    @Deprecated
+	 * @deprecated use registerProject|registerDocument instead
+	 */
+	@Deprecated
 	void setDocumentNumber(NodeRef documentNode, QName documentProperty, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -184,9 +194,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-    * @deprecated use registerProject|registerDocument instead
-    */
-    @Deprecated
+	 * @deprecated use registerProject|registerDocument instead
+	 */
+	@Deprecated
 	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, String templateStr) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -204,9 +214,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-     * @deprecated use registerProject|registerDocument instead
+	 * @deprecated use registerProject|registerDocument instead
 	 */
-    @Deprecated
+	@Deprecated
 	void setDocumentNumber(NodeRef documentNode, String documentPropertyPrefix, NodeRef templateNode) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -224,9 +234,9 @@ public interface RegNumbersService {
 	 * @throws TemplateRunException Ошибка на этапе выполнения шаблона:
 	 * неверное имя метода, функции или объекта, неверные параметры функции или
 	 * метода. Детали см. в эксепшене.
-     * @deprecated use registerProject|registerDocument instead
+	 * @deprecated use registerProject|registerDocument instead
 	 */
-    @Deprecated
+	@Deprecated
 	void setDocumentNumber(String dictionaryTemplateCode, NodeRef documentNode, String documentPropertyPrefix) throws TemplateParseException, TemplateRunException;
 
 	/**
@@ -235,25 +245,25 @@ public interface RegNumbersService {
 	 * @param dictionaryTemplateCode код шаблона в справочнике.
 	 * @return ссылка на объект шаблона.
 	 */
-	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
+	NodeRef getTemplateNodeByCode(String dictionaryTemplateCode) throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
+	void registerProject(NodeRef documentNode, String dictionaryTemplateCode) throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode)  throws TemplateParseException, TemplateRunException;
+	void registerDocument(NodeRef documentNode, String dictionaryTemplateCode) throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;
+	void registerProject(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve)  throws TemplateParseException, TemplateRunException;
+	void registerDocument(NodeRef documentNode, String dictionaryTemplateCode, boolean onlyReserve) throws TemplateParseException, TemplateRunException;
 
-    void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException;
+	void registerProject(NodeRef templateRef, NodeRef documentNode) throws TemplateParseException, TemplateRunException;
 
-    void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException;
+	void registerDocument(NodeRef documentNode, NodeRef templateRef) throws TemplateParseException, TemplateRunException;
 
-    /**
-     * Проверить, зарегистрирован ли документ
-     *
-     * @param documentNode ссылка на экземпляр документа, который необходимо проверить на регистрацию.
-     * @return зарегистрирован/не зарегистрирован
-     */
-    boolean isRegistered(NodeRef documentNode, boolean isProject);
+	/**
+	 * Проверить, зарегистрирован ли документ
+	 *
+	 * @param documentNode ссылка на экземпляр документа, который необходимо проверить на регистрацию.
+	 * @return зарегистрирован/не зарегистрирован
+	 */
+	boolean isRegistered(NodeRef documentNode, boolean isProject);
 }

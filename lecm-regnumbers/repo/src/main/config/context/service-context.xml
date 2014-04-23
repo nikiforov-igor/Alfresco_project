@@ -68,6 +68,7 @@
 	<bean id="regNumbersJavascriptExtension" class="ru.it.lecm.regnumbers.extension.RegNumbersJavascriptExtension" parent="baseJavaScriptExtension">
 		<property name="extensionName" value="regnumbers"/>
 		<property name="regNumbersService" ref="regNumbersService"/>
+		<property name="nodeService" ref="nodeService"/>
 	</bean>
 
     <bean id="regnumbers.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
