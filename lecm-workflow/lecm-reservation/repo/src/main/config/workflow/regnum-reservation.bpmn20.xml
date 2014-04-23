@@ -64,6 +64,13 @@
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
+				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+					<activiti:field name="script">
+						<activiti:string><![CDATA[
+							reservationWorkflow.reassignTask(assignee, task);
+						]]></activiti:string>
+					</activiti:field>
+				</activiti:taskListener>
 				<activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[

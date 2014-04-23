@@ -759,4 +759,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
         return records;
     }
+
+	public String wrapAsDocumentLink(NodeRef documentRef) {
+		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), DOCUMENT_LINK_URL);
+	}
 }

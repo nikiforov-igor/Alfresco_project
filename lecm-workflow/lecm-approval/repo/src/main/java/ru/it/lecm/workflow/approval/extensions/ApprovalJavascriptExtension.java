@@ -179,6 +179,10 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 		approvalService.assignTask(assignee.getNodeRef(), task);
 	}
 
+	public void reassignTask(ActivitiScriptNode assignee, DelegateTask task) {
+		approvalService.reassignTask(assignee.getNodeRef(), task);
+	}
+
 	public WorkflowTaskDecision completeTask(ActivitiScriptNode assignee, DelegateTask task) {
 		return approvalService.completeTask(assignee.getNodeRef(), task);
 	}

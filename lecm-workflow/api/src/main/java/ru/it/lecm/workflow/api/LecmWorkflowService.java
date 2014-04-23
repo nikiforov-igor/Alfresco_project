@@ -14,6 +14,8 @@ public interface LecmWorkflowService {
 
 	void assignTask(final NodeRef assignee, final DelegateTask task);
 
+	void reassignTask(final NodeRef assignee, final DelegateTask task);
+
 	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task);
 
 	/**

@@ -78,6 +78,12 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 		//nop
 	}
 
+	public void reassignTask(NodeRef assignee, DelegateTask task) {
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		grantDynamicRole(employeeRef, bpmPackage, (String) task.getVariable("registrarDynamicRole"));
+	}
+
 	@Override
 	public WorkflowTaskDecision completeTask(final NodeRef assignee, final DelegateTask task) {
 		String comment = (String) task.getVariableLocal("bpm_comment");

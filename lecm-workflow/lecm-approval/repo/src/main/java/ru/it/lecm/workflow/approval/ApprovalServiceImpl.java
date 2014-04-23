@@ -408,6 +408,12 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
+	public void reassignTask(NodeRef assignee, DelegateTask task) {
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		grantDynamicRole(employeeRef, bpmPackage, "DA_APPROVER_DYN");
+	}
+
 	@Override
 	public NodeRef createApprovalList(NodeRef bpmPackage, String documentAttachmentCategoryName, String approvalType, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = workflowResultListService.getOrCreateWorkflowResultFolder(bpmPackage);

@@ -57,6 +57,10 @@ public class ReservationWorkflowJavascriptExtension extends BaseWebScript {
 		reservationWorkflowService.assignTask(assignee.getNodeRef(), task);
 	}
 
+	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+		reservationWorkflowService.reassignTask(assignee.getNodeRef(), task);
+	}
+
 	public void notifyReservationStarted(final ActivitiScriptNode bpmPackage, final ScriptNode employee) {
 		reservationWorkflowService.notifyWorkflowStarted(employee.getNodeRef(), null, bpmPackage.getNodeRef());
 	}

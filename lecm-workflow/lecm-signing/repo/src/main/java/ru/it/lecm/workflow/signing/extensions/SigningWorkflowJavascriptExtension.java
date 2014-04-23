@@ -73,6 +73,10 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 		signingWorkflowService.assignTask(assignee.getNodeRef(), task);
 	}
 
+	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+		signingWorkflowService.reassignTask(assignee.getNodeRef(), task);
+	}
+
 	public WorkflowTaskDecision completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
 		return signingWorkflowService.completeTask(assignee.getNodeRef(), task);
 	}

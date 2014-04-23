@@ -40,6 +40,10 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 		reviewWorkflowService.assignTask(assignee.getNodeRef(), task);
 	}
 
+	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+		reviewWorkflowService.reassignTask(assignee.getNodeRef(), task);
+	}
+
 	public void completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
 		reviewWorkflowService.completeTask(assignee.getNodeRef(), task);
 	}

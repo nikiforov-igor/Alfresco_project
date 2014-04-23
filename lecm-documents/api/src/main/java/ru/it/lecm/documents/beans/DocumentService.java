@@ -322,4 +322,6 @@ public interface DocumentService {
     public void finalizeToUnit(NodeRef document, NodeRef primaryUnit);
 
     List<NodeRef> getDocumentsByQuery(String query, List<SortDefinition> sort, int skipCount, int loadCount);
+
+	public String wrapAsDocumentLink(NodeRef documentRef);
 }

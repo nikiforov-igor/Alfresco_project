@@ -102,6 +102,42 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			renderCellActions: function TL_renderCellActions(elCell, oRecord, oColumn, oData) {
 				this.createAction(elCell, this.msg("link.editTask"), "task-edit-link", $siteURL('task-edit?taskId=' + oRecord.getData('id') + '&referrer=tasks&myTasksLinkBack=true'));
+				this.createAction(elCell, this.msg("link.reassignTask"), "task-view-link", function (event, oRecord) {
+					var me = this;
+					new Alfresco.module.SimpleDialog("reassign-task-form" + Alfresco.util.generateDomId()).setOptions({
+						width: "50em",
+						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+						templateRequestParams: {
+							submissionUrl: "/lecm/base/action/reassign-task/" + oRecord.getData('id'),
+							itemKind: "type",
+							itemId: "bpm:startTask",
+							formId: "reassignTask",
+							mode: "create",
+							submitType: "json",
+							showCancelButton: true
+						},
+						actionUrl: null,
+						destroyOnHide: true,
+						doBeforeDialogShow: {
+							fn: function (p_form, p_dialog) {
+								var contId = p_dialog.id + "-form-container";
+								var dialogName = me.msg("title.reassignTask");
+								Alfresco.util.populateHTML(
+									[contId + "_h", dialogName]
+								);
+
+								p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+							}
+						},
+						onSuccess: {
+							fn: function (response) {
+								window.location.reload();
+							},
+							scope: this
+						}
+					}).show();
+				}, oRecord);
+
 				var me = this;
 				Alfresco.util.Ajax.request({
 					method: "GET",

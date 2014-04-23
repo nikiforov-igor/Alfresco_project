@@ -69,6 +69,12 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
+	public void reassignTask(NodeRef assignee, DelegateTask task) {
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		grantDynamicRole(employeeRef, bpmPackage, "DA_SIGNER_DYN");
+	}
+
 	@Override
 	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
 		String decisionMessage;
