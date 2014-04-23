@@ -323,7 +323,7 @@ $P{expiredDate} != null ?
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Important} ? "Да" : "Нет"]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="718" y="0" width="84" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
