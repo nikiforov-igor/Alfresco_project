@@ -429,8 +429,11 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 
 		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 
+        Set<NodeRef> receivers = new HashSet<NodeRef>();
+
 		NodeRef optsTrusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		if (optsTrusteeRef != null) {
+            receivers.add(optsTrusteeRef);
 			List<String> objects = new ArrayList<String> ();
 			objects.add ((String) nodeService.getProperty (optsTrusteeRef, ContentModel.PROP_NAME));
 			String template = "Сотруднику #object1 делегированы все полномочия сотрудника #mainobject";
@@ -448,6 +451,7 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			NodeRef procTrusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			NodeRef businessRoleRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
 			if (procTrusteeRef != null) {
+                receivers.add(procTrusteeRef);
 				objects.add ((String) nodeService.getProperty (procTrusteeRef, ContentModel.PROP_NAME));
 				objects.add ((String) nodeService.getProperty (businessRoleRef, ContentModel.PROP_NAME));
 				businessJournalService.log (initiator, mainObject, DelegationEventCategory.START_DELEGATE, template, objects);
@@ -457,13 +461,41 @@ public class DelegationBean extends BaseBean implements IDelegation, Authenticat
 			}
 		}
 
-	}
+        if (!receivers.isEmpty()) {
+            String shortName = (String) nodeService.getProperty(mainObject, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+            List<NodeRef> receiversList = new ArrayList<NodeRef>(receivers.size());
+            receiversList.addAll(receivers);
+            notificationsService.sendNotification("Система", mainObject, "Сотрудник " + shortName + " делегировал Вам свои полномочия по причине своего отсутствия.", receiversList, mainObject, true);
+        }
+    }
 
 	private void logStopDelegation (final NodeRef delegationOptsRef) {
 		final NodeRef initiator = null; //инициатор события это система
 		NodeRef mainObject = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_OWNER, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 		String template = "Делегирование полномочий сотрудника #mainobject прекращено";
 		businessJournalService.log (initiator, mainObject, DelegationEventCategory.STOP_DELEGATE, template, null);
+
+        Set<NodeRef> receivers = new HashSet<NodeRef>();
+
+        NodeRef optsTrusteeRef = findNodeByAssociationRef (delegationOptsRef, ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+        if (optsTrusteeRef != null) {
+            receivers.add(optsTrusteeRef);
+        }
+        //получить список активных доверенностей и для каждой залоггировать
+        List<NodeRef> procuracyRefs = getProcuracies (delegationOptsRef, true);
+        for (NodeRef procuracyRef : procuracyRefs) {
+            NodeRef procTrusteeRef = findNodeByAssociationRef (procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+            if (procTrusteeRef != null) {
+                receivers.add(procTrusteeRef);
+            }
+        }
+
+        if (!receivers.isEmpty()) {
+            String shortName = (String) nodeService.getProperty(mainObject, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+            List<NodeRef> receiversList = new ArrayList<NodeRef>(receivers.size());
+            receiversList.addAll(receivers);
+            notificationsService.sendNotification("Система", mainObject, "Делегирование полномочий сотрудника " + shortName + " завершено по причине его выхода на работу.", receiversList, mainObject, true);
+        }
 	}
 
 	@Override
