@@ -94,6 +94,9 @@ LogicECM.module.Workflow.workflowListValidator = function(field, args, event, fo
 				return true;
 			}
 
+			calendarDate.setHours(23);
+			calendarDate.setMinutes(59);
+
 			if (YAHOO.widget.DateMath.before(calendarDate, itemDate)) {
 				return true;
 			}
