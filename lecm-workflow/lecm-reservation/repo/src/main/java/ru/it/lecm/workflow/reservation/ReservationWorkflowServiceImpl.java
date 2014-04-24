@@ -14,9 +14,11 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.notifications.beans.Notification;
@@ -75,7 +77,12 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 
 	@Override
 	public void assignTask(final NodeRef assignee, final DelegateTask task) {
-		//nop
+		actualizeReservationTask(assignee, task);
+
+		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
+		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
+		grantDynamicRole(employeeRef, bpmPackage, (String) task.getVariable("registrarDynamicRole"));
+		notifyWorkflowStarted(employeeRef, null, bpmPackage);
 	}
 
 	public void reassignTask(NodeRef assignee, DelegateTask task) {
@@ -178,6 +185,35 @@ public class ReservationWorkflowServiceImpl extends WorkflowServiceAbstract impl
 		notification.setDescription(notificationMessage);
 		notification.setObjectRef(docInfo.getDocumentRef());
 		return notification;
+	}
+
+	protected void actualizeReservationTask(NodeRef assignee, DelegateTask task) {
+		String workflowRole = (String)task.getVariable("registrarDynamicRole");
+		boolean delegateAll = workflowRole == null; //если роль не указана, то ориентируемся на делегирование всего
+		NodeRef employee = orgstructureService.getEmployeeByPerson(assignee);
+		NodeRef delegationOpts = delegationService.getDelegationOpts(employee);
+		boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+		if (isDelegationActive) {
+			NodeRef effectiveEmployee;
+			if (delegateAll) {
+				effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			} else {
+				effectiveEmployee = delegationService.getEffectiveExecutor(employee, workflowRole);
+				//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+				if (employee.equals(effectiveEmployee)) {
+					effectiveEmployee = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				}
+			}
+			if (effectiveEmployee != null) {
+				String effectiveUserName = orgstructureService.getEmployeeLogin(effectiveEmployee);
+				if (StringUtils.isNotEmpty(effectiveUserName)) {
+					task.setAssignee(effectiveUserName);
+					task.setOwner(effectiveUserName); //???
+				}
+
+				task.setVariable("assumeExecutor", employee);
+			}
+		}
 	}
 
 	@Override

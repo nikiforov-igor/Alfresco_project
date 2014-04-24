@@ -50,17 +50,10 @@
 
 		<userTask id="regnumReservationTask" name="Запрос на резервирование номера для документа" activiti:assignee="${assignee.properties.userName}" activiti:formKey="reservationWf:regnumReservationTask">
 			<extensionElements>
-				<activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+				<activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
 					<activiti:field name="script">
 						<activiti:string><![CDATA[
-							//получаем employee
-							var registrar = reservationWorkflow.getEmployeeByPerson(assignee);
-							//включаем его в динамическую роль регистратора для этого документа
-							statemachine.grandDynamicRoleForEmployee(bpm_package.children[0], registrar, task.getVariable("registrarDynamicRole"));
-							//назначаем задачу
 							reservationWorkflow.assignTask(assignee, task);
-							//высылаем уведомление
-							reservationWorkflow.notifyReservationStarted(bpm_package, registrar);
 						]]></activiti:string>
 					</activiti:field>
 				</activiti:taskListener>
