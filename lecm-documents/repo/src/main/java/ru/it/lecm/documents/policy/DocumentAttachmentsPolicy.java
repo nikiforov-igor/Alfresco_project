@@ -120,7 +120,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	}
 
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
-		NodeRef attachmentRef = childAssocRef.getChildRef();
+		final NodeRef attachmentRef = childAssocRef.getChildRef();
 		NodeRef category = childAssocRef.getParentRef();
 
 		final NodeRef document = this.documentAttachmentsService.getDocumentByCategory(category);
@@ -138,6 +138,15 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				if (!assocExist) {
 					nodeService.createAssociation(category, attachmentRef, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS);
 				}
+                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                    @Override
+                    public Object doWork() throws Exception {
+                        HashMap<QName, Serializable> properties = new HashMap<QName, Serializable>(1, 1.0f);
+                        properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
+                        nodeService.addAspect(attachmentRef, ContentModel.ASPECT_OWNABLE, properties);
+                        return null;
+                    }
+                });
 			}
 		}
 	}
