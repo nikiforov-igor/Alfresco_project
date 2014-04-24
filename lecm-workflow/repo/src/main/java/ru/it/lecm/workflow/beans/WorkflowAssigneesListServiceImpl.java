@@ -195,16 +195,16 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	private void setEffectiveDueDate(NodeRef assigneeListItem, Date priorDueDate) {
 		Date effectiveDueDate = new Date(priorDueDate.getTime());
 		NodeRef employeeNode = getEmployeeFromAssigneeListItem(assigneeListItem);
-		boolean employeePresent = false;
+		boolean workingDayForEmployee = false;
 		Calendar calendar = Calendar.getInstance();
-		while (!employeePresent) {
+		while (!workingDayForEmployee) {
 			try {
-				employeePresent = workCalendarService.getEmployeeAvailability(employeeNode, effectiveDueDate);
+				workingDayForEmployee = workCalendarService.isWorkingDayForEmployee(employeeNode, effectiveDueDate);
 			} catch (IllegalArgumentException ex) {
 				logger.warn(ex.getMessage());
 				break;
 			}
-			if (!employeePresent) {
+			if (!workingDayForEmployee) {
 				effectiveDueDate = DateUtils.addDays(effectiveDueDate, 1);
 				calendar.setTime(effectiveDueDate);
 				int year = calendar.get(Calendar.YEAR);

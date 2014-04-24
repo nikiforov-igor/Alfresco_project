@@ -1,4 +1,9 @@
 (function() {
+	var abscentEmployeeDV, absenceReason, itemData, employeesAbsences, reasons, absenceContainerObj, reqBody,
+		dataRaw, req, response, calendarHeader, data, i, j, key, employee, responseRaw, result, month, monthStr,
+		employeeHasAbsence, currentDay, color;
+
+	var today = new Date();
 	var clientTimeOffset = args["timeOffset"];
 	var serverTimeOffset = new Date().getTimezoneOffset();
 	var timeOffset = serverTimeOffset - clientTimeOffset;
@@ -19,15 +24,16 @@
 	};
 
 	var daysAmount = 30;
-    model.result = {};
-
 	var absenceContainer = remote.connect("alfresco").get("/lecm/wcalendar/absence/get/container");
+
+	model.result = {};
+
 	if (absenceContainer.status != 200) {
 		return;
 	}
-	var absenceContainerObj = jsonUtils.toObject(absenceContainer);
+	absenceContainerObj = jsonUtils.toObject(absenceContainer);
 
-	var reqBody = {
+	reqBody = {
 		params: {
 			parent: absenceContainerObj.nodeRef ,
 			itemType: absenceContainerObj.itemType,
@@ -41,7 +47,7 @@
 		}
 	};
 
-	var dataRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/list/admin", jsonUtils.toJSONString(reqBody), "application/json");
+	dataRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/list/admin", jsonUtils.toJSONString(reqBody), "application/json");
 
 	if (dataRaw.status == 200) {
 		data = eval("(" + dataRaw + ")");
@@ -50,30 +56,33 @@
 	}
 
 	if (data != null && data.totalRecords > 0) {
-		var employeesAbsences = {};
-		var reasons = {};
+		employeesAbsences = {};
+		reasons = {};
 		for (i = 0; i < data.items.length; i++) {
 			itemData = data.items[i].itemData;
-			if (!employeesAbsences[itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue]) {
-				employeesAbsences[itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue] = [];
+			abscentEmployeeDV = itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue;
+			absenceReason = itemData["assoc_lecm-absence_abscence-reason-assoc"];
+
+			if (!employeesAbsences[abscentEmployeeDV]) {
+				employeesAbsences[abscentEmployeeDV] = [];
 			}
-			employeesAbsences[itemData["assoc_lecm-absence_abscent-employee-assoc"].displayValue].push({
+			employeesAbsences[abscentEmployeeDV].push({
 				begin: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_begin"].value), timeOffset),
 				end: addMinutes(DateFromISO8601(itemData["prop_lecm-absence_end"].value), timeOffset),
-				reason: itemData["assoc_lecm-absence_abscence-reason-assoc"].displayValue
+				reason: absenceReason.displayValue
 			});
-			reasons[itemData["assoc_lecm-absence_abscence-reason-assoc"].displayValue] = {
-				nodeRef: itemData["assoc_lecm-absence_abscence-reason-assoc"].value
+			reasons[absenceReason.displayValue] = {
+				nodeRef: absenceReason.value
 			};
 		}
 
 		for (key in reasons) {
-			var req =  {
+			req =  {
 				nodeRef: reasons[key].nodeRef
 			};
-			var responseRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/absenceReasonColor", jsonUtils.toJSONString(req), "application/json");
+			responseRaw = remote.connect("alfresco").post("/lecm/wcalendar/absence/get/absenceReasonColor", jsonUtils.toJSONString(req), "application/json");
 			if (responseRaw.status == 200) {
-				var response = eval("(" + responseRaw + ")");
+				response = eval("(" + responseRaw + ")");
 				reasons[key].color = response.color;
 			} else {
 				reasons[key].color = "#000000";
@@ -81,12 +90,11 @@
 
 		}
 
-		var today = new Date();
-		var calendarHeader = {};
+		calendarHeader = {};
 
 		for (i = 0; i < daysAmount; i++) {
-			var month = today.getMonth(),
-				monthStr = "y" + today.getYear().toString() + "m" + month.toString();
+			month = today.getMonth();
+			monthStr = "y" + today.getYear().toString() + "m" + month.toString();
 			if (!calendarHeader[monthStr]) {
 				calendarHeader[monthStr] = [];
 			}
@@ -94,10 +102,10 @@
 			today.setDate(today.getDate() + 1);
 		}
 
-		var result = {};
+		result = {};
 
 		for (employee in employeesAbsences) {
-			var employeeHasAbsence = false;
+			employeeHasAbsence = false;
 
 			if (!result[employee]) {
 				result[employee] = [];
@@ -105,9 +113,9 @@
 			today = new Date();
 
 			for (i = 0; i < daysAmount; i++) {
-				var currentDay = new Date(today);
-				var color = "";
-				for (var j = 0; j < employeesAbsences[employee].length; j++) {
+				currentDay = new Date(today);
+				color = "";
+				for (j = 0; j < employeesAbsences[employee].length; j++) {
 					if (checkDayAbsence(currentDay, employeesAbsences[employee][j].begin, employeesAbsences[employee][j].end)) {
 						color = reasons[employeesAbsences[employee][j].reason].color;
 						employeeHasAbsence = true;
@@ -135,9 +143,9 @@
 }());
 
 function checkDayAbsence(day, start, end) {
-	var absent = false;
-	for (var h = 0; h < 24; h++) {
-		for (var m = 0; m < 60; m++) {
+	var absent = false, h, m;
+	for (h = 0; h < 24; h++) {
+		for (m = 0; m < 60; m++) {
 			day.setHours(h, m, 0, 0);
 			if (day > start && day < end ) {
 				absent = true;

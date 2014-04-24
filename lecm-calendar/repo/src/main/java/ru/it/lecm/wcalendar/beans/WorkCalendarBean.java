@@ -338,6 +338,39 @@ public class WorkCalendarBean implements IWorkCalendar {
 		return getNextWorkingDate(date, offset, timeUnit);
 	}
 
+	@Override
+	public boolean isWorkingDayForEmployee(NodeRef employeeNode, Date day) {
+		boolean result;
+		if (!orgstructureService.isEmployee(employeeNode)) {
+			throw new IllegalArgumentException("Argument 'employeeNode' must be an Employee!");
+		}
+		NodeRef schedule = getScheduleOrParentSchedule(employeeNode);
+		if (schedule == null) {
+			logger.trace("No schedule associated with employee {} nor with it's parent OUs!", employeeNode);
+			return false;
+		}
+		String scheduleType = scheduleService.getScheduleType(schedule);
+
+		if (ISchedule.SCHEDULE_TYPE_COMMON.equals(scheduleType)) {
+			Boolean isWorkingDay = WCalendarService.isWorkingDay(day);
+
+			if (isWorkingDay == null) {
+				logger.warn("No calendar for such year ({})!", getYearByDate(day));
+				result = false;
+			} else {
+				result = isWorkingDay;
+			}
+
+		} else if (ISchedule.SCHEDULE_TYPE_SPECIAL.equals(scheduleType)) {
+			result = scheduleService.isWorkingDay(schedule, day) && !absenceService.isEmployeeAbsent(employeeNode, day);
+		} else {
+			String errMessage = String.format("Something wrong with schedule: it has some strange type: %s", scheduleType);
+			throw new IllegalStateException(errMessage);
+		}
+
+		return result;
+	}
+
 	public void setAbsenceService(IAbsence absenceService) {
 		this.absenceService = absenceService;
 	}
