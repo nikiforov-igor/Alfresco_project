@@ -51,6 +51,7 @@
 					<show id="lecmSign:documentPreview" force="true"/>
 					<show id="bpm:dueDate" />
 					<show id="lecmSign:signTaskResult" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmSign:presentString">
@@ -66,6 +67,9 @@
 						<control template="/ru/it/lecm/base-share/components/controls/activiti-transitions-radiobuttons.ftl">
 							<control-param name="options">SIGNED|Подписать#alf#REJECTED|Отклонить</control-param>
 						</control>
+					</field>
+					<field id="bpm:reassignable">
+						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>
 				</appearance>
 			</form>

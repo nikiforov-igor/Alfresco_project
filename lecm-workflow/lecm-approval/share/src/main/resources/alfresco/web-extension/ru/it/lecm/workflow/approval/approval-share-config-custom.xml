@@ -75,6 +75,7 @@
 					<show id="lecmApprove2:approveTaskResult" />
 					<show id="bpm:comment" />
 					<show id="lecmApprove2:approveTaskCommentAssoc" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmApprove2:presentString">
@@ -97,6 +98,9 @@
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-control.ftl">
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
+					</field>
+					<field id="bpm:reassignable">
+						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>
 				</appearance>
 			</form>

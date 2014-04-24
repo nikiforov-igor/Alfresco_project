@@ -44,6 +44,7 @@
 					<show id="lecmReview:documentPreview" force="true" />
 					<show id="lecmReview:reviewTaskResult" />
 					<show id="transitions" force="true" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="lecmReview:presentString">
@@ -64,6 +65,9 @@
 					</field>
 					<field id="lecmReview:documentPreview">
 						<control template="/ru/it/lecm/documents/controls/document-preview-control.ftl" />
+					</field>
+					<field id="bpm:reassignable">
+						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>
 				</appearance>
 			</form>

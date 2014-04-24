@@ -34,6 +34,7 @@
 					<show id="reservationWf:presentString" force="true" />
 					<show id="reservationWf:isReservate" />
 					<show id="bpm:comment" />
+					<show id="bpm:reassignable" />
 				</field-visibility>
 				<appearance>
 					<field id="reservationWf:presentString">
@@ -48,6 +49,9 @@
 						<control template="/org/alfresco/components/form/controls/textarea.ftl">
 							<control-param name="rows">4</control-param>
 						</control>
+					</field>
+					<field id="bpm:reassignable">
+						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
