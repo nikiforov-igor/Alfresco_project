@@ -1481,7 +1481,7 @@ public class StateMachineHelper implements StateMachineServiceBean {
 
         List<WorkflowTask> tasks = getAssignedAndPooledTasks(login);
         for (WorkflowTask task : tasks) {
-            if (workflowIds == null || workflowIds.contains(task.getDefinition().getId())) {
+            if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(task.getDefinition().getId())) {
                 NodeRef doc = getTaskDocument(task);
                 if (doc != null) {
                     documents.add(doc);
