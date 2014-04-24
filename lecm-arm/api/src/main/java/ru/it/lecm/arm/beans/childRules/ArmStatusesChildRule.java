@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -16,15 +17,15 @@ import java.util.Set;
  */
 public class ArmStatusesChildRule extends ArmBaseChildRule {
     private enum Rule {
-		ALL,
-		ALL_NOT_ARCHIVE,
-		ALL_ARCHIVE,
-		SELECTED,
-		EXCEPT_SELECTED
-	}
+        ALL,
+        ALL_NOT_ARCHIVE,
+        ALL_ARCHIVE,
+        SELECTED,
+        EXCEPT_SELECTED
+    }
 
-	private String rule;
-	private List<String> selectedStatuses;
+    private String rule;
+    private List<String> selectedStatuses;
 
     private StateMachineServiceBean stateMachineServiceBean;
 
@@ -33,22 +34,22 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
     }
 
     public String getRule() {
-		return rule;
-	}
+        return rule;
+    }
 
-	public void setRule(String rule) {
-		this.rule = rule;
-	}
+    public void setRule(String rule) {
+        this.rule = rule;
+    }
 
-	public List<String> getSelectedStatuses() {
-		return selectedStatuses;
-	}
+    public List<String> getSelectedStatuses() {
+        return selectedStatuses;
+    }
 
-	public void setSelectedStatuses(List<String> selectedStatuses) {
-		this.selectedStatuses = selectedStatuses;
-	}
+    public void setSelectedStatuses(List<String> selectedStatuses) {
+        this.selectedStatuses = selectedStatuses;
+    }
 
-	@Override
+    @Override
     public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
         List<ArmNode> nodes = new ArrayList<ArmNode>();
         Set<String> allStatuses = new HashSet<String>();
@@ -116,12 +117,14 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
                 break;
             }
         }
+        if (node != null) {
+            for (String st : allStatuses) {
+                NodeRef parentRef = node.getArmNodeRef() != null ? node.getArmNodeRef() : node.getNodeRef();
+                ArmNode childNode = service.wrapStatusAsObject(st, service.wrapArmNodeAsObject(parentRef, service.isAccordion(parentRef)));
+                nodes.add(childNode);
 
-        for (String st : allStatuses) {
-            ArmNode childNode = service.wrapStatusAsObject(st, node);
-            nodes.add(childNode);
+            }
         }
-
         return nodes;
     }
 }

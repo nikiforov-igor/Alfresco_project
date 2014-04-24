@@ -47,4 +47,6 @@ public interface ArmWrapperService {
     public ArmNode wrapStatusAsObject(String status, ArmNode parent, boolean onlyMeta);
 
     public String formatQuery(String templateQuery, NodeRef node);
+
+    public boolean isAccordion(NodeRef node);
 }

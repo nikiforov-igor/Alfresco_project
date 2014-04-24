@@ -216,9 +216,25 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());
         node.setTypes(parentNode.getTypes());
+
+        StringBuilder sb = new StringBuilder();
         if (parentNode.getSearchQuery() != null) {
-            node.setSearchQuery(formatQuery(parentNode.getSearchQuery(), nodeRef));
+            sb.append(formatQuery(parentNode.getSearchQuery(), nodeRef));
         }
+
+        NodeRef realParent = parentNode.getArmNodeRef();
+        if (realParent != null && !realParent.equals(nodeRef)) {
+            Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
+            if (searchQuery != null) {
+                String parentQuery = searchQuery.toString();
+                if (!parentQuery.isEmpty()) {
+                    sb.append(sb.length() > 0 ? " AND " : "").append(parentQuery.indexOf("NOT") != 0 ? "(" : "").append(parentQuery).append(parentQuery.indexOf("NOT") != 0 ? ")" : "");
+                }
+            }
+        }
+
+        node.setSearchQuery(sb.toString());
+
         node.setHtmlUrl(parentNode.getHtmlUrl());
         node.setReportCodes(parentNode.getReportCodes());
 
@@ -331,5 +347,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
         this.stateMachineHelper = stateMachineHelper;
+    }
+
+    public boolean isAccordion(NodeRef node) {
+        return service.isArmAccordion(node);
     }
 }
