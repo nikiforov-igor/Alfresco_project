@@ -429,7 +429,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
                 if (typesQuery.length > 0) {
                     if (searchQuery.length > 0) {
-                        searchQuery = "(" + typesQuery + ") AND (" + searchQuery + ")";
+                        var useBrack = searchQuery.indexOf("NOT") < 0;
+                        searchQuery = "(" + typesQuery + ") AND " + (useBrack ? "(" : "" ) + searchQuery + (useBrack ? ")" : "" );
                     } else {
                         searchQuery = typesQuery;
                     }
