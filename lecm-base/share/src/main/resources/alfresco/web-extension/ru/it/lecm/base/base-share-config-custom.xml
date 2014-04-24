@@ -145,6 +145,7 @@
                 <js src="/scripts/lecm-base/components/binder.js" />
 	            <js src="/scripts/lecm-base/components/lecm-association-create-control.js" />
 	            <js src="/scripts/lecm-base/components/lecm-text-checkboxes-control.js" />
+	            <js src="/scripts/lecm-base/components/lecm-reassign-task-control.js" />
 	            <js src="/scripts/lecm-base/constraints/current-date-limit-validator.js" />
 	            <js src="/scripts/lecm-base/constraints/regex-color-validator.js" />
 				<js src="/scripts/knockout.min.js" />
