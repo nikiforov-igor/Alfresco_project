@@ -83,13 +83,13 @@
 				<textFieldExpression><![CDATA[$P{expiredDate} != null ?
     ("На дату: " + new SimpleDateFormat("dd.MM.yyyy").format($P{expiredDate})) : ""]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
 				<reportElement uuid="27d34a72-0b4a-4bc1-8c8c-9e1a2c02f3e5" stretchType="RelativeToTallestObject" x="444" y="25" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#FFFF00"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
 					<font fontName="Times New Roman" size="12" isBold="false" pdfEncoding="Cp1251"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{execUnits_text} != null ? $P{execUnits_text}.replaceAll(";", "\n") : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{execUnits_text} != null ? $P{execUnits_text}.replaceAll(";", "\n") + "\n" : "")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="1e18a26b-1604-4723-a15f-cfab65e69edd" x="444" y="0" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#99FF33"/>
