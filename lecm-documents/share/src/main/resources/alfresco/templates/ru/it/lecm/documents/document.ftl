@@ -1,5 +1,7 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader>
+<@templateHeader "transitional">
+    <#include "/org/alfresco/components/form/form.get.head.ftl">
+
 	<@script type="text/javascript" src="${page.url.context}/res/components/documentlibrary/actions.js"></@script>
     <@script type="text/javascript" src="${page.url.context}/yui/resize/resize.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
@@ -9,6 +11,7 @@
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${page.url.context}/res/components/document-details/document-metadata.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/components/document-metadata-form-edit.css" />
 
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree-control.js"></@script>
 	<@script type="text/javascript" src="${page.url.context}/scripts/lecm-documents/graph-tree.js"></@script>
@@ -19,19 +22,18 @@
         при подключении макросом - не работают.
         Причина не выявлена, возможно, как-то связано с местом расположения файлов (/css/...)
     -->
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/yahoo-datatable.css"/>
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/yahoo-datatable.css"/>
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-documents/graph-view-control.css"/>
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-base/light-blue-bgr.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/document-components-panel.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/dashlet-components.css" />
+    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/page-document.css" />
 
     <#if documentType?? && documentType == "{http://www.it.ru/logicECM/errands/1.0}document">
-        <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-metadata.css" />
+        <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-metadata.css" />
+        <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-form.css" />
     </#if>
-    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-errands/errands-form.css" />
 
-    <@templateHtmlEditorAssets />
     <script type="text/javascript">
         //<![CDATA[
         var currentExtendedComponent = null;

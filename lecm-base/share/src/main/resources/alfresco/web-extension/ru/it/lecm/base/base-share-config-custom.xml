@@ -105,7 +105,6 @@
             <dependencies>
                 <!-- CSS-файлы подключать в этом файле: -->
                 <css src="/css/lecm-base/base-styles.css" />
-                <css src="/css/font-awesome.css" />
                 <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
                 <js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
                 <js src="/scripts/lecm-base/components/lecm-association-selectone.js" />

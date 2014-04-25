@@ -1,13 +1,4 @@
 <alfresco-config>
-    <config>
-        <forms>
-            <dependencies>
-                <css src="/css/lecm-base/base-styles.css" />
-                <css src="/css/font-awesome.css" />
-            </dependencies>
-        </forms>
-    </config>
-
     <config evaluator="model-type" condition="lecm-ord:document">
         <forms>
             <form>

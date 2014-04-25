@@ -2,8 +2,6 @@
     <config>
         <forms>
             <dependencies>
-                <css src="/css/lecm-base/base-styles.css" />
-                <css src="/css/font-awesome.css" />
 				<js src="/scripts/lecm-nd/nd-date-validator.js" />
             </dependencies>
         </forms>
