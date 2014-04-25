@@ -119,10 +119,8 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
         }
         if (node != null) {
             for (String st : allStatuses) {
-                NodeRef parentRef = node.getArmNodeRef() != null ? node.getArmNodeRef() : node.getNodeRef();
-                ArmNode childNode = service.wrapStatusAsObject(st, service.wrapArmNodeAsObject(parentRef, service.isAccordion(parentRef)));
+                ArmNode childNode = service.wrapStatusAsObject(st, node);
                 nodes.add(childNode);
-
             }
         }
         return nodes;

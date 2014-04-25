@@ -259,7 +259,25 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setTitle(status);
         node.setNodeRef(null);
         node.setArmNodeRef(parentNode.getNodeRef());
-        node.setSearchQuery("@lecm\\-statemachine\\:status:'" + status + "'");
+
+        StringBuilder sb = new StringBuilder();
+        if (parentNode.getSearchQuery() != null) {
+            sb.append("@lecm\\-statemachine\\:status:'").append(status).append("'");
+        }
+
+        NodeRef realParent = parentNode.getArmNodeRef();
+        if (realParent != null) {
+            Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
+            if (searchQuery != null) {
+                String parentQuery = searchQuery.toString();
+                if (!parentQuery.isEmpty()) {
+                    sb.append(sb.length() > 0 ? " AND " : "").append(parentQuery.indexOf("NOT") != 0 ? "(" : "").append(parentQuery).append(parentQuery.indexOf("NOT") != 0 ? ")" : "");
+                }
+            }
+        }
+
+        node.setSearchQuery(sb.toString());
+
         node.setTypes(parentNode.getTypes());
 
         if (!onlyMeta) {
