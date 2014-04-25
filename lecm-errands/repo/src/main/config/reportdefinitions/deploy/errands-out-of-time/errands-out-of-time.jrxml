@@ -108,7 +108,7 @@
 					<font fontName="Times New Roman" size="12" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{execUnits_text} != null ? $P{execUnits_text}.replaceAll(";", "\n") : "")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($P{execUnits_text} != null ? $P{execUnits_text}.replaceAll(";", "\n") + "\n" : "")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement uuid="1e18a26b-1604-4723-a15f-cfab65e69edd" x="444" y="0" width="345" height="25" isPrintWhenDetailOverflows="true" backcolor="#99FF33"/>
