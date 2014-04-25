@@ -2,13 +2,14 @@
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <@templateHeader "transitional">
     <@documentLibraryJS />
+    <#include "/org/alfresco/components/form/form.get.head.ftl">
     <@script type="text/javascript" src="${url.context}/res/modules/documentlibrary/doclib-actions.js"></@script>
 <!-- Required CSS -->
-    <@link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.context}/yui/treeview/assets/skins/sam/treeview.css"/>
 <!-- Optional CSS for for date editing with Calendar-->
-    <@link rel="stylesheet" type="text/css" href="${url.context}/yui/calendar/assets/skins/sam/calendar.css"/>
-    <@link rel="stylesheet" type="text/css" href="${url.context}/yui/menu/assets/skins/sam/menu.css"/>
-    <@link rel="stylesheet" type="text/css" href="${url.context}/yui/fonts/fonts-min.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.context}/yui/calendar/assets/skins/sam/calendar.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.context}/yui/menu/assets/skins/sam/menu.css"/>
+    <link rel="stylesheet" type="text/css" href="${url.context}/yui/fonts/fonts-min.css"/>
 
     <!-- Dependency source file -->
     <script type="text/javascript" src="${url.context}/yui/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -43,7 +44,7 @@
     <script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/menu.js"></script>
     <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/editor.css">
 
-    <@link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/menu.css" />
+    <link rel="stylesheet" type="text/css" href="${page.url.context}/css/lecm-statemachine-editor/menu.css" />
     <@script type="text/javascript" src="${page.url.context}/scripts/lecm-statemachine-editor/menu.js"></@script>
 </@>
 
