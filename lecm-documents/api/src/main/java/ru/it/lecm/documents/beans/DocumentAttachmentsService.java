@@ -1,6 +1,5 @@
 package ru.it.lecm.documents.beans;
 
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
@@ -17,6 +16,8 @@ public interface DocumentAttachmentsService {
     public static final String DOCUMENT_ATTACHMENTS_ROOT_NAME = "Вложения";
 
     public static final String CONSTRAINT_ATTACHMENT_CATEGORIES = "attachment-categories";
+
+    public static final String NOT_SECURITY_MOVE_ATTACHMENT_POLICY = "not_security_move_attachment_policy";
 
 	public static final QName TYPE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "attachmentsCategory");
 	public static final QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
@@ -99,4 +100,12 @@ public interface DocumentAttachmentsService {
     public List<NodeRef> getAttachmentsByCategory(NodeRef document, String categoryName);
 
 	public List<NodeRef> getAttachmentsByCategory(NodeRef category);
+
+    /** Программное добавление вложения документу без проверки прав
+     *
+     * @param attachmentRef - ссылка на вложение
+     * @param attachmentCategoryRef - ссылка на категорию вложения
+     */
+    public void addAttachment(NodeRef attachmentRef, NodeRef attachmentCategoryRef);
+
 }

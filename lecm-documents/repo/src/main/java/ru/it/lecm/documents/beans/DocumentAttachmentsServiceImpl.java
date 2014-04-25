@@ -3,6 +3,7 @@ package ru.it.lecm.documents.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -277,4 +278,17 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		}
 		return results;
 	}
+
+    /** Программное добавление вложения к документу без проверки прав
+     *
+     * @param attachmentRef - ссылка на вложение
+     * @param attachmentCategoryRef - ссылка на категорию вложения
+     */
+    @Override
+    public void addAttachment(NodeRef attachmentRef, NodeRef attachmentCategoryRef) {
+        AlfrescoTransactionSupport.bindResource(NOT_SECURITY_MOVE_ATTACHMENT_POLICY, true);
+        String assocName = nodeService.getProperty(attachmentRef, ContentModel.PROP_NAME).toString();
+        QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, assocName);
+        nodeService.moveNode(attachmentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
+    }
 }

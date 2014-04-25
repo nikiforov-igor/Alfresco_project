@@ -4,44 +4,34 @@ import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.cmr.workflow.WorkflowInstance;
+import org.alfresco.service.cmr.workflow.WorkflowTask;
+import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
+import org.alfresco.service.cmr.workflow.WorkflowTaskState;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
-
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.repo.policy.BehaviourFilter;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
-import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
-import org.alfresco.service.cmr.workflow.WorkflowTaskQuery;
-import org.alfresco.service.cmr.workflow.WorkflowTaskState;
-import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
+import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
+import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -133,15 +123,8 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 				}
 
 				final String commentFileNameFinal = commentFileNameStr;
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-					@Override
-					public ChildAssociationRef execute() throws Throwable {
-						nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameFinal);
-						QName commentAssocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, commentFileNameFinal);
-						return nodeService.moveNode(commentRef, attachmentCategoryRef, ContentModel.ASSOC_CONTAINS, commentAssocQName);
-					}
-				}, false, true);
+                nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameFinal);
+                documentAttachmentsService.addAttachment(commentRef, attachmentCategoryRef);
 
 				List<NodeRef> targetRefs = new ArrayList<NodeRef>();
 				targetRefs.add(commentRef);

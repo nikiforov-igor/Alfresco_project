@@ -257,27 +257,32 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	}
 
 	public void onAddAttachment(AssociationRef associationRef) {
-		NodeRef attachment = associationRef.getTargetRef();
-		NodeRef category = associationRef.getSourceRef();
+		final NodeRef attachment = associationRef.getTargetRef();
+		final NodeRef category = associationRef.getSourceRef();
 
 		final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
 		if (document != null) {
-			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
+            Boolean notCheckPermissions = AlfrescoTransactionSupport.getResource(DocumentAttachmentsService.NOT_SECURITY_MOVE_ATTACHMENT_POLICY);
+            if (notCheckPermissions == null || !notCheckPermissions) {
+			    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
+            }
 //			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
 
-			//добавим аспект lecm-attachment к файлу вложения
-			nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
-			// добавляем пользователя добавившего вложение как участника
 			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {
 					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                    //добавим аспект lecm-attachment к файлу вложения
+                    nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
+                    // добавляем пользователя добавившего вложение как участника
+                    transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 						@Override
 						public NodeRef execute() throws Throwable {
 							return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
 						}
 					});
+                    addParentDocumentAspect(document, attachment);
+                    return null;
 				}
 			});
 
@@ -285,7 +290,6 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 			objects.add(attachment.toString());
 			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
 
-			addParentDocumentAspect(document, attachment);
 		}
 	}
 
