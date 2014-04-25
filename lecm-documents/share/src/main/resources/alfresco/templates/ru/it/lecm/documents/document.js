@@ -1,6 +1,7 @@
 function main() {
     var url = '/lecm/document/api/getPermissions?nodeRef=' + page.url.args.nodeRef;
     var result = remote.connect("alfresco").get(url);
+    model.hasPermission = false;
     if (result.status == 200) {
         var access = eval('(' + result + ')');
         if (access && (access.readAccess)) {
@@ -11,8 +12,6 @@ function main() {
                 model.errandsSettings = errandsSettings;
             }
         }
-    } else {
-        model.hasPermission = false;
     }
 
     url = '/lecm/documents/hasStatemachine?nodeRef=' + page.url.args.nodeRef;
