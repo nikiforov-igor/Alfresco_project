@@ -2056,6 +2056,10 @@ a.remove-item {
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item > span > a,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplayInvisible div.association-auto-complete-selected-item-even > span > a {
     max-width: 330px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item > span.not-person,
 .yui-skin-lecmTheme .yui-panel div.form-field div.autocompleteCurrentValueDisplay div.association-auto-complete-selected-item-even > span.not-person,
