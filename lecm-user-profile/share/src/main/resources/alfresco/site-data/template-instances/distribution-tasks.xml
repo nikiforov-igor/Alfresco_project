@@ -23,6 +23,11 @@
 				<selected>userProfileDistributionTasks</selected>
 			</properties>
 		</component>
+		<!-- Toolbar -->
+		<component>
+			<region-id>toolbar</region-id>
+			<url>/lecm/distribution-tasks/toolbar</url>
+		</component>
 		<component>
 			<region-id>content</region-id>
 			<url>/lecm/distribution-tasks/content</url>

@@ -5,7 +5,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 (function () {
 	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event;
+		Event = YAHOO.util.Event,
+		Selector = YAHOO.util.Selector,
+		Bubbling = YAHOO.Bubbling;
 
 	var $html = Alfresco.util.encodeHTML,
 		$siteURL = Alfresco.util.siteURL;
@@ -13,6 +15,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	LogicECM.TaskDistribution = function (htmlId) {
 		LogicECM.TaskDistribution.superclass.constructor.call(this, "LogicECM.TaskDistribution", htmlId, ["button", "menu", "container", "datasource", "datatable", "paginator", "json", "history"]);
 
+		this.selectedItems = [];
 		return this;
 	};
 
@@ -26,6 +29,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				maxItems: 50
 			},
 
+			selectedItems: null,
+
 			onReady: function () {
 				var url = Alfresco.constants.PROXY_URI + "api/task-instances?authority=" + encodeURIComponent(Alfresco.constants.USERNAME) +
 					"&properties=" + ["bpm_priority", "bpm_status", "bpm_dueDate", "bpm_description", "bpm_package"].join(",");
@@ -34,7 +39,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						dataTable: {
 							container: this.id + "-tasks",
 							columnDefinitions: [
-								{ key: "id", sortable: false, formatter: this.bind(this.renderCellIcons), width: 40 },
+								{ key: "id", sortable: false, formatter: this.bind(this.renderCellSelect), width: 16 },
 								{ key: "title", sortable: false, formatter: this.bind(this.renderCellTaskInfo) },
 								{ key: "name", sortable: false, formatter: this.bind(this.renderCellActions), width: 200 }
 							],
@@ -56,6 +61,54 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							}
 						}
 					});
+
+				Event.onAvailable(this.id + "-select-all-tasks", function () {
+					Event.on(this.id + "-select-all-tasks", 'click', this.selectAllClick, this, true);
+				}, this, true);
+			},
+
+			renderCellSelect: function(elCell, oRecord, oColumn, oData) {
+				Dom.setStyle(elCell, "width", oColumn.width + "px");
+				Dom.setStyle(elCell.parentNode, "width", oColumn.width + "px");
+
+				elCell.innerHTML = '<input id="checkbox-' + oRecord.getId() + '" type="checkbox" name="taskChecked" value="'+ oData + '"' + (this.selectedItems[oData] ? ' checked="checked">' : '>');
+
+				Event.onAvailable("checkbox-" + oRecord.getId(), function () {
+					Event.on("checkbox-" + oRecord.getId(), 'click', this.selectTaskClick, oData, this);
+				}, this, true);
+			},
+
+			selectTaskClick: function(e, taskId) {
+				this.selectedItems[taskId] = e.target.checked;
+
+				var checks = Selector.query('input[type="checkbox"]', this.widgets.pagingDataTable.widgets.dataTable.getTbodyEl());
+
+				var allChecked = true;
+				for (var i = 0; i < checks.length; i++) {
+					if (!checks[i].checked) {
+						allChecked = false;
+						break;
+					}
+				}
+				Dom.get(this.id + '-select-all-tasks').checked = allChecked;
+
+				Bubbling.fire("selectedTasksChanged", {
+					selectedTasks: this.getSelectedItems()
+				});
+			},
+
+			selectAllClick: function(e) {
+				var selected = e.target.checked;
+				var checks = Selector.query('input[type="checkbox"]', this.widgets.pagingDataTable.widgets.dataTable.getTbodyEl());
+
+				for (var i = 0; i < checks.length; i++) {
+					checks[i].checked = selected;
+					this.selectedItems[checks[i].value] = selected;
+				}
+
+				Bubbling.fire("selectedTasksChanged", {
+					selectedTasks: this.getSelectedItems()
+				});
 			},
 
 			renderCellIcons: function TL_renderCellIcons(elCell, oRecord, oColumn, oData) {
@@ -159,7 +212,36 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						scope: this
 					}
 				});
-			}
+			},
 
+			getSelectedItems: function()
+			{
+				var items = [],
+					dTable = this.widgets.pagingDataTable.widgets.dataTable,
+					paginator = this.widgets.pagingDataTable.widgets.paginator,
+					recordSet = dTable.getRecordSet(),
+					aPageRecords,
+					startRecord,
+					endRecord,
+					record;
+				if (paginator) {
+					aPageRecords = paginator.getPageRecords();
+					startRecord = aPageRecords[0];
+					endRecord = aPageRecords[1];
+				} else {
+					startRecord = 0;
+					endRecord = this.totalRecords;
+				}
+				for (var i = startRecord; i <= endRecord; i++)
+				{
+					record = recordSet.getRecord(i);
+					if (record && this.selectedItems[record.getData("id")])
+					{
+						items.push(record.getData("id"));
+					}
+				}
+
+				return items;
+			}
 		}, true);
 })();

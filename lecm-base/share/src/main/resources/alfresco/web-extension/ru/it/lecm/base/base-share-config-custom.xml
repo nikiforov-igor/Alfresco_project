@@ -179,6 +179,7 @@
 			<form id="reassignTask">
 				<field-visibility>
 					<show id="cm:owner" force="true"/>
+					<show id="taskIds" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:owner" label="Сотрудник" mandatory="true">
@@ -189,6 +190,11 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
+						</control>
+					</field>
+					<field id="taskIds" label="Сотрудник" mandatory="false">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-arguments-hidden-control.ftl">
+							<control-param name="argName">taskIds</control-param>
 						</control>
 					</field>
 				</appearance>
