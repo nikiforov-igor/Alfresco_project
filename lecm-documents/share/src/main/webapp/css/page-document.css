@@ -392,3 +392,12 @@ div.yui-panel.form-container .form-fields {
     padding-left: 22px;
 }
 
+
+.yui-skin-lecmTheme .dashlet .dashlet-body div.form-field div.association-auto-complete-selected-item > span > a {
+    width: 95%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
