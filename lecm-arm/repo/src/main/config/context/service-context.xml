@@ -164,6 +164,8 @@
                         <value>lecm-arm:counter-description</value>
                         <value>lecm-arm:fields-assoc</value>
                         <value>lecm-arm:filters-assoc</value>
+                        <value>lecm-arm:is-select-by-activeTasks</value>
+                        <value>lecm-arm:activeTasks-filter</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
