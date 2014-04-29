@@ -30,7 +30,7 @@ LogicECM.TaskDistribution = LogicECM.TaskDistribution || {};
 				width: "50em",
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 				templateRequestParams: {
-					submissionUrl: "/lecm/base/action/reassign-tasks/",
+					submissionUrl: "/lecm/base/action/reassign-tasks",
 					itemKind: "type",
 					itemId: "bpm:startTask",
 					formId: "reassignTask",

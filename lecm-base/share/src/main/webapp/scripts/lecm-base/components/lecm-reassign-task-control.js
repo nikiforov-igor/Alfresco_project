@@ -41,13 +41,14 @@ LogicECM.module = LogicECM.module || {};
 						width: "50em",
 						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 						templateRequestParams: {
-							submissionUrl: "/lecm/base/action/reassign-task/" + this.options.taskId,
+							submissionUrl: "/lecm/base/action/reassign-tasks",
 							itemKind: "type",
 							itemId: "bpm:startTask",
 							formId: "reassignTask",
 							mode: "create",
 							submitType: "json",
-							showCancelButton: true
+							showCancelButton: true,
+							taskIds: this.options.taskId
 						},
 						actionUrl: null,
 						destroyOnHide: true,

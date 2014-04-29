@@ -425,18 +425,6 @@
         <property name="mutable" value="true" />
     </bean>
 
-	<bean id="webscript.ru.it.lecm.actions.reassign-task.post"
-	      class="ru.it.lecm.base.scripts.ReassignTask"
-	      parent="webscript"
-	      depends-on="substitudeService">
-		<property name="workflowService" ref="workflowServiceImpl"/>
-		<property name="orgstructureService" ref="serviceOrgstructure"/>
-		<property name="notificationsService" ref="notificationsService"/>
-		<property name="businessJournalService" ref="businessJournalService"/>
-		<property name="nodeService" ref="nodeService"/>
-		<property name="documentService" ref="documentService"/>
-	</bean>
-
 	<bean id="webscript.ru.it.lecm.actions.reassign-tasks.post"
 	      class="ru.it.lecm.base.scripts.ReassignTasks"
 	      parent="webscript"

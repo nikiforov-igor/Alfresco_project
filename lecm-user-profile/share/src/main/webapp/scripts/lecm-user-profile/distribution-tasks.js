@@ -161,13 +161,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						width: "50em",
 						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 						templateRequestParams: {
-							submissionUrl: "/lecm/base/action/reassign-task/" + oRecord.getData('id'),
+							submissionUrl: "/lecm/base/action/reassign-tasks",
 							itemKind: "type",
 							itemId: "bpm:startTask",
 							formId: "reassignTask",
 							mode: "create",
 							submitType: "json",
-							showCancelButton: true
+							showCancelButton: true,
+							taskIds: oRecord.getData('id')
 						},
 						actionUrl: null,
 						destroyOnHide: true,
