@@ -226,8 +226,7 @@ LogicECM.module = LogicECM.module || {};
 		        if (this.options.defaultValue != null) {
                      this.defaultValue = this.options.defaultValue;
                      this.updateViewForm();
-                } else 
-                if (this.options.defaultValueDataSource != null) {
+                } else if (this.options.defaultValueDataSource != null) {
 			        var me = this;
 
 			        Alfresco.util.Ajax.request(
@@ -573,7 +572,10 @@ LogicECM.module = LogicECM.module || {};
 				if (this.option)
 	            this.isSearch = true;
 	            this._updateItems(nodeRef, searchData);
-	        } else {
+			} else if (searchTerm === "") {
+				this.isSearch = false;
+				this._updateItems(this.currentNode.data.nodeRef, "");
+			} else {
 		        Alfresco.util.PopupManager.displayMessage(
 			        {
 				        text: this.msg("form.control.object-picker.search.enter-more", this.options.minSearchTermLength)
