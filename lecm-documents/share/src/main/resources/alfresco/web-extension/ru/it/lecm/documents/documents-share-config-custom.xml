@@ -751,12 +751,14 @@
 					<show id="cm:image"/>
 					<show id="cm:name"/>
 					<show id="lecm-document:creator"/>
+					<show id="lecm-document:modifier"/>
 					<show id="cm:versionLabel"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:image" label=" "/>
 					<field id="cm:name" label-id="label.attachmets.file.name"/>
 					<field id="lecm-document:creator" label-id="label.attachmets.autor"/>
+					<field id="lecm-document:modifier" label-id="label.attachmets.modifier"/>
 					<field id="cm:versionLabel" label-id="label.attachmets.version"/>
 				</appearance>
 			</form>
