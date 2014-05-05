@@ -5,6 +5,7 @@ if (result.status == 200) {
 } else {
     model.settings = {
         baseQuery:'',
+        title:'',
         isExist:false,
         filters:[]
     };
