@@ -3,4 +3,7 @@
 	<BusinessRole id="BR_ORGSTRUCTURE_ENGINEER">
 		<Permission object="." permissionGroup="LECM_BASIC_PG_Owner"/>
 	</BusinessRole>
+	<BusinessRole id="*">
+		<Permission object="../Сервис Справочники/Бизнес роли" permissionGroup="Consumer" inheritPermissions="false"/>
+	</BusinessRole>
 </ReposioryPermissions>
