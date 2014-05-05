@@ -184,10 +184,14 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 sb.append(searchQuery);
             }
             if (workflowQuery != null && workflowQuery.length() > 0) {
-                if (sb.length() > 0) {
+                boolean wrapBrackets = sb.length() > 0;
+                if (wrapBrackets) {
                     sb.append(" AND (");
                 }
-                sb.append(workflowQuery).append(")");
+                sb.append(workflowQuery);
+                if (wrapBrackets) {
+                    sb.append(")");
+                }
             }
             node.setSearchQuery(sb.toString());
         }
