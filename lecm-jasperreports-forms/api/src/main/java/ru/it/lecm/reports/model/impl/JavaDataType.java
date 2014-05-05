@@ -33,6 +33,7 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
     public enum SupportedTypes {
         NULL(null),
         STRING(String.class.getName()),
+        HTML("HTML"),
         DATE(Date.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {

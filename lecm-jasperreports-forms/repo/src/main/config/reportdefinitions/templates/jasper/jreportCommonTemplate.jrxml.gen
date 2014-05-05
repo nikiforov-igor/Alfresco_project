@@ -166,21 +166,40 @@
                 </macro.vars>
 
                 <macro.body.field>
-                    <textField isBlankWhenNull="true" isStretchWithOverflow="true">
-                        <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
-                        <box>
-                            <pen lineWidth="0.5" lineColor="#78C0D4"/>
-                            <topPen lineWidth="0.5" lineColor="#78C0D4"/>
-                            <leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-                            <bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-                            <rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-                        </box>
-                        <textElement textAlignment="Left" verticalAlignment="Middle">
-                            <font fontName="@fontName" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-                            <paragraph leftIndent="5"/>
-                        </textElement>
-                        <textFieldExpression><![CDATA[$F{@FLD.desc.columnName}]]></textFieldExpression>
-                    </textField>
+                    <macro.body.field.case expression="!@FLD.html">
+                        <textField isBlankWhenNull="true" isStretchWithOverflow="true">
+                            <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
+                            <box>
+                                <pen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <topPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            </box>
+                            <textElement textAlignment="Left" verticalAlignment="Middle">
+                                <font fontName="@fontName" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                                <paragraph leftIndent="5"/>
+                            </textElement>
+                            <textFieldExpression><![CDATA[$F{@FLD.desc.columnName}]]></textFieldExpression>
+                        </textField>
+                    </macro.body.field.case>
+                    <macro.body.field.case expression="@FLD.html">
+                        <textField isBlankWhenNull="true" isStretchWithOverflow="true">
+                            <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
+                            <box>
+                                <pen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <topPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+                                <rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+                            </box>
+                            <textElement textAlignment="Left" verticalAlignment="Middle" markup="html">
+                                <font fontName="@fontName" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                                <paragraph leftIndent="5"/>
+                            </textElement>
+                            <textFieldExpression><![CDATA[$F{@FLD.desc.columnName}]]></textFieldExpression>
+                        </textField>
+                    </macro.body.field.case>
                 </macro.body.field>
 			</prototype-columns>
 		</band>

@@ -48,6 +48,11 @@
                 <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_DOUBLE</property>
                 <property name="lecm-rpeditor:reportColumnTypeClass">java.lang.Double</property>
             </item>
+            <item name="cm:HTML" type="lecm-rpeditor:reportColumnType">
+                <property name="cm:name">HTML</property>
+                <property name="lecm-rpeditor:reportColumnTypeCode">COLUMN_TYPE_HTML</property>
+                <property name="lecm-rpeditor:reportColumnTypeClass">HTML</property>
+            </item>
         </items>
     </item>
 </items>

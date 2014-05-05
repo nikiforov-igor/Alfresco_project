@@ -518,13 +518,21 @@ public class XMLMacroGenerator {
          * @param asrcMacroPrototype узел с прототипом
          */
         public void parseNode(Node asrcMacroPrototype) {
-            srcMacroPrototype = asrcMacroPrototype;
-            destParent = srcMacroPrototype.getParentNode();
+            this.srcMacroPrototype = asrcMacroPrototype;
+            this.destParent = srcMacroPrototype.getParentNode();
+            this.srcTemplate = XmlHelper.findNodeByName(asrcMacroPrototype, XMLNODE_PROTOTYPE_BODY_FIELD);
 
-            Element templateNode = XmlHelper.findNodeByName(asrcMacroPrototype, XMLNODE_PROTOTYPE_BODY_FIELD);
+            /* ПЕРЕМЕННЫЕ И КОНСТАНТЫ*/
+            srcVars = XmlHelper.findNodeByName(srcMacroPrototype, XMLNODE_PROTOTYPE_VARS);
+
+            curVars = parseVars(srcVars);
+            curVars.setOuterMacro(parentVars);
+        }
+
+        public Node parseTemplateNode(Node templateNode) {
             List<Node> caseNodes = XmlHelper.findNodesList(templateNode, XMLNODE_PROTOTYPE_BODY_FIELD_CASE);
             if (caseNodes == null || caseNodes.isEmpty()) { // нет условий - просто идем по всем вложенным тегами прототипа
-                srcTemplate = templateNode;
+                return templateNode;
             } else {
                 for (Node caseNode : caseNodes) {
                     String caseExpression = null;
@@ -541,24 +549,14 @@ public class XMLMacroGenerator {
                             isAccept = Boolean.valueOf(globals.calcExpr(getPureCalcExpression(caseExpression)).toString());
                         }
                         if (isAccept) {
-                            this.srcTemplate = caseNode;
-                            break;
+                            return caseNode;
                         }
                     }
                 }
             }
 
-            if (srcTemplate == null) { // ничего не подошло - используем шаблон
-                srcTemplate = templateNode;
-            }
-
-            /* ПЕРЕМЕННЫЕ И КОНСТАНТЫ*/
-            srcVars = XmlHelper.findNodeByName(srcMacroPrototype, XMLNODE_PROTOTYPE_VARS);
-
-            curVars = parseVars(srcVars);
-            curVars.setOuterMacro(parentVars);
+            return templateNode;
         }
-
 
         /**
          * Выполнить XML-макроподстановку для всех колонок из указанного списка.
@@ -741,16 +739,18 @@ public class XMLMacroGenerator {
         private void doColumnMacroExpansion(final String macroKey, ColumnDescriptor colDesc, int index) {
             // автоматическая переменная для колокни данных
             curVars.addVar(macroKey, new ColumnDescValue(index, colDesc)); // "FLD", "PARAM"
+            globals.addVar(macroKey, new ColumnDescValue(index, colDesc));
 
             // вычисление значений перед генерацией ...
             curVars.calcAllNext(CalcPhase.pre); // применить авто-назначения ...
 
+            Node template = this.parseTemplateNode(srcTemplate);
             // генерация ...
-            if (srcTemplate != null && (srcTemplate.getChildNodes() != null)) {
+            if (template != null && (template.getChildNodes() != null)) {
                 // по всем вложенным узлам макроса ...
-                for (int i = 0; i < srcTemplate.getChildNodes().getLength(); i++) {
-                    final Node tnode = srcTemplate.getChildNodes().item(i);
-                    final Node newNode = tnode.cloneNode(/*deep*/true);
+                for (int i = 0; i < template.getChildNodes().getLength(); i++) {
+                    final Node tnode = template.getChildNodes().item(i);
+                    final Node newNode = tnode.cloneNode(true);
                     this.destParent.insertBefore(newNode, srcMacroPrototype);
                     processNode(newNode, this.destDoc, this.curVars);
                 }
@@ -763,15 +763,17 @@ public class XMLMacroGenerator {
         private void doSubReportMacroExpansion(SubReportDescriptorImpl subReport, int index) {
             // автоматическая переменная для колокни данных
             curVars.addVar(VNAME_SUBREPORT, new SubReportDescValue(index, subReport)); // "SUB"
+            globals.addVar(VNAME_SUBREPORT, new SubReportDescValue(index, subReport));
 
             // вычисление значений перед генерацией ...
             curVars.calcAllNext(CalcPhase.pre); // применить авто-назначения ...
 
+            Node template = this.parseTemplateNode(srcTemplate);
             // генерация ...
-            if (srcTemplate != null && (srcTemplate.getChildNodes() != null)) {
+            if (template != null && (template.getChildNodes() != null)) {
                 // по всем вложенным узлам макроса ...
-                for (int i = 0; i < srcTemplate.getChildNodes().getLength(); i++) {
-                    final Node tnode = srcTemplate.getChildNodes().item(i);
+                for (int i = 0; i < template.getChildNodes().getLength(); i++) {
+                    final Node tnode = template.getChildNodes().item(i);
                     final Node newNode = tnode.cloneNode(/*deep*/true);
                     this.destParent.insertBefore(newNode, srcMacroPrototype);
                     processNode(newNode, this.destDoc, this.curVars);
@@ -1653,11 +1655,17 @@ public class XMLMacroGenerator {
     public class ColumnDescXtender extends RectXtender {
         private ColumnDescriptor desc;
         private int index;
+        private boolean html = false;
 
         public ColumnDescXtender(int colIndex, ColumnDescriptor desc) {
             super();
             this.desc = desc;
             this.index = colIndex;
+
+            JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(desc.getClassName());
+            if (type != null) {
+                this.html = type.equals(JavaDataType.SupportedTypes.HTML);
+            }
         }
 
         public ColumnDescriptor getDesc() {
@@ -1676,6 +1684,13 @@ public class XMLMacroGenerator {
             this.index = index;
         }
 
+        public boolean isHtml() {
+            return html;
+        }
+
+        public void setHtml(boolean html) {
+            this.html = html;
+        }
     }
 
     public class ColumnDescValue
