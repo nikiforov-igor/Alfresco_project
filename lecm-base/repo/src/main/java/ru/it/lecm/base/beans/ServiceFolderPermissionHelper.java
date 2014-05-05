@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.*;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
+
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.PropertyCheck;
 import javax.xml.parsers.SAXParserFactory;
@@ -144,7 +146,15 @@ public class ServiceFolderPermissionHelper {
 		NodeRef currentNode = serviceRootNode;
 		String[] splittedName = objectName.split("/");
 		for (String pathElement : splittedName) {
-			NodeRef elementNode = nodeService.getChildByName(currentNode, ContentModel.ASSOC_CONTAINS, pathElement);
+			NodeRef elementNode = null;
+			if (pathElement.equals("..")) {
+				ChildAssociationRef parent = nodeService.getPrimaryParent(currentNode);
+				 if (parent != null) {
+					 elementNode = parent.getParentRef();
+				 }
+			} else {
+				elementNode = nodeService.getChildByName(currentNode, ContentModel.ASSOC_CONTAINS, pathElement);
+			}
 			if (elementNode != null) {
 				currentNode = elementNode;
 			} else {
