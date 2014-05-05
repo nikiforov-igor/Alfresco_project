@@ -2,6 +2,7 @@ package ru.it.lecm.reports.api;
 
 import net.sf.jasperreports.engine.design.JRDesignField;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.NamedValue;
 
 import java.util.LinkedHashMap;
@@ -93,7 +94,11 @@ public class DataFieldColumn extends JRDesignField {
 		/* тип ... */
 		try {
 			if (colDesc.getDataType() != null && colDesc.getDataType().getClassName() != null) {
-				result.setValueClass( Class.forName(colDesc.getDataType().getClassName()) );
+                if (!colDesc.getDataType().getClassName().equals(JavaDataType.HTML)) {
+                    result.setValueClass( Class.forName(colDesc.getDataType().getClassName()) );
+                } else {
+                    result.setValueClass(String.class);
+                }
 			} else {
 				result.setValueClass( Class.forName(colDesc.getClassName()) );
 			}

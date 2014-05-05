@@ -12,6 +12,7 @@ import net.sf.jasperreports.engine.design.JRDesignField;
 import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 
 public class JRUtils {
 
@@ -45,7 +46,11 @@ public class JRUtils {
         field.setName(colDesc.getColumnName());
         field.setDescription(colDesc.getDefault());
         try {
-            field.setValueClass(Class.forName(colDesc.getClassName()));
+            if (!colDesc.getClassName().equals(JavaDataType.HTML)) {
+                field.setValueClass(Class.forName(colDesc.getClassName()));
+            } else {
+                field.setValueClass(String.class);
+            }
         } catch (ClassNotFoundException ex) {
             final String msg = String.format("Column '%s' has invalid value class type: '%s' "
                     , colDesc.getColumnName(), colDesc.getClassName());

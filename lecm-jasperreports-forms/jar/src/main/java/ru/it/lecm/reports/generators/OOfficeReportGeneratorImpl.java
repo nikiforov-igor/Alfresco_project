@@ -9,6 +9,7 @@ import net.sf.jooreports.openoffice.connection.OpenOfficeConnection;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.util.PropertyCheck;
 import org.apache.commons.io.FilenameUtils;
+import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SubstitudeBean;
@@ -21,6 +22,7 @@ import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.model.DAO.FileReportContentDAOBean;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.JavaDataType;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -408,6 +410,13 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
                     if (value == null && colDesc.getExpression().matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
                         // пустой подотчет - вместо null подсовываем пустой список
                         value = new ArrayList();
+                    }
+
+                    JavaDataType.SupportedTypes type = JavaDataType.SupportedTypes.findType(colDesc.getClassName());
+                    if (type != null && value != null) {
+                        if (type.equals(JavaDataType.SupportedTypes.HTML)) {
+                            value = Jsoup.parse(value.toString()).text();
+                        }
                     }
                     props.put(colDesc.getColumnName(), value);
                 }

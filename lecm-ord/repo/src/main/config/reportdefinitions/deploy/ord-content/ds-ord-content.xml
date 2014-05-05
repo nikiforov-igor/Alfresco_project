@@ -53,7 +53,7 @@
             </l18>
         </field>
         <field alfrescoType="d:text" displayName="Содержание"
-            javaValueClass="java.lang.String"
+            javaValueClass="HTML"
             jrFldName="summary-content" queryFldName="{lecm-eds-document:summaryContent}">
             <l18>
                 <item key="RU_RU"><![CDATA[Содержание]]></item>

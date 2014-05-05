@@ -25,6 +25,7 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
         super(className);
     }
 
+    public final static String HTML = "HTML";
     /**
      * Набор типов поддерживаемых для шаблонов.
      *
@@ -33,7 +34,7 @@ public class JavaDataType extends JavaClassableImpl implements JavaClassable, Mn
     public enum SupportedTypes {
         NULL(null),
         STRING(String.class.getName()),
-        HTML("HTML"),
+        HTML(JavaDataType.HTML),
         DATE(Date.class.getName()) {
             @Override
             public Object getValueByRealType(Object value) {
