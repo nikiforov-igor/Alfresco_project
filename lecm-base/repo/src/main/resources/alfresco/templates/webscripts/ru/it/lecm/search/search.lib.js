@@ -337,7 +337,7 @@ function getSearchResults(params) {
         var useBr = filter.indexOf("NOT") < 0 || filter.indexOf("NOT") > 0;
         ftsQuery += (filter.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + (useBr ? '(' : '') + filter + (useBr ? ')' : '')) : '');
         useBr = filtersQuery.indexOf("NOT") < 0 || filtersQuery.indexOf("NOT") > 0;
-        ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : ' ') + (useBr? '(' : '')  + filtersQuery + (useBr ? '(' : '') ) : '');
+        ftsQuery += (filtersQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : ' ') + (useBr? '(' : '')  + filtersQuery + (useBr ? ')' : '') ) : '');
         ftsQuery += (fullTextSearchQuery.length !== 0 ? ((ftsQuery.length !== 0 ? ' AND ' : '') + '(' + fullTextSearchQuery + ')') : '');
 
         //фильтр по родителю
