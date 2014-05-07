@@ -29,7 +29,8 @@ public class TimerAction extends StateMachineAction implements PostponedAction {
             String expression = expressionElement.attribute(PROP_EXPRESSION);
             String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
             boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
-            this.transitionExpressions.add(new TransitionExpression(expression, outputValue, stopSubWorkflows));
+            String script = expressionElement.getText();
+            this.transitionExpressions.add(new TransitionExpression(expression, outputValue, stopSubWorkflows, script));
         }
 
         List<Element> attributes = action.elements("attribute");

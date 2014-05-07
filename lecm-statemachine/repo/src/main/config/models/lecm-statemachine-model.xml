@@ -69,6 +69,10 @@
                 <property name="lecm-statemachine:outputValue">
                     <type>d:text</type>
                 </property>
+                <property name="lecm-statemachine:script">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                </property>
             </properties>
         </type>
 	</types>

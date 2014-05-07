@@ -142,8 +142,8 @@ public class TimerActionHelper implements InitializingBean {
         return null;
     }
 
-    private void nextTransition(String stateMachineExecutionId, String stateMachineTaskId, String variable, List<TransitionExpression> expressions) {
-        StateMachineHelper stateMachineHelper = new StateMachineHelper();
+    private void nextTransition(final String stateMachineExecutionId, String stateMachineTaskId, String variable, List<TransitionExpression> expressions) {
+        final StateMachineHelper stateMachineHelper = new StateMachineHelper();
 
         Execution execution = stateMachineHelper.getExecution(stateMachineExecutionId);
         if (execution == null) {
@@ -159,7 +159,7 @@ public class TimerActionHelper implements InitializingBean {
             return;
         }
 
-        TransitionExpression expression = getFittingExpression(stateMachineExecutionId, expressions);
+        final TransitionExpression expression = getFittingExpression(stateMachineExecutionId, expressions);
         if (expression == null) {
             removeTimerNode(stateMachineExecutionId);
             return;
@@ -172,6 +172,16 @@ public class TimerActionHelper implements InitializingBean {
 
         setOutputVarable(stateMachineExecutionId, variable, expression.getOutputValue());
 
+        if (!"".equals(expression.getScript())) {
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    stateMachineHelper.executeScript(expression.getScript(), stateMachineExecutionId);
+                    return null;
+                }
+            });
+        }
+
         stateMachineHelper.nextTransition(providePrefix(stateMachineTaskId));
     }
 
@@ -182,7 +192,6 @@ public class TimerActionHelper implements InitializingBean {
         properties.put(StatemachineModel.PROP_EXECUTION_ID, stateMachineExecutionId);
         properties.put(StatemachineModel.PROP_TASK_ID, stateMachineTaskId);
         properties.put(StatemachineModel.PROP_FINISH_TIMESTAMP, finishTimestamp);
-        properties.put(StatemachineModel.PROP_VARIABLE, variable);
 
         final ChildAssociationRef[] timer = new ChildAssociationRef[1];
         transactionService.getRetryingTransactionHelper().doInTransaction(
@@ -200,6 +209,7 @@ public class TimerActionHelper implements InitializingBean {
             properties.put(StatemachineModel.PROP_STOP_SUBWORKFLOWS, expression.isStopSubWorkflows());
             properties.put(StatemachineModel.PROP_EXPRESSION, expression.getExpression());
             properties.put(StatemachineModel.PROP_OUTPUT_VALUE, expression.getOutputValue());
+            properties.put(StatemachineModel.PROP_SCRIPT, expression.getScript());
 
             transactionService.getRetryingTransactionHelper().doInTransaction(
                     new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
@@ -228,7 +238,8 @@ public class TimerActionHelper implements InitializingBean {
                 String expression = (String) nodeService.getProperty(expressionRef, StatemachineModel.PROP_EXPRESSION);
                 String outputValue = (String) nodeService.getProperty(expressionRef, StatemachineModel.PROP_OUTPUT_VALUE);
                 boolean stopSubWorkflows = (Boolean) nodeService.getProperty(expressionRef, StatemachineModel.PROP_STOP_SUBWORKFLOWS);
-                TransitionExpression transitionExpression = new TransitionExpression(expression, outputValue, stopSubWorkflows);
+                String script = (String) nodeService.getProperty(expressionRef, StatemachineModel.PROP_SCRIPT);
+                TransitionExpression transitionExpression = new TransitionExpression(expression, outputValue, stopSubWorkflows, script);
                 transitionExpressions.add(transitionExpression);
             }
 

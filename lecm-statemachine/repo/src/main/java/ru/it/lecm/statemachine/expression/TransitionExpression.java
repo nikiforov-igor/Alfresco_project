@@ -11,11 +11,13 @@ public class TransitionExpression {
     private String expression = null;
     private String outputValue = null;
     private boolean stopSubWorkflows = false;
+    private String script = null;
 
-    public TransitionExpression(String expression, String outputValue, boolean stopSubWorkflows) {
+    public TransitionExpression(String expression, String outputValue, boolean stopSubWorkflows, String script) {
         this.expression = expression;
         this.outputValue = outputValue;
         this.stopSubWorkflows = stopSubWorkflows;
+        this.script = script;
     }
 
     public String getExpression() {
@@ -29,4 +31,9 @@ public class TransitionExpression {
     public boolean isStopSubWorkflows() {
         return stopSubWorkflows;
     }
+
+    public String getScript() {
+        return script == null ? "" : script;
+    }
+
 }
