@@ -278,7 +278,7 @@ public class ParameterMapper {
             dsDesc.getColumns().add(result);
             destValue = value;
         } else {
-            if (result.getExpression() != null && !result.getExpression().isEmpty()) {
+            if (result.getExpression() != null && !result.getExpression().isEmpty() && !result.getExpression().startsWith("{")) {
                 destValue = result.getExpression();
             } else {
                 if (value instanceof String) {
