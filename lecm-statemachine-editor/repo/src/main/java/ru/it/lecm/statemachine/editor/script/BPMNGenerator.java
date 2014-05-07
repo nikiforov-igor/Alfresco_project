@@ -386,12 +386,12 @@ public class BPMNGenerator {
 		}
 	}
 
-    private int getTimerDuration(NodeRef status) {
+    private String getTimerDuration(NodeRef status) {
         try {
             String durationString = (String) nodeService.getProperty(status, StatemachineEditorModel.PROP_TIMER_DURATION);
-            return durationString != null ? Integer.parseInt(durationString) : -1;
+            return durationString != null && durationString.length() > 0 ? durationString : null;
         } catch (Exception e) {
-            return -1;
+            return null;
         }
     }
 
@@ -518,8 +518,8 @@ public class BPMNGenerator {
     private List<Flow> createTimerEvent(Element eventElement, String statusVar, ChildAssociationRef action, String actionVar) {
         NodeRef actions = action.getParentRef();
         NodeRef status = nodeService.getPrimaryParent(actions).getParentRef();
-        int timerDuration = getTimerDuration(status);
-        if (timerDuration <= 0) {
+        String timerDuration = getTimerDuration(status);
+        if (timerDuration == null) {
             return new ArrayList<Flow>();
         }
 
