@@ -105,5 +105,17 @@
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
 		  p:createOrUpdateDictionaries-ref="ord.groupOperations"/>
-	
+
+    <bean id="ord.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/ord-content.xml</value>
+                <value>alfresco/module/${artifactId}/reports/ord-reg-journal.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

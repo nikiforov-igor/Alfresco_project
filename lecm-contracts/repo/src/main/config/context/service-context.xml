@@ -468,4 +468,17 @@
             </list>
         </property>
     </bean>
+
+    <bean id="contracts.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/contract-dossier.xml</value>
+                <value>alfresco/module/${artifactId}/reports/contract-stages.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

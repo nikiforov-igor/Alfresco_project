@@ -476,4 +476,16 @@
             </map>
         </property>
     </bean>
+
+    <bean id="errands.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

@@ -184,4 +184,17 @@
             </map>
         </property>
     </bean>
+
+
+    <bean id="internal.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/internal-reg-journal.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>

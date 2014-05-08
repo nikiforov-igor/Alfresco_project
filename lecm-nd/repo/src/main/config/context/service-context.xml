@@ -109,4 +109,17 @@
 	<bean id="NDDocumentService" class="ru.it.lecm.nd.NDDocumentServiceImpl"
           p:nodeService-ref="nodeService"
     />
+
+
+    <bean id="nd.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/nd-reg-journal.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>
