@@ -173,7 +173,7 @@
                             <assoc type="lecm-rpeditor:reportTemplateType"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
                             <assoc type="lecm-rpeditor:reportTemplateFile"
-                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора(test)/Этапы/stages.jrxml"/>
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора/Этапы/stages.jrxml"/>
                         </assocs>
                     </item>
                     <item name="cm:stages.jrxml" type="cm:content">
@@ -462,7 +462,7 @@ CQk8L2JhbmQ+Cgk8L2RldGFpbD4KPC9qYXNwZXJSZXBvcnQ+Cg==
                     <assoc type="lecm-rpeditor:reportProviderAssoc"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/genericProvider"/>
                     <assoc type="lecm-rpeditor:reportTemplateAssoc"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора(test)/Этапы/stages-tmpl"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора/Этапы/stages-tmpl"/>
                 </assocs>
             </item>
             <item name="cm:contract-stages-template" type="lecm-rpeditor:reportTemplate">
@@ -472,7 +472,7 @@ CQk8L2JhbmQ+Cgk8L2RldGFpbD4KPC9qYXNwZXJSZXBvcnQ+Cg==
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
                     <assoc type="lecm-rpeditor:reportTemplateFile"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора(test)/contract-stages.jrxml"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора/contract-stages.jrxml"/>
                 </assocs>
             </item>
             <item name="cm:contract-stages.jrxml" type="cm:content">
@@ -548,7 +548,7 @@ ZXBvcnQ+CgkJPC9iYW5kPgoJPC9kZXRhaWw+CjwvamFzcGVyUmVwb3J0Pgo=
             <assoc type="lecm-rpeditor:reportProviderAssoc"
                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/genericProvider"/>
             <assoc type="lecm-rpeditor:reportTemplateAssoc"
-                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора(test)/contract-stages-template"/>
+                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Этапы договора/contract-stages-template"/>
         </assocs>
     </item>
 </items>
