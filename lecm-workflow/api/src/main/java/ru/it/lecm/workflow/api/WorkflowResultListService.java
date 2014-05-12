@@ -16,6 +16,8 @@ public interface WorkflowResultListService {
 
 	NodeRef createResultList(final NodeRef parentRef, final NodeRef bpmPackage, final String documentAttachmentCategoryName, QName resultListType, String resultListName);
 
+	NodeRef createResultList(final NodeRef parentRef, QName resultListType, String resultListName, String documentVersion);
+
 	NodeRef getOrCreateWorkflowResultFolder(NodeRef bpmPackage);
 
 	NodeRef getResultItemByUserName(NodeRef resultListRef, String userName);

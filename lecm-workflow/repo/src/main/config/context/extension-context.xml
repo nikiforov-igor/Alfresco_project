@@ -17,4 +17,10 @@
 		  p:workflowRunnerService-ref="workflowRunnerService"
 		  p:extensionName="routeWorkflow"/>
 
+	<bean id="workflow.resultList.extension" parent="baseScript"
+		  class="ru.it.lecm.workflow.extensions.WorkflowResultListJavascriptExtension"
+		  p:workflowResultListService-ref="workflowResultListService"
+		  p:namespaceService-ref="namespaceService"
+		  p:extensionName="workflowResultList"/>
+
 </beans>

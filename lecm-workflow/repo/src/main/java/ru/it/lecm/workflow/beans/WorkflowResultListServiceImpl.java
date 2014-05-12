@@ -110,16 +110,24 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		String contractDocumentVersion = Utils.getObjectVersion(bpmPackage, documentAttachmentCategoryName);
 		String resultListVersion = Utils.getResultListVersion(contractDocumentVersion, parentRef, resultListName);
 		String localName = String.format(resultListName, resultListVersion);
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-		properties.put(ContentModel.PROP_NAME, localName);
-		properties.put(ContentModel.PROP_TITLE, localName);
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION, contractDocumentVersion);
-		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, localName);
-		NodeRef resultListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, resultListType, properties).getChildRef();
+		NodeRef resultListRef = createResultList(parentRef, resultListType, localName, contractDocumentVersion);
 		//прикрепляем approval list к списку items у документа
 		QName qname = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, localName);
 		nodeService.addChild(bpmPackage, resultListRef, ContentModel.ASSOC_CONTAINS, qname);
+
+		return resultListRef;
+	}
+
+	@Override
+	public NodeRef createResultList(final NodeRef parentRef, QName resultListType, String resultListName, String documentVersion) {
+		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+		properties.put(ContentModel.PROP_NAME, resultListName);
+		properties.put(ContentModel.PROP_TITLE, resultListName);
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION, documentVersion);
+		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, resultListName);
+		NodeRef resultListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, resultListType, properties).getChildRef();
+
 		return resultListRef;
 	}
 
