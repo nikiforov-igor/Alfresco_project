@@ -147,12 +147,14 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                                     this.dataTable.hideTableMessage();
                                     this.dataTable.addRows(response.json);
                                     this.isInitialized = true;
+                                    Dom.setStyle(scope.id + "-documents-loading", "visibility", "hidden");
                                 },
                                 scope: this
                             },
                             failureCallback: {
                                 fn: function () {
                                     this.dataTable.showTableMessage(this.msg("message.documents.load.failure"));
+                                    Dom.setStyle(scope.id + "-documents-loading", "visibility", "hidden");
                                 },
                                 scope: this
                             }
@@ -166,8 +168,8 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
             onContainerScroll: function (event, scope) {
                 var container = event.currentTarget;
                 if (container.scrollTop + container.clientHeight == container.scrollHeight) {
-                    Dom.setStyle(scope.id + "-documents-loading", "visibility", "visible");
                     if (scope.isInitialized) {
+                        Dom.setStyle(scope.id + "-documents-loading", "visibility", "visible");
                         scope.loadDocuments();
                     }
                 }

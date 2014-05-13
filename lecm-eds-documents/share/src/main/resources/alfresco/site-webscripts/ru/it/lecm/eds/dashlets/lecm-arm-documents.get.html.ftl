@@ -52,5 +52,8 @@
     </div>
     <div id="${id}-main" class="body scrollableList" <#if args.height??>style="height: ${args.height}px;"</#if>>
         <div id="${id}-documents"></div>
+        <div id="${id}-documents-loading" style="text-align: center; visibility: hidden;">
+            <img src="/share/res/components/images/lightbox/loading.gif">
+        </div>
     </div>
 </div>
