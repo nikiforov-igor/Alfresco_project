@@ -56,4 +56,18 @@
 		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
 		  p:createOrUpdateDictionaries-ref="eds.groupOperations"/>
 
+    <bean id="eds.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/eds-by-kind-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat-all-in.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-type-stat.xml</value>
+            </list>
+        </property>
+    </bean>
 </beans>
