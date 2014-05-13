@@ -147,14 +147,14 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                                     this.dataTable.hideTableMessage();
                                     this.dataTable.addRows(response.json);
                                     this.isInitialized = true;
-                                    Dom.setStyle(scope.id + "-documents-loading", "visibility", "hidden");
+                                    Dom.setStyle(this.id + "-documents-loading", "visibility", "hidden");
                                 },
                                 scope: this
                             },
                             failureCallback: {
                                 fn: function () {
                                     this.dataTable.showTableMessage(this.msg("message.documents.load.failure"));
-                                    Dom.setStyle(scope.id + "-documents-loading", "visibility", "hidden");
+                                    Dom.setStyle(this.id + "-documents-loading", "visibility", "hidden");
                                 },
                                 scope: this
                             }
