@@ -119,7 +119,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
 
                     this.dataTable.getRecordSet().reset();
                     this.dataTable.render();
-
+                    this.dataTable.showTableMessage("Загрузка данных...");
                     this.loadDocuments();
                     this.services.preferences.set(this.buildPreferences(PREF_FILTER), this.widgets.filters.get("label"));
                 }
@@ -144,7 +144,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                                     if (items.length > 0) {
                                         this.skipItemsCount = this.skipItemsCount + items.length;
                                     }
-
+                                    this.dataTable.hideTableMessage();
                                     this.dataTable.addRows(response.json);
                                     this.isInitialized = true;
                                 },
@@ -152,10 +152,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                             },
                             failureCallback: {
                                 fn: function () {
-                                    Alfresco.util.PopupManager.displayMessage(
-                                        {
-                                            text: this.msg("message.documents.load.failure")
-                                        });
+                                    this.dataTable.showTableMessage(this.msg("message.documents.load.failure"));
                                 },
                                 scope: this
                             }
