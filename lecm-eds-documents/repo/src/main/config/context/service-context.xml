@@ -33,7 +33,7 @@
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
 					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
 					  businessJournalLogEventsPolicy"
-		  p:dictionaries-ref="eds.dictionaries"/>
+		  p:createOrUpdateDictionaries-ref="eds.dictionaries"/>
 
 	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_ID"/>
 	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_NAME"/>
