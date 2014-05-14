@@ -192,6 +192,7 @@ public class TimerActionHelper implements InitializingBean {
         properties.put(StatemachineModel.PROP_EXECUTION_ID, stateMachineExecutionId);
         properties.put(StatemachineModel.PROP_TASK_ID, stateMachineTaskId);
         properties.put(StatemachineModel.PROP_FINISH_TIMESTAMP, finishTimestamp);
+        properties.put(StatemachineModel.PROP_VARIABLE, variable);
 
         final ChildAssociationRef[] timer = new ChildAssociationRef[1];
         transactionService.getRetryingTransactionHelper().doInTransaction(
