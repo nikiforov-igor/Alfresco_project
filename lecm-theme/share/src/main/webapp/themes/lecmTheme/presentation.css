@@ -1992,7 +1992,7 @@ div.association-auto-complete-selected-item-even {
 *:not(.viewmode-value) > div.association-auto-complete-selected-item-even > span > a,
 *:not(.viewmode-value) > div.association-auto-complete-selected-item > span.not-person,
 *:not(.viewmode-value) > div.association-auto-complete-selected-item-even > span.not-person {
-    max-width: 330px;
+    max-width: 310px;
     display: inline-block;
     white-space: nowrap;
     overflow-x: hidden;
