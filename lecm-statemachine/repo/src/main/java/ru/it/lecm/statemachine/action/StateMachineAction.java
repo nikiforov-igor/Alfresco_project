@@ -13,6 +13,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
@@ -44,6 +45,7 @@ abstract public class StateMachineAction {
     private OrgstructureBean orgstructureBean;
     private DocumentService documentService;
     private PermissionService permissionService;
+    private DocumentMembersService documentMembersService;
 
     public TimerActionHelper getTimerActionHelper() {
         return timerActionHelper;
@@ -53,7 +55,15 @@ abstract public class StateMachineAction {
         this.timerActionHelper = timerActionHelper;
     }
 
-	public ServiceRegistry getServiceRegistry() {
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
+
+    public DocumentMembersService getDocumentMembersService() {
+        return documentMembersService;
+    }
+
+    public ServiceRegistry getServiceRegistry() {
 		return serviceRegistry;
 	}
 
