@@ -1,16 +1,21 @@
 package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -302,6 +307,35 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             formatedQuery = formatedQuery.replaceAll(ArmWrapperService.VALUE_TEXT, substitudeService.getObjectDescription(node));
         }
         return formatedQuery;
+    }
+
+    public String getNodeSearchQuery(NodeRef nodeRef) {
+        List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(nodeRef, ArmService.ASSOC_NODE_CHILD_RULE);
+        if (queryAssoc != null && queryAssoc.size() > 0) {
+            NodeRef query = queryAssoc.get(0).getTargetRef();
+            QName queryType = nodeService.getType(query);
+            Map<QName, Serializable> props = nodeService.getProperties(query);
+
+            if (ArmService.TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
+                ArmStatusesChildRule node = new ArmStatusesChildRule();
+                node.setRule((String) props.get(ArmService.PROP_STATUSES_RULE));
+                String selectedStatuses = (String) props.get(ArmService.PROP_SELECTED_STATUSES);
+                if (selectedStatuses != null) {
+                    List<String> selectedStatusesList = new ArrayList<String>();
+                    for (String str: selectedStatuses.split(",")) {
+                        String status = str.trim();
+                        if (status.length() > 0) {
+                            selectedStatusesList.add(status);
+                        }
+                    }
+
+                    node.setSelectedStatuses(selectedStatusesList);
+                }
+
+                return node.getQuery();
+            }
+        }
+        return (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
     }
 
     public String formatQuery(String templateQuery, String value) {

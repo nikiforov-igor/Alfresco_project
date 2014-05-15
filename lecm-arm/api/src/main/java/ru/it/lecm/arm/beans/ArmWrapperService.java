@@ -48,5 +48,7 @@ public interface ArmWrapperService {
 
     public String formatQuery(String templateQuery, NodeRef node);
 
+    public String getNodeSearchQuery(NodeRef nodeRef);
+
     public boolean isAccordion(NodeRef node);
 }

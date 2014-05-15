@@ -43,7 +43,7 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
             JSONObject result = new JSONObject();
             try {
                 result.put("title", childNode.getTitle());
-                result.put("query", childNode.getSearchQuery() != null ? childNode.getSearchQuery() : "");
+                result.put("query", getFullQuery(childNode, true, false));
 
                 nodes.add(result);
             } catch (JSONException e) {
@@ -55,13 +55,20 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
 
     @SuppressWarnings("unused")
     public String getFullQuery(ScriptNode node) {
-        return getFullQuery(node, true);
+        return getFullQuery(node, true, true);
     }
 
-    public String getFullQuery(ScriptNode node, boolean includeTypes) {
+    @SuppressWarnings("unused")
+    public String getFullQuery(ScriptNode node, boolean includeTypes, boolean includeParentQuery) {
         StringBuilder builder = new StringBuilder();
         ArmNode armNode = armWrapperService.wrapArmNodeAsObject(node.getNodeRef());
 
+        return getFullQuery(armNode, includeTypes, includeParentQuery);
+    }
+
+    @SuppressWarnings("unused")
+    public String getFullQuery(ArmNode armNode, boolean includeTypes, boolean includeParentQuery) {
+        StringBuilder builder = new StringBuilder();
         if (includeTypes) {
             List<String> types = armNode.getTypes();
             StringBuilder typesBuilder = new StringBuilder();
@@ -84,12 +91,13 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
             }
             builder.append("(").append(query.toString()).append(")");
         }
-
-        NodeRef parentNode = nodeService.getPrimaryParent(node.getNodeRef()).getParentRef();
-        if (parentNode != null) {
-            QName parentType = nodeService.getType(parentNode);
-            if (parentType.equals(ArmService.TYPE_ARM_NODE) || parentType.equals(ArmService.TYPE_ARM_ACCORDION)) {
-                builder.append(getFullQuery(new ScriptNode(parentNode, serviceRegistry, getScope()), false));
+        if (includeParentQuery) {
+            NodeRef parentNode = nodeService.getPrimaryParent(armNode.getNodeRef()).getParentRef();
+            if (parentNode != null) {
+                QName parentType = nodeService.getType(parentNode);
+                if (parentType.equals(ArmService.TYPE_ARM_NODE) || parentType.equals(ArmService.TYPE_ARM_ACCORDION)) {
+                    builder.append(getFullQuery(new ScriptNode(parentNode, serviceRegistry, getScope()), false, false));
+                }
             }
         }
         return builder.toString();

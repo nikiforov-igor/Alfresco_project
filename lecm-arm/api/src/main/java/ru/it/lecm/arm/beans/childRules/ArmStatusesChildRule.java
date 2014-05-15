@@ -125,4 +125,47 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
         }
         return nodes;
     }
+
+    public String getQuery() {
+        StringBuilder queryBuilder = new StringBuilder();
+        switch (Rule.valueOf(rule)) {
+            case SELECTED: {
+                if (selectedStatuses != null) {
+                    for (String status: selectedStatuses) {
+                        if (queryBuilder.length() > 0) {
+                            queryBuilder.append(" OR ");
+                        }
+                        queryBuilder.append("@lecm\\-statemachine\\:status:\"").append(status).append("\"");
+                    }
+                }
+                break;
+            }
+            case EXCEPT_SELECTED: {
+                if (selectedStatuses != null) {
+                    for (String status: selectedStatuses) {
+                        if (queryBuilder.length() > 0) {
+                            queryBuilder.append(" AND ");
+                        }
+                        queryBuilder.append("NOT @lecm\\-statemachine\\:status:\"").append(status).append("\"");
+                    }
+                }
+                break;
+            }
+            case ALL_ARCHIVE: {
+                queryBuilder.append("@lecm\\-statemachine\\-aspects\\:is\\-final:true");
+                break;
+            }
+            case ALL_NOT_ARCHIVE: {
+                queryBuilder.append("NOT (@lecm\\-statemachine\\-aspects\\:is\\-final:true)");
+                break;
+            }
+            case ALL: {
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        return queryBuilder.length() > 0 ? queryBuilder.toString() : null;
+    }
 }
