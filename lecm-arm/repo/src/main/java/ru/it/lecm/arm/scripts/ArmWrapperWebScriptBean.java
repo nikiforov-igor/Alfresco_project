@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.ArmService;
@@ -25,6 +26,7 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
     final private static Logger logger = LoggerFactory.getLogger(ArmWrapperWebScriptBean.class);
 
     private ArmWrapperService armWrapperService;
+    private ArmService armService;
     private NodeService nodeService;
 
     public void setArmWrapperService(ArmWrapperService armWrapperService) {
@@ -51,6 +53,17 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
             }
         }
         return nodes;
+    }
+
+    /**
+     * Получение списка значений корневых узлов АРМ
+     */
+    public Scriptable getAccordeons(String armRef) {
+        List<NodeRef> nodes = new ArrayList<NodeRef>();
+        if (armRef != null && NodeRef.isNodeRef(armRef)) {
+            nodes.addAll(armService.getArmAccordions(new NodeRef(armRef)));
+        }
+        return createScriptable(nodes);
     }
 
     @SuppressWarnings("unused")
@@ -101,5 +114,9 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
             }
         }
         return builder.toString();
+    }
+
+    public void setArmService(ArmService armService) {
+        this.armService = armService;
     }
 }

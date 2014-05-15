@@ -5,6 +5,7 @@ if (result.status == 200) {
 } else {
     model.settings = {
         baseQuery:'',
+        dashletTitle: '',
         title:'',
         isExist:false,
         filters:[]

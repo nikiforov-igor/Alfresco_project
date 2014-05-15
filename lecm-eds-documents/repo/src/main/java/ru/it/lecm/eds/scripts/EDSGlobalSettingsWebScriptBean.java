@@ -107,4 +107,12 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
         }
         return null;
     }
+
+    public ScriptNode getArm() {
+        NodeRef arm =  edsGlobalSettingsService.getArm();
+        if (arm != null) {
+            return new ScriptNode(arm, serviceRegistry, getScope());
+        }
+        return null;
+    }
 }

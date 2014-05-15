@@ -43,6 +43,14 @@
 							</#list>
 						</#if>
                     },
+                    dependentFieldArgKey: {
+                    <#if field.control.params.dependentFieldArgKey?? && field.control.params.dependentFieldArgKey != "">
+                        <#assign fieldName=field.control.params.dependentFieldArgKey?split(",")>
+                        <#list fieldName as name>
+                            "${name_index}": "${name?replace(":","_")}",
+                        </#list>
+                    </#if>
+                    },
                     webScriptUrl: "${field.control.params.webScriptUrl}",
                     fieldId: "${fieldId}",
                     <#if field.control.params.notSelectedOptionShow?? && field.control.params.notSelectedOptionShow == "false">

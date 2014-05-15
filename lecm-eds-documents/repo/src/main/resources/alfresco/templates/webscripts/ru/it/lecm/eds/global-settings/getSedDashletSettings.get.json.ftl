@@ -1,6 +1,7 @@
 <#escape x as x?js_string>
 {
     title: "${title!""}",
+    dashletTitle: "${dashletTitle!""}",
     baseQuery : "${baseQuery!""}",
     isExist: ${isExist?string},
     "filters":

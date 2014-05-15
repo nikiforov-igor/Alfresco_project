@@ -33,11 +33,23 @@
                     <mandatory>true</mandatory>
                     <default>false</default>
                 </property>
+                <!-- Код АРМ для дашлета "Моя работа"-->
+                <property name="lecm-eds-globset:arm-for-dashlet">
+                    <type>d:text</type>
+                    <mandatory>false</mandatory>
+                    <default>SED</default>
+                </property>
 		    </properties>
             <associations>
                 <association name="lecm-eds-globset:arm-node-for-dashlet-assoc">
                     <target>
                         <class>lecm-arm:base-node</class>
+                        <many>false</many>
+                    </target>
+                </association>
+                <association name="lecm-eds-globset:arm-for-dashlet-assoc">
+                    <target>
+                        <class>lecm-arm:arm</class>
                         <many>false</many>
                     </target>
                 </association>

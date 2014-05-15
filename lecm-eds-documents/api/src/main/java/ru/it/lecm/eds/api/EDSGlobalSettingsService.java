@@ -25,6 +25,7 @@ public interface EDSGlobalSettingsService {
 	QName PROP_SETTINGS_CENTRALIZED_REGISTRATION = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "centralized-registration");
 	QName PROP_SETTINGS_HIDE_PROPS = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "hide-properties-for-recipients");
 	QName ASSOC_SETTINGS_ARM_DASHLET_NODE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "arm-node-for-dashlet-assoc");
+	QName ASSOC_SETTINGS_ARM_DASHLET = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "arm-for-dashlet-assoc");
 
 	QName TYPE_POTENTIAL_ROLE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role");
 	QName PROP_POTENTIAL_ROLE_BUSINESS_ROLE_REF = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-business-role-assoc-ref");
@@ -50,6 +51,8 @@ public interface EDSGlobalSettingsService {
 	Boolean isHideProperties();
 
 	NodeRef getArmDashletNode();
+
+    NodeRef getArm();
 
 	List<NodeRef> getRegistras(NodeRef employeeRef, String businessRoleId);
 }

@@ -31,7 +31,7 @@
 //]]></script>
 
 <div class="dashlet arm-documents">
-    <div class="title">СЭД: <#if settings?? && settings.title?length == 0>Дашлет не настроен<#else>${settings.title}</#if></div>
+    <div class="title"><#if settings?? && settings.dashletTitle?length == 0><#else>${settings.dashletTitle}</#if>: <#if settings?? && (settings.title?length == 0 || settings.dashletTitle?length == 0)>Дашлет не настроен<#else>${settings.title}</#if></div>
     <div class="toolbar flat-button">
         <div class="hidden">
          <span class="align-left yui-button yui-menu-button" id="${id}-filters">

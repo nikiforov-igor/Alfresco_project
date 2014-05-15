@@ -87,6 +87,7 @@
 			<value>armWrapper</value>
 		</property>
 		<property name="armWrapperService" ref="armWrapperService"/>
+		<property name="armService" ref="armService"/>
 		<property name="nodeService" ref="nodeService"/>
 	</bean>
 

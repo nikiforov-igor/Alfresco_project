@@ -63,6 +63,8 @@ LogicECM.module = LogicECM.module || {};
 
                 dependentFieldName: null,
 
+                dependentFieldArgKey: null,
+
                 webScriptUrl: null,
 
                 htmlId: null,
@@ -213,50 +215,46 @@ LogicECM.module = LogicECM.module || {};
 
             populateSelect: function AssociationCascadingSelectOne_populateSelect() {
                 if (this.options.defaultLoadData) {
-                this._createDataSource();
+                    this._createDataSource();
 
-                var successHandler = function (sRequest, oResponse, oPayload)
-                {
-                    var emptyOptions = this.selectItem.options[0];
-                    this.selectItem.innerHTML = "";
-                    this.selectItem.appendChild(emptyOptions);
+                    var successHandler = function (sRequest, oResponse, oPayload) {
+                        var emptyOptions = this.selectItem.options[0];
+                        this.selectItem.innerHTML = "";
+                        this.selectItem.appendChild(emptyOptions);
 
-                    var results = oResponse.results;
-                    for (var i = 0; i < results.length; i++) {
-                        var node = results[i];
-                        var opt = document.createElement('option');
-                        opt.innerHTML = node.name;
-                        opt.value = node.nodeRef;
-                        if (node.nodeRef == this.options.selectedValueNodeRef) {
-                            opt.selected = true;
+                        var results = oResponse.results;
+                        for (var i = 0; i < results.length; i++) {
+                            var node = results[i];
+                            var opt = document.createElement('option');
+                            opt.innerHTML = node.name;
+                            opt.value = node.nodeRef;
+                            if (node.nodeRef == this.options.selectedValueNodeRef) {
+                                opt.selected = true;
+                            }
+                            this.selectItem.appendChild(opt);
                         }
-                        this.selectItem.appendChild(opt);
-                    }
 
-                    this.onSelectChange();
-                }.bind(this);
+                        this.onSelectChange();
+                    }.bind(this);
 
-                var failureHandler = function (sRequest, oResponse)
-                {
-                    if (oResponse.status == 401)
-                    {
-                        // Our session has likely timed-out, so refresh to offer the login page
-                        window.location.reload();
-                    }
-                    else
-                    {
-                        //todo show failure message
-                    }
-                }.bind(this);
+                    var failureHandler = function (sRequest, oResponse) {
+                        if (oResponse.status == 401) {
+                            // Our session has likely timed-out, so refresh to offer the login page
+                            window.location.reload();
+                        }
+                        else {
+                            //todo show failure message
+                        }
+                    }.bind(this);
 
-                var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
+                    var url = this._generateChildrenUrlPath(this.options.parentNodeRef) + this._generateChildrenUrlParams("");
 
-                this.dataSource.sendRequest(url,
-                    {
-                        success: successHandler,
-                        failure: failureHandler,
-                        scope: this
-                    });
+                    this.dataSource.sendRequest(url,
+                        {
+                            success: successHandler,
+                            failure: failureHandler,
+                            scope: this
+                        });
                 }
             },
 
@@ -411,20 +409,21 @@ LogicECM.module = LogicECM.module || {};
                     var url = "";
                     this.selectItemId = this.options.htmlId + "_" + this.options.fieldId + "-added";
                     for (obj in  this.options.dependentFieldName) {
-                        var value = "";
+                        var value = null;
                         // ищем элементы в диалоговом окне
-                        var elementId = this.options.htmlId + "_assoc_" + this.options.dependentFieldName[obj] + "-added";
+                        var elementId = this.options.htmlId + "_assoc_" + this.options.dependentFieldName[obj];
                         if (Dom.get(elementId) != null){
                             value = Dom.get(elementId).value;
                         }
-                        elementId = this.options.htmlId + "_prop_" + this.options.dependentFieldName[obj] + "-added";
-                        if (Dom.get(elementId) != null){
-                            value = Dom.get(elementId).value;
+                        if (value == null) {
+                            elementId = this.options.htmlId + "_prop_" + this.options.dependentFieldName[obj];
+                            if (Dom.get(elementId) != null){
+                                value = Dom.get(elementId).value;
+                            }
                         }
-                        if (value != ""){
-                            url = url + this.options.dependentFieldName[obj] + "=" + value + "&";
+                        if (value != null){
+                            url = url + (this.options.dependentFieldArgKey[obj] != null ? this.options.dependentFieldArgKey[obj] : this.options.dependentFieldName[obj]) + "=" + value + "&";
                         }
-
                     }
 
                     if (url != "") {
