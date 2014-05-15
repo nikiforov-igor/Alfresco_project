@@ -118,6 +118,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+        <property name="propertiesService" ref="propertiesService"/>
 	</bean>
 
 	<bean id="orgstructurePrimaryPositionPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructurePrimaryPositionPolicy"
