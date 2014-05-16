@@ -93,6 +93,11 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 			return;
 		}
 
+		if (nodeService.getProperty(assigneesItem, LecmWorkflowModel.PROP_ASSIGNEE_ORDER) != null) {
+			// порядок указан явно. предположим, что создающий знает, что делает
+			return;
+		}
+
 		List<ChildAssociationRef> targetAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
 		for (ChildAssociationRef targetAssoc : targetAssocs) {
 			NodeRef listItem = targetAssoc.getChildRef();
