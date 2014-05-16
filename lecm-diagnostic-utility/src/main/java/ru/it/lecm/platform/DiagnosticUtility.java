@@ -37,14 +37,6 @@ public class DiagnosticUtility {
     private final static String CONTROL_INFO_HASH_FILENAME = File.separator + "utility.md5";
     private final static String RESULT_FILENAME = File.separator + "utility.zip";
 
-    //Названия архивов
-    private final static String LOGS_ARCHIVE_NAME = File.separator + "server-logs.zip";
-    private final static String SHARED_CLASSES_ARCHIVE_NAME = File.separator + "server-shared-classes.zip";
-    private final static String ALFRESCO_CONFIGS_ARCHIVE_NAME = File.separator + "alfresco-configs.zip";
-    private final static String SHARE_CONFIGS_ARCHIVE_NAME = File.separator + "share-configs.zip";
-    private final static String TOMCAT_CONFIGS_ARCHIVE_NAME = File.separator + "tomcat-configs.zip";
-    private final static String SOLR_CONFIGS_ARCHIVE_NAME = File.separator + "solr-configs.zip";
-
     //Файл с логом бизнес-журнала
     private final static String BJ_LOG_FILENAME = File.separator + "business-journal.csv";
     private final static String GET_BJ_RECORDS_SCRIPT_URL = "/service/lecm/business-journal/api/last-records?count=1000&includeArchive=true";
@@ -61,7 +53,14 @@ public class DiagnosticUtility {
     private final static String CONFIG_FILENAME = "utility-properties.cfg";
 
     //конфиги
-    private final static String ALF_HOME = "alf_home";
+    private final static String ALF_SETTINGS_PATH = "alf_settings_path";
+    private final static String ALF_DATA_PATH = "alf_data_path";
+    private final static String ALF_SERVER_SETTINS = "alf_server_settins";
+    private final static String ALF_SERVER_LOGS = "alf_server_logs";
+    private final static String ALF_REPO_INSTANCE_PATH = "alf_repo_instance_path";
+    private final static String ALF_SHARE_INSTANCE_PATH = "alf_share_instance_path";
+    private final static String ALF_SOLR_INSTANCE_PATH = "alf_solr_instance_path";
+
     private final static String OUTPUT_DIR = "output_dir";
     private final static String ADMIN_LOGIN = "admin_login";
     private final static String ADMIN_PASSWORD = "admin_password";
@@ -197,13 +196,13 @@ public class DiagnosticUtility {
 
     private static boolean checkServer() {
         //прочитать и распарсить настроечный файл альфреско
-        String alfrescoRootDirectory = config.get(ALF_HOME);
-        if (alfrescoRootDirectory == null) {
-            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
+        String settinsDirectory = config.get(ALF_SETTINGS_PATH);
+        if (settinsDirectory == null) {
+            log.error("Failed read property 'ALF_SETTINGS_PATH' from config file. Please check utility configuration!");
             return false;
         }
 
-        File settingsDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "shared", "classes"}));
+        File settingsDir = new File(settinsDirectory);
         List<File> settingsFile = findFiles(settingsDir, "alfresco-global.properties", false);
 
         File alfrescoProperties = null;
@@ -280,90 +279,97 @@ public class DiagnosticUtility {
 
     private static List<File> collectFiles() {
 
-        String alfrescoRootDirectory = config.get(ALF_HOME);
-        if (alfrescoRootDirectory == null) {
-            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
-            return null;
-        }
-
-        File alfRoot = new File(alfrescoRootDirectory);
-        if (!alfRoot.exists()) {
-            log.error("Failed read Alfresco Root Directory by Path: {}", alfrescoRootDirectory);
-            return null;
-        }
+        String alfSettingsPath = config.get(ALF_SETTINGS_PATH);
+        String alfDataPath = config.get(ALF_DATA_PATH);
+        String alfServerSettins = config.get(ALF_SERVER_SETTINS);
+        String alfServerLogs = config.get(ALF_SERVER_LOGS);
+        String alfRepoInstancePath = config.get(ALF_REPO_INSTANCE_PATH);
+        String alfShareInstancePath = config.get(ALF_SHARE_INSTANCE_PATH);
+        String alfSolrInstancePath = config.get(ALF_SOLR_INSTANCE_PATH);
 
         List<File> dataFiles = new ArrayList<File>();
         // Далее log files
         try {
-            dataFiles.addAll(collectLogFiles(alfrescoRootDirectory));
+            dataFiles.addAll(collectLogFiles(alfDataPath));
+            dataFiles.addAll(collectLogFiles(alfServerLogs));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
+
+
         // Далее properties и xml из shared/classes
         try {
-            dataFiles.addAll(collectSharedFiles(alfrescoRootDirectory));
+            dataFiles.addAll(collectSharedFiles(alfSettingsPath));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
 
         // Далее solr files
-        try {
-            dataFiles.addAll(collectSolrFiles(alfrescoRootDirectory));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+        if (alfDataPath != null && alfSolrInstancePath != null) {
+            try {
+                dataFiles.addAll(collectSolrFiles(alfDataPath, alfSolrInstancePath));
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
 
         // Далее конфиги томката
         try {
-            dataFiles.addAll(collectTomcatConfigs(alfrescoRootDirectory));
+            dataFiles.addAll(collectTomcatConfigs(alfServerSettins));
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
 
         // И наконец проходим по альфреско и шаре
-        try {
-            dataFiles.addAll(collectAlfrescoFiles(alfrescoRootDirectory));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+        if (alfRepoInstancePath != null) {
+            try {
+                dataFiles.addAll(collectAlfrescoFiles(alfRepoInstancePath));
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
-        try {
-            dataFiles.addAll(collectShareFiles(alfrescoRootDirectory));
-        } catch (Exception ex) {
-            log.error(ex.getMessage(), ex);
+
+        if (alfShareInstancePath != null) {
+            try {
+                dataFiles.addAll(collectShareFiles(alfShareInstancePath));
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
         }
         return dataFiles;
     }
 
-    private static List<File> collectLogFiles(String alfrescoRootDirectory) {
+    private static List<File> collectLogFiles(String path) {
         log.info("Archive log files started");
 
         List<File> alfrescoLogs = new ArrayList<File>();
-        alfrescoLogs.addAll(findFiles(alfrescoRootDirectory, ".*\\.log", true));
+        alfrescoLogs.addAll(findFiles(path, ".*\\.log", true));
 
         return alfrescoLogs;
     }
 
-    private static List<File> collectSharedFiles(String alfrescoRootDirectory) {
+    private static List<File> collectSharedFiles(String path) {
         log.info("Archive files from shared/classes directory started");
 
         List<File> alfrescoSharedClasses = new ArrayList<File>();
-        File sharedClassesDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "shared", "classes"}));
+        File sharedClassesDir = new File(path);
 
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.xml", true));
         alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, ".*\\.properties", true));
+        alfrescoSharedClasses.addAll(findFiles(sharedClassesDir, "lecmlicense", true));
 
         return alfrescoSharedClasses;
     }
 
-    private static List<File> collectTomcatConfigs(String alfrescoRootDirectory) {
+    private static List<File> collectTomcatConfigs(String path) {
         log.info("Archive tomcat config files started");
 
-        List<File> tomcatConfigs = new ArrayList<File>();
-        File tomcatDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "conf"}));
+        List<File> serverConfigs = new ArrayList<File>();
+        File confPath = new File(path);
 
-        tomcatConfigs.addAll(findFiles(tomcatDir, "", true));
+        serverConfigs.addAll(findFiles(confPath, "", true));
 
-        return tomcatConfigs;
+        return serverConfigs;
     }
 
     private static List<File> collectShareFiles(String alfrescoRootDirectory) {
@@ -373,38 +379,38 @@ public class DiagnosticUtility {
         File shareDir;
 
         //----- log4j.properties -------
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes"}));
         shareConfigs.addAll(findFiles(shareDir, "log4j.properties", false));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco", "module"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "module"}));
         shareConfigs.addAll(findFiles(shareDir, "module.properties", true));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco", "web-extension"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "web-extension"}));
         shareConfigs.addAll(findFiles(shareDir, ".*-share-config-custom\\.xml", true));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco"}));
         shareConfigs.addAll(findFiles(shareDir, ".*-share-context\\.xml|.*\\.config\\.xml", true));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF", "classes", "alfresco"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco"}));
         shareConfigs.addAll(findFiles(shareDir, ".*\\.xml", false));
 
-        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "share", "WEB-INF"}));
+        shareDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF"}));
         shareConfigs.addAll(findFiles(shareDir, ".*\\.xml", false));
 
         return shareConfigs;
     }
 
-    private static List<File> collectSolrFiles(String alfrescoRootDirectory) {
+    private static List<File> collectSolrFiles(String dataPath, String instancePath) {
         log.info("Archive solr files started");
 
         List<File> solrFiles = new ArrayList<File>();
-        File solrWorkSpaceDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"alf_data", "solr", "workspace-SpacesStore"}));
+        File solrWorkSpaceDir = new File(buildFilePath(dataPath, new String[]{"solr", "workspace-SpacesStore"}));
         solrFiles.addAll(findFiles(solrWorkSpaceDir, "", true));
 
-        File solrArchiveDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"alf_data", "solr", "archive-SpacesStore"}));
+        File solrArchiveDir = new File(buildFilePath(dataPath, new String[]{"solr", "archive-SpacesStore"}));
         solrFiles.addAll(findFiles(solrArchiveDir, "", true));
 
-        File solrConfigDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "solr", "WEB-INF"}));
+        File solrConfigDir = new File(buildFilePath(instancePath, new String[]{"WEB-INF"}));
         solrFiles.addAll(findFiles(solrConfigDir, ".*\\.xml", true));
 
         return solrFiles;
@@ -417,60 +423,60 @@ public class DiagnosticUtility {
         File alfrescoDir;
 
         //----- log4j.properties -------
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, "log4j.properties", true));
 
         //----- *.properties -------
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "domain"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "domain"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.properties", true));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "keystore"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "keystore"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.properties", true));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "subsystems"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "subsystems"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.properties", true));
 
         //----- module ----------
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "module"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "module"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, "module.properties|.*-context\\.xml|.*-model\\.xml|.*bpmn20\\.xml", true));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "model"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "model"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "bootstrap"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "bootstrap"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "dao"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "dao"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "ibatis"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "ibatis"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "jgroups"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "jgroups"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "ml"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "ml"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "mimetype"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "mimetype"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "mt"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "mt"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "subsystems"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "subsystems"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "templates"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "templates"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
-        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"tomcat", "webapps", "alfresco", "WEB-INF", "classes", "alfresco", "workflow"}));
+        alfrescoDir = new File(buildFilePath(alfrescoRootDirectory, new String[]{"WEB-INF", "classes", "alfresco", "workflow"}));
         alfrescoConfigs.addAll(findFiles(alfrescoDir, ".*\\.xml", false));
 
         return alfrescoConfigs;
@@ -503,7 +509,7 @@ public class DiagnosticUtility {
         return new ArrayList<File>();
     }
 
-    private static long writeFilesToArchive(final List<File> filesToWrite, final File alfrescoRoot, final File zipFile) {
+    private static long writeFilesToArchive(final List<File> filesToWrite, final File zipFile) {
         long numberOfArchivedFiles = 0;
 
         Deque<File> queue = new LinkedList<File>();
@@ -521,6 +527,15 @@ public class DiagnosticUtility {
         boolean isOk = false;
 
         try {
+
+            String alfSettingsPath = new File(config.get(ALF_SETTINGS_PATH)).getAbsolutePath();
+            String alfDataPath = new File(config.get(ALF_DATA_PATH)).getAbsolutePath();
+            String alfServerSettins = new File(config.get(ALF_SERVER_SETTINS)).getAbsolutePath();
+            String alfServerLogs = new File(config.get(ALF_SERVER_LOGS)).getAbsolutePath();
+            String alfRepoInstancePath = config.get(ALF_REPO_INSTANCE_PATH) == null ? null : new File(config.get(ALF_REPO_INSTANCE_PATH)).getAbsolutePath();
+            String alfShareInstancePath = config.get(ALF_SHARE_INSTANCE_PATH) == null ? null : new File(config.get(ALF_SHARE_INSTANCE_PATH)).getAbsolutePath();
+            String alfSolrInstancePath = config.get(ALF_SOLR_INSTANCE_PATH) == null ? null : new File(config.get(ALF_SOLR_INSTANCE_PATH)).getAbsolutePath();
+
             if (!zipFile.exists()) {
                 zipFile.createNewFile();
             }
@@ -532,8 +547,21 @@ public class DiagnosticUtility {
                 File compressedFile = queue.pop();
 
                 String name;
-                if (compressedFile.getAbsolutePath().toLowerCase().startsWith(alfrescoRoot.getAbsolutePath().toLowerCase())) {
-                    name = finder.getRelativePath(alfrescoRoot, compressedFile);
+                String fileName = compressedFile.getAbsolutePath();
+                if (alfRepoInstancePath != null && fileName.startsWith(alfRepoInstancePath)) {
+                    name = fileName.replace(alfRepoInstancePath, "alfresco");
+                } else if (alfShareInstancePath != null && fileName.startsWith(alfShareInstancePath)) {
+                    name = fileName.replace(alfShareInstancePath, "share");
+                } else if (alfSolrInstancePath != null && fileName.startsWith(alfSolrInstancePath)) {
+                    name = fileName.replace(alfSolrInstancePath, "solr");
+                } else if (fileName.startsWith(alfServerLogs)) {
+                    name = fileName.replace(alfServerLogs, "server_logs");
+                } else if (fileName.startsWith(alfServerSettins)) {
+                    name = fileName.replace(alfServerSettins, "server_settings");
+                } else if (fileName.startsWith(alfDataPath)) {
+                    name = fileName.replace(alfDataPath, "data");
+                } else if (fileName.startsWith(alfSettingsPath)) {
+                    name = fileName.replace(alfSettingsPath, "settings");
                 } else {
                     name = compressedFile.getName();
                 }
@@ -925,12 +953,6 @@ public class DiagnosticUtility {
         File aclTreeFile = null;
         File controlFile = null;
 
-        String alfrescoRootDirectory = config.get(ALF_HOME);
-        if (alfrescoRootDirectory == null) {
-            log.error("Failed read property 'alf_home' from config file. Please check utility configuration!");
-            return;
-        }
-
         log.info("Started collecting diagnostic information ...");
         boolean success;
         //Фаза 1 - Получение системных переменных и параметров сервера
@@ -1037,7 +1059,7 @@ public class DiagnosticUtility {
 
         dataFiles.add(new File(currentDirectoryPath + File.separator + CONTROL_INFO_FILENAME));
 
-        writeFilesToArchive(dataFiles, new File(alfrescoRootDirectory), data);
+        writeFilesToArchive(dataFiles, data);
 
         //Удаляем временные файлы
         if (bjLogFile != null) {
