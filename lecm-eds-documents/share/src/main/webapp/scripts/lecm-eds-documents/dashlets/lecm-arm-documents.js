@@ -128,7 +128,7 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
             loadDocuments: function () {
                 var me = this;
                 if (this.options.isExist) {
-                    Alfresco.util.Ajax.jsonGet(
+                    Alfresco.util.Ajax.jsonPost(
                         {
                             url: Alfresco.constants.PROXY_URI + "lecm/document/getDocumentsByQuery",
                             dataObj: {

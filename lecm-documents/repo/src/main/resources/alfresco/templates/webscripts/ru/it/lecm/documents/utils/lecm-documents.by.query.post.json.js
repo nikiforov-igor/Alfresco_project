@@ -1,7 +1,7 @@
-var skipCount = args["skipCount"] != null ? parseInt(args["skipCount"]) : 0;
-var loadCount = args["loadCount"] != null ? parseInt(args["loadCount"]) : -1;
+var skipCount = json.has("skipCount") ? parseInt(json.get("skipCount")) : 0;
+var loadCount = json.has("loadCount") ? parseInt(json.get("loadCount")) : -1;
 
-var documents = documentScript.getDocumentsByQuery(args["query"], skipCount, loadCount);
+var documents = documentScript.getDocumentsByQuery(json.get("query"), skipCount, loadCount);
 
 var items = [];
 
