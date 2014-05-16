@@ -35,6 +35,13 @@ LogicECM.module = LogicECM.module || {};
 
 			return hiddenField;
 		},
+		_generateTransitionButtons: function() {
+			// create a submit button for each transition
+			for (var i = 0, ii = this.options.transitions.length; i < ii; i++) {
+				this._generateTransitionButton(this.options.transitions[i]);
+			}
+			YAHOO.Bubbling.fire('mandatoryControlValueUpdated', this);
+		},
 		/**
 		 * Generates a YUI button for the given transition.
 		 *
