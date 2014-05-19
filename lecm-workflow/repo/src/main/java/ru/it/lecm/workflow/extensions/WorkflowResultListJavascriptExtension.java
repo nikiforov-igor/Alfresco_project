@@ -34,14 +34,14 @@ public class WorkflowResultListJavascriptExtension extends BaseWebScript {
 		QName resultListQName = QName.createQName(resultListType, namespaceService);
 		NodeRef resultList = workflowResultListService.createResultList(parentRef.getNodeRef(), bpmPackage.getNodeRef(), documentAttachmentCategoryName, resultListQName, resultListName);
 
-		return new ScriptNode(resultList, serviceRegistry);
+		return new ScriptNode(resultList, serviceRegistry, getScope());
 	}
 
 	public ScriptNode createResultList(ScriptNode parentRef, String resultListType, String resultListName, String documentVersion) {
 		QName resultListQName = QName.createQName(resultListType, namespaceService);
 		NodeRef resultList = workflowResultListService.createResultList(parentRef.getNodeRef(), resultListQName, resultListName, documentVersion);
 
-		return new ScriptNode(resultList, serviceRegistry);
+		return new ScriptNode(resultList, serviceRegistry, getScope());
 	}
 
 	public ScriptNode createResultItem(ScriptNode resultListRef, ScriptNode employeeRef, String itemTitle, Object jsDueDate, int order, String resultItemType) {
@@ -55,7 +55,7 @@ public class WorkflowResultListJavascriptExtension extends BaseWebScript {
 		QName resultItemQName = QName.createQName(resultItemType, namespaceService);
 		NodeRef resultItem = workflowResultListService.createResultItem(resultListRef.getNodeRef(), employeeRef.getNodeRef(), itemTitle, dueDate, order, resultItemQName);
 
-		return new ScriptNode(resultItem, serviceRegistry);
+		return new ScriptNode(resultItem, serviceRegistry, getScope());
 	}
 
 }
