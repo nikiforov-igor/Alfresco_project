@@ -322,16 +322,31 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
 		// проверка на тот случай, что полиси вызвана во время старта системы, когда происходит обнуление системной проперти
 		if (PolicyUtils.safeEquals(before.get(ContentModel.PROP_SIZE_CURRENT), after.get(ContentModel.PROP_SIZE_CURRENT))) {
-			// мы не будем создавать сотрудника для неактивных или неправильно заполненных пользователей
-			if (personNeedsEmployee(person)) {
-				final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
-						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-						OrgstructureBean.TYPE_EMPLOYEE);
+                // мы не будем создавать сотрудника для неактивных или неправильно заполненных пользователей
+                if (personNeedsEmployee(person)) {
+                    try {
+                        Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
+                        boolean enabled;
+                        if (editorEnabled == null) {
+                            enabled = true;
+                        } else {
+                            enabled = Boolean.valueOf((String) editorEnabled);
+                        }
+                        if (enabled) {
+                            final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
+                                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
+                                    OrgstructureBean.TYPE_EMPLOYEE);
 
-				final NodeRef employeeNode = employeeNodeRef.getChildRef();
+                            final NodeRef employeeNode = employeeNodeRef.getChildRef();
 
-				// после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
-				nodeService.createAssociation(employeeNode, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+                            // после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
+                            nodeService.createAssociation(employeeNode, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+                        }
+                } catch (LecmBaseException e) {
+                    logger.error("Cannot read orgstructure properties");
+                }
+
+
 				/*
 				 * Нас интересует, не были ли изменены следующие атрибуты: cm:firstName, cm:lastName, cm:email, cm:telephone
 				 * Атрибуты для сравнени лежат в AFFECTED_PERSON_PROPERTIES
