@@ -9,7 +9,10 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.LinksResolver;
+import ru.it.lecm.reports.generators.SubreportBuilder;
+import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -126,7 +129,7 @@ public class NodeUtils {
      * @param resolver   LinksResolver
      * @return полученное значение
      */
-    public static Object getByLink(String sourceLink, NodeRef docId, Map<QName, Serializable> props, LinksResolver resolver) {
+    public static Object getByLink(String sourceLink, NodeRef docId, Map<QName, Serializable> props, LinksResolver resolver, SubreportBuilder builder) {
         if (sourceLink == null) {
             return null;
         }
@@ -151,9 +154,24 @@ public class NodeUtils {
                 }
                 value = resolver.evaluateLinkExpr(docId, sourceLink, null, propsMap);
             } else { // простое значение выбираем в свойствах
+                if (!sourceLink.matches(SubreportBuilder.REGEXP_SUBREPORTLINK)) {
+                    final QName qname = QName.createQName(sourceLink, ns);
+                    value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
+                } else {
+                    logger.debug("Include subreport :" + sourceLink);
+                    SubreportBuilder b = null;
+                    if (builder.getSubreport().getSubreports() != null) {
+                        for (ReportDescriptor desc : builder.getSubreport().getSubreports()) {
+                            if (sourceLink.equals("{{subreport::" + desc.getMnem() + "}}")) {
+                                b = new SubreportBuilder((SubReportDescriptorImpl) desc, resolver);
+                            }
+                        }
+                    } else {
+                        logger.debug("Cannot find subreports  for " + builder.getSubreport().getMnem() + ". Skip results");
+                    }
 
-                final QName qname = QName.createQName(sourceLink, ns);
-                value = (props != null) ? props.get(qname) : nodeService.getProperty(docId, qname);
+                    value = b != null ? b.buildSubreport(docId, b.getSubreport().getSourceListExpression()) : new ArrayList();
+                }
             }
         } catch (Throwable ex) {
             if (logger != null) {

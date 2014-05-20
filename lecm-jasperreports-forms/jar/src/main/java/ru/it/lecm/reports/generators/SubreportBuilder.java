@@ -225,7 +225,7 @@ public class SubreportBuilder {
                 for (String sourceLink : sourceLinks) {
                     sourceLink = sourceLink.trim();
                     if (sourceLink.length() > 0) {
-                        final Object value = NodeUtils.getByLink(sourceLink, subItemId, props, resolver);
+                        final Object value = NodeUtils.getByLink(sourceLink, subItemId, props, resolver, this);
                         if (value != null && !((value instanceof String) && ((String) value).length() == 0)) {
                             // found non-null / not-empty
                             fldValue = value;
