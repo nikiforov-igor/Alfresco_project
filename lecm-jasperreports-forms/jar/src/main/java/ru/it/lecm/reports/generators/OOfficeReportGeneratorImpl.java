@@ -272,7 +272,7 @@ public class OOfficeReportGeneratorImpl extends ReportGeneratorBase {
 		/* Получение данных шаблона отчёта */
 		final ContentReader reader;
 
-		final String reportTemplateFileName = templateDescriptor.getFileName();
+		final String reportTemplateFileName = getReportsManager().getTemplateFileName(reportDesc, templateDescriptor, fileExtension);
 
 		reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportTemplateFileName));
 		if (reader == null) {

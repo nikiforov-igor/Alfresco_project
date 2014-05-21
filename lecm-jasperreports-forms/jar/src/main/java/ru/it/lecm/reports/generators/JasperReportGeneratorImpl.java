@@ -47,7 +47,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         ReportFileData result = new ReportFileData();
 
-        final String reportFileName = templateDescriptor.getFileName().replace("jrxml", "jasper");
+        final String reportFileName = getReportsManager().getTemplateFileName(reportDesc,templateDescriptor, ".jasper");
         final ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
 
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -216,7 +216,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         try {
             JasperCompileManager.compileReportToStream(inData, outData);
-            final IdRContent id = IdRContent.createId(desc, template.getFileName().replace("jrxml", "jasper"));
+            final IdRContent id = IdRContent.createId(desc, getReportsManager().getTemplateFileName(desc, template, ".jasper"));
             storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
         } catch (JRException ex) {
             final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());

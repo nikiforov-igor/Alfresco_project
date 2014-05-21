@@ -17,10 +17,7 @@ import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
-import ru.it.lecm.reports.model.impl.ReportDefaultsDesc;
-import ru.it.lecm.reports.model.impl.ReportTemplate;
-import ru.it.lecm.reports.model.impl.ReportType;
-import ru.it.lecm.reports.model.impl.SubReportDescriptorImpl;
+import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.utils.ParameterMapper;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
@@ -357,6 +354,7 @@ public class ReportsManager {
      */
     public void registerReportDescriptor(ReportDescriptor desc) {
         if (desc != null) {
+            this.contentRepositoryDAO.delete(new ReportContentDAO.IdRContent(desc.getMnem(),  "*"));
             if (desc.getSubreports() != null) {
                 for (ReportDescriptor subReportDescriptor : desc.getSubreports()) {
                     registerReportDescriptor(subReportDescriptor);
@@ -364,7 +362,9 @@ public class ReportsManager {
             }
             createDsFile(desc); // создание ds-xml
             saveReportTemplate(desc); // сохранение шаблонов отчёта и подотчётов
-            getDescriptors().put(desc.getMnem(), desc);
+            if (desc instanceof ReportDescriptorImpl) {
+                getDescriptors().put(desc.getMnem(), desc);
+            }
             logger.info(String.format("Report descriptor with name '%s' registered!", desc.getMnem()));
         }
     }
@@ -485,8 +485,7 @@ public class ReportsManager {
         templateFileData.setEncoding("UTF-8");
         templateFileData.setMimeType(findMimeType(extension));
 
-        final String templateFileName = template.getFileName();
-        templateFileData.setFilename(templateFileName != null ? templateFileName : getTemplateFileName(desc, template, extension));
+        templateFileData.setFilename(getTemplateFileName(desc, template, extension));
         return storeAsContent(templateFileData, reportRef);
     }
 
@@ -899,7 +898,6 @@ public class ReportsManager {
         for (ReportTemplate template : desc.getReportTemplates()) {
             final String rtag = getReportTypeTag(template.getReportType());
             final ReportDefaultsDesc def = getReportDefaults().get(rtag);
-            final String templateFileName = template.getFileName();
 		    /* сохранение в репозиторий "шаблона отчёта"... */
             try {
                 byte[] templateRawData = null;
@@ -911,7 +909,7 @@ public class ReportsManager {
 
                     final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
 
-                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, templateFileName != null ? templateFileName : getTemplateFileName(desc, template, ext));
+                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, getTemplateFileName(desc, template, ext));
 
                     templateRawData = byteStream.toByteArray();
 
@@ -954,7 +952,7 @@ public class ReportsManager {
         for (ReportTemplate template : descriptor.getReportTemplates()) {
             final String rtag = getReportTypeTag(template.getReportType());
             final ReportDefaultsDesc def = getReportDefaults().get(rtag);
-            final String templateFileName = template.getFileName();
+            final String templateFileName = template.getMnem();
 		/* сохранение в репозиторий "шаблона отчёта"... */
             InputStream baStm = null;
             byte[] templateRawData;
@@ -1058,7 +1056,7 @@ public class ReportsManager {
                     throw new RuntimeException(
                             String.format("Report Template '%s' must have Report Type! Please check Representation Template and his Type!", template.getMnem()));
                 }
-                if (template.getFileName() == null) {
+                if (template.getFileName() == null || template.getMnem() == null) {
                     throw new RuntimeException(
                             String.format("Report '%s' must have Representation Template! Please select template from dictionary or create new!", template.getMnem()));
                 }
@@ -1084,7 +1082,7 @@ public class ReportsManager {
                 throw new RuntimeException(
                         String.format("Report Template '%s' must have Report Type! Please check Representation Template and his Type!", template.getMnem()));
             }
-            if (template.getFileName() == null) {
+            if (template.getFileName() == null || template.getMnem() == null) {
                 throw new RuntimeException(
                         String.format("Report '%s' must have Representation Template! Please select template from dictionary or create new!", template.getMnem()));
             }

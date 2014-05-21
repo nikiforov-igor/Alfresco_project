@@ -79,7 +79,7 @@ public abstract class LogicECMAssociationPolicy implements NodeServicePolicies.O
 		if (propertyDefinition != null) {
 			Serializable oldValue = nodeService.getProperty(record, propertyTextQName);
 			String strOldValue = oldValue != null ? oldValue.toString() : "";
-			Serializable newValue = getSerializable(nodeAssocRef.getTargetRef());
+			Serializable newValue = nodeService.exists(nodeAssocRef.getTargetRef()) ? getSerializable(nodeAssocRef.getTargetRef()) : "";
 			String strNewValue = newValue.toString();
 			if (!strOldValue.contains(strNewValue)) {
 				if (!strOldValue.isEmpty()) {

@@ -462,7 +462,7 @@ public class XMLMacroGenerator {
                     , this.reportDesc != null ? this.reportDesc.getMnem() : null));
         }
 
-        if (this.templateDesc == null || this.templateDesc.getFileName() == null) {
+        if (this.templateDesc == null || this.templateDesc.getFileName() == null || this.templateDesc.getMnem() == null) {
             logger.info(String.format("No report template present for report '%s' -> producing empty macros"
                     , this.templateDesc != null ? this.templateDesc.getMnem() : null));
         }
@@ -1717,12 +1717,11 @@ public class XMLMacroGenerator {
             super();
             this.desc = desc;
             this.index = colIndex;
-            if (desc != null) {
-                if (desc.getReportTemplates() != null && !desc.getReportTemplates().isEmpty()) {
-                    this.template = desc.getReportTemplates().get(0); // для подотчетов - всегда берем  первый шаблон!
-                    if (this.template != null) {
-                        this.templateName = this.template.getFileName().substring(0, this.template.getFileName().lastIndexOf("."));
-                    }
+            this.templateName = desc.getMnem() + "_";
+            if (desc.getReportTemplates() != null && !desc.getReportTemplates().isEmpty()) {
+                this.template = desc.getReportTemplates().get(0); // для подотчетов - всегда берем  первый шаблон!
+                if (this.template != null) {
+                    this.templateName = desc.getMnem() + "_" + this.template.getMnem();
                 }
             }
         }
