@@ -119,6 +119,7 @@
                             YAHOO.Bubbling.fire("activeGridChanged", {
                                 datagridMeta: {
                                     itemType: "lecm-rpeditor:reportDataSource",
+                                    useChildQuery: true,
                                     nodeRef: LogicECM.module.ReportsEditor.SETTINGS.sourcesContainer
                                 },
                                 bubblingLabel: "${sourceListLabel}"

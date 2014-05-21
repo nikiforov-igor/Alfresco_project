@@ -233,9 +233,10 @@
 
         _treeNodeSelected: function (node) {
             var nodeId = this._getTextNodeId(node);
-            if ((typeof this.selectedNode  === "undefined" || this.selectedNode === null)|| (this.menuState.selected != nodeId)) {
                 this.selectedNode = node;
-                this.tree.onEventToggleHighlight(node);
+                if (this.menuState.selected != nodeId) {
+                    this.tree.onEventToggleHighlight(node);
+                }
 
                 this.menuState.selected = nodeId;
 
@@ -262,7 +263,6 @@
                         });
                 }
                 this.preferences.set(this.PREFERENCE_KEY, this._buildPreferencesValue(), {successCallback: success});
-            }
         },
 
         _isNodeExpanded: function (nodeId) {

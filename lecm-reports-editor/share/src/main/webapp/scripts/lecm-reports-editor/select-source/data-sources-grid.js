@@ -38,6 +38,7 @@ YAHOO.lang.augmentObject(LogicECM.module.ReportsEditor.SourcesGrid.prototype, {
                     datagridMeta: {
                         itemType: "lecm-rpeditor:reportDataColumn",
                         nodeRef: nodeRef,
+                        useChildQuery:true,
                         sort: "lecm-rpeditor:dataColumnCode|true"
                     },
                     bubblingLabel: this.options.bubblingLabel.replace("sourcesList", "sourceColumns")

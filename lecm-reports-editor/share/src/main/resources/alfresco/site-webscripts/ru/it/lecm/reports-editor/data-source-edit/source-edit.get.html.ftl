@@ -123,6 +123,7 @@
                         datagridMeta: {
                             itemType: "lecm-rpeditor:reportDataColumn",
                             nodeRef: "${activeSourceId!"NOT_LOAD"}",
+                            useChildQuery: true,
                             actionsConfig: {
                                 fullDelete: true,
                                 trash: false
