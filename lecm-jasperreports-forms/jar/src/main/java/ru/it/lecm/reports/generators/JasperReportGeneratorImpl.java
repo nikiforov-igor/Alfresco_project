@@ -47,9 +47,13 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         ReportFileData result = new ReportFileData();
 
-        final String reportFileName = getReportsManager().getTemplateFileName(reportDesc,templateDescriptor, ".jasper");
-        final ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+        String reportFileName = getReportsManager().getTemplateFileName(reportDesc,templateDescriptor, ".jasper");
+        ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
 
+        if (reader == null) { // ищем файлы под старыми именами
+            reportFileName = templateDescriptor.getFileName().replace("jrxml", "jasper");
+            reader =  rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+        }
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
         try {
