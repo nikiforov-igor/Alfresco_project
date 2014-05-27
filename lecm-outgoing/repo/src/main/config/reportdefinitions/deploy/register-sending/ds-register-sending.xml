@@ -12,7 +12,7 @@
         </provider>
         <templates>
             <template filename="register-sending_list.jrxml"
-                mnem="List" type="JASPER">
+                mnem="list" type="JASPER">
                 <l18>
                     <item key="RU_RU"><![CDATA[Список]]></item>
                 </l18>

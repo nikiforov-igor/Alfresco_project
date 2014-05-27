@@ -11,7 +11,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="exec-discipline-by-executor.jrxml" mnem="exec-discipline-by-executor">
+            <template type="JASPER" filename="exec-discipline-by-executor_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="exec-discipline-by-executor"/>
                 </l18>

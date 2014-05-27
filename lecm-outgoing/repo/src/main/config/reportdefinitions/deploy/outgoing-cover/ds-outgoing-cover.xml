@@ -15,12 +15,12 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="outgoing-cover_c5.jrxml" mnem="outgoing-cover_c5">
+            <template type="JASPER" filename="outgoing-cover_c5.jrxml" mnem="c5">
                 <l18>
                     <item key="RU_RU"><![CDATA[Конверт С5]]></item>
                 </l18>
             </template>
-            <template type="JASPER" filename="outgoing-cover_dl.jrxml" mnem="outgoing-cover_dl">
+            <template type="JASPER" filename="outgoing-cover_dl.jrxml" mnem="dl">
                 <l18>
                     <item key="RU_RU"><![CDATA[Конверт DL]]></item>
                 </l18>

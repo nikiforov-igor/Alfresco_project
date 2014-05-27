@@ -48,7 +48,7 @@
            </l18>
         </provider>
         <templates>
-            <template mnem="docflow-counters" type="JASPER" filename="docflow-counters.jrxml"/>
+            <template mnem="tmpl" type="JASPER" filename="docflow-counters_tmpl.jrxml"/>
         </templates>
         <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
     </report.descriptor>

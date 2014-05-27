@@ -24,7 +24,7 @@
 			</l18>
 		</provider>
 		<templates>
-			<template mnem="approval-discipline" type="JASPER" filename="approval-discipline.jrxml"/>
+			<template mnem="tmpl" type="JASPER" filename="approval-discipline_tmpl.jrxml"/>
 		</templates>
         <roles>CONTRACT_READER,CONTRACT_RECORDER,CONTRACT_EXECUTOR,CONTRACT_CURATOR,CONTRACT_SIGNER</roles>
 	</report.descriptor>

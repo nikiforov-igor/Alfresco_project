@@ -842,16 +842,16 @@ ZD4KICAgIDwvZGV0YWlsPgo8L2phc3BlclJlcG9ydD4K
             </item>
             <item name="cm:Приказ" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[Приказ]]></property>
-                <property name="lecm-rpeditor:templateCode"><![CDATA[ord-content-order-tmpl]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[order-tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/OOffice"/>
                     <assoc type="lecm-rpeditor:reportTemplateFile"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Контент ОРД/ord-content_ord-content-order-tmpl.odt"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Контент ОРД/ord-content_order-tmpl.odt"/>
                 </assocs>
             </item>
-            <item name="cm:ord-content_ord-content-order-tmpl.odt" type="cm:content">
-                <property name="cm:name"><![CDATA[ord-content_ord-content-order-tmpl.odt]]></property>
+            <item name="cm:ord-content_order-tmpl.odt" type="cm:content">
+                <property name="cm:name"><![CDATA[ord-content_order-tmpl.odt]]></property>
                 <property name="cm:content"><![CDATA[UEsDBBQAAAgAAHVfdURexjIMJwAAACcAAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi92bmQub2Fz
 aXMub3BlbmRvY3VtZW50LnRleHRQSwMEFAAICAgAdV91RAAAAAAAAAAAAAAAAAgAAABtZXRhLnht
 bLVWy47bNhTd5ysEtVs9bVcWYSuLNFk1aNBM0GVAU9cethIpkNR4BkGAILPvtkCB/oMbNGg7bdpf
@@ -1070,16 +1070,16 @@ AHAEAAC5KgAAAAA=
             </item>
             <item name="cm:Распоряжение" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[Распоряжение]]></property>
-                <property name="lecm-rpeditor:templateCode"><![CDATA[ord-content-command-tmpl]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[command-tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/OOffice"/>
                     <assoc type="lecm-rpeditor:reportTemplateFile"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Контент ОРД/Копия ord-content_ord-content-command-tmpl.odt"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Контент ОРД/ord-content_command-tmpl.odt"/>
                 </assocs>
             </item>
-            <item name="cm:Копия ord-content_ord-content-command-tmpl.odt" type="cm:content">
-                <property name="cm:name"><![CDATA[Копия ord-content_ord-content-command-tmpl.odt]]></property>
+            <item name="cm:ord-content_command-tmpl.odt" type="cm:content">
+                <property name="cm:name"><![CDATA[ord-content_command-tmpl.odt]]></property>
                 <property name="cm:content"><![CDATA[UEsDBBQAAAgAAH1fdURexjIMJwAAACcAAAAIAAAAbWltZXR5cGVhcHBsaWNhdGlvbi92bmQub2Fz
 aXMub3BlbmRvY3VtZW50LnRleHRQSwMEFAAICAgAfV91RAAAAAAAAAAAAAAAAAgAAABtZXRhLnht
 bLVWy47bNhTd5ysEpVuJejmWBVtZpAm6aNCgmaDLgKauPWwlUiCp8QyCAEFm322BAvkHJ2jQZpK0

@@ -11,7 +11,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="exec-prod-by-orgunit.jrxml" mnem="exec-prod-by-orgunit">
+            <template type="JASPER" filename="exec-prod-by-orgunit_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="exec-prod-by-orgunit"/>
                 </l18>

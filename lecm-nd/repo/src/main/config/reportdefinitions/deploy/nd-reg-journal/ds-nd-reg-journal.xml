@@ -11,8 +11,8 @@
             </l18>
         </provider>
         <templates>
-            <template filename="nd-reg-journal.jrxml"
-                mnem="default" type="JASPER">
+            <template filename="nd-reg-journal_tmpl.jrxml"
+                mnem="tmpl" type="JASPER">
                 <l18>
                     <item key="RU_RU"><![CDATA[Шаблон]]></item>
                 </l18>

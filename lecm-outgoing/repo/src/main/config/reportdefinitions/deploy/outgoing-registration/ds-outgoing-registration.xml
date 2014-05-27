@@ -15,7 +15,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="outgoing-registration.jrxml" mnem="outgoing-registration">
+            <template type="JASPER" filename="outgoing-registration_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU"><![CDATA[outgoing-registration-template]]></item>
                 </l18>

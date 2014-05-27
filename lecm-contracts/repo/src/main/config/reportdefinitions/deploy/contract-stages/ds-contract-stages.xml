@@ -11,7 +11,7 @@
             </l18>
         </provider>
         <templates>
-            <template filename="contract-stages.jrxml" type="JASPER" mnem="contract-stages-template">
+            <template filename="contract-stages_tmpl.jrxml" type="JASPER" mnem="tmpl">
                 <l18>
                     <item key="RU_RU"><![CDATA[contract-stages-template]]></item>
                 </l18>

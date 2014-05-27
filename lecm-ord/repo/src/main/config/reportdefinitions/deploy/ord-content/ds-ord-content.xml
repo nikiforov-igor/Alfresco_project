@@ -13,14 +13,14 @@
         <templates>
             <template
                 filename="ord-content_ord-content-order-tmpl.odt"
-                mnem="ord-content-order-tmpl" type="OOFFICE">
+                mnem="order-tmpl" type="OOFFICE">
                 <l18>
                     <item key="RU_RU"><![CDATA[Приказ]]></item>
                 </l18>
             </template>
             <template
                 filename="ord-content_ord-content-command-tmpl.odt"
-                mnem="ord-content-command-tmpl" type="OOFFICE">
+                mnem="command-tmpl" type="OOFFICE">
                 <l18>
                     <item key="RU_RU"><![CDATA[Распоряжение]]></item>
                 </l18>

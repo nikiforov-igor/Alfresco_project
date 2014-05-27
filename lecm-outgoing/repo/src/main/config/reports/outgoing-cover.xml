@@ -118,7 +118,7 @@
             </item>
             <item name="cm:Конверт С5" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[Конверт С5]]></property>
-                <property name="lecm-rpeditor:templateCode"><![CDATA[outgoing-cover_c5]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[c5]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
@@ -222,7 +222,7 @@ aWw+CjwvamFzcGVyUmVwb3J0Pgo=
             </item>
             <item name="cm:Конверт DL" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[Конверт DL]]></property>
-                <property name="lecm-rpeditor:templateCode"><![CDATA[outgoing-cover_dl]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[dl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>

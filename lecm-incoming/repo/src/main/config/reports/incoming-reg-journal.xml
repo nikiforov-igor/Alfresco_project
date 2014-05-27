@@ -141,16 +141,16 @@
             </item>
             <item name="cm:incoming-reg-journal" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[incoming-reg-journal]]></property>
-                <property name="lecm-rpeditor:templateCode"><![CDATA[incoming-reg-journal]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[tmpl]]></property>
                 <assocs>
                     <assoc type="lecm-rpeditor:reportTemplateType"
                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
                     <assoc type="lecm-rpeditor:reportTemplateFile"
-                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации входящих документов/incoming-reg-journal.jrxml"/>
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации входящих документов/incoming-reg-journal_tmpl.jrxml"/>
                 </assocs>
             </item>
-            <item name="cm:incoming-reg-journal.jrxml" type="cm:content">
-                <property name="cm:name"><![CDATA[incoming-reg-journal.jrxml]]></property>
+            <item name="cm:incoming-reg-journal_tmpl.jrxml" type="cm:content">
+                <property name="cm:name"><![CDATA[incoming-reg-journal_tmpl.jrxml]]></property>
                 <property name="cm:content"><![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGphc3BlclJlcG9ydCB4bWxu
 cz0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMiIHht
 bG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpz

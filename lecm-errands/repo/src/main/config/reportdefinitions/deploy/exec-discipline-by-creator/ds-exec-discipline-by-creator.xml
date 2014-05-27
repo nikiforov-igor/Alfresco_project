@@ -12,7 +12,7 @@
         </provider>
         <templates>
             <template
-                    filename="exec-discipline-by-creator.jrxml" type="JASPER" mnem="exec-discipline-by-creator">
+                    filename="exec-discipline-by-creator_tmpl.jrxml" type="JASPER" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="exec-discipline-by-creator"/>
                 </l18>

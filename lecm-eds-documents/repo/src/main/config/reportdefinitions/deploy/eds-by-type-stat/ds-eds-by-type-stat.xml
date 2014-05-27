@@ -11,7 +11,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="eds-by-type-stat.jrxml" mnem="eds-by-type-stat.jrxml">
+            <template type="JASPER" filename="eds-by-type-stat_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="eds-by-type-type.jrxml"/>
                 </l18>

@@ -10,7 +10,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="incoming-reg-journal.jrxml" mnem="INCOMING_REG_JOURNAL">
+            <template type="JASPER" filename="incoming-reg-journal_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="123"/>
                 </l18>

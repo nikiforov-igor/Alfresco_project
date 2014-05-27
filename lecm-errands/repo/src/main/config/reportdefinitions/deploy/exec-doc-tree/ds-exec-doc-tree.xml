@@ -10,7 +10,7 @@
             </l18>
         </provider>
         <templates>
-            <template type="JASPER" filename="exec-doc-tree.jrxml" mnem="exec-doc-tree">
+            <template type="JASPER" filename="exec-doc-tree_tmpl.jrxml" mnem="tmpl">
                 <l18>
                     <item key="RU_RU" value="exec-doc-tree"/>
                 </l18>

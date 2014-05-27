@@ -1,4 +1,31 @@
-<?xml version='1.0' encoding='UTF-8'?><items><item name="cm:Журнал регистрации внутренних документов" type="lecm-rpeditor:reportDescriptor"><property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-internal:document]]></property><property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property><property name="cm:name"><![CDATA[Журнал регистрации внутренних документов]]></property><property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property><property name="lecm-rpeditor:reportQuery"><![CDATA[TYPE:"lecm-internal:document"  AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></property><property name="lecm-rpeditor:reportCode"><![CDATA[internal-reg-journal]]></property><property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[true]]></property><property name="lecm-rpeditor:reportQuerySort"><![CDATA[docDate|ASC]]></property><property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property><property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property><items><item name="cm:internal-reg-journal" type="lecm-rpeditor:reportTemplate"><property name="cm:name"><![CDATA[internal-reg-journal]]></property><property name="lecm-rpeditor:templateCode"><![CDATA[internal-reg-journal]]></property><assocs><assoc type="lecm-rpeditor:reportTemplateType" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/><assoc type="lecm-rpeditor:reportTemplateFile" path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации внутренних документов/internal-reg-journal.jrxml"/></assocs></item><item name="cm:internal-reg-journal.jrxml" type="cm:content"><property name="cm:name"><![CDATA[internal-reg-journal.jrxml]]></property><property name="cm:content"><![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGphc3BlclJlcG9ydCB4bWxu
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Журнал регистрации внутренних документов" type="lecm-rpeditor:reportDescriptor">
+        <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-internal:document]]></property>
+        <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
+        <property name="cm:name"><![CDATA[Журнал регистрации внутренних документов]]></property>
+        <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:reportQuery">
+            <![CDATA[TYPE:"lecm-internal:document"  AND @lecm\-document\-aspects\:reg\-data\-is\-registered:true]]></property>
+        <property name="lecm-rpeditor:reportCode"><![CDATA[internal-reg-journal]]></property>
+        <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[true]]></property>
+        <property name="lecm-rpeditor:reportQuerySort"><![CDATA[docDate|ASC]]></property>
+        <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
+        <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <items>
+            <item name="cm:internal-reg-journal" type="lecm-rpeditor:reportTemplate">
+                <property name="cm:name"><![CDATA[internal-reg-journal]]></property>
+                <property name="lecm-rpeditor:templateCode"><![CDATA[tmpl]]></property>
+                <assocs>
+                    <assoc type="lecm-rpeditor:reportTemplateType"
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип отчета/Jasper"/>
+                    <assoc type="lecm-rpeditor:reportTemplateFile"
+                           path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации внутренних документов/internal-reg-journal_tmpl.jrxml"/>
+                </assocs>
+            </item>
+            <item name="cm:internal-reg-journal_tmpl.jrxml" type="cm:content">
+                <property name="cm:name"><![CDATA[internal-reg-journal_tmpl.jrxml]]></property>
+                <property name="cm:content"><![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGphc3BlclJlcG9ydCB4bWxu
 cz0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMiIHht
 bG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpz
 Y2hlbWFMb2NhdGlvbj0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3Bl
@@ -307,4 +334,109 @@ PSJTaW5nbGUiIGxlZnRJbmRlbnQ9IjUiIHNwYWNpbmdCZWZvcmU9IjIiIHNwYWNpbmdBZnRlcj0i
 MiIvPgoJCQkJPC90ZXh0RWxlbWVudD4KCQkJCTx0ZXh0RmllbGRFeHByZXNzaW9uPjwhW0NEQVRB
 WyRWe1JFUE9SVF9DT1VOVH1dXT48L3RleHRGaWVsZEV4cHJlc3Npb24+CgkJCTwvdGV4dEZpZWxk
 PgoJCTwvYmFuZD4KCTwvZGV0YWlsPgo8L2phc3BlclJlcG9ydD4K
-]]></property><assocs/></item><item name="cm:7dd35c8f-82f6-40da-94b3-85665eba0cc2" type="lecm-rpeditor:reportDataSource"><property name="cm:name"><![CDATA[60617236-7c27-4687-ba3a-f847d97bbafc]]></property><items><item name="cm:Дата регистрации" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Дата регистрации]]></property><property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:doc-date}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[dateReg]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/><assoc type="lecm-rpeditor:columnParameterTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/></assocs></item><item name="cm:Дата документа" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Дата документа]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:doc-date}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docDate]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/></assocs></item><item name="cm:Регистрационный номер" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Регистрационный номер]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{~REGNUM}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[regNum]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item><item name="cm:Получатели" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Получатели]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-eds-document:recipients-assoc-text-content}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docRecipients]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item><item name="cm:Заголовок" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Заголовок]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:title}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docTitle]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item><item name="cm:Автор" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Автор]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:creator}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docAuthor]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item><item name="cm:Статус" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Статус]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-statemachine:status}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docStatus]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item><item name="cm:Тематика" type="lecm-rpeditor:reportDataColumn"><property name="cm:name"><![CDATA[Тематика]]></property><property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:subject-assoc/cm:name}]]></property><property name="lecm-rpeditor:dataColumnCode"><![CDATA[docThematic]]></property><property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property><assocs><assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/></assocs></item></items></item></items><assocs><assoc type="lecm-rpeditor:reportProviderAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/genericProvider"/><assoc type="lecm-rpeditor:reportTemplateAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации внутренних документов/internal-reg-journal"/></assocs></item></items>
+]]></property>
+                <assocs/>
+            </item>
+            <item name="cm:7dd35c8f-82f6-40da-94b3-85665eba0cc2" type="lecm-rpeditor:reportDataSource">
+                <property name="cm:name"><![CDATA[60617236-7c27-4687-ba3a-f847d97bbafc]]></property>
+                <items>
+                    <item name="cm:Дата регистрации" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Дата регистрации]]></property>
+                        <property name="lecm-rpeditor:dataColumnClass"><![CDATA[d:date]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:doc-date}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[dateReg]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
+                            <assoc type="lecm-rpeditor:columnParameterTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип параметра/Диапазон"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Дата документа" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Дата документа]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:doc-date}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docDate]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Date"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Регистрационный номер" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Регистрационный номер]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{~REGNUM}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[regNum]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Получатели" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Получатели]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-eds-document:recipients-assoc-text-content}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docRecipients]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Заголовок" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Заголовок]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:title}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docTitle]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Автор" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Автор]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:creator}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docAuthor]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Статус" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Статус]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-statemachine:status}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docStatus]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                    <item name="cm:Тематика" type="lecm-rpeditor:reportDataColumn">
+                        <property name="cm:name"><![CDATA[Тематика]]></property>
+                        <property name="lecm-rpeditor:dataColumnExpression">
+                            <![CDATA[{lecm-document:subject-assoc/cm:name}]]></property>
+                        <property name="lecm-rpeditor:dataColumnCode"><![CDATA[docThematic]]></property>
+                        <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <assocs>
+                            <assoc type="lecm-rpeditor:columnTypeAssoc"
+                                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
+                        </assocs>
+                    </item>
+                </items>
+            </item>
+        </items>
+        <assocs>
+            <assoc type="lecm-rpeditor:reportProviderAssoc"
+                   path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип провайдера/genericProvider"/>
+            <assoc type="lecm-rpeditor:reportTemplateAssoc"
+                   path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Журнал регистрации внутренних документов/internal-reg-journal"/>
+        </assocs>
+    </item>
+</items>
