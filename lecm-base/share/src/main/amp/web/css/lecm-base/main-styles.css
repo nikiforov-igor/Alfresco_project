@@ -78,6 +78,7 @@
     vertical-align: middle;
 }
 .control div.help-text {
+    width: auto;
     max-width: 100%;
     position: absolute;
     top: 90%;
