@@ -60,9 +60,9 @@
     margin-left: 0.3em;
 }
 
-.inlineTagEdit input[type="text"]:focus {
-    outline: none;
-}
+/*.inlineTagEdit input[type="text"]:focus {*/
+    /*outline: none;*/
+/*}*/
 
 .inlineTagEdit input[type="text"] {
     width: inherit;

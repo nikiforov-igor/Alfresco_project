@@ -20,12 +20,12 @@ a.disabled:hover {
 }
 
 
-input, input:focus,
-textarea, textarea:focus,
-a, a:focus,
-button, button:focus {
-    outline: none;
-}
+/*input, input:focus,*/
+/*textarea, textarea:focus,*/
+/*a, a:focus,*/
+/*button, button:focus {*/
+    /*outline: none;*/
+/*}*/
 ul, ul li,
 ol, ol li {
     margin: 0;
@@ -238,7 +238,7 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
 {
     border: none;
 }
-button:focus {outline:none;}
+/*button:focus {outline:none;}*/
 
 .yui-overlay,
 .alfresco-share .sticky-wrapper,
@@ -1006,10 +1006,10 @@ body.yui-skin-lecmTheme .yuimenu .bd
    border-bottom-right-radius: 6px;
 }
 
-body.yui-skin-lecmTheme .yuimenu .bd a:focus
-{
-   outline: none;
-}
+/*body.yui-skin-lecmTheme .yuimenu .bd a:focus*/
+/*{*/
+   /*outline: none;*/
+/*}*/
 
 /*
  * This ensures that the quick share actions can get displayed focus
