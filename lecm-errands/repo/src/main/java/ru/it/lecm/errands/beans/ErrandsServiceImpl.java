@@ -25,6 +25,10 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.security.LecmPermissionService;
 
 /**
@@ -33,6 +37,8 @@ import ru.it.lecm.security.LecmPermissionService;
  * Time: 11:43
  */
 public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
+
+    final protected Logger logger = LoggerFactory.getLogger(ErrandsServiceImpl.class);
 
 
     private static enum ModeChoosingExecutors {
@@ -50,7 +56,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     private DocumentService documentService;
     private OrgstructureBean orgstructureService;
-    private StateMachineServiceBean stateMachineBean;
+    private StateMachineServiceBean stateMachineService;
     private LecmObjectsService lecmObjectsService;
     private NamespaceService namespaceService;
     private BusinessJournalService businessJournalService;
@@ -64,8 +70,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         this.orgstructureService = orgstructureService;
     }
 
-    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
-        this.stateMachineBean = stateMachineBean;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
     public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
@@ -80,50 +86,70 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         this.businessJournalService = businessJournalService;
     }
 
-	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
-		this.lecmPermissionService = lecmPermissionService;
-	}
-
-    @Override
-    public NodeRef getServiceRootFolder() {
-        return getFolder(ERRANDS_ROOT_ID);
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+            this.lecmPermissionService = lecmPermissionService;
     }
 
+    public void init() {
+        //Думаю, самое подходящее место для проверки существования и создания глобальных настроек, это при инициализации бина
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+
+            @Override
+            public Void doWork() throws Exception {
+                lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+
+                    @Override
+                    public Void execute() throws Throwable {
+                        if (null == getSettingsNode()) {
+                            createSettingsNode();
+                        }
+                        return null;
+                    }
+                });
+                return null;
+            }
+        });
+    }
+     
+    @Override
+    public NodeRef getServiceRootFolder() {
+	return getFolder(ERRANDS_ROOT_ID);
+    }
+
+    @Override
     public NodeRef getDraftRoot() {
         return documentService.getDraftRootByType(TYPE_ERRANDS);
     }
 
+    @Override
     public NodeRef getSettingsNode() {
+//		TODO: Метод разделён. Создание вынесено в метод createSettingsNode
         final NodeRef rootFolder = this.getServiceRootFolder();
 
-        NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
-        if (settings != null) {
-            return settings;
-        } else {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
-                            if (settingsRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_SETTINGS_NODE_NAME);
-                                QName nodeTypeQName = TYPE_ERRANDS_SETTINGS;
+        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+    }
 
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, ERRANDS_SETTINGS_NODE_NAME);
-                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                settingsRef = associationRef.getChildRef();
-                            }
-                            return settingsRef;
-                        }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
+    @Override
+    public NodeRef createSettingsNode() throws WriteTransactionNeededException {
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create settings node");
         }
+
+        final NodeRef rootFolder = this.getServiceRootFolder();
+        NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_SETTINGS_NODE_NAME);
+        if (settingsRef == null) {
+            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_SETTINGS_NODE_NAME);
+            QName nodeTypeQName = TYPE_ERRANDS_SETTINGS;
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties.put(ContentModel.PROP_NAME, ERRANDS_SETTINGS_NODE_NAME);
+            ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+            settingsRef = associationRef.getChildRef();
+        }
+        return settingsRef;
     }
 
     public ModeChoosingExecutors getModeChoosingExecutors() {
@@ -137,7 +163,8 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return ModeChoosingExecutors.UNIT;
     }
 
-	public boolean isTransferRightToBaseDocument() {
+    @Override
+    public boolean isTransferRightToBaseDocument() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {
             return Boolean.TRUE.equals(nodeService.getProperty(settings, SETTINGS_PROP_TRANSFER_RIGHT));
@@ -145,52 +172,56 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return false;
     }
 
-	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist) {
+    @Override
+    public NodeRef getCurrentUserSettingsNode() {
+//		TODO: Метод разделён, создание вынесено в createCurrentUserSettingsNode
         final NodeRef rootFolder = this.getServiceRootFolder();
         final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
 
         NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-		if (settings != null || !createNewIfNotExist) {
-            return settings;
-        } else {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
-                            if (settingsRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
-                                QName nodeTypeQName = TYPE_ERRANDS_USER_SETTINGS;
-
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, settingsObjectName);
-                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                settingsRef = associationRef.getChildRef();
-                            }
-                            return settingsRef;
-                        }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
-        }
+	return settings;
     }
 
+    @Override
+    public NodeRef createCurrentUserSettingsNode() throws WriteTransactionNeededException {
+//		TODO: Проверим на отркрытую транзакцию, если что ругаемся.
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create settings node");
+        }
+
+        final NodeRef rootFolder = this.getServiceRootFolder();
+        final String settingsObjectName = authService.getCurrentUserName() + "_" + ERRANDS_SETTINGS_NODE_NAME;
+
+        NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, settingsObjectName);
+        if (settingsRef == null) {
+            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, settingsObjectName);
+            QName nodeTypeQName = TYPE_ERRANDS_USER_SETTINGS;
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties.put(ContentModel.PROP_NAME, settingsObjectName);
+            ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+            settingsRef = associationRef.getChildRef();
+        }
+        return settingsRef;
+    }
+    
+    @Override
     public boolean isDefaultWithoutInitiatorApproval() {
-		NodeRef settings = getCurrentUserSettingsNode(false);
+		NodeRef settings = getCurrentUserSettingsNode();
         if (settings != null) {
             return (Boolean) nodeService.getProperty(settings, USER_SETTINGS_PROP_WITHOUT_INITIATOR_APPROVAL);
         }
         return false;
     }
 
+    @Override
     public NodeRef getDefaultInitiator() {
         NodeRef result = orgstructureService.getCurrentEmployee();
         if (orgstructureService.isCurrentEmployeeHasBusinessRole(BUSINESS_ROLE_ERRANDS_CHOOSING_INITIATOR)) {
-			NodeRef settings = getCurrentUserSettingsNode(false);
+            NodeRef settings = getCurrentUserSettingsNode();
             if (settings != null) {
                 List<AssociationRef> defaultInitiatorAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_INITIATOR);
                 if (defaultInitiatorAssocs.size() > 0) {
@@ -201,8 +232,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return result;
     }
 
+    @Override
     public NodeRef getDefaultSubject() {
-		NodeRef settings = getCurrentUserSettingsNode(false);
+	NodeRef settings = getCurrentUserSettingsNode();
         if (settings != null) {
             List<AssociationRef> defaultSubjectAssocs = nodeService.getTargetAssocs(settings, USER_SETTINGS_ASSOC_DEFAULT_SUBJECT);
             if (defaultSubjectAssocs.size() > 0) {
@@ -212,6 +244,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return null;
     }
 
+    @Override
     public List<NodeRef> getAvailableExecutors() {
         if (getModeChoosingExecutors() == ModeChoosingExecutors.ORGANIZATION) {
             return null;
@@ -249,15 +282,15 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
             if (active != null) {
                 if (active) {
-                    if (stateMachineBean.hasActiveStatemachine(errand)) {
-                        if (stateMachineBean.isDraft(errand)) {
+                    if (stateMachineService.hasActiveStatemachine(errand)) {
+                        if (stateMachineService.isDraft(errand)) {
                             continue;
                         }
                     } else {
                         continue;
                     }
                 } else {
-                    if (!stateMachineBean.isFinal(errand)) {
+                    if (!stateMachineService.isFinal(errand)) {
                         continue;
                     }
                 }
@@ -301,6 +334,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return getDocumentErrands(document, null, roles);
     }
 
+    @Override
     public List<NodeRef> getErrandsDocuments(List<String> paths, int skipCount, int maxItems) {
         List<QName> types = new ArrayList<QName>();
         types.add(TYPE_ERRANDS);
@@ -308,7 +342,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineBean.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
 
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         // сортируем по важности поручения и по сроку исполнения
@@ -316,10 +350,10 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (stateMachineBean.isDraft(nodeRef)) {
+            if (stateMachineService.isDraft(nodeRef)) {
                 continue;
             }
-            if (stateMachineBean.isFinal(nodeRef)) {
+            if (stateMachineService.isFinal(nodeRef)) {
                 continue;
             }
             if (currentEmployee.equals(findNodeByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
@@ -335,6 +369,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         return result;
     }
 
+    @Override
     public List<NodeRef> getActiveErrands(List<String> paths, int skipCount, int maxItems) {
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
         List<QName> types = new ArrayList<QName>();
@@ -345,17 +380,17 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         List<SortDefinition> sort = new ArrayList<SortDefinition>();
         List<NodeRef> sortingErrands = new ArrayList<NodeRef>();
         List<NodeRef> result = new ArrayList<NodeRef>();
-        List<String> status = stateMachineBean.getStatuses("lecm-errands:document", true, false);
+        List<String> status = stateMachineService.getStatuses("lecm-errands:document", true, false);
 
         // сортируем по наименованию поручения и по сроку исполнения
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_NUMBER.toString(), false));
         sort.add(new SortDefinition(SortDefinition.SortType.FIELD, "@" + PROP_ERRANDS_LIMITATION_DATE.toString(), false));
 
         for (NodeRef nodeRef : documentService.getDocumentsByFilter(types, paths, status, null, sort)) {
-            if (stateMachineBean.isDraft(nodeRef)) {
+            if (stateMachineService.isDraft(nodeRef)) {
                 continue;
             }
-            if (stateMachineBean.isFinal(nodeRef)) {
+            if (stateMachineService.isFinal(nodeRef)) {
                 continue;
             }
             if (employees.containsAll(findNodesByAssociationRef(nodeRef, ASSOC_ERRANDS_EXECUTOR, OrgstructureBean.TYPE_EMPLOYEE, BaseBean.ASSOCIATION_TYPE.TARGET))) {
@@ -373,28 +408,51 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
     @Override
     public NodeRef getLinksFolderRef(final NodeRef document) {
-        return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-            @Override
-            public NodeRef doWork() throws Exception {
-                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
-                        NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
-                        if (linkFolder == null) {
-                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_LINK_FOLDER_NAME);
-                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
-                            properties.put(ContentModel.PROP_NAME, ERRANDS_LINK_FOLDER_NAME);
-                            ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
-                            return childAssoc.getChildRef();
-                        } else {
-                            return linkFolder;
-                        }
-                    }
-                });
-            }
-        });
+//		TODO: Метод разделён, создание вынесено в метод createLinksFolderRef
+        //а смысл теперь выполнять его от системы?
+//        return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+//            @Override
+//            public NodeRef doWork() throws Exception {
+				return nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
+//                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                    @Override
+//                    public NodeRef execute() throws Throwable {
+//                        NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
+//                        if (linkFolder == null) {
+//                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_LINK_FOLDER_NAME);
+//                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+//                            properties.put(ContentModel.PROP_NAME, ERRANDS_LINK_FOLDER_NAME);
+//                            ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+//                            return childAssoc.getChildRef();
+//                        } else {
+//                            return linkFolder;
+//                        }
+//                    }
+//                });
+//            }
+//        });
     }
+
+	@Override
+	public NodeRef createLinksFolderRef(final NodeRef document) throws WriteTransactionNeededException {
+//		TODO: Проверим на отркрытую транзакцию, если что ругаемся.
+		try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create settings node" );
+        }
+
+		NodeRef linkFolder = nodeService.getChildByName(document, ContentModel.ASSOC_CONTAINS, ERRANDS_LINK_FOLDER_NAME);
+		if (linkFolder == null) {
+			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_LINK_FOLDER_NAME);
+			Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+			properties.put(ContentModel.PROP_NAME, ERRANDS_LINK_FOLDER_NAME);
+			ChildAssociationRef childAssoc = nodeService.createNode(document, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, properties);
+			return childAssoc.getChildRef();
+		}
+		return linkFolder;
+	}
 
     @Override
     public List<NodeRef> getLinks(NodeRef document) {
@@ -412,8 +470,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
         PagingResults<NodeRef> pageOfNodeInfos = null;
         FileFilterMode.setClient(FileFilterMode.Client.script);
+        NodeRef linksFolderRef = getLinksFolderRef(document);
+        if (null == linksFolderRef) {
+            return results;
+        }
         try {
-            pageOfNodeInfos = lecmObjectsService.list(getLinksFolderRef(document), TYPE_BASE_LINK, new ArrayList<FilterProp>(), sortProps, pageRequest);
+            pageOfNodeInfos = lecmObjectsService.list(linksFolderRef, TYPE_BASE_LINK, new ArrayList<FilterProp>(), sortProps, pageRequest);
         } finally {
             FileFilterMode.clearClient();
         }

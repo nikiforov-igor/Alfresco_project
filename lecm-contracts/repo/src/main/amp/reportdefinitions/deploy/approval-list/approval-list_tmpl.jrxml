@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ApprovalList" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="730" leftMargin="70" rightMargin="42" topMargin="42" bottomMargin="42" isFloatColumnFooter="true" whenResourceMissingType="Empty" uuid="28e61b22-f23c-49c3-ba14-4928c3b8793a">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <property name="dataSource" value="ru.it.lecm.contracts.reports.DSProviderApprovalById"/>
+    <style name="styleOdd" mode="Opaque" backcolor="#F4F5F5">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[($V{REPORT_COUNT}%2 == 0) && false]]></conditionExpression>
+            <style backcolor="#E2DFD6"/>
+        </conditionalStyle>
+    </style>
+    <parameter name="CMIS_URL" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["http://127.0.0.1:8080/alfresco/cmisatom"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CMIS_USER" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["admin"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CMIS_PASS" class="java.lang.String" isForPrompting="false">
+        <defaultValueExpression><![CDATA["111"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CMIS_ALLVERSIONS" class="java.lang.Boolean" isForPrompting="false">
+        <defaultValueExpression><![CDATA[false]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CMIS_QUERY" class="java.lang.String">
+        <defaultValueExpression><![CDATA["select * from lecmApprovalResult:approvalResultList as approvals"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="CMIS_XMLCONFIG" class="java.lang.String">
+        <defaultValueExpression><![CDATA["ds-approval-list.xml"]]></defaultValueExpression>
+    </parameter>
+    <queryString>
+        <![CDATA[select * from cm:documents]]>
+    </queryString>
+    <field name="ID" class="java.lang.String">
+        <fieldDescription><![CDATA[ID документа]]></fieldDescription>
+    </field>
+    <field name="col_Doc.ExtPresentString" class="java.lang.String">
+        <fieldDescription><![CDATA[Строка представления]]></fieldDescription>
+    </field>
+    <field name="col_AproveList.Version" class="java.lang.String">
+        <fieldDescription><![CDATA[Номер версии документа]]></fieldDescription>
+    </field>
+    <field name="col_AproveList.ApproveResult" class="java.lang.String">
+        <fieldDescription><![CDATA[Результат Согласования]]></fieldDescription>
+    </field>
+    <field name="col_AproveList.ApproveStart" class="java.util.Date">
+        <fieldDescription><![CDATA[Дата начала согасования по документу]]></fieldDescription>
+    </field>
+    <field name="col_AproveList.ApproveEnd" class="java.util.Date">
+        <fieldDescription><![CDATA[Дата согласования по документу]]></fieldDescription>
+    </field>
+    <field name="col_ExecEmployee" class="java.lang.String">
+        <fieldDescription><![CDATA[Имя Исполнителя]]></fieldDescription>
+    </field>
+    <field name="col_ExecEmployee.StaffPosition.Id" class="java.lang.String">
+        <fieldDescription><![CDATA[Должность Исполнителя.id]]></fieldDescription>
+    </field>
+    <field name="col_ExecEmployee.StaffPosition.Name" class="java.lang.String">
+        <fieldDescription><![CDATA[Должность Исполнителя.Название]]></fieldDescription>
+    </field>
+    <field name="col_ExecEmployee.Unit.Id" class="java.lang.String">
+        <fieldDescription><![CDATA[Отдел Исполнителя.id]]></fieldDescription>
+    </field>
+    <field name="col_ExecEmployee.Unit.Name" class="java.lang.String">
+        <fieldDescription><![CDATA[Наименование отдела Исполнителя]]></fieldDescription>
+    </field>
+    <field name="col_Item.ApproveResult" class="java.lang.String">
+        <fieldDescription><![CDATA[Результат Согласования Сотрудником]]></fieldDescription>
+    </field>
+    <field name="col_Item.ApproveNotes" class="java.lang.String">
+        <fieldDescription><![CDATA[Замечания от Сотрудника]]></fieldDescription>
+    </field>
+    <field name="col_Item.ApproveDate" class="java.util.Date">
+        <fieldDescription><![CDATA[Дата согласования Сотрудником]]></fieldDescription>
+    </field>
+    <field name="col_Item.Employee" class="java.lang.String">
+        <fieldDescription><![CDATA[Имя Согласующего]]></fieldDescription>
+    </field>
+    <field name="col_Item.Employee.StaffPosition.Id" class="java.lang.String">
+        <fieldDescription><![CDATA[Должность Сотрудника]]></fieldDescription>
+    </field>
+    <field name="col_Item.Employee.StaffPosition.Name" class="java.lang.String">
+        <fieldDescription><![CDATA[Должность название]]></fieldDescription>
+    </field>
+    <field name="col_Item.Employee.Unit.Id" class="java.lang.String">
+        <fieldDescription><![CDATA[Отдел Согласующего.id]]></fieldDescription>
+    </field>
+    <field name="col_Item.Employee.Unit.Name" class="java.lang.String">
+        <fieldDescription><![CDATA[Отдел Согласующего.Наименование]]></fieldDescription>
+    </field>
+    <variable name="PERIOD_START" class="java.util.Date"/>
+    <variable name="PERIOD_END" class="java.util.Date"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="30" splitType="Stretch">
+            <staticText>
+                <reportElement uuid="85bf28f5-7b1d-49a7-b2d0-e31f2a45de0c" stretchType="RelativeToBandHeight" x="0" y="0" width="730" height="29"/>
+                <textElement textAlignment="Center">
+                    <font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                </textElement>
+                <text><![CDATA[Лист согласования]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="70" splitType="Stretch">
+            <property name="cmis.url" value="http://127.0.0.1:8080/alfresco/cmisatom"/>
+            <property name="cmis.binding_type" value="atompub"/>
+            <property name="cmis.user" value="admin"/>
+            <property name="cmis.password" value="111"/>
+            <textField isStretchWithOverflow="true">
+                <reportElement uuid="8232ed19-763a-4354-a29f-c9f649b31df8" x="3" y="0" width="727" height="30"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA["К " + ($F{col_Doc.ExtPresentString} != null ? $F{col_Doc.ExtPresentString} : "")
++ ", версия № " + ($F{col_AproveList.Version} != null ? $F{col_AproveList.Version} : "")]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement uuid="92c94d2f-ae2f-45d6-826a-4fe022f0baa4" positionType="FixRelativeToBottom" x="2" y="30" width="357" height="32"/>
+                <textElement textAlignment="Left" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Исполнитель: " + ($F{col_ExecEmployee} == null ? "" : $F{col_ExecEmployee})+ ($F{col_ExecEmployee.StaffPosition.Name} == null ? "" : ", "+ $F{col_ExecEmployee.StaffPosition.Name}) + ($F{col_ExecEmployee.Unit.Name} == null ? "" : ", "+ $F{col_ExecEmployee.Unit.Name})]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement uuid="57733b0b-8072-4194-ad89-e36d5cf70a4b" positionType="FixRelativeToBottom" x="362" y="30" width="180" height="32"/>
+                <textElement textAlignment="Left" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Дата начала согласования:"]]></textFieldExpression>
+            </textField>
+            <textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+                <reportElement uuid="0debf964-2b3a-47e5-9325-01ab4f577fd2" positionType="FixRelativeToBottom" x="548" y="30" width="180" height="32"/>
+                <textElement textAlignment="Left" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{col_AproveList.ApproveStart}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageHeader>
+    <columnHeader>
+        <band height="30" splitType="Stretch">
+            <rectangle>
+                <reportElement uuid="e298a568-777a-4862-a417-1fbacbc1d93d" x="0" y="1" width="730" height="28" backcolor="#DCDCDC"/>
+            </rectangle>
+            <textField isStretchWithOverflow="true">
+                <reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="2" y="2" width="30" height="26"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA["№"]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="52e19f23-e656-451b-84d6-f210e47da030" x="36" y="2" width="170" height="26"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Сотрудник"]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="8514e4c9-574d-4cbd-87f1-2afb80a884a2" x="210" y="2" width="170" height="26"/>
+                <textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+                    <font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Результат Согласования"]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="ad617c43-79fd-4734-84d2-1e37958cfa8c" x="384" y="2" width="230" height="26"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Замечания"]]></textFieldExpression>
+            </textField>
+            <textField isBlankWhenNull="true">
+                <reportElement uuid="8ad34c1a-0436-4c27-9c1b-a84c2d955145" x="624" y="2" width="100" height="26"/>
+                <textElement textAlignment="Center" verticalAlignment="Top">
+                    <font fontName="DejaVu Sans Mono" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Дата согласования"]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement uuid="ab9b1fbb-c17e-4ac0-8727-86464b45ae48" stretchType="RelativeToBandHeight" x="33" y="0" width="1" height="29"/>
+            </line>
+            <line>
+                <reportElement uuid="32c28a06-576c-407d-aaa4-5c406c4d913b" stretchType="RelativeToBandHeight" x="208" y="0" width="1" height="29"/>
+            </line>
+            <line>
+                <reportElement uuid="dc287e8e-5e02-4e74-b748-a91c4422df28" stretchType="RelativeToBandHeight" x="382" y="0" width="1" height="29"/>
+            </line>
+            <line>
+                <reportElement uuid="5b6d0115-f241-4433-9064-4b28fe16e551" stretchType="RelativeToBandHeight" x="616" y="0" width="1" height="29"/>
+            </line>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="26" splitType="Stretch">
+            <printWhenExpression><![CDATA[$V{REPORT_COUNT} <= 200]]></printWhenExpression>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="d2014534-0ee4-43cb-82d6-fd1d4e4ed21a" x="2" y="2" width="30" height="22"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" spacingBefore="1" spacingAfter="1" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="d2014534-2ee4-43cb-82d6-fd1d4e4ed21d" x="36" y="2" width="170" height="22"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" spacingBefore="1" spacingAfter="1" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA[($F{col_Item.Employee} == null ? "" : $F{col_Item.Employee}) + ($F{col_Item.Employee.StaffPosition.Name} == null ? "" : ", "+ $F{col_Item.Employee.StaffPosition.Name}) + ($F{col_Item.Employee.Unit.Name} == null ? "" : ", "+ $F{col_Item.Employee.Unit.Name})]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+                <reportElement uuid="0540390a-1d4a-425e-94fd-cba55ad840b5" x="624" y="2" width="100" height="22"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" spacingBefore="1" spacingAfter="1" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{col_Item.ApproveDate}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="5db5527c-1abb-4aad-a2d8-e699a7cede33" x="384" y="2" width="230" height="22"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" spacingBefore="1" spacingAfter="1" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{col_Item.ApproveNotes}]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" isBlankWhenNull="true">
+                <reportElement uuid="3174fdc4-62d4-46eb-9f49-d9fdcc29df25" x="210" y="2" width="170" height="22"/>
+                <textElement textAlignment="Left" verticalAlignment="Middle">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                    <paragraph lineSpacing="AtLeast" spacingBefore="1" spacingAfter="1" tabStopWidth="30"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{col_Item.ApproveResult}]]></textFieldExpression>
+            </textField>
+            <line>
+                <reportElement uuid="761758be-0e43-429b-8ca0-cd71cfc60d5f" positionType="FixRelativeToBottom" x="0" y="25" width="730" height="1"/>
+            </line>
+            <line>
+                <reportElement uuid="e99b830f-4006-48dc-956a-8c36c8c84003" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="25"/>
+            </line>
+            <line>
+                <reportElement uuid="a132f0be-1c6c-495b-aa33-910ea8e4cfa2" stretchType="RelativeToBandHeight" x="33" y="0" width="1" height="25"/>
+            </line>
+            <line>
+                <reportElement uuid="496c9e03-84fb-42c4-891c-8284c84bd4a4" stretchType="RelativeToBandHeight" x="208" y="0" width="1" height="25"/>
+            </line>
+            <line>
+                <reportElement uuid="e029505f-e152-4820-adb0-d5926a77a516" stretchType="RelativeToBandHeight" x="382" y="0" width="1" height="25"/>
+            </line>
+            <line>
+                <reportElement uuid="36edc890-8ccf-4680-a12c-0de338d828ac" stretchType="RelativeToBandHeight" x="616" y="0" width="1" height="25"/>
+            </line>
+            <line>
+                <reportElement uuid="1c3a02a2-227e-47e4-8d87-2dc5fdb552df" stretchType="RelativeToBandHeight" x="730" y="0" width="1" height="25"/>
+            </line>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="40" splitType="Stretch">
+            <textField isStretchWithOverflow="true">
+                <reportElement uuid="d0f946b7-8631-4585-ae38-030f2ca941b3" x="384" y="0" width="344" height="20" isPrintInFirstWholeBand="true"/>
+                <textElement textAlignment="Left">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                    <paragraph spacingBefore="5" spacingAfter="5"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Результат: "
++ (($F{col_AproveList.ApproveResult} != null) ? $F{col_AproveList.ApproveResult} : "")]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true">
+                <reportElement uuid="e219c235-6444-4008-97a2-6fc0d01e1bbd" x="384" y="20" width="232" height="20" isPrintInFirstWholeBand="true"/>
+                <textElement textAlignment="Left">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                    <paragraph spacingBefore="5" spacingAfter="5"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Дата согласования по документу: "]]></textFieldExpression>
+            </textField>
+            <textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+                <reportElement uuid="62759da2-8339-49e9-ac58-3c2503f28f06" x="620" y="20" width="108" height="20" isPrintInFirstWholeBand="true"/>
+                <textElement textAlignment="Left">
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251"/>
+                    <paragraph spacingBefore="5" spacingAfter="5"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{col_AproveList.ApproveEnd}]]></textFieldExpression>
+            </textField>
+        </band>
+    </columnFooter>
+    <pageFooter>
+        <band height="21" splitType="Stretch">
+            <textField evaluationTime="Report">
+                <reportElement uuid="888bd866-9e3c-4f97-8400-35c02cadae9d" x="1" y="4" width="93" height="17"/>
+                <textElement>
+                    <font fontName="DejaVu Sans Mono" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <summary>
+        <band height="2" splitType="Stretch"/>
+    </summary>
+</jasperReport>

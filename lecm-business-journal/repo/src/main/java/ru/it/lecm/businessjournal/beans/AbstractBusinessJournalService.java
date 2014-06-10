@@ -19,16 +19,17 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
- * User: pmelnikov 
- * Date: 02.12.13 
+ * User: pmelnikov
+ * Date: 02.12.13
  * Time: 15:54
  */
 public abstract class AbstractBusinessJournalService extends BaseBean {
 
-    protected NodeRef bjRootRef;
-    protected NodeRef bjArchiveRef;
+    protected String bjRootID;
+    protected String bjArchiveID;
     protected LecmPermissionService lecmPermissionService;
     protected StateMachineServiceBean stateMachineService;
     private DictionaryBean dictionaryService;
@@ -313,13 +314,13 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         jmsTemplate.convertAndSend(record);
     }
 
-    public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
-        NodeRef person = null;
+	public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
+		NodeRef person = null;
         if (personService.personExists(initiator)) {
             person = personService.getPerson(initiator, false);
         }
-        return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
-    }
+		return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
+	}
 
     public BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
         NodeRef employee = initiator != null ? orgstructureService.getEmployeeByPerson(initiator) : null;
@@ -341,11 +342,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         List<RecordObject> objectsDescription = new ArrayList<RecordObject>();
         if (objects != null && objects.size() > 0) {
             for (int i = 0; i < objects.size() && i < 5; i++) {
-                String str = objects.get(i);
-                NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
-                String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
-                objectsDescription.add(new RecordObject(nodeRef, objectDescription));
-            }
+            String str = objects.get(i);
+            NodeRef nodeRef = NodeRef.isNodeRef(str) ? new NodeRef(str) : null;
+            String objectDescription = NodeRef.isNodeRef(str) ? wrapAsLink(new NodeRef(str), false) : (isWorkflow(str) ? wrapAsWorkflowLink(str) : str);
+            objectsDescription.add(new RecordObject(nodeRef, objectDescription));
+        }
         }
 
         NodeRef objectType = getObjectType(mainObject);
@@ -422,11 +423,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public NodeRef getBusinessJournalDirectory() {
-        return bjRootRef;
+	return getFolder(bjRootID);
     }
 
     public NodeRef getBusinessJournalArchiveDirectory() {
-        return bjArchiveRef;
+        return getFolder(bjArchiveID);
     }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {

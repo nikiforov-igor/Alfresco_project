@@ -2,6 +2,7 @@ package ru.it.lecm.reports.model.DAO;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
@@ -17,6 +18,7 @@ import ru.it.lecm.reports.xml.DSXMLProducer;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * Служба хранения файлов, шаблонов и др контента, связанного с разворачиваемыми отчётами.
@@ -70,7 +72,7 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
      */
     @Override
     public NodeRef getServiceRootFolder() {
-        return getFolder(REPORT_SERVICE_FOLDER_ROOT_ID);
+	return getFolder(REPORT_SERVICE_FOLDER_ROOT_ID);
     }
 
     /**
@@ -100,7 +102,12 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
         // Узел самого отчёта (ур 2) ...
         NodeRef nodeReport = getFolder(getServiceRootFolder(), reportMnem);
         if (nodeReport == null) {
-            nodeReport = createFolder(getServiceRootFolder(), reportMnem);
+            try {
+                nodeReport = createFolder(getServiceRootFolder(), reportMnem);
+            } catch (WriteTransactionNeededException ex) {
+                logger.error(ex.getMessage(), ex);
+                throw new RuntimeException(ex);
+            }
         }
         return nodeReport;
     }
@@ -167,25 +174,31 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
 		 *            [lev==1] 2. папка "Отчёт" (reportMnemo)
 		 *            [lev==2] 3. Файлы отчета
 		 */
-        Set<QName> folderType = new HashSet<QName>();
-        folderType.add(ContentModel.TYPE_FOLDER);
+        AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
+            @Override
+            public Object doWork() throws Exception {
+                Set<QName> folderType = new HashSet<QName>();
+                folderType.add(ContentModel.TYPE_FOLDER);
 
-        int resultCnt = 0;
-        List<ChildAssociationRef> reportsFolders = nodeService.getChildAssocs(root, folderType);
-        for (ChildAssociationRef reportsFolder : reportsFolders) {
-            NodeRef report = reportsFolder.getChildRef();
-            String reportCode = (String) nodeService.getProperty(report, ContentModel.PROP_NAME);
+                int resultCnt = 0;
+                List<ChildAssociationRef> reportsFolders = nodeService.getChildAssocs(root, folderType);
+                for (ChildAssociationRef reportsFolder : reportsFolders) {
+                    NodeRef report = reportsFolder.getChildRef();
+                    String reportCode = (String) nodeService.getProperty(report, ContentModel.PROP_NAME);
 
-            String dsXmlFileName = DSXMLProducer.PFX_DS + reportCode + ".xml";
+                    String dsXmlFileName = DSXMLProducer.PFX_DS + reportCode + ".xml";
 
-            NodeRef dsConfigFile = nodeService.getChildByName(report, ContentModel.ASSOC_CONTAINS, dsXmlFileName);
+                    NodeRef dsConfigFile = nodeService.getChildByName(report, ContentModel.ASSOC_CONTAINS, dsXmlFileName);
 
-            if (dsConfigFile != null) {
-                resultCnt++;
-                enumerator.lookAtItem(new IdRContent(reportCode, dsXmlFileName));
+                    if (dsConfigFile != null) {
+                        resultCnt++;
+                        enumerator.lookAtItem(new IdRContent(reportCode, dsXmlFileName));
+                    }
+                }
+                return  resultCnt;
             }
-        }
-        return  resultCnt;
+        };
+        return Integer.parseInt(AuthenticationUtil.runAsSystem(raw).toString());
     }
 
     @Override

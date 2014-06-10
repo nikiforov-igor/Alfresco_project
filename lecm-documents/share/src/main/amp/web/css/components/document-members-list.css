@@ -1,0 +1,50 @@
+.members-list .members-title {
+    width: 100%;
+    padding: 0 .4em .4em;
+}
+.members-list .members-title .members-name {
+    color: #666666;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: bold;
+    text-align: left;
+    text-decoration: none;
+    padding-left: 1em;
+}
+
+.members-list .members-title  .member-add {
+    text-align: right;
+}
+
+.members-list .detail-list-item .icon, .members-list .detail-list-item .avatar {
+    float: left;
+}
+
+.members-list .detail-list-item .person {
+    padding-left: 54px;
+}
+
+.members-table {
+    width: 95%;
+    margin-left: 3%;
+}
+
+/* Dashlet styles */
+.dashlet.members .detail-list-item {
+    border-bottom: none;
+    overflow: hidden;
+}
+.dashlet.members .detail-list-item:first-of-type {
+    padding-top: 15px;
+}
+.dashlet.members .detail-list-item .avatar,
+.dashlet.members .detail-list-item .avatar img {
+    width: 40px;
+    height: 40px;
+}
+.dashlet.members .detail-list-item .person > div {
+    color: #969696;
+    padding-left: 5px;
+}
+

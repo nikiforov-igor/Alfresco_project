@@ -3,6 +3,7 @@ package ru.it.lecm.errands.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -132,10 +133,10 @@ public class ErrandsFilter extends DocumentFilter {
 
                         Date end = calendar.getTime();
 
-                        final String MIN = DocumentService.DateFormatISO8601.format(now);
-                        final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
+                        final String MIN = BaseBean.DateFormatISO8601.format(now);
+                        final String MAX = end != null ? BaseBean.DateFormatISO8601.format(end) : "MAX";
 
-                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXEC_DATE + ":\"" + MIN + " \"..\"" + MAX + "\")";
+                        query += (query.length() > 0 ? " AND " : "") + " (@" + PROP_EXEC_DATE + ":[\"" + MIN + "\" TO \"" + MAX + "\"])";
                         break;
                     }
                     case ALL: {

@@ -83,7 +83,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
     @Override
     public void onCreateChildAssociation(ChildAssociationRef childAssocRef, boolean isNewNode) {
         NodeRef node = childAssocRef.getParentRef();
-        if (nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
+        if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
             fireEvent(node);
         }
     }
@@ -91,7 +91,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
         NodeRef node = nodeAssocRef.getSourceRef();
-        if (nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
+        if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS) && !nodeAssocRef.getTypeQName().equals(DocumentEventService.ASSOC_EVENT_LISTENERS)) {
             fireEvent(node);
         }
     }
@@ -99,7 +99,7 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
     @Override
     public void onDeleteChildAssociation(ChildAssociationRef childAssocRef) {
         NodeRef node = childAssocRef.getParentRef();
-        if (nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
+        if (nodeService.exists(node) && nodeService.hasAspect(node, DocumentEventService.ASPECT_EVENT_LISTENERS)) {
             fireEvent(node);
         }
     }
@@ -143,48 +143,48 @@ public class DocumentEventPolicy implements NodeServicePolicies.OnUpdateProperti
 
         }
 
-        @Override
-        public void afterCommit() {
-            List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER);
-            if (pendingDocs != null) {
-                while (!pendingDocs.isEmpty()) {
-                    final NodeRef docRef = pendingDocs.remove(0);
-                    if (nodeService.exists(docRef)) {
-                        List<AssociationRef> listeners = nodeService.getTargetAssocs(docRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
-                        for (AssociationRef listener : listeners) {
-                            final NodeRef node = listener.getTargetRef();
-                            Runnable runnable = new Runnable() {
-                                public void run() {
-                                    try {
-                                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-                                            @Override
-                                            public Void doWork() throws Exception {
-                                                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-                                                    @Override
-                                                    public Void execute() throws Throwable {
-                                                        String senders = nodeService.getProperty(node, DocumentEventService.PROP_EVENT_SENDER).toString();
-                                                        if ("".equals(senders)) {
-                                                            senders = docRef.toString();
-                                                        } else {
-                                                            senders += "," + docRef.toString();
-                                                        }
-                                                        nodeService.setProperty(node, DocumentEventService.PROP_EVENT_SENDER, senders);
-                                                        return null;
-                                                    }
-                                                }, false, true);
-                                            }
-                                        });
-                                    } catch (Exception e) {
-                                        logger.error("Error while send document events", e);
-                                    }
-                                }
-                            };
-                            threadPoolExecutor.execute(runnable);
-                        }
-                    }
-                }
-            }
-        }
+         @Override
+         public void afterCommit() {
+             List<NodeRef> pendingDocs = AlfrescoTransactionSupport.getResource(DOCUMENT_EVENTS_TRANSACTION_LISTANER);
+             if (pendingDocs != null) {
+                 while (!pendingDocs.isEmpty()) {
+                     final NodeRef docRef = pendingDocs.remove(0);
+                     if (nodeService.exists(docRef)) {
+                         List<AssociationRef> listeners = nodeService.getTargetAssocs(docRef, DocumentEventService.ASSOC_EVENT_LISTENERS);
+                         for (AssociationRef listener : listeners) {
+                             final NodeRef node = listener.getTargetRef();
+                             Runnable runnable = new Runnable() {
+                                 public void run() {
+                                     try {
+                                         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                             @Override
+                                             public Void doWork() throws Exception {
+                                                 return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                                                     @Override
+                                                     public Void execute() throws Throwable {
+                                                         String senders = nodeService.getProperty(node, DocumentEventService.PROP_EVENT_SENDER).toString();
+                                                         if ("".equals(senders)) {
+                                                             senders = docRef.toString();
+                                                         } else {
+                                                             senders += "," + docRef.toString();
+                                                         }
+                                                         nodeService.setProperty(node, DocumentEventService.PROP_EVENT_SENDER, senders);
+                                                         return null;
+                                                     }
+                                                 }, false, true);
+                                             }
+                                         });
+                                     } catch (Exception e) {
+                                         logger.error("Error while send document events", e);
+                                     }
+                                 }
+                             };
+                             threadPoolExecutor.execute(runnable);
+                         }
+                     }
+                 }
+             }
+         }
 
         @Override
         public void afterRollback() {

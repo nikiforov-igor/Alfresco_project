@@ -1,0 +1,490 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+<!--
+	Licensed to the Apache Software Foundation (ASF) under one or more
+	contributor license agreements.  See the NOTICE file distributed with
+	this work for additional information regarding copyright ownership.
+	The ASF licenses this file to You under the Apache License, Version 2.0
+	(the "License"); you may not use this file except in compliance with
+	the License.  You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+
+-->
+<beans>
+
+    <bean id="contracts.LogicEcmContractsTableStructureBootstrap" parent="modelsToRepositoryLoader"
+          depends-on="documents.LogicEcmModelsBootstrap,contracts.LogicEcmContractsDictionariesBootstrap,ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,dictionary.LogicEcmDictionaryCurrencyModelBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-table-structure-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-contracts-table-structure-model</value>
+            </list>
+        </property>
+    </bean>
+
+	<bean id="contracts.contractsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap,
+		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,contracts.LogicEcmContractsDictionariesBootstrap,
+		  dictionary.LogicEcmDictionaryCurrencyModelBootstrap,documents.LogicEcmModelsConnectionsBootstrap,
+		  documents.dictionaries.LogicEcmModelsBootstrap, lecm.signed-docflow.model-bootstrap,contracts.LogicEcmContractsTableStructureBootstrap">
+		<property name="models">
+			<list>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-aspects-model.xml</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="contracts.LogicEcmContractsBootstrap" parent="modelsToRepositoryLoader"
+		  depends-on="contracts.contractsBootstrap">
+		<property name="models">
+			<list>
+
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-additional-document-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-model</value>
+				<value>alfresco/module/${artifactId}/messages/lecm-additional-document-model</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="contracts.LogicEcmContractsDictionariesBootstrap" parent="modelsToRepositoryLoader"
+	      depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-dictionaries-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-dictionaries-model</value>
+			</list>
+		</property>
+	</bean>
+
+    <!--временно все сообщения деплоятся здесь. TODO деплоить сообщения через репозиторий-->
+    <!--<bean id="contracts.contracts.temp.messages.bootstrap" parent="dictionaryModelBootstrap"-->
+          <!--depends-on="dictionaryBootstrap">-->
+    <!--<property name="labels">-->
+        <!--<list>-->
+            <!--<value>alfresco/module/${artifactId}/messages/lecm-contracts-model</value>-->
+            <!--<value>alfresco/module/${artifactId}/messages/lecm-additional-document-model</value>-->
+            <!--<value>alfresco/module/${artifactId}/messages/lecm-contracts-dictionaries-model</value>-->
+            <!--<value>alfresco/module/${artifactId}/messages/lecm-contracts-table-structure-model</value>-->
+        <!--</list>-->
+    <!--</property>-->
+<!--</bean>-->
+
+
+    <bean id="contractService" class="ru.it.lecm.contracts.beans.ContractsBeanImpl" parent="baseBean"
+          depends-on="nodeService, documentService, documentConnectionService,documentMembersService,regNumbersService, notificationsService">
+        <property name="searchService" ref="searchService"/>
+	    <property name="documentService" ref="documentService"/>
+	    <property name="authService" ref="authenticationService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+    </bean>
+
+    <bean id="contractsScript" parent="baseScript" class="ru.it.lecm.contracts.script.ContractsWebScriptBean"
+          depends-on="nodeService, contractService">
+        <property name="extensionName">
+            <value>contracts</value>
+        </property>
+		<property name="transactionService" ref="transactionService"/>
+	    <property name="nodeService" ref="nodeService"/>
+        <property name="contractService" ref="contractService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="preferenceService" ref="preferenceService"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+		<property name="documentMembersService" ref="documentMembersService"/>
+    </bean>
+
+    <bean id="contract.businessJournalDictionaryBootstrap"
+          parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+                      ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      businessJournalLogEventsPolicy, documents.LogicEcmConnectionTypesBootstrap,
+					  regNumbers.regNumbersTemplatesDicBootstrap">
+	    <property name="dictionaries">
+		    <list>
+			    <value>alfresco/module/${artifactId}/models/lecm-contracts-types.xml</value>
+			    <value>alfresco/module/${artifactId}/models/lecm-contract-documents-types.xml</value>
+			    <value>alfresco/module/${artifactId}/models/lecm-contract-delete-reasons.xml</value>
+			    <value>alfresco/module/${artifactId}/models/lecm-contracts-reference-data.xml</value>
+			    <value>alfresco/module/${artifactId}/models/lecm-contracts-status-types.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-business-journal-objectType-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-roles-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-connection-types-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/lecm-contracts-regnumbers.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contract.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-contract:document" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-contracts-default-statemachine.xml" />
+    </bean>
+
+    <bean id="additionalDocument.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-additional-document:additionalDocument" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-additionalDocument-default-statemachine.xml" />
+    </bean>
+
+    <bean id="contractsStatusesFilter" parent="documentStatusesFilter">
+        <property name="defaultFilters">
+            <map>
+                <entry key="lecm-contract:document" value="Все"/>
+                <entry key="lecm-contract:document-archive" value="Завершенные"/>
+                <entry key="lecm-additional-document:additionalDocument" value="Все"/>
+                <entry key="lecm-additional-document:additionalDocument-archive" value="Все"/>
+            </map>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="lecm-contract:document">
+                    <map>
+                        <entry key="Все" value="!Аннулирован, !Удален"/>
+                        <entry key="Проекты" value="Черновик, Проект зарегистрирован, На согласовании, Согласован, На доработке, На подписании"/>
+                        <entry key="Подписанные" value="Подписан, Зарегистрирован, Действует"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+        <property name="archiveFilters">
+            <map>
+                <entry key="lecm-contract:document">
+                    <map>
+                        <entry key="Завершенные" value="Исполнен, Расторгнут"/>
+                        <entry key="Корзина" value="Аннулирован, Удален"/>
+                    </map>
+                </entry>
+                <entry key="lecm-additional-document:additionalDocument">
+                    <map>
+                        <entry key="Завершенные" value="Исполнен, Отменен"/>
+                        <entry key="Корзина" value="Аннулирован"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+	<bean id="contractsWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
+		<property name="workflowDefinitions">
+			<list>
+				<props>
+					<prop key="engineId">activiti</prop>
+					<prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-create-on-basis.bpmn20.xml</prop>
+					<prop key="mimetype">text/xml</prop>
+					<prop key="redeploy">${redeploy.process.definitions}</prop>
+				</props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-delete-reason.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-contract-time.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+				<props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-termination.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-executed.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-contracts-sign-contractor.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-additionalDocument-sign-contractor.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+				<props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-additionalDocument-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+			</list>
+		</property>
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-contracts-workflow-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-contracts-workflow</value>
+			</list>
+		</property>
+		<property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+	</bean>
+
+    <bean id="contractsInitiatorNotificationExecutor" class="ru.it.lecm.contracts.schedule.InitiatorEveryDayNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="contractsService" ref="contractService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+    <property name="publicAction" value="false" />
+    </bean>
+
+    <bean id="contractsInitiatorNotificationSchedule" class="ru.it.lecm.contracts.schedule.InititatorEveryDayNotificationSchedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 3 */1 * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */30 * * * ?</value>
+        </property>
+        <property name="jobName">
+            <value>contracts-notifications-job</value>
+        </property>
+        <property name="jobGroup">
+            <value>contracts-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>contracts-notifications-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>contracts-notifications</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="contractsService" ref="contractService"/>
+    </bean>
+
+    <!-- Оповещении о наступленни даты начала/конца этапа -->
+    <bean id="contractsStageDateNotificationExecutor" class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="contractsService" ref="contractService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentTableService" ref="documentTableService"/>
+    <property name="publicAction" value="false" />
+    </bean>
+
+    <bean id="contractsStageDateNotificationSchedule" class="ru.it.lecm.contracts.schedule.ContractStageDateNotificationSchedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 5 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="jobName">
+            <value>contracts-stage-notifications-job</value>
+        </property>
+        <property name="jobGroup">
+            <value>contracts-stage-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>contracts-stage-notifications-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>contracts-stage-notifications</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <!-- #Оповещении о наступленни даты начала/конца этапа# -->
+
+	<bean id="contracts.LogicEcmContractsTaggedCounterRegistrator"
+	      parent="regNumbersTaggedCounterRegistrator"
+	      depends-on="contracts.LogicEcmContractsBootstrap">
+		<property name="documentType" value="lecm-contract:document"/>
+		<property name="tags">
+			<list>
+				<value>contracts_system</value>
+				<value>contracts_project</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="contractStagesPolicy" class="ru.it.lecm.contracts.policies.ContractStagesPolicy"
+          depends-on="contracts.LogicEcmContractsTableStructureBootstrap"
+          init-method="init">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="policyComponent" ref="policyComponent"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.contracts.substitute.string.get" class="ru.it.lecm.contracts.AssociationSubstituteString" parent="webscript">
+        <property name="substituteService" ref="substitudeService"/>
+    </bean>
+
+    <bean id="contracts.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-contract-dic:contract-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:contract-type-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:contract-documents-type">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:contract-documents-type-code</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:reference-data">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:reference-data-link</value>
+                    </list>
+                </entry>
+                <entry key="lecm-contract-dic:delete-reason">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-contract-dic:delete-reason-code</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="contractsCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-contract:summaryContent</value>
+                <value>lecm-contract:signatoryCounterparty</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-contract:typeContract-assoc</value>
+                <value>lecm-contract:partner-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+                <value>lecm-contract:representative-assoc</value>
+                <value>lecm-contract:currency-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contractsCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-contract:document" value-ref="contractsCopySettings"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="listOfUsedContractsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-additional-document:additionalDocument" value="Документ к договору"/>
+                <entry key="lecm-contract-dic:contract-type" value="Вид договора"/>
+                <entry key="lecm-contract-dic:contract-documents-type" value="Вид документа к договору"/>
+                <entry key="lecm-contract:document" value="Договор"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="contracts.view.bootstrap" class="ru.it.lecm.base.dbviews.DBViewBootstrap"
+          parent="lecm.view.bootstrap" depends-on="contracts.LogicEcmContractsBootstrap">
+        <property name="models">
+            <list>
+                <value>lecm-contract:document</value>
+                <value>lecm-additional-document:additionalDocument</value>
+                <value>lecm-contract-table-structure:stage</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="contracts.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/contract-dossier.xml</value>
+                <value>alfresco/module/${artifactId}/reports/contract-stages.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="contracts.reportsDeployer"/>
+    </bean>
+
+    <bean id="contracts.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>contract-dossier-byid</value>
+                <value>contract-stages</value>
+            </list>
+        </property>
+    </bean>
+</beans>

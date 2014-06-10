@@ -4,6 +4,8 @@ import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.InvalidQNameException;
+import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
@@ -13,8 +15,6 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.alfresco.service.namespace.InvalidQNameException;
-import org.alfresco.service.namespace.NamespaceException;
 
 /**
  * User: PMelnikov
@@ -28,7 +28,7 @@ public class ExpressionDocument {
     private static DocumentAttachmentsService documentAttachmentsService;
     private static DocumentConnectionService documentConnectionService;
 	private static DocumentService documentService;
-    private static StateMachineServiceBean stateMachineHelper;
+    private static StateMachineServiceBean stateMachineService;
 
     public ExpressionDocument() {
 
@@ -120,7 +120,7 @@ public class ExpressionDocument {
         List<NodeRef> connectedDocuments = documentConnectionService.getConnectedDocuments(nodeRef, connectionType, documentTypeQName);
         if (connectedDocuments != null) {
             for (NodeRef document: connectedDocuments) {
-                if (!stateMachineHelper.isFinal(document)) {
+                if (!stateMachineService.isFinal(document)) {
                     return true;
                 }
             }
@@ -128,9 +128,9 @@ public class ExpressionDocument {
         return false;
     }
 
-    //Наличие вложения с определенным типом
+    //Наличие вложения с определенным типом????
     public String getPreviousStatusName() {
-        return stateMachineHelper.getPreviousStatusName(nodeRef);
+        return stateMachineService.getPreviousStatusName(nodeRef);
     }
 
 	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {
@@ -140,32 +140,46 @@ public class ExpressionDocument {
 		types.add(nodeService.getType(this.nodeRef));
 
 		StringBuilder filters = new StringBuilder();
-
+        List<QName> properties = new ArrayList<QName>();
 		if (props != null) {
 			for (String prop: props) {
 				QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
-				Serializable propValue = nodeService.getProperty(this.nodeRef, propQName);
-				if (propValue != null) {
-					if (filters.length() > 0) {
-						filters.append(" AND ");
-					}
-					filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
-							.append(":\"").append(propValue).append("\"");
-				}
+                properties.add(propQName);
 			}
 		}
+        //проверяем свойсва на наличие пустых значений
+        boolean hasEmptyProperty = false;
+        for (QName property : properties) {
+            Serializable value = nodeService.getProperty(this.nodeRef, property);
+            hasEmptyProperty = hasEmptyProperty || value == null || "".equals(value);
+        }
 
-		List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, filters.toString(), null);
-		List<NodeRef> filteredDocuments = new ArrayList<NodeRef>();
-		if (documents != null) {
-			for (NodeRef document: documents) {
-				if (document != this.nodeRef && documentService.getDocumentRegNumber(document) != null) {
-					filteredDocuments.add(document);
-				}
-			}
-		}
+        if (!properties.isEmpty() && !hasEmptyProperty) {
+            for (String prop: props) {
+                QName propQName = QName.createQName(prop, serviceRegistry.getNamespaceService());
+                properties.add(propQName);
+                Serializable propValue = nodeService.getProperty(this.nodeRef, propQName);
+                if (propValue != null) {
+                    if (filters.length() > 0) {
+                        filters.append(" AND ");
+                    }
+                    filters.append("@").append(prop.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-"))
+                            .append(":\"").append(propValue).append("\"");
+                }
+            }
 
-		return filteredDocuments.size() > 0;
+            List<NodeRef> documents = documentService.getDocumentsByFilter(types, null, null, filters.toString(), null);
+            List<NodeRef> filteredDocuments = new ArrayList<NodeRef>();
+            if (documents != null) {
+                for (NodeRef document: documents) {
+                    filteredDocuments.add(document);
+                }
+            }
+
+		    return !filteredDocuments.isEmpty();
+        } else {
+            return false;
+        }
 	}
 	
 	/**
@@ -188,8 +202,8 @@ public class ExpressionDocument {
 		ExpressionDocument.documentConnectionService = documentConnectionService;
 	}
 
-	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-		ExpressionDocument.stateMachineHelper = stateMachineHelper;
+	public void setStateMachineService(StateMachineServiceBean stateMachineHelper) {
+		ExpressionDocument.stateMachineService = stateMachineHelper;
 	}
 
 	public void setDocumentService(DocumentService documentService) {

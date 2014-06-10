@@ -75,7 +75,7 @@ public class DiagnosticUtility {
     private static String currentDirectoryPath = ".";
     private static String resultsDirectory = ".";
     private static boolean isServerAvailable = false;
-    
+
     private final static DateFormat dateParser = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
 
     private final static String SALT = "ac19625a23bd1fa61874694464ac9066";

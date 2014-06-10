@@ -9,15 +9,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -27,6 +28,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  * @author dbayandin
  */
 public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalSettingsService {
+	private static final transient Logger logger = LoggerFactory.getLogger(EDSGlobalSettingsServiceImpl.class);
 
 	private Map<String, Map<String, NodeRef>> potentialRolesMap;
 
@@ -48,10 +50,20 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
+            return getFolder(EDS_GLOBAL_SETTINGS_FOLDER_ID);
 	}
 
 	public void init() {
+                if (null == getSettingsNode()) {
+                    //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+                    lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            return createSettingsNode();
+                        }
+                    });
+                    
+                }
 		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
 
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);
@@ -192,37 +204,37 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 
 	@Override
 	public NodeRef getSettingsNode() {
-        final NodeRef rootFolder = getServiceRootFolder();
-
-        NodeRef settings = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
-        if (settings != null) {
-            return settings;
-        } else {
-            AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-                @Override
-                public NodeRef doWork() throws Exception {
-                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
-                            if (settingsRef == null) {
-                                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, EDS_GLOBAL_SETTINGS_NODE_NAME);
-                                QName nodeTypeQName = TYPE_SETTINGS;
-
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                properties.put(ContentModel.PROP_NAME, EDS_GLOBAL_SETTINGS_NODE_NAME);
-                                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                settingsRef = associationRef.getChildRef();
-                            }
-                            return settingsRef;
-                        }
-                    });
-                }
-            };
-            return AuthenticationUtil.runAsSystem(raw);
+//		TODO: Метод разделён, создание вынесено в createSettingsNode
+            return nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, EDS_GLOBAL_SETTINGS_NODE_NAME);
         }
-    }
+
+        /**
+         * создание ноды с настройками. создаётся при инициализации бина
+         */
+        private NodeRef createSettingsNode() throws WriteTransactionNeededException {
+    //		Проверим, открыта ли транзакция
+            //проверяется в createNode
+//            try {
+//                lecmTransactionHelper.checkTransaction();
+//            } catch (TransactionNeededException ex) {
+//                throw new WriteTransactionNeededException("Can't create settings node");
+//            }
+//            NodeRef settingsRef = getSettingsNode();
+//            if (settingsRef == null) {
+//                QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+//                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, EDS_GLOBAL_SETTINGS_NODE_NAME);
+//                QName nodeTypeQName = TYPE_SETTINGS;
+//
+//                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+//                properties.put(ContentModel.PROP_NAME, EDS_GLOBAL_SETTINGS_NODE_NAME);
+//                ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+//                settingsRef = associationRef.getChildRef();
+                
+                //settingsRef = createNode(getServiceRootFolder(), TYPE_SETTINGS, EDS_GLOBAL_SETTINGS_NODE_NAME, null);
+//            }
+//            return settingsRef;
+            return createNode(getServiceRootFolder(), TYPE_SETTINGS, EDS_GLOBAL_SETTINGS_NODE_NAME, null);
+        }
 
 	@Override
 	public Boolean isRegistrationCenralized() {
@@ -242,7 +254,7 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
         return false;
     }
 
-    @Override
+	@Override
     public NodeRef getArmDashletNode() {
         NodeRef settings = getSettingsNode();
         if (settings != null) {

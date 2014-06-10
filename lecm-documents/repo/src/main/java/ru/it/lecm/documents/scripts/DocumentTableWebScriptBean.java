@@ -11,6 +11,7 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.alfresco.service.transaction.TransactionService;
 
 /**
  * User: AIvkin
@@ -21,6 +22,11 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 	private DocumentTableService documentTableService;
 	protected NodeService nodeService;
 	private NamespaceService namespaceService;
+	private TransactionService transactionService;
+
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
 
 	public void setDocumentTableService(DocumentTableService documentTableService) {
 		this.documentTableService = documentTableService;
@@ -34,6 +40,11 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		this.namespaceService = namespaceService;
 	}
 
+	/**
+	 * Получение папки с табличными данными для документра
+	 * @param documentNodeRef nodeRef документа
+	 * @return папка для табличных данных в документе
+	 */
 	public ScriptNode getRootFolder(String documentNodeRef) {
 		org.alfresco.util.ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -48,6 +59,11 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение результирующих строк
+	 * @param tableDataRef nodeRef табличных данных
+	 * @return массив результирующих строк
+	 */
 	public Scriptable getTableTotalRow(String tableDataRef) {
 		ParameterCheck.mandatory("tableDataRef", tableDataRef);
 
@@ -61,20 +77,51 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Перемещение строки табличных данных вверх
+	 * @param tableRowStr nodeRef строки табличных данных
+	 * @return nodeRef записи с которой произошёл обмен
+	 */
     public String onMoveTableRowUp(String tableRowStr) {
         org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
-        NodeRef tableRow = new NodeRef(tableRowStr);
+        final NodeRef tableRow = new NodeRef(tableRowStr);
 
-        return this.documentTableService.moveTableRowUp(tableRow);
+//		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//		return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>(){
+//
+//			@Override
+//			public String execute() throws Throwable {
+				return documentTableService.moveTableRowUp(tableRow);
+//			}
+//
+//		});
+
     }
 
+	/**
+	 * Перемещение строки табличных данных вниз
+	 * @param tableRowStr nodeRef строки табличных данных
+	 * @return nodeRef записи с которой произошёл обмен
+	 */
     public String onMoveTableRowDown(String tableRowStr) {
         org.alfresco.util.ParameterCheck.mandatory("tableRowStr", tableRowStr);
-        NodeRef tableRow = new NodeRef(tableRowStr);
-
-        return this.documentTableService.moveTableRowDown(tableRow);
+        final NodeRef tableRow = new NodeRef(tableRowStr);
+		//А должен ли скрипт сам открывать транзакцию???
+//		return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>(){
+//
+//			@Override
+//			public String execute() throws Throwable {
+				return documentTableService.moveTableRowDown(tableRow);
+//			}
+//
+//		});
     }
 
+	/**
+	 * Получение строк табличных данных
+	 * @param tableDataRef nodeRef табличных данных
+	 * @return массив строк табличных данных
+	 */
     public Scriptable getTableDataRows(String tableDataRef) {
         ParameterCheck.mandatory("tableDataRef", tableDataRef);
 

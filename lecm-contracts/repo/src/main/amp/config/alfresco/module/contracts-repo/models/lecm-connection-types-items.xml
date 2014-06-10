@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Типы связи" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:На основании" type="lecm-connect-types:connection-type">
+                <property name="cm:name">На основании</property>
+                <property name="lecm-connect-types:reverse-name">Основание</property>
+                <property name="lecm-connect-types:code">onBasis</property>
+            </item>
+            <item name="cm:Отменяет" type="lecm-connect-types:connection-type">
+                <property name="cm:name">Отменяет</property>
+                <property name="lecm-connect-types:reverse-name">Отменён</property>
+                <property name="lecm-connect-types:code">cancel</property>
+            </item>
+        </items>
+    </item>
+</items>

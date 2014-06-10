@@ -91,7 +91,7 @@ public class SemanticBeanImpl extends BaseBean implements ConstantsBean, Semanti
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		return null;
 	}
 
 	/**

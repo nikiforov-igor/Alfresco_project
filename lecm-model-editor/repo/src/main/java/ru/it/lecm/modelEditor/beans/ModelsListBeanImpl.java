@@ -105,7 +105,7 @@ public class ModelsListBeanImpl extends BaseBean {
 						String typeName = type.getName().toPrefixString(namespaceService);
 
 						JSONObject modelObject = new JSONObject();
-						modelObject.put("title", type.getModel().getDescription());
+						modelObject.put("title", type.getModel().getDescription(dictionaryService));
 						modelObject.put("isActive", true);
 						modelObject.put("isDocumentModel", true);
 						modelObject.put("modelName", type.getModel().getName().toPrefixString());
@@ -113,7 +113,7 @@ public class ModelsListBeanImpl extends BaseBean {
 
 						JSONObject typeObject = new JSONObject();
 						typeObject.put("typeName", typeName);
-						typeObject.put("title", type.getTitle());
+						typeObject.put("title", type.getTitle(dictionaryService));
 						typeObject.put("isDocument", true);
 						typeObject.put("modelName", type.getModel().getName().toPrefixString());
 
@@ -147,7 +147,7 @@ public class ModelsListBeanImpl extends BaseBean {
                                     firstType = types.get(0);
                                 }
 
-                                if (firstType != null) {
+								if (firstType != null) {
 									if (models.containsKey(firstType.getName())) {
 										models.get(firstType.getName()).put("nodeRef", child.toString());
 									} else {

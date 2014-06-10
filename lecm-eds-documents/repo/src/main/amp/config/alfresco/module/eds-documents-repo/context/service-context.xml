@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<util:list id="eds.models">
+		<value>alfresco/module/${artifactId}/models/lecm-eds-global-settings-model.xml</value>
+	</util:list>
+	<util:list id="eds.document.models">
+		<value>alfresco/module/${artifactId}/models/lecm-eds-document-model.xml</value>
+	</util:list>
+	<util:list id="eds.models.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-document-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-eds-global-settings-model</value>
+	</util:list>
+	<bean id="eds.models.bootstrap" parent="modelsToRepositoryLoader"
+		  depends-on="dictionaryBootstrap,
+					  documents.LogicEcmModelsBootstrap,
+					  arm.LogicEcmBootstrap,
+					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					  documents.dictionaries.LogicEcmModelsBootstrap,
+					  dictionary.fileRegister.LogicEcmModelsBootstrap"
+		  p:models-ref="eds.document.models"
+		  p:labels-ref="eds.models.labels"/>
+	
+	<bean id="eds.other.models.bootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="dictionaryBootstrap,
+					  documents.LogicEcmModelsBootstrap,
+					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					  documents.dictionaries.LogicEcmModelsBootstrap,
+					  arm.LogicEcmModelsBootstrap,
+					  dictionary.fileRegister.LogicEcmModelsBootstrap"
+		  p:models-ref="eds.models"
+		  p:labels-ref="eds.models.labels"/>
+		
+	<util:list id="eds.dictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-potential-roles.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-eds-br-items.xml</value>
+	</util:list>
+	<bean id="eds.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  businessJournalLogEventsPolicy"
+		  p:dictionaries-ref="eds.dictionaries"/>
+
+	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_ID" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_ID"/>
+	<util:constant id="EDS_GLOBAL_SETTINGS_FOLDER_NAME" static-field="ru.it.lecm.eds.api.EDSGlobalSettingsService.EDS_GLOBAL_SETTINGS_FOLDER_NAME"/>
+	<util:map id="eds.global-settings.folders">
+		<entry key="#{EDS_GLOBAL_SETTINGS_FOLDER_ID}" value="#{EDS_GLOBAL_SETTINGS_FOLDER_NAME}"/>
+	</util:map>
+	<bean id="eds.global-settings.service" init-method="init" parent="baseBean"
+            depends-on="eds.other.models.bootstrap"
+		  class="ru.it.lecm.eds.EDSGlobalSettingsServiceImpl"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:namespaceService-ref="namespaceService"
+		  p:dictionaryService-ref="serviceDictionary"
+		  p:folders-ref="eds.global-settings.folders"/>
+
+	<util:list id="eds.groupOperations">
+		<value>alfresco/module/${artifactId}/actions/route.xml</value>
+	</util:list>
+	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:dictionaries-ref="eds.groupOperations"/>
+
+    <bean id="eds.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/eds-by-kind-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-subject-stat-all-in.xml</value>
+                <value>alfresco/module/${artifactId}/reports/eds-by-type-stat.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="eds.reportsDeployer"/>
+    </bean>
+
+    <bean id="eds.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>eds-by-kind-stat</value>
+                <value>eds-by-subject-stat</value>
+                <value>eds-by-subject-stat-all-in</value>
+                <value>eds-by-type-stat</value>
+            </list>
+        </property>
+    </bean>
+</beans>

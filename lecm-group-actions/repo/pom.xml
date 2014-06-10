@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.group-actions</groupId>
         <artifactId>group-actions</artifactId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <artifactId>group-actions-repo</artifactId>
@@ -132,10 +132,20 @@
             </plugin>
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
-                <artifactId>maven-amp-plugin</artifactId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
             </plugin>
         </plugins>
         <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>

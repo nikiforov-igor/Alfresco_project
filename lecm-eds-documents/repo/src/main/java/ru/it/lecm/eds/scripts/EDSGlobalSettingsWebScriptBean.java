@@ -54,6 +54,17 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		//получаем текущего пользователя
 		NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
 		// централизованная ли регистрация
+//		TODO: Метод getRegistras в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
+//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
+//              нода настроек создаётся при инициализации бина. проверять не будем.
+//		if(edsGlobalSettingsService.getSettingsNode() == null) {
+//			try {
+////				Используется только в скриптах машины состояний, должно быть уже в транзакции
+//				edsGlobalSettingsService.createSettingsNode();
+//			} catch (WriteTransactionNeededException ex) {
+//				throw new RuntimeException("Can't create settings node", ex);
+//			}
+//		}
 		List<NodeRef> registrars = edsGlobalSettingsService.getRegistras(currentEmployee, businessRoleId);
 		return createScriptable(registrars);
 	}
@@ -89,6 +100,22 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 	}
 
 	public ScriptNode getSettingsNode() {
+//		TODO:  метод getSettingsNode ранее был getOrCreate.
+//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
+//              нода настроек создаётся при инициализации бина. проверять не будем.            
+//		NodeRef settings = edsGlobalSettingsService.getSettingsNode();
+//		if(settings == null) {
+////			Вызывается без транзакции, обернём
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//
+//				@Override
+//				public NodeRef execute() throws Throwable {
+//					return edsGlobalSettingsService.createSettingsNode();
+//				}
+//			};
+//			settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+//		}
+
 		return new ScriptNode(edsGlobalSettingsService.getSettingsNode(), serviceRegistry, getScope());
 	}
 
@@ -96,11 +123,44 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
 		return edsGlobalSettingsService.isRegistrationCenralized();
 	}
 
-	public Boolean isHidePropsForRecipients() {
+    /**
+     * Проверка, скрывать ли свойства для получателей
+     */
+    public Boolean isHidePropsForRecipients() {
+//		TODO: Метод isHideProperties в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
+//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
+//              нода настроек создаётся при инициализации бина. проверять не будем.
+//		if(edsGlobalSettingsService.getSettingsNode() == null) {
+//			try {
+////			Используется только в скриптах машины состояний, должно быть уже в транзакции
+//				edsGlobalSettingsService.createSettingsNode();
+//			} catch (WriteTransactionNeededException ex) {
+//				throw new RuntimeException("Can't create settings node", ex);
+//			}
+//		}
 		return edsGlobalSettingsService.isHideProperties();
 	}
 
+    /**
+     * Получение узла АРМ для Дашлета «Моя работа»
+     */
     public ScriptNode getArmDashletNode() {
+//		TODO: Метод getArmDashletNode в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
+//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
+//              нода настроек создаётся при инициализации бина. проверять не будем.
+//		if(edsGlobalSettingsService.getSettingsNode() == null) {
+////			Вызывается в RO транзакции, обернём
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					edsGlobalSettingsService.createSettingsNode();
+//					return null;
+//				}
+//			};
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
+
         NodeRef armDN =  edsGlobalSettingsService.getArmDashletNode();
         if (armDN != null) {
             return new ScriptNode(armDN, serviceRegistry, getScope());
@@ -108,7 +168,26 @@ public class EDSGlobalSettingsWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    /**
+     * Получение АРМ для Дашлета «Моя работа»
+     */
     public ScriptNode getArm() {
+//		TODO: Метод getArm в итоге дёргает метод getSettingsNode, который ранее был getOrCreate.
+//		Теперь метод разделён и необходимо провести проверку на существование ноды и создать её при необходимости
+//              нода настроек создаётся при инициализации бина. проверять не будем.        
+//		if(edsGlobalSettingsService.getSettingsNode() == null) {
+////			Вызывается в RO транзакции, обернём
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					edsGlobalSettingsService.createSettingsNode();
+//					return null;
+//				}
+//			};
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
+
         NodeRef arm =  edsGlobalSettingsService.getArm();
         if (arm != null) {
             return new ScriptNode(arm, serviceRegistry, getScope());

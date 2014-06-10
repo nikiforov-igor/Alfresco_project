@@ -11,7 +11,7 @@ public class TransitionExpression {
     private String expression = null;
     private String outputValue = null;
     private boolean stopSubWorkflows = false;
-    private String script = null;
+	private String script = null;
 
     public TransitionExpression(String expression, String outputValue, boolean stopSubWorkflows, String script) {
         this.expression = expression;

@@ -2,14 +2,13 @@ package ru.it.lecm.reports.model.DAO;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.*;
-import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportEditorDAO;
 import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
@@ -19,26 +18,20 @@ import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchBuilder;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
-public class ReportEditorDAOImpl implements ReportEditorDAO {
+public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
 
     private static final transient Logger log = LoggerFactory.getLogger(ReportEditorDAOImpl.class);
 
     private WKServiceKeeper services;
-    private ReportsManager reportsManager;
 
     public WKServiceKeeper getServices() {
         return services;
-    }
-
-    public void setReportsManager(ReportsManager reportsManager) {
-        this.reportsManager = reportsManager;
     }
 
     public void setServices(WKServiceKeeper services) {
@@ -50,33 +43,114 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return getReportDescriptor(id, false);
     }
 
+    public NodeRef getReportsRootFolder() {
+        return getFolder("RE_REPORTS_ROOT_ID");
+    }
+
     @Override
-    public ReportDescriptor getReportDescriptor(NodeRef id, boolean withoutSubs) {
-        ReportDescriptor result = getRegisteredReport(getString(id, PROP_REPORT_CODE));
-        if (result == null) {
-            boolean isSubReport = getNodeService().getType(id).equals(TYPE_SUB_REPORT_DESCRIPTOR);
-            result = !isSubReport ? new ReportDescriptorImpl() : new SubReportDescriptorImpl();
+    public ReportDescriptor getReportDescriptor(NodeRef node, boolean withoutSubs) {
+        boolean isSubReport = getNodeService().getType(node).equals(TYPE_SUB_REPORT_DESCRIPTOR);
+        ReportDescriptor result = !isSubReport ? new ReportDescriptorImpl() : new SubReportDescriptorImpl();
+
+        final NodeService nodeService = getNodeService();
+
+        result.setMnem((String) nodeService.getProperty(node, PROP_REPORT_CODE));
+        setL18Name(result, node);
+        setFlags(result.getFlags(), node);
+
+        // провайдер
+        List<AssociationRef> provideRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_PROVIDER);
+        if (!provideRefs.isEmpty()) {
+            NodeRef provider = provideRefs.get(0).getTargetRef();
+            result.setProviderDescriptor(createReportProvider(provider));
         }
 
-        setProps_RD(result, id);
+        //шаблон(ы)
+        List<AssociationRef> templatesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_TEMLATE);
+        List<ReportTemplate> templates = new ArrayList<ReportTemplate>();
+        for (AssociationRef template : templatesRefs) {
+            templates.add(createReportTemplate(template.getTargetRef()));
+        }
+        result.setReportTemplates(templates);
+
+        //бизнес-роли
+        List<AssociationRef> rolesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_ROLES);
+        Set<String> rolesSet = new HashSet<String>();
+        for (AssociationRef role : rolesRefs) {
+            String id = (String) nodeService.getProperty(role.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+            rolesSet.add(id);
+        }
+        result.setBusinessRoles(rolesSet);
+
+        //источник данных
+        Set<QName> ds = new HashSet<QName>();
+        ds.add(TYPE_REPORT_DATASOURCE);
+        List<ChildAssociationRef> dsChilds = nodeService.getChildAssocs(node, ds);
+        if (!dsChilds.isEmpty()) {
+            result.setDSDescriptor(createDSDescriptor(dsChilds.get(0).getChildRef()));
+        }
+
+        //кастомные свойства для подотчета
+        if (result.isSubReport()) {
+            SubReportDescriptorImpl subResult = (SubReportDescriptorImpl) result;
+            final String reportName = result.getMnem();
+            subResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
+
+            // источник данных для вложенного списка полей должен быть указан как query
+            subResult.setSourceListExpression(result.getFlags().getText());
+
+            List<AssociationRef> parentTempRefAssoc = getNodeService().getTargetAssocs(node, ASSOC_PARENT_TEMPLATE_ASSOC);
+            if (!parentTempRefAssoc.isEmpty()) {
+                NodeRef parentTemplate = parentTempRefAssoc.get(0).getTargetRef();
+                subResult.setParentTemplate(createReportTemplate(parentTemplate));
+            }
+            // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
+            List<String> sourceTypes = result.getFlags().getSupportedNodeTypes();
+            if (sourceTypes != null) {
+                subResult.setSourceListType(new HashSet<String>(sourceTypes));
+            }
+
+            Map<String, String> customFlags = result.getFlags().getFlagsMap();
+            if (customFlags != null && customFlags.size() > 0) {
+                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptor();
+
+                String format = customFlags.get("format");
+                if (format != null) {
+                    formatDesc.setFormatString(format);
+                }
+
+                String ifEmpty = customFlags.get("ifEmpty");
+                if (ifEmpty != null) {
+                    formatDesc.setIfEmptyTag(ifEmpty);
+                }
+
+                String delimiter = customFlags.get("delimiter");
+                if (delimiter != null) {
+                    formatDesc.setItemsDelimiter(delimiter);
+                }
+
+                subResult.setItemsFormat(formatDesc);
+            }
+
+            for (ColumnDescriptor subreportColumn : result.getDsDescriptor().getColumns()) {
+                //TODO сюда можно добавить обработку каких-то "особых" столбцов
+                if (subResult.getSubItemsSourceMap() == null) {
+                    subResult.setSubItemsSourceMap(new HashMap<String, String>());
+                }
+                subResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
+            }
+
+            //установим родителя
+            NodeRef parentReport = getNodeService().getPrimaryParent(node).getParentRef();
+            ReportDescriptor parent = getReportDescriptor(parentReport, true); // не включаем подочтеты сюда! нужен только "макет основного отчета"
+            subResult.setOwnerReport(parent);
+        }
 
         if (!withoutSubs) {
-            setSubReports(result, id);
+            setSubReports(result, node);
         }
 
         return result;
-    }
-
-    private ReportDescriptor getRegisteredReport(String reportCode) {
-        if (reportCode != null) {
-            List<ReportDescriptor> regDescriptors = reportsManager.getRegisteredReports();
-            for (ReportDescriptor regDescriptor : regDescriptors) {
-                if (regDescriptor.getMnem().equals(reportCode)) {
-                    return regDescriptor;
-                }
-            }
-        }
-        return null;
     }
 
     protected void setSubReports(ReportDescriptor result, NodeRef id) {
@@ -124,7 +198,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
     }
 
     protected String getString(NodeRef node, final QName propName) {
-        return  getString(node, propName, null);
+        return getString(node, propName, null);
     }
 
     protected Integer getInteger(NodeRef node, final QName propName, Integer defaultValue) {
@@ -149,102 +223,6 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         result.regItem(nodeService.getProperty(node, ContentModel.PROP_LOCALE).toString(), getString(node, propName, null));
     }
 
-    protected void setProps_RD(ReportDescriptor result, NodeRef node) {
-        final NodeService nodeService = getNodeService();
-
-        result.setMnem((String) nodeService.getProperty(node, PROP_REPORT_CODE));
-
-        setL18Name(result, node);
-
-        setFlags(result.getFlags(), node);
-
-        List<AssociationRef> provideRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_PROVIDER);
-        if (!provideRefs.isEmpty()) {
-            NodeRef provider = provideRefs.get(0).getTargetRef();
-            result.setProviderDescriptor(createReportProvider(provider));
-        }
-
-        List<AssociationRef> templatesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_TEMLATE);
-        List<ReportTemplate> templates = new ArrayList<ReportTemplate>();
-        for (AssociationRef template : templatesRefs) {
-            templates.add(createReportTemplate(template.getTargetRef()));
-        }
-        result.setReportTemplates(templates);
-
-        List<AssociationRef> rolesRefs = nodeService.getTargetAssocs(node, ASSOC_REPORT_ROLES);
-        Set<String> rolesSet = new HashSet<String>();
-        for (AssociationRef role : rolesRefs) {
-            String id = (String) nodeService.getProperty(role.getTargetRef(), OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
-            rolesSet.add(id);
-        }
-        result.setBusinessRoles(rolesSet);
-
-        Set<QName> ds = new HashSet<QName>();
-        ds.add(TYPE_REPORT_DATASOURCE);
-
-        List<ChildAssociationRef> dsChilds = nodeService.getChildAssocs(node, ds);
-        if (!dsChilds.isEmpty()) {
-            result.setDSDescriptor(createDSDescriptor(dsChilds.get(0).getChildRef()));
-        }
-
-        result.setSubReport(getNodeService().getType(node).equals(TYPE_SUB_REPORT_DESCRIPTOR));
-
-        if (result.isSubReport() && result instanceof SubReportDescriptorImpl) {
-            SubReportDescriptorImpl subResult = (SubReportDescriptorImpl) result;
-            final String reportName = result.getMnem();
-            subResult.setDestColumnName(reportName); // целевая колонка - это главная колонка отчёта
-
-            // источник данных для вложенного списка полей должен быть указан как query
-            subResult.setSourceListExpression(result.getFlags().getText());
-
-            List<AssociationRef> parentTempRefAssoc = getNodeService().getTargetAssocs(node, ASSOC_PARENT_TEMPLATE_ASSOC);
-            if (!parentTempRefAssoc.isEmpty()){
-                NodeRef parentTemplate = parentTempRefAssoc.get(0).getTargetRef();
-                subResult.setParentTemplate(createReportTemplate(parentTemplate));
-            }
-            // тип данных для вложенного списка полей должен быть указан в поле Использовать для типов
-            List<String> sourceTypes = result.getFlags().getSupportedNodeTypes();
-            if (sourceTypes != null) {
-                subResult.setSourceListType(new HashSet<String>(sourceTypes));
-            }
-
-            Map<String, String> customFlags = result.getFlags().getFlagsMap();
-            if (customFlags != null && customFlags.size() > 0) {
-                ItemsFormatDescriptor formatDesc = new ItemsFormatDescriptor();
-
-                String format = customFlags.get("format");
-                if (format != null) {
-                    formatDesc.setFormatString(format);
-                }
-
-                String ifEmpty = customFlags.get("ifEmpty");
-                if (ifEmpty != null) {
-                    formatDesc.setIfEmptyTag(ifEmpty);
-                }
-
-                String delimiter = customFlags.get("delimiter");
-                if (delimiter != null) {
-                    formatDesc.setItemsDelimiter(delimiter);
-                }
-
-                subResult.setItemsFormat(formatDesc);
-            }
-
-            for (ColumnDescriptor subreportColumn : result.getDsDescriptor().getColumns()) {
-                //TODO сюда можно добавить обработку каких-то "особых" столбцов
-                if (subResult.getSubItemsSourceMap() == null) {
-                    subResult.setSubItemsSourceMap(new HashMap<String, String>());
-                }
-                subResult.getSubItemsSourceMap().put(subreportColumn.getColumnName(), subreportColumn.getExpression());
-            }
-
-            //установим родителя
-            NodeRef parentReport = getNodeService().getPrimaryParent(node).getParentRef();
-            ReportDescriptor parent = getReportDescriptor(parentReport, true); // не включаем подочтеты сюда! нужен только "макет основного отчета"
-            subResult.setOwnerReport(parent);
-        }
-    }
-
     protected void setFlags(ReportFlags result, NodeRef node) {
         result.setMnem(null);
 
@@ -261,7 +239,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         String customFlags = getString(node, PROP_T_REPORT_FLAGS);
         if (customFlags != null) {
-            customFlags = customFlags.replaceAll("\\n", "").replaceAll("\\r","");
+            customFlags = customFlags.replaceAll("\\n", "").replaceAll("\\r", "");
             String[] cfStr = customFlags.split(";");
             if (cfStr.length > 0) {
                 for (String flagStr : cfStr) {
@@ -410,6 +388,11 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
         return result;
     }
 
+    @Override
+    public void markAsDeployed(NodeRef reportId) {
+        serviceRegistry.getNodeService().setProperty(reportId, ReportEditorDAO.PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, true);
+    }
+
     private JavaDataType createColDataType(NodeRef nodeColType) {
         if (nodeColType == null) {
             return null;
@@ -417,7 +400,7 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
         final String clazzName = (String) getNodeService().getProperty(nodeColType, PROP_RDS_COLTYPE_CLASS);
         final String name = (String) getNodeService().getProperty(nodeColType, ContentModel.PROP_NAME);
-        final String code = (String)getNodeService().getProperty(nodeColType, PROP_RDS_COLTYPE_CODE);
+        final String code = (String) getNodeService().getProperty(nodeColType, PROP_RDS_COLTYPE_CODE);
 
         // если есть класс - по классу, потом по имени, потом по по мнемонике
         final String tag = Utils.coalesce(clazzName, name, code);
@@ -457,13 +440,16 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
     @Override
     public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
-        LuceneSearchBuilder builder = new LuceneSearchBuilder(getNamespaceService());
-        builder.emmitFieldCond(null, PROP_REPORT_CODE.toPrefixString(getNamespaceService()), rtMnemo);
-        builder.emmitTypeCond(TYPE_REPORT_DESCRIPTOR.toPrefixString(getNamespaceService()), null);
-
-        ResultSet rs = LucenePreparedQuery.execFindQuery(builder, getServices().getServiceRegistry().getSearchService());
-        if (rs != null && rs.length() > 0) {
-            return rs.getRow(0).getNodeRef();
+        if (rtMnemo != null && !rtMnemo.isEmpty()) {
+            Set<QName> types = new HashSet<QName>();
+            types.add(TYPE_REPORT_DESCRIPTOR);
+            List<ChildAssociationRef> reports = getNodeService().getChildAssocs(getReportsRootFolder(), types);
+            for (ChildAssociationRef report : reports) {
+                String reportCode = (String) getNodeService().getProperty(report.getChildRef(), PROP_REPORT_CODE);
+                if (reportCode.equals(rtMnemo)) {
+                    return report.getChildRef();
+                }
+            }
         }
         return null;
     }
@@ -474,6 +460,11 @@ public class ReportEditorDAOImpl implements ReportEditorDAO {
 
     public NodeService getNodeService() {
         return getServices().getServiceRegistry().getNodeService();
+    }
+
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return getFolder("RE_ROOT_ID");
     }
 
     public List<ReportDescriptor> scanSubreports(NodeRef mainReport) {

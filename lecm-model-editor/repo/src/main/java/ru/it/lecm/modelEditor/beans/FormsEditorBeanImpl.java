@@ -3,7 +3,6 @@ package ru.it.lecm.modelEditor.beans;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -28,6 +27,7 @@ import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -63,7 +63,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(FORMS_EDITOR_ROOT_ID);
+            return getFolder(FORMS_EDITOR_ROOT_ID);
 	}
 
 	public void setNamespaceService(NamespaceService namespaceService) {
@@ -82,6 +82,7 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * Получения папки для развёртывания форм
 	 * @return папка для развёртывания форм
 	 */
+        //TODO Refactoring in progress
 	public NodeRef getModelsDeployRootFolder() {
 		NodeRef folder = null;
 
@@ -94,7 +95,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 			NodeRef parent = dictionaryAssocs.get(0).getChildRef();
 			folder = getFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
 			if (folder == null) {
-				folder = createFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
+                            try {
+                                folder = createFolder(parent, FORMS_EDITOR_MODELS_DEPLOY_ROOT_NAME);
+                            } catch (WriteTransactionNeededException ex) {
+                                logger.debug("Can't create folder.", ex );
+                                throw new RuntimeException(ex);
+                            }
 			}
 		}
 
@@ -287,15 +293,24 @@ public class FormsEditorBeanImpl extends BaseBean {
 	 * @param modelName имя модели
 	 * @return NodeRef папки модели
 	 */
+        //TODO Refactoring in progress
+        //TODO ALF-2616 Пока создаём каталог здесь, из-за логики работы формы. Надо придумать более правильное место для создания.
 	public NodeRef getModelRootFolder(String modelName) {
-		String folderName = modelName.replace(":", "_");
-		NodeRef parent = getServiceRootFolder();
-		NodeRef folder = getFolder(parent, folderName);
-		if (folder == null) {
-			return createFolder(parent, folderName);
-		} else {
-			return folder;
-		}
+		final String folderName = modelName.replace(":", "_");
+		final NodeRef parent = getServiceRootFolder();
+                NodeRef result =  getFolder(parent, folderName);
+                if (null == result) {
+                    logger.debug("Folder \""+ folderName +"\" not found in \""+parent.toString()+ "\", creating.");
+                    result = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            return createFolder(parent, folderName);
+                        }
+                    });
+                    logger.debug("Folder \"" + folderName+ "\" created in \""+parent.toString()+ "\"");
+                }
+                return result;
 	}
 
 	/**
@@ -339,7 +354,12 @@ public class FormsEditorBeanImpl extends BaseBean {
 	public boolean generateModelForms(final String modelName) {
 		NodeRef configNode = getModelConfigNode(modelName);
 		if (configNode == null) {
-			configNode = createNode(getModelsDeployRootFolder(), ContentModel.TYPE_CONTENT, getModelFileName(modelName), null);
+                    try {
+                        configNode = createNode(getModelsDeployRootFolder(), ContentModel.TYPE_CONTENT, getModelFileName(modelName), null);
+                    } catch (WriteTransactionNeededException ex) {
+                        logger.debug("Can't create folder.", ex );
+                        throw new RuntimeException(ex);
+                    }
 		}
 		if (!nodeService.hasAspect(configNode, ContentModel.ASPECT_VERSIONABLE)) {
 			nodeService.addAspect(configNode, ContentModel.ASPECT_VERSIONABLE, null);

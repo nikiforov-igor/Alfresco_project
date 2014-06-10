@@ -1,5 +1,6 @@
 package ru.it.lecm.statemachine.script;
 
+import org.activiti.engine.task.Task;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -8,6 +9,8 @@ import org.alfresco.service.cmr.workflow.WorkflowTask;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.StringUtils;
 import org.mozilla.javascript.ScriptableObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineHelper;
@@ -27,6 +30,8 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 
     private OrgstructureBean orgstructureService;
     private StateMachineHelper stateMachineHelper;
+
+    private final static Logger logger = LoggerFactory.getLogger(StatemachineWebScriptBean.class);
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -58,12 +63,17 @@ public class StatemachineWebScriptBean extends BaseWebScript {
             return new WorkflowTaskListBean();
         }
 
-        NodeRef nodeRef = node.getNodeRef();
+        final NodeRef nodeRef = node.getNodeRef();
         BPMState state = BPMState.getValue(stateParam);
 
         List<WorkflowTask> tasks = new ArrayList<WorkflowTask>();
         if (state == BPMState.ACTIVE || state == BPMState.ALL) {
-            List<WorkflowTask> activeTasks = stateMachineHelper.getActiveTasks(nodeRef);
+            List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+                @Override
+                public List<WorkflowTask> doWork() throws Exception {
+                    return stateMachineHelper.getDocumentTasks(nodeRef, true);
+                }
+            });
 
             List<WorkflowTask> userTasks = stateMachineHelper.getAssignedAndPooledTasks(AuthenticationUtil.getFullyAuthenticatedUser());
             for (WorkflowTask activeTask : activeTasks) {
@@ -76,7 +86,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         }
 
         if (state == BPMState.COMPLETED || state == BPMState.ALL) {
-            tasks.addAll(stateMachineHelper.getCompletedTasks(nodeRef));
+            tasks.addAll(stateMachineHelper.getDocumentTasks(nodeRef, false));
         }
 
         WorkflowTaskListBean result = new WorkflowTaskListBean();
@@ -115,11 +125,11 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         BPMState state = BPMState.getValue(stateParam);
         WorkflowListBean result = new WorkflowListBean();
 
-        List<WorkflowInstance> activeWorkflows = stateMachineHelper.getActiveWorkflows(nodeRef);
+        List<WorkflowInstance> activeWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, true);
         result.setActiveWorkflows(activeWorkflows, activeWorkflowsLimit);
 
         if (state == BPMState.ALL) {
-            List<WorkflowInstance> completedWorkflows = stateMachineHelper.getCompletedWorkflows(nodeRef);
+            List<WorkflowInstance> completedWorkflows = stateMachineHelper.getDocumentWorkflows(nodeRef, false);
             result.setCompletedWorkflows(completedWorkflows);
         }
 
@@ -170,7 +180,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
      * @return
      */
     public List<WorkflowTask> getDocumentTasks(ScriptNode node) {
-        return stateMachineHelper.getDocumentTasks(node.getNodeRef());
+        return stateMachineHelper.getDocumentTasks(node.getNodeRef(), true);
     }
 
     /**
@@ -179,7 +189,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
      * @return
      */
     public List<WorkflowInstance> getDocumentWorkflows(ScriptNode node) {
-        return stateMachineHelper.getDocumentWorkflows(node.getNodeRef());
+        return stateMachineHelper.getDocumentWorkflows(node.getNodeRef(), true);
     }
 
     /**
@@ -222,6 +232,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
     }
 
     public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
+    	logger.debug("!!!!!!! StatemachineWebScriptBean getStatuses");
         Set<String> statuses = new HashSet<String>();
         if (documentType != null && !documentType.isEmpty()) {
             String[] types = documentType.split(",");
@@ -268,7 +279,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
 		return stateMachineHelper.isFinal(new NodeRef(nodeRef));
 	}
 
-	/**
+    /**
      * Возвращает номер процесса машины состояний, по которому запущен документ
      * @param node
      * @return
@@ -282,7 +293,7 @@ public class StatemachineWebScriptBean extends BaseWebScript {
      * @param node
      * @return
      */
-	
+
     public String getStatemachineVersion(ScriptNode node) {
         return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
     }
@@ -296,6 +307,18 @@ public class StatemachineWebScriptBean extends BaseWebScript {
      */
     public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName) {
         return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName);
+    }
+    
+    /**
+     * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
+     * @param document документ
+     * @param employee сотрудник
+     * @param roleName имя роли
+     * @param task
+     * @return
+     */
+    public boolean grandDynamicRoleForEmployee(ScriptNode document, ScriptNode employee, String roleName, Task task) {
+        return stateMachineHelper.grandDynamicRoleForEmployee(document.getNodeRef(), employee.getNodeRef(), roleName, task);
     }
 
     /**
@@ -321,4 +344,13 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName);
     }
 
+    public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
+        stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
+    }
+
+	public void terminateWorkflowsByDefinition(final ScriptNode document, final String definition, final String variable, final Object value) {
+		ArrayList<String> definitions = new ArrayList<String>();
+		definitions.add(definition);
+		stateMachineHelper.terminateWorkflowsByDefinitionId(document.getNodeRef(), definitions, variable, value);
+	}
 }

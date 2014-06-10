@@ -9,6 +9,7 @@ import org.alfresco.service.namespace.QName;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
+import ru.it.lecm.workflow.api.WorkflowType;
 import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
 
 /**
@@ -17,11 +18,24 @@ import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
  */
 public class SigningWorkflowRunner extends AbstractWorkflowRunner {
 
+	public static class ApprovalWorkflowType implements WorkflowType {
+
+		@Override
+		public String getWorkflowDefinitionId() {
+			return "lecmSign";
+		}
+
+		@Override
+		public String getType() {
+			return "SIGNING";
+		}
+	}
+
 	@Override
 	protected Map<QName, Serializable> runImpl(Map<String, Object> variables, Map<QName, Serializable> properties) {
 		//построение bpm:workflowDueDate и lecm-workflow:workflowAssigneesListAssocs
 		NodeRef routeRef = WorkflowVariablesHelper.getRouteRef(variables);
-		NodeRef assigneesListRef = routeService.getAssigneesListByWorkflowType(routeRef, workflowType.name());
+		NodeRef assigneesListRef = routeService.getAssigneesListByWorkflowType(routeRef, workflowType.getType());
 		Serializable concurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesListRef);
 		Date workflowDueDate = workflowAssigneesListService.calculateAssigneesDueDatesByCompletionDays(assigneesListRef);
 		properties.put(WorkflowModel.PROP_WORKFLOW_DUE_DATE, workflowDueDate);

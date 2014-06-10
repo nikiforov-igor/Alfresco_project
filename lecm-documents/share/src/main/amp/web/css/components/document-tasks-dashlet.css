@@ -1,0 +1,13 @@
+.tasks-dashlet-content {
+	padding: 10px;
+}
+
+.task-link a {
+	padding-right: 30px;
+}
+
+.errands-data,
+.issue-data {
+	clear: both;
+	padding-top: 10px;
+}

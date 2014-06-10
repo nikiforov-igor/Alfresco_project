@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Search Node</shortname>
-    <description>Service to return metadata of item to display in the association tree view.</description>
-    <url>/lecm/forms/node/{store_type}/{store_id}/{id}/search</url>
-    <url>/lecm/forms/node/search</url>
-    <format default="json"/>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-</webscript>

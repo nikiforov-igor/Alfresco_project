@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -20,6 +23,8 @@ import java.util.Set;
  * Time: 17:45
  */
 public class ReportsEditorService extends BaseBean {
+
+	private final static Logger logger = LoggerFactory.getLogger(ReportsEditorService.class);
 
     public static final String RE_ROOT_NAME = "Сервис Редактор Отчетов";
     public static final String RE_ROOT_ID = "RE_ROOT_ID";
@@ -34,43 +39,33 @@ public class ReportsEditorService extends BaseBean {
     public static final String RE_TEMPLATES_FILES_ROOT_NAME = "Файлы";
     public static final String RE_TEMPLATES_FILES_ROOT_ID = "RE_TEMPLATES_FILES_ROOT_ID";
 
-    private NodeRef reRootRef;
-    private NodeRef reDictionaryRef;
-    private NodeRef reSourcesRef;
-    private NodeRef reTemplatesRef;
-    private NodeRef reReportsRef;
     private ReportsManager reportsManager;
 
     /**
      * Метод инициализвции сервиса
      */
     public void init() {
-        reRootRef = getFolder(RE_ROOT_ID);
-        reDictionaryRef = getFolder(RE_DICTIONARY_ROOT_ID);
-        reSourcesRef = getFolder(RE_SOURCES_ROOT_ID);
-        reTemplatesRef = getFolder(RE_TEMPLATES_ROOT_ID);
-        reReportsRef = getFolder(RE_REPORTS_ROOT_ID);
     }
 
     @Override
     public NodeRef getServiceRootFolder() {
-        return reRootRef;
+	return getFolder(RE_ROOT_ID);
     }
 
     public NodeRef getReportsRootFolder() {
-        return reReportsRef;
+	return getFolder(RE_REPORTS_ROOT_ID);
     }
 
     public NodeRef getSourcesRootFolder() {
-        return reSourcesRef;
+	return getFolder(RE_REPORTS_ROOT_ID);
     }
 
     public NodeRef getTemplatesRootFolder() {
-        return reTemplatesRef;
+	return getFolder(RE_TEMPLATES_ROOT_ID);
     }
 
     public NodeRef getDictionariesRootFolder() {
-        return reDictionaryRef;
+	return getFolder(RE_DICTIONARY_ROOT_ID);
     }
 
     public List<NodeRef> getReportTypes() {
@@ -96,18 +91,6 @@ public class ReportsEditorService extends BaseBean {
         }
 
         return templates;
-    }
-
-    public NodeRef getReportDescriptorNodeByCode(String rtMnemo) {
-        List<NodeRef> results = new ArrayList<NodeRef>();
-        List<NodeRef> reportsElement = getElements(reReportsRef, ReportsEditorModel.TYPE_REPORT_DESCRIPTOR);
-        for (NodeRef report : reportsElement) {
-            Serializable reportCode = nodeService.getProperty(report, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
-            if (reportCode != null && reportCode.equals(rtMnemo) && !isArchive(report)) {
-                return report;
-            }
-        }
-        return null;
     }
 
     public List<NodeRef> getDataColumnTypeByClass(String className) {

@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,15 +51,16 @@ public class XMLImporter {
 
     private Map<String, NodeRef> businessRoles = new HashMap<String, NodeRef>();
 
+    //TODO Refactoring in progress
     public XMLImporter(InputStream inputStream, RepositoryStructureHelper repositoryHelper, NodeService nodeService, DictionaryBean serviceDictionary, String stateMachineId) throws XMLStreamException {
-        this.nodeService = nodeService;
-        this.serviceDictionary = serviceDictionary;
-
-        final NodeRef companyHome = repositoryHelper.getHomeRef();
-        NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
-        this.stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
-
-        this.xmlr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
+            this.nodeService = nodeService;
+            this.serviceDictionary = serviceDictionary;
+            
+            final NodeRef companyHome = repositoryHelper.getHomeRef();
+            NodeRef stateMachinesRoot = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.STATEMACHINES);
+            this.stateMachineNodeRef = nodeService.getChildByName(stateMachinesRoot, ContentModel.ASSOC_CONTAINS, stateMachineId);
+            
+            this.xmlr = XMLInputFactory.newInstance().createXMLStreamReader(inputStream);
     }
 
     public void importStateMachine() throws XMLStreamException {

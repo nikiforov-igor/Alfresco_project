@@ -1,5 +1,8 @@
 package ru.it.lecm.workflow.approval;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -16,6 +19,7 @@ import org.alfresco.util.FileNameValidator;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
@@ -28,10 +32,6 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
-
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
 
 /**
  *
@@ -76,8 +76,8 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		final NodeRef commentRef, documentRef, approvalListItemRef;
 		final Map<QName, Serializable> properties;
 
-		startDate = DateUtils.truncate(taskDecision.getStartDate(), Calendar.DATE);
-		completionDate = DateUtils.truncate(new Date(), Calendar.DATE);
+		startDate = taskDecision.getStartDate();
+		completionDate = new Date();
 		comment = taskDecision.getComment();
 		decision = taskDecision.getDecision();
 		commentRef = taskDecision.getCommentRef();
@@ -103,7 +103,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 				commentFileName.append(documentProjectNumber);
 				commentFileName.append(", ");
 
-				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH.mm").format(new Date())).append(" + ");
+				commentFileName.append(new SimpleDateFormat("dd.MM.yyyy HH.mm").format(completionDate)).append(" + ");
 				commentFileName.append("Согласование сотрудником");
 
 				NodeRef employeeRef = findNodeByAssociationRef(approvalListItemRef, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
@@ -123,10 +123,10 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 				}
 
 				final String commentFileNameFinal = commentFileNameStr;
-                nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameFinal);
-                documentAttachmentsService.addAttachment(commentRef, attachmentCategoryRef);
+				nodeService.setProperty(commentRef, ContentModel.PROP_NAME, commentFileNameFinal);
+				documentAttachmentsService.addAttachment(commentRef, attachmentCategoryRef);
 
-				List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+				List<NodeRef> targetRefs = new ArrayList<>();
 				targetRefs.add(commentRef);
 				behaviourFilter.disableBehaviour(documentRef);
 				behaviourFilter.disableBehaviour(commentRef);
@@ -154,14 +154,14 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		String owner = (String) props.get(ContentModel.PROP_OWNER);
 		if (docInfo.getDocumentRef() != null) {
 			NodeRef employee = orgstructureService.getEmployeeByPerson(owner);
-			List<NodeRef> recipients = new ArrayList<NodeRef>();
+			List<NodeRef> recipients = new ArrayList<>();
 			recipients.add(employee);
 			Date comingSoonDate = workCalendar.getEmployeePreviousWorkingDay(employee, dueDate, -1);
 			Date currentDate = new Date();
 			if (comingSoonDate != null) {
 				int comingSoon = DateUtils.truncatedCompareTo(currentDate, comingSoonDate, Calendar.DATE);
 				int overdue = DateUtils.truncatedCompareTo(currentDate, dueDate, Calendar.DATE);
-				Map<QName, Serializable> fakeProps = new HashMap<QName, Serializable>();
+				Map<QName, Serializable> fakeProps = new HashMap<>();
 				if (!props.containsKey(FAKE_PROP_COMINGSOON) && comingSoon >= 0) {
 					fakeProps.put(FAKE_PROP_COMINGSOON, "");
 					String description = String.format("Напоминание: Вам необходимо согласовать проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
@@ -205,7 +205,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 			boolean isDocumentApproval = Utils.isDocument(Utils.getDocumentFromBpmPackage(bpmPackage));
 			DocumentInfo docInfo = new DocumentInfo(bpmPackage, orgstructureService, nodeService, serviceRegistry);
 			if (docInfo.getDocumentRef() != null) {
-				Set<NodeRef> recipients = new HashSet<NodeRef>();
+				Set<NodeRef> recipients = new HashSet<>();
 				recipients.add(docInfo.getInitiatorRef());
 				WorkflowInstance workflowInstance = workflowService.getWorkflowById(processInstanceId);
 				Date dueDate = workflowInstance.getDueDate();
@@ -217,7 +217,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 					if (!variableScope.hasVariable("initiatorComingSoon") && comingSoon >= 0) {
 						variableScope.setVariable("initiatorComingSoon", "");
 						String description = String.format("Напоминание: Вы направили на согласование проект документа %s, срок согласования %s", docInfo.getDocumentLink(), new SimpleDateFormat(DATE_FORMAT).format(dueDate));
-						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<>(recipients));
 					}
 					if (!variableScope.hasVariable("initiatorOverdue") && overdue > 0) {
 						variableScope.setVariable("initiatorOverdue", "");
@@ -227,43 +227,61 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 							//получить список кураторов и добавить его в recipients
 							recipients.addAll(Utils.getCurators());
 						}
-						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<NodeRef>(recipients));
+						sendNotification(description, docInfo.getDocumentRef(), new ArrayList<>(recipients));
 					}
 				}
 			} else {
 				logger.error("Can't notify initiators about deadline, because there is no document in bpmPackage. Perhaps it was deleted. Check your workflow instance {}", processInstanceId);
 			}
-		} catch (Exception ex) {
+		} catch (RuntimeException ex) {
 			logger.error("Internal error while notifying initiator and curators", ex);
 		}
 	}
 
+	//TODO Refactoring in progress... check getOrCreate
 	private NodeRef getOrCreateCustomApprovalFolder(NodeRef parentRef) {
 		NodeRef customApprovalRef = getFolder(parentRef, CUSTOM_APPROVAL_FOLDER_NAME);
 		if (customApprovalRef == null) {
-			customApprovalRef = createFolder(parentRef, CUSTOM_APPROVAL_FOLDER_NAME);
+			try {
+				customApprovalRef = createFolder(parentRef, CUSTOM_APPROVAL_FOLDER_NAME);
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't crate folder.", ex);
+				throw new RuntimeException(ex);
+			}
 		}
 		return customApprovalRef;
 	}
 
+	//TODO Refactoring in progress... check getOrCreate
 	private NodeRef getOrCreateParallelApprovalFolder(NodeRef parentRef) {
 		NodeRef parallelApprovalRef = getFolder(parentRef, PARALLEL_APPROVAL_FOLDER_NAME);
 		if (parallelApprovalRef == null) {
-			parallelApprovalRef = createFolder(parentRef, PARALLEL_APPROVAL_FOLDER_NAME);
+			try {
+				parallelApprovalRef = createFolder(parentRef, PARALLEL_APPROVAL_FOLDER_NAME);
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't crate folder.", ex);
+				throw new RuntimeException(ex);
+			}
 		}
 		return parallelApprovalRef;
 	}
 
+	//TODO Refactoring in progress... check getOrCreate
 	private NodeRef getOrCreateSequentialApprovalFolder(NodeRef parentRef) {
 		NodeRef parallelApprovalRef = getFolder(parentRef, SEQUENTIAL_APPROVAL_FOLDER_NAME);
 		if (parallelApprovalRef == null) {
-			parallelApprovalRef = createFolder(parentRef, SEQUENTIAL_APPROVAL_FOLDER_NAME);
+			try {
+				parallelApprovalRef = createFolder(parentRef, SEQUENTIAL_APPROVAL_FOLDER_NAME);
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't crate folder.", ex);
+				throw new RuntimeException(ex);
+			}
 		}
 		return parallelApprovalRef;
 	}
 
 	@Override
-	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) throws WriteTransactionNeededException {
 		String decision = (String) task.getVariableLocal("lecmApprove2_approveTaskResult");
 		ScriptNode commentScriptNode = (ScriptNode) task.getVariableLocal("lecmApprove2_approveTaskCommentAssoc");
 		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
@@ -273,7 +291,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	}
 
 	@Override
-	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task, String decision, NodeRef commentRef, Date dueDate) throws WriteTransactionNeededException {
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		String commentFileAttachmentCategoryName = (String) task.getVariable("commentFileAttachmentCategoryName");
 
@@ -347,11 +365,17 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	}
 
+	//TODO Refactoring in progress... check getOrCreate
 	@Override
 	public NodeRef getOrCreateApprovalFolderContainer(NodeRef parentRef) {
 		NodeRef approvalRef = getFolder(parentRef, "Согласование");
 		if (approvalRef == null) {
-			approvalRef = createFolder(parentRef, "Согласование");
+			try {
+				approvalRef = createFolder(parentRef, "Согласование");
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't crate folder.", ex);
+				throw new RuntimeException(ex);
+			}
 		}
 		return approvalRef;
 	}
@@ -361,12 +385,16 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 		NodeRef approvalRef = getOrCreateApprovalFolderContainer(parentRef);
 
-		if (APPROVAL_TYPE_PARALLEL.equals(approvalType)) {
-			result = getOrCreateParallelApprovalFolder(approvalRef);
-		} else if (APPROVAL_TYPE_SEQUENTIAL.equals(approvalType)) {
-			result = getOrCreateSequentialApprovalFolder(approvalRef);
-		} else if (APPROVAL_TYPE_CUSTOM.equals(approvalType)) {
-			result = getOrCreateCustomApprovalFolder(approvalRef);
+		if (null != approvalType) switch (approvalType) {
+			case APPROVAL_TYPE_PARALLEL:
+				result = getOrCreateParallelApprovalFolder(approvalRef);
+				break;
+			case APPROVAL_TYPE_SEQUENTIAL:
+				result = getOrCreateSequentialApprovalFolder(approvalRef);
+				break;
+			case APPROVAL_TYPE_CUSTOM:
+				result = getOrCreateCustomApprovalFolder(approvalRef);
+				break;
 		}
 		return result;
 	}
@@ -391,6 +419,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
+	@Override
 	public void reassignTask(NodeRef assignee, DelegateTask task) {
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
@@ -415,6 +444,7 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	@Override
 	public void deleteTempAssigneesList(DelegateExecution execution) {
+		//TODO ME Проверить почемо не останавливается согласование
 		workflowAssigneesListService.deleteAssigneesListWorkingCopy(execution);
 	}
 

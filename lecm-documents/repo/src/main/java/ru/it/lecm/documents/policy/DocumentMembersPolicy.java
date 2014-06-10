@@ -7,11 +7,9 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +27,9 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import org.alfresco.service.namespace.NamespaceService;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -47,9 +48,9 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	private DocumentMembersService documentMembersService;
 	private BusinessJournalService businessJournalService;
 	private NotificationsService notificationService;
-	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
-    private StateMachineServiceBean stateMachineBean;
+    private StateMachineServiceBean stateMachineService;
+	private NamespaceService namespaceService;
 
 	final public String DEFAULT_ACCESS = LecmPermissionGroup.PGROLE_Reader;
 	private String grantAccess = DEFAULT_ACCESS; // must have legal corresponding LecmPermissionGroup
@@ -59,16 +60,16 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE = {ForumModel.PROP_COMMENT_COUNT, DocumentService.PROP_RATING, DocumentService.PROP_RATED_PERSONS_COUNT};
     final private QName[] AFFECTED_NOT_ADD_MEMBER_PROPERTIES_EVER = { DocumentService.PROP_SYS_WORKFLOWS };
 
+	public void setNamespaceService(NamespaceService namespaceService) {
+		this.namespaceService = namespaceService;
+	}
+
 	public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
-	}
-
-	public void setAuthService(AuthenticationService authService) {
-		this.authService = authService;
 	}
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
@@ -87,10 +88,6 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.orgstructureService = orgstructureService;
 	}
 
-	public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
-
 	public String getGrantAccess() {
 		return grantAccess;
 	}
@@ -103,8 +100,8 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 		this.grantAccess = (value != null) ? value : DEFAULT_ACCESS;
 	}
 
-    public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
-        this.stateMachineBean = stateMachineBean;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
 	public final void init() {
@@ -172,26 +169,36 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         } catch (Throwable ex) {
             logger.error("Не удалось сохранить ссылку на участника!", ex);
         }
+//		TODO: Метод addMemberToUnit дёрагал метод getOrCreateDocMemberUnit,
+//		который был благополучно разделён. Поэтому сделаем проверку на существование
+		String type = nodeService.getType(docRef).toPrefixString(namespaceService).replaceAll(":", "_");
+		if(documentMembersService.getDocMembersUnit(type) == null) {
+			try {
+				documentMembersService.createDocMemberUnit(type);
+			} catch (WriteTransactionNeededException ex) {
+				throw new RuntimeException("Can't create DocMemberUnit");
+			}
+		}
         documentMembersService.addMemberToUnit(employee, docRef);
 
         // уведомление
         Boolean silent = (Boolean) nodeService.getProperty(member, DocumentMembersService.PROP_SILENT);
         if (silent == null || !silent) {
-            Notification notification = new Notification();
-            ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-            employeeList.add(employee);
-            notification.setRecipientEmployeeRefs(employeeList);
-            notification.setAuthor(authService.getCurrentUserName());
-            notification.setDescription("Вы приглашены как новый участник в документ " +
-                    wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
-            notification.setObjectRef(docRef);
-            notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-            notificationService.sendNotification(notification);
+        Notification notification = new Notification();
+        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+        employeeList.add(employee);
+        notification.setRecipientEmployeeRefs(employeeList);
+        notification.setAuthor(authService.getCurrentUserName());
+        notification.setDescription("Вы приглашены как новый участник в документ " +
+                wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+        notification.setObjectRef(docRef);
+        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+        notificationService.sendNotification(notification);
         }
 
         // Обновляем имя ноды
-        String newName = generateMemberNodeName(nodeAssocRef.getSourceRef());
-        nodeService.setProperty(nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
+        String newName = generateMemberNodeName(/*member*/nodeAssocRef.getSourceRef());
+        nodeService.setProperty(/*member*/nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
     }
 
     @Override
@@ -199,6 +206,7 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         NodeRef docRef = null;
         try {
             NodeRef member = nodeAssocRef.getSourceRef();
+            //Node does not exist
             NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
             docRef = nodeService.getPrimaryParent(folder).getParentRef();
             NodeRef employee = nodeAssocRef.getTargetRef();
@@ -247,32 +255,54 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
         // добаваление сотрудника, создавшего документ в участники
         final NodeRef docRef = childAssocRef.getChildRef();
         final String userName = (String) nodeService.getProperty(docRef, ContentModel.PROP_CREATOR);
-        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
-
-        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
         if (!AuthenticationUtil.getSystemUserName().equals(userName)) {
-            documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
+            final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+            props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());            
+            //полиси onCreate. транзакция должна быть                        
+            try {
+                documentMembersService.addMemberWithoutCheckPermission(docRef, orgstructureService.getEmployeeByPerson(userName), props);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
 	public void onUpdateDocument(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		// добаваление сотрудника, изменившего документ в участники
-        final String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
-        final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
-
-        Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-        props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
-
         /* не добавлять сотрудника как участника
             1) если изменения выполняет система
             2) если сотрудник добавляет комментарий, ставит рейтинг и документ находится на финальном статусе
             3) если меняются бизнес-процессы, прицепленные к документу (бизнес-процесс сам решит, включать ли сотрудника в участники)
         */
-        if (!AuthenticationUtil.getSystemUserName().equals(userName) &&
-                !(hasDoNotAddMemberUpdatedProperties(before, after, AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE) && stateMachineBean.isFinal(nodeRef)) &&
+        if (nodeService.exists(nodeRef) && !AuthenticationUtil.isRunAsUserTheSystemUser() &&
+                !(hasDoNotAddMemberUpdatedProperties(before, after, AFFECTED_NOT_ADD_MEMBER_PROPERTIES_ON_FINAL_STATE) && stateMachineService.isFinal(nodeRef)) &&
                 !hasDoNotAddMemberUpdatedProperties(before, after, AFFECTED_NOT_ADD_MEMBER_PROPERTIES_EVER)) {
-            documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
+        	// добаваление сотрудника, изменившего документ в участники
+            final String userName = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+            final LecmPermissionGroup pgGranting = lecmPermissionService.findPermissionGroup(getGrantAccess());
+
+            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+            props.put(DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.getName());
+//			TODO: Метод addMemberWithoutCheckPermission использует метод getMembersFolderRef,
+//			который был разделён, поэтому выполним проверку и создадим папку, если надо
+//                      думаю, эта папка должна создаваться в addMemberWithoutCheckPermission, т.к. это метод на запись, и папка нужна ему.
+//                      а то, и вовсе, при создании документа. более того, она создавалась в onCreate. но пока сделал в addMemberWithoutCheckPermission
+//                      он в onCreate вызывается, и всё равно требует RW транзакцию
+//			if(documentMembersService.getMembersFolderRef(nodeRef) == null) {
+//				logger.warn("Members folder not found, creating...");
+//				try {
+//					documentMembersService.createMembersFolderRef(nodeRef);
+//				} catch (WriteTransactionNeededException ex) {
+//					logger.error("Can't crate members folder for document ", nodeRef);
+//					throw new RuntimeException(ex);
+//				}
+//			}
+            try {
+                //Транзакция должна быть, т.к. onUpdatePolicy
+                documentMembersService.addMemberWithoutCheckPermission(nodeRef, orgstructureService.getEmployeeByPerson(userName), props);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

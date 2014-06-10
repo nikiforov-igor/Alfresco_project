@@ -1,7 +1,10 @@
 package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.impl.el.Expression;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
@@ -31,100 +34,129 @@ import java.util.regex.Pattern;
 /**
  * User: PMelnikov Date: 10.01.13 Time: 14:32
  */
-public class ArchiveDocumentAction extends StateMachineAction {
+public class ArchiveDocumentAction extends StateMachineAction implements ExecutionListener {
 
 	private String archiveFolderPath = "/Archive";
 	private String archiveFolderPathAdditional = "";
 	private String status = "UNKNOWN";
 	private String qnameArchivePath = null;
+	protected Expression archiveFolder;
+	protected Expression archiveFolderAdditional;
+    
+    public void setArchiveFolder(Expression archiveFolder) {
+		this.archiveFolder = archiveFolder;
+	}
+    
+    public void setArchiveFolderAdditional(Expression archiveFolderAdditional) {
+		this.archiveFolderAdditional = archiveFolderAdditional;
+	}
 
 	private static final transient Logger logger = LoggerFactory.getLogger(ArchiveDocumentAction.class);
 
 	@Override
-	public void execute(DelegateExecution execution) throws InvalidNodeRefException{
-		NodeService nodeService = getServiceRegistry().getNodeService();
+    public void notify(DelegateExecution execution) {
+		status = execution.getCurrentActivityName();
+		if(archiveFolder!=null&&archiveFolder.getValue(execution)!=null) archiveFolderPath = archiveFolder.getExpressionText();
+		if(archiveFolderAdditional!=null&&archiveFolderAdditional.getValue(execution)!=null) archiveFolderPathAdditional = archiveFolderAdditional.getExpressionText();
+		
+		final NodeService nodeService = getServiceRegistry().getNodeService();
 		NodeRef wPackage = ((ActivitiScriptNode) execution.getVariable("bpm_package")).getNodeRef();
-		NodeRef document = nodeService.getChildAssocs(wPackage).get(0).getChildRef();
-		if (nodeService.hasAspect(document, DocumentService.ASPECT_FINALIZE_TO_UNIT)) {
-			List<AssociationRef> units = nodeService.getTargetAssocs(document, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
-			NodeRef unit;
-			if (units.isEmpty()) {
-				throw new InvalidNodeRefException("У документа установлен аспект ASSOC_ORGANIZATION_UNIT_ASSOC, но отсутствуют подразделения", document);
-			}
-
-			unit = units.get(0).getTargetRef();
-			boolean isSharedFolder = (Boolean) nodeService.getProperty(document, DocumentService.PROP_IS_SHARED_FOLDER);
-			List<AssociationRef> folders = nodeService.getTargetAssocs(unit, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-			NodeRef folder = null;
-			if (isSharedFolder) {
-				if (folders.size() > 0) {
-					folder = nodeService.getChildByName(folders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
-				}
-			} else {
-				if (folders.size() > 0) {
-					folder = nodeService.getChildByName(folders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
-				}
-			}
-			String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-			if (folder != null) {
-				folder = createAdditionalPath(document, folder);
-				nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-			}
-
-			List<AssociationRef> additionalUnits = nodeService.getTargetAssocs(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC);
-			for (AssociationRef additionalUnit : additionalUnits) {
-				if (!additionalUnit.getTargetRef().equals(unit)) {
-					List<AssociationRef> additionalFolders = nodeService.getTargetAssocs(additionalUnit.getTargetRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-					NodeRef additionalFolder = null;
-					if (isSharedFolder) {
-						if (additionalFolders.size() > 0) {
-							additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
-						}
-					} else {
-						if (additionalFolders.size() > 0) {
-							additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
-						}
-					}
-					additionalFolder = createAdditionalPath(document, additionalFolder);
-					try {
-						nodeService.addChild(additionalFolder, document, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(additionalFolder.getId())));
-                        String authority = getOrgstructureBean().getOrgstructureUnitAuthority(additionalUnit.getTargetRef(), isSharedFolder);
-                        getPermissionService().setPermission(document, authority, "LECM_BASIC_PG_Reader", true);
-					} catch (Exception e) {
-						System.out.println();
-					}
-				}
-			}
-		} else {
-			String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
-			NodeRef folder = createArchivePath(document);
-			nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
-		}
-
-		Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
-		for (AccessPermission permission : permissions) {
-			if (permission.getPosition() == 0) {
-				getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
-			}
-		}
-
-        DocumentMembersService documentMembersService = getDocumentMembersService();
-        List<NodeRef> members = documentMembersService.getDocumentMembers(document);
-        LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionService().findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader);
-        for (NodeRef member : members) {
-            AssociationRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0);
-            getLecmPermissionService().grantAccess(pgGranting, document, employee.getTargetRef());
-        }
-
+		final NodeRef document = nodeService.getChildAssocs(wPackage).get(0).getChildRef();
+		final String name = (String) nodeService.getProperty(document, ContentModel.PROP_NAME);
+		
 		nodeService.setProperty(document, StatemachineModel.PROP_STATUS, status);
 
-        //Проверяем наличие аспекта указывающего на черновик
+        //Проверяем наличие аспекта указывающего на финальный статус
         if (!nodeService.hasAspect(document, StatemachineModel.ASPECT_IS_FINAL)) {
             nodeService.addAspect(document, StatemachineModel.ASPECT_IS_FINAL, null);
         }
         //Устанавливаем флаг финального статуса
         nodeService.setProperty(document, StatemachineModel.PROP_IS_FINAL, true);
-
+        
+        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+            @Override
+            public Void doWork() throws Exception {
+                try {
+					if (nodeService.hasAspect(document, DocumentService.ASPECT_FINALIZE_TO_UNIT)) {
+						List<AssociationRef> units = nodeService.getTargetAssocs(document, DocumentService.ASSOC_ORGANIZATION_UNIT_ASSOC);
+						if (units.isEmpty()) {
+							throw new InvalidNodeRefException("У документа установлен аспект ASSOC_ORGANIZATION_UNIT_ASSOC, но отсутствуют подразделения", document);
+						}
+						NodeRef unit = units.get(0).getTargetRef();//TODO избавиться от get(0)
+						boolean isSharedFolder = (Boolean) nodeService.getProperty(document, DocumentService.PROP_IS_SHARED_FOLDER);
+						List<AssociationRef> folders = nodeService.getTargetAssocs(unit, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+						///////////////////////
+						NodeRef folder = null;
+						if (isSharedFolder) {
+							if (folders.size() > 0) {//TODO нет прав
+								folder = nodeService.getChildByName(folders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
+							}
+						} else {
+							if (folders.size() > 0) {//TODO нет прав
+								folder = nodeService.getChildByName(folders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
+							}
+						}
+						if (folder != null) {
+							folder = createAdditionalPath(document, folder);
+							nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+						}
+						////////////////////////
+						List<AssociationRef> additionalUnits = nodeService.getTargetAssocs(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC);
+						for (AssociationRef additionalUnit : additionalUnits) {
+							if (!additionalUnit.getTargetRef().equals(unit)) {
+								List<AssociationRef> additionalFolders = nodeService.getTargetAssocs(additionalUnit.getTargetRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+								/////////////////////
+								NodeRef additionalFolder = null;
+								if (isSharedFolder) {
+									if (additionalFolders.size() > 0) {
+										additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_SHARED_FOLDER_NAME);
+									}
+								} else {
+									if (additionalFolders.size() > 0) {
+										additionalFolder = nodeService.getChildByName(additionalFolders.get(0).getTargetRef(), ContentModel.ASSOC_CONTAINS, OrgstructureBean.ORGANIZATION_UNIT_PRIVATE_FOLDER_NAME);
+									}
+								}
+								if(additionalFolder!=null) {
+									additionalFolder = createAdditionalPath(document, additionalFolder);
+									try {
+										nodeService.addChild(additionalFolder, document, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(additionalFolder.getId())));
+				                        String authority = getOrgstructureBean().getOrgstructureUnitAuthority(additionalUnit.getTargetRef(), isSharedFolder);
+				                        getServiceRegistry().getPermissionService().setPermission(document, authority, "LECM_BASIC_PG_Reader", true);
+									} catch (Exception e) {
+										//TODO что за фигня System.out.println();
+									}
+								}
+								/////////////////////
+							}
+						}
+					} else {
+						/////////////////////////////
+						NodeRef folder = createArchivePath(document);
+						nodeService.moveNode(document, folder, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)));
+						/////////////////////////////
+					}
+					/////////////////////////////////
+					Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
+					for (AccessPermission permission : permissions) {
+						if (permission.getPosition() == 0) {
+							getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
+						}
+					}
+					/////////////////////////////////
+					DocumentMembersService documentMembersService = getDocumentMembersService();
+			        List<NodeRef> members = documentMembersService.getDocumentMembers(document);
+			        LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionService().findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader);
+			        for (NodeRef member : members) {
+			            AssociationRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0);
+			            getLecmPermissionService().grantAccess(pgGranting, document, employee.getTargetRef());
+			        }
+			        /////////////////////////////////
+                } catch (Exception e) {
+                    logger.error("Error while action execution", e);
+                }
+		        return null;
+            }
+		});
         try {
 			String initiator = getServiceRegistry().getAuthenticationService().getCurrentUserName();
 			List<String> objects = new ArrayList<String>(1);
@@ -135,23 +167,15 @@ public class ArchiveDocumentAction extends StateMachineAction {
 		} catch (Exception e) {
 			logger.error("Не удалось создать запись бизнес-журнала", e);
 		}
-
+	}
+	@Override
+	public void execute(DelegateExecution execution) throws InvalidNodeRefException{
+		
 	}
 
 	@Override
-	public void init(Element actionElement, String processId) {
-		List<Element> attributes = actionElement.elements("attribute");
-		for (Element attribute : attributes) {
-			String name = attribute.attribute("name");
-			String value = attribute.attribute("value");
-			if ("archiveFolder".equalsIgnoreCase(name)) {
-				archiveFolderPath = value;
-			} else if ("archiveFolderAdditional".equalsIgnoreCase(name)) {
-				archiveFolderPathAdditional = value;
-			} else if ("status".equalsIgnoreCase(name)) {
-				status = value;
-			}
-		}
+	public void init(BaseElement actionElement, String processId) {
+
 	}
 
 	public String getArchiveFolderPath() {

@@ -100,6 +100,18 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		NodeRef organization = orgstructureService.getOrganization();
 		return new ScriptNode(organization, serviceRegistry, getScope());
 	}
+	
+	/**
+	 * Возвращает ноду Основного подразделения организации
+	 * 
+	 *
+	 * @return  ноду Подразделения
+	 */
+	
+	public ScriptNode getMainOrganisationUnit() {
+		NodeRef mainOrganizationUnit = orgstructureService.getMainOrganisationUnit();
+		return new ScriptNode(mainOrganizationUnit, serviceRegistry, getScope());
+	}
 
 	/**
 	 * Получаем список Дочерних объектов в формате, используемом в дереве Оргструктуры
@@ -625,14 +637,18 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public Scriptable getEmployeesByBusinessRole(String businessRoleRef) {
 		return getEmployeesByBusinessRole(businessRoleRef, false);
 	}
-
+    /**
+     * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
+     */
 	public Scriptable getEmployeesByBusinessRole(String businessRoleRef, boolean withDelegation) {
 		ParameterCheck.mandatory("businessRoleRef", businessRoleRef);
 		NodeRef ref = new NodeRef(businessRoleRef);
 		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(ref, withDelegation);
 		return createScriptable(results);
 	}
-
+    /**
+     * Получение перечня сотрудников, исполняющих определенную Бизнес-роль
+     */
 	public Scriptable getEmployeesByBusinessRoleId(String businessRoleId, boolean withDelegation) {
 		ParameterCheck.mandatory("businessRoleId", businessRoleId);
 		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(businessRoleId, withDelegation);
@@ -780,7 +796,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return orgstructureService.isDelegationEngineer (new NodeRef (employeeRef));
 	}
 
-	public boolean hasSubogetrdinate (final String bossRef, final String subordinateRef) {
+    /**
+     * имеет ли текущий пользователь у себя в подчинении другого пользователя (без учета делегирования)
+     * @param bossRef ссылка на сотрудника-руковидителя
+     * @param subordinateRef ссылка на сотрудника-возможного подчиненного
+     * @return true/false
+     */
+    public boolean hasSubogetrdinate (final String bossRef, final String subordinateRef) {
 		return orgstructureService.hasSubordinate (new NodeRef (bossRef), new NodeRef (subordinateRef));
 	}
 
@@ -956,6 +978,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         return settings.toString();
     }
 
+    /**
+     * Проверка наличия активных отсутствий у сотрудника/подразделения/штатного расписания
+     * @param nodeRefStr проверяемый объект
+     * @return список активных отсутствий
+     */
     public Scriptable checkNodeRefForAbsence(String nodeRefStr)
     {
         NodeRef nodeRef = new NodeRef(nodeRefStr);
@@ -1006,7 +1033,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         return orgstructureService.isEmployeeHasBusinessRole(new NodeRef(employeeRef), businessRole);
     }
 
-	/**
+    /**
      * Проверяет наличие бизнес-роли у сотрудника
      * @param employee сотрудник
      * @param businessRole бизнес роль
@@ -1049,26 +1076,51 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         return createScriptable(employees);
     }
 
-	public boolean isCurrentEmployeeHasBusinessRole(String roleId) {
+    /**
+     * Проверка, имеет ли текущий сотрудник заданную бизнес-роль
+     * @param roleId код бизнес-роли
+     * @return true/false
+     */
+    public boolean isCurrentEmployeeHasBusinessRole(String roleId) {
 		ParameterCheck.mandatory("roleId", roleId);
 		return orgstructureService.isCurrentEmployeeHasBusinessRole(roleId);
 	}
 
-	public boolean isEmployeeHasBusinessRole(ScriptNode employee, String roleId, boolean withDelegation, boolean inheritSubordinatesRoles) {
+    /**
+     * Проверка, имеет ли сотрудник заданную бизнес-роль с насторойками делегирования или без
+     * @param employee сотрудник
+     * @param roleId код бизнес-роли
+     * @param withDelegation учитывать ли делегирование
+     * @param inheritSubordinatesRoles учитывать ли субординацию
+     * @return true/false
+     */
+    public boolean isEmployeeHasBusinessRole(ScriptNode employee, String roleId, boolean withDelegation, boolean inheritSubordinatesRoles) {
 		ParameterCheck.mandatory("roleId", roleId);
 		return orgstructureService.isEmployeeHasBusinessRole(employee.getNodeRef(), roleId, withDelegation, inheritSubordinatesRoles);
 	}
 
-	public String getEmployeeLogin(ScriptNode employee) {
+    /**
+     * Получить логин сотрудника
+     * @param employee сотрудник
+     */
+    public String getEmployeeLogin(ScriptNode employee) {
 		return orgstructureService.getEmployeeLogin(employee.getNodeRef());
 	}
 
+    /**
+     * Получить сотрудника по заданному логину
+     * @param login логин пользователя
+     */
     public ScriptNode getEmployeeByLogin(String login) {
         return  new ScriptNode(orgstructureService.getEmployeeByPerson(login), serviceRegistry, getScope());
     }
 
+    /**
+     * Возвращает Authority для папки подразделения
+     * @param unit подразделение
+     * @param shared общая папка или нет
+     */
     public String getOrgstructureUnitAuthority(ScriptNode unit, boolean shared) {
         return orgstructureService.getOrgstructureUnitAuthority(unit.getNodeRef(), shared);
     }
-
 }

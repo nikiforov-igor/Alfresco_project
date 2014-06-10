@@ -33,8 +33,6 @@ public interface ReportDescriptor extends Mnemonicable, L18able {
 
     boolean isSubReport();
 
-    public void setSubReport(boolean isSubReport);
-
     boolean isSQLDataSource();
 
     public void setDSDescriptor(DataSourceDescriptor dsDescriptor);

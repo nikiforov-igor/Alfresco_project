@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ru.it.lecm.workflow</groupId>
 		<artifactId>workflow</artifactId>
-		<version>1.2.0</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>workflow-repo-api</artifactId>
 	<name>Logic ECM Workflow Repo API</name>
@@ -44,47 +44,56 @@
 		<dependency>
 			<groupId>org.joda</groupId>
 			<artifactId>com.springsource.org.joda.time</artifactId>
+			<version>1.6.2</version>
+			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.documents</groupId>
 			<artifactId>documents-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.notifications</groupId>
 			<artifactId>notifications-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.statemachine</groupId>
 			<artifactId>statemachine-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.calendar</groupId>
 			<artifactId>lecm-calendar-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
 			<artifactId>lecm-security-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+<dependency>
+			<groupId>ru.it.lecm.delegation</groupId>
+			<artifactId>lecm-delegation-repo-api</artifactId>
 			<version>${platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.delegation</groupId>
-			<artifactId>lecm-delegation-repo-api</artifactId>
-			<version>${platform.version}</version>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

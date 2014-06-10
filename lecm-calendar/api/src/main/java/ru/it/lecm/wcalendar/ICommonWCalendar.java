@@ -99,6 +99,11 @@ public interface ICommonWCalendar {
 	NodeRef getWCalendarContainer();
 
 	/**
+	 * Создание папки для календарей, графиков работы и отсутствия.
+	 * @return
+	 */
+	NodeRef createWCalendarContainer();
+	/**
 	 * Получение обекта класса, реализующего интерфейс IWCalCommon
 	 * (CalendarBean, AbsenceBean, ScheduleBean).
 	 *

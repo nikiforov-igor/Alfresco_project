@@ -6,7 +6,9 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.reservation.DecisionResult;
@@ -54,11 +56,19 @@ public class ReservationWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void assignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		reservationWorkflowService.assignTask(assignee.getNodeRef(), task);
+            try {
+                reservationWorkflowService.assignTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+            try {
 		reservationWorkflowService.reassignTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public void notifyReservationStarted(final ActivitiScriptNode bpmPackage, final ScriptNode employee) {
@@ -66,7 +76,11 @@ public class ReservationWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public WorkflowTaskDecision completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+            try {
 		return reservationWorkflowService.completeTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public void notifyReservationFinished(final ActivitiScriptNode bpmPackage, final DelegateTask task) {

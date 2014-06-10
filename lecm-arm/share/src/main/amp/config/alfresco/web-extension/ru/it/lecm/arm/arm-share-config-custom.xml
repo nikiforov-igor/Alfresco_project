@@ -1,0 +1,477 @@
+<alfresco-config>
+    <config>
+		<forms>
+            <default-controls>
+                <type name="association:lecm-arm:filter" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_АРМ/lecm-dic:Фильтры_x0020_АРМ</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="showViewIncompleteWarning">false</control-param>
+                </type>
+            </default-controls>
+
+			<dependencies>
+				<js src="/scripts/lecm-arm/controls/arm-settings-fields-control.js"/>
+				<js src="/scripts/lecm-arm/constraints/arm-statuses-child-rule-validator.js"/>
+			</dependencies>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:arm">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:code" force="true"/>
+					<!--<show id="lecm-arm:use-by-default" force="true"/>-->
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:arm">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:code" force="true"/>
+					<!--<show id="lecm-arm:use-by-default" force="true"/>-->
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:accordion">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:fields-assoc" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:business-roles-assoc" force="true"/>
+					<show id="lecm-arm:is-aggregation-node" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:fields-assoc">
+						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:business-roles-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showViewIncompleteWarning">false</control-param>
+							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:is-aggregation-node">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:accordion">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:business-roles-assoc" force="true"/>
+					<show id="lecm-arm:is-aggregation-node" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:business-roles-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Бизнес_x0020_роли</control-param>
+							<control-param name="nameSubstituteString">{cm:name}</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="showViewIncompleteWarning">false</control-param>
+							<control-param name="additionalFilter">@lecm-orgstr\\:business-role-is-dynamic: \"false\"</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:is-aggregation-node">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:fields-assoc" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
+					<show id="lecm-arm:is-select-by-activeTasks"/>
+					<show id="lecm-arm:activeTasks-filter"/>
+					<show id="lecm-arm:is-aggregation-node" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:fields-assoc">
+						<control template="/ru/it/lecm/arm/controls/arm-settings-fields-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-arm:field-title} ({lecm-arm:field-name})</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:node-child-rule-assoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-create-control.ftl">
+							<control-param name="nameSubstituteString">{lecm-arm:list-query-child-rule}{lecm-arm:child-rule-dictionary-assoc/cm:name}{lecm-arm:statuses-rule}</control-param>
+							<control-param name="itemTypes">lecm-arm:query-child-rule,lecm-arm:dictionary-child-rule,lecm-arm:statuses-child-rule</control-param>
+							<control-param name="fullDelete">true</control-param>
+						</control>
+					</field>
+                    <field id="lecm-arm:is-select-by-activeTasks">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+                            <control-param name="disabledFieldsIfNotSelect">lecm-arm:activeTasks-filter</control-param>
+                        </control>
+                    </field>
+					<field id="lecm-arm:is-aggregation-node">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+                    <show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:search-query" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:filters-assoc" force="true"/>
+					<show id="lecm-arm:counter-enable" force="true"/>
+					<show id="lecm-arm:counter-limitation" force="true"/>
+					<show id="lecm-arm:counter-description" force="true"/>
+					<show id="lecm-arm:is-aggregation-node" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:counter-enable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfNotSelect">lecm-arm:counter-limitation,lecm-arm:counter-description</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:is-aggregation-node">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
+							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:reports-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:reportCodes" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:reportCodes">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:reports-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:reportCodes" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:types">
+						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+                    <field id="lecm-arm:reportCodes">
+                        <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
+                            <control-param name="dataSource">lecm/reports/rptmanager/allRegisteredReports?forCollection=true</control-param>
+                        </control>
+                    </field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:html-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:html-url" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:html-node">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-arm:order" force="true"/>
+					<show id="lecm-arm:html-url" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:field">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:field-title" force="true"/>
+					<show id="lecm-arm:field-name" force="true"/>
+					<show id="lecm-arm:field-format-string" force="true"/>
+					<show id="lecm-arm:field-sortable" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:field">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:field-title" force="true"/>
+					<show id="lecm-arm:field-name" force="true"/>
+					<show id="lecm-arm:field-format-string" force="true"/>
+					<show id="lecm-arm:field-sortable" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:query-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:list-query-child-rule" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:query-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:list-query-child-rule" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:dictionary-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:dictionary-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:child-rule-dictionary-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-arm:statuses-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:statuses-rule" force="true"/>
+					<show id="lecm-arm:selected-statuses" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:statuses-rule" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.ARM.statusesChildRuleValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-arm:selected-statuses">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-arm:statuses-child-rule">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-arm:statuses-rule" force="true"/>
+					<show id="lecm-arm:selected-statuses" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-arm:statuses-rule" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+						<constraint-handlers>
+							<constraint type="MANDATORY" validation-handler="LogicECM.module.ARM.statusesChildRuleValidation" event="change"/>
+						</constraint-handlers>
+					</field>
+					<field id="lecm-arm:selected-statuses">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">6</control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+    <config evaluator="node-type" condition="lecm-arm:filter">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-values" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <!--<show id="lecm-arm:filter-class" force="true"/>-->
+                    <show id="lecm-arm:filter-query" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-arm:filter">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-values" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                    <show id="lecm-arm:filter-query" force="true"/>
+                </field-visibility>
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-arm:filter-code" force="true"/>
+                    <show id="lecm-arm:filter-multiple-select" force="true"/>
+                    <show id="lecm-arm:filter-class" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+</alfresco-config>

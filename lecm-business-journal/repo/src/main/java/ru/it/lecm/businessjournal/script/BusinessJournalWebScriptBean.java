@@ -3,6 +3,8 @@ package ru.it.lecm.businessjournal.script;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.ScriptableObject;
@@ -19,8 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 /**
  * @author dbashmakov
@@ -29,46 +29,80 @@ import org.json.JSONException;
  */
 public class BusinessJournalWebScriptBean extends BaseWebScript {
 
-	private BusinessJournalService service;
-	private BusinessJournalArchiverSettings archiverSettings;
+    private BusinessJournalService service;
+    private BusinessJournalArchiverSettings archiverSettings;
 
-	public void setService(BusinessJournalService service) {
-		this.service = service;
-	}
+    public void setService(BusinessJournalService service) {
+        this.service = service;
+    }
 
-	public void log(String mainObject, String eventCategory, String description, Scriptable objects) {
-		NodeRef record;
-		Object[] objs = Context.getCurrentContext().getElements(objects);
-		List<String> refs = new ArrayList<String>();
-		for (Object obj : objs) {
-			String ref = (String) obj;
-			refs.add(ref);
-		}
-		service.log(new NodeRef(mainObject), eventCategory, description, refs);
-	}
+    /**
+     * произвести запись в Бизнес-журнал
+     *
+     * @param mainObject    текстовое представление ссылки на любой объект
+     * @param eventCategory код категории события
+     * @param description   описание по умолчанию
+     * @param objects       список второстепенных объектов (текстовых представлений ссылок или просто строк)
+     */
+    @SuppressWarnings("unused")
+    public void log(String mainObject, String eventCategory, String description, Scriptable objects) {
+        NodeRef record;
+        Object[] objs = Context.getCurrentContext().getElements(objects);
+        List<String> refs = new ArrayList<String>();
+        for (Object obj : objs) {
+            String ref = (String) obj;
+            refs.add(ref);
+        }
+        service.log(new NodeRef(mainObject), eventCategory, description, refs);
+    }
 
-	public Scriptable getRecordsByInterval(long start, long end) {
-		List<BusinessJournalRecord> refs = service.getRecordsByInterval(getDateFromLong(start), getDateFromLong(end));
-		return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
-	}
+    /**
+     * получить список записей бизнес-журнала, сформированных за заданный период
+     *
+     * @param start начальное время (в мс)
+     * @param end   конечно время (в мс)
+     */
+    @SuppressWarnings("unused")
+    public Scriptable getRecordsByInterval(long start, long end) {
+        List<BusinessJournalRecord> refs = service.getRecordsByInterval(getDateFromLong(start), getDateFromLong(end));
+        return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
+    }
 
-	public ScriptNode getRecord(String recordRef) {
-		ParameterCheck.mandatory("recordRef", recordRef);
-		NodeRef ref = new NodeRef(recordRef);
-		if (!service.isBJRecord(ref)) {
-			throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала");
-		}
-		return new ScriptNode(ref, serviceRegistry, getScope());
-	}
+    /**
+     * получить запись бизнес-журнала по nodeRef
+     *
+     * @param recordRef текстовое представление nodeRef записи
+     */
+    @SuppressWarnings("unused")
+    public ScriptNode getRecord(String recordRef) {
+        ParameterCheck.mandatory("recordRef", recordRef);
+        NodeRef ref = new NodeRef(recordRef);
+        if (!service.isBJRecord(ref)) {
+            throw new ScriptException("Неправильный объект. Параметр должен содержать ссылку на запись бизнес-журнала");
+        }
+        return new ScriptNode(ref, serviceRegistry, getScope());
+    }
 
+    @SuppressWarnings("unused")
     public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey) {
         return getRecordsByParams(objectTypes, daysCount, whoseKey, null, null, null);
     }
 
+    @SuppressWarnings("unused")
     public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey, String checkMainObject) {
         return getRecordsByParams(objectTypes, daysCount, whoseKey, checkMainObject, null, null);
     }
 
+    /**
+     * получить список записей Бизнес-журнала по определенным параметрам
+     *
+     * @param objectTypes     список типов объектов
+     * @param daysCount       за сколько последних дней получить записи
+     * @param whoseKey        дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
+     * @param checkMainObject проверять ли доступность основного объекта
+     * @param skipCount       сколько записей следует пропустить
+     * @param maxItems        максимальное число возвращаемых записей
+     */
     public Scriptable getRecordsByParams(String objectTypes, String daysCount, String whoseKey, String checkMainObject, String skipCount, String maxItems) {
         Date now = new Date();
         Date start = null;
@@ -82,7 +116,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
             maxItemsInt = Integer.parseInt(maxItems);
         } catch (NumberFormatException ignored) {
         }
-        if (daysCount != null &&  !"".equals(daysCount)) {
+        if (daysCount != null && !"".equals(daysCount)) {
             Integer days = Integer.parseInt(daysCount);
 
             if (days > 0) {
@@ -100,6 +134,17 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return Context.getCurrentContext().newArray(getScope(), createScriptRecord(refs).toArray());
     }
 
+    /**
+     * получить список записей Бизнес-журнала
+     *
+     * @param sort            настройки сортировки в формате <поле|направление сортировки>
+     * @param startIndex      начальный индекс для поиска
+     * @param maxResults      максимальное число результатов в итоговой выборке
+     * @param filter          фильтры для поиска
+     * @param andFilter       использовать «AND» между разные фильтрами, иначе «OR»
+     * @param includeArchived включать в выборку архивные записи
+     */
+    @SuppressWarnings("unused")
     public Scriptable getRecords(String sort, Integer startIndex, Integer maxResults, Scriptable filter, Boolean andFilter, Boolean includeArchived) {
         String[] sortSet = sort.split("\\|");
         BusinessJournalRecord.Field field = BusinessJournalRecord.Field.fromFieldName(sortSet[0]);
@@ -108,24 +153,35 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return Context.getCurrentContext().newArray(getScope(), createScriptRecord(result).toArray());
     }
 
+    /**
+     * получить число записей Бизнес-журнала
+     *
+     * @param filter          фильтры для поиска
+     * @param andFilter       использовать «AND» между разные фильтрами, иначе «OR»
+     * @param includeArchived включать в выборку архивные записи
+     */
+    @SuppressWarnings("unused")
     public Long getRecordsCount(Scriptable filter, Boolean andFilter, Boolean includeArchived) {
         Map<BusinessJournalRecord.Field, String> filterObject = getFilter(filter);
         return service.getRecordsCount(filterObject, andFilter, includeArchived);
     }
 
+    /**
+     * получить корневую директорию сервиса
+     */
+    @SuppressWarnings("unused")
     public ScriptNode getDirectory() {
-		try {
-			NodeRef ref = service.getBusinessJournalDirectory();
-			return new ScriptNode(ref, serviceRegistry, getScope());
-		} catch (Exception e) {
-			throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
-		}
-	}
+        try {
+            NodeRef ref = service.getBusinessJournalDirectory();
+            return new ScriptNode(ref, serviceRegistry, getScope());
+        } catch (Exception e) {
+            throw new ScriptException("Не удалось получить директорию с бизнес-журналом", e);
+        }
+    }
 
     private Map<BusinessJournalRecord.Field, String> getFilter(Scriptable filter) {
         HashMap<BusinessJournalRecord.Field, String> result = new HashMap<BusinessJournalRecord.Field, String>();
         if (filter != null) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             Object[] ids = filter.getIds();
             for (Object id1 : ids) {
                 String id = (String) id1;
@@ -145,7 +201,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
                         calendar.add(Calendar.DAY_OF_MONTH, 1);
                         end = calendar.getTime();
                     }
-                    value = format.format(start) + "|" + format.format(end);
+                    value = DateFormatISO8601.format(start) + "|" + DateFormatISO8601.format(end);
                 }
                 result.put(BusinessJournalRecord.Field.fromFieldName(id), value);
             }
@@ -154,7 +210,6 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
     }
 
     private Date parseDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         Pattern p = Pattern.compile("(\\+|\\-)(\\d+):(\\d+)");
         Matcher m = p.matcher(date);
         if (m.find()) {
@@ -164,13 +219,14 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         }
         Date result = new Date();
         try {
-            result = format.parse(date);
+            result = DateFormatISO8601.parse(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return result;
 
     }
+
     private Date getDateFromLong(long longDate) {
         if (longDate != -1) {
             Calendar calendar = Calendar.getInstance();
@@ -180,25 +236,46 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public String getObjectDescription(String objectRef) {
-		NodeRef ref = new NodeRef(objectRef);
-		return service.getObjectDescription(ref);
-	}
+    /**
+     * получить описание объекта
+     *
+     * @param objectRef строкое представление nodeRef объекта
+     */
+    @SuppressWarnings("unused")
+    public String getObjectDescription(String objectRef) {
+        NodeRef ref = new NodeRef(objectRef);
+        return service.getObjectDescription(ref);
+    }
 
-	public boolean archiveRecord(Long recordId) {
-		return service.moveRecordToArchive(recordId);
-	}
+    /**
+     * выполнить архивацию записи Бизнес-журнала
+     *
+     * @param recordId идентификатор записи Бизнес-журнала
+     */
+    public boolean archiveRecord(Long recordId) {
+        return service.moveRecordToArchive(recordId);
+    }
 
-	public ScriptNode getArchiveDirectory() {
-		try {
-			NodeRef ref = service.getBusinessJournalArchiveDirectory();
-			return new ScriptNode(ref, serviceRegistry, getScope());
-		} catch (Exception e) {
-			throw new ScriptException("Не удалось получить директорию с архивными записями", e);
-		}
-	}
+    /**
+     * получить директорию с архивными записями
+     */
+    @SuppressWarnings("unused")
+    public ScriptNode getArchiveDirectory() {
+        try {
+            NodeRef ref = service.getBusinessJournalArchiveDirectory();
+            return new ScriptNode(ref, serviceRegistry, getScope());
+        } catch (Exception e) {
+            throw new ScriptException("Не удалось получить директорию с архивными записями", e);
+        }
+    }
 
-	public Scriptable findOldRecords(String dateStr) {
+    /**
+     * получить список «устаревших» записей Бизнес-журнала (записей старше чем указанная дата)
+     *
+     * @param dateStr текстовое представление даты в формате yyyy-MM-dd
+     */
+    @SuppressWarnings("unused")
+    public Scriptable findOldRecords(String dateStr) {
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
 
@@ -207,8 +284,18 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         } catch (ParseException e) {
             throw new ScriptException("Неверный формат даты!", e);
         }
-	}
+    }
 
+    /**
+     * получить историю (список записей Бизнес журнала) для заданного объекта
+     *
+     * @param nodeRef        текстовое представление nodeRef объекта
+     * @param sortColumnName свойство для сортировки
+     * @param ascending      направление сортировки (сортировать по возрастанию?)
+     * @param showSecondary  включать ли записи, в которых заданный объект является второстепенным
+     * @param showInactive   включать ли в итоговую выборку архивные записи
+     */
+    @SuppressWarnings("unused")
     public Scriptable getHistory(String nodeRef, String sortColumnName, boolean ascending, boolean showSecondary, boolean showInactive) {
         ParameterCheck.mandatory("parentRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
@@ -217,6 +304,13 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return Context.getCurrentContext().newArray(getScope(), createScriptRecord(records).toArray());
     }
 
+    /**
+     * получить историю (список записей Бизнес журнала) смены статусов для заданного объекта
+     *
+     * @param nodeRef        текстовое представление nodeRef объекта
+     * @param sortColumnName свойство для сортировки
+     * @param ascending      направление сортировки (сортировать по возрастанию?)
+     */
     public Scriptable getStatusHistory(String nodeRef, String sortColumnName, boolean ascending) {
         ParameterCheck.mandatory("parentRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
@@ -225,22 +319,35 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         return Context.getCurrentContext().newArray(getScope(), createScriptRecord(records).toArray());
     }
 
-	public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
-		this.archiverSettings = archiverSettings;
-	}
+    public void setArchiverSettings(BusinessJournalArchiverSettings archiverSettings) {
+        this.archiverSettings = archiverSettings;
+    }
 
-	public ScriptNode getArchSettings(){
-		NodeRef settings = archiverSettings.getArchiveSettingsRef();
-		return new ScriptNode(settings, serviceRegistry, getScope());
-	}
+    /**
+     * получить узел с настройками автоматической архивации
+     */
+    @SuppressWarnings("unused")
+    public ScriptNode getArchSettings() {
+        NodeRef settings = archiverSettings.getArchiveSettingsRef();
+        return new ScriptNode(settings, serviceRegistry, getScope());
+    }
 
-    public BusinessJournalScriptRecord getNodeById(Long nodeId){
+    /**
+     * получить запись бизнес-журнала (BusinessJournalScriptRecord) по идентификатору
+     *
+     * @param nodeId идентификатор объекта
+     */
+    public BusinessJournalScriptRecord getNodeById(Long nodeId) {
         return createScriptRecord(service.getNodeById(nodeId));
     }
 
+    /**
+     * Является ли текущий пользователь технологом бизнес-журнала
+     */
+    @SuppressWarnings("unused")
     public boolean isBJEngeneer() {
-		return service.isBJEngineer();
-	}
+        return service.isBJEngineer();
+    }
 
     private List<BusinessJournalScriptRecord> createScriptRecord(List<BusinessJournalRecord> records) {
         List<BusinessJournalScriptRecord> result = new ArrayList<BusinessJournalScriptRecord>();
@@ -275,9 +382,14 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         }
     }
 
+    @SuppressWarnings("unused")
+    /**
+     * включить/выключить логирование определенной категории событий
+     * @param nodeRefs  массив nodeRef категорий
+     * @param turnOn включить/выключить логирование
+     */
     public Boolean switchLogging(JSONArray nodeRefs, String turnOn) {
-        //Object[] nodeRefs = Context.getCurrentContext().getElements(scriptableNodeRefs);
-        for (int i=0; i<nodeRefs.length(); i++) {
+        for (int i = 0; i < nodeRefs.length(); i++) {
             try {
                 String nodeRef = nodeRefs.getJSONObject(i).getString("nodeRef");
                 Boolean turnOnBool = Boolean.parseBoolean(turnOn);
@@ -288,5 +400,4 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
         }
         return false;
     }
-    
 }

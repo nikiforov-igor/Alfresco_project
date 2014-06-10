@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get folder with form config</shortname>
-	<description>Get folder with form config</description>
-	<url>/lecm/docforms/deployRoot</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction>none</transaction>
-</webscript>

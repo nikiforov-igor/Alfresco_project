@@ -114,7 +114,7 @@ public class SubscriptionsToTypeLogEventPolicy implements NodeServicePolicies.On
 
 	@Override
 	public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		if (before.size() == after.size()) {
+		if ( nodeService.exists(nodeRef) && (before.size() == after.size()) ) {
 			List<AssociationRef> employees = nodeService.getTargetAssocs(nodeRef, SubscriptionsService.ASSOC_DESTINATION_EMPLOYEE);
 			if (employees != null) {
 				for (AssociationRef employeeAssoc: employees) {

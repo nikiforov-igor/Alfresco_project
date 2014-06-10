@@ -10,11 +10,12 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.workflow.WorkflowType;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowRunner;
 import ru.it.lecm.workflow.api.WorkflowRunnerService;
+import ru.it.lecm.workflow.api.WorkflowType;
+import ru.it.lecm.workflow.utils.WorkflowTypeHelper;
 import ru.it.lecm.workflow.utils.WorkflowVariablesHelper;
 
 /**
@@ -55,7 +56,7 @@ public class RouteWorkflowJavascriptExtension extends BaseWebScript {
 
 	public String startWorkflow(final Map<String, Object> variables) {
 		String workflowDefinition = WorkflowVariablesHelper.getWorkflowDefinition(variables);
-		WorkflowType workflowType = WorkflowType.getById(workflowDefinition);
+		WorkflowType workflowType = WorkflowTypeHelper.getWorkflowTypeByDefinition(workflowDefinition);
 		WorkflowRunner workflowRunner = workflowRunnerService.getWorkflowRunner(workflowType);
 		return workflowRunner.run(variables);
 	}

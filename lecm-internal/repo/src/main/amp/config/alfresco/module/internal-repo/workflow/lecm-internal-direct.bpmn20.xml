@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:activiti="http://activiti.org/bpmn"
+             typeLanguage="http://www.w3.org/2001/XMLSchema"
+             expressionLanguage="http://www.w3.org/1999/XPath"
+             targetNamespace="http://www.it.ru/logicECM/workflow/internal/direct">
+
+    <process id="lecmInternalDirect" name="Внутренний. Направить" isExecutable="true">
+        <startEvent id="start-internal-direct" name="Start Internal Direct" activiti:formKey="internalDirect:direct"></startEvent>
+        <serviceTask id="empty-service-task" name="Service task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                    	var emptyServiceTask = "Service task";
+                    ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+        <sequenceFlow id="from-start-to-empty-service-task" sourceRef="start-internal-direct" targetRef="empty-service-task"></sequenceFlow>
+        <receiveTask id="receivetask" name="Receive Task"></receiveTask>
+
+        <sequenceFlow id="from-empty-service-task-to-receivetask" sourceRef="empty-service-task" targetRef="receivetask"></sequenceFlow>
+
+        <serviceTask id="init-service-task" name="Service task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+            <extensionElements>
+                <activiti:field name="script">
+                    <activiti:string><![CDATA[
+                        var document = bpm_package.children[0]
+                        execution.setVariable("assigneesList", edsDocument.getRecipientLogins(document));
+                    ]]></activiti:string>
+                </activiti:field>
+            </extensionElements>
+        </serviceTask>
+
+        <sequenceFlow id="from-receive-task-to-answer" sourceRef="receivetask" targetRef="init-service-task"></sequenceFlow>
+
+        <userTask id="parallel-answer-task" name="Ответить"
+                  activiti:assignee="${assignee}"
+                  activiti:formKey="internalDirect:answerTask">
+            <extensionElements>
+                <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                        var document = bpm_package.children[0];
+                        var table = document.assocs["lecm-internal-table-structure:answers-assoc"][0];
+                        var employee = orgstructure.getEmployeeByLogin(task.getVariable("assignee"));
+
+                        var businessRole = (("" + edsGlobalSettings.isHidePropsForRecipients()) == "true") ? "LECM_BASIC_PG_ActionPerformer_Lite" : "LECM_BASIC_PG_ActionPerformer"; 
+                        documentMembers.addMemberWithoutCheckPermission(document, employee, businessRole);
+
+                        var initiator = orgstructure.getCurrentEmployee();
+                        var answer = table.createNode(null, "lecm-internal-table-structure:answer", "cm:contains");
+
+                        answer.setInheritsPermissions(false);
+                        lecmPermission.grantDynamicRole(answer, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_ActionPerformer");
+                        lecmPermission.grantDynamicRole(document, employee, "DA_RECIPIENT_DYN", "LECM_BASIC_PG_Employee");
+                        lecmPermission.grantDynamicRole(answer, initiator, "BR_INITIATOR", "LECM_BASIC_PG_Owner");
+
+                        answer.createAssociation(employee, "lecm-internal-table-structure:employee-assoc");
+                        //Подписываемся на слушание
+                        documentEvent.subscribe(answer, document);
+                        task.setVariableLocal("answer", answer.nodeRef.toString());
+                        task.setVariableLocal("initiatorEmployee", initiator.nodeRef.toString());
+                        //Создаем данные для формы
+                        var formData = [];
+                        //Получатель
+                        formData = "{\"lecm-internal:recipients-assoc\":\"" + document.assocs["lecm-document:author-assoc"][0].nodeRef.toString() + "\",";
+                        //Тематика
+                        formData += "\"lecm-document:subject-assoc\":\"" + document.assocs["lecm-document:subject-assoc"][0].nodeRef.toString() + "\",";
+                        //Связь
+                        formData += "\"lecm-document-aspects:response-to-assoc\":\"" + document.nodeRef.toString() + "\"}";
+                        //Сохраняем
+                        task.setVariableLocal("internalDirect_formData", formData);
+
+                        var curators = [];
+                        curators.push(employee.nodeRef.toString());
+					    var notificationText = documentScript.wrapperLink(initiator, initiator.properties["lecm-orgstr:employee-short-name"]) + " направил вам документ ";
+                        notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:ext-present-string}");
+                        notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+                <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
+                    <activiti:field name="script">
+                        <activiti:string><![CDATA[
+                            var document = bpm_package.children[0];
+							var answer = eval('(' + task.getVariable("internalDirect_answerResult") + ')');
+							var answerObject = search.findNode(task.getVariableLocal("answer"));
+							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
+							var curators = [];
+							curators.push(curator.nodeRef.toString());
+							var currentUser = orgstructure.getCurrentEmployee();
+							if (answer.type == "takeNote") {
+							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Принято к сведению";
+							    answerObject.save();
+							    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " принял к сведению направленный вами документ ";
+                                notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
+                                notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                            } else if (answer.type == "document") {
+                                var newDocument = search.findNode(answer.nodeRef);
+                                //Формируем ответ
+                                answerObject.createAssociation(newDocument, "lecm-internal-table-structure:answer-document-assoc")
+							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
+							    answerObject.save();
+							    //Добавляем инициатора процесса в участники нового документа
+							    documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
+							    //Добавляем слушателя
+							    documentEvent.subscribe(newDocument, document);
+                            } else if (answer.type == "answer") {
+                                var answerText = "";
+                                //Обрабатываем типовой ответ
+                                if (answer.typical != null && answer.typical != "") {
+                                    var typical = search.findNode(answer.typical);
+                                    answerText = typical.properties["cm:name"];
+                                    answerObject.createAssociation(typical, "lecm-internal-table-structure:answer-typical-assoc");
+                                }
+                                //Обрабатываем комметарий
+                                if (answer.manual != null && answer.manual != "") {
+                                    answerText += (answerText.length > 0 ? ". " : "") + answer.manual;
+                                }
+                                //Обрабатываем прикремленные файлы
+                                if (answer.files != null && answer.files != "") {
+                                    var files = answer.files.split(",");
+                                    for (var i in files) {
+                                        var file = search.findNode(files[i]);
+                                        document.createAssociation(file, "lecm-document-aspects:attachments-temp-assoc");
+                                        answerObject.createAssociation(file, "lecm-internal-table-structure:answer-attachment-assoc");
+                                    }
+                                }
+							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
+							    answerObject.properties["lecm-internal-table-structure:answer-details-clean"] = answerText;
+							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
+							    answerObject.save();
+
+      							var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";
+                                notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
+                                notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                            }
+						]]></activiti:string>
+                    </activiti:field>
+                </activiti:taskListener>
+            </extensionElements>
+            <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${assigneesList}" activiti:elementVariable="assignee"></multiInstanceLoopCharacteristics>
+        </userTask>
+        <sequenceFlow id="from-init-task-to-answer" sourceRef="init-service-task" targetRef="parallel-answer-task"></sequenceFlow>
+        <sequenceFlow id="from-log-final-decision-to-workflowEnd" sourceRef="parallel-answer-task" targetRef="workflowEnd"></sequenceFlow>
+
+        <endEvent id="workflowEnd" name="End"></endEvent>
+
+    </process>
+</definitions>

@@ -1,6 +1,0 @@
-<webscript>
-  <shortname>Namespaces service</shortname>
-  <description>Get namspace map</description>
-  <url>/namespaces</url>
-  <format default="json">argument</format>
-</webscript>

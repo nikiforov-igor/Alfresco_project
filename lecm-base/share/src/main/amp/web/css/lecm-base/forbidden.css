@@ -1,0 +1,6 @@
+.forbidden {
+	position: absolute; top: 50%; width: 100%; height: 0; text-align: center;
+}
+.forbidden .theme-color-3 {
+	color: #3C3C3C;
+}

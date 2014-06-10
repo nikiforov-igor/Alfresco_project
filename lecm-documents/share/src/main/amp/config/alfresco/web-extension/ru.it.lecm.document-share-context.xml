@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+	<bean id="documents.custom.config" class="org.springframework.extensions.config.ConfigBootstrap" init-method="register">
+		<property name="configService" ref="web.config" />
+		<property name="configs">
+			<list>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/documents/documents-share-config-custom.xml</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="documentResourceBundlesWebApp" class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+        <property name="resourceBundles">
+            <list>
+                <value>alfresco.web-extension.ru.it.lecm.documents.form</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.documents.form.form.get" class="ru.it.lecm.documents.form.Form" parent="webscript">
+        <property name="configService" ref="web.config" />
+        <property name="scriptRemote" ref="webscripts.script.remote" />
+    </bean>
+
+
+    <bean id="evaluator.ru.it.lecm.documents.isBase" parent="evaluator.doclib.action.nodeType">
+        <property name="types">
+            <list>
+                <value>lecm-document:base</value>
+            </list>
+        </property>
+        <property name="allowSubtypes" value="true"/>
+    </bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.isNotBase" parent="evaluator.ru.it.lecm.documents.isBase">
+		<property name="negateOutput" value="true" />
+	</bean>
+<!--TODO: Запилить машину состояний и включить -->
+	<bean id="evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatus" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.documents.isNotBase" />
+				<ref bean="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatusAndAdmin" parent="evaluator.doclib.action.chainedMatchOne">
+		<property name="evaluators">
+			<list>
+				<ref bean="evaluator.ru.it.lecm.documents.isNotBase" />
+				<ref bean="evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatusAndAdmin" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="evaluators.documents.util" class="ru.it.lecm.documents.evaluators.EvaluatorsUtil">
+		<property name="scriptRemote" ref="webscripts.script.remote" />
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.hasReadAttachmentComponent" class="ru.it.lecm.documents.evaluators.HasReadAttachmentComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
+	</bean>
+
+	<bean id="evaluator.ru.it.lecm.documents.viewVersionComponent" class="ru.it.lecm.documents.evaluators.ViewVersionComponentEvaluator">
+		<property name="evaluatorsUtil" ref="evaluators.documents.util" />
+	</bean>
+</beans>

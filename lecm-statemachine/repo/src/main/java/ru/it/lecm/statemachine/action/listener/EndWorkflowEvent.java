@@ -9,9 +9,10 @@ import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.WorkflowDescriptor;
 import ru.it.lecm.statemachine.action.*;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
-import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import java.util.List;
 public class EndWorkflowEvent implements ExecutionListener {
 
     private static DocumentService documentService;
+    private StateMachineHelper stateMachineHelper;
 
     @Override
     public void notify(final DelegateExecution delegateExecution) throws Exception {
@@ -36,10 +38,9 @@ public class EndWorkflowEvent implements ExecutionListener {
                 if (AuthenticationUtil.getFullyAuthenticatedUser() == null) {
                     return null;
                 }
-                StateMachineHelper helper = new StateMachineHelper();
                 String executionId = StateMachineHelper.ACTIVITI_PREFIX + delegateExecution.getId();
-
-                NodeRef document = helper.getStatemachineDocument(executionId);
+                //TODO Здесь выполняется получение документа из переменных процесса по executionId
+                NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
                 if (document == null) {
                     return null;
                 }
@@ -48,15 +49,16 @@ public class EndWorkflowEvent implements ExecutionListener {
                 WorkflowDescriptor descriptor = utils.getWorkflowDescriptor(document, executionId);
 
                 if (descriptor != null) {
-                    helper.logEndWorkflowEvent(document, executionId);
+                    stateMachineHelper.logEndWorkflowEvent(document, executionId);
 
                     String actionName = descriptor.getActionName();
                     String actionId = descriptor.getActionId();
                     String statemachineId = descriptor.getStatemachineExecutionId();
 
-                    List<StateMachineAction> actions = helper.getTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName(), descriptor.getEventName());
+                    //TODO Сразу передавать нужные параметры
+                    List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName());
                     if (actions.size() == 0) {
-                        actions = helper.getHistoricalTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName(), descriptor.getEventName());
+                        actions = stateMachineHelper.getHistoricalTaskActionsByName(descriptor.getStartTaskId(), descriptor.getActionName(), descriptor.getEventName());
                     }
 
                     List<WorkflowVariables.WorkflowVariable> variables = null;
@@ -88,32 +90,39 @@ public class EndWorkflowEvent implements ExecutionListener {
                     }
 
                     if (variables != null) {
-                        helper.getOutputVariables(statemachineId, delegateExecution.getVariables(), variables);
+                        stateMachineHelper.getOutputVariables(statemachineId, delegateExecution.getVariables(), variables);
                     }
 
-                    String taskId = helper.getCurrentTaskId(statemachineId);
-                    List<StateMachineAction> transitionActions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(TransitionAction.class), ExecutionListener.EVENTNAME_END);
+                    String taskId = stateMachineHelper.getCurrentTaskId(statemachineId);
+                    //TODO Сразу передавать нужные параметры
+                    List<StateMachineAction> transitionActions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(TransitionAction.class));
                     boolean isTrasitionValid = false;
                     boolean stopSubWorkflows = false;
+                    String messageName = "";
                     for (StateMachineAction action : transitionActions) {
                         TransitionAction transitionAction = (TransitionAction) action;
-                        boolean currentTransitionValid = documentService.execExpression(document, transitionAction.getExpression());
-                        HashMap<String, Object> parameters = new HashMap<String, Object>();
-                        parameters.put(transitionAction.getVariableName(), currentTransitionValid);
-                        helper.setExecutionParamentersByTaskId(taskId, parameters);
-
-                        if (currentTransitionValid) {
-                            stopSubWorkflows = stopSubWorkflows || transitionAction.isStopSubWorkflows();
-                        }
-                        isTrasitionValid = isTrasitionValid || currentTransitionValid;
+                        for(TransitionAction.TransitionActionEntity transition: transitionAction.getTransitions()) {
+	                        boolean currentTransitionValid = documentService.execExpression(document, transition.getExpression());
+//	                        HashMap<String, Object> parameters = new HashMap<String, Object>();
+//	                        parameters.put(transition.getVariableName(), currentTransitionValid);
+//	                        stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
+	
+	                        if (currentTransitionValid) {
+	                            stopSubWorkflows = stopSubWorkflows || transition.isStopSubWorkflows();
+	                            messageName = transition.getVariableName()+"_msg";
+	                        }
+	                        isTrasitionValid = isTrasitionValid || currentTransitionValid;
+                    	}
                     }
 
                     if (isTrasitionValid) {
                         if (stopSubWorkflows) {
-                            helper.stopDocumentSubWorkflows(statemachineId, executionId);
+                        	//TODO DONE первый параметр теперь нодреф документа а не id машины состояний
+                            stateMachineHelper.stopDocumentSubWorkflows(document, executionId);
                         }
 
-                        helper.nextTransition(taskId);
+                        //stateMachineHelper.nextTransition(taskId);
+                        stateMachineHelper.sendMessage(messageName, statemachineId.replace(StateMachineHelper.ACTIVITI_PREFIX,""));
                     }
 	                utils.removeWorkflow(document, executionId);
                 }
@@ -126,6 +135,10 @@ public class EndWorkflowEvent implements ExecutionListener {
     }
 
     public void setDocumentService(DocumentService documentService) {
-        this.documentService = documentService;
+    	this.documentService = documentService;
+    }
+    
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
     }
 }

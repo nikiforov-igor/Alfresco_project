@@ -17,6 +17,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -107,14 +108,14 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	}
 
 	@Override
-	public void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) {
+	public void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) throws WriteTransactionNeededException {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
 			this.grantPermissions(employeeRef, documentRef, "LECM_BASIC_PG_Reader", addEmployeeAsMember);
 		}
 	}
 
-	protected void grantPermissions(final NodeRef employeeRef, final NodeRef documentRef, final String permissionGroup, final boolean addEmployeeAsMember) {
+	protected void grantPermissions(final NodeRef employeeRef, final NodeRef documentRef, final String permissionGroup, final boolean addEmployeeAsMember) throws WriteTransactionNeededException {
 		if (documentRef != null) {
 			NodeRef member = null;
 			if (addEmployeeAsMember) {
@@ -251,7 +252,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		}
 	}
 
-	protected void completeTaskAddMembers(NodeRef employeeRef, NodeRef bpmPackage, DelegateTask task) {
+	protected void completeTaskAddMembers(NodeRef employeeRef, NodeRef bpmPackage, DelegateTask task) throws WriteTransactionNeededException {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);
 		if (Utils.isDocument(documentRef)) {
 			documentMembersService.addMemberWithoutCheckPermission(documentRef, employeeRef, new HashMap<QName, Serializable>(), true);

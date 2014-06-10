@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -13,6 +12,7 @@ import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
@@ -23,17 +23,17 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * @author dbashmakov
- *         Date: 25.12.12
- *         Time: 10:18
+ * @author dbashmakov Date: 25.12.12 Time: 10:18
  */
 public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalService implements BusinessJournalService {
 
     private static final String BUSINESS_JOURNAL_POST_TRANSACTION_PENDING_OBJECTS = "business_journal_post_transaction_pending_objects";
-
+	
     private static final Logger logger = LoggerFactory.getLogger(LocalBusinessJournalServiceImpl.class);
 
     private SearchService searchService;
+    private NamespaceService namespaceService;
+
     private BusinessJournalOnCreateAssocsPolicy businessJournalOnCreateAssocsPolicy;
 
     public void setSearchService(SearchService searchService) {
@@ -46,81 +46,77 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
 
     @Override
     public NodeRef getServiceRootFolder() {
-        return bjRootRef;
+        return getBusinessJournalDirectory();
     }
 
     /**
-     * Метод инициализвции сервиса
-     * Создает рабочую директорию - если она еще не создана.
-     * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
+     * Метод инициализвции сервиса Создает рабочую директорию - если она еще не
+     * создана. Записыывает в свойства сервиса nodeRef директории с
+     * бизнес-журналами
      */
     public void init() {
         businessJournalOnCreateAssocsPolicy.setBusinessJournalService(this);
-        bjRootRef = getFolder(BJ_ROOT_ID);
-        bjArchiveRef = getFolder(BJ_ARCHIVE_ROOT_ID);
+        bjRootID = BJ_ROOT_ID;
+        bjArchiveID = BJ_ARCHIVE_ROOT_ID;
     }
 
     @Override
     public void saveToStore(final BusinessJournalRecord record) throws Exception {
-        transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-            @Override
-            public NodeRef execute() throws Throwable {
-                final NodeRef objectType = record.getObjectType();
+        final NodeRef objectType = record.getObjectType();
 
-                String type = record.getObjectTypeText();
+        String type = record.getObjectTypeText();
 
-                String category = record.getEventCategoryText();
-
-                final NodeRef saveDirectoryRef = getSaveFolder(type, category, record.getDate());
-
-                // создаем ноду
-                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
-                properties.put(PROP_BR_RECORD_DATE, record.getDate());
-                properties.put(PROP_BR_RECORD_DESC, record.getRecordDescription());
-                properties.put(PROP_BR_RECORD_INITIATOR, record.getInitiatorText());
-                properties.put(PROP_BR_RECORD_MAIN_OBJECT, record.getMainObjectDescription());
-                if (record.getObjects() != null && record.getObjects().size() > 0) {
-                    for (int i = 0; i < record.getObjects().size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
-                        String description = record.getObjects().get(i).getDescription();
-                        properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i + 1)), description);
-                    }
-                }
-
-                ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
-                        QName.createQName(BJ_NAMESPACE_URI, GUID.generate()), TYPE_BR_RECORD, properties);
-                NodeRef result = associationRef.getChildRef();
-
-                // создаем ассоциации
-                if (record.getInitiator() != null && nodeService.exists(record.getInitiator())) {
-                    nodeService.createAssociation(result, record.getInitiator(), ASSOC_BR_RECORD_INITIATOR);
-                }
-                if (record.getMainObject() != null && nodeService.exists(record.getMainObject())) {
-                    nodeService.createAssociation(result, record.getMainObject(), ASSOC_BR_RECORD_MAIN_OBJ);
-                }
-                if (record.getMainObject() != null && !nodeService.exists(record.getMainObject())) {
-                    nodeService.setProperty(result, ASSOC_BR_RECORD_MAIN_OBJ_REF, record.getMainObject().toString());
-                }
-
-                // необязательные
-                if (record.getEventCategory() != null && nodeService.exists(record.getEventCategory())) {
-                    nodeService.createAssociation(result, record.getEventCategory(), ASSOC_BR_RECORD_EVENT_CAT);
-                }
-                if (objectType != null && nodeService.exists(record.getObjectType())) {
-                    nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
-                }
-
-                if (record.getObjects() != null && record.getObjects().size() > 0) {
-                    for (int j = 0; j < record.getObjects().size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
-                        if (record.getObjects().get(j).getNodeRef() != null && nodeService.exists(record.getObjects().get(j).getNodeRef())) {
-                            nodeService.createAssociation(result, record.getObjects().get(j).getNodeRef(), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j + 1)));
-                        }
-                    }
-                }
-                return result;
+        String category = record.getEventCategoryText();
+        final List<String> directoryPath = getDirectoryPath(type, category, record.getDate());
+        NodeRef saveDirectoryRef = getFolder(getBusinessJournalDirectory(),directoryPath);
+        if (null == saveDirectoryRef) {
+                saveDirectoryRef = createPath(getBusinessJournalDirectory(), directoryPath);
+        }
+        // создаем ноду
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(7);
+        properties.put(PROP_BR_RECORD_DATE, record.getDate());
+        properties.put(PROP_BR_RECORD_DESC, record.getRecordDescription());
+        properties.put(PROP_BR_RECORD_INITIATOR, record.getInitiatorText());
+        properties.put(PROP_BR_RECORD_MAIN_OBJECT, record.getMainObjectDescription());
+        if (record.getObjects() != null && record.getObjects().size() > 0) {
+            for (int i = 0; i < record.getObjects().size() && i < MAX_SECONDARY_OBJECTS_COUNT; i++) {
+                String description = record.getObjects().get(i).getDescription();
+                properties.put(QName.createQName(BJ_NAMESPACE_URI, getSecondObjPropName(i + 1)), description);
             }
-        });
-    }
+        }
 
+        ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
+                QName.createQName(BJ_NAMESPACE_URI, GUID.generate()), TYPE_BR_RECORD, properties);
+        NodeRef result = associationRef.getChildRef();
+
+        // создаем ассоциации
+        if (record.getInitiator() != null && nodeService.exists(record.getInitiator())) {
+            nodeService.createAssociation(result, record.getInitiator(), ASSOC_BR_RECORD_INITIATOR);
+        }
+//                if (record.getMainObject() != null && nodeService.exists(record.getMainObject())) {
+//                    nodeService.createAssociation(result, record.getMainObject(), ASSOC_BR_RECORD_MAIN_OBJ);
+//                }
+        if (record.getMainObject() != null) {
+            nodeService.setProperty(result, ASSOC_BR_RECORD_MAIN_OBJ_REF, record.getMainObject().toString());
+        }
+
+        // необязательные
+        if (record.getEventCategory() != null && nodeService.exists(record.getEventCategory())) {
+            nodeService.createAssociation(result, record.getEventCategory(), ASSOC_BR_RECORD_EVENT_CAT);
+        }
+        if (objectType != null && nodeService.exists(record.getObjectType())) {
+            nodeService.createAssociation(result, objectType, ASSOC_BR_RECORD_OBJ_TYPE);
+        }
+
+        if (record.getObjects() != null && record.getObjects().size() > 0) {
+            for (int j = 0; j < record.getObjects().size() && j < MAX_SECONDARY_OBJECTS_COUNT; j++) {
+                if (record.getObjects().get(j).getNodeRef() != null) {
+//                            nodeService.createAssociation(result, record.getObjects().get(j).getNodeRef(), QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j + 1)));
+                    nodeService.setProperty(result, QName.createQName(BJ_NAMESPACE_URI, getSeconObjAssocName(j + 1) + "-ref"), record.getObjects().get(j).getNodeRef());
+                }
+            }
+        }
+    }
 
     private String getSeconObjAssocName(int j) {
         return "bjRecord-secondaryObj" + j + "-assoc";
@@ -131,10 +127,11 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
     }
 
     /**
-     * Метод, возвращающий список ссылок на записи бизнес-журнала, сформированные за заданный период
+     * Метод, возвращающий список ссылок на записи бизнес-журнала,
+     * сформированные за заданный период
      *
      * @param begin - начальная дата
-     * @param end   - конечная дата
+     * @param end - конечная дата
      * @return список ссылок
      */
     @Override
@@ -163,35 +160,20 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         return pack(records);
     }
 
-    private NodeRef getSaveFolder(final String type, final String category, final Date date) {
-        return getFolder(getBusinessJournalDirectory(), type, category, date);
-    }
-
-    private NodeRef getArchiveFolder(final Date date, String type, String category) {
-        return getFolder(getBusinessJournalArchiveDirectory(), type, category, date);
-    }
-
-    /**
-     * Метод, возвращающий ссылку на директорию в директории "Бизнес Журнал" согласно заданным параметрам
-     *
-     * @param date     - текущая дата
-     * @param type     - тип объекта
-     * @param category - категория события
-     * @param root     - корень, относительно которого строится путь
-     * @return ссылка на директорию
-     */
-    private NodeRef getFolder(final NodeRef root, final String type, final String category, final Date date) {
-        List<String> directoryPaths = new ArrayList<String>(3);
+    private List<String> getDirectoryPath(String type, String category, Date date) {
+        final List<String> directoryPaths = new ArrayList<String>();
         if (type != null) {
             directoryPaths.add(type);
         }
         if (category != null) {
             directoryPaths.add(category);
         }
-        directoryPaths.addAll(getDateFolderPath(date));
-        return getFolder(root, directoryPaths);
+        if (date != null) {
+            directoryPaths.addAll(getDateFolderPath(date));
+        }
+        return directoryPaths;
     }
-
+    
     @Override
     public List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject) {
         return getRecordsByParams(objectTypeRefs, begin, end, whoseKey, checkMainObject, null, null);
@@ -208,7 +190,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
 
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_LUCENE);
-        query = "PARENT: \"" + bjRootRef.toString() + "\" TYPE:\"" + TYPE_BR_RECORD.toString() + "\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "] AND @lecm\\-dic\\:active: true ";
+        query = "PARENT: \"" + getBusinessJournalDirectory().toString() + "\" TYPE:\"" + TYPE_BR_RECORD.toString() + "\" AND @lecm\\-busjournal\\:bjRecord\\-date:[" + MIN + " TO " + MAX + "] AND @lecm\\-dic\\:active: true ";
 
         if (objectTypeRefs != null && !"".equals(objectTypeRefs)) {
             String types = "";
@@ -273,16 +255,14 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                 NodeRef rowNodeRef = row.getNodeRef();
                 if (checkMainObject != null && checkMainObject) {
                     // проверить доступность основного объекта
-                    List<AssociationRef> targetAssocs = nodeService.getTargetAssocs(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ);
-                    if (targetAssocs != null) {
-                        for (AssociationRef sourceAssoc : targetAssocs) {
-                            NodeRef nodeRef = sourceAssoc.getTargetRef();
+                    String mainObjRefStr = (String) nodeService.getProperty(rowNodeRef, ASSOC_BR_RECORD_MAIN_OBJ_REF);
+                    if (mainObjRefStr != null && NodeRef.isNodeRef(mainObjRefStr)) {
+                            NodeRef nodeRef = new NodeRef(mainObjRefStr);
 
                             if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef)
                                     && (!stateMachineService.isDraft(nodeRef) || isOwnNode(nodeRef))) {
                                 records.add(rowNodeRef);
                             }
-                        }
                     }
                 } else {
                     records.add(rowNodeRef);
@@ -297,6 +277,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
     }
 
     @Override
+    //TODO Refactoring in progress...
     public boolean moveRecordToArchive(final Long recordId) {
         if (!orgstructureService.isCurrentUserTheSystemUser() && !isBJEngineer()) {
             logger.warn("Current employee is not business journal engeneer");
@@ -305,38 +286,41 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         AuthenticationUtil.RunAsWork<Boolean> raw = new AuthenticationUtil.RunAsWork<Boolean>() {
             @Override
             public Boolean doWork() throws Exception {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Boolean>() {
-                    @Override
-                    public Boolean execute() throws Throwable {
                         final NodeRef record = serviceRegistry.getNodeService().getNodeRef(recordId);
                         if (!isArchive(record)) {
                             NodeRef objectType = findNodeByAssociationRef(record, ASSOC_BR_RECORD_OBJ_TYPE, null, ASSOCIATION_TYPE.TARGET);
-                            String type = null;
+                            final String type;
                             if (objectType != null) {
                                 type = (String) nodeService.getProperty(objectType, ContentModel.PROP_NAME);
                             } else {
                                 NodeRef mainObject = findNodeByAssociationRef(record, ASSOC_BR_RECORD_MAIN_OBJ, null, ASSOCIATION_TYPE.TARGET);
                                 if (mainObject != null) {
                                     type = nodeService.getType(mainObject).getPrefixString().replace(":", "_");
+                                } else {
+                                    type = null;
                                 }
                             }
-                            String category;
+                            final String category;
                             NodeRef eventCategory = findNodeByAssociationRef(record, ASSOC_BR_RECORD_EVENT_CAT, null, ASSOCIATION_TYPE.TARGET);
                             if (eventCategory != null) {
                                 category = (String) nodeService.getProperty(eventCategory, ContentModel.PROP_NAME);
                             } else {
                                 category = "unknown";
                             }
-                            NodeRef archiveRef = getArchiveFolder(new Date(), (type != null ? type : "unknown"), category);
+
+                            final List<String> directoryPath = getDirectoryPath((type != null ? type : "unknown"), category, new Date());
+                            NodeRef archiveRef = getFolder(getBusinessJournalArchiveDirectory(), directoryPath);
+                            if (null == archiveRef) {
+                                archiveRef = createPath(getBusinessJournalArchiveDirectory(), directoryPath);
+                            }       
                             nodeService.setProperty(record, IS_ACTIVE, false); // помечаем как неактивная запись
                             ChildAssociationRef newRef = nodeService.moveNode(record, archiveRef, ContentModel.ASSOC_CONTAINS, nodeService.getPrimaryParent(record).getQName());
                             return newRef != null;
+                        
                         } else {
                             return true;
                         }
                     }
-                });
-            }
         };
         return AuthenticationUtil.runAsSystem(raw);
     }
@@ -345,12 +329,16 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
     public List<BusinessJournalRecord> getHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending, boolean showSecondary, boolean showInactive) {
         List<NodeRef> result = getHistory(nodeRef, showSecondary, showInactive);
 
-        final QName sortFieldQName = sortColumnLocalName != null && sortColumnLocalName.length() > 0 ? QName.createQName(BJ_NAMESPACE_URI, sortColumnLocalName) : PROP_BR_RECORD_DATE;
+        final QName sortFieldQName =
+                sortColumnLocalName != null && sortColumnLocalName.length() > 0 ?
+                        QName.createQName(sortColumnLocalName, namespaceService) : PROP_BR_RECORD_DATE;
         if (sortFieldQName == null) {
             return pack(result);
+
         }
 
         class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
+
             @Override
             public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
                 T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
@@ -360,11 +348,11 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
             }
         }
 
-        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DATE.getLocalName())) {
+        if (sortFieldQName.equals(PROP_BR_RECORD_DATE)) {
             Collections.sort(result, new NodeRefComparator<Date>());
         }
 
-        if (sortFieldQName.getLocalName().equals(PROP_BR_RECORD_DESC.getLocalName())) {
+        if (sortFieldQName.equals(PROP_BR_RECORD_DESC)) {
             Collections.sort(result, new NodeRefComparator<String>());
         }
 
@@ -385,12 +373,12 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         query = "TYPE:\"" + TYPE_BR_RECORD.toString() + "\"";
         if (showSecondary) {
-            query += " AND (@lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
-                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj1\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
-                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj2\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
-                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj3\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
-                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj4\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR " +
-                    "lecm\\-busjournal\\:bjRecord\\-secondaryObj5\\-assoc\\-ref: \"" + nodeRef.toString() + "\")";
+            query += " AND (@lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR "
+                    + "lecm\\-busjournal\\:bjRecord\\-secondaryObj1\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR "
+                    + "lecm\\-busjournal\\:bjRecord\\-secondaryObj2\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR "
+                    + "lecm\\-busjournal\\:bjRecord\\-secondaryObj3\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR "
+                    + "lecm\\-busjournal\\:bjRecord\\-secondaryObj4\\-assoc\\-ref: \"" + nodeRef.toString() + "\" OR "
+                    + "lecm\\-busjournal\\:bjRecord\\-secondaryObj5\\-assoc\\-ref: \"" + nodeRef.toString() + "\")";
         } else {
             query += " AND @lecm\\-busjournal\\:bjRecord\\-mainObject\\-assoc\\-ref: \"" + nodeRef.toString() + "\"";
         }
@@ -417,7 +405,6 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         return result;
     }
 
-
     @Override
     public List<BusinessJournalRecord> getStatusHistory(NodeRef nodeRef, String sortColumnLocalName, final boolean sortAscending) {
 
@@ -441,6 +428,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
                 if (property != null) {
                     if (status.equals(property)) {
                         resultStatus.add(result.get(i));
+
                     }
                 }
             }
@@ -448,6 +436,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         result = resultStatus;
 
         class NodeRefComparator<T extends Serializable & Comparable<T>> implements Comparator<NodeRef> {
+
             @Override
             public int compare(NodeRef nodeRef1, NodeRef nodeRef2) {
                 T obj1 = (T) nodeService.getProperty(nodeRef1, sortFieldQName);
@@ -708,4 +697,7 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         return null;
     }
 
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 }

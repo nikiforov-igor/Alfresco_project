@@ -1,0 +1,327 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Registration of pentaho forms models -->
+    <bean id="${groupId}.${artifactId}.modelBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/jasperreports-forms-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Бин "часто используемых служб" -->
+    <bean id="wksKeeper" class="ru.it.lecm.reports.beans.WKServiceKeeper">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="substitudeService" ref="substitudeService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+    </bean>
+
+    <!-- Бин для разименований ссылок ... -->
+    <bean id="linksResolverBean" class="ru.it.lecm.reports.beans.LinksResolver">
+        <property name="services" ref="wksKeeper"/>
+    </bean>
+
+    <!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
+    <bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
+        <property name="services" ref="wksKeeper"/>
+        <property name="resolver" ref="linksResolverBean"/>
+        <property name="reportsManagerBeanName" value="reportsManager"/>
+        <property name="targetDataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection">
+        <!--<constructor-arg value="${ooo.port}"/>-->
+    </bean>
+
+    <!-- Генератор OOffice отчётов -->
+    <bean id="ooReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init">
+        <property name="services" ref="wksKeeper"/>
+        <property name="resolver" ref="linksResolverBean"/>
+        <property name="reportsManagerBeanName" value="reportsManager"/>
+        <property name="resultDAO" ref="fileOOReportResultBean"/>
+        <property name="ooConnectedStrictly" value="false"/>
+        <property name="maxConnectionRetries" value="2"/>
+        <property name="connection" ref="reportOpenOfficeConnection"/>
+        <property name="targetDataSource" ref="dataSource"/>
+        <property name="fileExtension" value=".odt"/>
+        <property name="defaultTarget" value="DOC"/>
+        <property name="templateGenerator" ref="ooOdtTemplateGenerator"/>
+    </bean>
+
+    <!-- Генератор OOffice Calc отчётов -->
+    <bean id="ooCalcReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl"
+          init-method="init">
+        <property name="services" ref="wksKeeper"/>
+        <property name="resolver" ref="linksResolverBean"/>
+        <property name="reportsManagerBeanName" value="reportsManager"/>
+        <property name="resultDAO" ref="fileOOReportResultBean"/>
+        <property name="ooConnectedStrictly" value="false"/>
+        <property name="maxConnectionRetries" value="2"/>
+        <property name="connection" ref="reportOpenOfficeConnection"/>
+        <property name="targetDataSource" ref="dataSource"/>
+        <property name="fileExtension" value=".ods"/>
+        <property name="defaultTarget" value="XLS"/>
+        <property name="templateGenerator" ref="ooCalcTemplateGenerator"/>
+    </bean>
+
+    <bean id="ooCalcTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeCalcTemplateGenerator">
+        <property name="connection">
+            <ref bean="reportOpenOfficeConnection"/>
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+
+    <bean id="ooOdtTemplateGenerator" class="ru.it.lecm.reports.generators.OpenOfficeTemplateGenerator">
+        <property name="connection">
+            <ref bean="reportOpenOfficeConnection"/>
+        </property>
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+
+    <util:constant id="RE_ROOT_ID" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_ROOT_ID"/>
+    <util:constant id="RE_ROOT_NAME" static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_ROOT_NAME"/>
+
+    <util:constant id="RE_REPORTS_ROOT_ID"
+                   static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_ID"/>
+    <util:constant id="RE_REPORTS_ROOT_NAME"
+                   static-field="ru.it.lecm.reports.editor.ReportsEditorService.RE_REPORTS_ROOT_NAME"/>
+
+    <bean id="reportEditorDAOBean" class="ru.it.lecm.reports.model.DAO.ReportEditorDAOImpl" depends-on="wksKeeper"
+          parent="baseBean">
+        <property name="services" ref="wksKeeper"/>
+        <property name="folders">
+            <map>
+                <entry key="#{RE_ROOT_ID}" value="#{RE_ROOT_NAME}"/>
+                <entry key="#{RE_REPORTS_ROOT_ID}" value="#{RE_ROOT_NAME}/#{RE_REPORTS_ROOT_NAME}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="reportsDeployer" class="ru.it.lecm.reports.bootstrap.ReportsBootstrapListener" depends-on="reportsManager"
+          abstract="true">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="reportsForDeploy">
+            <list/>
+        </property>
+        <property name="manager" ref="reportsManager"/>
+    </bean>
+
+    <!--  RSF == Report Service Folder -->
+    <util:constant id="RSF_ROOT_ID"
+                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_ID"/>
+    <util:constant id="RSF_ROOT_NAME"
+                   static-field="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean.REPORT_SERVICE_FOLDER_ROOT_NAME"/>
+
+    <!-- Хранение в репозитории файлов для отчётов (xml-шаблоны, jasper и пр) -->
+    <bean id="repositoryReportContentBean"
+          class="ru.it.lecm.reports.model.DAO.RepositoryReportContentDAOBean"
+          parent="baseBean">
+        <!-- Автоматическое создание каталогов. -->
+        <property name="folders">
+            <map>
+                <entry key="#{RSF_ROOT_ID}" value="#{RSF_ROOT_NAME}"/>
+            </map>
+        </property>
+    </bean>
+
+
+    <!--
+        Хранилище файлов отчётов "из поставки": ds-xml, jrxml, jasper и пр
+        FRC_DAO_DIR == File Report Content DAO Directory
+      -->
+    <!-- Хранение файлов для отчётов в файловой системе (xml-шаблоны, jasper и прнепосредственно из поставки) -->
+    <bean id="fileReportContentBean"
+          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          init-method="init">
+
+        <!-- для надёжности - запрещаем запись в предустановленные отчёты -->
+        <property name="readonly" value="true"/>
+
+        <!-- Расположение каталогов на серваке относительно ./classes -->
+        <property name="rootDir" value="/reportdefinitions/deploy"/>
+
+        <!--
+            Форматная строка относительно rootDir для получения полного пути к файлу
+            (положение программно задаётся как id : IdContent, фактически используются его одноимённые атрибуты)
+            Именованные параметры обозначаются как "@{abc}".
+            В качестве имени "abc" могут подставляться:
+                    @reportType		тип отчёта
+                        @reportTypeLo		тип отчёта в нижнем регистре
+                        @reportTypeUp		тип отчёта в верхнем регистре
+                    @reportMnemo	название отчёта
+                        (@reportMnemoLo/@reportMnemoUp аналогично типу)
+                    @fileName		название файла (только имя с расширением)
+                        (@fileNameLo/@fileNameUp аналогично)
+                    // @root		(!) корневой каталог использовать не разрешается
+          -->
+        <property name="storeStructurePathFmt" value="/@reportMnemo/@fileName"/>
+    </bean>
+
+    <!-- Хранилище в файловой системе "из поставки" для макетов/моделей
+        gen-файлов для генерации шаблонов отчётов
+      -->
+    <bean id="fileReportTemplatesBean"
+          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          init-method="init">
+        <!-- для надёжности - запрещаем запись -->
+        <property name="readonly" value="true"/>
+
+        <!-- Расположение каталогов на серваке относительно ./classes -->
+        <property name="rootDir" value="/reportdefinitions/templates"/>
+
+        <!--
+            Форматная строка относительно rootDir для получения полного пути к файлу
+            (положение программно задаётся как id : IdContent, фактически используются его одноимённые атрибуты)
+            Именованные параметры обозначаются как "@{abc}".
+            В качестве имени "abc" могут подставляться:
+                    @reportType		тип отчёта
+                        @reportTypeLo		тип отчёта в нижнем регистре
+                        @reportTypeUp		тип отчёта в верхнем регистре
+                    @reportMnemo	название отчёта
+                        (@reportMnemoLo/@reportMnemoUp аналогично типу)
+                    @fileName		название файла (только имя с расширением)
+                        (@fileNameLo/@fileNameUp аналогично)
+                    // @root		(!) корневой каталог использовать не разрешается
+            (!) Здесь зависимости от "кода отчёта" в форматной строке нет, т.к. это шаблоны
+          -->
+        <property name="storeStructurePathFmt" value="/@reportTypeLo/@fileName"/>
+    </bean>
+
+
+    <!-- Хранилище в файловой системе результатов построения шаблонов OpenOffice.
+        Должно быть файловое, т.к. OpenOffice работает именно с ними (не с потоками).
+      -->
+    <bean id="fileOOReportResultBean"
+          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          init-method="init">
+        <!-- сюда запись надо разрешить ... -->
+        <property name="readonly" value="false"/>
+
+        <!-- Расположение каталогов на серваке относительно ./classes -->
+        <property name="rootDir" value="/build/reports"/>
+
+        <!--
+            Форматная строка относительно rootDir для получения полного пути к файлу
+            (положение программно задаётся как id : IdContent, фактически используются его одноимённые атрибуты)
+            Именованные параметры обозначаются как "@{abc}".
+            В качестве имени "abc" могут подставляться:
+                    @reportType		тип отчёта
+                        @reportTypeLo		тип отчёта в нижнем регистре
+                        @reportTypeUp		тип отчёта в верхнем регистре
+                    @reportMnemo	название отчёта
+                        (@reportMnemoLo/@reportMnemoUp аналогично типу)
+                    @fileName		название файла (только имя с расширением)
+                        (@fileNameLo/@fileNameUp аналогично)
+                    // @root		(!) корневой каталог использовать не разрешается
+          -->
+        <property name="storeStructurePathFmt" value="/@reportMnemo/@fileName"/>
+    </bean>
+
+    <!-- Хранилище в файловой системе для подотчётов.
+        Должно быть файловое, т.к. , например, jasper ожидает именованный ресурс.
+      -->
+    <bean id="fileSubreportContentBean"
+          class="ru.it.lecm.reports.model.DAO.FileReportContentDAOBean"
+          init-method="init">
+        <!-- запись надо разрешить ... -->
+        <property name="readonly" value="false"/>
+
+        <!-- Расположение каталогов на серваке относительно ./classes
+        "/build/subreports"-->
+        <property name="rootDir" value="/reportdefinitions/deploy/subreports"/>
+
+        <!--
+            Форматная строка относительно rootDir для получения полного пути к файлу - см описание выше.
+            Здесь используем обычную структуру хранения:
+                root (./classes/.../subreports/)
+                    reportType (ooffice || jasper)
+                        subReportName
+                            files
+          -->
+        <property name="storeStructurePathFmt" value="/@reportMnemo/@fileName"/>
+    </bean>
+
+    <!--
+            Менеджер шаблонов отчёта
+      -->
+    <bean id="reportsManager" class="ru.it.lecm.reports.api.ReportsManager"
+          depends-on="repositoryReportContentBean, fileReportContentBean, reportEditorDAOBean, jasperReportGenerator"
+          init-method="init">
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
+        <property name="substitudeService" ref="substitudeService"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+
+        <!-- хранилище отчётов редактора -->
+        <property name="reportEditorDAO" ref="reportEditorDAOBean"/>
+
+        <!-- файлы создаваемых шаблонов отчётов как "cm:content" в репозитории -->
+        <property name="contentRepositoryDAO" ref="repositoryReportContentBean"/>
+        <property name="subreportFileDAO" ref="fileSubreportContentBean"/>
+
+        <!-- файлы готовых отчётов (поставка) в файловой системе -->
+        <property name="contentFileDAO" ref="fileReportContentBean"/>
+
+        <!-- файлы готовых макетов шаблонов (поставка для генерации шаблонов отчётов) -->
+        <property name="templateFileDAO" ref="fileReportTemplatesBean"/>
+
+        <property name="reportGenerators[JASPER]" ref="jasperReportGenerator"/>
+        <property name="reportGenerators[OOFFICE]" ref="ooReportGenerator"/>
+
+        <property name="reportGenerators[OOCALC]" ref="ooCalcReportGenerator"/>
+
+        <property name="reportDefaults[JASPER]">
+            <bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDesc">
+                <property name="fileExtension" value=".jrxml"/>
+                <property name="generationTemplate" value="jreportCommonTemplate.jrxml.gen"/>
+                <property name="subReportGenerationTemplate" value="sub-jreportCommonTemplate.jrxml.gen"/>
+            </bean>
+        </property>
+
+        <property name="reportDefaults[OOFFICE]">
+            <bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDesc">
+                <property name="fileExtension" value=".odt"/>
+                <property name="generationTemplate" value="ooreportCommonTemplate.odt.gen"/>
+                <property name="subReportGenerationTemplate" value="ooreportCommonTemplate.odt.gen"/>
+            </bean>
+        </property>
+        <property name="reportDefaults[OOCALC]">
+            <bean class="ru.it.lecm.reports.model.impl.ReportDefaultsDesc">
+                <property name="fileExtension" value=".ods"/>
+                <property name="generationTemplate" value="ooCalcReportCommonTemplate.ods.gen"/>
+                <property name="subReportGenerationTemplate" value="ooCalcReportCommonTemplate.ods.gen"/>
+            </bean>
+        </property>
+
+        <property name="xmlExportBean" ref="lecmDictionaryExportBean"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.forms.jasper.form.get"
+          class="ru.it.lecm.reports.forms.ReportMainProducer"
+          parent="webscript">
+        <property name="reportsManager" ref="reportsManager"/>
+    </bean>
+
+    <bean id="reportsMgrJavaScriptExtension" class="ru.it.lecm.reports.extensions.ReportManagerJavascriptExtension"
+          parent="baseScript">
+        <property name="extensionName" value="rptmanager"/>
+        <property name="reportsManager" ref="reportsManager"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.reports.rptmanager.dsxmlBytes.get"
+          class="ru.it.lecm.reports.xml.GetXmlConfig"
+          parent="webscript">
+        <property name="reportsManager" ref="reportsManager"/>
+    </bean>
+</beans>

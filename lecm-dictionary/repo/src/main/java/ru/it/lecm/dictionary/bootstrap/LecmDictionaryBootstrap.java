@@ -6,13 +6,15 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.dictionary.beans.XMLImportBean;
+import ru.it.lecm.dictionary.beans.XMLImportListener;
+import ru.it.lecm.dictionary.beans.XMLImporterInfo;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -28,11 +30,13 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	private static final transient Logger logger = LoggerFactory.getLogger(LecmDictionaryBootstrap.class);
 
 	private List<String> dictionaries;
-	private List<String> createOrUpdateDictionaries;
     private DictionaryBean dictionaryBean;
     private XMLImportBean xmlImportBean;
     private String rootPath;
     private Repository repositoryHelper;
+    private boolean bootstrapOnStart;
+
+    private XMLImportListener xmlImportListener;
 
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
@@ -42,14 +46,9 @@ public class LecmDictionaryBootstrap extends BaseBean {
         this.rootPath = rootPath;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+	@SuppressWarnings("UnusedDeclaration")
 	public void setDictionaries(List<String> dictionaries) {
 		this.dictionaries = dictionaries;
-	}
-
-	@SuppressWarnings("UnusedDeclaration")
-	public void setCreateOrUpdateDictionaries(List<String> createOrUpdateDictionaries) {
-		this.createOrUpdateDictionaries = createOrUpdateDictionaries;
 	}
 
     public void setDictionaryBean(DictionaryBean dictionaryBean) {
@@ -60,6 +59,14 @@ public class LecmDictionaryBootstrap extends BaseBean {
         this.xmlImportBean = xmlImportBean;
     }
 
+    public void setBootstrapOnStart(boolean bootstrapOnStart) {
+        this.bootstrapOnStart = bootstrapOnStart;
+    }
+
+    public void setXmlImportListener(XMLImportListener xmlImportListener) {
+        this.xmlImportListener = xmlImportListener;
+    }
+
     // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override
 	public NodeRef getServiceRootFolder() {
@@ -67,6 +74,10 @@ public class LecmDictionaryBootstrap extends BaseBean {
 	}
 
 	public void bootstrap() {
+		if (!bootstrapOnStart) {
+            logger.warn("Bootstrap disabled. Use 'lecm.dictionaries.bootstrapOnStart=true' in alfresco-global.properties file to enable it.");
+            return; //пропускаем
+        }
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
 			public Object doWork() throws Exception {
@@ -77,56 +88,28 @@ public class LecmDictionaryBootstrap extends BaseBean {
                     rootDir = dictionaryBean.getDictionariesRoot();
                 }
 				if (dictionaries != null) {
-					for (final String dictionary : dictionaries) {
-                        logger.info("Importing dictionary: {}", dictionary);
-						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-							@Override
-							public Object execute() throws Throwable {
-								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
+					transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+						@Override
+						public Object execute() throws Throwable {
+							for (final String dictionary : dictionaries) {
+								logger.debug("Importing dictionary: {}", dictionary);
+								final InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
 								try {
 									XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(inputStream);
-									importer.readItems(rootDir, true);
+									XMLImporterInfo info = importer.readItems(rootDir);
+									logger.debug("{} import finished. {}", dictionary, info);
 								} catch (Exception e) {
-									logger.error("Can not create dictionary: " + dictionary, e);
+									logger.error("Can not import dictionary: " + dictionary, e);
 								} finally {
-									try {
-										if (inputStream != null) {
-											inputStream.close();
-										}
-									} catch (IOException ignored) {
-
-									}
+									IOUtils.closeQuietly(inputStream);
 								}
-								return "ok";
 							}
-						});
-					}
-				}
-				if (createOrUpdateDictionaries != null) {
-					for (final String dictionary : createOrUpdateDictionaries) {
-                        logger.info("Updating dictionary: {}", dictionary);
-						transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-							@Override
-							public Object execute() throws Throwable {
-								InputStream inputStream = getClass().getClassLoader().getResourceAsStream(dictionary);
-								try {
-									XMLImportBean.XMLImporter importer = xmlImportBean.getXMLImporter(inputStream);
-									importer.readItems(rootDir, false);
-								} catch (Exception e) {
-									logger.error("Can not create dictionary: " + dictionary);
-								} finally {
-									try {
-										if (inputStream != null) {
-											inputStream.close();
-										}
-									} catch (IOException ignored) {
-
-									}
-								}
-								return "ok";
-							}
-						});
-					}
+                            if (xmlImportListener != null) {
+                                xmlImportListener.execute(); // оповещаем о завершении импорта
+                            }
+							return null;
+						}
+					});
 				}
 				return null;
 			}

@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Export</shortname>
-    <description>Export</description>
-    <url>/lecm/base/action/export-csv</url>
-    <format default="text">extension</format>
-    <authentication>user</authentication>
-    <transaction>none</transaction>
-</webscript>

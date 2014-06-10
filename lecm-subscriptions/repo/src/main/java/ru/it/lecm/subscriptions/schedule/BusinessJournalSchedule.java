@@ -173,12 +173,17 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
 	 * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getNodes()
 	 */
 
-	/**
-	 * Выборка записей из бизнес журнала записей по которым еще не проводилась рассылка оповещенний
-	 * @return
-	 */
-	@Override
-	public List<NodeRef> getNodes() {
+    /**
+     * Выборка записей из бизнес журнала записей по которым еще не проводилась рассылка оповещенний
+     * @return
+     */
+    @Override
+    public List<NodeRef> getNodes() {
+//		TODO: DONE Не совсем понятно, зачем вся логика перенесена сюда, всегда возвращает пустой лист,
+//		поэтому Executor никогда и не будет вызываться. getNodes() скорее всего в транзакцию не оборачивается, поэтому пока оставил здесь
+//              Логика здесь, я так понимаю, потому, что не всегда обрабатываться будут ноды (в случае внешнего хранилища) 
+//              и Executor до них не доберётся просто так.
+//              Транзакции здесь действительно нет.
         RetryingTransactionHelper transactionHelper = getTransactionService().getRetryingTransactionHelper();
         transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
             @Override
@@ -205,8 +210,8 @@ public class BusinessJournalSchedule extends AbstractScheduledAction {
                 return null;
             }
         }, false, true);
-		return new ArrayList<NodeRef>();
-	}
+        return new ArrayList<NodeRef>();
+    }
 
     protected void executeSubscription(BusinessJournalRecord record) {
         String author = record.getInitiatorText();

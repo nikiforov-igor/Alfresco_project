@@ -104,7 +104,7 @@ public class SubReportDescriptorImpl extends ReportDescriptorImpl {
         // пропишем подотчётам владельца ...
         if (this.subreports != null) {
             for (ReportDescriptor item : this.subreports) {
-                if (item instanceof SubReportDescriptorImpl) {
+                if (item.isSubReport()) {
                     SubReportDescriptorImpl subItem = (SubReportDescriptorImpl)item;
                     String destColumn = subItem.getDestColumnName();
                     ColumnDescriptor cd = dsDescriptor.findColumnByName(destColumn);

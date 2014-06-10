@@ -16,6 +16,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * @author dbashmakov
@@ -52,6 +54,11 @@ public class BusinessJournalArchiveSchedule extends AbstractScheduledAction {
 	private Scheduler scheduler;
 	private BusinessJournalService businessJournalService;
 	private BusinessJournalArchiverSettings archiverSettings;
+        private LecmTransactionHelper lecmTransactionHelper;
+
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+            this.lecmTransactionHelper = lecmTransactionHelper;
+        }
 
 	public BusinessJournalArchiveSchedule() {
 		super();
@@ -98,17 +105,22 @@ public class BusinessJournalArchiveSchedule extends AbstractScheduledAction {
 	}
 
 	@Override
-	public List<NodeRef> getNodes() {
-		int days = Integer.parseInt(getArchiverSettings().getDeep());
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, -days);
-        List<BusinessJournalRecord> records = businessJournalService.getRecordsByInterval(null, calendar.getTime());
-        for (BusinessJournalRecord record : records) {
-            boolean success = businessJournalService.moveRecordToArchive(record.getNodeId());
-            logger.debug(String.format("Результат перемещения записи в архив: [%s] - успех [%s]", record.getNodeId(), success));
+        public List<NodeRef> getNodes() {
+            return lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<List<NodeRef>>() {
+                @Override
+                public List<NodeRef> execute() throws Throwable {
+                    int days = Integer.parseInt(getArchiverSettings().getDeep());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.add(Calendar.DATE, -days);
+                    List<BusinessJournalRecord> records = businessJournalService.getRecordsByInterval(null, calendar.getTime());
+                    for (BusinessJournalRecord record : records) {
+                        boolean success = businessJournalService.moveRecordToArchive(record.getNodeId());
+                        logger.debug(String.format("Результат перемещения записи в архив: [%s] - успех [%s]", record.getNodeId(), success));
+                    }
+                    return new ArrayList<NodeRef>();
+                }
+            });
         }
-        return new ArrayList<NodeRef>();
-	}
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {

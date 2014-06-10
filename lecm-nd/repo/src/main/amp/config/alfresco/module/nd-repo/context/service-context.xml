@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:list id="nd.models">
+        <value>alfresco/module/${artifactId}/models/lecm-nd-model.xml</value>
+    </util:list>
+
+    <util:list id="nd.models.labels">
+        <value>alfresco/module/${artifactId}/messages/lecm-nd-model</value>
+    </util:list>
+
+    <util:list id="nd.dictionaries">
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-regnumbers-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-br-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-event-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-connection-types-items.xml</value>
+        <value>alfresco/module/${artifactId}/dictionaries/lecm-nd-type-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/lecm-nd-bj-items.xml</value>
+    </util:list>
+
+    <util:list id="nd.rn.tags">
+        <value>project</value>
+    </util:list>
+    <!-- Registration of orgStructure models -->
+    <bean id="nd.document.models.bootstrap" parent="modelsToRepositoryLoader"
+          depends-on="
+            ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+            eds.models.bootstrap, documents.LogicEcmModelsBootstrap,
+            documents.LogicEcmModelsBootstrap"
+          p:models-ref="nd.models"
+          p:labels-ref="nd.models.labels"/>
+
+    <bean id="nd.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      nd.document.models.bootstrap,
+					  businessJournalLogEventsPolicy,
+                      documents.LogicEcmConnectionTypesBootstrap,
+					  regNumbers.regNumbersTemplatesDicBootstrap"
+          p:dictionaries-ref="nd.dictionaries"
+    />
+
+    <bean id="nd.statemachine.bootstrap" parent="defaultStatemachines"
+          p:statemachineName="lecm-nd:document"
+          p:path="alfresco/module/${artifactId}/statemachine/lecm-nd-statemachine-default.xml"/>
+
+    <bean id="nd.start.schedule" class="ru.it.lecm.nd.scheduler.InWorkScheduler"
+          p:transactionMode="ISOLATED_TRANSACTIONS"
+          p:compensatingActionMode="IGNORE"
+          p:jobName="switch-nd-status"
+          p:jobGroup="nd"
+          p:triggerName="switch-nd-status-trigger"
+          p:triggerGroup="nd-trigger"
+          p:cronExpression="0 15 * * * ? *"
+          p:scheduler-ref="schedulerFactory"
+          p:actionService-ref="actionService"
+          p:transactionService-ref="transactionService"
+          p:searchService-ref="searchService"
+          p:runAsUser="System"
+    />
+
+    <bean id="inWorkExecutor" class="ru.it.lecm.nd.scheduler.InWorkExecutor" parent="action-executer"
+          p:ignoreLock="false"
+          p:publicAction="false"
+          p:nodeService-ref="nodeService"
+          p:policyFilter-ref="policyBehaviourFilter"
+    />
+
+    <bean id="nd.outOfDate.schedule" class="ru.it.lecm.nd.scheduler.OutOfDateScheduler"
+          p:transactionMode="ISOLATED_TRANSACTIONS"
+          p:compensatingActionMode="IGNORE"
+          p:jobName="out-of-date-nd-status"
+          p:jobGroup="nd-out-of-date"
+          p:triggerName="out-of-date-nd-status-trigger"
+          p:triggerGroup="out-of-date-nd-trigger"
+          p:cronExpression="0 30 * * * ? *"
+          p:scheduler-ref="schedulerFactory"
+          p:actionService-ref="actionService"
+          p:transactionService-ref="transactionService"
+          p:searchService-ref="searchService"
+          p:runAsUser="System"
+    />
+
+    <bean id="outOfDateExecutor" class="ru.it.lecm.nd.scheduler.OutOfDateExecutor" parent="action-executer"
+          p:ignoreLock="false"
+          p:publicAction="false"
+          p:nodeService-ref="nodeService"
+    />
+
+    <bean id="ndCreatePolicy" class="ru.it.lecm.nd.policy.NDCreatePolicy" init-method="init"
+          p:nodeService-ref="nodeService"
+          p:orgstructureService-ref="serviceOrgstructure"
+          p:policyComponent-ref="policyComponent"
+    />
+
+    <bean id="nd.LogicEcmNdTaggedCounterRegistrator" parent="regNumbersTaggedCounterRegistrator" depends-on="nd.document.models.bootstrap"
+        p:documentType="lecm-nd:document"
+        p:tags-ref="nd.rn.tags"
+    />
+
+	<bean id="NDDocumentService" class="ru.it.lecm.nd.NDDocumentServiceImpl" parent="baseBean"/>
+
+
+    <bean id="nd.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/nd-reg-journal.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="nd.reportsDeployer"/>
+    </bean>
+
+    <bean id="nd.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>nd-reg-journal</value>
+            </list>
+        </property>
+    </bean>
+</beans>

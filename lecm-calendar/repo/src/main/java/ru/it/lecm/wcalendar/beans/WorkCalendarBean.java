@@ -321,13 +321,13 @@ public class WorkCalendarBean implements IWorkCalendar {
 
 		int timeUnit, offset;
 		String modifierStr = offsetStr.substring(offsetStr.length() - 1);
-		if ("m".equals(modifierStr)) {
+		if ("m".equalsIgnoreCase(modifierStr)) {
 			timeUnit = Calendar.MINUTE;
 			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
-		} else if ("h".equals(modifierStr)) {
+		} else if ("h".equalsIgnoreCase(modifierStr)) {
 			timeUnit = Calendar.HOUR_OF_DAY;
 			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
-		} else if ("d".equals(modifierStr)) {
+		} else if ("d".equalsIgnoreCase(modifierStr)) {
 			timeUnit = Calendar.DAY_OF_MONTH;
 			offset = Integer.parseInt(offsetStr.substring(0, offsetStr.length() - 1));
 		} else {

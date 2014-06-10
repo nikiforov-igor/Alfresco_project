@@ -2,15 +2,15 @@ package ru.it.lecm.documents.scripts;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
-import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import org.alfresco.util.ParameterCheck;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,12 +22,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: orakovskaya
@@ -37,24 +40,24 @@ public class DocumentWebScriptBean extends BaseWebScript {
     private static final Logger logger = LoggerFactory.getLogger(DocumentWebScriptBean.class);
 
     private DocumentService documentService;
-	private NodeService nodeService;
+    private NodeService nodeService;
     private NamespaceService namespaceService;
-    private PreferenceService preferenceService;
-	private DictionaryService dictionaryService;
+    private DictionaryService dictionaryService;
+    private TransactionService transactionService;
+    private DocumentMembersService documentMembersService;
+    private LecmTransactionHelper lecmTransactionHelper;
 
-    private AuthenticationService authService;
-    private OrgstructureBean orgstructureService;
-
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
     }
 
-    public void setPreferenceService(PreferenceService preferenceService) {
-        this.preferenceService = preferenceService;
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        this.lecmTransactionHelper = lecmTransactionHelper;
     }
 
-    public void setAuthService(AuthenticationService authService) {
-        this.authService = authService;
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
     }
 
     public void setDocumentService(DocumentService documentService) {
@@ -69,11 +72,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
         this.namespaceService = namespaceService;
     }
 
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
-	public String getRating(String documentNodeRef) {
+    /**
+     * Получить рейтинг документа
+     *
+     * @param documentNodeRef документ
+     */
+    public String getRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
         NodeRef documentRef = new NodeRef(documentNodeRef);
@@ -82,7 +90,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return null;
     }
- 
+
+    /**
+     * Получить число проголосовавших за  документ
+     *
+     * @param documentNodeRef документ
+     */
+    @SuppressWarnings("unused")
     public Integer getRatedPersonCount(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -92,7 +106,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return null;
     }
- 
+
+    /**
+     * Получить рейтинг документа для текущего сотрудника
+     *
+     * @param documentNodeRef документ
+     */
+    @SuppressWarnings("unused")
     public Integer getMyRating(String documentNodeRef) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -103,6 +123,12 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    /**
+     * Установить рейтинг документу от текущего сотрудника
+     *
+     * @param documentNodeRef документ
+     */
+    @SuppressWarnings("unused")
     public Integer setMyRating(String documentNodeRef, String rating) {
         ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
@@ -113,9 +139,16 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
+    /**
+     * Создать документ заданного типа с заданными свойствами и ассоциациями
+     *
+     * @param type         тип документа
+     * @param properties   свойства документа
+     * @param associations ассоциации документа
+     */
     public ScriptNode createDocument(String type, Scriptable properties, Scriptable associations) {
         Map<String, String> mapProperties = new HashMap<String, String>();
-        Map<String, String> mapAssociation = new HashMap<String,String>();
+        Map<String, String> mapAssociation = new HashMap<String, String>();
         if (properties != null) {
             mapProperties = takeProperties(Context.getCurrentContext().getElements(properties));
         }
@@ -128,39 +161,91 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return new ScriptNode(documentRef, serviceRegistry, getScope());
     }
 
+    /**
+     * Произвести редактирование документа
+     *
+     * @param nodeRef    документ
+     * @param properties свойства документа
+     */
     public ScriptNode editDocument(String nodeRef, Scriptable properties) {
-      return editDocument(nodeRef, Context.getCurrentContext().getElements(properties));
+        return editDocument(nodeRef, Context.getCurrentContext().getElements(properties));
     }
 
-	public ScriptNode editDocument(String nodeRef, Object[] properties) {
-		NodeRef documentRef = new NodeRef(nodeRef);
-		Map<String, String> property = takeProperties(properties);
-		documentRef = documentService.editDocument(documentRef, property);
-		return new ScriptNode(documentRef, serviceRegistry, getScope());
-	}
+    /**
+     * Произвести редактирование документа
+     *
+     * @param nodeRef    документ
+     * @param properties свойства документа
+     */
+    public ScriptNode editDocument(String nodeRef, Object[] properties) {
+        NodeRef documentRef = new NodeRef(nodeRef);
+        Map<String, String> property = takeProperties(properties);
+        documentRef = documentService.editDocument(documentRef, property);
+        return new ScriptNode(documentRef, serviceRegistry, getScope());
+    }
 
+    /**
+     * Получить директорию с черновиками
+     */
+    @SuppressWarnings("unused")
     public ScriptNode getDraftsRoot() {
         return new ScriptNode(documentService.getDraftRoot(), serviceRegistry, getScope());
     }
 
-    public String getDraftsPath(){
+    /**
+     * Получить путь (xpath) к  директории с черновиками
+     */
+    @SuppressWarnings("unused")
+    public String getDraftsPath() {
         return documentService.getDraftPath();
     }
 
-    public String getDocumentsPath(){
+    /**
+     * Получить путь (xpath) к  директории с документами
+     */
+    @SuppressWarnings("unused")
+    public String getDocumentsPath() {
         return documentService.getDocumentsFolderPath();
     }
 
+    /**
+     * Получить директорию с черновиками заданного типа
+     *
+     * @param rootType тип документов
+     */
+    @SuppressWarnings("unused")
     public ScriptNode getDraftRoot(String rootType) {
         ParameterCheck.mandatory("rootType", rootType);
-        QName rootQNameType = QName.createQName(rootType, namespaceService);
+        final QName rootQNameType = QName.createQName(rootType, namespaceService);
         if (rootQNameType != null) {
-            return new ScriptNode(documentService.getDraftRootByType(rootQNameType), serviceRegistry, getScope());
+//			Стоит учесть, что веб-скрипт, где используется этот метод не транзакционный, поэтому
+//			Если какая-либо транзакция залочит ноду - получение отвалится по таймауту.
+            NodeRef ref = documentService.getDraftRootByType(rootQNameType);
+//			TODO: В случае, если папки черновиков ещё нет - создадим в транзакции.
+            if (ref == null) {
+                RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+                ref = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+                    @Override
+                    public NodeRef execute() throws Throwable {
+                        return documentService.createDraftRoot(rootQNameType);
+                    }
+
+                });
+            }
+
+            return new ScriptNode(ref, serviceRegistry, getScope());
         } else {
             return null;
         }
     }
 
+    /**
+     * Получить путь к директории с черновиками заданного типа
+     *
+     * @param rootType тип документов
+     */
+    @SuppressWarnings("unused")
     public String getDraftPath(String rootType) {
         ParameterCheck.mandatory("rootType", rootType);
         QName rootQNameType = QName.createQName(rootType, namespaceService);
@@ -170,22 +255,28 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-    private Map<String, String> takeProperties(Object[] object){
+    private Map<String, String> takeProperties(Object[] object) {
         List<String> list = getElements(object);
-        Map<String, String> map =  new HashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         String[] string;
         String value;
         for (String str : list) {
             if (!str.equals("")) {
                 string = str.split("=");
                 value = (string.length < 2) ? "" : string[1];
-                map.put(string[0],value);
+                map.put(string[0], value);
             }
         }
         return map;
     }
 
-    public Map<String, String> getFilters(String type, boolean forArchive){
+    /**
+     * Получить фильтры по типам (Все, Зарегистрированные и т.д) для документов заданного типа
+     *
+     * @param type       тип документов
+     * @param forArchive фильтры для архивных
+     */
+    public Map<String, String> getFilters(String type, boolean forArchive) {
         if (!forArchive) {
             return DocumentStatusesFilterBean.getFilterForType(type);
         } else {
@@ -193,6 +284,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
     }
 
+    /**
+     * Получить фильтр по умолчанию для типа документ ов
+     *
+     * @param type       тип документов
+     * @param forArchive фильтр для архивных
+     */
+    @SuppressWarnings("unused")
     public Map<String, String> getDefaultFilter(String type, boolean forArchive) {
         Map<String, String> filters = getFilters(type, forArchive);
         HashMap<String, String> defaultFilter = new HashMap<String, String>();
@@ -214,17 +312,36 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     /**
      * Получить количество участников для данного типа документа
+     *
      * @return список nodeRef
      */
-    public Integer getAmountMembers(String type) {
+    @SuppressWarnings("unused")
+    public Integer getAmountMembers(final String type) {
+//		TODO: Метод getMembers дёрагал метод getOrCreateDocMemberUnit,
+//		который был благополучно разделён. Поэтому сделаем проверку на существование
+        if (documentMembersService.getDocMembersUnit(type) == null) {
+            RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                @Override
+                public Void execute() throws Throwable {
+                    documentMembersService.createDocMemberUnit(type);
+                    return null;
+                }
+            };
+            lecmTransactionHelper.doInTransaction(cb, false);
+        }
         QName qNameType = QName.createQName(type, namespaceService);
         return documentService.getMembers(qNameType).size();
     }
 
     /**
      * Получить количество документов
-     * @return количество
+     *
+     * @param types     типы документов
+     * @param paths     пути, в которых искать
+     * @param statuses  статусы
+     * @param filterStr дополнительный фильтр для поиска
      */
+    @SuppressWarnings("unused")
     public Long getAmountDocuments(Scriptable types, Scriptable paths, Scriptable statuses, String filterStr) {
         List<String> docTypes = getElements(Context.getCurrentContext().getElements(types));
         List<QName> qNameTypes = new ArrayList<QName>();
@@ -241,25 +358,42 @@ public class DocumentWebScriptBean extends BaseWebScript {
                 getElements(Context.getCurrentContext().getElements(paths)), getElements(Context.getCurrentContext().getElements(statuses)), queryFilter, null);
     }
 
+    /**
+     * Получить  список пермиссий, по которым предоставляется доступ к странице с документами заданного типа
+     *
+     * @param type тип документов
+     */
+    @SuppressWarnings("unused")
     public List<String> getAccessPermissionsList(String type) {
         return DocumentsPermissionsBean.getPermissionsByType(type);
     }
 
+    /**
+     * Получить свойства документа
+     *
+     * @param nodeRef документ
+     */
     public String getProperties(String nodeRef) {
         NodeRef documentRef = new NodeRef(nodeRef);
         JSONArray properties = new JSONArray();
         JSONObject object = new JSONObject();
         Map<QName, Serializable> data = documentService.getProperties(documentRef);
         try {
-            for (Map.Entry<QName, Serializable> e: data.entrySet() ) {
+            for (Map.Entry<QName, Serializable> e : data.entrySet()) {
                 object.put(e.getKey().getLocalName(), e.getValue());
             }
         } catch (JSONException e) {
-	        logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return properties.put(object).toString();
     }
 
+    /**
+     * Получить название свойства, в котором хранится автор документа
+     *
+     * @param docType тип документов
+     */
+    @SuppressWarnings("unused")
     public String getAuthorProperty(String docType) {
         QName qNameType = QName.createQName(docType, namespaceService);
         if (qNameType != null) {
@@ -268,13 +402,13 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-    private ArrayList<String> getElements(Object[] object){
+    private ArrayList<String> getElements(Object[] object) {
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
             if (obj != null && obj instanceof NativeJavaObject) {
                 NativeJavaObject element = (NativeJavaObject) obj;
                 arrayList.add((String) element.unwrap());
-            } else if (obj != null && obj instanceof String){
+            } else if (obj != null && obj instanceof String) {
                 arrayList.add(obj.toString());
             }
         }
@@ -282,16 +416,22 @@ public class DocumentWebScriptBean extends BaseWebScript {
     }
 
 
-	/**
-	 * Оборачиваем узел в ссылку на document
-	 * @param node
-	 * @param description
-	 * @return
-	 */
-	public String wrapperDocumentLink(ScriptNode node, String description) {
-		return wrapperLink(node.getNodeRef().toString(), description, BaseBean.DOCUMENT_LINK_URL);
-	}
+    /**
+     * Оборачиваем узел в ссылку на document
+     *
+     * @param node        документ
+     * @param description описание (текст ссылки)
+     */
+    @SuppressWarnings("unused")
+    public String wrapperDocumentLink(ScriptNode node, String description) {
+        return wrapperLink(node.getNodeRef().toString(), description, BaseBean.DOCUMENT_LINK_URL);
+    }
 
+    /**
+     * Получить запрос для фильтра
+     *
+     * @param filter код фильтра + параметры
+     */
     public String getFilterQuery(String filter) {
         String[] filterParts = filter.split("\\|");
         if (filterParts.length > 0) {
@@ -303,7 +443,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
             DocumentFilter docFilter = FiltersManager.getFilterById(filterId);
             if (docFilter != null) {
-                if (filterData.isEmpty()){
+                if (filterData.isEmpty()) {
                     filterData = docFilter.getParamStr();
                 }
                 Object[] params = filterData != null ? filterData.split("/") : new Object[]{};
@@ -315,6 +455,12 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return "";
     }
 
+    /**
+     * Создать дубликат документа
+     *
+     * @param nodeRef документ
+     */
+    @SuppressWarnings("unused")
     public ScriptNode dublicateDocument(String nodeRef) {
         ParameterCheck.mandatory("nodeRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
@@ -327,30 +473,43 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public String getArmUrl(String nodeRef) {
+    /**
+     * Получить ссылку на АРМ документа
+     *
+     * @param nodeRef документ
+     */
+    public String getArmUrl(String nodeRef) {
         ParameterCheck.mandatory("nodeRef", nodeRef);
         NodeRef ref = new NodeRef(nodeRef);
         if (nodeService.exists(ref)) {
-	        QName type = nodeService.getType(ref);
-	        if (type != null) {
-		        ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_ARM_URL));
-		        if (constraint != null && (constraint.getConstraint() instanceof ArmUrlConstraint)) {
-			        return ((ArmUrlConstraint) constraint.getConstraint()).getArmUrl();
-		        }
-	        }
+            QName type = nodeService.getType(ref);
+            if (type != null) {
+                ConstraintDefinition constraint = dictionaryService.getConstraint(QName.createQName(type.getNamespaceURI(), DocumentService.CONSTRAINT_ARM_URL));
+                if (constraint != null && (constraint.getConstraint() instanceof ArmUrlConstraint)) {
+                    return ((ArmUrlConstraint) constraint.getConstraint()).getArmUrl();
+                }
+            }
         }
         return null;
     }
 
+    /**
+     * Получить строку представления документа
+     *
+     * @param document документ
+     */
+    @SuppressWarnings("unused")
     public String getPresentString(ScriptNode document) {
         return documentService.getPresentString(document.getNodeRef());
     }
 
     /**
      * Возвращает автора документа
+     *
      * @param document - текстовая ссылка на документ
      * @return ноду сотрудника-автор или null, если по какой-то причине нет такого свойства или сохранены битые данные
      */
+    @SuppressWarnings("unused")
     public ScriptNode getDocumentAuthor(String document) {
         ParameterCheck.mandatory("document", document);
         if (NodeRef.isNodeRef(document)) {
@@ -363,13 +522,19 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return null;
     }
 
-	public String getDocumentRegNumber(ScriptNode document) {
-		ParameterCheck.mandatory("document", document);
-		if (document != null) {
-			return documentService.getDocumentRegNumber(document.getNodeRef());
-		}
-		return null;
-	}
+    /**
+     * Получить регистрационный номер документа
+     *
+     * @param document документ
+     */
+    @SuppressWarnings("unused")
+    public String getDocumentRegNumber(ScriptNode document) {
+        ParameterCheck.mandatory("document", document);
+        if (document != null) {
+            return documentService.getDocumentRegNumber(document.getNodeRef());
+        }
+        return null;
+    }
 
     public void finalizeToUnit(ScriptNode document, Boolean sharedFolder, ScriptNode primaryUnit, Scriptable additionalUnits) {
         List<NodeRef> additionalUnitsRefs = getNodeRefsFromScriptableCollection(additionalUnits);
@@ -388,11 +553,18 @@ public class DocumentWebScriptBean extends BaseWebScript {
         finalizeToUnit(document, null, primaryUnit, null);
     }
 
-   public Scriptable getDocumentsByQuery(String query, int skipCount, int loadCount) {
-       List<SearchParameters.SortDefinition> sort = new ArrayList<SearchParameters.SortDefinition>();
-       sort.add(new SearchParameters.SortDefinition(SearchParameters.SortDefinition.SortType.FIELD, "@" + ContentModel.PROP_MODIFIED.toString(), false));
+    /**
+     * Получить список документов по поисковому запросу
+     *
+     * @param query     поисковый запрос
+     * @param skipCount сколько документов пропустить при выполнении запроса
+     * @param loadCount число документов для загрузки
+     */
+    public Scriptable getDocumentsByQuery(String query, int skipCount, int loadCount) {
+        List<SearchParameters.SortDefinition> sort = new ArrayList<SearchParameters.SortDefinition>();
+        sort.add(new SearchParameters.SortDefinition(SearchParameters.SortDefinition.SortType.FIELD, "@" + ContentModel.PROP_MODIFIED.toString(), false));
 
-       List<NodeRef> refs = documentService.getDocumentsByQuery(query, sort, skipCount, loadCount);
-       return createScriptable(refs);
-   }
+        List<NodeRef> refs = documentService.getDocumentsByQuery(query, sort, skipCount, loadCount);
+        return createScriptable(refs);
+    }
 }

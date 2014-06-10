@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: ORakovskaya
@@ -186,7 +188,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
 
 	@Override
 	public NodeRef getDictionariesRoot() {
-		return getFolder(DICTIONARIES_ROOT_ID);
+            return getFolder(DICTIONARIES_ROOT_ID);
 	}
 
 	@Override

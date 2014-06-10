@@ -1,0 +1,13 @@
+/* Поручения: статусы */
+.yui-skin-lecmTheme div.form-fields div.statuses-set {
+	text-align: right;
+}
+
+.yui-skin-lecmTheme div.form-fields div.statuses-set div.form-field {
+	width: auto;
+	display: inline-block;
+	margin: 0 0 0 30px;
+	padding: 0;
+	position: inherit;
+	float: none;
+}

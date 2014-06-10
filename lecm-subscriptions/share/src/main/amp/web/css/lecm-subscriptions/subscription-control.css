@@ -1,0 +1,8 @@
+.subscribe span.first-child {
+	background: url('../../images/lecm-subscriptions/alf_subscribe_16.png') no-repeat 5px 5px;
+	padding-left: 16px;
+}
+.unsubscribe span.first-child {
+	background: url('../../images/lecm-subscriptions/alf_unsubscribe_16.png') no-repeat 5px 5px;
+	padding-left: 16px;
+}

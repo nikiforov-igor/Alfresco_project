@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>ru.it.lecm</groupId>
 		<artifactId>server</artifactId>
-		<version>1.2.0</version>
+		<version>1.4.0</version>
 	</parent>
 
 	<groupId>ru.it.lecm.server</groupId>
@@ -87,10 +87,9 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco</artifactId>
-			<version>${alfresco.version}</version>
 			<type>war</type>
 		</dependency>
-		<dependency>
+<!--		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-web-client</artifactId>
 		</dependency>
@@ -109,7 +108,7 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-remote-api</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -250,13 +249,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.approval</groupId>
-			<artifactId>legacy-approval-repo</artifactId>
-			<version>${platform.version}</version>
-			<type>amp</type>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.reports-editor</groupId>
 			<artifactId>reports-editor-repo</artifactId>
 			<version>${platform.version}</version>
@@ -291,13 +283,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.eds-documents</groupId>
-            <artifactId>eds-documents-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
+		<dependency>
+			<groupId>ru.it.lecm.internal</groupId>
+			<artifactId>internal-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.incoming</groupId>
 			<artifactId>incoming-repo</artifactId>
@@ -313,12 +305,26 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.model-editor</groupId>
-			<artifactId>model-editor-repo</artifactId>
+			<groupId>ru.it.lecm.nd</groupId>
+			<artifactId>nd-repo</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.ord</groupId>
+			<artifactId>ord-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+            <groupId>ru.it.lecm.eds-documents</groupId>
+            <artifactId>eds-documents-repo</artifactId>
+            <version>${platform.version}</version>
+            <scope>runtime</scope>
+            <type>amp</type>
+        </dependency>
 		<dependency>
 			<groupId>ru.it.lecm.arm</groupId>
 			<artifactId>arm-repo</artifactId>
@@ -361,42 +367,20 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.internal</groupId>
-            <artifactId>internal-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
+		<dependency>
             <groupId>ru.it.lecm.group-actions</groupId>
             <artifactId>group-actions-repo</artifactId>
             <version>${platform.version}</version>
             <scope>runtime</scope>
             <type>amp</type>
         </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.ord</groupId>
-            <artifactId>ord-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <dependency>
-            <groupId>ru.it.lecm.nd</groupId>
-            <artifactId>nd-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-        <!--<dependency>
-            <groupId>ru.it.lecm.licensing</groupId>
-            <artifactId>licensing-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency-->
-
+                <dependency>
+                    <groupId>ru.it.lecm.model-editor</groupId>
+                    <artifactId>model-editor-repo</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
 	</dependencies>
 
 	<build>
@@ -487,7 +471,7 @@
 					<locales>en</locales>
 				</configuration>
 			</plugin>
-			<plugin>
+<!--			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.6</version>
@@ -542,19 +526,19 @@
 					</execution>
 				</executions>
 				<dependencies>
-					<!--
+
 					 | This is required to be re-defined explicitly at plugin level as
 					 | otherwise the 'amp' extension unArchiver won't be available to the
 					 | maven-dependency-plugin
-					-->
+
 					<dependency>
 						<groupId>org.alfresco.maven.plugin</groupId>
 						<artifactId>maven-amp-plugin</artifactId>
 						<version>3.0.4</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
+			</plugin>-->
+<!--			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
@@ -564,9 +548,290 @@
 					<warSourceExcludes>tools/**</warSourceExcludes>
 					<webResources>
 
-					</webResources>
+							</webResources>
+					</configuration>
+			</plugin>-->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<!--                    <archiveClasses>false</archiveClasses>
+					<webappDirectory>target/${webapp.name}</webappDirectory>
+					<warSourceExcludes>tools/**</warSourceExcludes>-->
+					<!--  Here is can control the order of overlay of your (WAR, AMP, etc.) dependencies
+				   | NOTE: At least one WAR dependency must be uncompressed first
+				   | NOTE: In order to have a dependency effectively added to the WAR you need to
+				   | explicitly mention it in the overlay section.
+				   | NOTE: First-win resource strategy is used by the WAR plugin
+					-->
+					<overlays>
+						<!-- Current project customizations -->
+						<overlay/>
+						<!-- The Alfresco WAR -->
+						<overlay>
+							<groupId>org.alfresco</groupId>
+							<artifactId>alfresco</artifactId>
+							<type>war</type>
+							<!-- To allow inclusion of META-INF, needed for MMT WAR file validation-->
+							<excludes/>
+							<!--<excludes>
+								<exclude>WEB-INF/lib/freemarker-2.3.18-patched.jar</exclude>
+							</excludes>-->
+						</overlay>
+						<!-- Add / order your AMPs here -->
+						<overlay>
+							<groupId>ru.it.lecm.base</groupId>
+							<artifactId>base-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.orgstructure</groupId>
+							<artifactId>orgstructure-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<!--                        <overlay>
+							<groupId>ru.it.lecm.experts</groupId>
+							<artifactId>experts-repo</artifactId>
+							<type>amp</type>
+						</overlay>-->
+						<overlay>
+							<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
+							<groupId>ru.it.lecm.reports</groupId>
+							<!-- <artifactId>jasperforms-repo</artifactId> -->
+							<artifactId>lecm-reports-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.dictionary</groupId>
+							<artifactId>dictionary-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.contracts</groupId>
+							<artifactId>contracts-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.statemachine</groupId>
+							<artifactId>statemachine-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.statemachine.editor</groupId>
+							<artifactId>statemachine-editor-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.delegation</groupId>
+							<artifactId>lecm-delegation-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.subscriptions</groupId>
+							<artifactId>subscriptions-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.notifications</groupId>
+							<artifactId>notifications-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.notifications.email</groupId>
+							<artifactId>notifications-email-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.notifications.dashlet</groupId>
+							<artifactId>notifications-dashlet-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.notifications.channel.active</groupId>
+							<artifactId>notifications-active-channel-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.business-journal</groupId>
+							<artifactId>business-journal-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.calendar</groupId>
+							<artifactId>lecm-calendar-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.security</groupId>
+							<artifactId>lecm-security-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.documents</groupId>
+							<artifactId>documents-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.regnumbers</groupId>
+							<artifactId>lecm-regnumbers-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.contractors</groupId>
+							<artifactId>lecm-contractors-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<!--                        <overlay>
+							<groupId>ru.it.lecm.contracts-fake</groupId>
+							<artifactId>contracts-fake-repo</artifactId>
+							<type>amp</type>
+						</overlay>-->
+						<overlay>
+							<groupId>ru.it.lecm.reports-editor</groupId>
+							<artifactId>reports-editor-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.errands</groupId>
+							<artifactId>errands-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<!--                        <overlay>
+							<groupId>ru.it.lecm.scaner</groupId>
+							<artifactId>scaner-repo</artifactId>
+							<type>amp</type>
+						</overlay>-->
+						<overlay>
+							<groupId>ru.it.lecm.signed-docflow</groupId>
+							<artifactId>signed-docflow-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<!--                        <overlay>
+							<groupId>ru.it.lecm.br5.semantic</groupId>
+							<artifactId>semantic-assist-repo</artifactId>
+							<type>amp</type>
+						</overlay>-->
+						<overlay>
+							<groupId>ru.it.lecm.permission-exp</groupId>
+							<artifactId>permission-exp-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.documents-removal</groupId>
+							<artifactId>documents-removal-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.model-editor</groupId>
+							<artifactId>model-editor-repo</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.internal</groupId>
+							<artifactId>internal-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.incoming</groupId>
+							<artifactId>incoming-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.outgoing</groupId>
+							<artifactId>outgoing-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.nd</groupId>
+							<artifactId>nd-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.ord</groupId>
+							<artifactId>ord-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.eds-documents</groupId>
+							<artifactId>eds-documents-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.arm</groupId>
+							<artifactId>arm-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.reservation</groupId>
+							<artifactId>reservation-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow</groupId>
+							<artifactId>workflow-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.signing</groupId>
+							<artifactId>signing-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.review</groupId>
+							<artifactId>review-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.approval</groupId>
+							<artifactId>approval-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.group-actions</groupId>
+							<artifactId>group-actions-repo</artifactId>
+
+
+							<type>amp</type>
+						</overlay>
+
+					</overlays>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.alfresco.maven.plugin</groupId>
+						<artifactId>alfresco-maven-plugin</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+				</dependencies>
 			</plugin>
+
+
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
@@ -629,13 +894,13 @@
 	</build>
 	<reporting>
 		<plugins>
-			<!-- Targeting 1.6 -->
+			<!-- Targeting 1.7 -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -670,6 +935,18 @@
 	</reporting>
 	<profiles>
 		<profile>
+			<id>lecmIM</id>
+			<dependencies>
+				<dependency>
+					<groupId>ru.it.lecm.lecm-im</groupId>
+					<artifactId>lecm-im-repo</artifactId>
+					<version>${platform.version}</version>
+					<type>amp</type>
+					<scope>runtime</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
 			<id>non-production-modules</id>
 			<dependencies>
 				<dependency>
@@ -692,13 +969,6 @@
 					<version>${platform.version}</version>
 					<scope>runtime</scope>
 					<type>amp</type>
-				</dependency>
-				<dependency>
-					<groupId>ru.it.lecm.contracts-fake</groupId>
-					<artifactId>contracts-fake-repo</artifactId>
-					<version>${platform.version}</version>
-					<type>amp</type>
-					<scope>runtime</scope>
 				</dependency>
 				<dependency>
 					<groupId>ru.it.lecm.scaner</groupId>

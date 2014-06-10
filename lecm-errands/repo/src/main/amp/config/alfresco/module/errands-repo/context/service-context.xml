@@ -1,0 +1,493 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="errands.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap, documents.LogicEcmModelsBootstrap,
+		  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+		  documents.LogicEcmModelsConnectionsBootstrap,
+		  links.LogicEcmContractsBootstrap,
+		  documents.dictionaries.LogicEcmModelsBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-aspects-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-errands-model</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="errands.dictionaries.LogicEcmModelsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap,ru.it.lecm.dictionary.dictionary-repo.dictionary">
+		<property name="models">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-dictionaries-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/${artifactId}/messages/lecm-errands-dictionaries-model</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="errands.dictionaryBootstrap"
+	      parent="lecmDictionaryBootstrap"
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+	                  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+                      businessJournalLogEventsPolicy, regNumbers.regNumbersTemplatesDicBootstrap,
+                      errands.dictionaries.LogicEcmModelsBootstrap">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-titles.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-business-journal-objectType-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-roles-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-errands-regnumbers.xml</value>
+			</list>
+		</property>
+	</bean>
+
+	<util:constant id="ERRANDS_ROOT_ID" static-field="ru.it.lecm.errands.ErrandsService.ERRANDS_ROOT_ID"/>
+	<util:constant id="ERRANDS_ROOT_NAME" static-field="ru.it.lecm.errands.ErrandsService.ERRANDS_ROOT_NAME"/>
+
+	<bean id="errandsService" class="ru.it.lecm.errands.beans.ErrandsServiceImpl" parent="baseBean"
+	      depends-on="nodeService, documentService, errands.LogicEcmModelsBootstrap" init-method="init">
+		<property name="documentService" ref="documentService"/>
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
+        <!-- TODO: Разобраться с машиной состояний-->
+        <property name="stateMachineService" ref="stateMachineHelper"/>
+        <property name="lecmObjectsService" ref="lecmObjectsService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="businessJournalService" ref="businessJournalService"/>
+		<property name="folders">
+			<map>
+				<entry key="#{ERRANDS_ROOT_ID}" value="#{ERRANDS_ROOT_NAME}"/>
+			</map>
+		</property>
+	<property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+	</bean>
+
+	<bean id="errandsScript" parent="baseScript" class="ru.it.lecm.errands.scripts.ErrandsWebScriptBean"
+	      depends-on="nodeService, errandsService">
+		<property name="extensionName">
+			<value>errands</value>
+		</property>
+		<property name="errandsService" ref="errandsService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="workCalendar" ref="WorkCalendarService"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+		<property name="lecmTransactionHelper" ref="lecmTransactionHelper"/>
+	</bean>
+
+    <bean id="errandsStatusesFilter" parent="documentStatusesFilter">
+        <property name="defaultFilters">
+            <map>
+                <entry key="lecm-errands:document" value="Все"/>
+                <entry key="lecm-errands:document-archive" value="Неисполненные"/>
+            </map>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="lecm-errands:document">
+                    <map>
+                        <entry key="Все" value="!Отменено, !Удалено, !Исполнено, !Не исполнено"/>
+                        <entry key="Ожидает исполнения" value="Ожидает исполнения"/>
+                        <entry key="Исполняется" value="Исполняется"/>
+                        <entry key="На утверждении" value="На утверждении инициатором, На утверждении контролером"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+        <property name="archiveFilters">
+            <map>
+                <entry key="lecm-errands:document">
+                    <map>
+                        <entry key="Неисполненные" value="Не исполнено"/>
+                        <entry key="Исполненные" value="Исполнено"/>
+                    </map>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="errandsAccessPermissions" parent="documentsPermissions">
+        <property name="permissions">
+            <map>
+                <entry key="lecm-errands:document">
+                    <list>
+                        <!-- Согласно 1433 - страница доступна всем пользователям-->
+                    </list>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+	<bean id="errands.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+		<constructor-arg>
+			<map>
+				<entry key="lecm-errands-dic:errand-titles">
+					<list>
+						<value>cm:name</value>
+						<value>lecm-errands-dic:errand-title-code</value>
+					</list>
+				</entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+    <bean  id="errandsConnectionPolicy" class="ru.it.lecm.errands.policy.ErrandsConnectionPolicy"
+           init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="documentConnectionService" ref="documentConnectionService"/>
+        <property name="nodeService" ref="nodeService"/>
+        <property name="documentService" ref="documentService"/>
+        <property name="documentMembersService" ref="documentMembersService" />
+    <property name="errandsService" ref="errandsService" />
+    </bean>
+                <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
+        <property name="statemachineName" value="lecm-errands:document" />
+        <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />
+    </bean>
+
+    <bean id="errandsWorkflowBootstrap" parent="workflowDeployer"
+          depends-on="contracts.LogicEcmContractsDictionariesBootstrap,
+				     statemachine.aspects.LogicEcmModelsBootstrap,
+				     ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,">
+        <property name="workflowDefinitions">
+            <list>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-remove-draft.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-create-child-errand.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-due-date-change.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-executor.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-controller.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-change-due-date.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-request-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-initiator-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+	            <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-initiator-approve.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-controller-decline.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+	            <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-controller-approve.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+                <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-cancel.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+	            <props>
+                    <prop key="engineId">activiti</prop>
+                    <prop key="location">alfresco/module/${artifactId}/workflow/lecm-errands-execute.bpmn20.xml</prop>
+                    <prop key="mimetype">text/xml</prop>
+                    <prop key="redeploy">${redeploy.process.definitions}</prop>
+                </props>
+            </list>
+        </property>
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-errands-workflow-model.xml</value>
+            </list>
+        </property>
+        <property name="labels">
+            <list>
+                <value>alfresco/module/${artifactId}/messages/lecm-errands-workflow</value>
+            </list>
+        </property>
+        <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
+    </bean>
+
+	<bean  id="errandsAttachmentsPolicy" class="ru.it.lecm.errands.policy.ErrandsAttachmentsPolicy"
+	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
+		<property name="policyComponent" ref="policyComponent"/>
+		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
+		<property name="nodeService" ref="nodeService"/>
+	</bean>
+
+    <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+    <property name="publicAction" value="false" />
+    </bean>
+
+    <bean id="errandsEveryDayStatusSchedule" class="ru.it.lecm.errands.shedule.EveryDayStatusShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 0 5 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>false</value>
+        </property>
+        <property name="jobName">
+            <value>errands-sys-agent-status</value>
+        </property>
+        <property name="jobGroup">
+            <value>errands-status</value>
+        </property>
+        <property name="triggerName">
+            <value>errands-sys-agent-status-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>errands-status-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="errandsEveryDayNotificationExecutor" class="ru.it.lecm.errands.shedule.EveryDayNotificationExecutor" parent="action-executer">
+        <property name="ignoreLock" value="false"/>
+        <property name="errandsService" ref="errandsService"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="nodeService" ref="nodeService"/>
+    <property name="publicAction" value="false" />
+    </bean>
+
+    <bean id="errandsEveryDayNotificationSchedule" class="ru.it.lecm.errands.shedule.EveryDayNotificationShedule">
+        <property name="transactionMode">
+            <value>ISOLATED_TRANSACTIONS</value>
+        </property>
+        <property name="compensatingActionMode">
+            <value>IGNORE</value>
+        </property>
+        <property name="nodeService">
+            <ref bean="nodeService"/>
+        </property>
+        <property name="cronExpression">
+            <value>0 15 5 */1 * ?</value>
+        </property>
+        <property name="firstStartExpression">
+            <value>0 */15 * * * ?</value>
+        </property>
+        <property name="onServerStart">
+            <value>true</value>
+        </property>
+        <property name="jobName">
+            <value>errands-sys-agent-notifier</value>
+        </property>
+        <property name="jobGroup">
+            <value>errands-notifications</value>
+        </property>
+        <property name="triggerName">
+            <value>errands-sys-agent-notifier-trigger</value>
+        </property>
+        <property name="triggerGroup">
+            <value>errands-notifications-trigger</value>
+        </property>
+        <property name="scheduler">
+            <ref bean="schedulerFactory"/>
+        </property>
+        <property name="actionService">
+            <ref bean="ActionService"/>
+        </property>
+        <property name="transactionService">
+            <ref bean="TransactionService"/>
+        </property>
+        <property name="runAsUser">
+            <value>System</value>
+        </property>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+
+    <bean id="errandsFilter" class="ru.it.lecm.errands.beans.ErrandsFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
+        <property name="workCalendar" ref="WorkCalendarService"/>
+    </bean>
+
+    <bean id="errandsCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-errands:title</value>
+                <value>lecm-errands:content</value>
+                <value>lecm-errands:is-important</value>
+                <value>lecm-errands:just-in-time</value>
+                <value>lecm-errands:is-short</value>
+                <value>lecm-errands:limitation-date</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-errands:initiator-assoc</value>
+                <value>lecm-errands:executor-assoc</value>
+                <value>lecm-errands:controller-assoc</value>
+                <value>lecm-errands:coexecutors-assoc</value>
+                <value>lecm-errands:links-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+            </list>
+        </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Поручение</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="errandsCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-errands:document" value-ref="errandsCopySettings"/>
+            </map>
+        </property>
+    </bean>
+
+	<bean id="errands.businessJournalDictionaryBootstrap"
+	      parent="lecmDictionaryBootstrap"
+	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap, businessJournalLogEventsPolicy">
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/models/lecm-business-journal-eventCategory-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
+    <!-- фильтры для дашлета Выданные мною поручения -->
+
+    <bean id="issuedErrandsAll" class="ru.it.lecm.errands.beans.IssuedByMeAll" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsAllImportant" class="ru.it.lecm.errands.beans.IssuedByMeAllImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExecution" class="ru.it.lecm.errands.beans.IssuedByMeExecution" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExecutionImportant" class="ru.it.lecm.errands.beans.IssuedByMeExecutionImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/all/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExpired" class="ru.it.lecm.errands.beans.IssuedByMeExpired" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/expired/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsExpiredImportant" class="ru.it.lecm.errands.beans.IssuedByMeExpiredImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/expired/true/false"/>
+    </bean>
+
+    <bean id="issuedErrandsDeadline" class="ru.it.lecm.errands.beans.IssuedByMeDeadline" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/deadline/false/false"/>
+    </bean>
+
+    <bean id="issuedErrandsDeadlineImportant" class="ru.it.lecm.errands.beans.IssuedByMeDeadlineImportant" depends-on="errandsFilter" parent="documentsFilter" init-method="register">
+        <property name="paramStr" value="initiator/deadline/true/false"/>
+    </bean>
+
+	<bean id="errandsChildFilter" class="ru.it.lecm.errands.beans.ErrandsChildFilter" depends-on="errandsService" parent="documentsFilter" init-method="register">
+	</bean>
+
+    <bean id="listOfUsedErrandsTypes" parent="listOfUsedTypes">
+        <property name="types">
+            <map>
+                <entry key="lecm-errands-dic:errand-titles" value="Заголовок поручения"/>
+                <entry key="lecm-errands:document" value="Поручение"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="errands.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/exec-doc-tree.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="errands.reportsDeployer"/>
+    </bean>
+
+    <bean id="errands.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>exec-doc-tree</value>
+            </list>
+        </property>
+    </bean>
+</beans>

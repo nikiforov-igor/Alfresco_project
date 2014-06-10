@@ -18,6 +18,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: AIvkin
@@ -25,6 +27,7 @@ import java.util.*;
  * Time: 10:10
  */
 public class ArmServiceImpl extends BaseBean implements ArmService {
+	private Logger logger = LoggerFactory.getLogger(ArmServiceImpl.class);
 
     private DictionaryBean dictionaryService;
     private SearchService searchService;
@@ -48,7 +51,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         }
     };
 
-    private StateMachineServiceBean stateMachineHelper;
+    private StateMachineServiceBean stateMachineService;
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
@@ -56,7 +59,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
 	public NodeRef getServiceRootFolder() {
-		return getFolder(ARM_ROOT_ID);
+            return getFolder(ARM_ROOT_ID);
 	}
 
 	@Override
@@ -283,7 +286,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				} else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
 					result = new ArmStatusesChildRule();
 					((ArmStatusesChildRule) result).setRule((String) props.get(PROP_STATUSES_RULE));
-                    ((ArmStatusesChildRule) result).setStateMachineServiceBean(stateMachineHelper);
+                    ((ArmStatusesChildRule) result).setStateMachineService(stateMachineService);
 
 					String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
 					if (selectedStatuses != null) {
@@ -322,7 +325,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     }
                 }
             }
-            List<NodeRef> documents = stateMachineHelper.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks);
+            List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks);
             for (NodeRef document : documents) {
                 sb.append("ID:\"").append(document.toString()).append("\" OR ");
             }
@@ -333,6 +336,67 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         }
         return result;
     }
+
+	public void aggregateNode(NodeRef nodeRef) {
+		if (isArmAccordion(nodeRef) || isArmNode(nodeRef)) {
+			Boolean isAggregationNode = (Boolean) nodeService.getProperty(nodeRef, ArmService.PROP_IS_AGGREGATION_NODE);
+
+			if (Boolean.TRUE.equals(isAggregationNode)) {
+				Set<QName> typeSet = new HashSet<QName>();
+				typeSet.add(ArmService.TYPE_ARM_NODE);
+				List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(nodeRef, typeSet);
+				if (childAssocs != null) {
+					StringBuilder query = new StringBuilder();
+					for (ChildAssociationRef assoc : childAssocs) {
+						String searchQuery = getNodeSearchQuery(assoc.getChildRef());
+						if (searchQuery != null && searchQuery.length() > 0) {
+							if (query.length() > 0) {
+								query.append(" OR ");
+							}
+							query.append("(");
+							if (searchQuery.startsWith("NOT")) {
+								query.append("ISNOTNULL:\"cm:name\" AND ");
+							}
+							query.append(searchQuery).append(")");
+						}
+					}
+					String oldQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+					if (!query.toString().equals(oldQuery)) {
+						nodeService.setProperty(nodeRef, ArmService.PROP_SEARCH_QUERY, query.toString());
+					}
+				}
+			}
+		}
+	}
+
+	public String getNodeSearchQuery(NodeRef nodeRef) {
+		List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(nodeRef, ASSOC_NODE_CHILD_RULE);
+		if (queryAssoc != null && queryAssoc.size() > 0) {
+			NodeRef query = queryAssoc.get(0).getTargetRef();
+			QName queryType = nodeService.getType(query);
+			Map<QName, Serializable> props = nodeService.getProperties(query);
+
+			if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
+				ArmStatusesChildRule node = new ArmStatusesChildRule();
+				node.setRule((String) props.get(PROP_STATUSES_RULE));
+				String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
+				if (selectedStatuses != null) {
+					List<String> selectedStatusesList = new ArrayList<String>();
+					for (String str: selectedStatuses.split(",")) {
+						String status = str.trim();
+						if (status.length() > 0) {
+							selectedStatusesList.add(status);
+						}
+					}
+
+					node.setSelectedStatuses(selectedStatusesList);
+				}
+
+				return node.getQuery();
+			}
+		}
+		return (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+	}
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
@@ -346,7 +410,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		this.namespaceService = namespaceService;
 	}
 
-    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 }

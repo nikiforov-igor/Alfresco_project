@@ -18,6 +18,8 @@ import ru.it.lecm.errands.ErrandsService;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: mshafeev
@@ -25,83 +27,122 @@ import java.util.List;
  * Time: 15:51
  */
 public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAssociationPolicy {
-	final static protected Logger logger = LoggerFactory.getLogger(ErrandsConnectionPolicy.class);
+    final static protected Logger logger = LoggerFactory.getLogger(ErrandsConnectionPolicy.class);
 
-	private PolicyComponent policyComponent;
-	private DocumentConnectionService documentConnectionService;
-	private NodeService nodeService;
-	private DocumentService documentService;
-	private DocumentMembersService documentMembersService;
+    private PolicyComponent policyComponent;
+    private DocumentConnectionService documentConnectionService;
+    private NodeService nodeService;
+    private DocumentService documentService;
+    private DocumentMembersService documentMembersService;
 	private ErrandsService errandsService;
 
-	public void setPolicyComponent(PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
-	}
+    public void setPolicyComponent(PolicyComponent policyComponent) {
+        this.policyComponent = policyComponent;
+    }
 
-	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
-		this.documentConnectionService = documentConnectionService;
-	}
+    public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
+        this.documentConnectionService = documentConnectionService;
+    }
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
 	public void setErrandsService(ErrandsService errandsService) {
 		this.errandsService = errandsService;
 	}
 
-	final public void init() {
-		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
+    final public void init() {
+        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
-		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
-				ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
+                ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ADDITIONAL_ERRANDS_DOCUMENT, new JavaBehaviour(this, "onCreateAssociation"));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				ErrandsService.TYPE_ERRANDS, ErrandsService.ASSOC_ERRANDS_EXECUTOR, new JavaBehaviour(this, "onCreateErrandExecutor"));
-	}
+    }
 
-	/**
-	 * Добавление связи при создании поручения на основании документа
-	 */
-	@Override
-	public void onCreateAssociation(AssociationRef associationRef) {
+    /**
+     * Добавление связи при создании поручения на основании документа
+     */
+    @Override
+    public void onCreateAssociation(AssociationRef associationRef) {
 		documentConnectionService.createConnection(associationRef.getTargetRef(), associationRef.getSourceRef(), DocumentConnectionService.DOCUMENT_CONNECTION_ON_BASIS_DICTIONARY_VALUE_CODE, true, true);
 
-		//обновление номера документа-основания в поручении
-		NodeRef baseDoc = associationRef.getTargetRef();
-		NodeRef errandDoc = associationRef.getSourceRef();
+        //обновление номера документа-основания в поручении
+        NodeRef baseDoc = associationRef.getTargetRef();
+        NodeRef errandDoc = associationRef.getSourceRef();
 
-		QName type = nodeService.getType(baseDoc);
-		if (type.equals(ErrandsService.TYPE_ERRANDS)) {
-			NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
-			documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
-		}
+        //TODO ALF-2843
+        //	   После рефакторинга транзакций валится добавление участника 
+        //     т.к. у дочернего поручение в этот момент еще нет папки с участниками
+        //     Узнать нужно ли еще это условие в принципе
+        //QName type = nodeService.getType(baseDoc);
+        //if (type.equals(ErrandsService.TYPE_ERRANDS)){
+            //NodeRef initiatorRef = nodeService.getTargetAssocs(baseDoc, ErrandsService.ASSOC_ERRANDS_INITIATOR).get(0).getTargetRef();
+			//documentMembersService.addMemberWithoutCheckPermission(errandDoc, initiatorRef, new HashMap<QName, Serializable>());
+        //}
 
 		List<String> regNums = documentService.getRegNumbersValues(baseDoc);
 		if (regNums != null && !regNums.isEmpty()) {
-			String regNumberValue = "";
+            String regNumberValue = "";
 			for (String number : regNums) {
 				if (number != null) {
 					regNumberValue += ((regNumberValue.length() > 0 ? "," : "") + number);
-				}
-			}
-			nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);
-		}
+                }
+            }
+            nodeService.setProperty(errandDoc, ErrandsService.PROP_BASE_DOC_NUMBER, regNumberValue);
+        }
 
-	    this.transferRightToBaseDocument(errandDoc);
+        
+            //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
+//		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
+//		существование и создать при необходимости
+//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.                
+//		if(errandsService.getSettingsNode() == null) {
+//			try {
+//				errandsService.createSettingsNode();
+//			} catch (WriteTransactionNeededException ex) {
+//				throw new RuntimeException("Can't create settings node", ex);
+//			}
+//		}
+            
+            //OnCreateAssociationPolicy : транзакция должна быть.
+            try {            
+                this.transferRightToBaseDocument(errandDoc);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException(ex);
+            }
 	}
 
 	public void onCreateErrandExecutor(AssociationRef associationRef) {
 		NodeRef errandDoc = associationRef.getSourceRef();
 
-		this.transferRightToBaseDocument(errandDoc);
+            //		TODO: Метод transferRightToBaseDocument в итоге использует метод erransService.getSettingsNode,
+//		который ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
+//		существование и создать при необходимости
+//              не понятно, зачем это делать здесь. Это не инит метод, и не точка изменения настроек.                                
+//		if(errandsService.getSettingsNode() == null) {
+//			try {
+//				errandsService.createSettingsNode();
+//			} catch (WriteTransactionNeededException ex) {
+//				throw new RuntimeException("Can't create settings node", ex);
+//			}
+//		}
+            
+            //OnCreateAssociationPolicy : транзакция должна быть.
+            try {                
+                this.transferRightToBaseDocument(errandDoc);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException(ex);
+            }
 	}
 
-	public void transferRightToBaseDocument(NodeRef errandDoc) {
+	public void transferRightToBaseDocument(NodeRef errandDoc) throws WriteTransactionNeededException {
 		if (errandsService.isTransferRightToBaseDocument()) {
 			NodeRef baseDoc = errandsService.getBaseDocument(errandDoc);
 			NodeRef executor = errandsService.getExecutor(errandDoc);
@@ -121,9 +162,9 @@ public class ErrandsConnectionPolicy implements NodeServicePolicies.OnCreateAsso
 				}
 			}
 		}
-	}
+    }
 
-	public void setDocumentMembersService(DocumentMembersService documentMembersService) {
-		this.documentMembersService = documentMembersService;
-	}
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
 }

@@ -1,0 +1,37 @@
+.dashlet.arm-documents .body .row {
+    line-height: 16px;
+    margin: 10px;
+}
+
+.body.scrollableList .eds-documents .yui-dt-liner.image {
+    padding: 4px 0;
+}
+
+.body.scrollableList .eds-documents tr.yui-dt-rec.yui-dt-odd {
+    background-color: #FFFFFF;
+}
+
+.body.scrollableList .eds-documents td.image {
+    width: 16px;
+}
+
+.body.scrollableList .eds-documents td {
+    border-bottom: 1px dashed #D9D9D9;
+}
+
+.body.scrollableList .eds-documents td .info a{
+    font-weight:bolder;
+}
+
+.body.scrollableList .eds-documents {
+    width: 100%;
+}
+
+.dashlet .titleBarActions .arm {
+    background-image: url('/share/res/images/lecm-eds-documents/arm.png');
+}
+
+.arm-documents .loading-image-container {
+	text-align: center;
+	visibility: hidden;
+}

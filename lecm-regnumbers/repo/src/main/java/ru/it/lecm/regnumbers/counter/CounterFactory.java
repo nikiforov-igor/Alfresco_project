@@ -20,6 +20,7 @@ import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import static ru.it.lecm.regnumbers.RegNumbersService.REGNUMBERS_NAMESPACE;
 
@@ -39,10 +40,7 @@ public class CounterFactory extends BaseBean {
 	// необходимые сервисы
 	private NamespaceService namespaceService;
 	private DictionaryService dictionaryService;
-	/**
-	 * Ссылка на каталог с счетчиками.
-	 */
-	private NodeRef countersRootNode;
+	
 	/**
 	 * ID каталога, в котором хранятся счетчики.
 	 */
@@ -73,8 +71,6 @@ public class CounterFactory extends BaseBean {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
 		PropertyCheck.mandatory(this, "namespaceService", namespaceService);
 		PropertyCheck.mandatory(this, "dictionaryService", dictionaryService);
-
-		countersRootNode = getFolder(REGNUMBERS_FOLDER_ID);
 	}
 
 	public void setNamespaceService(final NamespaceService namespaceService) {
@@ -187,7 +183,7 @@ public class CounterFactory extends BaseBean {
 
 			@Override
 			public NodeRef execute() throws Throwable {
-				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.PLAIN.objectName());
+				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.PLAIN.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.PLAIN, null, null);
 					NodeRef previousCounter = globalCounters.put(GLOBAL_PLAIN_COUNTER, counter);
@@ -211,7 +207,7 @@ public class CounterFactory extends BaseBean {
 
 			@Override
 			public NodeRef execute() throws Throwable {
-				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.YEAR.objectName());
+				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.YEAR.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.YEAR, null, null);
 					NodeRef previousCounter = globalCounters.put(GLOBAL_YEAR_COUNTER, counter);
@@ -235,7 +231,7 @@ public class CounterFactory extends BaseBean {
 
 			@Override
 			public NodeRef execute() throws Throwable {
-				NodeRef counter = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
+				NodeRef counter = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, CounterType.SIGNED_DOCFLOW.objectName());
 				if (counter == null) {
 					counter = createNewCounter(CounterType.SIGNED_DOCFLOW, null, null);
 					NodeRef previousCounter = globalCounters.put(GLOBAL_SIGNEDDOCFLOW_PLAIN_COUNTER, counter);
@@ -262,7 +258,7 @@ public class CounterFactory extends BaseBean {
 				} else {
 					childName = String.format(CounterType.DOCTYPE_PLAIN.objectName(), docType.replace(':', COLON_REPLACER) + TAG_DELIMITER + tag);
 				}
-				NodeRef counterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, childName);
+				NodeRef counterNodeRef = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, childName);
 				if (counterNodeRef == null) {
 					counterNodeRef = createNewCounter(CounterType.DOCTYPE_PLAIN, docType, tag);
 					logger.info(String.format("Plain counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
@@ -284,7 +280,7 @@ public class CounterFactory extends BaseBean {
 				} else {
 					childName = String.format(CounterType.DOCTYPE_YEAR.objectName(), docType.replace(':', COLON_REPLACER) + TAG_DELIMITER + tag);
 				}
-				NodeRef counterNodeRef = nodeService.getChildByName(countersRootNode, ContentModel.ASSOC_CONTAINS, childName);
+				NodeRef counterNodeRef = nodeService.getChildByName(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, childName);
 				if (counterNodeRef == null) {
 					counterNodeRef = createNewCounter(CounterType.DOCTYPE_YEAR, docType, tag);
 					logger.info(String.format("Year counter node '%s' for doctype '%s' with tag '%s' created", counterNodeRef, docType, tag));
@@ -380,7 +376,7 @@ public class CounterFactory extends BaseBean {
 		AuthenticationUtil.RunAsWork<NodeRef> plainCounterCreationWrapper = new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
-				ChildAssociationRef associationRef = nodeService.createNode(countersRootNode, ContentModel.ASSOC_CONTAINS, assocQName, itemType, properties);
+				ChildAssociationRef associationRef = nodeService.createNode(getServiceRootFolder(), ContentModel.ASSOC_CONTAINS, assocQName, itemType, properties);
 				return associationRef.getChildRef();
 			}
 		};
@@ -398,6 +394,6 @@ public class CounterFactory extends BaseBean {
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return countersRootNode;
+            return getFolder(REGNUMBERS_FOLDER_ID);
 	}
 }

@@ -53,8 +53,8 @@ public enum JasperReportTargetFileType {
 			aname = aname.trim();
 			for(JasperReportTargetFileType v: values()) {
 				// по совпадению имени,mime типа или расширения - любое из этого уникально...
-				if ( aname.equalsIgnoreCase(v.name())
-						|| aname.equalsIgnoreCase(v.extension)
+				if ( aname.equalsIgnoreCase(v.name()) 
+						|| aname.equalsIgnoreCase(v.extension) 
 						|| aname.equalsIgnoreCase(v.mimeType) )
 					return v;
 			}

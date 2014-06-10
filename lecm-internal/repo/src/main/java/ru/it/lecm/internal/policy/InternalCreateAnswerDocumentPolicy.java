@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -65,7 +66,12 @@ public class InternalCreateAnswerDocumentPolicy implements NodeServicePolicies.O
         }
 
         for (NodeRef member : members) {
-            documentMembersService.addMemberWithoutCheckPermission(internalRef, member, new HashMap<QName, Serializable>());
+            try {
+                //транзакция должна быть: policy onCreateAssociation
+                documentMembersService.addMemberWithoutCheckPermission(internalRef, member, new HashMap<QName, Serializable>());
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 

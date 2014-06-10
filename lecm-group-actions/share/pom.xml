@@ -5,13 +5,13 @@
     <parent>
         <groupId>ru.it.lecm.group-actions</groupId>
         <artifactId>group-actions</artifactId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <artifactId>group-actions-share</artifactId>
     <packaging>amp</packaging>
-    <name>Logic ECM Module Share</name>
-	<description>Logic ECM Group Actions Module Share project</description>
+    <name>Logic ECM Group Actions Share Module</name>
+	<description>Logic ECM Group Actions Share Module project</description>
 	<properties>
 		<module.log.level>debug</module.log.level>
 	</properties>
@@ -69,15 +69,25 @@
                 <artifactId>yuicompressor-maven-plugin</artifactId>
             </plugin>
             <plugin>
-				<groupId>org.alfresco.maven.plugin</groupId>
-				<artifactId>maven-amp-plugin</artifactId>
-			</plugin>
+                <groupId>org.alfresco.maven.plugin</groupId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
+            </plugin>
 		</plugins>
 		<!--
 			Copies and filters resources in build folder so maven-amp-plugin can
 			pick them up
 		-->
 		<resources>
+			<resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>

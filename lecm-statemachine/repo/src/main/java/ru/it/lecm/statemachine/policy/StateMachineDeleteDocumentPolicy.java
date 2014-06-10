@@ -20,10 +20,15 @@ public class StateMachineDeleteDocumentPolicy implements NodeServicePolicies.Bef
 	private PolicyComponent policyComponent;
 
 	final static Logger logger = LoggerFactory.getLogger(StateMachineDeleteDocumentPolicy.class);
+    private StateMachineHelper stateMachineHelper;
 
-	public void setPolicyComponent(PolicyComponent policyComponent) {
+    public void setPolicyComponent(PolicyComponent policyComponent) {
 		this.policyComponent = policyComponent;
 	}
+
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
 
 	public final void init() {
 		logger.debug( "Installing Policy ...");
@@ -35,10 +40,11 @@ public class StateMachineDeleteDocumentPolicy implements NodeServicePolicies.Bef
 
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
-        StateMachineHelper helper = new StateMachineHelper();
-        if (helper.hasActiveStatemachine(nodeRef)) {
-            String processId = helper.getStatemachineId(nodeRef);
-            helper.terminateProcess(processId);
+        if (stateMachineHelper.hasActiveStatemachine(nodeRef)) {
+            String processId = stateMachineHelper.getStatemachineId(nodeRef);
+            stateMachineHelper.terminateProcess(processId);
         }
     }
+
+
 }

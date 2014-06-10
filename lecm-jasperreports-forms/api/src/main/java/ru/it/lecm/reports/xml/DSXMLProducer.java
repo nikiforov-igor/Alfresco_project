@@ -448,7 +448,7 @@ public class DSXMLProducer {
 
 		/* вывод колонок ... */
         for (ReportDescriptor sdesc : srcSubReports) {
-            if (sdesc instanceof SubReportDescriptorImpl) {
+            if (sdesc.isSubReport()) {
                 final Element nodeColItem = xmlCreateSubreportNode(doc, xmlNodeItemName, (SubReportDescriptorImpl)sdesc);
                 nodeFields.appendChild(nodeColItem);
             }
@@ -1125,5 +1125,9 @@ public class DSXMLProducer {
      */
     public static IdRContent makeDsXmlId(ReportDescriptor desc) {
         return IdRContent.createId(desc, makeDsConfigFileName(desc.getMnem()));
+    }
+
+    public static IdRContent makeImportXmlId(ReportDescriptor desc) {
+        return IdRContent.createId(desc, String.format("%s.xml", desc.getMnem()));
     }
 }

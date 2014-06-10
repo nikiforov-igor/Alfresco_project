@@ -5,6 +5,7 @@ import org.alfresco.service.namespace.QName;
 
 import java.util.List;
 import java.util.Map;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -32,4 +33,12 @@ public interface DocumentFrequencyAnalysisService {
     NodeRef getFrequencyUnit(NodeRef employee, String docType, String actionId);
 
     List<NodeRef> getFrequencyUnits(NodeRef employee, String docType);
+
+	NodeRef createDocTypeFolder(NodeRef employee) throws WriteTransactionNeededException;
+
+	public NodeRef createFrequencyUnit(final NodeRef employee, final String docType, final String actionId) throws WriteTransactionNeededException;
+
+	NodeRef getWorkDirectory(final NodeRef employee);
+
+	NodeRef createWorkDirectory(NodeRef employee, String docType) throws WriteTransactionNeededException;
 }

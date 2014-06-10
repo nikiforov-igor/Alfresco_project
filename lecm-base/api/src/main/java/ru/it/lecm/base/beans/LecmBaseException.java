@@ -6,4 +6,21 @@ package ru.it.lecm.base.beans;
  * Time: 11:15
  */
 public class LecmBaseException extends Exception {
+
+    public LecmBaseException() {
+        super();
+    }
+
+    public LecmBaseException(String message) {
+        super(message);
+    }
+
+    public LecmBaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public LecmBaseException(Throwable cause) {
+        super(cause);
+    }
+    
 }

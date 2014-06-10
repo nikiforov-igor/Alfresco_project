@@ -131,12 +131,12 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
 				String attrName = attr.getName().toPrefixString(namespaceService);
 				if (!existFields.contains(attrName) && !attrName.endsWith("-ref") && !attrName.endsWith("-text-content")) {
 					JSONObject propJson = new JSONObject();
-					propJson.put("title", attr.getTitle() != null ? attr.getTitle() : "");
+					propJson.put("title", attr.getTitle(dictionaryService) != null ? attr.getTitle(dictionaryService) : "");
 					propJson.put("name", attrName);
 					if (attr instanceof PropertyDefinition) {
-						propJson.put("type", ((PropertyDefinition) attr).getDataType().getTitle());
+						propJson.put("type", ((PropertyDefinition) attr).getDataType().getTitle(dictionaryService));
 					} else if (attr instanceof AssociationDefinition) {
-						propJson.put("type", ((AssociationDefinition) attr).getTargetClass().getTitle());
+						propJson.put("type", ((AssociationDefinition) attr).getTargetClass().getTitle(dictionaryService));
 					}
 
 					fieldsJson.put(propJson);

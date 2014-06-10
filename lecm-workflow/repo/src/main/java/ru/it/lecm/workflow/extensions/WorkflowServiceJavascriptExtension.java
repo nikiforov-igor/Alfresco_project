@@ -55,17 +55,27 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 			NodeRef assigneesList;
 			if (hasRouteRef) {
 				NodeRef parentRef = new NodeRef(json.getString("routeRef"));
-				String creator  = (String)nodeService.getProperty(parentRef, ContentModel.PROP_CREATOR);
+				String creator = (String) nodeService.getProperty(parentRef, ContentModel.PROP_CREATOR);
 				NodeRef employeeRef = orgstructureService.getEmployeeByPerson(creator);
 				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(parentRef, workflowType, employeeRef);
+				String assigneesListConcurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesList);
+				if (!LecmWorkflowModel.CONCURRENCY_PAR.equals(assigneesListConcurrency) && !LecmWorkflowModel.CONCURRENCY_SEQ.equals(assigneesListConcurrency)) {
+					workflowAssigneesListService.setAssigneesListConcurrency(assigneesList, concurrency);
+				} else {
+					concurrency = assigneesListConcurrency;
+				}
 			} else {
 				assigneesList = workflowAssigneesListService.getDefaultAssigneesList(workflowType);
-			}
-			String assigneesListConcurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesList);
-			if (!LecmWorkflowModel.CONCURRENCY_PAR.equals(assigneesListConcurrency) && !LecmWorkflowModel.CONCURRENCY_SEQ.equals(assigneesListConcurrency)) {
-				workflowAssigneesListService.setAssigneesListConcurrency(assigneesList, concurrency);
-			} else {
-				concurrency = assigneesListConcurrency;
+				String assigneesListConcurrency = workflowAssigneesListService.getAssigneesListConcurrency(assigneesList);
+				if (!concurrency.equals(assigneesListConcurrency)) {
+					if (LecmWorkflowModel.CONCURRENCY_PAR.equals(concurrency) || LecmWorkflowModel.CONCURRENCY_SEQ.equals(concurrency)) {
+						workflowAssigneesListService.setAssigneesListConcurrency(assigneesList, concurrency);
+					} else if (assigneesListConcurrency != null) {
+						concurrency = assigneesListConcurrency;
+					} else {
+						concurrency = LecmWorkflowModel.CONCURRENCY_SEQ;
+					}
+				}
 			}
 
 			result.put("defaultList", assigneesList);
@@ -157,14 +167,8 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 	 * Получить содержимое листа согласующих
 	 *
 	 * @param json { "nodeRef": "NodeRef на список согласующих" }
-	 * @return {
-	 * "listName": "имя листа согласующих",
-	 * "listItems": [ {
-	 * "order": 0,
-	 * "nodeRef": "NodeRef на сотрудника",
-	 * "dueDate": ""
-	 * } ]
-	 * }
+	 * @return { "listName": "имя листа согласующих", "listItems": [ { "order": 0, "nodeRef": "NodeRef на сотрудника",
+	 * "dueDate": "" } ] }
 	 */
 	public JSONObject getAssigneesListContents(final JSONObject json) {
 		String nodeRefStr;
@@ -243,14 +247,9 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 	/**
 	 * Увеличить или уменьшить порядок элемента списка согласующих.
 	 *
-	 * @param json {
-	 * "assigneeItemNodeRef": "NodeRef элемента списка согласующих",
-	 * "moveDirection": "up" || "down"
-	 * }
-	 * @return {
-	 * "success": true|false (произошло ли перемещение по списку),
-	 * "assigneesListNodeRef": "NodeRef списка согласующих"
-	 * }
+	 * @param json { "assigneeItemNodeRef": "NodeRef элемента списка согласующих", "moveDirection": "up" || "down" }
+	 * @return { "success": true|false (произошло ли перемещение по списку), "assigneesListNodeRef": "NodeRef списка
+	 * согласующих" }
 	 */
 	public JSONObject changeOrder(final JSONObject json) {
 		String listItemNodeRefStr, direction;

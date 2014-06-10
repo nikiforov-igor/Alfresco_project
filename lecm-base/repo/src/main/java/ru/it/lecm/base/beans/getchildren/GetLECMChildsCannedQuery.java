@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.*;
+import org.alfresco.service.cmr.repository.NodeService;
 
 /**
  * Класс, реализующий запрос и фильтрацию для получение списка child элементов ноды
@@ -49,8 +50,8 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 	private NodePropertyHelper nodePropertyHelper;
 	private boolean applyPostQueryPermissions = false;
 
-	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params) {
-		super(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, methodSecurity, params);
+	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params) {
+		super(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, params);
 		this.nodeDAO = nodeDAO;
 		this.qnameDAO = qnameDAO;
 		this.cannedQueryDAO = cannedQueryDAO;

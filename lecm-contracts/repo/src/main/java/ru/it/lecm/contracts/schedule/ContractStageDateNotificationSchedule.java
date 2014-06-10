@@ -43,7 +43,7 @@ public class ContractStageDateNotificationSchedule extends AbstractScheduledActi
     private NodeService nodeService;
     private DocumentService documentService;
 
-    DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+    DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public ContractStageDateNotificationSchedule() {
         super();

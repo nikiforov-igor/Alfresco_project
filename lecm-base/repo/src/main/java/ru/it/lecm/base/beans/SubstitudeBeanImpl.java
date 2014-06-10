@@ -208,7 +208,6 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     }
 
     public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
-    private ServiceRegistry serviceRegistry;
     private NamespaceService namespaceService;
     private DictionaryBean dictionaryService;
     private String dateFormat = "yyyy-MM-dd HH:mm";
@@ -674,10 +673,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return expressions;
     }
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-        this.serviceRegistry = serviceRegistry;
-    }
-
+    
     public void init() {
         namespaceService = getServiceRegistry().getNamespaceService();
         nodeService = getServiceRegistry().getNodeService();

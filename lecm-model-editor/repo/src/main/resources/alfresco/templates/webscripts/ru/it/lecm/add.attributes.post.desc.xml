@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Add attributes to form</shortname>
-	<description>Add attributes to form</description>
-	<url>/lecm/docforms/addAttributes</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-</webscript>

@@ -12,11 +12,11 @@ import org.json.JSONException;
 import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.actions.bean.GroupActionsServiceImpl;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.*;
+import ru.it.lecm.actions.bean.GroupActionsService;
 
 /**
  * User: pmelnikov
@@ -25,7 +25,7 @@ import java.util.*;
  */
 public class GroupActionsScript extends BaseWebScript {
 
-    private GroupActionsServiceImpl actionsService;
+    private GroupActionsService actionsService;
     private DocumentService documentService;
     private DictionaryService dictionaryService;
     private NamespaceService namespaceService;
@@ -37,7 +37,7 @@ public class GroupActionsScript extends BaseWebScript {
         return new ScriptNode(home, serviceRegistry, getScope());
     }
 
-    public void setActionsService(GroupActionsServiceImpl actionsService) {
+    public void setActionsService(GroupActionsService actionsService) {
         this.actionsService = actionsService;
     }
 

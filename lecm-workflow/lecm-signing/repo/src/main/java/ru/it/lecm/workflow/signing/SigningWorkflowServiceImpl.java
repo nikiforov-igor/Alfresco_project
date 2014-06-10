@@ -23,6 +23,7 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
@@ -69,6 +70,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
+	@Override
 	public void reassignTask(NodeRef assignee, DelegateTask task) {
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
@@ -76,7 +78,7 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 	}
 
 	@Override
-	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
+	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) throws WriteTransactionNeededException {
 		String decisionMessage;
 		String decision = (String) task.getVariableLocal("lecmSign_signTaskResult");
 		Date dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
@@ -127,8 +129,8 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 		properties = nodeService.getProperties(resultListItemRef);
 
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE, DateUtils.truncate(taskDecision.getStartDate(), Calendar.DATE));
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_START_DATE, taskDecision.getStartDate());
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_FINISH_DATE, new Date());
 		properties.put(SigningWorkflowModel.PROP_SIGN_RESULT_ITEM_DECISION, taskDecision.getDecision());
 
 		nodeService.setProperties(resultListItemRef, properties);
@@ -271,11 +273,17 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		return resultList;
 	}
 
+	//TODO Refactoring in progress... check getOrCreate
 	@Override
 	public NodeRef getOrCreateSigningFolderContainer(NodeRef parentRef) {
 		NodeRef resultListRoot = getFolder(parentRef, "Подписание");
 		if (resultListRoot == null) {
-			resultListRoot = createFolder(parentRef, "Подписание");
+			try {
+				resultListRoot = createFolder(parentRef, "Подписание");
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't create folder.", ex);
+				throw new RuntimeException(ex);
+			}
 		}
 		return resultListRoot;
 	}

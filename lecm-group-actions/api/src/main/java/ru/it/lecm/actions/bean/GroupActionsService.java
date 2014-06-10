@@ -12,22 +12,29 @@ import java.util.List;
  */
 public interface GroupActionsService {
 
-    public static final String GA_ROOT_ID = "GA_ROOT_ID";
-    public static final String GA_ROOT_NAME = "Сервис Групповые операции";
+    String GA_ROOT_ID = "GA_ROOT_ID";
+    String GA_ROOT_NAME = "Сервис Групповые операции";
 
-    public static final String NAMESPACE_URI = "http://www.it.ru/lecm/group-actions/1.0";
+    String NAMESPACE_URI = "http://www.it.ru/lecm/group-actions/1.0";
 
-    public static final QName TYPE_GROUP_ACTION = QName.createQName(NAMESPACE_URI, "action");
+    QName TYPE_GROUP_ACTION = QName.createQName(NAMESPACE_URI, "base-action");
+    QName TYPE_GROUP_SCRIPT_ACTION = QName.createQName(NAMESPACE_URI, "script-action");
+    QName TYPE_GROUP_WORKFLOW_ACTION = QName.createQName(NAMESPACE_URI, "workflow-action");
+    QName TYPE_GROUP_DOCUMENT_ACTION = QName.createQName(NAMESPACE_URI, "document-action");
 
-    public static final QName PROP_TYPE = QName.createQName(NAMESPACE_URI, "type");
-    public static final QName PROP_STATUSES = QName.createQName(NAMESPACE_URI, "statuses");
-    public static final QName PROP_EXPRESSION = QName.createQName(NAMESPACE_URI, "expression");
-    public static final QName PROP_IS_GROUP = QName.createQName(NAMESPACE_URI, "isGroup");
-    public static final QName PROP_FOR_COLLECTION = QName.createQName(NAMESPACE_URI, "forCollection");
-    public static final QName PROP_ORDER = QName.createQName(NAMESPACE_URI, "order");
-    public static final QName PROP_SCRIPT = QName.createQName(NAMESPACE_URI, "script");
+    QName PROP_TYPE = QName.createQName(NAMESPACE_URI, "type");
+    QName PROP_STATUSES = QName.createQName(NAMESPACE_URI, "statuses");
+    QName PROP_EXPRESSION = QName.createQName(NAMESPACE_URI, "expression");
+    QName PROP_IS_GROUP = QName.createQName(NAMESPACE_URI, "isGroup");
+    QName PROP_FOR_COLLECTION = QName.createQName(NAMESPACE_URI, "forCollection");
+    QName PROP_ORDER = QName.createQName(NAMESPACE_URI, "order");
+    QName PROP_SCRIPT = QName.createQName(NAMESPACE_URI, "script");
+    QName PROP_DOCUMENT_TYPE = QName.createQName(NAMESPACE_URI, "document-type");
+    QName PROP_DOCUMENT_CONNECTION = QName.createQName(NAMESPACE_URI, "document-connection");
+    QName PROP_DOCUMENT_CONNECTION_SYSTEM = QName.createQName(NAMESPACE_URI, "document-connection-system");
+    QName PROP_WORKFLOW = QName.createQName(NAMESPACE_URI, "workflow");
 
-    public NodeRef getHomeRef();
+    NodeRef getHomeRef();
 
     /**
      * Вывод груповвых действий для набора документов
@@ -35,7 +42,7 @@ public interface GroupActionsService {
      * @param forItems
      * @return
      */
-    public List<NodeRef> getActiveGroupActions(List<NodeRef> forItems);
+    List<NodeRef> getActiveGroupActions(List<NodeRef> forItems);
 
     /**
      * Вывод не груповвых действий для документа
@@ -43,6 +50,7 @@ public interface GroupActionsService {
      * @param item
      * @return
      */
-    public List<NodeRef> getActiveActions(NodeRef item);
+    List<NodeRef> getActiveActions(NodeRef item);
 
+	List<String> getAspects();
 }

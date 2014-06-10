@@ -17,6 +17,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -155,23 +158,27 @@ public class UserTempDirectoryCleanSchedule extends AbstractScheduledAction {
 			}
 			for (NodeRef person: allPersons) {
                 if (person != null) {
-                    NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
-                    if (tempDirectory != null) {
-                        List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
-                        if (childs != null) {
-                            for (ChildAssociationRef child : childs) {
-                                NodeRef nodeRef = child.getChildRef();
+					try {
+						NodeRef tempDirectory = repositoryStructureHelper.getUserTemp(person, false);
+						if (tempDirectory != null) {
+							List<ChildAssociationRef> childs = nodeService.getChildAssocs(tempDirectory);
+							if (childs != null) {
+								for (ChildAssociationRef child : childs) {
+									NodeRef nodeRef = child.getChildRef();
 
-                                Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
-                                if (createDate != null && createDate.before(beforeFireTime)) {
-                                    List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
-                                    if (source == null || source.size() == 0) {
-                                        searchFiles.add(nodeRef);
-                                    }
-                                }
-                            }
-                        }
-                    }
+									Date createDate = (Date) nodeService.getProperty(nodeRef, ContentModel.PROP_CREATED);
+									if (createDate != null && createDate.before(beforeFireTime)) {
+										List<AssociationRef> source = nodeService.getSourceAssocs(tempDirectory, RegexQNamePattern.MATCH_ALL);
+										if (source == null || source.size() == 0) {
+											searchFiles.add(nodeRef);
+										}
+									}
+								}
+							}
+						}
+					} catch (WriteTransactionNeededException ex) {
+						throw new RuntimeException(ex);
+					}
                 }
             }
 		}

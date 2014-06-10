@@ -1,10 +1,6 @@
 package ru.it.lecm.notifications.dashlet.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -24,127 +20,109 @@ import ru.it.lecm.notifications.beans.NotificationsService;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.Date;
+import java.util.ArrayList;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
- * User: AIvkin
- * Date: 17.01.13
- * Time: 15:19
+ * User: AIvkin Date: 17.01.13 Time: 15:19
  *
  * Сервис канала уведомления для дашлета
  */
 public class NotificationsDashletChannel extends NotificationChannelBeanBase {
 
-    final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+    final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public static final String NOTIFICATIONS_DASHLET_ROOT_NAME = "Дашлет";
-	public static final String NOTIFICATIONS_DASHLET_ASSOC_QNAME = "dashlet";
+    public static final String NOTIFICATIONS_DASHLET_ROOT_ID = "NOTIFICATIONS_DASHLET_ROOT_ID";
+    public static final String NOTIFICATIONS_DASHLET_ASSOC_QNAME = "dashlet";
 
-	public static final String NOTIFICATIONS_DASHLET_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/dashlet/1.0";
-	public static final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
+    public static final String NOTIFICATIONS_DASHLET_NAMESPACE_URI = "http://www.it.ru/lecm/notifications/dashlet/1.0";
+    public static final QName TYPE_NOTIFICATION_DASHLET = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, "notification");
 
     private final static Logger logger = LoggerFactory.getLogger(NotificationsDashletChannel.class);
 
-    private ServiceRegistry serviceRegistry;
-	private Repository repositoryHelper;
-	protected NotificationsService notificationsService;
+
+    protected NotificationsService notificationsService;
     private NamespaceService namespaceService;
-    private NodeRef rootRef;
 
-    public void setServiceRegistry(ServiceRegistry serviceRegistry) {
-		this.serviceRegistry = serviceRegistry;
-	}
+    public void setNotificationsService(NotificationsService notificationsService) {
+        this.notificationsService = notificationsService;
+    }
 
-    public void setRepositoryHelper(Repository repositoryHelper) {
-		this.repositoryHelper = repositoryHelper;
-	}
-
-	public void setNotificationsService(NotificationsService notificationsService) {
-		this.notificationsService = notificationsService;
-	}
-
-	public NodeRef getRootRef() {
-		return rootRef;
-	}
+    public NodeRef getRootRef() {
+        return getFolder(NOTIFICATIONS_DASHLET_ROOT_ID);
+    }
 
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
 
-	/**
-	 * Метод инициализвции сервиса
-	 * Создает рабочую директорию - если она еще не создана.
-	 */
-	public void init() {
-		final String rootName = NOTIFICATIONS_DASHLET_ROOT_NAME;
-		repositoryHelper.init();
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef rootRef = nodeService.getChildByName(notificationsService.getNotificationsRootRef(), ContentModel.ASSOC_CONTAINS, rootName);
-						if (rootRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, NOTIFICATIONS_DASHLET_ASSOC_QNAME);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+    /**
+     * Метод инициализвции сервиса Создает рабочую директорию - если она еще не
+     * создана.
+     */
+    public void init() {
+        //создание каталога вынесено в service-context
+    }
 
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, rootName);
-							ChildAssociationRef associationRef = nodeService.createNode(notificationsService.getNotificationsRootRef(), assocTypeQName, assocQName, nodeTypeQName, properties);
-							rootRef = associationRef.getChildRef();
-						}
-						return rootRef;
-					}
-				});
-			}
-		};
-		this.rootRef = AuthenticationUtil.runAsSystem(raw);
-	}
-
-	@Override
-	public boolean sendNotification(NotificationUnit notification) {
-		return createNotification(notification) != null;
-	}
-
-	/**
-	 * Создание уведомления для дашлета
-	 *
-	 * @param notification Атомарное уведомление
-	 * @return Ссылка на уведомление для дашлета
-	 */
-	private NodeRef createNotification(NotificationUnit notification) {
-        String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
-		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
-
-        properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
-		properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
-		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
-
-		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName);
-
-        ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
-				QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, GUID.generate()),
-				TYPE_NOTIFICATION_DASHLET, properties);
-
-		NodeRef result = associationRef.getChildRef();
-
-		// создаем ассоциации
-		nodeService.createAssociation(result, notification.getRecipientRef(), NotificationsService.ASSOC_RECIPIENT);
-		return result;
-	}
+    @Override
+    public boolean sendNotification(NotificationUnit notification) {
+        try {
+            return createNotification(notification) != null;
+        } catch (WriteTransactionNeededException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     /**
-     * Метод, возвращающий список ссылок на уведомления, сформированные за заданный период
+     * Создание уведомления для дашлета
+     *
+     * @param notification Атомарное уведомление
+     * @return Ссылка на уведомление для дашлета
+     */
+    //TODO DONE Refactoring in progress
+    private NodeRef createNotification(NotificationUnit notification) throws WriteTransactionNeededException {
+        String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
+
+        properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
+        properties.put(NotificationsService.PROP_DESCRIPTION, notification.getDescription());
+        properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
+
+        NodeRef rootRef = getRootRef();
+        List<String> directoryPath = getDirectoryPath(employeeName, null);
+        NodeRef saveDirectoryRef = getFolder(rootRef, directoryPath);
+        //Судя по тому, что нода создаётся, транзакция должна быть.
+        if (null == saveDirectoryRef) {
+            saveDirectoryRef = createPath(rootRef, directoryPath);
+        }
+        
+        ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
+                QName.createQName(NOTIFICATIONS_DASHLET_NAMESPACE_URI, GUID.generate()),
+                TYPE_NOTIFICATION_DASHLET, properties);
+
+        NodeRef result = associationRef.getChildRef();
+
+        // создаем ассоциации
+        nodeService.createAssociation(result, notification.getRecipientRef(), NotificationsService.ASSOC_RECIPIENT);
+        return result;
+    }
+
+    /**
+     * Метод, возвращающий список ссылок на уведомления, сформированные за
+     * заданный период
      *
      * @param begin - начальная дата
-     * @param end   - конечная дата
+     * @param end - конечная дата
      * @return список ссылок
      */
     public List<NodeRef> getRecordsByInterval(Date begin, Date end) {
         List<NodeRef> records = new ArrayList<NodeRef>(10);
-        NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(this.rootRef);
+        NodeRef employeeDirectoryRef = getCurrentEmployeeFolder(getRootRef());
 
         if (employeeDirectoryRef != null) {
             String path = nodeService.getPath(employeeDirectoryRef).toPrefixString(namespaceService);
@@ -164,7 +142,7 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
                 results = serviceRegistry.getSearchService().query(sp);
                 for (ResultSetRow row : results) {
                     NodeRef currentNodeRef = row.getNodeRef();
-                    if (!isArchive(currentNodeRef)){
+                    if (!isArchive(currentNodeRef)) {
                         records.add(currentNodeRef);
                     }
                 }
@@ -179,8 +157,8 @@ public class NotificationsDashletChannel extends NotificationChannelBeanBase {
         return records;
     }
 
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return rootRef;
-	}
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return getRootRef();
+    }
 }

@@ -1,0 +1,6 @@
+.dnd-uploader .body {
+	height: 500px;
+}
+.dnd-uploader .body .web-preview {
+	height: 100%;
+}

@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get fields for node</shortname>
-	<description>Get fields for node</description>
-	<url>/lecm/arm/settings/fields?nodeRef={nodeRef}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction>none</transaction>
-</webscript>

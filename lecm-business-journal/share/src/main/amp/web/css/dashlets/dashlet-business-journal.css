@@ -1,0 +1,18 @@
+.dashlet.business-journal.yui-resize .yui-resize-handle {
+    z-index: 0;
+}
+.dashlet.business-journal .toolbar {
+    white-space: nowrap;
+}
+.dashlet.business-journal .toolbar .yuimenu .bd {
+    max-height: 200px;
+    overflow: auto;
+}
+.dashlet.business-journal .body .row {
+	line-height: 16px;
+	margin: 10px;
+}
+.business-journal .loading-image-container {
+	text-align: center;
+	visibility: hidden;
+}

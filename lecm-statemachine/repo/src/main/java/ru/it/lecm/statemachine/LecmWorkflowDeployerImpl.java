@@ -1,6 +1,7 @@
 package ru.it.lecm.statemachine;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.alfresco.model.ContentModel;
@@ -25,10 +26,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
 import ru.it.lecm.statemachine.bean.LecmWorkflowDeployer;
 
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+
 import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -53,6 +56,7 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
 	private AuthenticationContext authenticationContext;
 	private TransactionService transactionService;
 	private ServiceRegistry serviceRegistry;
+	private StateMachineHelper stateMachineHelper;
 
 	private static final String ENGINE_ID = "activiti";
 	private static final String MIMETYPE = "text/xml";
@@ -119,9 +123,10 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
                     logger.debug("It is a new definition. Create new definition.");
 					deploy(ENGINE_ID, MIMETYPE, new ByteArrayInputStream(bytes), fileName);
 				}
-				logger.debug("Statemachine " + fileName + "deployed successfully");
+				logger.debug("Statemachine " + fileName + " deployed successfully");
 			}
 			userTransaction.commit();
+			stateMachineHelper.resetStateMachene();
             logger.debug("Transaction commited. All definitions is refreshed.");
 		} catch (Exception e) {
 			try {
@@ -167,6 +172,10 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
         this.serviceRegistry = serviceRegistry;
     }
 
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
+    
 	private String getProcessKey(InputStream workflowDefinition) throws Exception {
 		try {
 			InputSource inputSource = new InputSource(workflowDefinition);

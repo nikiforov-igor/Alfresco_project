@@ -59,6 +59,14 @@ public class AbsenceStartPolicy implements OnCreateAssociationPolicy {
 		Date today = new Date();
 		absenceService.addBusinessJournalRecord(absenceRef, CalendarCategory.ADD_ABSENCE);
 		if (absenceBegin.compareTo(today) <= 0) {
+//			TODO: Метод absenceService.startAbsence в итоге дёргает метод getDelegationOpts,
+//			который ранее был типа getOrCreate, поэтому надо произвести проверку здесь и при необходимости создать
+//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
+//                      NodeRef employee = absenceService.getEmployeeByAbsence(absenceRef);
+//			if(delegationService.getDelegationOpts(employee) == null) {
+////				Уже выполняется в транзакции, дополнительная не нужна
+//				delegationService.createDelegationOpts(employee);
+//			}
 			absenceService.startAbsence(absenceRef);
 			logger.debug(String.format("Policy AbsenceStartPolicy invoked on %s for employee %s", absenceRef.toString(), nodeAssocRef.getTargetRef().toString()));
 		}

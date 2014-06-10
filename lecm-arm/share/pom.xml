@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.it.lecm.arm</groupId>
         <artifactId>arm</artifactId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <artifactId>arm-share</artifactId>
@@ -63,15 +63,25 @@
                 <artifactId>yuicompressor-maven-plugin</artifactId>
             </plugin>
             <plugin>
-				<groupId>org.alfresco.maven.plugin</groupId>
-				<artifactId>maven-amp-plugin</artifactId>
-			</plugin>
+                <groupId>org.alfresco.maven.plugin</groupId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
+            </plugin>
 		</plugins>
 		<!--
 			Copies and filters resources in build folder so maven-amp-plugin can
 			pick them up
 		-->
 		<resources>
+			<resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>

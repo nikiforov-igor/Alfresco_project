@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReposioryPermissions>
+	<BusinessRole id="*">
+		<Permission object="Контрагенты" permissionGroup="Collaborator"/>
+		<Permission object="Адресанты" permissionGroup="Collaborator"/>
+		<Permission object="Контрагенты Специализации" permissionGroup="Collaborator"/>
+	</BusinessRole>
+</ReposioryPermissions>

@@ -16,7 +16,9 @@ import java.io.Serializable;
 import org.alfresco.repo.policy.Behaviour;
 
 /**
- * Policy которая обеспечивает автоматическое создание параметров делегирования для сотрудников
+ * Policy которая обеспечивает автоматическое создание параметров делегирования
+ * для сотрудников
+ *
  * @author VLadimir Malygin
  * @since 12.12.2012 12:21:40
  * @see <p>mailto: <a href="mailto:vmalygin@it.ru">vmalygin@it.ru</a></p>
@@ -24,46 +26,49 @@ import org.alfresco.repo.policy.Behaviour;
 //BeforeDeleteNodePolicy OnRestoreNodePolicy пока не буду реализовывать, потому что непонятно а надо ли
 public class DelegationOptsPolicy implements OnUpdateNodePolicy {
 
-	private final static Logger logger = LoggerFactory.getLogger (DelegationOptsPolicy.class);
+    private final static Logger logger = LoggerFactory.getLogger(DelegationOptsPolicy.class);
 
-	private PolicyComponent policyComponent;
-	private IDelegation delegationService;
+    private PolicyComponent policyComponent;
+    private IDelegation delegationService;
     private NodeService nodeService;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
-	public final void init () {
-		PropertyCheck.mandatory (this, "policyComponent", policyComponent);
+    public final void init() {
+        PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 
-		policyComponent.bindClassBehaviour (OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour (this, "onUpdateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-	}
+        policyComponent.bindClassBehaviour(OnUpdateNodePolicy.QNAME, OrgstructureBean.TYPE_EMPLOYEE, new JavaBehaviour(this, "onUpdateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+    }
 
-	public void setPolicyComponent (PolicyComponent policyComponent) {
-		this.policyComponent = policyComponent;
-	}
+    public void setPolicyComponent(PolicyComponent policyComponent) {
+        this.policyComponent = policyComponent;
+    }
 
-	public void setDelegationService (IDelegation delegationService) {
-		this.delegationService = delegationService;
-	}
+    public void setDelegationService(IDelegation delegationService) {
+        this.delegationService = delegationService;
+    }
 
-	@Override
-	public void onUpdateNode (final NodeRef nodeRef) {
-		// nodeRef это employeeRef
+    @Override
+    //TODO здесь проверяются и создаются настройки делегирования. может быть делать это onCreate, а не onUpdateNode
+    public void onUpdateNode(final NodeRef nodeRef) {
+        // nodeRef это employeeRef
 
-        Serializable employeeName = nodeService.getProperty (nodeRef, ContentModel.PROP_NAME);
-        Serializable employeeFirstName = nodeService.getProperty (nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
+        Serializable employeeName = nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        Serializable employeeFirstName = nodeService.getProperty(nodeRef, OrgstructureBean.PROP_EMPLOYEE_LAST_NAME);
 
-        if (employeeName == null || employeeFirstName == null || employeeName.toString().length() == 0 || employeeFirstName.toString().length() == 0 ){
+        if (employeeName == null || employeeFirstName == null || employeeName.toString().length() == 0 || employeeFirstName.toString().length() == 0) {
             return;
         }
 
-        if (employeeName.toString().indexOf( employeeFirstName.toString() ) >= 0){
-            delegationService.getOrCreateDelegationOpts (nodeRef);
-		    logger.debug("employee with nodeRef '{}' sucessfully updated", nodeRef);
+        if (employeeName.toString().contains(employeeFirstName.toString())) {
+            if (null==delegationService.getDelegationOpts(nodeRef)) {
+                delegationService.createDelegationOpts(nodeRef);
+            }
+            logger.debug("employee with nodeRef '{}' sucessfully updated", nodeRef);
         } else {
-            logger.warn("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString() );
+            logger.warn("employee with name '{}'  and fisrt name '{}' not updated", employeeName.toString(), employeeFirstName.toString());
         }
-	}
+    }
 }

@@ -2,7 +2,6 @@ package ru.it.lecm.workflow.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,10 +12,10 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
@@ -123,7 +122,7 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 		properties.put(ContentModel.PROP_NAME, resultListName);
 		properties.put(ContentModel.PROP_TITLE, resultListName);
-		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE, DateUtils.truncate(new Date(), Calendar.DATE));
+		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_START_DATE, new Date());
 		properties.put(WorkflowResultModel.PROP_WORKFLOW_RESULT_LIST_DOCUMENT_VERSION, documentVersion);
 		QName assocQName = QName.createQName(WorkflowResultModel.WORKFLOW_RESULT_NAMESPACE, resultListName);
 		NodeRef resultListRef = nodeService.createNode(parentRef, ContentModel.ASSOC_CONTAINS, assocQName, resultListType, properties).getChildRef();
@@ -145,7 +144,12 @@ public class WorkflowResultListServiceImpl extends BaseBean implements WorkflowR
 			NodeRef globalWorkflowResultFolder = workflowFoldersService.getGlobalResultFolder();
 			workflowResultRoot = getFolder(globalWorkflowResultFolder, nodeUUID);
 			if (workflowResultRoot == null) {
+				try {
 				workflowResultRoot = createFolder(globalWorkflowResultFolder, nodeUUID);
+				} catch (WriteTransactionNeededException ex) {
+					logger.debug("Can't create folder.", ex );
+					throw new RuntimeException(ex);
+			}
 			}
 		} else {
 			logger.error("There is no any lecm-contract:document nor cm:content  in bpm:package");

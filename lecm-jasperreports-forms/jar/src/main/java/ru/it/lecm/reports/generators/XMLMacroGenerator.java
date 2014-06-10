@@ -721,7 +721,7 @@ public class XMLMacroGenerator {
 
         public void doParamsListMacroExpansion(ReportDescriptor descriptor) {
             if (descriptor != null) {
-                if (descriptor.isSubReport() && descriptor instanceof SubReportDescriptorImpl) {//для подотчетов только!!
+                if (descriptor.isSubReport()) {//для подотчетов только!!
                     SubReportDescriptorImpl subReport = (SubReportDescriptorImpl)descriptor;
                     ReportDescriptor parentReport = subReport.getOwnerReport();
                     if (parentReport != null) {// для подотчета параметрами будут считаться поля из родительского отчета
@@ -791,7 +791,7 @@ public class XMLMacroGenerator {
                 this.curVars.calcAllNext(CalcPhase.start); // инициализация ...
 
                 for (ReportDescriptor sub : subReports) {
-                    if (sub instanceof SubReportDescriptorImpl) {
+                    if (sub.isSubReport()) {
                         SubReportDescriptorImpl subReportWrapper = ((SubReportDescriptorImpl) sub);
                         if (subReportWrapper.getParentTemplate() == null ||
                                 parentTemplate.getMnem().equals(subReportWrapper.getParentTemplate().getMnem())) {

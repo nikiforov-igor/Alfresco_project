@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.incoming</groupId>
         <artifactId>incoming</artifactId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <artifactId>incoming-repo</artifactId>
@@ -141,14 +141,33 @@
             </plugin>
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
-                <artifactId>maven-amp-plugin</artifactId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jasperreports-maven-plugin</artifactId>
+                <configuration>
+                    <sourceDirectory>src/main/amp/reportdefinitions</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/${project.build.finalName}/reportdefinitions</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp/reportdefinitions</directory>
+                <targetPath>reportdefinitions</targetPath>
+            </resource>
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
@@ -162,18 +181,13 @@
              naming single sourcing from POM properties
          -->
             <resource>
-                <filtering>true</filtering>
-                <directory>src/main/config</directory>
-                <targetPath>alfresco/module/${project.artifactId}</targetPath>
-                <excludes>
-                    <exclude>**README-*</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/config/reportdefinitions</directory>
-                <targetPath>reportdefinitions</targetPath>
-            </resource>
+            <filtering>true</filtering>
+            <directory>src/main/config</directory>
+            <targetPath>alfresco/module/${project.artifactId}</targetPath>
+            <excludes>
+                <exclude>**README-*</exclude>
+            </excludes>
+        </resource>
         </resources>
     </build>
 </project>

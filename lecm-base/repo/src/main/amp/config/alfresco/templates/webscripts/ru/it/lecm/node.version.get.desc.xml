@@ -1,0 +1,12 @@
+<webscript>
+	<shortname>Base: получение версии узла</shortname>
+	<description>
+	Возвращает версию узла из аспекта, принимает параметр:
+	nodeRef
+	</description>
+	<url>/lecm/node/version?nodeRef={nodeRef}</url>
+	<format default="json">argument</format>
+	<authentication>user</authentication>
+	<transaction allow="readonly">required</transaction>
+	<lifecycle>internal</lifecycle>
+</webscript>

@@ -1,15 +1,18 @@
 package ru.it.lecm.workflow.review.extensions;
 
-import java.util.Date;
-import java.util.List;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNodeList;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -18,7 +21,7 @@ import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
 public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 
 	private ReviewWorkflowService reviewWorkflowService;
-
+	
 	public void setReviewWorkflowService(ReviewWorkflowService reviewWorkflowService) {
 		this.reviewWorkflowService = reviewWorkflowService;
 	}
@@ -37,15 +40,40 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void assignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		reviewWorkflowService.assignTask(assignee.getNodeRef(), task);
+		NodeRef employeeRef = assignee.getNodeRef();
+                //		TODO: Метод assignTask через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
+            try {    
+                reviewWorkflowService.assignTask(employeeRef, task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't assign task.", ex);
+            }
+	}
+
+    public void actualizeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
+		NodeRef employeeRef = assignee.getNodeRef();
+        reviewWorkflowService.actualizeTask(employeeRef, task);
 	}
 
 	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		reviewWorkflowService.reassignTask(assignee.getNodeRef(), task);
+            try {
+                reviewWorkflowService.reassignTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't reassign task.", ex);
+            }
 	}
 
 	public void completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		reviewWorkflowService.completeTask(assignee.getNodeRef(), task);
+            try {
+                reviewWorkflowService.completeTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't complete task.", ex);
+            }
 	}
 
 	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {
@@ -66,7 +94,11 @@ public class ReviewWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void sendBareNotifications(final ActivitiScriptNodeList assigneesList, final Date workflowDueDate, final ActivitiScriptNode bpmPackage) {
-		reviewWorkflowService.sendBareNotifications(assigneesList.getNodeReferences(), workflowDueDate, bpmPackage.getNodeRef());
+                try {
+                    reviewWorkflowService.sendBareNotifications(assigneesList.getNodeReferences(), workflowDueDate, bpmPackage.getNodeRef());
+                } catch (WriteTransactionNeededException ex) {
+                    throw new WebScriptException(ex.getMessage(), ex);
+                }
 	}
 
 }

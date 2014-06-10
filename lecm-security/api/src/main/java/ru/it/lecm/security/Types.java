@@ -160,7 +160,7 @@ public final class Types {
 				return new SGOrgUnit(objId, displayName);
             if (this == SG_PRIVATE_OU)
                 return new SGOrgUnitPrivate(objId, displayName);
-            if (this == SG_SV)
+			if (this == SG_SV)
 				return new SGSuperVisor(objId, displayName);
 			if (this == SG_BR)
 				return new SGBusinessRole(objId, displayName);
@@ -521,7 +521,7 @@ public final class Types {
 
 	}
 
-    /**
+	/**
      * Индикатор орг-штатной единицы.
      * название или Id объекта Альфреско можно использовать как super.id
      */

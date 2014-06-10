@@ -13,7 +13,10 @@ import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.mozilla.javascript.Context;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: AIvkin
@@ -25,7 +28,13 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 	private DocumentService documentService;
 	protected NodeService nodeService;
 	private NamespaceService namespaceService;
+	private LecmTransactionHelper lecmTransactionHelper;
 
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+            this.lecmTransactionHelper = lecmTransactionHelper;
+        }
+
+        
 	public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
 		this.documentConnectionService = documentConnectionService;
 	}
@@ -42,20 +51,52 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		this.namespaceService = namespaceService;
 	}
 
+	/**
+	 * Получение папки для связей в документе
+	 * @param documentNodeRef документ
+	 * @return папка со связями
+	 */
 	public ScriptNode getRootFolder(String documentNodeRef) {
-		org.alfresco.util.ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+        org.alfresco.util.ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
-		NodeRef documentRef = new NodeRef(documentNodeRef);
+        final NodeRef documentRef = new NodeRef(documentNodeRef);
 
-		if (this.nodeService.exists(documentRef)) {
-			NodeRef attachmentsRoot = this.documentConnectionService.getRootFolder(documentRef);
-			if (attachmentsRoot != null) {
-				return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
-			}
-		}
-		return null;
-	}
+        if (this.nodeService.exists(documentRef)) {
+            //TODO : Вынести создание rootFolder в машину состояний
+            //Сейчас папка связей создаётся здесь, иначе возникают проблемы с созданием связей: нет parentRef для вызова формы создания связи
 
+            NodeRef connectionsRoot = this.documentConnectionService.getRootFolder(documentRef);
+
+            if (null == connectionsRoot) {
+                AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
+                    @Override
+                    public NodeRef doWork() throws Exception {
+                        return lecmTransactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                            @Override
+                            public NodeRef execute() throws Throwable {
+                                return documentConnectionService.createRootFolder(documentRef);
+                            }
+                        }, false);
+                    }
+
+                };
+                connectionsRoot = AuthenticationUtil.runAsSystem(raw);
+            }
+        //TODO : Вынести создание rootFolder в машину состояний
+            
+            if (connectionsRoot != null) {
+                return new ScriptNode(connectionsRoot, this.serviceRegistry, getScope());
+            }
+        }
+        return null;
+    }
+
+	/**
+	 * Получение типа связи по умолчанию. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentNodeRef nodeRef основного документа
+	 * @param connectedDocumentRefOrType nodeRef связываемого документа, или его тип
+	 * @return тип связи по умолчанию
+	 */
 	public ScriptNode getDefaultConnectionType(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentRefOrType", connectedDocumentRefOrType);
@@ -84,6 +125,12 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		}
 	}
 
+	/**
+	 * Получение рекомендуемых типов связи. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentNodeRef nodeRef основного документа
+	 * @param connectedDocumentRefOrType nodeRef связываемого документа, или его тип
+	 * @return массив рекомендуемых типов связи
+	 */
 	public Scriptable getRecommendedConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentRefOrType", connectedDocumentRefOrType);
@@ -114,6 +161,12 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		}
 	}
 
+	/**
+	 * Получение доступных типов связи. Берётся из справочника "Доступные типы связи"
+	 * @param primaryDocumentNodeRef nodeRef основного документа
+	 * @param connectedDocumentRefOrType nodeRef связываемого документа, или его тип
+	 * @return массив доступных типов связи
+	 */
 	public Scriptable getAvailableConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentRefOrType) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentRefOrType);
@@ -145,6 +198,12 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 
 	}
 
+	/**
+	 * Получение существующих типов связи между двумя документами
+	 * @param primaryDocumentNodeRef nodeRef основного документа
+	 * @param connectedDocumentNodeRef nodeRef связываемого документа
+	 * @return массив существующих типов связи
+	 */
 	public Scriptable getExistConnectionTypes(String primaryDocumentNodeRef, String connectedDocumentNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
@@ -165,6 +224,11 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение связей документа
+	 * @param documentNodeRef nodeRef документа
+	 * @return массив связей
+	 */
 	public Scriptable getConnections(String documentNodeRef) {
 		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 		NodeRef documentRef = new NodeRef(documentNodeRef);
@@ -175,6 +239,11 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение связей на документ документа
+	 * @param documentNodeRef nodeRef документа
+	 * @return массив связей
+	 */
 	public Scriptable getConnectionsWithDocument(String documentNodeRef) {
 		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 		NodeRef documentRef = new NodeRef(documentNodeRef);
@@ -185,6 +254,12 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение связей на документ документа
+	 * @param documentNodeRef nodeRef документа
+	 * @param checkPermission проверятьли доступность связанного документа
+	 * @return массив связей
+	 */
 	public Scriptable getConnectionsWithDocument(String documentNodeRef, Boolean checkPermission) {
 		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 		NodeRef documentRef = new NodeRef(documentNodeRef);
@@ -195,6 +270,13 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Создание связи
+	 * @param primaryDocumentNodeRef nodeRef основного документа
+	 * @param connectedDocumentNodeRef nodeRef связываемого документа
+	 * @param typeNodeRef nodeRef типа связи
+	 * @return созданная связь
+	 */
 	public ScriptNode createConnection(String primaryDocumentNodeRef, String connectedDocumentNodeRef, String typeNodeRef) {
 		ParameterCheck.mandatory("primaryDocumentNodeRef", primaryDocumentNodeRef);
 		ParameterCheck.mandatory("connectedDocumentNodeRef", connectedDocumentNodeRef);
@@ -213,11 +295,24 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Создание связи
+	 * @param primaryDocument основной документа
+	 * @param connectedDocument связываемый документ
+	 * @param typeDictionaryElementCode код типа связи
+	 * @param isSystem является ли связь системной
+	 * @return созданная связь
+	 */
 	public ScriptNode createConnection(ScriptNode primaryDocument, ScriptNode connectedDocument, String typeDictionaryElementCode, boolean isSystem) {
 		NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocument.getNodeRef(), connectedDocument.getNodeRef(), typeDictionaryElementCode, isSystem);
 		return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
 	}
 
+	/**
+	 * Удаление связи
+	 * @param nodeRef nodeRef связи
+	 * @return сообщение о статусе удаления
+	 */
 	public String deleteConnection(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
@@ -229,6 +324,13 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 		return "Failure: node not found";
 	}
 
+	/**
+	 * Получение связанных документов
+	 * @param document документ
+	 * @param connectionTypeCode код типа связи
+	 * @param connectedDocumentType тип связанных документов
+	 * @return массив связанных документов
+	 */
 	public Scriptable getConnectedDocuments(ScriptNode document, String connectionTypeCode, String connectedDocumentType) {
 		ParameterCheck.mandatory("document", document);
 		ParameterCheck.mandatory("connectionTypeCode", connectionTypeCode);

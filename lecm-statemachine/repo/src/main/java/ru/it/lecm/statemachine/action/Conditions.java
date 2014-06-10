@@ -1,6 +1,7 @@
 package ru.it.lecm.statemachine.action;
 
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.ExtensionElement;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,26 +21,34 @@ public class Conditions {
 
     private List<Condition> conditions = new ArrayList<Condition>();
 
-    public Conditions(Element conditionsElement) {
-        if (conditionsElement != null) {
-            List<Element> conditions = conditionsElement.elements("condition");
-            for (Element condition : conditions) {
-                String expression = condition.element("expression").getText();
-                String errorMessage = condition.element("errorMessage").getText();
-                Element hideActionValue = condition.element("hideAction");
-                Boolean hideAction;
-                if (hideActionValue != null) {
-                    hideAction = Boolean.valueOf(hideActionValue.getText());
-                } else {
-                    hideAction = false;
-                }
-                this.conditions.add(new Condition(expression, errorMessage, hideAction));
-            }
-        }
+    public Conditions(){
+    	
+    }
+    
+    public Conditions(ExtensionElement conditionsElement) {
+//        if (conditionsElement != null) {
+//            List<Element> conditions = conditionsElement.elements("condition");
+//            for (Element condition : conditions) {
+//                String expression = condition.element("expression").getText();
+//                String errorMessage = condition.element("errorMessage").getText();
+//                Element hideActionValue = condition.element("hideAction");
+//                Boolean hideAction;
+//                if (hideActionValue != null) {
+//                    hideAction = Boolean.valueOf(hideActionValue.getText());
+//                } else {
+//                    hideAction = false;
+//                }
+//                this.conditions.add(new Condition(expression, errorMessage, hideAction));
+//            }
+//        }
     }
 
     public List<Condition> getConditions() {
         return conditions;
+    }
+    
+    public void addCondition(String expression, String errorMessage, boolean hideAction) {
+    	this.conditions.add(new Condition(expression, errorMessage, hideAction));
     }
 
     public class Condition {

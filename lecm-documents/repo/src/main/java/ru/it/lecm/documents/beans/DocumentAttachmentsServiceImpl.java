@@ -2,13 +2,11 @@ package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.AssociationRef;
-import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.cmr.version.VersionHistory;
@@ -21,8 +19,8 @@ import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
-import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -33,7 +31,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	private DictionaryService dictionaryService;
 	private VersionService versionService;
 	private LecmPermissionService lecmPermissionService;
-	private StateMachineServiceBean stateMachineBean;
+	private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
 
 	public void setDictionaryService(DictionaryService dictionaryService) {
@@ -48,8 +46,8 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
-		this.stateMachineBean = stateMachineBean;
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -58,55 +56,58 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 
 	@Override
 	public NodeRef getRootFolder(final NodeRef documentRef) {
-		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
-
-		final String attachmentsRootName = DOCUMENT_ATTACHMENTS_ROOT_NAME;
-
-        NodeRef ref = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-        if (ref != null) {
-            return ref;
-        }
-        //оставлено для подстраховки, создание папки происходит при создании документа
-        AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-						if (attachmentsRef == null) {
-							QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-							QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-							QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-							Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-							properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-							ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-							attachmentsRef = associationRef.getChildRef();
-							//не индексируем свойства папки
-							disableNodeIndex(attachmentsRef);
-						}
-						return attachmentsRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
+		//TODO DONE Рефакторинг AL-2733
+                this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
+		return getFolder(documentRef, DOCUMENT_ATTACHMENTS_ROOT_NAME);
 	}
 
-	public List<NodeRef> getCategories(final NodeRef documentRef) {
+	@Override
+	public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException {
+		//TODO DONE Рефакторинг AL-2733
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 
+		NodeRef attachmentsRef = createFolder(documentRef, DOCUMENT_ATTACHMENTS_ROOT_NAME);
+		disableNodeIndex(attachmentsRef);
+						return attachmentsRef;
+			}
+
+        @Override
+	public List<NodeRef> getCategories(final NodeRef documentRef) {
+		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_LIST, documentRef);
 		QName type = nodeService.getType(documentRef);
-
 		List<String> categories = getCategories(type);
-
-		List<NodeRef> result = new ArrayList<NodeRef>();
-		NodeRef attachmentRootRef = getRootFolder(documentRef);
-		for (String category : categories) {
-			NodeRef categoryFolderRef = getCategoryFolder(category, attachmentRootRef);
-			result.add(categoryFolderRef);
-		}
+		final List<NodeRef> result = new ArrayList<NodeRef>();
+                final NodeRef attachmentRootRef = getRootFolder(documentRef);
+		//TODO Рефакторинг AL-2733
+                //TODO Вроде как категории _должны_ создаваться машиной состояний, но сейчас всю работу по созданию выполняет этот метод, так что оптимизируем транзакцию,
+                // так чтоб открывалась один раз
+                final List<String> toCreate;
+                if (null == attachmentRootRef) {
+                    toCreate = categories;
+                } else {
+                    toCreate = new ArrayList<String>();
+                    for (String category : categories) {
+                        NodeRef categoryFolderRef = getFolder(attachmentRootRef, category);
+                        if (null == categoryFolderRef) {
+                            toCreate.add(category);
+                        } else {
+                            result.add(categoryFolderRef);
+                        }
+                    }
+                }
+                //Создаём всё, чего не хватает
+                lecmTransactionHelper.doInRWTransaction( new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                    @Override
+                    public Void execute() throws Throwable {
+                        NodeRef rootRef = (null == attachmentRootRef ? createRootFolder(documentRef) : attachmentRootRef);
+                        for (String folder : toCreate) {
+                            result.add(createCategoryFolder(folder, rootRef));
+                        }
+                        return null;
+                    }
+                }
+                        
+                );
 		return result;
 	}
 
@@ -122,35 +123,38 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 			}
 		}
 
-		if (categories.size() == 0) {
+		if (categories.isEmpty()) {
 			categories.add("Основные");
 		}
 		return categories;
 	}
+	
+	//TODO: надо разделить на получение и создание, чтобы вынести транзакции из цикла getCategories... а создание категорий вызывать отдельно. 
+        //TODO Refactoring in progress
+        //Разделить получение и создание.
+        //В итоге, в получении вообще делать нечего оказалось.
+//	public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
+//		NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
+//		return result;
+//	}
 
-	public NodeRef getCategoryFolder(final String category, final NodeRef attachmentRootRef) {
-		NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
-		if (result == null) {
-			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
-							disableNodeIndex(categoryRef);
-							return categoryRef;
-						}
-					});
-				}
-			};
-			result = AuthenticationUtil.runAsSystem(raw);
-		}
-		return result;
-	}
-
+        public NodeRef createCategoryFolder(final String category, final NodeRef attachmentRootRef) throws WriteTransactionNeededException {
+            NodeRef categoryRef = createNode(attachmentRootRef, TYPE_CATEGORY, category, null);
+            disableNodeIndex(categoryRef);
+            return categoryRef;
+        }
+        
+        @Override
 	public NodeRef getCategory(final String category, final NodeRef documentRef) {
 		NodeRef attachmentRootRef = getRootFolder(documentRef);
+
+		//TODO Рефакторинг AL-2733
+                //TODO Вроде как категории создаются машиной состояний, и, вряд ли здесь будет существовать транзакция на запись при получении категорий. 
+                //Так что создание закомментировал. Заменил на возврат null. Требуется тестирование.
+		if (null == attachmentRootRef){
+                    return null;
+		}
+
 		NodeRef result = nodeService.getChildByName(attachmentRootRef, ContentModel.ASSOC_CONTAINS, category);
 		if (isDocumentCategory(result)) {
 			return result;
@@ -239,7 +243,7 @@ public class DocumentAttachmentsServiceImpl extends BaseBean implements Document
 	@Override
 	public boolean isReadonlyCategory(NodeRef nodeRef) {
 		NodeRef document = this.getDocumentByCategory(nodeRef);
-		return document == null || this.stateMachineBean.isReadOnlyCategory(document, getCategoryName(nodeRef));
+		return document == null || this.stateMachineService.isReadOnlyCategory(document, getCategoryName(nodeRef));
 	}
 
 	@Override

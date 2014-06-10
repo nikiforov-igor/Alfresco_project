@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны регистрационных номеров" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Номер проекта НД" type="lecm-regnum:template">
+                <property name="cm:name">Номер проекта НД</property>
+                <property name="lecm-regnum:template-string">НД-{#formatNumber('00000', doc.counterYearDoctype('project'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера проекта НД</property>
+                <property name="lecm-regnum:template-service-id">ND_PROJECT_NUMBER</property>
+            </item>
+            <item name="cm:Номер НД" type="lecm-regnum:template">
+                <property name="cm:name">Номер НД</property>
+                <property name="lecm-regnum:template-string">{doc.associatedAttributePath('lecm-eds-document:document-type-assoc/lecm-doc-dic-dt:documentType-code')}-{#formatNumber('00000', doc.counterPlainDoctype)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для номера НД</property>
+                <property name="lecm-regnum:template-service-id">ND_NUMBER</property>
+            </item>
+        </items>
+    </item>
+</items>

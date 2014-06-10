@@ -1,0 +1,10 @@
+<webscript>
+	<shortname>Model editor: получение полей и ассоциаций модели</shortname>
+	<description>Возвращает поля и ассоциации модели, которые небыли добавлены на форму, принимает параметр:
+	formNodeRef
+	</description>
+	<url>/lecm/docforms/fields?formNodeRef={formNodeRef}</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction>none</transaction>
+</webscript>

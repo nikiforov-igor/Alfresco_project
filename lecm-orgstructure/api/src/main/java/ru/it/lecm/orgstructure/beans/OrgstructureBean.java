@@ -136,6 +136,13 @@ public interface OrgstructureBean {
 	 * @return NodeRef или NULL
 	 */
 	NodeRef getStructureDirectory();
+	
+	/**
+	 * Получение Основного подразделения организации
+	 *
+	 * @return NodeRef или NULL
+	 */
+	NodeRef getMainOrganisationUnit(); 
 
 	/**
 	 * Получение Директории с Сотрудниками

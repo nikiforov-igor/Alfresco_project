@@ -24,7 +24,7 @@ import java.util.List;
  */
 public abstract class BaseWebScript extends BaseScopableProcessorExtension {
 
-    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+    final static protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
     /**
      * Service registry
      */
@@ -37,6 +37,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
     /**
      * Возвращает массив, пригодный для использования в веб-скриптах
      *
+     * @param refs
      * @return Scriptable
      */
     protected Scriptable createScriptable(List<NodeRef> refs) {
@@ -90,7 +91,7 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
     }
 
 
-    /**
+	/**
 	 * Оборачиваем узел в ссылку на view-metadata
 	 * @param node
 	 * @param description

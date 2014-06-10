@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-additional-document:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+    <description>Документы к договору</description>
+    <author>Logic ECM</author>
+    <version>1.0</version>
+    <imports>
+        <import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+        <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/logicECM/contract/dictionaries/1.0" prefix="lecm-contract-dic"/>
+        <import uri="http://www.it.ru/logicECM/contract/1.0" prefix="lecm-contract"/>
+        <import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+        <import uri="http://www.it.ru/lecm/org/connection/1.0" prefix="lecm-connect"/>
+		<import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+    </imports>
+    <namespaces>
+        <namespace uri="http://www.it.ru/logicECM/contract/additional-document/1.0" prefix="lecm-additional-document"/>
+    </namespaces>
+
+    <constraints>
+        <constraint name="lecm-additional-document:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value><![CDATA[{lecm-additional-document:additionalDocumentType/cm:name} №{lecm-additional-document:number} от {lecm-additional-document:date?dd.MM.yyyy} с {lecm-additional-document:document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}]]></value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-additional-document:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Документ</value>
+                    <value>Согласование</value>
+                    <value>Другое</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-additional-document:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-additional-document:reg-number-properties-constraint" type="ru.it.lecm.documents.constraints.RegNumberPropertiesConstraint">
+            <parameter name="regNumbersProperties">
+                <value>lecm-additional-document:number</value>
+            </parameter>
+        </constraint>
+	    <constraint name="lecm-additional-document:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+		    <parameter name="armUrl">
+			    <value>contracts-documents</value>
+		    </parameter>
+	    </constraint>
+    </constraints>
+
+    <types>
+        <type name="lecm-additional-document:additionalDocument">
+            <title>Logic Ecm Additional Contract Document</title>
+            <parent>lecm-document:base</parent>
+            <properties>
+                <!-- Номер документа к договору-->
+                <property name="lecm-additional-document:number">
+                    <type>d:text</type>
+                    <default>Не присвоено</default>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Дата документа к договору-->
+                <property name="lecm-additional-document:date">
+                    <type>d:date</type>
+	                <default>1970-01-01T00:00:00.000Z</default>
+                </property>
+                <!-- Подписано контрагентом -->
+                <property name="lecm-additional-document:signedCounterparty">
+                    <type>d:boolean</type>
+	                <default>false</default>
+                </property>
+                <!-- Краткое содержание документа к договору -->
+                <property name="lecm-additional-document:summaryContent">
+                    <type>d:text</type>
+                </property>
+                <property name="lecm-additional-document:additionalDocumentType-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>false</tokenised>
+                    </index>
+                </property>
+	            <property name="lecm-additional-document:additionalDocumentType-ref">
+		            <type>d:text</type>
+		            <index enabled="true">
+			            <atomic>true</atomic>
+			            <stored>false</stored>
+			            <tokenised>both</tokenised>
+		            </index>
+	            </property>
+            </properties>
+            <associations>
+                <!-- Вид документа -->
+                <association name="lecm-additional-document:additionalDocumentType">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract-dic:contract-documents-type</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+                <!-- Документ основание -->
+                <association name="lecm-additional-document:document-assoc">
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-contract:document</class>
+                        <mandatory>true</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+            </associations>
+			<mandatory-aspects>
+				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
+			</mandatory-aspects>
+        </type>
+    </types>
+
+</model>

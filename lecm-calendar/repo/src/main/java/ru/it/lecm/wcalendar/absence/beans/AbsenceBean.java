@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import ru.it.lecm.wcalendar.CalendarCategory;
 
 /**
@@ -44,15 +45,26 @@ public class AbsenceBean extends AbstractCommonWCalendarBean implements IAbsence
 	 * объект для графиков отсутствия.
 	 */
 	public final void init() {
-		PropertyCheck.mandatory(this, "repository", repository);
-		PropertyCheck.mandatory(this, "nodeService", nodeService);
-		PropertyCheck.mandatory(this, "transactionService", transactionService);
-		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
-		PropertyCheck.mandatory(this, "delegationService", delegationService);
+            PropertyCheck.mandatory(this, "repository", repository);
+            PropertyCheck.mandatory(this, "nodeService", nodeService);
+            PropertyCheck.mandatory(this, "transactionService", transactionService);
+            PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
+            PropertyCheck.mandatory(this, "delegationService", delegationService);
 
-		// Создание контейнера (если не существует).
-		AuthenticationUtil.runAsSystem(this);
-	}
+            // Создание контейнера (если не существует).
+            // TODO: DONE Ввиду "устранения" транзакции в AbstractCommonWCalendarBean 
+            // init метод. Транзакции нет. Создаём.
+            // RunAsSystem есть в createWCalendarContainer();
+            if (getWCalendarContainer() == null) {
+                transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+                    @Override
+                    public Object execute() throws Throwable {
+                        createWCalendarContainer();
+                        return null;
+                    }
+                }, false, true);
+            }
+        }
 
 	public void setDelegationService(IDelegation delegationService) {
 		this.delegationService = delegationService;

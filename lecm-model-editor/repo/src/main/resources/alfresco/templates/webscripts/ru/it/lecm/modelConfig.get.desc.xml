@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get node with model</shortname>
-	<description>Get node with model</description>
-	<url>/lecm/docforms/config?modelName={modelName}</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction>none</transaction>
-</webscript>

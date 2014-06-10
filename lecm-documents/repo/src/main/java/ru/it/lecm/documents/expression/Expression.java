@@ -28,7 +28,7 @@ public class Expression {
 	private StandardEvaluationContext context;
 	private static OrgstructureBean orgstructureBean;
 	private static DocumentService documentService;
-	private static StateMachineServiceBean stateMachineHelper;
+	private static StateMachineServiceBean stateMachineService;
 	private ApplicationContext applicationContext;
 
     private static final transient Logger logger = LoggerFactory.getLogger(Expression.class);
@@ -41,9 +41,9 @@ public class Expression {
         NodeRef documentRef = document;
         this.doc = new ExpressionDocument(documentRef, serviceRegistry);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
-        String executionId = stateMachineHelper.getStatemachineId(document);
+        String executionId = stateMachineService.getStatemachineId(document);
         if (executionId != null) {
-            this.state = stateMachineHelper.getVariables(executionId);
+            this.state = stateMachineService.getVariables(executionId);
         }
         this.context = new StandardEvaluationContext(this);
 		this.context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
@@ -82,7 +82,7 @@ public class Expression {
         Expression.documentService = documentService;
     }
 
-    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 }

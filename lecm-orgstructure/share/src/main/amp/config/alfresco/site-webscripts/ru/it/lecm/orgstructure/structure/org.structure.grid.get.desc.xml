@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>orgstructure datagrid</shortname>
+    <description>Return orgstructure datagrid</description>
+    <url>/lecm/orgstructure/grid</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

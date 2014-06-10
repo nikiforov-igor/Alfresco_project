@@ -24,15 +24,15 @@ public class DocumentDeletePolicy implements BeforeDeleteNodePolicy {
 	final protected Logger logger = LoggerFactory.getLogger(DocumentDeletePolicy.class);
 
 	private PolicyComponent policyComponent;
-    private StateMachineServiceBean stateMachineServiceBean;
+    private StateMachineServiceBean stateMachineService;
 	private BusinessJournalService businessJournalService;
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
         this.policyComponent = policyComponent;
     }
 
-    public void setStateMachineServiceBean(StateMachineServiceBean stateMachineServiceBean) {
-        this.stateMachineServiceBean = stateMachineServiceBean;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
 	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
@@ -45,8 +45,8 @@ public class DocumentDeletePolicy implements BeforeDeleteNodePolicy {
 
     @Override
     public void beforeDeleteNode(NodeRef nodeRef) {
-        if (stateMachineServiceBean.hasActiveStatemachine(nodeRef) && !stateMachineServiceBean.isDraft(nodeRef)) {
-            throw new AlfrescoRuntimeException("Cannot delete document " + nodeRef + ". Is not draft.");
+        if (stateMachineService.hasActiveStatemachine(nodeRef) && !stateMachineService.isDraft(nodeRef)) {
+            //throw new AlfrescoRuntimeException("Cannot delete document " + nodeRef + ". Is not draft.");
         }
 		String user = AuthenticationUtil.getFullyAuthenticatedUser();
 

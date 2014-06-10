@@ -10,7 +10,7 @@ import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
+//import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private SubstitudeBean substitudeService;
     private DictionaryBean dictionaryService;
 	private NamespaceService namespaceService;
-    private StateMachineServiceBean stateMachineHelper;
+//    private StateMachineServiceBean stateMachineHelper;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
@@ -237,7 +237,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString();
                 if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND " : "").append(parentQuery.indexOf("NOT") != 0 ? "(" : "").append(parentQuery).append(parentQuery.indexOf("NOT") != 0 ? ")" : "");
+                    sb.append(sb.length() > 0 ? " AND (" : "(");
+                    if (parentQuery.startsWith("NOT")) {
+                        sb.append("ISNOTNULL:\"cm:name\" AND ");
+                    }
+                    sb.append(parentQuery).append(")");
                 }
             }
         }
@@ -280,7 +284,11 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString();
                 if (!parentQuery.isEmpty()) {
-                    sb.append(sb.length() > 0 ? " AND " : "").append(parentQuery.indexOf("NOT") != 0 ? "(" : "").append(parentQuery).append(parentQuery.indexOf("NOT") != 0 ? ")" : "");
+                    sb.append(sb.length() > 0 ? " AND (" : "(");
+                    if (parentQuery.startsWith("NOT")) {
+                        sb.append("ISNOTNULL:\"cm:name\" AND ");
+                    }
+                    sb.append(parentQuery).append(")");
                 }
             }
         }
@@ -401,9 +409,9 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         return results;
     }
 
-    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
-    }
+//    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
+//        this.stateMachineHelper = stateMachineHelper;
+//    }
 
     public boolean isAccordion(NodeRef node) {
         return service.isArmAccordion(node);

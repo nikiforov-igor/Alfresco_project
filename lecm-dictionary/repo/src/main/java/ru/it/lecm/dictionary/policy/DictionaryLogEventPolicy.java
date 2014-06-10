@@ -11,7 +11,6 @@ import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
@@ -71,9 +70,9 @@ public class DictionaryLogEventPolicy implements
 				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.FIRST_EVENT));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
-				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+				DictionaryBean.TYPE_HIERARCHICAL_DICTIONARY_VALUE, new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.FIRST_EVENT));
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
 				DictionaryBean.TYPE_PLANE_DICTIONARY_VALUE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));

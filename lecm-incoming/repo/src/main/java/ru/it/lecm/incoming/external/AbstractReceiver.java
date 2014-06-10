@@ -30,14 +30,15 @@ abstract public class AbstractReceiver {
     public abstract void receive(NodeRef document);
 
     public void store(ExternalIncomingDocument document) {
-        NodeRef incoming = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-            @Override
-            public NodeRef execute() throws Throwable {
+//		TODO: По идее, выполняется только в executor'ах, должны быть в транзакциях.
+//        NodeRef incoming = serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//            @Override
+//            public NodeRef execute() throws Throwable {
                 HashMap<QName, Serializable> props = new HashMap<QName, Serializable>();
                 props.put(IncomingServiceImpl.PROP_IS_BY_CHANNEL, true);
-                return nodeService.createNode(documentService.getDraftRoot(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "incoming"), IncomingServiceImpl.TYPE_INCOMING, props).getChildRef();
-            }
-        }, false, true);
+                NodeRef incoming = nodeService.createNode(documentService.getDraftRoot(), ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "incoming"), IncomingServiceImpl.TYPE_INCOMING, props).getChildRef();
+//            }
+//        }, false, true);
 
         //Добавляем вложения
         for (NodeRef attach : document.getContent()) {

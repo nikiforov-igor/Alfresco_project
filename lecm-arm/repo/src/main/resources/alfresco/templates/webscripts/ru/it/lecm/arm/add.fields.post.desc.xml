@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Add fields to node</shortname>
-	<description>Add fields to node</description>
-	<url>/lecm/arm/settings/addFields</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-</webscript>

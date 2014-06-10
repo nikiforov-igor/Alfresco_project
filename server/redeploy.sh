@@ -9,12 +9,6 @@ echo "CATALINA_HOME: $CATALINA_HOME"
 echo "Shutting down server"
 $ALF_HOME/./alfresco.sh stop
 
-echo "Clear SOLR indexes"
-rm -rf $ALF_HOME/alf_data/solr/archive/SpacesStore
-rm -rf $ALF_HOME/alf_data/solr/archive-SpacesStore/alfrescoModels
-rm -rf $ALF_HOME/alf_data/solr/workspace/SpacesStore
-rm -rf $ALF_HOME/alf_data/solr/workspace-SpacesStore/alfrescoModels
-
 echo "Clear tomcat webapps"
 rm -rf $CATALINA_HOME/webapps/alfresco
 rm -rf $CATALINA_HOME/webapps/share

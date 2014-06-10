@@ -42,7 +42,6 @@ public class ReportManagerJavascriptExtension extends BaseWebScript {
             final NodeRef rdId = new NodeRef(reportDescNode);
             getReportsManager().registerReportDescriptor(rdId);
             result = true;
-            serviceRegistry.getNodeService().setProperty(rdId, PROP_REPORT_DESCRIPTOR_IS_DEPLOYED, true);
         }
         logger.warn(String.format("report '%s' %sdeployed", reportDescNode, (result ? "" : "NOT ")));
         return result;

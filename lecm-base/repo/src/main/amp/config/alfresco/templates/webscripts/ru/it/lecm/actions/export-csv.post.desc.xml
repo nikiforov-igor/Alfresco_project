@@ -1,0 +1,15 @@
+<webscript>
+    <shortname>Base: Экспорт csv</shortname>
+    <description>
+    Экспорт csv, принимает параметры:
+    fileName,
+    timeZoneOffset,
+    nodeRef,
+    field,
+    fieldLabel
+    </description>
+    <url>/lecm/base/action/export-csv</url>
+    <format default="text">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

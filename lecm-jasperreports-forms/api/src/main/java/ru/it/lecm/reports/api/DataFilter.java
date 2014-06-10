@@ -162,10 +162,10 @@ public interface DataFilter {
         }
     }
 
-    /**
-     * Проверить, выполняются ли для указанного узла условия фильтра по ассоциациям
-     */
-    boolean isOk(NodeRef id);
+	/**
+	 * Проверить, выполняются ли для указанного узла условия фильтра по ассоциациям
+	 */
+	boolean isOk(NodeRef id); 
 
     public class DataFilterDesc {
         public final String formatString;

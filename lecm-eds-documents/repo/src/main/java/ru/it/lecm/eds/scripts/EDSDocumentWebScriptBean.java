@@ -25,6 +25,10 @@ public class EDSDocumentWebScriptBean extends BaseWebScript {
         this.orgstructureService = orgstructureService;
     }
 
+    /**
+     * Получить список логинов получателей для СЭД-документа
+     * @param document  документ
+     */
     public List<String> getRecipientLogins(ScriptNode document) {
         NodeRef doc = document.getNodeRef();
 

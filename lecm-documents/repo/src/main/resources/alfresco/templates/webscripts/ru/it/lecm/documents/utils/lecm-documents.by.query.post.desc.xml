@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Документы по запросу</shortname>
-    <description>Документы по запрос</description>
-    <url>/lecm/document/getDocumentsByQuery?query={query}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction allow="readonly">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

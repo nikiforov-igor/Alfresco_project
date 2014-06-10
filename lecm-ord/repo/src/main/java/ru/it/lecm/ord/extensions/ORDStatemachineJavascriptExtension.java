@@ -65,7 +65,7 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	private ORDDocumentService ordDocumentService;
 
 	private ORDReportsService ordReportsService;
-
+	
 	public void setNodeService(final NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
@@ -101,11 +101,11 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
 		this.lecmPermissionService = lecmPermissionService;
 	}
-
+	
 	public void setOrdReportsService(ORDReportsService ordReportsService) {
 		this.ordReportsService = ordReportsService;
 	}
-
+	
 	public void setOrdDocumentService(ORDDocumentService ordDocumentService) {
 		this.ordDocumentService = ordDocumentService;
 	}
@@ -538,10 +538,10 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 		return false;
 	}
-
+	
 	public ScriptNode generateDocumentReport(final String reportCode, final String templateCode, final String documentRef) {
 		NodeRef reportNodeRef = ordReportsService.generateDocumentReport(reportCode, templateCode, documentRef);
-
+		
 		return new ScriptNode(reportNodeRef, serviceRegistry, getScope());
 	}
 }

@@ -3,7 +3,8 @@ package ru.it.lecm.statemachine.action;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.impl.el.FixedValue;
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener;
 import org.slf4j.Logger;
@@ -42,8 +43,8 @@ public class ScriptAction extends StateMachineAction implements PostponedAction 
     }
 
 	@Override
-	public void init(Element actionElement, String processId) {
-        script = actionElement.element("script").getText();
+	public void init(BaseElement actionElement, String processId) {
+//        script = actionElement.element("script").getText();
     }
 
     @Override

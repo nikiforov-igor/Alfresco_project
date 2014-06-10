@@ -245,7 +245,7 @@ public abstract class OOTemplateGenerator {
                 String columnName = resultSet.getMetaData().getColumnName(i);
 
                 String value = SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL + columnName + SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL;
-                userPropsContainer.addProperty(desc instanceof SubReportDescriptorImpl ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
+                userPropsContainer.addProperty(desc.isSubReport() ? (desc.getMnem() + "." + columnName) : columnName, DOC_PROP_GOLD_FLAG_FOR_PERSISTENCE, value);
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);

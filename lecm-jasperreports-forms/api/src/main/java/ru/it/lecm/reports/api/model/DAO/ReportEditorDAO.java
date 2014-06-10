@@ -63,6 +63,8 @@ public interface ReportEditorDAO {
 
     final static public QName PROP_RTYPE_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportTypeCode");
 
+    public final static QName PROP_REPORT_DESCRIPTOR_IS_DEPLOYED = QName.createQName(REPORTS_EDITOR_URI, "reportIsDeployed");
+
     /**
      * Получить "Описатеть отчёта" по id узла типа "lecm-rpeditor:reportDescriptor"
      *
@@ -88,4 +90,6 @@ public interface ReportEditorDAO {
     ReportTemplate getReportTemplate(NodeRef id);
 
     ColumnDescriptor createColumnDescriptor(NodeRef node);
+
+    void markAsDeployed(NodeRef reportId);
 }

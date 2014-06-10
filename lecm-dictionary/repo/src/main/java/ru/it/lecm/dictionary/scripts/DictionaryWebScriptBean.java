@@ -26,12 +26,22 @@ public class DictionaryWebScriptBean extends BaseWebScript {
         this.dictionaryService = dictionaryService;
     }
 
+	/**
+	 * Получение справочника по имени
+	 * @param name название справочника
+	 * @return справочник
+	 */
     public ScriptNode getDictionaryByName(String name) {
         NodeRef dictionary = dictionaryService.getDictionaryByName(name);
 
         return (dictionary == null) ? null : new ScriptNode(dictionary, serviceRegistry, getScope());
     }
 
+	/**
+	 * Полчение елементов справоника, или вложенных элементов в иерархический элемент справочника
+	 * @param parent справоник или иерархический элемент справочника
+	 * @return массив вложенных элементов справочника
+	 */
     public Scriptable getChildren(String parent) {
         List<NodeRef> children = dictionaryService.getChildren(new NodeRef(parent));
 
@@ -45,8 +55,8 @@ public class DictionaryWebScriptBean extends BaseWebScript {
     }
 
 	/**
-	 * Получение корневой папки уведомлений активного канала
-	 * @return
+	 * Получение корневой папки для справочников
+	 * @return папка со справочниками
 	 */
 	public ScriptNode getRootDirectory() {
 		NodeRef ref = this.dictionaryService.getDictionariesRoot();

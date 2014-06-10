@@ -1,6 +1,7 @@
 package ru.it.lecm.statemachine.action.document;
 
 import org.activiti.engine.delegate.ExecutionListener;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -43,6 +44,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
     private ThreadPoolExecutor threadPoolExecutor;
     private TransactionListener transactionListener;
     private TransactionService transactionService;
+    private StateMachineHelper stateMachineHelper;
     final static Logger logger = LoggerFactory.getLogger(WaitForDocumentChangeListenerPolicy.class);
 
     private static final String WAIT_FOR_DOCUMENT_CHANGE_TRANSACTION_LISTENER = "wait_for_document_change_transaction_listener";
@@ -100,6 +102,9 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
         this.transactionService = transactionService;
     }
 
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
 
     private class WaitForDocumentChangePolicyTransactionListener implements TransactionListener {
 
@@ -128,16 +133,18 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                         Runnable runnable = new Runnable() {
                             public void run() {
                                 try {
-                                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                	String modifier = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_MODIFIER);
+                                	
+                                	AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
                                         @Override
                                         public Void doWork() throws Exception {
+											//TODO transaction in loop!!!
                                             return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                                 @Override
                                                 public Void execute() throws Throwable {
                                                     if (nodeService.hasAspect(nodeRef, StatemachineModel.ASPECT_WORKFLOW_DOCUMENT_TASK)) {
                                                         final String taskId = (String) nodeService.getProperty(nodeRef, StatemachineModel.PROP_WORKFLOW_DOCUMENT_TASK_STATE_PROCESS);
-                                                        final StateMachineHelper helper = new StateMachineHelper();
-                                                        List<StateMachineAction> actions = helper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class), ExecutionListener.EVENTNAME_START);
+                                                        List<StateMachineAction> actions = stateMachineHelper.getTaskActionsByName(taskId, StateMachineActionsImpl.getActionNameByClass(WaitForDocumentChangeAction.class));
 
                                                         WaitForDocumentChangeAction.Expression result = null;
                                                         for (StateMachineAction action : actions) {
@@ -157,23 +164,25 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                                                         if (result != null) {
                                                             if (result.getScript() != null && !"".equals(result.getScript())) {
                                                                 final String script = result.getScript();
-                                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                                                                    @Override
-                                                                    public Object doWork() throws Exception {
-                                                                        helper.executeScript(script, helper.getCurrentExecutionId(taskId));
-                                                                        return null;
-                                                                    }
-                                                                });
+//                                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+//                                                                    @Override
+//                                                                    public Object doWork() throws Exception {
+                                                                        stateMachineHelper.executeScript(script, stateMachineHelper.getCurrentExecutionId(taskId));
+//                                                                        return null;
+//                                                                    }
+//                                                                });
                                                             }
                                                             if (result.getOutputValue() != null && !"".equals(result.getOutputValue())) {
                                                                 HashMap<String, Object> parameters = new HashMap<String, Object>();
                                                                 parameters.put(result.getOutputVariable(), result.getOutputValue());
-                                                                helper.setExecutionParamentersByTaskId(taskId, parameters);
+                                                                //TODO может сразу execution? Или переписать на message?
+                                                                stateMachineHelper.setExecutionParamentersByTaskId(taskId, parameters);
                                                                 if (result.isStopSubWorkflows()) {
-                                                                    String statemachineId = helper.getCurrentExecutionId(taskId);
-                                                                    helper.stopDocumentSubWorkflows(statemachineId);
+                                                                    String statemachineId = stateMachineHelper.getCurrentExecutionId(taskId);
+                                                                    //TODO nodeRef это и есть документ
+                                                                    stateMachineHelper.stopDocumentSubWorkflows(nodeRef, null);
                                                                 }
-                                                                helper.stopDocumentProcessing(taskId);
+                                                                stateMachineHelper.nextTransition(taskId);
                                                             }
                                                         }
                                                     }
@@ -181,7 +190,7 @@ public class WaitForDocumentChangeListenerPolicy implements NodeServicePolicies.
                                                 }
                                             }, false, true);
                                         }
-                                    });
+                                    }, modifier);
                                 } catch (Exception e) {
                                     logger.error("Error while execution change document action", e);
                                 }

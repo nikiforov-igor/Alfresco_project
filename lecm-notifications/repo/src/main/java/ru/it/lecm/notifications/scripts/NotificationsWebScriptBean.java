@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.transaction.TransactionService;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: AIvkin
@@ -34,6 +37,16 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	NotificationsService service;
 	private OrgstructureBean orgstructureService;
 	protected AuthenticationService authService;
+	private TransactionService transactionService;
+        private LecmTransactionHelper lecmTransactionHelper;
+
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+            this.lecmTransactionHelper = lecmTransactionHelper;
+        }
+        
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
 
     public void setService(NotificationsService service) {
 		this.service = service;
@@ -120,20 +133,24 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 
     /**
      * Отправка уведомлений
-     * @param employee Список ссылок на получателей (пользователей).
+     * @param author автор уведомления
+     * @param employee список ссылок на получателей (пользователей).
      * @param textFormatString форматная строка для текста сообщения
      * @param channels перечень каналов
-     * @param object Основной объект уведомления
+     * @param object основной объект уведомления
+     * @param initiator инициатор
      */
     public void sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator) {
         sendNotification(author, employee, textFormatString, channels, object, initiator, false);
     }
     /**
      * Отправка уведомлений
-     * @param employee Список ссылок на получателей (пользователей).
+     * @param author автор уведомления
+     * @param employee Список ссылок на получателей (пользователей)
      * @param textFormatString форматная строка для текста сообщения
      * @param channels перечень каналов
      * @param object Основной объект уведомления
+     * @param initiator инициатор
      * @param dontCheckAccessToObject не проверять доступность объекта получателю
      */
     public void sendNotification(String author, Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, NodeRef initiator, boolean dontCheckAccessToObject) {
@@ -170,10 +187,25 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 	    service.sendNotification(author, object.getNodeRef(), textFormatString, employees, channelsArray, initiator, dontCheckAccessToObject);
     }
 
+	/**
+	 * Отправка уведомлений
+	 * @param employee список nodeRef-ов на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param channels перечень каналов
+	 * @param object основной объект уведомления
+	 */
 	public void sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object) {
         sendNotification(employee, textFormatString, channels, object, false);
     }
 
+	/**
+	 * Отправка уведомлений
+	 * @param employee список nodeRef-ов на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param channels перечень каналов
+	 * @param object основной объект уведомления
+	 * @param dontCheckAccessToObject не проверять доступность объекта получателю
+	 */
 	public void sendNotification(Scriptable employee, String textFormatString, Scriptable channels, ScriptNode object, boolean dontCheckAccessToObject) {
 		sendNotification("WebScript", employee, textFormatString, channels, object, null, dontCheckAccessToObject);
 	}
@@ -198,10 +230,23 @@ public class NotificationsWebScriptBean extends BaseWebScript {
 		sendNotification(employee, textFormatString, null, object, dontCheckAccessToObject);
 	}
 
+	/**
+	 * Отправка уведомлений от текущего пользователя
+	 * @param employee Список ссылок на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param object Основной объект уведомления
+	 */
 	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object) {
         sendNotificationFromCurrentUser(employee, textFormatString, object, false);
     }
 
+	/**
+	 * Отправка уведомлений от текущего пользователя
+	 * @param employee Список ссылок на получателей (пользователей).
+	 * @param textFormatString форматная строка для текста сообщения
+	 * @param object Основной объект уведомления
+	 * @param dontCheckAccessToObject не проверять доступность объекта получателю
+	 */
 	public void sendNotificationFromCurrentUser(Scriptable employee, String textFormatString, ScriptNode object, boolean dontCheckAccessToObject) {
 		sendNotification(authService.getCurrentUserName(), employee, textFormatString, null, object, orgstructureService.getCurrentEmployee(), dontCheckAccessToObject);
 	}
@@ -222,18 +267,55 @@ public class NotificationsWebScriptBean extends BaseWebScript {
         return arrayList;
     }
 
+	/**
+	 * Получение настроек уведомлений текущего пользователя
+	 * @return узел с настройками уведомлений
+	 */
 	public ScriptNode getCurrentUserSettingsNode() {
-		return new ScriptNode(service.getCurrentUserSettingsNode(true), serviceRegistry, getScope());
+		NodeRef settings = service.getCurrentUserSettingsNode();
+		if(settings == null) {
+                    logger.debug("Notifications user settings not found. Try to create.");
+                    settings = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+
+                            @Override
+                            public NodeRef execute() throws Throwable {
+                                    if(service.getCurrentUserSettingsNode() == null) {
+                                            return service.createCurrentUserSettingsNode();
+                                    }
+                                    return null;
+                            }
+
+                    });
+                    logger.debug("Notification user settings created. NodeRef = " + settings);
+		}
+		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
+	/**
+	 * Получение каналов уведомлений по умолчанию для текущего пользователя (из настроек)
+	 * @return список каналов уведомлений
+	 */
 	public List<NodeRef> getCurrentUserDefaultNotificationTypes() {
+//		TODO: getCurrentUserDefaultNotificationTypes глубоко в недрах в итоге использует метод
+//		service.getCurrentUserSettingsNode(). Может так получится, что папка ещё не создана, поэтому
+//		подёргаем перед выполнением.
+		getCurrentUserSettingsNode();
 		return service.getCurrentUserDefaultNotificationTypes();
 	}
 
+	/**
+	 * Получение глобальный настроек уведомлений
+	 * @return узел с глобальными настройками уведомлений
+	 */
 	public ScriptNode getGlobalSettingsNode() {
-		return new ScriptNode(service.getGlobalSettingsNode(), serviceRegistry, getScope());
+            //globalSettingsNode создаётся при инициализации сервиса.
+            return new ScriptNode(service.getGlobalSettingsNode(), serviceRegistry, getScope());
 	}
 
+	/**
+	 * Получение количества рабочих дней за которое должно высылаться уведомление
+	 * @return количество рабочих дней за которое должно высылаться уведомление
+	 */
     public int getSettingsNDays() {
         return service.getSettingsNDays();
     }

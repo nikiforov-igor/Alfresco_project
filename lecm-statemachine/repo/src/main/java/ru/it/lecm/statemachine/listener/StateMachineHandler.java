@@ -2,7 +2,7 @@ package ru.it.lecm.statemachine.listener;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
-import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.InvalidNodeRefException;
@@ -11,12 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.statemachine.TimerActionHelper;
+import ru.it.lecm.statemachine.StateMachineHelper;
+//import ru.it.lecm.statemachine.TimerActionHelper;
 import ru.it.lecm.statemachine.action.StateMachineAction;
+import ru.it.lecm.statemachine.action.StatusChangeAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
 import java.util.ArrayList;
@@ -42,34 +43,37 @@ public class StateMachineHandler {
 	private RepositoryStructureHelper repositoryStructureHelper;
 	private LecmPermissionService LecmPermissionService;
 	private OrgstructureBean orgstructureBean;
-    private TimerActionHelper timerActionHelper;
+//    private TimerActionHelper timerActionHelper;
     private DocumentService documentService;
     private PermissionService permissionService;
-    private DocumentMembersService documentMembersService;
+    private StateMachineHelper stateMachineHelper;
 
 	private String processId = "";
 
-    public StateMachineHandler() {
+	public StateMachineHandler() {
 	}
 
-    public StatemachineTaskListener configure(Element lecmExtention, String processId) {
+    public StatemachineTaskListener configure(BaseElement lecmExtention, String processId) {
         Map<String, ArrayList<StateMachineAction>> events = new HashMap<String, ArrayList<StateMachineAction>>();
         this.processId = processId;
 		events.put(ExecutionListener.EVENTNAME_START, new ArrayList<StateMachineAction>());
 		events.put(ExecutionListener.EVENTNAME_TAKE, new ArrayList<StateMachineAction>());
 		events.put(ExecutionListener.EVENTNAME_END, new ArrayList<StateMachineAction>());
-		List<Element> eventsElement = lecmExtention.elements("event");
-		for (Element event : eventsElement) {
-			String eventName = event.attribute("on").toLowerCase();
-			ArrayList<StateMachineAction> stateMachineActions = events.get(eventName);
-			List<Element> actions = event.elements("action");
-			for (Element action : actions) {
-				StateMachineAction stateMachineAction = getStateMachineAction(action);
-				if (stateMachineAction != null) {
-					stateMachineActions.add(stateMachineAction);
-				}
-			}
-		}
+		
+//		events.get(ExecutionListener.EVENTNAME_START).add(getStateMachineAction(lecmExtention));
+				
+//		List<Element> eventsElement = lecmExtention.elements("event");
+//		for (Element event : eventsElement) {
+//			String eventName = event.attribute("on").toLowerCase();
+//			ArrayList<StateMachineAction> stateMachineActions = events.get(eventName);
+//			List<Element> actions = event.elements("action");
+//			for (Element action : actions) {
+//				StateMachineAction stateMachineAction = getStateMachineAction(action);
+//				if (stateMachineAction != null) {
+//					stateMachineActions.add(stateMachineAction);
+//				}
+//			}
+//		}
         return new StatemachineTaskListener(events);
 	}
 
@@ -89,47 +93,63 @@ public class StateMachineHandler {
         this.repositoryStructureHelper = repositoryStructureHelper;
 	}
 
-    public void setTimerActionHelper(TimerActionHelper timerActionHelper) {
-        this.timerActionHelper = timerActionHelper;
-    }
+//    public void setTimerActionHelper(TimerActionHelper timerActionHelper) {
+//        this.timerActionHelper = timerActionHelper;
+//    }
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
     }
 
-    private StateMachineAction getStateMachineAction(final Element actionElement) {
-		String actionName = actionElement.attribute("type");
+    private StateMachineAction getStateMachineAction(final BaseElement actionElement) {
+//		String actionName = actionElement.attribute("type");
 		StateMachineAction action = null;
 		try {
-			Class actionClass = Class.forName(StateMachineActionsImpl.getClassName(actionName));
-			action = (StateMachineAction) actionClass.newInstance();
+//			Class actionClass = Class.forName(StateMachineActionsImpl.getClassName(actionName));
+//			action = (StateMachineAction) actionClass.newInstance();
+			//action = (StateMachineAction) new StatusChangeAction();
 		} catch (Exception e) {
-			logger.error("Cannot initialize action " + actionName, e);
+//			logger.error("Cannot initialize action " + actionName, e);
 		}
 
 		if (action != null) {
-			action.setServiceRegistry(serviceRegistry);
-			action.setLecmPermissionService(lecmPermissionService);
-			action.setBusinessJournalService(businessJournalService);
-			action.setRepositoryStructureHelper(repositoryStructureHelper);
-			action.setTimerActionHelper(timerActionHelper);
-            action.setOrgstructureBean(orgstructureBean);
-            action.setDocumentService(documentService);
-            action.setPermissionService(permissionService);
-            action.setDocumentMembersService(documentMembersService);
-			final StateMachineAction currentAction = action;
-			try {
-				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
-					@Override
-					public Void doWork() throws Exception {
-						currentAction.init(actionElement, processId);
-						return null;
-					}
-				});
-			} catch (Exception e) {
-				logger.error("Error while init action", e);
-				throw new IllegalStateException(e);
-			}
+    	//action.setServiceRegistry(serviceRegistry);
+//		action.setLecmPermissionService(lecmPermissionService);
+//		action.setBusinessJournalService(businessJournalService);
+		//action.setRepositoryStructureHelper(repositoryStructureHelper);
+		//action.setTimerActionHelper(timerActionHelper);
+		//action.setOrgstructureBean(orgstructureBean);
+		action.init(actionElement, processId);
+    			
+//		String actionName = actionElement.attribute("type");
+//		StateMachineAction action = null;
+//		try {
+//			Class actionClass = Class.forName(StateMachineActionsImpl.getClassName(actionName));
+//			action = (StateMachineAction) actionClass.newInstance();
+//		} catch (Exception e) {
+//			logger.error("Cannot initialize action " + actionName, e);
+//		}
+//
+//		if (action != null) {
+//			action.setServiceRegistry(serviceRegistry);
+//			action.setLecmPermissionService(lecmPermissionService);
+//			action.setBusinessJournalService(businessJournalService);
+//			action.setRepositoryStructureHelper(repositoryStructureHelper);
+//			action.setTimerActionHelper(timerActionHelper);
+//          action.setOrgstructureBean(orgstructureBean);
+//			final StateMachineAction currentAction = action;
+//			try {
+//				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+//					@Override
+//					public Void doWork() throws Exception {
+//						currentAction.init(actionElement, processId);
+//						return null;
+//					}
+//				});
+//			} catch (Exception e) {
+//				logger.error("Error while init action", e);
+//				throw new IllegalStateException(e);
+//			}
 		}
 		return action;
 	}
@@ -140,10 +160,10 @@ public class StateMachineHandler {
 
     public void setPermissionService(PermissionService permissionService) {
         this.permissionService = permissionService;
-    }
+	}
 
-    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
-        this.documentMembersService = documentMembersService;
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
     }
 
     public class StatemachineTaskListener implements ExecutionListener {
@@ -177,7 +197,7 @@ public class StateMachineHandler {
 						throw ex;
                     } catch (Exception e) {
                         logger.error("Error while action execution", e);
-					}
+                    }
                     return null;
                 }
             });

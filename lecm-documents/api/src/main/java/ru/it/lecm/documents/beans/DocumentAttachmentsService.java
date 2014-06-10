@@ -1,11 +1,11 @@
 package ru.it.lecm.documents.beans;
 
+import java.util.Collection;
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
-
-import java.util.Collection;
-import java.util.List;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -23,11 +23,19 @@ public interface DocumentAttachmentsService {
 	public static final QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
 
     /**
-     * Получение папки с вложениями для документра
+     * Получение папки с вложениями для документа
      * @param documentRef Ссылка на документ
      * @return Ссылка на папку с вложениями
      */
     public NodeRef getRootFolder(final NodeRef documentRef);
+
+    /**
+     * Создание папки с вложениями для документа
+     * @param documentRef Ссылка на документ
+     * @return Ссылка на папку с вложениями
+	 * @throws WriteTransactionNeededException
+     */
+    public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
 
     /**
      * Получения папок с категориями вложений

@@ -12,6 +12,8 @@ import java.util.List;
  * Time: 17:33
  * To change this template use File | Settings | File Templates.
  */
+
+/*TODO Что за бин*/
 public class WorkflowListBean {
     private int activeWorkflowsTotalCount = 0;
     private List<WorkflowInstance> activeWorkflows = new ArrayList<WorkflowInstance>();

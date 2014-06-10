@@ -1,0 +1,17 @@
+.price-control .price-currency {
+    width: 100px;
+    float: right;
+    margin-left: 4px;
+}
+.price-control .price-currency .label-div,
+.price-control .price-sum .buttons-div {
+    display: none;
+}
+.price-control .price-currency .control .container,
+.price-control .price-sum .control .container {
+    min-width: 0;
+}
+.price-control .price-sum {
+    width: auto;
+    overflow: hidden;
+}

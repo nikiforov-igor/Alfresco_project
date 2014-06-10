@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -23,14 +22,14 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.util.*;
 import org.alfresco.service.cmr.repository.InvalidNodeRefException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import static ru.it.lecm.documents.beans.DocumentConnectionService.ASSOC_CONNECTED_DOCUMENT;
 
 /**
- * User: AIvkin
- * Date: 18.02.13
- * Time: 13:55
+ * User: AIvkin Date: 18.02.13 Time: 13:55
  */
 public class DocumentConnectionServiceImpl extends BaseBean implements DocumentConnectionService {
+
 	private final static Logger logger = LoggerFactory.getLogger(DocumentConnectionServiceImpl.class);
 
 	private SearchService searchService;
@@ -56,34 +55,19 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef getRootFolder(final NodeRef documentRef) {
+		//TODO Рефакторинг AL-2733
+                this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
+		return nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, DOCUMENT_CONNECTIONS_ROOT_NAME);
+	}
+
+	@Override
+	public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException {
+		//TODO Рефакторинг AL-2733
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, documentRef);
 
-		final String attachmentsRootName = DOCUMENT_CONNECTIONS_ROOT_NAME;
-
-		AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
-			@Override
-			public NodeRef doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
-						NodeRef attachmentsRef = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, attachmentsRootName);
-                        if (attachmentsRef == null) {
-                            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, attachmentsRootName);
-                            QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                            properties.put(ContentModel.PROP_NAME, attachmentsRootName);
-                            ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                            attachmentsRef = associationRef.getChildRef();
-                            hideNode(attachmentsRef, true);
-                        }
-						return attachmentsRef;
-					}
-				});
-			}
-		};
-		return AuthenticationUtil.runAsSystem(raw);
+		NodeRef connectionRef = createFolder(documentRef, DOCUMENT_CONNECTIONS_ROOT_NAME);
+		hideNode(connectionRef, true);
+		return connectionRef;
 	}
 
 	@Override
@@ -139,7 +123,6 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		return getRecommendedConnectionTypes(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
 	}
 
-
 	@Override
 	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
 		this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_VIEW, primaryDocumentRef);
@@ -167,7 +150,6 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 	public List<NodeRef> getNotAvailableConnectionTypes(NodeRef primaryDocumentRef, NodeRef connectedDocumentRef) {
 		return getNotAvailableConnectionTypes(primaryDocumentRef, nodeService.getType(connectedDocumentRef));
 	}
-
 
 	@Override
 	public List<NodeRef> getAvailableConnectionTypes(NodeRef primaryDocumentRef, QName connectedDocumentType) {
@@ -199,8 +181,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		parameters.setQuery("TYPE:\"" + dictionaryType + "\" AND " + propPrimaryDocumentType + ":\"" +
-				primaryDocumentType + "\" AND " + propConnectedDocumentType + ":\"" + connectedDocumentType + "\"");
+		parameters.setQuery("TYPE:\"" + dictionaryType + "\" AND " + propPrimaryDocumentType + ":\""
+				+ primaryDocumentType + "\" AND " + propConnectedDocumentType + ":\"" + connectedDocumentType + "\"");
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
@@ -233,8 +215,8 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		SearchParameters parameters = new SearchParameters();
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-		parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\"" +
-				primaryDocumentRef + "\" AND " + propConnectedDocumentRef + ":\"" + connectedDocumentRef + "\"");
+		parameters.setQuery("TYPE:\"" + connectionType + "\" AND " + propPrimaryDocumentRef + ":\""
+				+ primaryDocumentRef + "\" AND " + propConnectedDocumentRef + ":\"" + connectedDocumentRef + "\"");
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
@@ -294,7 +276,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_PRIMARY_DOCUMENT);
 		if (connections != null) {
-			for (AssociationRef assocRef: connections) {
+			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
@@ -314,13 +296,13 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 		List<AssociationRef> connections = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
 		if (connections != null) {
-		 	for (AssociationRef assocRef: connections) {
-				 NodeRef connectionRef = assocRef.getSourceRef();
+			for (AssociationRef assocRef : connections) {
+				NodeRef connectionRef = assocRef.getSourceRef();
 
-				 if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
-					 results.add(connectionRef);
-				 }
-			 }
+				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
+					results.add(connectionRef);
+				}
+			}
 		}
 
 		return results;
@@ -328,22 +310,22 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 
 	@Override
 	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem) {
-        return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, typeNodeRef, isSystem, false);
-    }
+		return createConnection(primaryDocumentNodeRef, connectedDocumentNodeRef, typeNodeRef, isSystem, false);
+	}
 
 	@Override
-	public NodeRef createConnection(NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem, boolean doNotCheckPermission) {
+	public NodeRef createConnection(final NodeRef primaryDocumentNodeRef, NodeRef connectedDocumentNodeRef, NodeRef typeNodeRef, boolean isSystem, boolean doNotCheckPermission) {
         // ALF-1583
-        // При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
-        // В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
-        // позволяющая отключить прооверку прав на создание связи к документу.
-        // Переменная устанавливается в методе ru.it.lecm.documents.beans.DocumentConnectionServiceImpl.createConnection()
-        // Проверяется в ru.it.lecm.documents.policy.DocumentConnectionPolicy.beforeCreateNode()
-        AlfrescoTransactionSupport.bindResource(DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS, doNotCheckPermission);
+		// При добавлении поручения через блок "Задачи" появляется сообщение "Ваши изменения не удалось сохранить"
+		// В транзакцию добавляется переменная DocumentConnectionService.DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS,
+		// позволяющая отключить прооверку прав на создание связи к документу.
+		// Переменная устанавливается в методе ru.it.lecm.documents.beans.DocumentConnectionServiceImpl.createConnection()
+		// Проверяется в ru.it.lecm.documents.policy.DocumentConnectionPolicy.beforeCreateNode()
+		AlfrescoTransactionSupport.bindResource(DO_NOT_CHECK_PERMISSION_CREATE_DOCUMENT_LINKS, doNotCheckPermission);
 
-        if (!doNotCheckPermission) {
-		    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, primaryDocumentNodeRef);
-        }
+		if (!doNotCheckPermission) {
+			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_LINKS_CREATE, primaryDocumentNodeRef);
+		}
 
 		QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
 		QName assocQName = ContentModel.ASSOC_CONTAINS;
@@ -352,6 +334,15 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		properties.put(PROP_IS_SYSTEM, isSystem);
 
 		NodeRef connectionsRoot = getRootFolder(primaryDocumentNodeRef);
+		//TODO Рефакторинг AL-2733
+		if (null == connectionsRoot){
+			try {
+				connectionsRoot = createRootFolder(primaryDocumentNodeRef);
+			} catch (WriteTransactionNeededException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
+
 		ChildAssociationRef associationRef = nodeService.createNode(connectionsRoot, assocTypeQName, assocQName, TYPE_CONNECTION, properties);
 		NodeRef connectionNodeRef = associationRef.getChildRef();
 
@@ -359,7 +350,7 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 		nodeService.createAssociation(connectionNodeRef, connectedDocumentNodeRef, ASSOC_CONNECTED_DOCUMENT);
 		nodeService.createAssociation(connectionNodeRef, typeNodeRef, ASSOC_CONNECTION_TYPE);
 
-        hideNode(connectionNodeRef, true);
+		hideNode(connectionNodeRef, true);
 
 		return connectionNodeRef;
 	}
@@ -426,11 +417,11 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 					DocumentConnectionService.PROP_CONNECTION_TYPE_CODE,
 					connectionTypeCode);
 
-			for (AssociationRef assocRef: connections) {
+			for (AssociationRef assocRef : connections) {
 				NodeRef connectionRef = assocRef.getSourceRef();
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
-					boolean system =(Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
+					boolean system = (Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
 					if (!onlySystem || system) {
 						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 						if (connectionType != null && connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
@@ -484,10 +475,10 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 						connectionTypeCode);
 			}
 
-			for (NodeRef connectionRef: connections) {
+			for (NodeRef connectionRef : connections) {
 
 				if (!isArchive(connectionRef) && this.lecmPermissionService.hasReadAccess(connectionRef)) {
-					boolean system =(Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
+					boolean system = (Boolean) nodeService.getProperty(connectionRef, PROP_IS_SYSTEM);
 					if (!onlySystem || system) {
 						List<AssociationRef> connectionTypeAssoc = nodeService.getTargetAssocs(connectionRef, ASSOC_CONNECTION_TYPE);
 						if (connectionTypeAssoc != null && connectionTypeAssoc.size() == 1
@@ -521,12 +512,12 @@ public class DocumentConnectionServiceImpl extends BaseBean implements DocumentC
 					try {
 						List<AssociationRef> connectionsAssocRefs = nodeService.getSourceAssocs(documentRef, ASSOC_CONNECTED_DOCUMENT);
 						if (connectionsAssocRefs != null) {
-							for (AssociationRef assocRef: connectionsAssocRefs) {
+							for (AssociationRef assocRef : connectionsAssocRefs) {
 								NodeRef connectionRef = assocRef.getSourceRef();
 								connections.add(connectionRef);
 							}
 						}
-					} catch(InvalidNodeRefException ex) {
+					} catch (InvalidNodeRefException ex) {
 						String msg = String.format("Error while getting connections with document %s. Caused by: %s", documentRef, ex.getMessage());
 						logger.warn(msg);
 					}

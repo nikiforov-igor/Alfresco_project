@@ -1,7 +1,8 @@
 package ru.it.lecm.statemachine.action.document;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -21,6 +22,9 @@ import ru.it.lecm.statemachine.action.StateMachineAction;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * User: PMelnikov
  * Date: 23.10.12
@@ -30,23 +34,29 @@ public class WaitForDocumentChangeAction extends StateMachineAction implements P
 
 	private List<Expression> expressions = new ArrayList<Expression>();
 
+	private final static Logger logger = LoggerFactory.getLogger(WaitForDocumentChangeAction.class);
+
 	@Override
-	public void init(Element element, String processId) {
-		Element expressions = element.element(TAG_EXPRESSIONS);
-
-		String outputVariable = expressions.attribute(PROP_OUTPUT_VARIABLE);
-
-		for (Element expressionElement : expressions.elements(TAG_EXPRESSION)) {
-			String expression = expressionElement.attribute(PROP_EXPRESSION);
-			String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
-			boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
-            String script = expressionElement.getText();
-			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows, script));
-		}
+	public void init(BaseElement actionElement, String processId) {
+//		Element expressions = element.element(TAG_EXPRESSIONS);
+//
+//		String outputVariable = expressions.attribute(PROP_OUTPUT_VARIABLE);
+//
+//		for (Element expressionElement : expressions.elements(TAG_EXPRESSION)) {
+//			String expression = expressionElement.attribute(PROP_EXPRESSION);
+//			String outputValue = expressionElement.attribute(PROP_OUTPUT_VALUE);
+//			boolean stopSubWorkflows = Boolean.parseBoolean(expressionElement.attribute(StatemachineActionConstants.PROP_STOP_SUBWORKFLOWS));
+//            String script = expressionElement.getText();
+//			this.expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows, script));
+//		}
 	}
 
 	public List<Expression> getExpressions() {
 		return expressions;
+	}
+	
+	public void addExpression(String expression, String outputVariable, String outputValue, boolean stopSubWorkflows, String script) {
+		expressions.add(new Expression(expression, outputVariable, outputValue, stopSubWorkflows, script));
 	}
 
 	@Override

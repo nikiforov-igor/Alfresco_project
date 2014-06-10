@@ -33,7 +33,7 @@ public class ReportForm extends FormUIGet {
     public static final String TEMPLATES_COLUMN_NAME = "Шаблон представления";
     private ReportManagerApi reportManager;
 
-    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     private enum CustomTypes {
         STATUS,
@@ -259,9 +259,9 @@ public class ReportForm extends FormUIGet {
 
             if (allowedValues != null) {
                 if (field.isRepeating()) {
-                    field.getControl().setTemplate(CONTROL_SELECT_MANY);
+                    field.getControl().setTemplate("/ru/it/lecm/base-share/components/controls/selectmany.ftl");
                 } else {
-                    field.getControl().setTemplate(CONTROL_SELECT_ONE);
+                    field.getControl().setTemplate("/ru/it/lecm/base-share/components/controls/selectone.ftl");
                 }
 
                 if (!field.getControl().getParams().containsKey(CONTROL_PARAM_OPTIONS)) {

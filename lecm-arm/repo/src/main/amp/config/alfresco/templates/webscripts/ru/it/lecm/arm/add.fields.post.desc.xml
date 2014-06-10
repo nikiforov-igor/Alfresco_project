@@ -1,0 +1,13 @@
+<webscript>
+	<shortname>ARM: создает узел со свойствами</shortname>
+	<description>
+	Создает узел со свойствами, принимает json:
+	parentNodeRef,
+	fields{
+	name,
+	title}
+	</description>
+	<url>/lecm/arm/settings/addFields</url>
+	<format default="json">argument</format>
+	<authentication>user</authentication>
+</webscript>

@@ -14,6 +14,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: mshafeev
@@ -70,6 +73,12 @@ public class ContractsBeanImpl extends BaseBean {
 
 	public NodeRef getDraftRoot() {
 		return  documentService.getDraftRootByType(TYPE_CONTRACTS_DOCUMENT);
+	}
+
+        
+        //TODO DONE Refactoring in progress...
+	public NodeRef createDraftRoot() throws WriteTransactionNeededException {
+            return  documentService.createDraftRoot(TYPE_CONTRACTS_DOCUMENT);
 	}
 
 	public String getDraftPath() {
@@ -168,12 +177,12 @@ public class ContractsBeanImpl extends BaseBean {
 
         // Фильтр по датам
         if (dateProperty != null) {
-            final String MIN = begin != null ? DocumentService.DateFormatISO8601.format(begin) : "MIN";
-            final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
+            final String MIN = begin != null ? DateFormatISO8601.format(begin) : "MIN";
+            final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
 
             String property = dateProperty.toPrefixString(namespaceService);
             property = property.replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-            filterQuery += (filterQuery.length() > 0 ? " AND " : "") + "@" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
+            filterQuery += (filterQuery.length() > 0 ? " AND " : "") + "@" + property + ":[\"" + MIN + "\" TO \"" + MAX + "\"]";
         }
         return documentService.getDocumentsByFilter(types, paths, statuses, filterQuery, null);
     }

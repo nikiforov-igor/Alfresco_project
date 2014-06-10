@@ -1,20 +1,11 @@
 package ru.it.lecm.workflow.review;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -24,6 +15,8 @@ import org.alfresco.service.namespace.QName;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
@@ -34,6 +27,10 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 import ru.it.lecm.workflow.review.api.ReviewWorkflowModel;
 import ru.it.lecm.workflow.review.api.ReviewWorkflowService;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -78,7 +75,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	}
 
 	@Override
-	public void assignTask(NodeRef assignee, DelegateTask task) {
+	public void assignTask(NodeRef assignee, DelegateTask task) throws WriteTransactionNeededException {
 		Date dueDate = task.getDueDate();
 		if (dueDate == null) {
 			dueDate = (Date) nodeService.getProperty(assignee, LecmWorkflowModel.PROP_ASSIGNEE_DUE_DATE);
@@ -92,11 +89,34 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		notifyWorkflowStarted(employeeRef, dueDate, bpmPackage);
 	}
 
-	public void reassignTask(NodeRef assignee, DelegateTask task) {
+    @Override
+    public void actualizeTask(NodeRef assignee, DelegateTask task) {
+        NodeRef employee = findNodeByAssociationRef(assignee, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+        String userName = orgstructureService.getEmployeeLogin(employee);
+        //находим ResultItem
+        NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
+        NodeRef approvalListItemRef = workflowResultListService.getResultItemByUserName(approvalListRef, userName);
+        //привязали к задаче
+        nodeService.setProperty(approvalListItemRef, WorkflowResultModel.PROP_WORKFLOW_RESULT_ITEM_TASK_ID, task.getId());
+    }
+
+    @Override
+	public void reassignTask(NodeRef assignee, DelegateTask task) throws WriteTransactionNeededException {
 		NodeRef bpmPackage = ((ScriptNode) task.getVariable("bpm_package")).getNodeRef();
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		grantReaderPermissions(employeeRef, bpmPackage, false);
-	}
+
+        NodeRef approvalListRef = workflowResultListService.getResultListRef(task);
+        NodeRef approvalListItemRef = workflowResultListService.getResultItemByTaskId(approvalListRef, task.getId());
+        if (approvalListItemRef != null) {
+            List<AssociationRef> employees = nodeService.getTargetAssocs(approvalListItemRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+            for (AssociationRef employee : employees) {
+                nodeService.removeAssociation(approvalListItemRef, employee.getTargetRef(), WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+            }
+            nodeService.createAssociation(approvalListItemRef, employeeRef, WorkflowResultModel.ASSOC_WORKFLOW_RESULT_ITEM_EMPLOYEE);
+        }
+
+    }
 
 	@Override
 	public WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) {
@@ -118,16 +138,16 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 
 		execution.setVariable("taskDecision", decision);
 		NodeRef resultListRef = resultListService.getResultListRef(task);
-		logDecision(resultListRef, taskDecision);
+		logDecision(resultListRef, taskDecision, task);
 
 		return taskDecision;
 	}
 
-	private void logDecision(final NodeRef resultListRef, final WorkflowTaskDecision taskDecision) {
+	private void logDecision(final NodeRef resultListRef, final WorkflowTaskDecision taskDecision, final DelegateTask task) {
 		final NodeRef resultListItemRef;
 		final Map<QName, Serializable> properties;
 
-		resultListItemRef = resultListService.getResultItemByUserName(resultListRef, taskDecision.getUserName());
+		resultListItemRef = resultListService.getResultItemByTaskId(resultListRef, task.getId());
 
 		properties = nodeService.getProperties(resultListItemRef);
 
@@ -227,12 +247,19 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 		}
 	}
 
+        
+        //TODO Refactoring in progress...
 	@Override
 	public NodeRef createResultList(NodeRef bpmPackage, String documentAttachmentCategoryName, List<NodeRef> assigneesList) {
 		NodeRef resultListContainer = resultListService.getOrCreateWorkflowResultFolder(bpmPackage);
 		NodeRef resultListRoot = getFolder(resultListContainer, "Ознакомление");
 		if (resultListRoot == null) {
-			resultListRoot = createFolder(resultListContainer, "Ознакомление");
+                    try {
+                        resultListRoot = createFolder(resultListContainer, "Ознакомление");
+                    } catch (WriteTransactionNeededException ex) {
+                        logger.debug("Can't crate folder.", ex );
+                        throw new RuntimeException(ex);
+                    }
 		}
 
 		NodeRef resultList = resultListService.createResultList(resultListRoot, bpmPackage, documentAttachmentCategoryName, WorkflowResultModel.TYPE_WORKFLOW_RESULT_LIST, RESULT_LIST_NAME_FORMAT);
@@ -259,7 +286,7 @@ public class ReviewWorkflowServiceImpl extends WorkflowServiceAbstract implement
 	}
 
 	@Override
-	public void sendBareNotifications(List<NodeRef> assigneesList, Date workflowDueDate, NodeRef bpmPackage) {
+	public void sendBareNotifications(List<NodeRef> assigneesList, Date workflowDueDate, NodeRef bpmPackage) throws WriteTransactionNeededException {
 		for (NodeRef assignee : assigneesList) {
 			NodeRef employeeRef = assigneesListService.getEmployeeByAssignee(assignee);
 			grantReaderPermissions(employeeRef, bpmPackage, false);

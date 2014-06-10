@@ -156,6 +156,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		List<NodeRef> members = documentMembersService.getDocumentMembers(documentRef);
 		List<String> users = new ArrayList<String>();
 		for (NodeRef member : members) {
+			behaviourFilter.disableBehaviour(member);
 			List<AssociationRef> assocs = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
 			NodeRef employeeRef = assocs.get(0).getTargetRef();
 			String login = orgstructureService.getEmployeeLogin(employeeRef);
@@ -172,7 +173,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		logger.debug("Members {} are deleted and access is revoked for document {}", users, documentRef);
 
 		//останавливаем все workflow в которых участвует этот документ
-		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef);
+		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef, true);
 		Set<String> definitions = new HashSet<String>();
 		List<String> activities = new ArrayList<String>();
 		for (WorkflowInstance workflow : workflows) {

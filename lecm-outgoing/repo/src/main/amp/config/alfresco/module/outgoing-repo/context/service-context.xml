@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="outgoing.model.bootstrap" parent="modelsToRepositoryLoader"
+		  depends-on="dictionaryBootstrap,
+					  documents.LogicEcmModelsBootstrap,
+					  eds.models.bootstrap,
+					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
+					  documents.dictionaries.LogicEcmModelsBootstrap,
+					  dictionary.fileRegister.LogicEcmModelsBootstrap,
+					  ru.it.lecm.contractors.lecm-contractors-repo.contractors-model-bootstrap"
+		  p:models="alfresco/module/${artifactId}/models/lecm-outgoing-model.xml"
+		  p:labels="alfresco/module/${artifactId}/messages/lecm-outgoing-model"/>
+
+	<util:list id="outgoing.dictionaries">
+		<value>alfresco/module/${artifactId}/dictionaries/outgoing-bj-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/outgoing-br-items.xml</value>
+		<value>alfresco/module/${artifactId}/dictionaries/outgoing-rn-items.xml</value>
+	</util:list>
+	<bean id="outgoing.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap,
+					  ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+					  businessJournalLogEventsPolicy"
+		  p:dictionaries-ref="outgoing.dictionaries"/>
+
+	<util:list id="outgoing.groupOperations.dictionaries">
+		<value>alfresco/module/${artifactId}/actions/direct-to-registration.xml</value>
+		<value>alfresco/module/${artifactId}/actions/prepare-to-send.xml</value>
+		<value>alfresco/module/${artifactId}/actions/send.xml</value>
+		<value>alfresco/module/${artifactId}/actions/print-cover.xml</value>
+		<value>alfresco/module/${artifactId}/actions/register-sending.xml</value>
+	</util:list>
+	<bean id="outgoing.groupOperations" parent="lecmDictionaryBootstrap" depends-on="groupActionsService"
+		  p:rootPath="/Business platform/LECM/Сервис Групповые операции"
+		  p:dictionaries-ref="outgoing.groupOperations.dictionaries"/>
+
+	<bean id="outgoing.statemachine.bootstrap" parent="defaultStatemachines"
+		  p:statemachineName="lecm-outgoing:document"
+		  p:path="alfresco/module/${artifactId}/statemachine/lecm-outgoing-statemachine-default.xml"/>
+
+	<bean id="outgoing.service" parent="baseBean"
+		  class="ru.it.lecm.outgoing.beans.OutgoingServiceImpl"
+		  depends-on="outgoing.model.bootstrap"/>
+
+
+	<util:list id="outgoing.copySettings.propsToCopy">
+		<value>lecm-document:title</value>
+		<value>lecm-eds-document:note</value>
+		<value>lecm-eds-document:summaryContent</value>
+		<value>lecm-eds-document:execution-date</value>
+	</util:list>
+
+	<util:list id="outgoing.copySettings.assocsToCopy">
+		<value>lecm-outgoing:contractor-assoc</value>
+		<value>lecm-outgoing:recipient-assoc</value>
+		<value>lecm-outgoing:registrar-assoc</value>
+		<value>lecm-outgoing:delivery-method-assoc</value>
+		<value>lecm-eds-document:document-type-assoc</value>
+		<value>lecm-eds-document:file-register-assoc</value>
+		<value>lecm-eds-document:recipients-assoc</value>
+		<value>lecm-eds-document:reviewers-assoc</value>
+		<value>lecm-document:subject-assoc</value>
+	</util:list>
+
+	<bean id="outgoing.copySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings"
+		  p:propsToCopy-ref="outgoing.copySettings.propsToCopy"
+		  p:assocsToCopy-ref="outgoing.copySettings.assocsToCopy" />
+
+	<util:map id="outgoing.copySettings.bean.settings">
+		<entry key="lecm-outgoing:document" value-ref="outgoing.copySettings"/>
+	</util:map>
+
+	<bean id="outgoing.copySettings.bean" parent="documentCopySettingsBean"
+		  p:settings-ref="outgoing.copySettings.bean.settings" />
+
+	<util:list id="outgoing.taggedCounterRegistrator.tags">
+		<value>project</value>
+	</util:list>
+	<bean id="outgoing.taggedCounterRegistrator"
+		  parent="regNumbersTaggedCounterRegistrator"
+		  depends-on="outgoing.model.bootstrap"
+		  p:documentType="lecm-outgoing:document"
+		  p:tags-ref="outgoing.taggedCounterRegistrator.tags"/>
+
+    <bean id="outgoing.reports.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="reportsEditorService,reportsEditor.LogicEcmDictionariesBootstrap,
+          reportsEditorOnCreateAssocsPolicy,reportsEditorTemplatePolicy,
+          dataSourcePolicy,reportDescriptorPolicy">
+        <property name="rootPath" value="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/reports/outgoing-cover.xml</value>
+                <value>alfresco/module/${artifactId}/reports/outgoing-registration.xml</value>
+                <value>alfresco/module/${artifactId}/reports/register-sending.xml</value>
+            </list>
+        </property>
+        <property name="xmlImportListener" ref="outgoing.reportsDeployer"/>
+    </bean>
+
+    <bean id="outgoing.reportsDeployer" parent="reportsDeployer">
+        <property name="reportsForDeploy">
+            <list>
+                <value>outgoing-cover</value>
+                <value>outgoing-registration</value>
+                <value>register-sending</value>
+            </list>
+        </property>
+    </bean>
+</beans>

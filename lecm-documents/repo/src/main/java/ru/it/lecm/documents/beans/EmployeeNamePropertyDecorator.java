@@ -1,27 +1,29 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.jscript.app.PropertyDecorator;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PersonService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import org.alfresco.repo.jscript.app.BasePropertyDecorator;
+import org.alfresco.service.cmr.repository.NodeService;
+import org.json.simple.JSONAware;
+import org.json.simple.JSONObject;
 
 /**
  * User: dbashmakov
  * Date: 22.05.13
  * Time: 15:09
  */
-public class EmployeeNamePropertyDecorator implements PropertyDecorator {
+public class EmployeeNamePropertyDecorator extends BasePropertyDecorator {
     private ServiceRegistry services;
-    private NodeService nodeService = null;
+
     private PersonService personService = null;
+	private NodeService nodeService = null;
 
     private OrgstructureBean orgstructureService;
 
@@ -31,17 +33,20 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.services = serviceRegistry;
-        this.nodeService = serviceRegistry.getNodeService();
         this.personService = serviceRegistry.getPersonService();
+		this.nodeService = serviceRegistry.getNodeService();
     }
 
-    public Serializable decorate(NodeRef nodeRef, String propertyName, Serializable value) {
+
+	@Override
+	@SuppressWarnings("unchecked")
+    public JSONAware decorate(QName propertyName, NodeRef nodeRef, Serializable value) {
         String username = value.toString();
         String firstName;
         String middleName;
         String lastName;
         String ref = "";
-        Map<String, Serializable> map = new LinkedHashMap<String, Serializable>(4);
+		JSONObject map = new JSONObject();
         map.put("userName", username);
 
         if (this.personService.personExists(username) && !username.equals("System")) {
@@ -66,7 +71,7 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
             middleName = "";
         } else {
             map.put("isDeleted", true);
-            return (Serializable) map;
+            return map;
         }
 
         map.put("firstName", firstName);
@@ -74,7 +79,8 @@ public class EmployeeNamePropertyDecorator implements PropertyDecorator {
         map.put("middleName", middleName);
         map.put("nodeRef", ref);
         map.put("displayName", ((lastName != null ? lastName + " " : "") + (firstName != null ? firstName + " " : "") + (middleName != null ? middleName + " " : "")).replaceAll("^\\s+|\\s+$", ""));
-        return (Serializable) map;
+        return map;
     }
+
 }
 

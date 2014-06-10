@@ -1,0 +1,31 @@
+<extension>
+    <modules>
+        <module>
+            <id>Add a Custom Package for widgets</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <configurations>
+                <config evaluator="string-compare" condition="WebFramework" replace="false">
+                    <web-framework>
+                        <dojo-pages>
+                            <packages>
+                                <package name="logic_ecm" location="js/lib/logic_ecm" />
+                            </packages>
+                        </dojo-pages>
+                    </web-framework>
+                </config>
+            </configurations>
+        </module>
+        <module>
+            <id>Theme share header</id>
+            <version>1.0</version>
+            <auto-deploy>true</auto-deploy>
+            <customizations>
+                <customization>
+                    <targetPackageRoot>org.alfresco.share.header</targetPackageRoot>
+                    <sourcePackageRoot>ru.it.lecm.theme.header</sourcePackageRoot>
+                </customization>
+            </customizations>
+        </module>
+    </modules>
+</extension>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Исходящие. Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">Исходящие. Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">OUTGOING_CREATORS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющие право создания исходящих документов</property>
+			</item>
+			<item name="cm:Исходящие. Отправляющие" type="lecm-orgstr:business-role">
+				<property name="cm:name">Исходящие. Отправляющие</property>
+				<property name="lecm-orgstr:business-role-identifier">OUTGOING_SENDERS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющий право отправки документов</property>
+			</item>
+		</items>
+	</item>
+</items>

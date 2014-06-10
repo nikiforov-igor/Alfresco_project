@@ -22,8 +22,8 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
     private Logger logger = LoggerFactory.getLogger(RemoteBusinessJournalServiceImpl.class);
 
     public void init() {
-        bjRootRef = getFolder(BJ_ROOT_ID);
-        bjArchiveRef = getFolder(BJ_ARCHIVE_ROOT_ID);
+		bjRootID = BJ_ROOT_ID;
+		bjArchiveID = BJ_ARCHIVE_ROOT_ID;
     }
 
     @Override
@@ -141,7 +141,7 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
                 // проверить доступность основного объекта
                 for (BusinessJournalRecord record : result) {
 					NodeRef mainObject = record.getMainObject();
-                    if (nodeService.exists(mainObject) && lecmPermissionService.hasReadAccess(mainObject)
+					if (nodeService.exists(mainObject) && lecmPermissionService.hasReadAccess(mainObject)
 							&& (!stateMachineService.isDraft(mainObject) || isOwnNode(mainObject))) {
                         filteredResult.add(record);
                     }
@@ -441,13 +441,13 @@ public class RemoteBusinessJournalServiceImpl extends AbstractBusinessJournalSer
                 isActive
         );
         if (initiatorText != null) {
-            result.setInitiatorText(initiatorText);
+        result.setInitiatorText(initiatorText);
         }
         if (objectTypeText != null) {
-            result.setObjectTypeText(objectTypeText);
+        result.setObjectTypeText(objectTypeText);
         }
         if (eventCategoryText != null) {
-            result.setEventCategoryText(eventCategoryText);
+        result.setEventCategoryText(eventCategoryText);
         }
         return result;
     }

@@ -21,7 +21,7 @@
 	<parent>
 		<groupId>ru.it.lecm.errands</groupId>
 		<artifactId>errands</artifactId>
-		<version>1.2.0</version>
+		<version>1.4.0</version>
 	</parent>
 
 	<artifactId>errands-repo-api</artifactId>
@@ -75,6 +75,12 @@
 			<groupId>org.springframework.extensions.surf</groupId>
 			<artifactId>spring-webscripts</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 	<!--
@@ -107,10 +113,19 @@
 			</plugin>
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
-				<artifactId>maven-amp-plugin</artifactId>
+				<artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
 			</plugin>
 		</plugins>
-		<resources>
+		<resources><resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>

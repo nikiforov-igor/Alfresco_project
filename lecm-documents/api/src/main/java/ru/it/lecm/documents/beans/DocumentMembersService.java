@@ -7,6 +7,7 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -36,8 +37,9 @@ public interface DocumentMembersService {
      * @param employee - ссылка на сотрудника
      * @param properties - карта свойств
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMember(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
+    NodeRef addMember(NodeRef document, NodeRef employee, Map<QName, Serializable> properties)  throws WriteTransactionNeededException ;
 
     /**
      * Добавление нового участника с проверкой прав доступа
@@ -46,8 +48,9 @@ public interface DocumentMembersService {
      * @param properties - карта свойств
      * @param silent - не отправлять уведомление сотруднику о включении его в участники
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMember(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent);
+    NodeRef addMember(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent)  throws WriteTransactionNeededException ;
 
     /**
      * Добавление нового участника  с проверкой прав доступа
@@ -55,8 +58,9 @@ public interface DocumentMembersService {
      * @param employee - ссылка на сотрудника
      * @param permissionGroup - Группа привилегий
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup);
+    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup)  throws WriteTransactionNeededException ;
 
     /**
      * Добавление нового участника без проверки прав доступа
@@ -65,8 +69,9 @@ public interface DocumentMembersService {
      * @param permissionGroup - Группа привилегий
      * @param silent - не отправлять уведомление сотруднику о включении его в участники
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup, boolean silent);
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup, boolean silent)  throws WriteTransactionNeededException ;
 
     /**
      * Добавление нового участника без проверки прав доступа
@@ -75,8 +80,9 @@ public interface DocumentMembersService {
      * @param properties - карта свойств
      * @param silent - не отправлять уведомление сотруднику о включении его в участники
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent);
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employeeRef, Map<QName, Serializable> properties, boolean silent)  throws WriteTransactionNeededException;
 
     /**
      * Добавление нового участника без проверки прав доступа
@@ -84,8 +90,9 @@ public interface DocumentMembersService {
      * @param employee - ссылка на сотрудника
      * @param properties - карта свойств
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, Map<QName, Serializable> properties);
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, Map<QName, Serializable> properties)  throws WriteTransactionNeededException;
 
     /**
      * Добавление нового участника  с проверкой прав доступа
@@ -94,8 +101,9 @@ public interface DocumentMembersService {
      * @param permissionGroup - Группа привилегий
      * @param silent - не отправлять уведомление сотруднику о включении его в участники
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup, boolean silent);
+    NodeRef addMember(NodeRef document, NodeRef employee, String permissionGroup, boolean silent)  throws WriteTransactionNeededException;
 
     /**
      * Добавление нового участника без проверки прав доступа
@@ -103,8 +111,9 @@ public interface DocumentMembersService {
      * @param employee - ссылка на сотрудника
      * @param permissionGroup - Группа привилегий
      * @return ссылка на созданную ноду участника
+     * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
      */
-    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup);
+    NodeRef addMemberWithoutCheckPermission(NodeRef document, NodeRef employee, String permissionGroup)  throws WriteTransactionNeededException;
 
     /**
      * Удаление участника из данного документа
@@ -121,6 +130,16 @@ public interface DocumentMembersService {
      */
     NodeRef getMembersFolderRef(NodeRef document);
 
+	/**
+     * Создаёт директорию Участники для документа
+     * @param document - ссылка на документ
+     * @return ссылка на ноду
+     */
+	NodeRef createMembersFolderRef(final NodeRef document) throws WriteTransactionNeededException;
+
+	NodeRef createDocMemberUnit(final String docType) throws WriteTransactionNeededException;
+
+	NodeRef getDocMembersUnit(final String docType);
     /**
      * Возвращает список участников данного документа
      * @param document - ссылка на документ

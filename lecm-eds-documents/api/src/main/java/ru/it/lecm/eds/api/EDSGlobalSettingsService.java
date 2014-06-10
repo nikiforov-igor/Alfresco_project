@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  *
@@ -34,7 +35,6 @@ public interface EDSGlobalSettingsService {
 	QName ASSOC_POTENTIAL_ROLE_EMPLOYEE = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-employee-assoc");
 	QName ASSOC_POTENTIAL_ROLE_ORGANIZATION_ELEMENT = QName.createQName(GLOBAL_SETTINGS_NAMESPACE, "potential-role-organization-element-assoc");
 
-	NodeRef getServiceRootFolder();
 	NodeRef getSettingsNode();
 
 	Collection<NodeRef> getPotentialWorkers(NodeRef businessRoleRef, NodeRef organizationElementRef);

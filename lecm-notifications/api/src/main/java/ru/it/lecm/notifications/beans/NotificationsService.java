@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
 import java.util.List;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -95,7 +96,7 @@ public interface NotificationsService {
 	 *
 	 * @return Ссылка на корневую директорию уведомлений
 	 */
-	public NodeRef getNotificationsRootRef();
+	public NodeRef getNotificationsRootRef() throws WriteTransactionNeededException;
 
 	/**
 	 * Получение настроект пользователя
@@ -103,14 +104,23 @@ public interface NotificationsService {
 	 * @param createNewIfNotExist Создавать ли настройки если их нет
 	 * @return Ссылка на объект настроек
 	 */
-	public NodeRef geUserSettingsNode(String userName, boolean createNewIfNotExist);
+	public NodeRef getUserSettingsNode(String userName);
+
+	/**
+	 * Создание настроек пользователя
+	 * @param userName
+	 * @return
+	 */
+	public NodeRef createUserSettingsNode(String userName);
 
 	/**
 	 * Получение настроект текущего пользователя
 	 * @param createNewIfNotExist Создавать ли настройки если их нет
 	 * @return ссылка на объект пользовательских настроек
 	 */
-	public NodeRef getCurrentUserSettingsNode(boolean createNewIfNotExist);
+	public NodeRef getCurrentUserSettingsNode();
+	
+	public NodeRef createCurrentUserSettingsNode();
 
 	/**
 	 * Получение типов доставки уведомлений по-умолчанию из справочника

@@ -21,6 +21,7 @@ public interface ArmService {
 	public static final QName TYPE_ARM = QName.createQName(ARM_NAMESPACE_URI, "arm");
 	public static final QName PROP_ARM_CODE = QName.createQName(ARM_NAMESPACE_URI, "code");
 
+	public static final QName TYPE_ARM_BASE_NODE = QName.createQName(ARM_NAMESPACE_URI, "base-node");
 	public static final QName TYPE_ARM_ACCORDION = QName.createQName(ARM_NAMESPACE_URI, "accordion");
 	public static final QName TYPE_ARM_NODE = QName.createQName(ARM_NAMESPACE_URI, "node");
 	public static final QName TYPE_ARM_REPORTS_NODE = QName.createQName(ARM_NAMESPACE_URI, "reports-node");
@@ -38,6 +39,7 @@ public interface ArmService {
 	public static final QName PROP_IS_SELECT_BY_ACTIVE_TASKS = QName.createQName(ARM_NAMESPACE_URI, "is-select-by-activeTasks");
 	public static final QName PROP_ACTIVE_TASKS_FILTER = QName.createQName(ARM_NAMESPACE_URI, "activeTasks-filter");
 	public static final QName ASSOC_ACCORDION_BUSINESS_ROLES = QName.createQName(ARM_NAMESPACE_URI, "business-roles-assoc");
+	public static final QName PROP_IS_AGGREGATION_NODE = QName.createQName(ARM_NAMESPACE_URI, "is-aggregation-node");
 
 	public static final QName TYPE_ARM_COLUMN = QName.createQName(ARM_NAMESPACE_URI, "field");
 	public static final QName PROP_COLUMN_TITLE = QName.createQName(ARM_NAMESPACE_URI, "field-title");
@@ -156,4 +158,10 @@ public interface ArmService {
 	public ArmBaseChildRule getNodeChildRule(NodeRef node);
 
     public String getActiveWorkflowsQuery(NodeRef node);
+
+	/**
+	 * Агрегировать поисковый запрос для узла
+	 * @param nodeRef Узел
+	 */
+	public void aggregateNode(NodeRef nodeRef);
 }

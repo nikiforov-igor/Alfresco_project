@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import org.springframework.extensions.webscripts.WebScriptException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
@@ -36,7 +38,7 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	private OrgstructureBean orgstructureBean;
 	private WorkflowResultListService workflowResultListService;
 
-	public void setNodeService(NodeService nodeService) {
+        public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
@@ -70,15 +72,35 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 	}
 
 	public void assignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		signingWorkflowService.assignTask(assignee.getNodeRef(), task);
+		NodeRef assigneeRef = assignee.getNodeRef();
+                //		TODO: Метод assignTask через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
+            try {    
+                signingWorkflowService.assignTask(assigneeRef, task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't assign task", ex);
+            }
 	}
 
 	public void reassignTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		signingWorkflowService.reassignTask(assignee.getNodeRef(), task);
+            try {
+                signingWorkflowService.reassignTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't reassign task.", ex);
+            }
 	}
 
-	public WorkflowTaskDecision completeTask(final ActivitiScriptNode assignee, final DelegateTask task) {
-		return signingWorkflowService.completeTask(assignee.getNodeRef(), task);
+	public WorkflowTaskDecision completeTask(final ActivitiScriptNode assignee, final DelegateTask task)  {
+            try {
+                return signingWorkflowService.completeTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException("Can't complete task.", ex);
+            }
 	}
 
 	public void notifyDeadlineTasks(final String processInstanceId, final ActivitiScriptNode bpmPackage, final VariableScope variableScope) {

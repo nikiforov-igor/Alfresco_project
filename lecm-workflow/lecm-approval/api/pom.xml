@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ru.it.lecm.workflow.approval</groupId>
 		<artifactId>approval</artifactId>
-		<version>1.2.0</version>
+		<version>1.4.0</version>
 	</parent>
 	<artifactId>approval-repo-api</artifactId>
 	<name>Logic ECM Approval Repo API</name>
@@ -30,11 +30,17 @@
 			<artifactId>alfresco-repository</artifactId>
 			<scope>provided</scope>
 		</dependency>
-        <dependency>
-            <groupId>ru.it.lecm.workflow</groupId>
-            <artifactId>workflow-repo-api</artifactId>
-            <version>${platform.version}</version>
-            <type>jar</type>
-        </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.workflow</groupId>
+                    <artifactId>workflow-repo-api</artifactId>
+                    <version>${platform.version}</version>
+                    <type>jar</type>
+                </dependency>
+                <dependency>
+                        <groupId>ru.it.lecm.base</groupId>
+                        <artifactId>base-repo-api</artifactId>
+                        <version>${project.version}</version>
+                        <scope>provided</scope>
+                </dependency>
 	</dependencies>
 </project>

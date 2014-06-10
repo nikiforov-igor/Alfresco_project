@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Договор. Исполнитель" type="lecm-orgstr:business-role">
+                <property name="cm:name">Договор. Исполнитель</property>
+                <property name="lecm-orgstr:business-role-identifier">CONTRACT_EXECUTOR</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Исполнитель договора</property>
+            </item>
+            <item name="cm:Договор. Куратор" type="lecm-orgstr:business-role">
+                <property name="cm:name">Договор. Куратор</property>
+                <property name="lecm-orgstr:business-role-identifier">CONTRACT_CURATOR</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Куратор договорной деятельности</property>
+            </item>
+            <item name="cm:Договор. Подписант" type="lecm-orgstr:business-role">
+                <property name="cm:name">Договор. Подписант</property>
+                <property name="lecm-orgstr:business-role-identifier">CONTRACT_SIGNER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Подписант</property>
+            </item>
+            <item name="cm:Договор. Регистратор" type="lecm-orgstr:business-role">
+                <property name="cm:name">Договор. Регистратор</property>
+                <property name="lecm-orgstr:business-role-identifier">CONTRACT_RECORDER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Регистратор договора</property>
+            </item>
+            <item name="cm:Договор. Читатель" type="lecm-orgstr:business-role">
+                <property name="cm:name">Договор. Читатель</property>
+                <property name="lecm-orgstr:business-role-identifier">CONTRACT_READER</property>
+                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
+                <property name="lecm-orgstr:business-role-description">Читатель договора</property>
+            </item>
+        </items>
+    </item>
+</items>

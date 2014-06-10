@@ -4,7 +4,6 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
@@ -26,6 +25,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
@@ -40,32 +41,30 @@ import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: AIvkin
- * Date: 28.02.13
- * Time: 16:28
+ * Created with IntelliJ IDEA. User: AIvkin Date: 28.02.13 Time: 16:28
  */
 public class DocumentServiceImpl extends BaseBean implements DocumentService, ApplicationContextAware {
+
     private static final transient Logger logger = LoggerFactory.getLogger(DocumentServiceImpl.class);
 
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
     private Repository repositoryHelper;
     private NamespaceService namespaceService;
-	private DictionaryService dictionaryService;
+    private DictionaryService dictionaryService;
     private LecmPermissionService lecmPermissionService;
     private DocumentMembersService documentMembersService;
     private SearchService searchService;
     private DocumentAttachmentsService documentAttachmentsService;
     private CopyService copyService;
-	private ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
     private NotificationsService notificationsService;
     private IWorkCalendar workCalendarService;
 
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		this.applicationContext = applicationContext;
-	}
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
@@ -82,13 +81,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     public void setRepositoryHelper(Repository repositoryHelper) {
         this.repositoryHelper = repositoryHelper;
     }
+
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
 
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;
@@ -181,8 +181,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
 
         for (Map.Entry<QName, Serializable> e : nodeService.getProperties(documentRef).entrySet()) {
-            if (!(namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("cm") ||
-                    namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("sys"))) {
+            if (!(namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("cm")
+                    || namespaceService.getPrefixes(e.getKey().getNamespaceURI()).contains("sys"))) {
                 properties.put(e.getKey(), e.getValue());
             }
         }
@@ -191,33 +191,43 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     /**
      * Создание документа
+     *
      * @param type тип документа lecm-contract:document
      * @param property свойства документа
      * @return
      */
     @Override
-    public NodeRef createDocument(String type, Map<String, String> property, final Map<String,String> association) {
+    public NodeRef createDocument(String type, Map<String, String> property, final Map<String, String> association) {
         // получение папки черновиков для документа
-        final NodeRef draftRef;
+        NodeRef draftRef;
         if (getDraftRootLabel(type) != null) {
-            draftRef = getDraftRootByType(QName.createQName(type, namespaceService));
+            QName typeQName = QName.createQName(type, namespaceService);
+            draftRef = getDraftRootByType(typeQName);
+            if (draftRef == null) {
+                try {
+                    draftRef = createDraftRoot(typeQName);
+                } catch (WriteTransactionNeededException ex) {
+                    logger.debug(ex.getMessage(), ex);
+                    throw new RuntimeException(ex);
+                }
+            }
         } else {
             draftRef = getDraftRoot();
         }
 
         final QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
         final QName assocQName = ContentModel.ASSOC_CONTAINS;
-        final QName nodeTypeQName =  QName.createQName(type, namespaceService);
+        final QName nodeTypeQName = QName.createQName(type, namespaceService);
 
-        final Map<QName, Serializable> properties =  new HashMap<QName, Serializable>();
-        for(Map.Entry<String, String> e: property.entrySet()) {
-            properties.put(QName.createQName(e.getKey(),namespaceService),e.getValue());
+        final Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+        for (Map.Entry<String, String> e : property.entrySet()) {
+            properties.put(QName.createQName(e.getKey(), namespaceService), e.getValue());
         }
 
         ChildAssociationRef associationRef = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
 
-        for(Map.Entry<String, String> assoc : association.entrySet()) {
-           nodeService.createAssociation(associationRef.getChildRef(), new NodeRef(assoc.getValue()), QName.createQName(assoc.getKey().toString(),namespaceService));
+        for (Map.Entry<String, String> assoc : association.entrySet()) {
+            nodeService.createAssociation(associationRef.getChildRef(), new NodeRef(assoc.getValue()), QName.createQName(assoc.getKey(), namespaceService));
         }
 
         return associationRef.getChildRef();
@@ -225,6 +235,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     /**
      * Изменение свойств документа
+     *
      * @param nodeRef
      * @param property
      * @return ссылка на на документ
@@ -242,9 +253,9 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return nodeRef;
     }
 
-	@Override
-	public boolean isDocument(NodeRef ref) {
-		QName refType = nodeService.getType(ref);
+    @Override
+    public boolean isDocument(NodeRef ref) {
+        QName refType = nodeService.getType(ref);
         return refType != null && dictionaryService.isSubClass(refType, DocumentService.TYPE_BASE_DOCUMENT);
     }
 
@@ -256,36 +267,66 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public String getDraftPathByType(QName docType) {
         NodeRef draftRef = getDraftRootByType(docType);
-        return  nodeService.getPath(draftRef).toPrefixString(namespaceService);
+        return nodeService.getPath(draftRef).toPrefixString(namespaceService);
     }
 
+    @Override
     public NodeRef getDraftRoot() {
         String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
-        return repositoryStructureHelper.getDraftsRef(fullyAuthenticatedUser);
+        try {
+            return repositoryStructureHelper.getDraftsRef(fullyAuthenticatedUser);
+        } catch (WriteTransactionNeededException e) {
+            logger.debug("Can't get folder.", e);
+            return null;
+        }
     }
 
+    @Override
     public NodeRef getDraftRootByType(QName docType) {
         final NodeRef draftRef = getDraftRoot();
         final String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
         NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
 
-        if (nodeRef == null) {
-	        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
-	        return transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-		        @Override
-		        public NodeRef execute () throws Throwable {
-			        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-			        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
-			        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
-
-			        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-			        properties.put(ContentModel.PROP_NAME, rootName);
-			        ChildAssociationRef childAssoc = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-			        return childAssoc.getChildRef ();
-		        }
-	        }, false, true);
-        }
+//		TODO: DONE Разделение метода
+//        if (nodeRef == null) {
+//	        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper ();
+//	        return transactionHelper.doInTransaction (new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//		        @Override
+//		        public NodeRef execute () throws Throwable {
+//			        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+//			        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+//			        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+//
+//			        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+//			        properties.put(ContentModel.PROP_NAME, rootName);
+//			        ChildAssociationRef childAssoc = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+//			        return childAssoc.getChildRef ();
+//		        }
+//	        }, false, true);
+//        }
         return nodeRef;
+    }
+
+    @Override
+    //TODO DONE Refactoring in progress...
+    public NodeRef createDraftRoot(QName docType) throws WriteTransactionNeededException {
+        final NodeRef draftRef = getDraftRoot();
+        final String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
+
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create Draft Root for DocType " + rootName);
+        }
+
+        QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+        QName nodeTypeQName = ContentModel.TYPE_FOLDER;
+
+        Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+        properties.put(ContentModel.PROP_NAME, rootName);
+        ChildAssociationRef childAssoc = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+        return childAssoc.getChildRef();
     }
 
     @Override
@@ -293,16 +334,17 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return getDraftRootLabel(docType.toPrefixString(namespaceService));
     }
 
+    @Override
     public String getDocumentsFolderPath() {
-        NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
-        return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
+            NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
+            return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
     }
 
-	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
-	@Override
-	public NodeRef getServiceRootFolder() {
-		return null;
-	}
+    // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
+    @Override
+    public NodeRef getServiceRootFolder() {
+        return null;
+    }
 
     @Override
     public List<NodeRef> getMembers(QName docType) {
@@ -310,7 +352,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         List<NodeRef> allMembers = findNodesByAssociationRef(membersUnit, DocumentMembersService.ASSOC_UNIT_EMPLOYEE, null, ASSOCIATION_TYPE.TARGET);
         List<NodeRef> result = new ArrayList<NodeRef>();
         for (NodeRef allMember : allMembers) {
-            if (!isArchive(allMember)){
+            if (!isArchive(allMember)) {
                 result.add(allMember);
             }
         }
@@ -381,7 +423,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 pathsFilter += (addOR ? " OR " : "") + "PATH:\"" + path + "//*\"";
                 addOR = true;
             }
-            query += (query.length() > 0 ? " AND (": "(") + pathsFilter + ")";
+            query += (query.length() > 0 ? " AND (" : "(") + pathsFilter + ")";
         }
 
         // фильтр по статусам
@@ -395,8 +437,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     statusesNotFilter += " @lecm\\-statemachine\\:status:\"" + status.replace("!", "").trim() + "\"";
                 }
             }
-            query += (!statusesFilter.isEmpty() ? (query.length() > 0 ? " AND (": "(") + ("" + statusesFilter + ")") : "")  +
-                    (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter  + ")") : "");
+            query += (!statusesFilter.isEmpty() ? (query.length() > 0 ? " AND (" : "(") + ("" + statusesFilter + ")") : "")
+                    + (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter + ")") : "");
         }
 
         if (filterQuery != null && filterQuery.length() > 0) {
@@ -410,11 +452,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 filterQuery = filterQuery.replaceAll("#current-date", DateFormatISO8601.format(nextWorkDate));
             }
 
-
-            query += (query.length() > 0 ? " AND (": "(") + filterQuery + ") ";
+            query += (query.length() > 0 ? " AND (" : "(") + filterQuery + ") ";
         }
 
-        if (sortDefinition != null && !sortDefinition.isEmpty()){
+        if (sortDefinition != null && !sortDefinition.isEmpty()) {
             for (SortDefinition sort : sortDefinition) {
                 sp.addSort(sort);
             }
@@ -457,9 +498,19 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 }
             }
             // создаем ноду
-            ChildAssociationRef createdNodeAssoc = nodeService.createNode(getDraftRootByType(docType),
+            NodeRef draftRoot = getDraftRootByType(docType);
+//			TODO: DONE Ввиду разделения метода проверка
+            if (draftRoot == null) {
+                try {
+                    draftRoot = createDraftRoot(docType);
+                } catch (WriteTransactionNeededException ex) {
+                    logger.debug(ex.getMessage(), ex);
+                    throw new RuntimeException(ex);
+                }
+            }
+            ChildAssociationRef createdNodeAssoc = nodeService.createNode(draftRoot,
                     ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
-                    GUID.generate()), docType, properties);
+                            GUID.generate()), docType, properties);
 
             if (createdNodeAssoc != null && createdNodeAssoc.getChildRef() != null) {
                 NodeRef createdNode = createdNodeAssoc.getChildRef();
@@ -486,6 +537,13 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     if (categories != null) {
                         for (String category : categories) {
                             NodeRef errandAttachmentsFolder = documentAttachmentsService.getRootFolder(createdNode);
+                            if (null == errandAttachmentsFolder) {
+                                try { //TODO DONE Рефакторинг AL-2733
+                                    errandAttachmentsFolder = documentAttachmentsService.createRootFolder(createdNode);
+                                } catch (WriteTransactionNeededException ex) {
+                                    throw new RuntimeException(ex);
+                                }
+                            }
                             NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                             if (categoryRef != null) {
                                 // код ниже - хак. При копировании ноды - все ассоциации на неё также копируются. У вложений есть ссылка на родительский документ,
@@ -513,7 +571,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                                             // возвращаем удаленную ассоциацию
                                             try {
                                                 nodeService.createAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
-                                            } catch (AssociationExistsException ignored) {}
+                                            } catch (AssociationExistsException ignored) {
+                                            }
                                         }
                                     }
                                 }
@@ -538,7 +597,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return label != null ? label : key;
     }
 
-
     private void refreshValues(NodeRef documentNodeRef) {
         int personsCount = 0;
         int summaryRating = 0;
@@ -554,9 +612,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
             }
         }
         BigDecimal rating = (new BigDecimal((float) summaryRating / personsCount)).setScale(1, BigDecimal.ROUND_HALF_UP);
-
-        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
-        nodeService.setProperty(documentNodeRef, DocumentService.PROP_RATING, rating.toString());
+        //TODO DONE замена нескольких setProperty на setProperties.
+        Map<QName, Serializable> properties = nodeService.getProperties(documentNodeRef);
+        properties.put(DocumentService.PROP_RATED_PERSONS_COUNT, personsCount);
+        properties.put(DocumentService.PROP_RATING, rating.toString());
+        nodeService.setProperties(documentNodeRef, properties);
     }
 
     public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
@@ -629,7 +689,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         nodeService.setProperty(document, DocumentService.PROP_DOCUMENT_DATE, date);
     }
 
-    private String getRegNumber(NodeRef document, boolean getProjectNumber){
+    private String getRegNumber(NodeRef document, boolean getProjectNumber) {
         QName regAspectName = getProjectNumber ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
         QName propNumber = getProjectNumber ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
         if (nodeService.hasAspect(document, regAspectName)) {
@@ -641,7 +701,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return null;
     }
 
-    private Date getRegDate(NodeRef document, boolean getProjectNumber){
+    private Date getRegDate(NodeRef document, boolean getProjectNumber) {
         QName regAspectName = getProjectNumber ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
         QName propDate = getProjectNumber ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
         if (nodeService.hasAspect(document, regAspectName)) {
@@ -654,7 +714,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     }
 
     @Override
-    public NodeRef getDocumentRegistrator(NodeRef document){
+    public NodeRef getDocumentRegistrator(NodeRef document) {
         if (nodeService.hasAspect(document, DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA)) {
             List<AssociationRef> refs = nodeService.getTargetAssocs(document, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR);
             if (refs != null && !refs.isEmpty()) {
@@ -687,12 +747,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
     }
 
-	@Override
-	public Collection<QName> getDocumentSubTypes() {
-		Collection<QName> subTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
+    @Override
+    public Collection<QName> getDocumentSubTypes() {
+        Collection<QName> subTypes = dictionaryService.getSubTypes(DocumentService.TYPE_BASE_DOCUMENT, true);
         subTypes.remove(DocumentService.TYPE_BASE_DOCUMENT);
         return subTypes;
-	}
+    }
 
     @Override
     public boolean execExpression(NodeRef document, String expression) {
@@ -717,7 +777,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
 
         if (additionalUnits != null) {
-            nodeService.setAssociations(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC, additionalUnits);
+            HashSet<NodeRef> unique = new HashSet<NodeRef>(additionalUnits);
+            nodeService.setAssociations(document, DocumentService.ASSOC_ADDITIONAL_ORGANIZATION_UNIT_ASSOC, new ArrayList<NodeRef>(unique));
         }
     }
 
@@ -760,7 +821,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         return records;
     }
 
-	public String wrapAsDocumentLink(NodeRef documentRef) {
-		return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), DOCUMENT_LINK_URL);
-	}
+    public String wrapAsDocumentLink(NodeRef documentRef) {
+        return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), DOCUMENT_LINK_URL);
+    }
 }

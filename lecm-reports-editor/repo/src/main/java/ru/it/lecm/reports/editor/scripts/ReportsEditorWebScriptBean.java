@@ -95,7 +95,7 @@ public class ReportsEditorWebScriptBean extends BaseWebScript {
             Map<String, ReportDescriptor> descriptors = service.getReportsManager().getDescriptors();
             ReportDescriptor descriptor = descriptors.get(reportId);
             if (descriptor != null) {
-                if (fromParent && descriptor instanceof SubReportDescriptorImpl) {
+                if (fromParent && descriptor.isSubReport()) {
                     descriptor = ((SubReportDescriptorImpl) descriptor).getOwnerReport();
                     if (descriptor == null) {
                         return results;

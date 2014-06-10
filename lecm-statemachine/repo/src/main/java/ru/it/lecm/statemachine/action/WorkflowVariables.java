@@ -1,6 +1,6 @@
 package ru.it.lecm.statemachine.action;
 
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,18 +32,22 @@ public class WorkflowVariables {
 
 	private List<WorkflowVariable> input = new ArrayList<WorkflowVariable>();
 	private List<WorkflowVariable> output = new ArrayList<WorkflowVariable>();
+	
+	public WorkflowVariables() {
+		
+	}
 
-	public WorkflowVariables(Element workflowVariablesElement) {
-		if (workflowVariablesElement == null) return;
-
-		List<Element> variables = workflowVariablesElement.elements("input");
-		for (Element variable : variables) {
-			input.add(pack(variable));
-		}
-		variables = workflowVariablesElement.elements("output");
-		for (Element variable : variables) {
-			output.add(pack(variable));
-		}
+	public WorkflowVariables(WorkflowVariables workflowVariablesElement) {
+//		if (workflowVariablesElement == null) return;
+//
+//		List<Element> variables = workflowVariablesElement.elements("input");
+//		for (Element variable : variables) {
+//			input.add(pack(variable));
+//		}
+//		variables = workflowVariablesElement.elements("output");
+//		for (Element variable : variables) {
+//			output.add(pack(variable));
+//		}
 	}
 
 	public List<WorkflowVariable> getInput() {
@@ -53,13 +57,22 @@ public class WorkflowVariables {
 	public List<WorkflowVariable> getOutput() {
 		return output;
 	}
+	
+	public void addInput(String fromType, String fromValue, String toType, String toValue) {
+		input.add(new WorkflowVariable(Type.valueOf(fromType), fromValue, Type.valueOf(toType), toValue));
+	}
+	
+	public void addOutput(String fromType, String fromValue, String toType, String toValue) {
+		output.add(new WorkflowVariable(Type.valueOf(fromType), fromValue, Type.valueOf(toType), toValue));
+	}
 
-	private WorkflowVariable pack(Element workflowVariableElement) {
-		Type fromType = Type.valueOf(workflowVariableElement.attribute("fromType"));		String fromField = workflowVariableElement.attribute("fromField");
-		String fromValue = workflowVariableElement.attribute("fromValue");
-		Type toType = Type.valueOf(workflowVariableElement.attribute("toType"));
-		String toValue = workflowVariableElement.attribute("toValue");
-		return new WorkflowVariable(fromType, fromValue, toType, toValue);
+	private WorkflowVariable pack(WorkflowVariables workflowVariableElement) {
+//		Type fromType = Type.valueOf(workflowVariableElement.attribute("fromType"));		String fromField = workflowVariableElement.attribute("fromField");
+//		String fromValue = workflowVariableElement.attribute("fromValue");
+//		Type toType = Type.valueOf(workflowVariableElement.attribute("toType"));
+//		String toValue = workflowVariableElement.attribute("toValue");
+//		return new WorkflowVariable(fromType, fromValue, toType, toValue);
+		return null;
 	}
 
 	public class WorkflowVariable {

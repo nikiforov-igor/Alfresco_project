@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model name="lecm-incoming:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Входящие</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+	<imports>
+		<import uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<import uri="http://www.it.ru/logicECM/eds-document/1.0" prefix="lecm-eds-document"/>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+        <import uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
+        <import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+        <import uri="http://www.it.ru/logicECM/links/1.0" prefix="lecm-links"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/1.0" prefix="lecm-doc-dic"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/deliveryMethod/1.0" prefix="lecm-doc-dic-dm"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/docType/1.0" prefix="lecm-doc-dic-dt"/>
+        <import uri="http://www.it.ru/logicECM/document/dictionaries/fileRegister/1.0" prefix="lecm-doc-dic-fr"/>
+		<import uri="http://www.it.ru/lecm/contractors/model/contractor/1.0" prefix="lecm-contractor"/>
+		<import uri="http://www.it.ru/lecm/contractors/model/representative/1.0" prefix="lecm-representative"/>
+	</imports>
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/incoming/1.0" prefix="lecm-incoming"/>
+	</namespaces>
+
+    <constraints>
+        <constraint name="lecm-incoming:present-string-constraint" type="ru.it.lecm.documents.constraints.PresentStringConstraint">
+            <parameter name="presentString">
+                <value><![CDATA[{lecm-eds-document:document-type-assoc/cm:name} №{~REGNUM} от {~REGDATE}, от: {lecm-incoming:sender-assoc/lecm-contractor:contractor-to-legalform-association/lecm-legalform:short-title} '{lecm-incoming:sender-assoc/cm:name}', получатель {lecm-incoming:recipient-assoc/lecm-orgstr:employee-short-name}{lecm-incoming:recipient-assoc/lecm-orgstr:element-short-name}]]></value>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-incoming:attachment-categories" type="LIST">
+            <parameter name="allowedValues">
+                <list>
+                    <value>Входящее</value>
+                    <value>Прочее</value>
+                </list>
+            </parameter>
+        </constraint>
+        <constraint name="lecm-incoming:author-property-constraint" type="ru.it.lecm.documents.constraints.AuthorPropertyConstraint">
+            <parameter name="authorProperty">
+                <value>lecm-document:creator-ref</value>
+            </parameter>
+        </constraint>
+	    <constraint name="lecm-incoming:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
+		    <parameter name="armUrl">
+			    <value>arm?code=SED</value>
+		    </parameter>
+	    </constraint>
+    </constraints>
+
+    <types>
+		<type name="lecm-incoming:document">
+			<title>Logic Ecm Incoming Document</title>
+			<parent>lecm-eds-document:base</parent>
+			<properties>
+                <!--Нерегистрируемый-->
+                <property name="lecm-incoming:is-not-registered">
+                    <title>Нерегистрируемый</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
+                <!--Исходящий номер-->
+                <property name="lecm-incoming:outgoing-number">
+                    <title>Исходящий номер</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!--Исходящий от-->
+                <property name="lecm-incoming:outgoing-date">
+                    <title>Исходящий от</title>
+                    <type>d:date</type>
+                </property>
+                <property name="lecm-incoming:delivery-method-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-incoming:delivery-method-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+				<property name="lecm-incoming:sender-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-incoming:sender-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-incoming:addressee-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-incoming:addressee-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+                <property name="lecm-incoming:recipient-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-incoming:recipient-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <!-- Поступившее по каналам -->
+                <property name="lecm-incoming:is-by-channel">
+                    <type>d:boolean</type>
+                    <mandatory>true</mandatory>
+                    <default>false</default>
+                </property>
+			</properties>
+			<associations>
+				<!-- Ссылки -->
+				<association name="lecm-incoming:links-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-links:link</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+                <!--Способ доставки -->
+                <association name="lecm-incoming:delivery-method-assoc">
+                    <title>Способ доставки</title>
+                    <source>
+                        <mandatory>false</mandatory>
+                        <many>true</many>
+                    </source>
+                    <target>
+                        <class>lecm-doc-dic-dm:deliveryMethod</class>
+                        <mandatory>false</mandatory>
+                        <many>false</many>
+                    </target>
+                </association>
+				<!-- Получатель (сотрудник или подразделение) -->
+				<association name="lecm-incoming:recipient-assoc">
+                    <title>Получатель</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:cmobject</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+
+				<!-- Организация-отправитель -->
+				<association name="lecm-incoming:sender-assoc">
+					<title>Организация-отправитель</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-contractor:contractor-type</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<!-- Отправитель -->
+				<association name="lecm-incoming:addressee-assoc">
+					<title>Отправитель</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-representative:representative-type</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+            <mandatory-aspects>
+                <aspect>lecm-document-aspects:response-to-aspect</aspect>
+                <aspect>lecm-document-aspects:temp-attachments</aspect>
+                <aspect>lecm-document-aspects:on-control-aspect</aspect>
+            </mandatory-aspects>
+		</type>
+	</types>
+</model>

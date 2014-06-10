@@ -175,7 +175,7 @@ public class Form extends FormUIGet {
         for (String prop : fields.keySet()) {
             Field field = fields.get(prop);
             if (hasStatemachine) {
-                if (editableFields.contains(field.getConfigName())) {
+                if (editableFields.contains(field.getConfigName().replace(":", "_"))) {
                     FormField formField = formConfig.getFields().get(field.getConfigName());
                     boolean allowed = true;
                     if (formField != null) {

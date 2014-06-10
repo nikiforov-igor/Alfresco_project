@@ -29,6 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.transaction.TransactionService;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: dbashmakov
@@ -61,8 +64,18 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private ArmWrapperServiceImpl service;
 	private DictionaryService dictionaryService;
 	private NamespaceService namespaceService;
-	private StateMachineServiceBean statemachineService;
+	private StateMachineServiceBean stateMachineService;
 	private DocumentService documentService;
+        private LecmTransactionHelper lecmTransactionHelper;
+	private TransactionService transtactionService;
+
+        public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+            this.lecmTransactionHelper = lecmTransactionHelper;
+        }
+        
+	public void setTranstactionService(TransactionService transtactionService) {
+		this.transtactionService = transtactionService;
+	}
 
     public void setService(ArmWrapperServiceImpl service) {
         this.service = service;
@@ -76,8 +89,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		this.namespaceService = namespaceService;
 	}
 
-	public void setStatemachineService(StateMachineServiceBean statemachineService) {
-		this.statemachineService = statemachineService;
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void setDocumentService(DocumentService documentService) {
@@ -213,39 +226,54 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		return results;
 	}
 
-	private JSONArray getCreateTypes(ArmNode node, boolean isAccordion, Map<String, Boolean> isStarterHash) throws JSONException {
-		JSONArray results = new JSONArray();
-		List<String> allTypes = node.getCreateTypes();
-		if (allTypes != null) {
-			for (String type: allTypes) {
-				QName typeQName = QName.createQName(type, namespaceService);
-				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
-				if (typeDefinition != null) {
+	   private JSONArray getCreateTypes(ArmNode node, boolean isAccordion, Map<String, Boolean> isStarterHash) throws JSONException {
+        JSONArray results = new JSONArray();
+        List<String> allTypes = node.getCreateTypes();
+        if (allTypes != null) {
+            for (String type : allTypes) {
+                final QName typeQName = QName.createQName(type, namespaceService);
+                TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
+                if (typeDefinition != null) {
                     try {
-	                    boolean isStarter = true;
-	                    if (isAccordion) {
-		                    if (isStarterHash.containsKey(type)) {
-			                    isStarter = isStarterHash.get(type);
-		                    } else {
-			                    isStarter = statemachineService.isStarter(type);
-			                    isStarterHash.put(type, isStarter);
-		                    }
-	                    }
+                        boolean isStarter = true;
+                        if (isAccordion) {
+                            if (isStarterHash.containsKey(type)) {
+                                isStarter = isStarterHash.get(type);
+                            } else {
+                                isStarter = stateMachineService.isStarter(type);
+                                isStarterHash.put(type, isStarter);
+                            }
+                        }
                         if (isStarter) {
+                            NodeRef ref = documentService.getDraftRootByType(typeQName);
+//                            TODO: DONE Внешняя транзакция readonly, поэтому для создания папки черновика откроем на запись.
+//                            при таком вызове он не откроет новую транзакцию, и если здесь не падает, значит оно не вызывается, папка создалась раньше. 
+//                            Возможно, здесь эта проверка вообще не нужна, но, на всякий случай оставляю.
+//                            В такой ситуации используем lecmTransactionHelper
+                            if (ref == null) {
+                                ref = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+                                    @Override
+                                    public NodeRef execute() throws Throwable {
+                                        return documentService.createDraftRoot(typeQName);
+                                    }
+
+                                });
+                            }
                             JSONObject json = new JSONObject();
                             json.put("type", type);
-                            json.put("draftFolder", documentService.getDraftRootByType(typeQName));
-                            json.put("label", typeDefinition.getTitle());
+                            json.put("draftFolder", ref);
+                            json.put("label", typeDefinition.getTitle(dictionaryService));
                             results.put(json);
                         }
                     } catch (Exception ex) {
                         logger.error(ex.getMessage(), ex);
                     }
-				}
-			}
-		}
-		return results;
-	}
+                }
+            }
+        }
+        return results;
+    }
 
     private JSONArray getFiltersJSON(List<ArmFilter> filters) throws JSONException {
         JSONArray results = new JSONArray();

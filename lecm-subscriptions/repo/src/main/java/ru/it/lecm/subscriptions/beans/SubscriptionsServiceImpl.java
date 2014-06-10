@@ -16,6 +16,8 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Level;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: mShafeev
@@ -44,7 +46,7 @@ public class SubscriptionsServiceImpl extends BaseBean implements SubscriptionsS
 
 	@Override
 	public NodeRef getSubscriptionRootRef() {
-		return getFolder(SUBSCRIPTIONS_ROOT_ID);
+            return getFolder(SUBSCRIPTIONS_ROOT_ID);
 	}
 
 	@Override

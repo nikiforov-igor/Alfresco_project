@@ -69,7 +69,7 @@ public class ORDNotificationServiceImpl extends BaseBean implements ORDNotificat
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		return null;
 	}
 	
 	private void sendNotification(String message, NodeRef documentRef, List<NodeRef> recipients) {

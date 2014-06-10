@@ -8,10 +8,12 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
+//import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: pmelnikov
@@ -20,9 +22,10 @@ import java.util.*;
  */
 public class GroupActionsServiceImpl extends BaseBean implements GroupActionsService {
 
-    private NodeRef homeRef = null;
+	final protected Logger logger = LoggerFactory.getLogger(GroupActionsServiceImpl.class);
+
     private DictionaryService dictionaryService;
-    private StateMachineServiceBean stateMachineService;
+//    private StateMachineServiceBean stateMachineService;
     private List<String> aspects;
     private NamespaceService namespaceService;
     private DocumentService documentService;
@@ -33,32 +36,32 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
      * Записыывает в свойства сервиса nodeRef директории с бизнес-журналами
      */
     public void init() {
-        homeRef = getFolder(GA_ROOT_ID);
     }
 
     @Override
     public NodeRef getHomeRef() {
-        return homeRef;
+        return getServiceRootFolder();
     }
 
     @Override
     public NodeRef getServiceRootFolder() {
-        return homeRef;
+        return getFolder(GA_ROOT_ID);
     }
 
     public void setDictionaryService(DictionaryService dictionaryService) {
         this.dictionaryService = dictionaryService;
     }
 
-    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
-        this.stateMachineService = stateMachineService;
-    }
+//    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+//        this.stateMachineService = stateMachineService;
+//    }
 
     public void setAspects(List<String> aspects) {
         this.aspects = aspects;
     }
 
-    public List<String> getAspects() {
+    @Override
+	public List<String> getAspects() {
         return aspects;
     }
 
@@ -87,13 +90,16 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
         List<ChildAssociationRef> children = nodeService.getChildAssocs(getHomeRef());
         List<NodeRef> actions = new ArrayList<NodeRef>();
         for (ChildAssociationRef child : children) {
-            if (group) {
-                if (Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
-                    actions.add(child.getChildRef());
-                }
-            } else {
-                if (!Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
-                    actions.add(child.getChildRef());
+            QName type = nodeService.getType(child.getChildRef());
+            if (dictionaryService.isSubClass(type, TYPE_GROUP_ACTION)) {
+                if (group) {
+                    if (Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
+                        actions.add(child.getChildRef());
+                    }
+                } else {
+                    if (!Boolean.TRUE.equals(nodeService.getProperty(child.getChildRef(), GroupActionsService.PROP_IS_GROUP))) {
+                        actions.add(child.getChildRef());
+                    }
                 }
             }
         }

@@ -67,7 +67,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      */
     protected Set<String> jrSimpleProps;
 
-    final public static SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+    final public static SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public WKServiceKeeper getServices() {
         return services;
@@ -401,7 +401,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
             if (result) {
                 if (getReportDescriptor().getSubreports() != null) {  // прогрузка вложенных subreports ...
                     for (ReportDescriptor subreport : getReportDescriptor().getSubreports()) {
-                        if (subreport instanceof SubReportDescriptorImpl) {
+                        if (subreport.isSubReport()) {
                             final Object stringOrBean = prepareSubReport(docId, (SubReportDescriptorImpl) subreport, resolver);
                             context.getCurNodeProps().put(getAlfAttrNameByJRKey(((SubReportDescriptorImpl) subreport).getDestColumnName()), stringOrBean);
                         }

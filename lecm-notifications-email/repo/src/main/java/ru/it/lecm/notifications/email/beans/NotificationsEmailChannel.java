@@ -18,7 +18,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -38,7 +40,6 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 
 	protected NotificationsService notificationsService;
 	private ActionService actionService;
-	private NodeRef rootRef;
 
 	public void setNotificationsService(NotificationsService notificationsService) {
 		this.notificationsService = notificationsService;
@@ -53,21 +54,25 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	 * Создает рабочую директорию - если она еще не создана.
 	 */
 	public void init() {
-		this.rootRef = getFolder(NOTIFICATIONS_EMAIL_ROOT_ID);
 	}
 
 	@Override
 	public boolean sendNotification(NotificationUnit notification) {
 		String email = (String) nodeService.getProperty(notification.getRecipientRef(), OrgstructureBean.PROP_EMPLOYEE_EMAIL);
 		if (email != null) {
-			createNotification(notification, email);
+			try {
+				createNotification(notification, email);
 
-			String subject = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
-			if (subject == null) {
-				subject = "New notification";
+				String subject = I18NUtil.getMessage("notifications.email.subject", I18NUtil.getLocale());
+				if (subject == null) {
+					subject = "New notification";
+				}
+				sendEmail(subject, notification.getDescription(), email);
+				return true;
+			} catch (WriteTransactionNeededException ex) {
+				logger.debug("Can't create notification.", ex);
+				return false;
 			}
-			sendEmail(subject, notification.getDescription(), email);
-			return true;
 		} else {
 			return false;
 		}
@@ -80,7 +85,8 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 	 * @param email Адрес электронной почты
 	 * @return Ссылка на уведомление для email
 	 */
-	private NodeRef createNotification(NotificationUnit notification, String email) {
+        //TODO DONE Refactoring in progress
+	private NodeRef createNotification(NotificationUnit notification, String email) throws WriteTransactionNeededException {
 		String employeeName = (String) nodeService.getProperty(notification.getRecipientRef(), ContentModel.PROP_NAME);
 		Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
 		properties.put(NotificationsService.PROP_AUTOR, notification.getAutor());
@@ -88,7 +94,13 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 		properties.put(NotificationsService.PROP_FORMING_DATE, notification.getFormingDate());
 		properties.put(PROP_EMAIL, email);
 
-		final NodeRef saveDirectoryRef = getFolder(this.rootRef, employeeName, notification.getFormingDate());
+                NodeRef rootRef = getServiceRootFolder();
+                List<String> directoryPath = getDirectoryPath(employeeName, notification.getFormingDate());
+                NodeRef saveDirectoryRef = getFolder(rootRef, directoryPath);
+                //Судя по тому, что нода создаётся, транзакция должна быть.
+                if (null == saveDirectoryRef) {
+                    saveDirectoryRef = createPath(rootRef, directoryPath);
+                }
 
 		ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
 				QName.createQName(NOTIFICATIONS_EMAIL_NAMESPACE_URI, GUID.generate()),
@@ -114,6 +126,6 @@ public class NotificationsEmailChannel extends NotificationChannelBeanBase {
 
 	@Override
 	public NodeRef getServiceRootFolder() {
-		return rootRef;
+            return getFolder(NOTIFICATIONS_EMAIL_ROOT_ID);
 	}
 }

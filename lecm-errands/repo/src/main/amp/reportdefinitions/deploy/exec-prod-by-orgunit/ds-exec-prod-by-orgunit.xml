@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds.config>
+    <report.descriptor mnem="exec-prod-by-orgunit">
+        <l18>
+            <item key="RU_RU" value="Продуктивность по Подразделениям"/>
+        </l18>
+        <provider
+            javaClass="ru.it.lecm.errands.reports.ErrandsProductionsGraphDSProvider" mnem="PROVIDER_PROD_ERRANDS">
+            <l18>
+                <item key="RU_RU" value="Провайдер по Продуктивности Исполнителей/Подразделений"/>
+            </l18>
+        </provider>
+        <templates>
+            <template type="JASPER" filename="exec-prod-by-orgunit_tmpl.jrxml" mnem="tmpl">
+                <l18>
+                    <item key="RU_RU" value="exec-prod-by-orgunit"/>
+                </l18>
+            </template>
+        </templates>
+        <datasource.descriptor>
+            <l18>
+                <item key="RU_RU" value="b10c1b42-ad46-4694-b85f-cdaced5f9f03"/>
+            </l18>
+        </datasource.descriptor>
+        <roles>ERRANDS_INITIATOR,ERRANDS_EXECUTOR,ERRANDS_CONTROLLER,ERRANDS_COEXECUTOR,ERRANDS_READER,ERRANDS_CURATOR,ERRANDS_CHOOSING_INITIATOR</roles>
+    </report.descriptor>
+
+    <query.descriptor>
+        <offset>0</offset>
+        <limit>-1</limit>
+        <pgsize>-1</pgsize>
+        <queryText><![CDATA[+TYPE:"lecm-errands:document"]]></queryText>
+        <allVersions>true</allVersions>
+        <preferedType>lecm-errands:document</preferedType>
+        <isMultiRow>true</isMultiRow>
+        <isCustom>false</isCustom>
+    </query.descriptor>
+
+	<!--
+		groupBy.formats: Формат для группирования строк из НД, полученного после сбора всех поручений.
+		В одну группу будут отнесены строки с одинаковым значением отформатированной строки.
+
+		Пример форматной строки:
+
+		[CDATA[{lecm-additional-document:additionalDocumentType/cm:name} <i>№{lecm-additional-document:number}</i> от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts} с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		детально:
+		[CDATA[
+				{lecm-additional-document:additionalDocumentType/cm:name}
+				<i>№{lecm-additional-document:number}</i>
+				от {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:dateConclusionContracts}
+				с {..lecm-connect:primary-document-assoc/lecm-connect:connected-document-assoc/lecm-contract:partner-assoc/lecm-contractor:shortname}
+		]]
+		будет формировать для каждой выходной строки:
+			<Название_документа> №<Номер> от <ДатаСоглОсновногоДокумента> с <НазваниеОгранизацииПартнёра>
+	  -->
+	<groupBy.formats>
+		<map>
+			<!-- отсносительно Поручения -->
+			<item key="byPerson">
+				<![CDATA[ Инициатор {lecm-errands:initiator-assoc/cm:name}]]>
+			</item>
+
+			<!-- ссылка на организацию (отсносительно Персоны) "lecm-orgstr:organization-element" -->
+			<item key="byOrgUnit">
+				<![CDATA[ Подразделение {lecm-orgstr:element-short-name}]]>
+			</item>
+
+		</map>
+	</groupBy.formats>
+
+	<groupBy.source>
+		<map>
+			<!-- ссылка на Сотрудника-Исполнителя (относительно Поручения) -->
+			<item key="byPerson">
+				<![CDATA[lecm-errands:executor-assoc]]>
+			</item>
+
+			<!-- ссылка на организацию выбирается специально провайдером через Исполнителя -->
+			<item key="byOrgUnit">
+				<![CDATA[lecm-errands:executor-assoc]]>
+			</item>
+
+		</map>
+	</groupBy.source>
+
+    <fields>
+
+        <field alfrescoType="d:text" order="0" displayName="Группировка"
+            javaValueClass="java.lang.String" jrFldName="Col_GroupBy" queryFldName="byOrgUnit">
+            <l18>
+                <item key="RU_RU" value="Способ группировки"/>
+            </l18>
+        </field>
+
+        <!-- Период - это параметр для провеки сразу пары значений (начало и конец), 
+          так что выносим его для обработки провайдером - помечаем "{{ }}".
+          -->
+        <field alfrescoType="d:date" order="1" displayName="Период"
+            javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{{Col_Period}}">
+            <l18>
+                <item key="RU_RU" value="Период"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_RANGE" paramType="PARAM_TYPE_RANGE">
+                <l18>
+                    <item key="RU_RU" value="Диапазон"/>
+                </l18>
+                <label1>
+                    <item key="RU_RU" value=""/>
+                </label1>
+                <label2>
+                    <item key="RU_RU" value=""/>
+                </label2>
+            </parameter>
+        </field>
+
+        <!-- Исполнитель - обычный списочный параметр для Поручения -->
+        <field alfrescoType="lecm-orgstr:employee"
+            displayName="Исполнитель (сотрудник)"
+            jrFldName="Col_Param_Person" order="2" queryFldName="{lecm-errands:executor-assoc-ref}">
+            <l18>
+                <item key="RU_RU" value="Исполнитель (сотрудник)"/>
+            </l18>
+<!--
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/>
+                </l18>
+            </parameter>
+  -->
+        </field>
+
+        <!-- Подразделение -->
+        <field alfrescoType="lecm-orgstr:organization-unit"
+            displayName="Подразделение исполнителя" jrFldName="Col_Param_Exec_OrgUnit" order="3" 
+            queryFldName="{{Executor.OrgUnit}}">
+            <l18>
+                <item key="RU_RU" value="Подразделение исполнителя"/>
+            </l18>
+            <parameter mnem="PARAM_TYPE_LIST" paramType="PARAM_TYPE_LIST">
+                <l18> <item key="RU_RU" value="Список"/> </l18>
+            </parameter>
+        </field>
+
+        <field alfrescoType="d:text"
+            displayName="Сотрудник или подразделение"
+            javaValueClass="java.lang.String"
+            jrFldName="Col_NameTag" order="4" queryFldName="{{Col_NameTag}}">
+            <l18>
+                <item key="RU_RU" value="Сотрудник или подразделение"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:date"
+            displayName="Дата/Время"
+            javaValueClass="java.sql.Timestamp"
+            jrFldName="Col_DateTime" order="4" queryFldName="{{Col_DateTime}}">
+            <l18>
+                <item key="RU_RU" value="Дата/Время"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text"
+            displayName="Выдано важных поручений за период"
+            javaValueClass="java.lang.Integer"
+            jrFldName="Col_Count_Total_Important" order="5" queryFldName="{{Col_Count_Total_Important}}">
+            <l18>
+                <item key="RU_RU" value="Выдано важных поручений за период"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text"
+            displayName="Среднее время исполнения поручения"
+            javaValueClass="java.lang.Float"
+            jrFldName="Col_Avg_Execution.Value" order="6" queryFldName="{{Col_Avg_Execution.Value}}">
+            <l18>
+                <item key="RU_RU" value="Среднее время исполнения поручения"/>
+            </l18>
+        </field>
+
+        <field alfrescoType="d:text"
+            displayName="Единицы измерения среднего времени исполнения"
+            javaValueClass="java.lang.String"
+            jrFldName="Col_Avg_Execution.Units" order="7" queryFldName="{{Col_Avg_Execution.Units}}">
+            <l18>
+                <item key="RU_RU" value="Единицы измерения среднего времени исполнения"/>
+            </l18>
+        </field>
+    </fields>
+
+</ds.config>

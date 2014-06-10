@@ -52,7 +52,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 	private OrgstructureBean orgstructureService;
 	private SubstitudeBean substituteService;
 	private LecmPermissionService lecmPermissionService;
-	private StateMachineServiceBean stateMachineBean;
+	private StateMachineServiceBean stateMachineService;
 
 	final private QName[] AFFECTED_PROPERTIES = {ContentModel.PROP_CREATOR, ContentModel.PROP_MODIFIER};
 
@@ -80,8 +80,8 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	public void setStateMachineBean(StateMachineServiceBean stateMachineBean) {
-		this.stateMachineBean = stateMachineBean;
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void setSubstituteService(SubstitudeBean substitudeService) {
@@ -177,8 +177,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				QName propRef = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, changedProp.getLocalName() + "-ref");
 				NodeRef employeeRef = orgstructureService.getCurrentEmployee();
 				if (null != employeeRef) {
-					nodeService.setProperty(nodeRef, propName, substituteService.getObjectDescription(employeeRef));
-					nodeService.setProperty(nodeRef, propRef, employeeRef.toString());
+                                    //TODO DONE замена нескольких setProperty на setProperties. 
+                                        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+					properties.put(propName, substituteService.getObjectDescription(employeeRef));
+					properties.put(propRef, employeeRef.toString());
+                                        nodeService.setProperties(nodeRef, properties);
 				}
 			}
 		}
@@ -229,7 +232,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(versionableNode);
 		if (document != null) {
 			this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD_VER, document);
-			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
+			this.stateMachineService.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryNameByAttachment(versionableNode));
 		}
 	}
 
@@ -256,42 +259,43 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		}
 	}
 
-	public void onAddAttachment(AssociationRef associationRef) {
-		final NodeRef attachment = associationRef.getTargetRef();
-		final NodeRef category = associationRef.getSourceRef();
+        public void onAddAttachment(AssociationRef associationRef) {
+             final NodeRef attachment = associationRef.getTargetRef();
+             final NodeRef category = associationRef.getSourceRef();
 
-		final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
-		if (document != null) {
-            Boolean notCheckPermissions = AlfrescoTransactionSupport.getResource(DocumentAttachmentsService.NOT_SECURITY_MOVE_ATTACHMENT_POLICY);
-            if (notCheckPermissions == null || !notCheckPermissions) {
-			    this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
-            }
-//			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
+             final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
+             if (document != null) {
+                 Boolean notCheckPermissions = AlfrescoTransactionSupport.getResource(DocumentAttachmentsService.NOT_SECURITY_MOVE_ATTACHMENT_POLICY);
+                 if (notCheckPermissions == null || !notCheckPermissions) {
+                     this.lecmPermissionService.checkPermission(LecmPermissionService.PERM_CONTENT_ADD, document);
+                 }
+     //			this.stateMachineBean.checkReadOnlyCategory(document, this.documentAttachmentsService.getCategoryName(category));
 
-			AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
-				@Override
-				public NodeRef doWork() throws Exception {
-					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-                    //добавим аспект lecm-attachment к файлу вложения
-                    nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
-                    // добавляем пользователя добавившего вложение как участника
-                    transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-							return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
-						}
-					});
-                    addParentDocumentAspect(document, attachment);
-                    return null;
-				}
-			});
+                 AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                     @Override
+                     public NodeRef doWork() throws Exception {
+//                        TODO: Веротянее всего, что уже выполняется в транзакции
+//                        RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//                         добавим аспект lecm-attachment к файлу вложения
+                         nodeService.addAspect(attachment, DocumentService.ASPECT_LECM_ATTACHMENT, null);
+                         // добавляем пользователя добавившего вложение как участника
+     //                    transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+     //						@Override
+     //						public NodeRef execute() throws Throwable {
+                         documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
+     //				}
+     //			});
+                         addParentDocumentAspect(document, attachment);
+                         return null;
+                     }
+                 });
 
-			List<String> objects = new ArrayList<String>(1);
-			objects.add(attachment.toString());
-			businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
+                 List<String> objects = new ArrayList<String>(1);
+                 objects.add(attachment.toString());
+                 businessJournalService.log(document, EventCategory.ADD_DOCUMENT_ATTACHMENT, "#initiator добавил(а) вложение #object1 к документу #mainobject", objects);
 
-		}
-	}
+             }
+        }
 
 	public void beforeDeleteNode(NodeRef nodeRef) {
 		final NodeRef document = this.documentAttachmentsService.getDocumentByAttachment(nodeRef);
@@ -317,7 +321,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		}
 
 		if (hasDeletePermission) {
-			this.stateMachineBean.checkReadOnlyCategory(document, categoryName);
+			this.stateMachineService.checkReadOnlyCategory(document, categoryName);
 		} else {
 			throw new AlfrescoRuntimeException("Does not have permission 'delete' for node " + attachment);
 		}
@@ -326,13 +330,14 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
 			@Override
 			public NodeRef doWork() throws Exception {
-				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-				return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-					@Override
-					public NodeRef execute() throws Throwable {
+//				TODO: Вероятнее всего, уже выполняется в транзакции
+//				RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+//				return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//					@Override
+//					public NodeRef execute() throws Throwable {
 						return documentMembersService.addMember(document, orgstructureService.getCurrentEmployee(), new HashMap<QName, Serializable>());
-					}
-				});
+//					}
+//				});
 			}
 		});
 

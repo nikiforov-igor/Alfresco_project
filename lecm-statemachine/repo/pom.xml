@@ -6,7 +6,7 @@
     <parent>
         <groupId>ru.it.lecm.statemachine</groupId>
         <artifactId>statemachine</artifactId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
 
     <artifactId>statemachine-repo</artifactId>
@@ -61,8 +61,9 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>acegisecurity</groupId>
+			<groupId>org.acegisecurity</groupId>
 			<artifactId>acegi-security</artifactId>
+                        <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>ru.it.lecm.security</groupId>
@@ -92,7 +93,7 @@
             <groupId>ru.it.lecm.group-actions</groupId>
             <artifactId>group-actions-repo-api</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
+        <scope>provided</scope>
         </dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
     </dependencies>
@@ -126,10 +127,19 @@
             </plugin>
             <plugin>
                 <groupId>org.alfresco.maven.plugin</groupId>
-                <artifactId>maven-amp-plugin</artifactId>
+                <artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
             </plugin>
         </plugins>
-        <resources>
+        <resources><resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>

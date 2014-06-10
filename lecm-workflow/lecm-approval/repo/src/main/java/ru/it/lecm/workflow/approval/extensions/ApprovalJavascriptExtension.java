@@ -17,7 +17,9 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.approval.Utils;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -33,10 +35,10 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	private NodeService nodeService;
 	private OrgstructureBean orgstructureService;
 	private ApprovalService approvalService;
-	private StateMachineServiceBean stateMachineHelper;
+	private StateMachineServiceBean stateMachineService;
 
-	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-		this.stateMachineHelper = stateMachineHelper;
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -123,7 +125,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 		NodeRef document = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
 		ArrayList<String> definitions = new ArrayList<String>();
 		definitions.add("lecmApprovalWorkflow");
-		stateMachineHelper.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
+		stateMachineService.terminateWorkflowsByDefinitionId(document, definitions, variable, value);
 	}
 
 	/**
@@ -176,15 +178,35 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	}
 
 	public void assignTask(ActivitiScriptNode assignee, DelegateTask task) {
-		approvalService.assignTask(assignee.getNodeRef(), task);
+//		TODO: Метод assignTask через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
+		NodeRef employeeRef = assignee.getNodeRef();
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
+                try {
+                    approvalService.assignTask(employeeRef, task);
+                } catch (WriteTransactionNeededException ex) {
+                    throw new WebScriptException(ex.getMessage(), ex);
+                }
 	}
 
 	public void reassignTask(ActivitiScriptNode assignee, DelegateTask task) {
-		approvalService.reassignTask(assignee.getNodeRef(), task);
+            try {
+                approvalService.reassignTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public WorkflowTaskDecision completeTask(ActivitiScriptNode assignee, DelegateTask task) {
+            try {
 		return approvalService.completeTask(assignee.getNodeRef(), task);
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public ActivitiScriptNodeList createAssigneesList(ActivitiScriptNode assigneesListNode, DelegateExecution execution) {
@@ -202,13 +224,29 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public void assignCustomApprovalTask(DelegateTask task) {
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
-		approvalService.assignTask(employeeRef, task);
+//		TODO: Похоже, что вообще нигде не вызвается.
+//		TODO: Метод assignTask через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
+                try {
+                    approvalService.assignTask(employeeRef, task);
+                } catch (WriteTransactionNeededException ex) {
+                    throw new WebScriptException(ex.getMessage(), ex);
+                }
 	}
 
 	public WorkflowTaskDecision completeTask(DelegateTask task, String decision, ActivitiScriptNode commentScriptNode) {
+            try {
 		NodeRef employeeRef = orgstructureService.getEmployeeByPerson(task.getAssignee());
 		NodeRef commentRef = commentScriptNode != null ? commentScriptNode.getNodeRef() : null;
 		return approvalService.completeTask(employeeRef, task, decision, commentRef, task.getDueDate());
+            } catch (WriteTransactionNeededException ex) {
+                throw new WebScriptException(ex.getMessage(), ex);
+            }
 	}
 
 	public Map<String, String> addDecision(Map<String, String> decisionMap, String userName, String decision) {
@@ -222,6 +260,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public void saveRouteApprovalResult(final ActivitiScriptNode bpmPackage, final boolean isApproved) {
 		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
+		//TODO ME Проверить почемо не останавливается согласование
 		if (nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE)) {
 			nodeService.setProperty(documentRef, RouteAspecsModel.PROP_IS_APPROVED, isApproved);
 		}

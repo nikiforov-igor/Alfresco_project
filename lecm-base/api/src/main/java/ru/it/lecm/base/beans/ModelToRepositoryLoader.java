@@ -8,6 +8,8 @@ import org.springframework.extensions.surf.util.I18NUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.transaction.TransactionService;
 
 /**
  * Размещает модели данных в репозитории, где они впоследствии подхватываются альфреской
@@ -19,6 +21,11 @@ public class ModelToRepositoryLoader implements DictionaryListener {
     private boolean useDefaultModels = false;
     private List<String> models = new ArrayList<String>();
     private List<String> messages = new ArrayList<String>();
+	private TransactionService transactionService;
+
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
 
     private RepositoryLocation repositoryModelsLocation;
 
@@ -78,20 +85,30 @@ public class ModelToRepositoryLoader implements DictionaryListener {
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
             public Object doWork() throws Exception {
-                // регистрируем модели
-                for (final String bootstrapModel : models) {
-                    lecmModelsService.loadModelFromLocation(bootstrapModel, firstRun && useDefaultModels);
-                }
-                return null;
+                                //Вызывается только в init-методе
+				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>(){
+
+					@Override
+					public Object execute() throws Throwable {
+						// регистрируем модели
+						for (final String bootstrapModel : models) {
+							lecmModelsService.loadModelFromLocation(bootstrapModel, firstRun && useDefaultModels);
+						}
+						return null;
+					}
+
+				}, false, true);
             }
         });
         firstRun = false;
     }
 
+    @Override
     public void afterDictionaryDestroy() {
 
     }
 
+    @Override
     public void afterDictionaryInit() {
 
     }

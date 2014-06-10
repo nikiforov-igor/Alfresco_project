@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-    <shortname>Разметка с фильтрами</shortname>
-    <description>Разметка с фильтрами</description>
-    <url>/lecm/arm/draw-filters</url>
-    <authentication>user</authentication>
-    <format default="html">extension</format>
-</webscript>

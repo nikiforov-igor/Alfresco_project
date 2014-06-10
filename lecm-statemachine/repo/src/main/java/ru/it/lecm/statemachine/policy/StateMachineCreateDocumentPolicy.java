@@ -51,6 +51,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
     private BusinessJournalService businessJournalService;
 
     final static Logger logger = LoggerFactory.getLogger(StateMachineCreateDocumentPolicy.class);
+    private StateMachineHelper stateMachineHelper;
 
     public void setThreadPoolExecutor(ThreadPoolExecutor threadPoolExecutor) {
         this.threadPoolExecutor = threadPoolExecutor;
@@ -102,6 +103,10 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         }
     }
 
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
+
     private class StateMachineTransactionListener implements TransactionListener
     {
 
@@ -137,6 +142,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                 AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Void>() {
                                     @Override
                                     public Void doWork() throws Exception {
+										//TODO transaction in loop!!!
                                         return serviceRegistry.getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
                                             @Override
                                             public Void execute() throws Throwable {
@@ -145,7 +151,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
 
                                                 Map<QName, Serializable> workflowProps = new HashMap<QName, Serializable>(16);
 
-                                                WorkflowService workflowService = serviceRegistry.getWorkflowService();
+                                                final WorkflowService workflowService = serviceRegistry.getWorkflowService();
 
                                                 NodeRef stateProcessPackage = workflowService.createPackage(null);
                                                 nodeService.addChild(stateProcessPackage, docRef, ContentModel.ASSOC_CONTAINS, type);
@@ -167,7 +173,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 }
                                                 // start the workflow
 
-                                                AuthenticationUtil.setFullyAuthenticatedUser("workflow");
+                                                //AuthenticationUtil.setFullyAuthenticatedUser("workflow");
                                                 WorkflowPath path = null;
                                                 try {
                                                     path = workflowService.startWorkflow(wfDefinition.getId(), workflowProps);
@@ -184,12 +190,18 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
                                                 properties.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
                                                 nodeService.addAspect(docRef, ContentModel.ASPECT_OWNABLE, properties);
 
-                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
-                                                for (WorkflowTask task : tasks) {
-                                                    workflowService.endTask(task.getId(), null);
-                                                }
-                                                StateMachineHelper helper = new StateMachineHelper();
-                                                helper.executePostponedActions(path.getInstance().getId());
+                                                final String pathId = path.getId();
+                                                AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Void>() {
+                                                    @Override
+                                                    public Void doWork() throws Exception {
+		                                                List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(pathId);
+		                                                for (WorkflowTask task : tasks) {
+		                                                    workflowService.endTask(task.getId(), null);
+		                                                }
+		                                                return null;
+                                                    }
+                                                });
+                                                //stateMachineHelper.executePostponedActions(path.getInstance().getId());
 
                                                 String status = (String) nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS);
                                                 List<String> objects = new ArrayList<String>(1);

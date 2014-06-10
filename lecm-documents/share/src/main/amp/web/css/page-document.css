@@ -1,0 +1,375 @@
+#doc-bd {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #aaaaaa;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    padding-bottom: 0;
+}
+
+#custom-region {
+    padding-top: 20px;
+}
+
+.doc-page .yui-gc {
+    width: 100%;
+}
+.doc-page .yui-gc .doc-right-part {
+    width: 300px;
+    float: right;
+    word-wrap: break-word;
+    border-radius: 5px 0 0 5px;
+    margin-top: 20px;
+    background: #f2f2f2;
+}
+.doc-page .yui-gc .doc-right-part .control .label-div {
+    width: 110px;
+}
+.doc-page .yui-gc .doc-right-part .control .label-div ~ .container {
+    min-width: 130px;
+}
+.doc-page .yui-gc .main-content {
+    width: auto;
+    overflow: hidden;
+    float: none;
+}
+.doc-page .yui-gc .main-content > div {
+    width: 100%;
+}
+
+div.metadata-form div.lecm-dashlet-actions + div {
+    clear: both;
+    overflow-x: auto;
+}
+
+.yui-gc .preview,
+.yui-gc #doc-attach-right {
+	margin-top: 5px;
+}
+
+.bordered {
+    border: 1px solid #6C6C6C;
+    border-radius: 5px 5px 0 0;
+}
+
+.bordered-panel {
+    border: 1px solid #aaaaaa;
+    border-right: 0;
+}
+
+.yui-u .dashlet .dashlet-title {
+    height: 17px;
+    background-color: #bbe6f3;
+    border-radius: 4px 4px 0 0;
+    padding: 7px 1em 6px;
+    overflow: hidden;
+}
+.yui-u .dashlet .dashlet-title.title span {
+    color: #0a678e;
+    font: 14px Arial;
+    font-weight: bold;
+}
+
+.yui-gc .yui-u .columnSize2{
+    margin: 0;
+}
+
+.yui-gd .yui-u .column2 {
+    width: 49%;
+}
+
+.main-content .yui-gd div.column1 {
+    width: 47%;
+    margin-left: 2%;
+}
+
+.main-content .yui-gd div.column2 {
+    width: 47%;
+    margin-right: 2%
+}
+
+.alfresco-twister-actions a {
+    background-position: 0 center;
+    background-repeat: no-repeat;
+    padding: 0.5em;
+    text-decoration: none;
+}
+
+.alfresco-twister-actions {
+    position: absolute;
+    right: 1em;
+}
+
+.document-components-panel .alfresco-twister-actions .expand {
+    background-image: url("/share/res/images/lecm-documents/expand-16.png");
+    display: none;
+    opacity: .8;
+}
+.document-components-panel .alfresco-twister:hover .alfresco-twister-actions .expand {
+    display: inline;
+}
+.document-components-panel .alfresco-twister-actions .expand:active {
+    opacity: 1;
+}
+
+.alfresco-twister-closed .alfresco-twister-actions {
+    display: inline;
+}
+
+.widget-panel-grey {
+    background-color: #ccc;
+    padding: 0.8em 5px;
+}
+
+.widget-panel-white {
+    background-color: #F2F2F2;
+    padding: 0.8em 0.8em 0 0.8em;
+}
+
+.widget-button-grey {
+    margin: 5px 0;
+    padding: 3px 12px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-style: normal;
+    text-decoration: none;
+}
+
+.widget-button-grey:hover {
+    background-color: #ddd;
+    border: 1px solid #999;
+    border-radius: 5px;
+}
+
+.dndDocListHighlight {
+	outline: 2px solid #4F94C9;
+	outline-offset: -2px;
+}
+
+.highlight_field {
+    border: 1px red solid;
+}
+
+.yui-gc .comments-list {
+    text-align: left;
+    margin-left: 15px;
+    width: 100%;
+}
+
+#main-region .comments-list h2 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	margin-right: 25px;
+	border-bottom: 1px solid #d2d2d2;
+}
+
+/* Details Form */
+
+.form-container .edit-metadata a,
+.form-container .edit-metadata a:visited {
+    background: transparent url(/share/res/components/documentlibrary/actions/document-edit-metadata-16.png) no-repeat 12px 4px;
+    padding-left: 32px;
+}
+
+
+/**************** Workflow Tasks *******************************/
+
+.WORKFLOWTASKTYPE_NA {
+    display: none;
+}
+.WORKFLOWTASKTYPE_OVERDUE {
+    color: #FF0000;
+}
+.WORKFLOWTASKTYPE_SOON {
+    color: #CC6600;
+}
+.WORKFLOWTASKPRIORITY_LOW {
+    background-image: url("/share/res/components/images/priority-low-16.png");
+}
+.WORKFLOWTASKPRIORITY_MEDIUM {
+    background-image: url("/share/res/components/images/priority-medium-16.png");
+}
+.WORKFLOWTASKPRIORITY_HIGH {
+    background-image: url("/share/res/components/images/priority-high-16.png");
+}
+
+.errands-after {
+    color: #cd853f;
+}
+.errands-new {
+    color: #008000;
+}
+.errands-overdue {
+     color: red;
+ }
+
+
+.workflow-date {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666666;
+}
+.total-tasks-count-right {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    background: #ff7504;
+    position: absolute;
+    right: 20px;
+    top: -22px;
+    text-align: center;
+    vertical-align: middle;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+    border-radius: 6px;
+}
+.right-task {
+    margin-top: 12px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #CCCCCC;
+    padding-bottom: 5px;
+}
+
+.right-task .workflow-date {
+    float: left;
+}
+
+.right-more-link {
+    text-decoration: underline;
+    font-size: 12px;
+    color: #999999;
+    float: right;
+    cursor: pointer;
+}
+
+.right-more-link-arrow {
+    background-image: url(/share/res/images/lecm-documents/gray_arrow.png);
+    float: right;
+    width: 12px;
+    height: 11px;
+    cursor: pointer;
+}
+
+.right-tasks-container {
+    padding-left: 15px;
+}
+
+.workflow-task-item {
+    border-top: 1px solid #CCCCCC;
+    padding-top: 5px;
+    padding-bottom: 40px;
+}
+
+.workflow-task-line {
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.list-container {
+    padding-left: 40px;
+}
+.list-category {
+    clear: both;
+}
+.list-category-title {
+    font-size:20px;
+    font-weight:bold;
+    color:#666666;
+    padding-bottom: 10px;
+    float: left;
+}
+.list-workflows-title {
+	font-size:20px;
+	font-weight:bold;
+	color:#666666;
+	padding-bottom: 10px;
+}
+.list-category-title-subordinate {
+    font-size:20px;
+    font-weight:bold;
+    color:#666666;
+    padding-bottom: 10px;
+}
+.workflow-task-list-picture {
+    background-repeat: no-repeat;
+    margin-left: 18px;
+    float: left;
+    width: 16px;
+    margin-right: 35px;
+}
+.workflow-task-list-left-column {
+    float:left;
+    width: 200px;
+}
+.workflow-task-list-label {
+    color: #999999;
+}
+.workflow-task-description {
+    padding-top: 7px;
+    padding-bottom: 3px;
+}
+
+/******************** Workflows ***************************/
+
+.right-workflow {
+    margin-top: 12px;
+}
+
+.right-workflows-container {
+    margin-right: 25px;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.list-workflow-description {
+    padding-left: 3px;
+    font-size: 18px;
+}
+
+.lecm-dashlet-actions .add {
+    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
+    padding-left: 20px;
+    background-repeat: no-repeat;
+    margin-left: 40px;
+}
+
+.document-components-panel .alfresco-twister-actions .refresh {
+    background-image: url(/share/res/themes/lecmTheme/images/refresh-16.png);
+    display: none;
+    opacity: .8;
+}
+.document-components-panel .alfresco-twister:hover .alfresco-twister-actions .refresh {
+    display: inline;
+}
+.document-components-panel .alfresco-twister-actions .refresh:active {
+    opacity: 1;
+}
+
+.lecm-document-content-ajax-loading {
+    background: url(/share/res/images/lecm-documents/ajax-loader.gif) no-repeat center center;
+    width: 99%;
+    height: 40px;
+    margin: 3px;
+}
+
+
+.dashlet .datagrid .datagrid-bar {
+    margin: 0;
+}
+
+.edit-button .metadata-form  .lecm-dashlet-actions{
+    padding-right: 0;
+}
+
+.task-marker {
+    background: url(/share/images/lecm-documents/task-marker.png) no-repeat 3px 3px;
+    padding-left: 22px;
+}
+
+.right-block-content {
+ 	padding-left: 15px;
+}
+

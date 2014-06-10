@@ -1,0 +1,473 @@
+/* стили, для которых требуется рефакторинг:
+ hidden
+ tree-picker
+ object-finder
+ currentValueDisplay
+ autocomplete-block
+ autocompleteCurrentValueDisplay
+ autocompleteCurrentValueDisplayInvisible
+ association-auto-complete-item
+ association-auto-complete-item-even
+ form-field
+ with-grid
+
+ */
+
+
+/* Common styles - start */
+.hidden1 {
+    display: none;
+}
+.visible-hidden {
+	visibility: hidden;
+}
+.visible-visible {
+	visibility: visible;
+}
+.clear {
+    clear: both;
+}
+.left1 {
+	float: left;
+}
+.right1 {
+	float: left;
+}
+.panel-left {
+    float: left;
+}
+.panel-right {
+    float: right;
+}
+.cropped-item {
+	width: 100%;
+}
+.cropped-item .ci-buttons-div {
+    float: right;
+	padding-left: 4px;
+}
+.cropped-item .ci-value-div {
+    width: auto;
+    overflow: hidden;
+	position: relative;
+}
+.cropped-item .ci-value-div > span {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inherit;
+}
+.search-button button {
+    background: transparent url('/share/res/themes/lecmTheme/images/search.png') no-repeat center center;
+}
+.create-new-button button {
+    background: transparent url('/share/res/themes/lecmTheme/images/create-new-button.png') no-repeat center center;
+}
+.calendar-icon {
+    background: transparent url('/share/res/components/form/images/calendar.png') no-repeat center center;
+}
+
+
+.control span.help-icon {
+    position: inherit;
+    padding: 4px;
+    vertical-align: middle;
+}
+.control span.help-icon img {
+    vertical-align: middle;
+}
+.control div.help-text {
+    max-width: 100%;
+    position: absolute;
+    top: 90%;
+    right: 0;
+    margin: 0;
+    padding: 5px;
+    z-index: 1;
+}
+
+
+.yui-skin-lecmTheme.alfresco-share .yui-panel .bd div.yui-u {
+    padding: 0;
+}
+.yui-skin-lecmTheme.alfresco-share .yui-panel .bd .yui-u.first {
+	text-align: left;
+}
+.yui-skin-lecmTheme.alfresco-share .dnd-upload.yui-panel .bd .yui-u.first {
+	text-align: right;
+}
+
+.yui-skin-lecmTheme .form-container select {
+	max-width: 100%;
+}
+
+/* Common styles - end */
+
+/* Оформление окон - start */
+.yui-skin-lecmTheme .yui-panel {
+    min-width: 36em;
+    color: #333;
+    background: #eee;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.3);
+    /*overflow: hidden;*/
+}
+.yui-skin-lecmTheme .yui-panel a.container-close {
+    width: 16px;
+    height: 16px;
+    top: 7px;
+    right: 7px;
+    border-radius: 0;
+    background: url("/share/res/images/lecm-base/components/window_close_16.png") no-repeat;
+    opacity: .5;
+}
+.yui-skin-lecmTheme .yui-panel a.container-close:hover {
+    opacity: .8;
+}
+.yui-skin-lecmTheme .yui-panel a.container-close:active {
+    opacity: 1;
+}
+.yui-skin-lecmTheme .yui-panel .bd {
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel .bd div.form-fields {
+    padding: 10px;
+}
+.yui-skin-lecmTheme .yui-panel .hd,
+.yui-skin-lecmTheme .yui-panel .form-buttons,
+.yui-skin-lecmTheme .yui-panel .bdft,
+.yui-skin-lecmTheme .yui-panel .ft {
+    background: #bae6f4;
+    border: none;
+    margin: 0;
+}
+.yui-skin-lecmTheme .yui-panel .hd {
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #076a8d;
+    border-bottom: 1px solid #ccc;
+}
+.yui-skin-lecmTheme .yui-panel .bd div.form-buttons,
+.yui-skin-lecmTheme .yui-panel .bdft,
+.yui-skin-lecmTheme .yui-panel .ft {
+    height: 36px;
+    line-height: 36px;
+    padding: 0 7px;
+    border-top: 1px solid #ccc;
+}
+.yui-skin-lecmTheme .yui-panel .form-buttons span.yui-button,
+.yui-skin-lecmTheme .yui-panel .bdft span.yui-button,
+.yui-skin-lecmTheme .yui-panel .ft span.yui-button {
+    margin-top: 5px;
+}
+.yui-skin-lecmTheme .yui-panel .form-buttons button,
+.yui-skin-lecmTheme .yui-panel .bdft button,
+.yui-skin-lecmTheme .yui-panel .ft button {
+    min-height: 0;
+    height: 24px;
+}
+.yui-skin-lecmTheme .yui-panel .bd .bdft .align-right {
+    text-align: right;
+}
+
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li {
+    margin: 0 5px 0 0;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a {
+    background: #eaeaea;
+    border: 1px solid #d2d2d2;
+    border-bottom-width: 0;
+    border-radius: 5px 5px 0 0;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li a em {
+    padding: 5px 15px 2px;
+    border: none;
+    font-size: 13px;
+    font-weight: bold;
+    color: #303030;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected {
+    margin-bottom: -1px;
+    position: relative;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a {
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li:first-of-type.selected a:after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    background: #fff;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a em {
+    padding-bottom: 4px;
+    color: #076a8d;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-content {
+    margin: 0;
+    border: none;
+    border-left: 1px solid #d2d2d2;
+    border-radius: 0 5px 5px 5px;
+    padding: 0;
+    background: #eaeaea;
+}
+.yui-skin-lecmTheme .yui-panel .yui-navset .yui-content > div {
+    overflow: hidden;
+    border: 1px solid #d2d2d2;
+    border-radius: 5px;
+    background: #fff;
+    margin-left: -1px;
+    padding: 15px;
+}
+/* Оформление окон - end */
+
+/* Control styles - start */
+.control {
+    width: 100%;
+    height: auto;
+    position: relative;
+    padding: 0;
+    margin-bottom: 10px;
+    float: left;
+    /*background: rgba(0, 150, 0, .5); */ /*todo remove*/
+}
+.control .label-div {
+    width: 180px;
+    float: left;
+    line-height: 28px;
+    padding-right: 10px;
+}
+.control.viewmode .container {
+    line-height: 28px;
+}
+.control .label-div ~ .container {
+    width: auto;
+    min-width: 180px;
+    overflow: hidden;
+}
+.control .container .buttons-div {
+    float: right;
+    padding-left: 4px;
+}
+.control .container .buttons-div > input[type=button] { /* на время загрузки, чтоб не прыгали кнопки */
+    width: 28px;
+    height: 28px;
+    margin-left: 4px;
+}
+.control .container .buttons-div span {
+    margin: 0;
+}
+.control .container .buttons-div button {
+	width: auto;
+    min-width: 26px;
+    height: 26px;
+    padding: 0;
+}
+.control .container .buttons-div > span.yui-button:last-child,
+.control .container .buttons-div > span:last-child > span.yui-button {
+    margin-right: 0;
+}
+.control .container .value-div {
+    min-height: 28px;
+    width: auto;
+    overflow: hidden;
+}
+.control .container .value-div > input[type=text],
+.control .container .value-div > div.control-selected-values,
+.control .container .value-div > select,
+.control .container .value-div > textarea {
+    width: 100%;
+    height: auto;
+    min-height: 28px;
+    border: 1px solid #ccc;
+    position: inherit;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.control .container .value-div input.invalid + .mandatory-highlightable {
+    background-color: #faecee;
+}
+.control .container .value-div input.mandatory + .mandatory-highlightable {
+    background-color: #fafae6;
+}
+.control.editmode .container .value-div input[type=text],
+.control.editmode .container .value-div .control-selected-values,
+.control.editmode .container .value-div > :last-child {
+    margin-bottom: 4px;
+}
+.control.editmode .container .value-div:not(:empty) {
+    margin-bottom: -4px;
+}
+.control .container .value-div .control-selected-values {
+    max-height: 130px;
+    overflow: auto;
+}
+.control .container .value-div input[type=text] + .control-selected-values:empty {
+    display: none;
+}
+.control .control-selected-values > div,
+.currentValueDisplay > div {
+    height: 22px;
+    line-height: 22px;
+    white-space: normal;
+    border-bottom: 1px solid #ccc;
+    padding: 2px 0;
+}
+.control .control-selected-values > div:not(.cropped-item),
+.currentValueDisplay > div:not(.cropped-item) {
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.control .control-selected-values > div.cropped-item,
+.currentValueDisplay > div.cropped-item {
+    padding-right: 0;
+    padding-left: 0;
+}
+.control .control-selected-values > div.cropped-item .ci-buttons-div,
+.currentValueDisplay > div.cropped-item .ci-buttons-div {
+    padding-right: 5px;
+}
+.control .control-selected-values > div.cropped-item .ci-value-div,
+.currentValueDisplay > div.cropped-item .ci-value-div {
+    padding-right: 0;
+    padding-left: 5px;
+}
+.control .control-selected-values > div:nth-child(even),
+.currentValueDisplay > div:nth-child(even) {
+    background: #f8f8f8;
+}
+.control .control-selected-values > div:last-child,
+.currentValueDisplay > div:last-child {
+    border-bottom: none;
+}
+
+.dashlet .control {
+    margin-bottom: 0;
+}
+.doc-right-part .document-components-panel > div {
+    line-height: 22px;
+}
+.doc-right-part .control {
+    margin-bottom: 5px;
+}
+.doc-right-part .control .label-div,
+.doc-right-part .control .container {
+    line-height: 18px;
+}
+.doc-right-part .control .container .value-div {
+    min-height: 22px;
+}
+
+
+/* Control styles - end */
+
+/* Association dialog - start */
+.yui-panel.assoc-dialog {
+    display: none;
+}
+.yui-panel.assoc-dialog .bd {
+    padding: 10px 10px 0;
+}
+.yui-panel.assoc-dialog .bd .bdft {
+    margin: 0 -10px;
+}
+.yui-panel.assoc-dialog .bd > div:not(.bdft) {
+    margin-bottom: 10px;
+    overflow-y: hidden;
+    clear: both;
+}
+/* Association dialog - end */
+
+/* richtext & textarea controls - start */
+.control.richtext .label-div ~ .container,
+.control.textarea .label-div ~ .container {
+    min-width: 300px;
+}
+.control.richtext .container .value-div > span.mceEditor,
+.control.textarea .container .value-div > textarea {
+    width: 100%;
+    min-height: 100px;
+}
+.control.richtext .container .value-div {  /* чтоб не прыгало во время загрузки страницы */
+    min-height: 155px;
+}
+/* richtext & textarea controls - end */
+
+/* checkbox control - start */
+.checkbox-control {
+    line-height: 28px;
+}
+.checkbox-control input[type=checkbox] {
+    vertical-align: middle;
+}
+/* checkbox control - end*/
+
+/* date control - start */
+.control.date .calendar-icon {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #ccc;
+    display: block;
+    cursor: pointer;
+}
+.control.date .date-format,
+.control.date .time-format,
+.control.date .time-format-disabled {
+    margin-left: 0;
+}
+/* date control - end */
+
+/* daterange-control (daterange-control.ftl) - start */
+.control.daterange-control .two-columns .column {
+    width: 49%;
+    float: left;
+}
+.control.daterange-control .two-columns .column.last {
+    float: right;
+}
+.control.daterange-control .two-columns .column .label-div {
+    width: 20px;
+}
+/* daterange-control (daterange-control.ftl) - end */
+
+/* control with-grid - start */
+.control.with-grid {
+    margin-bottom: 10px;
+}
+.control.with-grid .datagrid .grid {
+    max-height: 200px;
+}
+/* control with-grid - end */
+
+/* Datepicker - start */
+.datepicker {
+     position: absolute;
+     font-size: 81%;         /* см. base.css (64) */
+     font-family: Arial, sans-serif;
+     z-index: 100100;        /* потому что уже заданы индексы выше 100000  */
+ }
+/* Datepicker - end */
+
+/* Temporary styles, should be removed */
+
+ /* view-metatdata form*/
+.share-form .form-container .container .form-fields {
+    background: #eee;
+}
+
+/*datagrid - start*/
+.yui-t1 #yui-main .yui-b.datagrid-content {
+	margin-left: 0;
+}
+/*datagrid - end*/
+
+.days-to-complete {
+    width: 3em;
+}

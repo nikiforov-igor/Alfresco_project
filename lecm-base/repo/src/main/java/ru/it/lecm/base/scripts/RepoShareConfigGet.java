@@ -3,7 +3,6 @@ package ru.it.lecm.base.scripts;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.tenant.TenantService;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -20,13 +19,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * User: AIvkin
- * Date: 14.11.13
- * Time: 15:31
+ * User: AIvkin Date: 14.11.13 Time: 15:31
  */
 public class RepoShareConfigGet extends AbstractWebScript {
+
 	private static final transient Logger log = LoggerFactory.getLogger(RepoShareConfigGet.class);
 
 	private static final String CONFIG_OPEN_TAG = "<alfresco-config>";
@@ -87,58 +84,57 @@ public class RepoShareConfigGet extends AbstractWebScript {
 	}
 
 	public String getConfigFrom(final List<String> repoFoldersUrls) {
-		return AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<String>() {
+        //TODO: DONE Вызывается из вебскрипта с транзакцией read, дополнительная не нужна
+		return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<String>() {
+
+			@Override
 			public String doWork() throws Exception {
-				return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<String>() {
-					public String execute() throws Exception {
-						StringBuilder result = new StringBuilder(CONFIG_OPEN_TAG);
+				StringBuilder result = new StringBuilder(CONFIG_OPEN_TAG);
 
-						List<NodeRef> nodes = new ArrayList<NodeRef>();
-						if (repoFoldersUrls != null) {
-							for (String folderUrl : repoFoldersUrls) {
-								int idx = folderUrl.indexOf(StoreRef.URI_FILLER);
-								if (idx != -1) {
-									// assume this is a repository location
-									int idx2 = folderUrl.indexOf("/", idx + 3);
+				List<NodeRef> nodes = new ArrayList<NodeRef>();
+				if (repoFoldersUrls != null) {
+					for (String folderUrl : repoFoldersUrls) {
+						int idx = folderUrl.indexOf(StoreRef.URI_FILLER);
+						if (idx != -1) {
+							// assume this is a repository location
+							int idx2 = folderUrl.indexOf("/", idx + 3);
 
-									String store = folderUrl.substring(0, idx2);
-									String path = folderUrl.substring(idx2);
+							String store = folderUrl.substring(0, idx2);
+							String path = folderUrl.substring(idx2);
 
-									StoreRef storeRef = tenantService.getName(new StoreRef(store));
-									NodeRef rootNode;
+							StoreRef storeRef = tenantService.getName(new StoreRef(store));
+							NodeRef rootNode;
 
-									try {
-										rootNode = nodeService.getRootNode(storeRef);
-									} catch (InvalidStoreRefException e) {
-										throw new ConfigException("Wrong configuration", e);
-									}
+							try {
+								rootNode = nodeService.getRootNode(storeRef);
+							} catch (InvalidStoreRefException e) {
+								throw new ConfigException("Wrong configuration", e);
+							}
 
-									List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path, null, namespaceService, false);
+							List<NodeRef> nodeRefs = searchService.selectNodes(rootNode, path, null, namespaceService, false);
 
-									if (nodeRefs != null) {
-										for (NodeRef nodeRef : nodeRefs) {
-											if (nodeService.getType(nodeRef).equals(ContentModel.TYPE_CONTENT)) {
-												nodes.add(nodeRef);
-											}
-										}
+							if (nodeRefs != null) {
+								for (NodeRef nodeRef : nodeRefs) {
+									if (nodeService.getType(nodeRef).equals(ContentModel.TYPE_CONTENT)) {
+										nodes.add(nodeRef);
 									}
 								}
 							}
 						}
-
-						for (NodeRef node: nodes) {
-							ContentReader configReader = contentService.getReader(node, ContentModel.PROP_CONTENT);
-							String content = configReader.getContentString();
-							content = content.replace(CONFIG_OPEN_TAG, "");
-							content = content.replace(CONFIG_CLOSE_TAG, "");
-							result.append(content);
-						}
-
-						result.append(CONFIG_CLOSE_TAG);
-						return result.toString();
 					}
-				}, true, false);
+				}
+
+				for (NodeRef node : nodes) {
+					ContentReader configReader = contentService.getReader(node, ContentModel.PROP_CONTENT);
+					String content = configReader.getContentString();
+					content = content.replace(CONFIG_OPEN_TAG, "");
+					content = content.replace(CONFIG_CLOSE_TAG, "");
+					result.append(content);
+				}
+
+				result.append(CONFIG_CLOSE_TAG);
+				return result.toString();
 			}
-		}, AuthenticationUtil.getSystemUserName());
+		});
 	}
 }

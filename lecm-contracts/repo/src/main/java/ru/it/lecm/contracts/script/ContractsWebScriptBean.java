@@ -1,17 +1,20 @@
 package ru.it.lecm.contracts.script;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
-import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.contracts.beans.ContractsBeanImpl;
 import ru.it.lecm.documents.beans.DocumentFilter;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -29,14 +32,29 @@ import java.util.*;
  */
 public class ContractsWebScriptBean extends BaseWebScript {
     private ContractsBeanImpl contractService;
-	protected NodeService nodeService;
+    protected NodeService nodeService;
     private OrgstructureBean orgstructureService;
     private PreferenceService preferenceService;
     private AuthenticationService authService;
     private NamespaceService namespaceService;
     private DocumentService documentService;
+    private TransactionService transactionService;
+    private DocumentMembersService documentMembersService;
+    private LecmTransactionHelper lecmTransactionHelper;
 
     private final String[] contractsDocsFinalStatuses = {"Аннулирован", "Отменен", "Исполнен"};
+
+    public void setDocumentMembersService(DocumentMembersService documentMembersService) {
+        this.documentMembersService = documentMembersService;
+    }
+
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        this.lecmTransactionHelper = lecmTransactionHelper;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -68,12 +86,27 @@ public class ContractsWebScriptBean extends BaseWebScript {
         this.contractService = contractService;
     }
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
     public ScriptNode getDraftRoot() {
-        return new ScriptNode(contractService.getDraftRoot(), serviceRegistry, getScope());
+//		Стоит учесть, что веб-скрипт, где используется этот метод не транзакционный, поэтому
+//		Если какая-либо транзакция залочит ноду - получение отвалится по таймауту.
+        NodeRef ref = contractService.getDraftRoot();
+        if (ref == null) {
+//			TODO: В случае, если папки черновиков ещё нет - создадим в транзакции.
+            RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+            ref = transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+                @Override
+                public NodeRef execute() throws Throwable {
+                    return contractService.createDraftRoot();
+                }
+
+            });
+        }
+        return new ScriptNode(ref, serviceRegistry, getScope());
     }
 
     public String getDraftPath() {
@@ -82,45 +115,81 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
     /**
      * Получить количество договоров
-     * @param path список путей поиска
+     *
+     * @param path       список путей поиска
      * @param properties список значений для фильтрации
      * @return количество
      */
+    @SuppressWarnings("unused")
     public Integer getAmountContracts(Scriptable path, Scriptable properties) {
         return contractService.getContracts(getElements(Context.getCurrentContext().getElements(path)), getElements(Context.getCurrentContext().getElements(properties))).size();
     }
 
     /**
      * Получить количество участников договорной деятельности
-     * @return
+     *
+     * @return общее число участников
      */
+    @SuppressWarnings("unused")
     public Integer getAmountMembers() {
+//		TODO: Метод getAllMembers дёрагал метод getOrCreateDocMemberUnit,
+//		который был благополучно разделён. Поэтому сделаем проверку на существование
+        String type = ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_");
+        if (documentMembersService.getDocMembersUnit(type) == null) {
+            try {
+                documentMembersService.createDocMemberUnit(type);
+            } catch (WriteTransactionNeededException ex) {
+                throw new RuntimeException("Can't create DocMemberUnit");
+            }
+        }
         return contractService.getAllMembers().size();
     }
 
     /**
      * Получить список участников договорной деятельности
+     *
      * @param sortColumnName сортируемый атрибут
-     * @param sortAscending сортировка
+     * @param sortAscending  сортировка
      * @return список участников
      */
+    @SuppressWarnings("unused")
     public Scriptable getMembers(String sortColumnName, Boolean sortAscending) {
+//		TODO: Метод getAllMembers дёрагал метод getOrCreateDocMemberUnit,
+//		который был благополучно разделён. Поэтому сделаем проверку на существование
+        final String type = ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_");
+        if (documentMembersService.getDocMembersUnit(type) == null) {
+//			Вызывается из веб-скрипта без транзакции, обернём
+            RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
+                @Override
+                public Void execute() throws Throwable {
+                    documentMembersService.createDocMemberUnit(type);
+                    return null;
+                }
+            };
+            lecmTransactionHelper.doInTransaction(cb, false);
+        }
         return createScriptable(contractService.getAllMembers(sortColumnName, sortAscending));
     }
 
-    private ArrayList<String> getElements(Object[] object){
+    private ArrayList<String> getElements(Object[] object) {
         ArrayList<String> arrayList = new ArrayList<String>();
         for (Object obj : object) {
             if (obj instanceof NativeJavaObject) {
                 NativeJavaObject element = (NativeJavaObject) obj;
                 arrayList.add((String) element.unwrap());
-            } else if (obj instanceof String){
+            } else if (obj instanceof String) {
                 arrayList.add(obj.toString());
             }
         }
         return arrayList;
     }
 
+    /**
+     * Получить список договоров по фильтрам (дата последней смены статуса и принадлежность)
+     *
+     * @param daysCount  дней, в пределах которых менялся статус документа
+     * @param userFilter фильтр по принадлежности(@link ContractsWebScriptBean.WhoseEnum)
+     */
     public NodeRef[] getContractsByFilters(String daysCount, String userFilter) {
         List<QName> types = new ArrayList<QName>(2);
         types.add(ContractsBeanImpl.TYPE_CONTRACTS_DOCUMENT);
@@ -196,11 +265,11 @@ public class ContractsWebScriptBean extends BaseWebScript {
         }
 
         // Фильтр по датам
-        final String MIN = start != null ? DocumentService.DateFormatISO8601.format(start) : "MIN";
-        final String MAX = DocumentService.DateFormatISO8601.format(now);
+        final String MIN = start != null ? DateFormatISO8601.format(start) : "MIN";
+        final String MAX = DateFormatISO8601.format(now);
 
         String property = DocumentService.PROP_STATUS_CHANGED_DATE.toPrefixString(namespaceService).replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-        filterQuery += (filterQuery.length() > 0 ? " AND " : "") + "@" + property + ":\"" + MIN + " \"..\"" + MAX + "\"";
+        filterQuery += (filterQuery.length() > 0 ? " AND " : "") + "@" + property + ":[\"" + MIN + "\" TO \"" + MAX + "\"]";
 
         List<NodeRef> refs = documentService.getDocumentsByFilter(types,
                 Arrays.asList(contractService.getDraftPath(), contractService.getDocumentsFolderPath()), null, filterQuery, null);
@@ -208,11 +277,25 @@ public class ContractsWebScriptBean extends BaseWebScript {
         return refs.toArray(new NodeRef[refs.size()]);
     }
 
-	public Scriptable getAllContractDocuments(ScriptNode document) {
-		List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
-		return createScriptable(additionalDocuments);
-	}
+    /**
+     * Получить список документов для договора для выбранного договора
+     *
+     * @param document нода договора
+     */
+    public Scriptable getAllContractDocuments(ScriptNode document) {
+        List<NodeRef> additionalDocuments = this.contractService.getAllContractDocuments(document.getNodeRef());
+        return createScriptable(additionalDocuments);
+    }
 
+    /**
+     * Получить список документов для договора по заданным параметрам
+     *
+     * @param paths         пути, согласно которым проихзводить поиск
+     * @param typeFilter    список типов документов к договору (через запятую)
+     * @param queryFilterId идентификатор фильтра (для добавления к итоговому запросу)
+     * @param activeDocs    искать по активным или архивным документам
+     */
+    @SuppressWarnings("unused")
     public Scriptable getAdditionalDocsByType(Scriptable paths, String typeFilter, String queryFilterId, boolean activeDocs) {
         String[] types = typeFilter != null && typeFilter.length() > 0 ? typeFilter.split("\\s*,\\s") : new String[0];
         String filter = "";
@@ -229,10 +312,10 @@ public class ContractsWebScriptBean extends BaseWebScript {
 
         if (queryFilterId != null && !queryFilterId.isEmpty()) {
             String filterId = DocumentService.PREF_DOCUMENTS + ".";
-	        if (!activeDocs) {
-		        filterId += "archive.";
-	        }
-	        filterId += ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
+            if (!activeDocs) {
+                filterId += "archive.";
+            }
+            filterId += ContractsBeanImpl.TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT.toPrefixString(namespaceService).replaceAll(":", "_") + "." + queryFilterId;
             String currentUser = authService.getCurrentUserName();
             Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, filterId);
             Serializable filterPref = preferences.get(filterId);
@@ -240,7 +323,7 @@ public class ContractsWebScriptBean extends BaseWebScript {
             String employeesFilter = "";
             DocumentFilter docFilter = FiltersManager.getFilterById(queryFilterId);
             if (docFilter != null && filterData != null && !filterData.isEmpty()) {
-                employeesFilter = docFilter.getQuery((Object[])filterData.split("/"));
+                employeesFilter = docFilter.getQuery((Object[]) filterData.split("/"));
             }
             if (employeesFilter.length() > 0) {
                 filter += " AND (" + employeesFilter + ")";
@@ -256,16 +339,4 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter, null);
         return createScriptable(additionalDocuments);
     }
-
-	public ScriptNode dublicateContract(String nodeRef) {
-		ParameterCheck.mandatory("nodeRef", nodeRef);
-		NodeRef ref = new NodeRef(nodeRef);
-		if (nodeService.exists(ref)) {
-			NodeRef createdNode = this.contractService.dublicateContract(ref);
-			if (createdNode != null) {
-				return new ScriptNode(createdNode, serviceRegistry, getScope());
-			}
-		}
-		return null;
-	}
 }

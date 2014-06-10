@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<webscript>
+    <shortname>ARM: Разметка с фильтрами</shortname>
+    <description>
+    Разметка с фильтрами, принимает json:
+    armCode,
+    filters
+    </description>
+    <url>/lecm/arm/draw-filters</url>
+    <authentication>user</authentication>
+    <format default="html">extension</format>
+</webscript>

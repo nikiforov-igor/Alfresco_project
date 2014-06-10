@@ -8,6 +8,8 @@ import org.springframework.beans.factory.InitializingBean;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: pmelnikov
@@ -19,9 +21,14 @@ public class BJLogMessageReceiver implements MessageListener, InitializingBean {
     private LocalBusinessJournalServiceImpl localService;
     private RemoteBusinessJournalServiceImpl remoteService;
     private AbstractBusinessJournalService service;
+    private LecmTransactionHelper lecmTransactionHelper;
     private String useRemote;
 
     private static final Logger logger = LoggerFactory.getLogger(BJLogMessageReceiver.class);
+
+    public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+        this.lecmTransactionHelper = lecmTransactionHelper;
+    }
 
     @Override
     public void onMessage(final Message message) {
@@ -29,8 +36,15 @@ public class BJLogMessageReceiver implements MessageListener, InitializingBean {
             AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                 @Override
                 public Object doWork() throws Exception {
-                    BusinessJournalRecord record = (BusinessJournalRecord) ((ActiveMQObjectMessage) message).getObject();
-                    service.saveToStore(record);
+                    lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>(){
+
+                        @Override
+                        public Void execute() throws Throwable {
+                            BusinessJournalRecord record = (BusinessJournalRecord) ((ActiveMQObjectMessage) message).getObject();
+                            service.saveToStore(record);
+                            return null;
+                        }
+                    });
                     return null;
                 }
             });

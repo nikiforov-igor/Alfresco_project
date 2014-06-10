@@ -62,7 +62,7 @@ public class WorkflowAssigneesListItemPolicy implements NodeServicePolicies.OnCr
 
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
 				LecmWorkflowModel.TYPE_ASSIGNEE, LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE,
-				new JavaBehaviour(this, "onCreateAssociation", NotificationFrequency.TRANSACTION_COMMIT));
+				new JavaBehaviour(this, "onCreateAssociation"));
 	}
 
 	@Override

@@ -58,4 +58,14 @@ public class XMLImporterInfo {
 	public int getImportedElementsCount() {
 		return createdElementsCount + updatedElementsCount;
 	}
+
+    @Override
+    public String toString() {
+        return "XMLImporterInfo{" +
+                "importedElementsCount=" + getImportedElementsCount() +
+                ", createdElementsCount=" + createdElementsCount +
+                ", updatedElementsCount=" + updatedElementsCount +
+                ", assocNotFoundErrors=" + assocNotFoundErrors.values().size() +
+                '}';
+    }
 }

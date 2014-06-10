@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -234,7 +235,7 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 
 	@Override
 	public NodeRef getSignedDocflowFolder() {
-		return getFolder(SIGNED_DOCFLOW_FOLDER);
+            return getFolder(SIGNED_DOCFLOW_FOLDER);
 	}
 
 	@Override
@@ -411,8 +412,12 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	@Override
 	public boolean updateSignature(NodeRef signatureRef, String updateDate, boolean isValid) {
 		try {
-			nodeService.setProperty(signatureRef, SignedDocflowModel.PROP_IS_VALID, isValid);
-			nodeService.setProperty(signatureRef, SignedDocflowModel.PROP_UPDATE_DATE, updateDate);
+                        //TODO замена нескольких setProperty на setProperties.
+                        //DONE
+                        Map<QName, Serializable> properties = nodeService.getProperties(signatureRef);
+			properties.put(SignedDocflowModel.PROP_IS_VALID, isValid);
+			properties.put(SignedDocflowModel.PROP_UPDATE_DATE, updateDate);
+                        nodeService.setProperties(signatureRef, properties);
 		} catch (Exception e) {
 			return false;
 		}
@@ -456,14 +461,18 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 				lockService.unlock(contentRef);
 			}
 
-			if (nodeService.getAspects(contentRef).contains(SignedDocflowModel.ASPECT_DOCFLOW_IDS)) {
-				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
-				nodeService.setProperty(contentRef, SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
+			if (nodeService.hasAspect(contentRef, SignedDocflowModel.ASPECT_DOCFLOW_IDS)) {
+                            //TODO замена нескольких setProperty на setProperties.
+                            //DONE
+                            Map<QName, Serializable> properties = nodeService.getProperties(contentRef);
+                            properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+                            properties.put(SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
+                            nodeService.setProperties(contentRef, properties);
 			} else {
-				Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
-				properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
-				properties.put(SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
-				nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCFLOW_IDS, properties);
+                            Map<org.alfresco.service.namespace.QName, Serializable> properties = new HashMap<org.alfresco.service.namespace.QName, Serializable>();
+                            properties.put(SignedDocflowModel.PROP_DOCUMENT_ID, documentId);
+                            properties.put(SignedDocflowModel.PROP_DOCFLOW_ID, docflowId);
+                            nodeService.addAspect(contentRef, SignedDocflowModel.ASPECT_DOCFLOW_IDS, properties);
 			}
 		} finally {
 			behaviourFilter.enableBehaviour(contentRef, ContentModel.ASPECT_VERSIONABLE);
@@ -484,17 +493,16 @@ public class SignedDocflowImpl extends BaseBean implements SignedDocflow {
 	}
 
 	@Override
+        //TODO Refactoring in progress...
+        //Вроде бы вызывается только в вебскрипте. транзакция уже должна быть
 	public void saveAuthenticationData(final String organizationId, final String organizationEdoId, final String token) {
-		RetryingTransactionCallback<Void> cb = new RetryingTransactionCallback<Void>() {
-			@Override
-			public Void execute() throws Throwable {
-				NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
-				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_ORGANIZATION_ID, organizationId);
-				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_ORGANIZATION_EDO_ID, organizationEdoId);
-				nodeService.setProperty(currentEmployeeRef, SignedDocflowModel.PROP_AUTH_TOKEN, token);
-				return null;
-			}
-		};
-		transactionService.getRetryingTransactionHelper().doInTransaction(cb, false, true);
+            NodeRef currentEmployeeRef = orgstructureService.getCurrentEmployee();
+            //TODO замена нескольких setProperty на setProperties.
+            //DONE
+            Map<QName, Serializable> properties = nodeService.getProperties(currentEmployeeRef);
+            properties.put(SignedDocflowModel.PROP_ORGANIZATION_ID, organizationId);
+            properties.put(SignedDocflowModel.PROP_ORGANIZATION_EDO_ID, organizationEdoId);
+            properties.put(SignedDocflowModel.PROP_AUTH_TOKEN, token);
+            nodeService.setProperties(currentEmployeeRef, properties);
 	}
 }

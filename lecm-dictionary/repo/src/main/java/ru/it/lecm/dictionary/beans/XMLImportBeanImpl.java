@@ -89,20 +89,20 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @throws javax.xml.stream.XMLStreamException
          */
         public XMLImporterInfo readItems(NodeRef parentNodeRef) throws XMLStreamException {
-            return readItems(parentNodeRef, false);
+            return readItems(parentNodeRef, UpdateMode.CREATE_NEW);
         }
 
         /**
          * Считывание элементов из файла
          *
          * @param parentNodeRef родительский элемен, в котором будут созданы импортируемые
-         * @param doNotUpdateIfExist не обновлять, если такой справочник уже существует, иначе обновить свойства справочника и элементы
+         * @param updateMode режим обновления записей
          * @throws XMLStreamException
          */
-        public XMLImporterInfo readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException {
+        public XMLImporterInfo readItems(NodeRef parentNodeRef, UpdateMode updateMode) throws XMLStreamException {
 	        this.importInfo = new XMLImporterInfo();
 
-            logger.debug("Importing dictionary. (doNotUpdateIfExist = {})", doNotUpdateIfExist);
+            logger.trace("Importing dictionary. (updateMode = {})", updateMode);
             XMLInputFactory inputFactory = XMLInputFactory.newInstance();
             XMLStreamReader xmlr = inputFactory.createXMLStreamReader(inputStream);
             try {
@@ -112,10 +112,11 @@ public class XMLImportBeanImpl implements XMLImportBean {
                     xmlr.nextTag();
                     str = xmlr.getLocalName();
                 }
+
                 if (str.equals(ExportNamespace.TAG_ITEMS)) {
-                    readItems(xmlr, parentNodeRef, doNotUpdateIfExist);
+                    readItems(xmlr, parentNodeRef, updateMode);
                 }
-	            createAssocs(doNotUpdateIfExist);
+	            createAssocs(updateMode);
             } finally {
                 xmlr.close();
             }
@@ -127,20 +128,25 @@ public class XMLImportBeanImpl implements XMLImportBean {
          *
          * @param xmlr XML Reader
          * @param parent ссылка на родительский элемент
-         * @param doNotUpdateIfExist не обновлять существующие записи
+         * @param updateMode режим обновления записей
          * @return true если элементы были создан
          * @throws XMLStreamException
          */
 
-        private boolean readItems(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
+        private boolean readItems(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ITEMS))) {
                 return false;
             }
+            String itemUpdateModeAttr = xmlr.getAttributeValue("", ExportNamespace.ATTR_UPDATE_MODE);
+            if (itemUpdateModeAttr != null) {
+                updateMode = UpdateMode.valueOf(itemUpdateModeAttr, updateMode);
+                logger.trace("Update mode changed to '{}'", updateMode);
+            }
             xmlr.nextTag();//входим в <items>
             try {
                 while (true) {
-                    if (!(readItem(xmlr, parent, doNotUpdateIfExist))) {
+                    if (!(readItem(xmlr, parent, updateMode))) {
                         break;
                     }
                 }
@@ -156,11 +162,11 @@ public class XMLImportBeanImpl implements XMLImportBean {
          *
          * @param xmlr XML Reader
          * @param parent ссылка на родительский элемент
-         * @param doNotUpdateIfExist не обновлять существующие записи
+         * @param updateMode режим обновления записей
          * @return true если элемент был создан
          * @throws XMLStreamException
          */
-        private boolean readItem(XMLStreamReader xmlr, NodeRef parent, boolean doNotUpdateIfExist) throws XMLStreamException {
+        private boolean readItem(XMLStreamReader xmlr, NodeRef parent, UpdateMode updateMode) throws XMLStreamException {
             if (!(XMLStreamConstants.START_ELEMENT == xmlr.getEventType()
                     && xmlr.getLocalName().equals(ExportNamespace.TAG_ITEM))) {
                 return false;
@@ -182,8 +188,14 @@ public class XMLImportBeanImpl implements XMLImportBean {
                 properties.put(ContentModel.PROP_NAME, itemName.getLocalName());
             }
             properties.putAll(getProperties(xmlr));
-            NodeRef current = createItem(parent, itemName, itemType, properties, doNotUpdateIfExist);
-            readItems(xmlr, current, doNotUpdateIfExist);
+            NodeRef current = createItem(parent, itemName, itemType, properties, updateMode);
+            if (updateMode.isRewriteChildren()) {
+                List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(current);
+                for (ChildAssociationRef childAssoc : childAssocs) {
+                    nodeService.deleteNode(childAssoc.getChildRef());
+                }
+            }
+            readItems(xmlr, current, updateMode);
             readAssocs(xmlr, current);
             xmlr.nextTag();//выходим из </item>
             return true;
@@ -229,24 +241,24 @@ public class XMLImportBeanImpl implements XMLImportBean {
             return true;
         }
 
-	    private void createAssocs(boolean doNotUpdateIfExist) {
+	    private void createAssocs(UpdateMode updateMode) {
 		    for (NodeRef nodeRef: this.assocs.keySet()) {
 			    for (String assocType: this.assocs.get(nodeRef).keySet()) {
 				    for (String assocPath: this.assocs.get(nodeRef).get(assocType)) {
-					    createAssoc(nodeRef, assocType, assocPath, doNotUpdateIfExist);
+					    createAssoc(nodeRef, assocType, assocPath, updateMode);
 				    }
 			    }
 		    }
 	    }
 
-	    private void createAssoc(NodeRef parent,  String assocTypeAttr, String assocPathAttr, boolean doNotUpdateIfExist) {
+	    private void createAssoc(NodeRef parent,  String assocTypeAttr, String assocPathAttr, UpdateMode updateMode) {
 		    QName assocType = QName.createQName(assocTypeAttr, namespaceService);
 		    NodeRef targetRef = getNodeByPath(assocPathAttr);
 		    if (targetRef != null) {
 			    AssociationDefinition associationDefinition = dictionaryService.getAssociation(assocType);
 			    List<AssociationRef> existingAssocs = nodeService.getTargetAssocs(parent, assocType);
 			    boolean create = true;
-			    if (doNotUpdateIfExist) {
+			    if (updateMode.isUpdateProperties()) {
 				    for (AssociationRef existingAssoc : existingAssocs) {
 					    if (existingAssoc.getTargetRef().equals(targetRef)) {
 						    create = false;
@@ -266,7 +278,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
 				    try {
 					    nodeService.createAssociation(parent, targetRef, assocType);
 				    } catch (AssociationExistsException ignored) {
-					    logger.debug("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
+					    logger.trace("Skip create association: {}. Already exist.", new AssociationRef(parent, assocType, targetRef));
 				    }
 			    }
 		    } else {
@@ -303,9 +315,10 @@ public class XMLImportBeanImpl implements XMLImportBean {
          * @param assocQName название ассоциации, если не задано - будет <code>ContentModel.ASSOC_CONTAINS</code>
          * @param itemType  тип создаваемого элемента
          * @param properties свойства
-         * @param doNotUpdateIfExist не обновлять существующие записи   @return ссылка на элемент
+         * @param updateMode режим обновления записей
+         * @return ссылка на элемент
          * */
-        private NodeRef createItem(NodeRef parentNodeRef, QName assocQName, QName itemType, Map<QName, Serializable> properties, boolean doNotUpdateIfExist) {
+        private NodeRef createItem(NodeRef parentNodeRef, QName assocQName, QName itemType, Map<QName, Serializable> properties, UpdateMode updateMode) {
             String name = null;
             NodeRef node = null;
             Serializable nameProp = properties.get(ContentModel.PROP_NAME);
@@ -349,7 +362,7 @@ public class XMLImportBeanImpl implements XMLImportBean {
 
 	            this.importInfo.setCreatedElementsCount(this.importInfo.getCreatedElementsCount() + 1);
                 logger.trace("Item '{}' created", name);
-            } else if (!doNotUpdateIfExist) {
+            } else if (updateMode.isUpdateProperties()) {
                 nodeService.addProperties(node, properties);
 	            this.importInfo.setUpdatedElementsCount(this.importInfo.getUpdatedElementsCount() + 1);
                 logger.trace("Item '{}' updated", name);

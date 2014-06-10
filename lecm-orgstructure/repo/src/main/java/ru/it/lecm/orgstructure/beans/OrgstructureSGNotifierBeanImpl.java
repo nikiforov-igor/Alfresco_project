@@ -26,7 +26,6 @@ public class OrgstructureSGNotifierBeanImpl
 {
 	final static protected Logger logger = LoggerFactory.getLogger(OrgstructureSGNotifierBeanImpl.class);
 
-	private AuthenticationService authService;
 	private OrgstructureBean orgstructureService;
 	private IOrgStructureNotifiers sgNotifier;
 
@@ -79,10 +78,6 @@ public class OrgstructureSGNotifierBeanImpl
 
 	public AuthenticationService getAuthService() {
 		return authService;
-	}
-
-	public void setAuthService(AuthenticationService authService) {
-		this.authService = authService;
 	}
 
 	public OrgstructureBean getOrgstructureService() {
@@ -227,7 +222,7 @@ public class OrgstructureSGNotifierBeanImpl
         final Types.SGPosition sgPrivateOU = PolicyUtils.makeOrgUnitPrivatePos(nodeOrgUnit, nodeService);
         sgNotifier.sgInclude( sgDP, sgPrivateOU);
 
-        // Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
+		// Если позиция руководящая прописать её Сотрудника (!) в SG_SV своего Подразделения ...
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (sgMe != null) {
 			/*
@@ -461,7 +456,7 @@ public class OrgstructureSGNotifierBeanImpl
             );
         }
 
-    }
+	}
 
 	@Override
 	public void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {

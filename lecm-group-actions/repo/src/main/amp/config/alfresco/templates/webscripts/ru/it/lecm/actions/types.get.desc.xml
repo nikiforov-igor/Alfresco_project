@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Group actions: получение типов документов и аспектов</shortname>
+	<description>Возвращает список всех типов документов платформы и аспектов групповых операций</description>
+	<url>/lecm/groupActions/types</url>
+	<format default="json">extension</format>
+	<authentication>user</authentication>
+	<transaction>none</transaction>
+</webscript>

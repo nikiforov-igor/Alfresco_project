@@ -20,32 +20,42 @@ import java.util.List;
  */
 public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 
-	private DocumentAttachmentsService documentAttachmentsService;
+    private DocumentAttachmentsService documentAttachmentsService;
 
-	protected NodeService nodeService;
+    protected NodeService nodeService;
 
-	public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
-		this.documentAttachmentsService = documentAttachmentsService;
-	}
+    public void setDocumentAttachmentsService(DocumentAttachmentsService documentAttachmentsService) {
+        this.documentAttachmentsService = documentAttachmentsService;
+    }
 
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
-	public ScriptNode getRootFolder(String documentNodeRef) {
-		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+	/**
+	 * Получение папки для вложений в документе
+	 * @param documentNodeRef nodeRef документа
+	 * @return папка с вложениями
+	 */
+    public ScriptNode getRootFolder(String documentNodeRef) {
+        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
-		NodeRef documentRef = new NodeRef(documentNodeRef);
+        NodeRef documentRef = new NodeRef(documentNodeRef);
 
-		if (this.nodeService.exists(documentRef)) {
-			NodeRef attachmentsRoot = this.documentAttachmentsService.getRootFolder(documentRef);
-			if (attachmentsRoot != null) {
-				return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
-			}
-		}
-		return null;
-	}
+        if (this.nodeService.exists(documentRef)) {
+            NodeRef attachmentsRoot = this.documentAttachmentsService.getRootFolder(documentRef);
+            if (attachmentsRoot != null) {
+                return new ScriptNode(attachmentsRoot, this.serviceRegistry, getScope());
+            }
+        }
+        return null;
+    }
 
+	/**
+	 * Получение документа по вложению
+	 * @param nodeRef nodeRef вложения
+	 * @return документ
+	 */
 	public ScriptNode getDocumentByAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
@@ -60,6 +70,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение категории по вложению
+	 * @param nodeRef nodeRef вложения
+	 * @return категория вложений
+	 */
 	public ScriptNode getCategoryByAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
@@ -74,25 +89,40 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
-	public Scriptable getCategories(String documentNodeRef) {
-		ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
+	/**
+	 * Получение категорий вложений для документа
+	 * @param documentNodeRef nodeRef документа
+	 * @return массив категорий вложений
+	 */
+    public Scriptable getCategories(String documentNodeRef) {
+        ParameterCheck.mandatory("documentNodeRef", documentNodeRef);
 
-		NodeRef documentRef = new NodeRef(documentNodeRef);
-		if (this.nodeService.exists(documentRef)) {
-			List<NodeRef> categories = this.documentAttachmentsService.getCategories(documentRef);
-			return createScriptable(categories);
-		}
-		return null;
-	}
+        NodeRef documentRef = new NodeRef(documentNodeRef);
+        if (this.nodeService.exists(documentRef)) {
+            List<NodeRef> categories = this.documentAttachmentsService.getCategories(documentRef);
+            return createScriptable(categories);
+        }
+        return null;
+    }
 
-	public String[] getCategoriesForType(String documentType) {
-		ParameterCheck.mandatory("documentType", documentType);
-		QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
-		List<String> categories = this.documentAttachmentsService.getCategories(type);
-		return categories.toArray(new String[categories.size()]);
-	}
+	/**
+	 * Получение категорий вложений по типу документа
+	 * @param documentType тип документа
+	 * @return массив названий категорий вложений
+	 */
+    public String[] getCategoriesForType(String documentType) {
+        ParameterCheck.mandatory("documentType", documentType);
+        QName type = QName.createQName(documentType, serviceRegistry.getNamespaceService());
+        List<String> categories = this.documentAttachmentsService.getCategories(type);
+        return categories.toArray(new String[categories.size()]);
+    }
 
-	public String deleteAttachment(String nodeRef) {
+	/**
+	 * Удаление вложения
+	 * @param nodeRef nodeRef вложения
+	 * @return Сообщение о статусе удаления
+	 */
+    public String deleteAttachment(String nodeRef) {
 		ParameterCheck.mandatory("nodeRef", nodeRef);
 
 		NodeRef ref = new NodeRef(nodeRef);
@@ -103,6 +133,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return "Failure: node not found";
 	}
 
+	/**
+	 * Получение всех версий вложения
+	 * @param nodeRef nodeRef вложения
+	 * @return массив с версиями вложения
+	 */
 	public Scriptable getAttachmentVersions(String nodeRef) {
 		NodeRef ref = new NodeRef(nodeRef);
 		if (this.nodeService.exists(ref) && this.documentAttachmentsService.isDocumentAttachment(ref)) {
@@ -114,6 +149,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Проверка, что категория доступна только для чтения
+	 * @param nodeRef nodeRef категории вложений
+	 * @return true, если категория доступна только для чтения
+	 */
 	public boolean isReadonlyCategory(String nodeRef) {
 		boolean result = false;
 		NodeRef ref = new NodeRef(nodeRef);
@@ -123,6 +163,12 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return result;
 	}
 
+	/**
+	 * Логгирование копирования вложений
+	 * @param originalNodeRef nodeRef оригинального вложение
+	 * @param copiedNodeRef nodeRef скопированного вложение
+	 * @return Сообщение о статусе логгирования
+	 */
 	public String copyAttachmentLog(String originalNodeRef, String copiedNodeRef) {
 		ParameterCheck.mandatory("originalNodeRef", originalNodeRef);
 		ParameterCheck.mandatory("copiedNodeRef", copiedNodeRef);
@@ -136,6 +182,12 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return "Failure: node not found";
 	}
 
+	/**
+	 * Получение вложений по категории
+	 * @param documentRef nodeRef документа
+	 * @param categoryName название категории вложений
+	 * @return массив вложений
+	 */
 	public Scriptable getAttachmentsByCategory(String documentRef, String categoryName) {
 		ParameterCheck.mandatory("documentRef", documentRef);
 		ParameterCheck.mandatory("categoryName", categoryName);
@@ -150,6 +202,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение вложений по категории
+	 * @param category категория вложений
+	 * @return массив вложений
+	 */
 	public Scriptable getAttachmentsByCategory(ScriptNode category) {
 		ParameterCheck.mandatory("category", category);
 
@@ -160,6 +217,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Получение вложений по категории
+	 * @param categoryRef nodeRef категории вложений
+	 * @return массив вложений
+	 */
 	public Scriptable getAttachmentsByCategory(String categoryRef) {
 		ParameterCheck.mandatory("categoryRef", categoryRef);
 
@@ -173,6 +235,11 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
 		return null;
 	}
 
+	/**
+	 * Проверка, что вложение является внутренним
+	 * @param attachment вложение
+	 * @return true, если вложение внутрненние, false - если вложение - ссылка
+	 */
 	public boolean isInnerAttachment(ScriptNode attachment) {
 		ParameterCheck.mandatory("attachment", attachment);
 		return documentAttachmentsService.isDocumentAttachment(attachment.getNodeRef()) &&

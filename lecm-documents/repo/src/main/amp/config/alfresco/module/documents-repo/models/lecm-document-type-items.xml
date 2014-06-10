@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Вид документа" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Заявление" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Заявление</property>
+				<property name="lecm-doc-dic-dt:documentType-code">01</property>
+			</item>
+			<item name="cm:Письмо" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Письмо</property>
+				<property name="lecm-doc-dic-dt:documentType-code">02</property>
+			</item>
+			<item name="cm:Приглашение" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Приглашение</property>
+				<property name="lecm-doc-dic-dt:documentType-code">03</property>
+			</item>
+			<item name="cm:Распоряжение" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Распоряжение</property>
+				<property name="lecm-doc-dic-dt:documentType-code">04</property>
+			</item>
+			<item name="cm:Рекламация" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Рекламация</property>
+				<property name="lecm-doc-dic-dt:documentType-code">05</property>
+			</item>
+			<item name="cm:Рекламные материалы" type="lecm-doc-dic-dt:documentType">
+				<property name="cm:name">Рекламные материалы</property>
+				<property name="lecm-doc-dic-dt:documentType-code">06</property>
+			</item>
+		</items>
+	</item>
+</items>

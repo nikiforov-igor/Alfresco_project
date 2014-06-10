@@ -88,14 +88,15 @@ public class ExpertsComponent implements ContentServicePolicies.OnContentUpdateP
 	public void onContentUpdate(NodeRef nodeRef, boolean newContent) {
 		if (exp_nodeService.hasAspect(nodeRef, EXPERTS_ASPECT) && newContent) {
 			final NodeRef ref = nodeRef;
-			RetryingTransactionHelper.RetryingTransactionCallback<Object> processEventCallback =
-					new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-						public Object execute() throws Throwable {
+                        //onUpdate policy. должна быть транзакция
+//			RetryingTransactionHelper.RetryingTransactionCallback<Object> processEventCallback =
+//					new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+//						public Object execute() throws Throwable {
 							searchExperts(ref, null);
-							return null;
-						}
-					};
-			exp_transService.getRetryingTransactionHelper().doInTransaction(processEventCallback, false);
+//							return null;
+//						}
+//					};
+//			exp_transService.getRetryingTransactionHelper().doInTransaction(processEventCallback, false);
 		}
 	}
 

@@ -41,7 +41,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 	private final static QName[] AFFECTED_PERSON_PROPERTIES = {ContentModel.PROP_FIRSTNAME, ContentModel.PROP_LASTNAME,
 		ContentModel.PROP_EMAIL, ContentModel.PROP_TELEPHONE};
 
-    public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
+	public void setBehaviourFilter(BehaviourFilter behaviourFilter) {
 		this.behaviourFilter = behaviourFilter;
 	}
 
@@ -53,7 +53,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
         this.propertiesService = propertiesService;
     }
 
-    @Override
+	@Override
 	public final void init() {
 		super.init();
 
@@ -146,27 +146,27 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
             }
 
             if (enabled) {
-                final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
-                final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
-                final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
-                if (changed) { // произошло переключение активности -> отработать ...
-                    notifyEmploeeTie(nodeRef, nowActive);
-                }
+		final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+		final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+		final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
+		if (changed) { // произошло переключение активности -> отработать ...
+			notifyEmploeeTie(nodeRef, nowActive);
+		}
 
-                //если сотрудник удаляется
-                if (changed && !nowActive) {
-                    List<NodeRef> employeeLinks = orgstructureService.getEmployeeLinks(nodeRef, true);
-                    for (NodeRef employeeLink : employeeLinks) {
-                        nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
-                        nodeService.deleteNode(employeeLink);
-                    }
-                    NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
-                    if (schedule != null) {
-                        nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
-                        nodeService.deleteNode(schedule);
-                    }
-                }
+        //если сотрудник удаляется
+        if (changed && !nowActive) {
+            List<NodeRef> employeeLinks = orgstructureService.getEmployeeLinks(nodeRef, true);
+            for (NodeRef employeeLink : employeeLinks) {
+                nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
+                nodeService.deleteNode(employeeLink);
             }
+			NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+			if (schedule != null) {
+				nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
+				nodeService.deleteNode(schedule);
+			}
+        }
+    }
         } catch (LecmBaseException e) {
             throw new IllegalStateException("Cannot read orgstructure properties");
         }
@@ -322,31 +322,29 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
 
 		// проверка на тот случай, что полиси вызвана во время старта системы, когда происходит обнуление системной проперти
 		if (PolicyUtils.safeEquals(before.get(ContentModel.PROP_SIZE_CURRENT), after.get(ContentModel.PROP_SIZE_CURRENT))) {
-                // мы не будем создавать сотрудника для неактивных или неправильно заполненных пользователей
-                if (personNeedsEmployee(person)) {
-                    try {
-                        Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
-                        boolean enabled;
-                        if (editorEnabled == null) {
-                            enabled = true;
-                        } else {
-                            enabled = Boolean.valueOf((String) editorEnabled);
-                        }
-                        if (enabled) {
-                            final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
-                                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
-                                    OrgstructureBean.TYPE_EMPLOYEE);
+			// мы не будем создавать сотрудника для неактивных или неправильно заполненных пользователей
+			if (personNeedsEmployee(person)) {
+                try {
+                    Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
+                    boolean enabled;
+                    if (editorEnabled == null) {
+                        enabled = true;
+                    } else {
+                        enabled = Boolean.valueOf((String) editorEnabled);
+                    }
+                    if (enabled) {
+                        final ChildAssociationRef employeeNodeRef = nodeService.createNode(orgstructureService.getEmployeesDirectory(), ContentModel.ASSOC_CONTAINS,
+                                QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate()),
+                                OrgstructureBean.TYPE_EMPLOYEE);
 
-                            final NodeRef employeeNode = employeeNodeRef.getChildRef();
+                        final NodeRef employeeNode = employeeNodeRef.getChildRef();
 
-                            // после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
-                            nodeService.createAssociation(employeeNode, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
-                        }
+                        // после создания ассоциации будет вызвана полиси onCreateEmployeePersonAssociation, которая и скопирует атрибутивный состав
+                        nodeService.createAssociation(employeeNode, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+                    }
                 } catch (LecmBaseException e) {
                     logger.error("Cannot read orgstructure properties");
                 }
-
-
 				/*
 				 * Нас интересует, не были ли изменены следующие атрибуты: cm:firstName, cm:lastName, cm:email, cm:telephone
 				 * Атрибуты для сравнени лежат в AFFECTED_PERSON_PROPERTIES

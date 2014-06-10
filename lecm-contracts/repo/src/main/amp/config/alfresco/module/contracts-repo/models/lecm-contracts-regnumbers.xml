@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Шаблоны регистрационных номеров" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Регистрационный номер договора" type="lecm-regnum:template">
+                <property name="cm:name">Регистрационный номер договора</property>
+                <property name="lecm-regnum:template-string">{#employeeOrgUnitCode(doc.creator)}-{#formatNumber('0000', doc.counterYearDoctype('contracts_system'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров договоров</property>
+                <property name="lecm-regnum:template-service-id">CONTRACT_REGNUM</property>
+            </item>
+            <item name="cm:Регистрационный номер проекта договора" type="lecm-regnum:template">
+                <property name="cm:name">Регистрационный номер проекта договора</property>
+                <property name="lecm-regnum:template-string">{#employeeOrgUnitCode(doc.creator)}-{doc.associatedAttributePath('lecm-document:subject-assoc/lecm-doc-dic:subject-code')}-{#formatNumber('0000', doc.counterYearDoctype('contracts_project'))}/{#formatDate('yy', doc.creationDate)}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров проектов договоров</property>
+                <property name="lecm-regnum:template-service-id">CONTRACT_PROJECT_REGNUM</property>
+            </item>
+            <item name="cm:Регистрационный номер проекта документа к договору" type="lecm-regnum:template">
+                <property name="cm:name">Регистрационный номер проекта документа к договору</property>
+                <property name="lecm-regnum:template-string">{doc.counterPlainDoctype}</property>
+                <property name="lecm-regnum:template-comment">Шаблон для регистрационных номеров проектов документов к договору</property>
+                <property name="lecm-regnum:template-service-id">CONTRACT_DOCUMENT_PROJECT_REGNUM</property>
+            </item>
+        </items>
+    </item>
+</items>

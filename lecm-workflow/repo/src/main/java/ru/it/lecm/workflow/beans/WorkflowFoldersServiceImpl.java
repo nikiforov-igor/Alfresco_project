@@ -1,7 +1,10 @@
 package ru.it.lecm.workflow.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
 
 /**
@@ -9,6 +12,8 @@ import ru.it.lecm.workflow.api.WorkflowFoldersService;
  * @author vmalygin
  */
 public class WorkflowFoldersServiceImpl extends BaseBean implements WorkflowFoldersService {
+
+	private final static Logger logger = LoggerFactory.getLogger(WorkflowFoldersServiceImpl.class);
 
 	public final static String WORKFLOW_FOLDER = "WORKFLOW_FOLDER";
 	public final static String WORKFLOW_GLOBAL_RESULT_FOLDER = "WORKFLOW_GLOBAL_RESULT_FOLDER";
@@ -21,16 +26,16 @@ public class WorkflowFoldersServiceImpl extends BaseBean implements WorkflowFold
 
 	@Override
 	public NodeRef getWorkflowFolder() {
-		return getFolder(WORKFLOW_FOLDER);
+            return getFolder(WORKFLOW_FOLDER);
 	}
 
 	@Override
 	public NodeRef getGlobalResultFolder() {
-		return getFolder(WORKFLOW_GLOBAL_RESULT_FOLDER);
+            return getFolder(WORKFLOW_GLOBAL_RESULT_FOLDER);
 	}
 
 	@Override
 	public NodeRef getAssigneesListWorkingCopyFolder() {
-		return getFolder(ASSIGNEES_LISTS_WORKING_COPY_FOLDER);
+            return getFolder(ASSIGNEES_LISTS_WORKING_COPY_FOLDER);
 	}
 }

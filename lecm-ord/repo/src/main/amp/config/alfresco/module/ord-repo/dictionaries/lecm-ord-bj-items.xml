@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:ОРД" type="lecm-busjournal:objectType">
+				<property name="cm:name">ОРД</property>
+				<property name="lecm-busjournal:objectType-code">LECM_ORD</property>
+				<property name="lecm-busjournal:objectType-class">lecm-ord:document</property>
+				<property name="lecm-busjournal:objectType-template">{lecm-document:present-string}</property>
+				<property name="lecm-busjournal:objectType-list-template">статус: {lecm-statemachine:status}, автор : {!~AUTHOR}</property>
+			</item>
+			<item name="cm:Пункт ОРД" type="lecm-busjournal:objectType">
+				<property name="cm:name">Пункт ОРД</property>
+				<property name="lecm-busjournal:objectType-code">LECM_ORD_POINT</property>
+				<property name="lecm-busjournal:objectType-class">lecm-ord-table-structure:item</property>
+				<property name="lecm-busjournal:objectType-template">Пункт №{lecm-document:indexTableRow}</property>
+				<property name="lecm-busjournal:objectType-list-template">Пункт №{lecm-document:indexTableRow}</property>
+			</item>
+		</items>
+	</item>
+</items>

@@ -1,0 +1,29 @@
+.daterange-set.two-columns .column {
+    width: 49.1%;
+    float: left;
+}
+.daterange-set.two-columns .column.last {
+    float: right;
+}
+.daterange-set .daterange-dates {
+    width: auto;
+    overflow: hidden;
+}
+.daterange-set .daterange-end-date {
+    width: auto;
+    overflow: hidden;
+}
+.daterange-set .daterange-end-date .control {
+    position: inherit;
+}
+.daterange-set .daterange-end-date .label-div {
+    width: 10px;
+}
+.daterange-set .daterange-unlimited {
+    width: 180px;
+    float: right;
+    text-align: right;
+}
+.daterange-set .daterange-unlimited .label-div {
+    display: none;
+}

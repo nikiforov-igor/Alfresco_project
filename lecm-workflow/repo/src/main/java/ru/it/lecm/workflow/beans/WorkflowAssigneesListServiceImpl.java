@@ -1,16 +1,5 @@
 package ru.it.lecm.workflow.beans;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
@@ -34,9 +23,12 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 import ru.it.lecm.wcalendar.calendar.ICalendar;
 import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
+import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.LecmWorkflowModel;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -383,6 +375,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 	public boolean changeAssigneeOrder(NodeRef assigneeNodeRef, String direction) {
 		int currentItemOrder, newItemOrder = 0;
 		boolean stopReordering = false, success;
+		Date currentAssigneeDueDate = getAssigneesListItemDueDate(assigneeNodeRef), assigneeDueDate = null;
 
 		currentItemOrder = getAssigneesListItemOrder(assigneeNodeRef);
 
@@ -415,11 +408,13 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 				}
 				int itemOrder = getAssigneesListItemOrder(item);
 				if (itemOrder == newItemOrder) {
-
+					assigneeDueDate = getAssigneesListItemDueDate(item);
+					setAssigneesListItemDueDate(item, currentAssigneeDueDate);
 					setAssigneesListItemOrder(item, currentItemOrder);
 					break;
 				}
 			}
+			setAssigneesListItemDueDate(assigneeNodeRef, assigneeDueDate);
 			setAssigneesListItemOrder(assigneeNodeRef, newItemOrder);
 
 			success = true;
@@ -477,6 +472,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 			resultAssigneesList = copyAssigneesList(assigneesListRef, parentAssocs.get(0).getParentRef(), validAssigneesListName, false);
 		}
 		nodeService.setProperty(resultAssigneesList, ContentModel.PROP_NAME, validAssigneesListName);
+		clearDueDatesInAssigneesList(resultAssigneesList);
 		nodeService.removeAspect(resultAssigneesList, LecmWorkflowModel.ASPECT_TEMP);
 	}
 
@@ -523,7 +519,7 @@ public class WorkflowAssigneesListServiceImpl extends BaseBean implements Workfl
 
 	private NodeRef copyAssigneesList(NodeRef source, NodeRef targetDir, String name, boolean isAnonymous) {
 		//создаем новый список во временной папке
-		NodeRef newAssigneesList = createEmptyAssigneesList(targetDir, null, name, isAnonymous);
+		NodeRef newAssigneesList = createEmptyAssigneesList(targetDir, orgstructureService.getCurrentEmployee(), name, isAnonymous);
 		//копируем навешанные аспекты
 		Set<QName> aspects = nodeService.getAspects(source);
 		for (QName aspect : aspects) {

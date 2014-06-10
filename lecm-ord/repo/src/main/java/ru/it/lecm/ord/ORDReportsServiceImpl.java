@@ -107,7 +107,7 @@ public class ORDReportsServiceImpl extends BaseBean implements ORDReportsService
 		
 		if (reportRef == null) {
 			reportRef = resultRef;
-						
+			
 			//saving new created report under necessary name
 			nodeService.setProperty(reportRef, ContentModel.PROP_NAME, reportNodeFullName);
 		} else {

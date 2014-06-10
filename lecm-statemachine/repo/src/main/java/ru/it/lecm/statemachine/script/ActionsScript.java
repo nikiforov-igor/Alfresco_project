@@ -1,7 +1,7 @@
 package ru.it.lecm.statemachine.script;
 
-import org.activiti.engine.delegate.ExecutionListener;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.WorkflowModel;
 import org.alfresco.service.ServiceRegistry;
@@ -51,7 +51,12 @@ public class ActionsScript extends DeclarativeWebScript {
     private GroupActionsService groupActionsService;
     private AuthenticationService authService;
     private LecmPermissionService lecmPermissionService;
+    private StateMachineHelper stateMachineService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+    public void setStateMachineService(StateMachineHelper stateMachineService) {
+        this.stateMachineService = stateMachineService;
+    }
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         ActionsScript.orgstructureService = orgstructureService;
@@ -81,10 +86,10 @@ public class ActionsScript extends DeclarativeWebScript {
             response.put("result", jsonResponse.toString());
             return response;
         }
+        /*NEW HELPER*/
+        //StateMachineHelper helper = new StateMachineHelper();
 
-        StateMachineHelper helper = new StateMachineHelper();
-
-        if (taskId != null && helper.getCurrentExecutionId(taskId) == null) {
+        if (taskId != null && stateMachineService.getCurrentExecutionId(taskId) == null && !stateMachineService.isFinal(new NodeRef(documentRef))) {
             HashMap<String, Object> actionResult = new HashMap<String, Object>();
             ArrayList<String> errors = new ArrayList<String>();
             errors.add("Статус документа изменился! Обновите страницу документа для получения списка доступных действий.");
@@ -140,46 +145,60 @@ public class ActionsScript extends DeclarativeWebScript {
         }
     }
 
-    private HashMap<String, Object> getActions(NodeRef nodeRef, String statemachineId) {
-        StateMachineHelper helper = new StateMachineHelper();
+    private HashMap<String, Object> getActions(final NodeRef nodeRef, String statemachineId) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         ArrayList<HashMap<String, Object>> actionsList = new ArrayList<HashMap<String, Object>>();
         NodeService nodeService = serviceRegistry.getNodeService();
-        WorkflowService workflowService = serviceRegistry.getWorkflowService();
+        final WorkflowService workflowService = serviceRegistry.getWorkflowService();
         List<WorkflowPath> paths = workflowService.getWorkflowPaths(statemachineId);
 
         Map<String, Long> counts = getActionsCounts(nodeRef);
+        List<WorkflowTask> activeTasks = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+            @Override
+            public List<WorkflowTask> doWork() throws Exception {
+                return stateMachineService.getDocumentTasks(nodeRef, true);
+            }
+        });
+
+        boolean hasExecutionPermission = stateMachineService.isFinal(nodeRef) || (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", nodeRef, authService.getCurrentUserName())
+                || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", nodeRef, authService.getCurrentUserName()) && stateMachineService.isDraft(nodeRef)));
+
+        List<WorkflowTask> userTasks = stateMachineService.getAssignedAndPooledTasks(authService.getCurrentUserName());
+        for (WorkflowTask activeTask : activeTasks) {
+            for (WorkflowTask userTask : userTasks) {
+                if (activeTask.getId().equals(userTask.getId())) {
+                    HashMap<String, Object> taskStruct = new HashMap<String, Object>();
+                    taskStruct.put("type", "task");
+                    taskStruct.put("actionId", userTask.getId());
+                    taskStruct.put("label", userTask.getTitle());
+                    taskStruct.put("count", Long.MAX_VALUE);
+                    taskStruct.put("isForm", false);
+                    Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
+                    taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
+                    actionsList.add(taskStruct);
+                }
+            }
+        }
 
         for (WorkflowPath path : paths) {
-            List<WorkflowTask> tasks = workflowService.getTasksForWorkflowPath(path.getId());
+            final String pathId = path.getId();
+            List<WorkflowTask> tasks = org.alfresco.repo.security.authentication.AuthenticationUtil.runAsSystem(new org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork<List<WorkflowTask>>() {
+                @Override
+                public List<WorkflowTask> doWork() throws Exception {
+                    return workflowService.getTasksForWorkflowPath(pathId);
+                }
+            });
+
             for (WorkflowTask task : tasks) {
                 result.put("taskId", task.getId());
                 Map<QName, Serializable> properties = task.getProperties();
                 NodeRef packageRef = (NodeRef) properties.get(WorkflowModel.ASSOC_PACKAGE);
                 NodeRef documentRef = nodeService.getChildAssocs(packageRef).get(0).getChildRef();
 
-                List<WorkflowTask> activeTasks = helper.getActiveTasks(nodeRef);
-                List<WorkflowTask> userTasks = helper.getAssignedAndPooledTasks(authService.getCurrentUserName());
-                for (WorkflowTask activeTask : activeTasks) {
-                    for (WorkflowTask userTask : userTasks) {
-                        if (activeTask.getId().equals(userTask.getId())) {
-                            HashMap<String, Object> taskStruct = new HashMap<String, Object>();
-                            taskStruct.put("type", "task");
-                            taskStruct.put("actionId", userTask.getId());
-                            taskStruct.put("label", userTask.getTitle());
-                            taskStruct.put("count", Long.MAX_VALUE);
-                            taskStruct.put("isForm", false);
-                            Serializable dueDate = userTask.getProperties().get(PROP_DUE_DATE);
-                            taskStruct.put("dueDate", dueDate == null ? null : dateFormat.format((Date) dueDate));
-                            actionsList.add(taskStruct);
-                        }
-                    }
-                }
+                if (hasExecutionPermission) {
 
-                if (lecmPermissionService.hasPermission("_lecmPerm_ActionExec", documentRef, authService.getCurrentUserName())
-                    || (lecmPermissionService.hasPermission("LECM_BASIC_PG_Initiator", documentRef, authService.getCurrentUserName()) && helper.isDraft(documentRef))) {
-
-                    List<StateMachineAction> actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class), ExecutionListener.EVENTNAME_TAKE);
+                    //TODO Сразу передавать нужные параметры
+                    List<StateMachineAction> actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(FinishStateWithTransitionAction.class));
                     for (StateMachineAction action : actions) {
                         FinishStateWithTransitionAction finishWithTransitionAction = (FinishStateWithTransitionAction) action;
                         List<FinishStateWithTransitionAction.NextState> states = finishWithTransitionAction.getStates();
@@ -195,7 +214,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 }
                             }
 
-                            Map<String, String> variables = helper.getInputVariablesMap(statemachineId, state.getVariables().getInput());
+                            Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, state.getVariables().getInput());
 
                             if (!hideAction) {
                                 Long count = counts.get(state.getActionId());
@@ -223,7 +242,8 @@ public class ActionsScript extends DeclarativeWebScript {
                         }
                     }
 
-                    actions = new StateMachineHelper().getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class), ExecutionListener.EVENTNAME_TAKE);
+                    //TODO getTaskActionsByName сразу передавать нужные параметры
+                    actions = stateMachineService.getTaskActionsByName(task.getId(), StateMachineActionsImpl.getActionNameByClass(UserWorkflow.class));
                     for (StateMachineAction action : actions) {
                         UserWorkflow userWorkflow = (UserWorkflow) action;
                         List<UserWorkflow.UserWorkflowEntity> entities = userWorkflow.getUserWorkflows();
@@ -239,7 +259,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 }
                             }
 
-                            Map<String, String> variables = helper.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
+                            Map<String, String> variables = stateMachineService.getInputVariablesMap(statemachineId, entity.getVariables().getInput());
 
                             if (!hideAction) {
                                 Long count = counts.get(entity.getId());
@@ -260,20 +280,37 @@ public class ActionsScript extends DeclarativeWebScript {
                             }
                         }
                     }
-                    sort(actionsList);
-                    List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
-                    for (NodeRef action : groupActions) {
-                        HashMap<String, Object> actionStruct = new HashMap<String, Object>();
-                        actionStruct.put("type", "group");
-                        actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                        actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                        actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
-                        actionsList.add(actionStruct);
-                    }
                 }
             }
         }
-        result.put("actions", actionsList);
+        //Сортируем по частоте использования
+        sort(actionsList);
+
+        if (hasExecutionPermission) {
+            List<NodeRef> groupActions = groupActionsService.getActiveActions(nodeRef);
+            for (NodeRef action : groupActions) {
+                HashMap<String, Object> actionStruct = new HashMap<String, Object>();
+                actionStruct.put("type", "group");
+                actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
+                actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
+                QName type = nodeService.getType(action);
+                if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
+                    actionStruct.put("subtype", "document");
+                    actionStruct.put("documentType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE));
+                    actionStruct.put("formFolder", documentService.getDraftRoot().toString());
+                } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
+                    actionStruct.put("subtype", "workflow");
+                    actionStruct.put("workflowType", nodeService.getProperty(action, GroupActionsService.PROP_WORKFLOW));
+                } else {
+                    actionStruct.put("subtype", "script");
+                }
+                actionsList.add(actionStruct);
+            }
+        }
+        if(actionsList.size()>0) {
+        	result.put("actions", actionsList);
+        }
         return result;
     }
 

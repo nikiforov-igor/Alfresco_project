@@ -20,8 +20,6 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     protected Set<String> businessRoles;
 
-    protected boolean subReport = false;
-
     public ReportDescriptorImpl() {
         super();
     }
@@ -102,7 +100,7 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
         // пропишем подотчётам владельца ...
         if (this.subreports != null) {
             for (ReportDescriptor item : this.subreports) {
-                if (item instanceof SubReportDescriptorImpl) {
+                if (item.isSubReport()) {
                     SubReportDescriptorImpl subItem = (SubReportDescriptorImpl)item;
                     String destColumn = subItem.getDestColumnName();
                     ColumnDescriptor cd = dsDescriptor.findColumnByName(destColumn);
@@ -182,16 +180,11 @@ public class ReportDescriptorImpl extends MnemonicNamedItem implements ReportDes
 
     @Override
     public boolean isSubReport() {
-        return subReport;
+        return false;
     }
 
     @Override
     public boolean isSQLDataSource() {
         return getProviderDescriptor() != null && getProviderDescriptor().getMnem().equals("SQL_PROVIDER");
-    }
-
-    @Override
-    public void setSubReport(boolean subReport) {
-        this.subReport = subReport;
     }
 }

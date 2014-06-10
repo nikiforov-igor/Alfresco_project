@@ -53,7 +53,20 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 	public ScriptNode getDelegationOpts (final String ref) {
 		ScriptNode scriptNode = null;
 		if (NodeRef.isNodeRef (ref)) {
-			NodeRef nodeRef = delegationService.getDelegationOpts (new NodeRef (ref));
+//			TODO: Потенциально может так получится, что настройки делегирования ещё не созданы,
+//			(из-за разделения метода getOrCreate, поэтому попробуем создать.
+//			Вызывается как минимум из одного не транзакционнного скрипта, поэтому обернём
+//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
+			final NodeRef employee = new NodeRef(ref);
+			NodeRef nodeRef = delegationService.getDelegationOpts(employee);
+//			if(delegationService.getDelegationOpts(new NodeRef(ref)) == null) {
+//				nodeRef = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+//					@Override
+//					public NodeRef execute() throws Throwable {
+//						return delegationService.createDelegationOpts(employee);
+//					}
+//				});
+//			}
 			if (nodeRef != null) {
 				scriptNode = new ScriptNode (nodeRef, serviceRegistry, getScope ());
 			}
@@ -104,7 +117,20 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 	public Scriptable actualizeProcuracies (final String ref) {
 		Scriptable scriptable = Context.getCurrentContext ().newArray (getScope (), new Object[] {});
 		if (NodeRef.isNodeRef (ref)) {
-			NodeRef delegationOptsNodeRef = delegationService.getDelegationOpts (new NodeRef (ref));
+			final NodeRef employee = new NodeRef (ref);
+			NodeRef delegationOptsNodeRef = delegationService.getDelegationOpts (employee);
+//			TODO: Потенциально может так получится, что настройки делегирования ещё не созданы,
+//			(из-за разделения метода getOrCreate, поэтому попробуем создать.
+//			Вызывается как минимум из одного не транзакционнного скрипта, поэтому обернём
+//                      delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                        
+//			if(delegationOptsNodeRef == null) {
+//				delegationOptsNodeRef = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>(){
+//					@Override
+//					public NodeRef execute() throws Throwable {
+//						return delegationService.createDelegationOpts(employee);
+//					}
+//				});
+//			}
 			if (delegationOptsNodeRef != null) {
 				NodeService nodeService = serviceRegistry.getNodeService ();
 				//получаем список активных уникальных бизнес ролей
@@ -225,6 +251,14 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 	}
 
 	public ScriptNode getEffectiveExecutor(String assumedExecutorRef) {
+//		TODO: Метод getEffectiveExecutor через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.            
+//		NodeRef employeeRef = new NodeRef(assumedExecutorRef);
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
 		NodeRef effectiveExecutor = delegationService.getEffectiveExecutor(new NodeRef(assumedExecutorRef));
 		if (effectiveExecutor != null) {
 			return new ScriptNode(effectiveExecutor, serviceRegistry, getScope());
@@ -243,6 +277,14 @@ public class DelegationJavascriptExtension extends BaseWebScript {
 	}
 
 	public ScriptNode assignTaskToEffectiveExecutor(String assumedExecutor, String businessRole, String taskID) {
+//		TODO: Метод assignTaskToEffectiveExecutor через несколько уровней вызывает getDelegationOpts,
+//		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
+//		и при необходимости создать
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.            
+//		NodeRef employeeRef = new NodeRef(assumedExecutor);
+//		if(delegationService.getDelegationOpts(employeeRef) == null) {
+//			delegationService.createDelegationOpts(employeeRef);
+//		}
 		NodeRef result = delegationService.assignTaskToEffectiveExecutor(new NodeRef(assumedExecutor), businessRole, taskID);
 		if (result != null) {
 			return new ScriptNode(result, serviceRegistry, getScope());

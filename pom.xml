@@ -7,109 +7,112 @@
 	   2.0 (the "License"); you may not use this file except in compliance
 	   with the License. You may obtain a copy of the License at
 
-	http://www.apache.org/licenses/LICENSE-2.0 Unless required by
-	applicable law or agreed to in writing, software distributed under the
-	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-	CONDITIONS OF ANY KIND, either express or implied. See the License for
-	the specific language governing permissions and limitations under the
-	License.
+        http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+        applicable law or agreed to in writing, software distributed under the
+        License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+        CONDITIONS OF ANY KIND, either express or implied. See the License for
+        the specific language governing permissions and limitations under the
+        License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>ru.it.lecm</groupId>
-	<artifactId>platform</artifactId>
-	<packaging>pom</packaging>
-	<name>Logic ECM Platform</name>
-	<!--
-	   An Alfresco version number must be of the form 1.2.3.4. Using
-	   1.0-SNAPSHOT as the AMP version will create an exception. See
-	   http://wiki.alfresco.com/wiki/Developing_an_Alfresco_Module: "The
-	   version number must be made up of numeric values separated by dots.
-	   For example '2.1.56' is a valid version number, '2.3.4a' is not. " In
-	   order to be able to use Maven snapshots we cannot use the <version/>
-	   below as the AMP module version. Instead we use the
-	   buildnumber-maven-plugin. This requires a scm connection.
-	-->
-	<version>1.2.0</version>
-	<description>Logic ECM Platform</description>
-	<repositories>
-		<repository>
-			<id>alfresco-public</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-		</repository>
-		<repository>
-			<id>alfresco-activiti</id>
-			<url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
-		</repository>
-		<repository>
-			<id>apache-activemq</id>
-			<url>https://repository.apache.org/content/repositories/releases/org/apache/activemq/apache-activemq/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>alfresco-public</id>
-			<url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
-	<properties>
-		<!--
-		   Default for which src/main/properties/<env>/alfresco-global.properties is
-		   loaded. NB: used only for the 'test' profile (e.g. '-P test' on the
-		   mvn commandline) jetty run deployment, does not impact AMP behavior
-		   which is typically environment independent
-		-->
-		<env>local</env>
-		<alfresco.version>4.0.e</alfresco.version>
-		<spring.version>3.0.5.RELEASE</spring.version>
-		<activiti.version>5.7</activiti.version>
-		<spring.surf.version>1.0.0</spring.surf.version>
-		<!-- <jasperreports.version>4.7.0</jasperreports.version> -->
-		<jasperreports.version>5.0.4</jasperreports.version>
-		<jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>
-		<slf4j.version>1.5.11</slf4j.version>
-		<spring.security.version>3.1.0.RC2</spring.security.version>
-		<acegisecurity.version>0.8.2</acegisecurity.version>
-		<platform.version>${project.version}</platform.version>
-		<buildNumber>1</buildNumber>
-		<client.debug>false</client.debug>
-		<module.log.level>info</module.log.level>
-		<redeploy.process.definitions>false</redeploy.process.definitions>
-		<repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
-		<apache.cxf.version>2.7.5</apache.cxf.version>
-	</properties>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ru.it.lecm</groupId>
+    <artifactId>platform</artifactId>
+    <packaging>pom</packaging>
+    <name>Logic ECM Platform</name>
+    <!--
+       An Alfresco version number must be of the form 1.2.3.4. Using
+       1.0-SNAPSHOT as the AMP version will create an exception. See
+       http://wiki.alfresco.com/wiki/Developing_an_Alfresco_Module: "The
+       version number must be made up of numeric values separated by dots.
+       For example '2.1.56' is a valid version number, '2.3.4a' is not. " In
+       order to be able to use Maven snapshots we cannot use the <version/>
+       below as the AMP module version. Instead we use the
+       buildnumber-maven-plugin. This requires a scm connection.
+    -->
+    <version>1.4.0</version>
+    <description>Logic ECM Platform</description>
+    <repositories>
+        <repository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>alfresco-activiti</id>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/activiti-releases/</url>
+        </repository>
+        <repository>
+            <id>apache-activemq</id>
+            <url>https://repository.apache.org/content/repositories/releases/org/apache/activemq/apache-activemq/</url>
+        </repository>
+        <repository>
+            <id>alfresco-public-snapshots</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public-snapshots</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>alfresco-public</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <properties>
+        <!--
+           Default for which src/main/properties/<env>/alfresco-global.properties is
+           loaded. NB: used only for the 'test' profile (e.g. '-P test' on the
+           mvn commandline) jetty run deployment, does not impact AMP behavior
+           which is typically environment independent
+        -->
+        <env>local</env>
+        <alfresco.version>4.2.e</alfresco.version>
+        <spring.version>3.0.5.RELEASE</spring.version>
+        <activiti.version>5.13-alf-20130918</activiti.version>
+        <spring.surf.version>1.2.0-M14</spring.surf.version>
+        <!-- <jasperreports.version>4.7.0</jasperreports.version> -->
+        <jasperreports.version>5.0.4</jasperreports.version>
+        <jasperreports.fonts.version>4.0.0</jasperreports.fonts.version>
+        <slf4j.version>1.5.11</slf4j.version>
+        <spring.security.version>3.1.0.RC2</spring.security.version>
+        <acegisecurity.version>0.8.2_patched</acegisecurity.version>
+        <platform.version>${project.version}</platform.version>
+        <buildNumber>1</buildNumber>
+        <client.debug>false</client.debug>
+        <module.log.level>info</module.log.level>
+        <redeploy.process.definitions>false</redeploy.process.definitions>
+        <repo.jscript.ScriptLogger>info</repo.jscript.ScriptLogger>
+        <apache.cxf.version>2.7.5</apache.cxf.version>
+    </properties>
 
-	<modules>
-		<module>lecm-base</module>
-		<module>lecm-security</module>
-		<module>lecm-orgstructure</module>
-		<module>lecm-jasperreports-forms</module>
-		<module>lecm-dictionary</module>
-		<module>lecm-contracts</module>
-		<module>lecm-statemachine</module>
-		<module>lecm-statemachine-editor</module>
-		<module>lecm-theme</module>
-		<module>lecm-delegation</module>
-		<module>lecm-subscriptions</module>
-		<module>lecm-notifications</module>
-		<module>lecm-notifications-email</module>
-		<module>lecm-notifications-dashlet</module>
-		<module>lecm-notifications-active-channel</module>
-		<module>lecm-business-journal</module>
-		<module>lecm-calendar</module>
-		<module>lecm-user-profile</module>
-		<module>lecm-documents</module>
-		<module>lecm-regnumbers</module>
-		<module>lecm-contractors</module>
-		<module>lecm-legacy-approval</module>
-		<module>lecm-reports-editor</module>
-		<module>lecm-errands</module>
-		<module>lecm-permission-exp</module>
-		<module>lecm-signed-docflow</module>
-		<module>lecm-documents-removal</module>
-		<module>lecm-incoming</module>
+    <modules>
+        <module>lecm-base</module>
+        <module>lecm-security</module>
+        <module>lecm-orgstructure</module>
+        <module>lecm-jasperreports-forms</module>
+        <module>lecm-dictionary</module>
+        <module>lecm-contracts</module>
+        <module>lecm-statemachine</module>
+        <module>lecm-statemachine-editor</module>
+        <module>lecm-theme</module>
+        <module>lecm-delegation</module>
+        <module>lecm-subscriptions</module>
+        <module>lecm-notifications</module>
+        <module>lecm-notifications-email</module>
+        <module>lecm-notifications-dashlet</module>
+        <module>lecm-notifications-active-channel</module>
+        <module>lecm-business-journal</module>
+        <module>lecm-calendar</module>
+        <module>lecm-user-profile</module>
+        <module>lecm-documents</module>
+        <module>lecm-regnumbers</module>
+        <module>lecm-contractors</module>
+        <module>lecm-reports-editor</module>
+        <module>lecm-errands</module>
+        <module>lecm-permission-exp</module>
+        <module>lecm-signed-docflow</module>
+        <module>lecm-documents-removal</module>
+        <module>lecm-incoming</module>
 		<module>lecm-outgoing</module>
 		<module>lecm-model-editor</module>
 		<module>lecm-eds-documents</module>
@@ -119,509 +122,595 @@
 		<module>lecm-group-actions</module>
 		<module>lecm-ord</module>
 		<module>lecm-nd</module>
-		<!--<module>lecm-licensing</module>-->
-	</modules>
-	<scm>
-		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
-		<!--<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>-->
-		<url>https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</url>
-	</scm>
+    </modules>
+    <scm>
+        <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
+        <!--<developerConnection>scm:svn:https://${user.name}@domain.com/svn/trunk/</developerConnection>-->
+        <url>https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</url>
+    </scm>
 
-	<!--
-	   need to list these as a provided so that Maven doesn't download them
-	   and include them in the AMP, they are provided by Alfresco
-	-->
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-core</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-data-model</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-remote-api</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-repository</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-web-framework-commons</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.extensions.surf</groupId>
-				<artifactId>spring-surf</artifactId>
-				<version>${spring.surf.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<artifactId>aopalliance</artifactId>
-						<groupId>aopalliance</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.extensions.surf</groupId>
-				<artifactId>spring-webscripts</artifactId>
-				<version>${spring.surf.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-webmvc</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.alfresco</groupId>
-				<artifactId>alfresco-share</artifactId>
-				<version>${alfresco.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jms</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports</artifactId>
-				<version>${jasperreports.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.apache.poi</groupId>
-						<artifactId>poi-ooxml</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.codehaus.jackson</groupId>
-						<artifactId>jackson-core-asl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.codehaus.jackson</groupId>
-						<artifactId>jackson-mapper-asl</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>bouncycastle</groupId>
-						<artifactId>bcmail-jdk14</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>bouncycastle</groupId>
-						<artifactId>bcprov-jdk14</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.bouncycastle</groupId>
-						<artifactId>bcmail-jdk14</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>org.bouncycastle</groupId>
-						<artifactId>bcprov-jdk14</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>net.sf.jasperreports</groupId>
-				<artifactId>jasperreports-fonts</artifactId>
-				<version>${jasperreports.fonts.version}</version>
-			</dependency>
-			<!--
-			   Example Jar dependency: will be properly packed into the AMP /lib
-			   directory <dependency> <groupId>rome</groupId>
-			   <artifactId>opensearch</artifactId> <version>0.1</version>
-			   </dependency>
-			-->
-			<!--
-			   Example AMP dependency: will be properly overlayed in the WAR
-			   produced by the integration-test phase in profile 'webapp'
-			   <dependency> <groupId>org.alfresco</groupId>
-			   <artifactId>recordsmanagement</artifactId> <version>2.1.0</version>
-			   <type>amp</type> </dependency>
-			-->
-			<!-- Don't add here amp dependencies as it will break amp packaging -->
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>1.4</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>commons-httpclient</groupId>
-				<artifactId>commons-httpclient</artifactId>
-				<version>3.1</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>1.4</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.6</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-compress</artifactId>
-				<version>1.1</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>xerces</groupId>
-				<artifactId>xercesImpl</artifactId>
-				<version>2.8.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.json</groupId>
-				<artifactId>json</artifactId>
-				<version>20090211</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.activiti</groupId>
-				<artifactId>activiti-engine</artifactId>
-				<version>${activiti.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.activiti</groupId>
-				<artifactId>activiti-spring</artifactId>
-				<version>${activiti.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>xstream</groupId>
-				<artifactId>xstream</artifactId>
-				<version>1.2.2</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>net.sourceforge.javacsv</groupId>
-				<artifactId>javacsv</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.transaction</groupId>
-				<artifactId>jta</artifactId>
-				<version>1.1</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-				<version>${slf4j.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>${spring.security.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>acegisecurity</groupId>
-				<artifactId>acegi-security</artifactId>
-				<version>${acegisecurity.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.tinyjee.jgraphx</groupId>
-				<artifactId>jgraphx</artifactId>
-				<version>1.10.4.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.quartz-scheduler</groupId>
-				<artifactId>quartz</artifactId>
-				<version>1.8.3-alfresco-patched</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-frontend-jaxws</artifactId>
-				<version>${apache.cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-databinding-jaxb</artifactId>
-				<version>${apache.cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.cxf</groupId>
-				<artifactId>cxf-rt-transports-http</artifactId>
-				<version>${apache.cxf.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.activemq</groupId>
-				<artifactId>activemq-all</artifactId>
-				<version>5.9.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.xbean</groupId>
-				<artifactId>xbean-spring</artifactId>
-				<version>3.6</version>
-			</dependency>
+    <!--
+       need to list these as a provided so that Maven doesn't download them
+       and include them in the AMP, they are provided by Alfresco
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-platform-distribution</artifactId>
+                <version>4.2.e</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--            <dependency>
+                            <groupId>org.alfresco</groupId>
+                            <artifactId>alfresco-core</artifactId>
+                            <version>${alfresco.version}</version>
+                            <scope>provided</scope>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.alfresco</groupId>
+                            <artifactId>alfresco-data-model</artifactId>
+                            <version>${alfresco.version}</version>
+                            <scope>provided</scope>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.alfresco</groupId>
+                            <artifactId>alfresco-remote-api</artifactId>
+                            <version>${alfresco.version}</version>
+                            <scope>provided</scope>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.alfresco</groupId>
+                            <artifactId>alfresco-repository</artifactId>
+                            <version>${alfresco.version}</version>
+                            <scope>provided</scope>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>slf4j-log4j12</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+            -->
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-web-framework-commons</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+                <type>jar</type>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.springframework.extensions.surf</groupId>
+                <artifactId>spring-surf</artifactId>
+                <version>${spring.surf.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>aopalliance</artifactId>
+                        <groupId>aopalliance</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--
+            -->
+            <dependency>
+                <groupId>org.springframework.extensions.surf</groupId>
+                <artifactId>spring-webscripts</artifactId>
+                <version>${spring.surf.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.alfresco</groupId>
+                <artifactId>alfresco-share</artifactId>
+                <version>${alfresco.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.alfresco</groupId>
+                        <artifactId>alfresco-web-framework-commons</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${spring.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!--
+            -->
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports</artifactId>
+                <version>${jasperreports.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.poi</groupId>
+                        <artifactId>poi-ooxml</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-core-asl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>bouncycastle</groupId>
+                        <artifactId>bcmail-jdk14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>bouncycastle</groupId>
+                        <artifactId>bcprov-jdk14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcmail-jdk14</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.bouncycastle</groupId>
+                        <artifactId>bcprov-jdk14</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency><!--
+
+               Example Jar dependency: will be properly packed into the AMP /lib
+               directory <dependency> <groupId>rome</groupId>
+               <artifactId>opensearch</artifactId> <version>0.1</version>
+               </dependency>
+
+
+               Example AMP dependency: will be properly overlayed in the WAR
+               produced by the integration-test phase in profile 'webapp'
+               <dependency> <groupId>org.alfresco</groupId>
+               <artifactId>recordsmanagement</artifactId> <version>2.1.0</version>
+               <type>amp</type> </dependency>
+
+             Don't add here amp dependencies as it will break amp packaging
+-->
 			<dependency>
 				<groupId>org.bouncycastle</groupId>
 				<artifactId>bcpkix-jdk15on</artifactId>
 				<version>1.50</version>
 			</dependency>
-			<dependency>
-				<groupId>org.joda</groupId>
-				<artifactId>com.springsource.org.joda.time</artifactId>
-				<version>1.6.2</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>1.4</version>
+                <scope>provided</scope>
+            </dependency><!--
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+                <scope>provided</scope>
+            </dependency>
+-->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.5</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.6</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.4.1</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>xerces</groupId>
+                <artifactId>xercesImpl</artifactId>
+                <version>2.10.0</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20090211</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-engine</artifactId>
+                <version>${activiti.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.joda</groupId>
-			<artifactId>com.springsource.org.joda.time</artifactId>
-		</dependency>
-	</dependencies>
+            </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring</artifactId>
+                <version>${activiti.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-orm</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-test</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                </exclusions>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<!-- Needed for cross OS compatibility in acp/zip encoding -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<configuration>
-						<encoding>UTF-8</encoding>
-						<!--
-						| By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
-						| This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
-						| here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
-						-->
-						<nonFilteredFileExtensions>
-							<nonFilteredFileExtension>ftl</nonFilteredFileExtension>
-							<nonFilteredFileExtension>prpt</nonFilteredFileExtension>
-							<nonFilteredFileExtension>jasper</nonFilteredFileExtension>
-							<nonFilteredFileExtension>odt</nonFilteredFileExtension>
-							<nonFilteredFileExtension>gen</nonFilteredFileExtension>
-						</nonFilteredFileExtensions>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-nosnapshot-plugin</artifactId>
-					<groupId>org.alfresco.maven</groupId>
-					<version>0.0.8</version>
-					<executions>
-						<execution>
-							<id>default</id>
-							<phase>initialize</phase>
-							<goals>
-								<goal>strip</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>buildnumber-maven-plugin</artifactId>
-					<version>1.1</version>
-					<executions>
-						<execution>
-							<phase>validate</phase>
-							<goals>
-								<goal>create</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<!--<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>-->
-						<!--<items>-->
-						<!--<item>timestamp</item>-->
-						<!--</items>-->
-						<doCheck>false</doCheck>
-						<doUpdate>false</doUpdate>
-					</configuration>
-				</plugin>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>2.3.2</version>
-					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
-						<encoding>UTF-8</encoding>
-					</configuration>
-				</plugin>
-				<!--Java Script minification with YUI Compressor-->
-				<plugin>
-					<groupId>net.alchim31.maven</groupId>
-					<artifactId>yuicompressor-maven-plugin</artifactId>
-					<version>1.3.2</version>
-					<executions>
-						<execution>
-							<phase>process-resources</phase>
-							<goals>
-								<goal>compress</goal>
-							</goals>
-						</execution>
-					</executions>
-					<configuration>
-						<encoding>UTF-8</encoding>
-						<linebreakpos>500</linebreakpos>
-						<webappDirectory>${project.build.directory}/${project.build.finalName}/web</webappDirectory>
-						<jswarn>false</jswarn>
-						<excludes>
-							<exclude>**/alfresco/site-webscripts/**/*.js</exclude>
-							<exclude>**/alfresco/templates/**/*.js</exclude>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>xstream</groupId>
+                <artifactId>xstream</artifactId>
+                <version>1.2.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.sourceforge.javacsv</groupId>
+                <artifactId>javacsv</artifactId>
+                <version>2.0</version>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>javax.transaction</groupId>
+                <artifactId>jta</artifactId>
+                <version>1.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!--
+                        <dependency>
+                            <groupId>org.springframework.security</groupId>
+                            <artifactId>spring-security-core</artifactId>
+                            <version>${spring.security.version}</version>
+                            <scope>provided</scope>
+                        </dependency>
+            -->
+            <dependency>
+                <groupId>org.acegisecurity</groupId>
+                <artifactId>acegi-security</artifactId>
+                <version>${acegisecurity.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.tinyjee.jgraphx</groupId>
+                <artifactId>jgraphx</artifactId>
+                <version>2.0.0.1</version>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.quartz-scheduler</groupId>
+                <artifactId>quartz</artifactId>
+                <version>1.8.3-alfresco-patched</version>
+                <scope>provided</scope>
+            </dependency><!--
+-->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${apache.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-jaxb</artifactId>
+                <version>${apache.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${apache.cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.sf.jasperreports</groupId>
+                <artifactId>jasperreports-fonts</artifactId>
+                <version>${jasperreports.fonts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>${spring.security.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>activemq-all</artifactId>
+                <version>5.9.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.xbean</groupId>
+                <artifactId>xbean-spring</artifactId>
+                <version>3.6</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-							<!-- Не пакуем то, что уже упаковано (knockout.js, font-awesome.css) -->
-							<exclude>**/*.min.js</exclude>
-							<exclude>**/*.min.css</exclude>
-						</excludes>
-					</configuration>
-					<dependencies>
-						<dependency>
-							<groupId>org.codehaus.plexus</groupId>
-							<artifactId>plexus-utils</artifactId>
-							<version>3.0</version>
-						</dependency>
-					</dependencies>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>jasperreports-maven-plugin</artifactId>
-					<version>1.0-beta-2</version>
-					<configuration>
-						<sourceDirectory>${basedir}/src/main/config/reportdefinitions</sourceDirectory>
-						<outputDirectory>${project.build.outputDirectory}/reportdefinitions</outputDirectory>
-						<compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compile-reports</goal>
-							</goals>
-						</execution>
-					</executions>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Needed for cross OS compatibility in acp/zip encoding -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <!--
+                        | By default as per http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7 FTL are not filtered to avoid corruption.
+                        | This behavior can be relaxed (in case filtering is needed in the FTLs) by selecting which files are filtered and which not as described
+                        | here http://code.google.com/p/maven-alfresco-archetypes/issues/detail?id=7#c3
+                        -->
+                        <nonFilteredFileExtensions>
+                            <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>prpt</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>jasper</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>odt</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>gen</nonFilteredFileExtension>
+                        </nonFilteredFileExtensions>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-nosnapshot-plugin</artifactId>
+                    <groupId>org.alfresco.maven</groupId>
+                    <version>0.0.8</version>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>strip</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>1.3</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!--<format>{0,date,yyyy-MM-dd HH:mm:ss}</format>-->
+                        <!--<items>-->
+                        <!--<item>timestamp</item>-->
+                        <!--</items>-->
+                        <doCheck>false</doCheck>
+                        <doUpdate>false</doUpdate>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <!--Java Script minification with YUI Compressor-->
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>yuicompressor-maven-plugin</artifactId>
+                    <version>1.3.2</version>
+                    <executions>
+                        <execution>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>compress</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <encoding>UTF-8</encoding>
+                        <linebreakpos>500</linebreakpos>
+                        <webappDirectory>${project.build.directory}/${project.build.finalName}/web</webappDirectory>
+                        <jswarn>false</jswarn>
+                        <excludes>
+                            <exclude>**/alfresco/site-webscripts/**/*.js</exclude>
+                            <exclude>**/alfresco/templates/**/*.js</exclude>
 
-					<dependencies>
-						<!--note this must be repeated here to pick up correct xml validation -->
-						<dependency>
-							<groupId>net.sf.jasperreports</groupId>
-							<artifactId>jasperreports</artifactId>
-							<version>${jasperreports.version}</version>
-						</dependency>
-					</dependencies>
+                            <!-- Не пакуем то, что уже упаковано (knockout.js, font-awesome.css) -->
+                            <exclude>**/*.min.js</exclude>
+                            <exclude>**/*.min.css</exclude>
+                        </excludes>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-utils</artifactId>
+                            <version>3.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>jasperreports-maven-plugin</artifactId>
+                    <version>1.0-beta-2</version>
+                    <configuration>
+                        <sourceDirectory>${basedir}/src/main/amp/reportdefinitions</sourceDirectory>
+                        <outputDirectory>${project.build.outputDirectory}/reportdefinitions</outputDirectory>
+                        <compiler>net.sf.jasperreports.engine.design.JRJdtCompiler</compiler>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compile-reports</goal>
+                            </goals>
+                        </execution>
+                    </executions>
 
-				</plugin>
-				<plugin>
-					<groupId>org.alfresco.maven.plugin</groupId>
-					<artifactId>maven-amp-plugin</artifactId>
-					<version>3.0.4</version>
-					<extensions>true</extensions>
-					<configuration>
-						<archive>
-							<addMavenDescriptor>false</addMavenDescriptor>
-						</archive>
-						<!--
-						<overlays>
-						   This sample adds records management module in the finally built
-						   AMP <overlay> <groupId>org.org.alfresco</groupId>
-						   <artifactId>recordsmanagement</artifactId>
-						   <version>2.1.0</version> <type>amp</type> </overlay>
-						-->
-						<!--
-						   The current AMP is always last in order to overwrite other
-						   modules' modules.properties <overlay></overlay>
-						</overlays>
-						-->
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>versions-maven-plugin</artifactId>
-					<version>2.1</version>
-				</plugin>
+                    <dependencies>
+                        <!--note this must be repeated here to pick up correct xml validation -->
+                        <dependency>
+                            <groupId>net.sf.jasperreports</groupId>
+                            <artifactId>jasperreports</artifactId>
+                            <version>${jasperreports.version}</version>
+                        </dependency>
+                    </dependencies>
 
-			</plugins>
-		</pluginManagement>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>versions-maven-plugin</artifactId>
-			</plugin>
+                </plugin>
+                <plugin>
+                    <groupId>org.alfresco.maven.plugin</groupId>
+                    <artifactId>maven-amp-plugin</artifactId>
+                    <version>3.0.4</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                        </archive>
+                        <!--
+                        <overlays>
+                           This sample adds records management module in the finally built
+                           AMP <overlay> <groupId>org.org.alfresco</groupId>
+                           <artifactId>recordsmanagement</artifactId>
+                           <version>2.1.0</version> <type>amp</type> </overlay>
+                        -->
+                        <!--
+                           The current AMP is always last in order to overwrite other
+                           modules' modules.properties <overlay></overlay>
+                        </overlays>
+                        -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.1</version>
+                </plugin>
 
-		</plugins>
-	</build>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+            </plugin>
 
-	<profiles>
-		<profile>
-			<id>share-client-debug</id>
-			<properties>
-				<client.debug>true</client.debug>
-			</properties>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>net.alchim31.maven</groupId>
-						<artifactId>yuicompressor-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>none</phase>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>logger-all-debug</id>
-			<properties>
-				<module.log.level>debug</module.log.level>
-				<repo.jscript.ScriptLogger>debug</repo.jscript.ScriptLogger>
-			</properties>
-		</profile>
-		<profile>
-			<id>redeploy-process-definitions</id>
-			<properties>
-				<redeploy.process.definitions>true</redeploy.process.definitions>
-			</properties>
-		</profile>
-		<profile>
-			<id>non-production-modules</id>
-			<modules>
-				<module>lecm-semantic-assist</module>
-				<module>lecm-iReferent-integration</module>
-				<module>lecm-experts</module>
-				<module>lecm-contracts-fake</module>
-				<module>lecm-scaner</module>
-				<module>lecm-diagnostic-utility</module>
-			</modules>
-		</profile>
-	</profiles>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>share-client-debug</id>
+            <properties>
+                <client.debug>true</client.debug>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>net.alchim31.maven</groupId>
+                        <artifactId>yuicompressor-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>none</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>lecmIM</id>
+            <modules>
+                <module>lecm-im</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>logger-all-debug</id>
+            <properties>
+                <module.log.level>debug</module.log.level>
+                <repo.jscript.ScriptLogger>debug</repo.jscript.ScriptLogger>
+            </properties>
+        </profile>
+        <profile>
+            <id>redeploy-process-definitions</id>
+            <properties>
+                <redeploy.process.definitions>true</redeploy.process.definitions>
+            </properties>
+        </profile>
+        <profile>
+            <id>non-production-modules</id>
+            <modules>
+                <module>lecm-semantic-assist</module>
+                <module>lecm-iReferent-integration</module>
+                <module>lecm-experts</module>
+                <module>lecm-scaner</module>
+                <module>lecm-diagnostic-utility</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

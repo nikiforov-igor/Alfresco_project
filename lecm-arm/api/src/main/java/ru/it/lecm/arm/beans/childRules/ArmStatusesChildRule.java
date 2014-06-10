@@ -1,6 +1,5 @@
 package ru.it.lecm.arm.beans.childRules;
 
-import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.arm.beans.ArmWrapperService;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
@@ -27,10 +26,10 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
     private String rule;
     private List<String> selectedStatuses;
 
-    private StateMachineServiceBean stateMachineServiceBean;
+    private StateMachineServiceBean stateMachineService;
 
-    public void setStateMachineServiceBean(StateMachineServiceBean stateMachineServiceBean) {
-        this.stateMachineServiceBean = stateMachineServiceBean;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
     public String getRule() {
@@ -73,7 +72,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
             case EXCEPT_SELECTED: {
                 List<String> excludedStatuses = getSelectedStatuses();
                 for (String docType : avaiableTypes) {
-                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, true);
+                    List<String> statusesForType = stateMachineService.getStatuses(docType, true, true);
                     for (String s : statusesForType) {
                         allStatuses.add(s);
                     }
@@ -88,7 +87,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
             }
             case ALL_ARCHIVE: {
                 for (String docType : avaiableTypes) {
-                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, false, true);
+                    List<String> statusesForType = stateMachineService.getStatuses(docType, false, true);
                     for (String s : statusesForType) {
                         allStatuses.add(s);
                     }
@@ -97,7 +96,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
             }
             case ALL_NOT_ARCHIVE: {
                 for (String docType : avaiableTypes) {
-                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, false);
+                    List<String> statusesForType = stateMachineService.getStatuses(docType, true, false);
                     for (String s : statusesForType) {
                         allStatuses.add(s);
                     }
@@ -106,7 +105,7 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
             }
             case ALL: {
                 for (String docType : avaiableTypes) {
-                    List<String> statusesForType = stateMachineServiceBean.getStatuses(docType, true, true);
+                    List<String> statusesForType = stateMachineService.getStatuses(docType, true, true);
                     for (String s : statusesForType) {
                         allStatuses.add(s);
                     }
@@ -126,46 +125,46 @@ public class ArmStatusesChildRule extends ArmBaseChildRule {
         return nodes;
     }
 
-    public String getQuery() {
-        StringBuilder queryBuilder = new StringBuilder();
-        switch (Rule.valueOf(rule)) {
-            case SELECTED: {
-                if (selectedStatuses != null) {
-                    for (String status: selectedStatuses) {
-                        if (queryBuilder.length() > 0) {
-                            queryBuilder.append(" OR ");
-                        }
-                        queryBuilder.append("@lecm\\-statemachine\\:status:\"").append(status).append("\"");
-                    }
-                }
-                break;
-            }
-            case EXCEPT_SELECTED: {
-                if (selectedStatuses != null) {
-                    for (String status: selectedStatuses) {
-                        if (queryBuilder.length() > 0) {
-                            queryBuilder.append(" AND ");
-                        }
-                        queryBuilder.append("NOT @lecm\\-statemachine\\:status:\"").append(status).append("\"");
-                    }
-                }
-                break;
-            }
-            case ALL_ARCHIVE: {
-                queryBuilder.append("@lecm\\-statemachine\\-aspects\\:is\\-final:true");
-                break;
-            }
-            case ALL_NOT_ARCHIVE: {
-                queryBuilder.append("NOT (@lecm\\-statemachine\\-aspects\\:is\\-final:true)");
-                break;
-            }
-            case ALL: {
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        return queryBuilder.length() > 0 ? queryBuilder.toString() : null;
-    }
+	public String getQuery() {
+		StringBuilder queryBuilder = new StringBuilder();
+		switch (Rule.valueOf(rule)) {
+			case SELECTED: {
+				if (selectedStatuses != null) {
+					for (String status: selectedStatuses) {
+						if (queryBuilder.length() > 0) {
+							queryBuilder.append(" OR ");
+						}
+						queryBuilder.append("@lecm\\-statemachine\\:status:\"").append(status).append("\"");
+					}
+				}
+				break;
+			}
+			case EXCEPT_SELECTED: {
+				if (selectedStatuses != null) {
+					for (String status: selectedStatuses) {
+						if (queryBuilder.length() > 0) {
+							queryBuilder.append(" AND ");
+						}
+						queryBuilder.append("NOT @lecm\\-statemachine\\:status:\"").append(status).append("\"");
+					}
+				}
+				break;
+			}
+			case ALL_ARCHIVE: {
+				queryBuilder.append("@lecm\\-statemachine\\-aspects\\:is\\-final:true");
+				break;
+			}
+			case ALL_NOT_ARCHIVE: {
+				queryBuilder.append("NOT (@lecm\\-statemachine\\-aspects\\:is\\-final:true)");
+				break;
+			}
+			case ALL: {
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+		return queryBuilder.length() > 0 ? queryBuilder.toString() : null;
+	}
 }

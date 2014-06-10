@@ -1,0 +1,162 @@
+.errands-main-form {
+    width: 93%;
+    margin: 20px 0 0 3.99%;
+}
+.yui-skin-lecmTheme div.metadata-form.errands-main-form .form-fields {
+    width: auto;
+    padding-left: 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: normal;
+    border: none;
+}
+.errands-main-form .form-fields .title {
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+.errands-main-form .form-fields .statuses {
+    float: right;
+}
+.errands-main-form .form-fields .statuses > div.form-field {
+    margin-left: 30px;
+}
+.errands-main-form .form-fields .main-info {
+    line-height: 2;
+}
+.errands-main-form .form-fields .errand-content {
+    border: 1px solid #888;
+    border-width: 1px 0;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 7px 0 20px 20px;
+    padding: 5px 0;
+}
+.errands-main-form .form-fields .times {
+    color: #999;
+    margin-top: 15px;
+}
+.errands-main-form .form-fields .times span,
+.errands-main-form .form-fields .descr span {
+    color: #333;
+    font-weight: bold;
+}
+.errands-main-form .form-fields .data-list-block,
+.errands-main-form .form-fields .exec-report {
+    margin: 15px;
+}
+.errands-main-form .form-fields .data-list-block span.heading,
+.errands-main-form .form-fields span.heading {
+    font-size: 16px;
+}
+.errands-main-form .form-fields .data-list-block span.yui-button {
+    margin: 0 0 -5px 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list {
+    margin: 5px 0 0 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list li {
+    line-height: 30px;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list li img.file-icon {
+    margin: 0 4px -4px 0;
+    cursor: pointer;
+}
+.errands-main-form .form-fields .data-list-block ul.data-list li .descr {
+    margin-left: 10px;
+    color: #999;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li {
+    margin: 12px 0;
+    overflow: hidden;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.avatar,
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.person {
+    float: left;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.avatar img {
+    width: 32px;
+    height: 32px;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.person {
+    margin: -5px 0 0 15px;
+    line-height: 24px;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.person div.position {
+    margin-left: 10px;
+    color: #999;
+}
+.errands-main-form .form-fields .data-list-block ul.persons-list li div.person span.text-cropped {
+    max-width: 200px;
+    display: inline-block;
+    vertical-align: top;
+}
+.errands-main-form .line {
+    width: 100%;
+    height: 2px;
+    background: #898989;
+    margin: 20px 0;
+}
+.errands-main-form .form-fields .block .title {
+    float: none;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.errands-main-form .form-fields .dnd-uploader {
+    float: right;
+}
+.errands-main-form .form-fields .dnd-uploader div.uploader-block {
+    margin: 0;
+}
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.dnd-uploader div.form-fields > div.set {
+    width: auto;
+}
+.errands-main-form .form-fields .exec-report {
+    overflow: hidden;
+}
+.errands-main-form .form-fields .exec-report .heading {
+    padding-left: 1em;
+}
+.errands-main-form .form-fields .exec-report div {
+    margin-top: 10px;
+}
+.errands-main-form .form-fields .exec-report div:first-of-type {
+    float: left;
+    margin: 10px 10px 0 30px;
+}
+.errands-main-form .form-fields .exec-report div textarea {
+    width: 500px;
+    height: 70px;
+    resize: none;
+}
+.errands-main-form .form-fields .exec-report div > span.yui-button:first-of-type {
+    margin-bottom: 14px;
+}
+.errands-main-form .form-fields .exec-report button {
+    width: 90px;
+}
+
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields,
+.yui-skin-lecmTheme div.metadata-form.errands-main-form div.form-fields > div.set {
+	min-width: 0;
+}
+
+.execution-report-container {
+	padding-left: 50px;
+	padding-right: 10px;
+}
+
+.execution-report-disabled {
+	overflow: auto;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	padding: 2px;
+	width: 500px;
+	height: 100px;
+	background-color: rgb(235, 235, 228);
+}
+
+.exec-block {
+    text-align: right;
+}

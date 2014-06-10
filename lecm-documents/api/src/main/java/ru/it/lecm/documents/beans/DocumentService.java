@@ -1,13 +1,11 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchParameters.SortDefinition;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -46,8 +44,6 @@ public interface DocumentService {
     public static final QName PROP_DOCUMENT_DEPRIVE_RIGHT = QName.createQName(DOCUMENT_NAMESPACE_URI, "deprive-right");
     public static final QName PROP_DOCUMENT_EMPLOYEE_REF = QName.createQName(DOCUMENT_NAMESPACE_URI, "employee-ref");
 	public static final QName ASSOC_AUTHOR = QName.createQName(DOCUMENT_NAMESPACE_URI, "author-assoc");
-
-    public static final DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 
     public static final String PREF_DOCUMENTS = "ru.it.lecm.documents";
     public static final String PREF_ARCHIVE_DOCUMENTS = "ru.it.lecm.documents.archive";
@@ -158,9 +154,18 @@ public interface DocumentService {
     /**
      * Получение пути для корневой папки для данного типа документов для текущего пользователя
      *
+     * @param docType
      * @return xpath до директории
      */
     String getDraftPathByType(QName docType);
+
+	/**
+	 * Создание корневой папки
+	 * @param docType
+	 * @return
+         * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
+	 */
+	public NodeRef createDraftRoot(QName docType) throws WriteTransactionNeededException;
 
     /**
      * Получение пути для папки Documents
@@ -179,6 +184,7 @@ public interface DocumentService {
     /**
      * Получение ноды с черновиками для заданного типа документов
      *
+     * @param docType
      * @return NodeRef
      */
     NodeRef getDraftRootByType(QName docType);

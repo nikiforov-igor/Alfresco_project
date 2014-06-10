@@ -35,7 +35,7 @@ public class InitiatorDocumentPolicy implements NodeServicePolicies.OnCreateNode
     private AuthenticationService authenticationService;
     private OrgstructureBean orgstructureService;
 	private LecmPermissionService lecmPermissionService;
-	private StateMachineServiceBean stateMachineHelper;
+	private StateMachineServiceBean stateMachineService;
 	private NamespaceService namespaceService;
 	private NodeService nodeService;
 	private IDelegation delegationService;
@@ -56,8 +56,8 @@ public class InitiatorDocumentPolicy implements NodeServicePolicies.OnCreateNode
 		this.lecmPermissionService = lecmPermissionService;
 	}
 
-	public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-		this.stateMachineHelper = stateMachineHelper;
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void setNamespaceService(NamespaceService namespaceService) {
@@ -85,6 +85,7 @@ public class InitiatorDocumentPolicy implements NodeServicePolicies.OnCreateNode
     public void onCreateNode(ChildAssociationRef childAssocRef) {
 	    // Добавление прав инициатора
 	    NodeRef docRef = childAssocRef.getChildRef();
+	    //TODO Возможно здесь не текущий пользовател а кто-то еще - String authorLogin = (String) nodeService.getProperty(docRef, ContentModel.PROP_MODIFIER);
 	    String authorLogin = authenticationService.getCurrentUserName();
 	    NodeRef employee = orgstructureService.getEmployeeByPerson(authorLogin);
 
@@ -95,7 +96,7 @@ public class InitiatorDocumentPolicy implements NodeServicePolicies.OnCreateNode
 	    if (delegationService.getCreateDocumentDelegationSetting()) {
 		    QName documentType = nodeService.getType(docRef);
 		    if (documentType != null) {
-			    Set<String> startRoles = stateMachineHelper.getStarterRoles(documentType.toPrefixString(namespaceService));
+			    Set<String> startRoles = stateMachineService.getStarterRoles(documentType.toPrefixString(namespaceService));
 			    if (startRoles != null) {
 				    Set<NodeRef> delegateOwners = delegationService.getDeletionOwnerEmployees(employee, startRoles);
 				    if (delegateOwners != null ) {

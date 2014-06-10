@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Get BR</shortname>
-	<description>Get roles explanation</description>
-	<url>/lecm/BRExplanation/roles</url>
-	<authentication>user</authentication>
-	<format default="html"/>
-</webscript>

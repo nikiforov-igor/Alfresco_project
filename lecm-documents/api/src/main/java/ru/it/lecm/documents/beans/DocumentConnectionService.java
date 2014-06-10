@@ -1,9 +1,9 @@
 package ru.it.lecm.documents.beans;
 
+import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-
-import java.util.List;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -66,6 +66,14 @@ public interface DocumentConnectionService {
 	 * @return Ссылка на папку
 	 */
 	public NodeRef getRootFolder(final NodeRef documentRef);
+
+	/**
+	 * Создание папки со связями для документа
+	 * @param documentRef Ссылка на документ
+	 * @return Ссылка на папку
+	 * @throws WriteTransactionNeededException
+	 */
+	public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
 
 	/**
 	 * Получение типа связи по умолчанию для документов. Берётся из справочника "Доступные типы связи"

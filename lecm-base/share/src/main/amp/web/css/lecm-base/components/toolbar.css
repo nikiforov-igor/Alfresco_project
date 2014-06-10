@@ -1,0 +1,54 @@
+.datalist-toolbar .search span.first-child,
+.datalist-toolbar .ex-search span.first-child {
+    width: 26px;
+    height: 26px;
+}
+.datalist-toolbar .search span.first-child {
+    background: url('/share/res/components/images/search-16-gray.png') no-repeat 5px 5px;
+}
+.datalist-toolbar .ex-search span.first-child {
+    background: url('../../../images/lecm-base/components/base/alf_base_filter_16.png') no-repeat 5px 5px;
+}
+
+ .ex-search.yui-button-disabled  {
+    opacity: 0.3;    
+}
+ 
+#searchBlock-content .search .form-buttons {
+    display: none;
+}
+
+.datalist-toolbar .exportcsv button {
+    background: url(/share/res/components/images/task-16.png) no-repeat 5px 5px;
+}
+.datalist-toolbar .delete-row button {
+    background: url(/share/res/components/images/delete-row-16.png) no-repeat 5px 5px;
+}
+
+.datalist-toolbar .clear-search {
+    text-decoration: none;
+}
+.datalist-toolbar .clear-search span {
+    background: url("/share/res/components/images/delete-disabled-16.png") no-repeat scroll 0 0 transparent;
+    padding-right: 16px;
+}
+.datalist-toolbar .import-xml span.first-child
+{
+	background: url(/share/images/lecm-dictionary/xml-file-16.png) no-repeat 12px 4px;
+	padding-left: 24px;
+}
+.datalist-toolbar .search-input {
+    display: inline-block;
+    vertical-align: text-bottom;
+    margin-top: 4px;
+    background-color: white;
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    line-height: 0;
+}
+.datalist-toolbar .search-input input {
+    border: 0;
+    outline: none;
+    padding-right: 0;
+	margin-bottom: 1px;
+}

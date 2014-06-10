@@ -1,34 +1,35 @@
 package ru.it.lecm.workflow.beans;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import ru.it.lecm.workflow.api.WorkflowRunner;
-import ru.it.lecm.workflow.WorkflowType;
 import ru.it.lecm.workflow.api.WorkflowRunnerService;
+import ru.it.lecm.workflow.api.WorkflowRunnerServiceConfigurer;
+import ru.it.lecm.workflow.api.WorkflowType;
 
 /**
  *
  * @author vmalygin
  */
-public class WorkflowRunnerFactory implements FactoryBean<WorkflowRunnerFactory>, WorkflowRunnerService {
+public class WorkflowRunnerFactory implements FactoryBean<WorkflowRunner>, WorkflowRunnerService, WorkflowRunnerServiceConfigurer {
 
 	private final static Class<WorkflowRunnerFactory> CLASS = WorkflowRunnerFactory.class;
 	private final static Logger logger = LoggerFactory.getLogger(CLASS);
 
-	private final Map<WorkflowType, WorkflowRunner> runners = new EnumMap<WorkflowType, WorkflowRunner>(WorkflowType.class);
+	private final Map<WorkflowType, WorkflowRunner> runners = new HashMap<>();
 
 	@Override
-	public WorkflowRunnerFactory getObject() throws Exception {
-		return this;
+	public WorkflowRunner getObject() throws Exception {
+		return null;
 	}
 
 	@Override
 	public Class<?> getObjectType() {
-		return CLASS;
+		return WorkflowRunner.class;
 	}
 
 	@Override
@@ -57,4 +58,10 @@ public class WorkflowRunnerFactory implements FactoryBean<WorkflowRunnerFactory>
 			throw new IllegalArgumentException(msg);
 		}
 	}
+
+	@Override
+	public Map<WorkflowType, WorkflowRunner> getWorkflowRunners() {
+		return runners;
+	}
+
 }

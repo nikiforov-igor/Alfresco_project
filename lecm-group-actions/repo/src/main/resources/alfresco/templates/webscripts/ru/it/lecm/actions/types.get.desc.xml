@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Get all document types and aspects</shortname>
-	<description>Get all document types and aspects</description>
-	<url>/lecm/groupActions/types</url>
-	<format default="json">extension</format>
-	<authentication>user</authentication>
-	<transaction>none</transaction>
-</webscript>

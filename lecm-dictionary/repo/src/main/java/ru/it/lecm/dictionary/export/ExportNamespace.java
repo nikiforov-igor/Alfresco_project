@@ -13,6 +13,7 @@ public interface ExportNamespace {
 	public static final String ATTR_NAME = "name";
     String ATTR_TYPE = "type";
     String ATTR_PATH = "path";
+    String ATTR_UPDATE_MODE = "updateMode";
     String DICTIONARY_NAMESPACE_URI = "http://www.it.ru/lecm/dictionary/1.0";
     QName DICTIONARY = QName.createQName(DICTIONARY_NAMESPACE_URI, "dictionary");
     QName PROP_TYPE = QName.createQName(DICTIONARY_NAMESPACE_URI, "type");

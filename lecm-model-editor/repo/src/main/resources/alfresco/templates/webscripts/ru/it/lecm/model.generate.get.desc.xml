@@ -1,8 +1,0 @@
-<webscript>
-	<shortname>Deploy model</shortname>
-	<description>Deploy model</description>
-	<url>/lecm/docforms/generate?modelName={modelName}</url>
-	<format default="json">extension</format>
-	<authentication>admin</authentication>
-	<transaction>required</transaction>
-</webscript>

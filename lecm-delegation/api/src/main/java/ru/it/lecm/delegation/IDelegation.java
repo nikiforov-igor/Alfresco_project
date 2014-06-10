@@ -125,7 +125,7 @@ public interface IDelegation {
 	 * @param employeeNodeRef идентификатор сотрудника
 	 * @return идентификатор параметров делегирования
 	 */
-	NodeRef getOrCreateDelegationOpts (final NodeRef employeeNodeRef);
+	//NodeRef getOrCreateDelegationOpts (final NodeRef employeeNodeRef);
 
 	/**
 	 * получение параметров делегирования для объекта системы
@@ -133,7 +133,9 @@ public interface IDelegation {
 	 * @param nodeRef объект системы, можно передать следующие типы объектов cm:person, lecm-orgstr:employee, lecm-d8n:delegation-opts
 	 * @return NodeRef идентификатор параметров делегирования или null если ничего не нашел.
 	 */
-	NodeRef getDelegationOpts (final NodeRef nodeRef);
+	NodeRef getDelegationOpts (NodeRef nodeRef);
+	
+        NodeRef createDelegationOpts (NodeRef nodeRef);
 
 	/**
 	 * Получение списка уникальных бизнес ролей для сотрудника

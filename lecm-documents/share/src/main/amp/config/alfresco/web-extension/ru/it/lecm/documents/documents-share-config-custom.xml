@@ -1,0 +1,1029 @@
+<alfresco-config>
+    <!-- Document Library Actions config section -->
+    <config evaluator="string-compare" condition="DocLibActions" replace="true">
+        <!--
+           Action definitions
+        -->
+        <actions>
+            <!-- Download document -->
+            <action id="document-download" type="link" label="actions.document.download">
+                <param name="href">{downloadUrl}</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View document in browser -->
+            <action id="document-view-content" type="link" label="actions.document.view">
+                <param name="href">{viewUrl}</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View document details -->
+            <action id="document-view-details" type="pagelink" label="actions.document.view-details">
+                <param name="page">document-details?nodeRef={node.nodeRef}</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View folder details -->
+            <action id="folder-view-details" type="pagelink" label="actions.folder.view-details">
+                <param name="page">folder-details?nodeRef={node.nodeRef}</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Edit properties pop-up -->
+            <action id="document-edit-properties" type="javascript" label="actions.document.edit-metadata">
+                <param name="function">onActionDetails</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Edit properties page -->
+            <action id="document-edit-metadata" type="pagelink" label="actions.document.edit-metadata">
+                <param name="page">edit-metadata?nodeRef={node.nodeRef}</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Approve simple workflow -->
+            <action id="document-approve" type="javascript" label="{jsNode.properties.app_approveStep}">
+                <param name="function">onActionSimpleRepoAction</param>
+                <!-- Additional parameters for onRepoAction function  -->
+                <param name="action">accept-simpleworkflow</param>
+                <param name="successMessage">message.simple-workflow.approved</param>
+                <param name="failureMessage">message.simple-workflow.failure</param>
+                <!-- aspect check, property != null check, action name = property value -->
+                <evaluator>evaluator.doclib.action.simpleApprove</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Reject simple workflow -->
+            <action id="document-reject" type="javascript" label="{jsNode.properties.app_rejectStep}">
+                <param name="function">onActionSimpleRepoAction</param>
+                <!-- Additional parameters for onRepoAction function  -->
+                <param name="action">reject-simpleworkflow</param>
+                <param name="successMessage">message.simple-workflow.rejected</param>
+                <param name="failureMessage">message.simple-workflow.failure</param>
+                <!-- aspect check, property != null check, action name = property value -->
+                <evaluator>evaluator.doclib.action.simpleReject</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Increment Counter -->
+            <action id="document-increment-counter" type="javascript" label="actions.document.increment-counter">
+                <param name="function">onActionSimpleRepoAction</param>
+                <!-- Additional parameters for onRepoAction function  -->
+                <param name="action">counter</param>
+                <param name="successMessage">message.increment-counter.success</param>
+                <param name="failureMessage">message.increment-counter.failure</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Extract Metadata -->
+            <action id="document-extract-metadata" type="javascript" label="actions.document.extract-metadata">
+                <param name="function">onActionSimpleRepoAction</param>
+                <!-- Additional parameters for onRepoAction function  -->
+                <param name="action">extract-metadata</param>
+                <param name="successMessage">message.extract-metadata.success</param>
+                <param name="failureMessage">message.extract-metadata.failure</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Transform -->
+            <action id="document-transform" type="javascript" label="actions.document.transform">
+                <param name="function">onActionFormDialog</param>
+                <!-- Additional parameters for onFormDialog function  -->
+                <param name="itemKind">action</param>
+                <param name="itemId">transform</param>
+                <param name="mode">create</param>
+                <param name="destination">{node.nodeRef}</param>
+                <param name="successMessage">message.transform.success</param>
+                <param name="failureMessage">message.transform.failure</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Transform Image -->
+            <action id="document-transform-image" type="javascript" label="actions.document.transform-image">
+                <param name="function">onActionFormDialog</param>
+                <!-- Additional parameters for onFormDialog function  -->
+                <param name="itemKind">action</param>
+                <param name="itemId">transform-image</param>
+                <param name="mode">create</param>
+                <param name="destination">{node.nodeRef}</param>
+                <param name="successMessage">message.transform-image.success</param>
+                <param name="failureMessage">message.transform-image.failure</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Execute Script -->
+            <action id="document-execute-script" type="javascript" label="actions.document.execute-script">
+                <param name="function">onActionFormDialog</param>
+                <!-- Additional parameters for onFormDialog function  -->
+                <param name="itemKind">action</param>
+                <param name="itemId">script</param>
+                <param name="mode">create</param>
+                <param name="destination">{node.nodeRef}</param>
+                <param name="successMessage">message.execute-script.success</param>
+                <param name="failureMessage">message.execute-script.failure</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Locate with path view -->
+            <action id="document-locate" type="javascript" label="actions.document.locate">
+                <param name="function">onActionLocate</param>
+                <evaluator>evaluator.doclib.action.locateAction</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Upload new version -->
+            <action id="document-upload-new-version" type="javascript" label="actions.document.upload-new-version">
+                <param name="function">onActionUploadNewVersion</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator>evaluator.doclib.action.editableByCurrentUser</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Inline edit -->
+            <action id="document-inline-edit" type="pagelink" label="actions.document.inline-edit">
+                <param name="page">inline-edit?nodeRef={node.nodeRef}</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <!-- aspect check (app:inlineeditable), mimetype check (text/plain, text/html, text/xml) -->
+                <evaluator>evaluator.doclib.action.inlineEdit</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Edit online -->
+            <action id="document-edit-online" type="javascript" label="actions.document.edit-online">
+                <param name="function">onActionEditOnline</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <!-- vti module check, mimetype check, userAgent check -->
+                <evaluator>evaluator.doclib.action.onlineEdit</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Edit offline -->
+            <action id="document-edit-offline" type="javascript" label="actions.document.edit-offline">
+                <param name="function">onActionEditOffline</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.notEditable</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Copy to -->
+            <action id="document-copy-to" type="javascript" label="actions.document.copy-to">
+                <param name="function">onActionCopyTo</param>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator>evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatus</evaluator>
+            </action>
+
+            <!-- Move to -->
+            <action id="document-move-to" type="javascript" label="actions.document.move-to">
+                <param name="function">onActionMoveTo</param>
+                <permissions>
+                    <permission allow="true">Delete</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+	            <evaluator>evaluator.ru.it.lecm.documents.isNotBaseOrFinalStatemachineStatusAndAdmin</evaluator>
+            </action>
+
+            <!-- Delete -->
+            <action id="document-delete" type="javascript" label="actions.document.delete">
+                <param name="function">onActionDelete</param>
+                <permissions>
+                    <permission allow="true">Delete</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Assign workflow -->
+            <action id="document-assign-workflow" type="javascript" label="actions.document.assign-workflow">
+                <param name="function">onActionAssignWorkflow</param>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+	        <!-- Assign workflow -->
+	        <action id="lecm-document-assign-workflow" type="javascript" label="actions.document.assign-workflow">
+		        <param name="function">onActionAssignWorkflow</param>
+		        <evaluator>evaluator.ru.it.lecm.documents.isBase</evaluator>
+		        <evaluator>evaluator.ru.it.lecm.statemachine.isFinalStateMachineStatus</evaluator>
+	        </action>
+
+            <!-- Manage permissions (site roles) -->
+            <action id="document-manage-site-permissions" type="javascript" icon="document-manage-permissions" label="actions.document.manage-permissions">
+                <param name="function">onActionManagePermissions</param>
+                <permissions>
+                    <permission allow="true">ChangePermissions</permission>
+                </permissions>
+                <evaluator>evaluator.doclib.action.siteBased</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Manage permissions (repository roles) -->
+            <action id="document-manage-repo-permissions" type="pagelink" icon="document-manage-permissions" label="actions.document.manage-permissions">
+                <param name="page">manage-permissions?nodeRef={node.nodeRef}</param>
+                <permissions>
+                    <permission allow="true">ChangePermissions</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.siteBased</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Manage aspects -->
+            <action id="document-manage-aspects" type="javascript" label="actions.document.manage-aspects">
+                <param name="function">onActionManageAspects</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Change type -->
+            <action id="document-change-type" type="javascript" label="actions.document.change-type">
+                <param name="function">onActionChangeType</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View original (of a Working Copy pair) -->
+            <action id="document-view-original" type="pagelink" label="actions.document.view-original">
+                <param name="page">document-details?nodeRef={workingCopy.sourceNodeRef}</param>
+                <!-- cm:workingcopy aspect -->
+                <evaluator>evaluator.doclib.action.isWorkingCopy</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View working copy (of a Working Copy pair) -->
+            <action id="document-view-working-copy" type="pagelink" label="actions.document.view-working-copy">
+                <param name="page">document-details?nodeRef={workingCopy.workingCopyNodeRef}</param>
+                <!-- cm:workingcopy aspect -->
+                <evaluator>evaluator.doclib.action.hasWorkingCopy</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Cancel editing (cancel checkout) -->
+            <action id="document-cancel-editing" type="javascript" label="actions.document.cancel-editing">
+                <param name="function">onActionCancelEditing</param>
+                <permissions>
+                    <permission allow="true">CancelCheckOut</permission>
+                </permissions>
+                <evaluator>evaluator.doclib.action.isWorkingCopy</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Manage folder rules -->
+            <action id="folder-manage-rules" type="pagelink" label="actions.folder.rules">
+                <param name="page">folder-rules?nodeRef={node.nodeRef}</param>
+                <permissions>
+                    <permission allow="true">ChangePermissions</permission>
+                </permissions>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View in Explorer client -->
+            <action id="view-in-explorer" type="link" label="actions.folder.explorer-view">
+                <param name="href">{explorerViewUrl}</param>
+                <param name="target">_blank</param>
+                <!-- repository-url config set, not in portlet mode -->
+                <evaluator>evaluator.doclib.action.viewInExplorer</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Checkout to Google Docs -->
+            <action id="document-checkout-to-googledocs" type="javascript" label="actions.document.checkout-google">
+                <param name="function">onActionCheckoutToGoogleDocs</param>
+                <permissions>
+                    <permission allow="true">Write</permission>
+                </permissions>
+                <!-- gd:googleEditable -->
+                <evaluator>evaluator.doclib.action.googleDocsCheckOut</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Checkin from Google Docs -->
+            <action id="document-checkin-from-googledocs" type="javascript" label="actions.document.checkin-google">
+                <param name="function">onActionCheckinFromGoogleDocs</param>
+                <!-- gd:googleResource, cm:workingCopyOwner = currentUser -->
+                <evaluator>evaluator.doclib.action.googleDocsCheckIn</evaluator>
+                <override>document-checkout-to-googledocs</override>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View in Google Docs -->
+            <action id="document-view-googledoc" type="link" icon="document-view-content" label="actions.document.view-google-doc">
+                <param name="href">{workingCopy.googleDocUrl}</param>
+                <param name="target">_blank</param>
+                <!-- gd:googleResource -->
+                <evaluator>evaluator.doclib.action.googleDocsView</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- View on Google Maps -->
+            <action id="document-view-googlemaps" type="pagelink" label="actions.document.view-google-map">
+                <param name="page">geographic-map?nodeRef={node.nodeRef}</param>
+                <!-- aspect cm:geographic -->
+                <evaluator>evaluator.doclib.action.googleMaps</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Transferred node: View in source repository -->
+            <action id="document-view-in-source-repository" type="link" label="actions.document.view-source-repository">
+                <!-- calculated from siteId, item.location.repositoryId, replicationUrlMapping from share-config-custom.xml and node.type -->
+                <param name="href">{sourceRepositoryUrl}</param>
+                <param name="target">_blank</param>
+                <!-- aspect trx:transferred, not portlet mode -->
+                <evaluator>evaluator.doclib.action.transferred</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+
+            <!-- Publish document -->
+            <action id="document-publish" type="javascript" label="actions.document.publish">
+                <param name="function">onActionPublish</param>
+                <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+                <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+            </action>
+        	        <action id="lecm-attach-to-document" type="javascript" label="label.action.attach-to-document">
+		        <param name="function">onActionFormDialog</param>
+		        <param name="itemKind">action</param>
+		        <param name="itemId">attach-to-document</param>
+		        <param name="mode">create</param>
+		        <param name="destination">{node.nodeRef}</param>
+		        <permissions>
+			        <permission allow="true">Delete</permission>
+		        </permissions>
+		        <param name="successMessage">message.attachToDocument.success</param>
+		        <param name="failureMessage">message.attachToDocument.failure</param>
+		        <evaluator negate="true">evaluator.doclib.action.isLocked</evaluator>
+		        <evaluator negate="true">evaluator.ru.it.lecm.documents.isBase</evaluator>
+	        </action>
+        </actions>
+
+        <!--
+           Action Group definitions
+        -->
+        <actionGroups>
+            <actionGroup id="empty"/>
+
+            <actionGroup id="document-browse">
+                <action index="100" id="document-download" />
+                <action index="110" id="document-view-content" />
+                <action index="120" id="document-locate" />
+                <action index="130" id="document-edit-properties" />
+                <action index="140" id="document-upload-new-version" />
+                <action index="150" id="document-view-original" />
+                <action index="160" id="document-view-working-copy" />
+                <action index="170" id="document-approve" />
+                <action index="180" id="document-reject" />
+                <action index="190" id="document-inline-edit" />
+                <action index="200" id="document-edit-online" />
+                <action index="210" id="document-edit-offline" />
+                <action index="220" id="document-view-googledoc" />
+                <action index="230" id="document-checkout-to-googledocs" />
+                <action index="240" id="document-checkin-from-googledocs" />
+                <action index="250" id="document-copy-to" />
+                <action index="260" id="document-move-to" />
+                <action index="270" id="document-delete" />
+                <action index="280" id="document-assign-workflow" />
+                <action index="290" id="document-cancel-editing" />
+                <action index="300" id="document-publish" />
+                <action index="310" id="document-view-googlemaps" />
+                <action index="320" id="document-view-in-source-repository" />
+            <action index="330" id="lecm-attach-to-document" />
+            </actionGroup>
+
+            <actionGroup id="document-details">
+                <action index="100" id="document-download" />
+                <action index="110" id="document-view-content" />
+                <action index="120" id="document-edit-metadata" />
+                <action index="130" id="document-upload-new-version" />
+                <action index="140" id="document-view-original" />
+                <action index="150" id="document-view-working-copy" />
+                <action index="160" id="document-approve" />
+                <action index="170" id="document-reject" />
+                <action index="180" id="document-inline-edit" />
+                <action index="190" id="document-edit-online" />
+                <action index="200" id="document-edit-offline" />
+                <action index="210" id="document-view-googledoc" />
+                <action index="220" id="document-checkout-to-googledocs" />
+                <action index="230" id="document-checkin-from-googledocs" />
+                <action index="240" id="document-copy-to" />
+                <action index="250" id="document-move-to" />
+                <action index="260" id="document-delete" />
+                <action index="270" id="document-assign-workflow" />
+                <action index="280" id="document-cancel-editing" />
+                <action index="290" id="document-manage-site-permissions" />
+                <action index="300" id="document-manage-repo-permissions" />
+                <action index="310" id="document-manage-aspects" />
+                <action index="320" id="document-change-type" />
+                <action index="330" id="document-view-in-source-repository" />
+                <action index="340" id="document-publish" />
+                <action index="350" id="document-view-googlemaps" />
+            <action index="360" id="lecm-attach-to-document" />
+            </actionGroup>
+
+            <actionGroup id="folder-browse">
+                <action index="100" id="folder-view-details" />
+                <action index="110" id="document-edit-properties" icon="folder-edit-properties" label="actions.folder.edit-metadata" />
+                <action index="120" id="document-approve" icon="folder-approve" />
+                <action index="130" id="document-reject" icon="folder-reject" />
+                <action index="140" id="document-locate" icon="document-locate" label="actions.folder.locate" />
+                <action index="150" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" />
+                <action index="160" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" />
+                <action index="170" id="folder-manage-rules" />
+                <action index="180" id="document-delete" icon="folder-delete" label="actions.folder.delete" />
+                <action index="190" id="document-manage-site-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
+                <action index="200" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
+                <action index="210" id="document-manage-aspects" label="actions.folder.manage-aspects" />
+                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
+	            <action index="230" id="lecm-document-assign-workflow" icon="document-assign-workflow" label="actions.document.assign-workflow"/>
+            </actionGroup>
+
+            <actionGroup id="folder-details">
+                <action index="100" id="document-edit-metadata" icon="folder-edit-metadata" label="actions.folder.edit-metadata" />
+                <action index="110" id="document-approve" icon="folder-approve" />
+                <action index="120" id="document-reject" icon="folder-reject" />
+                <action index="130" id="document-copy-to" icon="folder-copy-to" label="actions.folder.copy-to" />
+                <action index="140" id="document-move-to" icon="folder-move-to" label="actions.folder.move-to" />
+                <action index="150" id="folder-manage-rules" />
+                <action index="160" id="document-delete" icon="folder-delete" label="actions.folder.delete" />
+                <action index="170" id="document-manage-site-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
+                <action index="180" id="document-manage-repo-permissions" icon="folder-manage-permissions" label="actions.folder.manage-permissions" />
+                <action index="190" id="document-manage-aspects" label="actions.folder.manage-aspects" />
+                <action index="200" id="document-change-type" label="actions.folder.change-type" />
+                <action index="210" id="view-in-explorer" />
+                <action index="220" id="document-view-in-source-repository" label="actions.folder.view-source-repository" />
+	            <action index="230" id="lecm-document-assign-workflow"  icon="document-assign-workflow" label="actions.document.assign-workflow"/>
+            </actionGroup>
+
+            <actionGroup id="document-link-browse">
+                <action index="100" id="document-locate" label="actions.link.locate">
+                    <evaluator />
+                </action>
+                <action index="110" id="document-delete" label="actions.link.delete" />
+            </actionGroup>
+
+            <actionGroup id="document-link-details">
+                <action index="100" id="document-delete" label="actions.link.delete" />
+            </actionGroup>
+
+            <actionGroup id="folder-link-browse">
+                <action index="100" id="folder-view-details" />
+                <action index="110" id="document-locate" label="actions.link.locate">
+                    <evaluator />
+                </action>
+                <action index="120" id="document-delete" icon="folder-delete" label="actions.link.delete" />
+            </actionGroup>
+
+            <actionGroup id="folder-link-details">
+                <action index="100" id="document-delete" icon="folder-delete" label="actions.link.delete" />
+            </actionGroup>
+
+        </actionGroups>
+    </config>
+
+    <config>
+        <forms>
+<!--
+			<dependencies>
+                <js src="/scripts/lecm-documents/documents-const.js"/>
+                <js src="/scripts/components/document-component-base.js"/>
+                <js src="/scripts/documents/connections/type-select.js"/>
+                <js src="/scripts/documents/members/lecm-document-members.js"/>
+                <js src="/scripts/grids/doc-members-datagrid.js"/>
+                <js src="/scripts/components/format-packageItems-document.js"/>
+	            <js src="/scripts/documents/tables/lecm-document-table.js"/>
+                <js src="/scripts/lecm-documents/select-status-control.js"/>
+                <js src="/scripts/lecm-documents/lecm-document-preview-control.js"/>
+            </dependencies>
+-->
+            <default-controls>
+                <type name="association:lecm-doc-dic:subjects" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+                    <control-param name="plane">false</control-param>
+		            <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="showSelectedItemsPath">false</control-param>
+                    <control-param name="showSearch">false</control-param>
+                </type>
+	            <type name="association:lecm-document:base" template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+		            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+		            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+		            <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                </type>
+                <type name="STATUS" template="/ru/it/lecm/documents/controls/select-status-control.ftl">
+                    <control-param name="multiply">true</control-param>
+                    <control-param name="withEmpty">true</control-param>
+                </type>
+            <type name="association:lecm-doc-dic-dm:deliveryMethod" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Способ_x0020_доставки</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="itemType">lecm-doc-dic-dm:deliveryMethod</control-param>
+                </type>
+                <type name="association:lecm-doc-dic-dt:documentType" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="itemType">lecm-doc-dic-dt:documentType</control-param>
+                </type>
+	            <type name="association:lecm-doc-dic-fr:level3" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Номенклатура_x0020_дел</control-param>
+		            <control-param name="nameSubstituteString">{lecm-doc-dic-fr:index} - {lecm-doc-dic-fr:title}</control-param>
+		            <control-param name="treeNodeSubstituteString">{lecm-doc-dic-fr:year}{lecm-doc-dic-fr:organization-unit-assoc/lecm-orgstr:element-short-name}</control-param>
+		            <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
+		            <control-param name="plane">false</control-param>
+		            <control-param name="showCreateNewLink">false</control-param>
+		            <control-param name="showCreateNewButton">false</control-param>
+		            <control-param name="showSelectedItemsPath">false</control-param>
+		            <control-param name="showSearch">false</control-param>
+                </type>
+            </default-controls>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-document:attachmentsCategory">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document:categoryAttachments"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document:categoryAttachments" label=""/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+    <config evaluator="node-type" condition="lecm-connect-types:connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+	            <appearance>
+	                <field id="lecm-connect-types:code" read-only="true"/>
+	            </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect-types:connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+	            <appearance>
+		            <field id="lecm-connect-types:code">
+			            <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+			            <constraint-handlers>
+				            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+			            </constraint-handlers>
+		            </field>
+	            </appearance>
+            </form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="lecm-connect-types:reverse-name"/>
+                    <show id="lecm-connect-types:code"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-connect-types:available-connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect-types:available-connection-type">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-connect-types:primary-document-type"/>
+                    <show id="lecm-connect-types:connected-document-type"/>
+                    <show id="lecm-connect-types:not-available-connection-types-assoc"/>
+                    <show id="lecm-connect-types:recommended-connection-types-assoc"/>
+                    <show id="lecm-connect-types:default-connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-connect:connection">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-connect:connection">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-connect:primary-document-assoc"/>
+                    <show id="lecm-connect:connected-document-assoc"/>
+                    <show id="lecm-connect:connection-type-assoc"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-connect:primary-document-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
+                    </field>
+                    <field id="lecm-connect:connected-document-assoc">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+                            <control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+                            <control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+	                        <control-param name="changeItemsFireAction">changeConnectedDocument</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-connect:connection-type-assoc">
+                        <control template="/ru/it/lecm/documents/controls/connections/select-types.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Типы_x0020_связи
+                            </control-param>
+                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="notSelectedOptionShow">true</control-param>
+                            <control-param name="notSelectedOptionLabel"></control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-members:member">
+        <forms>
+            <form>
+                <field-visibility>
+                    <!--<show id="lecm-doc-members:group"/>-->
+                    <show id="lecm-doc-members:employee-assoc"/>
+                </field-visibility>
+                <!--<appearance>
+                    <field id="lecm-doc-members:group">
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+                            <control-param name="webscriptType">server</control-param>
+                            <control-param name="webscript">/lecm/statemachine/editor/privileges</control-param>
+                            <control-param name="withEmpty">true</control-param>
+                        </control>
+                    </field>
+                </appearance>-->
+            </form>
+            <form id="datagrid">
+                <field-visibility>
+                    <show id="lecm-doc-members:member-fio" force="true"/>
+                    <show id="lecm-doc-members:member-position" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-doc-members:member-fio" substituteString="$includeRef{lecm-doc-members:employee-assoc/lecm-orgstr:employee-last-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-first-name} {lecm-doc-members:employee-assoc/lecm-orgstr:employee-middle-name}"/>
+                    <field id="lecm-doc-members:member-position" substituteString="{lecm-doc-members:employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-members:member">
+        <forms>
+            <form>
+                <field-visibility>
+                    <!--<show id="lecm-doc-members:group"/>-->
+                    <show id="lecm-doc-members:employee-assoc"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+	<config evaluator="model-type" condition="cm:content">
+		<forms>
+			<form id="attachments-dashlet-table">
+				<field-visibility>
+					<show id="cm:image"/>
+					<show id="cm:name"/>
+					<show id="lecm-document:creator"/>
+					<show id="lecm-document:modifier"/>
+					<show id="cm:versionLabel"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:image" label=" "/>
+					<field id="cm:name" label-id="label.attachmets.file.name"/>
+					<field id="lecm-document:creator" label-id="label.attachmets.autor"/>
+					<field id="lecm-document:modifier" label-id="label.attachmets.modifier"/>
+					<field id="cm:versionLabel" label-id="label.attachmets.version"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+    <config evaluator="model-type" condition="lecm-document:base">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                    <show id="cm:image"/>
+                    <show id="lecm-document:present-string"/>
+                    <show id="lecm-document:ext-present-string"/>
+                    <show id="lecm-document:list-present-string"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:image" label=" "/>
+                    <field id="cm:name" label=" "/>
+                    <field id="lecm-document:present-string" label=" "/>
+                    <field id="lecm-document:ext-present-string" label=" "/>
+                </appearance>
+            </form>
+        <form id="datagrid-arm">
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+                <appearance>
+                    <field id="cm:name"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <metadata-templates>
+            <template id="baseDocument">
+                <evaluator>evaluator.ru.it.lecm.documents.isBase</evaluator>
+                <line index="10" id="list-present" view="detailed">{list-present}</line>
+                <line index="20" id="date">{date}</line>
+                <line index="30" id="tags" view="detailed">{tags}</line>
+            </template>
+        </metadata-templates>
+    </config>
+
+    <!--<config evaluator="string-compare" condition="DocLibCustom">
+                <dependencies>
+            <js src="/scripts/lecm-documents/contracts-renderers-register.js"/>
+            <js src="/scripts/lecm-documents/lecm-doc-list-overrride.js"/>
+            <js src="/scripts/lecm-documents/lecm-doc-tree-overrride.js"/>
+        </dependencies>
+    </config>-->
+	<config evaluator="node-type" condition="lecm-doc-dic:subjects">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-doc-dic:subject-code" read-only="true"/>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic:subjects">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-doc-dic:subject-code">
+						<control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+						<constraint-handlers>
+							<constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+						</constraint-handlers>
+					</field>
+				</appearance>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:name" force="true"/>
+					<show id="lecm-doc-dic:subject-code" force="true"/>
+					<show id="lecm-doc-dic:subject-description" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="aspect" condition="lecm-document-aspects:parent-document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-document-aspects:parent-document-assoc" for-mode="view"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecm-document-aspects:parent-document-assoc">
+						<control template="/ru/it/lecm/documents/controls/parent-document-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level1">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level1">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:year" force="true"/>
+					<show id="lecm-doc-dic-fr:level1-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level2">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level2">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:organization-unit-assoc" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="node-type" condition="lecm-doc-dic-fr:level3">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecm-doc-dic-fr:level3">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecm-doc-dic-fr:index" force="true"/>
+					<show id="lecm-doc-dic-fr:title" force="true"/>
+					<show id="lecm-doc-dic-fr:storage-period" force="true"/>
+					<show id="lecm-doc-dic-fr:level3-note" force="true"/>
+				</field-visibility>
+			</form>
+		</forms>
+	</config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-dm:deliveryMethod">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-dm:deliveryMethod">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dm:deliveryMethod-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-doc-dic-dt:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="model-type" condition="lecm-doc-dic-dt:documentType">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name" force="true"/>
+                    <show id="lecm-doc-dic-dt:documentType-code" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+	<config evaluator="string-compare" condition="attach-to-document">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="document"/>
+					<show id="category"/>
+				</field-visibility>
+				<appearance>
+					<set id="set" template="/ru/it/lecm/documents/sets/attach-to-document-set.ftl"/>
+
+					<field id="document" label-id="label.attach-to-document.document" set="set">
+						<control template="/ru/it/lecm/base-share/components/controls/association-search-control.ftl">
+							<control-param name="itemType">lecm-document:base</control-param>
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:Documents</control-param>
+							<control-param name="nameSubstituteString">{lecm-document:ext-present-string}&lt;/br&gt;{lecm-document:list-present-string}</control-param>
+							<control-param name="selectedItemsNameSubstituteString">{lecm-document:ext-present-string}</control-param>
+							<control-param name="changeItemsFireAction">changeAttachToDocument</control-param>
+						</control>
+					</field>
+					<field id="category" label-id="label.attach-to-document.category" set="set">
+						<control template="/ru/it/lecm/documents/controls/select-document-category-control.ftl">
+							<control-param name="notSelectedOptionShow">true</control-param>
+							<control-param name="notSelectedOptionLabel"></control-param>
+						</control>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+</alfresco-config>

@@ -1,7 +1,0 @@
-<webscript>
-	<shortname>Contracts Fake Module Root Node</shortname>
-	<description>Contracts Fake Module Root Node</description>
-	<url>/lecm/contracts/fake/root</url>
-	<format default="html">extension</format>
-	<authentication>user</authentication>
-</webscript>

@@ -1,0 +1,43 @@
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_start-date,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_start-date div {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_end-date,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_end-date div {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_stage-status,
+.yui-skin-lecmTheme div.grid td.yui-dt-col-prop_lecm-contract-table-structure_stage-status div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td[status="Закрыт"], .datagrid .grid.yui-dt .yui-dt-data td[status="Закрыт"] {
+    color: green;
+}
+
+.yui-u .dashlet .dashlet-body .datagrid .grid.yui-dt .yui-dt-data td[status="В работе"], .datagrid .grid.yui-dt .yui-dt-data td[status="В работе"] {
+    color: blue;
+}
+
+/* Создание этапа договора: новое представление */
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table.view-stage td {
+    width: 33%;
+}
+
+.yui-skin-lecmTheme .yui-panel.lecm-contract-table-structure_stage_edit table td {
+    vertical-align: top;
+}
+
+.yui-skin-lecmTheme .yui-panel table.view-stage tr td {
+    width: 33%;
+}

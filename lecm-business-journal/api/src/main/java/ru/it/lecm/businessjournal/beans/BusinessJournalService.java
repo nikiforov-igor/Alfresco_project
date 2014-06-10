@@ -3,8 +3,6 @@ package ru.it.lecm.businessjournal.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -92,9 +90,6 @@ public interface BusinessJournalService {
 
 	String DEFAULT_SYSTEM_TEMPLATE = "Системный агент";
 
-	String SYSTEM = "System";
-
-	DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
 	String BUSINESS_ROLE_BUSINESS_JOURNAL_ENGENEER = "BR_BUSINESS_JOURNAL_ENGENEER";
 
     String ACTIVITI_PREFIX = "activiti$";
@@ -275,6 +270,7 @@ public interface BusinessJournalService {
     /**
      * Метод, перемещающий заданную запись в архив
      *
+     * @param recordId
      * @return boolean результат выполнения операции
      */
     boolean moveRecordToArchive(final Long recordId);

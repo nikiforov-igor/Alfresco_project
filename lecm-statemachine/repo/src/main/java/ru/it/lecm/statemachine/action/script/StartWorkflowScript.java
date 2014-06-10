@@ -8,15 +8,22 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineEventCategory;
 import ru.it.lecm.statemachine.StateMachineHelper;
 import ru.it.lecm.statemachine.TransitionResponse;
 import ru.it.lecm.statemachine.action.UserWorkflow;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: PMelnikov
@@ -28,6 +35,7 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 	private static ServiceRegistry serviceRegistry;
     private static DocumentFrequencyAnalysisService frequencyAnalysisService;
     private static OrgstructureBean orgstructureService;
+    private StateMachineHelper stateMachineHelper;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         StartWorkflowScript.orgstructureService = orgstructureService;
@@ -41,6 +49,10 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 		StartWorkflowScript.serviceRegistry = serviceRegistry;
 	}
 
+    public void setStateMachineHelper(StateMachineHelper stateMachineHelper) {
+        this.stateMachineHelper = stateMachineHelper;
+    }
+
 	@Override
 	protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         Map<String, Object> result = new HashMap<String, Object>();
@@ -51,32 +63,56 @@ public class StartWorkflowScript extends DeclarativeWebScript {
 
 		//Если есть actionId обрабатываем transitionAction
 		if ("trans".equals(actionType)) {
-            StateMachineHelper helper = new StateMachineHelper();
-            String executionId = helper.getCurrentExecutionId(taskId);
-            NodeRef document = helper.getStatemachineDocument(executionId);
-            TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, FinishStateWithTransitionAction.class, persistedResponse);
+            String executionId = stateMachineHelper.getCurrentExecutionId(taskId);
+            NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
+            TransitionResponse transitionResponse = stateMachineHelper.executeUserAction(document, taskId, actionId, FinishStateWithTransitionAction.class, persistedResponse);
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {
+//				updateActionCount в своих недрах дёргает updateFrequencyCount,
+//				который дёргает getOrCreateFrequencyUnit. Теперь метод разделён,
+//				нужно гарантированно получить все необходимые папки.
+//				Метод frequencyAnalysisService.getFrequencyUnit использует метод
+//				getWorkDirectory, который ранее был getOrCreate, поэтому выполним
+//				проверку и создадим папку при необходимости
+				NodeService nodeService = serviceRegistry.getNodeService();
+				QName type = nodeService.getType(document);
+				String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
+				NodeRef employee = orgstructureService.getCurrentEmployee();
+
+				if(frequencyAnalysisService.getWorkDirectory(employee) == null){
+					try {
+						frequencyAnalysisService.createWorkDirectory(employee, shortTypeName);
+					} catch (WriteTransactionNeededException ex) {
+						throw new RuntimeException("Can't create work directory", ex);
+					}
+				}
+
+				if(frequencyAnalysisService.getFrequencyUnit(employee, shortTypeName, actionId) == null) {
+					try {
+						frequencyAnalysisService.createFrequencyUnit(employee, shortTypeName, actionId);
+					} catch (WriteTransactionNeededException ex) {
+						throw new RuntimeException("Can't create FrequencyUnit");
+					}
+				}
                 updateActionCount(document, actionId);
-                String newWorkflowId = helper.parseExecutionId(persistedResponse);
+                String newWorkflowId = parseExecutionId(persistedResponse);
                 if (newWorkflowId != null) {
-                    helper.logStartWorkflowEvent(document, newWorkflowId);
+                    stateMachineHelper.logStartWorkflowEvent(document, newWorkflowId);
                 }
                 if (transitionResponse.getRedirect() != null) {
                     result.put("redirect", transitionResponse.getRedirect());
                 }
             }
 		} else if ("user".equals(actionType)){
-            StateMachineHelper helper = new StateMachineHelper();
-            String executionId = helper.parseExecutionId(persistedResponse);
+            String executionId = parseExecutionId(persistedResponse);
 
-            NodeRef document = helper.getStatemachineDocument(executionId);
-            TransitionResponse transitionResponse = helper.executeUserAction(document, taskId, actionId, UserWorkflow.class, persistedResponse);
+            NodeRef document = stateMachineHelper.getStatemachineDocument(executionId);
+            TransitionResponse transitionResponse = stateMachineHelper.executeUserAction(document, taskId, actionId, UserWorkflow.class, persistedResponse);
             //если небыло ошибок, то действие логируем
             if (transitionResponse.getErrors().size() == 0) {
                 updateActionCount(document, actionId);
-                String newWorkflowId = helper.parseExecutionId(persistedResponse);
-                helper.logStartWorkflowEvent(document, newWorkflowId);
+                String newWorkflowId = parseExecutionId(persistedResponse);
+                stateMachineHelper.logStartWorkflowEvent(document, newWorkflowId);
                 if (transitionResponse.getRedirect() != null) {
                     result.put("redirect", transitionResponse.getRedirect());
                 }
@@ -94,6 +130,21 @@ public class StartWorkflowScript extends DeclarativeWebScript {
         NodeRef employee = orgstructureService.getCurrentEmployee();
         if (employee != null) {
             frequencyAnalysisService.updateFrequencyCount(employee, shortTypeName, actionId);
+        }
+    }
+
+    private String /*Используется только в StartWorkflowScript*/parseExecutionId(String persistedResponse) {
+        if (persistedResponse == null || "null".equals(persistedResponse)) {
+            return null;
+        }
+
+        int start = persistedResponse.indexOf("=") + 1;
+        int end = persistedResponse.indexOf(",");
+
+        try {
+            return persistedResponse.substring(start, end);
+        } catch (Exception e) {
+            return null;
         }
     }
 

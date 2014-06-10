@@ -1,10 +1,14 @@
 package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: PMelnikov
@@ -18,31 +22,37 @@ public class UserWorkflow extends StateMachineAction {
     private final static String PROP_LABEL = "label";
     private final static String PROP_CONDITION_ACCESS = "conditionAccess";
 
-    private ArrayList<UserWorkflowEntity> entities = new ArrayList<UserWorkflowEntity>();
+    private List<UserWorkflowEntity> entities = new ArrayList<UserWorkflowEntity>();
+    
+    private final static Logger logger = LoggerFactory.getLogger(UserWorkflow.class);
 
 	@Override
 	public void execute(DelegateExecution execution) {
 	}
 
 	@Override
-	public void init(Element actionElement, String processId) {
-        List<Element> attributes = actionElement.elements("attribute");
-        for (Element attribute : attributes) {
-            String id = attribute.attribute(PROP_ID);
-            String label = attribute.attribute(PROP_LABEL);
-            String workflowId = attribute.attribute(PROP_WORKFLOW_ID);
-            String conditionAccess = attribute.attribute(PROP_CONDITION_ACCESS);
-			if (conditionAccess == null) {
-				conditionAccess = "";
-			}
-            Conditions conditions = new Conditions(attribute.element("conditions"));
-			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
-            entities.add(new UserWorkflowEntity(id, label, workflowId, conditions, variables));
-        }
+	public void init(BaseElement actionElement, String processId) {
+//        List<Element> attributes = actionElement.elements("attribute");
+//        for (Element attribute : attributes) {
+//            String id = attribute.attribute(PROP_ID);
+//            String label = attribute.attribute(PROP_LABEL);
+//            String workflowId = attribute.attribute(PROP_WORKFLOW_ID);
+//            String conditionAccess = attribute.attribute(PROP_CONDITION_ACCESS);
+//			if (conditionAccess == null) {
+//				conditionAccess = "";
+//			}
+//            Conditions conditions = new Conditions(attribute.element("conditions"));
+//			WorkflowVariables variables = new WorkflowVariables(attribute.element("workflowVariables"));
+//            entities.add(new UserWorkflowEntity(id, label, workflowId, conditions, variables));
+//        }
     }
 
     public List<UserWorkflowEntity> getUserWorkflows() {
         return  entities;
+    }
+    
+    public void addUserWorkflow(String id, String label, String workflowId, Conditions conditionAccess, WorkflowVariables variables) {
+    	entities.add(new UserWorkflowEntity(id, label, workflowId, conditionAccess, variables));
     }
 
     public class UserWorkflowEntity {

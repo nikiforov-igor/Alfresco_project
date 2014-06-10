@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="lecm-dic:Бизнес роли" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Внутренние. Создатели" type="lecm-orgstr:business-role">
+				<property name="cm:name">Внутренние. Создатели</property>
+				<property name="lecm-orgstr:business-role-identifier">INTERNAL_CREATORS</property>
+				<property name="lecm-orgstr:business-role-is-dynamic">false</property>
+				<property name="lecm-orgstr:business-role-description">Сотрудники, имеющий право создания внутренних документов</property>
+			</item>
+		</items>
+	</item>
+</items>

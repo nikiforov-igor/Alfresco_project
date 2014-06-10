@@ -1,14 +1,15 @@
 package ru.it.lecm.base.scripts;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.ServiceRegistry;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
- * User: PMelnikov
- * Date: 12.04.13
- * Time: 16:43
+ * User: PMelnikov Date: 12.04.13 Time: 16:43
  */
 public class LecmRepositoryWebScriptBean extends BaseWebScript {
 
@@ -24,42 +25,53 @@ public class LecmRepositoryWebScriptBean extends BaseWebScript {
     }
 
     /**
-     * получение ссылки на корневую папку LECM
-     * если папки нет, то она создается
+     * получение ссылки на корневую папку LECM если папки нет, то она создается
+     *
      * @return
      */
     public ScriptNode getHomeRef() {
-        ScriptNode node = new ScriptNode(repositoryStructureHelper.getHomeRef(), serviceRegistry, getScope());
-        return node;
+        return new ScriptNode(repositoryStructureHelper.getHomeRef(), serviceRegistry, getScope());
     }
 
     /**
-     * получение ссылки на корневую папку для документов машины состояний
-     * если папки нет, то она создается
+     * получение ссылки на корневую папку для документов машины состояний если
+     * папки нет, то она создается
+     *
      * @return
      */
     public ScriptNode getDocumentsRef() {
-        ScriptNode node = new ScriptNode(repositoryStructureHelper.getDocumentsRef(), serviceRegistry, getScope());
-        return node;
+        return new ScriptNode(repositoryStructureHelper.getDocumentsRef(), serviceRegistry, getScope());
     }
 
     /**
      * получение ссылки на папку "черновики" для указанного пользователя
+     *
      * @param username логи пользователя
      * @return
      */
     public ScriptNode getDraftsRef(final String username) {
-        ScriptNode node = new ScriptNode(repositoryStructureHelper.getDraftsRef(username), serviceRegistry, getScope());
+        ScriptNode node = null;
+        try {
+            node = new ScriptNode(repositoryStructureHelper.getDraftsRef(username), serviceRegistry, getScope());
+        } catch (WriteTransactionNeededException ex) {
+            throw new RuntimeException(ex);
+        }
         return node;
     }
 
     /**
      * получение ссылки на папку "черновики" для указанного пользователя
+     *
      * @param userRef ссылки на cm:person
      * @return
      */
-    public ScriptNode getDraftsRef(final ScriptNode personRef){
-        ScriptNode node = new ScriptNode(repositoryStructureHelper.getDraftsRef(personRef.getNodeRef()), serviceRegistry, getScope());
+    public ScriptNode getDraftsRef(final ScriptNode personRef) {
+        ScriptNode node = null;
+        try {
+            node = new ScriptNode(repositoryStructureHelper.getDraftsRef(personRef.getNodeRef()), serviceRegistry, getScope());
+        } catch (WriteTransactionNeededException ex) {
+            throw new RuntimeException(ex);
+        }
         return node;
     }
 

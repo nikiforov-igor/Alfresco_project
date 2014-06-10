@@ -1,8 +1,10 @@
 package ru.it.lecm.base.beans.getchildren;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.alfresco.model.ContentModel;
 
 import org.alfresco.query.*;
 import org.alfresco.repo.domain.contentdata.ContentDataDAO;
@@ -17,6 +19,7 @@ import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
@@ -36,6 +39,7 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	private ContentDataDAO contentDataDAO;
 	private CannedQueryDAO cannedQueryDAO;
 	private TenantService tenantService;
+	private NodeService nodeService;
 
 	private MethodSecurityBean<NodeRef> methodSecurity;
 
@@ -74,7 +78,11 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	@Override
 	public CannedQuery<NodeRef> getCannedQuery(CannedQueryParameters parameters) {
 		NodePropertyHelper nodePropertyHelper = new NodePropertyHelper(dictionaryService, qnameDAO, localeDAO, contentDataDAO);
-		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, methodSecurity, parameters);
+		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, parameters);
+	}
+
+	public void setNodeService(NodeService nodeService) {
+		this.nodeService = nodeService;
 	}
 
 	/**
@@ -97,7 +105,13 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 		int requestTotalCountMax = pagingRequest.getRequestTotalCountMax();
 
 		// specific query params - context (parent) and inclusive filters (child types, property values)
-		GetChildrenCannedQueryParams paramBean = new GetChildrenCannedQueryParams(tenantService.getName(parentRef), childTypeQNames, filterProps, pattern);
+		//GetChildrenCannedQueryParams paramBean = new GetChildrenCannedQueryParams(tenantService.getName(parentRef), childTypeQNames, filterProps, pattern);
+		Set<QName> assocTypeQNames = new HashSet<QName>();
+		Set<QName> inclusiveAspects = new HashSet<QName>();
+		//TODO: Снова сотни заглушек
+		assocTypeQNames.add(ContentModel.ASSOC_CONTAINS);
+		GetChildrenCannedQueryParams paramBean = new GetChildrenCannedQueryParams(tenantService.getName(parentRef),
+				assocTypeQNames, childTypeQNames, inclusiveAspects, inclusiveAspects, filterProps, pattern);
 
 		// page details
 		CannedQueryPageDetails cqpd = new CannedQueryPageDetails(pagingRequest.getSkipCount(), pagingRequest.getMaxItems(), CannedQueryPageDetails.DEFAULT_PAGE_NUMBER, CannedQueryPageDetails.DEFAULT_PAGE_COUNT);

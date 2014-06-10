@@ -15,7 +15,7 @@ public interface ReportGenerator {
 	 *
      * @param reportDesc описатель отчёта (null, если нет описателя - "hardcoded report")
      * @param templateDescriptor  шаблон отчета
-     *@param parameters параметры (обычно это request-параметры).
+     * @param parameters параметры (обычно это request-параметры).
      * подразумевается что названия параметров в этом списке совпадают с мнемоникой
      * соот-щих колонок набора данных, который соот-ет шаблону reportName.
      * Если это не так, тогда провайдер "сам" должен разбираться "что и куда"
@@ -47,10 +47,10 @@ public interface ReportGenerator {
 	 *
      *
      *
-     * @param maketData поток с данными макета шаблона
-     * @param desc описатель отчёта
+	 * @param maketData поток с данными макета шаблона
+	 * @param desc описатель отчёта
      * @param template
-     * @return данные готового шаблона отчёта (получить из них поток достаточно
+	 * @return данные готового шаблона отчёта (получить из них поток достаточно
 	 * просто, например:<br/>
 	 * <code>
 	 * 		byte[] data = g.generateReportTemplateByMaket(...); <br/> 

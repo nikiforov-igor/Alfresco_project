@@ -41,6 +41,11 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
             for (NodeRef selectedUnit : allSelectedUnits) {
                 employeesSet.addAll(getServices().getOrgstructureService().getUnitEmployees(selectedUnit));
             }
+
+            if (allSelectedUnits.size() > 0) {
+                executorsRefs.add("NOT_REF");
+            }
+
             for (NodeRef nodeRef : employeesSet) {
                 executorsRefs.add(nodeRef.toString());
             }

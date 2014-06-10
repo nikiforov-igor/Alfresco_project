@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>restoreItem</shortname>
-	<description>Datagrid Action - Restore single or multiple items</description>
-	<url>/lecm/base/action/restore</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-	<transaction>required</transaction>
-	<lifecycle>internal</lifecycle>
-</webscript>

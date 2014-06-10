@@ -67,8 +67,6 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 		PropertyCheck.mandatory(this, "authService", authService);
 
 		// Создание контейнера (если не существует).
-		AuthenticationUtil.runAsSystem(this);
-
 		// Обертка для эскалации прав.
 		AuthenticationUtil.RunAsWork<Object> raw = new AuthenticationUtil.RunAsWork<Object>() {
 			@Override
@@ -77,12 +75,16 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
 					public Object execute() throws Throwable {
+						// Создание контейнера (если не существует).
+						if(getWCalendarContainer() == null){
+							createWCalendarContainer();
+						}
 						// Собственно генерация
 						int yearsCreated = generateYearsList(yearsNumberToCreate);
 						logger.info(String.format("Created %d calendars", yearsCreated));
 						return "ok";
 					}
-				});
+				}, false, true);
 				return null;
 			}
 		};

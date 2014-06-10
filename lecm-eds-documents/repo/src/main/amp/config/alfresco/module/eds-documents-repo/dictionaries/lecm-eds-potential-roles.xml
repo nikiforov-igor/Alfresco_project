@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items updateMode="CreateOrUpdate">
+    <item name="lecm-dic:Потенциальные роли" type="lecm-dic:dictionary">
+        <property name="cm:name">Потенциальные роли</property>
+        <property name="lecm-dic:description">Справочник потенциальных ролей</property>
+        <property name="lecm-dic:type">lecm-eds-globset:potential-role</property>
+        <property name="lecm-dic:attributeForShow">cm:name</property>
+        <property name="lecm-dic:plane">true</property>
+        <property name="lecm-dic:active">true</property>
+    </item>
+</items>

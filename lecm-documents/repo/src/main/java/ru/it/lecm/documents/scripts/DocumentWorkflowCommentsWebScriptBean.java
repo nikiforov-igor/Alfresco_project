@@ -18,6 +18,12 @@ public class DocumentWorkflowCommentsWebScriptBean extends BaseWebScript {
 		this.documentWorkflowCommentsService = documentWorkflowCommentsService;
 	}
 
+	/**
+	 * Создание комментария для процесса в документе
+	 * @param document документ
+	 * @param comment текс комментария
+	 * @return созданный объект комментария
+	 */
 	public ScriptNode createWorkflowComment(ScriptNode document, String comment) {
 		ParameterCheck.mandatory("document", document);
 		ParameterCheck.mandatory("comment", comment);

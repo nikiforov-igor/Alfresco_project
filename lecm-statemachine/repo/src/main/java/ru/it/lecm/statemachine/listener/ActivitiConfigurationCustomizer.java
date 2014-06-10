@@ -1,10 +1,24 @@
 package ru.it.lecm.statemachine.listener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.activiti.engine.impl.bpmn.deployer.BpmnDeployer;
 import org.activiti.engine.impl.bpmn.parser.BpmnParser;
+import org.activiti.engine.parse.BpmnParseHandler;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.PropertyValue;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.ManagedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * User: PMelnikov
  * Date: 05.09.12
@@ -13,27 +27,25 @@ import org.springframework.beans.factory.InitializingBean;
  * Утилитарный класс предназначен для инициализации парсера,
  * который добаляет листенер на окончание пользовательского процесса.
  */
-public class ActivitiConfigurationCustomizer implements InitializingBean {
+public class ActivitiConfigurationCustomizer implements BeanFactoryPostProcessor {
 
-	private AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration;
-	private static LogicECMBPMNParser logicECMBPMNParser;
+	private static final transient Logger logger = LoggerFactory.getLogger(ActivitiConfigurationCustomizer.class);
 
-    public AlfrescoProcessEngineConfiguration getActivitiProcessEngineConfiguration() {
-		return activitiProcessEngineConfiguration;
+	public ActivitiConfigurationCustomizer() {
 	}
-
-	public void setActivitiProcessEngineConfiguration(AlfrescoProcessEngineConfiguration activitiProcessEngineConfiguration) {
-		this.activitiProcessEngineConfiguration = activitiProcessEngineConfiguration;
-	}
-
-    public void setLogicECMBPMNParser(LogicECMBPMNParser logicECMBPMNParser) {
-        ActivitiConfigurationCustomizer.logicECMBPMNParser = logicECMBPMNParser;
-    }
-
+    
+    @SuppressWarnings("unchecked")
     @Override
-	public void afterPropertiesSet() throws Exception {
-		BpmnParser parser = ((BpmnDeployer) activitiProcessEngineConfiguration.getDeploymentCache().getDeployers().get(0)).getBpmnParser();
-        parser.getParseListeners().add(logicECMBPMNParser);
-	}
+    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
+            BeanDefinition activitiConfiguration = beanFactory
+                            .getBeanDefinition("activitiProcessEngineConfiguration");
+            MutablePropertyValues propertyValues = activitiConfiguration
+                            .getPropertyValues();
+            PropertyValue postParseHandlers = propertyValues
+                            .getPropertyValue("postBpmnParseHandlers");
+            ManagedList<RuntimeBeanReference> refsList = (ManagedList<RuntimeBeanReference>) postParseHandlers
+                            .getValue();
+            refsList.add(new RuntimeBeanReference("logicECMBPMNParser"));
+    }
 
 }

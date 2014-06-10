@@ -1,0 +1,17 @@
+.yui-skin-lecmTheme .arm-metadata .yui-menu-button button {
+	background-image:none;
+}
+
+.yui-skin-lecmTheme .arm-metadata .yui-menu-button {
+	border-color: #ccc;
+	border-style: solid;
+	border-radius: 3px;
+}
+
+.datalists {
+	margin-left: -5px;
+}
+.datalists .header-bar {
+	height: 30px;
+	background: #c5c5c5;
+}

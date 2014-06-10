@@ -1,0 +1,11 @@
+<webscript>
+    <shortname>Model editor: получение узла с формами для модели</shortname>
+    <description>
+    Возвращает узел содержащий описания форм модели, принимает параметр:
+    modelName
+    </description>
+    <url>/lecm/docforms/root?modelName={modelName}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

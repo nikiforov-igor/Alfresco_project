@@ -1,10 +1,13 @@
 package ru.it.lecm.workflow.review.api;
 
+import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.DelegateTask;
+import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.workflow.api.LecmWorkflowService;
+
 import java.util.Date;
 import java.util.List;
-import org.activiti.engine.delegate.DelegateExecution;
-import org.alfresco.service.cmr.repository.NodeRef;
-import ru.it.lecm.workflow.api.LecmWorkflowService;
 
 /**
  *
@@ -19,6 +22,8 @@ public interface ReviewWorkflowService extends LecmWorkflowService {
 
 	void logWorkflowFinished(NodeRef resultList);
 
-	void sendBareNotifications(List<NodeRef> assigneesList, Date workflowDueDate, NodeRef bpmPackage);
+	void sendBareNotifications(List<NodeRef> assigneesList, Date workflowDueDate, NodeRef bpmPackage) throws WriteTransactionNeededException;
+
+    void actualizeTask(NodeRef assignee, DelegateTask task);
 
 }

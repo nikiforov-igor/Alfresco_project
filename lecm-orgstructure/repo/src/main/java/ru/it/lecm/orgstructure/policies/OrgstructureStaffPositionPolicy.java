@@ -27,7 +27,7 @@ public class OrgstructureStaffPositionPolicy
 {
     private LecmBasePropertiesService propertiesService;
 
-    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
 
@@ -39,7 +39,7 @@ public class OrgstructureStaffPositionPolicy
         this.propertiesService = propertiesService;
     }
 
-    public final void init() {
+	public final void init() {
 		super.init();
 
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -61,9 +61,9 @@ public class OrgstructureStaffPositionPolicy
             }
 
             if (enabled) {
-                final NodeRef staffPos = childAssocRef.getChildRef();
-                businessJournalService.log(staffPos, EventCategory.ADD, "#initiator добавил(а) новый элемент в справочник «Должностные позиции» -  #mainobject");
-            }
+		final NodeRef staffPos = childAssocRef.getChildRef();
+		businessJournalService.log(staffPos, EventCategory.ADD, "#initiator добавил(а) новый элемент в справочник «Должностные позиции» -  #mainobject");
+	}
         } catch (LecmBaseException e) {
             throw new IllegalStateException("Cannot read orgstructure properties");
         }

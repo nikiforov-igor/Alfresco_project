@@ -17,6 +17,40 @@ public interface XMLImportBean {
     public interface XMLImporter {
         public XMLImporterInfo readItems(NodeRef parentNodeRef) throws XMLStreamException;
 
-        public XMLImporterInfo readItems(NodeRef parentNodeRef, boolean doNotUpdateIfExist) throws XMLStreamException;
+        public XMLImporterInfo readItems(NodeRef parentNodeRef, XMLImportBean.UpdateMode updateMode) throws XMLStreamException;
+    }
+
+    public enum UpdateMode {
+        CREATE_NEW("CreateNew", false, false),
+        CREATE_OR_UPDATE("CreateOrUpdate", true, false),
+        REWRITE_CHILDREN("RewriteChildren", true, true);
+        private final String strValue;
+        private final boolean updateProperties;
+        private final boolean rewriteChildren;
+
+        UpdateMode(String strValue, boolean updateProperties, boolean rewriteChildren) {
+            this.strValue = strValue.toLowerCase();
+            this.updateProperties = updateProperties;
+            this.rewriteChildren = rewriteChildren;
+        }
+
+        public boolean isUpdateProperties() {
+            return updateProperties;
+        }
+
+        public boolean isRewriteChildren() {
+            return rewriteChildren;
+        }
+
+        public static UpdateMode valueOf(String strValue, UpdateMode defaultValue) {
+            for (int i = 0; i < values().length; i++) {
+                UpdateMode updateMode = values()[i];
+                if (updateMode.strValue.equals(strValue.toLowerCase())
+                        || updateMode.name().equalsIgnoreCase(strValue)) {
+                    return updateMode;
+                }
+            }
+            return defaultValue == null ? UpdateMode.CREATE_NEW : defaultValue;
+        }
     }
 }

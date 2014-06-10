@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>ru.it.lecm.reports</groupId>
 		<artifactId>lecm-reports</artifactId>
-		<version>1.2.0</version>
+		<version>1.4.0</version>
 	</parent>
 
 	<artifactId>lecm-reports-api</artifactId>
@@ -43,6 +43,12 @@
 		<dependency>
 			<groupId>org.alfresco</groupId>
 			<artifactId>alfresco-repository</artifactId>
+		 <exclusions>
+		  <exclusion>
+		   <artifactId>juh</artifactId>
+		   <groupId>org.openoffice</groupId>
+		  </exclusion>
+		 </exclusions>
 		</dependency>
 
 		<dependency>
@@ -54,21 +60,25 @@
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>${xalan.version}</version>
+                        <scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>xerces</groupId>
 			<artifactId>xercesImpl</artifactId>
-			<version>${xerces.version}</version>
+			<!--<version>${xerces.version}</version>-->
+                        <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
+                        <scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-fonts</artifactId>
+                        <scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -84,7 +94,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
+        <dependency>
+            <groupId>ru.it.lecm.dictionary</groupId>
+            <artifactId>dictionary-repo-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>
@@ -122,10 +139,19 @@
 			</plugin>
 			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
-				<artifactId>maven-amp-plugin</artifactId>
+				<artifactId>alfresco-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <extensions>true</extensions>
 			</plugin>
 		</plugins>
-		<resources>
+		<resources><resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>

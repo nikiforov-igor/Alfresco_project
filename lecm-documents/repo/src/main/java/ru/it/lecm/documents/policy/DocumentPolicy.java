@@ -11,7 +11,6 @@ import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.security.AccessPermission;
@@ -42,6 +41,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -63,7 +63,7 @@ public class DocumentPolicy extends BaseBean
     private SubstitudeBean substituteService;
     private AuthenticationService authenticationService;
     private OrgstructureBean orgstructureService;
-    private StateMachineServiceBean stateMachineHelper;
+    private StateMachineServiceBean stateMachineService;
 	private LecmPermissionService lecmPermissionService;
     private PermissionService permissionService;
     private AuthorityService authorityService;
@@ -99,8 +99,8 @@ public class DocumentPolicy extends BaseBean
         this.orgstructureService = orgstructureService;
     }
 
-    public void setStateMachineHelper(StateMachineServiceBean stateMachineHelper) {
-        this.stateMachineHelper = stateMachineHelper;
+    public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+        this.stateMachineService = stateMachineService;
     }
 
 	public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
@@ -156,22 +156,24 @@ public class DocumentPolicy extends BaseBean
     /**
      * Метод переназначает документ новому сотруднику и выделяем ему соответствующие права
      */
-    public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after, QName authorPropertyQName) {
+    public void documentTransmit(NodeRef documentRef, Map<QName, Serializable> before, Map<QName, Serializable> after, QName authorPropertyQName) throws WriteTransactionNeededException {
         NodeRef beforeAuthor = new NodeRef(before.get(authorPropertyQName).toString());
         NodeRef afterAuthor = new NodeRef(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).toString());
         Set<AccessPermission> permissionsDoc = permissionService.getAllSetPermissions(documentRef);
         Set<String> permissionsEmployee = authorityService.getAuthoritiesForUser(orgstructureService.getEmployeeLogin(beforeAuthor));
-
+        //TODO DONE замена нескольких setProperty на setProperties.
+        Map<QName, Serializable> properties = nodeService.getProperties(documentRef);
         if (authorPropertyQName.equals(DocumentService.PROP_DOCUMENT_CREATOR_REF)) {
-            nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
+            properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(afterAuthor));
         }
-        nodeService.setProperty(documentRef, authorPropertyQName, afterAuthor.toString());
-        nodeService.setProperty(documentRef, DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, "");
-
+        properties.put(authorPropertyQName, afterAuthor.toString());
+        properties.put(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, "");
+        nodeService.setProperties(documentRef, properties);
+        //DONE
         // добавляем в участники документа нового сотрудника
         documentMembersService.addMember(documentRef, afterAuthor, new HashMap<QName, Serializable>());
         // передаем задачи по документу
-        stateMachineHelper.transferRightTask(documentRef, orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
+        stateMachineService.transferRightTask(documentRef, orgstructureService.getEmployeeLogin(beforeAuthor), orgstructureService.getEmployeeLogin(afterAuthor));
 
 
         // Проверяем выбран ли пункт лишать прав автора документа, если нет то добавляем бывшего автора в читатели документа и осталяем в участниках
@@ -191,7 +193,10 @@ public class DocumentPolicy extends BaseBean
             // переопределяем права на документы к договору.
             // для этого получаем список документов из папочки Связи и берем только документы с "Системной" связью
             NodeRef rootLinks = documentConnectionService.getRootFolder(documentRef);
-            List<ChildAssociationRef> links = nodeService.getChildAssocs(rootLinks);
+            List<ChildAssociationRef> links = new ArrayList<ChildAssociationRef>();
+            if (null != rootLinks){ //TODO Рефакторинг AL-2733
+                    links = nodeService.getChildAssocs(rootLinks);
+            }
 
 //            List<NodeRef> additionalDocuments = documentConnectionService.getConnectionsWithDocument(documentRef);
             for (ChildAssociationRef link : links) {
@@ -200,16 +205,20 @@ public class DocumentPolicy extends BaseBean
                     if (addDoc.size() > 0) {
                         // присваиваем значения property документу к договору, чтобы инициализировать policy уже для
                         // документа к договору при это устанавливаем значения как и основном документе
-                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, afterAuthor.toString());
-                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_IS_TRANSMIT, after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString());
-                        nodeService.setProperty(addDoc.get(0).getTargetRef(), DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT, after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString());
+                        //TODO DONE замена нескольких setProperty на setProperties.
+                        properties = nodeService.getProperties(addDoc.get(0).getTargetRef());
+                        properties.put(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF, afterAuthor.toString());
+                        properties.put(DocumentService.PROP_DOCUMENT_IS_TRANSMIT, after.get(DocumentService.PROP_DOCUMENT_IS_TRANSMIT).toString());
+                        properties.put(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT, after.get(DocumentService.PROP_DOCUMENT_DEPRIVE_RIGHT).toString());
+                        nodeService.setProperties(addDoc.get(0).getTargetRef(), properties);
+                        //DONE
                     }
                 }
             }
 
 	        for (AccessPermission permission : permissionsDoc) {
 		        if (permissionsEmployee.contains(permission.getAuthority()) && !PermissionService.ALL_AUTHORITIES.equals(permission.getAuthority())) {
-			        if (permission.getAuthority().indexOf(Types.SFX_BRME) != -1 || permission.getAuthority().indexOf(Types.SFX_SPEC) != -1 || permission.getAuthority().indexOf(Types.SFX_PRIV4USER) != -1) {
+			        if (permission.getAuthority().contains(Types.SFX_BRME) || permission.getAuthority().contains(Types.SFX_SPEC) || permission.getAuthority().contains(Types.SFX_PRIV4USER)) {
 				        // удаляем динамическую роль
 //                    lecmPermissionService.revokeDynamicRole(permission.getPermission(), documentRef, beforeAuthor.getId());
 				        permissionService.clearPermission(documentRef, permission.getAuthority());
@@ -228,6 +237,8 @@ public class DocumentPolicy extends BaseBean
         return (constraint == null) ? null : QName.createQName(((AuthorPropertyConstraint)constraint.getConstraint()).getAuthorProperty(), namespaceService);
     }
 
+    //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
+    @Override
     public void onUpdateProperties(final NodeRef nodeRef, final Map<QName, Serializable> before, Map<QName, Serializable> after) {
 		/*
 		 изменился регистрационный номер документа
@@ -260,61 +271,73 @@ public class DocumentPolicy extends BaseBean
 			}
 		}
 
-        NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-        if (employeeRef != null) {
-            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
-            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
-        }
-        QName authorPropertyQName = getAuthorProperty(nodeRef);
-        if (authorPropertyQName == null) {
-            authorPropertyQName = DocumentService.PROP_DOCUMENT_CREATOR_REF;
-        }
-        if (before.get(authorPropertyQName) != null && !before.get(authorPropertyQName).equals("") &&
-		        after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF) != null && !after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).equals("")) {
-            if (!before.get(authorPropertyQName).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
-                documentTransmit(nodeRef, before, after, authorPropertyQName);
-            }
-        }
-        if (!changeIgnoredProperties(before, after)) {
-            if (before.size() == after.size()) { // только при изменении свойств (учитываем добавление/удаление комментариев, не учитываем создание документа + добавление рейтингов и прочего
-                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
-                    if ((Integer)after.get(ForumModel.PROP_COMMENT_COUNT) < (Integer)before.get(ForumModel.PROP_COMMENT_COUNT)){
-                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator удалил(а) комментарий в документе \"#mainobject\"");
-                    } else {
-                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
-                    }
-                } else {
-                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в документ \"#mainobject\"");
-                }
-            } else {
-                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
-                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
-                }
-            }
-        }
+		if(nodeService.exists(nodeRef)) {
+        	NodeRef employeeRef = orgstructureService.getCurrentEmployee();
+	        if (employeeRef != null) {
+	            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER, substituteService.getObjectDescription(employeeRef));
+	            setPropertyAsSystem(nodeRef, DocumentService.PROP_DOCUMENT_MODIFIER_REF, employeeRef.toString());
+	        }
+	        QName authorPropertyQName = getAuthorProperty(nodeRef);
+	        if (authorPropertyQName == null) {
+	            authorPropertyQName = DocumentService.PROP_DOCUMENT_CREATOR_REF;
+	        }
+	        if (before.get(authorPropertyQName) != null && !before.get(authorPropertyQName).equals("") &&
+			        after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF) != null && !after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF).equals("")) {
+	            if (!before.get(authorPropertyQName).equals(after.get(DocumentService.PROP_DOCUMENT_EMPLOYEE_REF))) {
+                        try {
+                            //OnUpdatePropertiesPolicy : транзакция должна быть.
+                            documentTransmit(nodeRef, before, after, authorPropertyQName);
+                        } catch (WriteTransactionNeededException ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        
+                        
+	            }
+	        }
 
-	    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
+	        if (!changeIgnoredProperties(before, after)) {
+	            if (before.size() == after.size()) { // только при изменении свойств (учитываем добавление/удаление комментариев, не учитываем создание документа + добавление рейтингов и прочего
+	                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
+	                    if ((Integer)after.get(ForumModel.PROP_COMMENT_COUNT) < (Integer)before.get(ForumModel.PROP_COMMENT_COUNT)){
+	                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator удалил(а) комментарий в документе \"#mainobject\"");
+	                    } else {
+	                        businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
+	                    }
+	                } else {
+	                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в документ \"#mainobject\"");
+	                }
+	            } else {
+	                if (after.get(ForumModel.PROP_COMMENT_COUNT) != null) {
+	                    businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator оставил(а) комментарий в документе \"#mainobject\"");
+	                }
+	            }
+	        }
 
-	    updatePresentString(nodeRef);
+		    NodeRef documentSearchObject = getDocumentSearchObject(nodeRef);
 
-	    if (documentSearchObject == null) {
-		    documentSearchObject = getDocumentSearchObject(nodeRef);
-	    }
-	    if (documentSearchObject != null) {
-		    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
-		    try{
-			    updateDocumentSearchObject(nodeRef, documentSearchObject);
-			    createDocumentSearchObjectThumbnail(documentSearchObject, nodeRef);
-		    } finally {
-				behaviourFilter.enableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
-			}
-	    }
+		    updatePresentString(nodeRef);
 
-        if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
-            setPropertyAsSystem(nodeRef, DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
-        }
+		    if (documentSearchObject == null) {
+			    documentSearchObject = getDocumentSearchObject(nodeRef);
+		    }
+		    if (documentSearchObject != null) {
+			    behaviourFilter.disableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+			    try{
+				    updateDocumentSearchObject(nodeRef, documentSearchObject);
+				    createDocumentSearchObjectThumbnail(documentSearchObject, nodeRef);
+			    } finally {
+					behaviourFilter.enableBehaviour(documentSearchObject, RenditionModel.ASPECT_RENDITIONED);
+				}
+		    }
+
+	        if (isChangeProperty(before, after, StatemachineModel.PROP_STATUS)) { //если изменили статус - фиксируем дату изменения и переформируем представление
+	            setPropertyAsSystem(nodeRef, DocumentService.PROP_STATUS_CHANGED_DATE, new Date());
+	        }
+		}
     }
 
+
+    //TODO ???Оно надо???
     private void setPropertyAsSystem(final NodeRef nodeRef, final QName property, final Serializable value) {
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             @Override
@@ -325,6 +348,8 @@ public class DocumentPolicy extends BaseBean
         });
     }
 
+
+    //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     private void updatePresentString(final NodeRef nodeRef) {
         String presentString = "{cm:name}";
 
@@ -381,15 +406,27 @@ public class DocumentPolicy extends BaseBean
     }
 
     @Override
+    //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     public void onCreateNode(ChildAssociationRef childAssocRef) {
         updatePresentString(childAssocRef.getChildRef()); // при создании onUpdateproperties ещё не срабатывает - заполняем поле с представлением явно
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
-        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
-        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_DATE, new Date());
-        nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
+        //TODO замена нескольких setProperty на setProperties.
+        Map<QName, Serializable> properties = nodeService.getProperties(childAssocRef.getChildRef());
+        // заполняем тип
+        final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
+        if (typeDef != null) {
+            typeDef.getTitle();
+            properties.put(DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
+        }
 
-	    nodeService.createAssociation(childAssocRef.getChildRef(), employeeRef, DocumentService.ASSOC_AUTHOR);
+
+        properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
+        properties.put(DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
+        properties.put(DocumentService.PROP_DOCUMENT_DATE, new Date());
+        properties.put(DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
+        nodeService.setProperties(childAssocRef.getChildRef(), properties);
+        //DONE
+        nodeService.createAssociation(childAssocRef.getChildRef(), employeeRef, DocumentService.ASSOC_AUTHOR);
 
         NodeRef attachmentsRef = nodeService.getChildByName(childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
         if (attachmentsRef == null) {
@@ -397,7 +434,7 @@ public class DocumentPolicy extends BaseBean
             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
             QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
-            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties = new HashMap<QName, Serializable>(1);
             properties.put(ContentModel.PROP_NAME, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
             ChildAssociationRef associationRef = nodeService.createNode(childAssocRef.getChildRef(), assocTypeQName, assocQName, nodeTypeQName, properties);
             attachmentsRef = associationRef.getChildRef();
@@ -406,11 +443,11 @@ public class DocumentPolicy extends BaseBean
         }
 
         // заполняем тип
-        final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
-        if (typeDef != null) {
-            typeDef.getTitle();
-            nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
-        }
+        //final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
+        //if (typeDef != null) {
+        //    typeDef.getTitle();
+        //    nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
+        //}
 
         NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
         if (documentSearchObject != null) {
@@ -434,23 +471,33 @@ public class DocumentPolicy extends BaseBean
 				AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 					@Override
 					public NodeRef doWork() throws Exception {
-						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-							@Override
-							public NodeRef execute() throws Throwable {
-								NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
-                                if (result == null) {
-                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-                                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
-                                    QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+//						TODO: Метод явно вызывается только в onUpdateProperties и onCreateNode, транзакция уже должна быть открыта
+						QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
+						QName nodeTypeQName = ContentModel.TYPE_CONTENT;
 
-                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-                                    properties.put(ContentModel.PROP_NAME, fileName);
-                                    ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                    result = associationRef.getChildRef();
-                                }
-								return result;
-							}
-						});
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+						properties.put(ContentModel.PROP_NAME, fileName);
+						ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+						return associationRef.getChildRef();
+
+//						return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//							@Override
+//							public NodeRef execute() throws Throwable {
+//								NodeRef result = nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, fileName);
+//                                if (result == null) {
+//                                    QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+//                                    QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, (fileName.length() > QName.MAX_LENGTH) ? fileName.substring(fileName.length()-QName.MAX_LENGTH, fileName.length()) : fileName);
+//                                    QName nodeTypeQName = ContentModel.TYPE_CONTENT;
+//
+//                                    Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+//                                    properties.put(ContentModel.PROP_NAME, fileName);
+//                                    ChildAssociationRef associationRef = nodeService.createNode(documentRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+//                                    result = associationRef.getChildRef();
+//                                }
+//								return result;
+//							}
+//						});
 					}
 				};
 				result = AuthenticationUtil.runAsSystem(raw);
@@ -528,42 +575,75 @@ public class DocumentPolicy extends BaseBean
 			AuthenticationUtil.RunAsWork<NodeRef> raw = new AuthenticationUtil.RunAsWork<NodeRef>() {
 				@Override
 				public NodeRef doWork() throws Exception {
-					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-						@Override
-						public NodeRef execute() throws Throwable {
-		                    String thumbnailName = "doclib";
-							NodeRef thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
-                            if (thumbnail == null) {
-                                QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
-                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
-                                QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
+//					TODO: Метод явно вызывается только в onUpdateProperties, транзакция уже должна быть открыта
+					String thumbnailName = "doclib";
+					NodeRef thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
+					if (thumbnail == null) {
+						QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
+						QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
+						QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
 
-                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
-                                properties.put(ContentModel.PROP_NAME, thumbnailName);
-                                properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
-                                properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
-                                ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
-                                thumbnail = associationRef.getChildRef();
+						Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
+						properties.put(ContentModel.PROP_NAME, thumbnailName);
+						properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
+						properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
+						ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+						thumbnail = associationRef.getChildRef();
 
-                                NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
-                                String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
+						NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
+						String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
 
-                                InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
-                                if (stream == null) {
-                                    stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
-                                }
-                                if (stream != null){
-                                    ContentService contentService = serviceRegistry.getContentService();
-                                    ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
-                                    if (writer != null) {
-                                        writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
-                                        writer.putContent(stream);
-                                    }
-                                }
-							}
-							return thumbnail;
+						InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
+						if (stream == null) {
+							stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
 						}
-					});
+						if (stream != null){
+							ContentService contentService = serviceRegistry.getContentService();
+							ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
+							if (writer != null) {
+								writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
+								writer.putContent(stream);
+							}
+						}
+					}
+					return thumbnail;
+
+//					return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//						@Override
+//						public NodeRef execute() throws Throwable {
+//		                    String thumbnailName = "doclib";
+//							NodeRef thumbnail = serviceRegistry.getThumbnailService().getThumbnailByName(objectRef, ContentModel.PROP_CONTENT, thumbnailName);
+//                            if (thumbnail == null) {
+//                                QName assocTypeQName = RenditionModel.ASSOC_RENDITION;
+//                                QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, thumbnailName);
+//                                QName nodeTypeQName = ContentModel.TYPE_THUMBNAIL;
+//
+//                                Map<QName, Serializable> properties = new HashMap<QName, Serializable>(4);
+//                                properties.put(ContentModel.PROP_NAME, thumbnailName);
+//                                properties.put(ContentModel.PROP_THUMBNAIL_NAME, thumbnailName);
+//                                properties.put(ContentModel.PROP_CONTENT_PROPERTY_NAME, ContentModel.PROP_CONTENT);
+//                                ChildAssociationRef associationRef = nodeService.createNode(objectRef, assocTypeQName, assocQName, nodeTypeQName, properties);
+//                                thumbnail = associationRef.getChildRef();
+//
+//                                NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
+//                                String documentType = nodeService.getType(documentRef).toPrefixString(namespacePrefixResolver).replace(":", "_");
+//
+//                                InputStream stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + documentType + ".png");
+//                                if (stream == null) {
+//                                    stream = this.getClass().getResourceAsStream(DOCUMENT_SEARCH_CONTENT_THUMBNAIL_PATH + "default_document.png");
+//                                }
+//                                if (stream != null){
+//                                    ContentService contentService = serviceRegistry.getContentService();
+//                                    ContentWriter writer = contentService.getWriter(thumbnail, ContentModel.PROP_CONTENT, true);
+//                                    if (writer != null) {
+//                                        writer.setMimetype(MimetypeMap.MIMETYPE_IMAGE_PNG);
+//                                        writer.putContent(stream);
+//                                    }
+//                                }
+//							}
+//							return thumbnail;
+//						}
+//					});
 				}
 			};
 

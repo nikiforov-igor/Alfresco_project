@@ -1,0 +1,11 @@
+<webscript>
+	<shortname>Model editor: Генерация форм модели</shortname>
+	<description>
+	Генерация форм модели, принимает параметр:
+	modelName
+	</description>
+	<url>/lecm/docforms/generate?modelName={modelName}</url>
+	<format default="json">extension</format>
+	<authentication>admin</authentication>
+	<transaction>required</transaction>
+</webscript>

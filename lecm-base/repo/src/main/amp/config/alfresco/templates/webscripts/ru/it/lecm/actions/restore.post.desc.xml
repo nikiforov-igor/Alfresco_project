@@ -1,0 +1,12 @@
+<webscript>
+	<shortname>Base: восстановление элемента</shortname>
+	<description>
+	Восстанавливает элемент, приниает json:
+	nodeRefs
+	</description>
+	<url>/lecm/base/action/restore</url>
+	<format default="json">argument</format>
+	<authentication>user</authentication>
+	<transaction>required</transaction>
+	<lifecycle>internal</lifecycle>
+</webscript>

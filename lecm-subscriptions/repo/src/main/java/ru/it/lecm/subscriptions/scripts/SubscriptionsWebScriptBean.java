@@ -70,7 +70,7 @@ public class SubscriptionsWebScriptBean extends BaseWebScript {
 	public String getRoots() {
 		JSONArray nodes = new JSONArray();
 		NodeService nodeService = serviceRegistry.getNodeService();
-		repository.init();
+		//repository.init();
 		JSONObject root;
 		NodeRef subscriptionRef = subscriptionsService.getSubscriptionRootRef();
 		try {

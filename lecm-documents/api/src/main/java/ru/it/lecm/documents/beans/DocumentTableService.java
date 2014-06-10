@@ -1,11 +1,11 @@
 package ru.it.lecm.documents.beans;
 
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.namespace.QName;
-import ru.it.lecm.documents.TableTotalRowCalculator;
-
 import java.util.List;
 import java.util.Set;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.documents.TableTotalRowCalculator;
 
 /**
  * User: AIvkin
@@ -31,6 +31,24 @@ public interface DocumentTableService {
 	 * @return Ссылка на папку с вложениями
 	 */
 	public NodeRef getRootFolder(final NodeRef documentRef);
+
+	/**
+	 * Получение папки с табличными данными для документра
+	 * или ее создание в случае отсутствия
+	 * @param documentRef документ
+	 * @return Ссылка на папку с вложениями
+	 * @throws WriteTransactionNeededException
+	 */
+	//public NodeRef getOrCreateRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
+
+	/**
+	 * Создание папки с табличными данными для документра
+	 * или ее создание в случае отсутствия
+	 * @param documentRef документ
+	 * @return Ссылка на папку с вложениями
+	 * @throws WriteTransactionNeededException
+	 */
+	public NodeRef createRootFolder(final NodeRef documentRef) throws WriteTransactionNeededException;
 
 	/**
 	 * Проверка, что объект является табличными данными документа

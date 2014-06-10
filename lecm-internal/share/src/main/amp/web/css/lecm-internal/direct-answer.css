@@ -1,0 +1,12 @@
+.root-table {
+	width: 100%;
+}
+
+.create-internal-button-td {
+	width: 100%;
+}
+
+.form-container textarea.answer-text {
+	width: 100%;
+	margin-top:10px;
+}

@@ -1,0 +1,11 @@
+.tasks-list-filter {
+    margin-bottom: 20px;
+}
+
+.tasks-list-filter > select {
+	margin-left: 13px;
+}
+
+.workflow-task-item .workflow-task-title {
+	font-size: 16px;
+}

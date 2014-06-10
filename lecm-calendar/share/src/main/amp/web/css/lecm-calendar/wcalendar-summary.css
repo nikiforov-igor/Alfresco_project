@@ -1,0 +1,11 @@
+.calendar-month {
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.summary-table-body-wrapper .colored-td {
+	background-color: #0000FF;
+	color: #0000FF;
+	border-color: #0000FF;
+}

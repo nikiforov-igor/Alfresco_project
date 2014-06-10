@@ -4,6 +4,7 @@ import java.util.Date;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.service.cmr.repository.NodeRef;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 
 /**
@@ -12,11 +13,11 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
  */
 public interface LecmWorkflowService {
 
-	void assignTask(final NodeRef assignee, final DelegateTask task);
+	void assignTask(final NodeRef assignee, final DelegateTask task) throws WriteTransactionNeededException;
 
-	void reassignTask(final NodeRef assignee, final DelegateTask task);
+	void reassignTask(final NodeRef assignee, final DelegateTask task) throws WriteTransactionNeededException;
 
-	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task);
+	WorkflowTaskDecision completeTask(NodeRef assignee, DelegateTask task) throws WriteTransactionNeededException;
 
 	/**
 	 * Добавить участника процесса в динамическую роль
@@ -34,8 +35,9 @@ public interface LecmWorkflowService {
 	 * @param employeeRef сотрудник
 	 * @param bpmPackage bpmPackage с документом
 	 * @param addEmployeeAsMember добавлять ли сотрудника в участники документа
+         * @throws ru.it.lecm.base.beans.WriteTransactionNeededException
 	 */
-	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember);
+	void grantReaderPermissions(final NodeRef employeeRef, final NodeRef bpmPackage, final boolean addEmployeeAsMember) throws WriteTransactionNeededException;
 
 	void notifyWorkflowStarted(final NodeRef employeeRef, final Date dueDate, final NodeRef bpmPackage);
 

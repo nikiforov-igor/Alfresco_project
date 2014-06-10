@@ -6,9 +6,7 @@ import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.AlfrescoTransactionSupport;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -28,6 +26,7 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -105,6 +104,8 @@ public class DocumentTablePolicy extends BaseBean {
 				DocumentTableService.TYPE_TABLE_DATA_ROW, new JavaBehaviour(this, "beforeDeleteTableDataRow"));
 	}
 
+
+        //TODO Refactoring in process...
 	public void onAddAspect(NodeRef nodeRef, QName aspectTypeQName) {
 		if (dictionaryService.isSubClass(aspectTypeQName, DocumentTableService.ASPECT_TABLE_DATA)) {
 			AspectDefinition aspectDefinition = dictionaryService.getAspect(aspectTypeQName);
@@ -116,15 +117,27 @@ public class DocumentTablePolicy extends BaseBean {
 					if (targetClass != null) {
 						QName asscoClassName = targetClass.getName();
 						if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
-							NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
-
-							String nodeName = assoc.getTitle();
+//							Предполагается, что здесь в любом случае надо создать
+//							NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
+							NodeRef rootFolder;
+							try {
+								rootFolder = documentTableService.createRootFolder(nodeRef);
+							} catch (WriteTransactionNeededException ex) {
+								throw new RuntimeException(ex);
+							}
+							String nodeName = assoc.getTitle(dictionaryService);
 							if (nodeName == null) {
 								nodeName = assocName.toPrefixString(namespaceService);
 							}
 							nodeName = FileNameValidator.getValidFileName(nodeName);
 
-							NodeRef tableData = createNode(rootFolder, asscoClassName, nodeName, null);
+							NodeRef tableData;
+                                                    try {
+                                                        tableData = createNode(rootFolder, asscoClassName, nodeName, null);
+                                                    } catch (WriteTransactionNeededException ex) {
+                                                        logger.debug("Can't create table data object", ex);
+                                                        throw new RuntimeException(ex);
+                                                    }
                             hideNode(tableData, true);
 							nodeService.createAssociation(nodeRef, tableData, assocName);
 
@@ -352,6 +365,13 @@ public class DocumentTablePolicy extends BaseBean {
 		return null;
 	}
 
+	public PropertyDefinition getCategoryPropertyByTableDataRow(NodeRef documentTableDataRef, QName assocType) {
+		String assocQName = assocType.toPrefixString(namespaceService);
+
+		QName propertyCategoryQName = QName.createQName(assocQName + "-category", namespaceService);
+		return dictionaryService.getProperty(propertyCategoryQName);
+	}
+
 	public void onDeleteAttachmentAssoc(AssociationRef associationRef) {
 		NodeRef tableDataRow = associationRef.getSourceRef();
 
@@ -369,24 +389,7 @@ public class DocumentTablePolicy extends BaseBean {
 
 	public void beforeDeleteTableDataRow(NodeRef nodeRef) {
 		final NodeRef tableDataRow = nodeRef;
-		final List<AssociationRef> assocs = nodeService.getTargetAssocs(nodeRef, RegexQNamePattern.MATCH_ALL);
-		if (assocs != null) {
-			AuthenticationUtil.runAsSystem (new AuthenticationUtil.RunAsWork<Void>() {
-				@Override
-				public Void doWork() throws Exception {
-					RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
-					return transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
-						@Override
-						public Void execute() throws Throwable {
-							for (AssociationRef assoc : assocs) {
-								removeAttachment(tableDataRow, assoc);
-							}
-							return null;
-						}
-					}, false, true);
-				}
-			});
-		}
+
 		//Пересчёт индексов
 		int index;
 		NodeRef tableData = documentTableService.getTableDataByRow(nodeRef);
@@ -418,9 +421,9 @@ public class DocumentTablePolicy extends BaseBean {
 	}
 
 	public void removeAttachment(NodeRef documentTableDataRef, AssociationRef assoc) {
-		String categoryName = getCategoryNameByTableDataRow(documentTableDataRef, assoc.getTypeQName());
+		PropertyDefinition categoryName = getCategoryPropertyByTableDataRow(documentTableDataRef, assoc.getTypeQName());
 
-		if (categoryName != null) {
+		if (categoryName != null && nodeService.exists(assoc.getTargetRef())) {
 			documentAttachmentsService.deleteAttachment(assoc.getTargetRef());
 		}
 	}

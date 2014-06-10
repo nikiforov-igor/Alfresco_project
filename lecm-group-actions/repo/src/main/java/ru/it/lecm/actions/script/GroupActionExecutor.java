@@ -41,7 +41,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
 
-        List<NodeRef> items = new ArrayList<NodeRef>();
+        final List<NodeRef> items = new ArrayList<NodeRef>();
         String actionId = null;
 
         HashMap<String, String> paramenters = new HashMap<String, String>();
@@ -76,13 +76,13 @@ public class GroupActionExecutor extends DeclarativeWebScript {
         if (actionId != null) {
             action = nodeService.getChildByName(actionsService.getHomeRef(), ContentModel.ASSOC_CONTAINS, actionId);
         }
-        HashMap<String, Object> result = new HashMap<String, Object>();
+        final HashMap<String, Object> result = new HashMap<String, Object>();
         if (action != null && items.size() > 0) {
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
             final Map<String, Object> scriptModel = createScriptParameters(req, null, null, model);
             addParamenersToModel(paramenters, scriptModel);
 
-            Map<String, Object> returnModel = new HashMap<String, Object>(8, 1.0f);
+            final Map<String, Object> returnModel = new HashMap<String, Object>(8, 1.0f);
             scriptModel.put("model", returnModel);
 
             String script = nodeService.getProperty(action, GroupActionsService.PROP_SCRIPT).toString();
@@ -98,6 +98,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                          "}\r\n" + script;
                 final ScriptContent scriptContent = new StringScriptContent(script);
                 scriptModel.put("documentsArray", items.toArray());
+                //TODO В транзакцию завёрнуто исполнение скрипта.
                 try {
                     transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
                         @Override
@@ -116,33 +117,35 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                 result.put("forCollection", false);
                 result.put("withErrors", false);
                 final ScriptContent scriptContent = new StringScriptContent(script);
-                ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
-                for (NodeRef item : items) {
-                    scriptModel.put("document", item);
-                    HashMap<String, Object> itemResult = new HashMap<String, Object>();
-                    itemResult.put("message", nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING).toString());
-                    itemResult.put("withErrors", false);
-                    try {
-                        try {
-                            transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
-                                @Override
-                                public Object execute() throws Throwable {
-                                    scriptProcessor.executeScript(scriptContent, scriptModel);
-                                    return null;
-                                }
-                            }, false, true);
-                        } catch (Exception e) {
-                            logger.error("Error while execute script: ", e);
-                            result.put("withErrors", true);
-                        }
-                    } catch (Exception e) {
-                        logger.error("Error while execute script: ", e);
-                        itemResult.put("withErrors", true);
-                    }
-                    itemResult.put("redirect", returnModel.get("redirect"));
-                    itemResult.put("openWindow", returnModel.get("openWindow"));
-                    itemsResult.add(itemResult);
-                }
+                final ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
+				
+				//TODO проверить, нужна ли здесь вообще транзакция
+				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+					@Override
+					public Object execute() throws Throwable {
+						for (NodeRef item : items) {
+							scriptModel.put("document", item);
+							HashMap<String, Object> itemResult = new HashMap<String, Object>();
+							itemResult.put("message", nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING).toString());
+							itemResult.put("withErrors", false);
+							try {
+								try {
+									scriptProcessor.executeScript(scriptContent, scriptModel);
+								} catch (Exception e) {
+									logger.error("Error while execute script: ", e);
+									result.put("withErrors", true);
+								}
+							} catch (Exception e) {
+								logger.error("Error while execute script: ", e);
+								itemResult.put("withErrors", true);
+							}
+							itemResult.put("redirect", returnModel.get("redirect"));
+							itemResult.put("openWindow", returnModel.get("openWindow"));
+							itemsResult.add(itemResult);
+						}
+						return null;
+					}
+				}, false, true);
                 result.put("items", itemsResult);
             }
         }

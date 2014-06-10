@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<page>
-    <title>Group Actions List</title>
-    <description>Group Actions List</description>
-    <template-instance>group-actions</template-instance>
-    <authentication>user</authentication>
-</page>

@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lecm-im</artifactId>
         <groupId>ru.it.lecm.lecm-im</groupId>
-        <version>1.2.0</version>
+        <version>1.4.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lecm-im-gwt-debug</artifactId>
@@ -107,7 +107,14 @@
             </plugin>
         </plugins>
 
-        <resources>
+        <resources><resource>
+                <filtering>true</filtering>
+                <directory>src/main/amp</directory>
+                <targetPath>../${project.build.finalName}</targetPath>
+                <excludes>
+                    <exclude>**README-*</exclude>
+                </excludes>
+            </resource>
 			<resource>
 				<directory>${basedir}/src/main/resources</directory>
 			</resource>

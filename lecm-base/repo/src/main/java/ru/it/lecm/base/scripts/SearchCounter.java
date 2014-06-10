@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -117,7 +118,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 if (query.contains("#current-date")) {
                     int limitDays = notificationsService.getSettingsNDays();
                     Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-                    query = query.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
+                    query = query.replaceAll("#current-date", BaseBean.DateFormatISO8601.format(nextWorkDate));
                 }
 
                 sp.setQuery(query);
@@ -215,7 +216,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
             if (additionalQuery.contains("#current-date")) {
                 int limitDays = notificationsService.getSettingsNDays();
                 Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-                additionalQuery = additionalQuery.replaceAll("#current-date", DocumentService.DateFormatISO8601.format(nextWorkDate));
+                additionalQuery = additionalQuery.replaceAll("#current-date", BaseBean.DateFormatISO8601.format(nextWorkDate));
             }
 
             queryBuffer.append("(").append(additionalQuery).append(")");

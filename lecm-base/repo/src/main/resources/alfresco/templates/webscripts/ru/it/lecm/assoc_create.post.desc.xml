@@ -1,9 +1,0 @@
-<webscript>
-    <shortname>Create Association</shortname>
-    <description>Create Association</description>
-    <url>/lecm/base/createAssoc</url>
-    <format default="json">argument</format>
-    <authentication>user</authentication>
-    <transaction allow="readwrite" buffersize="0">required</transaction>
-    <lifecycle>internal</lifecycle>
-</webscript>

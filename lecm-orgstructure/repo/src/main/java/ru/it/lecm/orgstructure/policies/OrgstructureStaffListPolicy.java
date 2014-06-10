@@ -30,7 +30,7 @@ public class OrgstructureStaffListPolicy
 
     private LecmBasePropertiesService propertiesService;
 
-    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+	public void setBusinessJournalService(BusinessJournalService businessJournalService) {
 		this.businessJournalService = businessJournalService;
 	}
 
@@ -38,7 +38,7 @@ public class OrgstructureStaffListPolicy
         this.propertiesService = propertiesService;
     }
 
-    @Override
+	@Override
 	public void init() {
 		super.init();
 		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
@@ -51,7 +51,8 @@ public class OrgstructureStaffListPolicy
 
     public void onDeleteStaffListLog(NodeRef staff) {
         final NodeRef unit = orgstructureService.getUnitByStaff(staff);
-        final List<String> objects = Arrays.asList(staff.toString());
+		final NodeRef positionRef = orgstructureService.getPositionByStaff(staff);
+        final List<String> objects = Arrays.asList(positionRef.toString());
         businessJournalService.log(unit, EventCategory.REMOVE_STAFF_POSITION, "#initiator внес(ла) сведения об исключении должности #object1 из подразделения #mainobject", objects);
 
         // исключение штаной SG_DP ...
@@ -81,43 +82,43 @@ public class OrgstructureStaffListPolicy
                 enabled = Boolean.valueOf((String) editorEnabled);
             }
 
-            if (enabled) {
-                final Boolean prevPrimary = (Boolean) before.get(OrgstructureBean.PROP_STAFF_LIST_IS_BOSS);
-                final Boolean curPrimary = (Boolean) after.get(OrgstructureBean.PROP_STAFF_LIST_IS_BOSS);
-                final boolean changed = !PolicyUtils.safeEquals(prevPrimary, curPrimary);
+            if (enabled && nodeService.exists(nodeRef)) {
+				final Boolean prevPrimary = (Boolean) before.get(OrgstructureBean.PROP_STAFF_LIST_IS_BOSS);
+				final Boolean curPrimary = (Boolean) after.get(OrgstructureBean.PROP_STAFF_LIST_IS_BOSS);
+				final boolean changed = !PolicyUtils.safeEquals(prevPrimary, curPrimary);
 
-                final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeRef);
+				final NodeRef employee = orgstructureService.getEmployeeByPosition(nodeRef);
 
-                if (changed && employee != null) {
-                    final NodeRef unit = nodeService.getPrimaryParent(nodeRef).getParentRef();
+				if (changed && employee != null) {
+					final NodeRef unit = nodeService.getPrimaryParent(nodeRef).getParentRef();
 
-                    final String category;
-                    final String defaultDescription;
-                    if (curPrimary) {
-                        defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
-                        category = EventCategory.TAKE_BOSS_POSITION;
+					final String category;
+					final String defaultDescription;
+					if (curPrimary) {
+						defaultDescription = "#initiator внес(ла) сведения о назначении Сотрудника #mainobject руководителем подразделения #object1";
+						category = EventCategory.TAKE_BOSS_POSITION;
 
-                    } else {
-                        defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
-                        category = EventCategory.RELEASE_BOSS_POSITION;
-                    }
-                    final List<String> objects = Arrays.asList(unit.toString());
-                    businessJournalService.log(employee, category, defaultDescription, objects);
-                }
+					} else {
+						defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с руководящей позиции в подразделении #object1";
+						category = EventCategory.RELEASE_BOSS_POSITION;
+					}
+					final List<String> objects = Arrays.asList(unit.toString());
+					businessJournalService.log(employee, category, defaultDescription, objects);
+				}
 
-                // @NOTE: обновление SG_DP для штаной позиции ...
-                {
-                    final NodeRef staffPos = nodeRef;
-                    final boolean curActive = Boolean.TRUE.equals(after.get(BaseBean.IS_ACTIVE));
-                    final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staffPos, employee, nodeService, orgstructureService, logger);
-                    // оповещение по должности для связывания/отвязки SG_DP ...
-                    if (curActive) {
-                        this.orgSGNotifier.notifyNodeCreated(sgDP);
-                        this.orgSGNotifier.notifyChangeDP( staffPos);
-                    } else
-                        this.orgSGNotifier.notifyNodeDeactivated(sgDP);
-                }
-            }
+				// @NOTE: обновление SG_DP для штаной позиции ...
+				{
+					final NodeRef staffPos = nodeRef;
+					final boolean curActive = Boolean.TRUE.equals(after.get(BaseBean.IS_ACTIVE));
+					final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(staffPos, employee, nodeService, orgstructureService, logger);
+					// оповещение по должности для связывания/отвязки SG_DP ...
+					if (curActive) {
+						this.orgSGNotifier.notifyNodeCreated(sgDP);
+						this.orgSGNotifier.notifyChangeDP( staffPos);
+					} else
+						this.orgSGNotifier.notifyNodeDeactivated(sgDP);
+				}
+			}
         } catch (LecmBaseException e) {
             throw new IllegalStateException("Cannot read orgstructure properties");
         }

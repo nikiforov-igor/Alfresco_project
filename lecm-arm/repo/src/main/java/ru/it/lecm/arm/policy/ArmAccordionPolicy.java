@@ -66,11 +66,12 @@ public class ArmAccordionPolicy implements NodeServicePolicies.OnCreateAssociati
 	public void onDeleteAssociation(AssociationRef nodeAssocRef) {
 		NodeRef accordion = nodeAssocRef.getSourceRef();
 		NodeRef businessRole = nodeAssocRef.getTargetRef();
-
-		List<AssociationRef> existAccordionBusinessRoles = nodeService.getTargetAssocs(accordion, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES);
-
-		permissionService.setInheritParentPermissions(accordion, existAccordionBusinessRoles.size() == 0);
-		permissionService.deletePermission(accordion, getAutorityByBusinessRole(businessRole), "LECM_BASIC_PG_Reader");
+		if(nodeService.exists(accordion)){
+			List<AssociationRef> existAccordionBusinessRoles = nodeService.getTargetAssocs(accordion, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES);
+	
+			permissionService.setInheritParentPermissions(accordion, existAccordionBusinessRoles.size() == 0);
+			permissionService.deletePermission(accordion, getAutorityByBusinessRole(businessRole), "LECM_BASIC_PG_Reader");
+		}
 	}
 
 	private String getAutorityByBusinessRole(NodeRef businessRole) {

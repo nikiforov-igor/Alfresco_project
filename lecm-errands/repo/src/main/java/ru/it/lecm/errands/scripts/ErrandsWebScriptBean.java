@@ -19,6 +19,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -35,6 +40,11 @@ public class ErrandsWebScriptBean extends BaseWebScript {
     private IWorkCalendar workCalendar;
     private NodeService nodeService;
     private DocumentConnectionService documentConnectionService;
+	private LecmTransactionHelper lecmTransactionHelper;
+
+	public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
+		this.lecmTransactionHelper = lecmTransactionHelper;
+	}
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
@@ -73,27 +83,127 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		this.errandsService = errandsService;
 	}
 
+	/**
+	 * Получение узла с глобальными настройками поручений
+	 * @return узел с глобальными настройками поручений
+	 */
 	public ScriptNode getSettingsNode() {
-		return new ScriptNode(errandsService.getSettingsNode(), serviceRegistry, getScope());
+//		TODO: Метод getSettingsNode ранее был типа getOrCreate, поэтому здесь надо бы проверить ноду на
+//		существование и создать при необходимости
+//              нода создаётся при инициализации бина            
+		NodeRef settings = errandsService.getSettingsNode();
+		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
+        
+        //TODO может быть создавать ноду с настройками при создании пользователя?
+        //Пока будем создавать здесь - при входе в персональные настройки.
+
+	/**
+	 * Получение узла с настройка для поручений текущего пользователя
+	 * @return узел с настройками поручений для текущего пользователя
+	 */
 	public ScriptNode getCurrentUserSettingsNode() {
-		return new ScriptNode(errandsService.getCurrentUserSettingsNode(true), serviceRegistry, getScope());
+		NodeRef settings = errandsService.getCurrentUserSettingsNode();
+		if(settings == null) {
+//			Вызывается без транзакции, поэтому обернём
+			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+
+				@Override
+				public NodeRef execute() throws Throwable {
+					return errandsService.createCurrentUserSettingsNode();
+				}
+			};
+			settings = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+		}
+		return new ScriptNode(settings, serviceRegistry, getScope());
 	}
 
+	/**
+	 * Получение списка сотрудников, доступных текущему пользователю для выбора
+	 * исполнителя и соисполнителей
+	 * @return список доступных исполнителей (сотрудников)
+	 */
 	public List<NodeRef> getAvailableExecutors() {
-		return  errandsService.getAvailableExecutors();
+		return errandsService.getAvailableExecutors();
 	}
 
+	/**
+	 * Проверяет личные настройки "Без утверждения Инициатором"
+	 * @return true - если в личных настройках выбрано "Без утверждения
+	 * Инициатором"
+	 */
 	public boolean isDefaultWithoutInitiatorApproval() {
+//		TODO: Метод isDefaultWithoutInitiatorApproval в итоге вызывает метод getCurrentUserSettingsNode,
+//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+//		if(errandsService.getCurrentUserSettingsNode() == null) {
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					errandsService.createCurrentUserSettingsNode();
+//					return null;
+//				}
+//
+//			};
+//
+////			TODO: Явно вызывается из вебскрипта без транзакции
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
 		return  errandsService.isDefaultWithoutInitiatorApproval();
 	}
 
+	/**
+	 * Получает инициатора по умолчанию из личных настроек
+	 *
+	 * @return ссылка на сотрудника
+	 */
 	public NodeRef getDefaultInitiator() {
+//		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
+//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+//		if(errandsService.getCurrentUserSettingsNode() == null) {
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					errandsService.createCurrentUserSettingsNode();
+//					return null;
+//				}
+//
+//			};
+//
+////			TODO: Явно вызывается из вебскрипта без транзакции
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
 		return  errandsService.getDefaultInitiator();
 	}
 
+	/**
+	 * Получает тематику по умолчанию из личных настроек
+	 *
+	 * @return ссылка на элеменнт справочника "Тематика"
+	 */
 	public NodeRef getDefaultSubject() {
+//		TODO: Метод getDefaultSubject в итоге вызывает метод getCurrentUserSettingsNode,
+//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+//              Здесь создавать её необходимости нет.             
+//		if(errandsService.getCurrentUserSettingsNode() == null) {
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					errandsService.createCurrentUserSettingsNode();
+//					return null;
+//				}
+//
+//			};
+//
+////			TODO: Явно вызывается из вебскрипта без транзакции
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
 		return  errandsService.getDefaultSubject();
 	}
 
@@ -216,10 +326,10 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 
                         Date end = calendar.getTime();
 
-                        final String MIN = DocumentService.DateFormatISO8601.format(now);
-                        final String MAX = end != null ? DocumentService.DateFormatISO8601.format(end) : "MAX";
+                        final String MIN = DateFormatISO8601.format(now);
+                        final String MAX = end != null ? DateFormatISO8601.format(end) : "MAX";
 
-                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXEC_DATE + ":\"" + MIN + " \"..\"" + MAX + "\"";
+                        issuedFilterQuery += (issuedFilterQuery.length() > 0 ? " AND " : "") + " @" + PROP_EXEC_DATE + ":[\"" + MIN + " \" TO \"" + MAX + "\"]";
 
                         break;
                     }
@@ -319,19 +429,79 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return null;
     }
 
-
+	/**
+	 * Получение папки со ссылками
+	 *
+	 * @param documentRef nodeRef документа
+	 * @return папка со ссылками
+	 */
     public ScriptNode getLinkFolder(String documentRef){
+//		TODO: Метод getLinksFolderRef,
+//		был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+//              а может быть создавать её при создании документа?
         ParameterCheck.mandatory("documentRef", documentRef);
-        return new ScriptNode(errandsService.getLinksFolderRef(new NodeRef(documentRef)), serviceRegistry, getScope());
+        final NodeRef document = new NodeRef(documentRef);
+		NodeRef linksFolderRef = errandsService.getLinksFolderRef(document);
+		if(linksFolderRef == null) {
+			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef> () {
+
+				@Override
+				public NodeRef execute() throws Throwable {
+					return errandsService.createLinksFolderRef(document);
+				}
+
+			};
+
+//			TODO: Явно вызывается из вебскрипта без транзакции
+			linksFolderRef = (NodeRef) lecmTransactionHelper.doInTransaction(cb, false);
+		}
+        ParameterCheck.mandatory("documentRef", documentRef);
+        return new ScriptNode(linksFolderRef, serviceRegistry, getScope());
     }
 
+	/**
+	 * Возвращает ссылки на внутренние и внешние объекты системы из формы
+	 * поручения.
+	 *
+	 * @param documentRef nodeRef документа
+	 * @return массив ссылок
+	 */
     public Scriptable getLinks(String documentRef) {
+//		TODO: Метод getLinks в итоге вызывает метод getLinksFolderRef,
+//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+//              Если здесь не создана папка для связей, то и создавать её не надо, просто связей нет.
         ParameterCheck.mandatory("documentRef", documentRef);
-        NodeRef document = new NodeRef(documentRef);
+        final NodeRef document = new NodeRef(documentRef);
+//		if(errandsService.getLinksFolderRef(document) == null) {
+//			RetryingTransactionHelper.RetryingTransactionCallback cb = new RetryingTransactionHelper.RetryingTransactionCallback<Void> () {
+//
+//				@Override
+//				public Void execute() throws Throwable {
+//					errandsService.createLinksFolderRef(document);
+//					return null;
+//				}
+//
+//			};
+//
+////			TODO: Явно вызывается из вебскрипта без транзакции
+//			lecmTransactionHelper.doInTransaction(cb, false);
+//		}
+
         List<NodeRef> links = errandsService.getLinks(document);
         return createScriptable(links);
     }
 
+	/**
+	 * Возвращает ссылки на внутренние и внешние объекты системы из формы
+	 * поручения.
+	 *
+	 * @param documentRef nodeRef документа
+	 * @param association ассоциация, например: "lecm-errands:links-assoc",
+	 * "lecm-errands:execution-links-assoc"
+	 * @return массив ссылок
+	 */
     public Scriptable getLinksByAssociation(String documentRef, String association) {
         ParameterCheck.mandatory("documentRef", documentRef);
         NodeRef document = new NodeRef(documentRef);
@@ -339,10 +509,38 @@ public class ErrandsWebScriptBean extends BaseWebScript {
         return createScriptable(links);
     }
 
+	/**
+	 * Создание ссылки lecm-links:link
+	 *
+	 * @param nodeRef nodeRef документf
+	 * @param name название ссылки
+	 * @param url ссылка например: http://www.test
+	 * @param isExecute true создание "lecm-errands:links-assoc" ассоциации
+	 * false создание "lecm-errands:execution-links-assoc" оссоциации
+	 * @return ссылка
+	 */
     public NodeRef createLinks(String nodeRef, String name, String url, boolean isExecute){
-        return errandsService.createLinks(new NodeRef(nodeRef), name, url, isExecute);
+//		TODO: Метод createLinks в итоге вызывает метод getLinksFolderRef,
+//		который был ранее типа getOrCreate, теперь он разделён и надо проверить существование папки и
+//		при необходимости создать её в короткой транзакции
+		NodeRef document = new NodeRef(nodeRef);
+		if(errandsService.getLinksFolderRef(document) == null) {
+			try {
+				errandsService.createLinksFolderRef(document);
+			} catch (WriteTransactionNeededException ex) {
+				throw new RuntimeException("Can't create links folder", ex);
+			}
+		}
+
+        return errandsService.createLinks(document, name, url, isExecute);
     }
 
+	/**
+	 * Сохранение отчёта об исполнении
+	 *
+	 * @param documentRef nodeRef документа
+	 * @param report текст отчёта об исполнении
+	 */
 	public void setExecutionReport(String documentRef, String report) {
 		ParameterCheck.mandatory("documentRef", documentRef);
 		ParameterCheck.mandatory("report", report);

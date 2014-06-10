@@ -1,0 +1,11 @@
+<webscript>
+	<shortname>Model editor: добавление узла с атрибутами в узел формы</shortname>
+	<description>
+	Скрипт для добавления узла с атрибутами в узел формы редактора форм принимает json:
+	formNodeRef, 
+	attributes{name, title}
+	</description>
+	<url>/lecm/docforms/addAttributes</url>
+	<format default="json">argument</format>
+	<authentication>user</authentication>
+</webscript>

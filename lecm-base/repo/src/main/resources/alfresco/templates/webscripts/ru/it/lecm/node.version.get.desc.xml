@@ -1,9 +1,0 @@
-<webscript>
-	<shortname>Document node version</shortname>
-	<description>Document Node Version</description>
-	<url>/lecm/node/version?nodeRef={nodeRef}</url>
-	<format default="json">argument</format>
-	<authentication>user</authentication>
-	<transaction allow="readonly">required</transaction>
-	<lifecycle>internal</lifecycle>
-</webscript>

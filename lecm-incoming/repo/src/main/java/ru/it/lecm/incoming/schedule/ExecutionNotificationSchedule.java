@@ -195,11 +195,10 @@ public class ExecutionNotificationSchedule extends AbstractScheduledAction {
         statuses.add("!Принят");
         paths.add(documentService.getDocumentsFolderPath());
 
-        DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+        DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
         filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + DateFormatISO8601.format(start) + "\" to \"" + DateFormatISO8601.format(end) + "\"]";
-        List<NodeRef> incomingDocuments = documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
-        return incomingDocuments;
+        return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
     }
 
 }

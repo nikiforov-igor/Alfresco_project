@@ -1,7 +1,0 @@
-<webscript>
-    <shortname>group actions active list</shortname>
-    <description>Group Actions Active List</description>
-    <url>/lecm/groupActions/fields</url>
-    <format default="json">extension</format>
-    <authentication runas="admin">none</authentication>
-</webscript>

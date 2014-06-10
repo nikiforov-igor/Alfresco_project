@@ -104,6 +104,9 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
             final NodeService srv = getServices().getServiceRegistry().getNodeService();
             /* получение списка Связей службой документальных связей ... */
             final NodeRef linksRef = getServices().getDocumentConnectionService().getRootFolder(docId); // получить ссылку на "Связи"
+			if (linksRef == null) { //TODO DONE Рефакторинг AL-2733
+                return null;
+            }
 
             final List<ChildAssociationRef> connectionsList =
                     srv.getChildAssocs(linksRef, new HashSet<QName>(Arrays.asList(DocumentConnectionService.TYPE_CONNECTION)));

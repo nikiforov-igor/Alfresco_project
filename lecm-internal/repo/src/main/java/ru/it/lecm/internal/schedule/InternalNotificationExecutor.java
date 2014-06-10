@@ -1,7 +1,6 @@
 package ru.it.lecm.internal.schedule;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -53,9 +52,10 @@ public class InternalNotificationExecutor implements Job {
 
         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
             public Object doWork() {
-                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                    @Override
-                    public NodeRef execute() throws Throwable {
+//				TODO: Скорее всего выполняется в транзакции шедулера
+//                return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+//                    @Override
+//                    public NodeRef execute() throws Throwable {
                         List<NodeRef> internals = getInternal(documentService, notificationsService, calendarBean);
 
                         List<NodeRef> connectedDocs = new ArrayList<NodeRef>();
@@ -108,8 +108,8 @@ public class InternalNotificationExecutor implements Job {
                             }
                         }
                         return null;
-                    }
-                });
+//                    }
+//                });
             }
         });
     }
@@ -149,7 +149,7 @@ public class InternalNotificationExecutor implements Job {
         List<String> statuses = new ArrayList<String>();
         statuses.add("Направлен");
 
-        String filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + DocumentService.DateFormatISO8601.format(start) + "\" to \"" + DocumentService.DateFormatISO8601.format(end) + "\"]";
+        String filters = "@lecm\\-eds\\-document\\:execution\\-date: [\"" + BaseBean.DateFormatISO8601.format(start) + "\" to \"" + BaseBean.DateFormatISO8601.format(end) + "\"]";
         return documentService.getDocumentsByFilter(types, paths, statuses, filters, null);
     }
 

@@ -1,7 +1,8 @@
 package ru.it.lecm.statemachine.action;
 
 import org.activiti.engine.delegate.DelegateExecution;
-import org.activiti.engine.impl.util.xml.Element;
+//import org.activiti.engine.impl.util.xml.Element;
+import org.activiti.bpmn.model.BaseElement;
 import org.alfresco.repo.workflow.activiti.ActivitiScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -46,14 +47,14 @@ public class ChooseStartPathAction extends StateMachineAction {
     }
 
     @Override
-    public void init(Element actionElement, String processId) {
-        List<Element> attributes = actionElement.elements("attribute");
-        for (Element attribute : attributes) {
-            String expression = attribute.attribute("expression");
-            String value = attribute.attribute("value");
-            StartExpression startExpression = new StartExpression(expression, value);
-            expressions.add(startExpression);
-        }
+    public void init(BaseElement actionElement, String processId) {
+//        List<Element> attributes = actionElement.elements("attribute");
+//        for (Element attribute : attributes) {
+//            String expression = attribute.attribute("expression");
+//            String value = attribute.attribute("value");
+//            StartExpression startExpression = new StartExpression(expression, value);
+//            expressions.add(startExpression);
+//        }
     }
 
     private class StartExpression {
