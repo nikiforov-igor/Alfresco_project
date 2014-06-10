@@ -53,6 +53,14 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         }
     }
 
+    /**
+     * Возвращает задачи для документа
+     * @param node - документ, для которого будет возвращены задачи
+     * @param stateParam  статус задачи
+     * @param addSubordinatesTask поск задач подчененных сотрудников
+     * @param myTasksLimit - максимальное количество задач
+     * @return
+     */
     public WorkflowTaskListBean getTasks(ScriptNode node, String stateParam, boolean addSubordinatesTask, int myTasksLimit) {
         if (node == null) {
             return new WorkflowTaskListBean();
@@ -116,6 +124,14 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return result;
     }
 
+    /**
+     * Возвращает процессы для документа
+     *
+     * @param node - nodeRef документа
+     * @param stateParam состояние заправиваемых процессов
+     * @param activeWorkflowsLimit максимальное количество возвращаемых процессов
+     * @return
+     */
     public WorkflowListBean getWorkflows(ScriptNode node, String stateParam, int activeWorkflowsLimit) {
         if (node == null) {
             return new WorkflowListBean();
@@ -136,6 +152,12 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return result;
     }
 
+    /**
+     * Проверка на "Только для чтения" для категории вложения
+     * @param node - документ
+     * @param category - категория
+     * @return
+     */
     public boolean isReadOnlyCategory(ScriptNode node, String category) {
         return stateMachineHelper.isReadOnlyCategory(node.getNodeRef(), category);
     }
@@ -219,18 +241,42 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.isDraft(node.getNodeRef());
     }
 
+    /**
+     * Возвращает статус для документа
+     * @param document
+     * @return
+     */
     public String getDocumentStatus(ScriptNode document) {
         return stateMachineHelper.getDocumentStatus(document.getNodeRef());
     }
 
+    /**
+     * Выполнение действия по его идентификатору
+     * @param document
+     * @param actionId
+     * @return
+     */
     public TransitionResponse executeAction(ScriptNode document, String actionId) {
         return stateMachineHelper.executeUserAction(document.getNodeRef(), actionId);
     }
 
+    /**
+     * Выполнение действия по его имени
+     * @param document
+     * @param actionName
+     * @return
+     */
     public TransitionResponse executeActionByName(ScriptNode document, String actionName) {
         return stateMachineHelper.executeActionByName(document.getNodeRef(), actionName);
     }
 
+    /**
+     * Получение списка статусов для документа
+     * @param documentType
+     * @param includeActive
+     * @param includeFinal
+     * @return
+     */
     public String[] getStatuses(String documentType, boolean includeActive, boolean includeFinal) {
     	logger.debug("!!!!!!! StatemachineWebScriptBean getStatuses");
         Set<String> statuses = new HashSet<String>();
@@ -245,11 +291,21 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return statuses.toArray(new String[statuses.size()]);
     }
 
+    /**
+     * Получение папкок с архивными документами
+     * @param documentType
+     * @return
+     */
     public String[] getArchiveFolders(String documentType) {
         Set<String> folders = stateMachineHelper.getArchiveFolders(documentType);
         return folders.toArray(new String[folders.size()]);
     }
 
+    /**
+     * Получение строки представления для документа
+     * @param document
+     * @return
+     */
     public String getDocumentPresentString(NodeRef document) {
         return (String) serviceRegistry.getNodeService().getProperty(document, QName.createQName("http://www.it.ru/logicECM/document/1.0", "present-string"));
     }
@@ -293,7 +349,6 @@ public class StatemachineWebScriptBean extends BaseWebScript {
      * @param node
      * @return
      */
-
     public String getStatemachineVersion(ScriptNode node) {
         return stateMachineHelper.getStatemachineVersion(node.getNodeRef());
     }
@@ -340,14 +395,32 @@ public class StatemachineWebScriptBean extends BaseWebScript {
         return stateMachineHelper.getPreviousStatusName(document.getNodeRef());
     }
 
+    /**
+     * Выполнение дейсвтвия по перходу в следующий статус
+     * @param document
+     * @param actionName
+     */
     public void executeTransitionAction(ScriptNode document, String actionName) {
         stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName);
     }
 
+    /**
+     * Выполнение дейсвтвия по перходу в следующий статус
+     * @param document
+     * @param actionName
+     * @param task
+     */
     public void executeTransitionAction(ScriptNode document, String actionName, Task task) {
         stateMachineHelper.executeTransitionAction(document.getNodeRef(), actionName, task);
     }
 
+    /**
+     * Принудительное завершение процесса
+     * @param document
+     * @param definition
+     * @param variable
+     * @param value
+     */
 	public void terminateWorkflowsByDefinition(final ScriptNode document, final String definition, final String variable, final Object value) {
 		ArrayList<String> definitions = new ArrayList<String>();
 		definitions.add(definition);
