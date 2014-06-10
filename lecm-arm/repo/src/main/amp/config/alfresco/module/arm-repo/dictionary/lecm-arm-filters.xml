@@ -29,7 +29,7 @@
                 <property name="lecm-arm:filter-code">СONTROL_FILTER</property>
                 <property name="lecm-arm:filter-class">baseQueryArmFilter</property>
                 <property name="lecm-arm:filter-multiple-select">false</property>
-                <property name="lecm-arm:filter-values">true|True,false|False</property>
+                <property name="lecm-arm:filter-values">true|Да,false|Нет</property>
                 <property name="lecm-arm:filter-query">@lecm\-document\-aspects\:is\-on\-control:#value</property>
             </item>
 	        <item name="cm:Требующие визы" type="lecm-arm:filter">
