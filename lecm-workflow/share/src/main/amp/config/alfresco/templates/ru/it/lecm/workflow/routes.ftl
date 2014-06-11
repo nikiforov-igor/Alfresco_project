@@ -4,6 +4,7 @@
 <#include "/org/alfresco/components/form/form.dependencies.inc"/>
 
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/base-menu/base-menu.css"/>
+<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-workflow/routes.css"/>
 
 <@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"/>
 <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>

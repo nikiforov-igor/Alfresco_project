@@ -6,6 +6,8 @@
 
 <script type="text/javascript">
 	(function () {
+		LogicECM.module.Routes.isEngineer = ${isEngineer?string};
+
 		var routesToolbar = new LogicECM.module.Routes.Toolbar("${toolbarId}");
 		routesToolbar.setMessages(${messages});
 		routesToolbar.setOptions ({

@@ -47,7 +47,15 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			setTimeout(centerDialogInternal, 50);
 		},
 
-		onActionEdit: function(item) {
+		onActionEditCommon: function(item) {
+			this.onActionEdit(item, 'editCommonRoute');
+		},
+
+		onActionEditPrivate: function(item) {
+			this.onActionEdit(item, 'editPrivateRoute');
+		},
+
+		onActionEdit: function(item, formId) {
 			// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
 			if (this.editDialogOpening) {
 				return;
@@ -68,7 +76,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				submitType: "json",
 				showCancelButton: true
 			};
-			if (this.options.editForm) {
+			if (formId) {
+				templateRequestParams.formId = formId;
+			} else if (this.options.editForm) {
 				templateRequestParams.formId = this.options.editForm;
 			}
 			var editRouteForm = new Alfresco.module.SimpleDialog(this.id + "-editDetails");

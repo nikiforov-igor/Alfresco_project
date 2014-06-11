@@ -7,17 +7,28 @@
 var datagrid = new LogicECM.module.Routes.DataGrid("${id}");
 datagrid.setOptions({
 	usePagination:true,
-    disableDynamicPagination: true,
+	disableDynamicPagination: true,
 	showExtendSearchBlock: false,
 	showCheckboxColumn: false,
 	bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
 	dataSource: "/lecm/workflow/routes/routesList",
 	actions: [{
 		type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
-		id:"onActionEdit",
+		id:"onActionEditPrivate",
 		permission:"edit",
-		label:"${msg('actions.edit')}"
-	},{
+		label:"${msg('actions.edit')}",
+		evaluator: function() {
+			return !LogicECM.module.Routes.isEngineer;
+		}
+	}, {
+		type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+		id:"onActionEditCommon",
+		permission:"edit",
+		label:"${msg('actions.edit')}",
+		evaluator: function() {
+			return LogicECM.module.Routes.isEngineer;
+		}
+	}, {
 		type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
 		id:"onActionDelete",
 		permission:"delete",

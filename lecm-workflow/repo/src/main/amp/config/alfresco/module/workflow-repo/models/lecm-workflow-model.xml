@@ -213,7 +213,7 @@
 		<aspect name="lecm-workflow:owner-aspect">
 			<associations>
 				<association name="lecm-workflow:workflow-assignees-list-owner-assoc">
-					<description>Владелец списка участников (сотрудник или подразделение)</description>
+					<description>Владелец списка участников</description>
 					<source>
 						<mandatory>false</mandatory>
 						<many>true</many>
