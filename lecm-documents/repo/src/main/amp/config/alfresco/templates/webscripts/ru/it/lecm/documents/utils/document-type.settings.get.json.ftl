@@ -1,6 +1,7 @@
 <#escape x as x?js_string>
 {
     "nodeRef": "${nodeRef}",
+    "title": "${title!''}",
     "draftPath": "${draftPath}",
     "documentPath": "${documentPath}",
     "archivePath": "${archivePath}"

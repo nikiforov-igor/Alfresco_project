@@ -5,6 +5,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.SearchParameters;
@@ -238,6 +239,23 @@ public class DocumentWebScriptBean extends BaseWebScript {
         } else {
             return null;
         }
+    }
+
+	/**
+     * Получить заголовок для типа
+     *
+     * @param documentType тип документов
+     */
+    public String getTypeTitle(String documentType) {
+        ParameterCheck.mandatory("documentType", documentType);
+        final QName documentQNameType = QName.createQName(documentType, namespaceService);
+        if (documentQNameType != null) {
+	        TypeDefinition typeDefinition = dictionaryService.getType(documentQNameType);
+	        if (typeDefinition != null) {
+		        return typeDefinition.getTitle(dictionaryService);
+	        }
+        }
+        return null;
     }
 
     /**

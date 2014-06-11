@@ -11,6 +11,7 @@ var documentPath = documentScript.getDocumentsPath();
 var archDirectories = statemachine.getArchiveFolders(docType);
 
 model.nodeRef = node;
+model.title =  documentScript.getTypeTitle(docType);
 model.draftPath = draftPath;
 model.documentPath = documentPath;
 model.archivePath = archDirectories.join(",");
