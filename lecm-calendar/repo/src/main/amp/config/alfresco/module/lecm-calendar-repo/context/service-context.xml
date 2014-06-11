@@ -12,7 +12,7 @@
 				<value>alfresco/module/${artifactId}/models/calendar-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/absence-model.xml</value>
 				<value>alfresco/module/${artifactId}/models/schedule-model.xml</value>
-				<value>alfresco/module/${artifactId}/models/wcal-common.xml</value>
+				<value>alfresco/module/${artifactId}/models/wcal-common-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
