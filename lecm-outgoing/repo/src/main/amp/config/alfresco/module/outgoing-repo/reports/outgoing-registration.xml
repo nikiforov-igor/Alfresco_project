@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="RewriteChildren">
     <item name="cm:Журнал регистрации исходящих документов" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-outgoing:document]]></property>
         <property name="cm:name"><![CDATA[Журнал регистрации исходящих документов]]></property>

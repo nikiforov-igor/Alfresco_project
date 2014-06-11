@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="RewriteChildren">
     <item name="cm:Сводка по тематикам документов (объедин.)" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType">
             <![CDATA[lecm-incoming:document,lecm-internal:document,lecm-nd:document,lecm-ord:document,lecm-outgoing:document]]></property>
