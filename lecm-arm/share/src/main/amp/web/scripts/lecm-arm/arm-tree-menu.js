@@ -238,7 +238,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counter: oResults[nodeIndex].counter,
                                 counterLimit: oResults[nodeIndex].counterLimit,
                                 counterDesc: oResults[nodeIndex].counterDesc,
-	                            createTypes: oResults[nodeIndex].createTypes,
 	                            htmlUrl: oResults[nodeIndex].htmlUrl,
                                 reportCodes: oResults[nodeIndex].reportCodes
                             };
@@ -371,17 +370,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            parent = parent.parent;
 	            }
 
-	            var createTypes = [];
-	            for (var i = 0; i < node.data.createTypes.length; i++) {
-		            for (var j = 0; j < parent.data.createTypes.length; j++) {
-			            if (node.data.createTypes[i].type == parent.data.createTypes[j].type) {
-				            createTypes.push(node.data.createTypes[i]);
-			            }
-		            }
-	            }
-
 	            YAHOO.Bubbling.fire ("updateArmToolbar", {
-		            createTypes: createTypes
+		            createTypes: parent.data.createTypes
 	            });
             }
             // сбрасываем после того, как отослали запрос к гриду

@@ -25,10 +25,8 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.transaction.TransactionService;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
@@ -72,7 +70,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
         public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
             this.lecmTransactionHelper = lecmTransactionHelper;
         }
-        
+
 	public void setTranstactionService(TransactionService transtactionService) {
 		this.transtactionService = transtactionService;
 	}
@@ -162,7 +160,9 @@ public class ArmTreeMenuScript extends AbstractWebScript {
                 result.put(COUNTER_DESC, node.getCounter().getDescription());
                 result.put(COUNTER_LIMIT, node.getCounter().getQuery());
             }
-	        result.put(CREATE_TYPES, getCreateTypes(node, isAccordionNode, isStarterHash));
+	        if (isAccordionNode) {
+		        result.put(CREATE_TYPES, getCreateTypes(node, isStarterHash));
+	        }
 	        result.put(HTML_URL,node.getHtmlUrl());
 	        result.put(REPORT_CODES,node.getReportCodes());
         } catch (JSONException e) {
@@ -226,54 +226,67 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 		return results;
 	}
 
-	   private JSONArray getCreateTypes(ArmNode node, boolean isAccordion, Map<String, Boolean> isStarterHash) throws JSONException {
-        JSONArray results = new JSONArray();
-        List<String> allTypes = node.getCreateTypes();
-        if (allTypes != null) {
-            for (String type : allTypes) {
-                final QName typeQName = QName.createQName(type, namespaceService);
-                TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
-                if (typeDefinition != null) {
-                    try {
-                        boolean isStarter = true;
-                        if (isAccordion) {
-                            if (isStarterHash.containsKey(type)) {
-                                isStarter = isStarterHash.get(type);
-                            } else {
-                                isStarter = stateMachineService.isStarter(type);
-                                isStarterHash.put(type, isStarter);
-                            }
-                        }
-                        if (isStarter) {
-                            NodeRef ref = documentService.getDraftRootByType(typeQName);
+	private JSONArray getCreateTypes(ArmNode node, Map<String, Boolean> isStarterHash) throws JSONException {
+		List<JSONObject> results = new ArrayList<>();
+		List<String> allTypes = node.getCreateTypes();
+		if (allTypes != null) {
+			for (String type : allTypes) {
+				final QName typeQName = QName.createQName(type, namespaceService);
+				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
+				if (typeDefinition != null) {
+					try {
+						boolean isStarter;
+						if (isStarterHash.containsKey(type)) {
+							isStarter = isStarterHash.get(type);
+						} else {
+							isStarter = stateMachineService.isStarter(type);
+							isStarterHash.put(type, isStarter);
+						}
+						NodeRef ref = documentService.getDraftRootByType(typeQName);
 //                            TODO: DONE Внешняя транзакция readonly, поэтому для создания папки черновика откроем на запись.
 //                            при таком вызове он не откроет новую транзакцию, и если здесь не падает, значит оно не вызывается, папка создалась раньше. 
 //                            Возможно, здесь эта проверка вообще не нужна, но, на всякий случай оставляю.
 //                            В такой ситуации используем lecmTransactionHelper
-                            if (ref == null) {
-                                ref = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+						if (ref == null) {
+							ref = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
 
-                                    @Override
-                                    public NodeRef execute() throws Throwable {
-                                        return documentService.createDraftRoot(typeQName);
-                                    }
+								@Override
+								public NodeRef execute() throws Throwable {
+									return documentService.createDraftRoot(typeQName);
+								}
 
-                                });
-                            }
-                            JSONObject json = new JSONObject();
-                            json.put("type", type);
-                            json.put("draftFolder", ref);
-                            json.put("label", typeDefinition.getTitle(dictionaryService));
-                            results.put(json);
-                        }
-                    } catch (Exception ex) {
-                        logger.error(ex.getMessage(), ex);
-                    }
-                }
-            }
-        }
-        return results;
-    }
+							});
+						}
+						JSONObject json = new JSONObject();
+						json.put("type", type);
+						json.put("draftFolder", ref);
+						json.put("disabled", !isStarter);
+						json.put("label", typeDefinition.getTitle(dictionaryService));
+						results.add(json);
+					} catch (Exception ex) {
+						logger.error(ex.getMessage(), ex);
+					}
+				}
+			}
+		}
+		Collections.sort(results, new Comparator<JSONObject>() {
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+				String valA = "";
+				String valB = "";
+
+				try {
+					valA = (String) a.get("label");
+					valB = (String) b.get("label");
+				} catch (JSONException e) {
+					logger.error("JSONException in combineJSONArrays sort section", e);
+				}
+
+				return valA.compareTo(valB);
+			}
+		});
+		return new JSONArray(results);
+	}
 
     private JSONArray getFiltersJSON(List<ArmFilter> filters) throws JSONException {
         JSONArray results = new JSONArray();

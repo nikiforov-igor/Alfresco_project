@@ -116,6 +116,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 					items.push({
 						text: type.label,
 						value: type.type,
+						disabled: type.disabled,
 						onclick: {
 							fn: this.onNewRow,
 							obj: {
