@@ -172,7 +172,7 @@ public class ExpressionDocument {
             List<NodeRef> filteredDocuments = new ArrayList<NodeRef>();
             if (documents != null) {
                 for (NodeRef document: documents) {
-                    if (!document.equals(this.nodeRef)) {
+                    if (!document.equals(this.nodeRef) && documentService.getDocumentRegNumber(document) != null) {
                         filteredDocuments.add(document);
                     }
                 }
