@@ -242,24 +242,8 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 							isStarter = stateMachineService.isStarter(type);
 							isStarterHash.put(type, isStarter);
 						}
-						NodeRef ref = documentService.getDraftRootByType(typeQName);
-//                            TODO: DONE Внешняя транзакция readonly, поэтому для создания папки черновика откроем на запись.
-//                            при таком вызове он не откроет новую транзакцию, и если здесь не падает, значит оно не вызывается, папка создалась раньше. 
-//                            Возможно, здесь эта проверка вообще не нужна, но, на всякий случай оставляю.
-//                            В такой ситуации используем lecmTransactionHelper
-						if (ref == null) {
-							ref = lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-
-								@Override
-								public NodeRef execute() throws Throwable {
-									return documentService.createDraftRoot(typeQName);
-								}
-
-							});
-						}
 						JSONObject json = new JSONObject();
 						json.put("type", type);
-						json.put("draftFolder", ref);
 						json.put("disabled", !isStarter);
 						json.put("label", typeDefinition.getTitle(dictionaryService));
 						results.add(json);
