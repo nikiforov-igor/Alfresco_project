@@ -424,4 +424,7 @@
 		<property name="nodeService" ref="nodeService"/>
 		<property name="documentService" ref="documentService"/>
 	</bean>
+
+    <bean id="webscript.ru.it.lecm.js-helper.getCompletion.get" class="ru.it.lecm.base.scripts.JSCompletionHelper" parent="webscript">
+    </bean>
 </beans>

@@ -697,8 +697,15 @@
                         </control>
                     </field>
                     <field id="lecm-stmeditor:transition-script" label="Скрипт">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
+                        </control> -->
+                        <!-- 
+                        Используется экспериментальный контрол редактора JS кода
+                        Если будут проблемы - просто вернуть textarea
+                         -->
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -840,8 +847,15 @@
 					</field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
                     <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
+                        </control> -->
+                        <!-- 
+                        Используется экспериментальный контрол редактора JS кода
+                        Если будут проблемы - просто вернуть textarea
+                         -->
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
                         </control>
                     </field>
 				</appearance>
@@ -869,8 +883,15 @@
                     </field>
                     <field id="lecm-stmeditor:stopSubWorkflows" />
                     <field id="lecm-stmeditor:transitionDocumentChangeScript" label="Скрипт">
-                        <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+                        <!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">20</control-param>
+                        </control> -->
+                        <!-- 
+                        Используется экспериментальный контрол редактора JS кода
+                        Если будут проблемы - просто вернуть textarea
+                         -->
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -1222,9 +1243,16 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:actionScript" >
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+						<!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
 							<control-param name="rows">30</control-param>
-						</control>
+						</control> -->
+						<!-- 
+                        Используется экспериментальный контрол редактора JS кода
+                        Если будут проблемы - просто вернуть textarea
+                         -->
+						<control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
+                        </control>
 					</field>
 				</appearance>
 			</form>
@@ -1245,7 +1273,14 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecm-stmeditor:actionScript" >
-						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+						<!-- <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
+							<control-param name="rows">30</control-param>
+                        </control> -->
+                        <!-- 
+                        Используется экспериментальный контрол редактора JS кода
+                        Если будут проблемы - просто вернуть textarea
+                         -->
+                        <control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
 							<control-param name="rows">30</control-param>
                         </control>
 					</field>
