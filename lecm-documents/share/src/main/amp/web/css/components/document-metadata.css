@@ -1,0 +1,14 @@
+.container .document-preview {
+	width: 630px;
+	float: right;
+	padding-top: 13px;
+}
+
+.container .document-preview .web-preview {
+	height: 100%;
+}
+
+.container .document-metadata {
+	width: auto;
+	overflow: hidden;
+}

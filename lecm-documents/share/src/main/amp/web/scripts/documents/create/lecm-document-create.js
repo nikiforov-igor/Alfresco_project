@@ -98,6 +98,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				{
 					cancelButton.addListener("click", this.onCancelButtonClick, null, this);
 				}
+
+				var previewHeight = Dom.getRegion(this.id + "-form-fields").height - 26;
+				Dom.setStyle(this.id + "-preview", "height", previewHeight.toString() + "px");
 			},
 
 			onBeforeFormRuntimeInit: function(layer, args) {

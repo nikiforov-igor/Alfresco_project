@@ -294,6 +294,18 @@ LogicECM.control = LogicECM.control || {};
 				this.updateSelectedItems();
 				this.updateFormFields();
 				this.updateFormUI();
+
+				YAHOO.Bubbling.fire("hidePreview");
+			},
+
+			attachShowPreviewClickListener: function(node) {
+				Event.addListener("attachment-show-preview-" + node.nodeRef, "click", this.showPreview, node.nodeRef, this);
+			},
+
+			showPreview: function(e, nodeRef) {
+				YAHOO.Bubbling.fire("showPreview", {
+					nodeRef: nodeRef
+				});
 			},
 
 			attachUploadNewVersionClickListener: function(node) {
@@ -396,6 +408,10 @@ LogicECM.control = LogicECM.control || {};
 							var leftPart = fileIconHtml + fileName;
 							if (!item.justUpload) {
 								leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
+							} else {
+								var linkId = "attachment-show-preview-" + nodeRef;
+								leftPart = "<a href='javascript:void(0);' id='" + linkId + "'>" + leftPart + "</a>";
+								Event.onAvailable(linkId, this.attachShowPreviewClickListener, item, this);
 							}
 
 							var reghtPart = "";
