@@ -22,19 +22,19 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 {
 	var Dom = YAHOO.util.Dom;
 
-	LogicECM.module.Documents.Create = function(htmlId)
+	LogicECM.module.Documents.Edit = function(htmlId)
 	{
-		LogicECM.module.Documents.Create.superclass.constructor.call(this, "LogicECM.module.Documents.Create", htmlId, ["container", "json"]);
+		LogicECM.module.Documents.Edit.superclass.constructor.call(this, "LogicECM.module.Documents.Edit", htmlId, ["container", "json"]);
 
 		YAHOO.Bubbling.on("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 		YAHOO.Bubbling.on("formContentReady", this.onFormContentReady, this);
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.module.Documents.Create, Alfresco.component.Base,
+	YAHOO.extend(LogicECM.module.Documents.Edit, Alfresco.component.Base,
 		{
 			options: {
-				documentType: null,
+				nodeRef: null,
 				formId: null,
 				args: {}
 			},
@@ -42,55 +42,40 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			rootFolder: null,
 
 			onReady: function () {
-				this.loadDraftRoot();
-			},
-
-			loadDraftRoot: function() {
-				if (this.options.documentType != null) {
-					var me = this;
-					var url = Alfresco.constants.PROXY_URI + "lecm/document-type/settings?docType=" + this.options.documentType;
-					var callback = {
-						success: function (oResponse) {
-							var oResults = eval("(" + oResponse.responseText + ")");
-							me.rootFolder = oResults.nodeRef;
-							me.loadForm();
-						},
-						timeout: 60000
-					};
-					YAHOO.util.Connect.asyncRequest('GET', url, callback);
-				}
+				this.loadForm();
 			},
 
 			loadForm: function() {
-				var me = this;
-				Alfresco.util.Ajax.request(
-					{
-						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
-						dataObj: {
-							htmlid: this.id,
-							itemKind:"type",
-							itemId: this.options.documentType,
-							destination: this.rootFolder,
-							mode: "create",
-							submitType:"json",
-							formId: this.options.formId,
-							showSubmitButton:true,
-							showCancelButton: true,
-							args: JSON.stringify(this.options.args)
-						},
-						successCallback: {
-							fn: function (response) {
-								var container = Dom.get(me.id + "-body");
-								container.innerHTML = response.serverResponse.responseText;
-							}
-						},
-						failureMessage: "message.failure",
-						execScripts: true
-					});
+				if (this.options.nodeRef != null) {
+					var me = this;
+					Alfresco.util.Ajax.request(
+						{
+							url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+							dataObj: {
+								htmlid: this.id,
+								itemKind: "node",
+								itemId: this.options.nodeRef,
+								mode: "edit",
+								submitType: "json",
+								formId: this.options.formId,
+								showSubmitButton: true,
+								showCancelButton: true,
+								args: JSON.stringify(this.options.args)
+							},
+							successCallback: {
+								fn: function (response) {
+									var container = Dom.get(me.id + "-body");
+									container.innerHTML = response.serverResponse.responseText;
+								}
+							},
+							failureMessage: "message.failure",
+							execScripts: true
+						});
+				}
 			},
 
 			onFormContentReady: function(layer, args) {
-					var submitButton = args[1].buttons.submit;
+				var submitButton = args[1].buttons.submit;
 				submitButton.set("label", this.msg("label.save"));
 
 				var cancelButton = args[1].buttons.cancel;

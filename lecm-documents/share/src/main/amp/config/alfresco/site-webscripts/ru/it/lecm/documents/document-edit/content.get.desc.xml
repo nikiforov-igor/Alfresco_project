@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>document-edit-content</shortname>
+    <description>document-edit-content</description>
+	<url>/lecm/documents/edit/content</url>
+	<format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>

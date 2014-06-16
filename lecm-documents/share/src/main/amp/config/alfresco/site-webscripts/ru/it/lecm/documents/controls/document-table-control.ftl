@@ -107,6 +107,8 @@
 					'${js}',
 				</#list>
 		    </#if>
+	        'scripts/lecm-base/components/advsearch.js',
+	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/documents/tables/lecm-document-table.js'
 		], drawForm);
