@@ -34,7 +34,9 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 	YAHOO.extend(LogicECM.module.Documents.Create, Alfresco.component.Base,
 		{
 			options: {
-				documentType: null
+				documentType: null,
+				formId: null,
+				args: {}
 			},
 
 			rootFolder: null,
@@ -63,7 +65,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				var me = this;
 				Alfresco.util.Ajax.request(
 					{
-						url: Alfresco.constants.URL_SERVICECONTEXT + "components/form",
+						url: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 						dataObj: {
 							htmlid: "document-create",
 							itemKind:"type",
@@ -71,8 +73,10 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 							destination: this.rootFolder,
 							mode: "create",
 							submitType:"json",
+							formId: this.options.formId,
 							showSubmitButton:true,
-							showCancelButton: true
+							showCancelButton: true,
+							args: JSON.stringify(this.options.args)
 						},
 						successCallback: {
 							fn: function (response) {

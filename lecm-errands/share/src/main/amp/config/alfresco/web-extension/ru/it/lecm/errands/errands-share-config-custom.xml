@@ -572,7 +572,9 @@
                         <control template="/org/alfresco/components/form/controls/hidden.ftl"/>
                     </field>
                     <field id="lecm-errands:additional-document-assoc" set="main">
-                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl"/>
+                        <control template="/ru/it/lecm/errands/controls/additional-document-assoc.ftl">
+	                        <control-param name="parentDocArg">parentDoc</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
