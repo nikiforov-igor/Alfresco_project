@@ -106,9 +106,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormSubmitFailure: function(response) {
+				var message = Alfresco.util.message("message.failure");
+				var regnumberDuplicateRegex = /REGNUMBER_DUPLICATE_EXCEPTION/;
+
+				if (regnumberDuplicateRegex.test(response.serverResponse.responseText)) {
+					message = "Документ с указанным регистрационным номером уже существует в системе! Сохранение невозможно.";
+				}
+
 				Alfresco.util.PopupManager.displayPrompt(
 					{
-						text: Alfresco.util.message("message.failure")
+						text: message
 					});
 			},
 

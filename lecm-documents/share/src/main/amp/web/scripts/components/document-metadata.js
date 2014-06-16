@@ -114,83 +114,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     });
             },
 
-            onEdit: function (containerId, formId, moveStartPage) {
-                // Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку редактирования)
-                if (docMetaOpening) {
-                    return;
-                }
-                docMetaOpening = true;
-                if (formId != undefined || formId != null) {
-                    this.options.formId = formId;
-                }
-                if (containerId != undefined || containerId != null) {
-                    this.options.containerId = containerId;
-                }
-                if (moveStartPage != undefined || moveStartPage != null) {
-                    this.options.moveStartPage = moveStartPage;
-                }
-                var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-	            var templateRequestParams = {
-		            itemKind: "node",
-		            itemId: this.options.nodeRef,
-		            formId: "NodeMetadata-" + this.id,
-		            mode: "edit",
-		            submitType: "json",
-		            showCancelButton: true
-	            };
-
-                new Alfresco.module.SimpleDialog("documentMetadata-" + this.id + "_results").setOptions({
-                    width: "84em",
-                    templateUrl: templateUrl,
-	                templateRequestParams: templateRequestParams,
-                    actionUrl: null,
-                    destroyOnHide: true,
-                    doBeforeDialogShow: {
-						scope: this,
-                        fn: function(p_form, p_dialog) {
-                            p_dialog.dialog.setHeader(this.msg("document.main.form.edit"));
-
-                            Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
-                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                            docMetaOpening = false;
-                        }
-                    },
-                    onSuccess: {
-                        scope: this,
-                        fn: function (response) {
-                            if (this.options.moveStartPage) {
-                                window.location.reload();
-                            } else {
-                                //формируем путь с параметрами. Осуществляем переход
-                                LogicECM.module.Base.Util.addUrlParam(location.search, 'view', 'main');
-                            }
-                        }
-                        },
-					onFailure: {
-						scope: this,
-						fn: function(response) {
-							var regnumberDuplicateRegex = /REGNUMBER_DUPLICATE_EXCEPTION/, errorMessage;
-
-							if (regnumberDuplicateRegex.test(response.serverResponse.responseText)) {
-								errorMessage = "Документ с указанным регистрационным номером уже существует в системе! Сохранение невозможно.";
-							} else {
-								errorMessage = "Не получилось сохранить документ";
-							}
-
-							Alfresco.util.PopupManager.displayPrompt({
-								title: "Ошибка сохранения документа",
-								text: errorMessage,
-								buttons: [{
-									text: "OK",
-									handler: function() {
-										this.destroy();
-									},
-									isDefault: true
-								}]
-							});
-						}
-                    }
-                }).show();
+            onEdit: function () {
+	            window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-edit?nodeRef=" + this.options.nodeRef;
             },
 
             refreshContainer: function (containerId, formId, response) {
