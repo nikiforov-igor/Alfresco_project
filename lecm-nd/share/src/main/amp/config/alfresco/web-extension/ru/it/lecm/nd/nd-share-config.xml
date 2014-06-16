@@ -11,7 +11,6 @@
         <forms>
             <form>
                 <field-visibility>
-                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <show id="lecm-document:title"/>
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-eds-document:summaryContent"/>
@@ -20,30 +19,11 @@
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-nd:begin-date" mandatory="true"/>
                     <show id="lecm-nd:end-date" mandatory="true"/>
+	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <set id="common"/>
-                    <set id="nd0" parent="common" template="/ru/it/lecm/base-share/components/preview-set.ftl"/>
-
-                    <set id="nd1" parent="nd0" />
-                    <set id="nd2" parent="nd0" />
-
-                    <set id="nd3" parent="nd2"/>
-                    <set id="nd41" parent="nd2"/>
-                    <set id="nd42" parent="nd2"/>
-                    <set id="nd5" parent="nd2"/>
-                    <set id="dates" parent="nd2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-                    <set id="nd7" parent="nd2"/>
-                    <set id="nd8" parent="nd2"/>
-
-                    <field id="lecm-document-aspects:attachments-temp-assoc" set="nd1">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl">
-                            <control-param name="directoryName">Документ</control-param>
-                            <control-param name="uploadDirectoryPath">{usertemp}</control-param>
-                        </control>
-                    </field>
-                    <field id="lecm-document:title" label="Заголовок" set="nd3"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="nd41">
+                    <field id="lecm-document:title" label="Заголовок"/>
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -52,7 +32,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" set="nd42" mandatory="true">
+                    <field id="lecm-document-aspects:additional-organization-unit-assoc" label="Подразделения" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
                             <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -61,29 +41,37 @@
                             <control-param name="endpointType">lecm-orgstr:organization-unit</control-param>
                         </control>
                     </field>
-                    <field id="lecm-eds-document:summaryContent" label="Содержание" set="nd5">
+                    <field id="lecm-eds-document:summaryContent" label="Содержание">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates" mandatory="true">
+                    <field id="lecm-nd:begin-date" label="Дата начала действия" mandatory="true">
                         <constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
 						</constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
-                    <field id="lecm-nd:end-date" label="Дата окончания действия" set="dates" mandatory="true">
+                    <field id="lecm-nd:end-date" label="Дата окончания действия" mandatory="true">
                         <constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
 						</constraint-handlers>
                         <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
                     </field>
-                    <field id="lecm-eds-document:note" label="Примечание" set="nd7">
+                    <field id="lecm-eds-document:note" label="Примечание">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-document:subject-assoc" label="Тематика" set="nd8"/>
+                    <field id="lecm-document:subject-assoc" label="Тематика"/>
+
+	                <field id="lecm-document-aspects:attachments-temp-assoc">
+		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
+			                <control-param name="directoryName">Вложения</control-param>
+			                <control-param name="suppressRefreshEvent">true</control-param>
+		                </control>
+	                </field>
                 </appearance>
             </form>
 
