@@ -171,8 +171,6 @@
 					<show id="lecm-arm:counter-limitation" force="true"/>
 					<show id="lecm-arm:counter-description" force="true"/>
 					<show id="lecm-arm:node-child-rule-assoc" force="true"/>
-					<show id="lecm-arm:is-select-by-activeTasks"/>
-					<show id="lecm-arm:activeTasks-filter"/>
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
@@ -199,11 +197,6 @@
 							<control-param name="fullDelete">true</control-param>
 						</control>
 					</field>
-                    <field id="lecm-arm:is-select-by-activeTasks">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
-                            <control-param name="disabledFieldsIfNotSelect">lecm-arm:activeTasks-filter</control-param>
-                        </control>
-                    </field>
 					<field id="lecm-arm:is-aggregation-node">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl">
 							<control-param name="disabledFieldsIfSelect">lecm-arm:search-query</control-param>

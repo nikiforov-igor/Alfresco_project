@@ -293,9 +293,7 @@
         <property name="storeUrl">
             <value>${spaces.store}</value>
         </property>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="notificationsService" ref="notificationsService"/>
-        <property name="workCalendarService" ref="WorkCalendarService"/>
+        <property name="processorService" ref="searchQueryProcessorService"/>
     </bean>
 
 	<bean id="webscript.ru.it.lecm.config.repoShareConfig.get"
@@ -426,5 +424,34 @@
 	</bean>
 
     <bean id="webscript.ru.it.lecm.js-helper.getCompletion.get" class="ru.it.lecm.base.scripts.JSCompletionHelper" parent="webscript">
+    </bean>
+
+    <bean id="searchQueryProcessorService" class="ru.it.lecm.base.beans.SearchQueryProcessorServiceImpl">
+        <property name="processorManager" ref="searchQueryProcessorManager"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="notificationsService" ref="notificationsService"/>
+        <property name="workCalendarService" ref="WorkCalendarService"/>
+    </bean>
+
+    <bean id="searchQueryProcessorManager" class="ru.it.lecm.base.beans.SearchQueryProcManager"/>
+
+    <bean id="searchQueryBaseProccesor" init-method="register" abstract="true"
+          class="ru.it.lecm.base.beans.SearchQueryProcessor">
+        <property name="nodeService" ref="nodeService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="authService" ref="authenticationService"/>
+        <property name="processorManager" ref="searchQueryProcessorManager"/>
+    </bean>
+
+    <bean id="favouritesProcessor" class="ru.it.lecm.base.processors.FavouritesProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="FAVOURITES"/>
+        <property name="preferenceService" ref="preferenceService"/>
+    </bean>
+
+    <bean id="searchQueryProcessorWebScript" parent="baseScript" class="ru.it.lecm.base.scripts.SearchQueryProcessorScript">
+        <property name="extensionName">
+            <value>searchQueryProcessor</value>
+        </property>
+        <property name="processorService" ref="searchQueryProcessorService"/>
     </bean>
 </beans>

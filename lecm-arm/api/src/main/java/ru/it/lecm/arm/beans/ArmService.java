@@ -157,8 +157,6 @@ public interface ArmService {
 	 */
 	public ArmBaseChildRule getNodeChildRule(NodeRef node);
 
-    public String getActiveWorkflowsQuery(NodeRef node);
-
 	/**
 	 * Агрегировать поисковый запрос для узла
 	 * @param nodeRef Узел

@@ -182,23 +182,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setTypes(getNodeTypes(nodeRef));
 
         String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
-        String workflowQuery = service.getActiveWorkflowsQuery(nodeRef);
-        if (searchQuery != null || workflowQuery != null) {
-            StringBuilder sb = new StringBuilder();
-            if (searchQuery != null) {
-                sb.append(searchQuery);
-            }
-            if (workflowQuery != null && workflowQuery.length() > 0) {
-                boolean wrapBrackets = sb.length() > 0;
-                if (wrapBrackets) {
-                    sb.append(" AND (");
-                }
-                sb.append(workflowQuery);
-                if (wrapBrackets) {
-                    sb.append(")");
-                }
-            }
-            node.setSearchQuery(sb.toString());
+        if (searchQuery != null) {
+            node.setSearchQuery(searchQuery);
         }
         node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
 

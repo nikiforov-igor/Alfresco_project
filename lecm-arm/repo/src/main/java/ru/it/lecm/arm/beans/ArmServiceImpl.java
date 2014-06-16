@@ -307,36 +307,6 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		return null;
 	}
 
-    @Override
-    public String getActiveWorkflowsQuery(NodeRef node) {
-        String result = null;
-        Object isFilterObj = nodeService.getProperty(node, ArmService.PROP_IS_SELECT_BY_ACTIVE_TASKS);
-        boolean isFilterByActiveTasks = isFilterObj != null ? (Boolean) isFilterObj : false;
-        if (isFilterByActiveTasks) {
-            StringBuilder sb = new StringBuilder();
-            Set<String> filterTasks = null;
-            Object tasksFilterObj = nodeService.getProperty(node, ArmService.PROP_ACTIVE_TASKS_FILTER);
-            if (tasksFilterObj != null) {
-                filterTasks = new HashSet<String>();
-                String[] tasksIds = tasksFilterObj.toString().split(",");
-                for (String taskId : tasksIds) {
-                    if (!taskId.isEmpty()) {
-                        filterTasks.add(taskId.trim());
-                    }
-                }
-            }
-            List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks);
-            for (NodeRef document : documents) {
-                sb.append("ID:\"").append(document.toString()).append("\" OR ");
-            }
-
-            sb.append("ID:\"NOT_REF\""); // выключать поиск, если документы не найдены
-
-            result = sb.toString();
-        }
-        return result;
-    }
-
 	public void aggregateNode(NodeRef nodeRef) {
 		if (isArmAccordion(nodeRef) || isArmNode(nodeRef)) {
 			Boolean isAggregationNode = (Boolean) nodeService.getProperty(nodeRef, ArmService.PROP_IS_AGGREGATION_NODE);

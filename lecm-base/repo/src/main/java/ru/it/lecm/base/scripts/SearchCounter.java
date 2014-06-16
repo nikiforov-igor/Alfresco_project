@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -34,24 +35,15 @@ public class SearchCounter extends BaseScopableProcessorExtension {
 
     protected ServiceRegistry services;
     protected StoreRef storeRef;
-    private OrgstructureBean orgstructureService;
-    private NotificationsService notificationsService;
-    private IWorkCalendar workCalendarService;
+
+    private SearchQueryProcessorService processorService;
 
     public void setServiceRegistry(ServiceRegistry services) {
         this.services = services;
     }
 
-    public void setOrgstructureService(OrgstructureBean orgstructureService) {
-        this.orgstructureService = orgstructureService;
-    }
-
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
-    }
-
-    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
-        this.workCalendarService = workCalendarService;
+    public void setProcessorService(SearchQueryProcessorService processorService) {
+        this.processorService = processorService;
     }
 
     public void setStoreUrl(String storeRef) {
@@ -110,16 +102,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 sp.addStore(store != null ? new StoreRef(store) : this.storeRef);
                 sp.setLanguage(language != null ? language : SearchService.LANGUAGE_LUCENE);
 
-
-                // обработка спец-выражений
-                if (query.contains("#current-user")) {
-                    query = query.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
-                }
-                if (query.contains("#current-date")) {
-                    int limitDays = notificationsService.getSettingsNDays();
-                    Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-                    query = query.replaceAll("#current-date", BaseBean.DateFormatISO8601.format(nextWorkDate));
-                }
+                query = processorService.processQuery(query);
 
                 sp.setQuery(query);
                 if (namespace != null) {
@@ -210,14 +193,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
 
         if (additionalQuery != null && !additionalQuery.isEmpty()) {
             // обработка спец-выражений
-            if (additionalQuery.contains("#current-user")) {
-                additionalQuery = additionalQuery.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
-            }
-            if (additionalQuery.contains("#current-date")) {
-                int limitDays = notificationsService.getSettingsNDays();
-                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-                additionalQuery = additionalQuery.replaceAll("#current-date", BaseBean.DateFormatISO8601.format(nextWorkDate));
-            }
+            additionalQuery = processorService.processQuery(additionalQuery);
 
             queryBuffer.append("(").append(additionalQuery).append(")");
         }

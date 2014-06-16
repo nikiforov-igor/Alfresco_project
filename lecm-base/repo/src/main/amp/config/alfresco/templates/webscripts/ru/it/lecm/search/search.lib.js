@@ -364,17 +364,8 @@ function getSearchResults(params) {
             ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' ' + query + ')';
         }
 
-        //спец сочетания
-        if (ftsQuery.indexOf("#current-user") >= 0) {
-            var employeeRef = orgstructure.getCurrentEmployee().getNodeRef().toString();
-            ftsQuery = ftsQuery.split("#current-user").join(employeeRef);
-        }
-
-        if (ftsQuery.indexOf("#current-date") >= 0) {
-            var nDays = notifications.getSettingsNDays();
-            var limitDate = workCalendar.getNextWorkingDateByDays(new Date(), nDays);
-            ftsQuery = ftsQuery.split("#current-date").join(base.dateToISOString(limitDate));
-        }
+        // обработка запроса процессорами
+        ftsQuery = searchQueryProcessor.processQuery(ftsQuery);
 
         if (logger.isLoggingEnabled())
             logger.log("Query:\r\n" + ftsQuery + "\r\nSortby: " + (sort != null ? sort : ""));
