@@ -180,14 +180,4 @@
         <property name="propertiesService" ref="propertiesService"/>
         <property name="policyComponent" ref="policyComponent"/>
     </bean>
-
-	<bean id="${groupId}.${artifactId}.serviceContractorsDictionariesPermissions" parent="ServiceFolderPermissionHelper"
-	      depends-on="serviceDictionary" >
-		<property name="serviceBean" ref="serviceDictionary"/>
-		<property name="permissionsList">
-			<list>
-				<value>alfresco/module/${artifactId}/permissions/dictionaries-permissions.xml</value>
-			</list>
-		</property>
-	</bean>
 </beans>
