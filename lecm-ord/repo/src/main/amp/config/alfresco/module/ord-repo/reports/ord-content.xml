@@ -88,7 +88,7 @@
                             <item name="cm:ФИО" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[ФИО]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[_____________/{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}]]></property>
+                                    <![CDATA[_____________/{lecm-orgstr:employee-short-name}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-signer-fio]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <assocs>
@@ -134,7 +134,7 @@
                             <item name="cm:ФИО Ответственного" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[ФИО Ответственного]]></property>
                                 <property name="lecm-rpeditor:dataColumnExpression">
-                                    <![CDATA[Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-last-name}]]></property>
+                                    <![CDATA[Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-short-name}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-assignee]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                                 <assocs>
@@ -178,7 +178,7 @@
                             </item>
                             <item name="cm:Инфо" type="lecm-rpeditor:reportDataColumn">
                                 <property name="cm:name"><![CDATA[Инфо]]></property>
-                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-ord-table-structure:item-content}. Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-last-name}
+                                <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-ord-table-structure:item-content}. Ответственный: {lecm-ord-table-structure:executor-assoc/lecm-orgstr:employee-short-name}
 Срок исполнения {lecm-ord-table-structure:execution-date?dd-MM-yyyy}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ord-item-info]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
