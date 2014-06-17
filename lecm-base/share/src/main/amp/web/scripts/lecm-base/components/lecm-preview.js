@@ -33,10 +33,6 @@ LogicECM.control = LogicECM.control || {};
 		{
 			flashUploaderWasShow: true,
 
-			onReady:function () {
-				var i = 1 + 2;
-			},
-
 			showPreview: function (event, args) {
 				if (args != null && args[1] != null && args[1].nodeRef != null) {
 					var me = this;

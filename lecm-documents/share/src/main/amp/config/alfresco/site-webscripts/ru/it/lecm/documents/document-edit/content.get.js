@@ -1,5 +1,5 @@
 function main() {
-	var args = {};
+	var urlArgs = {};
 	var nodeRef = "";
 	var formId = "";
 	for (var prop in page.url.args) {
@@ -8,20 +8,25 @@ function main() {
 		} else if (prop == "formId") {
 			formId = page.url.args[prop];
 		} else {
-			args[prop] = page.url.args[prop];
+			urlArgs[prop] = page.url.args[prop];
 		}
 	}
 
-	var widget = {
+	var documentEdit = {
 		name : "LogicECM.module.Documents.Edit",
 		options : {
 			nodeRef : nodeRef,
 			formId : formId,
-			args : args
+			args : urlArgs
 		}
 	};
 
-	model.widgets = [widget];
+	var documentPreview = {
+		name : "LogicECM.control.Preview",
+		initArgs: ["\"" + args["htmlid"] + "-preview\"" ]
+	};
+
+	model.widgets = [documentEdit, documentPreview];
 }
 
 main();
