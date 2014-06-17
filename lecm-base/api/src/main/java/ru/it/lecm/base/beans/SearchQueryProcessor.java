@@ -53,8 +53,9 @@ public abstract class SearchQueryProcessor {
         PropertyCheck.mandatory(this, "namespaceService", namespaceService);
         PropertyCheck.mandatory(this, "authService", authService);
         PropertyCheck.mandatory(this, "nodeService", nodeService);
+        PropertyCheck.mandatory(this, "processorManager", processorManager);
 
-        if (id != null) {
+        if (id != null && !id.isEmpty()) {
             processorManager.resisterProcessor(this);
         }
     }

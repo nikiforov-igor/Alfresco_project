@@ -38,7 +38,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
         Set<String> filterTasks = null;
-        Object tasksFilter = params.get("tasks");
+        Object tasksFilter = params != null ? params.get("tasks") : null;
         if (tasksFilter != null) {
             filterTasks = new HashSet<>();
             if (tasksFilter instanceof JSONArray) {

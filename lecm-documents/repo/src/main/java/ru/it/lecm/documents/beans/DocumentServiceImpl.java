@@ -25,16 +25,15 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.extensions.surf.util.I18NUtil;
 import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.SearchQueryProcessorService;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.expression.Expression;
-import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -49,7 +48,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     private OrgstructureBean orgstructureService;
     private BusinessJournalService businessJournalService;
-    private Repository repositoryHelper;
     private NamespaceService namespaceService;
     private DictionaryService dictionaryService;
     private LecmPermissionService lecmPermissionService;
@@ -58,8 +56,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     private DocumentAttachmentsService documentAttachmentsService;
     private CopyService copyService;
     private ApplicationContext applicationContext;
-    private NotificationsService notificationsService;
-    private IWorkCalendar workCalendarService;
+    private SearchQueryProcessorService processorService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -78,10 +75,6 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         this.businessJournalService = businessJournalService;
     }
 
-    public void setRepositoryHelper(Repository repositoryHelper) {
-        this.repositoryHelper = repositoryHelper;
-    }
-
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
@@ -98,12 +91,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         this.searchService = searchService;
     }
 
-    public void setNotificationsService(NotificationsService notificationsService) {
-        this.notificationsService = notificationsService;
-    }
-
-    public void setWorkCalendarService(IWorkCalendar workCalendarService) {
-        this.workCalendarService = workCalendarService;
+    public void setProcessorService(SearchQueryProcessorService processorService) {
+        this.processorService = processorService;
     }
 
     @Override
@@ -443,15 +432,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
         if (filterQuery != null && filterQuery.length() > 0) {
             // обработка спец-выражений
-            if (filterQuery.contains("#current-user")) {
-                filterQuery = filterQuery.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
-            }
-            if (query.contains("#current-date")) {
-                int limitDays = notificationsService.getSettingsNDays();
-                Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-                filterQuery = filterQuery.replaceAll("#current-date", DateFormatISO8601.format(nextWorkDate));
-            }
-
+            filterQuery = processorService.processQuery(filterQuery);
             query += (query.length() > 0 ? " AND (" : "(") + filterQuery + ") ";
         }
 

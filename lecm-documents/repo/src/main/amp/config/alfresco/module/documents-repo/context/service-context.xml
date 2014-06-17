@@ -113,7 +113,6 @@
           parent="baseBean"
           depends-on="transactionService, nodeService, serviceOrgstructure">
         <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="businessJournalService" ref="businessJournalService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
@@ -122,6 +121,7 @@
         <property name="searchService" ref="searchService"/>
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="copyService" ref="copyService"/>
+        <property name="processorService" ref="searchQueryProcessorService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"

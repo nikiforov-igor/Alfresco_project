@@ -19,11 +19,13 @@ import java.util.regex.Pattern;
  */
 public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorService {
     private final static Logger logger = LoggerFactory.getLogger(SearchQueryProcessorServiceImpl.class);
+    public static final String CURRENT_USER = "#current-user";
+    public static final String CURRENT_DATE = "#current-date";
 
-    private Pattern processorPattern = Pattern.compile("[{]{2}.+?[}]{2}");
+    private final Pattern PROC_PATTERN = Pattern.compile("[{]{2}.+?[}]{2}");
 
-    final String OPEN_PARAM_SYMBOL = "(";
-    final String CLOSE_PARAM_SYMBOL = ")";
+    private final String OPEN_PARAM_SYMBOL = "(";
+    private final String CLOSE_PARAM_SYMBOL = ")";
 
     private SearchQueryProcManager processorManager;
     private OrgstructureBean orgstructureService;
@@ -48,32 +50,44 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
 
     @Override
     public String processQuery(String query) {
-        Matcher m = Pattern.compile("[{]{2}.+?[}]{2}").matcher(query);
+        Matcher m = PROC_PATTERN.matcher(query);
         while (m.find()) {
             String groupText = m.group();
             String params = getParamsStr(groupText);
-            int lastIndex = groupText.length() - 2; // - }} size
+            int lastIndex = groupText.length() - (CLOSE_PARAM_SYMBOL.length() * 2); // - }} size
             if (params != null && !params.isEmpty()) {
-                lastIndex = groupText.indexOf(params) - 1; // - ( size
+                lastIndex = groupText.indexOf(params) - OPEN_PARAM_SYMBOL.length(); // - ( size
             }
             String processorId = groupText.substring(2, lastIndex);
             query = query.replace(groupText, "(" + getProcessorQuery(processorId, params) + ")");
         }
 
         // обработка спец-выражений
-        if (query.contains("#current-user")) {
-            query = query.replaceAll("#current-user", orgstructureService.getCurrentEmployee().toString());
+        if (query.contains(CURRENT_USER)) {
+            query = query.replaceAll(CURRENT_USER, orgstructureService.getCurrentEmployee().toString());
         }
-        if (query.contains("#current-date")) {
+        if (query.contains(CURRENT_DATE)) {
             int limitDays = notificationsService.getSettingsNDays();
             Date nextWorkDate = workCalendarService.getNextWorkingDate(new Date(), limitDays, Calendar.DAY_OF_MONTH);
-            query = query.replaceAll("#current-date", BaseBean.DateFormatISO8601.format(nextWorkDate));
+            query = query.replaceAll(CURRENT_DATE, BaseBean.DateFormatISO8601.format(nextWorkDate));
         }
         return query;
     }
 
     @Override
     public String getProcessorQuery(String id, String params) {
+        Map<String, Object> paramsMap = getParametersMap(params);
+
+        SearchQueryProcessor processor = processorManager.getProcessorById(id);
+        if (processor != null) {
+            return processor.getQuery(paramsMap);
+        } else {
+            logger.debug("Search Query Processor with id= " + id + " not found. Return empty string query!");
+        }
+        return "";
+    }
+
+    private Map<String, Object> getParametersMap(String params) {
         Map<String, Object> paramsMap = new HashMap<>();
         if (params != null) {
             try {
@@ -88,14 +102,7 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
                 logger.error(ex.getMessage(), ex);
             }
         }
-
-        SearchQueryProcessor processor = processorManager.getProcessorById(id);
-        if (processor != null) {
-            return processor.getQuery(paramsMap);
-        } else {
-            logger.debug("Search Query Processor with id= " + id + " not found. Return empty string query!");
-        }
-        return "";
+        return paramsMap;
     }
 
     private String getParamsStr(String processorText) {
