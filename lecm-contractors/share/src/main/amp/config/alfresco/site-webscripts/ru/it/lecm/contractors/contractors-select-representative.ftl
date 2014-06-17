@@ -75,6 +75,7 @@
         "use strict";
 
         var globCurrentContractor = null; // Глобальная переменная модуля для сохранения выбранного контрагента.
+	    var addRepresentativeButton = null;
 
         LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor( fieldHtmlId ) {
 
@@ -245,8 +246,14 @@
 
             this.onFormFieldReady = function( that ) {
 
-                var addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button", { onclick: { fn: that._showAddRepresentativeForm, scope: that } } );
-                    window.arb = addRepresentativeButton;
+	            addRepresentativeButton = new YAHOO.widget.Button( "${controlId}-add-new-representative-button",
+		                {
+			                onclick: { fn: that._showAddRepresentativeForm, scope: that },
+			                disabled: true
+		                }
+                );
+
+                window.arb = addRepresentativeButton;
 
                 // Собираем Input-элементы.
                 var currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
@@ -287,7 +294,30 @@
             previousSelected: null,
             _firstSelected: null,
 
-            onUpdateRepresentativesList: function( type, args, force, representativeToSelect ) {
+	        checkAddChildPermission: function(nodeRef) {
+		        if (nodeRef != null) {
+			        Alfresco.util.Ajax.jsonGet(
+					        {
+						        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/security/api/getPermission?nodeRef=" + encodeURIComponent(nodeRef) + "&permission=" + encodeURIComponent("AddChildren"),
+						        successCallback:
+						        {
+							        fn: function (response) {
+								        var oResults = response.json;
+								        if (oResults != null) {
+									        if (addRepresentativeButton != null) {
+										        addRepresentativeButton.set("disabled", !oResults);
+									        }
+//								        globCurrentContractor.testFail("fail");
+								        }
+							        },
+							        scope: this
+						        },
+						        failureMessage: "message.failure"
+					        });
+		        }
+	        },
+
+	        onUpdateRepresentativesList: function( type, args, force, representativeToSelect ) {
 
                 var selectElement = YAHOO.util.Dom.get( "${selectId}" ),
                     currentInputEl = YAHOO.util.Dom.get( "${controlId}" ),
@@ -319,6 +349,8 @@
 
                 selectElement.disabled = false;
                 selectedContractor = globCurrentContractor = selectedContractors[0];
+
+		        this.checkAddChildPermission(globCurrentContractor);
 
                 // Событие на которое мы подписываем этот обработчик вызывается 3+ раз за один "выбор" контрагента, а
 				// заполнять список адресантов необходимо только один раз.

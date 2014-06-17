@@ -187,6 +187,7 @@
             ignoreNodes: "${args.ignoreNodes}".split(","),
 	    </#if>
         showCreateNewLink: ${showCreateNewLink?string},
+	    showCreateNewButton: ${showCreateNewButton?string},
 		<#if field.control.params.createNewMessage??>
 			createNewMessage: "${field.control.params.createNewMessage}",
 		<#elseif field.control.params.createNewMessageId??>

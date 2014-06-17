@@ -66,7 +66,8 @@ function main()
             type: resultNode.getTypeShort(),
             nodeRef: resultNode.getNodeRef().toString(),
             isLeaf: "" + !searchCounter.hasChildren(resultNode.getNodeRef().toString(), null),
-            isContainer: "" + resultNode.isContainer
+            isContainer: "" + resultNode.isContainer,
+	        hasPermAddChildren: lecmPermission.hasPermission(resultNode.nodeRef, "AddChildren")
         };
     }
     catch (e)

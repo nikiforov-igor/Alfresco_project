@@ -136,7 +136,10 @@ LogicECM.module = LogicECM.module || {};
                 if (!this.options.disabled && this.options.showCreateNewButton) {
                     this.createNewButton =  new YAHOO.widget.Button(
                         this.controlId + "-selectone-create-new-button",
-                        { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
+                        {
+	                        onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
+	                        disabled: true
+                        }
                     );
                 }
 
@@ -249,6 +252,9 @@ LogicECM.module = LogicECM.module || {};
                                     if (this.options.parentNodeRef === "") {
                                         this.options.parentNodeRef = oResults.nodeRef;
                                     }
+	                                if (this.options.showCreateNewButton && this.createNewButton != null) {
+		                                this.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+	                                }
                                 }
                             },
                             scope: this

@@ -7,7 +7,8 @@
 		type: "${b.type}",
 		nodeRef: "${b.nodeRef}",
 		isLeaf: ${b.isLeaf},
-        isContainer: ${b.isContainer}
+        isContainer: ${b.isContainer},
+		hasPermAddChildren: ${b.hasPermAddChildren?string}
 	}
 		<#if b_has_next>,</#if>
 	</#list>

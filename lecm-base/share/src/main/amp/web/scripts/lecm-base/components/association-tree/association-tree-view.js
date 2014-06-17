@@ -69,13 +69,17 @@ LogicECM.module = LogicECM.module || {};
 
         doubleClickLock: false,
 
+		canCreateNew: false,
+
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
 			ignoreNodesInTreeView: true,
 			prefixPickerId: null,
 
-            showCreateNewLink: true,
+            showCreateNewLink: false,
+
+			showCreateNewButton: false,
 
             setCurrentValue: true,
 
@@ -207,11 +211,13 @@ LogicECM.module = LogicECM.module || {};
 
 	            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
 
-                if (this.options.showCreateNewLink) {
+                if (this.options.showCreateNewButton) {
                     this.widgets.createNewButton =  new YAHOO.widget.Button(
 	                    this.options.prefixPickerId + "-tree-picker-create-new-button",
-                        { onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this } }
-                        );
+                        {
+	                        onclick: { fn: this.showCreateNewItemWindow, obj: null, scope: this },
+	                        disabled: true
+                        });
                 }
 
                 this.populateDataWithAllowedScript();
@@ -659,6 +665,7 @@ LogicECM.module = LogicECM.module || {};
                                         isLeaf:oResults.isLeaf,
                                         type:oResults.type,
                                         isContainer: oResults.isContainer,
+	                                    hasPermAddChildren: oResults.hasPermAddChildren,
                                         displayPath: oResults.displayPath,
                                         renderHidden:true
                                     };
@@ -674,11 +681,16 @@ LogicECM.module = LogicECM.module || {};
                                         {
                                             data: {
                                                 isContainer: true,
-                                                nodeRef: this.options.rootNodeRef
+                                                nodeRef: this.options.rootNodeRef,
+	                                            hasPermAddChildren: oResults.hasPermAddChildren
                                             }
                                         });
                                 }
                                 this._loadSelectedItems(this.options.clearFormsOnStart, true);
+
+	                            if (this.options.showCreateNewButton && this.widgets.createNewButton != null) {
+									this.widgets.createNewButton.set("disabled", !oResults.hasPermAddChildren);
+	                            }
                             }
                         },
                         scope: this
@@ -747,6 +759,7 @@ LogicECM.module = LogicECM.module || {};
                                     isLeaf:oResults[nodeIndex].isLeaf,
                                     type:oResults[nodeIndex].type,
                                     isContainer: oResults[nodeIndex].isContainer,
+	                                hasPermAddChildren: oResults[nodeIndex].hasPermAddChildren,
                                     renderHidden:true
                                 };
 
@@ -837,7 +850,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && (!me.isSearch || me.options.plane))
+                    if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && me.currentNode.data.hasPermAddChildren && (!me.isSearch || me.options.plane))
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -1142,7 +1155,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
                 this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && (!this.isSearch || this.options.plane))
+                if (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane))
                 {
                     this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
                 }

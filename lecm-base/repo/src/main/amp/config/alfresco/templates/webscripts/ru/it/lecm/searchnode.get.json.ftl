@@ -5,6 +5,7 @@
         "type": "${resultNode.type}",
         "nodeRef": "${resultNode.nodeRef}",
         "isLeaf": ${resultNode.isLeaf},
-        "isContainer": ${resultNode.isContainer}
+        "isContainer": ${resultNode.isContainer},
+		"hasPermAddChildren": ${resultNode.hasPermAddChildren?string}
     }
 </#escape>
