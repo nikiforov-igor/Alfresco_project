@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 
@@ -41,6 +42,7 @@ public class DocumentWebScriptBean extends BaseWebScript {
     private static final Logger logger = LoggerFactory.getLogger(DocumentWebScriptBean.class);
 
     private DocumentService documentService;
+    private DocumentFrequencyAnalysisService documentFrequencyAnalysisService;
     private NodeService nodeService;
     private NamespaceService namespaceService;
     private DictionaryService dictionaryService;
@@ -50,6 +52,10 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
     public void setDocumentMembersService(DocumentMembersService documentMembersService) {
         this.documentMembersService = documentMembersService;
+    }
+
+    public void setDocumentFrequencyAnalysisService(DocumentFrequencyAnalysisService documentFrequencyAnalysisService) {
+        this.documentFrequencyAnalysisService = documentFrequencyAnalysisService;
     }
 
     public void setLecmTransactionHelper(LecmTransactionHelper lecmTransactionHelper) {
@@ -584,5 +590,19 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
         List<NodeRef> refs = documentService.getDocumentsByQuery(query, sort, skipCount, loadCount);
         return createScriptable(refs);
+    }
+
+    public boolean checkLastDocuments(ScriptNode document) {
+        return documentFrequencyAnalysisService.checkLastDocuments(document.getNodeRef());
+    }
+
+    public boolean saveToLastDocuments(ScriptNode document) {
+        try {
+            return documentFrequencyAnalysisService.saveToLastDocuments(document.getNodeRef());
+        } catch (WriteTransactionNeededException ignored) {
+        //ничего страшного, если не  запомнилось, просто логируем
+            logger.warn("Can not save {} to last documents");
+        }
+        return false;
     }
 }

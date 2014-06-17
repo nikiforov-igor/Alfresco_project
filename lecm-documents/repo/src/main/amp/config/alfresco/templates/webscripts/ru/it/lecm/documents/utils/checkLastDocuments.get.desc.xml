@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Есть ли документ в списке последних открытых пользователем?</shortname>
+    <description>Есть ли документ в списке последних открытых пользователем?</description>
+    <url>/lecm/documents/checkLastDocuments?nodeRef={nodeRef}</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>
