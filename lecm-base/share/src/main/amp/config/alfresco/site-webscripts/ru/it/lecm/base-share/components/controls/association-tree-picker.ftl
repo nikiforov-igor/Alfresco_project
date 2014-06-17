@@ -142,7 +142,9 @@
 (function() {
  	function init() {
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/association-tree/association-tree-view.js'
+            'scripts/lecm-base/components/association-tree/association-tree-view.js',
+            'modules/simple-dialog.js',
+            'jquery/jquery-1.6.2.js',
    		], createAssociationTreeViewer);
    	}
  	function createAssociationTreeViewer(){

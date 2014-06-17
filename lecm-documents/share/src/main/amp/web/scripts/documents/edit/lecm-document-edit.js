@@ -75,13 +75,17 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormContentReady: function(layer, args) {
-				var submitButton = args[1].buttons.submit;
-				submitButton.set("label", this.msg("label.save"));
+				if (args[1].parentId == this.id) {
+					var submitButton = args[1].buttons.submit;
+					submitButton.set("label", this.msg("label.save"));
 
-				var cancelButton = args[1].buttons.cancel;
-				if (cancelButton)
-				{
-					cancelButton.addListener("click", this.onCancelButtonClick, null, this);
+					var cancelButton = args[1].buttons.cancel;
+					if (cancelButton) {
+						cancelButton.addListener("click", this.onCancelButtonClick, null, this);
+					}
+
+					var previewHeight = Dom.getRegion(this.id + "-form-fields").height - 26;
+					Dom.setStyle(this.id + "-preview", "height", previewHeight.toString() + "px");
 				}
 			},
 
