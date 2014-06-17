@@ -324,6 +324,7 @@
 					<show id="lecm-arm:field-name" force="true"/>
 					<show id="lecm-arm:field-format-string" force="true"/>
 					<show id="lecm-arm:field-sortable" force="true"/>
+					<show id="lecm-arm:field-by-default" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>
@@ -337,6 +338,7 @@
 					<show id="lecm-arm:field-name" force="true"/>
 					<show id="lecm-arm:field-format-string" force="true"/>
 					<show id="lecm-arm:field-sortable" force="true"/>
+					<show id="lecm-arm:field-by-default" force="true"/>
 				</field-visibility>
 			</form>
 		</forms>

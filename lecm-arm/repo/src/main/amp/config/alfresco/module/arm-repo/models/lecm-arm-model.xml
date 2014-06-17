@@ -279,6 +279,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+                <!--Включить сортировку-->
+                <property name="lecm-arm:field-by-default">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
 			</properties>
 		</type>
 
