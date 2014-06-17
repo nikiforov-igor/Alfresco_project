@@ -6,6 +6,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.util.List;
@@ -18,10 +19,15 @@ import java.util.List;
 public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
 
     private LecmPermissionService lecmPermissionService;
+    private OrgstructureBean orgstructureService;
     private AuthenticationService authService;
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
         this.lecmPermissionService = lecmPermissionService;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 
     public void setAuthService(AuthenticationService authService) {
@@ -106,7 +112,7 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
      * @param roleName имя роли
      */
     public boolean hasEmployeeDynamicRole(ScriptNode document, ScriptNode employee, String roleName) {
-        return lecmPermissionService.hasEmployeeDynamicRole(document.getNodeRef(), employee.getNodeRef(), roleName);
+        return lecmPermissionService.hasEmployeeDynamicRole(document.getNodeRef(), orgstructureService.getEmployeeLogin(employee.getNodeRef()), roleName);
     }
 
     /**

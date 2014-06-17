@@ -67,6 +67,6 @@ public class ExpressionEmployee {
 	 * @return
 	 */
 	public boolean hasDynamicBusinessRole(NodeRef document, String roleName) {
-		return lecmPermissionService.hasEmployeeDynamicRole(document, employee, roleName);
+		return lecmPermissionService.hasEmployeeDynamicRole(document, orgstructureBean.getEmployeeLogin(employee), roleName);
 	}
 }

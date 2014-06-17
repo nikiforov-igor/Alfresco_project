@@ -302,11 +302,11 @@ public interface LecmPermissionService {
     /**
      * Проверка наличия прав чтения у документа для сотрудника
      * @param document документ
-     * @param employee сотрудник
+     * @param employeeLogin логин сотрудника
      * @param roleName имя роли
      * @return
      */
-    public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName);
+    public boolean hasEmployeeDynamicRole(NodeRef document, String employeeLogin, String roleName);
 
     /**
      * Список существующих прав для пользователя по отношению к документу

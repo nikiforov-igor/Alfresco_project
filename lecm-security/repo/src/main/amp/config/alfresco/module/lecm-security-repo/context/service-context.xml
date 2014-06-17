@@ -54,5 +54,6 @@
         </property>
         <property name="authService" ref="authenticationService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 </beans>

@@ -1,10 +1,12 @@
 package ru.it.lecm.security.beans;
 
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.security.permissions.PermissionReference;
 import org.alfresco.repo.security.permissions.impl.ModelDAO;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.*;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.extensions.surf.util.I18NUtil;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.Types;
 import ru.it.lecm.security.Types.SGPosition;
@@ -24,9 +27,6 @@ import ru.it.lecm.security.events.IOrgStructureNotifiers;
 import javax.naming.AuthenticationException;
 import javax.naming.InvalidNameException;
 import java.util.*;
-import org.alfresco.model.ContentModel;
-import org.alfresco.service.cmr.repository.AssociationRef;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 public class LecmPermissionServiceImpl
 		implements LecmPermissionService, InitializingBean
@@ -453,20 +453,22 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
-	public boolean hasEmployeeDynamicRole(NodeRef document, NodeRef employee, String roleName) {
-		final SGPrivateBusinessRole posBRME = Types.SGKind.getSGMyRolePos(employee.getId(), roleName);
-		final String authority = sgnm.makeSGName(posBRME);
+	public boolean hasEmployeeDynamicRole(NodeRef document, String employeeLogin, String roleName) {
+        Set<String> authoritiesForUser = authorityService.getAuthoritiesForUser(employeeLogin);
+        String authority = authorityService.getName(AuthorityType.GROUP, String.format("%s%s%s%s", Types.PFX_LECM, Types.SGKind.SG_BRME.getSuffix(), roleName, Types.SFX_PRIV4USER));
 
-		final Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
-		if (status != null) {
-			for (AccessPermission permission : status) {
-				if (permission.getAccessStatus() == AccessStatus.ALLOWED && permission.getAuthority().equals(authority)) {
-					return true; // FOUND
-				}
-			}
-		}
-		return false;// NOT FOUND
-	}
+        final Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
+        if (status != null) {
+            for (AccessPermission permission : status) {
+                if (permission.getAccessStatus() == AccessStatus.ALLOWED && permission.getAuthority().startsWith(authority)) {
+                    if (authoritiesForUser.contains(permission.getAuthority())) {
+                        return true; // FOUND
+                    }
+                }
+            }
+        }
+        return false;// NOT FOUND
+    }
 
 
     @Override
