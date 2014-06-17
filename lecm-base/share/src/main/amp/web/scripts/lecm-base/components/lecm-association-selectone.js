@@ -201,13 +201,13 @@ LogicECM.module = LogicECM.module || {};
                     actionUrl:null,
                     destroyOnHide:true,
                     doBeforeDialogShow:{
-                        fn:this.setCreateNewFormDialogTitle
+                        fn: this.setCreateNewFormDialogTitle,
+	                    scope: this
                     },
                     onSuccess:{
                         fn:function (response) {
                             this.options.selectedValueNodeRef = response.json.persistedObject;
                             this.populateSelect();
-                            this.doubleClickLock = false;
                         },
                         scope:this
                     },
@@ -229,6 +229,7 @@ LogicECM.module = LogicECM.module || {};
 				}
 				p_dialog.dialog.setHeader(message);
 	            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+	            this.doubleClickLock = false;
             },
 
             _loadParentNode: function AssociationTreeViewer__loadRootNode() {
