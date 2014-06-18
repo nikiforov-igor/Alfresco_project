@@ -191,15 +191,22 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
             PagingResults<NodeRef> pageOfNodeInfos = null;
             FileFilterMode.setClient(FileFilterMode.Client.script);
             try {
-                pageOfNodeInfos = lecmObjectsService.list(getMembersFolderRef(document), TYPE_DOC_MEMBER, new ArrayList<FilterProp>(), sortProps, pageRequest);
+	            NodeRef membersFolder = getMembersFolderRef(document);
+	            if (membersFolder != null) {
+		            pageOfNodeInfos = lecmObjectsService.list(membersFolder, TYPE_DOC_MEMBER, new ArrayList<FilterProp>(), sortProps, pageRequest);
+	            }
+            } catch (Exception e) {
+	            logger.error("Error get members", e);
             } finally {
                 FileFilterMode.clearClient();
             }
 
-            List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
-            for (NodeRef ref : nodeInfos) {
-                results.add(ref);
-            }
+	        if (pageOfNodeInfos != null) {
+		        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+		        for (NodeRef ref : nodeInfos) {
+			        results.add(ref);
+		        }
+	        }
         }
         return results;
     }
