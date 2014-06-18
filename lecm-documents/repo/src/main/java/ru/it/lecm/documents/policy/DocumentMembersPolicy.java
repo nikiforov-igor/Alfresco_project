@@ -140,65 +140,67 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	@Override
     public void onCreateAssociation(AssociationRef nodeAssocRef) {
         NodeRef member = nodeAssocRef.getSourceRef();
-        NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
-        NodeRef docRef = nodeService.getPrimaryParent(folder).getParentRef();
-        NodeRef employee = nodeAssocRef.getTargetRef();
+		if (nodeService.exists(member)) {
+			NodeRef folder = nodeService.getPrimaryParent(member).getParentRef();
+			NodeRef docRef = nodeService.getPrimaryParent(folder).getParentRef();
+			NodeRef employee = nodeAssocRef.getTargetRef();
 
-        try {
-            // Выдача прав новому участнику
-            LecmPermissionService.LecmPermissionGroup pgGranting = documentMembersService.getMemberPermissionGroup(member);
-            lecmPermissionService.grantAccess(pgGranting, docRef, employee);
-            nodeService.setProperty(member, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
-        } catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
-            logger.error("Не удалось выдать права новому участнику!", ex);
-        }
-        try {
-            // сохранение ссылки на сотрудника-участника в документе
-            QName propertyRefQName = DocumentMembersService.PROP_DOC_MEMBERS;
+			try {
+				// Выдача прав новому участнику
+				LecmPermissionService.LecmPermissionGroup pgGranting = documentMembersService.getMemberPermissionGroup(member);
+				lecmPermissionService.grantAccess(pgGranting, docRef, employee);
+				nodeService.setProperty(member, DocumentMembersService.PROP_MEMBER_GROUP, pgGranting.toString());
+			} catch (Throwable ex) { // (!, RuSA, 2013/02/22) в политиках исключения поднимать наружу не предсказуемо может изменять поведение Alfresco
+				logger.error("Не удалось выдать права новому участнику!", ex);
+			}
+			try {
+				// сохранение ссылки на сотрудника-участника в документе
+				QName propertyRefQName = DocumentMembersService.PROP_DOC_MEMBERS;
 
-            Serializable oldValue = nodeService.getProperty(docRef, propertyRefQName);
-            String strOldValue = oldValue != null ? oldValue.toString() : "";
-            String refValue = employee.toString();
-            if (!strOldValue.contains(refValue)) {
-                if (!strOldValue.isEmpty()) {
-                    strOldValue += ";";
-                }
-                strOldValue += refValue;
-            }
-            nodeService.setProperty(docRef, propertyRefQName, strOldValue);
-        } catch (Throwable ex) {
-            logger.error("Не удалось сохранить ссылку на участника!", ex);
-        }
+				Serializable oldValue = nodeService.getProperty(docRef, propertyRefQName);
+				String strOldValue = oldValue != null ? oldValue.toString() : "";
+				String refValue = employee.toString();
+				if (!strOldValue.contains(refValue)) {
+					if (!strOldValue.isEmpty()) {
+						strOldValue += ";";
+					}
+					strOldValue += refValue;
+				}
+				nodeService.setProperty(docRef, propertyRefQName, strOldValue);
+			} catch (Throwable ex) {
+				logger.error("Не удалось сохранить ссылку на участника!", ex);
+			}
 //		TODO: Метод addMemberToUnit дёрагал метод getOrCreateDocMemberUnit,
 //		который был благополучно разделён. Поэтому сделаем проверку на существование
-		String type = nodeService.getType(docRef).toPrefixString(namespaceService).replaceAll(":", "_");
-		if(documentMembersService.getDocMembersUnit(type) == null) {
-			try {
-				documentMembersService.createDocMemberUnit(type);
-			} catch (WriteTransactionNeededException ex) {
-				throw new RuntimeException("Can't create DocMemberUnit");
+			String type = nodeService.getType(docRef).toPrefixString(namespaceService).replaceAll(":", "_");
+			if (documentMembersService.getDocMembersUnit(type) == null) {
+				try {
+					documentMembersService.createDocMemberUnit(type);
+				} catch (WriteTransactionNeededException ex) {
+					throw new RuntimeException("Can't create DocMemberUnit");
+				}
 			}
+			documentMembersService.addMemberToUnit(employee, docRef);
+
+			// уведомление
+			Boolean silent = (Boolean) nodeService.getProperty(member, DocumentMembersService.PROP_SILENT);
+			if (silent == null || !silent) {
+				Notification notification = new Notification();
+				ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
+				employeeList.add(employee);
+				notification.setRecipientEmployeeRefs(employeeList);
+				notification.setAuthor(authService.getCurrentUserName());
+				notification.setDescription("Вы приглашены как новый участник в документ " +
+						wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
+				notification.setObjectRef(docRef);
+				notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
+				notificationService.sendNotification(notification);
+			}
+
+			// Обновляем имя ноды
+			String newName = generateMemberNodeName(/*member*/nodeAssocRef.getSourceRef());
+			nodeService.setProperty(/*member*/nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
 		}
-        documentMembersService.addMemberToUnit(employee, docRef);
-
-        // уведомление
-        Boolean silent = (Boolean) nodeService.getProperty(member, DocumentMembersService.PROP_SILENT);
-        if (silent == null || !silent) {
-        Notification notification = new Notification();
-        ArrayList<NodeRef> employeeList = new ArrayList<NodeRef>();
-        employeeList.add(employee);
-        notification.setRecipientEmployeeRefs(employeeList);
-        notification.setAuthor(authService.getCurrentUserName());
-        notification.setDescription("Вы приглашены как новый участник в документ " +
-                wrapperLink(docRef, nodeService.getProperty(docRef, DocumentService.PROP_PRESENT_STRING).toString(), DOCUMENT_LINK_URL));
-        notification.setObjectRef(docRef);
-        notification.setInitiatorRef(orgstructureService.getCurrentEmployee());
-        notificationService.sendNotification(notification);
-        }
-
-        // Обновляем имя ноды
-        String newName = generateMemberNodeName(/*member*/nodeAssocRef.getSourceRef());
-        nodeService.setProperty(/*member*/nodeAssocRef.getSourceRef(), ContentModel.PROP_NAME, newName);
     }
 
     @Override
@@ -239,15 +241,18 @@ public class DocumentMembersPolicy extends BaseBean implements NodeServicePolici
 	public void onCreateNodeLog(ChildAssociationRef childAssocRef) {
 		NodeRef member = childAssocRef.getChildRef();
 		NodeRef folder = childAssocRef.getParentRef();
-		NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
 
-		NodeRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
-		final List<String> objects = Arrays.asList(employee.toString());
+		if (nodeService.exists(folder)) {
+			NodeRef document = nodeService.getPrimaryParent(folder).getParentRef();
 
-		// запись в БЖ
-		final String initiator = authService.getCurrentUserName();
-		if (!initiator.equals(orgstructureService.getEmployeeLogin(employee))) { // не создавать запись и уведомление для текущего пользователя
-			businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "#initiator пригласил(а) сотрудника #object1 в документ #mainobject", objects);
+			NodeRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0).getTargetRef();
+			final List<String> objects = Arrays.asList(employee.toString());
+
+			// запись в БЖ
+			final String initiator = authService.getCurrentUserName();
+			if (!initiator.equals(orgstructureService.getEmployeeLogin(employee))) { // не создавать запись и уведомление для текущего пользователя
+				businessJournalService.log(initiator, document, DocumentEventCategory.INVITE_DOCUMENT_MEMBER, "#initiator пригласил(а) сотрудника #object1 в документ #mainobject", objects);
+			}
 		}
 	}
 
