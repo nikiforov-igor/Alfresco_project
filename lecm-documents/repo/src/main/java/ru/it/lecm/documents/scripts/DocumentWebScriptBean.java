@@ -605,4 +605,20 @@ public class DocumentWebScriptBean extends BaseWebScript {
         }
         return false;
     }
+
+    /**
+     * Добавить документ в избранное
+     * @param document - ссылка на документ
+     */
+    public void addToFavourites(ScriptNode document) {
+        documentService.addToFavourites(document.getNodeRef());
+    }
+
+    /**
+     * Удалить документ из избранного
+     * @param document - ссылка на документ
+     */
+    public void removeFromFavourites(ScriptNode document) {
+        documentService.removeFromFavourites(document.getNodeRef());
+    }
 }

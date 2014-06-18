@@ -330,4 +330,16 @@ public interface DocumentService {
     List<NodeRef> getDocumentsByQuery(String query, List<SortDefinition> sort, int skipCount, int loadCount);
 
 	public String wrapAsDocumentLink(NodeRef documentRef);
+
+    /**
+     * Добавить документ в избранное
+     * @param document - - ссылка на документ
+     */
+    void addToFavourites(NodeRef document);
+
+    /**
+     * Удалить документ из избранного
+     * @param document - ссылка на документ
+     */
+    void removeFromFavourites(NodeRef document);
 }

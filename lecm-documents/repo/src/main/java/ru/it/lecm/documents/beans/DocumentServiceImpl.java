@@ -1,12 +1,12 @@
 package ru.it.lecm.documents.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.preference.PreferenceService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -57,6 +57,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     private CopyService copyService;
     private ApplicationContext applicationContext;
     private SearchQueryProcessorService processorService;
+    private PreferenceService preferenceService;
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
@@ -89,6 +90,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     public void setSearchService(SearchService searchService) {
         this.searchService = searchService;
+    }
+
+    public void setPreferenceService(PreferenceService preferenceService) {
+        this.preferenceService = preferenceService;
     }
 
     public void setProcessorService(SearchQueryProcessorService processorService) {
@@ -804,5 +809,43 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     public String wrapAsDocumentLink(NodeRef documentRef) {
         return wrapperLink(documentRef, (String) nodeService.getProperty(documentRef, PROP_EXT_PRESENT_STRING), DOCUMENT_LINK_URL);
+    }
+
+    @Override
+    public void addToFavourites(NodeRef document) {
+        String favourites = "org.alfresco.share.documents.favourites";
+        String currentUser = authService.getCurrentUserName();
+        Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
+        if (preferences != null) {
+            String favouriteDocs = preferences.get(favourites) != null ? preferences.get(favourites).toString() : null;
+            if (favouriteDocs != null) {
+                if (!favouriteDocs.contains(document.toString())) {
+                    favouriteDocs += "," + document.toString();
+                    preferences.put(favourites, favouriteDocs);
+                }
+            }
+        } else {
+            preferences = new HashMap<>();
+            preferences.put(favourites, document.toString());
+        }
+        preferenceService.setPreferences(currentUser, preferences);
+    }
+
+    @Override
+    public void removeFromFavourites(NodeRef document) {
+        String favourites = "org.alfresco.share.documents.favourites";
+        String currentUser = authService.getCurrentUserName();
+        Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
+        if (preferences != null) {
+            String favouriteDocs = preferences.get(favourites) != null ? preferences.get(favourites).toString() : null;
+            if (favouriteDocs != null) {
+                if (favouriteDocs.contains(document.toString())) {
+                    favouriteDocs = favouriteDocs.replace("," + document.toString(), "")
+                            .replace(document.toString(), "");
+                    preferences.put(favourites, favouriteDocs);
+                    preferenceService.setPreferences(currentUser, preferences);
+                }
+            }
+        }
     }
 }
