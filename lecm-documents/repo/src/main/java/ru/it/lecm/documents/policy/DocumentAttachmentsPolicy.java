@@ -116,7 +116,7 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 				new JavaBehaviour(this, "onAddAttachment"));
 		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
 				DocumentAttachmentsService.TYPE_CATEGORY, DocumentAttachmentsService.ASSOC_CATEGORY_ATTACHMENTS,
-				new JavaBehaviour(this, "onDeleteAttachmentAssoc"));
+				new JavaBehaviour(this, "onDeleteAttachmentAssoc", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	public void onCreateNode(ChildAssociationRef childAssocRef) {
@@ -308,9 +308,11 @@ public class DocumentAttachmentsPolicy extends BaseBean {
 		NodeRef attachment = nodeAssocRef.getTargetRef();
 		NodeRef category = nodeAssocRef.getSourceRef();
 
-		final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
-		if (document != null) {
-			onDeleteAttachment(attachment, document, this.documentAttachmentsService.getCategoryName(category));
+		if (nodeService.exists(category)) {
+			final NodeRef document = documentAttachmentsService.getDocumentByCategory(category);
+			if (document != null) {
+				onDeleteAttachment(attachment, document, this.documentAttachmentsService.getCategoryName(category));
+			}
 		}
 	}
 
