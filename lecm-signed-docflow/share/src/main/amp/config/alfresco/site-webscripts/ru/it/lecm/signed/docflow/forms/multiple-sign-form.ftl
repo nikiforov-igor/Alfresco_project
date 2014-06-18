@@ -6,7 +6,7 @@
 <#assign data = t?eval>
 <div id="${formContainerId}">
 <#if formUI == "true">
-    <@formLib.renderFormsRuntime formId = formId />
+	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 <#if t == '[]'>
 	<br/><strong>Нет подписываемых вложений</strong>
@@ -23,8 +23,5 @@
 	<br/>
 	</#list>
 </#list>
-      
 </@>
 </div>
-
-

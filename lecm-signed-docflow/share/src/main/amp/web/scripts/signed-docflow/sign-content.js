@@ -18,30 +18,16 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 	Alfresco.util.PopupManager.zIndex = 1000;
 
-	/**
-	 * YUI Library aliases
-	 */
-	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event;
-
-	/**
-	 * DocumentHistory constructor.
-	 *
-	 * @param {String} htmlId The HTML id of the parent element
-	 * @return {LogicECM.DocumentMembers} The new DocumentHistory instance
-	 * @constructor
-	 */
-	LogicECM.ContentSigning = function ContentSigning_constructor(htmlId) {
+	LogicECM.ContentSigning = function(htmlId) {
 		LogicECM.ContentSigning.superclass.constructor.call(this, htmlId);
 
 		return this;
 	};
 
-	YAHOO.extend(LogicECM.ContentSigning, LogicECM.DocumentComponentBase);
+	YAHOO.extend(LogicECM.ContentSigning, Alfresco.component.Base);
 
 	YAHOO.lang.augmentObject(LogicECM.ContentSigning.prototype, {
 		newId: null,
-
 		onReady: function() {
 			var id = this.newId ? this.newId : this.id;
 
@@ -49,7 +35,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 			Alfresco.util.createTwister(id + "-exchange-heading", "DocumentAttachmentExchange");
 
 		},
-
 		onViewSignature: function(event) {
 			var form = new Alfresco.module.SimpleDialog(this.id + "-signs-short-form");
 
@@ -66,8 +51,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					signedContentRef: this.options.nodeRef
 				},
 				destroyOnHide: true,
-				doBeforeDialogShow:{
-					fn: function( p_form, p_dialog ) {
+				doBeforeDialogShow: {
+					fn: function(p_form, p_dialog) {
 						p_dialog.dialog.setHeader("Просмотр информации о подписях");
 						p_form.doBeforeFormSubmit = {
 							fn: function() {
@@ -89,21 +74,21 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			form.show();
 		},
-
 		onSignDocument: function(event) {
 			CryptoApplet.signAction(this.options.nodeRef);
 		},
-
 		onRefreshSignatures: function(event) {
-			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {
+				successCallback: {
+					fn: this.onViewSignature,
+					scope: this
+				}
+			});
 		},
-
 		onUploadSignature: function(event) {
 			CryptoApplet.loadSignAction(this.options.nodeRef);
 		},
-
 		onSendDocument: function() {
-			var checkOptions = {};
 
 			function showForm() {
 				var form = new Alfresco.module.SimpleDialog(this.id + "-send-to-contractor-form");
@@ -121,7 +106,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					},
 					destroyOnHide: true,
 					contentRef: this.options.nodeRef,
-					doBeforeDialogShow:{
+					doBeforeDialogShow: {
 						fn: function(form, dialog) {
 							dialog.dialog.setHeader("Отправка контрагенту");
 						}
@@ -136,24 +121,27 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				});
 
 				form.show();
-			};
+			}
 
-			checkOptions.successCallback = {};
-			checkOptions.successCallback.fn = showForm;
-			checkOptions.successCallback.scope = this;
-
-			CryptoApplet.CheckSignaturesByNodeRefList(this.options.nodeRef, checkOptions);
-
+			CryptoApplet.CheckSignaturesByNodeRefList(this.options.nodeRef, {
+				successCallback: {
+					scope: this,
+					fn: showForm
+				}
+			});
 		},
-
 		onSignaturesReceived: function(event) {
-			CryptoApplet.updateSignsAction(this.options.nodeRef, {successCallback: {fn: this.onViewSignature, scope: this}});
-
+			CryptoApplet.updateSignsAction(this.options.nodeRef, {
+				successCallback: {
+					fn: this.onViewSignature,
+					scope: this
+				}
+			});
 		},
-
-		_bindAjaxTo: function ContentSigning_bindAjaxTo(method, url, dataObj, scope, signatureHandler) {
+		_bindAjaxTo: function(method, url, dataObj, scope, signatureHandler) {
 			var id = this.newId,
 				contentRef = this.options.nodeRef;
+
 			return function makeDataRequest() {
 
 				var loadingPopup = Alfresco.util.PopupManager.displayMessage({
@@ -182,7 +170,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 							loadingPopup.destroy();
 
 							// Выходим, если всё хорошо
-							if(result.gateResponse.responseType == "OK") {
+							if (result.gateResponse.responseType === "OK") {
 								if (result.signatures.length > 1) {
 									message = "Подписи успешно получены";
 								} else if (result.signatures.length) {
@@ -190,17 +178,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 								} else {
 									message = "Новых подписей нет";
 								}
-								loadingPopup = Alfresco.util.PopupManager.displayMessage({ text: message });
+								loadingPopup = Alfresco.util.PopupManager.displayMessage({text: message});
 								YAHOO.lang.later(2500, null, hideAndReload);
 
-								if(YAHOO.lang.isFunction(signatureHandler)) {
+								if (YAHOO.lang.isFunction(signatureHandler)) {
 									signatureHandler.call(scope || window, contentRef, result);
 								}
 
 								return;
 							}
 
-							if(result.gateResponse.responseType == "UNAUTHORIZED") {
+							if (result.gateResponse.responseType === "UNAUTHORIZED") {
 								// Показываем форму авторизации, в ином случае
 								authSimpleDialog = new Alfresco.module.SimpleDialog(id + "-auth-form");
 
@@ -217,14 +205,19 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 									},
 									actionUrl: null,
 									destroyOnHide: true,
-									doBeforeDialogShow:{
+									doBeforeDialogShow: {
 										fn: function(form, simpleDialog) {
 											simpleDialog.dialog.setHeader("Необходима аутентификация, выберите сертификат");
 										}
 									},
 									doBeforeAjaxRequest: {
 										fn: function() {
-												CryptoApplet.unicloudAuth({successCallback: {fn: makeDataRequest, scope: this}});
+											CryptoApplet.unicloudAuth({
+												successCallback: {
+													fn: makeDataRequest,
+													scope: this
+												}
+											});
 											return false;
 										}
 									},
@@ -258,7 +251,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				});
 			};
 		},
-
 		_loadSignaturesToRepo: function(contentRef, result) {
 			var i,
 				signatures = result.signatures,
@@ -269,12 +261,11 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			spanReceivedCount.innerHTML = signaturesLength;
 			iReadStateElem.addClass(result.isRead ? "icon-ok" : "icon-remove");
-			for(i = 0; i < signaturesLength; i++) {
+			for (i = 0; i < signaturesLength; i++) {
 				CryptoApplet.loadSignFromString(contentRef, signatures[i]);
 			}
 		},
-
-		_getSignedContentFromPartner: function ContentSigning_getSignedContentFromPartner(response) {
+		_getSignedContentFromPartner: function(response) {
 			//надо проверить что в response.json что-то есть, иначе послать лесом...
 			var interType = response.json.interactionType,
 				templateUrl = "lecm/signed-docflow/getSignedContentFromPartner?method={method}&nodeRef={nodeRef}",
@@ -283,9 +274,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 			if (YAHOO.lang.isValue(interType)) {
 				url = YAHOO.lang.substitute(templateUrl, {
-						method: interType,
-						nodeRef: this.options.nodeRef
-					});
+					method: interType,
+					nodeRef: this.options.nodeRef
+				});
 
 				makeDataRequest = this._bindAjaxTo("GET", url, {}, this, this._loadSignaturesToRepo);
 				makeDataRequest();
@@ -296,22 +287,28 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 				});
 			}
 		},
-
 		onRefreshSentDocuments: function(event) {
 
 			//получаем из ноды информацию по тому контрагенту с которым мы взаимодействуем
 			Alfresco.util.Ajax.jsonRequest({
 				url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/signed-docflow/getContractorInfoBySendedContent",
-				dataObj: { nodeRef: this.options.nodeRef },
-				successCallback: { fn: this._getSignedContentFromPartner, scope: this },
-				failureCallback: { fn: onFailureCallback }
+				dataObj: {
+					nodeRef: this.options.nodeRef
+				},
+				successCallback: {
+					fn: this._getSignedContentFromPartner,
+					scope: this
+				},
+				failureCallback: {
+					scope: this,
+					fn: function(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: "Не удалось получить данные по контрагенту для документа"
+						});
+					}
+				}
 			});
 
-			function onFailureCallback(response) {
-				Alfresco.util.PopupManager.displayMessage({
-					text: "Не удалось получить данные по контрагенту для документа"
-				});
-			}
 		}
 	}, true);
 })();

@@ -8,15 +8,15 @@
 		CryptoApplet.onReady();
 	}
 </script>
-<applet codebase="/share/scripts/signed-docflow"
-		code="ru.businesslogic.crypto.userinterface.CryptoApplet.class"
-		archive="/share/scripts/signed-docflow/ITStampApplet.jar"
-		name="signApplet"
-		width=1
-		height=1>
+
+<object type="application/x-java-applet" height="1" width="1" name="signApplet">
+	<param name="codebase" valu="/share/scripts/signed-docflow"/>
+	<param name="code" value="ru.businesslogic.crypto.userinterface.CryptoApplet.class" />
+	<param name="archive" value="/share/scripts/signed-docflow/ITStampApplet.jar" />
 	<param name="signOnLoad" value="false"/>
 	<param name="debug" value="true"/>
 	<param name="providerType" value="CSP_CRYPTOPRO"/>
 	<param name="doAfterLoad" value="true"/>
-</applet>
+</object>
+
 </#macro>

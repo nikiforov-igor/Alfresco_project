@@ -514,6 +514,21 @@
                             <nonFilteredFileExtension>jasper</nonFilteredFileExtension>
                             <nonFilteredFileExtension>odt</nonFilteredFileExtension>
                             <nonFilteredFileExtension>gen</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>jar</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>swf</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>bz2</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>gz</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>tar</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>rar</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>7z</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>acp</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>bin</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>doc</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>war</nonFilteredFileExtension>
+                            <nonFilteredFileExtension>ear</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
                 </plugin>

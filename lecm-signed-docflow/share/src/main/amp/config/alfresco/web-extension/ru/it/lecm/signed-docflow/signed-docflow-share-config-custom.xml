@@ -3,9 +3,6 @@
 
 	<config>
 		<forms>
-			<dependencies>
-				<js src="/scripts/signed-docflow/signs-all-form.js"/>
-			</dependencies>
 			<form id="signs-info-all">
 				<create-form template="/ru/it/lecm/signed/docflow/forms/signs-all-form.ftl"/>
 			</form>

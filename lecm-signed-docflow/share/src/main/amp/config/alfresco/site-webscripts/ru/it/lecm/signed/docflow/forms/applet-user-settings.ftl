@@ -13,7 +13,7 @@
 
 <div id="${formContainerId}">
 <#if formUI == "true">
-    <@formLib.renderFormsRuntime formId = formId />
+	<@formLib.renderFormsRuntime formId = formId />
 </#if>
 
 <@formLib.renderFormContainer formId = formId>

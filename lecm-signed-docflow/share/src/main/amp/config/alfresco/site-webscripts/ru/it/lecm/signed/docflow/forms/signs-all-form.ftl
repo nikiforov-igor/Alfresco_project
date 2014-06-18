@@ -60,8 +60,16 @@
 <@formLib.renderFormsRuntime formId = formId />
 
 <script type="text/javascript">
-	new LogicECM.module.SignsAllForm("${htmlId}", "${controlId}").setOptions({
-		"signedContentRef": "${signedContentRef}",
-		"refreshBeforeShow": false
+(function() {
+	LogicECM.module.Base.Util.loadScripts([
+		'scripts/signed-docflow/signs-all-form.js',
+		'scripts/lecm-base/third-party/knockout.js'
+		], function() {
+			new LogicECM.module.SignsAllForm("${htmlId}", "${controlId}").setOptions({
+				signedContentRef: "${signedContentRef}",
+				refreshBeforeShow: false
+			});
 	});
+
+})();
 </script>
