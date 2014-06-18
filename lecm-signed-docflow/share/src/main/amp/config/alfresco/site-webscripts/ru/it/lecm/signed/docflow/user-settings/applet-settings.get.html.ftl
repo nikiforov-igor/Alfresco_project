@@ -5,7 +5,7 @@
 <script type="text/javascript">
 (function() {
 	new LogicECM.AppletUserSettings("${el}").setMessages(${messages});
-});
+})();
 //]]></script>
 
 <div id="${el}-body" class="applet-user-settings">
