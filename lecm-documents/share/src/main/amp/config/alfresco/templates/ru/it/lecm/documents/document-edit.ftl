@@ -13,6 +13,10 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <div id="no_menu_page" class="sticky-wrapper">
 	<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
-		<@region id="content" scope="template"/>
+		<#if hasPermission>
+			<@region id="content" scope="template"/>
+		<#else>
+			<@region id="not-permission-header" scope="template"/>
+		</#if>
 	</@bpage.basePage>
 </div>
