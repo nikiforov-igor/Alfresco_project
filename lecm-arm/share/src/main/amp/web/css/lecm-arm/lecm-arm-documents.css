@@ -275,3 +275,30 @@ div.error-item
 .yui-dt-col-prop_lecm-document_regnum {
     white-space: nowrap;
 }
+
+#columnsForm .columns-list {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.filters-block .columns {
+    margin-left: 9px;
+    border: none;
+    background-color: transparent;
+    position: inherit;
+}
+
+.filters-block .columns {
+    border: 1px solid transparent;
+}
+.filters-block .columns.showed {
+    background-color: white;
+    border: 1px solid #aaa;
+    border-bottom: none;
+    position: relative;
+    z-index: 1000;
+}
+
+.filters-block .columns.showed button {
+    color: #333;
+}

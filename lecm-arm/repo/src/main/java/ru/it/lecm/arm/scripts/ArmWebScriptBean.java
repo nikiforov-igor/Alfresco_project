@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.*;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -11,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -21,7 +23,9 @@ import ru.it.lecm.arm.beans.ArmService;
 import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
 import ru.it.lecm.arm.filters.BaseQueryArmFilter;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.util.*;
@@ -232,6 +236,82 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
             logger.error(ex.getMessage(), ex);
         }
         return result;
+    }
+
+    /**
+     * Получение узла с настройками для узла АРМ
+     * @param armNode узел
+     */
+    public ScriptNode getNodeUserSettings(ScriptNode armNode) {
+        NodeRef settings = armService.getNodeUserSettings(armNode.getNodeRef());
+        return (settings == null) ? null : new ScriptNode(settings, serviceRegistry, getScope());
+    }
+
+    /**
+     * Создание узел с настройками для узла АРМ
+     * @param armNode узел
+     */
+    public ScriptNode createNodeUserSettings(ScriptNode armNode) {
+        NodeRef settings = null;
+        try {
+            settings = armService.createUserSettingsForNode(armNode.getNodeRef());
+        } catch (WriteTransactionNeededException e) {
+            logger.warn("Can not create user settings node");
+        }
+
+        return (settings == null) ? null : new ScriptNode(settings, serviceRegistry, getScope());
+    }
+
+    /**
+     * Возвращает список столбцов (объектов из репозитория, ScriptNode) для заданного узла АРМ
+     * @param armNode узел
+     */
+    @SuppressWarnings("unused")
+    public Scriptable getNodeColumns(ScriptNode armNode) {
+        List<NodeRef> columns = new ArrayList<>();
+        if (armNode != null) {
+            columns = armService.getNodeColumnsRefs(armNode.getNodeRef());
+        }
+        return createScriptable(columns);
+    }
+
+    /**
+     * Возвращает список столбцов (объектов из репозитория, ScriptNode) для заданного узла АРМ
+     * @param armNode узел
+     */
+    @SuppressWarnings("unused")
+    public boolean saveUserColumnsSet(final ScriptNode armNode, final String columnsToSavedJSON) {
+        final AuthenticationUtil.RunAsWork<Boolean> saveColumns = new AuthenticationUtil.RunAsWork<Boolean>() {
+            @Override
+            public Boolean doWork() throws Exception {
+                ScriptNode settingsNode = getNodeUserSettings(armNode);
+                if (settingsNode == null) {
+                    settingsNode = createNodeUserSettings(armNode);
+                }
+                if (settingsNode != null) {
+                    List<NodeRef> targetColumns = new ArrayList<>();
+                    try {
+                        JSONObject columnsSettings = new JSONObject(columnsToSavedJSON);
+                        JSONArray selectedColumnsArray = (JSONArray) columnsSettings.get("selected");
+                        for (int j = 0; j < selectedColumnsArray.length(); j++) {
+                            String columnRef = (String) selectedColumnsArray.get(j);
+                            if (NodeRef.isNodeRef(columnRef)) {
+                                targetColumns.add(new NodeRef(columnRef));
+                            }
+                        }
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+
+                    nodeService.setAssociations(settingsNode.getNodeRef(), ArmService.ASSOC_USER_NODE_COLUMNS, targetColumns);
+
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        return AuthenticationUtil.runAsSystem(saveColumns);
     }
 
     private JSONObject nativeObjectToJSON(NativeObject nativeObject) throws IOException {

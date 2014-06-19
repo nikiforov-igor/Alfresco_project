@@ -3,6 +3,7 @@ package ru.it.lecm.arm.beans;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,6 +47,7 @@ public interface ArmService {
 	public static final QName PROP_COLUMN_FIELD_NAME = QName.createQName(ARM_NAMESPACE_URI, "field-name");
 	public static final QName PROP_COLUMN_FORMAT_STRING = QName.createQName(ARM_NAMESPACE_URI, "field-format-string");
 	public static final QName PROP_COLUMN_SORTABLE = QName.createQName(ARM_NAMESPACE_URI, "field-sortable");
+	public static final QName PROP_COLUMN_BY_DEFAULT = QName.createQName(ARM_NAMESPACE_URI, "field-by-default");
 
 	public static final QName TYPE_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "query-child-rule");
 	public static final QName PROP_LIST_QUERY_CHILD_RULE = QName.createQName(ARM_NAMESPACE_URI, "list-query-child-rule");
@@ -66,6 +68,9 @@ public interface ArmService {
     public static final QName PROP_FILTER_VALUES = QName.createQName(ARM_NAMESPACE_URI, "filter-values");
     public static final QName PROP_FILTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "filter-query");
     public static final QName PROP_FILTER_MULTIPLE = QName.createQName(ARM_NAMESPACE_URI, "filter-multiple-select");
+
+    public static final QName TYPE_USER_SETTINGS= QName.createQName(ARM_NAMESPACE_URI, "user-settings");
+    public static final QName ASSOC_USER_NODE_COLUMNS = QName.createQName(ARM_NAMESPACE_URI, "user-fields-assoc");
 	/**
 	 * проверяет что объект является аккордионом
 	 */
@@ -150,6 +155,19 @@ public interface ArmService {
 	 */
 	public List<ArmColumn> getNodeColumns(NodeRef node);
 
+    /**
+     * Получение колонок узла (списка NodeRef)
+     * @param node Узел
+     * @return Объект с настройками счётчика
+     */
+    public List<NodeRef> getNodeColumnsRefs(NodeRef node);
+    /**
+     * Получение колонок узла для текущего пользователя из его настроек
+     * @param node Узел
+     * @return Объект с настройками счётчика
+     */
+    public List<ArmColumn> getUserNodeColumns(NodeRef node);
+
 	/**
 	 * Получение запроса для узла
 	 * @param node узел
@@ -162,4 +180,16 @@ public interface ArmService {
 	 * @param nodeRef Узел
 	 */
 	public void aggregateNode(NodeRef nodeRef);
+
+    /**
+     * Получение узел с настройками для узла АРМ
+     * @param node узел
+     */
+    public NodeRef getNodeUserSettings(final NodeRef node);
+
+    /**
+     * Создание узел с настройками для узла АРМ
+     * @param node узел
+     */
+    public NodeRef createUserSettingsForNode(final NodeRef node) throws WriteTransactionNeededException;
 }

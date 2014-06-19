@@ -211,6 +211,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 						}
 					}
 
+					columnJSON.put("id", column.getId());
 					columnJSON.put("type", type);
 					columnJSON.put("name", fieldName);
 					columnJSON.put("formsName", formsName);

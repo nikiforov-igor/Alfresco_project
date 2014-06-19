@@ -1,5 +1,7 @@
 package ru.it.lecm.arm.beans;
 
+import org.alfresco.service.cmr.repository.NodeRef;
+
 /**
  * User: AIvkin
  * Date: 04.02.14
@@ -10,8 +12,11 @@ public class ArmColumn {
 	private String field;
 	private String formatString;
 	private boolean sortable;
+	private boolean byDefault;
+    private NodeRef id;
 
-	public ArmColumn() {
+	public ArmColumn(NodeRef nodeRef) {
+        this.id = nodeRef;
 	}
 
 	public String getTitle() {
@@ -52,7 +57,7 @@ public class ArmColumn {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		ArmColumn armColumn = (ArmColumn) o;
-
+        if (id != null ? !id.equals(armColumn.id) : armColumn.id != null) return false;
 		if (sortable != armColumn.sortable) return false;
 		if (field != null ? !field.equals(armColumn.field) : armColumn.field != null) return false;
 		if (formatString != null ? !formatString.equals(armColumn.formatString) : armColumn.formatString != null) return false;
@@ -65,8 +70,21 @@ public class ArmColumn {
 	public int hashCode() {
 		int result = title != null ? title.hashCode() : 0;
 		result = 31 * result + (field != null ? field.hashCode() : 0);
+		result = 31 * result + (id != null ? id.hashCode() : 0);
 		result = 31 * result + (formatString != null ? formatString.hashCode() : 0);
 		result = 31 * result + (sortable ? 1 : 0);
 		return result;
 	}
+
+    public NodeRef getId() {
+        return id;
+    }
+
+    public boolean isByDefault() {
+        return byDefault;
+    }
+
+    public void setByDefault(boolean byDefault) {
+        this.byDefault = byDefault;
+    }
 }

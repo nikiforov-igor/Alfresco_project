@@ -13,8 +13,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         LogicECM.module.ARM.DocumentsToolbar.superclass.constructor.call(this, "LogicECM.module.ARM.DocumentsToolbar", htmlId);
 
         this.filtersDialog = null;
+        this.columnsDialog = null;
         this.splashScreen = null;
         this.avaiableFilters = [];
+        this.currentNode = null;
 
         this.deferredListPopulation = new Alfresco.util.Deferred(["updateArmFilters", "initDatagrid"],
             {
@@ -33,12 +35,15 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
     YAHOO.lang.augmentObject(LogicECM.module.ARM.DocumentsToolbar.prototype,
         {
             filtersDialog: null,
+            columnsDialog: null,
             splashScreen: null,
             gridBubblingLabel: "documents-arm",
 	        doubleClickLock: false,
 
             avaiableFilters:[],
             currentType: null,
+
+            currentNode: null,
 
             onInitDataGrid: function BaseToolbar_onInitDataGrid(layer, args) {
                 LogicECM.module.ARM.DocumentsToolbar.superclass.onInitDataGrid.call(this,layer, args);
@@ -75,6 +80,49 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 });
             },
 
+            _renderColumns: function () {
+                var columnsDiv = Dom.get(this.id + "-columns-dialog-content");
+                var toolbar = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-select-columns",
+                    dataObj: {
+                        htmlId: Alfresco.util.generateDomId(),
+                        nodeRef: this.currentNode.data.nodeRef,
+                        columns: this._getNodeColumnsStr(this.currentNode)
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            columnsDiv.innerHTML = oResponse.serverResponse.responseText;
+                            if (toolbar.columnsDialog != null) {
+                                toolbar.columnsDialog.show();
+                                toolbar.toolbarButtons["defaultActive"].columnsButton.set("disabled", true);
+                                Dom.addClass(toolbar.id + "-columns-button-container", "showed");
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            },
+
+            _getNodeColumnsStr: function(node) {
+                var columns = [];
+                if (node != null) {
+                    if (node.data.columns && node.data.columns.length > 0) {
+                        for (var i = 0; i < node.data.columns.length; i++) {
+                            var column = node.data.columns[i];
+                            columns.push(column.id);
+                        }
+                    }
+                }
+                return columns.join(";");
+            },
+
 		    _drawFiltersPanel: function () {
 			    // создаем диалог
 			    this.filtersDialog = new YAHOO.widget.Panel(this.id + "-filters-dialog",
@@ -99,8 +147,36 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			    }, null, this);
 		    },
 
+            _drawColumnsPanel: function () {
+                // создаем диалог
+                this.columnsDialog = new YAHOO.widget.Panel(this.id + "-columns-dialog",
+                    {
+                        fixedcenter: false,
+                        close: false,
+                        draggable: false,
+                        zindex: 4,
+                        modal: true,
+                        visible: false
+                    }
+                );
+                this.columnsDialog.render();
+
+                var hideMaskCss = document.createElement("style");
+                hideMaskCss.type = "text/css";
+                hideMaskCss.innerHTML = "#" + this.id + "-columns-dialog_mask { opacity: 0; }";
+                document.body.appendChild(hideMaskCss);
+
+                YAHOO.util.Event.onAvailable(this.id + "-columns-dialog_mask", function () {
+                    YAHOO.util.Event.on(this.id + "-columns-dialog_mask", 'click', this.hideColumnsDialog, null, this);
+                }, null, this);
+            },
+
             onFiltersClick: function () {
                 this._renderFilters(this.avaiableFilters);
+            },
+
+            onColumnsClick: function () {
+                this._renderColumns();
             },
 
 	        hideFiltersDialog: function () {
@@ -108,6 +184,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		        this.toolbarButtons["defaultActive"].filtersButton.set("disabled", false);
 		        Dom.removeClass(this.id + "-filters-button-container", "showed");
 	        },
+
+            hideColumnsDialog: function () {
+                this.columnsDialog.hide();
+                this.toolbarButtons["defaultActive"].columnsButton.set("disabled", false);
+                Dom.removeClass(this.id + "-columns-button-container", "showed");
+            },
 
             onApplyFilterClick: function () {
                 //update current filters
@@ -124,12 +206,31 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	        onCancelFilterClick: function () {
 		        this.hideFiltersDialog();
 	        },
+            onApplyColumnsClick: function () {
+                //update current filters
+                var form = Dom.get('columnsForm');
+                if (form) {
+                    YAHOO.Bubbling.fire ("updateCurrentColumns", {
+                        selectedColumns: this._buildColumnsData(form)
+                    });
+                }
+
+                this.hideColumnsDialog();
+            },
+
+            onCancelColumnsClick: function () {
+                this.hideColumnsDialog();
+            },
 
             _initButtons: function () {
 	            this._drawFiltersPanel();
+	            this._drawColumnsPanel();
                 this.toolbarButtons["defaultActive"].filtersButton = Alfresco.util.createYUIButton(this, "filtersButton", this.onFiltersClick);
-	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-apply-button", this.onApplyFilterClick);
-	            this.widgets.searchButton = Alfresco.util.createYUIButton(this, "filters-cancel-button", this.onCancelFilterClick);
+                this.toolbarButtons["defaultActive"].columnsButton = Alfresco.util.createYUIButton(this, "columnsButton", this.onColumnsClick);
+	            this.widgets.filtersApplyButton = Alfresco.util.createYUIButton(this, "filters-apply-button", this.onApplyFilterClick);
+	            this.widgets.filtersCancelButton = Alfresco.util.createYUIButton(this, "filters-cancel-button", this.onCancelFilterClick);
+                this.widgets.columnsApplyButton = Alfresco.util.createYUIButton(this, "columns-apply-button", this.onApplyColumnsClick);
+                this.widgets.columnsCancelButton = Alfresco.util.createYUIButton(this, "columns-cancel-button", this.onCancelColumnsClick);
 
                 this.toolbarButtons["defaultActive"].groupActionsButton = new YAHOO.widget.Button(
                     this.id + "-groupActionsButton",
@@ -458,12 +559,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onUpdateArmFilters: function (layer, args) {
                 var currentNode = args[1].currentNode;
+                this.currentNode = currentNode;
                 if (currentNode !== null) {
                     var filters = currentNode.data.filters;
                     var hasFilters = filters != null && filters.length > 0;
+                    var hasColumns = currentNode.data.columns != null && currentNode.data.columns.length > 0;
+                    var isArmNode = currentNode.data.nodeType == "lecm-arm:node";
 
                     this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isNotGridNode || !hasFilters);
                     this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isNotGridNode);
+                    this.toolbarButtons["defaultActive"].columnsButton.set("disabled", args[1].isNotGridNode || !isArmNode || !hasColumns);
 
                     var searchInput = Dom.get(this.id + "-full-text-search");
                     if (args[1].isNotGridNode) {
@@ -505,6 +610,22 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             _buildPreferencesValue: function () {
                 return '';
+            },
+
+            _buildColumnsData: function (form) {
+                var checkedColumns = [];
+                if (form !== null) {
+                    for (var i = 0; i < form.elements.length; i++) {
+                        var element = form.elements[i];
+                        if (element.type !== "checkbox" || element.disabled) {
+                            continue;
+                        }
+                        if (element.checked) {
+                            checkedColumns.push(YAHOO.lang.trim(element.value));
+                        }
+                    }
+                }
+                return checkedColumns;
             },
 
             _buildFormData: function (form) {

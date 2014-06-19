@@ -19,6 +19,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             ["button", "container", "connection", "json", "selector"]);
 
 	    this.accordionItems = [];
+
+        YAHOO.Bubbling.on("updateCurrentColumns", this.onUpdateSelectedColumns, this);
+
         return this;
     };
 
@@ -472,6 +475,36 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 return this.menuState.selected.indexOf(nodeId) >= 0;
             }
             return false;
+        },
+
+        onUpdateSelectedColumns: function (layer, args) {
+            var columns = args[1].selectedColumns;
+            var menu = this;
+            if (columns != null) {
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "POST",
+                    url: Alfresco.constants.PROXY_URI + "lecm/arm/save/user-columns",
+                    dataObj: {
+                        columns: YAHOO.lang.JSON.stringify({
+                            selected:columns
+                        }),
+                        nodeRef: this.selectedNode.data.nodeRef
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            if (oResponse.json) {
+                                menu._loadTree(menu.selectedNode.parent);
+                            }
+                        }
+                    },
+                    failureCallback: {
+                        fn: function (oResponse) {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            }
         }
     });
 })();

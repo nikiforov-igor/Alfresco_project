@@ -7,19 +7,21 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.arm.beans.childRules.ArmBaseChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmDictionaryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmQueryChildRule;
 import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * User: AIvkin
@@ -245,27 +247,110 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public List<ArmColumn> getNodeColumns(NodeRef node) {
-		List<ArmColumn> result = new ArrayList<ArmColumn>();
-		List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
-		if (columns != null) {
-			for (NodeRef ref : columns) {
-				ArmColumn column = new ArmColumn();
-                Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
-				column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
-				column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
-				column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
-                Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
-                if (sortableValue != null) {
-                    column.setSortable((Boolean) sortableValue);
+		List<ArmColumn> result = getUserNodeColumns(node); // получаем список колонок из настроек пользователя
+        if (result.isEmpty()) { // пусто - тащим из настроек АРМ
+            List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
+            if (columns != null) {
+                for (NodeRef ref : columns) {
+                    Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
+
+                    Object byDefaultValue = columnProps.get(PROP_COLUMN_BY_DEFAULT);
+                    if (byDefaultValue == null || (Boolean)byDefaultValue) {
+                        ArmColumn column = new ArmColumn(ref);
+
+                        column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
+                        column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
+                        column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
+                        Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
+                        if (sortableValue != null) {
+                            column.setSortable((Boolean) sortableValue);
+                        }
+                        column.setByDefault(true);
+                        result.add(column);
+                    }
                 }
-				result.add(column);
-			}
-		}
+            }
+        }
 
 		return result;
 	}
 
-	@Override
+    @Override
+    public List<NodeRef> getNodeColumnsRefs(NodeRef node) {
+        List<NodeRef> nodeColumns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
+        if (nodeColumns.isEmpty()) {
+            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            if (isArmElement(parent)) {
+                return getNodeColumnsRefs(parent);
+            }
+        }
+        return nodeColumns;
+    }
+
+    @Override
+    public List<ArmColumn> getUserNodeColumns(NodeRef node) {
+        List<ArmColumn> result = new ArrayList<>();
+        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        if (employee != null) {
+            final NodeRef employeeSettingsRef = getNodeUserSettings(node);
+            if (employeeSettingsRef != null) { // может быть пусто, так как настройки создаются при изменении списка колонок
+                List<NodeRef> columns = findNodesByAssociationRef(employeeSettingsRef, ASSOC_USER_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
+                if (columns != null) {
+                    for (NodeRef ref : columns) {
+                        ArmColumn column = new ArmColumn(ref);
+                        Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
+                        column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
+                        column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
+                        column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
+                        Object sortableValue = columnProps.get(PROP_COLUMN_SORTABLE);
+                        if (sortableValue != null) {
+                            column.setSortable((Boolean) sortableValue);
+                        }
+                        Object byDefaultValue = columnProps.get(PROP_COLUMN_BY_DEFAULT);
+                        if (byDefaultValue != null) {
+                            column.setByDefault((Boolean) byDefaultValue);
+                        }
+                        result.add(column);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public NodeRef getNodeUserSettings(final NodeRef node) {
+        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        if (employee == null) {
+            logger.error("Could not get current employee. Skip creating settings object");
+            return null;
+        }
+        String loginName = orgstructureBean.getEmployeeLogin(employee);
+        return nodeService.getChildByName(node, ContentModel.ASSOC_CONTAINS, loginName);
+    }
+
+    @Override
+    public NodeRef createUserSettingsForNode(final NodeRef node) throws WriteTransactionNeededException {
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create user settings for arm node " + node);
+        }
+
+        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        if (employee == null) {
+            logger.error("Could not get current employee. Skip creating settings object");
+            return null;
+        }
+
+        String loginName = orgstructureBean.getEmployeeLogin(employee);
+        // создать и скрыть
+        NodeRef nodeRef = createNode(node, TYPE_USER_SETTINGS, loginName, null);
+        hideNode(nodeRef, true);
+        return nodeRef;
+    }
+
+    @Override
 	public ArmBaseChildRule getNodeChildRule(NodeRef node) {
 		if (isArmNode(node)) {
 			List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_CHILD_RULE);
