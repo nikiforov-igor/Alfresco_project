@@ -15,8 +15,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.Serializable;
 import java.util.*;
 
-//import ru.it.lecm.statemachine.StateMachineServiceBean;
-
 /**
  * User: pmelnikov
  * Date: 19.02.14
