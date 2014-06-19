@@ -27,6 +27,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         YAHOO.Bubbling.on("updateArmFilters", this.onUpdateArmFilters, this);
 	    YAHOO.Bubbling.on("selectedItemsChanged", this.onCheckDocument, this);
         YAHOO.Bubbling.on("objectFinderReady", this._onObjectFinderReady, this);
+
+        YAHOO.Bubbling.on("restoreDefaultColumns", this.onRestoreDefaultColumns, this);
         return this;
     };
 
@@ -710,6 +712,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 				        itemType: this.currentType
 			        });
 		        }
-	        }
+	        },
+
+            onRestoreDefaultColumns: function (layer, args) {
+                YAHOO.Bubbling.fire("updateCurrentColumns", {
+                    selectedColumns: []
+                });
+                this.hideColumnsDialog();
+            }
         }, true);
 })();
