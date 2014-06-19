@@ -253,6 +253,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
+                this.toolbarButtons["defaultActive"].exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExportClick);
 
             },
 
@@ -469,6 +470,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         }).show();
                     }
                 }
+            },
+
+            onExportClick: function onExportClick_Function () {
+                this.modules.dataGrid.exportData();
             },
 
             _onObjectFinderReady: function StartWorkflow_onObjectFinderReady(layer, args) {

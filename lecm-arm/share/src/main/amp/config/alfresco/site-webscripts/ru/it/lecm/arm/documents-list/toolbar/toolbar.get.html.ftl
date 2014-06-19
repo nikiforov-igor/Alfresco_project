@@ -80,5 +80,13 @@
         </div>
     </div>
 </div>
+<div class="group-actions">
+    <span id="${id}-exportButton" class="yui-button yui-push-button">
+       <span class="first-child">
+          <button type="button">${msg("columns.button.export")}</button>
+       </span>
+    </span>
+</div>
+
 
 </@comp.baseToolbar>

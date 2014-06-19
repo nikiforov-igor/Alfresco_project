@@ -354,14 +354,13 @@ function getSearchResults(params) {
 
         //фильтр по доступным нодам
         if (searchNodes != null) {
-            var query = "";
+            var ftsQuery = "";
             for (i = 0; i < searchNodes.length; i++) {
-                query += "ID:" + searchNodes[i].replace(":", "\\:");
+                ftsQuery += "ID:" + searchNodes[i].replace(":", "\\:");
                 if (i < searchNodes.length - 1) {
-                    query += " OR "
+                    ftsQuery += " OR "
                 }
             }
-            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + ' (' + query + ')';
         }
 
         // обработка запроса процессорами

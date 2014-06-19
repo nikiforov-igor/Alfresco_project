@@ -89,6 +89,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
             dataGrid: null, // Обратная ссылка на грид
 
+            currentSearchArgs: null,
+
             /**
              * Получение и отрисовка формы
              *
@@ -251,57 +253,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * args - Объект с настройками поиска
              */
             performSearch: function ADVSearch__performSearch(args) {
-                var searchConfig = args.searchConfig,
-                    searchShowInactive = args.searchShowInactive,
-                    parent = args.parent,
-                    searchNodes = args.searchNodes,
-                    itemType = args.itemType,
-                    sort = args.sort,
-                    useChildQuery = args.useChildQuery ? args.useChildQuery : false,
-                    offset = args.offset ? args.offset : -1;
+                var searchConfig = args.searchConfig;
 
-                // дополнительный фильтр из адресной строки (или параметров)
-                var successFilters = args.filter;
-                if (!successFilters) {
-                    successFilters = this.dataGrid.currentFilters;
-                }
-                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
-                if (bookmarkedFilter) {
-                    try {
-                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
-                        }
-                    }
-                    catch (e) {
-                        // Catch "malformed URI sequence" exception
-                    }
-                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
-                        var filters = strFilter.split("|");
-                        return {
-                            code: window.unescape(filters[0] || ""),
-                            curValue: window.unescape(filters[1] || ""),
-                            fromUrl:true
-                        };
-                    };
-
-                    var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
-                    var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
-                    if (index >= 0) {
-                        successFilters.splice(index, 1);
-                    }
-                    successFilters.push(filterFromUrl);
-                }
-
-                // вернуть следующие поля для элемента(строки)
-                var reqFields = [];
-                var reqNameSubstituteStrings = [];
-                for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
-                    var column = this.dataColumns[i],
-                        columnName = column.name.replace(":", "_");
-                    reqFields.push(columnName);
-                    reqNameSubstituteStrings.push(column.nameSubstituteString);
-                }
-                var fields = reqFields.join(",");
-                var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
+                this.currentSearchArgs = args;
 
                 this.dataTable.getRecordSet().reset();
                 this.dataTable.render();
@@ -368,7 +322,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
 
                 this.dataSource.connMgr.setDefaultPostHeader(Alfresco.util.Ajax.JSON); // для предотвращения ошибок
-                var searchParams = this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters, useChildQuery);
+                var searchParams = this.prepareSearchParams(args);
                 this.dataSource.sendRequest(YAHOO.lang.JSON.stringify(searchParams),
                     {
                         success: successHandler,
@@ -385,6 +339,86 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 if (!obj.bubblingLabel || !this.bubblingLabel || obj.bubblingLabel == this.bubblingLabel){
                     this.performSearch(obj);
                 }
+            },
+
+            exportData: function exportAllData_function() {
+                if (this.currentSearchArgs == null) return;
+                var parameters = this.prepareSearchParams(this.currentSearchArgs);
+                parameters.columns = this.dataColumns;
+                var items = this.dataGrid.getSelectedItems();
+                var currentSelectedItems = [];
+                for (var i = 0; i < items.length; i++) {
+                    currentSelectedItems.push(items[i].nodeRef);
+                }
+                parameters.params.searchNodes = currentSelectedItems.join(",");
+                var form = document.createElement("form");
+                form.enctype = "multipart/form-data";
+                form.action = Alfresco.constants.PROXY_URI + "lecm/search/export";
+                form.method = "POST";
+
+                var inputFileName = document.createElement("input");
+                inputFileName.type = "hidden";
+                inputFileName.name = "parameters";
+                inputFileName.value = JSON.stringify(parameters);
+                form.appendChild(inputFileName);
+
+                form.submit();
+            },
+
+            prepareSearchParams: function prepareSearchParams_function(args) {
+                var searchConfig = args.searchConfig,
+                    searchShowInactive = args.searchShowInactive,
+                    parent = args.parent,
+                    searchNodes = args.searchNodes,
+                    itemType = args.itemType,
+                    sort = args.sort,
+                    useChildQuery = args.useChildQuery ? args.useChildQuery : false,
+                    offset = args.offset ? args.offset : -1;
+
+                // вернуть следующие поля для элемента(строки)
+                var reqFields = [];
+                var reqNameSubstituteStrings = [];
+                for (var i = 0, ii = this.dataColumns.length; i < ii; i++) {
+                    var column = this.dataColumns[i],
+                        columnName = column.name.replace(":", "_");
+                    reqFields.push(columnName);
+                    reqNameSubstituteStrings.push(column.nameSubstituteString);
+                }
+                var fields = reqFields.join(",");
+                var nameSubstituteStrings = reqNameSubstituteStrings.join(",");
+
+                // дополнительный фильтр из адресной строки (или параметров)
+                var successFilters = args.filter;
+                if (!successFilters) {
+                    successFilters = this.dataGrid.currentFilters;
+                }
+                var bookmarkedFilter = YAHOO.util.History.getBookmarkedState("filter");
+                if (bookmarkedFilter) {
+                    try {
+                        while (bookmarkedFilter !== (bookmarkedFilter = decodeURIComponent(bookmarkedFilter))) {
+                        }
+                    }
+                    catch (e) {
+                        // Catch "malformed URI sequence" exception
+                    }
+                    var fnDecodeBookmarkedFilter = function DL_fnDecodeBookmarkedFilter(strFilter) {
+                        var filters = strFilter.split("|");
+                        return {
+                            code: window.unescape(filters[0] || ""),
+                            curValue: window.unescape(filters[1] || ""),
+                            fromUrl:true
+                        };
+                    };
+
+                    var filterFromUrl = fnDecodeBookmarkedFilter(bookmarkedFilter);
+                    var index = this.dataGrid._filterInArray(filterFromUrl.code, successFilters);
+                    if (index >= 0) {
+                        successFilters.splice(index, 1);
+                    }
+                    successFilters.push(filterFromUrl);
+                }
+
+                return this.buildSearchParams(parent, searchNodes, itemType, sort != null ? sort : "cm:name|true", searchConfig, fields, nameSubstituteStrings, searchShowInactive, offset, successFilters, useChildQuery);
             },
 
             buildSearchParams:function ADVSearch__buildSearchParams(parent, searchNodes, itemType, sort, searchConfig, searchFields, dataRequestNameSubstituteStrings, searchShowInactive, offset, additionalFilters, useChildQuery) {
