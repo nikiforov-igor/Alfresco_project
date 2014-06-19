@@ -361,7 +361,7 @@ function getSearchResults(params) {
                     query += " OR "
                 }
             }
-            ftsQuery += (ftsQuery.length !== 0 ? ' AND' : '') + ' ' + query + ')';
+            ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + ' (' + query + ')';
         }
 
         // обработка запроса процессорами
