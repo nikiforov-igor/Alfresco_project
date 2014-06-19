@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.policy;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.ForumModel;
 import org.alfresco.model.RenditionModel;
@@ -408,7 +409,14 @@ public class DocumentPolicy extends BaseBean
     @Override
     //TODO сложная длинная логика. Нужно разобраться, попытаться упростить.
     public void onCreateNode(ChildAssociationRef childAssocRef) {
-        updatePresentString(childAssocRef.getChildRef()); // при создании onUpdateproperties ещё не срабатывает - заполняем поле с представлением явно
+	    NodeRef document = childAssocRef.getChildRef();
+
+	    String type = nodeService.getType(document).toPrefixString(namespaceService);
+	    if (!stateMachineService.isStarter(type)) {
+		    throw new AlfrescoRuntimeException("User not starter for document type '" + type + "' for node " + document);
+	    }
+
+        updatePresentString(document); // при создании onUpdateproperties ещё не срабатывает - заполняем поле с представлением явно
         final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
         //TODO замена нескольких setProperty на setProperties.
         Map<QName, Serializable> properties = nodeService.getProperties(childAssocRef.getChildRef());
