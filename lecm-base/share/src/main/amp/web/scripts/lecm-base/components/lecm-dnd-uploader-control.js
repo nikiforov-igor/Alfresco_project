@@ -56,6 +56,8 @@ LogicECM.control = LogicECM.control || {};
 			hasAddContentRight: null,
 			hasDeleteContentRight: null,
 			hasNewVersionContentRight: null,
+			showPreview: false,
+			selectedPreviewFile: null,
 
 			onReady:function () {
 				if (!this.options.disabled) {
@@ -63,6 +65,16 @@ LogicECM.control = LogicECM.control || {};
 					this.loadRootNode();
 
 					Event.on(this.id + "-uploader-button", "click", this.showUploader, null, this);
+
+					if (Dom.get(this.id + "-show-preview-button") != null) {
+						this.widgets.showPreviewButton = new YAHOO.widget.Button(
+								this.id + "-show-preview-button",
+							{
+								onclick: { fn: this.showPreviewButtonClick, obj: null, scope: this },
+								disabled: true
+							}
+						);
+					}
 				}
 				if (this.options.checkRights) {
 					this.loadPermissions();
@@ -272,6 +284,8 @@ LogicECM.control = LogicECM.control || {};
 					me.updateFormFields();
 					me.updateFormUI();
 
+					me.selectPreviewFile(null, obj.successful[obj.successful.length - 1].nodeRef);
+
 					if (this.options.autoSubmit) {
 						var formElem  = Dom.get(this.id).form;
 						if (formElem != null) {
@@ -291,21 +305,51 @@ LogicECM.control = LogicECM.control || {};
 			removeSelectedElement: function(event, node) {
                 if (this.disabled) return;
 				delete this.selectedItems[node.nodeRef];
+
+				if (node.nodeRef == this.selectedPreviewFile) {
+					var selectedItems = this.getSelectedItems();
+					if (selectedItems.length > 0) {
+						this.selectPreviewFile(null, selectedItems[0]);
+					} else {
+						this.selectedPreviewFile = null;
+						this.updatePreview();
+					}
+				}
+
 				this.updateSelectedItems();
 				this.updateFormFields();
 				this.updateFormUI();
+			},
 
-				YAHOO.Bubbling.fire("hidePreview");
+			showPreviewButtonClick: function() {
+			 	this.showPreview = !this.showPreview;
+				this.updatePreview();
 			},
 
 			attachShowPreviewClickListener: function(node) {
-				Event.addListener("attachment-show-preview-" + node.nodeRef, "click", this.showPreview, node.nodeRef, this);
+				Event.addListener("attachment-show-preview-" + node.nodeRef, "click", this.selectPreviewFile, node.nodeRef, this);
 			},
 
-			showPreview: function(e, nodeRef) {
-				YAHOO.Bubbling.fire("showPreview", {
-					nodeRef: nodeRef
-				});
+			selectPreviewFile: function(e, nodeRef) {
+				if (this.selectedPreviewFile != null) {
+					Dom.removeClass("attachment-" + this.selectedPreviewFile, "selected");
+				}
+				Dom.addClass("attachment-" + nodeRef, "selected");
+				this.selectedPreviewFile = nodeRef;
+				this.updatePreview();
+			},
+
+			updatePreview: function() {
+				if (this.widgets.showPreviewButton != null) {
+					this.widgets.showPreviewButton.set("disabled", this.selectedPreviewFile == null);
+				}
+				if (this.showPreview && this.selectedPreviewFile != null) {
+					YAHOO.Bubbling.fire("showPreview", {
+						nodeRef: this.selectedPreviewFile
+					});
+				} else {
+					YAHOO.Bubbling.fire("hidePreview");
+				}
 			},
 
 			attachUploadNewVersionClickListener: function(node) {
@@ -438,6 +482,10 @@ LogicECM.control = LogicECM.control || {};
 							}
 						}
 					}
+				}
+
+				if (this.selectedPreviewFile != null) {
+					Dom.addClass("attachment-" + this.selectedPreviewFile, "selected");
 				}
 			},
 
