@@ -453,7 +453,20 @@ LogicECM.module.Base.Util = {
         }
 
         return '<div class="cropped-item">' + buttonsHtml + '<div class="ci-value-div"><span>' + leftCroppedPart + '</span></div></div>';
-    }
+    },
+	encodeUrlParams: function(params) {
+		return "p1=" + window.btoa(params) + "&p2=" + this.hashCode(params);
+	},
+	hashCode: function(str) {
+		var hash = 0, i, chr, len;
+		if (str.length == 0) return hash;
+		for (i = 0, len = str.length; i < len; i++) {
+			chr   = str.charCodeAt(i);
+			hash  = ((hash << 5) - hash) + chr;
+			hash |= 0; // Convert to 32bit integer
+		}
+		return hash;
+	}
 };
 
 (function() {

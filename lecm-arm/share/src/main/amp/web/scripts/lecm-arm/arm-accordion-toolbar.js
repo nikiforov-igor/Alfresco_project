@@ -28,7 +28,7 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 			);
 		},
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
-			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + p_oItem.type;
+			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + p_oItem.type);
 		},
 		onUpdateArmToolbar: function(layer, args) {
 			var createTypes = args[1].createTypes;

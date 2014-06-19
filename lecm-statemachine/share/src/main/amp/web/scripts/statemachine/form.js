@@ -146,17 +146,19 @@ LogicECM.module = LogicECM.module || {};
 			var templateRequestParams;
 			var formWidth = "65em";
 			if (action.isForm) {
-				var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?";
-				url += "documentType=" + action.formType;
-				url += "&formId=" + "workflow-form";
+				var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.formType;
+
+				var params = "documentType=" + action.formType;
+				params += "&formId=" + "workflow-form";
 				if (action.variables != null) {
 					for (var prop in action.variables) {
 						if (action.variables.hasOwnProperty(prop)) {
-							url += "&" + prop + "=" + action.variables[prop];
+							params += "&" + prop + "=" + action.variables[prop];
 						}
 					}
 				}
-				window.location.href = url;
+
+				window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
 			} else {
 				templateUrl += "lecm/components/form";
 				templateRequestParams = {

@@ -53,7 +53,7 @@ LogicECM.module.Documents = LogicECM.module.Documents|| {};
 
             onNewRow: function () {
 	            window.location.href =
-		            Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + this.options.itemType;
+		            Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + this.options.itemType + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + this.options.itemType);
             }
         }, true);
 })();

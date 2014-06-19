@@ -30,9 +30,17 @@
 
 <@markup id="html">
 	<@uniqueIdDiv>
-		<div class="container">
-			<div id="${el}-preview" class="document-preview body"></div>
-			<div id="${el}-body" class="document-metadata"></div>
-		</div>
+		<#if hasPermission>
+			<div class="container">
+				<div id="${el}-preview" class="document-preview body"></div>
+				<div id="${el}-body" class="document-metadata"></div>
+			</div>
+		<#else>
+			<div class="document-header">
+				<div class="status-banner">
+					${accessMsg}
+				</div>
+			</div>
+		</#if>
 	</@>
 </@>
