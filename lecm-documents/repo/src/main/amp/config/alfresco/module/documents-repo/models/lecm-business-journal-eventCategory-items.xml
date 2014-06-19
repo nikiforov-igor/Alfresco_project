@@ -50,6 +50,10 @@
                 <property name="cm:name">Добавление ссылки</property>
                 <property name="lecm-busjournal:eventCategory-code">LINK_ADDED</property>
             </item>
+            <item name="cm:Регистрация" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Регистрация</property>
+                <property name="lecm-busjournal:eventCategory-code">REGISTRATION</property>
+            </item>
         </items>
     </item>
 </items>

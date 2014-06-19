@@ -37,6 +37,7 @@
 		<property name="documentService" ref="documentService"/>
 		<property name="documentConnectionService" ref="documentConnectionService"/>
         <property name="orgstructureService" ref="serviceOrgstructure" />
+        <property name="businessJournalService" ref="businessJournalService"/>
 	</bean>
 
 	<util:constant id="REGNUMBERS_FOLDER_ID" static-field="ru.it.lecm.regnumbers.counter.CounterFactory.REGNUMBERS_FOLDER_ID"/>

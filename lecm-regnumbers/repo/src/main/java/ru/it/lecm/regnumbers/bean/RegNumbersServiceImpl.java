@@ -1,9 +1,5 @@
 package ru.it.lecm.regnumbers.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
@@ -20,6 +16,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -29,6 +26,13 @@ import ru.it.lecm.regnumbers.template.Parser;
 import ru.it.lecm.regnumbers.template.ParserImpl;
 import ru.it.lecm.regnumbers.template.TemplateParseException;
 import ru.it.lecm.regnumbers.template.TemplateRunException;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -49,6 +53,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 	private DocumentService documentService;
 	private OrgstructureBean orgstructureService;
 	private DocumentConnectionService documentConnectionService;
+    private BusinessJournalService businessJournalService;
 
 	public final void init() {
 		PropertyCheck.mandatory(this, "transactionService", transactionService);
@@ -84,7 +89,11 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		this.orgstructureService = orgstructureService;
 	}
 
-	@Override
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    @Override
 	public String getNumber(NodeRef documentNode, String templateStr) throws TemplateParseException, TemplateRunException {
 		Parser parser = new ParserImpl(applicationContext);
 		return parser.runTemplate(templateStr, documentNode);
@@ -261,52 +270,62 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 		}
 		NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
 		if (templateDictionary != null && documentNode != null) {
-			QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
-			QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
-			QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
-			QName propIsRegistered = isProjectRegister ? null : DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED;
+            QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
+            QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
+            QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
+            QName propIsRegistered = isProjectRegister ? null : DocumentService.PROP_REG_DATA_DOC_IS_REGISTERED;
 
-			if (!nodeService.hasAspect(documentNode, regAspectName)) {
-				nodeService.addAspect(documentNode, regAspectName, null);
-			}
+            if (!nodeService.hasAspect(documentNode, regAspectName)) {
+                nodeService.addAspect(documentNode, regAspectName, null);
+            }
+            NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+            Serializable number = nodeService.getProperty(documentNode, propNumber);
+            String regNumber = null;
+            if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
+                //номер уже есть
+                if (propIsRegistered != null && !onlyReserve) {
+                    nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
+                }
+            } else {
+                //регистрируем
+                NodeRef repeatedDocument = getRepeatedDocument(documentNode);
+                QName documentType = nodeService.getType(documentNode);
+                // нам нужно получить уникальный регистрационный номер документа.
+                // есть вероятность, что сгененрированный номер уже используется, потому что задан руками
+                do {
+                    if (repeatedDocument != null) {
+                        regNumber = getRepeatedNumber(documentNode);
+                    } else {
+                        regNumber = getNumber(documentNode, templateDictionary);
+                    }
+                } while (!isNumberUnique(regNumber, documentType));
 
-			Serializable number = nodeService.getProperty(documentNode, propNumber);
-			if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
-				//номер уже есть
-				if (propIsRegistered != null && !onlyReserve) {
-					nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
-				}
-			} else {
-				//регистрируем
-				String regNumber;
-				NodeRef repeatedDocument = getRepeatedDocument(documentNode);
-				QName documentType = nodeService.getType(documentNode);
-				// нам нужно получить уникальный регистрационный номер документа.
-				// есть вероятность, что сгененрированный номер уже используется, потому что задан руками
-				do {
-					if (repeatedDocument != null) {
-						regNumber = getRepeatedNumber(documentNode);
-					} else {
-						regNumber = getNumber(documentNode, templateDictionary);
-					}
-				} while (!isNumberUnique(regNumber, documentType));
+                Date date = new Date();
+                nodeService.setProperty(documentNode, propNumber, regNumber);
+                nodeService.setProperty(documentNode, propDate, date);
+                documentService.setDocumentActualNumber(documentNode, regNumber);
+                documentService.setDocumentActualDate(documentNode, date);
+                if (propIsRegistered != null) {
+                    nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
+                }
 
-				Date date = new Date();
-				nodeService.setProperty(documentNode, propNumber, regNumber);
-				nodeService.setProperty(documentNode, propDate, date);
-				documentService.setDocumentActualNumber(documentNode, regNumber);
-				documentService.setDocumentActualDate(documentNode, date);
-				if (propIsRegistered != null) {
-					nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
-				}
-				NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-				if (currentEmployee != null) {
-					List<NodeRef> targetRefs = new ArrayList<NodeRef>();
-					targetRefs.add(currentEmployee);
-					nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
-				}
-			}
-		}
+                if (currentEmployee != null) {
+                    List<NodeRef> targetRefs = new ArrayList<NodeRef>();
+                    targetRefs.add(currentEmployee);
+                    nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
+                }
+            }
+            if (!onlyReserve) {
+                Date regDate = documentService.getDocumentRegDate(documentNode);
+                String regDateString = "";
+                if (regDate != null) {
+                    DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
+                    regDateString = dFormat.format(regDate);
+                }
+
+                businessJournalService.log(orgstructureService.getEmployeeLogin(currentEmployee), documentNode, "REGISTRATION", "#initiator зарегистрировал(а) документ " + wrapperLink(documentNode, documentService.getDocumentRegNumber(documentNode) + " от " + regDateString, DOCUMENT_LINK_URL), null);
+            }
+        }
 	}
 
 	private NodeRef getRepeatedDocument(NodeRef documentRef) {

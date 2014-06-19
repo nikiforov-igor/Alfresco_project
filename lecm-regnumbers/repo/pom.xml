@@ -92,7 +92,13 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>ru.it.lecm.business-journal</groupId>
+            <artifactId>business-journal-repo-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 	<scm>
 		<connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk</connection>
