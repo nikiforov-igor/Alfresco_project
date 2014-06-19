@@ -6,14 +6,16 @@ import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import ru.it.lecm.base.beans.BaseBean;
-import ru.it.lecm.documents.beans.DocumentService;
-//import ru.it.lecm.statemachine.StateMachineServiceBean;
-import ru.it.lecm.statemachine.StatemachineModel;
-
-import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.statemachine.StatemachineModel;
+
+import java.io.Serializable;
+import java.util.*;
+
+//import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * User: pmelnikov
@@ -126,21 +128,26 @@ public class GroupActionsServiceImpl extends BaseBean implements GroupActionsSer
     private List<NodeRef> filterByType(List<NodeRef> actions, List<NodeRef> items) {
         List<NodeRef> result = new ArrayList<NodeRef>();
         for (NodeRef action : actions) {
-            String type = nodeService.getProperty(action, GroupActionsService.PROP_TYPE).toString();
-            QName typeQName = QName.createQName(type, namespaceService);
+            Serializable property = nodeService.getProperty(action, GroupActionsService.PROP_TYPE);
             boolean isRight = true;
-            for (NodeRef item : items) {
-                TypeDefinition typeDef = dictionaryService.getType(typeQName);
-                if (typeDef != null) {
-                    QName itemType = nodeService.getType(item);
-                    if (!itemType.equals(typeQName) || !dictionaryService.isSubClass(itemType, typeQName)) {
-                        isRight = false;
-                        break;
-                    }
-                } else {
-                    if (!nodeService.hasAspect(item, typeQName)) {
-                        isRight = false;
-                        break;
+            if (property != null) {
+                String type = property.toString();
+                if (type != null && !type.isEmpty()) {
+                    QName typeQName = QName.createQName(type, namespaceService);
+                    for (NodeRef item : items) {
+                        TypeDefinition typeDef = dictionaryService.getType(typeQName);
+                        if (typeDef != null) {
+                            QName itemType = nodeService.getType(item);
+                            if (!itemType.equals(typeQName) || !dictionaryService.isSubClass(itemType, typeQName)) {
+                                isRight = false;
+                                break;
+                            }
+                        } else {
+                            if (!nodeService.hasAspect(item, typeQName)) {
+                                isRight = false;
+                                break;
+                            }
+                        }
                     }
                 }
             }
