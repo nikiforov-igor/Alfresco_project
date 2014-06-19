@@ -308,36 +308,61 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         fn: function (oResponse) {
                             var json = oResponse.json;
                             var actionItems = [];
+                            var wideActionItems = [];
                             for (var i in json) {
-                                actionItems.push({
-                                    text: json[i].id,
-                                    value: json[i].id,
-                                    onclick: {
-                                        fn: me.onGroupActionsClick,
-                                        obj: {
-                                            actionId: json[i].id,
-                                            type: json[i].type,
-                                            withForm: json[i].withForm,
-                                            items: items,
-                                            workflowId: json[i].workflowId,
-                                            label: json[i].id
-                                        },
-                                        scope: me
-                                    }
-                                });
+                                if (!json[i].wide) {
+                                    actionItems.push({
+                                        text: json[i].id,
+                                        value: json[i].id,
+                                        onclick: {
+                                            fn: me.onGroupActionsClick,
+                                            obj: {
+                                                actionId: json[i].id,
+                                                type: json[i].type,
+                                                withForm: json[i].withForm,
+                                                items: items,
+                                                workflowId: json[i].workflowId,
+                                                label: json[i].id
+                                            },
+                                            scope: me
+                                        }
+                                    });
+                                } else {
+                                    wideActionItems.push({
+                                        text: json[i].id,
+                                        value: json[i].id,
+                                        onclick: {
+                                            fn: me.onGroupActionsClick,
+                                            obj: {
+                                                actionId: json[i].id,
+                                                type: json[i].type,
+                                                withForm: json[i].withForm,
+                                                items: items,
+                                                workflowId: json[i].workflowId,
+                                                label: json[i].id
+                                            },
+                                            scope: me
+                                        }
+                                    });
+                                }
                             }
-                            if (actionItems.length == 0) {
+                            if (actionItems.length == 0 && wideActionItems.length == 0) {
                                 actionItems.push({
                                     text: "Нет доступных операций",
                                     disabled: true
                                 });
                             }
+                            if (actionItems.length != 0 && wideActionItems.length != 0) {
+                                wideActionItems[0].classname = "toplineditem";
+                            }
                             if (YAHOO.util.Dom.inDocument(menu.element)) {
                                 menu.clearContent();
                                 menu.addItems(actionItems);
+                                menu.addItems(wideActionItems);
                                 menu.render();
                             } else {
-                                menu.itemData = actionItems;
+                                menu.addItems(actionItems);
+                                menu.addItems(wideActionItems);
                             }
                         }
                     },
