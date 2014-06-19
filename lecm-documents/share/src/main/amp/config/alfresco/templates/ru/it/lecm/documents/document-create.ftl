@@ -3,6 +3,7 @@
 <@templateHeader>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/base-menu/base-menu.css"/>
+	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-header.css" />
 
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"/>
 
@@ -13,6 +14,14 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <div id="no_menu_page" class="sticky-wrapper">
 	<@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
-		<@region id="content" scope="template"/>
+		<#if hasPermission>
+			<@region id="content" scope="template"/>
+		<#else>
+			<div class="document-header">
+				<div class="status-banner">
+					${accessMsg}
+				</div>
+			</div>
+		</#if>
 	</@bpage.basePage>
 </div>
