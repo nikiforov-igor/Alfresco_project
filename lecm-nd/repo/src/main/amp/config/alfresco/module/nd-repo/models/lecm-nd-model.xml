@@ -71,6 +71,10 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
+	            <!-- Бессрочный -->
+	            <property name="lecm-nd:unlimited">
+		            <type>d:boolean</type>
+	            </property>
             </properties>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:temp-attachments</aspect>

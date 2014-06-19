@@ -19,9 +19,12 @@
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-nd:begin-date" mandatory="true"/>
                     <show id="lecm-nd:end-date" mandatory="true"/>
+                    <show id="lecm-nd:unlimited" mandatory="true"/>
 	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
+	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
+
                     <field id="lecm-document:title" label="Заголовок"/>
                     <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
@@ -46,18 +49,9 @@
                             <control-param name="rows">4</control-param>
                         </control>
                     </field>
-                    <field id="lecm-nd:begin-date" label="Дата начала действия" mandatory="true">
-                        <constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
-						</constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
-                    <field id="lecm-nd:end-date" label="Дата окончания действия" mandatory="true">
-                        <constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="LogicECM.module.ND.dateIntervalValidation" event="blur"/>
-						</constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
+                    <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
+                    <field id="lecm-nd:end-date" label="" set="dates"/>
+	                <field id="lecm-nd:unlimited" set="dates"/>
                     <field id="lecm-eds-document:note" label="Примечание">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">4</control-param>
@@ -107,6 +101,7 @@
                     <show id="lecm-eds-document:note"/>                                                                 <!-- Примечание -->
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
+                    <show id="lecm-nd:unlimited"/>
                     <show id="lecm-document-aspects:is-shared-folder"/>
                     <show id="lecm-eds-document:file-register-assoc"/>													<!-- Номенклатура дел -->
                 <show id="lecm-document:regnum"/>
@@ -176,6 +171,7 @@
                     <show id="lecm-nd:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
+	                <show id="lecm-nd:unlimited" mandatory="true"/>
                     <show id="lecm-eds-document:file-register-assoc"/>
                     <show id="lecm-document:author-assoc"/>
                     <show id="lecm-document-aspects:reg-project-data-number"/>
@@ -191,7 +187,7 @@
                     <set id="nd3" parent="common"/>
                     <set id="nd4" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="nd5" parent="common"/>
-                    <set id="dates" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
+                    <set id="dates" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="nd7" parent="common"/>
                     <set id="nd8" parent="common" template="/org/alfresco/components/form/2-column-set.ftl"/>
                     <set id="author" parent="common"/>
@@ -237,18 +233,9 @@
                     </field>
                     <field id="lecm-document:subject-assoc" label="Тематика" set="nd8"/>
                     <field id="lecm-eds-document:file-register-assoc" label="Номенклатура" set="nd8"/>
-                    <field id="lecm-nd:begin-date" label="Дата начала действия" set="dates">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
-                    <field id="lecm-nd:end-date" label="Дата окончания действия" set="dates">
-                        <constraint-handlers>
-                            <constraint type="MANDATORY" validation-handler="LogicECM.module.Approval.workflowFormValidator" event="keyup"/>
-                        </constraint-handlers>
-                        <control template="/ru/it/lecm/base-share/components/controls/date.ftl"/>
-                    </field>
+	                <field id="lecm-nd:begin-date"  label="Период действия" set="dates"/>
+	                <field id="lecm-nd:end-date" label="" set="dates"/>
+	                <field id="lecm-nd:unlimited" set="dates"/>
                     <field id="lecm-document:author-assoc" set="author" read-only="true"/>
                     <field id="lecm-document-aspects:reg-project-data-number" set="footer"/>
                     <field id="lecm-document-aspects:reg-project-data-date" set="footer"/>
