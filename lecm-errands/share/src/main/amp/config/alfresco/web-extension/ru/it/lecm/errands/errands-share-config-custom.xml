@@ -310,7 +310,7 @@
 	                    </constraint-handlers>
                     </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
-		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">label.errands.attachments</control-param>
 		                </control>
@@ -523,7 +523,7 @@
                         </control>
                     </field>
                     <field id="lecm-errands:attachments-temp-assoc" set="main">
-                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
+                        <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
                         </control>
