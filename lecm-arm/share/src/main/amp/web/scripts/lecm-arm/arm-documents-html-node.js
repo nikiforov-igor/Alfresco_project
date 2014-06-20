@@ -36,7 +36,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			},
 
 			isIframePage: function(url) {
-				return url.indexOf("http://") == 0;
+				return url.indexOf("http://") == 0 || url.indexOf("https://") == 0;
 			},
 
 			loadSharePage: function(url) {

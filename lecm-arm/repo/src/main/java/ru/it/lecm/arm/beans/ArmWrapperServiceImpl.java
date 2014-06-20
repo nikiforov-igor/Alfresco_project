@@ -185,6 +185,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (searchQuery != null) {
             node.setSearchQuery(searchQuery);
         }
+	    node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
         node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
 
         if (!onlyMeta) {
