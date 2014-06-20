@@ -32,8 +32,8 @@
 	<@uniqueIdDiv>
 		<#if hasPermission>
 			<div class="container">
-				<div id="${el}-preview" class="document-preview body"></div>
 				<div id="${el}-body" class="document-metadata"></div>
+				<div id="${el}-preview" class="document-preview body"></div>
 			</div>
 		<#else>
 			<div class="document-header">

@@ -1,6 +1,6 @@
 .container .document-preview {
-	width: 630px;
-	float: right;
+	width: auto;
+	overflow: hidden;
 	padding-top: 13px;
 }
 
@@ -9,6 +9,11 @@
 }
 
 .container .document-metadata {
-	width: auto;
-	overflow: hidden;
+	width: 600px;
+	float: left;
+}
+
+.container .document-metadata .control .label-div {
+ 	width: 160px;
+	text-align: right;
 }
