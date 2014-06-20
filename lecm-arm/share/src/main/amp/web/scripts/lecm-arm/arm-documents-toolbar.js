@@ -486,7 +486,23 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             onExportClick: function onExportClick_Function (p_sType, p_aArgs, p_oItem) {
                 var value = p_oItem.value;
-                this.modules.dataGrid.exportData(value === "all");
+                if (value === "checked" && this.modules.dataGrid.getSelectedItems().length == 0 ) {
+                    Alfresco.util.PopupManager.displayPrompt(
+                        {
+                            title: "Выгрузка выбранных элементов",
+                            text: "Выгрузка выбранных элементов не возможна, так как не выбран ни один элемент",
+                            buttons: [
+                                {
+                                    text: "Ок",
+                                    handler: function dlA_onAction_action() {
+                                        this.destroy();
+                                    }
+                                }
+                            ]
+                        });
+                } else {
+                    this.modules.dataGrid.exportData(value === "all");
+                }
             },
 
             _onObjectFinderReady: function StartWorkflow_onObjectFinderReady(layer, args) {
