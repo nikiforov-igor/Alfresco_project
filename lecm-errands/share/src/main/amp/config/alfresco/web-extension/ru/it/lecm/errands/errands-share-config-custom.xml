@@ -61,22 +61,13 @@
                     <show id="lecm-errands:execution-report"/>
                 </field-visibility>
                 <appearance>
-                    <set id="set0" appearance="" template="/ru/it/lecm/base-share/components/statuses-set.ftl" />
-                    <set id="set1" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="set2" appearance="" />
-                    <set id="set3" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="set4" appearance="" />
-                    <set id="set5" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="set6" appearance="" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" />
-                    <set id="set7" appearance="" />
-
-                    <field id="lecm-errands:is-important" set="set0">
+                    <field id="lecm-errands:is-important">
                         <control template="/ru/it/lecm/base-share/components/controls/important.ftl" />
                     </field>
-                    <field id="lecm-statemachine:status" set="set0">
+                    <field id="lecm-statemachine:status">
                         <control template="/ru/it/lecm/base-share/components/controls/status.ftl" />
                     </field>
-                    <field id="lecm-errands:initiator-assoc" set="set1">
+                    <field id="lecm-errands:initiator-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -86,12 +77,12 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="set1" mandatory="true">
+                    <field id="lecm-errands:limitation-date" mandatory="true">
 	                    <constraint-handlers>
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:title" set="set2">
+                    <field id="lecm-errands:title">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-association-autocomplete-text-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Заголовки_x0020_поручений</control-param>
                             <control-param name="itemType">lecm-errands-dic:errand-titles</control-param>
@@ -102,7 +93,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-	                <field id="lecm-errands:executor-assoc" set="set3">
+	                <field id="lecm-errands:executor-assoc">
 		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -112,13 +103,13 @@
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-errands:end-date" set="set3"/>
-                    <field id="lecm-errands:controller-assoc" set="set3"/>
-                    <field id="lecm-errands:start-date" set="set3"/>
-                    <field id="lecm-errands:content" set="set4">
+                    <field id="lecm-errands:end-date"/>
+                    <field id="lecm-errands:controller-assoc"/>
+                    <field id="lecm-errands:start-date"/>
+                    <field id="lecm-errands:content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:coexecutors-assoc" set="set5">
+                    <field id="lecm-errands:coexecutors-assoc">
 		                <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 			                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
 			                <control-param name="nameSubstituteString">{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-short-name}</control-param>
@@ -128,8 +119,8 @@
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
 		                </control>
 	                </field>
-                    <field id="lecm-document:creator" set="set6"/>
-                    <field id="lecm-document:subject-assoc" set="set6">
+                    <field id="lecm-document:creator"/>
+                    <field id="lecm-document:subject-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -139,11 +130,11 @@
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:line" set="set7">
+                    <field id="lecm-errands:line">
                         <control template="/ru/it/lecm/base-share/components/controls/line.ftl"/>
                     </field>
-                    <field id="lecm-errands:execution-date" set="set7"/>
-                    <field id="lecm-errands:execution-report" set="set7">
+                    <field id="lecm-errands:execution-date"/>
+                    <field id="lecm-errands:execution-report">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
                 </appearance>
