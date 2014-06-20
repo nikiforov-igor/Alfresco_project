@@ -17,7 +17,7 @@ var getDocumentPresentString = function (nodeRef) {
 	if (nodeRef) {
 		var nodeDetails = DocumentUtils.getNodeDetails(nodeRef);
 		if (nodeDetails) {
-			return nodeDetails.item.node.properties["lecm-document:ext-present-string"];
+			return 'Редактирование атрибутов. ' + nodeDetails.item.node.properties["lecm-document:ext-present-string"];
 		}
 	}
 	return null;

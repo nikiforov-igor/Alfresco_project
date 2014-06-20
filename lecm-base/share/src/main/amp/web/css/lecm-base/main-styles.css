@@ -482,3 +482,12 @@
 .days-to-complete {
     width: 3em;
 }
+
+/*Обрезание заголовка страницы*/
+.alf-menu-title-text {
+	max-width: 1100px; /*todo сделать резиновым*/
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: inherit;
+}
