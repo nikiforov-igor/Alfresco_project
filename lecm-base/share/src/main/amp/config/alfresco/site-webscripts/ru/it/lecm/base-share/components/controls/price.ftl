@@ -1,4 +1,4 @@
-<#assign priceSet = item />
+<#assign priceSet = set />
 <div class="price-control">
     <div class="price-currency">
         <#assign currency = priceSet.children[1]/>
