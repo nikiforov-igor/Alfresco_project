@@ -1,5 +1,3 @@
-<#include "/org/alfresco/components/form/controls/common/editorparams.inc.ftl" />
-
 <#if field.control.params.rows??><#assign rows=field.control.params.rows><#else><#assign rows=2></#if>
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
@@ -31,7 +29,21 @@
 	                <#if form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>disabled: true,</#if>
 	                currentValue: "${field.value?js_string}",
 	                mandatory: ${field.mandatory?string},
-	                <@editorParameters field />
+		            editorParameters:{
+			            width: "100%",
+			            inline_styles: false,
+			            convert_fonts_to_spans: false,
+			            theme: 'advanced',
+			            theme_advanced_toolbar_location: "top",
+			            theme_advanced_toolbar_align: "left",
+			            theme_advanced_statusbar_location: "bottom",
+			            theme_advanced_path: false,
+			            language: "${locale?substring(0, 2)?js_string}",
+			            plugins: "fullscreen,table",
+			            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,fontselect,fontsizeselect, separator, fullscreen",
+			            theme_advanced_buttons2: "justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,table,separator,undo,redo,separator,forecolor,backcolor",
+			            theme_advanced_buttons3: null
+		            }
 	            }).setMessages(${messages});
 		}
 		YAHOO.util.Event.onDOMReady(init);

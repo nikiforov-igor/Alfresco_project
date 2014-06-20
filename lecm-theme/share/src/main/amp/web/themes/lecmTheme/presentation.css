@@ -718,10 +718,6 @@ span.navigation-separator-alt
    box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.defaultSkin table.mceLayout {
-   width: 100% !important;
-}
-
 .mceEditor.defaultSkin
 {
    box-shadow: 0.33px 2px 8px rgba(0, 0, 0, 0.15);
