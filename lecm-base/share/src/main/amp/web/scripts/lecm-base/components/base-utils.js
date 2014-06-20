@@ -431,6 +431,13 @@ LogicECM.module.Base.Util = {
     },
 
     // функции для контролов:
+    getControlValueView: function(nodeRef, displayValue, showTitle) {
+        var title = "";
+        if (showTitle == null || showTitle) {
+            title = "title='" + displayValue + "'";
+        }
+        return "<span><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a></span>";
+    },
 
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
 	    var title = "";

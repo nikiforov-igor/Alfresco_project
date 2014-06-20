@@ -69,6 +69,9 @@
 
                 var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
                     usePagination: ${usePagination?string},
+                    <#if field.control.params.overrideSortingWith??>
+                        overrideSortingWith: ${field.control.params.overrideSortingWith?string},
+                    </#if>
                     showExtendSearchBlock: false,
                         actions: [
                             <#if field.control.params.actionsDescriptor?? >

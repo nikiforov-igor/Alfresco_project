@@ -1,15 +1,15 @@
 package ru.it.lecm.workflow.extensions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import org.alfresco.model.ContentModel;
-import org.json.JSONObject;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.ISO8601DateFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
+import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -17,6 +17,11 @@ import ru.it.lecm.workflow.AssigneesList;
 import ru.it.lecm.workflow.AssigneesListItem;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -316,4 +321,14 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 		return LecmWorkflowModel.TYPE_ROUTE.toPrefixString(serviceRegistry.getNamespaceService());
 	}
 
+    public Scriptable getRouteEmployess(String routeRef, String workflowType) {
+        List<NodeRef> assigners = new ArrayList<>();
+        NodeRef assigneesList = workflowAssigneesListService.getDefaultAssigneesList(new NodeRef(routeRef), workflowType, orgstructureService.getCurrentEmployee());
+
+        List<ChildAssociationRef> listItemsAssocs = nodeService.getChildAssocs(assigneesList, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+        for (ChildAssociationRef listItemAssoc : listItemsAssocs) {
+            assigners.add(listItemAssoc.getChildRef());
+        }
+        return createScriptable(assigners);
+    }
 }

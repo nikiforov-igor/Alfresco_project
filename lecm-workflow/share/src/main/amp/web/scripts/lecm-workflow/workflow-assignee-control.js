@@ -688,32 +688,34 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 			}
 
 			var formsRuntime = this.widgets.form.formsRuntime;
-			var validations = formsRuntime.validations;
+            if (formsRuntime != null) {
+                var validations = formsRuntime.validations;
 
-			if (formsRuntime.formId === this.options.formId) {
-				this.validationHacked = true;
+                if (formsRuntime.formId === this.options.formId) {
+                    this.validationHacked = true;
 
-				// На afterFormRuntimeInit подписывается каждый экземпляр WorkflowList, и каждый пытается inject-ить этот
-				// валидатор. Чтобы не создавать копии одного и тоже валидатора, inject-им только при отсутствии.
-				if (!validations.some(isDueDateValidator)) {
-					formsRuntime.addValidation(this.options.dueDateId, // fieldId
-						LogicECM.module.Workflow.workflowDueDateValidator, // validationHandler
-						null, // validationArgs
-						'change', // when
-						null); // message
-				}
+                    // На afterFormRuntimeInit подписывается каждый экземпляр WorkflowList, и каждый пытается inject-ить этот
+                    // валидатор. Чтобы не создавать копии одного и тоже валидатора, inject-им только при отсутствии.
+                    if (!validations.some(isDueDateValidator)) {
+                        formsRuntime.addValidation(this.options.dueDateId, // fieldId
+                            LogicECM.module.Workflow.workflowDueDateValidator, // validationHandler
+                            null, // validationArgs
+                            'change', // when
+                            null); // message
+                    }
 
-				// Каждый экземпляр WorkflowList добавляет свой валидатор в коллекцию FormsRuntime, передавая себя (this)
-				// через validationArgs. Это позволит валидировать именно ту таблицу, которая относится к текущему
-				// экземпляру.
-				if (!validations.some(isworkflowListValidator)) {
-					formsRuntime.addValidation(this.options.listNodeRefInput,
-						LogicECM.module.Workflow.workflowListValidator,
-						{workflowListControl: this},
-					'change',
-						null);
-				}
-			}
+                    // Каждый экземпляр WorkflowList добавляет свой валидатор в коллекцию FormsRuntime, передавая себя (this)
+                    // через validationArgs. Это позволит валидировать именно ту таблицу, которая относится к текущему
+                    // экземпляру.
+                    if (!validations.some(isworkflowListValidator)) {
+                        formsRuntime.addValidation(this.options.listNodeRefInput,
+                            LogicECM.module.Workflow.workflowListValidator,
+                            {workflowListControl: this},
+                            'change',
+                            null);
+                    }
+                }
+            }
 		},
 		_hackTheRecordSet: function(layer, args) {
 			var rs;

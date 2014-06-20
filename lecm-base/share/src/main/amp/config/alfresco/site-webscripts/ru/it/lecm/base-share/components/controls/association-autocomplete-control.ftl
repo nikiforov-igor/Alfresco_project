@@ -149,6 +149,9 @@
     </#if>
         nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
         additionalFilter: "${field.control.params.additionalFilter!''}",
+    <#if field.control.params.showAssocViewForm??>
+        showAssocViewForm: ${field.control.params.showAssocViewForm?string},
+    </#if>
 	    useDynamicLoading: ${useDynamicLoading?string}
     });
 
@@ -201,6 +204,9 @@
         showSearch: ${showSearch?string},
         changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
         plane: true,
+    <#if field.control.params.showAssocViewForm??>
+        showAssocViewForm: ${field.control.params.showAssocViewForm?string},
+    </#if>
         currentValue: "${field.value!''}",
         itemType:"${field.control.params.itemType!field.endpointType}",
         additionalFilter: "${field.control.params.additionalFilter!''}"

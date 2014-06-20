@@ -77,7 +77,9 @@ LogicECM.module = LogicECM.module || {};
 
                 allowedNodesScript: null,
 
-	            useDynamicLoading: false
+	            useDynamicLoading: false,
+
+                showAssocViewForm: false
             },
 
             selectedItems: null,
@@ -481,7 +483,11 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.itemType == "lecm-orgstr:employee") {
 		                el.innerHTML += Util.getCroppedItem(Util.getControlEmployeeView(item.nodeRef, itemName), this.getRemoveButtonHTML(item));
 	                } else {
-                        el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(itemName), this.getRemoveButtonHTML(item));
+                        if (this.options.showAssocViewForm) {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlValueView(item.nodeRef, itemName, itemName), this.getRemoveButtonHTML(item));
+                        } else {
+                            el.innerHTML += Util.getCroppedItem(Util.getControlDefaultView(itemName), this.getRemoveButtonHTML(item));
+                        }
 	                }
                     YAHOO.util.Event.onAvailable("ac-" + this.controlId + item.nodeRef, this.attachRemoveItemClickListener, item, this);
                 }

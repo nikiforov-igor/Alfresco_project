@@ -43,7 +43,7 @@
 <#assign dueDateId = '${htmlId}_prop_bpm_workflowDueDate'>
 
 <#-- Состояния -->
-<#assign routeRef = (form.mode == 'edit') ? string(args.itemId, '')>
+<#assign routeRef = args.itemId!''>
 <#assign isRoute = routeRef?has_content>
 
 <div id='${containerId}' class="workflow-list-control-container">
