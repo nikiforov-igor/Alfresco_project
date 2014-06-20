@@ -32,31 +32,20 @@
                     <show id="lecm-document-aspects:is-shared-folder"/>
                 </field-visibility>
 	            <appearance>
-		            <set id="incoming2" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming3"/>
-		            <set id="incoming4" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming5"/>
-		            <set id="incoming6" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming7"/>
-		            <set id="incoming8"/>
-                    <set id="incoming9" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-		            <set id="incoming10"/>
-		            <set id="incoming11" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl"/>
-
-		            <field id="lecm-document:regnum" set="incoming2" mandatory="true">
+		            <field id="lecm-document:regnum" mandatory="true">
 			            <constraint-handlers>
 				           <constraint type="MANDATORY" validation-handler="LogicECM.module.Documents.regnumUniqueness.validator"
 			            event="keyup" />
 						</constraint-handlers>
 		            </field>
-		            <field id="lecm-document-aspects:reg-data-date" set="incoming2" />
+		            <field id="lecm-document-aspects:reg-data-date"/>
 
-		            <field id="lecm-document:title" set="incoming3"/>
+		            <field id="lecm-document:title"/>
 
-		            <field id="lecm-eds-document:document-type-assoc" set="incoming4"/>
-		            <field id="lecm-incoming:delivery-method-assoc" set="incoming4" mandatory="true"/>
+		            <field id="lecm-eds-document:document-type-assoc"/>
+		            <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 
-		            <field id="lecm-incoming:sender-assoc" set="incoming5" mandatory="true">
+		            <field id="lecm-incoming:sender-assoc" mandatory="true">
 			            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
 				            <control-param name="changeItemsFireAction">lecm-incoming-addressee-assoc</control-param>
 				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
@@ -66,7 +55,7 @@
 							<control-param name="createNewMessageId">label.new-contractor</control-param>
 			            </control>
 		            </field>
-		            <field id="lecm-incoming:addressee-assoc" set="incoming5">
+		            <field id="lecm-incoming:addressee-assoc">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
 				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
 							<control-param name="createNewMessage">Новый отправитель</control-param>
@@ -74,14 +63,14 @@
 			            </control>
 		            </field>
 
-		            <field id="lecm-incoming:outgoing-number" set="incoming6"/>
-		            <field id="lecm-incoming:outgoing-date" set="incoming6"/>
+		            <field id="lecm-incoming:outgoing-number"/>
+		            <field id="lecm-incoming:outgoing-date"/>
 
-		            <field id="lecm-eds-document:summaryContent" set="incoming7">
+		            <field id="lecm-eds-document:summaryContent">
 			            <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
 		            </field>
 
-		            <field id="lecm-incoming:recipient-assoc" set="incoming8">
+		            <field id="lecm-incoming:recipient-assoc">
 			            <control template="/ru/it/lecm/base-share/components/controls/double-association-tree-picker.ftl">
 				            <control-param name="firstItemType">lecm-orgstr:employee</control-param>
 				            <control-param name="firstRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Сотрудники</control-param>
@@ -103,24 +92,24 @@
 			            </control>
 		            </field>
 
-		            <field id="lecm-eds-document:execution-date" set="incoming9">
+		            <field id="lecm-eds-document:execution-date">
 			            <control template="/ru/it/lecm/base-share/components/controls/date.ftl">
 				            <control-param name="minLimitCurrentDate">true</control-param>
 			            </control>
 		            </field>
-		            <field id="lecm-document-aspects:is-on-control" set="incoming9"/>
+		            <field id="lecm-document-aspects:is-on-control"/>
 
-		            <field id="lecm-eds-document:file-register-assoc" set="incoming9"/>
-		            <field id="lecm-document:subject-assoc" set="incoming9" mandatory="true"/>
+		            <field id="lecm-eds-document:file-register-assoc"/>
+		            <field id="lecm-document:subject-assoc" mandatory="true"/>
 
-		            <field id="lecm-eds-document:note" set="incoming10">
+		            <field id="lecm-eds-document:note">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl">
                             <control-param name="rows">6</control-param>
                         </control>
 		            </field>
 
-		            <field id="lecm-incoming:is-not-registered" set="incoming11"/>
-		            <field id="lecm-document-aspects:is-shared-folder" set="incoming11"/>
+		            <field id="lecm-incoming:is-not-registered"/>
+		            <field id="lecm-document-aspects:is-shared-folder"/>
 	            </appearance>
             </form>
             <!-- Форма с набором полей для правой области (Общие сведения) на карточке документа-->
