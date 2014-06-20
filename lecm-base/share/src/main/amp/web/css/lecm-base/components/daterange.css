@@ -20,7 +20,7 @@
 .daterange-set .daterange-end-date .control {
     position: inherit;
 }
-.daterange-set .daterange-end-date .label-div {
+.daterange-set .daterange-end-date .control .label-div {
     width: 10px;
 }
 .daterange-set .daterange-unlimited {
