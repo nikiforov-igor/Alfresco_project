@@ -125,7 +125,7 @@ public class ExportData extends AbstractWebScript {
                         String result = "";
                         if (value != null) {
                             String type = (String) value.get("type");
-                            if ("date".equals(type)) {
+                            if ("date".equals(type) || "datetime".equals(type)) {
                                 Date date = null;
                                 try {
                                     date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX").parse(value.get("displayValue").toString());
