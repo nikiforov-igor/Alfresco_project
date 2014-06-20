@@ -56,7 +56,6 @@ LogicECM.control = LogicECM.control || {};
 			hasAddContentRight: null,
 			hasDeleteContentRight: null,
 			hasNewVersionContentRight: null,
-			showPreview: false,
 			selectedPreviewFile: null,
 
 			onReady:function () {
@@ -70,7 +69,13 @@ LogicECM.control = LogicECM.control || {};
 						this.widgets.showPreviewButton = new YAHOO.widget.Button(
 								this.id + "-show-preview-button",
 							{
-								onclick: { fn: this.showPreviewButtonClick, obj: null, scope: this },
+								type: "checkbox",
+								onclick: {
+									fn: this.updatePreview,
+									obj: null,
+									scope: this
+								},
+								checked: false,
 								disabled: true
 							}
 						);
@@ -321,11 +326,6 @@ LogicECM.control = LogicECM.control || {};
 				this.updateFormUI();
 			},
 
-			showPreviewButtonClick: function() {
-			 	this.showPreview = !this.showPreview;
-				this.updatePreview();
-			},
-
 			attachShowPreviewClickListener: function(node) {
 				Event.addListener("attachment-show-preview-" + node.nodeRef, "click", this.selectPreviewFile, node.nodeRef, this);
 			},
@@ -343,7 +343,7 @@ LogicECM.control = LogicECM.control || {};
 				if (this.widgets.showPreviewButton != null) {
 					this.widgets.showPreviewButton.set("disabled", this.selectedPreviewFile == null);
 				}
-				if (this.showPreview && this.selectedPreviewFile != null) {
+				if (this.selectedPreviewFile != null && (this.widgets.showPreviewButton == null || this.widgets.showPreviewButton.get("checked"))) {
 					YAHOO.Bubbling.fire("showPreview", {
 						nodeRef: this.selectedPreviewFile
 					});
