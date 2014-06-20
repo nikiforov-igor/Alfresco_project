@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.*;
-import ru.it.lecm.base.beans.SubstitudeBean;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -22,8 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * User: mShafeev
- * Date: 01.11.12
+ * User: PMelnikov
+ * Date: 11.06.14
  */
 
 public class ExportData extends AbstractWebScript {
@@ -31,7 +30,6 @@ public class ExportData extends AbstractWebScript {
     private static final transient Logger log = LoggerFactory.getLogger(ExportData.class);
 
     protected NodeService nodeService;
-    private SubstitudeBean substituteService;
 
     /**
      * Russian locale
@@ -41,15 +39,11 @@ public class ExportData extends AbstractWebScript {
     /**
      * Формат даты
      */
-    private static final String DATE_FORMAT = "dd MMM yyyy HH:mm:ss";
+    private static final String DATE_FORMAT = "EEE dd MMM YYYY";
     private RhinoScriptProcessor rhinoScriptProcessor;
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
-    }
-
-    public void setSubstituteService(SubstitudeBean substitudeService) {
-        this.substituteService = substitudeService;
     }
 
     @Override
@@ -74,8 +68,8 @@ public class ExportData extends AbstractWebScript {
 
             JSONObject parameters = new JSONObject(req.getParameter("parameters"));
             //сбрасываем настройки пагинации
-            //parameters.getJSONObject("params").put("maxResults", "" + Integer.MAX_VALUE);
-            //parameters.getJSONObject("params").put("startIndex", "0");
+            parameters.getJSONObject("params").put("maxResults", "" + Integer.MAX_VALUE);
+            parameters.getJSONObject("params").put("startIndex", "0");
 
             scriptModel.put("json", parameters);
             Map<String, Object> returnModel = new HashMap<String, Object>(8, 1.0f);
@@ -138,7 +132,7 @@ public class ExportData extends AbstractWebScript {
                                 } catch (ParseException e) {
                                     log.error("Error while parsing date format", e);
                                 }
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("EEE dd MMM YYYY");
+                                SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, LOCALE_RU);
                                 result = dateFormat.format(date);
                             } else if ("boolean".equals(type)){
                                 Boolean booleanValue = Boolean.parseBoolean(value.get("displayValue").toString());

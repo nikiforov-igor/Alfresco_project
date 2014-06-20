@@ -177,13 +177,9 @@
 
     <bean id="webscript.ru.it.lecm.search.export.post"
           class="ru.it.lecm.base.scripts.ExportData"
-          parent="webscript"
-          depends-on="substitudeService">
+          parent="webscript">
         <property name="nodeService">
             <ref bean="nodeService" />
-        </property>
-        <property name="substituteService">
-            <ref bean="substitudeService" />
         </property>
         <property name="rhinoScriptProcessor">
             <ref bean="javaScriptProcessor" />
