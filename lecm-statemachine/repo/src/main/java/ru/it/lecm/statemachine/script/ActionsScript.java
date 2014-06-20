@@ -235,6 +235,8 @@ public class ActionsScript extends DeclarativeWebScript {
                                 if (state.isForm()) {
                                     resultState.put("formType", state.getFormType());
                                     resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
+                                    resultState.put("connectionType", state.getFormConnection());
+                                    resultState.put("connectionIsSystem", state.isSystemFormConnection());
                                 }
                                 actionsList.add(resultState);
 
@@ -298,6 +300,8 @@ public class ActionsScript extends DeclarativeWebScript {
                 if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
                     actionStruct.put("subtype", "document");
                     actionStruct.put("documentType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE));
+                    actionStruct.put("connectionType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION));
+                    actionStruct.put("connectionIsSystem", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM));
                     actionStruct.put("formFolder", documentService.getDraftRoot().toString());
                 } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
                     actionStruct.put("subtype", "workflow");

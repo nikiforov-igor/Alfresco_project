@@ -261,10 +261,11 @@ LogicECM.module = LogicECM.module || {};
                         };
                         responseHandler = function(response) {
                             var res = response;
-                            var template = "{proxyUri}lecm/statemachine/postActions?label={label}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
+                            var template = "{proxyUri}lecm/statemachine/postActions?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
                             var url = YAHOO.lang.substitute(template, {
                                 proxyUri: Alfresco.constants.PROXY_URI,
-                                label: encodeURIComponent(action.label),
+                                connectionType: encodeURIComponent(action.connectionType),
+                                connectionIsSystem: encodeURIComponent(action.connectionIsSystem),
                                 fromNodeRef: me.options.nodeRef,
                                 toNodeRef: response.json.persistedObject
                             });

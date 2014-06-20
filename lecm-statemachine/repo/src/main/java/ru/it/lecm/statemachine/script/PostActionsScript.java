@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine.script;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.springframework.extensions.webscripts.Cache;
@@ -11,7 +10,6 @@ import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,7 +36,8 @@ public class PostActionsScript extends DeclarativeWebScript  {
 
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
-        String label = req.getParameter("label");
+        String connectionType = req.getParameter("connectionType");
+        Boolean isSystem = Boolean.valueOf(req.getParameter("connectionIsSystem"));
 
         NodeRef fromNode = null;
         if (req.getParameter("fromNodeRef") != null && NodeRef.isNodeRef(req.getParameter("fromNodeRef"))) {
@@ -49,22 +48,8 @@ public class PostActionsScript extends DeclarativeWebScript  {
         if (req.getParameter("toNodeRef") != null && NodeRef.isNodeRef(req.getParameter("toNodeRef"))) {
             toNode = new NodeRef(req.getParameter("toNodeRef"));
         }
-
-        if (label != null && fromNode != null && toNode != null) {
-            List<NodeRef> actions = groupActionsService.getActiveActions(fromNode);
-            NodeRef activeAction = null;
-            for (NodeRef action : actions) {
-                String actionLabel = nodeService.getProperty(action, ContentModel.PROP_NAME).toString();
-                if (actionLabel.equals(label)) {
-                    activeAction = action;
-                    break;
-                }
-            }
-            if (activeAction != null) {
-                String connectionType = nodeService.getProperty(activeAction, GroupActionsService.PROP_DOCUMENT_CONNECTION).toString();
-                Boolean isSystem = (Boolean) nodeService.getProperty(activeAction, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM);
-                documentConnectionService.createConnection(toNode, fromNode, connectionType, isSystem, true);
-            }
+        if (connectionType != null) {
+            documentConnectionService.createConnection(toNode, fromNode, connectionType, isSystem, true);
         }
         return new HashMap<String, Object>();
     }
