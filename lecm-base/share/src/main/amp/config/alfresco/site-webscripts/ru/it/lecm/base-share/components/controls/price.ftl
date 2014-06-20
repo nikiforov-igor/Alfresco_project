@@ -1,4 +1,8 @@
-<#assign priceSet = set />
+<#if item??>
+	<#assign priceSet = item />
+<#else>
+	<#assign priceSet = set />
+</#if >
 <div class="price-control">
     <div class="price-currency">
         <#assign currency = priceSet.children[1]/>
