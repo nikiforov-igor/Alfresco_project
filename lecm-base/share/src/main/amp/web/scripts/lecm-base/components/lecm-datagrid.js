@@ -1280,8 +1280,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 }
             },
 
-            exportData: function exportData_function() {
-                this.search.exportData();
+            exportData: function exportData_function(isAll) {
+                this.search.exportData(isAll);
             },
 
             _filterInArray: function (filterCode, filtersArray) {

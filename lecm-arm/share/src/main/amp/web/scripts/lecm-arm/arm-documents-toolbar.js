@@ -253,7 +253,19 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
                 this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
-                this.toolbarButtons["defaultActive"].exportButton = Alfresco.util.createYUIButton(this, "exportButton", this.onExportClick);
+
+                var exportButtonMenu  = [
+                            { text: "Выгрузить все", value: "all", onclick: { fn: this.onExportClick.bind(this) } },
+                    	    { text: "Выгрузить выбранные", value: "checked", onclick: { fn: this.onExportClick.bind(this) } }
+                    	];
+                this.toolbarButtons["defaultActive"].exportButton = new YAHOO.widget.Button(
+                    this.id + "-exportButton",
+                    {
+                        type: "menu",
+                        menu: exportButtonMenu,
+                        disabled: false
+                    }
+                );
 
             },
 
@@ -472,8 +484,9 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 }
             },
 
-            onExportClick: function onExportClick_Function () {
-                this.modules.dataGrid.exportData();
+            onExportClick: function onExportClick_Function (p_sType, p_aArgs, p_oItem) {
+                var value = p_oItem.value;
+                this.modules.dataGrid.exportData(value === "all");
             },
 
             _onObjectFinderReady: function StartWorkflow_onObjectFinderReady(layer, args) {

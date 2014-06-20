@@ -341,16 +341,18 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 }
             },
 
-            exportData: function exportAllData_function() {
+            exportData: function exportAllData_function(isAll) {
                 if (this.currentSearchArgs == null) return;
                 var parameters = this.prepareSearchParams(this.currentSearchArgs);
                 parameters.columns = this.dataColumns;
-                var items = this.dataGrid.getSelectedItems();
-                var currentSelectedItems = [];
-                for (var i = 0; i < items.length; i++) {
-                    currentSelectedItems.push(items[i].nodeRef);
+                if (!isAll) {
+                    var items = this.dataGrid.getSelectedItems();
+                    var currentSelectedItems = [];
+                    for (var i = 0; i < items.length; i++) {
+                        currentSelectedItems.push(items[i].nodeRef);
+                    }
+                    parameters.params.searchNodes = currentSelectedItems.join(",");
                 }
-                parameters.params.searchNodes = currentSelectedItems.join(",");
                 var form = document.createElement("form");
                 form.enctype = "multipart/form-data";
                 form.action = Alfresco.constants.PROXY_URI + "lecm/search/export";
