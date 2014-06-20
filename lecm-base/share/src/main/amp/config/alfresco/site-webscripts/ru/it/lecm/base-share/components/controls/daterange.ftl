@@ -7,6 +7,11 @@
 <@renderDateRange set=set />
 
 <#macro renderDateRange set>
+	<div class="daterange-unlimited">
+		<#assign unlimited = set.children[2]/>
+		<#assign unlimitHtmlId = (htmlid + "_" + unlimited.id)/>
+		<@formLib.renderField field=form.fields[unlimited.id] />
+	</div>
 	<div id="${htmlid}" class="daterange-set two-columns">
         <div class="column">
             <div class="daterange-start-date">
@@ -16,11 +21,6 @@
             </div>
         </div>
         <div class="column last">
-            <div class="daterange-unlimited">
-                <#assign unlimited = set.children[2]/>
-                <#assign unlimitHtmlId = (htmlid + "_" + unlimited.id)/>
-                <@formLib.renderField field=form.fields[unlimited.id] />
-            </div>
             <div class="daterange-end-date">
                 <#assign end = set.children[1]/>
                 <#assign endDateHtmlId = (htmlid + "_" + end.id)/>

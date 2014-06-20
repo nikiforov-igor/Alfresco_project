@@ -1,9 +1,13 @@
 .daterange-set.two-columns .column {
-    width: 49.1%;
+    width: 64%;
     float: left;
 }
 .daterange-set.two-columns .column.last {
     float: right;
+	width: 34%;
+}
+.daterange-set.two-columns .control .label-div ~ .container {
+	min-width: 110px;
 }
 .daterange-set .daterange-dates {
     width: auto;
