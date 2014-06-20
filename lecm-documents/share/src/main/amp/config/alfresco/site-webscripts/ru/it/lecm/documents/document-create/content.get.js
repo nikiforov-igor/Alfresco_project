@@ -5,6 +5,10 @@ function main() {
 	var docType = "";
 	var formId = "";
 
+	var connectionType = null;
+	var connectionIsSystem = null;
+	var parentDocumentNodeRef = null;
+
 	var params = page.url.args["p1"];
 	var decodeParams = new java.lang.String(Packages.org.apache.commons.codec.binary.Base64.decodeBase64(params));
 
@@ -20,6 +24,12 @@ function main() {
 					docType = value;
 				} else if (name == "formId") {
 					formId = value;
+				} else if (name == "connectionType") {
+					connectionType = value;
+				} else if (name == "connectionIsSystem") {
+					connectionIsSystem = value;
+				} else if (name == "parentDocumentNodeRef") {
+					parentDocumentNodeRef = value;
 				} else {
 					urlArgs[name] = value;
 				}
@@ -33,6 +43,9 @@ function main() {
 				options: {
 					documentType: docType,
 					formId: formId,
+					connectionType: connectionType,
+					connectionIsSystem: connectionIsSystem,
+					parentDocumentNodeRef: parentDocumentNodeRef,
 					args: urlArgs
 				}
 			};

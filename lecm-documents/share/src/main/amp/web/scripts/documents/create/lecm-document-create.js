@@ -36,10 +36,17 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			options: {
 				documentType: null,
 				formId: null,
+
+				//Параметры для создания связи
+				connectionType: null,
+				connectionIsSystem: null,
+				parentDocumentNodeRef: null,
+
 				args: {}
 			},
 
 			rootFolder: null,
+			splashScreen: null,
 
 			onReady: function () {
 				this.loadDraftRoot();
@@ -121,7 +128,27 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormSubmitSuccess: function (response) {
-				window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + response.json.persistedObject;
+				var createdDocument = response.json.persistedObject;
+				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
+                    var template = "{proxyUri}lecm/statemachine/postActions?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
+                    var url = YAHOO.lang.substitute(template, {
+                        proxyUri: Alfresco.constants.PROXY_URI,
+                        connectionType: encodeURIComponent(this.options.connectionType),
+                        connectionIsSystem: encodeURIComponent(this.options.connectionIsSystem),
+                        fromNodeRef: this.options.parentDocumentNodeRef,
+                        toNodeRef: createdDocument
+                    });
+                    this._showSplash();
+                    var callback = {
+                        success: function(oResponse) {
+                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+                        },
+                        timeout: 60000
+                    };
+                    YAHOO.util.Connect.asyncRequest('GET', url, callback);
+				} else {
+					window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+				}
 			},
 
 			onFormSubmitFailure: function(response) {
@@ -133,6 +160,18 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 			onCancelButtonClick: function() {
 				document.location.href = document.referrer;
+			},
+
+			_showSplash: function() {
+				this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+					{
+						text: Alfresco.util.message("label.loading"),
+						spanClass: "wait",
+						displayTime: 0
+					});
+			},
+			_hideSplash: function() {
+				YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
 			}
 		});
 })();

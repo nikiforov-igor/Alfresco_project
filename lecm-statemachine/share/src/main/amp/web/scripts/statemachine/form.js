@@ -242,47 +242,18 @@ LogicECM.module = LogicECM.module || {};
 				this._createScriptForm(action);
 			} else {
                 if (action.subtype == "document" || action.subtype == "workflow") {
-                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
-                    var templateRequestParams;
-                    var formWidth = "84em";
-
-                    templateUrl += "lecm/components/form";
-                    var templateRequestParams = "";
-                    var responseHandler = "";
                     if (action.subtype == "document") {
-                        templateRequestParams = {
-                            itemKind: "type",
-                            itemId: action.documentType,
-                            mode: "create",
-                            submitType: "json",
-                            formId: "workflow-form",
-                            destination: action.formFolder,
-                            showCancelButton: true
-                        };
-                        responseHandler = function(response) {
-                            var res = response;
-                            var template = "{proxyUri}lecm/statemachine/postActions?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
-                            var url = YAHOO.lang.substitute(template, {
-                                proxyUri: Alfresco.constants.PROXY_URI,
-                                connectionType: encodeURIComponent(action.connectionType),
-                                connectionIsSystem: encodeURIComponent(action.connectionIsSystem),
-                                fromNodeRef: me.options.nodeRef,
-                                toNodeRef: response.json.persistedObject
-                            });
-                            this._showSplash();
-                            var callback = {
-                                success: function(oResponse) {
-                                    document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + res.json.persistedObject;
-                                },
-                                argument: {
-                                    contractsObject: this
-                                },
-                                timeout: 60000
-                            };
-                            YAHOO.util.Connect.asyncRequest('GET', url, callback);
-                        }
+	                    var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
+
+	                    var params = "documentType=" + action.documentType;
+	                    params += "&formId=" + "workflow-form";
+	                    params += "&connectionType=" + action.connectionType;
+	                    params += "&connectionIsSystem=" + action.connectionIsSystem;
+	                    params += "&parentDocumentNodeRef=" + this.options.nodeRef;
+
+	                    window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
                     } else {
-                        templateRequestParams = {
+                        var templateRequestParams = {
                             itemKind: "workflow",
                             itemId: action.workflowType,
                             mode: "create",
@@ -291,48 +262,49 @@ LogicECM.module = LogicECM.module || {};
                             destination: action.formFolder,
                             showCancelButton: true
                         };
-                        responseHandler = function(response) {
+                        var responseHandler = function(response) {
                             // document.location.href = document.location.href;
                             // ALF-2803
                             window.location.reload(true);
                         }
+
+	                    var me = this;
+	                    LogicECM.CurrentModules = {};
+	                    LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+		                    width: "84em",
+		                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
+		                    templateRequestParams: templateRequestParams,
+		                    actionUrl: null,
+		                    destroyOnHide: true,
+		                    doBeforeDialogShow: {
+			                    scope: this,
+			                    fn: function(p_form, p_dialog) {
+				                    p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
+				                    var contId = p_dialog.id + "-form-container";
+				                    Dom.addClass(contId, "metadata-form-edit");
+				                    if (action.formType && action.formType != "") {
+					                    Dom.addClass(contId, action.formType.replace(":", "_"));
+				                    } else {
+					                    Dom.addClass(contId, "no-form-type");
+				                    }
+
+				                    this.doubleClickLock = false;
+
+				                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+			                    }
+		                    },
+		                    doBeforeFormSubmit: {
+			                    scope: this,
+			                    fn: function() {
+				                    this._showSplash();
+			                    }
+		                    },
+		                    onSuccess: {
+			                    scope: this,
+			                    fn: responseHandler
+		                    }
+	                    }).show();
                     }
-                    var me = this;
-                    LogicECM.CurrentModules = {};
-                    LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                        width: formWidth,
-                        templateUrl: templateUrl,
-                        templateRequestParams: templateRequestParams,
-                        actionUrl: null,
-                        destroyOnHide: true,
-                        doBeforeDialogShow: {
-                            scope: this,
-                            fn: function(p_form, p_dialog) {
-                                p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
-                                var contId = p_dialog.id + "-form-container";
-                                Dom.addClass(contId, "metadata-form-edit");
-                                if (action.formType && action.formType != "") {
-                                    Dom.addClass(contId, action.formType.replace(":", "_"));
-                                } else {
-                                    Dom.addClass(contId, "no-form-type");
-                                }
-
-                                this.doubleClickLock = false;
-
-                                p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-                            }
-                        },
-                        doBeforeFormSubmit: {
-                            scope: this,
-                            fn: function() {
-                                this._showSplash();
-                            }
-                        },
-                        onSuccess: {
-                            scope: this,
-                            fn: responseHandler
-                        }
-                    }).show();
                 } else {
                     var me = this;
                     Alfresco.util.PopupManager.displayPrompt(
