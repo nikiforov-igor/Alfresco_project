@@ -817,12 +817,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         String currentUser = authService.getCurrentUserName();
         Map<String, Serializable> preferences = preferenceService.getPreferences(currentUser, favourites);
         if (preferences != null) {
-            String favouriteDocs = preferences.get(favourites) != null ? preferences.get(favourites).toString() : null;
-            if (favouriteDocs != null) {
-                if (!favouriteDocs.contains(document.toString())) {
-                    favouriteDocs += "," + document.toString();
-                    preferences.put(favourites, favouriteDocs);
-                }
+            String favouriteDocs = preferences.get(favourites) != null ? preferences.get(favourites).toString() : "";
+            if (!favouriteDocs.contains(document.toString())) {
+                favouriteDocs += (favouriteDocs.isEmpty() ? "" : ",") + document.toString();
+                preferences.put(favourites, favouriteDocs);
             }
         } else {
             preferences = new HashMap<>();
