@@ -1,6 +1,7 @@
 package ru.it.lecm.base.processors;
 
 import org.alfresco.service.cmr.preference.PreferenceService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
 
 import java.io.Serializable;
@@ -26,7 +27,9 @@ public class FavouritesProcessor extends SearchQueryProcessor {
             if (favouriteDocs != null && favouriteDocs.length() > 0) {
                 String[] docsRefs = favouriteDocs.split(",");
                 for (String docsRef : docsRefs) {
-                    sbQuery.append("ID:").append(docsRef.replace(":", "\\:")).append(" OR ");
+                    if (NodeRef.isNodeRef(docsRef)) {
+                        sbQuery.append("ID:").append(docsRef.replace(":", "\\:")).append(" OR ");
+                    }
                 }
 
             }
