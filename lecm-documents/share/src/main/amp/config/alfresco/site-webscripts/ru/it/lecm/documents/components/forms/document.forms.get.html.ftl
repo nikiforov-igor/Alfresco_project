@@ -35,14 +35,17 @@
 		                Event = YAHOO.util.Event;
 		
 		            function init() {
-		                var forms = Dom.getChildren(Dom.getChildren("${el}-formContainer")[0]);
-		
-		                if (forms.length > 0) {
-		                    var heading = Dom.get("${el}-heading");
-		
-		                    Dom.removeClass(heading, "not-active");
-		                    Alfresco.util.createTwister(heading, "DocumentForms");
-		                }
+			            var formContainerChildren = Dom.getChildren("${el}-formContainer");
+			            if (formContainerChildren != null && formContainerChildren.length > 0) {
+				            var forms = Dom.getChildren(formContainerChildren[0]);
+
+				            if (forms.length > 0) {
+					            var heading = Dom.get("${el}-heading");
+
+					            Dom.removeClass(heading, "not-active");
+					            Alfresco.util.createTwister(heading, "DocumentForms");
+				            }
+			            }
 		            }
 		
 		            Event.onDOMReady(init);
