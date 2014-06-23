@@ -9,6 +9,8 @@ function main() {
     AlfrescoUtil.param("isAnchor");
 
     model.hasStatemachine = hasStatemachine(model.nodeRef);
+
+	model.isErrandsStarter = isStarter("lecm-errands:document");
 }
 
 main();

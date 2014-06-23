@@ -24,6 +24,7 @@ LogicECM.module.Errands.dashlet = LogicECM.module.Errands.dashlet || {};
             onAddErrandClick: function Errands_onAddErrandsClick(args) {
 	            var url = Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + this.options.itemType;
 	            var params = "documentType=" + this.options.itemType;
+	            params += "&formId=" + "workflow-form";
 	            if (args != null) {
 		            for (var prop in args) {
 			            if (args.hasOwnProperty(prop)) {
