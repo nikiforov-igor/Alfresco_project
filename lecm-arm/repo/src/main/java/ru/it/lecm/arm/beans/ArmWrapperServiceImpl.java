@@ -10,12 +10,13 @@ import ru.it.lecm.arm.beans.childRules.ArmStatusesChildRule;
 import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
-//import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+//import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 /**
  * User: dbashmakov
@@ -258,6 +259,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setTitle(status);
         node.setNodeRef(null);
         node.setArmNodeRef(parentNode.getNodeRef());
+        node.setNodeType(ArmService.TYPE_ARM_NODE.toPrefixString(namespaceService));
 
         StringBuilder sb = new StringBuilder();
         if (parentNode.getSearchQuery() != null) {
