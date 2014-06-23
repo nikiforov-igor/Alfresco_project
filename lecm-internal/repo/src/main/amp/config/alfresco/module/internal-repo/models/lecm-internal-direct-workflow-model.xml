@@ -6,6 +6,7 @@
 
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+        <import uri="http://www.it.ru/logicECM/document/workflow/1.0" prefix="lecmWorkflowDocument"/>
         <import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
         <import uri="http://www.alfresco.org/model/bpm/1.0" prefix="bpm"/>
         <import uri="http://www.it.ru/logicECM/model/workflow/1.0" prefix="lecm-workflow"/>
@@ -29,10 +30,14 @@
             <properties>
                 <property name="internalDirect:answerResult">
                     <type>d:text</type>
-                    <mandatory>true</mandatory>
+                    <mandatory>false</mandatory>
                     <default></default>
                 </property>
                 <property name="internalDirect:formData">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+                <property name="internalDirect:createdNodeRef">
                     <type>d:text</type>
                     <default></default>
                 </property>
@@ -42,6 +47,9 @@
                     <default>false</default>
                 </property>
             </overrides>
+            <mandatory-aspects>
+                <aspect>lecmWorkflowDocument:createdNodeRefAspect</aspect>
+            </mandatory-aspects>
         </type>
     </types>
 </model>

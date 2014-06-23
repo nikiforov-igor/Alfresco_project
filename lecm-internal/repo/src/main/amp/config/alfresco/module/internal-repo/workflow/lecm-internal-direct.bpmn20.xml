@@ -85,61 +85,65 @@
                     <activiti:field name="script">
                         <activiti:string><![CDATA[
                             var document = bpm_package.children[0];
-							var answer = eval('(' + task.getVariable("internalDirect_answerResult") + ')');
+
 							var answerObject = search.findNode(task.getVariableLocal("answer"));
 							var curator = search.findNode(task.getVariableLocal("initiatorEmployee"));
 							var curators = [];
 							curators.push(curator.nodeRef.toString());
 							var currentUser = orgstructure.getCurrentEmployee();
-							if (answer.type == "takeNote") {
-							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Принято к сведению";
-							    answerObject.save();
-							    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " принял к сведению направленный вами документ ";
-                                notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
-                                notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
-                            } else if (answer.type == "document") {
-                                var newDocument = search.findNode(answer.nodeRef);
+							var newDocumentRef = task.getVariable("lecmWorkflowDocument_createdNodeRef");
+							if (newDocumentRef != null && newDocumentRef != "") {
+                                var newDocument = search.findNode(newDocumentRef);
                                 //Формируем ответ
                                 answerObject.createAssociation(newDocument, "lecm-internal-table-structure:answer-document-assoc")
-							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
-							    answerObject.save();
-							    //Добавляем инициатора процесса в участники нового документа
-							    documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
-							    //Добавляем слушателя
-							    documentEvent.subscribe(newDocument, document);
-                            } else if (answer.type == "answer") {
-                                var answerText = "";
-                                //Обрабатываем типовой ответ
-                                if (answer.typical != null && answer.typical != "") {
-                                    var typical = search.findNode(answer.typical);
-                                    answerText = typical.properties["cm:name"];
-                                    answerObject.createAssociation(typical, "lecm-internal-table-structure:answer-typical-assoc");
-                                }
-                                //Обрабатываем комметарий
-                                if (answer.manual != null && answer.manual != "") {
-                                    answerText += (answerText.length > 0 ? ". " : "") + answer.manual;
-                                }
-                                //Обрабатываем прикремленные файлы
-                                if (answer.files != null && answer.files != "") {
-                                    var files = answer.files.split(",");
-                                    for (var i in files) {
-                                        var file = search.findNode(files[i]);
-                                        document.createAssociation(file, "lecm-document-aspects:attachments-temp-assoc");
-                                        answerObject.createAssociation(file, "lecm-internal-table-structure:answer-attachment-assoc");
+                                answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+                                answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
+                                answerObject.save();
+                                //Добавляем инициатора процесса в участники нового документа
+                                documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
+                                //Добавляем слушателя
+                                documentEvent.subscribe(newDocument, document);
+							} else {
+                                var answer = eval('(' + task.getVariable("internalDirect_answerResult") + ')');
+                                if (answer.type == "takeNote") {
+                                    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+                                    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
+                                    answerObject.properties["lecm-internal-table-structure:answer-details"] = "Принято к сведению";
+                                    answerObject.save();
+                                    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " принял к сведению направленный вами документ ";
+                                    notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
+                                    notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                                } else if (answer.type == "answer") {
+                                    var answerText = "";
+                                    //Обрабатываем типовой ответ
+                                    if (answer.typical != null && answer.typical != "") {
+                                        var typical = search.findNode(answer.typical);
+                                        answerText = typical.properties["cm:name"];
+                                        answerObject.createAssociation(typical, "lecm-internal-table-structure:answer-typical-assoc");
                                     }
-                                }
-							    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
-							    answerObject.properties["lecm-internal-table-structure:answer-details-clean"] = answerText;
-							    answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
-							    answerObject.save();
+                                    //Обрабатываем комметарий
+                                    if (answer.manual != null && answer.manual != "") {
+                                        answerText += (answerText.length > 0 ? ". " : "") + answer.manual;
+                                    }
+                                    //Обрабатываем прикремленные файлы
+                                    if (answer.files != null && answer.files != "") {
+                                        var files = answer.files.split(",");
+                                        for (var i in files) {
+                                            var file = search.findNode(files[i]);
+                                            document.createAssociation(file, "lecm-document-aspects:attachments-temp-assoc");
+                                            answerObject.createAssociation(file, "lecm-internal-table-structure:answer-attachment-assoc");
+                                        }
+                                    }
+                                    answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
+                                    answerObject.properties["lecm-internal-table-structure:answer-complete"] = "true";
+                                    answerObject.properties["lecm-internal-table-structure:answer-details-clean"] = answerText;
+                                    answerObject.properties["lecm-internal-table-structure:answer-details"] = "!html " + documentScript.wrapperAttribute(answerObject, answerText);
+                                    answerObject.save();
 
-      							var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";
-                                notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
-                                notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                                    var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";
+                                    notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
+                                    notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+                                }
                             }
 						]]></activiti:string>
                     </activiti:field>

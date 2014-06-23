@@ -8,6 +8,7 @@ function main() {
 	var connectionType = null;
 	var connectionIsSystem = null;
 	var parentDocumentNodeRef = null;
+	var workflowTask = null;
 
 	var params = page.url.args["p1"];
 	var decodeParams = new java.lang.String(Packages.org.apache.commons.codec.binary.Base64.decodeBase64(params));
@@ -30,6 +31,8 @@ function main() {
 					connectionIsSystem = value;
 				} else if (name == "parentDocumentNodeRef") {
 					parentDocumentNodeRef = value;
+				} else if (name == "workflowTask") {
+                    workflowTask = value;
 				} else {
 					urlArgs[name] = value;
 				}
@@ -46,6 +49,7 @@ function main() {
 					connectionType: connectionType,
 					connectionIsSystem: connectionIsSystem,
 					parentDocumentNodeRef: parentDocumentNodeRef,
+                    workflowTask: workflowTask,
 					args: urlArgs
 				}
 			};

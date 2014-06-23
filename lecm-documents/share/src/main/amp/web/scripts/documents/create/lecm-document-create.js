@@ -41,6 +41,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				connectionType: null,
 				connectionIsSystem: null,
 				parentDocumentNodeRef: null,
+                //для завершения процесса
+                workflowTask: null,
 
 				args: {}
 			},
@@ -146,7 +148,30 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         timeout: 60000
                     };
                     YAHOO.util.Connect.asyncRequest('GET', url, callback);
-				} else {
+				} else if (this.options.workflowTask != null) {
+                    var template = "{proxyUri}api/task/{workflowTask}/formprocessor";
+                    var url = YAHOO.lang.substitute(template, {
+                        proxyUri: Alfresco.constants.PROXY_URI,
+                        workflowTask: encodeURIComponent(this.options.workflowTask)
+                    });
+                    var params = {
+                        "prop_lecmWorkflowDocument_createdNodeRef": createdDocument,
+                        "direct-type": "on",
+                        "prop_transitions": "Next"
+                    }
+                    this._showSplash();
+                    Alfresco.util.Ajax.jsonPost(
+                        {
+                            url: url,
+                            dataObj: params,
+                            successCallback: {
+                                fn: function (response) {
+                                    document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+                                },
+                                scope: this
+                            }
+                        });
+                }else {
 					window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
 				}
 			},

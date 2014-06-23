@@ -112,7 +112,23 @@ LogicECM.module = LogicECM.module || {};
                     });
                 },
                 addDocument: function addDocement_function() {
-                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
+                    var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + "lecm-internal:document";
+
+                    var params = "documentType=" + "lecm-internal:document";
+                    params += "&formId=" + "workflow-form";
+                    params += "&workflowTask=" + "${form.arguments.itemId!""}";
+
+                    if (this.initFields != null && this.initFields != "") {
+                        var fields = eval("(" + this.initFields + ")");
+                        for (var prop in fields) {
+                            if (fields.hasOwnProperty(prop)) {
+                                params += "&" + prop + "=" + fields[prop];
+                            }
+                        }
+                    }
+
+                    window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+/*                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
 	                var templateRequestParams = {
 		                itemKind: "type",
 		                destination: this.destination,
@@ -155,7 +171,7 @@ LogicECM.module = LogicECM.module || {};
                             },
                             scope: this
                         }
-                    }).show();
+                    }).show();*/
                 },
                 onFirst: function onFirst_function() {
                     this.clearAnswer();
