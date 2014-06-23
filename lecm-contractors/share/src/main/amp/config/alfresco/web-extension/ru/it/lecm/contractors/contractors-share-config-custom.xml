@@ -28,7 +28,9 @@
                     <show id="lecm-contractor:BIK"/>                                                                    <!-- БИК -->
                     <show id="lecm-contractor:bankname"/>                                                               <!-- Наименование банка -->
                     <show id="lecm-contractor:bank-location"/>                                                          <!-- Местоположение банка -->
-                    <show id="lecm-contractor:contractor-code"/>                                                        <!-- Код контрагента -->
+                    <show id="lecm-contractor:contractor-code"/>
+                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
+                    <!-- Код контрагента -->
 
                     <show id="lecm-contractor:contractor-to-specialization-association"/>                               <!-- FK Специализация -->
                     <show id="lecm-contractor:contractor-to-legalform-association"/>                                    <!-- FK ОПФ -->
@@ -99,6 +101,9 @@
                                 <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname}</control-param>
                             </control>
                         </field>
+                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts" mandatory="true">            <!-- FK Специализация -->
+                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl" />
+                    </field>
                 </appearance>
             </form>
 
@@ -174,6 +179,7 @@
                     <show id="lecm-contractor:contractor-to-specialization-association"/>                               <!-- FK Специализация -->
                     <show id="lecm-contractor:contractor-to-legalform-association"/>                                    <!-- FK ОПФ -->
 
+                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
                     <show id="lecm-contractor:contractor-to-link-association"/>                                         <!-- FK Адресант (через ссылку) -->
 					<show id="lecm-contractor:interaction-type"/>
                 </field-visibility>
@@ -250,6 +256,9 @@
                                 <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname}</control-param>
                             </control>
                         </field>
+                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts" mandatory="true">            <!-- FK Специализация -->
+                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl" />
+                    </field>
                 </appearance>
             </form>
             <form id="versions">

@@ -1,13 +1,14 @@
 package ru.it.lecm.dictionary.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
-import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -21,6 +22,7 @@ public class DictionaryWebScriptBean extends BaseWebScript {
 
     public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
     private DictionaryBean dictionaryService;
+    private NamespaceService namespaceService;
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
@@ -54,7 +56,14 @@ public class DictionaryWebScriptBean extends BaseWebScript {
         return (dictionary == null) ? null : new ScriptNode(dictionary, serviceRegistry, getScope());
     }
 
-	/**
+    public Scriptable getRecordByParamValue(String object, String field, Serializable value) {
+        QName fieldName = QName.createQName(field, namespaceService);
+        List<NodeRef> records = dictionaryService.getRecordsByParamValue(object, fieldName, value);
+
+        return createScriptable(records);
+    }
+
+    /**
 	 * Получение корневой папки для справочников
 	 * @return папка со справочниками
 	 */
@@ -62,4 +71,8 @@ public class DictionaryWebScriptBean extends BaseWebScript {
 		NodeRef ref = this.dictionaryService.getDictionariesRoot();
 		return new ScriptNode(ref, serviceRegistry, getScope());
 	}
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 }

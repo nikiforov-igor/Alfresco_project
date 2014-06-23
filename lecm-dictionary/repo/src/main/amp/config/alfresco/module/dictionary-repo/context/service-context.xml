@@ -98,6 +98,7 @@
         <property name="dictionaryService">
             <ref bean="serviceDictionary"/>
         </property>
+        <property name="namespaceService" ref="namespaceService"/>
     </bean>
 
 	<bean id="dictionaryLogEventsPolicy" class="ru.it.lecm.dictionary.policy.DictionaryLogEventPolicy"
