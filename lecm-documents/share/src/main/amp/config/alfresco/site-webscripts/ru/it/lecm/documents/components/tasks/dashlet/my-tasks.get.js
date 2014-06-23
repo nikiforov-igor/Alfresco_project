@@ -3,3 +3,5 @@
 model.nodeRef = args["nodeRef"];
 model.hasStatemachine = hasStatemachine(args["nodeRef"]);
 model.hasPermission = hasPermission(args["nodeRef"], PERM_WF_TASK_LIST);
+
+model.isErrandsStarter = isStarter("lecm-errands:document");

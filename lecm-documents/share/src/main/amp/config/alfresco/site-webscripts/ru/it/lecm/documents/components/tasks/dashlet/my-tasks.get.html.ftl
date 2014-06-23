@@ -7,7 +7,7 @@
                 <div class="dashlet-title-text">${msg("label.title")}</div>
                 <div class="total-tasks-count">
 
-                <#if hasStatemachine>
+                <#if hasStatemachine && isErrandsStarter>
                     <span class="lecm-dashlet-actions">
                         <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.onAddErrandClick()" class="add"
                            title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
