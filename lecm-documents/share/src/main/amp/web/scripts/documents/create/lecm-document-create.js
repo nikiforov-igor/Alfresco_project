@@ -130,7 +130,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			onFormSubmitSuccess: function (response) {
 				var createdDocument = response.json.persistedObject;
 				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
-                    var template = "{proxyUri}lecm/statemachine/postActions?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
+                    var template = "{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
                     var url = YAHOO.lang.substitute(template, {
                         proxyUri: Alfresco.constants.PROXY_URI,
                         connectionType: encodeURIComponent(this.options.connectionType),

@@ -193,13 +193,6 @@
 		<property name="stateMachineService" ref="stateMachineHelper"/>
     </bean>
 
-    <bean id="webscript.ru.it.lecm.statemachine.postActions.get" class="ru.it.lecm.statemachine.script.PostActionsScript"
-          parent="webscript">
-        <property name="nodeService" ref="nodeService"/>
-        <property name="documentConnectionService" ref="documentConnectionService"/>
-        <property name="groupActionsService" ref="groupActionsService"/>
-    </bean>
-
     <bean id="statemachine.endWorkflowEvent"
           class="ru.it.lecm.statemachine.action.listener.EndWorkflowEvent">
         <!-- <property name="documentService" ref="documentService"/> -->

@@ -1,4 +1,4 @@
-package ru.it.lecm.statemachine.script;
+package ru.it.lecm.documents.scripts;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -6,7 +6,6 @@ import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.actions.bean.GroupActionsService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 
 import java.util.HashMap;
@@ -17,10 +16,9 @@ import java.util.Map;
  * Date: 14.05.2014
  * Time: 9:45
  */
-public class PostActionsScript extends DeclarativeWebScript  {
+public class DocumentConnectionScript extends DeclarativeWebScript  {
 
     private NodeService nodeService;
-    private GroupActionsService groupActionsService;
     private DocumentConnectionService documentConnectionService;
     public void setDocumentConnectionService(DocumentConnectionService documentConnectionService) {
         this.documentConnectionService = documentConnectionService;
@@ -28,10 +26,6 @@ public class PostActionsScript extends DeclarativeWebScript  {
 
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
-    }
-
-    public void setGroupActionsService(GroupActionsService groupActionsService) {
-        this.groupActionsService = groupActionsService;
     }
 
     @Override
