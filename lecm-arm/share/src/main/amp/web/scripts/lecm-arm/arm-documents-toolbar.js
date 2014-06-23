@@ -630,6 +630,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     this.toolbarButtons["defaultActive"].filtersButton.set("disabled", args[1].isNotGridNode || !hasFilters);
                     this.toolbarButtons["defaultActive"].searchButton.set("disabled", args[1].isNotGridNode);
                     this.toolbarButtons["defaultActive"].columnsButton.set("disabled", args[1].isNotGridNode || !isArmNode || !hasColumns);
+                    this.toolbarButtons["defaultActive"].exportButton.set("disabled", args[1].isNotGridNode || !isArmNode || !hasColumns);
 
                     var searchInput = Dom.get(this.id + "-full-text-search");
                     if (args[1].isNotGridNode) {
