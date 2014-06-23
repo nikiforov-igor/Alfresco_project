@@ -9,8 +9,9 @@
 					<control-param name="notSelectedOptionShow">true</control-param>
 					<control-param name="notSelectedOptionLabel"> </control-param>
 					<control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
 					<control-param name="endpointType">lecm-workflow:route</control-param>
-					<control-param name="customDatasource">lecm/workflow/routes/pickerDatasource/</control-param>
+					<control-param name="childrenDataSource">lecm/workflow/routes/pickerDatasource/</control-param>
 					<control-param name="showAssocViewForm">true</control-param>
 					<control-param name="additionalFilter">(ISNOTNULL:\"cm:title\")</control-param>
 				</type>

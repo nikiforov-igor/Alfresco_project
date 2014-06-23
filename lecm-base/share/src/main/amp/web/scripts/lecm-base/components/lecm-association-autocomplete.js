@@ -254,7 +254,9 @@ LogicECM.module = LogicECM.module || {};
 			            }
 			            if (searchData != "") {
 				            searchData = searchData.substring(0,(searchData.length)-1);
-			            }
+			            } else {
+                            searchData = "cm:name" +  ":" + decodeURIComponent(sQuery);
+                        }
 
 						return me._generateChildrenUrlParams(searchData);
 					};

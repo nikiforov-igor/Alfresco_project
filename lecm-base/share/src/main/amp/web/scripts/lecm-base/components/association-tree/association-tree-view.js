@@ -574,7 +574,9 @@ LogicECM.module = LogicECM.module || {};
 	                }
 	                if (searchData != "") {
 	                    searchData = searchData.substring(0,(searchData.length)-1);
-	                }
+	                } else {
+                        searchData = "cm:name" +  ":" + decodeURIComponent(searchTerm);
+                    }
 	            }
 				if (this.option)
 	            this.isSearch = true;
@@ -1066,7 +1068,11 @@ LogicECM.module = LogicECM.module || {};
                 if (oRecord.getData("type") == "lecm-orgstr:employee") {
                     template += '<h3 class="item-name">' + Util.getControlEmployeeView("{nodeRef}","{name}", true) + '</h3>';
                 } else {
-                    template += '<h3 class="item-name">{name}</h3>';
+                    if (scope.options.showAssocViewForm) {
+                        template += '<h3 class="item-name">' + Util.getControlValueView(oRecord.getData("nodeRef"), "{name}", "{name}") + '</h3>';
+                    } else {
+                        template += '<h3 class="item-name">{name}</h3>';
+                    }
                 }
 
                 if (!scope.options.compactMode)
