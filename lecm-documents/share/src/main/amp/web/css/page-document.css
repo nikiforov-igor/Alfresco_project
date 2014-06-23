@@ -373,3 +373,10 @@ div.metadata-form div.lecm-dashlet-actions + div {
  	padding-left: 15px;
 }
 
+.doc-page .yui-gc .main-content.preview {
+	padding: 5px;
+}
+
+.doc-right-part .document-versions .panel-body {
+	overflow-x:hidden;
+}

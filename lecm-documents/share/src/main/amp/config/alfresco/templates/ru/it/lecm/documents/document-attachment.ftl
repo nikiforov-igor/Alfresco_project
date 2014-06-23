@@ -16,25 +16,25 @@
    </div>
    </@>
 	<@markup id="doc-bd">
-	<div id="doc-bd">
+	<div id="doc-bd" class="doc-page">
 		<@region id="actions-common" scope="template"/>
 		<@region id="actions" scope="template"/>
 		<@region id="document-attachment-header" scope="template"/>
 		<#if hasPermission>
 		<div class="yui-gc">
-			<div class="yui-u first preview">
-				<#if (config.scoped['DocumentDetails']['document-details'].getChildValue('display-web-preview') == "true")>
-					<@region id="web-preview" scope="template"/>
-				</#if>
-				<@region id="comments" scope="template"/>
-			</div>
-			<div id="doc-attach-right" class="yui-u bordered-panel">
+			<div id="doc-attach-right" class="bordered-panel doc-right-part">
 				<@region id="document-actions" scope="template"/>
 				<@region id="document-signing" scope="template"/>
 				<@region id="document-tags" scope="template"/>
 				<@region id="document-metadata" scope="template"/>
 				<@region id="document-versions" scope="template"/>
 				<@region id="document-attachment-dnd" scope="template"/>
+			</div>
+			<div class="main-content preview">
+				<#if (config.scoped['DocumentDetails']['document-details'].getChildValue('display-web-preview') == "true")>
+					<@region id="web-preview" scope="template"/>
+				</#if>
+				<@region id="comments" scope="template"/>
 			</div>
 		</div>
 		</#if>
