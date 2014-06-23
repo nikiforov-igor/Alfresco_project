@@ -404,7 +404,7 @@
             </div>
             <div id="${id}-exec-child-errands" class="data-list-block">
                 <span class="heading">${msg("message.eddand.childErrands")}<span class="count"> (${(childErrands![])?size})</span></span>
-                <#if roles.isExecutor && isEditableChildErrands && hasActionExecPerm>
+                <#if roles.isExecutor && isEditableChildErrands && hasActionExecPerm && isErrandsStarter>
 	                <span id="${id}-exec-child-errands-add" class="yui-button yui-push-button">
 	                    <span class="first-child">
 	                        <button type="button">${msg("message.eddand.addChildErrands")}</button>

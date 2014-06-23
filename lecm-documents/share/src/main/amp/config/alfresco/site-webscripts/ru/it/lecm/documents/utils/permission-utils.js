@@ -89,3 +89,13 @@ function hasReadAttachmentPermission(nodeRef, userId) {
         return false;
     }
 }
+
+function isStarter(docType) {
+	var url = '/lecm/documents/employeeIsStarter?docType=' + docType;
+	var result = remote.connect("alfresco").get(url);
+	if (result.status != 200) {
+		return false;
+	}
+	var perm = eval('(' + result + ')');
+	return (("" + perm) == "true");
+}
