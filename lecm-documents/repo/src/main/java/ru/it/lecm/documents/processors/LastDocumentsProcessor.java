@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.processors;
 
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 
@@ -25,7 +26,9 @@ public class LastDocumentsProcessor extends SearchQueryProcessor {
             if (lastDocuments != null && lastDocuments.length() > 0) {
                 String[] docsRefs = lastDocuments.split(";");
                 for (String docsRef : docsRefs) {
-                    sbQuery.append("ID:").append(docsRef.replace(":", "\\:")).append(" OR ");
+                    if (NodeRef.isNodeRef(docsRef)) {
+                        sbQuery.append("ID:").append(docsRef.replace(":", "\\:")).append(" OR ");
+                    }
                 }
 
             }
