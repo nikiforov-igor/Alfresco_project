@@ -6820,7 +6820,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
  
 var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(ord, "№ {~REGNUM}") + " на регистрацию";
 logText = substitude.formatNodeTitle(ord.nodeRef.toString(), logText);
-businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></value>
+businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]></value>
                                                             </property>
                                                             <property>
                                                                 <name>scriptLabel</name>
