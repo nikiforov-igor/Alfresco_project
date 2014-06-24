@@ -309,7 +309,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            createFormTitleMsg: "label.create-row.title",
 
 	            viewFormTitleMsg: "logicecm.view",
-
+                    
+                    createItemBtnMsg: null,
+                    
 	            expandable: false,
 
 	            expandDataSource: "components/form",
@@ -1041,7 +1043,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 				this.setupActions();
 
 				if (this.options.allowCreate) {
-					Alfresco.util.createYUIButton(this, "newRowButton", this.onActionCreate.bind(this));
+					var btn = Alfresco.util.createYUIButton(this, "newRowButton", this.onActionCreate.bind(this));
+                                        if(this.options.createItemBtnMsg) {
+                                            btn.set('label', this.msg(this.options.createItemBtnMsg));
+                                        }
 					Dom.setStyle(this.id + "-toolbar", "display", "block");
 				}
 
