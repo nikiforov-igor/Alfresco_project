@@ -27,7 +27,7 @@
 
 	                                    var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "#initiator направил(а) " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1";
+				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1";
                                         logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
@@ -66,7 +66,7 @@
 
 								    	var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "#initiator направил(а) " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1";
+				                        var logText = "#initiator направил(а) документ " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1";
                                         logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
 				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    }
@@ -85,7 +85,7 @@
 							        }
 
 			                        var logObjects = [];
-				                    var logText = "#initiator направил(а) "
+				                    var logText = "#initiator направил(а) документ "
 				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}")
 				                    + " на рассмотрение рассматривающим";
 

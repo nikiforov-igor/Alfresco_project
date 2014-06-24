@@ -23,7 +23,7 @@
 
                                 var logObjects = [];
 				                logObjects.push("" + recipientAssoc.nodeRef.toString());
-				                var logText = "#initiator направил(а) "
+				                var logText = "#initiator направил(а) документ "
 				                + documentScript.wrapperDocumentLink(incoming, "№ {~REGNUM} от {~REGDATE}")
 				                + " на исполнение #object1";
 
