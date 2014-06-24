@@ -652,8 +652,9 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         Serializable number = nodeService.getProperty(document, DocumentService.PROP_DOCUMENT_REGNUM);
         if (number != null) {
             return number.toString();
+        } else {
+            return "Не присвоено";
         }
-        return null;
     }
 
     @Override

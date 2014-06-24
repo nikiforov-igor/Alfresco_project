@@ -145,16 +145,17 @@
 		</constructor-arg>
 	</bean>
 
-    <bean  id="errandsConnectionPolicy" class="ru.it.lecm.errands.policy.ErrandsConnectionPolicy"
+    <bean  id="errandsConnectionPolicy" class="ru.it.lecm.errands.policy.ErrandsConnectionPolicy" parent="baseBean"
            init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentConnectionService" ref="documentConnectionService"/>
-        <property name="nodeService" ref="nodeService"/>
         <property name="documentService" ref="documentService"/>
         <property name="documentMembersService" ref="documentMembersService" />
-    <property name="errandsService" ref="errandsService" />
+        <property name="errandsService" ref="errandsService" />
+        <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
-                <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
+
+    <bean id="errands.defaultStatemachine" parent="defaultStatemachines">
         <property name="statemachineName" value="lecm-errands:document" />
         <property name="path" value="alfresco/module/${artifactId}/models/lecm-errands-default-statemacine.xml" />
     </bean>
