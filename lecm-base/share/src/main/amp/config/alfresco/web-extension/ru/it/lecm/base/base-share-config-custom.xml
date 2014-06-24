@@ -139,6 +139,7 @@
 				<css src="/css/font-awesome.css" />
                 <!--содержит полезные вещи, включая ассинхронную подгрузку других скриптов-->
                 <js src="/scripts/lecm-base/components/base-utils.js" />
+                <js src="/scripts/lecm-base/components/base64.js" />
 				<!-- <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
 				<js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-selectone.js" />

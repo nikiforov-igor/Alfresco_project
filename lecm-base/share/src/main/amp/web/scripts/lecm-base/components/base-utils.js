@@ -462,7 +462,7 @@ LogicECM.module.Base.Util = {
         return '<div class="cropped-item">' + buttonsHtml + '<div class="ci-value-div"><span>' + leftCroppedPart + '</span></div></div>';
     },
 	encodeUrlParams: function(params) {
-		return "p1=" + window.btoa(params) + "&p2=" + this.hashCode(params);
+		return "p1=" + base64.encode(params) + "&p2=" + this.hashCode(params);
 	},
 	hashCode: function(str) {
 		var hash = 0, i, chr, len;
