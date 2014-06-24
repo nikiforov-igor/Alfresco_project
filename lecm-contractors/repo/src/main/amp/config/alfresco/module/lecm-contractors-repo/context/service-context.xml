@@ -35,6 +35,7 @@
                 <value>alfresco/module/${artifactId}/models/dictionaries/representative-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/specialization-dictionary.xml</value>
                 <value>alfresco/module/${artifactId}/models/dictionaries/legalform-dictionary-items.xml</value>
+                <value>alfresco/module/${artifactId}/models/dictionaries/lecm-contractors-roles-items.xml</value>
             </list>
         </property>
     </bean>
@@ -180,4 +181,14 @@
         <property name="propertiesService" ref="propertiesService"/>
         <property name="policyComponent" ref="policyComponent"/>
     </bean>
+
+	<bean id="${groupId}.${artifactId}.serviceContractorsDictionariesPermissions" parent="ServiceFolderPermissionHelper"
+	      depends-on="serviceDictionary" >
+		<property name="serviceBean" ref="serviceDictionary"/>
+		<property name="permissionsList">
+			<list>
+				<value>alfresco/module/${artifactId}/permissions/dictionaries-permissions.xml</value>
+			</list>
+		</property>
+	</bean>
 </beans>
