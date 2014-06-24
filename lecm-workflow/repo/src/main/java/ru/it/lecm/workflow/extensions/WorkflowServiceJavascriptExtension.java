@@ -58,7 +58,7 @@ public class WorkflowServiceJavascriptExtension extends BaseWebScript {
 			concurrency = json.getString("concurrency");
 			boolean hasRouteRef = json.has("routeRef");
 			NodeRef assigneesList;
-			if (hasRouteRef) {
+			if (hasRouteRef && NodeRef.isNodeRef(json.getString("routeRef"))) {
 				NodeRef parentRef = new NodeRef(json.getString("routeRef"));
 				String creator = (String) nodeService.getProperty(parentRef, ContentModel.PROP_CREATOR);
 				NodeRef employeeRef = orgstructureService.getEmployeeByPerson(creator);
