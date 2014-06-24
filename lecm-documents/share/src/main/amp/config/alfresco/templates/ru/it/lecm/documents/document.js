@@ -33,17 +33,9 @@ function main() {
         }
     }
 
-    url = '/lecm/documents/checkLastDocuments?nodeRef=' + page.url.args.nodeRef;
-    result = remote.connect("alfresco").get(url);
-    var containedInLastDocumentsList = false;
-    if (result.status == 200) {
-        containedInLastDocumentsList = eval('(' + result + ')');
-    }
-
-    if (!containedInLastDocumentsList) {
-        url = '/lecm/documents/saveToLastDocuments?nodeRef=' + page.url.args.nodeRef;
-        remote.connect("alfresco").get(url);
-    }
+    //отмечаем просмотр
+    url = '/lecm/documents/saveToLastDocuments?nodeRef=' + page.url.args.nodeRef;
+    remote.connect("alfresco").get(url);
 }
 
 main();
