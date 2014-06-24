@@ -9,7 +9,7 @@
 
                 <#if hasStatemachine && isErrandsStarter>
                     <span class="lecm-dashlet-actions">
-                        <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.onAddErrandClick()" class="add"
+                        <a id="${id}-action-add" href="javascript:void(0);" onclick="errandsComponent.createChildErrand()" class="add"
                            title="${msg("dashlet.add.errand.tooltip")}">${msg("dashlet.add.errand")}</a>
                     </span>
                 </#if>
