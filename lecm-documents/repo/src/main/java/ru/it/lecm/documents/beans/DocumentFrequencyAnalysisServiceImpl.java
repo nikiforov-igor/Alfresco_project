@@ -211,10 +211,11 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
         NodeRef lastDocContainer = getLastDocumentsContainer(employee);
         if (lastDocContainer != null) {
             String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
-            if (lastDocs != null && !lastDocs.contains(document.toString())) {
-                lastDocs += document.toString() + ";";
+            if (lastDocs != null) {
+                lastDocs = lastDocs.replace(document.toString() + ";", ""); //убираем, если уже есть в списке
+                lastDocs += document.toString() + ";"; //добавляем в конец
                 if (StringUtils.countOccurrencesOf(lastDocs, ";") > maxLastDocumentsToSave) {
-                    lastDocs = lastDocs.substring(lastDocs.indexOf(";") + 1);
+                    lastDocs = lastDocs.substring(lastDocs.indexOf(";") + 1); //убираем лишние
                 }
                 nodeService.setProperty(lastDocContainer, PROP_LAST_DOCUMENTS, lastDocs);
                 return true;
