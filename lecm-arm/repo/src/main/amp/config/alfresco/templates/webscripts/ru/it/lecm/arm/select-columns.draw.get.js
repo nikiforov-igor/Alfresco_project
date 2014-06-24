@@ -11,6 +11,24 @@ function main() {
             userColumnsIds = args["columns"].split(";");
         }
 
+        for (var index in userColumnsIds) {
+            var value = userColumnsIds[index];
+            var colIndex = findInArray(value, allColumns);
+            if (colIndex >= 0) {
+                var column = allColumns[colIndex];
+                var columnObj = {
+                    id: column.getNodeRef().toString(),
+                    name: column.properties["lecm-arm:field-title"] != null ? column.properties["lecm-arm:field-title"]  : "-",
+                    isDefault:column.properties["lecm-arm:field-by-default"] != null ? column.properties["lecm-arm:field-by-default"] : false,
+                    fieldName: column.properties["lecm-arm:field-name"] != null ? column.properties["lecm-arm:field-name"] : "-",
+                    checked: true
+                };
+                columnsArray.push(columnObj);
+
+                allColumns.splice(colIndex, 1);
+            }
+        }
+
         for (var index in allColumns) {
             var column = allColumns[index];
             // подменяем фильтр на сохраненный по коду
@@ -19,7 +37,7 @@ function main() {
                 name: column.properties["lecm-arm:field-title"] != null ? column.properties["lecm-arm:field-title"]  : "-",
                 isDefault:column.properties["lecm-arm:field-by-default"] != null ? column.properties["lecm-arm:field-by-default"] : false,
                 fieldName: column.properties["lecm-arm:field-name"] != null ? column.properties["lecm-arm:field-name"] : "-",
-                checked: existInArray(column.getNodeRef().toString(), userColumnsIds)
+                checked: false
             };
             columnsArray.push(columnObj);
         }
@@ -34,15 +52,15 @@ function main() {
 
 main();
 
-function existInArray(value, testArray) {
+function findInArray(value, testArray) {
     if (value == null) {
         return false;
     }
     for (var i = 0; i < testArray.length; i++) {
         var testValue = testArray[i];
-        if (value == testValue) {
-            return true;
+        if (value == testValue.getNodeRef().toString()) {
+            return i;
         }
     }
-    return false;
+    return -1;
 }
