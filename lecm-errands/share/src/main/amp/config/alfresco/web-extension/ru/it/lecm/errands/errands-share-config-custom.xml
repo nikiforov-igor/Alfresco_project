@@ -304,12 +304,13 @@
 		                </control>
 	                </field>
                     <field id="lecm-document:subject-assoc" set="collapsable">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+	                        <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+	                        <control-param name="plane">false</control-param>
+	                        <control-param name="showCreateNewLink">false</control-param>
+	                        <control-param name="showCreateNewButton">false</control-param>
+	                        <control-param name="showSelectedItemsPath">false</control-param>
+	                        <control-param name="showSearch">false</control-param>
 	                        <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
                         </control>
                     </field>
@@ -514,14 +515,15 @@
                         </control>
                     </field>
                     <field id="lecm-document:subject-assoc" set="collapsable">
-                        <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
-                            <control-param name="notSelectedOptionShow">true</control-param>
-                            <control-param name="notSelectedOptionLabel"> </control-param>
-                            <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
-                        </control>
+	                    <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+		                    <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
+		                    <control-param name="plane">false</control-param>
+		                    <control-param name="showCreateNewLink">false</control-param>
+		                    <control-param name="showCreateNewButton">false</control-param>
+		                    <control-param name="showSelectedItemsPath">false</control-param>
+		                    <control-param name="showSearch">false</control-param>
+		                    <control-param name="defaultValueDataSource">lecm/errands/getDefaultSubject</control-param>
+	                    </control>
                     </field>
                     <field id="lecm-errands:initiator-assoc" set="exist-bussines-role">
                         <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
@@ -681,17 +683,6 @@
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-errands:user-settings-default-subject-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
-				</appearance>
 			</form>
 		</forms>
 	</config>
@@ -704,17 +695,6 @@
 					<show id="lecm-errands:user-settings-default-initiator-assoc"/>
 					<show id="lecm-errands:user-settings-default-subject-assoc"/>
 				</field-visibility>
-				<appearance>
-					<field id="lecm-errands:user-settings-default-subject-assoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
-							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Тематика</control-param>
-							<control-param name="nameSubstituteString">{cm:name}</control-param>
-							<control-param name="notSelectedOptionShow">true</control-param>
-							<control-param name="notSelectedOptionLabel"> </control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-						</control>
-					</field>
-				</appearance>
 			</form>
 		</forms>
 	</config>
