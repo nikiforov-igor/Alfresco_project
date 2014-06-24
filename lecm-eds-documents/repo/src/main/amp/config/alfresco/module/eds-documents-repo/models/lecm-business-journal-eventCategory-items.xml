@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="lecm-dic:Категория события" type="lecm-dic:dictionary">
+        <items updateMode="CreateOrUpdate">
+            <item name="cm:Направление документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Направление документа</property>
+                <property name="lecm-busjournal:eventCategory-code">DIRECT_DOCUMENT</property>
+            </item>
+            <item name="cm:Возврат документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Возврат документа</property>
+                <property name="lecm-busjournal:eventCategory-code">RETURN_DOCUMENT</property>
+            </item>
+            <item name="cm:Исполнение документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Исполнение документа</property>
+                <property name="lecm-busjournal:eventCategory-code">EXECUTE_DOCUMENT</property>
+            </item>
+            <item name="cm:Отправка документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Отправка документа</property>
+                <property name="lecm-busjournal:eventCategory-code">SEND_DOCUMENT</property>
+            </item>
+            <item name="cm:Принятие документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Принятие документа</property>
+                <property name="lecm-busjournal:eventCategory-code">ACCEPT_DOCUMENT</property>
+            </item>
+            <item name="cm:Отмена документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Отмена документа</property>
+                <property name="lecm-busjournal:eventCategory-code">CANCEL_DOCUMENT</property>
+            </item>
+            <item name="cm:Принятие документа" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Принятие документа</property>
+                <property name="lecm-busjournal:eventCategory-code">ACCEPT_DOCUMENT</property>
+            </item>
+        </items>
+    </item>
+</items>

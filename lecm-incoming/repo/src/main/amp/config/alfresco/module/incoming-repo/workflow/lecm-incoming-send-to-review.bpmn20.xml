@@ -27,8 +27,9 @@
 
 	                                    var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "Документ #mainobject был направлен на рассмотрение сотруднику #object1";
-				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
+				                        var logText = "#initiator направил(а) " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение #object1";
+                                        logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    } else if (recipient.typeShort == "lecm-orgstr:organization-unit") {
 								    	var recipients = [];
                                         var employees = [];
@@ -65,8 +66,9 @@
 
 								    	var logObjects = [];
 				                        logObjects.push("" + recipient.nodeRef);
-				                        var logText = "Документ #mainobject был направлен на рассмотрение в подразделение #object1";
-				                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, logObjects);
+				                        var logText = "#initiator направил(а) " + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " на рассмотрение в подразделение #object1";
+                                        logText = substitude.formatNodeTitle(document.nodeRef.toString(), logText);
+				                        businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", logText, logObjects);
 								    }
 								} else {
 									var recipients = orgstructure.getEmployeesByBusinessRoleId("INCOMING_REVIEWERS", true);
@@ -82,8 +84,12 @@
 	                                    notifications.sendNotificationFromCurrentUser(recipients, notificationText, document, true);
 							        }
 
-			                        var logText = "Документ #mainobject был направлен рассматривающим";
-			                        businessJournal.log(document.nodeRef.toString(), "EDIT", logText, []);
+			                        var logObjects = [];
+				                    var logText = "#initiator направил(а) "
+				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}")
+				                    + " на рассмотрение рассматривающим";
+
+				                    businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), logObjects);
 								}
 							}
 						]]></activiti:string>

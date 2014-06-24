@@ -20,6 +20,14 @@
                                 var recipients = [];
 		                        recipients.push(recipientAssoc.nodeRef.toString());
                                 notifications.sendNotificationFromCurrentUser(recipients, notificationText, incoming);
+
+                                var logObjects = [];
+				                logObjects.push("" + recipientAssoc.nodeRef.toString());
+				                var logText = "#initiator направил(а) "
+				                + documentScript.wrapperDocumentLink(incoming, "№ {~REGNUM} от {~REGDATE}")
+				                + " на исполнение #object1";
+
+				                businessJournal.log(incoming.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(incoming.nodeRef.toString(), logText), logObjects);
                             }
                         ]]></activiti:string>
                     </activiti:field>
