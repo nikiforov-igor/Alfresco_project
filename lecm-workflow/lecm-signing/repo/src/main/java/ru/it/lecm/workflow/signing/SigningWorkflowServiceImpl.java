@@ -1,15 +1,5 @@
 package ru.it.lecm.workflow.signing;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
 import org.alfresco.model.ContentModel;
@@ -34,6 +24,10 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
 import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -114,6 +108,13 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 		decisionsMap = addDecision(decisionsMap, taskDecision);
 		task.setVariable("decisionsMap", decisionsMap);//decisionsMap может быть null, поэтому если она создана, ее надо перезаписать
 		task.setVariable("taskDecision", decision);
+
+        NodeRef signingTaskListRef = workflowResultListService.getResultListRef(task);
+        logDecision(signingTaskListRef, taskDecision);
+
+        businessJournalService.log(task.getAssignee(), docInfo.getDocumentRef(), "ACCEPT_DOCUMENT_DECISION", "#initiator принял(а) решение по документу "
+                + wrapperLink(docInfo.getDocumentRef(), documentService.getProjectRegNumber(docInfo.getDocumentRef()) + ":"
+                + getDecision(taskDecision.getDecision()), DOCUMENT_LINK_URL), null);
 
 		completeTaskAddMembers(employee, bpmPackage, task);
 
@@ -232,19 +233,23 @@ public class SigningWorkflowServiceImpl extends WorkflowServiceAbstract implemen
 
 	@Override
 	protected String getWorkflowFinishedMessage(String documentLink, String decisionCode) {
-		String decision;
-		if (DecisionResult.SIGNED.name().equals(decisionCode)) {
-			decision = "подписано";
-		} else if (DecisionResult.REJECTED.name().equals(decisionCode)) {
-			decision = "отклонено";
-		} else if (DecisionResult.NO_DECISION.name().equals(decisionCode)) {
-			decision = "решение не принято";
-		} else {
-			decision = "";
-		}
-
-		return String.format("Принято решение о документе %s: \"%s\"", documentLink, decision);
+		return String.format("Принято решение о документе %s: \"%s\"", documentLink, getDecision(decisionCode));
 	}
+
+    private String getDecision(String decisionCode) {
+        String decision;
+        if (DecisionResult.SIGNED.name().equals(decisionCode)) {
+            decision = "подписано";
+        } else if (DecisionResult.REJECTED.name().equals(decisionCode)) {
+            decision = "отклонено";
+        } else if (DecisionResult.NO_DECISION.name().equals(decisionCode)) {
+            decision = "решение не принято";
+        } else {
+            decision = "";
+        }
+
+        return decision;
+    }
 
 	@Override
 	public NodeRef getServiceRootFolder() {

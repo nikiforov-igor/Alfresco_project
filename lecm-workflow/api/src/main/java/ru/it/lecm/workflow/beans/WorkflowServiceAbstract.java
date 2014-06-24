@@ -1,11 +1,9 @@
 package ru.it.lecm.workflow.beans;
 
-import java.io.Serializable;
-import java.util.*;
-
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowService;
 import org.alfresco.service.cmr.workflow.WorkflowTask;
@@ -18,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -29,11 +28,10 @@ import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.DocumentInfo;
 import ru.it.lecm.workflow.Utils;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
-import ru.it.lecm.workflow.api.LecmWorkflowModel;
-import ru.it.lecm.workflow.api.WorkflowFoldersService;
-import ru.it.lecm.workflow.api.LecmWorkflowService;
-import ru.it.lecm.workflow.api.WorkflowResultListService;
-import ru.it.lecm.workflow.api.WorkflowResultModel;
+import ru.it.lecm.workflow.api.*;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -58,6 +56,9 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 	protected IDelegation delegationService;
 	protected WorkflowResultListService workflowResultListService;
 	protected StateMachineServiceBean stateMachineService;
+    protected BusinessJournalService businessJournalService;
+    protected DictionaryService dictionaryService;
+    protected NamespaceService namespaceService;
 
 	public void setWorkflowService(WorkflowService workflowService) {
 		this.workflowService = workflowService;
@@ -99,6 +100,17 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		this.stateMachineService = stateMachineService;
 	}
 
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public void setDictionaryService(DictionaryService dictionaryService) {
+        this.dictionaryService = dictionaryService;
+    }
+
+    public void setNamespaceService(NamespaceService namespaceService) {
+        this.namespaceService = namespaceService;
+    }
 	@Override
 	public void grantDynamicRole(final NodeRef employeeRef, final NodeRef bpmPackage, final String role) {
 		NodeRef documentRef = Utils.getObjectFromBpmPackage(bpmPackage);

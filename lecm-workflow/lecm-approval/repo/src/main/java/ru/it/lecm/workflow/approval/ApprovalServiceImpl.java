@@ -1,8 +1,5 @@
 package ru.it.lecm.workflow.approval;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -32,6 +29,10 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -138,6 +139,9 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 				}
 			}
 		}
+        businessJournalService.log(taskDecision.getUserName(), documentRef, "ACCEPT_DOCUMENT_DECISION", "#initiator принял(а) решение по документу "
+                + wrapperLink(documentRef, documentService.getProjectRegNumber(documentRef) + ":"
+                + getDecision(taskDecision.getDecision()), DOCUMENT_LINK_URL), null);
 	}
 
 	@Override
@@ -344,26 +348,28 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 
 	@Override
 	protected String getWorkflowFinishedMessage(String documentLink, String decision) {
-		String decisionMsg;
-		if (DecisionResult.APPROVED.name().equals(decision)) {
-			decisionMsg = "согласовано";
-		} else if (DecisionResult.APPROVED_WITH_REMARK.name().equals(decision)) {
-			decisionMsg = "согласовано с замечаниями";
-		} else if (DecisionResult.REJECTED.name().equals(decision)) {
-			decisionMsg = "отклонено";
-		} else if (DecisionResult.APPROVED_FORCE.name().equals(decision)) {
-			decisionMsg = "принудительно завершено";
-		} else if (DecisionResult.REJECTED_FORCE.name().equals(decision)) {
-			decisionMsg = "отозвано с согласования";
-		} else if (DecisionResult.NO_DECISION.name().equals(decision)) {
-			decisionMsg = "решение не принято";
-		} else {
-			decisionMsg = "";
-		}
-
-		return String.format("Принято решение о документе %s: \"%s\"", documentLink, decisionMsg);
-
+		return String.format("Принято решение о документе %s: \"%s\"", documentLink, getDecision(decision));
 	}
+
+    private String getDecision(String decision) {
+        String decisionMsg;
+        if (DecisionResult.APPROVED.name().equals(decision)) {
+            decisionMsg = "согласовано";
+        } else if (DecisionResult.APPROVED_WITH_REMARK.name().equals(decision)) {
+            decisionMsg = "согласовано с замечаниями";
+        } else if (DecisionResult.REJECTED.name().equals(decision)) {
+            decisionMsg = "отклонено";
+        } else if (DecisionResult.APPROVED_FORCE.name().equals(decision)) {
+            decisionMsg = "принудительно завершено";
+        } else if (DecisionResult.REJECTED_FORCE.name().equals(decision)) {
+            decisionMsg = "отозвано с согласования";
+        } else if (DecisionResult.NO_DECISION.name().equals(decision)) {
+            decisionMsg = "решение не принято";
+        } else {
+            decisionMsg = "";
+        }
+        return decisionMsg;
+    }
 
 	//TODO Refactoring in progress... check getOrCreate
 	@Override
@@ -452,5 +458,4 @@ public class ApprovalServiceImpl extends WorkflowServiceAbstract implements Appr
 	public NodeRef getEmployeeForAssignee(NodeRef assignee) {
 		return workflowAssigneesListService.getEmployeeByAssignee(assignee);
 	}
-
 }
