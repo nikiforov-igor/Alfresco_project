@@ -10,7 +10,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
 		this.documentNodeRef = documentNodeRef;
 
-		YAHOO.util.Event.onContentReady(containerId, this.renewDatagrid, this, true);
+		//YAHOO.util.Event.onContentReady(containerId, this.renewDatagrid, this, true);
 		YAHOO.Bubbling.on("activeTabChange", this.renewDatagrid, this);
 
 		return LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
