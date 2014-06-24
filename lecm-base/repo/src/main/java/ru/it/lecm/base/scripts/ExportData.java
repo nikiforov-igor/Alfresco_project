@@ -40,6 +40,7 @@ public class ExportData extends AbstractWebScript {
      * Формат даты
      */
     private static final String DATE_FORMAT = "EEE dd MMM YYYY";
+    private static final String DATETIME_FORMAT = "EEE dd MMM YYYY HH:mm";
     private RhinoScriptProcessor rhinoScriptProcessor;
 
     public void setNodeService(NodeService nodeService) {
@@ -132,7 +133,7 @@ public class ExportData extends AbstractWebScript {
                                 } catch (ParseException e) {
                                     log.error("Error while parsing date format", e);
                                 }
-                                SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, LOCALE_RU);
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("date".equals(type) ? DATE_FORMAT : DATETIME_FORMAT, LOCALE_RU);
                                 result = dateFormat.format(date);
                             } else if ("boolean".equals(type)){
                                 Boolean booleanValue = Boolean.parseBoolean(value.get("displayValue").toString());
