@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.rule.RuleType;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
@@ -182,7 +183,7 @@ public class OrgstructureUnitPolicy
                          if (shared.size() > 0) {
                              NodeRef folder = shared.get(0).getTargetRef();
                              properties = nodeService.getProperties(folder);
-                             properties.put(ContentModel.PROP_NAME, after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME));
+                             properties.put(ContentModel.PROP_NAME, FileNameValidator.getValidFileName(after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString()));
                              properties.put(ContentModel.PROP_TITLE, after.get(OrgstructureBean.PROP_UNIT_CODE));
                              properties.put(ContentModel.PROP_DESCRIPTION, after.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
                              nodeService.setProperties(folder, properties);
@@ -253,7 +254,7 @@ public class OrgstructureUnitPolicy
         }
 
         //Создаем основную папку подразделения
-        String name = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString();
+        String name = FileNameValidator.getValidFileName(nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString());
         String title = nodeService.getProperty(unit, OrgstructureBean.PROP_UNIT_CODE).toString();
         String description = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME).toString();
 
