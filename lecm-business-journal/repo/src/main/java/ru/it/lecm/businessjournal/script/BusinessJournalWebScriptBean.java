@@ -47,7 +47,7 @@ public class BusinessJournalWebScriptBean extends BaseWebScript {
     @SuppressWarnings("unused")
     public void log(String mainObject, String eventCategory, String description, Scriptable objects) {
         NodeRef record;
-        Object[] objs = Context.getCurrentContext().getElements(objects);
+        Object[] objs = objects != null ? Context.getCurrentContext().getElements(objects) : new Object[0];
         List<String> refs = new ArrayList<String>();
         for (Object obj : objs) {
             String ref = (String) obj;

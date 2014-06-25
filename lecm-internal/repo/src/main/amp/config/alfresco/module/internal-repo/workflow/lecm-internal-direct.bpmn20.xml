@@ -78,6 +78,14 @@
                         notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:ext-present-string}");
                         notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
 
+                        var logObjects = [];
+				        logObjects.push("" + employee.nodeRef.toString());
+				        var logText = "#initiator направил(а) "
+				        + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}")
+				        + " сотруднику #object1";
+
+				         businessJournal.log(document.nodeRef.toString(), "DIRECT_DOCUMENT", substitude.formatNodeTitle(document.nodeRef.toString(), logText), logObjects);
+
 						]]></activiti:string>
                     </activiti:field>
                 </activiti:taskListener>
@@ -95,7 +103,7 @@
 							if (newDocumentRef != null && newDocumentRef != "") {
                                 var newDocument = search.findNode(newDocumentRef);
                                 //Формируем ответ
-                                answerObject.createAssociation(newDocument, "lecm-internal-table-structure:answer-document-assoc")
+                                answerObject.createAssociation(newDocument, "lecm-internal-table-structure:answer-document-assoc");
                                 answerObject.properties["lecm-internal-table-structure:answer-status"] = "true";
                                 answerObject.properties["lecm-internal-table-structure:answer-details"] = "Готовится ответ";
                                 answerObject.save();
@@ -103,6 +111,11 @@
                                 documentMembers.addMemberWithoutCheckPermission(newDocument, curator, "LECM_BASIC_PG_Reader");
                                 //Добавляем слушателя
                                 documentEvent.subscribe(newDocument, document);
+
+                                var logText = "#initiator создал(а) внутренний документ в ответ на "
+				                + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}");
+
+				                businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
 							} else {
                                 var answer = eval('(' + task.getVariable("internalDirect_answerResult") + ')');
                                 if (answer.type == "takeNote") {
@@ -113,6 +126,11 @@
                                     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " принял к сведению направленный вами документ ";
                                     notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
                                     notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+
+				                    var logText = "#initiator принял(а) внутренний документ "
+				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}") + " к сведению";
+
+				                    businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                                 } else if (answer.type == "answer") {
                                     var answerText = "";
                                     //Обрабатываем типовой ответ
@@ -143,6 +161,11 @@
                                     var notificationText = documentScript.wrapperLink(currentUser, currentUser.properties["lecm-orgstr:employee-short-name"]) + " ответил с комментарием на ваш документ ";
                                     notificationText += documentScript.wrapperDocumentLink(document , "{lecm-document:title}");
                                     notifications.sendNotificationFromCurrentUser(curators, notificationText, document);
+
+                                    var logText = "#initiator создал(а) ответ-комментарий к документу "
+				                    + documentScript.wrapperDocumentLink(document, "№ {~REGNUM} от {~REGDATE}");
+
+				                    businessJournal.log(document.nodeRef.toString(), "EXEC_ACTION", substitude.formatNodeTitle(document.nodeRef.toString(), logText), []);
                                 }
                             }
 						]]></activiti:string>
