@@ -29,7 +29,7 @@ public class CustomBaseDocNameProperty extends BasePropertyDecorator {
 			//Получаем представление
             Serializable replaceValue = nodeService.getProperty(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING);
             //Замещаем имя на представление или возвращаем обычное
-            result.setValue(replaceValue != null ? replaceValue.toString().replaceAll("<.*?>","") : value);
+            result.setValue(replaceValue != null ? replaceValue.toString().replaceAll("<.*?>","").replace("\"", "\\\"") : value);
 			return result;
 		}
 		return result;
