@@ -26,6 +26,10 @@
                 <property name="cm:name">Отмена документа</property>
                 <property name="lecm-busjournal:eventCategory-code">CANCEL_DOCUMENT</property>
             </item>
+            <item name="cm:Завершение срока действия" type="lecm-busjournal:eventCategory">
+                <property name="cm:name">Завершение срока действия</property>
+                <property name="lecm-busjournal:eventCategory-code">EXPIRATION_DATE</property>
+            </item>
         </items>
     </item>
 </items>

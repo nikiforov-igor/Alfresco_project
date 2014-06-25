@@ -6,7 +6,6 @@
 
 package ru.it.lecm.nd.scheduler;
 
-import java.util.List;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
@@ -14,7 +13,12 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.nd.NDDocumentServiceImpl;
 import ru.it.lecm.statemachine.StatemachineModel;
+
+import java.util.List;
 
 /**
  *
@@ -24,6 +28,9 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 
 	private final static Logger logger = LoggerFactory.getLogger(InWorkExecutor.class);
 	private NodeService nodeService;
+    private BusinessJournalService businessJournalService;
+    private NDDocumentServiceImpl ndDocumentService;
+    private SubstitudeBean substitudeBean;
 
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
@@ -34,6 +41,10 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 		logger.info(String.format("ND [%s] is cancelling.", actionedUponNodeRef.toString()));
 		nodeService.setProperty(actionedUponNodeRef, StatemachineModel.PROP_STATUS, "Срок действия окончен");
 
+        //логирование
+        String bjMessage = "Документ " + ndDocumentService.wrapperLink(actionedUponNodeRef, "№ {~REGNUM} от {~REGDATE}", NDDocumentServiceImpl.DOCUMENT_LINK_URL)+ " завершил срок действия";
+        bjMessage = substitudeBean.formatNodeTitle(actionedUponNodeRef, bjMessage);
+        businessJournalService.log("System", actionedUponNodeRef, "EXPIRATION_DATE", bjMessage, null);
 	}
 
 	@Override
@@ -41,4 +52,15 @@ public class OutOfDateExecutor extends ActionExecuterAbstractBase {
 
 	}
 
+    public void setBusinessJournalService(BusinessJournalService businessJournalService) {
+        this.businessJournalService = businessJournalService;
+    }
+
+    public void setNdDocumentService(NDDocumentServiceImpl ndDocumentService) {
+        this.ndDocumentService = ndDocumentService;
+    }
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
+    }
 }

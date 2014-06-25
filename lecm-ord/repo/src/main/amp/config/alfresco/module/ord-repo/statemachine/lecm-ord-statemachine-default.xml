@@ -7666,7 +7666,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
     /*Введение в действие*/
     var acceptedDocAssoc = ord.assocs["lecm-ord:accepted-assoc"];
     if (acceptedDocAssoc != null && acceptedDocAssoc.length > 0) {
-      for (var ii = 0; ii < acceptedDoc.length; ii++) {
+      for (var ii = 0; ii < acceptedDocAssoc.length; ii++) {
       var acceptedDoc = acceptedDocAssoc[ii];
       acceptedDoc.addAspect("lecm-document-aspects:in-work");
       acceptedDoc.save();
@@ -7677,6 +7677,7 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
       var acceptedDocDesc = substitude.formatNodeTitle(acceptedDoc, documentScript.wrapperDocumentLink(acceptedDoc, "№ {~REGNUM} от {~REGDATE}"));
       
 	  businessJournal.log(ord.nodeRef.toString(), "ACCEPT_DOCUMENT", "Документ " + mainDocDesc + " ввел в действие документ " + acceptedDocDesc, []);
+      businessJournal.log(acceptedDoc.nodeRef.toString(), "ACCEPT_DOCUMENT", "Документ " + acceptedDocDesc + " введен в действие документом " + mainDocDesc, []);
       }
     }
 })();]]></value>
