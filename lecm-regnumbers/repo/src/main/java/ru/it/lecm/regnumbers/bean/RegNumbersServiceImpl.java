@@ -281,6 +281,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
             Serializable number = nodeService.getProperty(documentNode, propNumber);
             String regNumber = null;
+            Date regDate = null;
             if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
                 //номер уже есть
                 if (propIsRegistered != null && !onlyReserve) {
@@ -300,11 +301,11 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     }
                 } while (!isNumberUnique(regNumber, documentType));
 
-                Date date = new Date();
+	            regDate = new Date();
                 nodeService.setProperty(documentNode, propNumber, regNumber);
-                nodeService.setProperty(documentNode, propDate, date);
+                nodeService.setProperty(documentNode, propDate, regDate);
                 documentService.setDocumentActualNumber(documentNode, regNumber);
-                documentService.setDocumentActualDate(documentNode, date);
+                documentService.setDocumentActualDate(documentNode, regDate);
                 if (propIsRegistered != null) {
                     nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
                 }
@@ -316,14 +317,13 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                 }
             }
             if (!onlyReserve) {
-                Date regDate = documentService.getDocumentRegDate(documentNode);
                 String regDateString = "";
                 if (regDate != null) {
                     DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
                     regDateString = dFormat.format(regDate);
                 }
 
-                businessJournalService.log(orgstructureService.getEmployeeLogin(currentEmployee), documentNode, "REGISTRATION", "#initiator зарегистрировал(а) документ " + wrapperLink(documentNode, documentService.getDocumentRegNumber(documentNode) + " от " + regDateString, DOCUMENT_LINK_URL), null);
+                businessJournalService.log(orgstructureService.getEmployeeLogin(currentEmployee), documentNode, "REGISTRATION", "#initiator зарегистрировал(а) документ " + wrapperLink(documentNode, regNumber + " от " + regDateString, DOCUMENT_LINK_URL), null);
             }
         }
 	}
