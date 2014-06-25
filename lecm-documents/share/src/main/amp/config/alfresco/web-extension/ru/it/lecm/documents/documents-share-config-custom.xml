@@ -780,13 +780,18 @@
                     <field id="lecm-document:ext-present-string" label=" "/>
                 </appearance>
             </form>
-        <form id="datagrid-arm">
+            <form id="datagrid-arm">
                 <field-visibility>
                     <show id="cm:name"/>
                 </field-visibility>
                 <appearance>
                     <field id="cm:name"/>
                 </appearance>
+            </form>
+            <form id="last-documents-list">
+                <field-visibility>
+                    <show id="lecm-document:present-string" force="true"/>
+                </field-visibility>
             </form>
         </forms>
     </config>

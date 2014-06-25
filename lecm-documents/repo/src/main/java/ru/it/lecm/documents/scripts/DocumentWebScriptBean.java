@@ -29,10 +29,7 @@ import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: orakovskaya
@@ -604,6 +601,23 @@ public class DocumentWebScriptBean extends BaseWebScript {
             logger.warn("Can not save {} to last documents");
         }
         return false;
+    }
+
+    /**
+     * Возвращает список последних просмотренных документов
+     */
+    public Scriptable getLastDocuments() {
+        String lastNodes = documentFrequencyAnalysisService.getLastDocuments();
+        StringTokenizer t = new StringTokenizer(lastNodes, ";");
+        ArrayList<NodeRef> nodes = new ArrayList<NodeRef>();
+        while(t.hasMoreElements()) {
+            String key = t.nextToken();
+            if (!"".equals(key)) {
+                nodes.add(new NodeRef(key));
+            }
+        }
+        Collections.reverse(nodes);
+        return createScriptable(nodes);
     }
 
     /**

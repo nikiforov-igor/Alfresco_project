@@ -316,7 +316,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
 	            expandDataSource: "components/form",
 
-				expandDataObj: {}
+				expandDataObj: {},
+
+                /**
+                 * Имя атрибута для открытия документа
+                 */
+                attributeForOpen: null
             },
 
             showActionsCount: 3,
@@ -754,6 +759,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                         if (scope.options.attributeForShow != null && datalistColumn.name == scope.options.attributeForShow) {
                                             html += "<a href='javascript:void(0);' onclick=\"viewAttributes(\'" + oRecord.getData("nodeRef") + "\', null, \'" + scope.options.viewFormTitleMsg + "\')\">" + columnContent + "</a>";
+                                        } else if (scope.options.attributeForOpen != null && datalistColumn.name == scope.options.attributeForOpen) {
+                                            html += "<a href=\'" + window.location.protocol + '//' + window.location.host + Alfresco.constants.URL_PAGECONTEXT + 'document?nodeRef=' + oRecord.getData("nodeRef") + "\'\">" + columnContent + "</a>";
                                         } else {
                                             html += columnContent;
                                         }

@@ -1,0 +1,8 @@
+<webscript>
+   <shortname>business journal history</shortname>
+   <description>Business Journal History Webscript</description>
+   <url>/lecm/documents/last/datasource</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

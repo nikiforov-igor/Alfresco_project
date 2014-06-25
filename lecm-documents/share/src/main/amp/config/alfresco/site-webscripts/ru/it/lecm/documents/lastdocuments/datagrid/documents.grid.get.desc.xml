@@ -1,0 +1,7 @@
+<webscript>
+    <shortname>Contracts datagrid</shortname>
+    <description>Return contracts datagrid</description>
+    <url>/lecm/documents/last</url>
+    <format default="html">extension</format>
+    <authentication>user</authentication>
+</webscript>
