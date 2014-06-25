@@ -554,6 +554,8 @@ LogicECM.module = LogicECM.module || {};
        */
       isReady: false,
 
+       isInitialized: false,
+
       /**
        * Set multiple initialization options at once.
        *
@@ -605,6 +607,8 @@ LogicECM.module = LogicECM.module || {};
        */
       onReady: function ObjectFinder_onReady()
       {
+         if (this.isInitialized) return;
+         this.isInitialized = true;
          this._createSelectedItemsControls();
          if (!this.options.disabled)
          {

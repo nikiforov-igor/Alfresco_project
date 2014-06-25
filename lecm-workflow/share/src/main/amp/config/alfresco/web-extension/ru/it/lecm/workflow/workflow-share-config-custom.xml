@@ -17,7 +17,6 @@
 				</type>
 			</default-controls>
 			<dependencies>
-				<js src="/scripts/lecm-workflow/lecm-package-items-finder.js" />
 				<js src="/scripts/lecm-workflow/workflow-validators.js" />
 			</dependencies>
 		</forms>
