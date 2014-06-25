@@ -78,7 +78,7 @@
           p:jobGroup="nd-out-of-date"
           p:triggerName="out-of-date-nd-status-trigger"
           p:triggerGroup="out-of-date-nd-trigger"
-          p:cronExpression="0 */2 * * * ? *"
+          p:cronExpression="0 30 * * * ? *"
           p:scheduler-ref="schedulerFactory"
           p:actionService-ref="actionService"
           p:transactionService-ref="transactionService"
