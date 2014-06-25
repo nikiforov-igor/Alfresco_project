@@ -7637,9 +7637,44 @@ businessJournal.log(ord.nodeRef.toString(), "DIRECT_DOCUMENT", logText, []);]]><
     regnumbers.registerDocument(ord, "ORD_NUMBER");
     ord.save();
     /*Отмена документов*/
-    ordStatemachine.repealDocuments(ord);
+    var canceldDocAssoc = ord.assocs["lecm-ord:canceled-assoc"];
+    if (canceldDocAssoc != null && canceldDocAssoc.length > 0) {
+      var cancelDoc = canceldDocAssoc[0];
+      var cancelDocType = cancelDoc.getTypeShort();
+      if (cancelDocType == "lecm-ord:document") {
+      	    cancelDoc.properties["lecm-statemachine:status"] = "Отменен";
+      } else if (cancelDocType == "lecm-nd:document") {
+        var ndStatus = cancelDoc.properties["lecm-statemachine:status"];
+        if (ndStatus == "Действует") {
+          	cancelDoc.properties["lecm-statemachine:status"] = "Отменен";	
+        } else {
+        	cancelDoc.addAspect("lecm-document-aspects:cancelled");
+        }  
+      }
+      cancelDoc.save();
+      
+      documentConnection.createConnection(ord, cancelDoc, "cancel", true, true);
+      
+      var mainDocDesc = substitude.formatNodeTitle(ord, documentScript.wrapperDocumentLink(ord, "№ {~REGNUM} от {~REGDATE}"));
+      var canceledDocDesc = substitude.formatNodeTitle(cancelDoc, documentScript.wrapperDocumentLink(cancelDoc, "№ {~REGNUM} от {~REGDATE}"));
+      
+	  businessJournal.log(ord.nodeRef.toString(), "CANCEL_DOCUMENT", "Документ " + mainDocDesc + " отменил документ " + canceledDocDesc, []);
+	  businessJournal.log(cancelDoc.nodeRef.toString(), "CANCEL_DOCUMENT",  "Документ " + canceledDocDesc + " отменен документом " + mainDocDesc, []);
+    }
     /*Введение в действие*/
-    ordStatemachine.enactDocuments(ord);
+    var acceptedDocAssoc = ord.assocs["lecm-ord:accepted-assoc"];
+    if (acceptedDocAssoc != null && acceptedDocAssoc.length > 0) {
+      var acceptedDoc = acceptedDocAssoc[0];
+      acceptedDoc.addAspect("lecm-document-aspects:in-work");
+      acceptedDoc.save();
+      
+      documentConnection.createConnection(ord, acceptedDoc, "accept", true, true);
+      
+      var mainDocDesc = substitude.formatNodeTitle(ord, documentScript.wrapperDocumentLink(ord, "№ {~REGNUM} от {~REGDATE}"));
+      var acceptedDocDesc = substitude.formatNodeTitle(acceptedDoc, documentScript.wrapperDocumentLink(acceptedDoc, "№ {~REGNUM} от {~REGDATE}"));
+      
+	  businessJournal.log(ord.nodeRef.toString(), "ACCEPT_DOCUMENT", "Документ " + mainDocDesc + " ввел в действие документ " + acceptedDocDesc, []);
+    }
 })();]]></value>
                                                             </property>
                                                             <property>

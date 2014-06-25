@@ -2,21 +2,21 @@ package ru.it.lecm.documents.scripts;
 
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentService;
 
 import java.util.List;
-import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import org.mozilla.javascript.Context;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
 
 /**
  * User: AIvkin
@@ -304,10 +304,13 @@ public class DocumentConnectionWebScriptBean extends BaseWebScript {
 	 * @return созданная связь
 	 */
 	public ScriptNode createConnection(ScriptNode primaryDocument, ScriptNode connectedDocument, String typeDictionaryElementCode, boolean isSystem) {
-		NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocument.getNodeRef(), connectedDocument.getNodeRef(), typeDictionaryElementCode, isSystem);
-		return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
+		return createConnection(primaryDocument, connectedDocument,typeDictionaryElementCode, isSystem, false);
 	}
 
+    public ScriptNode createConnection(ScriptNode primaryDocument, ScriptNode connectedDocument, String typeDictionaryElementCode, boolean isSystem, boolean doNotCheckPermission) {
+        NodeRef connectionsRef = this.documentConnectionService.createConnection(primaryDocument.getNodeRef(), connectedDocument.getNodeRef(), typeDictionaryElementCode, isSystem, doNotCheckPermission);
+        return new ScriptNode(connectionsRef, this.serviceRegistry, getScope());
+    }
 	/**
 	 * Удаление связи
 	 * @param nodeRef nodeRef связи

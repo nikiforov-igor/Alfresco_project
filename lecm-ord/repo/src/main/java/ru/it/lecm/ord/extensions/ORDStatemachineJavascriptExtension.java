@@ -1,15 +1,5 @@
 package ru.it.lecm.ord.extensions;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -36,7 +26,6 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 import ru.it.lecm.eds.api.EDSDocumentService;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.errands.ErrandsService;
-import ru.it.lecm.nd.api.NDModel;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.ord.api.ORDDocumentService;
 import ru.it.lecm.ord.api.ORDModel;
@@ -45,6 +34,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -423,53 +415,6 @@ public class ORDStatemachineJavascriptExtension extends BaseWebScript {
 		}
 
 		return result;
-	}
-
-	public void repealDocuments(ScriptNode ordSNode){
-		NodeRef ord = ordSNode.getNodeRef();
-		List<AssociationRef> repealProjAssocs = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_CANCELED);
-		for (AssociationRef repealProjAssoc:repealProjAssocs){
-			NodeRef repealProj = repealProjAssoc.getTargetRef();
-			if (ORDModel.TYPE_ORD.equals(nodeService.getType(repealProj))){
-				nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, ORDModel.STATUSES.get(ORDModel.ORD_STATUSES.CANCELED_FAKE_STATUS));
-			}
-			if (NDModel.TYPE_ND.equals(nodeService.getType(repealProj))){
-				String ndStatus = (String) nodeService.getProperty(repealProj, StatemachineModel.PROP_STATUS);
-				if (NDModel.STATUSES.get(NDModel.ND_STATUSES.ACTIVE_STATUS).equals(ndStatus)){
-					nodeService.setProperty(repealProj, StatemachineModel.PROP_STATUS, NDModel.STATUSES.get(NDModel.ND_STATUSES.CANCELED_STATUS));
-				}
-				else{
-					nodeService.addAspect(repealProj, DocumentService.ASPECT_DOC_CANCELLED, new HashMap<QName, Serializable>());
-				}
-			}
-
-			//запись в бизнес журнал о том, что документ отменен
-			String ordPresentStr = getOrdURL(ordSNode);
-	 		String bjMessage = String.format("Документ #mainobject отменен документом %s", ordPresentStr);
-			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
-			businessJournalService.log("System", repealProj, "CANCEL_DOCUMENT", bjMessage, null);
-
-			//создадим связь
-			documentConnectionService.createConnection(ord, repealProj, "cancel", true, true);
-		}
-	}
-
-	public void enactDocuments(ScriptNode ordSNode){
-		NodeRef ord = ordSNode.getNodeRef();
-		List<AssociationRef> enactAssoc = nodeService.getTargetAssocs(ord, ORDModel.ASSOC_ORD_ACCEPT);
-		for (AssociationRef enactProjAssoc:enactAssoc){
-			NodeRef repealProj = enactProjAssoc.getTargetRef();
-			nodeService.addAspect(repealProj, DocumentService.ASPECT_DOC_ACCEPT, null);
-
-			//запись в бизнес журнал о том, что документ введён в действие
-			String ordPresentStr = getOrdURL(ordSNode);
-	 		String bjMessage = String.format("Документ #mainobject введен в действие документом %s", ordPresentStr);
-			String registrarLogin = orgstructureService.getEmployeeLogin(orgstructureService.getCurrentEmployee());
-			businessJournalService.log("System", repealProj, "ACCEPT_DOCUMENT", bjMessage, null);
-
-			//создадим связь
-			documentConnectionService.createConnection(ord, repealProj, "accept", true, true);
-		}
 	}
 
 	public void changePointStatusByErrand(ScriptNode ordSNode){
