@@ -1,4 +1,4 @@
-<#macro renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent="false">
+<#macro renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent="false" showPreview="true">
 	<#assign params = field.control.params/>
 	<#assign disabled = form.mode == "view">
 
@@ -39,7 +39,8 @@
 				checkRights: ${checkRights?string},
 				itemNodeRef: "${form.arguments.itemId}",
 				currentValue: "${field.value!""}",
-            	suppressRefreshEvent: ${suppressRefreshEvent?string}
+            	suppressRefreshEvent: ${suppressRefreshEvent?string},
+            	showPreview: ${showPreview?string}
 			});
 		}
 		YAHOO.util.Event.onDOMReady(init);

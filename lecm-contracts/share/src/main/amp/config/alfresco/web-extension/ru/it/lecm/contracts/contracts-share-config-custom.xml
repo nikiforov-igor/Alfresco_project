@@ -1274,6 +1274,7 @@
                             <control-param name="showUploadNewVersion">true</control-param>
                             <control-param name="checkRights">true</control-param>
                             <control-param name="suppressRefreshEvent">true</control-param>
+                            <control-param name="showPreview">false</control-param>
                         </control>
                     </field>
                     <field id="lecm-contract-table-structure:stage-comment">

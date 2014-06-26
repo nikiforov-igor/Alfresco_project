@@ -17,6 +17,10 @@
     <#if params.suppressRefreshEvent?? && params.suppressRefreshEvent == "true">
         <#assign suppressRefreshEvent = true/>
     </#if>
+    <#assign showPreview = true/>
+    <#if params.showPreview?? && params.showPreview == "false">
+        <#assign showPreview = false/>
+    </#if>
     <#if params.showAttsList?? && params.showAttsList == "false">
         <#assign showAttsList = false/>
     </#if>
@@ -30,7 +34,7 @@
     </#if>
 	<div class="container">
 		<div class="buttons-div">
-			<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent/>
+			<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent showPreview/>
 		</div>
 		<div class="value-div">
 		    <#if showAttsList>

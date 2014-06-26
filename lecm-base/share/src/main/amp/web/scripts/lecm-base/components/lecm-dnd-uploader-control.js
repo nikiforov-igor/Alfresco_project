@@ -44,7 +44,8 @@ LogicECM.control = LogicECM.control || {};
 				checkRights: false,
 				itemNodeRef: false,
                 suppressRefreshEvent: false,
-                useDnD: true
+                useDnD: true,
+                showPreview: true
 			},
 
 			currentValueHtmlId: "",
@@ -343,13 +344,15 @@ LogicECM.control = LogicECM.control || {};
 				if (this.widgets.showPreviewButton != null) {
 					this.widgets.showPreviewButton.set("disabled", this.selectedPreviewFile == null);
 				}
-				if (this.selectedPreviewFile != null && (this.widgets.showPreviewButton == null || this.widgets.showPreviewButton.get("checked"))) {
-					YAHOO.Bubbling.fire("showPreview", {
-						nodeRef: this.selectedPreviewFile
-					});
-				} else {
-					YAHOO.Bubbling.fire("hidePreview");
-				}
+                if (this.options.showPreview) {
+                    if (this.selectedPreviewFile != null && (this.widgets.showPreviewButton == null || this.widgets.showPreviewButton.get("checked"))) {
+                        YAHOO.Bubbling.fire("showPreview", {
+                            nodeRef: this.selectedPreviewFile
+                        });
+                    } else {
+                        YAHOO.Bubbling.fire("hidePreview");
+                    }
+                }
 			},
 
 			attachUploadNewVersionClickListener: function(node) {
