@@ -61,10 +61,15 @@
     <#assign isTableSortable = field.control.params.isTableSortable/>
 </#if>
 
+<#assign jsObjectName = "LogicECM.module.DocumentTable"/>
+<#if field.control.params.jsObjectName??>
+    <#assign jsObjectName = field.control.params.jsObjectName/>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
 	function drawForm(){
-		var control = new LogicECM.module.DocumentTable("${fieldHtmlId}").setMessages(${messages});
+		var control = new ${jsObjectName}("${fieldHtmlId}").setMessages(${messages});
 		control.setOptions(
 			{
 				currentValue: "${field.value!""}",
