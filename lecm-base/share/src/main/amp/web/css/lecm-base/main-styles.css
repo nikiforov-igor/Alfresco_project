@@ -151,6 +151,9 @@
     font-weight: bold;
     color: #076a8d;
     border-bottom: 1px solid #ccc;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 .yui-skin-lecmTheme .yui-panel .bd div.form-buttons,
 .yui-skin-lecmTheme .yui-panel .bdft,
