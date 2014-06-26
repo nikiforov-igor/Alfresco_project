@@ -1,11 +1,14 @@
 package ru.it.lecm.reports.model.impl;
 
-import java.util.Set;
-
 import ru.it.lecm.base.beans.SubstitudeBean;
-import ru.it.lecm.reports.api.model.*;
+import ru.it.lecm.reports.api.model.FlagsExtendable;
+import ru.it.lecm.reports.api.model.JavaClassable;
+import ru.it.lecm.reports.api.model.L18able;
+import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
+
+import java.util.Set;
 
 /**
  * Описатель колонки.
@@ -25,6 +28,8 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
     private String alfrescoType;
 
     private int order = 0;
+
+    private boolean mandatory = false;
 
     public ColumnDescriptor() {
         super();
@@ -54,6 +59,7 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         result = prime * result
                 + ((flagsExtendable == null) ? 0 : flagsExtendable.hashCode());
         result = prime * result + order;
+        result = prime * result + (this.isMandatory() ? 1 : 0);
         return result;
     }
 
@@ -102,7 +108,7 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         } else if (!flagsExtendable.equals(other.flagsExtendable))
             return false;
 
-        return order == other.order;
+        return mandatory != other.mandatory && order == other.order;
     }
 
     @Override
@@ -116,6 +122,7 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
                 + "\n\t, javaClass " + super.toString()
                 + "\n\t, flagsExtendable " + flagsExtendable
                 + ", order " + order
+                + ", mandatory " + mandatory
                 + "]";
     }
 
@@ -255,5 +262,15 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         this.setParameterValue(Utils.clone(srcCol.getParameterValue()));
 
         this.setFlags(srcCol.flags());
+
+        this.setMandatory(srcCol.isMandatory());
+    }
+
+    public boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(boolean isMandatory) {
+        this.mandatory = isMandatory;
     }
 }

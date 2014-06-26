@@ -38,6 +38,7 @@ public interface ReportEditorDAO {
     final static public QName PROP_RDS_COLUMN_EXPR = QName.createQName(REPORTS_EDITOR_URI, "dataColumnExpression");
     final static public QName PROP_RDS_COLUMN_CLASS = QName.createQName(REPORTS_EDITOR_URI, "dataColumnClass");
     final static public QName PROP_RDS_COLUMN_ORDER = QName.createQName(REPORTS_EDITOR_URI, "dataColumnOrder");
+    final static public QName PROP_RDS_COLUMN_MANDATORY = QName.createQName(REPORTS_EDITOR_URI, "dataColumnMandatory");
 
     final static public QName PROP_RDS_COLTYPE_CODE = QName.createQName(REPORTS_EDITOR_URI, "reportColumnTypeCode");
     final static public QName PROP_RDS_COLTYPE_CLASS = QName.createQName(REPORTS_EDITOR_URI, "reportColumnTypeClass");

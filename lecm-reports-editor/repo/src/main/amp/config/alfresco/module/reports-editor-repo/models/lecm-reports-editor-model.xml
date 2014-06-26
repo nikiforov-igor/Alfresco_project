@@ -304,6 +304,11 @@
                     <type>d:int</type>
                     <default>0</default>
                 </property>
+                <property name="lecm-rpeditor:dataColumnMandatory">
+                    <title>Column Is Mandatory</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:columnTypeAssoc">

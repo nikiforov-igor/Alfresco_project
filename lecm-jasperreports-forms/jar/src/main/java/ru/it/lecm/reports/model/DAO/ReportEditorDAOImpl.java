@@ -365,6 +365,12 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         } else {
             result.setOrder(0);
         }
+        Object mandatoryValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_MANDATORY);
+        if (orderValue != null) {
+            result.setMandatory(Boolean.valueOf(mandatoryValue.toString()));
+        } else {
+            result.setMandatory(false);
+        }
 
         Object alfTypeValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_CLASS);
         if (alfTypeValue != null) {

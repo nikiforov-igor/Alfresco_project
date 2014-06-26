@@ -4,13 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.*;
-import ru.it.lecm.reports.api.model.*;
+import ru.it.lecm.reports.api.model.AlfrescoAssocInfo;
 import ru.it.lecm.reports.api.model.AlfrescoAssocInfo.AssocKind;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
+import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterType.Type;
+import ru.it.lecm.reports.api.model.ParameterTypedValue;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.model.impl.*;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
-import ru.it.lecm.reports.model.impl.ItemsFormatDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -82,6 +83,7 @@ public class DSXMLProducer {
     public final static String XMLATTR_EXPRESSION = "expression";
     public final static String XMLATTR_DISPLAYNAME = "displayName";
     public final static String XMLATTR_ORDER = "order";
+    public final static String XMLATTR_MANDATORY = "mandatory";
 
     public final static String XMLATTR_VALUE_JAVACLASS = "javaValueClass";
     public final static String XMLATTR_JAVACLASS = "javaClass";
@@ -749,6 +751,8 @@ public class DSXMLProducer {
         result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
         result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
         result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
+        result.setAttribute(XMLATTR_MANDATORY, String.valueOf(column.isMandatory()));
+
         if (column.getOrder() != 0) {
             result.setAttribute(XMLATTR_ORDER, String.valueOf(column.getOrder()));
         }
@@ -858,6 +862,12 @@ public class DSXMLProducer {
                 final String sorder = fldNode.getAttribute(DSXMLProducer.XMLATTR_ORDER);
                 if (!Utils.isStringEmpty(sorder)) {
                     column.setOrder(Integer.parseInt(sorder));
+                }
+            }
+            if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_MANDATORY)) {
+                final String mandatory = fldNode.getAttribute(DSXMLProducer.XMLATTR_MANDATORY);
+                if (!Utils.isStringEmpty(mandatory)) {
+                    column.setMandatory(Boolean.parseBoolean(mandatory));
                 }
             }
 

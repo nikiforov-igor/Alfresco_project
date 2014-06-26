@@ -3,6 +3,8 @@ package ru.it.lecm.reports.editor.form;
 import org.alfresco.web.config.forms.*;
 import org.alfresco.web.scripts.forms.FormUIGet;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.Cache;
@@ -10,11 +12,13 @@ import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.util.StringUtils;
-import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.api.model.ParameterType;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.manager.ReportManagerApi;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
+import ru.it.lecm.reports.model.impl.L18Value;
+import ru.it.lecm.reports.model.impl.ParameterTypedValueImpl;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 
 import java.io.InputStream;
@@ -35,6 +39,8 @@ public class ReportForm extends FormUIGet {
 
     final protected DateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
+    private final static Log logger = LogFactory.getLog(ReportForm.class);
+
     private enum CustomTypes {
         STATUS,
         TEMPLATES
@@ -49,6 +55,10 @@ public class ReportForm extends FormUIGet {
         d_double
     }
 
+    public void setReportManager(ReportManagerApi reportManager) {
+        this.reportManager = reportManager;
+    }
+
     @Override
     protected Map<String, Object> executeImpl(WebScriptRequest req, Status status, Cache cache) {
         return super.executeImpl(req, status, cache);
@@ -58,18 +68,19 @@ public class ReportForm extends FormUIGet {
     protected Map<String, Object> generateModel(String itemKind, String itemId, WebScriptRequest request, Status status, Cache cache) {
         ReportDescriptor descriptor = getReportDescriptor(itemId);
 
-        HashMap<String, Object> model = new HashMap<String, Object>();
-        HashMap<String, Object> form = new HashMap<String, Object>();
+        final HashMap<String, Object> model = new HashMap<String, Object>();
+        final HashMap<String, Object> form = new HashMap<String, Object>();
         model.put(MODEL_FORM, form);
 
-        form.put(MODEL_CONSTRAINTS, new ArrayList<Object>());
+        final ArrayList<Constraint> constraints = new ArrayList<Constraint>();
+        form.put(MODEL_CONSTRAINTS, constraints);
 
-        ArrayList<Set> sets = new ArrayList<Set>();
+        final ArrayList<Set> sets = new ArrayList<Set>();
         form.put(MODEL_STRUCTURE, sets);
         Set set = new Set("", "Набор параметров");
         sets.add(set);
 
-        HashMap<String, Field> fields = new HashMap<String, Field>();
+        final HashMap<String, Field> fields = new HashMap<String, Field>();
         form.put(MODEL_FIELDS, fields);
 
         List<ColumnDescriptor> columns = descriptor.getDsDescriptor().getColumns();
@@ -91,18 +102,30 @@ public class ReportForm extends FormUIGet {
             addTemplateParameterColumn(params);
         }
 
-        int colnum = 0;
+        int colNumber = 0;
         for (ColumnDescriptor param : params) {
-        	colnum++;
-            Field field = generateFieldModel(param, colnum, descriptor);
+            colNumber++;
+            Field field = generateFieldModel(param, colNumber, descriptor);
             if (field != null) {
                 fields.put(param.getColumnName(), field);
                 FieldPointer fieldPointer = new FieldPointer(field.getId());
                 set.addChild(fieldPointer);
+
+                if (field.isMandatory()) {
+                    Constraint constraint;
+                    try {
+                        constraint = generateConstraintModel(field, CONSTRAINT_MANDATORY);
+                        if (constraint != null) {
+                            constraints.add(constraint);
+                        }
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
             }
         }
 
-        Map<String, Object> arguments = new HashMap<String, Object>();
+        final Map<String, Object> arguments = new HashMap<String, Object>();
 
         String[] parameters = request.getParameterNames();
         for (String parameter : parameters) {
@@ -123,23 +146,7 @@ public class ReportForm extends FormUIGet {
         return model;
     }
 
-    private void addTemplateParameterColumn(List<ColumnDescriptor> params) {
-        ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
-        templateParam.setAlfrescoType(TEMPLATES);
-
-        L18Value name = new L18Value();
-        name.regItem("ru", TEMPLATES_COLUMN_NAME);
-        templateParam.setL18Name(name);
-
-        templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
-        params.add(templateParam);
-    }
-
-    static String nonBlank(String s, String sDefault) {
-    	return (s != null && s.trim().length() > 0) ? s : sDefault;
-    }
-
-    protected Field generateFieldModel(ColumnDescriptor column, int colnum, ReportDescriptor desc) {
+    protected Field generateFieldModel(ColumnDescriptor column, int colNum, ReportDescriptor desc) {
         Field field = null;
         try {
             if (column != null) {
@@ -147,14 +154,15 @@ public class ReportForm extends FormUIGet {
                 field = new Field();
 
                 // т.к. пустые метки могут уронить диалог, сделаем их всегда заполненными ...
-                final String colMnem = nonBlank(column.getColumnName(), String.format("Column_%d", colnum));
-                final String colCaption = nonBlank(column.getDefault(), colMnem);
+                final String colCode = nonBlank(column.getColumnName(), String.format("Column_%d", colNum));
+                final String colCaption = nonBlank(column.getDefault(), colCode);
 
-                field.setId(colMnem);
-                field.setName(colMnem);
+                field.setId(colCode);
+                field.setName(colCode);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
 
+                field.setMandatory(column.isMandatory());
                 field.setDataKeyName(column.getColumnName());
 
                 String dataType = column.getAlfrescoType();
@@ -165,6 +173,7 @@ public class ReportForm extends FormUIGet {
                 processFieldControl(field, column, desc);
             }
         } catch (JSONException je) {
+            logger.debug(je.getMessage(), je);
             field = null;
         }
 
@@ -175,8 +184,7 @@ public class ReportForm extends FormUIGet {
         FieldControl control = null;
 
         DefaultControlsConfigElement defaultControls = null;
-        FormsConfigElement formsGlobalConfig =
-                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        FormsConfigElement formsGlobalConfig = (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
         if (formsGlobalConfig != null) {
             defaultControls = formsGlobalConfig.getDefaultControls();
         }
@@ -220,7 +228,7 @@ public class ReportForm extends FormUIGet {
                     }
                 }
                 String columnExpression = column.getExpression();
-                if (columnExpression != null && !columnExpression.isEmpty()){
+                if (columnExpression != null && !columnExpression.isEmpty()) {
                     if (!columnExpression.startsWith("{")) {// не вычисляемое значение, значит либо константа, либо список значений
                         if (!columnExpression.contains(",")) { // константа
                             allowedValues = new String[1];
@@ -268,13 +276,71 @@ public class ReportForm extends FormUIGet {
                     List<String> optionsList = new ArrayList<String>(allowedValues.length);
                     Collections.addAll(optionsList, allowedValues);
 
-                    // ALF-7961: don't use a comma as the list separator
                     field.getControl().getParams().put(CONTROL_PARAM_OPTIONS,
                             StringUtils.collectionToDelimitedString(optionsList, DELIMITER));
                     field.getControl().getParams().put(CONTROL_PARAM_OPTION_SEPARATOR, DELIMITER);
                 }
             }
         }
+    }
+
+    protected Constraint generateConstraintModel(Field field, String constraintId) throws JSONException {
+        Constraint constraint = null;
+
+        // retrieve the default constraints configuration
+        ConstraintHandlersConfigElement defaultConstraintHandlers = null;
+        FormsConfigElement formsGlobalConfig =
+                (FormsConfigElement) this.configService.getGlobalConfig().getConfigElement(CONFIG_FORMS);
+        if (formsGlobalConfig != null) {
+            defaultConstraintHandlers = formsGlobalConfig.getConstraintHandlers();
+        }
+
+        if (defaultConstraintHandlers == null) {
+            throw new WebScriptException("Failed to locate default constraint handlers configurarion");
+        }
+
+        // get the default handler for the constraint
+        ConstraintHandlerDefinition defaultConstraintConfig =
+                defaultConstraintHandlers.getItems().get(constraintId);
+
+        if (defaultConstraintConfig != null) {
+            // generate and process the constraint model
+            constraint = generateConstraintModel(field, constraintId, new JSONObject(), defaultConstraintConfig);
+        }
+
+        return constraint;
+    }
+
+    private Constraint generateConstraintModel(Field field, String constraintId, JSONObject constraintParams, ConstraintHandlerDefinition defaultConstraintConfig) {
+        // get the validation handler from the config
+        String validationHandler = defaultConstraintConfig.getValidationHandler();
+
+        Constraint constraint = new Constraint(field.getId(), constraintId, validationHandler, constraintParams);
+
+        if (defaultConstraintConfig.getEvent() != null) {
+            constraint.setEvent(defaultConstraintConfig.getEvent());
+        } else {
+            constraint.setEvent(DEFAULT_CONSTRAINT_EVENT);
+        }
+
+        // look for an overridden message in the field's constraint config,
+        // if none found look in the default constraint config
+        String constraintMsg = null;
+        if (defaultConstraintConfig.getMessageId() != null) {
+            constraintMsg = retrieveMessage(defaultConstraintConfig.getMessageId());
+        } else if (defaultConstraintConfig.getMessage() != null) {
+            constraintMsg = defaultConstraintConfig.getMessage();
+        }
+        if (constraintMsg == null) {
+            constraintMsg = retrieveMessage(validationHandler + ".message");
+        }
+
+        // add the message if there is one
+        if (constraintMsg != null) {
+            constraint.setMessage(constraintMsg);
+        }
+
+        return constraint;
     }
 
     private ReportDescriptor getReportDescriptor(String reportCode) {
@@ -293,17 +359,30 @@ public class ReportForm extends FormUIGet {
                         enumHasValue(CustomTypes.class, typeKey));
     }
 
-    public void setReportManager(ReportManagerApi reportManager) {
-        this.reportManager = reportManager;
-    }
-
-    static public boolean enumHasValue(Class enumClass, String name) {
-        boolean inEnum = false;
+    private boolean enumHasValue(Class enumClass, String name) {
+        boolean inEnum = true;
         try {
-            inEnum = Enum.valueOf(enumClass, name) != null;
-        } catch (Exception ex){
+            Enum.valueOf(enumClass, name);
+        } catch (Exception ignored) {
+            inEnum = false;
         }
         return inEnum;
+    }
+
+    private void addTemplateParameterColumn(List<ColumnDescriptor> params) {
+        ColumnDescriptor templateParam = new ColumnDescriptor(TEMPLATE_CODE);
+        templateParam.setAlfrescoType(TEMPLATES);
+
+        L18Value name = new L18Value();
+        name.regItem("ru", TEMPLATES_COLUMN_NAME);
+        templateParam.setL18Name(name);
+
+        templateParam.setParameterValue(new ParameterTypedValueImpl(ParameterTypedValue.Type.VALUE.getMnemonic()));
+        params.add(templateParam);
+    }
+
+    private String nonBlank(String s, String sDefault) {
+        return (s != null && s.trim().length() > 0) ? s : sDefault;
     }
 
     public class Field extends Element {
@@ -504,7 +583,7 @@ public class ReportForm extends FormUIGet {
         protected String template;
         protected Map<String, String> params;
 
-        FieldControl(String template) {
+        protected FieldControl(String template) {
             this.template = template;
             this.params = new HashMap<String, String>(4);
         }
@@ -523,11 +602,7 @@ public class ReportForm extends FormUIGet {
 
         @Override
         public String toString() {
-            StringBuilder buffer = new StringBuilder();
-            buffer.append("control(template=").append(this.template);
-            buffer.append(" params=").append(this.params);
-            buffer.append(")");
-            return buffer.toString();
+            return "control(template=" + this.template + " params=" + this.params + ")";
         }
     }
 
@@ -542,7 +617,7 @@ public class ReportForm extends FormUIGet {
         private String message;
         private String event;
 
-        Constraint(String fieldId, String id, String handler, JSONObject params) {
+        protected Constraint(String fieldId, String id, String handler, JSONObject params) {
             this.fieldId = fieldId;
             this.id = id;
             this.validationHandler = handler;
@@ -615,34 +690,11 @@ public class ReportForm extends FormUIGet {
         }
     }
 
-    public abstract class Element {
-        protected String kind;
-        protected String id;
-
-        public String getKind() {
-            return this.kind;
-        }
-
-        public String getId() {
-            return this.id;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder builder = new StringBuilder();
-            builder.append(this.kind);
-            builder.append("(");
-            builder.append(this.id);
-            builder.append(")");
-            return builder.toString();
-        }
-    }
-
     /**
      * Represents a pointer to a field, used in the form UI model.
      */
     public class FieldPointer extends Element {
-        FieldPointer(String id) {
+        protected FieldPointer(String id) {
             this.kind = FIELD;
             this.id = id;
         }
@@ -657,7 +709,7 @@ public class ReportForm extends FormUIGet {
         protected String label;
         protected List<Element> children;
 
-        Set(FormSet setConfig) {
+        protected Set(FormSet setConfig) {
             this.kind = SET;
             this.id = setConfig.getSetId();
             this.appearance = setConfig.getAppearance();
@@ -666,7 +718,7 @@ public class ReportForm extends FormUIGet {
             this.children = new ArrayList<Element>(4);
         }
 
-        Set(String id, String label) {
+        protected Set(String id, String label) {
             this.kind = SET;
             this.id = id;
             this.label = label;
