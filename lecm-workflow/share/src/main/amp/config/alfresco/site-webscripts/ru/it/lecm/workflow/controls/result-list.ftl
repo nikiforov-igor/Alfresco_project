@@ -19,87 +19,98 @@
 <@grid.datagrid containerId true "app-list-item-employee-view">
 	<script type="text/javascript">
 	(function () {
-		LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
-			var html = "", i, ii, columnContent, datalistColumn, data,
-					resultItemCommentTemplate = '<a href="{proto}//{host}{pageContext}document-attachment?nodeRef={nodeRef}">' +
-						'<img src="{resContext}/components/images/generic-file-16.png" width="16"  alt="{displayValue}" title="{displayValue}"/></a>',
-					attributeForShowTemplate = '<a href="javascript:void(0);" onclick="viewAttributes(\'{nodeRef}\')">{content}</a>';
 
-			if (!oRecord) {
-				oRecord = this.getRecord(elCell);
-			}
-			if (!oColumn) {
-				oColumn = this.getColumn(elCell.parentNode.cellIndex);
-			}
+        function draw() {
+            LogicECM.module.Base.DataGrid.prototype.getCustomCellFormatter = function(grid, elCell, oRecord, oColumn, oData) {
+                var html = "", i, ii, columnContent, datalistColumn, data,
+                        resultItemCommentTemplate = '<a href="{proto}//{host}{pageContext}document-attachment?nodeRef={nodeRef}">' +
+                                '<img src="{resContext}/components/images/generic-file-16.png" width="16"  alt="{displayValue}" title="{displayValue}"/></a>',
+                        attributeForShowTemplate = '<a href="javascript:void(0);" onclick="viewAttributes(\'{nodeRef}\')">{content}</a>';
 
-			if (oRecord && oColumn) {
-				if (!oData) {
-					oData = oRecord.getData("itemData")[oColumn.field];
-				}
+                if (!oRecord) {
+                    oRecord = this.getRecord(elCell);
+                }
+                if (!oColumn) {
+                    oColumn = this.getColumn(elCell.parentNode.cellIndex);
+                }
 
-				if (oData) {
-					datalistColumn = grid.datagridColumns[oColumn.key];
-					if (datalistColumn) {
-						oData = YAHOO.lang.isArray(oData) ? oData : [oData];
-						for (i = 0, ii = oData.length, data; i < ii; i++) {
-							data = oData[i];
+                if (oRecord && oColumn) {
+                    if (!oData) {
+                        oData = oRecord.getData("itemData")[oColumn.field];
+                    }
 
-							switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
-								case "lecmApprovalResult:approvalResultItemCommentAssoc":
-									columnContent = YAHOO.lang.substitute(resultItemCommentTemplate, {
-										proto: window.location.protocol,
-										host: window.location.host,
-										pageContext: Alfresco.constants.URL_PAGECONTEXT,
-										nodeRef: data.value,
-										resContext: Alfresco.constants.URL_RESCONTEXT,
-										displayValue: data.displayValue
-									});
+                    if (oData) {
+                        datalistColumn = grid.datagridColumns[oColumn.key];
+                        if (datalistColumn) {
+                            oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+                            for (i = 0, ii = oData.length, data; i < ii; i++) {
+                                data = oData[i];
 
-									break;
-								default:
-									break;
-							}
-							if (columnContent) {
-								if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
-									html += YAHOO.lang.substitute(attributeForShowTemplate, {
-										nodeRef: oRecord.getData("nodeRef"),
-										content: columnContent
-									});
-								} else {
-									html += columnContent;
-								}
+                                switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
+                                    case "lecmApprovalResult:approvalResultItemCommentAssoc":
+                                        columnContent = YAHOO.lang.substitute(resultItemCommentTemplate, {
+                                            proto: window.location.protocol,
+                                            host: window.location.host,
+                                            pageContext: Alfresco.constants.URL_PAGECONTEXT,
+                                            nodeRef: data.value,
+                                            resContext: Alfresco.constants.URL_RESCONTEXT,
+                                            displayValue: data.displayValue
+                                        });
 
-								if (i < ii - 1) {
-									html += "<br />";
-								}
-							}
-						}
-					}
-				}
-			}
-			return html ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
-		};
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                if (columnContent) {
+                                    if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
+                                        html += YAHOO.lang.substitute(attributeForShowTemplate, {
+                                            nodeRef: oRecord.getData("nodeRef"),
+                                            content: columnContent
+                                        });
+                                    } else {
+                                        html += columnContent;
+                                    }
 
-		YAHOO.util.Event.onDOMReady(function (){
-			var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
-				usePagination: ${usePagination?string},
-				showExtendSearchBlock: false,
-				actions: [],
-				datagridMeta: {
-					itemType: "${itemType}",
+                                    if (i < ii - 1) {
+                                        html += "<br />";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return html ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+            };
+
+            var datagrid = new LogicECM.module.Base.DataGrid('${containerId}').setOptions({
+                usePagination: ${usePagination?string},
+                showExtendSearchBlock: false,
+                actions: [],
+                datagridMeta: {
+                    itemType: "${itemType}",
                     useChildQuery: true,
-					datagridFormId: "datagrid",
-					nodeRef: "${form.arguments.itemId}",
-					sort: "lecm-workflow:assignee-order|true",
-				},
-				bubblingLabel: "${containerId}",
-			allowCreate: ${allowCreate?string},
-				showActionColumn: ${showActions?string},
-				showCheckboxColumn: false
-			}).setMessages(${messages});
+                    datagridFormId: "datagrid",
+                    nodeRef: "${form.arguments.itemId}",
+                    sort: "lecm-workflow:assignee-order|true"
+                },
+                bubblingLabel: "${containerId}",
+                allowCreate: ${allowCreate?string},
+                showActionColumn: ${showActions?string},
+                showCheckboxColumn: false
+            }).setMessages(${messages});
 
-			datagrid.draw();
-		});
+            datagrid.draw();
+
+        }
+
+        function init() {
+            LogicECM.module.Base.Util.loadScripts([
+                'scripts/lecm-base/components/advsearch.js',
+                'scripts/lecm-base/components/lecm-datagrid.js'
+            ], draw);
+        }
+
+        YAHOO.util.Event.onDOMReady(init);
 
 	})();
 </script>
