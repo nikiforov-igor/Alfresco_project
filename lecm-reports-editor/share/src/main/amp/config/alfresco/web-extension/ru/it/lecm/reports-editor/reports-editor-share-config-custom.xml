@@ -517,10 +517,10 @@
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
-                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
+                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -540,7 +540,6 @@
                     <field id="lecm-rpeditor:dataColumnExpression" mandatory="true" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
@@ -560,6 +559,7 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
+                    <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
                 </appearance>
             </form>
             <form id="sql-provider-column">
@@ -570,10 +570,10 @@
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
-                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
+                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -593,7 +593,6 @@
                     <field id="lecm-rpeditor:dataColumnExpression" mandatory="false" set="settings">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
@@ -613,6 +612,7 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter"  help-id="column.order.help"/>
+                    <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
                 </appearance>
             </form>
         </forms>
@@ -627,10 +627,10 @@
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnExpression"/>
-                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
+                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -650,7 +650,6 @@
                     <field id="lecm-rpeditor:dataColumnExpression" set="settings" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter" >
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
@@ -670,6 +669,7 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
+                    <field id="lecm-rpeditor:dataColumnMandatory" set="parameter"/>
                 </appearance>
             </form>
             <form id="short-datagrid">
@@ -688,10 +688,10 @@
                     <show id="cm:name"/>
                     <show id="lecm-rpeditor:dataColumnCode"/>
                     <show id="lecm-rpeditor:columnTypeAssoc"/>
-                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                     <show id="lecm-rpeditor:columnParameterTypeAssoc"/>
                     <show id="lecm-rpeditor:dataColumnClass"/>
                     <show id="lecm-rpeditor:dataColumnOrder"/>
+                    <show id="lecm-rpeditor:dataColumnMandatory"/>
                 </field-visibility>
                 <appearance>
                     <set id="settings" appearance="" label-id="report-column.settings" />
@@ -708,7 +708,6 @@
                             <control-param name="showCreateNewButton">false</control-param>
                         </control>
                     </field>
-                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
                     <field id="lecm-rpeditor:columnParameterTypeAssoc" set="parameter">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Редактор_x0020_Отчетов/cm:Справочники/lecm-dic:Тип_x0020_параметра</control-param>
@@ -728,6 +727,7 @@
                         </control>
                     </field>
                     <field id="lecm-rpeditor:dataColumnOrder" set="parameter" help-id="column.order.help"/>
+                    <field id="lecm-rpeditor:dataColumnMandatory" set="settings"/>
                 </appearance>
             </form>
             <form id="datagrid">
