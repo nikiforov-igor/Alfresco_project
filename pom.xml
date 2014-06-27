@@ -112,16 +112,11 @@
         <module>lecm-permission-exp</module>
         <module>lecm-signed-docflow</module>
         <module>lecm-documents-removal</module>
-        <module>lecm-incoming</module>
-		<module>lecm-outgoing</module>
 		<module>lecm-model-editor</module>
 		<module>lecm-eds-documents</module>
 		<module>lecm-arm</module>
 		<module>lecm-workflow</module>
-		<module>lecm-internal</module>
 		<module>lecm-group-actions</module>
-		<module>lecm-ord</module>
-		<module>lecm-nd</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
@@ -716,6 +711,16 @@
             <properties>
                 <redeploy.process.definitions>true</redeploy.process.definitions>
             </properties>
+        </profile>
+        <profile>
+            <id>SED</id>
+            <modules>
+                <module>lecm-incoming</module>
+                <module>lecm-outgoing</module>
+                <module>lecm-internal</module>
+                <module>lecm-ord</module>
+                <module>lecm-nd</module>
+            </modules>
         </profile>
         <profile>
             <id>non-production-modules</id>

@@ -222,43 +222,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.it.lecm.permission-exp</groupId>
-			<artifactId>permission-exp-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
 			<groupId>ru.it.lecm.internal</groupId>
 			<artifactId>internal-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.incoming</groupId>
-			<artifactId>incoming-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.outgoing</groupId>
-			<artifactId>outgoing-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.nd</groupId>
-			<artifactId>nd-share</artifactId>
-			<version>${platform.version}</version>
-			<scope>runtime</scope>
-			<type>amp</type>
-		</dependency>
-		<dependency>
-			<groupId>ru.it.lecm.ord</groupId>
-			<artifactId>ord-share</artifactId>
 			<version>${platform.version}</version>
 			<scope>runtime</scope>
 			<type>amp</type>
@@ -470,271 +435,166 @@
 							<groupId>org.alfresco</groupId>
 							<artifactId>share</artifactId>
 							<type>war</type>
-							<!-- To allow inclusion of META-INF, needed for MMT WAR file validation-->
 							<excludes/>
-							<!--<excludes>
-								<exclude>WEB-INF/lib/freemarker-2.3.18-patched.jar</exclude>
-							</excludes>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.base</groupId>
 							<artifactId>base-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.orgstructure</groupId>
 							<artifactId>orgstructure-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
-							<!-- <groupId>ru.it.lecm.forms.jasperforms</groupId> -->
 							<groupId>ru.it.lecm.reports</groupId>
-							<!-- <artifactId>jasperforms-share</artifactId> -->
 							<artifactId>lecm-reports-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.dictionary</groupId>
 							<artifactId>dictionary-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.contracts</groupId>
 							<artifactId>contracts-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.statemachine</groupId>
 							<artifactId>statemachine-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.statemachine.editor</groupId>
 							<artifactId>statemachine-editor-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.theme</groupId>
 							<artifactId>lecm-theme-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.delegation</groupId>
 							<artifactId>lecm-delegation-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.subscriptions</groupId>
 							<artifactId>subscriptions-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.notifications</groupId>
 							<artifactId>notifications-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.notifications.dashlet</groupId>
 							<artifactId>notifications-dashlet-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.notifications.channel.active</groupId>
 							<artifactId>notifications-active-channel-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.business-journal</groupId>
 							<artifactId>business-journal-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.calendar</groupId>
 							<artifactId>lecm-calendar-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.user-profile</groupId>
 							<artifactId>lecm-user-profile-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.documents</groupId>
 							<artifactId>documents-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.regnumbers</groupId>
 							<artifactId>lecm-regnumbers-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.contractors</groupId>
 							<artifactId>lecm-contractors-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.reports-editor</groupId>
 							<artifactId>reports-editor-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.errands</groupId>
 							<artifactId>errands-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.signed-docflow</groupId>
 							<artifactId>signed-docflow-share</artifactId>
-							<!--<version>${platform.version}</version>-->
 							<type>amp</type>
-							<!--<scope>runtime</scope>-->
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.permission-exp</groupId>
 							<artifactId>permission-exp-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.model-editor</groupId>
 							<artifactId>model-editor-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.internal</groupId>
-							<artifactId>internal-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.incoming</groupId>
-							<artifactId>incoming-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.outgoing</groupId>
-							<artifactId>outgoing-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.nd</groupId>
-							<artifactId>nd-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
-							<type>amp</type>
-						</overlay>
-						<overlay>
-							<groupId>ru.it.lecm.ord</groupId>
-							<artifactId>ord-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.eds-documents</groupId>
 							<artifactId>eds-documents-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.arm</groupId>
 							<artifactId>arm-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.workflow.reservation</groupId>
 							<artifactId>reservation-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.workflow</groupId>
 							<artifactId>workflow-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.workflow.signing</groupId>
 							<artifactId>signing-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.workflow.review</groupId>
 							<artifactId>review-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.workflow.approval</groupId>
 							<artifactId>approval-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 						<overlay>
 							<groupId>ru.it.lecm.group-actions</groupId>
 							<artifactId>group-actions-share</artifactId>
-							<!--<version>${platform.version}</version>-->
-							<!--<scope>runtime</scope>-->
 							<type>amp</type>
 						</overlay>
 					</overlays>
@@ -784,6 +644,263 @@
 				</dependency>
 			</dependencies>
 		</profile>
+        <profile>
+            <id>SED</id>
+            <dependencies>
+                <dependency>
+                    <groupId>ru.it.lecm.internal</groupId>
+                    <artifactId>internal-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.incoming</groupId>
+                    <artifactId>incoming-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.outgoing</groupId>
+                    <artifactId>outgoing-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.nd</groupId>
+                    <artifactId>nd-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+                <dependency>
+                    <groupId>ru.it.lecm.ord</groupId>
+                    <artifactId>ord-share</artifactId>
+                    <version>${platform.version}</version>
+                    <scope>runtime</scope>
+                    <type>amp</type>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <overlays>
+                                <!-- Current project customizations -->
+                                <overlay/>
+                                <!-- The Alfresco WAR -->
+                                <overlay>
+                                    <groupId>org.alfresco</groupId>
+                                    <artifactId>share</artifactId>
+                                    <type>war</type>
+                                    <excludes/>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.base</groupId>
+                                    <artifactId>base-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.orgstructure</groupId>
+                                    <artifactId>orgstructure-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.reports</groupId>
+                                    <artifactId>lecm-reports-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.dictionary</groupId>
+                                    <artifactId>dictionary-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.contracts</groupId>
+                                    <artifactId>contracts-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.statemachine</groupId>
+                                    <artifactId>statemachine-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.statemachine.editor</groupId>
+                                    <artifactId>statemachine-editor-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.theme</groupId>
+                                    <artifactId>lecm-theme-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.delegation</groupId>
+                                    <artifactId>lecm-delegation-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.subscriptions</groupId>
+                                    <artifactId>subscriptions-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.notifications</groupId>
+                                    <artifactId>notifications-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.notifications.dashlet</groupId>
+                                    <artifactId>notifications-dashlet-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.notifications.channel.active</groupId>
+                                    <artifactId>notifications-active-channel-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.business-journal</groupId>
+                                    <artifactId>business-journal-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.calendar</groupId>
+                                    <artifactId>lecm-calendar-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.user-profile</groupId>
+                                    <artifactId>lecm-user-profile-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.documents</groupId>
+                                    <artifactId>documents-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.regnumbers</groupId>
+                                    <artifactId>lecm-regnumbers-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.contractors</groupId>
+                                    <artifactId>lecm-contractors-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.reports-editor</groupId>
+                                    <artifactId>reports-editor-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.errands</groupId>
+                                    <artifactId>errands-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.signed-docflow</groupId>
+                                    <artifactId>signed-docflow-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.permission-exp</groupId>
+                                    <artifactId>permission-exp-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.model-editor</groupId>
+                                    <artifactId>model-editor-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.arm</groupId>
+                                    <artifactId>arm-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.reservation</groupId>
+                                    <artifactId>reservation-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow</groupId>
+                                    <artifactId>workflow-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.signing</groupId>
+                                    <artifactId>signing-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.review</groupId>
+                                    <artifactId>review-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.approval</groupId>
+                                    <artifactId>approval-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.group-actions</groupId>
+                                    <artifactId>group-actions-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.eds-documents</groupId>
+                                    <artifactId>eds-documents-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+
+                                <!-- Дополнительные модули СЭД -->
+                                <overlay>
+                                    <groupId>ru.it.lecm.internal</groupId>
+                                    <artifactId>internal-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.incoming</groupId>
+                                    <artifactId>incoming-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.outgoing</groupId>
+                                    <artifactId>outgoing-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.nd</groupId>
+                                    <artifactId>nd-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.ord</groupId>
+                                    <artifactId>ord-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+
+                            </overlays>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.alfresco.maven.plugin</groupId>
+                                <artifactId>alfresco-maven-plugin</artifactId>
+                                <version>1.1.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
 		<profile>
 			<id>non-production-modules</id>
 			<dependencies>
