@@ -5,14 +5,23 @@
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-   <@renderPickerJS field "picker" />
-   picker.setOptions(
-   {
-      itemType: "${field.endpointType}",
-      multipleSelectMode: ${field.endpointMany?string},
-      itemFamily: "authority",
-      nameSubstituteString: "{cm:firstName} {cm:lastName} ({cm:userName})"
-   });
+    function init() {
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/object-finder/lecm-object-finder.js'
+        ], createPicker);
+    }
+    function createPicker(){
+       <@renderPickerJS field "picker" />
+       picker.setOptions(
+       {
+          itemType: "${field.endpointType}",
+          multipleSelectMode: ${field.endpointMany?string},
+          itemFamily: "authority",
+          nameSubstituteString: "{cm:firstName} {cm:lastName} ({cm:userName})"
+       });
+    }
+    YAHOO.util.Event.onDOMReady(init);
+
 })();
 //]]></script>
 
