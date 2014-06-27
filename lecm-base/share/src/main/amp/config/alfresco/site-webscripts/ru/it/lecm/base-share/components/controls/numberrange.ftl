@@ -34,7 +34,7 @@
             <@formLib.renderFieldHelp field=field />
         </div>
         <div class="value-div">
-            <input id="${fieldHtmlId}" type="hidden" name="${field.name}-date-range" value=""/>
+            <input id="${fieldHtmlId}" type="hidden" name="${field.name}-number-range" value=""/>
             <div id="${controlId}">
                 <div class="yui-g">
                     <div class="yui-u first">

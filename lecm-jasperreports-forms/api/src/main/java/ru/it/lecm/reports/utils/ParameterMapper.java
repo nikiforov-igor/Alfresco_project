@@ -25,7 +25,7 @@ public class ParameterMapper {
     static final transient Logger log = LoggerFactory.getLogger(ParameterMapper.class);
 
     public static final String DATE_RANGE = "-date-range";
-    public static final String NUMBER_RANGE = "-range";
+    public static final String NUMBER_RANGE = "-number-range";
     public static final String RANGE_LO_POSTFIX = "_lo";
     public static final String RANGE_HI_POSTFIX = "_hi";
     public static final String IDS_POSTFIX = "_ids";
