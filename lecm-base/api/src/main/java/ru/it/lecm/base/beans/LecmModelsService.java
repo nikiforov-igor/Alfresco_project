@@ -113,44 +113,50 @@ public class LecmModelsService {
 //                  TODO: DONE Вызывается из вебскрипта, уже обёрнутого в транзакцию. Транзакция перенесена во вторую точку вызова - init метод бина ModelToRepositoryLoader
                     InputStream contentInputStream = null;
                     try {
-                        contentInputStream = modelResource.getInputStream();
+	                    contentInputStream = modelResource.getInputStream();
 
-                        NodeRef newNode;
-                        boolean update = false;
-                        if (node == null) {
-                            Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-                            props.put(ContentModel.PROP_NAME, name);
+	                    NodeRef newNode;
+	                    boolean update = false;
+	                    if (node == null) {
+		                    Map<QName, Serializable> props = new HashMap<QName, Serializable>();
+		                    props.put(ContentModel.PROP_NAME, name);
 
-                            newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
-                            update = true;
-                        } else {
-                            newNode = node;
-                            InputStream oldContentInputStream = null;
-                            try {
-                                ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
-                                oldContentInputStream = oldContentReader.getContentInputStream();
-                                update = !IOUtils.contentEquals(oldContentInputStream, contentInputStream);
-                            } finally {
-                                IOUtils.closeQuietly(oldContentInputStream);
-                                IOUtils.closeQuietly(contentInputStream);
-                            }
-                        }
+		                    newNode = nodeService.createNode(modelsRoot, ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name), ContentModel.TYPE_DICTIONARY_MODEL, props).getChildRef();
+		                    update = true;
+	                    } else {
+		                    newNode = node;
+		                    InputStream oldContentInputStream = null;
+		                    try {
+			                    ContentReader oldContentReader = contentService.getReader(newNode, ContentModel.PROP_CONTENT);
+			                    oldContentInputStream = oldContentReader.getContentInputStream();
+			                    update = !IOUtils.contentEquals(oldContentInputStream, contentInputStream);
+		                    } catch (Exception e) {
+			                    logger.error("Error load model", e);
+		                    } finally {
+			                    IOUtils.closeQuietly(oldContentInputStream);
+			                    IOUtils.closeQuietly(contentInputStream);
+		                    }
+	                    }
 
-                        //не обновляем, если нет изменений
-                        if (update) {
-                            contentInputStream = modelResource.getInputStream();
-                            if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
-                                nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
-                            }
-                            ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
-                            contentWriter.putContent(contentInputStream);
-                            nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
-                        }
+	                    //не обновляем, если нет изменений
+	                    if (update) {
+		                    contentInputStream = modelResource.getInputStream();
+		                    if (!nodeService.hasAspect(newNode, ContentModel.ASPECT_VERSIONABLE)) {
+			                    nodeService.addAspect(newNode, ContentModel.ASPECT_VERSIONABLE, null);
+		                    }
+		                    ContentWriter contentWriter = contentService.getWriter(newNode, ContentModel.PROP_CONTENT, true);
+		                    contentWriter.putContent(contentInputStream);
+		                    nodeService.setProperty(newNode, ContentModel.PROP_MODEL_ACTIVE, true);
+	                    }
+                    } catch (Exception e) {
+	                    logger.error("Error load model", e);
                     } finally {
                         IOUtils.closeQuietly(contentInputStream);
                     }
                     return null;
                 }
+            } catch (Exception e) {
+	            logger.error("Error load model", e);
             } finally {
                 IOUtils.closeQuietly(modelStream);
             }
