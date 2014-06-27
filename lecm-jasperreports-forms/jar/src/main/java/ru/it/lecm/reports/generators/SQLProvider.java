@@ -4,13 +4,9 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
-import ru.it.lecm.reports.beans.LinksResolver;
 import ru.it.lecm.reports.beans.ReportProviderExt;
-import ru.it.lecm.reports.beans.WKServiceKeeper;
 import ru.it.lecm.reports.model.impl.JavaDataType;
-import ru.it.lecm.reports.utils.Utils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -29,10 +25,7 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
 
     private static final Logger logger = LoggerFactory.getLogger(SQLProvider.class);
 
-    private WKServiceKeeper services;
-    private LinksResolver resolver;
     private ReportDescriptor reportDescriptor;
-    private ReportsManager reportManager;
     private DataSource basicDataSource;
 
     @Override
@@ -106,29 +99,12 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     }
 
     @Override
-    public void setServices(WKServiceKeeper services) {
-        this.services = services;
-    }
-
-    @Override
     public void setReportDescriptor(ReportDescriptor reportDescriptor) {
-        if (Utils.isSafelyEquals(this.reportDescriptor, reportDescriptor)) {
-            return;
-        }
         this.reportDescriptor = reportDescriptor;
     }
 
     @Override
-    public void setReportManager(ReportsManager reportsManager) {
-        this.reportManager = reportsManager;
-    }
-
-    @Override
-    public void setResolver(LinksResolver resolver) {
-        this.resolver = resolver;
-    }
-
-    public void setBaseDataSource(DataSource basicDS) {
-        this.basicDataSource = basicDS;
+    public void initializeFromGenerator(ReportGeneratorBase baseGenerator) {
+        this.basicDataSource = baseGenerator.getTargetDataSource();
     }
 }

@@ -1,7 +1,5 @@
 package ru.it.lecm.contracts.reports;
 
-import java.io.Serializable;
-import java.util.*;
 import net.sf.jasperreports.engine.JRException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -15,13 +13,15 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchBuilder;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период."
@@ -47,20 +47,18 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
     final static String JRName_AVG_MISSED_DAYS = "col_Employee.AvgMissed"; // Средний срок просрочки, дней
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
-
-        builder.emmit(result.luceneQueryText());
+    protected LuceneSearchWrapper buildQuery() {
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         boolean hasData = !builder.isEmpty();
 
         // выполненные Согласования -> вне статуса 'NO_DECISION'
-        builder.emmit(hasData ? " AND " : "").
-                emmitFieldCond("NOT", ApprovalResultModel.PROP_APPROVAL_LIST_DECISION.toPrefixString(getServices().getServiceRegistry().getNamespaceService()), VALUE_STATUS_NOTREADY);
+        builder.emmit(hasData ? " AND " : "");
+        final String condition =
+                getQueryHelper().emmitFieldCondition("NOT", ApprovalResultModel.PROP_APPROVAL_LIST_DECISION.toPrefixString(getServices().getServiceRegistry().getNamespaceService()), VALUE_STATUS_NOTREADY);
+        builder.emmit(condition);
 
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 
     @Override

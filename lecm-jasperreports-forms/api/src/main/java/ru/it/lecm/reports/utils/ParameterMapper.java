@@ -296,6 +296,7 @@ public class ParameterMapper {
         if (destValue != null) { // задать значение ...
             if (result.getParameterValue() == null) {
                 final ParameterTypedValueImpl ptv = new ParameterTypedValueImpl(colName);
+                ptv.setRequired(true);
                 result.setParameterValue(ptv);
             }
             result.getParameterValue().setBound1(destValue);

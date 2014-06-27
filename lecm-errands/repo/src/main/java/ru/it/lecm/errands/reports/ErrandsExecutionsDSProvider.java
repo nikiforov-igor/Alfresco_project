@@ -12,17 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.statemachine.StatemachineModel;
-import ru.it.lecm.utils.LuceneSearchBuilder;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.util.*;
@@ -132,16 +131,10 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
 
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery(); // new LucenePreparedQuery();
-
+    protected LuceneSearchWrapper buildQuery() {
         final NamespaceService namespaceService = getServices().getServiceRegistry().getNamespaceService();
 
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(namespaceService);
-        builder.emmit(result.luceneQueryText());
-
-        // hasData: становится true после внесения первого любого условия в builder
-        boolean hasData = !builder.isEmpty();
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         final DataSourceDescriptor ds = getReportDescriptor().getDsDescriptor();
 
@@ -152,7 +145,9 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
                 // внутри super.buildQuery), и задано выражение - активируем
                 // соот-щее условие атрибута "просроченности"...
                 final boolean flag = Boolean.parseBoolean(col.getExpression().trim());
-                builder.emmitFieldCond((hasData ? " AND " : null), ErrandsQNamesHelper.QNFLD_IS_EXPIRED.toPrefixString(namespaceService), flag);
+
+                String condition = getQueryHelper().emmitFieldCondition((!builder.isEmpty() ? " AND " : null), ErrandsQNamesHelper.QNFLD_IS_EXPIRED.toPrefixString(namespaceService), flag);
+                builder.emmit(condition);
             }
         }
 
@@ -167,17 +162,14 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
         this.periodEnd = paramsFilter.getParamPeriodEnd(ds);
 
         // "Дата исполнения" внутри периода ...
-        final String condEnd = Utils.emmitDateIntervalCheck(Utils.luceneEncode(ErrandsService.PROP_ERRANDS_EXECUTION_DATE.toPrefixString(namespaceService)), this.periodStart, this.periodEnd);
+        final String condEnd = getQueryHelper().emmitDateIntervalCheck(ErrandsService.PROP_ERRANDS_EXECUTION_DATE.toPrefixString(namespaceService), this.periodStart, this.periodEnd);
         final boolean hasEnd = !Utils.isStringEmpty(condEnd);
         if (hasEnd) {
             final String cond = String.format(" (%s)\n\t", condEnd);
-            builder.emmit(hasData ? " AND " : "").emmit(cond);
+            builder.emmit(!builder.isEmpty() ? " AND " : "").emmit(cond);
         }
 
-
-		/* Формирование */
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 
 

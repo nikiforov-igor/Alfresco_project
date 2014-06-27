@@ -1,16 +1,8 @@
 package ru.it.lecm.contracts.reports;
 
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.search.ResultSetRow;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
-import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
-import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchBuilder;
-
-import java.util.Iterator;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 /**
  * Отчёт по реестру договоров
@@ -28,11 +20,8 @@ public class DSProviderReestrDogovorov extends GenericDSProviderBase {
     }
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
-        builder.emmit(result.luceneQueryText());
+    protected LuceneSearchWrapper buildQuery() {
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         boolean hasData = !builder.isEmpty();
 
@@ -42,7 +31,6 @@ public class DSProviderReestrDogovorov extends GenericDSProviderBase {
                     emmit("(@lecm\\-contract\\:unlimited:true OR @lecm\\-contract\\:endDate:[NOW TO MAX])"); // неограниченый или "истекает позже чем сейчас"
         }
 
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 }

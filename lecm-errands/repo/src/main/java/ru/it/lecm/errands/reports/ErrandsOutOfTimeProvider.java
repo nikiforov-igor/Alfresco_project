@@ -2,9 +2,8 @@ package ru.it.lecm.errands.reports;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchBuilder;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +17,8 @@ import java.util.Set;
  */
 public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
     private Boolean importantOnly;
+
+    @SuppressWarnings("unused")
     private List<String> execUnits;
 
     private List<String> executorsRefs = new ArrayList<String>();
@@ -53,20 +54,15 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
     }
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
-        builder.emmit(result.luceneQueryText());
-
-        boolean hasData = !builder.isEmpty();
+    protected LuceneSearchWrapper buildQuery() {
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         if (Boolean.TRUE.equals(importantOnly)) {
-            builder.emmit(hasData ? " AND " : "").
+            builder.emmit(!builder.isEmpty() ? " AND " : "").
                     emmit("@lecm\\-errands\\:is\\-important:true");
         }
 
-        hasData = !builder.isEmpty();
+        boolean hasData = !builder.isEmpty();
 
         if (!executorsRefs.isEmpty()) {
             builder.emmit(hasData ? " AND (" : "");
@@ -77,7 +73,6 @@ public class ErrandsOutOfTimeProvider extends GenericDSProviderBase {
             builder.emmit(executorsQuery.substring(0, executorsQuery.length() - 4));
             builder.emmit(hasData ? ")" : "");
         }
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 }

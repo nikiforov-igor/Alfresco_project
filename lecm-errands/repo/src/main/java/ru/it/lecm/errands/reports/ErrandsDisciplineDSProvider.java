@@ -13,12 +13,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.calc.DataGroupCounter;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
-import ru.it.lecm.utils.LuceneSearchBuilder;
 
 import java.io.Serializable;
 import java.util.*;
@@ -87,18 +85,6 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
     @Override
     protected AlfrescoJRDataSource newJRDataSource(Iterator<ResultSetRow> iterator) {
         return new ExecDisciplineJRDataSource(iterator);
-    }
-
-    @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
-        builder.emmit(result.luceneQueryText());
-
-		/* Формирование */
-        result.setLuceneQueryText(builder.toString());
-        return result;
     }
 
     /**

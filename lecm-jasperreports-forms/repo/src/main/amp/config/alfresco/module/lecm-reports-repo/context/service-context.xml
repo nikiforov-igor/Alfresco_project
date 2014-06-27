@@ -29,28 +29,31 @@
         <property name="services" ref="wksKeeper"/>
     </bean>
 
-    <!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
-    <bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl">
+    <!-- Бин для разименований ссылок ... -->
+    <bean id="lucenePreparedQueryHelper" class="ru.it.lecm.reports.generators.LucenePreparedQueryHelper">
+        <property name="processorService" ref="searchQueryProcessorService"/>
         <property name="services" ref="wksKeeper"/>
-        <property name="resolver" ref="linksResolverBean"/>
-        <property name="reportsManagerBeanName" value="reportsManager"/>
-        <property name="targetDataSource" ref="dataSource"/>
     </bean>
 
-    <bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection">
-        <!--<constructor-arg value="${ooo.port}"/>-->
+    <bean id="baseReportGenerator" abstract="true" class="ru.it.lecm.reports.generators.ReportGeneratorBase">
+        <property name="services" ref="wksKeeper"/>
+        <property name="resolver" ref="linksResolverBean"/>
+        <property name="reportsManager" ref="reportsManager"/>
+        <property name="targetDataSource" ref="dataSource"/>
+        <property name="queryHelper" ref="lucenePreparedQueryHelper"/>
     </bean>
+
+    <!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
+    <bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl" parent="baseReportGenerator"/>
+
+    <bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection"/>
 
     <!-- Генератор OOffice отчётов -->
-    <bean id="ooReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init">
-        <property name="services" ref="wksKeeper"/>
-        <property name="resolver" ref="linksResolverBean"/>
-        <property name="reportsManagerBeanName" value="reportsManager"/>
+    <bean id="ooReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init" parent="baseReportGenerator">
         <property name="resultDAO" ref="fileOOReportResultBean"/>
         <property name="ooConnectedStrictly" value="false"/>
         <property name="maxConnectionRetries" value="2"/>
         <property name="connection" ref="reportOpenOfficeConnection"/>
-        <property name="targetDataSource" ref="dataSource"/>
         <property name="fileExtension" value=".odt"/>
         <property name="defaultTarget" value="DOC"/>
         <property name="templateGenerator" ref="ooOdtTemplateGenerator"/>
@@ -59,14 +62,10 @@
     <!-- Генератор OOffice Calc отчётов -->
     <bean id="ooCalcReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl"
           init-method="init">
-        <property name="services" ref="wksKeeper"/>
-        <property name="resolver" ref="linksResolverBean"/>
-        <property name="reportsManagerBeanName" value="reportsManager"/>
         <property name="resultDAO" ref="fileOOReportResultBean"/>
         <property name="ooConnectedStrictly" value="false"/>
         <property name="maxConnectionRetries" value="2"/>
         <property name="connection" ref="reportOpenOfficeConnection"/>
-        <property name="targetDataSource" ref="dataSource"/>
         <property name="fileExtension" value=".ods"/>
         <property name="defaultTarget" value="XLS"/>
         <property name="templateGenerator" ref="ooCalcTemplateGenerator"/>

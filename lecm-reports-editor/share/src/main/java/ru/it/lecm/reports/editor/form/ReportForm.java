@@ -162,7 +162,7 @@ public class ReportForm extends FormUIGet {
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
 
-                field.setMandatory(column.isMandatory());
+                field.setMandatory(column.getParameterValue().isRequired());
                 field.setDataKeyName(column.getColumnName());
 
                 String dataType = column.getAlfrescoType();

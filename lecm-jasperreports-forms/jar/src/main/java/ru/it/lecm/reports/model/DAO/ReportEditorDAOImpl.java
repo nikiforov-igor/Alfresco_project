@@ -14,7 +14,7 @@ import ru.it.lecm.reports.api.model.L18able;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
+import ru.it.lecm.reports.generators.LucenePreparedQueryHelper;
 import ru.it.lecm.reports.model.impl.*;
 import ru.it.lecm.reports.model.impl.JavaDataType.SupportedTypes;
 import ru.it.lecm.reports.utils.Utils;
@@ -235,7 +235,7 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
 
         result.setLimit(getInteger(node, PROP_REPORT_QUERY_LIMIT));
         result.setOffset(getInteger(node, PROP_REPORT_QUERY_OFFSET, 0));
-        result.setPgSize(getInteger(node, PROP_REPORT_QUERY_PGSIZE, LucenePreparedQuery.QUERYPG_ALL));
+        result.setPgSize(getInteger(node, PROP_REPORT_QUERY_PGSIZE, LucenePreparedQueryHelper.QUERYPG_ALL));
 
         String customFlags = getString(node, PROP_T_REPORT_FLAGS);
         if (customFlags != null) {
@@ -365,12 +365,6 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         } else {
             result.setOrder(0);
         }
-        Object mandatoryValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_MANDATORY);
-        if (orderValue != null) {
-            result.setMandatory(Boolean.valueOf(mandatoryValue.toString()));
-        } else {
-            result.setMandatory(false);
-        }
 
         Object alfTypeValue = getNodeService().getProperty(node, PROP_RDS_COLUMN_CLASS);
         if (alfTypeValue != null) {
@@ -388,7 +382,7 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         List<AssociationRef> colParsRefs = getNodeService().getTargetAssocs(node, ASSOC_RDS_COLUMN_PARAMTYPE);
         if (!colParsRefs.isEmpty()) {
             NodeRef parType = colParsRefs.get(0).getTargetRef();
-            result.setParameterValue(createParameterTypeValue(parType));
+            result.setParameterValue(createParameterTypeValue(node, parType));
         }
 
         return result;
@@ -419,7 +413,7 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
         }
     }
 
-    private ParameterTypedValue createParameterTypeValue(NodeRef nodeColParType) {
+    private ParameterTypedValue createParameterTypeValue(NodeRef columnRef, NodeRef nodeColParType) {
         if (nodeColParType == null) {
             return null;
         }
@@ -440,6 +434,14 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
                 throw new RuntimeException(msg);
             }
             result.setType(atype);
+        }
+
+
+        Object mandatoryValue = getNodeService().getProperty(columnRef, PROP_RDS_COLUMN_MANDATORY);
+        if (columnRef != null) {
+            result.setRequired(Boolean.valueOf(mandatoryValue.toString()));
+        } else {
+            result.setRequired(false);
         }
         return result;
     }

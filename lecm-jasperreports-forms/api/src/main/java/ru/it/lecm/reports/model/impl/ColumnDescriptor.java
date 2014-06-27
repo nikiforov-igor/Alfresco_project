@@ -29,8 +29,6 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
 
     private int order = 0;
 
-    private boolean mandatory = false;
-
     public ColumnDescriptor() {
         super();
     }
@@ -59,7 +57,6 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         result = prime * result
                 + ((flagsExtendable == null) ? 0 : flagsExtendable.hashCode());
         result = prime * result + order;
-        result = prime * result + (this.isMandatory() ? 1 : 0);
         return result;
     }
 
@@ -108,7 +105,7 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         } else if (!flagsExtendable.equals(other.flagsExtendable))
             return false;
 
-        return mandatory != other.mandatory && order == other.order;
+        return order == other.order;
     }
 
     @Override
@@ -122,7 +119,6 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
                 + "\n\t, javaClass " + super.toString()
                 + "\n\t, flagsExtendable " + flagsExtendable
                 + ", order " + order
-                + ", mandatory " + mandatory
                 + "]";
     }
 
@@ -262,15 +258,5 @@ public class ColumnDescriptor extends JavaClassableImpl implements JavaClassable
         this.setParameterValue(Utils.clone(srcCol.getParameterValue()));
 
         this.setFlags(srcCol.flags());
-
-        this.setMandatory(srcCol.isMandatory());
-    }
-
-    public boolean isMandatory() {
-        return mandatory;
-    }
-
-    public void setMandatory(boolean isMandatory) {
-        this.mandatory = isMandatory;
     }
 }

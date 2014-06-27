@@ -751,7 +751,6 @@ public class DSXMLProducer {
         result.setAttribute(XMLATTR_JR_FLDNAME, column.getColumnName());
         result.setAttribute(XMLATTR_QUERY_FLDNAME, column.getExpression());
         result.setAttribute(XMLATTR_DISPLAYNAME, column.get("ru", ""));
-        result.setAttribute(XMLATTR_MANDATORY, String.valueOf(column.isMandatory()));
 
         if (column.getOrder() != 0) {
             result.setAttribute(XMLATTR_ORDER, String.valueOf(column.getOrder()));
@@ -864,12 +863,6 @@ public class DSXMLProducer {
                     column.setOrder(Integer.parseInt(sorder));
                 }
             }
-            if (fldNode.hasAttribute(DSXMLProducer.XMLATTR_MANDATORY)) {
-                final String mandatory = fldNode.getAttribute(DSXMLProducer.XMLATTR_MANDATORY);
-                if (!Utils.isStringEmpty(mandatory)) {
-                    column.setMandatory(Boolean.parseBoolean(mandatory));
-                }
-            }
 
             // DONE: restore map-locale
             XmlHelper.parseL18(column, fldNode);
@@ -908,6 +901,7 @@ public class DSXMLProducer {
             result.setAttribute(XMLATTR_PARAM_TYPE, parameter.getType().getMnemonic());
         }
 
+        result.setAttribute(XMLATTR_MANDATORY, String.valueOf(parameter.isRequired()));
 		/* альфресковская ассоциация ... */
 
         final Element nodeAssoc = xmlCreateAssocNode(doc, XMLNODE_ALFRESCO_ASSOC, parameter.getAlfrescoAssoc());
@@ -958,6 +952,12 @@ public class DSXMLProducer {
 		/* альфресковская ассоциация ... */
         result.setAlfrescoAssoc(parseAssocNode(nodeParameter, XMLNODE_ALFRESCO_ASSOC));
 
+        if (nodeParameter.hasAttribute(DSXMLProducer.XMLATTR_MANDATORY)) {
+            final String mandatory = nodeParameter.getAttribute(DSXMLProducer.XMLATTR_MANDATORY);
+            if (!Utils.isStringEmpty(mandatory)) {
+                result.setRequired(Boolean.parseBoolean(mandatory));
+            }
+        }
          /* тип параметра */
         Type parType = null;
         if (nodeParameter.hasAttribute(XMLATTR_PARAM_TYPE)) {

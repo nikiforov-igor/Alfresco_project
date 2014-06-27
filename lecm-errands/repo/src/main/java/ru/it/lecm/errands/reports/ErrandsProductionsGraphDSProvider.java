@@ -15,13 +15,12 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.calc.AvgValue;
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.jasper.AlfrescoJRDataSource;
 import ru.it.lecm.reports.jasper.TypedJoinDS;
 import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
-import ru.it.lecm.utils.LuceneSearchBuilder;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -105,13 +104,8 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
     }
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-
-        final NamespaceService namespaceService = getServices().getServiceRegistry().getNamespaceService();
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(namespaceService);
-
-        builder.emmit(result.luceneQueryText());
+    protected LuceneSearchWrapper buildQuery() {
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         // hasData: становится true после внесения первого любого условия в builder
         boolean hasData = !builder.isEmpty();
@@ -139,15 +133,14 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
         periodStart = Utils.adjustDayTime(periodStart, 0, 0, 0, 0); // начало суток
 
         final String condEnd =
-                Utils.emmitDateIntervalCheck(Utils.luceneEncode(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(namespaceService)), periodStart, periodEnd, false);
+                getQueryHelper().emmitDateIntervalCheck(LocalQNamesHelper.QNFLD_END_DATE.toPrefixString(getServices().getServiceRegistry().getNamespaceService()), periodStart, periodEnd, false);
 
         if (!Utils.isStringEmpty(condEnd)) {
             final String condBoth = String.format("\n\t(%s)\n\t", condEnd);
             builder.emmit(hasData ? " AND " : "").emmit(condBoth);
         }
 
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 
     /**

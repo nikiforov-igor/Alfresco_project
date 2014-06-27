@@ -1,9 +1,8 @@
 package ru.it.lecm.errands.reports;
 
 import ru.it.lecm.reports.generators.GenericDSProviderBase;
-import ru.it.lecm.reports.generators.LucenePreparedQuery;
 import ru.it.lecm.reports.utils.ArgsHelper;
-import ru.it.lecm.utils.LuceneSearchBuilder;
+import ru.it.lecm.utils.LuceneSearchWrapper;
 
 import java.util.Date;
 
@@ -23,21 +22,18 @@ public class ErrandsExpiredToDateProvider extends ErrandsOutOfTimeProvider {
     }
 
     @Override
-    protected LucenePreparedQuery buildQuery() {
-        final LucenePreparedQuery result = super.buildQuery();
-
-        final LuceneSearchBuilder builder = new LuceneSearchBuilder(getServices().getServiceRegistry().getNamespaceService());
-        builder.emmit(result.luceneQueryText());
+    protected LuceneSearchWrapper buildQuery() {
+        final LuceneSearchWrapper builder = super.buildQuery();
 
         boolean hasData = !builder.isEmpty();
 
         if (expiredDate != null) {
             Date expired = ArgsHelper.tryMakeDate(expiredDate, null);
+            //TODO denis переписать на emitDateInterval
             builder.emmit(hasData ? " AND " : "").
                     emmit("@lecm\\-errands\\:limitation\\-date:[MIN TO " + GenericDSProviderBase.DateFormatISO8601.format(expired) + "]");
         }
-        result.setLuceneQueryText(builder.toString());
-        return result;
+        return builder;
     }
 
 }

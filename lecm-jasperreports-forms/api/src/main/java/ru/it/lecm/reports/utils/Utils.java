@@ -9,7 +9,7 @@ import java.util.*;
 
 public class Utils {
     final public static char QUOTE = '\"';
-    private static final char CH_WALL = '\\'; // символ экранировки
+    final public static char CH_WALL = '\\'; // символ экранировки
 
     final public static int MILLIS_PER_DAY = 86400000;
     final public static long MILLIS_PER_HOUR = 1000 * 60 * 60;
@@ -44,38 +44,6 @@ public class Utils {
             e--;
         }
         return s.substring(b, e);
-    }
-
-    /**
-     * Экранировка символов [':', '-'] в указанной строке символом '\' для Lucene-строк
-     *
-     * @return String
-     */
-    public static String luceneEncode(String s) {
-        return doCharsProtection(s, ":-");
-    }
-
-    /**
-     * Экранировка указанных символов в строке символом '\'
-     *
-     * @param s     экранируемая строка
-     * @param chars символы, которые подлежат экранировке
-     * @return String
-     */
-    public static String doCharsProtection(String s, String chars) {
-        if (isStringEmpty(s) || isStringEmpty(chars)) {
-            return s;
-        }
-        final StringBuilder result = new StringBuilder();
-        for (int i = 0; i < s.length(); i++) {
-            final char ch = s.charAt(i);
-            if (CH_WALL == ch   /* сам символ "экрана" тоже надо экранировать */
-                    || chars.indexOf(ch) >= 0
-                    )// надо экранировку
-                result.append(CH_WALL);
-            result.append(ch); // сам символ
-        }
-        return result.toString();
     }
 
     /**
@@ -262,107 +230,6 @@ public class Utils {
 
     public static String getAsString(Object[] args) {
         return (args == null) ? "NULL" : getAsString(Arrays.asList(args), ", ");
-    }
-
-    /**
-     * Сформировать lucene-style проверку попадания поля даты в указанный интервал.
-     * Формируется условие вида " @fld:[ x TO y]"
-     * Если обе даты пустые - ничего не формируется
-     *
-     * @param fldName (!) экранированное имя поля, (!) без символа '@' в начале
-     * @param from    дата начала
-     * @param upto    дата конца
-     * @return условие проверки вхождения даты в диапазон или NULL, если обе даты NULL
-     */
-    public static String emmitDateIntervalCheck(String fldName, Date from, Date upto) {
-        return emmitDateIntervalCheck(fldName, from, upto, false);
-    }
-
-    public static String emmitDateIntervalCheck(String fldName, Date from, Date upto, boolean includeNullValue) {
-        final boolean needEmmition = (from != null || upto != null);
-        if (!needEmmition) {
-            return null;
-        }
-
-        // если даты не по-порядку - поменяем их местами
-        if (from != null && upto != null) {
-            if (from.after(upto)) {
-                final Date temp = from;
-                from = upto;
-                upto = temp;
-            }
-        }
-
-        // add " ... [X TO Y]"
-        final String stMIN = ArgsHelper.dateToStr(from, "MIN");
-        final String stMAX = ArgsHelper.dateToStr(upto, "MAX");
-        return (includeNullValue ? " ISNULL:\"@" +fldName + "\" OR " : "@") + fldName + ":[" + stMIN + " TO " + stMAX + "]";
-    }
-
-    /**
-     * Сформировать lucene-style проверку попадания поля числа в указанный интервал.
-     * Формируется условие вида " @fld:[ x TO y]"
-     * Если обе границы пустые - ничего не формируется
-     *
-     * @param fldName (!) экранированное имя поля, (!) без символа '@' в начале
-     * @param from    числовая границы слева
-     * @param upto    числовая границы справа
-     * @return условие проверки вхождения числа в диапазон или NULL, если обе границы NULL
-     */
-    public static String emmitNumericIntervalCheck(String fldName, Number from, Number upto) {
-        final boolean needEmmition = (from != null || upto != null);
-        if (!needEmmition) {
-            return null;
-        }
-        // если даты не по-порядку - поменяем их местами
-        if (from != null && upto != null) {
-            if (from.doubleValue() > upto.doubleValue()) {
-                final Number temp = from;
-                from = upto;
-                upto = temp;
-            }
-        }
-
-        // add " ... [X TO Y]"
-        //  используем формат без разделителя, чтобы нормально выполнялся строковый поиск ...
-        final String stMIN = (from != null) ? String.format("%12.0f", from.doubleValue()) : "MIN";
-        final String stMAX = (upto != null) ? String.format("%12.0f", upto.doubleValue()) : "MAX";
-        return " ISNULL:\"" + fldName + "\" OR " + "@" + fldName + ":[" + stMIN + " TO " + stMAX + "]";
-    }
-
-
-    /**
-     * Сформировать условие для проверки значения на вхождение в список вида:
-     * "( fld:value1 OR fld:value2 ...)"
-     * (!) скобки включаются, операция между значениями "OR"
-     *
-     * @param fldName String
-     * @param values String[]
-     * @return  boolean
-     */
-    public static boolean emmitValuesInsideList(final StringBuilder result, String fldName, final String[] values) {
-        if (!hasNonEmptyValues(values)) {
-            return false;
-        }
-
-        // final StringBuilder result = new StringBuilder();
-        final boolean isSpecialName = "TYPE ID".contains(fldName);
-        //result.append("( ISNULL:\"" + fldName + "\") OR ( ");
-        result.append("( ");
-        boolean addOR = false;
-        for (String value : values) {
-            if (value != null && !value.isEmpty()) {
-                final String quotedValue = Utils.quoted(value);
-                if (addOR)
-                    result.append(" OR ");
-                if (!isSpecialName) // добавление '@' требуется ТОЛЬКО для обычных полей
-                    result.append("@"); //
-                result.append(fldName).append(":").append(quotedValue);
-                addOR = true;
-            }
-        }
-        result.append(") ");
-        return true;
     }
 
     /**
