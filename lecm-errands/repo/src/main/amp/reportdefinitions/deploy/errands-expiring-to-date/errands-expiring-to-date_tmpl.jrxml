@@ -20,9 +20,6 @@
 			<style backcolor="#D2EAF1"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="CMIS_XMLCONFIG" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["ds-internal-reg-journal.xml"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["reportdefinitions/deploy/subreports/"]]></defaultValueExpression>
 	</parameter>
