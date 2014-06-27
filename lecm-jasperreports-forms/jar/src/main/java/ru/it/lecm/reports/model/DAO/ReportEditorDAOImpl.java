@@ -438,7 +438,7 @@ public class ReportEditorDAOImpl extends BaseBean implements ReportEditorDAO {
 
 
         Object mandatoryValue = getNodeService().getProperty(columnRef, PROP_RDS_COLUMN_MANDATORY);
-        if (columnRef != null) {
+        if (mandatoryValue != null) {
             result.setRequired(Boolean.valueOf(mandatoryValue.toString()));
         } else {
             result.setRequired(false);
