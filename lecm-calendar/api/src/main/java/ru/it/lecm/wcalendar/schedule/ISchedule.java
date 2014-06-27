@@ -1,10 +1,11 @@
 package ru.it.lecm.wcalendar.schedule;
 
-import java.util.Date;
-import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -118,7 +119,16 @@ public interface ISchedule extends ICommonWCalendar {
 	 */
 	NodeRef getScheduleByOrgSubject(NodeRef node);
 
-	/**
+    /**
+     * Получить расписание, привзянное к сотруднику или орг. единице.
+     *
+     * @param node NodeRef сотрудника/орг. единицы.
+     * @return NodeRef расписания, привязанного к node. Если таковое
+     * отсутствует, то null.
+     */
+    NodeRef getScheduleByOrgSubject(NodeRef node, boolean excludeDefault);
+
+    /**
 	 * Проверяет, привязано ли какое-нибудь расписание к node.
 	 *
 	 * @param node NodeRef на сотрудника или орг. единицу.

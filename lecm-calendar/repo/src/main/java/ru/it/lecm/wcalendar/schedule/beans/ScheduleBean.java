@@ -1,15 +1,5 @@
 package ru.it.lecm.wcalendar.schedule.beans;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -27,12 +17,17 @@ import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.ICommonWCalendar;
 import ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean;
-import ru.it.lecm.wcalendar.CalendarCategory;
 import ru.it.lecm.wcalendar.schedule.ISchedule;
-
 import ru.it.lecm.wcalendar.schedule.ISpecialScheduleRaw;
+
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -356,9 +351,13 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 
     @Override
     public NodeRef getScheduleByOrgSubject(NodeRef node) {
+        return getScheduleByOrgSubject(node, false);
+    }
+
+    public NodeRef getScheduleByOrgSubject(NodeRef node, boolean excludeDefault) {
         NodeRef schedule = findNodeByAssociationRef(node, ASSOC_SCHEDULE_EMPLOYEE_LINK, TYPE_SCHEDULE, ASSOCIATION_TYPE.SOURCE);
         if (schedule == null) {
-            return defaultSchedule;
+            return excludeDefault ? null : defaultSchedule;
         } else {
             return schedule;
         }

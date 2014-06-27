@@ -156,7 +156,7 @@ public class OrgstructureUnitPolicy
 
                      //если подразделение удаляется
                      if (changed && !nowActive) {
-                         NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+                         NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef, true);
                          if (schedule != null && nodeService.exists(schedule)) {
                              nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
                              nodeService.deleteNode(schedule);
