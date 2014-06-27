@@ -38,7 +38,7 @@
     <bean id="baseReportGenerator" abstract="true" class="ru.it.lecm.reports.generators.ReportGeneratorBase">
         <property name="services" ref="wksKeeper"/>
         <property name="resolver" ref="linksResolverBean"/>
-        <property name="reportsManager" ref="reportsManager"/>
+        <property name="reportsManagerBeanName" value="reportsManager"/>
         <property name="targetDataSource" ref="dataSource"/>
         <property name="queryHelper" ref="lucenePreparedQueryHelper"/>
     </bean>

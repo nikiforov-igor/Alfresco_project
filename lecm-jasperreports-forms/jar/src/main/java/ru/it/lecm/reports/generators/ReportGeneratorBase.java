@@ -5,6 +5,9 @@ import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.reports.api.ReportGenerator;
 import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
@@ -29,7 +32,7 @@ import java.util.Map;
 /**
  * Базовый класс для построителей отчётов в runtime.
  */
-public abstract class ReportGeneratorBase implements ReportGenerator {
+public abstract class ReportGeneratorBase implements ReportGenerator, ApplicationContextAware {
     private static final transient Logger log = LoggerFactory.getLogger(ReportGeneratorBase.class);
 
     /**
@@ -41,8 +44,31 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
     private WKServiceKeeper services;
     private LinksResolver resolver;
     private ReportsManager reportsManager;
+    private String reportsManagerBeanName;
 
     private LucenePreparedQueryHelper queryHelper;
+    private ApplicationContext context;
+
+    @Override
+    public void setApplicationContext(ApplicationContext ctx) throws BeansException {
+        this.context = ctx;
+    }
+
+    public void setReportsManagerBeanName(String beanName) {
+        if (Utils.isSafelyEquals(beanName, reportsManagerBeanName)){
+            return;
+        }
+        log.debug(String.format("ReportsManagerBeanName assigned: %s", beanName));
+        this.reportsManagerBeanName = beanName;
+        this.reportsManager = null; // очистка
+    }
+
+    public ReportsManager getReportsManager() {
+        if (this.reportsManager == null && this.reportsManagerBeanName != null) {
+            this.reportsManager = (ReportsManager) this.context.getBean(this.reportsManagerBeanName);
+        }
+        return this.reportsManager;
+    }
 
     public void setQueryHelper(LucenePreparedQueryHelper queryHelper) {
         this.queryHelper = queryHelper;
@@ -58,10 +84,6 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
 
     public void setServices(WKServiceKeeper services) {
         this.services = services;
-    }
-
-    public ReportsManager getReportsManager() {
-        return this.reportsManager;
     }
 
     public void setReportsManager(ReportsManager reportsManager) {
