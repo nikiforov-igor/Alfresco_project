@@ -364,6 +364,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 inputFileName.value = JSON.stringify(parameters);
                 form.appendChild(inputFileName);
 
+                var timeZoneOffset = document.createElement("input");
+                timeZoneOffset.type = "hidden";
+                timeZoneOffset.name = "timeZoneOffset";
+                timeZoneOffset.value = encodeURIComponent(new Date().getTimezoneOffset());
+                form.appendChild(timeZoneOffset);
+
                 document.body.appendChild(form);
 
                 form.submit();

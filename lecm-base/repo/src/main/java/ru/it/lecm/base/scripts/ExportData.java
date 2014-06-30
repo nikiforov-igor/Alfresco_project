@@ -63,6 +63,12 @@ public class ExportData extends AbstractWebScript {
             Log logger = LogFactory.getLog(ExportData.class);
             String script = ScriptResourceHelper.resolveScriptImports(baos.toString(), rhinoScriptProcessor, logger);
 
+            int timeZoneOffset = TimeZone.getDefault().getRawOffset();
+            try {
+                timeZoneOffset = - Integer.parseInt(req.getParameter("timeZoneOffset")) * 1000 * 60;
+            } catch (Exception ignored) {}
+
+
             //Подготавливаем модель данных для скрипта
             Map<String, Object> model = new HashMap<String, Object>(8, 1.0f);
             Map<String, Object> scriptModel = createScriptParameters(req, res, null, model);
@@ -119,6 +125,7 @@ public class ExportData extends AbstractWebScript {
 
             ArrayList<HashMap<String, Object>> items = (ArrayList<HashMap<String, Object>>) ((HashMap<String, Object>) dataModel.get("data")).get("items");
             if (items != null && !items.isEmpty()) {
+                int timeZoneDiff = timeZoneOffset - TimeZone.getDefault().getRawOffset();
                 for (HashMap<String, Object> item : items) {
                     HashMap<String, Object> data = (HashMap<String, Object>) item.get("nodeData");
                     for (String key : fieldKeys) {
@@ -133,6 +140,15 @@ public class ExportData extends AbstractWebScript {
                                 } catch (ParseException e) {
                                     log.error("Error while parsing date format", e);
                                 }
+
+                                if (timeZoneDiff != 0) {
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTime(date);
+
+                                    cal.add(Calendar.MILLISECOND, timeZoneDiff);
+                                    date = cal.getTime();
+                                }
+
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("date".equals(type) ? DATE_FORMAT : DATETIME_FORMAT, LOCALE_RU);
                                 result = dateFormat.format(date);
                             } else if ("boolean".equals(type)){
