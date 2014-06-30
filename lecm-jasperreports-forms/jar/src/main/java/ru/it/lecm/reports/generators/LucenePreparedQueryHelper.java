@@ -11,11 +11,11 @@ import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ParameterTypedValue;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.WKServiceKeeper;
-import ru.it.lecm.reports.jasper.ReportDSContextImpl;
 import ru.it.lecm.reports.jasper.utils.DurationLogger;
 import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.utils.ArgsHelper;
@@ -39,6 +39,9 @@ public class LucenePreparedQueryHelper {
 
     final public static int QUERYROWS_UNLIMITED = -1; // неограниченое кол-во строк в ответе
     final public static int QUERYPG_ALL = -1; // без разбивки на страницы
+    public static final String VALUE_PLACEHOLDER = "#value";
+    public static final String VALUE_PLACEHOLDER_1 = "#value1";
+    public static final String VALUE_PLACEHOLDER_2 = "#value2";
 
     private SearchQueryProcessorService processorService;
     private WKServiceKeeper services;
@@ -127,7 +130,16 @@ public class LucenePreparedQueryHelper {
                 continue;
             }
 
-            final boolean isSimpleLink = ReportDSContextImpl.isDirectAlfrescoPropertyLink(substituteExpression);
+            final boolean isProcessedField = isProcessedFieldLink(substituteExpression);
+
+            if (isProcessedField) {
+                final String cond = makeProcessedCondition(substituteExpression, colDesc.getParameterValue());
+                if (cond != null && cond.length() > 0){
+                    bquery.emmit(!bquery.isEmpty() ? " AND " : "").emmit(cond);
+                }
+                continue;
+            }
+            final boolean isSimpleLink = isDirectAlfrescoPropertyLink(substituteExpression);
             if (!isSimpleLink) {
                 // сложный параметр будем проверять позже - в фильтре данных
                 bquery.getArgsByLinks().add(colDesc);
@@ -150,14 +162,6 @@ public class LucenePreparedQueryHelper {
                 logger.warn("Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
             }
 
-            if (expressionQName == null) { //TODO denis зачем??
-                try { // qname типа, для проверки наличия ассоциаций
-                    expressionQName = QName.createQName(colDesc.getAlfrescoType(), ns);
-                } catch (InvalidQNameException ex) {
-                    logger.warn("Unsupported parameter type '%s' for column '%s' -> column condition skipped", colDesc.getAlfrescoType(), colDesc.getColumnName());
-                }
-            }
-
             if (expressionQName == null) {
                 continue; // у нас записано нечто непонятное - пропускаем
             }
@@ -170,11 +174,11 @@ public class LucenePreparedQueryHelper {
                 bquery.getArgsByProps().add(colDesc);
             }
 
-			/* сгенерировать условие (VALUE/LIST/RANGE) ... */
-            final StringBuilder cond = makeValueCondition(colDesc.getQNamedExpression(), colDesc.getParameterValue());
+			/* сгенерировать условие (VALUE_PLACEHOLDER/LIST/RANGE) ... */
+            final String cond = makeValueCondition(colDesc.getQNamedExpression(), colDesc.getParameterValue());
 
             if (cond != null && cond.length() > 0) {
-                bquery.emmit(!bquery.isEmpty() ? " AND " : "").emmit("(").emmit(processorService.processQuery(cond.toString())).emmit(")");
+                bquery.emmit(!bquery.isEmpty() ? " AND " : "").emmit("(").emmit(processorService.processQuery(cond)).emmit(")");
                 iblog++;
                 blog.append(String.format("\t[%d]\t%s\n", iblog, cond));
             }
@@ -187,7 +191,46 @@ public class LucenePreparedQueryHelper {
         return bquery;
     }
 
-    private StringBuilder makeValueCondition(String propertyName, ParameterTypedValue parType) {
+    private String makeProcessedCondition(String processorExpression, ParameterTypedValue parType) {
+        if (processorExpression == null || parType == null) {
+            return null;
+        }
+
+        Object bound1 = parType.getBound1();
+        Object bound2 = parType.getBound2();
+
+        if (processorExpression.contains(VALUE_PLACEHOLDER)) { //есть что подменять
+            switch (parType.getType()) {
+                case RANGE:
+                    if (bound2 != null) { //только в случае параметра-диапозона есть второе граничное значение
+                        if (bound2 instanceof Date) {
+                            bound2 = Utils.dateToString((Date) bound2);
+                        }
+                        processorExpression = processorExpression.replace(VALUE_PLACEHOLDER_2, bound2.toString());
+                    }
+                    // без break - падаем ниже, чтобы обработать первое граничное значение
+                case VALUE:
+                case LIST:
+                    if (bound1 != null) {
+                        if (bound1 instanceof Object[]) {
+                            bound1 = Utils.getAsString((Object[]) bound1, ",");
+                        }
+                        if (bound1 instanceof Date) {
+                            bound1 = Utils.dateToString((Date) bound1);
+                        }
+                        processorExpression = processorExpression.replace(VALUE_PLACEHOLDER, bound1.toString());
+                        processorExpression = processorExpression.replace(VALUE_PLACEHOLDER_1, bound1.toString());
+                    }
+                    break;
+                default: // непонятный тип - сообщение об ошибке и игнор ...
+                    logger.error(String.format("Unsupported parameter type '%s' -> condition skipped", Utils.coalesce(parType.getType(), "NULL")));
+                    break;
+            }
+        }
+        return processorService.processQuery(processorExpression);
+    }
+
+    private String makeValueCondition(String propertyName, ParameterTypedValue parType) {
         return makeValueCondition(propertyName, parType, false, null);
     }
 
@@ -197,14 +240,14 @@ public class LucenePreparedQueryHelper {
      * @param propertyName атрибут Альфреско (строка вида "тип:поле")
      * @param parType      параметр, с которым надо сгенерировать условие
      */
-    private StringBuilder makeValueCondition(String propertyName, ParameterTypedValue parType, boolean splitValue, String delimiter) {
+    private String makeValueCondition(String propertyName, ParameterTypedValue parType, boolean splitValue, String delimiter) {
         if (parType == null || propertyName == null) {
             return null;
         }
 
 		/*
          *  граничные значения для поиска. По-идее здесь, после проверки
-		 *  isEmpty(), для LIST/VALUE нижняя граница не пустая, а для
+		 *  isEmpty(), для LIST/VALUE_PLACEHOLDER нижняя граница не пустая, а для
 		 *  RANGE - одна из границ точно не пустая
 		 */
         final Object bound1 = parType.getBound1();
@@ -279,7 +322,7 @@ public class LucenePreparedQueryHelper {
                 break;
         }
 
-        return condition;
+        return condition.toString();
     }
 
     @SuppressWarnings("unused")
@@ -349,7 +392,7 @@ public class LucenePreparedQueryHelper {
 
             final ColumnDescriptor colWithID = reportDescriptor.getDsDescriptor().findColumnByParameter(DataSourceDescriptor.COLNAME_ID);
             if (colWithID != null && colWithID.getParameterValue() != null && !colWithID.getParameterValue().isEmpty()) {
-                final StringBuilder idCond = makeValueCondition("ID", colWithID.getParameterValue(), true, ",");
+                final String idCond = makeValueCondition("ID", colWithID.getParameterValue(), true, ",");
                 if (idCond != null && idCond.length() > 0) {
                     sb.append(hasType ? " AND " : "").append(idCond);
                     hasId = true;
@@ -588,5 +631,28 @@ public class LucenePreparedQueryHelper {
         }
         sb.append(") ");
         return sb.toString();
+    }
+
+    /**
+     * Проверить, является ли ссылка простой.
+     * Простой ссылкой считаем ссылки на конкретные поля в виде выражений "{abc}"
+     *
+     * @return true, если колонка содержит просто ссылку на поле
+     */
+    private boolean isDirectAlfrescoPropertyLink(final String expression) {
+        return (expression != null) && (expression.length() > 0)
+                && Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна
+                && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
+                && !expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) && !expression.contains(SubstitudeBean.PSEUDO_PROPERTY_SYMBOL); // нет символов "/"
+    }
+
+    /**
+     * Проверить, является ли ссылка вычисляемым выражением "{{abc}}"
+     *
+     * @return true, если колонка содержит вычисляемое выражение
+     */
+    private boolean isProcessedFieldLink(final String expression) {
+        return (expression != null) && (expression.length() > 0)
+                && expression.matches(SearchQueryProcessorService.PROC_PATTERN.toString());
     }
 }

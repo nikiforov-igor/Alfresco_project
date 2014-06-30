@@ -8,7 +8,6 @@ import ru.it.lecm.reports.api.DataFieldColumn;
 import ru.it.lecm.reports.api.DataFilter;
 import ru.it.lecm.reports.api.ReportDSContext;
 import ru.it.lecm.reports.beans.LinksResolver;
-import ru.it.lecm.reports.utils.Utils;
 
 import java.util.*;
 
@@ -131,19 +130,6 @@ public class ReportDSContextImpl implements ReportDSContext {
      */
     public static boolean isCalcField(final String fldName) {
         return (fldName != null) && fldName.contains(SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) && fldName.contains(SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL);
-    }
-
-    /**
-     * Проверить, является ли ссылка простой.
-     * Простой ссылкой считаем ссылки на конкретные поля в виде выражений "{abc}"
-     *
-     * @return true, если колонка содержит просто ссылку на поле
-     */
-    public static boolean isDirectAlfrescoPropertyLink(final String expression) {
-        return (expression != null) && (expression.length() > 0)
-                && Utils.hasStartOnce(expression, SubstitudeBean.OPEN_SUBSTITUDE_SYMBOL) // есть певая "{" и она одна
-                && Utils.hasEndOnce(expression, SubstitudeBean.CLOSE_SUBSTITUDE_SYMBOL) // есть последняя "}" и она одна
-                && !expression.contains(SubstitudeBean.SPLIT_TRANSITIONS_SYMBOL) && !expression.contains(SubstitudeBean.PSEUDO_PROPERTY_SYMBOL); // нет символов "/"
     }
 
     // TODO: использовать LinksResolver

@@ -4,6 +4,8 @@ import org.alfresco.service.cmr.repository.ContentReader;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -13,6 +15,8 @@ public class Utils {
 
     final public static int MILLIS_PER_DAY = 86400000;
     final public static long MILLIS_PER_HOUR = 1000 * 60 * 60;
+
+    final public static DateFormat YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
 
     private Utils() {
     }
@@ -195,6 +199,36 @@ public class Utils {
         return result.toString();
     }
 
+    public static <T> String getAsString(final T[] col, String delimiter) {
+        return getAsString(col, delimiter, null, null);
+    }
+
+    public static <T> String getAsString(final T[] col, final String delimiter, String quoteOpen, String quoteClose) {
+        if (col == null) {
+            return null;
+        }
+        if (quoteOpen == null) {
+            quoteOpen = "";
+        }
+        if (quoteClose == null) {
+            quoteClose = "";
+        }
+        final StringBuilder result = new StringBuilder(10);
+        for (T item : col) {
+            final String strItem = (item != null)
+                    ? quoteOpen + item.toString() + quoteClose
+                    : "NULL";
+
+            result.append(strItem);
+            if (delimiter != null) {
+                result.append(delimiter);
+            }
+        }
+        if (delimiter != null && result.length() > delimiter.length()) {
+            result.delete(result.length() - delimiter.length(), result.length());
+        }
+        return result.toString();
+    }
     /**
      * Make string enumeration of the items as list with delimiters.
      *
@@ -421,6 +455,14 @@ public class Utils {
             if (stmIn != null) {
                 IOUtils.closeQuietly(stmIn);
             }
+        }
+    }
+
+    public static String dateToString(Date valueToWrite) {
+        if (valueToWrite != null) {
+            return YYYY_MM_DD.format(valueToWrite);
+        } else {
+            return null;
         }
     }
 }

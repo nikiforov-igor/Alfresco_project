@@ -10,7 +10,6 @@ import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * User: dbashmakov
@@ -21,8 +20,6 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
     private final static Logger logger = LoggerFactory.getLogger(SearchQueryProcessorServiceImpl.class);
     public static final String CURRENT_USER = "#current-user";
     public static final String CURRENT_DATE = "#current-date";
-
-    private final Pattern PROC_PATTERN = Pattern.compile("[{]{2}.+?[}]{2}");
 
     private final String OPEN_PARAM_SYMBOL = "(";
     private final String CLOSE_PARAM_SYMBOL = ")";
@@ -99,7 +96,7 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
                     paramsMap.put(next, value);
                 }
             } catch (JSONException ex) {
-                logger.error(ex.getMessage(), ex);
+                logger.error("Cannot parse param object. Skip params set", ex);
             }
         }
         return paramsMap;
