@@ -11,12 +11,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
-import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.api.model.ReportFileData;
+import ru.it.lecm.reports.model.impl.ColumnDescriptor;
 import ru.it.lecm.reports.model.impl.ReportTemplate;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.reports.utils.Utils;
@@ -222,10 +222,9 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             JasperCompileManager.compileReportToStream(inData, outData);
             final IdRContent id = IdRContent.createId(desc, getReportsManager().getTemplateFileName(desc, template, ".jasper"));
             storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
-        } catch (JRException ex) {
+        } catch (Exception ex) {
             final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());
             log.error(msg, ex);
-            throw new RuntimeException(msg, ex);
         }
         log.info(String.format("Jasper report '%s' compiled SUCCESSFULLY into %s bytes", desc.getMnem(), outData.size()));
     }
