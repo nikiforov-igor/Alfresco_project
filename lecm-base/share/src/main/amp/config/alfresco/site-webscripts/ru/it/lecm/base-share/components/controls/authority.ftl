@@ -47,15 +47,13 @@
 			${field.label?html}:
 				<#if field.endpointMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
 			</label>
-			<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-			<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+            <input type="hidden" id="${controlId}-added" name="${field.name}_added" />
+            <input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
 			<input type="hidden" id="${controlId}-selectedItems"/>
 		</div>
 		<div id="${controlId}" class="container">
 			<#if field.disabled == false>
 				<input type="hidden" id="${fieldHtmlId}" name="-" value="${field.value?html}" />
-				<input type="hidden" id="${controlId}-added" name="${field.name}_added" />
-				<input type="hidden" id="${controlId}-removed" name="${field.name}_removed" />
 				<@renderPickerHTML controlId />
 				<div class="buttons-div">
 					<div id="${controlId}-itemGroupActions" class="show-picker"></div>
