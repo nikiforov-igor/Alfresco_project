@@ -56,7 +56,10 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
                 lastIndex = groupText.indexOf(params) - OPEN_PARAM_SYMBOL.length(); // - ( size
             }
             String processorId = groupText.substring(2, lastIndex);
-            query = query.replace(groupText, "(" + getProcessorQuery(processorId, params) + ")");
+            String procQuery = getProcessorQuery(processorId, params);
+            if (!procQuery.isEmpty()) {
+                query = query.replace(groupText, "(" + getProcessorQuery(processorId, params) + ")");
+            }
         }
 
         // обработка спец-выражений

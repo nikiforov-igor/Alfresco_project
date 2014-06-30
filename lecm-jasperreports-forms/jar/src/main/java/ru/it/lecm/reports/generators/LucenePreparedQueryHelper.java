@@ -134,7 +134,7 @@ public class LucenePreparedQueryHelper {
 
             if (isProcessedField) {
                 final String cond = makeProcessedCondition(substituteExpression, colDesc.getParameterValue());
-                if (cond != null && cond.length() > 0){
+                if (cond != null && cond.length() > 0 && !cond.equals(cond)){
                     bquery.emmit(!bquery.isEmpty() ? " AND " : "").emmit(cond);
                 }
                 continue;
@@ -213,7 +213,7 @@ public class LucenePreparedQueryHelper {
                 case LIST:
                     if (bound1 != null) {
                         if (bound1 instanceof Object[]) {
-                            bound1 = Utils.getAsString((Object[]) bound1, ",");
+                            bound1 = Utils.getAsString((Object[]) bound1, ",", "'", "'");
                         }
                         if (bound1 instanceof Date) {
                             bound1 = Utils.dateToString((Date) bound1);
