@@ -364,6 +364,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 inputFileName.value = JSON.stringify(parameters);
                 form.appendChild(inputFileName);
 
+                document.body.appendChild(form);
+
                 form.submit();
             },
 
