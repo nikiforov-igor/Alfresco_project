@@ -468,7 +468,10 @@ public class ReportsManager {
 
         final ReportFileData templateFileData = new ReportFileData();
 
-        final byte[] contentBytes = generateReportTemplate(desc); // (!) ГЕНЕРАЦИЯ
+        /* генерация шаблона отчёта по макету шаблона ... */
+        final ReportGenerator rg = findAndCheckReportGenerator(null);
+
+        final byte[] contentBytes = generateReportTemplate(rg, desc); // (!) ГЕНЕРАЦИЯ
         templateFileData.setData(contentBytes);
 
         // формирование названия
@@ -477,7 +480,7 @@ public class ReportsManager {
         templateFileData.setEncoding("UTF-8");
         templateFileData.setMimeType(findMimeType(extension));
 
-        templateFileData.setFilename(getTemplateFileName(desc, null, extension));
+        templateFileData.setFilename(rg.getTemplateFileName(desc, null, extension));
 
         return storeAsContent(templateFileData, reportRef);
     }
@@ -495,7 +498,9 @@ public class ReportsManager {
 
         final ReportFileData templateFileData = new ReportFileData();
 
-        final byte[] contentBytes = generateReportTemplate(desc, template); // (!) ГЕНЕРАЦИЯ
+        final ReportGenerator rg = findAndCheckReportGenerator(template.getReportType());
+
+        final byte[] contentBytes = generateReportTemplate(rg, desc, template); // (!) ГЕНЕРАЦИЯ
         templateFileData.setData(contentBytes);
 
         // формирование названия
@@ -508,22 +513,8 @@ public class ReportsManager {
         templateFileData.setEncoding("UTF-8");
         templateFileData.setMimeType(findMimeType(extension));
 
-        templateFileData.setFilename(getTemplateFileName(desc, template, extension));
+        templateFileData.setFilename(rg.getTemplateFileName(desc, template, extension));
         return storeAsContent(templateFileData, reportRef);
-    }
-
-    public String getTemplateFileName(ReportDescriptor desc, ReportTemplate template, String extension){
-        if (desc == null) {
-            return null;
-        }
-        StringBuilder builder = new StringBuilder();
-        builder.append(desc.getMnem()).append("_");
-
-        if (template != null) {
-            builder.append(template.getMnem());
-        }
-        builder.append(extension);
-        return builder.toString();
     }
 
     /**
@@ -622,18 +613,13 @@ public class ReportsManager {
         // (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
         reportDesc = Utils.clone(reportDesc);
 
-        final ReportContentDAO storage = this.findContentDAO(reportDesc);
-        if (storage == null) {
-            throw new RuntimeException(String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportName));
-        }
-
         // (1) передача параметров из запроса в ReportDescriptor на основании их типов
         // (2) расширение списка пришедших параметров: для диапазонов - добавление крайних значений, для ID - добавить доп поле node_id (для SQL запросов)
         Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService);
         if (logger.isInfoEnabled()) {
             logParameters(paramsMap, String.format("Processing report '%s' with args: \n", reportName));
         }
-        // получение провайдера ...
+
         ReportTemplate rTemplate = getTemplateByCode(reportDesc, templateCode);
         if (rTemplate == null) {
             throw new RuntimeException(String.format("Report '%s' has not any template !", reportName));
@@ -645,7 +631,7 @@ public class ReportsManager {
             throw new RuntimeException("Unsupported report kind '" + rType + "': no provider registered");
         }
 
-        return reporter.produceReport(reportDesc, rTemplate, paramsMap, storage);
+        return reporter.produceReport(this, reportDesc, rTemplate, paramsMap);
     }
 
 
@@ -734,7 +720,7 @@ public class ReportsManager {
      * Сгенерировать для указанного описателя файл с шаблоном отчёта.
      * Используется сконфигурированное имя gen-шаблона.
      */
-    private byte[] generateReportTemplate(ReportDescriptor reportDesc) {
+    private byte[] generateReportTemplate(final ReportGenerator rg, final ReportDescriptor reportDesc) {
         if (reportDesc == null) {
             return null;
         }
@@ -754,10 +740,6 @@ public class ReportsManager {
         try {
             final byte[] maketData = ru.it.lecm.reports.utils.Utils.ContentToBytes(reader);
 
-			/* генерация шаблона отчёта по макету шаблона ... */
-
-            final ReportGenerator rg = findAndCheckReportGenerator(null);
-
             return rg.generateReportTemplateByMaket(maketData, reportDesc, null);
 
         } catch (Throwable ex) {
@@ -768,7 +750,7 @@ public class ReportsManager {
         }
     }
 
-    private byte[] generateReportTemplate(ReportDescriptor reportDesc, ReportTemplate template) {
+    private byte[] generateReportTemplate(ReportGenerator rg, ReportDescriptor reportDesc, ReportTemplate template) {
         if (reportDesc == null) {
             return null;
         }
@@ -792,10 +774,6 @@ public class ReportsManager {
         final ContentReader reader = this.getTemplateFileDAO().loadContent(id);
         try {
             final byte[] maketData = ru.it.lecm.reports.utils.Utils.ContentToBytes(reader);
-
-					/* генерация шаблона отчёта по макету шаблона ... */
-
-            final ReportGenerator rg = findAndCheckReportGenerator(template.getReportType());
 
             return rg.generateReportTemplateByMaket(maketData, reportDesc, template);
 
@@ -932,13 +910,15 @@ public class ReportsManager {
                 byte[] templateRawData = null;
                 final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 final InputStream stm = template.getData();
+
+                ReportGenerator reportGenerator = findAndCheckReportGenerator(template.getReportType());
                 if (stm != null) {
                     stm.reset();
                     IOUtils.copy(stm, byteStream);
 
                     final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
 
-                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, getTemplateFileName(desc, template, ext));
+                    final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(desc, reportGenerator.getTemplateFileName(desc, template, ext));
 
                     templateRawData = byteStream.toByteArray();
 
@@ -955,9 +935,9 @@ public class ReportsManager {
                  * именно его (не требуется определять откуда получен описатель - из
                  * файлового хранилища или из репозитория)
                  */
-                findAndCheckReportGenerator(template.getReportType()).onRegister(desc, template, templateRawData, storage);
+                reportGenerator.onRegister(desc, template, templateRawData, storage);
                 if (isSubreport) {//сохраняем подотчет и в файловую систему!
-                    findAndCheckReportGenerator(template.getReportType()).onRegister(desc, template, templateRawData, subReportStorage);
+                    reportGenerator.onRegister(desc, template, templateRawData, subReportStorage);
                 }
                 logger.debug(String.format("Report '%s': provider notified", desc.getMnem()));
 
@@ -981,12 +961,13 @@ public class ReportsManager {
         for (ReportTemplate template : descriptor.getReportTemplates()) {
             final String rtag = getReportTypeTag(template.getReportType());
             final ReportDefaultsDesc def = getReportDefaults().get(rtag);
-		/* сохранение в репозиторий "шаблона отчёта"... */
+        /* сохранение в репозиторий "шаблона отчёта"... */
             InputStream baStm = null;
             byte[] templateRawData;
             try {
+                final ReportGenerator rg = findAndCheckReportGenerator(template.getReportType());
                 final String ext = (def != null) ? def.getFileExtension() : DEFAULT_REPORT_EXTENSION;
-                final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(descriptor, getTemplateFileName(descriptor, template, ext));
+                final ReportContentDAO.IdRContent id = ReportContentDAO.IdRContent.createId(descriptor, rg.getTemplateFileName(descriptor, template, ext));
 
                 if (fromStorage.exists(id) && (!toStorage.exists(id) || reWrite)) {
                     ContentReader fromReader = fromStorage.loadContent(id);
@@ -997,7 +978,7 @@ public class ReportsManager {
                         toStorage.storeContent(id, baStm);
                     }
 
-                    findAndCheckReportGenerator(template.getReportType()).onRegister(descriptor, template, templateRawData, toStorage);
+                    rg.onRegister(descriptor, template, templateRawData, toStorage);
                 }
             } catch (Throwable ex) {
                 final String msg = String.format(

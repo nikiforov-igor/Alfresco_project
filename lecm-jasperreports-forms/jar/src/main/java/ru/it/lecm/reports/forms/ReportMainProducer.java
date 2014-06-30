@@ -2,8 +2,6 @@ package ru.it.lecm.reports.forms;
 
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.util.PropertyCheck;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -30,8 +28,6 @@ import java.util.Map;
  */
 public class ReportMainProducer extends AbstractWebScript {
     public static final String FLAG_EXEC = "1";
-
-    static final transient Logger log = LoggerFactory.getLogger(ReportMainProducer.class);
 
     final static String PARAM_EXEC = "exec";
     final static String CONTENT_TEXT_HTML_CHARSET_UTF_8 = "text/html;charset=UTF-8";

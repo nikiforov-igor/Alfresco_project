@@ -4,6 +4,7 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JRDesignField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.beans.ReportProviderExt;
 import ru.it.lecm.reports.model.impl.JavaDataType;
@@ -26,6 +27,9 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     private static final Logger logger = LoggerFactory.getLogger(SQLProvider.class);
 
     private ReportDescriptor reportDescriptor;
+
+    @SuppressWarnings("unused")
+    private ReportsManager reportsManager;
     private DataSource basicDataSource;
 
     @Override
@@ -101,6 +105,11 @@ public class SQLProvider implements JRDataSourceProvider, ReportProviderExt {
     @Override
     public void setReportDescriptor(ReportDescriptor reportDescriptor) {
         this.reportDescriptor = reportDescriptor;
+    }
+
+    @Override
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
     }
 
     @Override

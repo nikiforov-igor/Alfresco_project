@@ -32,7 +32,6 @@ import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.reports.xml.DSXMLProducer;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -51,7 +50,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     private WKServiceKeeper services;
     private LinksResolver resolver;
     private ReportDescriptor reportDescriptor;
-    private ReportsManager reportManager;
+    private ReportsManager reportsManager;
     private LucenePreparedQueryHelper queryHelper;
 
     /**
@@ -67,8 +66,6 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * null означает, что ограничений нет.
      */
     protected Set<String> jrSimpleProps;
-
-    final public static SimpleDateFormat DateFormatISO8601 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
     public WKServiceKeeper getServices() {
         return services;
@@ -92,10 +89,14 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
     }
 
     @Override
+    public void setReportsManager(ReportsManager reportsManager) {
+        this.reportsManager = reportsManager;
+    }
+
+    @Override
     public void initializeFromGenerator(ReportGeneratorBase baseGenerator) {
         this.setServices(baseGenerator.getServices());
         this.setResolver(baseGenerator.getResolver());
-        this.setReportManager(baseGenerator.getReportsManager());
         this.setQueryHelper(baseGenerator.getQueryHelper());
     }
 
@@ -118,12 +119,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
         }
     }
 
-    public void setReportManager(ReportsManager reportMgr) {
-        this.reportManager = reportMgr;
-    }
-
-    public ReportsManager getReportManager() {
-        return reportManager;
+    public ReportsManager getReportsManager() {
+        return reportsManager;
     }
 
     protected void clearSearch() {
@@ -197,8 +194,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * @return JRDSConfigXML
      */
     protected JRDSConfigXML createXmlConfig() {
-        PropertyCheck.mandatory(this, "reportManager", getReportManager());
-        return new ConfigXMLOfGenericDsProvider(this.getReportManager());
+        PropertyCheck.mandatory(this, "reportManager", getReportsManager());
+        return new ConfigXMLOfGenericDsProvider(this.getReportsManager());
     }
 
     public LucenePreparedQueryHelper getQueryHelper() {

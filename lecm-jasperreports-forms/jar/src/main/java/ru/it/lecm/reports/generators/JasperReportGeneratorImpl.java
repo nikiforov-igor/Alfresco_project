@@ -11,6 +11,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.reports.api.JasperReportTargetFileType;
+import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO;
 import ru.it.lecm.reports.api.model.DAO.ReportContentDAO.IdRContent;
 import ru.it.lecm.reports.api.model.DataSourceDescriptor;
@@ -41,26 +42,28 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
     private static final transient Logger log = LoggerFactory.getLogger(JasperReportGeneratorImpl.class);
 
     @Override
-    public ReportFileData produceReport(ReportDescriptor reportDesc, ReportTemplate templateDescriptor, Map<String, Object> parameters, ReportContentDAO rptContent) throws IOException {
-        PropertyCheck.mandatory(this, "services", getServices());
-        PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
+    public ReportFileData produceReport(ReportsManager reportsManager, ReportDescriptor reportDesc, ReportTemplate templateDescriptor, Map<String, Object> parameters) throws IOException {
+        PropertyCheck.mandatory(this, "reportDesc", reportDesc);
+        PropertyCheck.mandatory(this, "reportsManager", reportsManager);
 
-        ReportFileData result = new ReportFileData();
+        final ReportFileData result = new ReportFileData();
 
-        String reportFileName = getReportsManager().getTemplateFileName(reportDesc,templateDescriptor, ".jasper");
-        ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+        log.debug(String.format("producing report /'%s'/ \"%s\"", reportDesc.getMnem(), reportDesc.getDefault()));
 
-        if (reader == null) { // ищем файлы под старыми именами
-            reportFileName = templateDescriptor.getFileName().replace("jrxml", "jasper");
-            reader =  rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+        final ReportContentDAO rptContent = reportsManager.findContentDAO(reportDesc);
+        if (rptContent == null) {
+            throw new RuntimeException(String.format("Report '%s' storage point is unknown (possibly report is not registered !?)", reportDesc.getMnem()));
         }
-        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        InputStream stm = (reader != null) ? reader.getContentInputStream() : null;
-        try {
-            if (reader == null) {
-                throw new IOException(String.format("Report is missed - file '%s' not found", reportFileName));
-            }
 
+        final String reportFileName = getTemplateFileName(reportDesc, templateDescriptor, ".jasper");
+        ContentReader reader = rptContent.loadContent(IdRContent.createId(reportDesc, reportFileName));
+        if (reader == null) {
+            throw new IOException(String.format("Report is missed - file '%s' not found", reportFileName));
+        }
+
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        InputStream stm = reader.getContentInputStream();
+        try {
             // DONE: параметризовать выходной формат
             final JasperReportTargetFileType target = findTargetArg(parameters, reportDesc);
 
@@ -71,7 +74,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 			/* Создание Провайдера */
             final String dataSourceClass = reportDesc.getProviderDescriptor() != null ?
                     reportDesc.getProviderDescriptor().getClassName() : jasperReport.getProperty("dataSource");
-            final JRDataSourceProvider dsProvider = super.createDsProvider(reportDesc, dataSourceClass, parameters);
+            final JRDataSourceProvider dsProvider = createDsProvider(reportsManager, reportDesc, dataSourceClass, parameters);
 
 			/* построение отчёта */
             generateReport(target, outputStream, jasperReport, dsProvider, parameters);
@@ -220,7 +223,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
 
         try {
             JasperCompileManager.compileReportToStream(inData, outData);
-            final IdRContent id = IdRContent.createId(desc, getReportsManager().getTemplateFileName(desc, template, ".jasper"));
+            final IdRContent id = IdRContent.createId(desc, getTemplateFileName(desc, template, ".jasper"));
             storage.storeContent(id, new ByteArrayInputStream(outData.toByteArray()));
         } catch (Exception ex) {
             final String msg = String.format("Error compiling report '%s':\n\t%s", desc.getMnem(), ex.getMessage());
