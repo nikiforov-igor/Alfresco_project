@@ -136,35 +136,6 @@ public class JRDSConfigXML extends JRDSConfigBaseImpl {
         return false; // if errors
     }
 
-/* 
- * XML Example:
-<?xml version="1.0" encoding="UTF-8"?>
-
-<ds.config>
-
-	<cmis.connection>
-		<url></url>
-		<username></username>
-		<password></password>
-		<allVersions>false</allVersions>
-	</cmis.connection>
-
-	<fields>
-		<field queryFldName="cmis:id" dislayName="" javaValueClass="Integer"/>
-	</fields>
-
-	<query.descriptor>
-		<offset>0</offset>
-		<limit>-1</limit>
-		<pgsize>-1</pgsize>
-		<queryText>
-			<![CDATA[select * from lecm:documents $P{mdgfkahqf}
-			]]>
-		</queryText>	
-	</query.descriptor>
-
-</ds.config>
- */
     public void xmlRead(InputStream xml, String info) {
         setDefaults(getArgs());
 

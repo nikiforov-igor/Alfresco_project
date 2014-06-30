@@ -46,7 +46,7 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
         final LinkedDocumentsDS result = new LinkedDocumentsDS(iterator);
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
-        result.getContext().setMetaFields(conf().getMetaFields());
+        result.getContext().setMetaFields(getConfigXML().getMetaFields());
         result.buildJoin();
         return result;
     }
@@ -64,9 +64,9 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
             final NodeRef mainDoc = getMainDoc();
             Map<String, Serializable> mainDocProps = loadDocInfo(mainDoc, true); // получаем свойства основного документа
 
-            if (context.getRsIter() != null) {
-                while (context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
-                    final ResultSetRow rs = context.getRsIter().next();
+            if (getContext().getRsIter() != null) {
+                while (getContext().getRsIter().hasNext()) { // тут только одна запись будет по-идее
+                    final ResultSetRow rs = getContext().getRsIter().next();
                     final NodeRef docId = rs.getNodeRef(); // id основного документа
 
                     // поиск id присоединённых документов, которые и надо будет добавлять в result ...
@@ -135,7 +135,7 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
         private Map<String, Serializable> loadDocInfo(NodeRef docInfo, boolean isInMainDoc) {
             final Map<String, Serializable> resProps = new HashMap<String, Serializable>();
 
-            if (conf().getMetaFields() == null) {
+            if (getConfigXML().getMetaFields() == null) {
                 return resProps;
             }
 
@@ -143,7 +143,7 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
             final Map<QName, Serializable> props = getServices().getServiceRegistry().getNodeService().getProperties(docInfo);
 
             final NamespaceService ns = getServices().getServiceRegistry().getNamespaceService();
-            for (Map.Entry<String, DataFieldColumn> e : conf().getMetaFields().entrySet()) {
+            for (Map.Entry<String, DataFieldColumn> e : getConfigXML().getMetaFields().entrySet()) {
                 final DataFieldColumn fld = e.getValue();
                 final boolean hasInMainDoc = fld.hasXAttributes() && fld.getAttributes().containsKey(IN_MAIN_DOC);
                 if (hasInMainDoc == isInMainDoc) {
@@ -164,7 +164,7 @@ public class DSProviderContractsDeltaById extends GenericDSProviderBase {
             final Map<String, Serializable> result = new HashMap<String, Serializable>();
 
             // DONE: move the data from main & linked documents ...
-            for (Map.Entry<String, DataFieldColumn> e : conf().getMetaFields().entrySet()) {
+            for (Map.Entry<String, DataFieldColumn> e : getConfigXML().getMetaFields().entrySet()) {
                 final DataFieldColumn fld = e.getValue();
                 final String reportColName = fld.getName();
                 if (item.containsKey(reportColName)) {

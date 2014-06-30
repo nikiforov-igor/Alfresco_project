@@ -77,7 +77,6 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
 
     @Override
     protected void setXMLDefaults(Map<String, Object> defaults) {
-        super.setXMLDefaults(defaults);
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP, null);
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP, null);
     }
@@ -271,9 +270,9 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
             // Ключ здесь это Сотрудник или Подразделение, в ~ от группировки (см this.useOUFilter)
             final Map<NodeRef, DisciplineGroupInfo> result = new HashMap<NodeRef, DisciplineGroupInfo>();
 
-            paramsFilter.scanGroupByInfo(conf());
+            paramsFilter.scanGroupByInfo(getConfigXML());
 
-            if (context.getRsIter() != null) {
+            if (getContext().getRsIter() != null) {
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
 
 				/* Получение формата и ссылки для выбранного groupby-Измерения из конфигурации ... */
@@ -290,12 +289,12 @@ public class ErrandsDisciplineDSProvider extends GenericDSProviderBase {
                 }
 
 				/* проход по всем загруженным Поручениям ... */
-                while (context.getRsIter().hasNext()) {
-                    final ResultSetRow rs = context.getRsIter().next();
+                while (getContext().getRsIter().hasNext()) {
+                    final ResultSetRow rs = getContext().getRsIter().next();
                     final NodeRef errandId = rs.getNodeRef(); // id Поручения
 
                     // (!) Фильтрование
-                    if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
+                    if (getContext().getFilter() != null && !getContext().getFilter().isOk(errandId)) {
                         if (logger.isDebugEnabled())
                             logger.debug(String.format("{%s} filtered out", errandId));
                         continue;

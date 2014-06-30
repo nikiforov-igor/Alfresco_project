@@ -94,7 +94,6 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
 
     @Override
     protected void setXMLDefaults(Map<String, Object> defaults) {
-        super.setXMLDefaults(defaults);
 
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP, null);
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP, null);
@@ -107,10 +106,10 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
 
     private void loadConfig() {
         try {
-            conf().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
-            conf().loadConfig();
-            this.paramsFilter.scanGroupByInfo(conf());
-            this.paramsFilter.scanStatuses(conf());
+            getConfigXML().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
+            getConfigXML().loadConfig();
+            this.paramsFilter.scanGroupByInfo(getConfigXML());
+            this.paramsFilter.scanStatuses(getConfigXML());
         } catch (JRException e) {
             logger.error(e.getMessage(), e);
         }
@@ -332,7 +331,7 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
 
             final List<TaskInfo> result = new ArrayList<TaskInfo>();
 
-            if (context.getRsIter() != null) {
+            if (getContext().getRsIter() != null) {
 
                 // Ключ здесь это Сотрудник
                 final Map<NodeRef, ExecutorGroupInfo> executors = new HashMap<NodeRef, ExecutorGroupInfo>();
@@ -360,14 +359,14 @@ public class ErrandsExecutionsDSProvider extends GenericDSProviderBase {
                         , Utils.nonblank(orgUnitSelected, "*")));
 
 				/* проход по всем загруженным задачам... */
-                while (context.getRsIter().hasNext()) {
+                while (getContext().getRsIter().hasNext()) {
 
-                    final ResultSetRow rs = context.getRsIter().next();
+                    final ResultSetRow rs = getContext().getRsIter().next();
 
                     final NodeRef errandId = rs.getNodeRef(); // id Задачи
 
                     // (!) Фильтрование
-                    if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
+                    if (getContext().getFilter() != null && !getContext().getFilter().isOk(errandId)) {
                         if (logger.isDebugEnabled())
                             logger.debug(String.format("{%s} filtered out", errandId));
                         continue;

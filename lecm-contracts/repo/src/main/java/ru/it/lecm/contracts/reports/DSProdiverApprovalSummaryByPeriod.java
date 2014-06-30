@@ -209,11 +209,11 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
         public boolean next() throws JRException {
             while (iterData != null && iterData.hasNext()) {
                 final EmployeeInfo item = iterData.next();
-                context.setCurNodeProps(makeCurProps(item));
+                getContext().setCurNodeProps(makeCurProps(item));
                 return true;
             } // while
             // NOT FOUND MORE - DONE
-            context.setCurNodeProps(null);
+            getContext().setCurNodeProps(null);
             return false;
         }
 
@@ -246,7 +246,7 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
          */
         private void buildData() {
             this.data = new ArrayList<EmployeeInfo>();
-            if (context.getRsIter() != null) {
+            if (getContext().getRsIter() != null) {
                 final Map<NodeRef, EmployeeInfo> statistic = new HashMap<NodeRef, EmployeeInfo>(); // накопленная статистика по Позователю
 
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
@@ -254,8 +254,8 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 
                 final ApproveQNameHelper approveQNames = new ApproveQNameHelper(ns);
 
-                while (context.getRsIter().hasNext()) {
-                    final ResultSetRow rs = context.getRsIter().next();
+                while (getContext().getRsIter().hasNext()) {
+                    final ResultSetRow rs = getContext().getRsIter().next();
 
                     final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований
 

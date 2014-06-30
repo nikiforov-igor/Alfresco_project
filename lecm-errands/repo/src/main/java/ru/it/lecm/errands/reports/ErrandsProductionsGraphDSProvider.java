@@ -76,7 +76,6 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
 
     @Override
     protected void setXMLDefaults(Map<String, Object> defaults) {
-        super.setXMLDefaults(defaults);
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_FORMATS_MAP, null);
         defaults.put(ErrandsReportFilterParams.XMLGROUPBY_SOURCE_MAP, null);
     }
@@ -84,9 +83,9 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
 
     private void loadConfig() {
         try {
-            conf().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
-            conf().loadConfig();
-            this.paramsFilter.scanGroupByInfo(conf());
+            getConfigXML().setConfigName(DSXMLProducer.makeDsConfigFileName(this.getReportDescriptor().getMnem()));
+            getConfigXML().loadConfig();
+            this.paramsFilter.scanGroupByInfo(getConfigXML());
         } catch (JRException e) {
             logger.error(e.getMessage(), e);
         }
@@ -381,7 +380,7 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
             final int maxDaysCounter = 1 + (countDays >= 0 ? countDays : 0); // кол-во отметок времени
 
             // проход по данным ...
-            if (context.getRsIter() != null && result.isEmpty()) {
+            if (getContext().getRsIter() != null && result.isEmpty()) {
                 // series: собранные данные по объекта (Сотрудникам или Подразделениям)
                 // Ключ здесь это название измерения (tag)
                 final Map<NodeRef, ProductGroupInfo> series = new HashMap<NodeRef, ProductGroupInfo>();
@@ -402,11 +401,11 @@ public class ErrandsProductionsGraphDSProvider extends GenericDSProviderBase {
                 }
 
 				/* проход по всем загруженным Поручениям ... */
-                while (context.getRsIter().hasNext()) {
-                    final ResultSetRow rs = context.getRsIter().next();
+                while (getContext().getRsIter().hasNext()) {
+                    final ResultSetRow rs = getContext().getRsIter().next();
 
                     final NodeRef errandId = rs.getNodeRef(); // id Поручения
-                    if (context.getFilter() != null && !context.getFilter().isOk(errandId)) {
+                    if (getContext().getFilter() != null && !getContext().getFilter().isOk(errandId)) {
                         if (logger.isDebugEnabled()) {
                             logger.debug(String.format("{%s} filtered out", errandId));
                         }

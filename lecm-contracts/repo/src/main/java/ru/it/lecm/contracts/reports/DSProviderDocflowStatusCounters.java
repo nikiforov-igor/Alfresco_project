@@ -91,7 +91,6 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
 
     @Override
     protected void setXMLDefaults(Map<String, Object> defaults) {
-        super.setXMLDefaults(defaults);
         defaults.put(XMLSTATUSES_LIST, null); // list
         defaults.put(XMLGROUPBY_FORMATS_MAP, null); // map
         defaults.put(XMLSTATUS_FLAGS_MAP, null); // map
@@ -102,7 +101,7 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
         final DocflowJRDataSource result = new DocflowJRDataSource(iterator);
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
-        result.getContext().setMetaFields(conf().getMetaFields());
+        result.getContext().setMetaFields(getConfigXML().getMetaFields());
         result.buildJoin();
         return result;
     }
@@ -182,7 +181,7 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
                 throw new RuntimeException("Too few parameters: 'groupBy' not assigned");
             }
 
-            final Map<String, Object> mapGroupBy = conf().getMap(XMLGROUPBY_FORMATS_MAP);
+            final Map<String, Object> mapGroupBy = getConfigXML().getMap(XMLGROUPBY_FORMATS_MAP);
             if (mapGroupBy == null) {
                 throw new RuntimeException(String.format("Invalid configuration: no '%s' map provided", XMLGROUPBY_FORMATS_MAP));
             }
@@ -235,7 +234,7 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
 
 			/* Счётчики ... */
             @SuppressWarnings("unchecked")
-            final List<String> statusOrderedList = conf().getList(XMLSTATUSES_LIST);
+            final List<String> statusOrderedList = getConfigXML().getList(XMLSTATUSES_LIST);
 
             int iCol = 0;
             for (String colName : statusOrderedList) {
@@ -252,7 +251,7 @@ public class DSProviderDocflowStatusCounters extends GenericDSProviderBase {
             result.put(String.format(COLNAME_COUNTER_FMT, iCol), item.sumAllOthers(statusOrderedList));
 
 			/* Параметры формирования колонки с суммой данных по строке ... */
-            final Map<String, Object> mapStatusFlags = conf().getMap(XMLSTATUS_FLAGS_MAP);
+            final Map<String, Object> mapStatusFlags = getConfigXML().getMap(XMLSTATUS_FLAGS_MAP);
             if (mapStatusFlags != null) {
                 // надо ли формировать столбец с суммой по строке
                 final boolean enCalcRowSum = (mapStatusFlags.containsKey(XMLSTATUS_FLAGS_ITEM_ROWSUM_SHOW))

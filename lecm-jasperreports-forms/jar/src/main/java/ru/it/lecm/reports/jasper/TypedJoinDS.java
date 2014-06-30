@@ -1,14 +1,13 @@
 package ru.it.lecm.reports.jasper;
 
+import net.sf.jasperreports.engine.JRException;
+import org.alfresco.service.cmr.search.ResultSetRow;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import net.sf.jasperreports.engine.JRException;
-
-import org.alfresco.service.cmr.search.ResultSetRow;
 
 /**
  * Типизированный НД, в котором строки набора являются контейнерами типа T.
@@ -47,11 +46,11 @@ public abstract class TypedJoinDS<T> extends AlfrescoJRDataSource {
         }
         if (iterData != null && iterData.hasNext()) {
             final T item = iterData.next();
-            context.setCurNodeProps(getNodeProps(item));
+            getContext().setCurNodeProps(getNodeProps(item));
             return true;
         }
         // NOT FOUND MORE - DONE
-        context.setCurNodeProps(null);
+        getContext().setCurNodeProps(null);
         return false;
     }
 

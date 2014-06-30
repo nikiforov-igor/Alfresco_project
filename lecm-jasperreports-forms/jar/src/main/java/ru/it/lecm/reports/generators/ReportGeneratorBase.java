@@ -124,9 +124,10 @@ public abstract class ReportGeneratorBase implements ReportGenerator {
             // "своих" особо облагородим ...
             if (resultProvider instanceof ReportProviderExt) {
                 final ReportProviderExt adsp = (ReportProviderExt) resultProvider;
-                adsp.setReportDescriptor(reportDesc);
                 adsp.setReportsManager(reportsManager);
                 adsp.initializeFromGenerator(this);
+
+                adsp.setReportDescriptor(reportDesc);
             }
 
             assignProviderProps(resultProvider, parameters, reportDesc);

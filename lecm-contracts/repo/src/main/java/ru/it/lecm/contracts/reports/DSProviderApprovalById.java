@@ -48,7 +48,6 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
     }
 
     protected void setXMLDefaults(Map<String, Object> defaults) {
-        super.setXMLDefaults(defaults);
         defaults.put(XMLNODE_STATUS_DISPLAYNAMES, null);
     }
 
@@ -57,8 +56,8 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
         final ApprovalItemsDS result = new ApprovalItemsDS(iterator);
         result.getContext().setRegistryService(getServices().getServiceRegistry());
         result.getContext().setJrSimpleProps(jrSimpleProps);
-        if (conf() != null) {
-            result.getContext().setMetaFields(conf().getMetaFields());
+        if (getConfigXML() != null) {
+            result.getContext().setMetaFields(getConfigXML().getMetaFields());
         }
         result.buildJoin();
         return result;
@@ -188,13 +187,13 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
         public int buildJoin() {
             final ArrayList<ApprovalInfo> result = new ArrayList<ApprovalInfo>();
 
-            if (context.getRsIter() != null) {
+            if (getContext().getRsIter() != null) {
 
                 final NodeService nodeSrv = getServices().getServiceRegistry().getNodeService();
                 final ApproveQNameHelper approveQNames = new ApproveQNameHelper(getServices().getServiceRegistry().getNamespaceService());
 
-                while (context.getRsIter().hasNext()) { // тут только одна запись будет по-идее
-                    final ResultSetRow rs = context.getRsIter().next();
+                while (getContext().getRsIter().hasNext()) { // тут только одна запись будет по-идее
+                    final ResultSetRow rs = getContext().getRsIter().next();
 
                     final NodeRef approveListId = rs.getNodeRef(); // id Списка Согласований
 
@@ -289,7 +288,7 @@ public class DSProviderApprovalById extends GenericDSProviderBase {
     }
 
     private Map<String, Object> getL18ApproveResultMap() {
-        Map<String, Object> resultL18 = conf().getMap(XMLNODE_STATUS_DISPLAYNAMES);
+        Map<String, Object> resultL18 = getConfigXML().getMap(XMLNODE_STATUS_DISPLAYNAMES);
         if (resultL18 == null) {
             resultL18 = new HashMap<String, Object>();
         }

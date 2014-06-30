@@ -35,10 +35,7 @@ import java.util.Map;
 public class AlfrescoJRDataSource implements JRDataSource {
     private static final Logger logger = LoggerFactory.getLogger(AlfrescoJRDataSource.class);
 
-    /**
-     * Контекст выполнения для НД отчёта.
-     */
-    final protected ReportDSContextImpl context = new ReportDSContextImpl();
+    private ReportDSContextImpl context = new ReportDSContextImpl();
 
     public AlfrescoJRDataSource(Iterator<ResultSetRow> iterator) {
         this.context.setRsIter(iterator);
@@ -52,6 +49,9 @@ public class AlfrescoJRDataSource implements JRDataSource {
         return context;
     }
 
+    public void setContext(ReportDSContextImpl context) {
+         this.context = context;
+    }
     /**
      * @param propNameWithPrefix название свойства
      * @return true, если свойство простое (т.е. получается непосредственно у объекта)
