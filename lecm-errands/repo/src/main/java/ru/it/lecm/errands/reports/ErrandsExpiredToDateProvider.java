@@ -1,6 +1,5 @@
 package ru.it.lecm.errands.reports;
 
-import ru.it.lecm.reports.generators.GenericDSProviderBase;
 import ru.it.lecm.reports.utils.ArgsHelper;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 
@@ -29,9 +28,8 @@ public class ErrandsExpiredToDateProvider extends ErrandsOutOfTimeProvider {
 
         if (expiredDate != null) {
             Date expired = ArgsHelper.tryMakeDate(expiredDate, null);
-            //TODO denis переписать на emitDateInterval
-            builder.emmit(hasData ? " AND " : "").
-                    emmit("@lecm\\-errands\\:limitation\\-date:[MIN TO " + GenericDSProviderBase.DateFormatISO8601.format(expired) + "]");
+            String query = getQueryHelper().emmitDateIntervalCheck("lecm-errands:limitation-date", null, expired);
+            builder.emmit(hasData ? " AND " : "").emmit(query);
         }
         return builder;
     }
