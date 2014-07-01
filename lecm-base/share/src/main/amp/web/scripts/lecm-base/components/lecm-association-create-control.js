@@ -62,6 +62,8 @@ LogicECM.module = LogicECM.module || {};
 
 				nameSubstituteString: "{cm:name}",
 
+				sortProp: "cm:name",
+
 				// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 				employeeAbsenceMarker: false,
 
@@ -222,6 +224,7 @@ LogicECM.module = LogicECM.module || {};
 								items: arrItems.split(","),
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
+								sortProp: this.options.sortProp,
 								selectedItemsNameSubstituteString: this.options.nameSubstituteString
 							},
 							successCallback: {
@@ -296,6 +299,7 @@ LogicECM.module = LogicECM.module || {};
 								items: nodeRefs,
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
+								sortProp: this.options.sortProp,
 								selectedItemsNameSubstituteString: this.options.nameSubstituteString
 							},
 							successCallback: {

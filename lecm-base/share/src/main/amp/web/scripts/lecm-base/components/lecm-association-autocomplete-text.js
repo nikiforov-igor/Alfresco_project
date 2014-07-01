@@ -53,6 +53,8 @@ LogicECM.module = LogicECM.module || {};
 
 				nameSubstituteString:"{cm:name}",
 
+                sortProp: "cm:name",
+
 				additionalFilter: "",
 
 				ignoreNodes: [],
@@ -280,6 +282,7 @@ LogicECM.module = LogicECM.module || {};
             _generateChildrenUrlParams: function (searchTerm) {
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                    "&sortProp=" + encodeURIComponent(this.options.sortProp) +
                     "&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/") {

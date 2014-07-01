@@ -57,6 +57,8 @@ LogicECM.module = LogicECM.module || {};
 
                 nameSubstituteString: "{cm:name}",
 
+                sortProp: "cm:name",
+
                 openSubstituteSymbol: "{",
 
                 closeSubstituteSymbol: "}",
@@ -353,7 +355,7 @@ LogicECM.module = LogicECM.module || {};
             _generateChildrenUrlParams: function AssociationCascadingSelectOne__generateChildrenUrlParams(searchTerm)
             {
                 var params =  "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString);
+                    "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) + "&sortProp=" + encodeURIComponent(this.options.sortProp);
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/")
                 {

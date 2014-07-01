@@ -463,6 +463,8 @@ LogicECM.module = LogicECM.module || {};
 
          nameSubstituteString: "{cm:name}",
 
+         sortProp: "cm:name",
+
          substituteParent:"",
 
          viewOnLinkClick:false,
@@ -1623,6 +1625,7 @@ LogicECM.module = LogicECM.module || {};
                   items: arrItems.split(","),
                   itemValueType: this.options.valueType,
                   itemNameSubstituteString: this.options.nameSubstituteString,
+                  sortProp: this.options.sortProp,
                   substituteParent: this.options.substituteParent != "" ? this.options.substituteParent : "none",
                   itemOpenSubstituteSymbol: this.options.openSubstituteSymbol,
                   itemCloseSubstituteSymbol: this.options.closeSubstituteSymbol,
@@ -2396,6 +2399,8 @@ LogicECM.module = LogicECM.module || {};
          createNewItemIcon: "",
 
           nameSubstituteString: "{cm:name}",
+
+          sortProp: "cm:name",
 
           substituteParent:"",
 
@@ -3183,6 +3188,7 @@ LogicECM.module = LogicECM.module || {};
       {
          var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) + 
                       "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                      "&sortProp=" + encodeURIComponent(this.options.sortProp) +
                       "&openSubstituteSymbol=" + encodeURIComponent(this.options.openSubstituteSymbol) +
                       "&closeSubstituteSymbol=" + encodeURIComponent(this.options.closeSubstituteSymbol) +
                       "&showNotSelectableItems=" + encodeURIComponent(this.options.showNotSelectableItems) +

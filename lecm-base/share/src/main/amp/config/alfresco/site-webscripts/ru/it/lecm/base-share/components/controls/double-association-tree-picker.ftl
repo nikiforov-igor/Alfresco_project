@@ -130,6 +130,9 @@
 	        <#if params.firstNameSubstituteString??>
 	            nameSubstituteString: "${params.firstNameSubstituteString}",
 	        </#if>
+            <#if field.control.params.sortProp??>
+                sortProp: "${field.control.params.sortProp}",
+            </#if>
 		    <#if params.firstSelectedItemsNameSubstituteString??>
 			    selectedItemsNameSubstituteString: "${params.firstSelectedItemsNameSubstituteString}",
 		    </#if>
@@ -189,6 +192,9 @@
 		    <#if params.secondNameSubstituteString??>
 			    nameSubstituteString: "${params.secondNameSubstituteString}",
 		    </#if>
+            <#if field.control.params.sortProp??>
+                sortProp: "${field.control.params.sortProp}",
+            </#if>
 		    <#if params.secondSelectedItemsNameSubstituteString??>
 			    selectedItemsNameSubstituteString: "${params.secondSelectedItemsNameSubstituteString}",
 		    </#if>

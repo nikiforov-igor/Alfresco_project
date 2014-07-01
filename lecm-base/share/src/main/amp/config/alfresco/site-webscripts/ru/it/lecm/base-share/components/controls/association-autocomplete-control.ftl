@@ -177,6 +177,9 @@
     <#if field.control.params.selectedItemsNameSubstituteString??>
         selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
     </#if>
+    <#if field.control.params.sortProp??>
+        sortProp: "${field.control.params.sortProp}",
+    </#if>
     <#if field.control.params.parentNodeRef??>
         rootNodeRef: "${field.control.params.parentNodeRef}",
     </#if>

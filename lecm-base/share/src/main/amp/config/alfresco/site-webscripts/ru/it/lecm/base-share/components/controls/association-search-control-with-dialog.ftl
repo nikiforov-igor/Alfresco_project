@@ -122,6 +122,9 @@
 				<#if field.control.params.nameSubstituteString??>
 					nameSubstituteString: "${field.control.params.nameSubstituteString}",
 				</#if>
+                <#if field.control.params.sortProp??>
+                    sortProp: "${field.control.params.sortProp}",
+                </#if>
 				<#if field.control.params.selectedItemsNameSubstituteString??>
 					selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
 				</#if>

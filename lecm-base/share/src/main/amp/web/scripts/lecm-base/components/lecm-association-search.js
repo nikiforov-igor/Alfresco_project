@@ -92,6 +92,8 @@ LogicECM.module = LogicECM.module || {};
 
 				nameSubstituteString: "{cm:name}",
 
+                sortProp: "cm:name",
+
 				selectedItemsNameSubstituteString: null,
 
 				// fire bubling методы выполняемые по нажатию определенной кнопки в диалоговом окне
@@ -297,6 +299,7 @@ LogicECM.module = LogicECM.module || {};
 								items: arrItems.split(","),
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
+								sortProp: this.options.sortProp,
 								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
 							},
 							successCallback:
@@ -659,6 +662,7 @@ LogicECM.module = LogicECM.module || {};
 			{
 				var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
 					"&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                    "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
 

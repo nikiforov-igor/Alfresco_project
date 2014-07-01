@@ -38,7 +38,8 @@
 			<#if field.control.params.defaultValuesDataSource??>
 				defaultValuesDataSource: "${field.control.params.defaultValuesDataSource}",
 			</#if>
-			nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}"
+			nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+			sortProp: "${field.control.params.sortProp!'cm:name'}"
 		});
 	}
 	YAHOO.util.Event.onDOMReady(init);

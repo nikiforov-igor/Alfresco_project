@@ -127,6 +127,8 @@ LogicECM.module = LogicECM.module || {};
 
             nameSubstituteString: "{cm:name}",
 
+            sortProp: "cm:name",
+
 			selectedItemsNameSubstituteString: null,
 			// при выборе сотрудника в контроле отображать, доступен ли он в данный момент и если недоступен, то показывать его автоответ
 			employeeAbsenceMarker: false,
@@ -380,6 +382,7 @@ LogicECM.module = LogicECM.module || {};
                             items: arrItems.split(","),
                             itemValueType: "nodeRef",
                             itemNameSubstituteString: this.options.nameSubstituteString,
+                            sortProp: this.options.sortProp,
 	                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
                         },
                         successCallback:
@@ -461,6 +464,7 @@ LogicECM.module = LogicECM.module || {};
                             items: nodeRef.split(","),
                             itemValueType: "nodeRef",
                             itemNameSubstituteString: this.options.nameSubstituteString,
+                            sortProp: this.options.sortProp,
 	                        selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
                         },
                         successCallback:
@@ -1222,6 +1226,7 @@ LogicECM.module = LogicECM.module || {};
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&size=" + this.getMaxSearchResult() + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
         },

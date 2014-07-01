@@ -85,6 +85,7 @@
 			childrenDataSource: "${field.control.params.childrenDataSource}",
 		</#if>
 			nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+			sortProp: "${field.control.params.sortProp!'cm:name'}",
 			additionalFilter: "${field.control.params.additionalFilter!''}",
 			useDynamicLoading: ${useDynamicLoading?string}
 		});
@@ -107,6 +108,9 @@
 		<#if field.control.params.nameSubstituteString??>
 			nameSubstituteString: "${field.control.params.nameSubstituteString}",
 		</#if>
+        <#if field.control.params.sortProp??>
+            sortProp: "${field.control.params.sortProp}",
+        </#if>
 		<#if field.control.params.selectedItemsNameSubstituteString??>
 			selectedItemsNameSubstituteString: "${field.control.params.selectedItemsNameSubstituteString}",
 		</#if>
@@ -117,7 +121,7 @@
 		<#if field.control.params.employeeAbsenceMarker??>
 			employeeAbsenceMarker: "${field.control.params.employeeAbsenceMarker}",
 		</#if>
-		<#if args.ignoreNodes??>
+		<#if args.ignoreNodes??>                                    о
 			ignoreNodes: "${args.ignoreNodes}".split(","),
 		</#if>
 	    <#if args.allowedNodes??>

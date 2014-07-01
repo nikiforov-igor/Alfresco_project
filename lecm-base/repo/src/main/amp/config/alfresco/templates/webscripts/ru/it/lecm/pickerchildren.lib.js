@@ -21,6 +21,7 @@ function getPickerChildrenItems(filter)
 		showNotSelectable = args['showNotSelectableItems'],
 		showFolders = args['showFolders'],
 		docType = args['docType'],
+		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'];
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
@@ -133,7 +134,7 @@ function getPickerChildrenItems(filter)
 					ignoreTypes = argsFilterType.split(',');
 				}
 
-				childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, "cm:name", true, null).getPage();
+				childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, sortProp, true, null).getPage();
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
@@ -166,7 +167,7 @@ function getPickerChildrenItems(filter)
 							},
 							sort: [
 								{
-									column: "@cm:name",
+									column: "@" + sortProp,
 									ascending: true
 								}]
 						});

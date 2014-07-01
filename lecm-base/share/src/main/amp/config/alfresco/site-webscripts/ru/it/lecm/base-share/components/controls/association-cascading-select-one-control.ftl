@@ -41,6 +41,7 @@
                     maxSearchResults: ${field.control.params.maxSearchResults!'1000'},
                     selectedValueNodeRef: "${fieldValue}",
                     nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+                    sortProp: "${field.control.params.sortProp!'cm:name'}",
                     htmlId: "${htmlid}",
                     dependentFieldName: {
                     <#if field.control.params.dependentFieldName?? && field.control.params.dependentFieldName != "">

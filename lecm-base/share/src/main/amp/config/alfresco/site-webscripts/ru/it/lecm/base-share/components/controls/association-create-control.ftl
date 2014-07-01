@@ -85,6 +85,9 @@
 			<#if field.control.params.nameSubstituteString??>
 				nameSubstituteString: "${field.control.params.nameSubstituteString}",
 			</#if>
+            <#if field.control.params.sortProp??>
+                sortProp: "${field.control.params.sortProp}",
+            </#if>
 			<#if field.control.params.changeItemsFireAction??>
 				changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
 			</#if>

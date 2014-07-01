@@ -61,6 +61,8 @@ LogicECM.module = LogicECM.module || {};
 
                 nameSubstituteString:"{cm:name}",
 
+                sortProp: "cm:name",
+
 	            selectedItemsNameSubstituteString: null,
 
 				additionalFilter: "",
@@ -421,6 +423,7 @@ LogicECM.module = LogicECM.module || {};
             {
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+                    "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	                "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
 

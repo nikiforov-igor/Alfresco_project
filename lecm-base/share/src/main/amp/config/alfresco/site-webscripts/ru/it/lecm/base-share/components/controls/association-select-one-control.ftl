@@ -79,6 +79,7 @@
                     oldValue: "${fieldValue}",
                     selectedValueNodeRef: "${fieldValue}",
                     nameSubstituteString: "${field.control.params.nameSubstituteString!'{cm:name}'}",
+                    sortProp: "${field.control.params.sortProp!'cm:name'}",
                     showCreateNewButton: ${showCreateNewButton?string},
     	            notSelectedOptionShow: ${notSelectedOptionShow?string},
     	            notSelectedText: "${notSelectedText?string}",

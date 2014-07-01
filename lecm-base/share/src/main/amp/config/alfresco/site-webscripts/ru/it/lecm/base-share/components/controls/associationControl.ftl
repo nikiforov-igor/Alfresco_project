@@ -40,6 +40,9 @@
 	    <#if field.control.params.nameSubstituteString??>
 	    	nameSubstituteString: "${field.control.params.nameSubstituteString}",
 	    </#if>
+        <#if field.control.params.sortProp??>
+            sortProp: "${field.control.params.sortProp}",
+        </#if>
 	    <#if field.control.params.substituteParent?? && field.control.params.substituteParent == "true">
 	    	substituteParent:"${form.arguments.itemId!""}",
 	    </#if>
