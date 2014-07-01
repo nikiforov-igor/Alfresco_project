@@ -117,13 +117,13 @@ public class DocumentTablePolicy extends BaseBean {
 					if (targetClass != null) {
 						QName asscoClassName = targetClass.getName();
 						if (asscoClassName != null && dictionaryService.isSubClass(asscoClassName, DocumentTableService.TYPE_TABLE_DATA)) {
-//							Предполагается, что здесь в любом случае надо создать
-//							NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
-							NodeRef rootFolder;
-							try {
-								rootFolder = documentTableService.createRootFolder(nodeRef);
-							} catch (WriteTransactionNeededException ex) {
-								throw new RuntimeException(ex);
+							NodeRef rootFolder = documentTableService.getRootFolder(nodeRef);
+							if (rootFolder == null) {
+								try {
+									rootFolder = documentTableService.createRootFolder(nodeRef);
+								} catch (WriteTransactionNeededException ex) {
+									throw new RuntimeException(ex);
+								}
 							}
 							String nodeName = assoc.getTitle(dictionaryService);
 							if (nodeName == null) {
