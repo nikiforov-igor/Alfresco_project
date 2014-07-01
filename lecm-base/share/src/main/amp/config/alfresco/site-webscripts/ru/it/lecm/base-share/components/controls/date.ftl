@@ -82,6 +82,13 @@
 <#elseif !multiValued>
         <#assign controlId = fieldHtmlId + "-cntrl">
 
+        <#assign currentValue = field.value?js_string>
+        <#if  !currentValue?has_content && !disabled > 
+             <#assign currentValue = field.control.params.defaultValue!""?js_string>
+             <#if currentValue == "now"> 
+                    <#assign currentValue = .now?string("yyyy-MM-dd")>
+             </#if>
+        </#if>     
         <script type="text/javascript">//<![CDATA[
         (function () {
             function init() {
@@ -93,8 +100,12 @@
             function createDatePicker() {
                 var picker = new LogicECM.DatePicker("${controlId}", "${fieldHtmlId}").setOptions(
                         {
-                                <#if form.mode == "view" || disabled>disabled: true,</#if>
-                            currentValue: "${field.value?js_string}",
+                            <#if form.mode == "view" || disabled>disabled: true,</#if>
+                            currentValue: "${currentValue}",
+                            <#if field.control.params.defaultScriptURL?has_content>
+                                defaultScript: '${field.control.params.defaultScriptURL?js_string}',
+                                destination: "${form.destination!""}",
+                            </#if>
                             showTime: ${showTime?string},
                             mandatory: ${field.mandatory?string},
                             minLimit: "${minLimit?string}",
