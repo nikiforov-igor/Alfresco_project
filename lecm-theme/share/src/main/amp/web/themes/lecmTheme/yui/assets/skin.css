@@ -98,7 +98,7 @@ text-decoration: none;
 border-width: 1px 0;
 border-style: solid;
 border-color: #ccc;
-margin: auto .25em;
+/*margin: auto .25em;*/
 }
 .yui-skin-lecmTheme .yui-button .first-child {
 border-width: 0 1px;

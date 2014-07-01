@@ -243,16 +243,17 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     }
                 );
 
-	            this.toolbarButtons["defaultActive"].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick);
+                this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
+                this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().cfg.setProperty("classname", "group-actions-dialog");
+                this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
+                this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
+
+                this.toolbarButtons["defaultActive"].searchButton = Alfresco.util.createYUIButton(this, "searchButton", this.onSearchClick);
 
 	            this.toolbarButtons["defaultActive"].extendSearchButton = Alfresco.util.createYUIButton(this, "extendSearchButton", this.onExSearchClick,
 			            {
 				            disabled: true
 			            });
-
-                this.toolbarButtons["defaultActive"].groupActionsButton.on("click", this.onCheckDocumentFinished.bind(this));
-                this.toolbarButtons["defaultActive"].groupActionsButton.getMenu().subscribe("hide", this.clearOperationsList.bind(this));
-                this.toolbarButtons["defaultActive"].groupActionsButton.set("disabled", true);
 
                 var exportButtonMenu  = [
                             { text: "Выгрузить все", value: "all", onclick: { fn: this.onExportClick.bind(this) } },
@@ -266,6 +267,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         disabled: false
                     }
                 );
+                this.toolbarButtons["defaultActive"].exportButton.getMenu().cfg.setProperty("classname", "group-actions-dialog");
 
             },
 

@@ -48,11 +48,13 @@
 	</div>
 </div>
 <div class="group-actions">
-    <span id="${id}-groupActionsButton" class="yui-button yui-push-button">
-       <span class="first-child">
-          <button type="button">${msg("button.group-actions")}</button>
-       </span>
-    </span>
+    <div class="actions">
+        <span id="${id}-groupActionsButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button">${msg("button.group-actions")}</button>
+           </span>
+        </span>
+    </div>
 </div>
 <div class="filters-block">
     <div id="${id}-columns-button-container" class="columns">
@@ -81,12 +83,13 @@
     </div>
 </div>
 <div class="group-actions">
-    <span id="${id}-exportButton" class="yui-button yui-push-button">
-       <span class="first-child">
-          <button type="button">${msg("columns.button.export")}</button>
-       </span>
-    </span>
+    <div class="actions">
+        <span id="${id}-exportButton" class="yui-button yui-push-button">
+           <span class="first-child">
+              <button type="button">${msg("columns.button.export")}</button>
+           </span>
+        </span>
+    </div>
 </div>
-
 
 </@comp.baseToolbar>
