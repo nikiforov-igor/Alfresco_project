@@ -67,7 +67,7 @@
                 </label2>
             </parameter>
         </field>
-        <field alfrescoType="lecm-orgstr:organization-unit" displayName="Подразделение-исполнитель" jrFldName="execUnits" order="30" queryFldName="{{execUnits}">
+        <field alfrescoType="lecm-orgstr:organization-unit" displayName="Подразделение-исполнитель" jrFldName="execUnits" order="30" queryFldName="#execUnits">
             <l18>
                 <item key="RU_RU" value="Подразделение-исполнитель"/>
             </l18>
@@ -84,7 +84,7 @@
             </parameter>
         </field>
         <field alfrescoType="d:boolean" order="40" displayName="Важные"
-               javaValueClass="java.lang.Boolean" jrFldName="importantOnly" queryFldName="{{importantOnly}}">
+               javaValueClass="java.lang.Boolean" jrFldName="importantOnly" queryFldName="#importantOnly">
             <l18>
                 <item key="RU_RU" value="Важные"/>
             </l18>

@@ -89,7 +89,7 @@
         </field>
 
         <!-- Период - это параметр для провеки сразу пары значений (начало и конец), 
-          так что выносим его для обработки провайдером - помечаем "{{ }}".
+          так что выносим его для обработки провайдером - помечаем "# }}".
           -->
         <field alfrescoType="d:date" order="1" displayName="Период"
             javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{lecm-errands:start-date}">
@@ -112,7 +112,7 @@
         <!-- Подразделение -->
         <field alfrescoType="lecm-orgstr:organization-unit"
             displayName="Подразделение исполнителя" jrFldName="Col_Param_Exec_OrgUnit" order="3" 
-            queryFldName="{{Executor.OrgUnit}}">
+            queryFldName="#Executor.OrgUnit">
             <l18>
                 <item key="RU_RU" value="Подразделение исполнителя"/>
             </l18>
@@ -124,7 +124,7 @@
         <field alfrescoType="d:text"
             displayName="Подразделение"
             javaValueClass="java.lang.String"
-            jrFldName="Col_NameTag" order="4" queryFldName="{{Col_NameTag}}">
+            jrFldName="Col_NameTag" order="4" queryFldName="#Col_NameTag">
             <l18>
                 <item key="RU_RU" value="Подразделение"/>
             </l18>
@@ -133,7 +133,7 @@
         <field alfrescoType="d:text"
             displayName="Выдано всего поручений за период"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Total" order="4" queryFldName="{{Col_Count_Total}}">
+            jrFldName="Col_Count_Total" order="4" queryFldName="#Col_Count_Total">
             <l18>
                 <item key="RU_RU" value="Выдано всего поручений за период"/>
             </l18>
@@ -142,7 +142,7 @@
         <field alfrescoType="d:text"
             displayName="Выдано важных поручений за период"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Total_Important" order="5" queryFldName="{{Col_Count_Total_Important}}">
+            jrFldName="Col_Count_Total_Important" order="5" queryFldName="#Col_Count_Total_Important">
             <l18>
                 <item key="RU_RU" value="Выдано важных поручений за период"/>
             </l18>
@@ -151,7 +151,7 @@
         <field alfrescoType="d:text"
             displayName="Закрыто всего поручений за период"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Closed" order="6" queryFldName="{{Col_Count_Closed}}">
+            jrFldName="Col_Count_Closed" order="6" queryFldName="#Col_Count_Closed">
             <l18>
                 <item key="RU_RU" value="Закрыто всего поручений за период"/>
             </l18>
@@ -160,7 +160,7 @@
         <field alfrescoType="d:text"
             displayName="Закрытых важных поручений за период"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Closed_important" order="7" queryFldName="{{Col_Count_Closed_important}}">
+            jrFldName="Col_Count_Closed_important" order="7" queryFldName="#Col_Count_Closed_important">
             <l18>
                 <item key="RU_RU" value="Закрытых важных поручений за период"/>
             </l18>
@@ -169,7 +169,7 @@
         <field alfrescoType="d:text"
             displayName="Кол-во исполнений в срок"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Intime" order="8" queryFldName="{{Col_Count_Intime}}">
+            jrFldName="Col_Count_Intime" order="8" queryFldName="#Col_Count_Intime">
             <l18>
                 <item key="RU_RU" value="Кол-во исполнений в срок"/>
             </l18>
@@ -178,7 +178,7 @@
         <field alfrescoType="d:text"
             displayName="Кол-во поручений, отклонённых руководителем"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Boss_Refused" order="9" queryFldName="{{Col_Count_Boss_Refused}}">
+            jrFldName="Col_Count_Boss_Refused" order="9" queryFldName="#Col_Count_Boss_Refused">
             <l18>
                 <item key="RU_RU" value="Кол-во поручений, отклонённых руководителем"/>
             </l18>
@@ -187,7 +187,7 @@
         <field alfrescoType="d:text"
             displayName="Кол-во важных поручений, неисполненных в срок"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Important_Refused" order="10" queryFldName="{{Col_Count_Important_Refused}}">
+            jrFldName="Col_Count_Important_Refused" order="10" queryFldName="#Col_Count_Important_Refused">
             <l18>
                 <item key="RU_RU" value="Кол-во важных поручений, неисполненных в срок"/>
             </l18>
@@ -196,7 +196,7 @@
         <field alfrescoType="d:text"
             displayName="Среднее время исполнения поручения"
             javaValueClass="java.lang.Float"
-            jrFldName="Col_Avg_Execution.Value" order="11" queryFldName="{{Col_Avg_Execution.Value}}">
+            jrFldName="Col_Avg_Execution.Value" order="11" queryFldName="#Col_Avg_Execution.Value">
             <l18>
                 <item key="RU_RU" value="Среднее время исполнения поручения"/>
             </l18>

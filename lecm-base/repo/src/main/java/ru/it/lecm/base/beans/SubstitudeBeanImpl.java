@@ -28,9 +28,6 @@ import java.util.regex.Pattern;
  *         Time: 11:44
  */
 public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
-    final private static String XSYNTAX_MARKER_OPEN = "{{";
-    final private static String XSYNTAX_MARKER_CLOSE = "}}";
-
     enum PseudoProps {
         AUTHOR {
             @Override
@@ -339,7 +336,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     }
 
     private boolean isExtendedSyntax(String fmt) {
-        return (fmt != null) && fmt.contains(XSYNTAX_MARKER_OPEN) && fmt.contains(XSYNTAX_MARKER_CLOSE);
+        return (fmt != null) && fmt.startsWith(OPEN_SUBSTITUDE_SYMBOL + "@");
     }
 
     /**
@@ -349,7 +346,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * нему отсавшуюся часть выражения.
      */
     private String extendedFormatNodeTitle(final NodeRef node, String fmt) {
-        String begAuthorRef = "\\{\\{@AUTHOR.*?}}";
+        String begAuthorRef = "\\{@AUTHOR.*?}";
         Pattern authorPattern = Pattern.compile(begAuthorRef);
         //создаем Matcher
         Matcher m = authorPattern.matcher(fmt);
@@ -361,11 +358,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 authorNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
             }
             String groupText = m.group();
-            int startPos = "{{@AUTHOR".length();
+            int startPos = "{@AUTHOR".length();
             if (groupText.charAt(startPos) == '/') {
                 startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
             }
-            final String shortFmt = "{" + groupText.substring(startPos, groupText.length() - 1);
+            final String shortFmt = "{" + groupText.substring(startPos, groupText.length());
             if (shortFmt.equals("{}")) {
                 fmt = fmt.replace(groupText, getObjectDescription(authorNode));
             } else {

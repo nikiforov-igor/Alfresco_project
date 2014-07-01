@@ -229,7 +229,7 @@ public class ReportForm extends FormUIGet {
                 }
                 String columnExpression = column.getExpression();
                 if (columnExpression != null && !columnExpression.isEmpty()) {
-                    if (!columnExpression.startsWith("{")) {// не вычисляемое значение, значит либо константа, либо список значений
+                    if (!columnExpression.startsWith("{") && !columnExpression.startsWith("#")) {// не вычисляемое значение, значит либо константа, либо список значений
                         if (!columnExpression.contains(",")) { // константа
                             allowedValues = new String[1];
                             allowedValues[0] = columnExpression;

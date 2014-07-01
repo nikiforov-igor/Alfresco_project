@@ -128,7 +128,7 @@
         </field>
 
         <field alfrescoType="d:boolean" order="6" displayName="Только актуальные"
-               javaValueClass="java.lang.Boolean" jrFldName="contractActualOnly" queryFldName="{{contractActualOnly}}">
+               javaValueClass="java.lang.Boolean" jrFldName="contractActualOnly" queryFldName="#contractActualOnly">
             <l18>
                 <item key="RU_RU" value="Только актуальные"/>
             </l18>
@@ -165,6 +165,6 @@
         <field jrFldName="col_DateEnd" queryFldName="{lecm-contract:endDate}" displayName="Дата окончания действия договора"
                javaValueClass="java.util.Date"/>
 
-		<field jrFldName="col_Executor" queryFldName="{{@AUTHOR/lecm-orgstr:employee-short-name}}" displayName="Исполнитель" />
+		<field jrFldName="col_Executor" queryFldName="{@AUTHOR/lecm-orgstr:employee-short-name}" displayName="Исполнитель" />
 	</fields>
 </ds.config>

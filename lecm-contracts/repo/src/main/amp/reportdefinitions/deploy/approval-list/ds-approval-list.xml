@@ -122,7 +122,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
 
     <fields>
         <field order="1" alfrescoType="d:text" javaValueClass="java.lang.String"
-               jrFldName="ID" queryFldName="{{ID}}">
+               jrFldName="ID" queryFldName="#ID">
             displayName="ID документа"
             <l18>
                 <item key="RU_RU" value="ID документа"/>
@@ -196,7 +196,7 @@ http://127.0.0.1:8080/alfresco/service/lecm/report/approval-list?nodeRef=workspa
                displayName="Дата согласования Сотрудником" javaValueClass="date"/>
 
         <!-- Для Сотрудника-Согласующего: ФИО -->
-        <field queryFldName="{{ApproveEmployee} is {lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}}"
+        <field queryFldName="{lecm-workflow-result:workflow-result-list-workflow-result-item-assoc/lecm-workflow-result:workflow-result-item-employee-assoc/lecm-orgstr:employee-short-name}"
                jrFldName="col_Item.Employee"
                displayName="Согласующий"/>
 

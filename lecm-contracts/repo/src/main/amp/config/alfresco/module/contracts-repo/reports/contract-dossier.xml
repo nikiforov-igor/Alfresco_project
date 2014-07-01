@@ -18,7 +18,7 @@
                     <item name="cm:Инициатор" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Инициатор]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{{@AUTHOR/lecm-orgstr:employee-short-name}}]]></property>
+                            <![CDATA[{@AUTHOR/lecm-orgstr:employee-short-name}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Initiator]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <assocs>
@@ -29,7 +29,7 @@
                     <item name="cm:Инициатор.Телефон" type="lecm-rpeditor:reportDataColumn">
                         <property name="cm:name"><![CDATA[Инициатор.Телефон]]></property>
                         <property name="lecm-rpeditor:dataColumnExpression">
-                            <![CDATA[{{@AUTHOR/lecm-orgstr:employee-phone}}]]></property>
+                            <![CDATA[{@AUTHOR/lecm-orgstr:employee-phone}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Initiator.Phone]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
                         <assocs>

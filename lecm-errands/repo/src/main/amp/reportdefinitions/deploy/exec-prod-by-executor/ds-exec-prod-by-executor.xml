@@ -94,10 +94,10 @@
         </field>
 
         <!-- Период - это параметр для провеки сразу пары значений (начало и конец), 
-          так что выносим его для обработки провайдером - помечаем "{{ }}".
+          так что выносим его для обработки провайдером - помечаем "# ".
           -->
         <field alfrescoType="d:date" order="1" displayName="Период"
-            javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="{{Col_Period}}">
+            javaValueClass="java.util.Date" jrFldName="Col_Period" queryFldName="#Col_Period">
             <l18>
                 <item key="RU_RU" value="Период"/>
             </l18>
@@ -137,7 +137,7 @@
         <!-- Подразделение -->
         <field alfrescoType="lecm-orgstr:organization-unit"
             displayName="Подразделение исполнителя" jrFldName="Col_Param_Exec_OrgUnit" order="3" 
-            queryFldName="{{Executor.OrgUnit}}">
+            queryFldName="#Executor.OrgUnit">
             <l18>
                 <item key="RU_RU" value="Подразделение исполнителя"/>
             </l18>
@@ -151,7 +151,7 @@
         <field alfrescoType="d:text"
             displayName="Сотрудник или подразделение"
             javaValueClass="java.lang.String"
-            jrFldName="Col_NameTag" order="4" queryFldName="{{Col_NameTag}}">
+            jrFldName="Col_NameTag" order="4" queryFldName="#Col_NameTag">
             <l18>
                 <item key="RU_RU" value="Сотрудник или подразделение"/>
             </l18>
@@ -160,7 +160,7 @@
         <field alfrescoType="d:date"
             displayName="Дата/Время"
             javaValueClass="java.sql.Timestamp"
-            jrFldName="Col_DateTime" order="4" queryFldName="{{Col_DateTime}}">
+            jrFldName="Col_DateTime" order="4" queryFldName="#Col_DateTime">
             <l18>
                 <item key="RU_RU" value="Дата/Время"/>
             </l18>
@@ -169,7 +169,7 @@
         <field alfrescoType="d:text"
             displayName="Выдано важных поручений за период"
             javaValueClass="java.lang.Integer"
-            jrFldName="Col_Count_Total_Important" order="5" queryFldName="{{Col_Count_Total_Important}}">
+            jrFldName="Col_Count_Total_Important" order="5" queryFldName="#Col_Count_Total_Important">
             <l18>
                 <item key="RU_RU" value="Выдано важных поручений за период"/>
             </l18>
@@ -178,7 +178,7 @@
         <field alfrescoType="d:text"
             displayName="Среднее время исполнения поручения"
             javaValueClass="java.lang.Float"
-            jrFldName="Col_Avg_Execution.Value" order="6" queryFldName="{{Col_Avg_Execution.Value}}">
+            jrFldName="Col_Avg_Execution.Value" order="6" queryFldName="#Col_Avg_Execution.Value">
             <l18>
                 <item key="RU_RU" value="Среднее время исполнения поручения"/>
             </l18>
@@ -187,7 +187,7 @@
         <field alfrescoType="d:text"
             displayName="Единицы измерения среднего времени исполнения"
             javaValueClass="java.lang.String"
-            jrFldName="Col_Avg_Execution.Units" order="7" queryFldName="{{Col_Avg_Execution.Units}}">
+            jrFldName="Col_Avg_Execution.Units" order="7" queryFldName="#Col_Avg_Execution.Units">
             <l18>
                 <item key="RU_RU" value="Единицы измерения среднего времени исполнения"/>
             </l18>
