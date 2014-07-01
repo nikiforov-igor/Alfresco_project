@@ -107,15 +107,15 @@
 	}
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
-		    <#if params.jsDependencies??>
-				<#list params.jsDependencies?split(",") as js>
-					'${js}',
-				</#list>
-		    </#if>
 	        'scripts/lecm-base/components/advsearch.js',
 	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
-            'scripts/documents/tables/lecm-document-table.js'
+            'scripts/documents/tables/lecm-document-table.js',
+	        <#if params.jsDependencies??>
+		        <#list params.jsDependencies?split(",") as js>
+			        '${js}',
+		        </#list>
+	        </#if>
 		], drawForm);
     }
 	YAHOO.util.Event.onDOMReady(init);
