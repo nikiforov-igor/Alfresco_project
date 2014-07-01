@@ -35,7 +35,7 @@
 		  p:labels-ref="ord.models.labels"/>
 
 	<bean id="ord.dictionary.bootstrap" parent="lecmDictionaryBootstrap"
-		  depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap,
+		  depends-on="ru.it.lecm.business-journal.business-journal-repo.businessJournalDictionaryBootstrap,
                       ord.document.models.bootstrap,
 					  businessJournalLogEventsPolicy,
                       documents.LogicEcmConnectionTypesBootstrap,
