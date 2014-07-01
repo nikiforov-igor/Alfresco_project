@@ -154,7 +154,7 @@
 		<div class="container">
 			<div class="value-div">
 				<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
-				<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable"></span>
+				<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable">${field.value?html}</span>
 			</div>
 		</div>
 	</div>
