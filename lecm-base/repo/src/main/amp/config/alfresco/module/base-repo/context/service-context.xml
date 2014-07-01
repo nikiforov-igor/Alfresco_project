@@ -193,7 +193,21 @@
 		<property name="lecmModelsService" ref="lecmModelsService"/>
 	</bean>
 
-	<bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="logicEcmBaseAspectsBootstrap" parent="dictionaryModelBootstrap"
+	      depends-on="dictionaryBootstrap">
+		<property name="models">
+			<list>
+				<value>alfresco/module/base-repo/models/lecm-base-aspects-model.xml</value>
+			</list>
+		</property>
+		<property name="labels">
+			<list>
+				<value>alfresco/module/base-repo/messages/lecm-base-aspects-model</value>
+			</list>
+		</property>
+	</bean>
+
+    <bean id="links.LogicEcmContractsBootstrap" parent="dictionaryModelBootstrap"
 	      depends-on="dictionaryBootstrap">
 		<property name="models">
 			<list>
