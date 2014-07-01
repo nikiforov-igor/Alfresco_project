@@ -93,6 +93,11 @@
     </#if>
 </#if>
 
+<#assign endpointMany = field.endpointMany>
+<#if field.control.params.endpointMany??>
+	<#assign endpointMany = (field.control.params.endpointMany == "true")>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
     LogicECM.CurrentModules = LogicECM.CurrentModules || {};
@@ -127,7 +132,7 @@
     <#if (allowedScript?? && allowedScript != "")>
         allowedNodesScript: "${allowedScript}",
     </#if>
-        multipleSelectMode: ${field.endpointMany?string},
+        multipleSelectMode: ${endpointMany?string},
         itemType: "${field.control.params.itemType!field.endpointType}",
         currentValue: "${field.value!''}",
         itemFamily: "node",
@@ -164,7 +169,7 @@
         rootLocation: "${field.control.params.startLocation}",
     </#if>
         mandatory: ${isFieldMandatory?string},
-        multipleSelectMode: ${field.endpointMany?string},
+        multipleSelectMode: ${endpointMany?string},
 
     <#if field.control.params.nameSubstituteString??>
         nameSubstituteString: "${field.control.params.nameSubstituteString}",
@@ -255,7 +260,7 @@
         <div class="value-div">
             <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
             <input id="${controlId}-autocomplete-input" name="${field.name}-autocomplete-input" type="text" class="mandatory-highlightable"/>
-            <div id="${controlId}-currentValueDisplay" class="container control-selected-values <#if !field.endpointMany>hidden1</#if>"></div>
+            <div id="${controlId}-currentValueDisplay" class="container control-selected-values <#if !endpointMany>hidden1</#if>"></div>
         </div>
     </div>
     <div id="${controlId}-autocomplete-container"></div>
