@@ -167,6 +167,12 @@ span.wrapper-title {
     padding: 0;
 }
 
+#yui-main .datalist-toolbar .header-bar {
+    min-height: 30px;
+    height: auto;
+    overflow: hidden;
+}
+
 #alf-filters {
   margin-left: -5px;
 }

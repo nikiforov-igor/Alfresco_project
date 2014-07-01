@@ -96,6 +96,7 @@ showExSeacrhBtn(необязательный) - добавить(показыв�
 			</div>
         </div>
 		</#if>
+        <div class="clear"></div>
 	</div>
 </div>
 </#macro>
