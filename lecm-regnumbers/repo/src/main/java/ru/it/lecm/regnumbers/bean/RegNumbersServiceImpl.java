@@ -323,7 +323,13 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     regDateString = dFormat.format(regDate);
                 }
 
-                businessJournalService.log(orgstructureService.getEmployeeLogin(currentEmployee), documentNode, "REGISTRATION", "#initiator зарегистрировал(а) документ " + wrapperLink(documentNode, regNumber + " от " + regDateString, DOCUMENT_LINK_URL), null);
+                String text;
+                if (isProjectRegister) {
+                    text = "#initiator зарегистрировал(а) проект документа ";
+                } else {
+                    text = "#initiator зарегистрировал(а) документ ";
+                }
+                businessJournalService.log(orgstructureService.getEmployeeLogin(currentEmployee), documentNode, "REGISTRATION", text + wrapperLink(documentNode, regNumber + " от " + regDateString, DOCUMENT_LINK_URL), null);
             }
         }
 	}
