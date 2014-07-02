@@ -21,10 +21,6 @@
    </#if>
 </#if>
 
-<#if field.control.params.defaultValue?has_content>
-	<#assign fieldValue=field.control.params.defaultValue>
-</#if>
-
 <#if form.mode == "view">
 	<div class="control selectone viewmode">
 		<div class="label-div">
