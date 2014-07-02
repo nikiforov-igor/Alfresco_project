@@ -194,6 +194,13 @@ public interface LecmPermissionService {
 	void revokeDynamicRole( String roleCode, NodeRef nodeRef, String employeeId);
 
 	/**
+	 * Зачистить динамическую роль в документе/папке
+	 * @param roleCode id Динамической Роли
+	 * @param nodeRef документа или папки
+	 */
+	void revokeDynamicRole(String roleCode, NodeRef nodeRef);
+
+	/**
 	 * Перепрописать Статические Роли на папку (документ).
 	 * @param nodeRef id статусной-папки
 	 * @param accessMap карта нарезки прав:

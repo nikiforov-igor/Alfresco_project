@@ -3,13 +3,18 @@ package ru.it.lecm.security.script;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.AccessStatus;
 import org.alfresco.service.cmr.security.AuthenticationService;
+import org.alfresco.service.cmr.security.AuthorityType;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: dbashmakov
@@ -91,6 +96,10 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
 
     public void revokeDynamicRole(ScriptNode document, ScriptNode employee, String roleCode) {
         lecmPermissionService.revokeDynamicRole(roleCode, document.getNodeRef(), employee.getNodeRef().getId());
+    }
+
+	public void revokeDynamicRole(ScriptNode document, String roleCode) {
+		lecmPermissionService.revokeDynamicRole(roleCode, document.getNodeRef());
     }
 
     public void grantDynamicRole(ScriptNode document, ScriptNode employee, String roleCode, String permission) {

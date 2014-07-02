@@ -494,6 +494,20 @@ public class LecmPermissionServiceImpl
 	}
 
 	@Override
+	public void revokeDynamicRole(String roleCode, NodeRef nodeRef) {
+		String authority = authorityService.getName(AuthorityType.GROUP, String.format("%s%s%s%s", Types.PFX_LECM, Types.SGKind.SG_BRME.getSuffix(), roleCode, Types.SFX_PRIV4USER));
+
+		final Set<AccessPermission> status = permissionService.getAllSetPermissions(nodeRef);
+		if (status != null) {
+			for (AccessPermission permission : status) {
+				if (permission.getAuthority().startsWith(authority)) {
+					permissionService.deletePermission(nodeRef, permission.getAuthority(), permission.getPermission());
+				}
+			}
+		}
+	}
+
+	@Override
 	public void grantAccess(LecmPermissionGroup permissionGroup, NodeRef nodeRef, NodeRef employeeRef) {
 		String userLogin = getEmployeeLogin(employeeRef);
 		final SGPosition posUserSpec = Types.SGKind.getSGSpecialUserRole(employeeRef.getId(), permissionGroup, nodeRef, userLogin);
