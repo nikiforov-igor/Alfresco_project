@@ -467,6 +467,10 @@
                     <title>Hidden property for List roles</title>
                     <type>d:text</type>
                 </property>
+                <property name="lecm-orgstr:employee-person-login">
+                    <title>Hidden property for Person Login</title>
+                    <type>d:text</type>
+                </property>
                 <property name="lecm-orgstr:employee-short-name">
                     <title>Short Name</title>
                     <type>d:text</type>

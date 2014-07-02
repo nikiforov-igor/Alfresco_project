@@ -65,6 +65,7 @@ public interface OrgstructureBean {
 	QName PROP_EMPLOYEE_NUMBER = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-number");
 	QName PROP_EMPLOYEE_PHONE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-phone");
 	QName PROP_EMPLOYEE_SEX = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-sex");
+	QName PROP_EMPLOYEE_PERSON_LOGIN = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-person-login");
 
 	QName PROP_EMPLOYEE_FIRST_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-first-name");
 	QName PROP_EMPLOYEE_MIDDLE_NAME = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-middle-name");
