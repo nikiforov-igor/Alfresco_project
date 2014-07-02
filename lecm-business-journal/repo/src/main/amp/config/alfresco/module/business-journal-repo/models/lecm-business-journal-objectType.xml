@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
+<items updateMode="CreateOrUpdate">
     <item name="lecm-dic:Тип объекта" type="lecm-dic:dictionary">
         <property name="cm:name">Тип объекта</property>
         <property name="lecm-dic:description">Справочник, содержащий перечень объектов, действия с которым подлежат записи в бизнес-журнал</property>
