@@ -269,7 +269,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
 			return;
 		}
 		NodeRef templateDictionary = getTemplateNodeByCode(dictionaryTemplateCode);
-		if (templateDictionary != null && documentNode != null) {
+		if (documentNode != null) {
             QName regAspectName = isProjectRegister ? DocumentService.ASPECT_HAS_REG_PROJECT_DATA : DocumentService.ASPECT_HAS_REG_DOCUMENT_DATA;
             QName propNumber = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_NUMBER : DocumentService.PROP_REG_DATA_DOC_NUMBER;
             QName propDate = isProjectRegister ? DocumentService.PROP_REG_DATA_PROJECT_DATE : DocumentService.PROP_REG_DATA_DOC_DATE;
@@ -297,7 +297,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     if (repeatedDocument != null) {
                         regNumber = getRepeatedNumber(documentNode);
                     } else {
-                        regNumber = getNumber(documentNode, templateDictionary);
+                        regNumber = templateDictionary != null ? getNumber(documentNode, templateDictionary) : getNumber(documentNode, dictionaryTemplateCode);
                     }
                 } while (!isNumberUnique(regNumber, documentType));
 
