@@ -22,6 +22,7 @@
 	                    bubblingLabel: "documents-last",
 	                    attributeForOpen: "lecm-document:present-string",
                         dataSource: "/lecm/documents/last/datasource",
+                        overrideSortingWith: false,
                         datagridMeta: {
                             itemType: "lecm-document:base",
                             useChildQuery: false,
