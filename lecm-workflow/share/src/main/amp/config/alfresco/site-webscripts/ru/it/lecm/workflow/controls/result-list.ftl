@@ -45,7 +45,7 @@
                             oData = YAHOO.lang.isArray(oData) ? oData : [oData];
                             for (i = 0, ii = oData.length, data; i < ii; i++) {
                                 data = oData[i];
-
+                                var columnContent = "";
                                 switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
                                     case "lecmApprovalResult:approvalResultItemCommentAssoc":
                                         columnContent = YAHOO.lang.substitute(resultItemCommentTemplate, {
@@ -56,11 +56,19 @@
                                             resContext: Alfresco.constants.URL_RESCONTEXT,
                                             displayValue: data.displayValue
                                         });
-
-                                        break;
                                     default:
                                         break;
                                 }
+
+                                switch (datalistColumn.dataType.toLowerCase()) {
+                                    case "datetime":
+                                        columnContent += Alfresco.util.formatDate(Alfresco.util.fromISO8601(data.value), grid.msg("date-format.defaultDateOnly"));
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+
                                 if (columnContent) {
                                     if (grid.options.attributeForShow != null && datalistColumn.name == grid.options.attributeForShow) {
                                         html += YAHOO.lang.substitute(attributeForShowTemplate, {
