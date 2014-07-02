@@ -1,6 +1,5 @@
 package ru.it.lecm.workflow.policies;
 
-import java.util.List;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
@@ -20,6 +19,8 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.lang.StringUtils;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
+
+import java.util.List;
 
 /**
  *
@@ -55,16 +56,17 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 			String validName = FileNameValidator.getValidFileName(newName);
 			nodeService.setProperty(routeRef, ContentModel.PROP_NAME, validName);
 			boolean hasTempAspect = nodeService.hasAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
-			List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
-			int assigneesCount = 0;
-			for (ChildAssociationRef child : children) {
-				NodeRef assigneesListRef = child.getChildRef();
-				assigneesCount += nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL).size();
-			}
-			if (hasTempAspect && assigneesCount > 0) {
-				nodeService.removeAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
-			}
-		}
+            if (hasTempAspect) {
+                List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
+                for (ChildAssociationRef child : children) {
+                    NodeRef assigneesListRef = child.getChildRef();
+                    if (!nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL).isEmpty()) {
+                        nodeService.removeAspect(routeRef, LecmWorkflowModel.ASPECT_TEMP);
+                        break;  //проверять остальные списки не требуется
+                    }
+                }
+            }
+        }
 	}
 
 	@Override
