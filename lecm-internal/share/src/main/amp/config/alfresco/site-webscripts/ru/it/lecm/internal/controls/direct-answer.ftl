@@ -11,25 +11,6 @@
 
 <script type="text/javascript">//<![CDATA[
 
-/**
- * LogicECM root namespace.
- *
- * @namespace LogicECM
- */
-// Ensure LogicECM root object exists
-if (typeof LogicECM == "undefined" || !LogicECM) {
-    var LogicECM = {};
-}
-
-/**
- * LogicECM top-level module namespace.
- *
- * @namespace LogicECM
- * @class LogicECM.module
- */
-LogicECM.module = LogicECM.module || {};
-
-
 (function () {
 
     /**
@@ -128,50 +109,6 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
-/*                    var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-	                var templateRequestParams = {
-		                itemKind: "type",
-		                destination: this.destination,
-		                itemId: "lecm-internal:document",
-		                mode: "create",
-		                submitType: "json",
-		                formId: "workflow-form",
-		                args: this.initFields,
-		                showCancelButton: true
-	                };
-
-                    var me = this;
-                    LogicECM.CurrentModules = {};
-                    LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
-                        width: "84em",
-                        templateUrl: templateUrl,
-	                    templateRequestParams: templateRequestParams,
-                        actionUrl: null,
-                        destroyOnHide: true,
-                        doBeforeDialogShow: {
-                            fn: function (p_form, p_dialog) {
-                                var contId = p_dialog.id + "-form-container";
-                                var dialogName = this.msg("logicecm.workflow.runAction.label", "Ответ");
-                                Alfresco.util.populateHTML(
-                                        [contId + "_h", dialogName]
-                                );
-
-	                            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-
-	                            Dom.addClass(contId, "metadata-form-edit");
-                                Dom.addClass(contId, "lecm-internal_document");
-                                me.doubleClickLock = false;
-                            }
-                        },
-                        onSuccess: {
-                            fn: function (response) {
-                                me.persistedObject = response.json.persistedObject;
-                                me.saveDocumentAnswer();
-                                Dom.get("${htmlid}-form-submit").click();
-                            },
-                            scope: this
-                        }
-                    }).show();*/
                 },
                 onFirst: function onFirst_function() {
                     this.clearAnswer();

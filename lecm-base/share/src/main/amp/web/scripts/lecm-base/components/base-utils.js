@@ -79,7 +79,7 @@ LogicECM.module.Base.Util = {
             });
         }
         loader.onSuccess = onSuccessCallback;
-        loader.insert();
+        loader.insert(null);
     },
 
     /*
