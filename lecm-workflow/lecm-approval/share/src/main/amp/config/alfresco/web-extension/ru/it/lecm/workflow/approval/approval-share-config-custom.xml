@@ -233,7 +233,10 @@
 					<show id="lecmApprovalResult:approvalResultItemCommentAssoc"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmApprovalResult:approvalResultItemCommentAssoc">
+					<field id="lecmApprovalResult:approvalResultItemDecision">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+                    <field id="lecmApprovalResult:approvalResultItemCommentAssoc">
 						<control template="/ru/it/lecm/base-share/components/controls/view-file-link.ftl"/>
 					</field>
 				</appearance>

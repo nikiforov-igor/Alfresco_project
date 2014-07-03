@@ -490,6 +490,14 @@
 }
 /* control with-grid - end */
 
+/* control view-file-link - start */
+.control.view-file-link .value-div a img {
+    vertical-align: text-bottom;
+    margin-right: 4px;
+}
+/* control view-file-link - end*/
+
+
 /* Datepicker - start */
 .datepicker {
      position: absolute;
