@@ -106,7 +106,8 @@
 /* Common styles - end */
 
 /* Оформление окон - start */
-.yui-skin-lecmTheme .yui-panel {
+.yui-skin-lecmTheme .yui-panel,
+.yui-skin-lecmTheme .dijitDialog {
     min-width: 36em;
     color: #333;
     background: #eee;
@@ -115,7 +116,8 @@
     box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.3);
     /*overflow: hidden;*/
 }
-.yui-skin-lecmTheme .yui-panel a.container-close {
+.yui-skin-lecmTheme .yui-panel a.container-close,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogCloseIcon {
     width: 16px;
     height: 16px;
     top: 7px;
@@ -124,27 +126,40 @@
     background: url("/share/res/images/lecm-base/components/window_close_16.png") no-repeat;
     opacity: .5;
 }
-.yui-skin-lecmTheme .yui-panel a.container-close:hover {
+.yui-skin-lecmTheme .yui-panel a.container-close:hover,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogCloseIcon:hover {
     opacity: .8;
 }
-.yui-skin-lecmTheme .yui-panel a.container-close:active {
+.yui-skin-lecmTheme .yui-panel a.container-close:active,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogCloseIcon:active {
     opacity: 1;
 }
-.yui-skin-lecmTheme .yui-panel .bd {
+.yui-skin-lecmTheme .yui-panel .bd,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogPaneContent {
     background: #fff;
 }
 .yui-skin-lecmTheme .yui-panel .bd div.form-fields {
     padding: 10px;
 }
+.yui-skin-lecmTheme .dijitDialog .dijitDialogPaneContent {
+    border-top: none;
+}
+.yui-skin-lecmTheme .dijitDialog .dijitDialogPaneContent textarea {
+    width: 100% !important; /*чтобы перекрыть инлайновые стили альфрески*/
+    border: 1px solid #ccc;
+}
 .yui-skin-lecmTheme .yui-panel .hd,
 .yui-skin-lecmTheme .yui-panel .form-buttons,
 .yui-skin-lecmTheme .yui-panel .bdft,
-.yui-skin-lecmTheme .yui-panel .ft {
+.yui-skin-lecmTheme .yui-panel .ft,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogTitleBar,
+.yui-skin-lecmTheme .dijitDialog .footer {
     background: #bae6f4;
     border: none;
     margin: 0;
 }
-.yui-skin-lecmTheme .yui-panel .hd {
+.yui-skin-lecmTheme .yui-panel .hd,
+.yui-skin-lecmTheme .dijitDialog .dijitDialogTitleBar {
     height: 30px;
     line-height: 30px;
     font-size: 16px;
@@ -155,9 +170,16 @@
     overflow: hidden;
     white-space: nowrap;
 }
+.yui-skin-lecmTheme .dijitDialog .dijitDialogTitleBar .dijitDialogTitle {
+    line-height: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #076a8d;
+}
 .yui-skin-lecmTheme .yui-panel .bd div.form-buttons,
 .yui-skin-lecmTheme .yui-panel .bdft,
-.yui-skin-lecmTheme .yui-panel .ft {
+.yui-skin-lecmTheme .yui-panel .ft,
+.yui-skin-lecmTheme .dijitDialog .footer {
     height: 36px;
     line-height: 36px;
     padding: 0 7px;
@@ -165,7 +187,8 @@
 }
 .yui-skin-lecmTheme .yui-panel .form-buttons span.yui-button,
 .yui-skin-lecmTheme .yui-panel .bdft span.yui-button,
-.yui-skin-lecmTheme .yui-panel .ft span.yui-button {
+.yui-skin-lecmTheme .yui-panel .ft span.yui-button,
+.yui-skin-lecmTheme .dijitDialog .footer span.dijitButton {
     margin-top: 5px;
 }
 .yui-skin-lecmTheme .yui-panel .form-buttons button,
@@ -176,6 +199,13 @@
 }
 .yui-skin-lecmTheme .yui-panel .bd .bdft .align-right {
     text-align: right;
+}
+.yui-skin-lecmTheme .dijitDialog .footer span.dijitButton {
+    background: #fff;
+}
+.yui-skin-lecmTheme .dijitDialog .footer span.dijitButton .dijitButtonNode {
+    border: 1px solid #ccc;
+    font-size: 13px;
 }
 
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li {
