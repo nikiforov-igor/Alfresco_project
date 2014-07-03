@@ -99,6 +99,15 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
             String signers = "";
             int signersCount = 0;
             int approversCount = 0;
+            NodeRef ownerRef = nodeService.getTargetAssocs(routeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER).get(0).getTargetRef();
+            QName ownerTypeQName = nodeService.getType(ownerRef);
+            String description = "";
+            if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(ownerTypeQName)) {
+                description = "Личный маршрут\n";
+            } else if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.isMatch(ownerTypeQName)) {
+                String orgName = (String) nodeService.getProperty(ownerRef, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+                description =  String.format("Маршрут подразделения \"%s\"\n", orgName);
+            }
             List<ChildAssociationRef> listsRefs = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
             for (ChildAssociationRef list : listsRefs) {
                 NodeRef assigneesListRef = list.getChildRef();
@@ -134,7 +143,7 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
             } else if (signersCount > 0) {
                 signers = "Подписант: " + signers;
             }
-            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, approvers + signers);
+            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, description + approvers + signers);
         }
     }
 
