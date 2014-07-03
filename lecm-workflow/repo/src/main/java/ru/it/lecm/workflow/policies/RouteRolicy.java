@@ -1,7 +1,7 @@
 package ru.it.lecm.workflow.policies;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.node.NodeServicePolicies.OnCreateAssociationPolicy;
+import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.node.NodeServicePolicies.OnCreateChildAssociationPolicy;
 import org.alfresco.repo.node.NodeServicePolicies.OnUpdateNodePolicy;
 import org.alfresco.repo.policy.Behaviour;
@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author vmalygin
  */
-public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociationPolicy, OnCreateAssociationPolicy {
+public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociationPolicy, NodeServicePolicies.OnDeleteChildAssociationPolicy {
 
 	private PolicyComponent policyComponent;
 	private NodeService nodeService;
@@ -43,7 +43,8 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 		PropertyCheck.mandatory(this, "policyComponent", policyComponent);
 		policyComponent.bindClassBehaviour(OnUpdateNodePolicy.QNAME, LecmWorkflowModel.TYPE_ROUTE, new JavaBehaviour(this, "onUpdateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 		policyComponent.bindAssociationBehaviour(OnCreateChildAssociationPolicy.QNAME, LecmWorkflowModel.TYPE_ROUTE, ContentModel.ASSOC_CONTAINS, new JavaBehaviour(this, "onCreateChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindAssociationBehaviour(OnCreateAssociationPolicy.QNAME, LecmWorkflowModel.TYPE_ROUTE, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(OnCreateChildAssociationPolicy.QNAME, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, new JavaBehaviour(this, "onCreateAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+		policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteChildAssociationPolicy.QNAME, LecmWorkflowModel.TYPE_WORKFLOW_ASSIGNEES_LIST, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, new JavaBehaviour(this, "onDeleteChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 	}
 
 	@Override
@@ -81,16 +82,60 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 		}
 	}
 
-	@Override
-	public void onCreateAssociation(AssociationRef nodeAssocRef) {
-		NodeRef routeRef = nodeAssocRef.getSourceRef();
-		NodeRef ownerRef = nodeAssocRef.getTargetRef();
-		QName ownerTypeQName = nodeService.getType(ownerRef);
-		if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(ownerTypeQName)) {
-			nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, "личный маршрут");
-		} else if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.isMatch(ownerTypeQName)) {
-			String orgName = (String) nodeService.getProperty(ownerRef, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
-			nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, String.format("маршрут подразделения \"%s\"", orgName));
-		}
+	public void onCreateAssociation(ChildAssociationRef childAssocRef, boolean isNewNode) {
+        updateRouteDescription(childAssocRef);
 	}
+
+    @Override
+    public void onDeleteChildAssociation(ChildAssociationRef childAssocRef) {
+        updateRouteDescription(childAssocRef);
+    }
+
+    private void updateRouteDescription(ChildAssociationRef childAssocRef) {
+        NodeRef listRef = childAssocRef.getParentRef();
+        NodeRef routeRef = nodeService.getPrimaryParent(listRef).getParentRef();
+        if (LecmWorkflowModel.TYPE_ROUTE.isMatch(nodeService.getType(routeRef))) {
+            String approvers = "";
+            String signers = "";
+            int signersCount = 0;
+            int approversCount = 0;
+            List<ChildAssociationRef> listsRefs = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
+            for (ChildAssociationRef list : listsRefs) {
+                NodeRef assigneesListRef = list.getChildRef();
+                String listType = (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_TYPE);
+                List<ChildAssociationRef> assignees = nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+                for (ChildAssociationRef assignee : assignees) {
+                    List<AssociationRef> refs = nodeService.getTargetAssocs(assignee.getChildRef(), LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+                    if (!refs.isEmpty()) {
+                        NodeRef employeeRef = refs.get(0).getTargetRef();
+                        String shortName = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                        if (!"".equals(shortName)) {
+                            switch (listType) {
+                                case "SIGNING":
+                                    signers += (signersCount > 0 ? ", " : "") + shortName;
+                                    signersCount++;
+                                    break;
+                                case "APPROVAL":
+                                    approvers += (approversCount > 0 ? ", " : "") + shortName;
+                                    approversCount++;
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            if (approversCount > 1) {
+                approvers = "Согласующие: " + approvers + "\n";
+            } else if (approversCount > 0) {
+                approvers = "Согласующий: " + approvers + "\n";
+            }
+            if (signersCount > 1) {
+                signers = "Подписанты: " + signers;
+            } else if (signersCount > 0) {
+                signers = "Подписант: " + signers;
+            }
+            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, approvers + signers);
+        }
+    }
+
 }
