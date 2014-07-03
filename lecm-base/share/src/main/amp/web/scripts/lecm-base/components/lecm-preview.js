@@ -48,7 +48,7 @@ LogicECM.control = LogicECM.control || {};
 									Dom.get(me.id).innerHTML = response.serverResponse.responseText;
 									var previewId = me.id + "-full-window-div";
 
-									if (me.flashUploaderWasShow) {
+									if (me.flashUploaderWasShow && Alfresco.WebPreview.prototype.Plugins.PdfJs == null) {
 										me.flashUploaderWasShow = false;
 										Event.onAvailable(previewId, function () {
 											var preview = Dom.get(previewId);
