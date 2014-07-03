@@ -1123,4 +1123,20 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     public String getOrgstructureUnitAuthority(ScriptNode unit, boolean shared) {
         return orgstructureService.getOrgstructureUnitAuthority(unit.getNodeRef(), shared);
     }
+
+	/**
+	 * Проверка, что объект является сотрудником
+	 */
+	public boolean isEmployee(ScriptNode obj) {
+		ParameterCheck.mandatory("obj", obj);
+		return orgstructureService.isEmployee(obj.getNodeRef());
+	}
+
+	/**
+	 * Проверка, что объект является подразделением
+	 */
+	public boolean isUnit(ScriptNode obj) {
+		ParameterCheck.mandatory("obj", obj);
+		return orgstructureService.isUnit(obj.getNodeRef());
+	}
 }
