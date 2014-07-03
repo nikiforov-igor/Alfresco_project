@@ -150,6 +150,7 @@ LogicECM.module = LogicECM.module || {};
 
 				var params = "documentType=" + action.formType;
 				params += "&formId=" + "workflow-form";
+                params += "&parentDocumentNodeRef=" + this.options.nodeRef;
 				if (action.variables != null) {
 					for (var prop in action.variables) {
 						if (action.variables.hasOwnProperty(prop)) {
