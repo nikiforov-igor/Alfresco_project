@@ -130,7 +130,7 @@ public class ExpressionDocument {
 
     //Наличие вложения с определенным типом????
     public String getPreviousStatusName() {
-        return stateMachineService.getPreviousStatusName(nodeRef);
+        return stateMachineService.getPreviousStatusNameOnTake(nodeRef);
     }
 
 	public boolean hasDuplicates(boolean onlyHasRegDat, String... props) {

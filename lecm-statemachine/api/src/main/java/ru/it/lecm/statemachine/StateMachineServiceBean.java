@@ -2,7 +2,6 @@ package ru.it.lecm.statemachine;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.workflow.WorkflowInstance;
-import org.alfresco.service.cmr.workflow.WorkflowTask;
 
 import java.util.List;
 import java.util.Map;
@@ -65,7 +64,13 @@ public interface StateMachineServiceBean {
      */
     public String getPreviousStatusName(NodeRef document);
 
-	public List<String> getPreviousStatusesNames(NodeRef document);
+    /**
+     * @param document - документ
+     * @return Имя предыдущего статуса для статусов в ожидании
+     */
+    public String getPreviousStatusNameOnTake(NodeRef document);
+
+    public List<String> getPreviousStatusesNames(NodeRef document);
 
     public String getStatemachineId(NodeRef document);
 

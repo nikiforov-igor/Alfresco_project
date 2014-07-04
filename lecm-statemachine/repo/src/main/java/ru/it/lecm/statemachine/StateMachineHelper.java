@@ -1,6 +1,5 @@
 package ru.it.lecm.statemachine;
 
-import org.activiti.engine.ActivitiException;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -9,15 +8,10 @@ import org.activiti.engine.delegate.ExecutionListener;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
-import org.activiti.engine.impl.bpmn.behavior.NoneEndEventActivityBehavior;
 import org.activiti.engine.impl.bpmn.behavior.ReceiveTaskActivityBehavior;
-import org.activiti.engine.impl.bpmn.behavior.UserTaskActivityBehavior;
-import org.activiti.engine.impl.calendar.BusinessCalendarManager;
-import org.activiti.engine.impl.calendar.MapBusinessCalendarManager;
-import org.activiti.engine.impl.calendar.DueDateBusinessCalendar;
-import org.activiti.engine.impl.calendar.DurationBusinessCalendar;
 import org.activiti.engine.impl.calendar.CycleBusinessCalendar;
-import org.activiti.engine.impl.calendar.BusinessCalendar;
+import org.activiti.engine.impl.calendar.DueDateBusinessCalendar;
+import org.activiti.engine.impl.calendar.MapBusinessCalendarManager;
 import org.activiti.engine.impl.el.FixedValue;
 import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
 import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
@@ -47,13 +41,13 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.beans.DocumentConnectionService;
 import ru.it.lecm.documents.beans.DocumentMembersService;
@@ -67,18 +61,14 @@ import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionActio
 import ru.it.lecm.statemachine.action.script.WorkflowScript;
 import ru.it.lecm.statemachine.assign.AssignExecution;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
-import ru.it.lecm.statemachine.listener.StateMachineHandler;
 import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
-import org.apache.commons.lang.StringUtils;
 
 /**
  * User: PMelnikov
@@ -382,12 +372,20 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 
     @Override
     public String getPreviousStatusName(NodeRef document) {
-        String statemachineId = getStatemachineId(document);
-        HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-        List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().executionId(statemachineId).orderByTaskId().desc().list();
+        List<HistoricTaskInstance> tasks = getHistoricalTaskInstances(document);
         String result = null;
         if (!tasks.isEmpty()) {
             result = tasks.get(0).getName();
+        }
+        return result;
+    }
+
+    @Override
+    public String getPreviousStatusNameOnTake(NodeRef document) {
+        List<HistoricTaskInstance> tasks = getHistoricalTaskInstances(document);
+        String result = null;
+        if (!tasks.isEmpty() && tasks.size() > 1) {
+            result = tasks.get(1).getName();
         }
         return result;
     }
@@ -2416,6 +2414,12 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             result = getStateMachineActions(task.getProcessDefinitionId(), task.getTaskDefinitionKey(), onFire);
         }
         return result;
+    }
+
+    private List<HistoricTaskInstance> getHistoricalTaskInstances(NodeRef document) {
+        String statemachineId = getStatemachineId(document);
+        HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
+        return historyService.createHistoricTaskInstanceQuery().executionId(statemachineId).orderByTaskId().desc().list();
     }
 
     private List<NodeRef> getAssigneesForWorkflow(String workflowId) {
