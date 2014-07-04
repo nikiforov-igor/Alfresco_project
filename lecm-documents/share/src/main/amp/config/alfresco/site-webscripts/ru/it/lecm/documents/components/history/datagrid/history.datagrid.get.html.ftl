@@ -87,7 +87,7 @@
 
         function initDiagramButton() {
             function showDiagram() {
-                showLightbox({ src: Alfresco.constants.PROXY_URI + 'lecm/statemachine/editor/diagram?docNodeRef=${nodeRef}&type=current' });
+                showLightbox({ src: Alfresco.constants.PROXY_URI + 'lecm/statemachine/editor/diagram?docNodeRef=${nodeRef}&type=current&noCache=' + new Date().getTime()});
             }
 
             var btn = new YAHOO.widget.Button("${containerId}-show-diagram");
