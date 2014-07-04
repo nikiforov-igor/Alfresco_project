@@ -301,4 +301,40 @@
         <property name="publicAction" value="false" />
     </bean>
 
+    <bean id="orgstructure.exportEmployees.model" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-orgstr:employee">
+                    <list>
+                        <value>lecm-orgstr:employee-number</value>
+                        <value>cm:name</value>
+                        <value>lecm-orgstr:employee-middle-name</value>
+                        <value>lecm-dic:active</value>
+                        <value>lecm-orgstr:employee-fio-g</value>
+                        <value>lecm-orgstr:employee-short-name</value>
+                        <value>lecm-orgstr:employee-person-login</value>
+                        <value>lecm-orgstr:employee-sex</value>
+                        <value>lecm-orgstr:employee-first-name</value>
+                        <value>lecm-orgstr:employee-phone</value>
+                        <value>lecm-orgstr:employee-last-name</value>
+                        <value>lecm-orgstr:employee-email</value>
+                        <value>lecm-orgstr:employee-fio-d</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.orgstructure.import.import.post"
+          class="ru.it.lecm.orgstructure.imports.EmployeeImport"
+          parent="webscript">
+        <property name="dictionaryBean" ref="serviceDictionary"/>
+        <property name="xmlImportBean" ref="lecmDictionaryImportBean"/>
+        <property name="transactionService" ref="transactionService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="behaviourFilter" ref="policyBehaviourFilter"/>
+        <property name="nodeService" ref="NodeService" />
+    </bean>
+
 </beans>

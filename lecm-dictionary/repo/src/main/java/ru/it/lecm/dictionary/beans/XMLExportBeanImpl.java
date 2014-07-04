@@ -184,7 +184,7 @@ public class XMLExportBeanImpl implements XMLExportBean {
             //экспорт свойств справочника
             for (Map.Entry<QName, Serializable> entry : nodeService.getProperties(childRef).entrySet()) {
                 QName qName = entry.getKey().getPrefixedQName(namespaceService);
-                String value = entry.getValue().toString();
+                String value = entry.getValue() != null ? entry.getValue().toString() : null;
                 if ((doNotFilterFields && !ignoredNamespaces.contains(qName.getNamespaceURI()))
                         || (!doNotFilterFields && isExportField(fields, qName))) {
                     writeProperty(qName, value);
@@ -197,10 +197,12 @@ public class XMLExportBeanImpl implements XMLExportBean {
         }
 
         private void writeProperty(QName name, String value) throws XMLStreamException {
-            xmlw.writeStartElement(ExportNamespace.TAG_PROPERTY);
-            xmlw.writeAttribute(ExportNamespace.ATTR_NAME, name.toPrefixString());
-            xmlw.writeCData(value);
-            xmlw.writeEndElement();
+            if (value != null) {
+                xmlw.writeStartElement(ExportNamespace.TAG_PROPERTY);
+                xmlw.writeAttribute(ExportNamespace.ATTR_NAME, name.toPrefixString());
+                xmlw.writeCData(value);
+                xmlw.writeEndElement();
+            }
         }
 
 	    private void writeContent(NodeRef fileRef) throws XMLStreamException {
