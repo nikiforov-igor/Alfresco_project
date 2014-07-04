@@ -25,6 +25,8 @@ LogicECM.module = LogicECM.module || {};
  */
 LogicECM.module.Base = LogicECM.module.Base || {};
 
+LogicECM.module.Base.validators = LogicECM.module.Base.validators || {};
+
 /**
  * LogicECM Base Util
  *

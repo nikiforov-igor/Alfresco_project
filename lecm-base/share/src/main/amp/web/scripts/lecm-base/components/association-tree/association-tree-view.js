@@ -532,9 +532,6 @@ LogicECM.module = LogicECM.module || {};
             }
             // Update parent form
             this.updateFormFields();
-            if(this.options.mandatory) {
-                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
-            }
 			if (this.options.fireAction.ok != null) {
               var fireName = this.options.fireAction.ok.split(",");
               for (var i in fireName){
