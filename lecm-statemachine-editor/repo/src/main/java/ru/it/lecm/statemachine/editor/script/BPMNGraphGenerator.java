@@ -3,10 +3,22 @@ package ru.it.lecm.statemachine.editor.script;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.util.mxCellRenderer;
 import com.mxgraph.view.mxGraph;
-import java.awt.Color;
-import java.awt.image.BufferedImage;
+import org.activiti.bpmn.model.*;
+import org.activiti.engine.ProcessEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,24 +27,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.swing.SwingConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.activiti.bpmn.model.BoundaryEvent;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.bpmn.model.EndEvent;
-import org.activiti.bpmn.model.ExclusiveGateway;
-import org.activiti.bpmn.model.FlowElement;
-import org.activiti.bpmn.model.SequenceFlow;
-import org.activiti.bpmn.model.StartEvent;
-import org.activiti.bpmn.model.UserTask;
-import org.activiti.engine.ProcessEngine;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * User: PMelnikov
@@ -151,7 +145,7 @@ public class BPMNGraphGenerator {
         return new ByteArrayInputStream(baos.toByteArray());
     }
 
-	public InputStream generateByModel(BpmnModel model,String currentStatus, List<String> history){
+	public InputStream generateByModel(BpmnModel model, List<String> history){
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
 		mxGraph graph = new mxGraph();
@@ -161,31 +155,36 @@ public class BPMNGraphGenerator {
 		HashMap<String, String> boundaryEvents = new HashMap<>();
 		org.activiti.bpmn.model.Process process = model.getMainProcess();
 		Collection<FlowElement> elements = process.getFlowElements();
+        String currentStatus = history.get(0);
 		for (FlowElement flowElement : elements) {
 			Object vertex = null;
+            Class type = flowElement.getClass();
 
-			String image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task.png;";
-			if(flowElement.getName() != null && history.contains(flowElement.getName())){
-				image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task_prev.png;";
-			}
-			if(flowElement.getName() != null && flowElement.getName().equals(currentStatus)) {
-				image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task_active.png;";
-			}
-			Class type = flowElement.getClass();
-			if(type.equals(StartEvent.class)) {
+            if(type.equals(StartEvent.class)) {
 				vertex = graph.insertVertex(parent, null, "", 20, 20, 35, 35, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/start.png;");
 			} else if (type.equals(EndEvent.class)){
 				String title = flowElement.getName();
-				double width = 6.5 * title.length();
+                String image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/end.png";
+                if(title != null && title.equals(currentStatus)) {
+                    image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/end_active.png";
+                }
+                double width = 6.5 * title.length();
 				if (width < 35) {
 					width = 35;
 				}
-				vertex = graph.insertVertex(parent, null, title, 20, 20, width, 35, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/end.png;");
+				vertex = graph.insertVertex(parent, null, title, 20, 20, width, 35, image);
 			} else if (type.equals(ExclusiveGateway.class)) {
 				vertex = graph.insertVertex(parent, null, "", 20, 20, 39, 39, "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/gateway.png;");
 			} else if (type.equals(UserTask.class)){
-				String title = flowElement.getName();
+                String image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task.png;";
+                if(flowElement.getName() != null && flowElement.getName().equals(currentStatus)) {
+                    image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task_active.png;";
+                } else if(flowElement.getName() != null && history.contains(flowElement.getName())){
+                    image = "shape=image;image=/alfresco/templates/webscripts/ru/it/lecm/statemachine/editor/images/task_prev.png;";
+                }
+                String title = flowElement.getName();
 				vertex = graph.insertVertex(parent, null, title, 20, 20, 105, 55, image);
+
 			} else if(type.equals(BoundaryEvent.class)) {
 				BoundaryEvent bEvent = (BoundaryEvent) flowElement;
 				String id = bEvent.getId();

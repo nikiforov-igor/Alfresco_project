@@ -1,5 +1,9 @@
 package ru.it.lecm.statemachine.editor.script;
 
+import org.activiti.bpmn.model.BpmnModel;
+import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
@@ -14,6 +18,8 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.bean.LecmWorkflowDeployer;
 import ru.it.lecm.statemachine.editor.StatemachineEditorModel;
 import ru.it.lecm.statemachine.editor.export.XMLExporter;
@@ -23,14 +29,6 @@ import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import org.activiti.bpmn.BpmnAutoLayout;
-import org.activiti.bpmn.converter.BpmnXMLConverter;
-import org.activiti.bpmn.model.BpmnModel;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.impl.bpmn.diagram.ProcessDiagramGenerator;
-import org.activiti.engine.runtime.ProcessInstance;
-import ru.it.lecm.statemachine.StateMachineServiceBean;
-import ru.it.lecm.statemachine.StatemachineModel;
 
 /**
  * User: PMelnikov
@@ -234,8 +232,6 @@ public class BPMNDiagramScript extends AbstractWebScript {
 	}
 
 	public InputStream currentStatusDiagram(NodeRef docRef) {
-
-		String currentStatus = nodeService.getProperty(docRef, StatemachineModel.PROP_STATUS).toString();
 		String processId = nodeService.getProperty(docRef, StatemachineModel.PROP_STATEMACHINE_ID).toString();
 		List<String> history = statemachineService.getPreviousStatusesNames(docRef);
 		ProcessInstance processInstance = activitiProcessEngine.getRuntimeService()
@@ -243,12 +239,21 @@ public class BPMNDiagramScript extends AbstractWebScript {
                 .processInstanceId(processId.split("\\$")[1])
                 .singleResult();
 
-		if (processInstance == null)
-		{
-			throw new RuntimeException("Entity not found for " + processId);
-		}
+        String definitionId;
+		if (processInstance == null) {
+            HistoricProcessInstance historicProcessInstance = activitiProcessEngine.getHistoryService().createHistoricProcessInstanceQuery()
+                    .processInstanceId(processId.split("\\$")[1])
+                    .singleResult();
+            if (historicProcessInstance == null) {
+			    throw new RuntimeException("Entity not found for " + processId);
+            } else {
+                definitionId = historicProcessInstance.getProcessDefinitionId();
+            }
+		} else {
+            definitionId = processInstance.getProcessDefinitionId();
+        }
 
-		BpmnModel model = activitiProcessEngine.getRepositoryService().getBpmnModel(processInstance.getProcessDefinitionId());
-		return new BPMNGraphGenerator().generateByModel(model, currentStatus, history);
+		BpmnModel model = activitiProcessEngine.getRepositoryService().getBpmnModel(definitionId);
+		return new BPMNGraphGenerator().generateByModel(model, history);
 	}
 }

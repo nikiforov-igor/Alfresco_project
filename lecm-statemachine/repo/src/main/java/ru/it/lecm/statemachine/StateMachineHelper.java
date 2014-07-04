@@ -5,6 +5,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.ExecutionListener;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.impl.RepositoryServiceImpl;
@@ -392,16 +393,17 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 
 	@Override
 	public List<String> getPreviousStatusesNames(NodeRef document) {
-		String statemachineId = getStatemachineId(document);
+		String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-        List<HistoricTaskInstance> tasks = historyService.createHistoricTaskInstanceQuery().executionId(statemachineId).orderByTaskId().desc().list();
-        List<String> result = new ArrayList<String>();
-        if (!tasks.isEmpty()) {
-			for(HistoricTaskInstance task : tasks) {
-				result.add(task.getName());
+        List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).orderByHistoricActivityInstanceStartTime().desc().list();
+        List<String> result = new ArrayList<>();
+        if (!activities.isEmpty()) {
+			for(HistoricActivityInstance activity : activities) {
+                if (activity.getActivityName() != null) {
+				    result.add(activity.getActivityName());
+                }
 			}
         }
-
         return result;
 	}
 
