@@ -38,6 +38,7 @@
 		<property name="authorityService" ref="authorityService" />
 		<property name="authService" ref="authenticationService"/>
 		<property name="orgStructureNotifiers" ref="lecmSecurityGroupsBean" />
+		<property name="orgstructureService" ref="serviceOrgstructure"/>
 
 		<property name="modelDAOService" ref="permissionsModelDAO" />
 
@@ -55,5 +56,6 @@
         <property name="authService" ref="authenticationService"/>
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+	    <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
 </beans>

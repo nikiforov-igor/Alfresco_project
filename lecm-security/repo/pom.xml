@@ -55,6 +55,12 @@
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>ru.it.lecm.base</groupId>
+			<artifactId>base-repo-api</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>ru.it.lecm.orgstructure</groupId>
 			<artifactId>orgstructure-repo-api</artifactId>
 			<version>${project.version}</version>

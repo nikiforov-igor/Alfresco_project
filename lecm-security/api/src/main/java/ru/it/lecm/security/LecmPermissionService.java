@@ -201,6 +201,14 @@ public interface LecmPermissionService {
 	void revokeDynamicRole(String roleCode, NodeRef nodeRef);
 
 	/**
+	 * Получение всех сотрудников с динамической ролью в документе
+	 * @param document документ
+	 * @param roleCode динамическая роль
+	 * @return список сотрудников
+	 */
+	public List<NodeRef> getEmployeesByDynamicRole(NodeRef document, String roleCode);
+
+	/**
 	 * Перепрописать Статические Роли на папку (документ).
 	 * @param nodeRef id статусной-папки
 	 * @param accessMap карта нарезки прав:

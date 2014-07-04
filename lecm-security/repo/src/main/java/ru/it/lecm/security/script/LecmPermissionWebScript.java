@@ -1,27 +1,22 @@
 package ru.it.lecm.security.script;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.security.AccessPermission;
-import org.alfresco.service.cmr.security.AccessStatus;
 import org.alfresco.service.cmr.security.AuthenticationService;
-import org.alfresco.service.cmr.security.AuthorityType;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
-import ru.it.lecm.security.Types;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * User: dbashmakov
  * Date: 28.03.13
  * Time: 16:37
  */
-public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
+public class LecmPermissionWebScript extends BaseWebScript {
 
     private LecmPermissionService lecmPermissionService;
     private OrgstructureBean orgstructureService;
@@ -134,4 +129,14 @@ public class LecmPermissionWebScript extends BaseScopableProcessorExtension {
         return Context.getCurrentContext().newArray(getScope(), results.toArray());
     }
 
+	/**
+	 * Получение всех сотрудников с динамической ролью в документе
+	 * @param document документ
+	 * @param roleCode динамическая роль
+	 * @return список сотрудников
+	 */
+	public Scriptable getEmployeesByDynamicRole(ScriptNode document, String roleCode) {
+		List<NodeRef> results = lecmPermissionService.getEmployeesByDynamicRole(document.getNodeRef(), roleCode);
+		return createScriptable(results);
+	}
 }

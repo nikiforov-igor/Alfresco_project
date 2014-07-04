@@ -9,6 +9,7 @@ import org.alfresco.repo.security.permissions.impl.ModelDAO;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.security.*;
 import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
@@ -39,6 +40,7 @@ public class LecmPermissionServiceImpl
 	private AuthorityService authorityService;
 	private ModelDAO modelDAOService; // "permissionsModelDAO"
 	private AuthenticationService authService;
+	private OrgstructureBean orgstructureService;
 
 	/*
 	 * если потребуется прозрачное присвоение БР "по факту" - т.е. выдавать
@@ -136,6 +138,9 @@ public class LecmPermissionServiceImpl
 		this.orgStructureNotifiers = value;
 	}
 
+	public void setOrgstructureService(OrgstructureBean orgstructureService) {
+		this.orgstructureService = orgstructureService;
+	}
 
 	/**
 	 * @return флаг наследования родительских полномочий для статического случая выдачи прав
@@ -505,6 +510,25 @@ public class LecmPermissionServiceImpl
 				}
 			}
 		}
+	}
+
+	public List<NodeRef> getEmployeesByDynamicRole(NodeRef document, String roleCode) {
+		List<NodeRef> result = new ArrayList<>();
+		String authority = authorityService.getName(AuthorityType.GROUP, String.format("%s%s%s%s", Types.PFX_LECM, Types.SGKind.SG_BRME.getSuffix(), roleCode, Types.SFX_PRIV4USER));
+
+		final Set<AccessPermission> status = permissionService.getAllSetPermissions(document);
+		if (status != null) {
+			for (AccessPermission permission : status) {
+				if (permission.getAuthority().startsWith(authority)) {
+					String id = permission.getAuthority().substring(authority.length() + 1);
+				 	NodeRef ref = new NodeRef(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE, id);
+					if (nodeService.exists(ref) && orgstructureService.isEmployee(ref)) {
+						result.add(ref);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
