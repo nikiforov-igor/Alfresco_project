@@ -2508,7 +2508,10 @@ div.search-picker.object-finder div.yui-gb.orgchart-picker-menu input {
 div.object-finder.inlineable {
   width: auto;
 }
-/*Спасаем тонущий лайтбокс. Ибо у всяких там диалогов этот z-index Очень уж большой. FIXME*/
+
 div#lightbox {
-  z-index: 100002 !important;
+    z-index: 100003 !important; /*Спасаем тонущий лайтбокс. Ибо у всяких там диалогов этот z-index Очень уж большой. FIXME*/
+    /*max-width: 96%;*/
+    /*margin-left: 1%;*/
+    /*overflow: auto;*/
 }
