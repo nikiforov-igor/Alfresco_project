@@ -42,7 +42,7 @@ public class Expression {
         this.doc = new ExpressionDocument(documentRef, serviceRegistry);
         this.user = new ExpressionUser(document, serviceRegistry, orgstructureBean, documentService);
         String executionId = stateMachineService.getStatemachineId(document);
-        if (executionId != null) {
+        if (!"Не запущен".equals(executionId)) {
             this.state = stateMachineService.getVariables(executionId);
         }
         this.context = new StandardEvaluationContext(this);
