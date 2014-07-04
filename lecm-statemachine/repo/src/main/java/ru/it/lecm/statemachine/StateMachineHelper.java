@@ -396,7 +396,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 	public List<String> getPreviousStatusesNames(NodeRef document) {
 		String statemachineId = (String) serviceRegistry.getNodeService().getProperty(document, StatemachineModel.PROP_STATEMACHINE_ID);
         HistoryService historyService = activitiProcessEngineConfiguration.getHistoryService();
-        List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery().executionId(statemachineId.replace(ACTIVITI_PREFIX, "")).orderByHistoricActivityInstanceStartTime().desc().list();
+        List<HistoricActivityInstance> activities = historyService.createHistoricActivityInstanceQuery().processInstanceId(statemachineId.replace(ACTIVITI_PREFIX, "")).orderByHistoricActivityInstanceStartTime().desc().list();
         List<String> result = new ArrayList<>();
         if (!activities.isEmpty()) {
 			for(HistoricActivityInstance activity : activities) {

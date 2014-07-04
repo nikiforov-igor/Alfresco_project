@@ -155,8 +155,11 @@ public class BPMNGraphGenerator {
 		HashMap<String, String> boundaryEvents = new HashMap<>();
 		org.activiti.bpmn.model.Process process = model.getMainProcess();
 		Collection<FlowElement> elements = process.getFlowElements();
-        String currentStatus = history.get(0);
-		for (FlowElement flowElement : elements) {
+        String currentStatus = null;
+        if (!history.isEmpty()) {
+            currentStatus = history.get(0);
+        }
+        for (FlowElement flowElement : elements) {
 			Object vertex = null;
             Class type = flowElement.getClass();
 
