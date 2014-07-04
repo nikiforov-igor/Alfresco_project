@@ -248,8 +248,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
              Task task = taskQuery.processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
              if (task != null) {
                    String smName = task.getProcessDefinitionId();
+                   String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
                    smName = smName.substring(0, smName.indexOf(":"));
-                   Map<String, LecmPermissionGroup> privaleges = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getDynamicRoles();
+                   Map<String, LecmPermissionGroup> privaleges = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getDynamicRoles();
                    LecmPermissionGroup group = privaleges.get(roleName);
                    if (group != null) {
                        lecmPermissionService.grantDynamicRole(roleName, document, employee.getId(), group);
@@ -466,8 +467,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	boolean result = false;
     	if (task != null) {
     		String smName = task.getProcessDefinitionId();
+    		String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
     		smName = smName.substring(0, smName.indexOf(":"));
-    		Map<String, LecmPermissionGroup> privaleges = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getDynamicRoles();
+    		Map<String, LecmPermissionGroup> privaleges = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getDynamicRoles();
     		LecmPermissionGroup group = privaleges.get(roleName);
     		if (group != null) {
     			lecmPermissionService.grantDynamicRole(roleName, document, employee.getId(), group);
@@ -743,7 +745,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     		if(version==null) return new StateMacheneVersion();
     		return version;
     	}
-    	public StateMacheneVersion getLastVersionByNumber(Long number) {
+    	public StateMacheneVersion getVersionByNumber(String number) {
     		StateMacheneVersion version =  getVersions().get("version_"+number);
     		if(version==null) return new StateMacheneVersion();
     		return version;
@@ -1425,8 +1427,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             Task task = taskQuery.taskId(taskId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (task != null) {
             	String smName = task.getProcessDefinitionId();
+            	String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
             	smName = smName.substring(0, smName.indexOf(":"));
-            	StateMachineAction action = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getActionByName(actionType);
+            	StateMachineAction action = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getActionByName(actionType);
             	if(action!=null) result.add(action);
             }
         }
@@ -1486,8 +1489,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             Task task = taskQuery.processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (task != null) {
                   String smName = task.getProcessDefinitionId();
+                  String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
                   smName = smName.substring(0, smName.indexOf(":"));
-                  Set<StateField> result = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getFields();
+                  Set<StateField> result = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getFields();
                 return new StateFields(true, result);
             }
         }
@@ -1518,8 +1522,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             Task task = taskQuery.processInstanceId(executionId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (task != null) {
                   String smName = task.getProcessDefinitionId();
+                  String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
                   smName = smName.substring(0, smName.indexOf(":"));
-                  Set<StateField> fields = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getFields();
+                  Set<StateField> fields = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getFields();
                   for (StateField stateField: fields) {
                 	  if (stateField.getName().equals(field)) {
                 		  return stateField.isEditable();
@@ -2143,7 +2148,8 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 //            }
 //        }
         String smName = processDefinitionId.substring(0, processDefinitionId.indexOf(":"));
-        result.add(getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(name).getActionByName("FinishStateWithTransition"));
+        String version = processDefinitionId.substring(processDefinitionId.indexOf(":")+1, processDefinitionId.lastIndexOf(":"));
+        result.add(getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(name).getActionByName("FinishStateWithTransition"));
 //        List<ExecutionListener> listeners = activity.getExecutionListeners().get("start");
 //        if (listeners != null) {
 //            for (ExecutionListener listener : listeners) {
@@ -2344,8 +2350,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             Task task = taskQuery.processInstanceId(procesId.replace(ACTIVITI_PREFIX, "")).singleResult();
             if (task != null) {
                   String smName = task.getProcessDefinitionId();
+                  String version = smName.substring(smName.indexOf(":")+1, smName.lastIndexOf(":"));
                   smName = smName.substring(0, smName.indexOf(":"));
-                  Set<StateField> result = getStateMecheneByName(smName).getLastVersion().getSettings().getSettingsContent().getStatusByName(task.getName()).getCategories();
+                  Set<StateField> result = getStateMecheneByName(smName).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(task.getName()).getCategories();
                 return new StateFields(true, result);
             }
         }

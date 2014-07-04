@@ -70,7 +70,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
     			+ " processDefinitionId: " + delegateTask.getProcessDefinitionId() + " ,"
     			+ " processInstanceId: " + delegateTask.getProcessInstanceId() + "");
     	
-    	List<String> vars = getStateMachineHelper().getStateMecheneByName(processId).getLastVersion().getSettings().getSettingsContent().getStatusByName(status).getStatusVars();
+    	List<String> vars = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStatusVars();
     	for(String var:vars) {
     		delegateTask.getExecution().setVariable(var,"");
     	}
@@ -143,7 +143,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
 			        		if (statusFolder == null) {
 			        			statusFolder = createFolder(versionFolder, status);
 			        			//Установка статических прав на папку статуса
-			        			staticPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getLastVersion().getSettings().getSettingsContent().getStatusByName(status).getStaticRoles();
+			        			staticPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getStaticRoles();
 			        			//TODO 
 			        			execBuildInTransactStatic(statusFolder, staticPrivileges);
 			        			getServiceRegistry().getPermissionService().setPermission(statusFolder, AuthenticationUtil.SYSTEM_USER_NAME, "Read", true);
@@ -163,7 +163,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
             }
         });
         // Установка динамических ролей для файла
-        dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getLastVersion().getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
+        dynamicPrivileges = getStateMachineHelper().getStateMecheneByName(processId).getVersionByNumber(version).getSettings().getSettingsContent().getStatusByName(status).getDynamicRoles();
         //TODO
         execBuildInTransactDynamic(stm_document, dynamicPrivileges);
     }
