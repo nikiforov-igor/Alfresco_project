@@ -212,7 +212,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE;
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/arm/tree-menu?armCode=" + LogicECM.module.ARM.SETTINGS.ARM_CODE + "&noCache=" + new Date().getTime();
             if (node.data.nodeRef != null) {
                 sUrl += "&nodeRef=" + encodeURI(node.data.nodeRef);
                 if (node.data.armNodeRef != null) {
