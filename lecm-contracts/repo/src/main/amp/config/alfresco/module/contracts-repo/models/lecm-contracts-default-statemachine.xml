@@ -6088,7 +6088,8 @@ notifications.sendNotificationFromCurrentUser(signers,notificationText, contract
                                                             <transitionLabelAspect/>
                                                         </aspects>
                                                         <associations>
-                                                            <association><type>transitionStatus/type>
+                                                            <association>
+                                                                <type>transitionStatus</type>
                                                                 <reference>
                                                                     workspace://SpacesStore/dec1243d-5ee9-4b61-a30f-9e0787b3097a
                                                                 </reference>
