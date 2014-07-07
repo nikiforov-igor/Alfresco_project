@@ -93,57 +93,59 @@ public class RouteRolicy implements OnUpdateNodePolicy, OnCreateChildAssociation
 
     private void updateRouteDescription(ChildAssociationRef childAssocRef) {
         NodeRef listRef = childAssocRef.getParentRef();
-        NodeRef routeRef = nodeService.getPrimaryParent(listRef).getParentRef();
-        if (LecmWorkflowModel.TYPE_ROUTE.isMatch(nodeService.getType(routeRef))) {
-            String approvers = "";
-            String signers = "";
-            int signersCount = 0;
-            int approversCount = 0;
-            NodeRef ownerRef = nodeService.getTargetAssocs(routeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER).get(0).getTargetRef();
-            QName ownerTypeQName = nodeService.getType(ownerRef);
-            String description = "";
-            if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(ownerTypeQName)) {
-                description = "Личный маршрут\n";
-            } else if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.isMatch(ownerTypeQName)) {
-                String orgName = (String) nodeService.getProperty(ownerRef, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
-                description =  String.format("Маршрут подразделения \"%s\"\n", orgName);
-            }
-            List<ChildAssociationRef> listsRefs = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
-            for (ChildAssociationRef list : listsRefs) {
-                NodeRef assigneesListRef = list.getChildRef();
-                String listType = (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_TYPE);
-                List<ChildAssociationRef> assignees = nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
-                for (ChildAssociationRef assignee : assignees) {
-                    List<AssociationRef> refs = nodeService.getTargetAssocs(assignee.getChildRef(), LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
-                    if (!refs.isEmpty()) {
-                        NodeRef employeeRef = refs.get(0).getTargetRef();
-                        String shortName = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
-                        if (!"".equals(shortName)) {
-                            switch (listType) {
-                                case "SIGNING":
-                                    signers += (signersCount > 0 ? ", " : "") + shortName;
-                                    signersCount++;
-                                    break;
-                                case "APPROVAL":
-                                    approvers += (approversCount > 0 ? ", " : "") + shortName;
-                                    approversCount++;
-                                    break;
+        if (nodeService.exists(listRef)) {
+            NodeRef routeRef = nodeService.getPrimaryParent(listRef).getParentRef();
+            if (LecmWorkflowModel.TYPE_ROUTE.isMatch(nodeService.getType(routeRef))) {
+                String approvers = "";
+                String signers = "";
+                int signersCount = 0;
+                int approversCount = 0;
+                NodeRef ownerRef = nodeService.getTargetAssocs(routeRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_OWNER).get(0).getTargetRef();
+                QName ownerTypeQName = nodeService.getType(ownerRef);
+                String description = "";
+                if (OrgstructureBean.TYPE_EMPLOYEE.isMatch(ownerTypeQName)) {
+                    description = "Личный маршрут\n";
+                } else if (OrgstructureBean.TYPE_ORGANIZATION_UNIT.isMatch(ownerTypeQName)) {
+                    String orgName = (String) nodeService.getProperty(ownerRef, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME);
+                    description =  String.format("Маршрут подразделения \"%s\"\n", orgName);
+                }
+                List<ChildAssociationRef> listsRefs = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);
+                for (ChildAssociationRef list : listsRefs) {
+                    NodeRef assigneesListRef = list.getChildRef();
+                    String listType = (String) nodeService.getProperty(assigneesListRef, LecmWorkflowModel.PROP_WORKFLOW_TYPE);
+                    List<ChildAssociationRef> assignees = nodeService.getChildAssocs(assigneesListRef, LecmWorkflowModel.ASSOC_WORKFLOW_ASSIGNEES_LIST_CONTAINS_ASSIGNEE, RegexQNamePattern.MATCH_ALL);
+                    for (ChildAssociationRef assignee : assignees) {
+                        List<AssociationRef> refs = nodeService.getTargetAssocs(assignee.getChildRef(), LecmWorkflowModel.ASSOC_ASSIGNEE_EMPLOYEE);
+                        if (!refs.isEmpty()) {
+                            NodeRef employeeRef = refs.get(0).getTargetRef();
+                            String shortName = (String) nodeService.getProperty(employeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
+                            if (!"".equals(shortName)) {
+                                switch (listType) {
+                                    case "SIGNING":
+                                        signers += (signersCount > 0 ? ", " : "") + shortName;
+                                        signersCount++;
+                                        break;
+                                    case "APPROVAL":
+                                        approvers += (approversCount > 0 ? ", " : "") + shortName;
+                                        approversCount++;
+                                        break;
+                                }
                             }
                         }
                     }
                 }
+                if (approversCount > 1) {
+                    approvers = "Согласующие: " + approvers + "\n";
+                } else if (approversCount > 0) {
+                    approvers = "Согласующий: " + approvers + "\n";
+                }
+                if (signersCount > 1) {
+                    signers = "Подписанты: " + signers;
+                } else if (signersCount > 0) {
+                    signers = "Подписант: " + signers;
+                }
+                nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, description + approvers + signers);
             }
-            if (approversCount > 1) {
-                approvers = "Согласующие: " + approvers + "\n";
-            } else if (approversCount > 0) {
-                approvers = "Согласующий: " + approvers + "\n";
-            }
-            if (signersCount > 1) {
-                signers = "Подписанты: " + signers;
-            } else if (signersCount > 0) {
-                signers = "Подписант: " + signers;
-            }
-            nodeService.setProperty(routeRef, ContentModel.PROP_DESCRIPTION, description + approvers + signers);
         }
     }
 
