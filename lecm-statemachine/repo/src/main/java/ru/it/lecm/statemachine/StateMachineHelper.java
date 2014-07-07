@@ -454,7 +454,15 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
         }
 
         List<WorkflowInstance> activeWorkflows = serviceRegistry.getWorkflowService().getWorkflowsForContent(nodeRef, isActive);
-        return filterWorkflows(activeWorkflows);
+        String procesId = (String) serviceRegistry.getNodeService().getProperty(nodeRef, StatemachineModel.PROP_STATEMACHINE_ID);
+        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
+        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
+	    for (WorkflowInstance instance : activeWorkflows) {
+	    	if (!workflowSysUser.equals(instance.getInitiator()) && !isServiceWorkflow(instance) && !instance.getId().equals(procesId)) {
+	    		result.add(instance);
+	    	}
+	    }
+	    return result;
     }
 
 //  @Override
@@ -2192,16 +2200,16 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
         return result;
     }
 
-    private List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
-        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
-        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
-        for (WorkflowInstance instance : workflows) {
-            if (!workflowSysUser.equals(instance.getInitiator()) && !isServiceWorkflow(instance)) {
-                result.add(instance);
-            }
-        }
-        return result;
-    }
+//    private List<WorkflowInstance> filterWorkflows(List<WorkflowInstance> workflows) {
+//        List<WorkflowInstance> result = new ArrayList<WorkflowInstance>();
+//        NodeRef workflowSysUser = serviceRegistry.getPersonService().getPerson("workflow");
+//        for (WorkflowInstance instance : workflows) {
+//            if (!workflowSysUser.equals(instance.getInitiator()) && !isServiceWorkflow(instance)) {
+//                result.add(instance);
+//            }
+//        }
+//        return result;
+//    }
     //TODO Метод для рефакторинга !!!!
     //document - документ это наше все stopDocumentSubWorkflows, addWorkflow, createConnection
     //statemachineId - используется для executeScript, new WorkflowDescriptor, setInputVariables, setExecutionParameters
