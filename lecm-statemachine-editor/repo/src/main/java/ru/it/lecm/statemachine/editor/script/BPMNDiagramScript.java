@@ -9,6 +9,7 @@ import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.workflow.activiti.AlfrescoProcessEngineConfiguration;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.*;
+import org.alfresco.service.cmr.workflow.WorkflowDeployment;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.*;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 /**
@@ -104,15 +106,14 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					NodeRef statemachine = new NodeRef(statemachineNodeRef);
 					statemachine = nodeService.getPrimaryParent(statemachine).getParentRef();
 		            String machineName = nodeService.getProperty(statemachine, ContentModel.PROP_NAME).toString();
-		            logger.debug("Start generate diagram and deploy it for statemachine " + machineName);
-
+		            logger.debug("Генерация процесса для машины состояний " + machineName);
 		            //Создаем результирующую диаграмму
 		            String fileName = machineName + ".bpmn20.xml";
 					NodeRef companyHome = repositoryHelper.getCompanyHome();
 					NodeRef workflowFolder = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, LecmWorkflowDeployer.WORKFLOW_FOLDER);
 					NodeRef file = nodeService.getChildByName(workflowFolder, ContentModel.ASSOC_CONTAINS, fileName);
 					if (file == null) {
-						HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
 						props.put(ContentModel.PROP_NAME, fileName);
 						ChildAssociationRef childAssocRef = nodeService.createNode(
 								workflowFolder,
@@ -125,34 +126,43 @@ public class BPMNDiagramScript extends AbstractWebScript {
 					ContentWriter writer = contentService.getWriter(file, ContentModel.PROP_CONTENT, true);
 					writer.setMimetype("text/xml");
 					ByteArrayInputStream is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
+					logger.debug("Деплой процесса для "+machineName);
+		            WorkflowDeployment wd = lecmWorkflowDeployer.deploy("activiti", "text/xml", is, fileName);
+		            String lastVersion = wd.getDefinition().getVersion();
+		            is.close();
+		            is = (ByteArrayInputStream) new BPMNGenerator(statemachineNodeRef, nodeService).generate();
 					writer.putContent(is);
 					is.close();
-
-		            logger.debug("Diagram is generated. Create version for deployment.");
-
 		            //Создаем версию
 		            NodeRef statemachines = nodeService.getPrimaryParent(statemachine).getParentRef();
 		            NodeRef versions = nodeService.getChildByName(statemachines, ContentModel.ASSOC_CONTAINS, StatemachineEditorModel.FOLDER_VERSIONS);
 		            NodeRef statemachineVersions = nodeService.getChildByName(versions, ContentModel.ASSOC_CONTAINS, machineName);
-		            Long lastVersion = (Long) nodeService.getProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION);
-		            lastVersion++;
-
-		            HashMap<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
-		            props.put(ContentModel.PROP_NAME, "version_" + lastVersion);
-		            props.put(StatemachineEditorModel.PROP_VERSION, lastVersion);
-		            props.put(StatemachineEditorModel.PROP_PUBLISH_DATE, new Date());
-		            if (req.getParameter("comment") != null) {
-		                props.put(StatemachineEditorModel.PROP_PUBLISH_COMMENT, req.getParameter("comment"));
-		            }
-
-		            ChildAssociationRef childAssocRef = nodeService.createNode(
+		            
+		            NodeRef version = nodeService.getChildByName(statemachineVersions, ContentModel.ASSOC_CONTAINS, "version_" + lastVersion);
+					if (version == null) {
+						Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+			            props.put(ContentModel.PROP_NAME, "version_" + lastVersion);
+			            props.put(StatemachineEditorModel.PROP_VERSION, lastVersion);
+			            props.put(StatemachineEditorModel.PROP_PUBLISH_DATE, new Date());
+			            if (req.getParameter("comment") != null) {
+			                props.put(StatemachineEditorModel.PROP_PUBLISH_COMMENT, req.getParameter("comment"));
+			            }
+						ChildAssociationRef childAssocRef = nodeService.createNode(
 		                    statemachineVersions,
 		                    ContentModel.ASSOC_CONTAINS,
 		                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("version_" + lastVersion)),
 		                    StatemachineEditorModel.TYPE_VERSION,
 		                    props);
-		            NodeRef version = childAssocRef.getChildRef();
-
+		            	version = childAssocRef.getChildRef();
+					} else {
+						Map<QName, Serializable> props = nodeService.getProperties(version);
+						props.put(StatemachineEditorModel.PROP_VERSION, lastVersion);
+			            props.put(StatemachineEditorModel.PROP_PUBLISH_DATE, new Date());
+			            if (req.getParameter("comment") != null) {
+			                props.put(StatemachineEditorModel.PROP_PUBLISH_COMMENT, req.getParameter("comment"));
+			            }
+						nodeService.setProperties(version, props);
+					}
 		            //Добавляем в версию файл импорта
 		            ByteArrayOutputStream backupOut = new ByteArrayOutputStream();
 		            try {
@@ -162,38 +172,43 @@ public class BPMNDiagramScript extends AbstractWebScript {
 			            logger.error(e.getMessage(), e);
 		            }
 
-		            props = new HashMap<QName, Serializable>(1, 1.0f);
-		            props.put(ContentModel.PROP_NAME, "backup.xml");
-
-		            childAssocRef = nodeService.createNode(
-		                    version,
-		                    ContentModel.ASSOC_CONTAINS,
-		                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("backup.xml")),
-		                    ContentModel.TYPE_CONTENT,
-		                    props);
-		            NodeRef backupFile = childAssocRef.getChildRef();
+		            NodeRef backupFile = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, "backup.xml");
+					if (backupFile == null) {
+			            Map<QName, Serializable> props = new HashMap<QName, Serializable>(1, 1.0f);
+			            props.put(ContentModel.PROP_NAME, "backup.xml");
+	
+			            ChildAssociationRef childAssocRef = nodeService.createNode(
+			                    version,
+			                    ContentModel.ASSOC_CONTAINS,
+			                    QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName("backup.xml")),
+			                    ContentModel.TYPE_CONTENT,
+			                    props);
+			            backupFile = childAssocRef.getChildRef();
+					}
 		            writer = contentService.getWriter(backupFile, ContentModel.PROP_CONTENT, true);
 		            writer.setMimetype("text/xml");
 		            is = new ByteArrayInputStream(backupOut.toByteArray());
 		            writer.putContent(is);
 		            is.close();
-
 		            try {
+		            	NodeRef processFile = nodeService.getChildByName(version, ContentModel.ASSOC_CONTAINS, fileName);
+			            if(processFile!=null) {
+			            	fileFolderService.rename(processFile, "old_"+fileName);
+			            }
 		                fileFolderService.copy(file, version, fileName);
 		            } catch (org.alfresco.service.cmr.model.FileNotFoundException e) {
-		                logger.error("Cannot copy file", e);
+		                logger.error("Не удалось скопировать файл", e);
+		            } catch (org.alfresco.service.cmr.model.FileExistsException e) {
+		            	logger.error("Не удалось скопировать файл", e);
 		            }
 
 		            //Сохраняем свойсвтва контейнера версий
 		            nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
-		            //Публикуем машину состояний
-		            logger.debug("Deploy process");
-		            lecmWorkflowDeployer.redeploy();
-		            logger.debug("Process is deployed");
+		            logger.debug("Машина состояний развернута");
                 }
             } catch (LecmBaseException e) {
-                logger.error("Error while deployed statemachine");
+                logger.error("Не удалось развернуть машину состояний");
             }
 		} else if (statemachineNodeRef != null && "diagram".equals(type)) {
 			res.setContentType("image/png");

@@ -232,7 +232,8 @@ public class LecmWorkflowDeployerImpl extends AbstractLifecycleBean implements L
 	protected void onShutdown(ApplicationEvent applicationEvent) {
 	}
 
-	private WorkflowDeployment deploy(String engineId, String mimetype, InputStream inputStream, String filename) throws IOException {
+	@Override
+	public WorkflowDeployment deploy(String engineId, String mimetype, InputStream inputStream, String filename) throws IOException {
 		return workflowService.deployDefinition(engineId, inputStream, mimetype, filename);
 	}
 
