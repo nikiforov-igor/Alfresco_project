@@ -18,12 +18,6 @@
 </#if>
 
 <script type="text/javascript">//<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-LogicECM.module = LogicECM.module || {};
-LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
-LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 (function() {
 
 	function init() {

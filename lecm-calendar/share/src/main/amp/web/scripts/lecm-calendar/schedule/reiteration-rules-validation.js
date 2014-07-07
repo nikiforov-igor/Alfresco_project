@@ -4,7 +4,7 @@ if (typeof LogicECM === "undefined" || !LogicECM) {
 
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
-LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Schedule || {};
+LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 
 (function() {
 	LogicECM.module.WCalendar.Schedule.reiterationRulesValidation = function Schedule_reiterationRulesValidation() {
