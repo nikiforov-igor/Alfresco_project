@@ -102,6 +102,13 @@ LogicECM.module = LogicECM.module || {};
                             }
                         }
                     }
+                    YAHOO.Bubbling.fire("formValueChanged", {
+                       eventGroup: this,
+                       addedItems: [],
+                       removedItems: [],
+                       selectedItems: [],
+                       selectedItemsMetaData: {}
+                    });
                 }
             });
 })();
