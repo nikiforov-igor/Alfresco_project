@@ -58,7 +58,7 @@ public class SearchQueryProcessorServiceImpl implements SearchQueryProcessorServ
             String processorId = groupText.substring(2, lastIndex);
             String procQuery = getProcessorQuery(processorId, params);
             if (!procQuery.isEmpty()) {
-                query = query.replace(groupText, "(" + getProcessorQuery(processorId, params) + ")");
+                query = query.replace(groupText, "(" + procQuery + ")");
             }
         }
 

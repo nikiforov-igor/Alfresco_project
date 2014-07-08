@@ -134,7 +134,7 @@ public class LucenePreparedQueryHelper {
 
             if (isProcessedField) {
                 final String cond = makeProcessedCondition(substituteExpression, colDesc.getParameterValue());
-                if (cond != null && cond.length() > 0 && !cond.equals(cond)){
+                if (cond != null && cond.length() > 0 && !cond.equals(substituteExpression)){
                     bquery.emmit(!bquery.isEmpty() ? " AND " : "").emmit(cond);
                 }
                 continue;

@@ -614,6 +614,11 @@
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
+    <bean id="docsByUnitsProcessor" class="ru.it.lecm.documents.processors.DocsAuthorsByUnitProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="DOCS_AUTHORS_BY_UNIT"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+    </bean>
+
     <bean id="lastDocumentsProcessor" class="ru.it.lecm.documents.processors.LastDocumentsProcessor" parent="searchQueryBaseProccesor">
         <property name="id" value="LAST_DOCUMENTS"/>
         <property name="documentFrequencyAnalysisService" ref="frequencyAnalysisService"/>
