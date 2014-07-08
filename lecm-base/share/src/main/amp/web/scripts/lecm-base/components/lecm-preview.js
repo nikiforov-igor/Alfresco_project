@@ -40,6 +40,11 @@ LogicECM.control = LogicECM.control || {};
 					var me = this;
                     if (this.currentPreviewElement != null) {
                         Dom.get(me.id).innerHTML = "";
+
+                        var prevFullWindowDiv = Dom.get(this.currentPreviewElement.id + "-full-window-div");
+                        if (prevFullWindowDiv) {
+                            Dom.getAncestorByTagName(prevFullWindowDiv, "body").removeChild(prevFullWindowDiv);
+                        }
                     }
                     var previewElementId = this.id + new Date().getTime();
                     this.currentPreviewElement = document.createElement("div");
