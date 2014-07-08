@@ -39,7 +39,7 @@ LogicECM.control = LogicECM.control || {};
 				if (args != null && args[1] != null && args[1].nodeRef != null) {
 					var me = this;
                     if (this.currentPreviewElement != null) {
-                        Dom.get(me.id).removeChild(this.currentPreviewElement);
+                        Dom.get(me.id).innerHTML = "";
                     }
                     var previewElementId = this.id + new Date().getTime();
                     this.currentPreviewElement = document.createElement("div");
@@ -82,6 +82,7 @@ LogicECM.control = LogicECM.control || {};
 
 			hidePreview: function () {
 				Dom.get(this.id).innerHTML = "";
+                this.currentPreviewElement = null;
 			}
 		});
 })();
