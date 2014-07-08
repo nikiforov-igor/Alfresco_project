@@ -8,6 +8,10 @@
 	height: 100%;
 }
 
+.container .document-preview.body .web-preview .previewer.Embed {
+    height: 100% !important; /* чтобы переопределить инлайновые стили альфрески */
+}
+
 .container .document-metadata {
 	width: 600px;
 	float: left;
