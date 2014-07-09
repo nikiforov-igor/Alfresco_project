@@ -38,18 +38,21 @@ public class ArmWrapperWebScriptBean extends BaseWebScript {
     }
 
     @SuppressWarnings("unused")
-    public List<JSONObject> getArmNodeChilds(ScriptNode node) {
+    public List<JSONObject> getArmNodeChilds(ScriptNode node, boolean withOwnQueryOnly) {
         List<JSONObject> nodes = new ArrayList<JSONObject>();
         List<ArmNode> childNodes = armWrapperService.getChildNodes(node.getNodeRef(), nodeService.getPrimaryParent(node.getNodeRef()).getParentRef(), false);
         for (ArmNode childNode : childNodes) {
-            JSONObject result = new JSONObject();
-            try {
-                result.put("title", childNode.getTitle());
-                result.put("query", getFullQuery(childNode, true, false));
+            String ownQuery = getFullQuery(childNode, false, false);
+            if (!withOwnQueryOnly || (ownQuery != null && !"".equals(ownQuery.trim()))) {
+                JSONObject result = new JSONObject();
+                try {
+                    result.put("title", childNode.getTitle());
+                    result.put("query", getFullQuery(childNode, true, false));
 
-                nodes.add(result);
-            } catch (JSONException e) {
-                logger.error(e.getMessage(), e);
+                    nodes.add(result);
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
             }
         }
         return nodes;
