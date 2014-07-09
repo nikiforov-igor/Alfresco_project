@@ -10,9 +10,11 @@ ${msg("heading")}
     </span>
 </h2>
 
+<#if data??>
 <div>
     <div class="total-tasks-count-right <#if data.myTasksTotalCount == 0>hidden1</#if>">${data.myTasksTotalCount}</div>
 </div>
+</#if>
 
 <div id="${id}-formContainer">
 <#if data??>
