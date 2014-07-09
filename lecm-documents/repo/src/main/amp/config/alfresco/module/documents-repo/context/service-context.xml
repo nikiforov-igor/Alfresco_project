@@ -614,9 +614,13 @@
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
     </bean>
 
-    <bean id="docsByUnitsProcessor" class="ru.it.lecm.documents.processors.DocsAuthorsByUnitProcessor" parent="searchQueryBaseProccesor">
-        <property name="id" value="DOCS_AUTHORS_BY_UNIT"/>
+    <bean id="employeesByUnitsProcessor" class="ru.it.lecm.documents.processors.EmployeesByUnitsProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="EMPLOYEES_BY_UNITS"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+    </bean>
+
+    <bean id="docsBySigners" class="ru.it.lecm.documents.processors.DocumentsBySignersProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="DOCUMENTS_BY_SIGNERS"/>
     </bean>
 
     <bean id="lastDocumentsProcessor" class="ru.it.lecm.documents.processors.LastDocumentsProcessor" parent="searchQueryBaseProccesor">

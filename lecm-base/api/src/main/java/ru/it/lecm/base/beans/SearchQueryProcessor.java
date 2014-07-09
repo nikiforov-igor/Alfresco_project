@@ -1,6 +1,7 @@
 package ru.it.lecm.base.beans;
 
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.security.AuthenticationService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.util.PropertyCheck;
@@ -16,6 +17,7 @@ public abstract class SearchQueryProcessor {
     protected NamespaceService namespaceService;
     protected AuthenticationService authService;
     protected NodeService nodeService;
+    protected SearchService searchService;
 
     protected SearchQueryProcManager processorManager;
 
@@ -45,6 +47,9 @@ public abstract class SearchQueryProcessor {
         this.processorManager = processorManager;
     }
 
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
     /**
      регистрации в системе
      */

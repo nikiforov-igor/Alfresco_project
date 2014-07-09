@@ -464,6 +464,7 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="authService" ref="authenticationService"/>
         <property name="processorManager" ref="searchQueryProcessorManager"/>
+        <property name="searchService" ref="searchService"/>
     </bean>
 
     <bean id="favouritesProcessor" class="ru.it.lecm.base.processors.FavouritesProcessor" parent="searchQueryBaseProccesor">

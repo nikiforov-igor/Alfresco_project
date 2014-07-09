@@ -685,6 +685,7 @@ public class XMLMacroGenerator {
                             if (colDesc.getAlfrescoType() != null && !colDesc.getAlfrescoType().startsWith("d:")) {
                                 //(2)
                                 colDesc.setColumnName(columnName + ParameterMapper.TEXT);
+                                colDesc.setClassName(JavaDataType.SupportedTypes.STRING.name());
                                 index++;
                                 this.doColumnMacroExpansion(macroKey, colDesc, index);
 
