@@ -497,6 +497,11 @@
 }
 /* control view-file-link - end*/
 
+/* control hidden-association - start */
+.control.hidden-assoc {
+    margin-bottom: 0;
+}
+/* control hidden-association - end */
 
 /* Datepicker - start */
 .datepicker {
