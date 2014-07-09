@@ -35,8 +35,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
 
     var Dom = YAHOO.util.Dom;
     var Event = YAHOO.util.Event;
-    var UA = YAHOO.util.UserAction;
-    var Bubbling = YAHOO.Bubbling;
     LogicECM.module.StatemachineEditor.Menu = function (htmlId) {
         return LogicECM.module.StatemachineEditor.Menu.superclass.constructor.call(
             this,
@@ -67,7 +65,7 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             //Home
             var onClickHomeMenuButton = function(e) {
                 document.location.href = Alfresco.constants.URL_CONTEXT + "page/statemachine";
-            }
+            };
             Alfresco.util.createYUIButton(this, "homeBtn", onClickHomeMenuButton, {});
 
             var propertiesMenu = new YAHOO.widget.Menu("propertiesMenu");
@@ -100,37 +98,37 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             var onClickPropertiesMenuButton = function(e) {
                 propertiesMenu.moveTo(e.clientX, e.clientY);
                 propertiesMenu.show();
-            }
+            };
             Alfresco.util.createYUIButton(this, "properties-menu-button", onClickPropertiesMenuButton, {});
 
             //Deploy
             var onClickDeployMenuButton = function(e) {
                 this.editor._deployStatemachine();
-            }
+            };
             Alfresco.util.createYUIButton(this, "deploy-menu-button", onClickDeployMenuButton, {});
 
             //Versions
             var onClickVersionsMenuButton = function(e) {
                 this.editor.showVersions();
-            }
+            };
             Alfresco.util.createYUIButton(this, "versions-menu-button", onClickVersionsMenuButton, {});
 
             //New Status
             var onClickNewStatusMenuButton = function(e) {
                 this.editor._createStatus();
-            }
+            };
             Alfresco.util.createYUIButton(this, "new-status-menu-button", onClickNewStatusMenuButton, {});
 
             //End Status
             var onClickEndEventMenuButton = function(e) {
                 this.editor._createEndEvent();
-            }
+            };
             Alfresco.util.createYUIButton(this, "end-event-menu-button", onClickEndEventMenuButton, {});
 
             //New AlternativeStart
             var onClickAlternativeStartMenuButton = function(e) {
                 this.editor.editAlternativeStarts();
-            }
+            };
             Alfresco.util.createYUIButton(this, "alternative-start-menu-button", onClickAlternativeStartMenuButton, {});
 
             //Export
@@ -143,12 +141,6 @@ LogicECM.module.StatemachineEditor = LogicECM.module.StatemachineEditor || {};
             var importXmlButton = Alfresco.util.createYUIButton(this, "machine-import", function(){},{});
             var inputId = this.id + "-import-xml-input";
 
-            Event.on(inputId, "mouseenter", function() {
-                UA.mouseover(importXmlButton);
-            });
-            Event.on(inputId, "mouseleave", function() {
-                UA.mouseout(importXmlButton);
-            });
             Event.on(inputId, "change", this.editor._importStatemachine, null, this);
 
             // Finally show the component body here to prevent UI artifacts on YUI button decoration

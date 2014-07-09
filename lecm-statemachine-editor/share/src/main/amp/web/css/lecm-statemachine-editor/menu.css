@@ -2,44 +2,8 @@
     background: url('/share/res/images/lecm-statemachine-editor/home.png') no-repeat 4px 4px;
 }
 
-
-.statemachine-menu #menu-buttons-properties-menu-button span.first-child {
-    width: 24px;
-    height: 24px;
-    background: url('/share/res/images/lecm-statemachine-editor/properties.png') no-repeat 4px 4px;
-}
-
-.statemachine-menu #menu-buttons-deploy-menu-button span.first-child {
-    width: 24px;
-    height: 24px;
-	background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
-}
-
-.statemachine-menu #menu-buttons-versions-menu-button span.first-child {
-    width: 24px;
-    height: 24px;
-    background: url('/share/res/images/lecm-statemachine-editor/versions.png') no-repeat 4px 4px;
-}
-
-.statemachine-menu #menu-buttons-machine-export span.first-child {
-	background: url('/share/res/images/lecm-statemachine-editor/export.png') no-repeat 4px 4px;
-    width: 24px;
-    height: 24px;
-}
-
-.statemachine-menu #menu-buttons-machine-import span.first-child {
-    background: url('/share/res/images/lecm-statemachine-editor/import.png') no-repeat 4px 4px;
-    width: 24px;
-    height: 24px;
-}
-
-.statatemachine-import-form {
-    position: absolute;
-    border: 1px solid black;
-    opacity: 0;
-    width: 24px;
-    height: 24px;
-    margin: -26px 0 0 466px;
+.statemachine-menu {
+    position: relative;
 }
 
 .statatemachine-menu-spin {
@@ -52,16 +16,57 @@
     width: 18px;
 }
 
-
-.statatemachine-import-input {
+.statatemachine-import-form {
     width: 24px;
     height: 24px;
+    position: absolute;
+    left: 0;
+    top: -10px;
+    border: 1px solid black;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.yui-skin-lecmTheme .statatemachine-import-form .statatemachine-import-input {
+    height: 24px;
+    position: absolute;
+    right: 0;
     cursor: pointer;
 }
 
 .statemachine-status-title {
     display: inline-block;
     width: 60px;
+}
+
+.statemachine-menu #menu-buttons-properties-menu-button span.first-child {
+    width: 24px;
+    height: 24px;
+    background: url('/share/res/images/lecm-statemachine-editor/properties.png') no-repeat 4px 4px;
+}
+
+.statemachine-menu #menu-buttons-deploy-menu-button span.first-child {
+    width: 24px;
+    height: 24px;
+    background: url('/share/res/images/lecm-statemachine-editor/deploy.png') no-repeat 4px 4px;
+}
+
+.statemachine-menu #menu-buttons-versions-menu-button span.first-child {
+    width: 24px;
+    height: 24px;
+    background: url('/share/res/images/lecm-statemachine-editor/versions.png') no-repeat 4px 4px;
+}
+
+.statemachine-menu #menu-buttons-machine-export span.first-child {
+    background: url('/share/res/images/lecm-statemachine-editor/export.png') no-repeat 4px 4px;
+    width: 24px;
+    height: 24px;
+}
+
+.statemachine-menu #menu-buttons-machine-import span.first-child {
+    background: url('/share/res/images/lecm-statemachine-editor/import.png') no-repeat 4px 4px;
+    width: 24px;
+    height: 24px;
 }
 
 .statemachine-menu #menu-buttons-new-status-menu-button span.first-child {
