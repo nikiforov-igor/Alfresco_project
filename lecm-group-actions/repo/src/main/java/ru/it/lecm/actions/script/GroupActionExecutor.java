@@ -118,7 +118,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
                 result.put("withErrors", false);
                 final ScriptContent scriptContent = new StringScriptContent(script);
                 final ArrayList<HashMap<String, Object>> itemsResult = new ArrayList<HashMap<String, Object>>();
-				
+
 				//TODO проверить, нужна ли здесь вообще транзакция
 				transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
 					@Override
@@ -126,7 +126,7 @@ public class GroupActionExecutor extends DeclarativeWebScript {
 						for (NodeRef item : items) {
 							scriptModel.put("document", item);
 							HashMap<String, Object> itemResult = new HashMap<String, Object>();
-							itemResult.put("message", nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING).toString());
+							itemResult.put("message", (String) nodeService.getProperty(item, DocumentService.PROP_PRESENT_STRING));
 							itemResult.put("withErrors", false);
 							try {
 								try {
