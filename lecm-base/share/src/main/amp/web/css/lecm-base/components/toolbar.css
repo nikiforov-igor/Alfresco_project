@@ -32,23 +32,23 @@
     background: url("/share/res/components/images/delete-disabled-16.png") no-repeat scroll 0 0 transparent;
     padding-right: 16px;
 }
-.datalist-toolbar .import-xml span.first-child
-{
+.datalist-toolbar .import-xml span.first-child {
 	background: url(/share/images/lecm-dictionary/xml-file-16.png) no-repeat 12px 4px;
 	padding-left: 24px;
 }
 .datalist-toolbar .search-input {
     display: inline-block;
-    vertical-align: text-bottom;
-    margin-top: 4px;
-    background-color: white;
-    border: 1px solid #CCC;
+    margin-top: 2px;
+    background-color: #fff;
+    border: 1px solid #ccc;
     border-radius: 3px;
-    line-height: 0;
 }
 .datalist-toolbar .search-input input {
     border: 0;
     outline: none;
     padding-right: 0;
-	margin-bottom: 1px;
+    margin-left: 3px;
+}
+.datalist-toolbar .yui-button.search {
+    margin: 0;
 }
