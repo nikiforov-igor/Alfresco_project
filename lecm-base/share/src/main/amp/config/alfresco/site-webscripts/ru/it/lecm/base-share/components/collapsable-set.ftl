@@ -13,17 +13,21 @@
             <@formLib.renderField field=form.fields[item.id] />
         </#if>
     </#list>
-    <span id="${id}-${set.id}-save-draft" class="yui-button yui-push-button">
+    <div class="form-buttons">
+        <span id="${id}-${set.id}-save-draft" class="yui-button yui-push-button">
+            <span class="first-child">
+                <button type="button">${msg("label.save-draft")}</button>
+            </span>
+        </span>
+    </div>
+</div>
+<div class="form-buttons">
+    <span id="${id}-${set.id}-expand-panel" class="yui-button yui-push-button">
         <span class="first-child">
-            <button type="button">${msg("label.save-draft")}</button>
+            <button type="button">${msg("label.show-details")}</button>
         </span>
     </span>
 </div>
-<span id="${id}-${set.id}-expand-panel" class="yui-button yui-push-button">
-    <span class="first-child">
-        <button type="button">${msg("label.show-details")}</button>
-    </span>
-</span>
 
 <script type="text/javascript">//<![CDATA[
 (function() {

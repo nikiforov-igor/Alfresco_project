@@ -507,6 +507,19 @@
  }
 /* Datepicker - end */
 
+/* форма создания документа */
+.yui-skin-lecmTheme .form-container .form-fields,
+.yui-skin-lecmTheme .form-container .form-fields .set {
+    padding-bottom: 0;
+}
+.yui-skin-lecmTheme .form-container .form-buttons {
+    margin-left: 1em;
+    padding: 0 1em 1em 190px;
+}
+.yui-skin-lecmTheme .form-container .form-fields .form-buttons {
+    margin-left: 0;
+}
+
 /* Temporary styles, should be removed */
 
  /* view-metatdata form*/

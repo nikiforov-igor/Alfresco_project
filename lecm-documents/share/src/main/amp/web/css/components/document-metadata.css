@@ -6,6 +6,7 @@
 
 .container .document-preview .web-preview {
 	height: 100%;
+    border: 1px solid #ccc;
 }
 
 .container .document-preview.body .web-preview .previewer.Embed {
