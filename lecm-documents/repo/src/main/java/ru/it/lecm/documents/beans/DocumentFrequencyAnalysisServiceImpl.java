@@ -180,7 +180,14 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
         if (lastDocContainer != null) {
             String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
             if (lastDocs != null) {
-                return lastDocs;
+                String[] strings = lastDocs.split(";");
+                StringBuilder docs = new StringBuilder();
+                for (String string : strings) {
+                    if (nodeService.exists(new NodeRef(string))) {
+                        docs.append(string).append(";");
+                    }
+                }
+                return docs.toString();
             }
         }
         return "";
