@@ -521,6 +521,7 @@
     margin-left: 1em;
     padding: 0 1em 1em 190px;
 }
+.yui-skin-lecmTheme .form-container.yui-panel .form-buttons,
 .yui-skin-lecmTheme .form-container .form-fields .form-buttons {
     margin-left: 0;
 }
