@@ -2,12 +2,12 @@
 	<script type="text/javascript">//<![CDATA[
 	var viewDialog = null;
 
-	function viewAttributes(nodeRef, setId, title) {
+	function viewAttributes(nodeRef, setId, title, viewFormId) {
 		var obj = {
 			htmlid:nodeRef.replace("workspace://SpacesStore/","").replace("-",""),
 			itemKind:"node",
 			itemId:nodeRef,
-			formId:"${formId}",
+			formId: viewFormId != null ? viewFormId : "${formId}",
 			mode:"view"
 		};
 		if (setId != null) {

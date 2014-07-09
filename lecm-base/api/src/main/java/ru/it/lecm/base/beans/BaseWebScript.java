@@ -80,6 +80,10 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
         return wrapperAttribute(node.getNodeRef(), description);
     }
 
+	public String wrapperAttribute(ScriptNode node, String description, String formId) {
+		return wrapperAttribute(node.getNodeRef(), description, formId);
+	}
+
     /**
      * Оборачиваем узел в ссылку для просмотра атрибутов
      * @param nodeRef
@@ -87,8 +91,12 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      * @return
      */
     public String wrapperAttribute(NodeRef nodeRef, String description) {
-        return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef.toString() + "', null, null)\">" + description + "</a>";
+        return wrapperAttribute(nodeRef, description, null);
     }
+
+	public String wrapperAttribute(NodeRef nodeRef, String description, String formId) {
+		return "<a href=\"javascript:void(0);\" onclick=\"viewAttributes('" + nodeRef.toString() + "', null, null" + (formId != null ? (",'" +  formId + "'") : "") + ")\">" + description + "</a>";
+	}
 
 
 	/**
