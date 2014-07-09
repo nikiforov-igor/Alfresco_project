@@ -14,6 +14,8 @@
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/title-with-filter-label/title-with-filter-label.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
+
     <#include "/org/alfresco/components/form/form.dependencies.inc">
 
     <#assign filter = ""/>
