@@ -30,9 +30,14 @@
 <script type="text/javascript">//<![CDATA[
 (function() {
 	function init() {
-		LogicECM.module.Base.Util.loadScripts([
-			'scripts/lecm-base/components/lecm-form-tabs.js'
-		], createControl, ["tabview"]);
+        if (LogicECM.BaseFormTabs) {
+            createControl();
+        } else {
+            // грузим скрипт только в том случае, когда он еще не был загружен
+            LogicECM.module.Base.Util.loadScripts([
+                'scripts/lecm-base/components/lecm-form-tabs.js'
+            ], createControl, ["tabview"]);
+        }
 	}
 
     function createControl() {
