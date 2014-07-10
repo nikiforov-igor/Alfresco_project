@@ -2,21 +2,9 @@
     <#assign aDateTime = .now>
     <#assign el="avaiableColumns"/>
 
-<script type="text/javascript">
-    if (typeof LogicECM == "undefined" || !LogicECM) {
-        var LogicECM = {};
-    }
-
-    LogicECM.module = LogicECM.module || {};
-
-    LogicECM.module.ARM = LogicECM.module.ARM || {};
-
-</script>
-
 <script type="text/javascript">//<![CDATA[
 
 (function () {
-    LogicECM.module.ARM = LogicECM.module.ARM || {};
     LogicECM.module.ARM.restoreColumns = function restoreColumns() {
         YAHOO.Bubbling.fire("restoreDefaultColumns");
     }
