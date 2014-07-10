@@ -94,4 +94,6 @@ public interface StateMachineServiceBean {
     public void sendSignal(String executionId);
 
     public boolean isServiceWorkflow(WorkflowInstance workflow);
+    
+    public void resetStateMachene();
 }
