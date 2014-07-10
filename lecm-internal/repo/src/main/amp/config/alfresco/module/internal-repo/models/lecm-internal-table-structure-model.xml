@@ -119,6 +119,7 @@
             </properties>
             <associations>
                 <association name="lecm-internal-table-structure:answers-assoc">
+                    <title>Ответы</title>
                     <source>
                         <mandatory>true</mandatory>
                         <many>false</many>

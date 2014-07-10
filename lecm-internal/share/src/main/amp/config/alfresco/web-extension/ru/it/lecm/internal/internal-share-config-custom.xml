@@ -209,6 +209,25 @@
         </forms>
     </config>
 
+    <config evaluator="node-type" condition="lecm-internal-table-structure:answersTable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-internal-table-structure:answersGrid" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <field id="lecm-internal-table-structure:answersGrid" label="Ответы">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-internal-table-structure:answer</control-param>
+                            <control-param name="datagridFormId">answers-datagrid</control-param>
+                            <control-param name="allowCreate">false</control-param>
+                        </control>
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
     <config evaluator="model-type" condition="lecm-internal-table-structure:answer">
         <forms>
             <form id="answers-datagrid">
