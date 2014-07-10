@@ -205,6 +205,8 @@ public class BPMNDiagramScript extends AbstractWebScript {
 		            //Сохраняем свойсвтва контейнера версий
 		            nodeService.setProperty(statemachineVersions, StatemachineEditorModel.PROP_LAST_VERSION, lastVersion);
 
+		            statemachineService.resetStateMachene();
+		            
 		            logger.debug("Машина состояний развернута");
                 }
             } catch (LecmBaseException e) {
