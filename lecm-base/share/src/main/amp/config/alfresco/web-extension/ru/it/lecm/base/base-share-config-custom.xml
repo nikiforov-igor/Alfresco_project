@@ -140,12 +140,12 @@
                 <!--содержит полезные вещи, включая ассинхронную подгрузку других скриптов-->
                 <js src="/scripts/lecm-base/components/base-utils.js" />
                 <js src="/scripts/lecm-base/components/base64.js" />
+                <js src="/scripts/lecm-base/components/lecm-validation.js" />
 				<!-- <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
 				<js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-cascading-selectone.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-autocomplete.js" />
-				<js src="/scripts/lecm-base/components/lecm-validation.js" />
 				<js src="/scripts/lecm-base/components/lecm-date-display.js" />
 				<js src="/scripts/lecm-base/components/lecm-fillproperties.js" />
 				<js src="/scripts/lecm-base/components/association-tree/association-tree-view.js" />
