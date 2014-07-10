@@ -60,6 +60,7 @@
 			p:documentService-ref="documentService"
 			p:objTypeCache-ref="objTypeCache"
 			p:typeTemplateCache-ref="typeTemplateCache"
+			p:dictionary-ref="dictionaryService"
 			p:typeListTemplateCache-ref="typeListTemplateCache"
 			p:dateFormat="${lecm.base.date.format}"/>
 

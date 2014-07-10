@@ -4,6 +4,7 @@ import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
@@ -207,6 +208,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     public static final String DICTIONARY_TYPE_OBJECT_NAME = "Тип объекта";
     private NamespaceService namespaceService;
     private DictionaryBean dictionaryService;
+    private DictionaryService dictionary;
     private String dateFormat = "yyyy-MM-dd HH:mm";
 
     final private static Logger logger = LoggerFactory.getLogger(SubstitudeBeanImpl.class);
@@ -222,6 +224,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
 
     public void setTypeTemplateCache(SimpleCache<NodeRef, String> typeTemplateCache) {
         this.typeTemplateCache = typeTemplateCache;
+    }
+
+    public void setDictionary(DictionaryService dictionary) {
+        this.dictionary = dictionary;
     }
 
     public void setTypeListTemplateCache(SimpleCache<NodeRef, String> typeListTemplateCache) {
@@ -699,7 +705,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         QName type = nodeService.getType(nodeRef);
         String shortTypeName = type.toPrefixString(serviceRegistry.getNamespaceService());
         // получаем Тип Объекта
-        return getObjectTypeByClass(shortTypeName);
+        return getObjectTypeByClass(type,shortTypeName);
     }
 
     /**
@@ -708,13 +714,18 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
      * @param type - тип(класс) объекта
      * @return ссылка на объект справочника или NULL
      */
-    private NodeRef getObjectTypeByClass(String type) {
+    private NodeRef getObjectTypeByClass(QName qnameType, String type) {
         // получаем Тип Объекта
         NodeRef typeRef = objTypeCache.get(type);
         if (typeRef == null) {
             typeRef = dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CLASS, type);
             if (typeRef != null) {
                 objTypeCache.put(type, typeRef);
+            } else {
+                boolean isDocument = dictionary.isSubClass(qnameType, DocumentService.TYPE_BASE_DOCUMENT);
+                if (isDocument && !qnameType.equals(DocumentService.TYPE_BASE_DOCUMENT)) {
+                    return getObjectTypeByClass(DocumentService.TYPE_BASE_DOCUMENT, DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService));
+                }
             }
         }
         return typeRef;
