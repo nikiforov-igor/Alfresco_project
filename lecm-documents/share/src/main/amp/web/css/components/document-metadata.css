@@ -1,14 +1,19 @@
 .container .document-preview {
 	width: auto;
 	overflow: hidden;
-	padding-top: 13px;
+	padding: 1em 1em 0 0;
 }
-
+.container .document-preview > div {
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
 .container .document-preview .web-preview {
 	height: 100%;
-    border: 1px solid #ccc;
 }
-
+.container .document-preview.body .web-preview .previewer {
+    border: none;
+}
+.container .document-preview.body .web-preview .previewer.WebPreviewer,
 .container .document-preview.body .web-preview .previewer.Embed {
     height: 100% !important; /* чтобы переопределить инлайновые стили альфрески */
 }
@@ -17,7 +22,6 @@
 	width: 600px;
 	float: left;
 }
-
 .document-metadata .control .label-div {
 	text-align: right;
 }
