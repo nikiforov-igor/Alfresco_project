@@ -66,9 +66,7 @@
                 showExtendSearchBlock: false,
                 showCheckboxColumn: false,
                 searchShowInactive: false,
-
                 forceSubscribing: true,
-
                 showActionColumn: ${showActions?string},
 
             <#if showActions>
@@ -122,6 +120,12 @@
             templateUrl: "components/form",
             templateRequestParams: templateRequestParams,
             destroyOnHide: true,
+            doBeforeDialogShow: {
+                fn: function (p_form, p_dialog) {
+                    p_dialog.dialog.setHeader("${msg('tab.representatives.addRepresentativeButton.label')}");
+                },
+                scope: this
+            },
             doBeforeFormSubmit: {
                 fn: function() {
                     isPrimaryCheckboxChecked = YAHOO.util.Dom.get("${fieldHtmlId}-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry").checked;
