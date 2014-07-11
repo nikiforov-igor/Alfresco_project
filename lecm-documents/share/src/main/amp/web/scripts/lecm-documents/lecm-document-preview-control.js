@@ -164,18 +164,13 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			Dom.setStyle(obj.previewerDiv, 'height', this.options.height);
 		},
 
-		onViewerReady: function(obj) {
-
-			function onWebPreviewResize(obj) {
-				var subscribers = webPreview.plugin.onResize.subscribers;
-				var oldSubscribers = YAHOO.lang.merge({subscribers: subscribers});
-
-				webPreview.plugin.onResize.unsubscribeAll();
+		onWebPreviewResize: function(event, args, obj) {
 				Dom.setStyle(obj.previewerDiv, 'height', this.options.height);
 				Dom.setStyle(obj.viewer, 'height', this.options.viewerHeight);
-				webPreview.plugin.onResize.subscribers = oldSubscribers.subscribers;
 				return false;
-			}
+		},
+
+		onViewerReady: function(obj) {
 
 			var webPreview, components = Alfresco.util.ComponentManager.find({name: 'Alfresco.WebPreview'});
 
@@ -185,7 +180,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			if (components && components.length) {
 				webPreview = components[0];
 				if (webPreview.plugin && webPreview.plugin.onResize) {
-					webPreview.plugin.onResize.subscribe(onWebPreviewResize, obj, this);
+					webPreview.plugin.onResize.unsubscribe(this.onWebPreviewResize);
+					webPreview.plugin.onResize.subscribe(this.onWebPreviewResize, obj, this);
 				}
 			}
 		}
