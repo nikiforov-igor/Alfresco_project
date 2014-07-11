@@ -4,6 +4,7 @@
 	padding: 1em 1em 0 0;
 }
 .container .document-preview > div {
+    height: 100%;
     border: 1px solid #ccc;
     box-sizing: border-box;
 }

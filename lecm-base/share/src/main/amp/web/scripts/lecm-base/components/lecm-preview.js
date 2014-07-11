@@ -50,13 +50,6 @@ LogicECM.control = LogicECM.control || {};
                     this.currentPreviewElement = document.createElement("div");
                     this.currentPreviewElement.id = previewElementId;
                     Dom.get(me.id).appendChild(this.currentPreviewElement);
-                    // устанавливаем высоту области просмотра
-                    var docPreviewBody = Dom.getAncestorByClassName(this.currentPreviewElement, "document-preview body");
-                    var metadataBlock = Dom.getPreviousSibling(docPreviewBody);
-                    var height = metadataBlock.offsetHeight - parseInt(Dom.getStyle(docPreviewBody, "padding-top"))
-                                - parseInt(Dom.getStyle(docPreviewBody, "padding-bottom"));
-                    Dom.setStyle(docPreviewBody, "height", height + "px");
-                    Dom.setStyle(this.currentPreviewElement, "height", height + "px");
 					Alfresco.util.Ajax.request(
 						{
 							url: Alfresco.constants.URL_SERVICECONTEXT + "components/preview/web-preview",
