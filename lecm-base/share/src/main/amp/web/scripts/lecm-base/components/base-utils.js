@@ -436,7 +436,7 @@ LogicECM.module.Base.Util = {
     getControlValueView: function(nodeRef, displayValue, showTitle) {
         var title = "";
         if (showTitle == null || showTitle) {
-            title = "title='" + displayValue + "'";
+            title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
         }
         return "<span><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a></span>";
     },
@@ -444,7 +444,7 @@ LogicECM.module.Base.Util = {
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
 	    var title = "";
 	    if (showTitle == null || showTitle) {
-		    title = "title='" + displayValue + "'";
+		    title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
 	    }
 	    return "<span class='person'><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
     },
