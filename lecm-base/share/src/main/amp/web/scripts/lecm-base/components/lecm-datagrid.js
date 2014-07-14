@@ -2712,10 +2712,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         },
                         onFailure:{
                             fn:function DataGrid_onActionCreate_failure(response) {
-                                this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
-	                            this.editDialogOpening = false;
+                                me.displayErrorMessageWithDetails(me.msg("logicecm.base.error"), me.msg("message.save.failure"), response.json.message);
+	                            me.editDialogOpening = false;
+	                            this.widgets.cancelButton.set("disabled", false);
                             },
-                            scope:this
+	                        scope: createDetails
                         }
                     }).show();
             },
