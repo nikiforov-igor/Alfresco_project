@@ -222,7 +222,7 @@ function getSearchResults(params) {
                                         }
                                         else {
                                             // simple range found
-                                            propName = propName.substr(0, propName.length - "-range".length);
+                                            propName = propName.substr(0, propName.length - "-number-range".length);
 
                                             // work out if "min" and/or "max" are specified - use MIN and MAX otherwise
                                             from = (sepindex === 0 ? "MIN" : propValue.substr(0, sepindex));

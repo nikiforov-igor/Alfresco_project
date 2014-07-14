@@ -93,37 +93,33 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
        * @param event The event that occurred
        * @private
        */
-      _handleFieldChange: function NumberRange__handleFieldChange(event)
-      {
-         var strMinValue = YAHOO.lang.trim(Dom.get(this.id + "-min").value),
-             strMaxValue = YAHOO.lang.trim(Dom.get(this.id + "-max").value);
-         if (strMinValue.length !== 0)
-         {
-            var minValue = parseFloat(strMinValue);
-            if (!isNaN(minValue))
-            {
-               Dom.removeClass(this.id + "-min", "invalid");
-               this.currentMinNumber = strMinValue;
-            }
-            else
-            {
-               Dom.addClass(this.id + "-min", "invalid");
-            }
-         }
-         if (strMaxValue.length !== 0)
-         {
-            var maxValue = parseFloat(strMaxValue);
-            if (!isNaN(maxValue))
-            {
-               Dom.removeClass(this.id + "-max", "invalid");
-               this.currentMaxNumber = strMaxValue;
-            }
-            else
-            {
-               Dom.addClass(this.id + "-max", "invalid");
-            }
-         }
-         this._updateCurrentValue();
+      _handleFieldChange: function NumberRange__handleFieldChange(event) {
+          var strMinValue = YAHOO.lang.trim(Dom.get(this.id + "-min").value),
+              strMaxValue = YAHOO.lang.trim(Dom.get(this.id + "-max").value);
+
+          var minValue = parseFloat(strMinValue);
+          if (!isNaN(minValue) || strMinValue.length == 0) {
+              Dom.removeClass(this.id + "-min", "invalid");
+              this.currentMinNumber = strMinValue;
+          }
+          else {
+              if (strMinValue.length > 0) {
+                  Dom.addClass(this.id + "-min", "invalid");
+              }
+          }
+
+          var maxValue = parseFloat(strMaxValue);
+          if (!isNaN(maxValue) || strMaxValue.length == 0) {
+              Dom.removeClass(this.id + "-max", "invalid");
+              this.currentMaxNumber = strMaxValue;
+          }
+          else {
+              if (strMaxValue.length > 0) {
+                  Dom.addClass(this.id + "-max", "invalid");
+              }
+          }
+
+          this._updateCurrentValue();
       }
    });
 })();
