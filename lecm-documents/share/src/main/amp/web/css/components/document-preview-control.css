@@ -1,0 +1,20 @@
+.yui-skin-lecmTheme .control.document-preview .preview-select {
+    margin-bottom: 10px;
+}
+.yui-skin-lecmTheme .control.document-preview .document-preview.body:not(:empty) {
+    height: 100%;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer {
+    border: none;
+}
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview,
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.WebPreviewer .web-preview.real embed,
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.Embed iframe,
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.Image img {
+    height: 500px;
+}
+.yui-skin-lecmTheme .control.document-preview .document-preview.body .web-preview .previewer.Embed iframe {
+    height: 476px !important;
+}

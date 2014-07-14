@@ -2373,10 +2373,6 @@ span.person a div.description:empty {
   font:16px/1.231 Open Sans,arial,helvetica,clean,sans-serif !important;
 }
 
-.yui-skin-lecmTheme .yui-panel div.document-preview-cntrol {
-    min-height: 300px;
-}
-
 /*
 Стили неоднородны в плане величин ширины (где-то в процентах, где-то в пикселях)
 Всё нужно будет привести в один вид, а пока вот такой костыль

@@ -2,11 +2,11 @@
 
 <#assign params = field.control.params/>
 
-<div class="form-field document-preview-cntrol">
+<div class="control document-preview">
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
-            LogicECM.module.Base.Util.loadScripts([
+            LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-documents/lecm-document-preview-control.js',
 	            'components/preview/web-preview.js',
 	            'components/preview/WebPreviewer.js',
@@ -22,7 +22,10 @@
 	            'extras/components/preview/pdfjs/compatibility.js',
 	            'extras/components/preview/pdfjs/pdf.js',
 	            'extras/components/preview/spin.js'
-		    ], createControl);
+            ],
+            [
+                'css/components/document-preview-control.css'
+            ], createControl);
 	    }
 		function createControl() {
 			var control = new LogicECM.module.Documents.DocumentPreviewControl("${fieldHtmlId}").setMessages(${messages});
@@ -35,10 +38,11 @@
 	})();
 	//]]></script>
 
-	<div class="preview-select document-preview">
+	<div class="preview-select">
 		<select id="${fieldHtmlId}-attachment-select"></select>
 	</div>
-	<div id="${fieldHtmlId}-preview-container" class="document-preview"></div>
+	<div id="${fieldHtmlId}-preview-container" class="document-preview body"></div> <#-- не удалять! класс 'body' важен для расчета высоты области просмотра -->
 
 	<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
 </div>
+<div class="clear"></div>
