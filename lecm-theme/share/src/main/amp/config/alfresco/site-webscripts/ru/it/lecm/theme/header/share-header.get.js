@@ -269,6 +269,7 @@ var moreMenu = {
         widgets: [
 	        {
 	            name: "alfresco/menus/AlfMenuGroup",
+	            id: "LOGIC_ECM_WIDGETS",
 	            config: {
 	                label: "Logic ECM",
 	                widgets: logicECMWidgets
