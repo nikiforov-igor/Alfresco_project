@@ -2,8 +2,11 @@ package ru.it.lecm.base.beans;
 
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.cache.SimpleCache;
+import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
+import org.alfresco.service.cmr.dictionary.Constraint;
+import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -551,7 +554,23 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 } else {
                     Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
                     if (property != null && result != null) {
-                        result = result.toString().isEmpty() ? property : result;
+                        if (result.toString().isEmpty()) {
+                            List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
+                            //ищем привязанный LIST_CONSTRAINT
+                            if (constraintDefinitionList != null) {
+                                for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
+                                    Constraint constraint = constraintDefinition.getConstraint();
+                                    if (constraint instanceof ListOfValuesConstraint) {
+                                        //получаем локализованное значение для LIST_CONSTRAINT
+                                        String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(property.toString(), dictionary);
+                                        if (constraintProperty != null) {
+                                            property = constraintProperty;
+                                        }
+                                    }
+                                }
+                            }
+                            result = property;
+                        }
                         if (result instanceof Date) {
                             if (timeZoneOffset != null) {
                                 Calendar cal = Calendar.getInstance();
