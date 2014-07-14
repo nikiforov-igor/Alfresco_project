@@ -146,6 +146,9 @@
 			</associations>
 		</aspect>
 
+        //маркер. Отключает перемещение документа при финализации
+        <aspect name="lecm-document-aspects:dont-move-to-archive-folder"/>
+
 		<!-- аспект для поля "В ответ на" -->
 		<aspect name="lecm-document-aspects:response-to-aspect">
 			<associations>
