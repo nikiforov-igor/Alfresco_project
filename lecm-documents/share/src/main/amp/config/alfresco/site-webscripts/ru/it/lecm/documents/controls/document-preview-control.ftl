@@ -1,8 +1,6 @@
 <#include "/org/alfresco/components/form/controls/common/utils.inc.ftl" />
 
 <#assign params = field.control.params/>
-<#assign height = params.height ! ""/>
-<#assign viewerHeight = params.viewerHeight ! ""/>
 
 <div class="form-field document-preview-cntrol">
 	<script type="text/javascript">//<![CDATA[
@@ -29,12 +27,10 @@
 		function createControl() {
 			var control = new LogicECM.module.Documents.DocumentPreviewControl("${fieldHtmlId}").setMessages(${messages});
 			control.setOptions({
-				taskId: "${form.arguments.itemId}",
-				height: '${height}',
-				viewerHeight: '${viewerHeight}'
+				taskId: "${form.arguments.itemId}"
 			});
 		}
-
+		
 		YAHOO.util.Event.onDOMReady(init);
 	})();
 	//]]></script>
