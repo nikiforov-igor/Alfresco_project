@@ -21,7 +21,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	var Dom = YAHOO.util.Dom;
 
 	LogicECM.BaseFormTabs = function (htmlId) {
-		LogicECM.BaseFormTabs.superclass.constructor.call(this, "LogicECM.BaseFormTabs", htmlId);
+		LogicECM.BaseFormTabs.superclass.constructor.call(this, "LogicECM.BaseFormTabs", htmlId, ["tabview"]);
 
 		return this;
 	};
