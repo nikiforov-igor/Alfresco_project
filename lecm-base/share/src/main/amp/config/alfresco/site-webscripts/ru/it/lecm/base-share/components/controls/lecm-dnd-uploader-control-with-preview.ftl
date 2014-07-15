@@ -43,7 +43,7 @@
 	<div class="container">
 		<div class="buttons-div">
             <span class="show-preview-button">
-                <input type="button" id="${fieldHtmlId}-show-preview-button" name="-" value="..."/>
+                <input type="button" id="${fieldHtmlId}-show-preview-button" name="-" value=""/>
             </span>
 		</div>
 		<div class="value-div">

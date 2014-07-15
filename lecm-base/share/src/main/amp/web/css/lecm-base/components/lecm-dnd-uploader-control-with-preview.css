@@ -6,3 +6,11 @@
 .dnd-uploader-with-preview .buttons-div {
 	margin-top: 85px;
 }
+
+.dnd-uploader-with-preview .buttons-div .show-preview-button button {
+	background: url('../../../images/lecm-base/components/preview-16.png') no-repeat center center;
+}
+
+.dnd-uploader-with-preview .buttons-div .show-preview-button button:disabled {
+	background: url('../../../images/lecm-base/components/preview-16_inactive.png') no-repeat center center;
+}
