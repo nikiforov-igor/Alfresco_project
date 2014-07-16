@@ -284,7 +284,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         SysAdminParams params = serviceRegistry.getSysAdminParams();
         String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
         String description = getWorkflowDescription(executionId);
-        return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId.replace("$", "\\$") + "\">" + description + "</a>";
+        return "<a href=\"" + serverUrl + WORKFLOW_LINK_URL + "?workflowId=" + executionId + "\">" + description + "</a>";
     }
 
     public void log(final Date date, final NodeRef initiator, final NodeRef mainObject, final String eventCategory, final String defaultDescription, final List<String> objects) {
