@@ -1,9 +1,8 @@
 var url = "/lecm/statemachine/editor/datagrid/status?nodeRef=" + args["nodeRef"];
 var json = remote.connect("alfresco").get(url);
+var columns = [];
 if (json.status == 200) {
     var statuses = eval("(" + json + ")");
-    var columns = [];
-
     columns.push({
         "type": "property",
         "name": "form_field",
@@ -23,7 +22,6 @@ if (json.status == 200) {
             "sortable": false
         });
     }
-
-    model.columns = columns;
 }
+model.columns = columns;
 
