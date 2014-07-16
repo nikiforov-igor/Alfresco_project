@@ -326,3 +326,14 @@ div.error-item
 #columnsForm .columns-list .filters-table td div {
     border-bottom: 1px solid #D6D6D6;
 }
+
+.arm-html-node {
+    position: relative;
+}
+.arm-html-node .iframe-cover {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    display: none;
+}

@@ -7,7 +7,8 @@ LogicECM.module = LogicECM.module || {};
 LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 (function () {
-	var Dom = YAHOO.util.Dom;
+	var Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector;
 
 	LogicECM.module.ARM.HtmlNode = function (htmlId) {
 		LogicECM.module.ARM.HtmlNode.superclass.constructor.call(this, "LogicECM.module.ARM.HtmlNode", htmlId);
@@ -61,8 +62,23 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 			loadIframePage: function(url) {
 				var height = Dom.getY("lecm-content-ft") - Dom.getY(this.id);
+                Dom.get(this.id).innerHTML = '<iframe style="width:100%; height:' + height + 'px;" src="' + url + '"></iframe>'
+                    // для адекватной работы сплиттера ифрэйм нужно "прикрыть", иначе он перехватывает события от сплиттера
+                    + '<div class="iframe-cover"></div>';
 
-				Dom.get(this.id).innerHTML = '<iframe style="width:100%; height:' + height + 'px;" src="' + url + '"></iframe>';
-			}
+                var iframeCover = Selector.query('div.iframe-cover', this.id, true);
+
+                YAHOO.Bubbling.on("startSplitterMoving", function() {
+                    if (iframeCover) {
+                        Dom.setStyle(iframeCover, 'display', 'block');
+                    }
+                });
+                YAHOO.Bubbling.on("endSplitterMoving", function() {
+                    if (iframeCover) {
+                        Dom.setStyle(iframeCover, 'display', 'none');
+                    }
+                });
+
+            }
 		}, true);
 })();

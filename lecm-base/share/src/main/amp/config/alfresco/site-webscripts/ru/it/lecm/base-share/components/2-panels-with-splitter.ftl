@@ -10,19 +10,24 @@
         <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>-->
 	<script type="text/javascript">//<![CDATA[
         (function(){
-		function initResizer() {
-                  var resizer = new LogicECM.module.Base.Resizer('resizer');
-                  resizer.setOptions({
-                        <#if initialWidth?has_content>
-			initialWidth: ${initialWidth?string},
-                        </#if>
-			divLeft: "${leftPanelId}",
-			divRight: "${rightPanelId}"
-		});
-
-		}
-		YAHOO.util.Event.onDOMReady(initResizer);
-                })();
+            function initResizer() {
+                var resizer = new LogicECM.module.Base.Resizer('resizer');
+                resizer.setOptions({
+                    <#if initialWidth?has_content>
+                        initialWidth: ${initialWidth?string},
+                    </#if>
+                    divLeft: "${leftPanelId}",
+                    divRight: "${rightPanelId}"
+                });
+                resizer.onStartResize = function() {
+                    YAHOO.Bubbling.fire("startSplitterMoving");
+                };
+                resizer.onEndResize = function() {
+                    YAHOO.Bubbling.fire("endSplitterMoving");
+                };
+            }
+            YAHOO.util.Event.onDOMReady(initResizer);
+        })();
 	//]]></script>
 
 <div class="two-panels-container">

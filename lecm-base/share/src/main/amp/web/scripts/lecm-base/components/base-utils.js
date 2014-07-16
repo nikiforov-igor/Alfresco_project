@@ -483,7 +483,7 @@ LogicECM.module.Base.Util = {
 	 * YUI Library aliases
 	 */
 	var Dom = YAHOO.util.Dom,
-			Event = YAHOO.util.Event;
+		Event = YAHOO.util.Event;
 
 	// Recalculate the vertical size on a browser window resize event
 	Event.on(window, "resize", function(e) {
@@ -503,7 +503,24 @@ LogicECM.module.Base.Util = {
 	};
 
 	YAHOO.extend(LogicECM.module.Base.Resizer, Alfresco.widget.Resizer, {
-		marginLeft: 8,
+        marginLeft: 8,
+        onStartResize: null,
+        onEndResize: null,
+        onComponentsLoaded: function Resizer_onComponentsLoaded() {
+            YAHOO.util.Event.onDOMReady(this.onReady, this, true);
+
+            // Start and End resize event handlers
+            this.widgets.horizResize.on("startResize", function(eventTarget) {
+                if (this.onStartResize) {
+                    this.onStartResize();
+                }
+            }, this, true);
+            this.widgets.horizResize.on("endResize", function(eventTarget) {
+                if (this.onEndResize) {
+                    this.onEndResize();
+                }
+            }, this, true);
+        },
 		onResize: function(width) {
 			var cn = Dom.get(this.options.divLeft).childNodes,
 					handle = cn[cn.length - 1];
