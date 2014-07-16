@@ -1,5 +1,12 @@
 <alfresco-config>
-    
+	<config>
+		<forms>
+			<dependencies>
+				<js src="/scripts/lecm-forms-editor/lecm-model-name-validator.js" />
+			</dependencies>
+		</forms>
+	</config>
+
     <config evaluator="node-type" condition="cm:dictionaryModel">
         <forms>
       		<form id="edit-model">
@@ -50,7 +57,11 @@
 				<appearance>
                		<set id="parameters" label-id="it.model.parameters" />
                		<set id="content" label-id="it.model.content" />
-               		<field id="cm:name" set="parameters" />
+               		<field id="cm:name" set="parameters">
+		                <constraint-handlers>
+			                <constraint type="REGEX" validation-handler="LogicECM.module.modelNameValidation" message="Недопустимое имя модели" event="keyup"/>
+		                </constraint-handlers>
+               		</field>
                		<field id="cm:modelActive" set="parameters" />
                		<field id="cm:content" set="content">
                   		<control template="/ru/it/lecm/controls/model-editor.ftl" />
