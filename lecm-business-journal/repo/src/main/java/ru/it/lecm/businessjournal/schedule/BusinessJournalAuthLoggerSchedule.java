@@ -172,24 +172,25 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
 
                             logger.debug("Handle entry " + entryId + "\n" + "Values:");
                             for (String key : values.keySet()) {
-                                logger.debug(key + ": " + values.get(key).toString());
-                                if (key.equals("/authAudit/login/no-error/user")) {
-                                    type = EventCategory.LOGIN_SUCCESS;
-                                    login = values.get(key).toString();
-                                    text = "Пользователь "+login+" вошёл в систему.";
+                                if (values.get(key) != null) {
+                                    logger.debug(key + ": " + values.get(key).toString());
+                                    if (key.equals("/authAudit/login/no-error/user")) {
+                                        type = EventCategory.LOGIN_SUCCESS;
+                                        login = values.get(key).toString();
+                                        text = "Пользователь "+login+" вошёл в систему.";
 
-                                } else if (key.equals("/authAudit/error/error/user")) {
-                                    type = EventCategory.LOGIN_FAILED;
-                                    login = values.get(key).toString();
-                                    text = "Неудачная попытка входа. Login="+login;
-                                } else if (key.equals("/authAudit/logout/args/user")) {
-                                    type = EventCategory.LOGOUT;
-                                    login = values.get(key).toString();
-                                    text = "Пользователь "+login+" завершил сеанс.";
-                                } else {
-                                    logger.debug(key);
+                                    } else if (key.equals("/authAudit/error/error/user")) {
+                                        type = EventCategory.LOGIN_FAILED;
+                                        login = values.get(key).toString();
+                                        text = "Неудачная попытка входа. Login="+login;
+                                    } else if (key.equals("/authAudit/logout/args/user")) {
+                                        type = EventCategory.LOGOUT;
+                                        login = values.get(key).toString();
+                                        text = "Пользователь "+login+" завершил сеанс.";
+                                    } else {
+                                        logger.debug(key);
+                                    }
                                 }
-                                
                             }
                             
 
