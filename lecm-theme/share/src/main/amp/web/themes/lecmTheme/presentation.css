@@ -2399,6 +2399,12 @@ div.currentValueDisplay,
   margin-right: 0;
 }
 
+.alf-header div.dijitMenuItem span,
+.alf-header div.dijitMenuItem span.alf-menu-bar-label-node a {
+  line-height: 18px;
+  font-family: arial, helvetica, sans-serif;
+}
+
 .alfresco-share .logo {
   margin-top: 34px !important;
 }
