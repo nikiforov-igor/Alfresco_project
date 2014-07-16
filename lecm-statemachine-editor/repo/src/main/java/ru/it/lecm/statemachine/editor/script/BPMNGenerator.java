@@ -212,6 +212,7 @@ public class BPMNGenerator {
 		statusTask.setAttribute("id", statusVar);
 		statusTask.setAttribute("activiti:assignee", "${bpm_assignee.properties.userName}");
 		statusTask.setAttribute("name", statusName);
+		statusTask.setAttribute("activiti:formKey", "lecm-statemachine:startTask");
 		process.appendChild(statusTask);
 
 		//create extention

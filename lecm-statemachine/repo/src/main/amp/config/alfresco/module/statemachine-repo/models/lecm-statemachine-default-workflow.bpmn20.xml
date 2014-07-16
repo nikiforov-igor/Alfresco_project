@@ -4,7 +4,8 @@
              targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
 <process id="default_statemachine">
     <startEvent activiti:formKey="lecm-statemachine:startTask" id="start"/>
-    <userTask activiti:assignee="${bpm_assignee.properties.userName}" id="id34f6363e1a564b28bda366d8164c7ea9" name="Черновик">
+    <userTask activiti:assignee="${bpm_assignee.properties.userName}" id="id34f6363e1a564b28bda366d8164c7ea9" name="Черновик"
+              activiti:formKey="lecm-statemachine:startTask">
         <extensionElements>
             <lecm:extension>
                 <lecm:event on="start">
