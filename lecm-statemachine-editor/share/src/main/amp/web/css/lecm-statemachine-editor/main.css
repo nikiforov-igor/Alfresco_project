@@ -9,3 +9,12 @@
 .statemachine-statuses-buttons-table .status-lable {
 	padding-right: 26px;
 }
+
+.confirm-comment-panel .bd .form-container {
+    padding: 1em;
+}
+.confirm-comment-panel .bd textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+}

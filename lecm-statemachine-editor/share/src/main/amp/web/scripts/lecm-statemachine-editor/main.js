@@ -718,13 +718,14 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 
         show: function showCommentConfirm() {
             var containerDiv = document.createElement("div");
-            var form = '<div id="confirm-comment-form-container" class="yui-panel">' +
-                '<div id="confirm-comment-head" class="hd">' + this.options.title + '</div>' +
-                '<div id="confirm-comment-body" class="bd">' +
-                '<div id="confirm-comment-content" class="form-container"><div class="form-fields" style="padding: 1em">' +
+            var panel = '<div id="confirm-comment-form-container" class="yui-panel confirm-comment-panel">' +
+                '<div class="hd">' + this.options.title + '</div>' +
+                '<div class="bd">' +
+                '<div class="form-container">' +
                 '<label for="confirm-comment-textarea">' + this.options.fieldTitle+ ':</label>' +
-                '<textarea id="confirm-comment-textarea" name="confirm-comment-textarea" rows="9" style="margin: 0 0 5px 0; width: 360px;"></textarea>' +
-                '<div style="text-align: right">' +
+                '<textarea id="confirm-comment-textarea" name="confirm-comment-textarea" rows="9"></textarea>' +
+                '</div>' +
+                '<div class="form-buttons">' +
                 '<span id="confirm-comment-edit" class="yui-button yui-push-button">' +
                 '<span class="first-child">' +
                 '<button id="confirm-comment-edit-button" type="button" tabindex="0">Ок</button>' +
@@ -737,9 +738,8 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
                 '</span>' +
                 '</div>' +
                 '</div>' +
-                '</div>' +
                 '</div>';
-            containerDiv.innerHTML = form;
+            containerDiv.innerHTML = panel;
             this.dialog = Alfresco.util.createYUIPanel(Dom.getFirstChild(containerDiv),
                 {
                     width: "30em"
