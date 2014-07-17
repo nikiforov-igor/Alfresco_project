@@ -1,6 +1,7 @@
 .dnd-uploader-with-preview .uploader-block {
 	float: left;
 	padding-right: 5px;
+    padding-left: 2px;
 }
 
 .dnd-uploader-with-preview .buttons-div {

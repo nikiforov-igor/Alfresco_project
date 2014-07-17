@@ -297,7 +297,7 @@
 }
 .control .container .buttons-div {
     float: right;
-    padding-left: 4px;
+    padding: 2px;
 }
 .control .container .buttons-div > input[type=button] { /* на время загрузки, чтоб не прыгали кнопки */
     width: 28px;
@@ -321,6 +321,7 @@
     min-height: 28px;
     width: auto;
     overflow: hidden;
+    padding: 2px;
 }
 .control .container .value-div > input[type=text],
 .control .container .value-div > div.control-selected-values,
