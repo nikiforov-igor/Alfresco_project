@@ -1141,10 +1141,10 @@
                 <appearance>
                     <set id="sender" appearance="bordered-panel" label-id="Передаваемое значение из машины состояний" />
                     <set id="receiver" appearance="bordered-panel" label-id="Получаемое значение процессом" />
-                    <field id="lecm-stmeditor:inputToType" set="receiver"/>
-                    <field id="lecm-stmeditor:inputToValue" set="receiver">
-	                    <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-                    </field>
+	                <field id="lecm-stmeditor:inputToType" set="receiver">
+		                <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+	                </field>
+                    <field id="lecm-stmeditor:inputToValue" set="receiver"/>
                     <field id="lecm-stmeditor:inputFromType" set="sender">
 	                    <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
                     </field>
