@@ -15,9 +15,9 @@
 
 
 /* Common styles - start */
-*:focus {
-    outline: 2px solid #8be729;
-}
+/**:focus {*/
+    /*outline: 2px solid #8be729;*/
+/*}*/
 .hidden1 {
     display: none;
 }
