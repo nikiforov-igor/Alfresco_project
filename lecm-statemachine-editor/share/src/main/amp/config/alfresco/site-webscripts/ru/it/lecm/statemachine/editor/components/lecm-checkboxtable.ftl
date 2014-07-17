@@ -30,7 +30,6 @@
 <@grid.datagrid containerId false>
     <script type="text/javascript">//<![CDATA[
     (function () {
-        var splashScreen = null;
 
         function init() {
 		    LogicECM.module.Base.Util.loadScripts([
@@ -91,17 +90,7 @@
 	    YAHOO.util.Event.onDOMReady(init);
     })();
 
-    function changeFieldState(control, nodeRef) {
-        var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/datagrid/fields?nodeRef=" + encodeURIComponent(nodeRef) + "&value=" + control.checked;
-        var callback = {
-            failure: function() {
-                alert("Error");
-            },
-            timeout: 60000
-        };
-        YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
-    }
-    /*    function changeFieldState(control, nodeRef) {
+     function changeFieldState(control, nodeRef) {
         Alfresco.util.Ajax.jsonRequest({
             method: "PUT",
             url: Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/datagrid/fields?nodeRef=" + encodeURIComponent(nodeRef) + "&value=" + control.checked,
@@ -111,7 +100,7 @@
                 }
             }
         });
-    }*/
+    }
     //]]></script>
 </@grid.datagrid>
 </div>
