@@ -30,7 +30,9 @@
 <@grid.datagrid containerId false>
     <script type="text/javascript">//<![CDATA[
     (function () {
-	    function init() {
+        var splashScreen = null;
+
+        function init() {
 		    LogicECM.module.Base.Util.loadScripts([
 				    'scripts/lecm-base/components/advsearch.js',
 				    'scripts/lecm-base/components/lecm-datagrid.js',
@@ -99,6 +101,17 @@
         };
         YAHOO.util.Connect.asyncRequest('PUT', sUrl, callback);
     }
+    /*    function changeFieldState(control, nodeRef) {
+        Alfresco.util.Ajax.jsonRequest({
+            method: "PUT",
+            url: Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/datagrid/fields?nodeRef=" + encodeURIComponent(nodeRef) + "&value=" + control.checked,
+            failureCallback: {
+                fn: function () {
+                    alert("Error");
+                }
+            }
+        });
+    }*/
     //]]></script>
 </@grid.datagrid>
 </div>
