@@ -10,6 +10,8 @@
  association-auto-complete-item-even
  form-field
  with-grid
+ left, left1, left-panel
+ right, right1, right-panel
 
  */
 
@@ -30,16 +32,10 @@
 .clear {
     clear: both;
 }
-.left1 {
-	float: left;
-}
-.right1 {
-	float: left;
-}
-.panel-left {
+.panel-left, .left1 { /*todo refactoring*/
     float: left;
 }
-.panel-right {
+.panel-right, .right1 { /*todo refactoring*/
     float: right;
 }
 .cropped-item {
