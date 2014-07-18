@@ -206,6 +206,22 @@ public abstract class SecurityNotificationsPolicyBase
 	protected void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {
 		this.orgSGNotifier.notifyDeleteOU(nodeOU, parent);
 	}
+	
+	/**
+	 * Оповещение об изменении/создании рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	protected void notifyChangedWG(NodeRef nodeWG) {
+		this.orgSGNotifier.notifyChangedWG(nodeWG);
+	}
+
+	/**
+	 * Оповещение об удалении рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	protected void notifyDeleteWG(NodeRef nodeWG) {
+		this.orgSGNotifier.notifyDeleteWG(nodeWG);
+	}
 
 	/**
 	 * Выполнить подключение БР выданных для подразделения OU и всех его вложенных,

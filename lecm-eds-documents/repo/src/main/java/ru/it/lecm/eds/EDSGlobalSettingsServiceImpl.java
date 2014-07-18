@@ -54,16 +54,16 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 
 	public void init() {
-                if (null == getSettingsNode()) {
-                    //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-                    lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            return createSettingsNode();
-                        }
-                    });
-                    
-                }
+		if (null == getSettingsNode()) {
+			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				@Override
+				public NodeRef execute() throws Throwable {
+					return createSettingsNode();
+				}
+			});
+
+		}
 		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
 
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);

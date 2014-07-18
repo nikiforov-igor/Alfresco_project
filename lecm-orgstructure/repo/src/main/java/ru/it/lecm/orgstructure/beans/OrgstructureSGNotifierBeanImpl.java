@@ -455,7 +455,6 @@ public class OrgstructureSGNotifierBeanImpl
                     , SGKind.SG_PRIVATE_OU.getSGPos(nodeOU.getId(), posNodePrivateOU.getDisplayInfo())
             );
         }
-
 	}
 
 	@Override
@@ -492,6 +491,36 @@ public class OrgstructureSGNotifierBeanImpl
 		sgNotifier.orgNodeDeactivated( posNodeOU);
 	}
 
+	/**
+	 * Оповещение об изменении/создании рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	@Override
+	public void notifyChangedWG(NodeRef nodeWG) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyChangedWG:\n\t WG {%s} of type {%s}",
+					nodeWG, nodeService.getType(nodeWG)));
+		}
+
+		final Types.SGPosition posNodeWG = PolicyUtils.makeWorkGroupPos(nodeWG, nodeService);
+		sgNotifier.orgNodeCreated( posNodeWG);
+	}
+	
+	/**
+	 * Оповещение об удалении рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	@Override
+	public void notifyDeleteWG(NodeRef nodeWG) {
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyDeleteWG:\n\t OU {%s} of type {%s}",
+					nodeWG, nodeService.getType(nodeWG)));
+		}
+
+		final Types.SGPosition posNodeWG = PolicyUtils.makeWorkGroupPos(nodeWG, nodeService);
+		sgNotifier.orgNodeDeactivated(posNodeWG);
+	}
+	
 	/**
 	 * Выполнить подключение БР выданных для подразделения OU и всех его вложенных,
 	 * для Сотрудников подразделения OU (и вложенных)

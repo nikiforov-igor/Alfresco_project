@@ -23,7 +23,7 @@ public class PolicyUtils {
 	public static final QName PROP_DP_INFO = ContentModel.PROP_NAME; // QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
 
 	// "lecm-orgstr:organization-element"::"element-short-name"
-	public static final QName PROP_ORGUNIT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
+	public static final QName PROP_ORGELEMENT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
 
 	// "lecm-orgstr:organization-unit"::"unit-code"
 	 public static final QName PROP_ORGUNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
@@ -127,9 +127,19 @@ public class PolicyUtils {
 	public static String getOrgUnitIdCode(NodeRef orgUnit, NodeService nodeService) {
 		if (orgUnit == null)
 			return null;
-		// final String unitIdCode = ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_CODE); // PROP_ORGUNIT_NAME
+		// final String unitIdCode = ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_CODE); // PROP_ORGELEMENT_NAME
 		final String unitIdCode = orgUnit.getId();
 		return unitIdCode;
+	}
+	
+	/**
+	 * Получить id/название Рабочей группы (WG)
+	 * @param workGroup
+	 * @param nodeService
+	 * @return
+	 */
+	public static String getWorkGroupIdCode(NodeRef workGroup, NodeService nodeService) {
+		return getOrgUnitIdCode(workGroup, nodeService);
 	}
 
 	/**
@@ -201,7 +211,7 @@ public class PolicyUtils {
 	 */
 	public static Types.SGOrgUnit makeOrgUnitPos(NodeRef orgUnit, NodeService nodeService) {
 		final String orgIdCode = getOrgUnitIdCode(orgUnit, nodeService);
-		final String orgDetails= ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_NAME);
+		final String orgDetails= ""+ nodeService.getProperty( orgUnit, PROP_ORGELEMENT_NAME);
 		final Types.SGOrgUnit sgOU = (Types.SGOrgUnit) Types.SGKind.SG_OU.getSGPos( orgIdCode, orgDetails);
 		return sgOU;
 	}
@@ -216,7 +226,7 @@ public class PolicyUtils {
      */
     public static Types.SGOrgUnitPrivate makeOrgUnitPrivatePos(NodeRef orgUnit, NodeService nodeService) {
         final String orgIdCode = getOrgUnitIdCode(orgUnit, nodeService);
-        final String orgDetails= ""+ nodeService.getProperty( orgUnit, PROP_ORGUNIT_NAME) + " PRIVATE";
+        final String orgDetails= ""+ nodeService.getProperty( orgUnit, PROP_ORGELEMENT_NAME) + " PRIVATE";
         final Types.SGOrgUnitPrivate sgOU = (Types.SGOrgUnitPrivate) Types.SGKind.SG_PRIVATE_OU.getSGPos( orgIdCode, orgDetails);
         return sgOU;
     }
@@ -235,6 +245,21 @@ public class PolicyUtils {
 		return sgSV;
 	}
 
+	/**
+	 * Получить дексриптор Рабочей группы, который используется в методах IOrgStructureNotifiers.
+	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
+	 * ориентированное" описание.
+	 * @param workGroup id узла типа "lecm-orgstr:organization-element"
+	 * @param nodeService служба работы с узлами
+	 * @return
+	 */
+	public static Types.SGWorkGroup makeWorkGroupPos(NodeRef workGroup, NodeService nodeService) {
+		final String wgIdCode = getWorkGroupIdCode(workGroup, nodeService);
+		final String wgDetails= ""+ nodeService.getProperty( workGroup, PROP_ORGELEMENT_NAME);
+		final Types.SGWorkGroup sgWG = (Types.SGWorkGroup) Types.SGKind.SG_WG.getSGPos( wgIdCode, wgDetails);
+		return sgWG;
+	}
+	
 	/**
 	 * Получить дексриптор Бизнес Роли, для использования в методах IOrgStructureNotifiers.
 	 * В принципе, ничего особенно не делается, кроме как формируется "гуманоид-
