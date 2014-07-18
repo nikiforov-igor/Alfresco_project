@@ -19,6 +19,15 @@
 		</property>
 	</bean>
 
+    <bean id="org.aspectsBootstrap" parent="dictionaryModelBootstrap"
+          depends-on="dictionaryBootstrap, ${groupId}.${artifactId}.orgStructureBootstrap, ru.it.lecm.contractors.lecm-contractors-repo.contractors-dictionary-bootstrap">
+        <property name="models">
+            <list>
+                <value>alfresco/module/${artifactId}/models/lecm-orgstructure-aspects-model.xml</value>
+            </list>
+        </property>
+    </bean>
+
 	<bean id="${groupId}.${artifactId}.orgDictionaryBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap, ru.it.lecm.dictionary.dictionary-repo.dictionary">
 		<property name="models">
@@ -157,6 +166,7 @@
 		<property name="repositoryHelper" ref="repositoryHelper"/>
         <property name="permissionService" ref="permissionService"/>
         <property name="propertiesService" ref="propertiesService"/>
+        <property name="dictionaryBean" ref="serviceDictionary"/>
     </bean>
 
 	<bean id="orgstructureStaffListPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureStaffListPolicy"
