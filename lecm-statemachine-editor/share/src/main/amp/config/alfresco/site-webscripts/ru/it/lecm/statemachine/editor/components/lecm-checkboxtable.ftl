@@ -90,7 +90,7 @@
 	    YAHOO.util.Event.onDOMReady(init);
     })();
 
-     function changeFieldState(control, nodeRef) {
+    function changeFieldState(control, nodeRef) {
         Alfresco.util.Ajax.jsonRequest({
             method: "PUT",
             url: Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/datagrid/fields?nodeRef=" + encodeURIComponent(nodeRef) + "&value=" + control.checked,

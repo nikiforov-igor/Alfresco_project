@@ -1,13 +1,5 @@
 package ru.it.lecm.eds;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -22,6 +14,9 @@ import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.eds.api.EDSGlobalSettingsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  *
@@ -54,16 +49,16 @@ public class EDSGlobalSettingsServiceImpl extends BaseBean implements EDSGlobalS
 	}
 
 	public void init() {
-                if (null == getSettingsNode()) {
-                    //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
-                    lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
-                        @Override
-                        public NodeRef execute() throws Throwable {
-                            return createSettingsNode();
-                        }
-                    });
-                    
-                }
+		if (null == getSettingsNode()) {
+			//TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
+			lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+				@Override
+				public NodeRef execute() throws Throwable {
+					return createSettingsNode();
+				}
+			});
+
+		}
 		this.potentialRolesMap = new HashMap<String, Map<String, NodeRef>>();
 
 		NodeRef potentialRolesDictionary = dictionaryService.getDictionaryByName(POTENTIAL_ROLES_DICTIONARY_NAME);

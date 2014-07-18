@@ -27,6 +27,7 @@ public final class Types {
 	01	GROUP_LECM$ME-nnn			личная sec-группа пользователя с id=nnn ("ME" здесь "дань схемам" и в общем можно убирать)
 	 (?)	GROUP_LECM$U-nnn		личная sec-группа пользователя с id=nnn
 	02	GROUP_LECM$OU-nnn			sec-группа Орг-Штатного подразделения (OU) с id=nnn
+		GROUP_LECM$WG-nnn			sec-группа рабочей группы (WG) с id=nnn
 	03	GROUP_LECM$DP-nnn			должностная позиция (DP) с id=nnn
 
 	04	GROUP_LECM_SV$OU-nnn		руководящая позиция Орг-Штатного подразделения (OU) с id=nnn
@@ -44,6 +45,7 @@ public final class Types {
 	final static public String SFX_OU  = "$OU"+ SFX_DELIM;   // by id
 	final static public String SFX_PRIVATE_OU  = "$OU_PRIVATE" + SFX_DELIM;   // by id
 	final static public String SFX_DP  = "$DP"+ SFX_DELIM;   // by id
+	final static public String SFX_WG  = "$WG"+ SFX_DELIM;   // by id
 
 	final static public String SFX_USR = "$ME"+ SFX_DELIM;   // by id
 	final static public String SFX_BR  = "$BR"+ SFX_DELIM;   // by id
@@ -102,6 +104,7 @@ public final class Types {
 		  SG_ME(SFX_USR, "Private User Point")		// личная группа Сотрудника-пользователя
 		, SG_DP(SFX_DP, "Deputy Position")			// группа Должностной позиции
 		, SG_OU(SFX_OU, "Org Unit")					// группа Подразделения
+		, SG_WG(SFX_WG, "Work Group")					// группа Рабочей группы
 		, SG_PRIVATE_OU(SFX_PRIVATE_OU, "Org Unit Private")					// группа Подразделения
 
 		, SG_SV(SFX_SV, "Boss Position")			// группа Руководящая (связана с Подразделением и Должностью)
@@ -160,6 +163,8 @@ public final class Types {
 				return new SGOrgUnit(objId, displayName);
             if (this == SG_PRIVATE_OU)
                 return new SGOrgUnitPrivate(objId, displayName);
+            if (this == SG_WG)
+                return new SGWorkGroup(objId, displayName);
 			if (this == SG_SV)
 				return new SGSuperVisor(objId, displayName);
 			if (this == SG_BR)
@@ -542,6 +547,28 @@ public final class Types {
             super.setId(value);
         }
 
+    }
+	
+	/**
+     * Индикатор рабочей группы.
+     * название или Id объекта Альфреско можно использовать как super.id
+     */
+    public static class SGWorkGroup extends SGPosition {
+        private SGWorkGroup(String orgUnitId) {
+            super( SGKind.SG_WG, orgUnitId);
+        }
+
+        private SGWorkGroup(String orgUnitId, String displayName) {
+            super( SGKind.SG_WG, orgUnitId, displayName);
+        }
+
+        public String getOUId() {
+            return super.getId();
+        }
+
+        public void setOUId(String value) {
+            super.setId(value);
+		}
     }
 
     /**

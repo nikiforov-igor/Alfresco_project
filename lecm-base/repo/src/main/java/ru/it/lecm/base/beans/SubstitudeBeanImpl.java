@@ -868,7 +868,6 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                         if (!isArchive(nodeRef) && !expressionsFalse) {
                             filteredResults.add(nodeRef);
                             exist = true;
-                            break;
                         }
                     }
                     if (!exist) {

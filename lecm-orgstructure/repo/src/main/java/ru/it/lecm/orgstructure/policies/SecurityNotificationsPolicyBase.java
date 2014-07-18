@@ -11,7 +11,6 @@ import org.alfresco.util.PropertyCheck;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
@@ -205,6 +204,22 @@ public abstract class SecurityNotificationsPolicyBase
 
 	protected void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {
 		this.orgSGNotifier.notifyDeleteOU(nodeOU, parent);
+	}
+	
+	/**
+	 * Оповещение об изменении/создании рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	protected void notifyChangedWG(NodeRef nodeWG) {
+		this.orgSGNotifier.notifyChangedWG(nodeWG);
+	}
+
+	/**
+	 * Оповещение об удалении рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	protected void notifyDeleteWG(NodeRef nodeWG) {
+		this.orgSGNotifier.notifyDeleteWG(nodeWG);
 	}
 
 	/**

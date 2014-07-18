@@ -2,7 +2,6 @@ package ru.it.lecm.orgstructure.beans;
 
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-
 import ru.it.lecm.security.Types.SGPosition;
 
 /**
@@ -95,6 +94,18 @@ public interface OrgstructureSGNotifierBean {
 
 	void notifyDeleteOU(NodeRef nodeOU, NodeRef parent);
 
+	/**
+	 * Оповещение об изменении/создании рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	public void notifyChangedWG(NodeRef nodeWG);
+	
+	/**
+	 * Оповещение об удалении рабочей группы
+	 * @param nodeWG изменённая Рабочая группа
+	 */
+	public void notifyDeleteWG(NodeRef nodeWG);
+		
 	/**
 	 * Выполнить подключение БР выданных для подразделения OU и всех его 
 	 * вложенных подразделений (и, как следствие, для Сотрудников подразделения и вложенных в него).

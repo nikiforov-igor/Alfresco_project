@@ -125,8 +125,8 @@ public class OrgstructureUnitPolicy
 
 		// отслеживаем котороткое название для SG-обозначений
 		{
-			final Object oldValue = before.get(PolicyUtils.PROP_ORGUNIT_NAME);
-			final Object newValue = after.get(PolicyUtils.PROP_ORGUNIT_NAME);
+			final Object oldValue = before.get(PolicyUtils.PROP_ORGELEMENT_NAME);
+			final Object newValue = after.get(PolicyUtils.PROP_ORGELEMENT_NAME);
 			final boolean flagChanged = ! PolicyUtils.safeEquals( newValue, oldValue);
 			if (flagChanged) {
 				logger.debug( String.format( "updating details for OU '%s'\n\t from '%s'\n\t to '%s'", nodeRef, oldValue, newValue));
