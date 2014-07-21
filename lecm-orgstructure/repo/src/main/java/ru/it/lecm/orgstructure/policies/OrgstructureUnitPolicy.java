@@ -103,14 +103,16 @@ public class OrgstructureUnitPolicy
                         throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
                     }
                 } else {
-                    // создаем контрагента
-                    AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
-                        @Override
-                        public Object doWork() throws Exception {
-                            createOrganizationContractor(unit);
-                            return null;
-                        }
-                    });
+                    // создаем контрагента - если подразделение 2-го уровня или у родителя есть аспект
+                    if (parent.equals(orgstructureService.getRootUnit()) || nodeService.hasAspect(parent, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                        AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                            @Override
+                            public Object doWork() throws Exception {
+                                createOrganizationContractor(unit);
+                                return null;
+                            }
+                        });
+                    }
                 }
                 // оповещение securityService по Департаменту ...
                 notifyChangedOU(unit, parent);
