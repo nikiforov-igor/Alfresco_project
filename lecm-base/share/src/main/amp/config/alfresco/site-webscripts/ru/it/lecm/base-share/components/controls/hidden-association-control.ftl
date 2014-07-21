@@ -15,12 +15,33 @@
 	(function()
 	{
 		YAHOO.util.Event.onContentReady("${fieldHtmlId}", function (){
+			<#if field.control.params.addedXpath??>
+				addValue("${field.control.params.addedXpath}");
+			</#if>
+
 			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
 					{
 						fieldName: "${field.name}",
 						fieldId: "${fieldHtmlId}"
 					});
 		});
+
+		function addValue(xPath) {
+			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent(xPath);
+			Alfresco.util.Ajax.jsonGet(
+					{
+						url: sUrl,
+						successCallback:
+						{
+							fn: function (response) {
+								var oResults = response.json;
+								if (oResults != null && oResults.nodeRef != null) {
+									YAHOO.util.Dom.get("${fieldHtmlId}-added").value = oResults.nodeRef;
+								}
+							}
+						}
+					});
+		}
 	})();
 </script>
 
