@@ -75,7 +75,8 @@ public class OrgstructureEmployeeLinkPolicy
 				objects.add(group != null ? group.toString() : "");
 				businessJournalService.log(employee, EventCategory.TAKE_GROUP_ROLE, defaultDescription, objects);
 				// уведомление
-				notifyEmploeeSetBR(employee, role);
+				//notifyEmploeeSetBR(employee, role);
+				notifyEmployeeSetWG(employee, role, group);
 			}
 		} catch (Exception e) {
 			logger.error("Exception at association post processing onCreateAssociation:", e);
@@ -125,7 +126,7 @@ public class OrgstructureEmployeeLinkPolicy
 
 				businessJournalService.log(employee, EventCategory.RELEASE_GROUP_ROLE, defaultDescription, objects);
 
-				notifyEmploeeRemoveBR(employee, role);
+				notifyEmployeeRemoveWG(employee, role, group);
 			}
 		} catch (Exception e) {
 			logger.error("Exception at association post processing onDeleteAssociation:", e);

@@ -137,13 +137,13 @@ public interface OrgstructureBean {
 	 * @return NodeRef или NULL
 	 */
 	NodeRef getStructureDirectory();
-	
+
 	/**
 	 * Получение Основного подразделения организации
 	 *
 	 * @return NodeRef или NULL
 	 */
-	NodeRef getMainOrganisationUnit(); 
+	NodeRef getMainOrganisationUnit();
 
 	/**
 	 * Получение Директории с Сотрудниками
@@ -338,6 +338,11 @@ public interface OrgstructureBean {
 	 * Получение списка Рабочих Групп, в которых участвует сотрудник
 	 */
 	List<NodeRef> getEmployeeWorkGroups(NodeRef employeeRef);
+
+	/**
+	 * Получение ссылки на сотрудника для роли в рабочей группе
+	 */
+	NodeRef getEmployeeLinkByWorkRole(NodeRef role);
 
 	/**
 	 * Получение рабочей группы, к которому относится участник

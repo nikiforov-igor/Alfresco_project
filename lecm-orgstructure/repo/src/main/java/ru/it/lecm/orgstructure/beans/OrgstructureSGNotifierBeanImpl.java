@@ -226,9 +226,9 @@ public class OrgstructureSGNotifierBeanImpl
 		final Types.SGPosition sgSV = Types.SGKind.SG_SV.getSGPos( nodeOrgUnit.getId(), sgOU.getDisplayInfo());
 		if (sgMe != null) {
 			/*
-			 * 
+			 *
 			if (isBoss) {
-				if (sgMe != null) // убрать SV подразедления из личной группы  
+				if (sgMe != null) // убрать SV подразедления из личной группы
 					sgNotifier.sgExclude( sgSV, sgMe);
 				// прописать руководящую SG_DP -> SG_SV(OU)
 				sgNotifier.sgInclude( sgDP, sgSV);
@@ -283,7 +283,7 @@ public class OrgstructureSGNotifierBeanImpl
 
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
-		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
+		final String broleCode = PolicyUtils.getWorkGroupIdCode(brole, nodeService);
 		if (broleCode != null)
 			this.sgNotifier.orgBRRemoved( broleCode, emplPos);
 		else
@@ -312,6 +312,52 @@ public class OrgstructureSGNotifierBeanImpl
 	}
 
 	@Override
+	public void notifyEmployeeSetWG(NodeRef employee, NodeRef nodeWR, NodeRef group) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeSetDP:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), nodeWR, nodeService.getType(nodeWR)));
+		}
+
+		final String loginName = getEmployeeLogin(employee);
+		final String emplId = (employee != null) ? employee.getId() : null;
+
+		final Types.SGPosition posNodeWG = PolicyUtils.makeWorkGroupPos(group, nodeService);
+
+		Types.SGPrivateMeOfUser sgMe = null;
+		if (employee != null) {
+			// safely-свяжем пользователя с его личной группой
+			if (loginName != null)
+				sgNotifier.orgEmployeeTie(emplId, loginName, true);
+
+			// sgMe = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
+			sgMe = Types.SGKind.getSGMeOfUser(emplId, loginName);
+			sgNotifier.sgInclude(sgMe, posNodeWG);
+		}
+
+
+	}
+
+	public void notifyEmployeeRemoveWG(NodeRef employee, NodeRef nodeWR, NodeRef group) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), nodeWR, nodeService.getType(nodeWR)));
+		}
+
+		final Types.SGPrivateMeOfUser sgMe = (employee != null)
+				? PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger)
+				: null;
+		final Types.SGWorkGroup sgWG = PolicyUtils.makeWorkGroupPos(group, nodeService);
+
+		if (sgMe != null)
+		{
+			this.sgNotifier.sgExclude( sgMe, sgWG);
+		}
+
+	}
+
+	@Override
 	public void notifyEmploeeRemoveDP(NodeRef employee, NodeRef nodeDP) {
 		if (logger.isDebugEnabled()) {
 			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
@@ -319,15 +365,15 @@ public class OrgstructureSGNotifierBeanImpl
 		}
 
 		// выход из DP-группы ...
-		final Types.SGPrivateMeOfUser sgMe = (employee != null) 
+		final Types.SGPrivateMeOfUser sgMe = (employee != null)
 				? PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger)
 				: null;
 		final Types.SGDeputyPosition sgDP = PolicyUtils.makeDeputyPos(nodeDP, employee, nodeService, orgstructureService, logger);
 		if (sgMe != null)
 		{
-			this.sgNotifier.sgExclude( sgMe, sgDP); 
+			this.sgNotifier.sgExclude( sgMe, sgDP);
 
-			// выписывание из SV групп ... 
+			// выписывание из SV групп ...
 			// 1) убрать SVOU из личной
 			final NodeRef orgUnit = orgstructureService.getUnitByStaff(nodeDP);
 			if (orgUnit == null) {
@@ -338,7 +384,7 @@ public class OrgstructureSGNotifierBeanImpl
 			sgNotifier.sgExclude( sgSV, sgMe); // SVOU убрать из личной
 
 			// 2) если босс - убрать USERid из SVOU (для других - фактичеки ничего не будет делать)
-			sgNotifier.sgExclude( sgMe, sgSV); // для босса - убрать себя из SV, для остальных - фактически ничего не будет делать 
+			sgNotifier.sgExclude( sgMe, sgSV); // для босса - убрать себя из SV, для остальных - фактически ничего не будет делать
 
 		}
 	}
@@ -723,25 +769,25 @@ public class OrgstructureSGNotifierBeanImpl
 			return;
 		}
 
-		// DONE: посмотреть можно ли выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee 
+		// DONE: посмотреть можно ли выделить в отдельный private-метод совместно с подобным кодом из notifyChangeDPAndEmloyee
 		// Простой вариант, если не надо учитывать вложенность:
 		for(NodeRef orgUnit: orgsBoss) {
 			// руководящая позиция подразделения ...
 			final Types.SGSuperVisor sgSV = PolicyUtils.makeOrgUnitSVPos(orgUnit, nodeService);
 
-			if (created) { 
+			if (created) {
 				// sgNotifier.sgExclude( sgSV, sgDestMe); // отвязать SV-группу своего подраздедения (SVOU) от себя ("anti-recurse step")
 				sgNotifier.sgInclude( sgDestMe, sgSV); // привязать себя к SVOU
-			} else { 
+			} else {
 				sgNotifier.sgExclude( sgDestMe, sgSV); // ("anti-recurse step") отвязать себя от SVOU
-				// sgNotifier.sgInclude( sgSV, sgDestMe); // привязать SVOU к себе 
+				// sgNotifier.sgInclude( sgSV, sgDestMe); // привязать SVOU к себе
 			}
 		}
 
 
 //		// получить все подразделения, в которых принимающий делегат является работником (но не боссом)...
 //		// DONE: ты надо перечислить только подразделения, вложенные в те, которыми руководит босс (делегирующий)
-//		final List<NodeRef> orgsDest = findOnlySimpleUnits(destEmployee); 
+//		final List<NodeRef> orgsDest = findOnlySimpleUnits(destEmployee);
 //
 //		if (created) {
 //			// выполнить отсоединение принимающего делегата ото всех его обычных (работных) SVOU
@@ -759,7 +805,7 @@ public class OrgstructureSGNotifierBeanImpl
 //			}
 //
 //		} else {
-//			// "снять со всех постов" ) 
+//			// "снять со всех постов" )
 //			// выполнить отсоединение делегата ото всх предоставленных Руководящих позиций ...
 //			for(NodeRef orgUnit: orgsBoss) {
 //				// руководящая позиция подразделения ...
@@ -779,7 +825,7 @@ public class OrgstructureSGNotifierBeanImpl
 
 
 	/**
-	 * Получить все подразделения, в которых принимающий делегат является 
+	 * Получить все подразделения, в которых принимающий делегат является
 	 * работником, но не боссом.
 	 * @param employee
 	 * @return

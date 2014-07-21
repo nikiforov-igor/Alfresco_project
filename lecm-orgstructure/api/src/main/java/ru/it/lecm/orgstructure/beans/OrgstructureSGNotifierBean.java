@@ -8,11 +8,11 @@ import ru.it.lecm.security.Types.SGPosition;
 /**
  * Основные оповещения с уровня модели LECM до уровня службы security groups.
  * Синхронизирует события создания-удаления-изменения объектов Сотрудник,
- * Подразделение, Должность, Бизнес-роль, предоставления БР для Сотрудников, 
- * Должностей и Подразделений, с соответствующими операциями для службы 
+ * Подразделение, Должность, Бизнес-роль, предоставления БР для Сотрудников,
+ * Должностей и Подразделений, с соответствующими операциями для службы
  * работы с security groups:
  *   ru.it.lecm.orgstructure.policies.* -> call OrgstructureSGNotifierBean -> IOrgStructureNotifiers
- * 
+ *
  * @author rabdullin
  */
 public interface OrgstructureSGNotifierBean {
@@ -64,6 +64,11 @@ public interface OrgstructureSGNotifierBean {
 	void notifyEmploeeRemoveDP(NodeRef employee, NodeRef dpid);
 
 	/**
+	 * Снять Сотрудника с роли в рабочей группе
+	 */
+	void notifyEmployeeRemoveWG(NodeRef employee, NodeRef nodeWR, NodeRef group);
+
+	/**
 	 * Нотификация о связывании Сотрудника и пользователя Альфреско.
 	 * @param employee
 	 * @param isActive true, если флажок "активен" включен
@@ -79,7 +84,7 @@ public interface OrgstructureSGNotifierBean {
 	/**
 	 * Нотификация об отвязывании Сотрудника и пользователя Альфреско.
 	 * @param employee
-	 * @param person 
+	 * @param person
 	 */
 	void notifyEmploeeDown(NodeRef employee, NodeRef person);
 
@@ -100,15 +105,17 @@ public interface OrgstructureSGNotifierBean {
 	 * @param nodeWG изменённая Рабочая группа
 	 */
 	public void notifyChangedWG(NodeRef nodeWG);
-	
+
+	public void notifyEmployeeSetWG(NodeRef employee, NodeRef nodeWR, NodeRef group);
+
 	/**
 	 * Оповещение об удалении рабочей группы
 	 * @param nodeWG изменённая Рабочая группа
 	 */
 	public void notifyDeleteWG(NodeRef nodeWG);
-		
+
 	/**
-	 * Выполнить подключение БР выданных для подразделения OU и всех его 
+	 * Выполнить подключение БР выданных для подразделения OU и всех его
 	 * вложенных подразделений (и, как следствие, для Сотрудников подразделения и вложенных в него).
 	 * @param nodeOU исходное подразделение
 	 * @param include true, чтобы выдать БРоли, false чтобы отозвать

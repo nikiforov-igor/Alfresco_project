@@ -163,6 +163,13 @@ public abstract class SecurityNotificationsPolicyBase
 	}
 
 	/**
+	 * Исключение сотрудника из роли рабочей группы
+	 */
+	protected void notifyEmployeeRemoveWG(NodeRef employee, NodeRef WR, NodeRef group) {
+		this.orgSGNotifier.notifyEmployeeRemoveWG(employee, WR, group);
+	}
+
+	/**
 	 * Нотификация о связывании Сотрудника и пользователя Альфреско.
 	 * @param employee
 	 * @param isActive true, если флажок "активен" включен
@@ -206,7 +213,14 @@ public abstract class SecurityNotificationsPolicyBase
 	protected void notifyDeleteOU(NodeRef nodeOU, NodeRef parent) {
 		this.orgSGNotifier.notifyDeleteOU(nodeOU, parent);
 	}
-	
+
+	/**
+	 * Оповещение об включении сотрудника в роль рабочей группы
+	 */
+	protected void notifyEmployeeSetWG(NodeRef employee, NodeRef nodeWR, NodeRef group) {
+		this.orgSGNotifier.notifyEmployeeSetWG(employee, nodeWR, group);
+	}
+
 	/**
 	 * Оповещение об изменении/создании рабочей группы
 	 * @param nodeWG изменённая Рабочая группа

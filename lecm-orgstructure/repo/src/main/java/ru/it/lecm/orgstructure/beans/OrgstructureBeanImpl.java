@@ -22,8 +22,6 @@ import ru.it.lecm.orgstructure.policies.PolicyUtils;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * @author dbashmakov Date: 27.11.12 Time: 17:08
@@ -796,6 +794,28 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			link.add(TYPE_EMPLOYEE_LINK);
 
 			List<ChildAssociationRef> links = nodeService.getChildAssocs(positionRef, link);
+			if (links.size() > 0) {
+				NodeRef empRef = links.get(0).getChildRef();
+				if (!isArchive(empRef)) {
+					employeeLink = empRef;
+				}
+			}
+		}
+		return employeeLink;
+	}
+
+	@Override
+	public NodeRef getEmployeeLinkByWorkRole(NodeRef role) {
+		NodeRef employeeLink = null;
+		Set<QName> properTypes = new HashSet<QName>();
+		properTypes.add(TYPE_WORK_ROLE);
+		properTypes.add(TYPE_WORKFORCE);
+
+		if (isProperType(role, properTypes)) {
+			Set<QName> link = new HashSet<QName>();
+			link.add(TYPE_EMPLOYEE_LINK);
+
+			List<ChildAssociationRef> links = nodeService.getChildAssocs(role, link);
 			if (links.size() > 0) {
 				NodeRef empRef = links.get(0).getChildRef();
 				if (!isArchive(empRef)) {
