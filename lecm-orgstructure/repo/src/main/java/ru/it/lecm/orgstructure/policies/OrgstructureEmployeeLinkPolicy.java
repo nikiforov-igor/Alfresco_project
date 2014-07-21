@@ -111,14 +111,21 @@ public class OrgstructureEmployeeLinkPolicy
 	}
 
 	@Override
-	public void beforeDeleteNode(NodeRef nodeRef) {
+	public void beforeDeleteNode(NodeRef employeeLink) {
 		try {
-			final NodeRef employeeLink = nodeRef;
 			final NodeRef parent = nodeService.getPrimaryParent(employeeLink).getParentRef();
 			final NodeRef employee = orgstructureService.getEmployeeByLink(employeeLink);
 
-			if (orgstructureService.isStaffList(parent)) { // -> запись в БЖ
-				String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
+			if (orgstructureService.isStaffList(parent)) {
+                if (!hasStaffWithContractor(employee)) {
+                    // удаляется последняя позиция -> сценарий "Исключение сотрудника из организации"
+                    if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                        nodeService.removeAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR);
+                    }
+                }
+
+                // -> запись в БЖ
+                String defaultDescription = "#initiator внес(ла) сведения о снятии Сотрудника #mainobject с должности #object1 в подразделении #object2";
 				NodeRef position = orgstructureService.getPositionByStaff(parent);
 				NodeRef unit = orgstructureService.getUnitByStaff(parent);
 				List<String> objects = new ArrayList<String>(2);
@@ -151,4 +158,18 @@ public class OrgstructureEmployeeLinkPolicy
 			logger.error("Exception at association post processing onDeleteAssociation:", e);
 		}
 	}
+
+    private boolean hasStaffWithContractor(NodeRef employee) {
+        List<NodeRef> staffs = orgstructureService.getEmployeeStaffs(employee);
+        if (staffs.size() > 0) {
+            NodeRef rootUnit = orgstructureService.getRootUnit();
+            for (NodeRef staff : staffs) {
+                NodeRef unit = orgstructureService.getUnitByStaff(staff);
+                if (!unit.equals(rootUnit) && nodeService.hasAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
