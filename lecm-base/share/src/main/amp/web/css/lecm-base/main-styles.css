@@ -299,6 +299,9 @@
     float: right;
     padding: 2px;
 }
+.control .container .buttons-div:empty {
+    padding: 0;
+}
 .control .container .buttons-div > input[type=button] { /* на время загрузки, чтоб не прыгали кнопки */
     width: 28px;
     height: 28px;
