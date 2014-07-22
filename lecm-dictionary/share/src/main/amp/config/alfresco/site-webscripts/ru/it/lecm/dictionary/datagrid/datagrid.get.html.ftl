@@ -33,6 +33,7 @@
 	                bubblingLabel: "${bubblingLabel}",
 	                usePagination: true,
 	                showExtendSearchBlock: true,
+                    excludeColumns:["notDeletable"],
 	                actions: [
 	                    {
 	                        type: "datagrid-action-link-${bubblingLabel}",
@@ -52,7 +53,7 @@
 	                        permission: "delete",
 	                        label: "${msg("actions.delete-row")}",
 	                        evaluator: function (rowData) {
-	                            return this.isActiveItem(rowData.itemData);
+	                            return this.isActiveItem(rowData.itemData) && this.isDeletable(rowData.itemData);
 	                        }
 	                    },
 	                    {
