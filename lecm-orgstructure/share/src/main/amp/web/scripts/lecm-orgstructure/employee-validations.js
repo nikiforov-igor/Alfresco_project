@@ -60,3 +60,59 @@ LogicECM.module.OrgStructure.Absence.employeeHasNoAbsenceValidation =
 
         return valid;
     };
+
+LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = function (field, args,  event, form, silent, message) {
+    var valid = false;
+    var employeeRef = field.value;
+    var employeeOrganization = null;
+
+    if (employeeRef.length > 0) {
+        jQuery.ajax({
+            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getEmployeeOrganization?nodeRef=" + employeeRef,
+            type: "GET",
+            timeout: 10000,
+            async: false,
+            dataType: "json",
+            contentType: "application/json",
+            processData: true,
+
+            success: function(result, textStatus, jqXHR) {
+                employeeOrganization = result != null ? result.nodeRef : null;
+                if (employeeOrganization != null) {
+                    jQuery.ajax({
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/api/getStaffPositionUnit?nodeRef=" + field.form["alf_destination"].value,
+                        type: "GET",
+                        timeout: 10000,
+                        async: false,
+                        dataType: "json",
+                        contentType: "application/json",
+                        processData: true,
+
+                        success: function(result, textStatus, jqXHR) {
+                            var staffOrganization = result != null ? result.nodeRef : null;
+                            valid = staffOrganization == employeeOrganization;
+                        },
+
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            valid = false;
+                            Alfresco.util.PopupManager.displayMessage({
+                                text: "ERROR: can not perform field validation"
+                            });
+                        }
+                    });
+                } else {
+                    valid = true;
+                }
+            },
+
+            error: function(jqXHR, textStatus, errorThrown) {
+                valid = false;
+                Alfresco.util.PopupManager.displayMessage({
+                    text: "ERROR: can not perform field validation"
+                });
+            }
+        });
+    }
+
+    return valid;
+};

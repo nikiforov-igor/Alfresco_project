@@ -987,6 +987,7 @@
                     <field id="lecm-orgstr:employee-link-employee-assoc" mandatory="true">
                         <constraint-handlers>
                             <constraint type="MANDATORY" validation-handler="LogicECM.module.OrgStructure.Absence.employeeHasNoAbsenceValidation" event="change" message="Невозможно выполнить действие! Сотрудник имеет активные отсутствия."/>
+                            <constraint type="INVALID" validation-handler="LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation" event="change" message="Невозможно назначить сотрудника больше чем в одну организацию!"/>
                         </constraint-handlers>
                     </field>
                 </appearance>

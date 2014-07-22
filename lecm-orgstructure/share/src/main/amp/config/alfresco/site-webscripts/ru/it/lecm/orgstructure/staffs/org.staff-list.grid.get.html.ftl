@@ -6,7 +6,7 @@
 <@link rel="stylesheet" type="text/css" href="${url.context}/res/modules/document-details/historic-properties-viewer.css" />
 
 
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/employee-has-no-absencesl-validation.js"/>
+<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/employee-validations.js"/>
 
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#import "/ru/it/lecm/orgstructure/components/orgstructure-tree.ftl" as orgTree/>
