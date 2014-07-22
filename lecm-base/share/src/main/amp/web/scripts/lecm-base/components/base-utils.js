@@ -483,7 +483,8 @@ LogicECM.module.Base.Util = {
 	 * YUI Library aliases
 	 */
 	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event;
+		Event = YAHOO.util.Event,
+        Selector = YAHOO.util.Selector;
 
 	// Recalculate the vertical size on a browser window resize event
 	Event.on(window, "resize", function(e) {
@@ -543,5 +544,53 @@ LogicECM.module.Base.Util = {
 			YAHOO.Bubbling.fire("SetHeaderWidth");
 		}
 	});
+
+    // Скрипт выставляет элементам формы атрибут tabindex, задавая нужный порядок обхода с клавиатуры
+    // Отрабатывает после загрузки формы
+
+    function setElementsTabbingOrder(layer, args) {
+        var params = args[1];
+        var formId = params.eventGroup;
+        var form = Dom.get(formId);
+        var elements = Selector.query('div.control, .form-buttons span.yui-button, .form-buttons input[type=button]', form);
+
+        var tabindex = 0;
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el && el.offsetHeight > 0) {
+                if (Dom.hasClass(el, "control")) {
+                    if (Dom.hasClass(el, "control-X")) {
+                        //todo настройки для конкретных контролов
+
+                    } else {
+                        var valueDiv = Selector.query('div.value-div', el, true);
+                        if (valueDiv) {
+                            var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
+                            if (input) {
+                                Dom.setAttribute(input, 'tabindex', ++tabindex);
+                            }
+                        }
+                        var buttonDiv = Selector.query('div.buttons-div', el, true);
+                        if (buttonDiv) {
+                            var buttons = Selector.query('a, input[type=button], span.yui-button button', buttonDiv);
+                            for (var j = 0; j < buttons.length; j++) {
+                                var btn = buttons[j];
+                                if (btn.offsetHeight > 0) {
+                                    Dom.setAttribute(btn, 'tabindex', ++tabindex);
+                                }
+                            }
+                        }
+                    }
+                } else if (Dom.hasClass(el, "yui-button")) {
+                    var button = Selector.query('button', el, true);
+                    Dom.setAttribute(button, 'tabindex', ++tabindex);
+                } else {
+                    Dom.setAttribute(el, 'tabindex', ++tabindex);
+                }
+            }
+        }
+    }
+
+    YAHOO.Bubbling.on("afterFormRuntimeInit", setElementsTabbingOrder);
 
 })();

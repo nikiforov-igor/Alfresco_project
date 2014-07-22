@@ -37,7 +37,8 @@ LogicECM.module = LogicECM.module || {};
                             defaultValue: null,
                             defaultValueDataSource: null,
                             disabledFieldsIfSelect: null,
-                            disabledFieldsIfNotSelect: null
+                            disabledFieldsIfNotSelect: null,
+	                        fireMandatoryByChange: false
                         },
                 checkboxId: null,
                 checkbox: null,
@@ -109,6 +110,9 @@ LogicECM.module = LogicECM.module || {};
                        selectedItems: [],
                        selectedItemsMetaData: {}
                     });
+	                if (this.options.fireMandatoryByChange) {
+		                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
+	                }
                 }
             });
 })();

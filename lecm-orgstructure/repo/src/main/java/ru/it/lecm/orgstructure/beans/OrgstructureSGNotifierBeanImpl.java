@@ -283,7 +283,7 @@ public class OrgstructureSGNotifierBeanImpl
 
 		final Types.SGPosition emplPos = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
 		// использование специального значения более "человечно" чем brole.getId(), и переносимо между разными базами Альфреско
-		final String broleCode = PolicyUtils.getBRoleIdCode(brole, nodeService);
+		final String broleCode = PolicyUtils.getWorkGroupIdCode(brole, nodeService);
 		if (broleCode != null)
 			this.sgNotifier.orgBRRemoved( broleCode, emplPos);
 		else
@@ -309,6 +309,52 @@ public class OrgstructureSGNotifierBeanImpl
 		final boolean isBoss = Boolean.TRUE.equals(nodeService.getProperty(nodeDP, OrgstructureBean.PROP_STAFF_LIST_IS_BOSS));
 
 		notifyChangeDPAndEmloyee(employee, nodeDP, isBoss, orgUnit);
+	}
+
+	@Override
+	public void notifyEmployeeSetWG(NodeRef employee, NodeRef nodeWR, NodeRef group) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeSetDP:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), nodeWR, nodeService.getType(nodeWR)));
+		}
+
+		final String loginName = getEmployeeLogin(employee);
+		final String emplId = (employee != null) ? employee.getId() : null;
+
+		final Types.SGPosition posNodeWG = PolicyUtils.makeWorkGroupPos(group, nodeService);
+
+		Types.SGPrivateMeOfUser sgMe = null;
+		if (employee != null) {
+			// safely-свяжем пользователя с его личной группой
+			if (loginName != null)
+				sgNotifier.orgEmployeeTie(emplId, loginName, true);
+
+			// sgMe = PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger);
+			sgMe = Types.SGKind.getSGMeOfUser(emplId, loginName);
+			sgNotifier.sgInclude(sgMe, posNodeWG);
+		}
+
+
+	}
+
+	public void notifyEmployeeRemoveWG(NodeRef employee, NodeRef nodeWR, NodeRef group) {
+
+		if (logger.isDebugEnabled()) {
+			logger.debug( String.format( "notifyEmploeeRemoveBR:\n\t Employee {%s} of type {%s}\n\t DP {%s} of type {%s}",
+					employee, nodeService.getType(employee), nodeWR, nodeService.getType(nodeWR)));
+		}
+
+		final Types.SGPrivateMeOfUser sgMe = (employee != null)
+				? PolicyUtils.makeEmploeePos(employee, nodeService, orgstructureService, logger)
+				: null;
+		final Types.SGWorkGroup sgWG = PolicyUtils.makeWorkGroupPos(group, nodeService);
+
+		if (sgMe != null)
+		{
+			this.sgNotifier.sgExclude( sgMe, sgWG);
+		}
+
 	}
 
 	@Override

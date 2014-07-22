@@ -18,6 +18,8 @@
 <#else>
     <script type="text/javascript">//<![CDATA[
     (function() {
+        var Dom = YAHOO.util.Dom;
+
     	function init() {
             LogicECM.module.Base.Util.loadScripts([
                 'scripts/lecm-base/components/lecm-rich-text.js'
@@ -42,10 +44,17 @@
 			            plugins: "fullscreen,table",
 			            theme_advanced_buttons1: "bold,italic,underline,strikethrough,separator,fontselect,fontsizeselect, separator, fullscreen",
 			            theme_advanced_buttons2: "justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,table,separator,undo,redo,separator,forecolor,backcolor",
-			            theme_advanced_buttons3: null
+			            theme_advanced_buttons3: null,
+                        init_instance_callback : setTabIndex
 		            }
 	            }).setMessages(${messages});
 		}
+        function setTabIndex (editor) {
+            var editorId = editor.id;
+
+            Dom.setAttribute(editorId + '_ifr', "tabindex", Dom.getAttribute(editorId, "tabindex"));
+            Dom.setAttribute(editorId, "tabindex", '0');
+        }
 		YAHOO.util.Event.onDOMReady(init);
     })();
     //]]></script>

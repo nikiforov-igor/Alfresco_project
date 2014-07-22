@@ -12,15 +12,15 @@ import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.AccessPermission;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.EventCategory;
-import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.security.LecmPermissionService;
+import ru.it.lecm.security.Types;
 import ru.it.lecm.statemachine.StatemachineModel;
 
 import java.util.ArrayList;
@@ -139,22 +139,15 @@ public class ArchiveDocumentAction extends StateMachineAction implements Executi
                             /////////////////////////////
                         }
                     }
-                    /////////////////////////////////
+                    //удаляем динамические пермиссии
+                    //исключение: пермиссии, назначенные непосредственно сотруднику (с префиксом GROUP__LECM$SPEC%)
+                    //            пермиссии участников также сохраняются (т.к. они выданы непосредственно сотруднику)
 					Set<AccessPermission> permissions = getServiceRegistry().getPermissionService().getAllSetPermissions(document);
 					for (AccessPermission permission : permissions) {
-						if (permission.getPosition() == 0) {
+						if (permission.getPosition() == 0 && !permission.getAuthority().startsWith(PermissionService.GROUP_PREFIX + Types.PFX_LECM + Types.SGKind.SG_SPEC.getSuffix())) {
 							getServiceRegistry().getPermissionService().deletePermission(document, permission.getAuthority(), permission.getPermission());
 						}
 					}
-					/////////////////////////////////
-					DocumentMembersService documentMembersService = getDocumentMembersService();
-			        List<NodeRef> members = documentMembersService.getDocumentMembers(document);
-			        LecmPermissionService.LecmPermissionGroup pgGranting = getLecmPermissionService().findPermissionGroup(LecmPermissionService.LecmPermissionGroup.PGROLE_Reader);
-			        for (NodeRef member : members) {
-			            AssociationRef employee = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE).get(0);
-			            getLecmPermissionService().grantAccess(pgGranting, document, employee.getTargetRef());
-			        }
-			        /////////////////////////////////
                 } catch (Exception e) {
                     logger.error("Error while action execution", e);
                 }

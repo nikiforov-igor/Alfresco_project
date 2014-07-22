@@ -25,6 +25,11 @@
 	</#if>
 </#if>
 
+<#assign fireMandatoryByChange = false/>
+<#if field.control.params.fireMandatoryByChange?? && field.control.params.fireMandatoryByChange == "true">
+	<#assign fireMandatoryByChange = true/>
+</#if>
+
 <#assign fieldId=field.id!"">
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
@@ -56,6 +61,7 @@
 			<#if field.control.params.disabledFieldsIfNotSelect??>
 				disabledFieldsIfNotSelect: "${field.control.params.disabledFieldsIfNotSelect}".split(","),
 			</#if>
+				fireMandatoryByChange: "${fireMandatoryByChange?string}",
 				mode: "${form.mode}",
 				fieldId: "${fieldId}"
 			});

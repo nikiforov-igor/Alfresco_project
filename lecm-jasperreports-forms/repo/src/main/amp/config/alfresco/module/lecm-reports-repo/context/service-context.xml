@@ -60,7 +60,7 @@
 
     <!-- Генератор OOffice Calc отчётов -->
     <bean id="ooCalcReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl"
-          init-method="init">
+          init-method="init" parent="baseReportGenerator">
         <property name="resultDAO" ref="fileOOReportResultBean"/>
         <property name="ooConnectedStrictly" value="false"/>
         <property name="maxConnectionRetries" value="2"/>
