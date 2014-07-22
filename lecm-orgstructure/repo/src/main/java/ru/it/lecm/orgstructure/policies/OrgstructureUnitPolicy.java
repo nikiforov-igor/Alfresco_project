@@ -188,6 +188,13 @@ public class OrgstructureUnitPolicy
 //                           TODO: DONE Вероятней всего, что полиси на изменение вызовется только в read-write транзакции, поэтому транзакцию убираю
                              nodeService.setProperty(folder, ContentModel.PROP_NAME, name + " (Удалено)");
                          }
+
+                         if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)){
+                             NodeRef contractor = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
+                             if (nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION)) {
+                                 nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION);
+                             }
+                         }
                      } else {
                          //TODO DONE замена нескольких setProperty на setProperties.
                          //Обновляем папку подразделения
