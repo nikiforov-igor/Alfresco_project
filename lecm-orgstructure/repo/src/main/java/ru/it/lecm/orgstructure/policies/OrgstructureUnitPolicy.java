@@ -17,7 +17,6 @@ import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileNameValidator;
-import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
@@ -39,14 +38,9 @@ import java.util.Map;
  *         Date: 28.01.13
  *         Time: 10:37
  */
-public class OrgstructureUnitPolicy
-		extends SecurityJournalizedPolicyBase
-		implements NodeServicePolicies.OnCreateNodePolicy
-					, NodeServicePolicies.OnDeleteNodePolicy
-{
+public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implements NodeServicePolicies.OnCreateNodePolicy {
 
-	final static String CHKNAME_AUTH_SERVICE = "authService";
-
+    public static final String RU_IT_LECM_PROPERTIES_ORGSTRUCTURE_EDITOR_ENABLED = "ru.it.lecm.properties.orgstructure.editor.enabled";
     private ISchedule scheduleService;
     private Repository repositoryHelper;
     private PermissionService permissionService;
@@ -57,36 +51,40 @@ public class OrgstructureUnitPolicy
         this.dictionaryBean = dictionaryBean;
     }
 
+    public void setScheduleService(ISchedule scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    public void setRepositoryHelper(Repository repositoryHelper) {
+        this.repositoryHelper = repositoryHelper;
+    }
+
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
+    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
+        this.propertiesService = propertiesService;
+    }
+
     @Override
-	public void init() {
-		PropertyCheck.mandatory(this, CHKNAME_AUTH_SERVICE, authService);
+    public void init() {
+        super.init();
 
-		super.init();
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
+                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
+                OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnit"));
+    }
 
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onCreateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnitLog", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onUpdateUnit"));
-		policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
-				OrgstructureBean.TYPE_ORGANIZATION_UNIT, new JavaBehaviour(this, "onDeleteNode"));
-	}
-
-//	public AuthenticationService getAuthService() {
-//		return authService;
-//	}
-
-	public void setScheduleService(ISchedule scheduleService) {
-		this.scheduleService = scheduleService;
-	}
-
-	@Override
-	public void onCreateNode(ChildAssociationRef childAssocRef) {
+    @Override
+    public void onCreateNode(ChildAssociationRef childAssocRef) {
         try {
-            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.editor.enabled");
+            Object editorEnabled = propertiesService.getProperty(RU_IT_LECM_PROPERTIES_ORGSTRUCTURE_EDITOR_ENABLED);
             boolean enabled;
             if (editorEnabled == null) {
                 enabled = true;
@@ -95,12 +93,13 @@ public class OrgstructureUnitPolicy
             }
 
             if (enabled) {
+                //проверка на уникальность подразделения первого уровня
                 final NodeRef unit = childAssocRef.getChildRef();
                 NodeRef parent = orgstructureService.getParentUnit(unit);
                 if (parent == null) {
                     NodeRef root = orgstructureService.getRootUnit();
                     if (root != null && !root.equals(unit)) {
-                        throw new  AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
+                        throw new AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
                     }
                 } else {
                     // создаем контрагента - если подразделение 2-го уровня или у родителя есть аспект
@@ -129,102 +128,25 @@ public class OrgstructureUnitPolicy
         }
     }
 
-	public void onUpdateUnitLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-		final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
-		final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
-		final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
+    @SuppressWarnings("unused")
+    public void onUpdateUnitLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
+        final Boolean prevActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+        final Boolean curActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+        final boolean changed = !PolicyUtils.safeEquals(prevActive, curActive);
 
-		if (before.size() == after.size() && !changed) {
-			businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о подразделении #mainobject");
-		}
+        if (before.size() == after.size() && !changed) {
+            businessJournalService.log(nodeRef, EventCategory.EDIT, "#initiator внес(ла) изменения в сведения о подразделении #mainobject");
+        }
 
-		if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
-			businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о подразделении #mainobject");
-		}
+        if (changed && !curActive) { // бьыли изменения во флаге и подразделение помечено как неактивное
+            businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о подразделении #mainobject");
+        }
+    }
 
-		// отслеживаем котороткое название для SG-обозначений
-		{
-			final Object oldValue = before.get(PolicyUtils.PROP_ORGELEMENT_NAME);
-			final Object newValue = after.get(PolicyUtils.PROP_ORGELEMENT_NAME);
-			final boolean flagChanged = ! PolicyUtils.safeEquals( newValue, oldValue);
-			if (flagChanged) {
-				logger.debug( String.format( "updating details for OU '%s'\n\t from '%s'\n\t to '%s'", nodeRef, oldValue, newValue));
-				notifyNodeCreated( PolicyUtils.makeOrgUnitPos(nodeRef, nodeService));
-				/*
-				notifyNodeCreated( PolicyUtils.makeOrgUnitSVPos(nodeRef, nodeService));
-				(!) для OUSV явный вызов не потребуется, т.к. notifyOU автоматом создаёт sv-часть
-				*/
-			}
-		}
-	}
-
-	public void onUpdateUnit(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
-             try {
-                 Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.editor.enabled");
-                 boolean enabled;
-                 if (editorEnabled == null) {
-                     enabled = true;
-                 } else {
-                     enabled = Boolean.valueOf((String) editorEnabled);
-                 }
-
-                 if (enabled) {
-                     final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
-                     final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
-                     final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
-
-                     //если подразделение удаляется
-                     if (changed && !nowActive) {
-                         NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef, true);
-                         if (schedule != null && nodeService.exists(schedule)) {
-                             nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
-                             nodeService.deleteNode(schedule);
-                         }
-                         //Обновляем папку подразделения
-                         List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-                         if (shared.size() > 0) {
-                             final NodeRef folder = shared.get(0).getTargetRef();
-                             final String name = nodeService.getProperty(folder, ContentModel.PROP_NAME).toString();
-//                           TODO: DONE Вероятней всего, что полиси на изменение вызовется только в read-write транзакции, поэтому транзакцию убираю
-                             nodeService.setProperty(folder, ContentModel.PROP_NAME, name + " (Удалено)");
-                         }
-
-                         if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)){
-                             NodeRef contractor = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
-                             if (nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION)) {
-                                 nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION);
-                             }
-                         }
-                     } else {
-                         //TODO DONE замена нескольких setProperty на setProperties.
-                         //Обновляем папку подразделения
-                         List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-                         Map<QName, Serializable> properties;
-                         if (shared.isEmpty()) {
-                             if (before.size() > 0) {
-                                 createOrganizationUnitStore(nodeRef);
-                                 shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-                             }
-                         }
-                         if (shared.size() > 0) {
-                             NodeRef folder = shared.get(0).getTargetRef();
-                             properties = nodeService.getProperties(folder);
-                             properties.put(ContentModel.PROP_NAME, FileNameValidator.getValidFileName(after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString()));
-                             properties.put(ContentModel.PROP_TITLE, after.get(OrgstructureBean.PROP_UNIT_CODE));
-                             properties.put(ContentModel.PROP_DESCRIPTION, after.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
-                             nodeService.setProperties(folder, properties);
-                         }
-                     }
-                 }
-             } catch (LecmBaseException e) {
-                 throw new IllegalStateException("Cannot read orgstructure properties");
-             }
-         }
-
-	@Override
-	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+    @SuppressWarnings("unused")
+    public void onUpdateUnit(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         try {
-            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.editor.enabled");
+            Object editorEnabled = propertiesService.getProperty(RU_IT_LECM_PROPERTIES_ORGSTRUCTURE_EDITOR_ENABLED);
             boolean enabled;
             if (editorEnabled == null) {
                 enabled = true;
@@ -233,31 +155,86 @@ public class OrgstructureUnitPolicy
             }
 
             if (enabled) {
-                final NodeRef nodeOU = childAssocRef.getChildRef();
-                final NodeRef parentOU = childAssocRef.getParentRef();
-                notifyDeleteOU( nodeOU, parentOU);
+                final Boolean nowActive = (Boolean) after.get(BaseBean.IS_ACTIVE);
+                final Boolean oldActive = (Boolean) before.get(BaseBean.IS_ACTIVE);
+                final boolean changed = !PolicyUtils.safeEquals(oldActive, nowActive);
+
+                //если подразделение удаляется
+                if (changed && !nowActive) {
+                    NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef, true);
+                    if (schedule != null && nodeService.exists(schedule)) {
+                        nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
+                        nodeService.deleteNode(schedule);
+                    }
+                    //Обновляем папку подразделения
+                    List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+                    if (shared.size() > 0) {
+                        final NodeRef folder = shared.get(0).getTargetRef();
+                        final String name = nodeService.getProperty(folder, ContentModel.PROP_NAME).toString();
+//                           TODO: DONE Вероятней всего, что полиси на изменение вызовется только в read-write транзакции, поэтому транзакцию убираю
+                        nodeService.setProperty(folder, ContentModel.PROP_NAME, name + " (Удалено)");
+                    }
+
+                    //Удаляем аспект у контрагента при удалении подразделения
+                    if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                        NodeRef contractor = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
+                        if (nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION)) {
+                            nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION);
+                        }
+                    }
+                    // оповещение securityService по Департаменту ...
+                    notifyDeleteOU(nodeRef, nodeService.getPrimaryParent(nodeRef).getParentRef());
+                } else {
+                    // отслеживаем короткое название для SG-обозначений
+                    final Object oldValue = before.get(PolicyUtils.PROP_ORGELEMENT_NAME);
+                    final Object newValue = after.get(PolicyUtils.PROP_ORGELEMENT_NAME);
+                    final boolean flagChanged = !PolicyUtils.safeEquals(newValue, oldValue);
+                    if (flagChanged) {
+                        logger.debug(String.format("updating details for OU '%s'\n\t from '%s'\n\t to '%s'", nodeRef, oldValue, newValue));
+                        notifyNodeCreated(PolicyUtils.makeOrgUnitPos(nodeRef, nodeService));
+                    }
+
+                    //Обновляем папку подразделения
+                    List<AssociationRef> shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+                    Map<QName, Serializable> properties;
+                    if (shared.isEmpty()) {
+                        if (before.size() > 0) {
+                            createOrganizationUnitStore(nodeRef);
+                            shared = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
+                        }
+                    }
+                    if (shared.size() > 0) {
+                        NodeRef folder = shared.get(0).getTargetRef();
+                        properties = nodeService.getProperties(folder);
+                        properties.put(ContentModel.PROP_NAME, FileNameValidator.getValidFileName(after.get(OrgstructureBean.PROP_ORG_ELEMENT_SHORT_NAME).toString()));
+                        properties.put(ContentModel.PROP_TITLE, after.get(OrgstructureBean.PROP_UNIT_CODE));
+                        properties.put(ContentModel.PROP_DESCRIPTION, after.get(OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME));
+                        nodeService.setProperties(folder, properties);
+                    }
+                }
             }
         } catch (LecmBaseException e) {
             throw new IllegalStateException("Cannot read orgstructure properties");
         }
-	}
+    }
 
-	public void onCreateUnitLog(ChildAssociationRef childAssocRef) {
-		NodeRef unit = childAssocRef.getChildRef();
-		NodeRef parent = orgstructureService.getParentUnit(unit);
+    @SuppressWarnings("unused")
+    public void onCreateUnitLog(ChildAssociationRef childAssocRef) {
+        NodeRef unit = childAssocRef.getChildRef();
+        NodeRef parent = orgstructureService.getParentUnit(unit);
 
-		final List<String> objects = new ArrayList<String>(1);
-		if (parent != null) {
-			objects.add(parent.toString());
-		} else { // корневое подразделение - берем Организацию
-			objects.add(orgstructureService.getOrganization().toString());
-		}
+        final List<String> objects = new ArrayList<String>(1);
+        if (parent != null) {
+            objects.add(parent.toString());
+        } else { // корневое подразделение - берем Организацию
+            objects.add(orgstructureService.getOrganization().toString());
+        }
 
-		final String initiator = authService.getCurrentUserName();
-		businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
-	}
+        final String initiator = authService.getCurrentUserName();
+        businessJournalService.log(initiator, unit, EventCategory.ADD, "#initiator создал(а) новое подразделение #mainobject в подразделении #object1", objects);
+    }
 
-    private void createOrganizationContractor(NodeRef unit){
+    private void createOrganizationContractor(NodeRef unit) {
         NodeRef contractorsDictionary = dictionaryBean.getDictionaryByName("Контрагенты");
 
         if (contractorsDictionary != null) {
@@ -363,17 +340,5 @@ public class OrgstructureUnitPolicy
 
         //Создаем ассоциацию подразделения с папкой
         nodeService.createAssociation(unit, ref.getChildRef(), OrgstructureBean.ASSOC_ORGANIZATION_UNIT_FOLDER);
-    }
-
-    public void setRepositoryHelper(Repository repositoryHelper) {
-        this.repositoryHelper = repositoryHelper;
-    }
-
-    public void setPermissionService(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
-
-    public void setPropertiesService(LecmBasePropertiesService propertiesService) {
-        this.propertiesService = propertiesService;
     }
 }
