@@ -19,7 +19,8 @@ LogicECM.control = LogicECM.control || {};
 (function () {
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
-		Util = LogicECM.module.Base.Util;
+		Util = LogicECM.module.Base.Util,
+        KeyListener = YAHOO.util.KeyListener;
 
 	LogicECM.control.DndUploader = function (fieldHtmlId) {
 		LogicECM.control.DndUploader.superclass.constructor.call(this, "LogicECM.control.DndUploader", fieldHtmlId, [ "container"]);
@@ -64,11 +65,21 @@ LogicECM.control = LogicECM.control || {};
 					LogicECM.LecmUploaderInitializer.initLecmUploaders();
 					this.loadRootNode();
 
-					Event.on(this.id + "-uploader-button", "click", this.showUploader, null, this);
+                    var uploaderButton = this.id + "-uploader-button";
+					Event.on(uploaderButton, "click", this.showUploader, null, this);
+                    new KeyListener(uploaderButton,
+                        {
+                            keys: KeyListener.KEY.ENTER
+                        },
+                        {
+                            fn: this.showUploader,
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
 
 					if (Dom.get(this.id + "-show-preview-button") != null) {
 						this.widgets.showPreviewButton = new YAHOO.widget.Button(
-								this.id + "-show-preview-button",
+                            this.id + "-show-preview-button",
 							{
 								type: "checkbox",
 								onclick: {

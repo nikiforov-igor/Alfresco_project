@@ -559,10 +559,18 @@ LogicECM.module.Base.Util = {
             var el = elements[i];
             if (el && el.offsetHeight > 0) {
                 if (Dom.hasClass(el, "control")) {
-                    if (Dom.hasClass(el, "control-X")) {
-                        //todo настройки для конкретных контролов
+                    //todo настройки для конкретных контролов
+                    if (Dom.hasClass(el, "dnd-uploader")) {
+                        var link = Selector.query('.uploader-block img.uploader-button', el, true);
+                        if (link) {
+                            Dom.setAttribute(link, 'tabindex', ++tabindex);
+                        }
+                    } else if (Dom.hasClass(el, "")) {
+
+                    } else if (Dom.hasClass(el, "")) {
 
                     } else {
+                        // универсально для большинства контролов
                         var valueDiv = Selector.query('div.value-div', el, true);
                         if (valueDiv) {
                             var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
