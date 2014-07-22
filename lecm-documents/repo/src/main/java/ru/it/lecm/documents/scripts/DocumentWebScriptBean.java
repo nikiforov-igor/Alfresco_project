@@ -589,10 +589,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
         return createScriptable(refs);
     }
 
-    public boolean checkLastDocuments(ScriptNode document) {
-        return documentFrequencyAnalysisService.checkLastDocuments(document.getNodeRef());
-    }
-
     public boolean saveToLastDocuments(ScriptNode document) {
         try {
             return documentFrequencyAnalysisService.saveToLastDocuments(document.getNodeRef());
@@ -607,15 +603,8 @@ public class DocumentWebScriptBean extends BaseWebScript {
      * Возвращает список последних просмотренных документов
      */
     public Scriptable getLastDocuments() {
-        String lastNodes = documentFrequencyAnalysisService.getLastDocuments();
-        StringTokenizer t = new StringTokenizer(lastNodes, ";");
-        ArrayList<NodeRef> nodes = new ArrayList<NodeRef>();
-        while(t.hasMoreElements()) {
-            String key = t.nextToken();
-            if (!"".equals(key)) {
-                nodes.add(new NodeRef(key));
-            }
-        }
+        ArrayList<NodeRef> nodes = new ArrayList<>();
+        nodes.addAll(documentFrequencyAnalysisService.getLastDocuments().keySet());
         Collections.reverse(nodes);
         return createScriptable(nodes);
     }

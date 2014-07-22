@@ -6,19 +6,16 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
+import org.apache.commons.lang.text.StrBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: dbashmakov
@@ -174,36 +171,27 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
     }
 
     @Override
-    public String getLastDocuments() {
+    public LinkedHashMap<NodeRef, Date> getLastDocuments() {
+        LinkedHashMap<NodeRef, Date> docs = new LinkedHashMap<>();
         NodeRef employee = orgstructureService.getCurrentEmployee();
         NodeRef lastDocContainer = getLastDocumentsContainer(employee);
         if (lastDocContainer != null) {
             String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
             if (lastDocs != null) {
                 String[] strings = lastDocs.split(";");
-                StringBuilder docs = new StringBuilder();
                 for (String string : strings) {
-                    if (nodeService.exists(new NodeRef(string))) {
-                        docs.append(string).append(";");
+                    String[] split = string.split("\\|");
+                    String doc = split[0];
+                    String date = split.length > 1 ? split[1] : "0";
+                    NodeRef nodeRef = new NodeRef(doc);
+                    if (nodeService.exists(nodeRef)) {
+                        Date lastDate = new Date(Long.parseLong(date));
+                        docs.put(nodeRef, lastDate);
                     }
                 }
-                return docs.toString();
             }
         }
-        return "";
-    }
-
-    @Override
-    public boolean checkLastDocuments(NodeRef document) {
-        NodeRef employee = orgstructureService.getCurrentEmployee();
-        NodeRef lastDocContainer = getLastDocumentsContainer(employee);
-        if (lastDocContainer != null) {
-            String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
-            if (lastDocs != null && lastDocs.contains(document.toString())) {
-                return true;
-            }
-        }
-        return false;
+        return docs;
     }
 
     @Override
@@ -215,18 +203,23 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
         } catch (TransactionNeededException ex) {
             throw new WriteTransactionNeededException("Can't create doc type folder for employee " + employee);
         }
+        LinkedHashMap<NodeRef, Date> lastDocuments = getLastDocuments();
+        lastDocuments.remove(document);
+        lastDocuments.put(document, new Date());
+        StrBuilder lastDocsStr = new StrBuilder();
+        int i = lastDocuments.size() - maxLastDocumentsToSave;
+        for (Map.Entry<NodeRef, Date> entry : lastDocuments.entrySet()) {
+            if (i-- > 0) {
+                continue;   //пропускаем устаревшие
+            }
+            lastDocsStr.append(entry.getKey())
+                    .append("|")
+                    .append(entry.getValue().getTime())
+                    .append(";");
+        }
         NodeRef lastDocContainer = getLastDocumentsContainer(employee);
         if (lastDocContainer != null) {
-            String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
-            if (lastDocs != null) {
-                lastDocs = lastDocs.replace(document.toString() + ";", ""); //убираем, если уже есть в списке
-                lastDocs += document.toString() + ";"; //добавляем в конец
-                if (StringUtils.countOccurrencesOf(lastDocs, ";") > maxLastDocumentsToSave) {
-                    lastDocs = lastDocs.substring(lastDocs.indexOf(";") + 1); //убираем лишние
-                }
-                nodeService.setProperty(lastDocContainer, PROP_LAST_DOCUMENTS, lastDocs);
-                return true;
-            }
+            nodeService.setProperty(lastDocContainer, PROP_LAST_DOCUMENTS, lastDocsStr.toString());
         } else {
             NodeRef workDirectory = getWorkDirectory(employee);
             if (workDirectory == null) {
@@ -235,7 +228,7 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
             }
             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-            properties.put(PROP_LAST_DOCUMENTS, document.toString() + ";");
+            properties.put(PROP_LAST_DOCUMENTS, lastDocsStr.toString());
             lastDocContainer = nodeService.createNode(workDirectory, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_EMPLOYEE_LAST_DOCUMENTS, properties).getChildRef();
             nodeService.createAssociation(lastDocContainer, employee, ASSOC_LAST_DOC_TO_EMPLOYEE);
             return true;
