@@ -351,7 +351,8 @@ LogicECM.module.Eds.GlobalSettings = LogicECM.module.Eds.GlobalSettings || {};
 
 			canItemBeSelected: function PotentialRolesTreeViewer_canItemBeSelected(id)
 			{
-				if (!this.currentNode) {
+				if (!(this.currentNode && this.currentNode.data && this.currentNode.data.type &&
+					this.currentNode.data.type == this.options.treeItemType)) {
 					return false;
 				}
 
