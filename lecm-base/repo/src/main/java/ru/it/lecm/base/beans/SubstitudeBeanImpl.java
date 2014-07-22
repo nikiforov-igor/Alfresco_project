@@ -13,6 +13,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.ISO8601DateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
@@ -178,6 +179,22 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     return number ;
                 }
                 return DocumentService.DEFAULT_REG_NUM;
+            }
+        },
+        DOC_LAST_VIEW_DATE {
+            @Override
+            public String getFormatStringByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                Date documentLastViewDate = docService.getDocumentLastViewDate(object);
+                if (documentLastViewDate != null) {
+                    return ISO8601DateFormat.format(documentLastViewDate);
+                }
+
+                return "";
+            }
+
+            @Override
+            public Object getRealTypeValueByPseudoProp(NodeRef object, DocumentService docService, ServiceRegistry services) {
+                return docService.getDocumentLastViewDate(object);
             }
         };
 

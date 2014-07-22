@@ -16,6 +16,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +39,6 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
-import org.alfresco.service.namespace.RegexQNamePattern;
 
 /**
  * Created with IntelliJ IDEA. User: AIvkin Date: 28.02.13 Time: 16:28
@@ -60,9 +60,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     private SearchQueryProcessorService processorService;
     private PreferenceService preferenceService;
     private DocumentTableService documentTableService;
+    private DocumentFrequencyAnalysisService frequencyAnalysisService;
 
     public DocumentTableService getDocumentTableService() {
         return documentTableService;
+    }
+
+    public void setFrequencyAnalysisService(DocumentFrequencyAnalysisService frequencyAnalysisService) {
+        this.frequencyAnalysisService = frequencyAnalysisService;
     }
 
     public void setDocumentTableService(DocumentTableService documentTableService) {
@@ -871,5 +876,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                 }
             }
         }
+    }
+
+    @Override
+    public Date getDocumentLastViewDate(NodeRef document) {
+        Map<NodeRef, Date> lastDocuments = frequencyAnalysisService.getLastDocuments();
+        return lastDocuments.get(document);
     }
 }

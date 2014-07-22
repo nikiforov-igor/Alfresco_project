@@ -126,6 +126,7 @@
         <property name="copyService" ref="copyService"/>
         <property name="processorService" ref="searchQueryProcessorService"/>
         <property name="documentTableService" ref="documentTableService"/>
+        <property name="frequencyAnalysisService" ref="frequencyAnalysisService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"

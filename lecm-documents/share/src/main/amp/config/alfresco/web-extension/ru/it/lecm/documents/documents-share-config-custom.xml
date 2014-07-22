@@ -790,8 +790,15 @@
             </form>
             <form id="last-documents-list">
                 <field-visibility>
+                    <show id="cm:created" force="true"/>    //небольшой хак - выводится будет другое значение, от этого требуется только тип
+                    <show id="lecm-document:doc-type" force="true"/>
+                    <show id="lecm-document:title" force="true"/>
+                    <show id="lecm-document:author-assoc" force="true"/>
                     <show id="lecm-document:present-string" force="true"/>
                 </field-visibility>
+                <appearance>
+                    <field id="cm:created" substituteString="{~DOC_LAST_VIEW_DATE}" label="Дата просмотра"/>
+                </appearance>
             </form>
         </forms>
     </config>
