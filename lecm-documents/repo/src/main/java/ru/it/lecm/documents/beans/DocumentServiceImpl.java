@@ -38,6 +38,7 @@ import ru.it.lecm.security.LecmPermissionService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import org.alfresco.service.namespace.RegexQNamePattern;
 
 /**
  * Created with IntelliJ IDEA. User: AIvkin Date: 28.02.13 Time: 16:28
@@ -58,7 +59,16 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     private ApplicationContext applicationContext;
     private SearchQueryProcessorService processorService;
     private PreferenceService preferenceService;
+    private DocumentTableService documentTableService;
 
+    public DocumentTableService getDocumentTableService() {
+        return documentTableService;
+    }
+
+    public void setDocumentTableService(DocumentTableService documentTableService) {
+        this.documentTableService = documentTableService;
+    }
+    
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
@@ -330,8 +340,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
 
     @Override
     public String getDocumentsFolderPath() {
-            NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
-            return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
+        NodeRef nodeRef = repositoryStructureHelper.getDocumentsRef();
+        return nodeService.getPath(nodeRef).toPrefixString(namespaceService);
     }
 
     // в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
@@ -472,11 +482,12 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
             if (settings != null) {
                 // копируем свойства
                 List<String> propertiesToCopy = settings.getPropsToCopy();
+                Map<QName, Serializable> originalProperties = nodeService.getProperties(document);
                 for (String propName : propertiesToCopy) {
                     try {
                         QName propQName = QName.createQName(propName, namespaceService);
                         if (propQName != null) {
-                            properties.put(propQName, nodeService.getProperty(document, propQName));
+                            properties.put(propQName, originalProperties.get(propQName));
                         }
                     } catch (InvalidQNameException invalid) {
                         logger.warn("Invalid QName for document property:" + propName);
@@ -567,6 +578,20 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                         }
                     }
                 }
+
+                //копируем табличные данные
+                if (null != settings) {
+                    List<String> tableDataToCopy = settings.getTableDataToCopy();
+                    if (null != tableDataToCopy) {
+                        for (String table : tableDataToCopy) {
+                            QName tableType = QName.createQName(table, namespaceService);
+                            List<NodeRef> targets = findNodesByAssociationRef(document, RegexQNamePattern.MATCH_ALL, tableType, ASSOCIATION_TYPE.TARGET);
+                            documentTableService.copyTableData(createdNode, targets.get(0));
+                        }
+                    }
+
+                }
+
                 return createdNode;
             }
         }

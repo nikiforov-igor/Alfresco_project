@@ -99,6 +99,9 @@ public interface DocumentTableService {
 	 */
 	public List<NodeRef> getTableDataRows(NodeRef tableDataRef);
 
+        
+        public NodeRef copyTableData(NodeRef document, NodeRef tableDataRef); 
+        
 	/**
 	 * Создание результирующей строки
 	 * @param tableDataRef табличные данные

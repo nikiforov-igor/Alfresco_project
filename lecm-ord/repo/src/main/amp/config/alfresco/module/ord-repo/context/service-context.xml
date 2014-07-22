@@ -66,6 +66,65 @@
 		  class="ru.it.lecm.ord.ORDDocumentServiceImpl"
 		  p:lecmDictionaryService-ref="serviceDictionary"/>
 
+        
+        <bean id="ordCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-document:title</value>
+                <value>lecm-eds-document:summaryContent</value>
+                <value>lecm-eds-document:note</value>
+                <value>lecm-document-aspects:is-shared-folder</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-eds-document:document-type-assoc</value>
+                <value>lecm-document:subject-assoc</value>
+                <value>lecm-eds-document:file-register-assoc</value>
+                <value>lecm-ord:registrar-assoc</value> <!--??-->
+                <value>lecm-ord:controller-assoc</value>
+                <value>lecm-ord:canceled-assoc</value>
+                <value>lecm-ord:accepted-assoc</value>
+            </list>
+        </property>
+        <property name="categoriesToCopy">
+            <list>
+                <value>Документ</value>
+            </list>
+        </property>
+        <property name="tableDataToCopy">
+            <list>
+                <value>lecm-ord-table-structure:itemsTable</value>
+            </list>
+        </property>
+        
+    </bean>
+        <bean id="ordItemCopySettings" class="ru.it.lecm.documents.beans.DocumentCopySettings">
+        <property name="propsToCopy">
+            <list>
+                <value>lecm-document:indexTableRow</value>
+                <value>lecm-ord-table-structure:execution-date</value>
+                <value>lecm-ord-table-structure:item-content</value>
+                <value>lecm-ord-table-structure:item-comment</value>
+            </list>
+        </property>
+        <property name="assocsToCopy">
+            <list>
+                <value>lecm-ord-table-structure:executor-assoc</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="ordCopySettingsBean" parent="documentCopySettingsBean">
+        <property name="settings">
+            <map>
+                <entry key="lecm-ord:document" value-ref="ordCopySettings"/>
+                <entry key="lecm-ord-table-structure:item" value-ref="ordItemCopySettings"/>
+            </map>
+        </property>
+    </bean>
+
+        
 	<!--notification-->
 	<bean id="ordNotificationService" parent="baseBean"
 		  class="ru.it.lecm.ord.ORDNotificationServiceImpl"

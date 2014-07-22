@@ -125,6 +125,7 @@
         <property name="documentAttachmentsService" ref="documentAttachmentsService"/>
         <property name="copyService" ref="copyService"/>
         <property name="processorService" ref="searchQueryProcessorService"/>
+        <property name="documentTableService" ref="documentTableService"/>
     </bean>
 
     <bean id="documents.LogicEcmModelsConnectionsBootstrap" parent="dictionaryModelBootstrap"

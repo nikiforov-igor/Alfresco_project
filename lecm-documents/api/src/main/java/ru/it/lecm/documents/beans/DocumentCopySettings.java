@@ -12,7 +12,16 @@ public class DocumentCopySettings {
     private List<String> propsToCopy;
     private List<String> assocsToCopy;
     private List<String> categoriesToCopy;
+    private List<String> tableDataToCopy;
 
+    public List<String> getTableDataToCopy() {
+        return tableDataToCopy;
+    }
+
+    public void setTableDataToCopy(List<String> tableDataToCopy) {
+        this.tableDataToCopy = tableDataToCopy;
+    }
+    
     public List<String> getPropsToCopy() {
         return propsToCopy;
     }

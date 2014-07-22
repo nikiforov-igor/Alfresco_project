@@ -15,6 +15,9 @@ import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
+import org.alfresco.service.namespace.InvalidQNameException;
+import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
@@ -387,9 +390,75 @@ public class DocumentTableServiceImpl extends BaseBean implements DocumentTableS
     }
 
     @Override
-	public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
-		if (!calculators.containsKey(postfix)) {
-			calculators.put(postfix, calculator);
-		}
-	}
+    public void addCalculator(String postfix, TableTotalRowCalculator calculator) {
+            if (!calculators.containsKey(postfix)) {
+                    calculators.put(postfix, calculator);
+            }
+    }
+
+    private NodeRef copyRow(NodeRef source, NodeRef target) {
+        NodeRef result = null;
+        if (isDocumentTableData(target) && isDocumentTableDataRow(source)) {
+            QName rawType = nodeService.getType(source);
+            DocumentCopySettings settings = DocumentCopySettingsBean.getSettingsForDocType(rawType.toPrefixString(namespaceService));
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+            if (settings != null) {
+                // копируем свойства
+                List<String> propertiesToCopy = settings.getPropsToCopy();
+                Map<QName, Serializable> originalProperties = nodeService.getProperties(source);
+                for (String propName : propertiesToCopy) {
+                    try {
+                        QName propQName = QName.createQName(propName, namespaceService);
+                        if (propQName != null) {
+                            properties.put(propQName, originalProperties.get(propQName));
+                        }
+                    } catch (InvalidQNameException invalid) {
+                        logger.warn("Invalid QName for document property:" + propName);
+                    }
+                }
+            }
+            // создаем ноду
+            ChildAssociationRef createdNodeAssoc = nodeService.createNode(target,
+                    ContentModel.ASSOC_CONTAINS, QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI,
+                            GUID.generate()), rawType, properties);
+
+            if (createdNodeAssoc != null && createdNodeAssoc.getChildRef() != null) {
+                result = createdNodeAssoc.getChildRef();
+                if (settings != null) {
+                    // копируем ассоциации
+                    List<String> assocsToCopy = settings.getAssocsToCopy();
+                    for (String assocName : assocsToCopy) {
+                        try {
+                            QName assocQName = QName.createQName(assocName, namespaceService);
+                            if (assocQName != null) {
+                                List<NodeRef> targets = findNodesByAssociationRef(source, assocQName, null, ASSOCIATION_TYPE.TARGET);
+                                nodeService.setAssociations(result, assocQName, targets);
+
+                            }
+                        } catch (InvalidQNameException invalid) {
+                            logger.warn("Invalid QName for document assoc:" + assocName);
+                        }
+                    }
+                }
+            }
+            
+        }
+        return result;
+    }
+    
+    @Override
+    public NodeRef copyTableData(NodeRef document, NodeRef tableDataRef) {
+        if (isDocumentTableData(tableDataRef)) {
+            List<ChildAssociationRef> items =  nodeService.getChildAssocs(tableDataRef);
+            NodeRef targetTable =  findNodesByAssociationRef(document, RegexQNamePattern.MATCH_ALL, nodeService.getType(tableDataRef), ASSOCIATION_TYPE.TARGET).get(0);
+            for (ChildAssociationRef itemAssociationRef : items) {
+                NodeRef item = itemAssociationRef.getChildRef();
+                copyRow(item, targetTable);
+            }
+            return targetTable;
+        } else {
+            return null;
+        }
+    }
+        
 }
