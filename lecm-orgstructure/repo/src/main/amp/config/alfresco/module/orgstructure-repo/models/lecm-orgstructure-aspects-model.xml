@@ -23,6 +23,24 @@
 
         <!-- аспект Иммет связанного контрагента -->
         <aspect name="lecm-orgstr-aspects:has-linked-contractor-aspect">
+            <properties>
+                <property name="lecm-orgstr-aspects:linked-contractor-assoc-ref">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+                <property name="lecm-orgstr-aspects:linked-contractor-assoc-text-content">
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
             <associations>
                 <association name="lecm-orgstr-aspects:linked-contractor-assoc">
                     <source>
