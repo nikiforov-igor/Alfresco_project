@@ -530,7 +530,7 @@
                     <field id="internalDirect:formData">
                         <control template="/ru/it/lecm/base-share/components/controls/hidden.ftl"/>
                     </field>
-                    <field id="internalDirect:answerResult">
+                    <field id="internalDirect:answerResult" mandatory="true">
                         <control template="/ru/it/lecm/internal/controls/direct-answer.ftl" />
                     </field>
                     <field id="transitions">
