@@ -4,6 +4,7 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -50,14 +51,7 @@ public interface DocumentFrequencyAnalysisService {
      * Получить список последних открытых пользователем документов
      * @return список последних открытых пользователем документов, разделенных ";"
      */
-    public String getLastDocuments();
-
-    /**
-     * Проверка, входит ли документ в список последних открытых текущим пользователем
-     * @param document документ
-     * @return входит ли документ в список последних открытых текущим пользователем
-     */
-    boolean checkLastDocuments(NodeRef document);
+    public Map<NodeRef, Date> getLastDocuments();
 
     /**
      * Добавление документа в список последних, открытых текущим пользователем

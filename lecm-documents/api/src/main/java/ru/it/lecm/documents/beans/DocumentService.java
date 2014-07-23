@@ -343,4 +343,11 @@ public interface DocumentService {
      * @param document - ссылка на документ
      */
     void removeFromFavourites(NodeRef document);
+
+    /**
+     * получение даты последнего открытия документа текущим пользователем
+     * @param document ссылка на документ
+     * @return дату последнего открытия документа или NULL, если нет в списке последних открывавшихся
+     */
+    Date getDocumentLastViewDate(NodeRef document);
 }

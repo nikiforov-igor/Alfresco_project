@@ -1,11 +1,12 @@
 package ru.it.lecm.documents.beans;
 
-import java.util.List;
-import java.util.Set;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.TableTotalRowCalculator;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: AIvkin
@@ -99,6 +100,9 @@ public interface DocumentTableService {
 	 */
 	public List<NodeRef> getTableDataRows(NodeRef tableDataRef);
 
+        
+        public NodeRef copyTableData(NodeRef document, NodeRef tableDataRef); 
+        
 	/**
 	 * Создание результирующей строки
 	 * @param tableDataRef табличные данные

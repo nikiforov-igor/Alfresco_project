@@ -5,6 +5,7 @@ import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.documents.beans.DocumentFrequencyAnalysisService;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: azinovin
@@ -22,16 +23,11 @@ public class LastDocumentsProcessor extends SearchQueryProcessor {
     @Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
-        String lastDocuments = documentFrequencyAnalysisService.getLastDocuments();
-            if (lastDocuments != null && lastDocuments.length() > 0) {
-                String[] docsRefs = lastDocuments.split(";");
-                for (String docsRef : docsRefs) {
-                    if (NodeRef.isNodeRef(docsRef)) {
-                        sbQuery.append("ID:").append(docsRef.replace(":", "\\:")).append(" OR ");
-                    }
-                }
+        Set<NodeRef> docsRefs = documentFrequencyAnalysisService.getLastDocuments().keySet();
+        for (NodeRef docsRef : docsRefs) {
+            sbQuery.append("ID:").append(docsRef.toString().replace(":", "\\:")).append(" OR ");
+        }
 
-            }
         sbQuery.append("ID:\"NOT_REF\""); // выключать поиск, если документы не найдены
         return sbQuery.toString();
     }
