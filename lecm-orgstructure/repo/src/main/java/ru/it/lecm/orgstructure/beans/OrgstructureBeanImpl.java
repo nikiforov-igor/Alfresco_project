@@ -1,6 +1,7 @@
 package ru.it.lecm.orgstructure.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.model.Repository;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
@@ -33,8 +34,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	private DictionaryBean dictionaryService;
 	private NodeRef organizationRootRef;
 	private Repository repositoryHelper;
+    private SimpleCache<String, NodeRef> userOrganizationsCache;
 
-	public void setPersonService(PersonService personService) {
+    public void setPersonService(PersonService personService) {
 		this.personService = personService;
 	}
 
@@ -45,6 +47,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	public void setRepositoryHelper(Repository repositoryHelper) {
 		this.repositoryHelper = repositoryHelper;
 	}
+
+    public void setUserOrganizationsCache(SimpleCache<String, NodeRef> userOrganizationsCache) {
+        this.userOrganizationsCache = userOrganizationsCache;
+    }
+
+    @Override
+    public SimpleCache<String, NodeRef> getUserOrganizationsCache() {
+        return userOrganizationsCache;
+    }
 
 	/**
 	 * Метод инициализвции сервиса Создает рабочую директорию - если она еще не
@@ -1949,4 +1960,71 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	public String getBusinessRoleIdentifier(NodeRef roleRef) {
 		return (String) nodeService.getProperty(roleRef, PROP_BUSINESS_ROLE_IDENTIFIER);
 	}
+
+    @Override
+    public NodeRef getEmployeeOrganization(NodeRef employee) {
+        NodeRef organization = null;
+        String userName = getEmployeeLogin(employee);
+        if (userName != null) {
+            if (getUserOrganizationsCache().contains(userName)) {
+                organization = getUserOrganizationsCache().get(userName);
+            } else {
+                if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    List<AssociationRef> orgAssoc = nodeService.getTargetAssocs(employee, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                    if (orgAssoc != null && orgAssoc.size() > 0) {
+                        organization = orgAssoc.get(0).getTargetRef();
+                    }
+                }
+                getUserOrganizationsCache().put(userName, organization);
+            }
+        }
+        return organization;
+    }
+
+    @Override
+    public NodeRef getUserOrganization(String userName) {
+        NodeRef organization = null;
+        if (userName != null) {
+            if (getUserOrganizationsCache().contains(userName)) {
+                organization = getUserOrganizationsCache().get(userName);
+            } else {
+                NodeRef employee = getEmployeeByPerson(userName);
+                if (employee != null) {
+                    if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        List<AssociationRef> orgAssoc = nodeService.getTargetAssocs(employee, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                        if (orgAssoc != null && orgAssoc.size() > 0) {
+                            organization = orgAssoc.get(0).getTargetRef();
+                        }
+                    }
+                    getUserOrganizationsCache().put(userName, organization);
+                }
+            }
+        }
+        return organization;
+    }
+
+    @Override
+    public NodeRef getUnitOrganization(NodeRef orgUnit) {
+        NodeRef contractor = null;
+        if (nodeService.hasAspect(orgUnit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+            List<AssociationRef> contractorAssoc = nodeService.getTargetAssocs(orgUnit, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            if (!contractorAssoc.isEmpty()) {
+                contractor = contractorAssoc.get(0).getTargetRef();
+            }
+        }
+
+        return contractor;
+    }
+
+    @Override
+    public NodeRef getUnitByOrganization(NodeRef organization) {
+        NodeRef unit = null;
+        if (nodeService.hasAspect(organization, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
+            List<AssociationRef> parents = nodeService.getSourceAssocs(organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+            for (AssociationRef parent : parents) {
+
+            }
+        }
+        return unit;
+    }
 }

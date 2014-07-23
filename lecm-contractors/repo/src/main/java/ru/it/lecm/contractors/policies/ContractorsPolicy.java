@@ -132,7 +132,7 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
             //если контрагент удаляется
             if (changed && !nowActive) {
                 // Провеяряем аспект у контрагента
-                if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION)) {
+                if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
                     throw new IllegalStateException("Невозможно удалить контрагента! На него ссылается орг.единица!");
                 }
             }

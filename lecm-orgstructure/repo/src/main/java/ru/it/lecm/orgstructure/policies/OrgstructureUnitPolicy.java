@@ -102,8 +102,8 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                         throw new AlfrescoRuntimeException("Нельзя создать два корневых подразделения!");
                     }
                 } else {
-                    // создаем контрагента - если подразделение 2-го уровня или у родителя есть аспект
-                    if (parent.equals(orgstructureService.getRootUnit()) || nodeService.hasAspect(parent, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                    // создаем контрагента - если подразделение 2-го уровня
+                    if (parent.equals(orgstructureService.getRootUnit())) {
                         AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
                             @Override
                             public Object doWork() throws Exception {
@@ -111,6 +111,12 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                                 return null;
                             }
                         });
+                    } else { // для остальных - прописываем ссылку, если есть аспект и организация
+                        NodeRef organization = orgstructureService.getUnitOrganization(parent);
+                        if (organization != null) {
+                            nodeService.addAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                            nodeService.createAssociation(unit, organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                        }
                     }
                 }
                 // оповещение securityService по Департаменту ...
@@ -176,10 +182,10 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                     }
 
                     //Удаляем аспект у контрагента при удалении подразделения
-                    if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
-                        NodeRef contractor = nodeService.getTargetAssocs(nodeRef, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
-                        if (nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION)) {
-                            nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION);
+                    if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        NodeRef contractor = orgstructureService.getUnitOrganization(nodeRef);
+                        if (contractor != null && nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
+                            nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION);
                         }
                     }
                     // оповещение securityService по Департаменту ...
@@ -254,10 +260,10 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
             NodeRef contractor = nodeService.createNode(contractorsDictionary, ContentModel.ASSOC_CONTAINS, assocQName, Contractors.TYPE_CONTRACTOR, props).getChildRef();
 
-            nodeService.addAspect(contractor, OrgstructureAspectsModel.ASPECT_HAS_ORGANIZATION, null);
+            nodeService.addAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION, null);
 
-            nodeService.addAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR, null);
-            nodeService.createAssociation(unit, contractor, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR);
+            nodeService.addAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+            nodeService.createAssociation(unit, contractor, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
         }
     }
 

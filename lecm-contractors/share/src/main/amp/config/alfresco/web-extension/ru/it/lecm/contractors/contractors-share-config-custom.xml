@@ -120,7 +120,7 @@
                 <appearance>
                     <!-- Знай: 'lecm-contractor:contractor-to-link-association' создаётся через политику. -->
                     <field id="lecm-representative:computed-representative-fullname" substituteString="{lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:surname} {lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:firstname}"></field>
-                    <field id="notDeletable" substituteString="{..lecm-orgstr-aspects:linked-contractor-assoc/lecm-dic:active}"></field>
+                    <field id="notDeletable" substituteString="{..lecm-orgstr-aspects:linked-organization-assoc/lecm-dic:active}"></field>
                 </appearance>
             </form>
 

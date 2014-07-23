@@ -11,7 +11,7 @@ public class OrgstructureAspectsModel {
 
     private final static String ORGSTRUCTURE_ASPECTS_NAMESPACE_URI = "http://www.it.ru/lecm/org/structure/aspects/1.0";
 
-    public final static QName ASPECT_HAS_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "has-organization-aspect");
-    public final static QName ASPECT_HAS_LINKED_CONTRACTOR = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "has-linked-contractor-aspect");
-    public final static QName ASSOC_LINKED_CONTRACTOR = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "linked-contractor-assoc");
+    public final static QName ASPECT_IS_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "is-organization-aspect");
+    public final static QName ASPECT_HAS_LINKED_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "has-linked-organization-aspect");
+    public final static QName ASSOC_LINKED_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "linked-organization-assoc");
 }

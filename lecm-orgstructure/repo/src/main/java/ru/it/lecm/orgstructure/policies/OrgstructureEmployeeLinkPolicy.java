@@ -48,17 +48,15 @@ public class OrgstructureEmployeeLinkPolicy
         if (orgstructureService.isStaffList(staff)) {
             // Назначение на должность
             NodeRef unit = orgstructureService.getUnitByStaff(staff);
-            if (nodeService.hasAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)
-                    && nodeService.getTargetAssocs(unit, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).size() > 0) {
-                NodeRef unitContractor = nodeService.getTargetAssocs(unit, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
-
-                if (!nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+            NodeRef unitContractor = orgstructureService.getUnitOrganization(unit);
+            if (unitContractor != null) {
+                if (!nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
                     // Включаем сотрудника в Организацию
-                    nodeService.addAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR, null);
-                    nodeService.createAssociation(employee, unitContractor, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR);
+                    nodeService.addAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+                    nodeService.createAssociation(employee, unitContractor, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                 } else {
                     // проверяем соответствие организаций
-                    NodeRef employeeContractor = nodeService.getTargetAssocs(employee, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
+                    NodeRef employeeContractor = orgstructureService.getEmployeeOrganization(employee);
                     if (!employeeContractor.equals(unitContractor)) {
                         throw new IllegalStateException("[[Невозможно добавить сотрудника больше чем в одну организацию!]]");
                     }
@@ -120,8 +118,8 @@ public class OrgstructureEmployeeLinkPolicy
 			if (orgstructureService.isStaffList(parent)) {
                 if (!hasStaffWithContractor(employee)) {
                     // удаляется последняя позиция -> сценарий "Исключение сотрудника из организации"
-                    if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
-                        nodeService.removeAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR);
+                    if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        nodeService.removeAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION);
                     }
                 }
 
@@ -166,7 +164,7 @@ public class OrgstructureEmployeeLinkPolicy
             NodeRef rootUnit = orgstructureService.getRootUnit();
             for (NodeRef staff : staffs) {
                 NodeRef unit = orgstructureService.getUnitByStaff(staff);
-                if (!unit.equals(rootUnit) && nodeService.hasAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
+                if (!unit.equals(rootUnit) && nodeService.hasAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
                     return true;
                 }
             }

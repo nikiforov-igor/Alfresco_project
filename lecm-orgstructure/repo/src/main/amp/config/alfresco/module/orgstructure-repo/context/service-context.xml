@@ -80,6 +80,7 @@
 		<property name="personService" ref="personService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="userOrganizationsCache" ref="userOrganizationsCache"/>
 		<property name="folders">
 			<map>
 				<entry key="#{ORGANIZATION_ROOT_ID}" value="Сервис Структура организации и сотрудников"/>
@@ -346,6 +347,25 @@
         <property name="namespaceService" ref="namespaceService"/>
         <property name="behaviourFilter" ref="policyBehaviourFilter"/>
         <property name="nodeService" ref="NodeService" />
+    </bean>
+
+    <bean name="userOrganizationsSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="userOrganizationsCache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache">
+            <ref bean="userOrganizationsSharedCache" />
+        </property>
+        <property name="name">
+            <value>ru.it.lecm.cache.userOrganizationsCache</value>
+        </property>
+    </bean>
+
+    <bean id="orgstructureEmployeeOrganizationPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureEmployeeOrganizationPolicy"
+          init-method="init" parent="baseBean" depends-on="lecmSecurityGroupsBean">
+        <property name="policyComponent" ref="policyComponent"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="orgSGNotifier" ref="orgstructureSGNotifierBean" />
+        <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
 </beans>

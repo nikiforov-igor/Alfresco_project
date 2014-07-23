@@ -19,12 +19,12 @@
 
     <aspects>
         <!-- маркер. Имеет организацию -->
-        <aspect name="lecm-orgstr-aspects:has-organization-aspect"/>
+        <aspect name="lecm-orgstr-aspects:is-organization-aspect"/>
 
         <!-- аспект Иммет связанного контрагента -->
-        <aspect name="lecm-orgstr-aspects:has-linked-contractor-aspect">
+        <aspect name="lecm-orgstr-aspects:has-linked-organization-aspect">
             <properties>
-                <property name="lecm-orgstr-aspects:linked-contractor-assoc-ref">
+                <property name="lecm-orgstr-aspects:linked-organization-assoc-ref">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -32,7 +32,7 @@
                         <tokenised>both</tokenised>
                     </index>
                 </property>
-                <property name="lecm-orgstr-aspects:linked-contractor-assoc-text-content">
+                <property name="lecm-orgstr-aspects:linked-organization-assoc-text-content">
                     <type>d:text</type>
                     <index enabled="true">
                         <atomic>true</atomic>
@@ -42,7 +42,7 @@
                 </property>
             </properties>
             <associations>
-                <association name="lecm-orgstr-aspects:linked-contractor-assoc">
+                <association name="lecm-orgstr-aspects:linked-organization-assoc">
                     <source>
                         <mandatory>false</mandatory>
                         <many>true</many>

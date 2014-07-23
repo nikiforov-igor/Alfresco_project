@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.beans;
 
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -723,4 +724,14 @@ public interface OrgstructureBean {
 	public boolean isDynamicBusinessRole(NodeRef roleRef);
 
 	public String getBusinessRoleIdentifier(NodeRef roleRef);
+
+    public NodeRef getEmployeeOrganization(NodeRef employee);
+
+    public NodeRef getUserOrganization(String userName);
+
+    public NodeRef getUnitOrganization(NodeRef orgUnit);
+
+    public NodeRef getUnitByOrganization(NodeRef organization);
+
+    public SimpleCache<String, NodeRef> getUserOrganizationsCache();
 }

@@ -441,11 +441,10 @@ public class DocumentPolicy extends BaseBean
         nodeService.createAssociation(childAssocRef.getChildRef(), author, DocumentService.ASSOC_AUTHOR);
 
         // Приписывание документа к организации
-        if (nodeService.hasAspect(author, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR)) {
-            NodeRef contractor = nodeService.getTargetAssocs(author, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR).get(0).getTargetRef();
-
-            nodeService.addAspect(document, OrgstructureAspectsModel.ASPECT_HAS_LINKED_CONTRACTOR, null);
-            nodeService.createAssociation(document, contractor, OrgstructureAspectsModel.ASSOC_LINKED_CONTRACTOR);
+        NodeRef contractor = orgstructureService.getEmployeeOrganization(author);
+        if (contractor != null) {
+            nodeService.addAspect(document, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+            nodeService.createAssociation(document, contractor, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
         }
 
         NodeRef attachmentsRef = nodeService.getChildByName(childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
