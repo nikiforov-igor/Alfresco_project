@@ -106,6 +106,23 @@ public class DocumentAttachmentsWebScriptBean extends BaseWebScript {
     }
 
 	/**
+	 * Получение категорий вложений по имени
+	 * @param categoryName название категории
+	 * @param document nodeRef документа
+	 * @return массив категорий вложений
+	 */
+    public ScriptNode getCategoryByName(String categoryName, ScriptNode document) {
+        ParameterCheck.mandatory("categoryName", categoryName);
+        ParameterCheck.mandatory("document", document);
+
+	    NodeRef category = this.documentAttachmentsService.getCategory(categoryName, document.getNodeRef());
+	    if (category != null) {
+		    return new ScriptNode(category, this.serviceRegistry, getScope());
+	    }
+        return null;
+    }
+
+	/**
 	 * Получение категорий вложений по типу документа
 	 * @param documentType тип документа
 	 * @return массив названий категорий вложений
