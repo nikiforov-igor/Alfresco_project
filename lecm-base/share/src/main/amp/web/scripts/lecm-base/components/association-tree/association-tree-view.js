@@ -21,6 +21,7 @@ LogicECM.module = LogicECM.module || {};
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		KeyListener = YAHOO.util.KeyListener,
+        Selector = YAHOO.util.Selector,
 		Util = LogicECM.module.Base.Util;
 
     var $html = Alfresco.util.encodeHTML,
@@ -503,7 +504,7 @@ LogicECM.module = LogicECM.module || {};
 
 	            // Register the "enter" event on the search text field
 	            var zinput = Dom.get(this.options.pickerId + "-searchText");
-	            new YAHOO.util.KeyListener(zinput,
+	            new KeyListener(zinput,
 	                {
 	                    keys: 13
 	                },
@@ -629,7 +630,167 @@ LogicECM.module = LogicECM.module || {};
 	        }
             this._loadSelectedItems(true, false);
 
+            this.setTabbingOrder();
+
             Event.preventDefault(e);
+        },
+
+        // Set properly tabbing order
+        setTabbingOrder: function() {
+            this.activeClass = "active";
+            this.firstTabbed = null;
+
+            var me = this;
+            var dialog = Dom.get(this.widgets.dialog.id);
+
+            if (dialog && dialog.offsetHeight > 0) {
+                var tabindex = 1000; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
+
+                var search = Selector.query(".control", dialog, true);
+                if (search) {
+                    var input = Selector.query("input", search, true);
+                    Dom.setAttribute(input, "tabindex", ++tabindex);
+                    this.firstTabbed = input.id;
+                }
+
+                var tables = Selector.query("div.picker-items, div.currentValueDisplay", dialog);
+
+                for (var i = 0; i < tables.length; i++) {
+                    var table = tables[i];
+                    Dom.setAttribute(table, 'tabindex', ++tabindex);
+                    if (!this.firstTabbed) {
+                        this.firstTabbed = table.id;
+                    }
+
+                    Event.on(table, "focusout", function(e) {
+                        var activeEl = me.activeElement;
+                        if (activeEl) {
+                            Dom.removeClass(activeEl, me.activeClass);
+                        }
+                    });
+                    new KeyListener(table, {keys: KeyListener.KEY.DOWN},
+                        {
+                            fn: this.focusToNext,
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
+                    new KeyListener(table, {keys: KeyListener.KEY.UP},
+                        {
+                            fn: this.focusToPrevious,
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
+
+                    if (Dom.hasClass(table, "picker-items")) { // Таблица с элементами для выбора
+                        Event.on(table, "focusin", function(e) {
+                            var rows = Selector.query("tbody tr.yui-dt-rec", e.target);
+                            if (rows && rows.length > 0) {
+                                Dom.addClass(rows[0], me.activeClass);
+                                me.activeElement = rows[0];
+                            }
+                        });
+
+                        new KeyListener(table, {keys: KeyListener.KEY.ENTER},
+                            {
+                                fn: function() {
+                                    var activeEl = this.activeElement;
+                                    if (activeEl) {
+                                        var addIcon = Selector.query("td a.add-item", activeEl, true);
+                                        if (addIcon) {
+                                            addIcon.click();
+                                        }
+                                    }
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    } else if (Dom.hasClass(table, "currentValueDisplay")) { // Выбранные элементы
+                        Event.on(table, "focusin", function(e) {
+                            var rows = Selector.query("div.cropped-item", e.target);
+                            if (rows && rows.length > 0) {
+                                Dom.addClass(rows[0], me.activeClass);
+                                me.activeElement = rows[0];
+                            }
+                        });
+
+                        new KeyListener(table, {keys: KeyListener.KEY.ENTER},
+                            {
+                                fn: function() {
+                                    var activeEl = this.activeElement;
+                                    if (activeEl) {
+                                        var removeIcon = Selector.query("div a.remove-item", activeEl, true);
+                                        if (removeIcon) {
+                                            removeIcon.click();
+
+                                            var selectedElsTable = Selector.query("div.currentValueDisplay", dialog, true);
+                                            var rows = Selector.query("div.cropped-item", selectedElsTable);
+                                            if (rows && rows.length > 0) {
+                                                selectedElsTable.focus();
+                                                Dom.addClass(rows[0], me.activeClass);
+                                                me.activeElement = rows[0];
+                                            } else {
+                                                Selector.query("div.picker-items", dialog, true).focus();
+                                            }
+                                        }
+                                    }
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
+
+                }
+
+                var footer = Selector.query("div.bdft", dialog, true);
+                if (footer) {
+                    var btns = Selector.query("span.yui-button button", footer);
+                    for (var i = 0; i < btns.length; i++) {
+                        Dom.setAttribute(btns[i], "tabindex", ++tabindex);
+                    }
+                    new KeyListener(btns[btns.length - 1], {keys: KeyListener.KEY.TAB},
+                        {
+                            fn: function() {
+                                if (me.firstTabbed) {
+                                    Dom.get(me.firstTabbed).focus();
+                                }
+                            },
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
+                }
+
+                if (this.firstTabbed) {
+                    Dom.get(this.firstTabbed).focus();
+                }
+            }
+        },
+
+        focusToNext: function(a, args) {
+            var e = args[1];
+            var activeEl = this.activeElement;
+            if (activeEl) {
+                var next = Dom.getNextSibling(activeEl);
+                if (next) {
+                    Dom.removeClass(activeEl, this.activeClass);
+                    Dom.addClass(next, this.activeClass);
+                    this.activeElement = next;
+                }
+            }
+            e.preventDefault();
+        },
+
+        focusToPrevious: function(a, args) {
+            var e = args[1];
+            var activeEl = this.activeElement;
+            if (activeEl) {
+                var prev = Dom.getPreviousSibling(activeEl);
+                if (prev) {
+                    Dom.removeClass(activeEl, this.activeClass);
+                    Dom.addClass(prev, this.activeClass);
+                    this.activeElement = prev;
+                }
+            }
+            e.preventDefault();
         },
 
         // Fill tree view group selector with node data
