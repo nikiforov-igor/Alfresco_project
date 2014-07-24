@@ -26,9 +26,14 @@ YAHOO.util.Event.onContentReady("${fieldHtmlId}-value", function() {
 //]]>
 </script>
 
-<div class="form-field">
-	<div class="viewmode-field ">
-		<span class="viewmode-label">${field.label?html}:</span>
-		<span class="viewmode-value" id="${fieldHtmlId}-value"></span>
+<div class="control substitude viewmode">
+	<div class="label-div">
+		<label>${field.label?html}:</label>
+	</div>
+	<div class="container">
+		<div class="value-div">
+			<span class="viewmode-value" id="${fieldHtmlId}-value"></span>
+		</div>
 	</div>
 </div>
+<div class="clear"></div>

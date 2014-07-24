@@ -237,6 +237,7 @@
                 <property name="lecm-orgstr:unit-code">
                     <title>Code</title>
                     <type>d:text</type>
+                    <mandatory>true</mandatory>
                     <index enabled="true">
                         <atomic>true</atomic>
                         <stored>false</stored>

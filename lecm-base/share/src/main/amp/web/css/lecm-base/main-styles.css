@@ -20,6 +20,9 @@
 *:focus {
     outline: 2px solid #8be729;
 }
+div:focus {
+    outline-offset: -2px;
+}
 .hidden1 {
     display: none;
 }
@@ -57,6 +60,14 @@
     text-overflow: ellipsis;
     display: inherit;
 }
+
+tr.active,
+.yui-skin-lecmTheme .picker-items tr.yui-dt-odd.active,
+.yui-skin-lecmTheme .picker-items tr.yui-dt-even.active,
+.yui-skin-lecmTheme .currentValueDisplay > div.active {
+    background: #ddd;
+}
+
 .search-button button {
     background: transparent url('/share/res/themes/lecmTheme/images/search.png') no-repeat center center;
 }
