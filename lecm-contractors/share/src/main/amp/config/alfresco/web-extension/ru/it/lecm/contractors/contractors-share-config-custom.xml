@@ -444,7 +444,6 @@
                     <show id="lecm-contractor:contractor-to-legalform-association"/>
                     <!-- FK ОПФ -->
                     <show id="lecm-contractor:interaction-type"/>
-                    <show id="hasOrganization"/>
                 </field-visibility>
 
                 <appearance>
@@ -507,14 +506,6 @@
 
                     <field id="lecm-contractor:interaction-type" set="contacts">
                         <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-                    </field>
-
-                    <field id="hasOrganization" set="contacts" label="Наша собственная организация">
-                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
-                            <control-param name="formatString">
-                                {@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}
-                            </control-param>
-                        </control>
                     </field>
 
                     <!-- Вкладка: Коды -->
