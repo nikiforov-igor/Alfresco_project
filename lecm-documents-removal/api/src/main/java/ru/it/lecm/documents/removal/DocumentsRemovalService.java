@@ -13,4 +13,10 @@ public interface DocumentsRemovalService {
 	 * @param documentRef
 	 */
 	void purge(final NodeRef documentRef);
+
+    /**
+     * полное удаление черновика документа
+     * @param document документ
+     */
+    public void purgeDraft(NodeRef document);
 }
