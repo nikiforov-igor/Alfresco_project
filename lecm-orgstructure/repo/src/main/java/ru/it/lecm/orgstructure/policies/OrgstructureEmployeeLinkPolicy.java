@@ -58,7 +58,7 @@ public class OrgstructureEmployeeLinkPolicy
                     // проверяем соответствие организаций
                     NodeRef employeeContractor = orgstructureService.getEmployeeOrganization(employee);
                     if (!employeeContractor.equals(unitContractor)) {
-                        throw new IllegalStateException("[[Невозможно добавить сотрудника больше чем в одну организацию!]]");
+                        throw new IllegalStateException("Невозможно добавить сотрудника больше чем в одну организацию!");
                     }
                 }
             }
