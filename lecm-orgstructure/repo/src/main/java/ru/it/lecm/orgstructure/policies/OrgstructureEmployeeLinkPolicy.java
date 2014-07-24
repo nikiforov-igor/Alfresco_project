@@ -48,7 +48,7 @@ public class OrgstructureEmployeeLinkPolicy
         if (orgstructureService.isStaffList(staff)) {
             // Назначение на должность
             NodeRef unit = orgstructureService.getUnitByStaff(staff);
-            NodeRef unitContractor = orgstructureService.getUnitOrganization(unit);
+            NodeRef unitContractor = orgstructureService.getOrganization(unit);
             if (unitContractor != null) {
                 if (!nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
                     // Включаем сотрудника в Организацию

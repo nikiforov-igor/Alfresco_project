@@ -725,11 +725,23 @@ public interface OrgstructureBean {
 
 	public String getBusinessRoleIdentifier(NodeRef roleRef);
 
+    /**
+     *  Возвращает организацию для сотрудника
+     *
+     */
     public NodeRef getEmployeeOrganization(NodeRef employee);
 
+    /**
+     *  Возвращает организацию для пользователя
+     *
+     */
     public NodeRef getUserOrganization(String userName);
 
-    public NodeRef getUnitOrganization(NodeRef orgUnit);
+    /**
+     *  Возвращает организацию для подразделения
+     *
+     */
+    public NodeRef getOrganization(NodeRef orgUnit);
 
     public NodeRef getUnitByOrganization(NodeRef organization);
 

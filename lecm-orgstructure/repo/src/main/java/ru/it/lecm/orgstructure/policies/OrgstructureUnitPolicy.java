@@ -112,7 +112,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
                             }
                         });
                     } else { // для остальных - прописываем ссылку, если есть аспект и организация
-                        NodeRef organization = orgstructureService.getUnitOrganization(parent);
+                        NodeRef organization = orgstructureService.getOrganization(parent);
                         if (organization != null) {
                             nodeService.addAspect(unit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
                             nodeService.createAssociation(unit, organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
@@ -183,7 +183,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
 
                     //Удаляем аспект у контрагента при удалении подразделения
                     if (nodeService.hasAspect(nodeRef, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
-                        NodeRef contractor = orgstructureService.getUnitOrganization(nodeRef);
+                        NodeRef contractor = orgstructureService.getOrganization(nodeRef);
                         if (contractor != null && nodeService.hasAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
                             nodeService.removeAspect(contractor, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION);
                         }

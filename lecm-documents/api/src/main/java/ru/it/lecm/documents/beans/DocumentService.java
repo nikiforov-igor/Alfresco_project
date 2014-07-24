@@ -350,4 +350,8 @@ public interface DocumentService {
      * @return дату последнего открытия документа или NULL, если нет в списке последних открывавшихся
      */
     Date getDocumentLastViewDate(NodeRef document);
+
+    boolean hasOrganization(NodeRef document);
+
+    NodeRef getOrganization(NodeRef document);
 }

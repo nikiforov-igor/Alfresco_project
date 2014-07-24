@@ -2004,27 +2004,34 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     }
 
     @Override
-    public NodeRef getUnitOrganization(NodeRef orgUnit) {
-        NodeRef contractor = null;
-        if (nodeService.hasAspect(orgUnit, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
-            List<AssociationRef> contractorAssoc = nodeService.getTargetAssocs(orgUnit, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
-            if (!contractorAssoc.isEmpty()) {
-                contractor = contractorAssoc.get(0).getTargetRef();
+    public NodeRef getOrganization(NodeRef orgElement) {
+        NodeRef organization = null;
+        QName type = nodeService.getType(orgElement);
+        if (type.equals(TYPE_EMPLOYEE)){
+            return getEmployeeOrganization(orgElement);
+        } else {
+            if (nodeService.hasAspect(orgElement, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                List<AssociationRef> contractorAssoc = nodeService.getTargetAssocs(orgElement, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                if (!contractorAssoc.isEmpty()) {
+                    organization = contractorAssoc.get(0).getTargetRef();
+                }
             }
-        }
 
-        return contractor;
+        }
+        return organization;
     }
 
     @Override
     public NodeRef getUnitByOrganization(NodeRef organization) {
-        NodeRef unit = null;
         if (nodeService.hasAspect(organization, OrgstructureAspectsModel.ASPECT_IS_ORGANIZATION)) {
             List<AssociationRef> parents = nodeService.getSourceAssocs(organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
             for (AssociationRef parent : parents) {
-
+                QName type = nodeService.getType(parent.getSourceRef());
+                if (type.equals(TYPE_ORGANIZATION_UNIT)){
+                    return parent.getSourceRef();
+                }
             }
         }
-        return unit;
+        return null;
     }
 }

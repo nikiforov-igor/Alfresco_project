@@ -883,4 +883,14 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         Map<NodeRef, Date> lastDocuments = frequencyAnalysisService.getLastDocuments();
         return lastDocuments.get(document);
     }
+
+    @Override
+    public boolean hasOrganization(NodeRef document) {
+        return getOrganization(document) != null;
+    }
+
+    @Override
+    public NodeRef getOrganization(NodeRef document) {
+        return orgstructureService.getOrganization(document);
+    }
 }
