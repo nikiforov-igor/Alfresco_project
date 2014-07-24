@@ -368,4 +368,13 @@
         <property name="businessJournalService" ref="businessJournalService"/>
     </bean>
 
+    <bean id="inUserOrganizationProcessor" class="ru.it.lecm.orgstructure.processors.InSameOrganizationProcessor" parent="searchQueryBaseProccesor">
+        <property name="id" value="IN_SAME_ORGANIZATION"/>
+        <property name="orgstructureBean" ref="serviceOrgstructure"/>
+    </bean>
+
+    <bean id="orgstructureOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOnCreateAssocPolicy"
+          parent="logicEcmAssociationPolicy" init-method="init">
+        <property name="substitute" ref="substitudeService"/>
+    </bean>
 </beans>
