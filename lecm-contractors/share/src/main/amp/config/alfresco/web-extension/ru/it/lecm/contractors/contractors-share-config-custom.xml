@@ -6,103 +6,155 @@
         <forms>
             <!-- Контрагент: Создание -->
             <form>
-                <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-
+                <create-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
                 <field-visibility>
-                    <show id="lecm-contractor:fullname"/>                                                               <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>                                                              <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>                                                                <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>                                                          <!-- Юридический адрес -->
-                    <show id="lecm-contractor:physical-address"/>                                                       <!-- Фактический адрес -->
-                    <show id="lecm-contractor:phone"/>                                                                  <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>                                                                    <!-- Факс -->
-                    <show id="lecm-contractor:email"/>                                                                  <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>                                                                    <!-- ИНН -->
-                    <show id="lecm-contractor:OKPO"/>                                                                   <!-- ОКПО -->
-                    <show id="lecm-contractor:OKVED"/>                                                                  <!-- ОКВЭД -->
-                    <show id="lecm-contractor:OKOGU"/>                                                                  <!-- ОКОГУ -->
-                    <show id="lecm-contractor:KPP"/>                                                                    <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>                                                                   <!-- ОГРН -->
-                    <show id="lecm-contractor:transactional-account"/>                                                  <!-- Расчетный счет -->
-                    <show id="lecm-contractor:correspondent-account"/>                                                  <!-- Корреспондентский счет -->
-                    <show id="lecm-contractor:BIK"/>                                                                    <!-- БИК -->
-                    <show id="lecm-contractor:bankname"/>                                                               <!-- Наименование банка -->
-                    <show id="lecm-contractor:bank-location"/>                                                          <!-- Местоположение банка -->
+                    <show id="lecm-contractor:fullname"/>
+                    <!-- Полное наименование -->
+                    <show id="lecm-contractor:shortname"/>
+                    <!-- Сокращенное наименование -->
+                    <show id="lecm-contractor:comment"/>
+                    <!-- Комментарий -->
+                    <show id="lecm-contractor:legal-address"/>
+                    <!-- Юридический адрес -->
+                    <show id="lecm-contractor:physical-address"/>
+                    <!-- Фактический адрес -->
+                    <show id="lecm-contractor:phone"/>
+                    <!-- Телефон -->
+                    <show id="lecm-contractor:fax"/>
+                    <!-- Факс -->
+                    <show id="lecm-contractor:email"/>
+                    <!-- E-mail -->
+                    <show id="lecm-contractor:INN"/>
+                    <!-- ИНН -->
+                    <show id="lecm-contractor:OKPO"/>
+                    <!-- ОКПО -->
+                    <show id="lecm-contractor:OKVED"/>
+                    <!-- ОКВЭД -->
+                    <show id="lecm-contractor:OKOGU"/>
+                    <!-- ОКОГУ -->
+                    <show id="lecm-contractor:KPP"/>
+                    <!-- КПП -->
+                    <show id="lecm-contractor:OGRN"/>
+                    <!-- ОГРН -->
+                    <show id="lecm-contractor:transactional-account"/>
+                    <!-- Расчетный счет -->
+                    <show id="lecm-contractor:correspondent-account"/>
+                    <!-- Корреспондентский счет -->
+                    <show id="lecm-contractor:BIK"/>
+                    <!-- БИК -->
+                    <show id="lecm-contractor:bankname"/>
+                    <!-- Наименование банка -->
+                    <show id="lecm-contractor:bank-location"/>
+                    <!-- Местоположение банка -->
                     <show id="lecm-contractor:contractor-code"/>
                     <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
                     <!-- Код контрагента -->
-
-                    <show id="lecm-contractor:contractor-to-specialization-association"/>                               <!-- FK Специализация -->
-                    <show id="lecm-contractor:contractor-to-legalform-association"/>                                    <!-- FK ОПФ -->
-                <show id="lecm-contractor:interaction-type"/>
-				</field-visibility>
-
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                    <!-- FK Специализация -->
+                    <show id="lecm-contractor:contractor-to-legalform-association"/>
+                    <!-- FK ОПФ -->
+                    <show id="lecm-contractor:interaction-type"/>
+                </field-visibility>
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
-                    <set id="contacts" label-id="tabs.contractor.contacts" appearance="" />
-                        <field id="lecm-contractor:fullname" set="contacts"/>                                           <!-- Полное наименование -->
-                        <field id="lecm-contractor:shortname" set="contacts"/>                                          <!-- Сокращенное наименование -->
-                        <field id="lecm-contractor:comment" set="contacts"/>                                            <!-- Комментарий -->
-                        <field id="lecm-contractor:legal-address" set="contacts"/>                                      <!-- Юридический адрес -->
-                        <field id="lecm-contractor:physical-address" set="contacts"/>                                   <!-- Фактический адрес -->
-                        <field id="lecm-contractor:phone" set="contacts"/>                                              <!-- Телефон -->
-                        <field id="lecm-contractor:fax" set="contacts"/>                                                <!-- Факс -->
-                        <field id="lecm-contractor:email" set="contacts"/>                                              <!-- E-mail -->
-                        <field id="lecm-contractor:contractor-code" set="contacts"  mandatory="true"/>                                    <!-- Код контрагента -->
-                        <field id="lecm-contractor:contractor-to-specialization-association" set="contacts" mandatory="true">            <!-- FK Специализация -->
-                            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                                <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
-                                <control-param name="showCreateNewButton">false</control-param>
-                                <control-param name="plane">false</control-param>
-                                <control-param name="showSelectedItemsPath">false</control-param>
-                                <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
+                    <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="lecm-contractor:fullname" set="contacts"/>
+                    <!-- Полное наименование -->
+                    <field id="lecm-contractor:shortname" set="contacts"/>
+                    <!-- Сокращенное наименование -->
+                    <field id="lecm-contractor:comment" set="contacts"/>
+                    <!-- Комментарий -->
+                    <field id="lecm-contractor:legal-address" set="contacts"/>
+                    <!-- Юридический адрес -->
+                    <field id="lecm-contractor:physical-address" set="contacts"/>
+                    <!-- Фактический адрес -->
+                    <field id="lecm-contractor:phone" set="contacts"/>
+                    <!-- Телефон -->
+                    <field id="lecm-contractor:fax" set="contacts"/>
+                    <!-- Факс -->
+                    <field id="lecm-contractor:email" set="contacts"/>
+                    <!-- E-mail -->
+                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <!-- Код контрагента -->
+                    <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
+                           mandatory="true">            <!-- FK Специализация -->
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">false</control-param>
+                            <control-param name="showSelectedItemsPath">false</control-param>
+                            <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
                             <control-param name="createNewMessageId">label.new-specialization</control-param>
-							</control>
-                        </field>
-                        <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"  mandatory="true">                 <!-- FK ОПФ -->
-                            <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
-                                <control-param name="showCreateNewButton">false</control-param>
-                                <control-param name="nameSubstituteString">{lecm-legalform:short-title}, {lecm-legalform:full-title}</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
+                           mandatory="true">                 <!-- FK ОПФ -->
+                        <control
+                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{lecm-legalform:short-title},
+                                {lecm-legalform:full-title}
+                            </control-param>
                             <control-param name="createNewMessageId">label.new-legalform</control-param>
-							</control>
-                        </field>
+                        </control>
+                    </field>
 
-						<field id="lecm-contractor:interaction-type" set="contacts">
-							<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-						</field>
+                    <field id="lecm-contractor:interaction-type" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
 
                     <!-- Вкладка: Коды -->
-                    <set id="codes" label-id="tabs.contractor.codes" appearance="" />
-                        <field id="lecm-contractor:INN" set="codes"/>                                                   <!-- ИНН -->
-                        <field id="lecm-contractor:OKPO" set="codes"/>                                                  <!-- ОКПО -->
-                        <field id="lecm-contractor:OKVED" set="codes"/>                                                 <!-- ОКВЭД -->
-                        <field id="lecm-contractor:OKOGU" set="codes"/>                                                 <!-- ОКОГУ -->
-                        <field id="lecm-contractor:KPP" set="codes"/>                                                   <!-- КПП -->
-                        <field id="lecm-contractor:OGRN" set="codes"/>                                                  <!-- ОГРН -->
+                    <set id="codes" label-id="tabs.contractor.codes" appearance=""/>
+                    <field id="lecm-contractor:INN" set="codes"/>
+                    <!-- ИНН -->
+                    <field id="lecm-contractor:OKPO" set="codes"/>
+                    <!-- ОКПО -->
+                    <field id="lecm-contractor:OKVED" set="codes"/>
+                    <!-- ОКВЭД -->
+                    <field id="lecm-contractor:OKOGU" set="codes"/>
+                    <!-- ОКОГУ -->
+                    <field id="lecm-contractor:KPP" set="codes"/>
+                    <!-- КПП -->
+                    <field id="lecm-contractor:OGRN" set="codes"/>
+                    <!-- ОГРН -->
 
                     <!-- Вкладка: Реквизиты банка -->
-                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance="" />
-                        <field id="lecm-contractor:transactional-account" set="bankinfo"/>                              <!-- Расчетный счет -->
-                        <field id="lecm-contractor:correspondent-account" set="bankinfo"/>                              <!-- Корреспондентский счет -->
-                        <field id="lecm-contractor:BIK" set="bankinfo"/>                                                <!-- БИК -->
-                        <field id="lecm-contractor:bankname" set="bankinfo"/>                                           <!-- Наименование банка -->
-                        <field id="lecm-contractor:bank-location" set="bankinfo"/>                                      <!-- Местоположение банка -->
+                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance=""/>
+                    <field id="lecm-contractor:transactional-account" set="bankinfo"/>
+                    <!-- Расчетный счет -->
+                    <field id="lecm-contractor:correspondent-account" set="bankinfo"/>
+                    <!-- Корреспондентский счет -->
+                    <field id="lecm-contractor:BIK" set="bankinfo"/>
+                    <!-- БИК -->
+                    <field id="lecm-contractor:bankname" set="bankinfo"/>
+                    <!-- Наименование банка -->
+                    <field id="lecm-contractor:bank-location" set="bankinfo"/>
+                    <!-- Местоположение банка -->
 
                     <!-- Вкладка: Адресанты -->
-                    <set id="representatives" label-id="tabs.contractor.representatives" appearance="" />
-                        <field id="lecm-contractor:contractor-to-link-association" set="representatives">
-                            <control template="/ru/it/lecm/contractors/representatives.ftl">
-                                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
-                                <control-param name="showCreateNewButton">false</control-param>
-                                <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname}</control-param>
-                            </control>
-                        </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts" mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl" />
+                    <set id="representatives" label-id="tabs.contractor.representatives" appearance=""/>
+                    <field id="lecm-contractor:contractor-to-link-association" set="representatives">
+                        <control template="/ru/it/lecm/contractors/representatives.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname}
+                                {lecm-representative:firstname}
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
+                           mandatory="true">            <!-- FK Специализация -->
+                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
                     </field>
                 </appearance>
             </form>
@@ -110,195 +162,120 @@
             <!-- Контрагент: Таблица -->
             <form id="datagrid">
                 <field-visibility>
-                    <show id="lecm-contractor:shortname"/>                                                              <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:physical-address"/>                                                       <!-- Фактический адрес -->
-                    <show id="lecm-contractor:phone"/>                                                                  <!-- Телефон -->
+                    <show id="lecm-contractor:shortname"/>
+                    <!-- Сокращенное наименование -->
+                    <show id="lecm-contractor:physical-address"/>
+                    <!-- Фактический адрес -->
+                    <show id="lecm-contractor:phone"/>
+                    <!-- Телефон -->
 
-                    <show id="lecm-representative:computed-representative-fullname" force="true"/>                      <!-- "{Фамилия} {Имя}" основного адресанта. -->
+                    <show id="lecm-representative:computed-representative-fullname" force="true"/>
+                    <!-- "{Фамилия} {Имя}" основного адресанта. -->
                     <show id="deletable"/>
                 </field-visibility>
                 <appearance>
                     <!-- Знай: 'lecm-contractor:contractor-to-link-association' создаётся через политику. -->
-                    <field id="lecm-representative:computed-representative-fullname" substituteString="{lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:surname} {lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:firstname}"></field>
-                    <field id="deletable" substituteString="{@!hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
+                    <field id="lecm-representative:computed-representative-fullname"
+                           substituteString="{lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:surname} {lecm-contractor:contractor-to-link-association(lecm-contractor:link-to-representative-association-is-primary=true)/lecm-contractor:link-to-representative-association/lecm-representative:firstname}"></field>
+                    <field id="deletable"
+                           substituteString="{@!hasAspect('lecm-orgstr-aspects:is-organization-aspect')}"></field>
                 </appearance>
             </form>
 
-	        <!-- Контрагент: Таблица -->
-	        <form id="search">
-		        <field-visibility>
-			        <show id="lecm-contractor:fullname"/>
-			        <show id="lecm-contractor:shortname"/>
-			        <show id="lecm-contractor:contractor-to-specialization-association"/>
-			        <show id="lecm-contractor:INN"/>
-		        </field-visibility>
-		        <appearance>
-			        <field id="lecm-contractor:contractor-to-specialization-association">
-				        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-					        <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации</control-param>
-					        <control-param name="showCreateNewLink">false</control-param>
-					        <control-param name="showCreateNewButton">false</control-param>
-					        <control-param name="plane">false</control-param>
-					        <control-param name="showSelectedItemsPath">false</control-param>
-					        <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
-				        </control>
-			        </field>
-		        </appearance>
-	        </form>
-        </forms>
-    </config>
-
-<config evaluator="node-type" condition="lecm-contractor:contractor-type">
-        <forms>
-            <!-- Контрагент: Отображение -->
-            <form>
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-
+            <!-- Контрагент: Таблица -->
+            <form id="search">
                 <field-visibility>
-                    <show id="lecm-contractor:computed-parent"/>                                                        <!-- Наименование материнской компании -->
-                    <show id="lecm-contractor:fullname"/>                                                               <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>                                                              <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>                                                                <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>                                                          <!-- Юридический адрес -->
-                    <show id="lecm-contractor:physical-address"/>                                                       <!-- Фактический адрес -->
-                    <show id="lecm-contractor:phone"/>                                                                  <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>                                                                    <!-- Факс -->
-                    <show id="lecm-contractor:email"/>                                                                  <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>                                                                    <!-- ИНН -->
-                    <show id="lecm-contractor:OKPO"/>                                                                   <!-- ОКПО -->
-                    <show id="lecm-contractor:OKVED"/>                                                                  <!-- ОКВЭД -->
-                    <show id="lecm-contractor:OKOGU"/>                                                                  <!-- ОКОГУ -->
-                    <show id="lecm-contractor:KPP"/>                                                                    <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>                                                                   <!-- ОГРН -->
-                    <show id="lecm-contractor:transactional-account"/>                                                  <!-- Расчетный счет -->
-                    <show id="lecm-contractor:correspondent-account"/>                                                  <!-- Корреспондентский счет -->
-                    <show id="lecm-contractor:BIK"/>                                                                    <!-- БИК -->
-                    <show id="lecm-contractor:bankname"/>                                                               <!-- Наименование банка -->
-                    <show id="lecm-contractor:bank-location"/>                                                          <!-- Местоположение банка -->
-                    <show id="lecm-contractor:contractor-code"/>                                                        <!-- Код контрагента -->
-
-                    <show id="lecm-contractor:contractor-to-specialization-association"/>                               <!-- FK Специализация -->
-                    <show id="lecm-contractor:contractor-to-legalform-association"/>                                    <!-- FK ОПФ -->
-
-                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
-                    <show id="lecm-contractor:contractor-to-link-association"/>                                         <!-- FK Адресант (через ссылку) -->
-					<show id="lecm-contractor:interaction-type"/>
+                    <show id="lecm-contractor:fullname"/>
+                    <show id="lecm-contractor:shortname"/>
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                    <show id="lecm-contractor:INN"/>
                 </field-visibility>
-
                 <appearance>
-                    <!-- Вкладка: Контактные данные -->
-                    <set id="contacts" label-id="tabs.contractor.contacts" appearance="" />
-                        <field id="lecm-contractor:computed-parent" set="contacts">                                     <!-- Наименование материнской компании -->
-                            <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
-                                <control-param name="formTitle">Просмотр материнской компании для</control-param>
-                                <control-param name="labelText">Материнская компания</control-param>
-                                <control-param name="dataUrl">lecm/contractors/getparent</control-param>
-                                <control-param name="setId">contacts</control-param>
-                            </control>
-                        </field>
-                        <field id="lecm-contractor:fullname" set="contacts"/>                                           <!-- Полное наименование -->
-                        <field id="lecm-contractor:shortname" set="contacts"/>                                          <!-- Сокращенное наименование -->
-                        <field id="lecm-contractor:comment" set="contacts"/>                                            <!-- Комментарий -->
-                        <field id="lecm-contractor:legal-address" set="contacts"/>                                      <!-- Юридический адрес -->
-                        <field id="lecm-contractor:physical-address" set="contacts"/>                                   <!-- Фактический адрес -->
-                        <field id="lecm-contractor:phone" set="contacts"/>                                              <!-- Телефон -->
-                        <field id="lecm-contractor:fax" set="contacts"/>                                                <!-- Факс -->
-                        <field id="lecm-contractor:email" set="contacts"/>                                              <!-- E-mail -->
-                        <field id="lecm-contractor:contractor-code" set="contacts"  mandatory="true"/>                                    <!-- Код контрагента -->
-                        <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"   mandatory="true">
-                            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации</control-param>
-                            <control-param name="showCreateNewLink">true</control-param>
+                    <field id="lecm-contractor:contractor-to-specialization-association">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
+                            <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="plane">false</control-param>
                             <control-param name="showSelectedItemsPath">false</control-param>
                             <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
-                            <control-param name="createNewMessageId">label.new-specialization</control-param>
-							</control>
-                        </field>
-                        <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"   mandatory="true">                 <!-- ОПФ -->
-                            <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
-                                <control-param name="showCreateNewButton">false</control-param>
-                                <control-param name="nameSubstituteString">{lecm-legalform:short-title}, {lecm-legalform:full-title}</control-param>
-                            <control-param name="createNewMessageId">label.new-legalform</control-param>
-							</control>
-                        </field>
-
-						<field id="lecm-contractor:interaction-type" set="contacts">
-							<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-						</field>
-
-                    <!-- Вкладка: Коды -->
-                    <set id="codes" label-id="tabs.contractor.codes" appearance="" />
-                        <field id="lecm-contractor:INN" set="codes"/>                                                   <!-- ИНН -->
-                        <field id="lecm-contractor:OKPO" set="codes"/>                                                  <!-- ОКПО -->
-                        <field id="lecm-contractor:OKVED" set="codes"/>                                                 <!-- ОКВЭД -->
-                        <field id="lecm-contractor:OKOGU" set="codes"/>                                                 <!-- ОКОГУ -->
-                        <field id="lecm-contractor:KPP" set="codes"/>                                                   <!-- КПП -->
-                        <field id="lecm-contractor:OGRN" set="codes"/>                                                  <!-- ОГРН -->
-
-                    <!-- Вкладка: Реквизиты банка -->
-                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance="" />
-                        <field id="lecm-contractor:transactional-account" set="bankinfo"/>                              <!-- Расчетный счет -->
-                        <field id="lecm-contractor:correspondent-account" set="bankinfo"/>                              <!-- Корреспондентский счет -->
-                        <field id="lecm-contractor:BIK" set="bankinfo"/>                                                <!-- БИК -->
-                        <field id="lecm-contractor:bankname" set="bankinfo"/>                                           <!-- Наименование банка -->
-                        <field id="lecm-contractor:bank-location" set="bankinfo"/>                                      <!-- Местоположение банка -->
-
-                    <!-- Вкладка: Адресанты -->
-                    <set id="representatives" label-id="tabs.contractor.representatives" appearance="" />
-                        <field id="lecm-contractor:contractor-to-link-association" set="representatives">
-                            <control template="/ru/it/lecm/contractors/representatives.ftl">
-                                <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
-                                <control-param name="showCreateNewLink">true</control-param>
-                                <control-param name="showCreateNewButton">false</control-param>
-                                <control-param name="nameSubstituteString">{lecm-representative:surname} {lecm-representative:firstname}</control-param>
-                            </control>
-                        </field>
-                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts" mandatory="true">            <!-- FK Специализация -->
-                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl" />
+                        </control>
                     </field>
                 </appearance>
             </form>
-            <form id="versions">
-                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
-                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-contractor:contractor-type">
+        <forms>
+            <!-- Контрагент: Отображение -->
+            <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
 
                 <field-visibility>
-                    <show id="lecm-contractor:computed-parent"/>                                                        <!-- Наименование материнской компании -->
-                    <show id="lecm-contractor:fullname"/>                                                               <!-- Полное наименование -->
-                    <show id="lecm-contractor:shortname"/>                                                              <!-- Сокращенное наименование -->
-                    <show id="lecm-contractor:comment"/>                                                                <!-- Комментарий -->
-                    <show id="lecm-contractor:legal-address"/>                                                          <!-- Юридический адрес -->
-                    <show id="lecm-contractor:physical-address"/>                                                       <!-- Фактический адрес -->
-                    <show id="lecm-contractor:phone"/>                                                                  <!-- Телефон -->
-                    <show id="lecm-contractor:fax"/>                                                                    <!-- Факс -->
-                    <show id="lecm-contractor:email"/>                                                                  <!-- E-mail -->
-                    <show id="lecm-contractor:INN"/>                                                                    <!-- ИНН -->
-                    <show id="lecm-contractor:OKPO"/>                                                                   <!-- ОКПО -->
-                    <show id="lecm-contractor:OKVED"/>                                                                  <!-- ОКВЭД -->
-                    <show id="lecm-contractor:OKOGU"/>                                                                  <!-- ОКОГУ -->
-                    <show id="lecm-contractor:KPP"/>                                                                    <!-- КПП -->
-                    <show id="lecm-contractor:OGRN"/>                                                                   <!-- ОГРН -->
-                    <show id="lecm-contractor:transactional-account"/>                                                  <!-- Расчетный счет -->
-                    <show id="lecm-contractor:correspondent-account"/>                                                  <!-- Корреспондентский счет -->
-                    <show id="lecm-contractor:BIK"/>                                                                    <!-- БИК -->
-                    <show id="lecm-contractor:bankname"/>                                                               <!-- Наименование банка -->
-                    <show id="lecm-contractor:bank-location"/>                                                          <!-- Местоположение банка -->
-                    <show id="lecm-contractor:contractor-code"/>                                                        <!-- Код контрагента -->
+                    <show id="lecm-contractor:computed-parent"/>
+                    <!-- Наименование материнской компании -->
+                    <show id="lecm-contractor:fullname"/>
+                    <!-- Полное наименование -->
+                    <show id="lecm-contractor:shortname"/>
+                    <!-- Сокращенное наименование -->
+                    <show id="lecm-contractor:comment"/>
+                    <!-- Комментарий -->
+                    <show id="lecm-contractor:legal-address"/>
+                    <!-- Юридический адрес -->
+                    <show id="lecm-contractor:physical-address"/>
+                    <!-- Фактический адрес -->
+                    <show id="lecm-contractor:phone"/>
+                    <!-- Телефон -->
+                    <show id="lecm-contractor:fax"/>
+                    <!-- Факс -->
+                    <show id="lecm-contractor:email"/>
+                    <!-- E-mail -->
+                    <show id="lecm-contractor:INN"/>
+                    <!-- ИНН -->
+                    <show id="lecm-contractor:OKPO"/>
+                    <!-- ОКПО -->
+                    <show id="lecm-contractor:OKVED"/>
+                    <!-- ОКВЭД -->
+                    <show id="lecm-contractor:OKOGU"/>
+                    <!-- ОКОГУ -->
+                    <show id="lecm-contractor:KPP"/>
+                    <!-- КПП -->
+                    <show id="lecm-contractor:OGRN"/>
+                    <!-- ОГРН -->
+                    <show id="lecm-contractor:transactional-account"/>
+                    <!-- Расчетный счет -->
+                    <show id="lecm-contractor:correspondent-account"/>
+                    <!-- Корреспондентский счет -->
+                    <show id="lecm-contractor:BIK"/>
+                    <!-- БИК -->
+                    <show id="lecm-contractor:bankname"/>
+                    <!-- Наименование банка -->
+                    <show id="lecm-contractor:bank-location"/>
+                    <!-- Местоположение банка -->
+                    <show id="lecm-contractor:contractor-code"/>
+                    <!-- Код контрагента -->
 
-                    <show id="lecm-contractor:contractor-to-specialization-association"/>                               <!-- FK Специализация -->
-                    <show id="lecm-contractor:contractor-to-legalform-association"/>                                    <!-- FK ОПФ -->
-                <show id="lecm-contractor:interaction-type"/>
-				</field-visibility>
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                    <!-- FK Специализация -->
+                    <show id="lecm-contractor:contractor-to-legalform-association"/>
+                    <!-- FK ОПФ -->
+
+                    <show id="lecm-contractor:contractor-to-check-inn" force="true"/>
+                    <show id="lecm-contractor:contractor-to-link-association"/>
+                    <!-- FK Адресант (через ссылку) -->
+                    <show id="lecm-contractor:interaction-type"/>
+                    <show id="hasOrganization"/>
+                </field-visibility>
 
                 <appearance>
                     <!-- Вкладка: Контактные данные -->
-                    <set id="contacts" label-id="tabs.contractor.contacts" appearance="" />
-                    <field id="lecm-contractor:computed-parent" set="contacts">                                     <!-- Наименование материнской компании -->
+                    <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="lecm-contractor:computed-parent"
+                           set="contacts">                                     <!-- Наименование материнской компании -->
                         <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
                             <control-param name="formTitle">Просмотр материнской компании для</control-param>
                             <control-param name="labelText">Материнская компания</control-param>
@@ -306,18 +283,206 @@
                             <control-param name="setId">contacts</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contractor:fullname" set="contacts"/>                                           <!-- Полное наименование -->
-                    <field id="lecm-contractor:shortname" set="contacts"/>                                          <!-- Сокращенное наименование -->
-                    <field id="lecm-contractor:comment" set="contacts"/>                                            <!-- Комментарий -->
-                    <field id="lecm-contractor:legal-address" set="contacts"/>                                      <!-- Юридический адрес -->
-                    <field id="lecm-contractor:physical-address" set="contacts"/>                                   <!-- Фактический адрес -->
-                    <field id="lecm-contractor:phone" set="contacts"/>                                              <!-- Телефон -->
-                    <field id="lecm-contractor:fax" set="contacts"/>                                                <!-- Факс -->
-                    <field id="lecm-contractor:email" set="contacts"/>                                              <!-- E-mail -->
-                    <field id="lecm-contractor:contractor-code" set="contacts"  mandatory="true"/>                                    <!-- Код контрагента -->
-                    <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"   mandatory="true">
+                    <field id="lecm-contractor:fullname" set="contacts"/>
+                    <!-- Полное наименование -->
+                    <field id="lecm-contractor:shortname" set="contacts"/>
+                    <!-- Сокращенное наименование -->
+                    <field id="lecm-contractor:comment" set="contacts"/>
+                    <!-- Комментарий -->
+                    <field id="lecm-contractor:legal-address" set="contacts"/>
+                    <!-- Юридический адрес -->
+                    <field id="lecm-contractor:physical-address" set="contacts"/>
+                    <!-- Фактический адрес -->
+                    <field id="lecm-contractor:phone" set="contacts"/>
+                    <!-- Телефон -->
+                    <field id="lecm-contractor:fax" set="contacts"/>
+                    <!-- Факс -->
+                    <field id="lecm-contractor:email" set="contacts"/>
+                    <!-- E-mail -->
+                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <!-- Код контрагента -->
+                    <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
+                           mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-                            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации</control-param>
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="plane">false</control-param>
+                            <control-param name="showSelectedItemsPath">false</control-param>
+                            <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
+                            <control-param name="createNewMessageId">label.new-specialization</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
+                           mandatory="true">                 <!-- ОПФ -->
+                        <control
+                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{lecm-legalform:short-title},
+                                {lecm-legalform:full-title}
+                            </control-param>
+                            <control-param name="createNewMessageId">label.new-legalform</control-param>
+                        </control>
+                    </field>
+
+                    <field id="lecm-contractor:interaction-type" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="hasOrganization" set="contacts" label="Наша собственная организация">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">
+                                {@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}
+                            </control-param>
+                        </control>
+                    </field>
+
+                    <!-- Вкладка: Коды -->
+                    <set id="codes" label-id="tabs.contractor.codes" appearance=""/>
+                    <field id="lecm-contractor:INN" set="codes"/>
+                    <!-- ИНН -->
+                    <field id="lecm-contractor:OKPO" set="codes"/>
+                    <!-- ОКПО -->
+                    <field id="lecm-contractor:OKVED" set="codes"/>
+                    <!-- ОКВЭД -->
+                    <field id="lecm-contractor:OKOGU" set="codes"/>
+                    <!-- ОКОГУ -->
+                    <field id="lecm-contractor:KPP" set="codes"/>
+                    <!-- КПП -->
+                    <field id="lecm-contractor:OGRN" set="codes"/>
+                    <!-- ОГРН -->
+
+                    <!-- Вкладка: Реквизиты банка -->
+                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance=""/>
+                    <field id="lecm-contractor:transactional-account" set="bankinfo"/>
+                    <!-- Расчетный счет -->
+                    <field id="lecm-contractor:correspondent-account" set="bankinfo"/>
+                    <!-- Корреспондентский счет -->
+                    <field id="lecm-contractor:BIK" set="bankinfo"/>
+                    <!-- БИК -->
+                    <field id="lecm-contractor:bankname" set="bankinfo"/>
+                    <!-- Наименование банка -->
+                    <field id="lecm-contractor:bank-location" set="bankinfo"/>
+                    <!-- Местоположение банка -->
+
+                    <!-- Вкладка: Адресанты -->
+                    <set id="representatives" label-id="tabs.contractor.representatives" appearance=""/>
+                    <field id="lecm-contractor:contractor-to-link-association" set="representatives">
+                        <control template="/ru/it/lecm/contractors/representatives.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты
+                            </control-param>
+                            <control-param name="showCreateNewLink">true</control-param>
+                            <control-param name="showCreateNewButton">false</control-param>
+                            <control-param name="nameSubstituteString">{lecm-representative:surname}
+                                {lecm-representative:firstname}
+                            </control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:contractor-to-check-inn" set="contacts"
+                           mandatory="true">            <!-- FK Специализация -->
+                        <control template="/ru/it/lecm/contractors/contractors-check-inn.ftl"/>
+                    </field>
+                </appearance>
+            </form>
+            <form id="versions">
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl"/>
+
+                <field-visibility>
+                    <show id="lecm-contractor:computed-parent"/>
+                    <!-- Наименование материнской компании -->
+                    <show id="lecm-contractor:fullname"/>
+                    <!-- Полное наименование -->
+                    <show id="lecm-contractor:shortname"/>
+                    <!-- Сокращенное наименование -->
+                    <show id="lecm-contractor:comment"/>
+                    <!-- Комментарий -->
+                    <show id="lecm-contractor:legal-address"/>
+                    <!-- Юридический адрес -->
+                    <show id="lecm-contractor:physical-address"/>
+                    <!-- Фактический адрес -->
+                    <show id="lecm-contractor:phone"/>
+                    <!-- Телефон -->
+                    <show id="lecm-contractor:fax"/>
+                    <!-- Факс -->
+                    <show id="lecm-contractor:email"/>
+                    <!-- E-mail -->
+                    <show id="lecm-contractor:INN"/>
+                    <!-- ИНН -->
+                    <show id="lecm-contractor:OKPO"/>
+                    <!-- ОКПО -->
+                    <show id="lecm-contractor:OKVED"/>
+                    <!-- ОКВЭД -->
+                    <show id="lecm-contractor:OKOGU"/>
+                    <!-- ОКОГУ -->
+                    <show id="lecm-contractor:KPP"/>
+                    <!-- КПП -->
+                    <show id="lecm-contractor:OGRN"/>
+                    <!-- ОГРН -->
+                    <show id="lecm-contractor:transactional-account"/>
+                    <!-- Расчетный счет -->
+                    <show id="lecm-contractor:correspondent-account"/>
+                    <!-- Корреспондентский счет -->
+                    <show id="lecm-contractor:BIK"/>
+                    <!-- БИК -->
+                    <show id="lecm-contractor:bankname"/>
+                    <!-- Наименование банка -->
+                    <show id="lecm-contractor:bank-location"/>
+                    <!-- Местоположение банка -->
+                    <show id="lecm-contractor:contractor-code"/>
+                    <!-- Код контрагента -->
+
+                    <show id="lecm-contractor:contractor-to-specialization-association"/>
+                    <!-- FK Специализация -->
+                    <show id="lecm-contractor:contractor-to-legalform-association"/>
+                    <!-- FK ОПФ -->
+                    <show id="lecm-contractor:interaction-type"/>
+                    <show id="hasOrganization"/>
+                </field-visibility>
+
+                <appearance>
+                    <!-- Вкладка: Контактные данные -->
+                    <set id="contacts" label-id="tabs.contractor.contacts" appearance=""/>
+                    <field id="lecm-contractor:computed-parent"
+                           set="contacts">                                     <!-- Наименование материнской компании -->
+                        <control template="/ru/it/lecm/base-share/components/controls/view-link-control.ftl">
+                            <control-param name="formTitle">Просмотр материнской компании для</control-param>
+                            <control-param name="labelText">Материнская компания</control-param>
+                            <control-param name="dataUrl">lecm/contractors/getparent</control-param>
+                            <control-param name="setId">contacts</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-contractor:fullname" set="contacts"/>
+                    <!-- Полное наименование -->
+                    <field id="lecm-contractor:shortname" set="contacts"/>
+                    <!-- Сокращенное наименование -->
+                    <field id="lecm-contractor:comment" set="contacts"/>
+                    <!-- Комментарий -->
+                    <field id="lecm-contractor:legal-address" set="contacts"/>
+                    <!-- Юридический адрес -->
+                    <field id="lecm-contractor:physical-address" set="contacts"/>
+                    <!-- Фактический адрес -->
+                    <field id="lecm-contractor:phone" set="contacts"/>
+                    <!-- Телефон -->
+                    <field id="lecm-contractor:fax" set="contacts"/>
+                    <!-- Факс -->
+                    <field id="lecm-contractor:email" set="contacts"/>
+                    <!-- E-mail -->
+                    <field id="lecm-contractor:contractor-code" set="contacts" mandatory="true"/>
+                    <!-- Код контрагента -->
+                    <field id="lecm-contractor:contractor-to-specialization-association" set="contacts"
+                           mandatory="true">
+                        <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+                            <control-param name="rootLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Специализации
+                            </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="plane">false</control-param>
@@ -325,35 +490,60 @@
                             <control-param name="treeItemType">lecm-specialization:specialization-type</control-param>
                         </control>
                     </field>
-                    <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"   mandatory="true">                 <!-- ОПФ -->
-                        <control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-                            <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы</control-param>
+                    <field id="lecm-contractor:contractor-to-legalform-association" set="contacts"
+                           mandatory="true">                 <!-- ОПФ -->
+                        <control
+                                template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                            <control-param name="startLocation">
+                                /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты_x0020_Организационно-правовые_x0020_формы
+                            </control-param>
                             <control-param name="showCreateNewLink">false</control-param>
                             <control-param name="showCreateNewButton">false</control-param>
-                            <control-param name="nameSubstituteString">{lecm-legalform:short-title}, {lecm-legalform:full-title}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-legalform:short-title},
+                                {lecm-legalform:full-title}
+                            </control-param>
                         </control>
                     </field>
 
-					<field id="lecm-contractor:interaction-type" set="contacts">
-						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
-					</field>
+                    <field id="lecm-contractor:interaction-type" set="contacts">
+                        <control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+                    </field>
+
+                    <field id="hasOrganization" set="contacts" label="Наша собственная организация">
+                        <control template="/ru/it/lecm/base-share/components/controls/substitude-control.ftl">
+                            <control-param name="formatString">
+                                {@hasAspect('lecm-orgstr-aspects:is-organization-aspect')}
+                            </control-param>
+                        </control>
+                    </field>
 
                     <!-- Вкладка: Коды -->
-                    <set id="codes" label-id="tabs.contractor.codes" appearance="" />
-                    <field id="lecm-contractor:INN" set="codes"/>                                                   <!-- ИНН -->
-                    <field id="lecm-contractor:OKPO" set="codes"/>                                                  <!-- ОКПО -->
-                    <field id="lecm-contractor:OKVED" set="codes"/>                                                 <!-- ОКВЭД -->
-                    <field id="lecm-contractor:OKOGU" set="codes"/>                                                 <!-- ОКОГУ -->
-                    <field id="lecm-contractor:KPP" set="codes"/>                                                   <!-- КПП -->
-                    <field id="lecm-contractor:OGRN" set="codes"/>                                                  <!-- ОГРН -->
+                    <set id="codes" label-id="tabs.contractor.codes" appearance=""/>
+                    <field id="lecm-contractor:INN" set="codes"/>
+                    <!-- ИНН -->
+                    <field id="lecm-contractor:OKPO" set="codes"/>
+                    <!-- ОКПО -->
+                    <field id="lecm-contractor:OKVED" set="codes"/>
+                    <!-- ОКВЭД -->
+                    <field id="lecm-contractor:OKOGU" set="codes"/>
+                    <!-- ОКОГУ -->
+                    <field id="lecm-contractor:KPP" set="codes"/>
+                    <!-- КПП -->
+                    <field id="lecm-contractor:OGRN" set="codes"/>
+                    <!-- ОГРН -->
 
                     <!-- Вкладка: Реквизиты банка -->
-                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance="" />
-                    <field id="lecm-contractor:transactional-account" set="bankinfo"/>                              <!-- Расчетный счет -->
-                    <field id="lecm-contractor:correspondent-account" set="bankinfo"/>                              <!-- Корреспондентский счет -->
-                    <field id="lecm-contractor:BIK" set="bankinfo"/>                                                <!-- БИК -->
-                    <field id="lecm-contractor:bankname" set="bankinfo"/>                                           <!-- Наименование банка -->
-                    <field id="lecm-contractor:bank-location" set="bankinfo"/>                                      <!-- Местоположение банка -->
+                    <set id="bankinfo" label-id="tabs.contractor.bankinfo" appearance=""/>
+                    <field id="lecm-contractor:transactional-account" set="bankinfo"/>
+                    <!-- Расчетный счет -->
+                    <field id="lecm-contractor:correspondent-account" set="bankinfo"/>
+                    <!-- Корреспондентский счет -->
+                    <field id="lecm-contractor:BIK" set="bankinfo"/>
+                    <!-- БИК -->
+                    <field id="lecm-contractor:bankname" set="bankinfo"/>
+                    <!-- Наименование банка -->
+                    <field id="lecm-contractor:bank-location" set="bankinfo"/>
+                    <!-- Местоположение банка -->
 
                 </appearance>
             </form>
