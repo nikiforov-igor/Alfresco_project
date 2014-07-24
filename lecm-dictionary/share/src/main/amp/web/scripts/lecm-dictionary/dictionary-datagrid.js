@@ -41,7 +41,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
      */
     YAHOO.lang.augmentObject(LogicECM.module.Dictionary.DataGrid.prototype, {
         isDeletable: function DataGrid_isDeletable(itemData) {
-            return itemData["prop_notDeletable"] == undefined || itemData["prop_notDeletable"].value == "" || itemData["prop_notDeletable"].value == "false";
+            return itemData["prop_deletable"] == undefined || itemData["prop_deletable"].value == "" || itemData["prop_deletable"].value == "true";
         },
 
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {

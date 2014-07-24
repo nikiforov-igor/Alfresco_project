@@ -33,7 +33,7 @@
 	                bubblingLabel: "${bubblingLabel}",
 	                usePagination: true,
 	                showExtendSearchBlock: true,
-                    excludeColumns:["notDeletable"],
+                    excludeColumns:["deletable"],
 	                actions: [
 	                    {
 	                        type: "datagrid-action-link-${bubblingLabel}",

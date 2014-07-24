@@ -479,4 +479,6 @@
         </property>
         <property name="processorService" ref="searchQueryProcessorService"/>
     </bean>
+
+    <bean id="nodeExpression" class="ru.it.lecm.base.expression.ExpressionNode"/>
 </beans>
