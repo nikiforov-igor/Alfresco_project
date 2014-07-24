@@ -22,7 +22,7 @@
 	<#assign defaultValue=form.arguments[field.name]>
 </#if>
 
-<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")) || (field.control.params.readOnly?? && field.control.params.readOnly == "true") >
 
 <#if disabled>
 <div id="${controlId}" class="control association-search viewmode">
