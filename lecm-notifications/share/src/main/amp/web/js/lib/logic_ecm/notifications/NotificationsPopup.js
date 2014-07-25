@@ -125,6 +125,19 @@ define(["dojo/_base/declare",
                 setInterval(function() { // bind() не работает в IE
                     self.loadNewNotificationsCount();
                 }, this.refreshCountTime);
+
+                //костыль для инициализации форм, пока живет здесь
+                Alfresco.util.Ajax.request(
+                    {
+                        url:Alfresco.constants.URL_SERVICECONTEXT + "lecm/config/init?reset=false",
+                        dataObj:{},
+                        successCallback:{
+                            fn:function (response) {
+                            }
+                        },
+                        failureMessage:"message.failure",
+                        execScripts:true
+                    });
             },
 
             /**
