@@ -1,9 +1,5 @@
 package ru.it.lecm.documents.removal;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.BehaviourFilter;
@@ -30,6 +26,11 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -133,6 +134,10 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 	@Override
 	public void purge(final NodeRef documentRef) {
+        purge(documentRef, false);
+    }
+
+	private void purge(final NodeRef documentRef, boolean draftDocument) {
 		//проверяем что это действительно документ
 		QName documentType = nodeService.getType(documentRef);
 		boolean isDocument = dictionaryService.isSubClass(documentType, DocumentService.TYPE_BASE_DOCUMENT);
@@ -141,13 +146,14 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 			String msg = String.format(template, documentRef, documentType, DocumentService.TYPE_BASE_DOCUMENT);
 			throw new AlfrescoRuntimeException(msg);
 		}
-		//проверяем что мы есть админ, причем совсем админ ???
-		String user = AuthenticationUtil.getFullyAuthenticatedUser();
-		if (!lecmPermissionService.isAdmin(user)) {
-			String template = "User with login %s must be alfresco administrator to purge document {%s}%s";
-			String msg = String.format(template, user, documentType, documentRef);
-			throw new AlfrescoRuntimeException(msg);
-		}
+        String user = AuthenticationUtil.getFullyAuthenticatedUser();
+        if (!draftDocument || !stateMachineService.isDraft(documentRef)) {    //если мы удаляем черновик, то админом быть необязательно
+            if (!lecmPermissionService.isAdmin(user)) {     //проверяем что мы есть админ, причем совсем админ ???
+                String template = "User with login %s must be alfresco administrator to purge document {%s}%s";
+                String msg = String.format(template, user, documentType, documentRef);
+                throw new AlfrescoRuntimeException(msg);
+            }
+        }
 
 		behaviourFilter.disableBehaviour(documentRef);
 		logger.debug("All policies for document {} are deactivated!", documentRef);
@@ -252,4 +258,18 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		logger.debug("Document {} of type {} successfully purged", documentRef, documentType);
 		businessJournalService.sendRecord(record);
 	}
+
+    @Override
+    public void purgeDraft(final NodeRef document) {
+        //удаляем только черновики
+        if (stateMachineService.isDraft(document)) {
+            AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+                @Override
+                public Object doWork() throws Exception {
+                    purge(document, true);
+                    return null;
+                }
+            });
+        }
+    }
 }

@@ -209,6 +209,9 @@
         <#if field.control.params.defaultValueDataSource??>
             defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
         </#if>
+        <#if field.control.params.childrenDataSource??>
+            childrenDataSource: "${field.control.params.childrenDataSource}",
+        </#if>
         <#if defaultValue?has_content>
             defaultValue: "${defaultValue?string}",
         </#if>

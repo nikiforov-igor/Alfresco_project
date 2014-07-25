@@ -4,6 +4,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.transaction.TransactionService;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -11,7 +12,6 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.alfresco.service.transaction.TransactionService;
 
 /**
  * User: AIvkin
@@ -134,4 +134,19 @@ public class DocumentTableWebScriptBean extends BaseWebScript {
         }
         return createScriptable(new ArrayList<NodeRef>());
     }
+
+	/**
+	 * Получение документа по строке табличных данных
+	 * @param tableDataRow строка табличных данных
+	 * @return документ
+	 */
+	public ScriptNode getDocumentByTableDataRow(ScriptNode tableDataRow) {
+		org.alfresco.util.ParameterCheck.mandatory("tableDataRow", tableDataRow);
+
+		NodeRef document = this.documentTableService.getDocumentByTableDataRow(tableDataRow.getNodeRef());
+		if (document != null) {
+			return new ScriptNode(document, this.serviceRegistry, getScope());
+		}
+		return null;
+	}
 }

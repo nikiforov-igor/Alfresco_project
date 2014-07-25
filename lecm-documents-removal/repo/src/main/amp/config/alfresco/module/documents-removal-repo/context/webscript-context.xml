@@ -8,4 +8,7 @@
 		  class="ru.it.lecm.documents.removal.webscript.DocumentsRemovalWebscript"
 		  p:documentsRemovalService-ref="documentsRemovalService"/>
 
+    <bean id="documentsRemovalScriptService" parent="baseScript" class="ru.it.lecm.documents.removal.webscript.DocumentsRemovalScriptService"
+          p:documentsRemovalService-ref="documentsRemovalService"
+            p:extensionName="documentsRemovalService"/>
 </beans>
