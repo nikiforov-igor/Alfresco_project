@@ -140,13 +140,6 @@ public interface OrgstructureBean {
 	NodeRef getStructureDirectory();
 
 	/**
-	 * Получение Основного подразделения организации
-	 *
-	 * @return NodeRef или NULL
-	 */
-	NodeRef getMainOrganisationUnit();
-
-	/**
 	 * Получение Директории с Сотрудниками
 	 *
 	 * @return NodeRef или NULL
@@ -611,19 +604,20 @@ public interface OrgstructureBean {
 	 * @return true если вызов произошел от имени системы
 	 */
 	boolean isCurrentUserTheSystemUser();
-	String getEmployeeLogin(NodeRef employee);
 
-        public Set<NodeRef> getEmployeeDirectRoles(NodeRef employeeRef);
+    String getEmployeeLogin(NodeRef employee);
 
-        public Set<NodeRef> getEmployeeUnitRoles(NodeRef employeeRef);
+    public Set<NodeRef> getEmployeeDirectRoles(NodeRef employeeRef);
 
-        public Set<NodeRef> getEmployeeWGRoles(NodeRef employeeRef);
+    public Set<NodeRef> getEmployeeUnitRoles(NodeRef employeeRef);
 
-        public Set<NodeRef> getEmployeeDPRoles(NodeRef employeeRef);
+    public Set<NodeRef> getEmployeeWGRoles(NodeRef employeeRef);
 
-	List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
+    public Set<NodeRef> getEmployeeDPRoles(NodeRef employeeRef);
 
-        Map<NodeRef, List<NodeRef>> getEmployeeDelegatedRolesWithOwner(NodeRef employeeRef);
+    List<NodeRef> getEmployeeRoles(NodeRef employeeRef);
+
+    Map<NodeRef, List<NodeRef>> getEmployeeDelegatedRolesWithOwner(NodeRef employeeRef);
 
     List<NodeRef> getEmployeeRoles(NodeRef employeeRef, boolean includeDelegatedRoles);
 
@@ -746,4 +740,8 @@ public interface OrgstructureBean {
     public NodeRef getUnitByOrganization(NodeRef organization);
 
     public SimpleCache<String, NodeRef> getUserOrganizationsCache();
+
+    public boolean hasAccessToOrgElement(String userName, NodeRef orgElement);
+
+    public boolean hasAccessToOrgElement(NodeRef orgElement);
 }

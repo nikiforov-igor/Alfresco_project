@@ -894,7 +894,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
     documentScript.finalizeToUnit(document, unit);
 })();]]></value>
                                                             </property>
@@ -4200,7 +4200,7 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-	if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+	if(unit==null) unit = orgstructure.getRootUnit();
     documentScript.finalizeToUnit(document, unit);
 })();]]></value>
                                                             </property>
@@ -7671,7 +7671,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
 (function(){
     var author = stm_document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit==null) primaryUnit = orgstructure.getMainOrganisationUnit();
+	if(primaryUnit==null) primaryUnit = orgstructure.getRootUnit();
     var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
     var additionalUnits = [];
     for each (var recipient in recipients) {
@@ -7867,7 +7867,7 @@ businessJournal.log(internal.nodeRef.toString(), "DIRECT_DOCUMENT", logText, [])
                                                                 <value><![CDATA[(function(){
     var author = stm_document.assocs["lecm-document:author-assoc"][0];
     var primaryUnit = orgstructure.getPrimaryOrgUnit(author);
-	if(primaryUnit==null) primaryUnit = orgstructure.getMainOrganisationUnit();
+	if(primaryUnit==null) primaryUnit = orgstructure.getRootUnit();
     var recipients = stm_document.assocs["lecm-eds-document:recipients-assoc"];
     var additionalUnits = [];
     for each (var recipient in recipients) {

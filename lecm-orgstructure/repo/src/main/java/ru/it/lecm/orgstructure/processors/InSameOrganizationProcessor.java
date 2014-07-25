@@ -42,14 +42,15 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         }
 
         final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-        sbQuery.append("@").append(organizationProperty);
+        sbQuery.append("NOT @").append(organizationProperty).append(":\"*\"");
+        sbQuery.append(" AND @").append(organizationProperty).append(":");
 
         if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS")) {
             organization = orgstructureBean.getEmployeeOrganization(employee);
             if (organization != null) {
-                sbQuery.append(":").append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
+                sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
             } else {
-                sbQuery.append(":\"NOT_REF\"");
+                sbQuery.append("\"NOT_REF\"");
             }
         } else {
             sbQuery.append(":(*)");

@@ -290,7 +290,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 })();]]></value>
@@ -1158,7 +1158,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 })();]]></value>
@@ -2105,7 +2105,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, false, unit);
 })();]]></value>
@@ -2999,7 +2999,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 })();]]></value>
@@ -4150,7 +4150,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 })();]]></value>
@@ -6208,7 +6208,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 	
@@ -7193,7 +7193,7 @@
     if (unit == null) {
         unit = orgstructure.getPrimaryOrgUnit(orgstructure.getCurrentEmployee().nodeRef);
     }
-    if(unit==null) unit = orgstructure.getMainOrganisationUnit();
+    if(unit==null) unit = orgstructure.getRootUnit();
 
     documentScript.finalizeToUnit(incoming, unit);
 })();]]></value>
