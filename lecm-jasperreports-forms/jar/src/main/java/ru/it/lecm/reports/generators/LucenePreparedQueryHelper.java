@@ -184,6 +184,16 @@ public class LucenePreparedQueryHelper {
             }
         }
 
+        boolean hasData = !bquery.isEmpty();
+
+        if (!bquery.getQuery().toString().contains("ID:")) { // нет явного задания ID -> исключаем черновики
+            String condition = emmitFieldCondition((hasData ? " AND NOT(" : ""), "lecm-statemachine-aspects:is-draft", true);
+            bquery.emmit(condition);
+            bquery.emmit(hasData ? ")" : "");
+        }
+
+        bquery.emmit((!bquery.isEmpty() ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"));
+
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Quering nodes by Lucene conditions:\n%s\n", blog.toString()));
         }
@@ -442,7 +452,7 @@ public class LucenePreparedQueryHelper {
         final String stMIN = ArgsHelper.dateToStr(from, "MIN");
         final String stMAX = ArgsHelper.dateToStr(upto, "MAX");
 
-        return (includeNullValue ? " ISNULL:\"@" + luceneEncode(fldName) + "\" OR " : "@") + luceneEncode(fldName) + ":[" + stMIN + " TO " + stMAX + "]";
+        return (includeNullValue ? " ISNULL:\"@" + luceneEncode(fldName) + "\" OR " : "@") + luceneEncode(fldName) + ":[\"" + stMIN + "\" TO \"" + stMAX + "\"]";
     }
 
     /**
@@ -654,5 +664,9 @@ public class LucenePreparedQueryHelper {
     private boolean isProcessedFieldLink(final String expression) {
         return (expression != null) && (expression.length() > 0)
                 && expression.matches(SearchQueryProcessorService.PROC_PATTERN.toString());
+    }
+
+    public SearchQueryProcessorService getProcessorService() {
+        return processorService;
     }
 }

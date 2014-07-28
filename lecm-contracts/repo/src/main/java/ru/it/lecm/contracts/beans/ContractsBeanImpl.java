@@ -9,14 +9,12 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: mshafeev
@@ -206,6 +204,8 @@ public class ContractsBeanImpl extends BaseBean {
         if (filter != null && filter.length() > 0) {
             query +=  " AND (" +  filter + ") ";
         }
+
+        query += (query.length() > 0 ? " AND " : "") + "{{IN_SAME_ORGANIZATION}}";
 
         ResultSet results = null;
         sp.setQuery(query);

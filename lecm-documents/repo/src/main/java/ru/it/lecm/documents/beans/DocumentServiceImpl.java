@@ -450,11 +450,13 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     + (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter + ")") : "");
         }
 
+        query += (query.length() > 0 ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}");
+
         if (filterQuery != null && filterQuery.length() > 0) {
-            // обработка спец-выражений
-            filterQuery = processorService.processQuery(filterQuery);
             query += (query.length() > 0 ? " AND (" : "(") + filterQuery + ") ";
         }
+
+
 
         if (sortDefinition != null && !sortDefinition.isEmpty()) {
             for (SortDefinition sort : sortDefinition) {
