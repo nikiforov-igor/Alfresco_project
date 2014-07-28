@@ -26,9 +26,9 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
 
-        Object userName = params != null ? params.get(USERNAME_PARAM) : null;
+        Object userName = params != null && params.get(USERNAME_PARAM) != null ? params.get(USERNAME_PARAM) != null : null;
 
-        Object orgFieldShort = params != null ? params.get(ORGANIZATION_FIELD_PARAM) : DEFAULT_ORGANIZATION_FIELD;
+        Object orgFieldShort = params != null && params.get(ORGANIZATION_FIELD_PARAM) != null ? params.get(ORGANIZATION_FIELD_PARAM) : DEFAULT_ORGANIZATION_FIELD;
         if (orgFieldShort.toString().trim().isEmpty()) {
             orgFieldShort = DEFAULT_ORGANIZATION_FIELD;
         }
@@ -42,8 +42,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         }
 
         final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
-        sbQuery.append("NOT @").append(organizationProperty).append(":\"*\"");
-        sbQuery.append(" AND @").append(organizationProperty).append(":");
+        sbQuery.append("@").append(organizationProperty).append(":");
 
         if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS")) {
             organization = orgstructureBean.getEmployeeOrganization(employee);
@@ -53,8 +52,9 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
                 sbQuery.append("\"NOT_REF\"");
             }
         } else {
-            sbQuery.append(":(*)");
+            sbQuery.append("\"*\"");
         }
+        sbQuery.append(" OR NOT @").append(organizationProperty).append(":\"*\"");
 
         return sbQuery.toString();
     }

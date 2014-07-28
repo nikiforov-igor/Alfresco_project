@@ -12,16 +12,9 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SearchQueryProcessorService;
-import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.notifications.beans.NotificationsService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
-import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -101,6 +94,8 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                 SearchParameters sp = new SearchParameters();
                 sp.addStore(store != null ? new StoreRef(store) : this.storeRef);
                 sp.setLanguage(language != null ? language : SearchService.LANGUAGE_LUCENE);
+
+                query = query + " AND {{IN_SAME_ORGANIZATION}} ";
 
                 query = processorService.processQuery(query);
 

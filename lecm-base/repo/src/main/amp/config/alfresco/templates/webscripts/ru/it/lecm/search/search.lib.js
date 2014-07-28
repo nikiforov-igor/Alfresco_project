@@ -351,6 +351,8 @@ function getSearchResults(params) {
             ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + 'NOT @' + this.escapeQName("lecm-dic:active") + ':false';
         }
 
+        // по организации
+        ftsQuery += (ftsQuery.length !== 0 ? ' AND ' : '') + '{{IN_SAME_ORGANIZATION}}';
 
         //фильтр по доступным нодам
         if (searchNodes != null) {

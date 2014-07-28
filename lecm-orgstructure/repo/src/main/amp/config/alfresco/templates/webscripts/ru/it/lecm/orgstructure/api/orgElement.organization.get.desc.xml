@@ -1,7 +1,7 @@
 <webscript>
     <shortname>Return employee organization</shortname>
     <description>Return employee organization</description>
-    <url>/lecm/orgstructure/getEmployeeOrganization?nodeRef={nodeRef}</url>
+    <url>/lecm/orgstructure/getOrganization?nodeRef={nodeRef}</url>
     <format default="json">extension</format>
     <authentication>user</authentication>
     <transaction>none</transaction>

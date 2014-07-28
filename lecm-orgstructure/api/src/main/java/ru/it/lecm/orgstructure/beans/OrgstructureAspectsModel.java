@@ -14,4 +14,5 @@ public class OrgstructureAspectsModel {
     public final static QName ASPECT_IS_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "is-organization-aspect");
     public final static QName ASPECT_HAS_LINKED_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "has-linked-organization-aspect");
     public final static QName ASSOC_LINKED_ORGANIZATION = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "linked-organization-assoc");
+    public final static QName PROP_LINKED_ORGANIZATION_REF = QName.createQName(ORGSTRUCTURE_ASPECTS_NAMESPACE_URI, "linked-organization-assoc-ref");
 }

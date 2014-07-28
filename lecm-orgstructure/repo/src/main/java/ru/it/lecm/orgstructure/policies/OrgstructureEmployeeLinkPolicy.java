@@ -22,7 +22,8 @@ public class OrgstructureEmployeeLinkPolicy
 		implements
 		NodeServicePolicies.OnCreateNodePolicy
 		, NodeServicePolicies.OnCreateAssociationPolicy
-		, NodeServicePolicies.BeforeDeleteNodePolicy {
+		, NodeServicePolicies.BeforeDeleteNodePolicy,
+        NodeServicePolicies.OnDeleteNodePolicy{
 
 	@Override
 	public void init() {
@@ -35,6 +36,8 @@ public class OrgstructureEmployeeLinkPolicy
 				new JavaBehaviour(this, "onCreateAssociation"));
 		policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
 				OrgstructureBean.TYPE_EMPLOYEE_LINK, new JavaBehaviour(this, "beforeDeleteNode"));
+/*        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+				OrgstructureBean.TYPE_EMPLOYEE_LINK, new JavaBehaviour(this, "onDeleteNode"));*/
 	}
 
 	@Override
@@ -119,6 +122,8 @@ public class OrgstructureEmployeeLinkPolicy
                 if (!hasStaffWithContractor(employee)) {
                     // удаляется последняя позиция -> сценарий "Исключение сотрудника из организации"
                     if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        NodeRef organization = orgstructureService.getEmployeeOrganization(employee);
+                        nodeService.removeAssociation(employee, organization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
                         nodeService.removeAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION);
                     }
                 }
@@ -170,5 +175,19 @@ public class OrgstructureEmployeeLinkPolicy
             }
         }
         return false;
+    }
+
+    @Override
+    public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+        /*final NodeRef parent = childAssocRef.getParentRef();
+        final NodeRef employee = orgstructureService.getEmployeeByLink(childAssocRef.getChildRef());
+        if (orgstructureService.isStaffList(parent)) {
+            if (!hasStaffWithContractor(employee)) {
+                // удаляется последняя позиция -> сценарий "Исключение сотрудника из организации"
+                if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                    nodeService.removeAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION);
+                }
+            }
+        }*/
     }
 }

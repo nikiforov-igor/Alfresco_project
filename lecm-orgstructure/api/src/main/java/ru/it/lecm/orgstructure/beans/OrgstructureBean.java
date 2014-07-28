@@ -732,10 +732,10 @@ public interface OrgstructureBean {
     public NodeRef getUserOrganization(String userName);
 
     /**
-     *  Возвращает организацию для подразделения
+     *  Возвращает организацию для орг элемента
      *
      */
-    public NodeRef getOrganization(NodeRef orgUnit);
+    public NodeRef getOrganization(NodeRef orgElement);
 
     public NodeRef getUnitByOrganization(NodeRef organization);
 

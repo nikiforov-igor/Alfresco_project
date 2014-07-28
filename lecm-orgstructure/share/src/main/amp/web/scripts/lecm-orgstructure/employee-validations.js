@@ -68,7 +68,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
 
     if (employeeRef.length > 0) {
         jQuery.ajax({
-            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getEmployeeOrganization?nodeRef=" + employeeRef,
+            url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getOrganization?nodeRef=" + employeeRef,
             type: "GET",
             timeout: 10000,
             async: false,
@@ -89,8 +89,28 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
                         processData: true,
 
                         success: function(result, textStatus, jqXHR) {
-                            var staffOrganization = result != null ? result.nodeRef : null;
-                            valid = staffOrganization == employeeOrganization;
+                            var staffUnit = result != null ? result.nodeRef : null;
+                            jQuery.ajax({
+                                url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/orgstructure/getOrganization?nodeRef=" + staffUnit,
+                                type: "GET",
+                                timeout: 10000,
+                                async: false,
+                                dataType: "json",
+                                contentType: "application/json",
+                                processData: true,
+
+                                success: function(result, textStatus, jqXHR) {
+                                    var unitOrganization = result != null ? result.nodeRef : null;
+                                    valid = unitOrganization != null && (employeeOrganization == unitOrganization);
+                                },
+
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    valid = false;
+                                    Alfresco.util.PopupManager.displayMessage({
+                                        text: "ERROR: can not perform field validation"
+                                    });
+                                }
+                            });
                         },
 
                         error: function(jqXHR, textStatus, errorThrown) {

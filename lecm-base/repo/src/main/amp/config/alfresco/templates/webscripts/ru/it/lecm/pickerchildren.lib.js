@@ -182,7 +182,9 @@ function getPickerChildrenItems(filter)
 
 			for each (var result in childNodes)
 			{
-				if (result.hasPermission("Read") && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])) {
+				if (result.hasPermission("Read")
+                    && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])
+                    && (!result.hasAspect("lecm-orgstr-aspects:has-linked-organization-aspect") || orgstructure.hasAccessToOrgElement(result))) {
 					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
 					{
 						// wrap result and determine if it is selectable in the UI
