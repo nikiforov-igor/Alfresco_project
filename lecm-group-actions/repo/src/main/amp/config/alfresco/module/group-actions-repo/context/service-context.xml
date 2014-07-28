@@ -97,7 +97,7 @@
                         <value>lecm-group-actions:workflow</value>
                     </list>
                 </entry>
-                <entry key="lecm-group-actions:workflow-action">
+                <entry key="lecm-group-actions:document-action">
                     <list>
                         <value>cm:name</value>
                         <value>lecm-group-actions:expression</value>
