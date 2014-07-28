@@ -6,11 +6,13 @@
 
 <script type="text/javascript">
     //    <![CDATA[
-    function getNodeRef() {
-        YAHOO.util.Dom.get("${htmlId}").setAttribute("value", "${parent!""}");
-        YAHOO.util.Dom.get("${htmlId}-added").setAttribute("value", "${parent!""}");
-    }
-    YAHOO.util.Event.onContentReady("${fieldHtmlId}", getNodeRef, true);
+    (function () {
+	    function getNodeRef() {
+	        YAHOO.util.Dom.get("${htmlId}").setAttribute("value", "${parent!""}");
+	        YAHOO.util.Dom.get("${htmlId}-added").setAttribute("value", "${parent!""}");
+	    }
+	    YAHOO.util.Event.onContentReady("${fieldHtmlId}", getNodeRef, true);
+    })();
     //]]>
 </script>
 

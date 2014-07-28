@@ -142,6 +142,8 @@
                 <js src="/scripts/lecm-base/components/base64.js" />
                 <js src="/scripts/lecm-base/components/lecm-validation.js" />
 				<js src="/scripts/lecm-base/components/lecm-form-tabs.js" />
+				<js src="/yui/tabview/tabview.js" />
+				<js src="/jquery/jquery-1.6.2.js"/>
 				<!-- <js src="/scripts/lecm-base/components/lecm-toolbar.js" />
 				<js src="/scripts/lecm-base/components/object-finder/lecm-object-finder.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-selectone.js" />
@@ -156,7 +158,6 @@
 				<js src="/scripts/lecm-base/components/lecm-association-datagrid-control.js" />
 				<js src="/scripts/lecm-base/components/advsearch.js" />
 				<js src="/yui/resize/resize.js" />
-				<js src="/yui/tabview/tabview.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-checkboxes.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-search.js" />
 				<js src="/scripts/lecm-base/components/lecm-rich-text.js" />
@@ -165,7 +166,6 @@
 				<js src="/components/upload/html-upload.js" />
 				<js src="/components/upload/file-upload.js" />
 				<js src="/components/upload/flash-upload.js" />
-				<js src="/jquery/jquery-1.6.2.js"/>
 				<js src="/modules/simple-dialog.js"/>
 				<js src="/scripts/lecm-base/components/lecm-checkbox.js" />
 				<js src="/scripts/lecm-base/components/lecm-association-autocomplete-text.js" />
