@@ -687,6 +687,7 @@ LogicECM.module = LogicECM.module || {};
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
                                 me.activeElement = rows[0];
+                                e.target.scrollTop = 0;
                             }
                         });
 
@@ -710,6 +711,7 @@ LogicECM.module = LogicECM.module || {};
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
                                 me.activeElement = rows[0];
+                                e.target.scrollTop = 0;
                             }
                         });
 
@@ -776,7 +778,15 @@ LogicECM.module = LogicECM.module || {};
                     this.activeElement = next;
                 }
             }
-            e.preventDefault();
+            // делаем, чтобы скроллинг списка работал, но только когда это нужно
+            var target = args[1].target;
+            activeEl = this.activeElement;
+            var scrollEnded = target.scrollHeight - target.scrollTop <= target.offsetHeight;
+            if ((Dom.getY(activeEl) < Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                e.preventDefault();
+            }
+            e.stopImmediatePropagation();      // убираем скролл браузера
+            e.stopPropagation();
         },
 
         focusToPrevious: function(a, args) {
@@ -790,7 +800,15 @@ LogicECM.module = LogicECM.module || {};
                     this.activeElement = prev;
                 }
             }
-            e.preventDefault();
+            // делаем, чтобы скроллинг списка работал, но только когда это нужно
+            var target = args[1].target;
+            activeEl = this.activeElement;
+            var scrollEnded = target.scrollTop == 0;
+            if ((Dom.getY(activeEl) > Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                e.preventDefault();
+            }
+            e.stopImmediatePropagation();      // убираем скролл браузера
+            e.stopPropagation();
         },
 
         // Fill tree view group selector with node data
