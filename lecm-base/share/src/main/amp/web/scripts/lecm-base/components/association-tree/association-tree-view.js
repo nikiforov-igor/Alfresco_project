@@ -534,11 +534,12 @@ LogicECM.module = LogicECM.module || {};
             // Update parent form
             this.updateFormFields();
 			if (this.options.fireAction.ok != null) {
-              var fireName = this.options.fireAction.ok.split(",");
-              for (var i in fireName){
-                  YAHOO.Bubbling.fire(fireName[i], this);
-              }
-          }
+                var fireName = this.options.fireAction.ok.split(",");
+                for (var i in fireName) {
+                    YAHOO.Bubbling.fire(fireName[i], this);
+                }
+            }
+            this.backToControl();
         },
 
         onCancel: function(e, p_obj)
@@ -546,17 +547,26 @@ LogicECM.module = LogicECM.module || {};
             Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
             this.widgets.escapeListener.disable();
             this.widgets.dialog.hide();
-            if( this.widgets.pickerButton )
+            if (this.widgets.pickerButton)
                 this.widgets.pickerButton.set("disabled", false);
             if (e) {
                 Event.preventDefault(e);
             }
 			if (this.options.fireAction.cancel != null) {
-              var fireName = this.options.fireAction.cancel.split(",");
-              for (var i in fireName){
-                  YAHOO.Bubbling.fire(fireName[i], this);
-              }
-          }
+                var fireName = this.options.fireAction.cancel.split(",");
+                for (var i in fireName) {
+                    YAHOO.Bubbling.fire(fireName[i], this);
+                }
+            }
+            this.backToControl();
+        },
+
+        // после закрытия диалога вернуть фокус в исходный контрол
+        backToControl: function() {
+            var controlBtn = Dom.get(this.options.prefixPickerId + "-tree-picker-button-button");
+            if (controlBtn) {
+                controlBtn.focus();
+            }
         },
 
         onSearch: function()
