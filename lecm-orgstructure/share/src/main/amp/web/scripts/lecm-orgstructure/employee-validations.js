@@ -101,7 +101,7 @@ LogicECM.module.OrgStructure.employeeNotHasAnotherOrganizationValidation = funct
 
                                 success: function(result, textStatus, jqXHR) {
                                     var unitOrganization = result != null ? result.nodeRef : null;
-                                    valid = unitOrganization != null && (employeeOrganization == unitOrganization);
+                                    valid = unitOrganization == null || (unitOrganization != null && (employeeOrganization == unitOrganization));
                                 },
 
                                 error: function(jqXHR, textStatus, errorThrown) {
