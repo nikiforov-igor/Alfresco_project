@@ -538,22 +538,10 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     List<String> categories = settings.getCategoriesToCopy();
                     if (categories != null) {
                         for (String category : categories) {
-                            NodeRef errandAttachmentsFolder = documentAttachmentsService.getRootFolder(createdNode);
-                            if (null == errandAttachmentsFolder) {
-                                try { //TODO DONE Рефакторинг AL-2733
-                                    errandAttachmentsFolder = documentAttachmentsService.createRootFolder(createdNode);
-                                } catch (WriteTransactionNeededException ex) {
-                                    throw new RuntimeException(ex);
-                                }
-                            }
                             NodeRef categoryRef = documentAttachmentsService.getCategory(category, document);
                             if (categoryRef != null) {
-                                // код ниже - хак. При копировании ноды - все ассоциации на неё также копируются. У вложений есть ссылка на родительский документ,
-                                // и есть полиси, которые создавает эту же самую ассоциацию при добавлении нового вложения. Полиси и сервис копирования не знаю друг о друге -  возникает конфликт.
-                                //копируем директорию с категорией
-                                NodeRef errandCategoryFolder = copyService.copyAndRename(categoryRef, errandAttachmentsFolder, ContentModel.ASSOC_CONTAINS,
-                                        QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
-                                        false);
+ 	                            documentAttachmentsService.getCategories(createdNode);
+	                            NodeRef errandCategoryFolder = documentAttachmentsService.getCategory(category, createdNode);
                                 // копируем вложения для категории
                                 List<ChildAssociationRef> childs = nodeService.getChildAssocs(categoryRef);
                                 for (ChildAssociationRef child : childs) {
@@ -566,7 +554,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                                         nodeService.removeAssociation(childRef, parentDoc, DocumentService.ASSOC_PARENT_DOCUMENT);
                                         try {
                                             copyService.copyAndRename(childRef, errandCategoryFolder, ContentModel.ASSOC_CONTAINS,
-                                                    QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), QName.createValidLocalName(category)),
+                                                    QName.createQName(ContentModel.PROP_CONTENT.getNamespaceURI(), nodeService.getProperty(childRef, ContentModel.PROP_NAME).toString()),
                                                     false);
 
                                         } finally {
