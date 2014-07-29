@@ -397,6 +397,7 @@ public interface OrgstructureBean {
 	 * Получение текущего сотрудника по имени пользователя
 	 */
 	NodeRef getEmployeeByPerson(String personName);
+	NodeRef getEmployeeByPerson(String personName, boolean checkAccess);
 
 	/**
 	 * Получение текущего сотрудника по NodeRef пользователя
@@ -744,4 +745,5 @@ public interface OrgstructureBean {
     public boolean hasAccessToOrgElement(String userName, NodeRef orgElement);
 
     public boolean hasAccessToOrgElement(NodeRef orgElement);
+    public boolean hasAccessToOrgElement(NodeRef orgElement, boolean doNotAccessWithEmpty);
 }

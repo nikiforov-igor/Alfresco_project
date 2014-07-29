@@ -59,24 +59,43 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
     @Override
     public boolean hasAccessToOrgElement(String userName, NodeRef orgElement) {
-        if (userName != null && (!userName.equalsIgnoreCase("System") && !userName.equalsIgnoreCase("workflow"))) {
+        return hasAccessToOrgElement(userName, orgElement, false);
+    }
+
+    private boolean hasAccessToOrgElement(String userName, NodeRef orgElement, boolean doNotAccessWithEmpty) {
+        if (userName != null) {
+            if (userName.equalsIgnoreCase("System") || userName.equalsIgnoreCase("workflow")) {
+                return true;
+            }
             NodeRef currentEmployee = getEmployeeByPerson(userName, false);
-            if (currentEmployee != null && !currentEmployee.equals(orgElement)) {
-                if (!isEmployeeHasBusinessRole(getEmployeeByPerson(userName), "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false, false)) {
-                    NodeRef orgElementOrganization = getOrganization(orgElement);
-                    if (orgElementOrganization != null) {
-                        NodeRef employeeOrganization = getUserOrganization(userName);
-                        return employeeOrganization != null && orgElementOrganization.equals(employeeOrganization);
-                    }
+            if (currentEmployee != null) {
+                // доступ к самому себе или при наличии бизнес-роли - доступ разрешен
+                if (currentEmployee.equals(orgElement) ||
+                        isEmployeeHasBusinessRole(getEmployeeByPerson(userName), "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false, false)) {
+                    return true;
                 }
+                NodeRef orgElementOrganization = getOrganization(orgElement);
+                if (orgElementOrganization == null) { // доступ к элементам, у которых нет организации разрешен в зависимости от флага
+                    return !doNotAccessWithEmpty;
+                }
+
+                NodeRef employeeOrganization = getUserOrganization(userName);
+
+                // Если у сотрудника нет организации - доступ есть только к тем структурам, у которых тоже нет организации
+                // Если у сотрудника есть организация - доступ есть к тем структурам, у которых нет орагниазции + у которых организация == организации сотрудника
+                return employeeOrganization != null && employeeOrganization.equals(orgElementOrganization);
             }
         }
-        return true;
+        return false;
     }
 
     @Override
     public boolean hasAccessToOrgElement(NodeRef orgElement) {
         return hasAccessToOrgElement(authService.getCurrentUserName(), orgElement);
+    }
+    @Override
+    public boolean hasAccessToOrgElement(NodeRef orgElement, boolean doNotAccessWithEmpty) {
+        return hasAccessToOrgElement(authService.getCurrentUserName(), orgElement, doNotAccessWithEmpty);
     }
 
     /**
@@ -249,23 +268,27 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits) {
-		List<NodeRef> results = new ArrayList<NodeRef>();
-		Set<QName> units = new HashSet<QName>();
-		units.add(TYPE_ORGANIZATION_UNIT);
+		return getSubUnits(parent, onlyActive, includeSubunits, true);
+	}
 
-		List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(parent, units);
-		for (ChildAssociationRef uRef : uRefs) {
-			if (!onlyActive || !isArchive(uRef.getChildRef())) {
-                if (hasAccessToOrgElement(uRef.getChildRef())){
+    private List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+        Set<QName> units = new HashSet<QName>();
+        units.add(TYPE_ORGANIZATION_UNIT);
+
+        List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(parent, units);
+        for (ChildAssociationRef uRef : uRefs) {
+            if (!onlyActive || !isArchive(uRef.getChildRef())) {
+                if (!checkAccess || hasAccessToOrgElement(uRef.getChildRef())){
                     results.add(uRef.getChildRef());
                     if (includeSubunits) {
                         results.addAll(getSubUnits(uRef.getChildRef(), onlyActive, true));
                     }
                 }
-			}
-		}
-		return results;
-	}
+            }
+        }
+        return results;
+    }
 
 	@Override
 	public boolean hasChild(NodeRef parent, boolean onlyActive) {
@@ -707,7 +730,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public NodeRef getRootUnit() {
-		List<NodeRef> units = getSubUnits(getStructureDirectory(), true);
+		List<NodeRef> units = getSubUnits(getStructureDirectory(), true, false, false);
 		if (units.size() > 0) {
 			return units.get(0);
 		}
@@ -1070,7 +1093,8 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return getEmployeeByPerson(personName, true);
 	}
 
-    private NodeRef getEmployeeByPerson(String personName, boolean checkAccess) {
+    @Override
+    public NodeRef getEmployeeByPerson(String personName, boolean checkAccess) {
         if (personName != null) {
             NodeRef personNodeRef;
             try {
@@ -1132,7 +1156,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
     private List<NodeRef> getEmployeeUnits(final NodeRef employeeRef, final boolean bossUnitsOnly, final boolean allParents, final boolean checkAccess) {
         //получаем список штатных расписаний сотрудника
         List<NodeRef> staffs = getEmployeeStaffs(employeeRef, checkAccess);
-        List<NodeRef> units = new ArrayList<NodeRef>(staffs.size());
+        List<NodeRef> units = new ArrayList<NodeRef>();
         for (NodeRef staffRef : staffs) {
             //для каждого штатного расписания вытаскиваем подразделение
             NodeRef unitRef = getUnitByStaff(staffRef, checkAccess);

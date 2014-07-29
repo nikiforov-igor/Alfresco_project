@@ -1144,8 +1144,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		return orgstructureService.isUnit(obj.getNodeRef());
 	}
 
-    public boolean hasAccessToOrgElement(ScriptNode obj) {
+    public boolean hasAccessToOrgElement(ScriptNode obj, boolean useStrictFilterByOrg) {
         ParameterCheck.mandatory("obj", obj);
-        return orgstructureService.hasAccessToOrgElement(obj.getNodeRef());
+        return orgstructureService.hasAccessToOrgElement(obj.getNodeRef(), useStrictFilterByOrg);
     }
 }

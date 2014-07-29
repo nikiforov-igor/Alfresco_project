@@ -57,6 +57,8 @@ LogicECM.module = LogicECM.module || {};
 
 				additionalFilter: "",
 
+                useStrictFilterByOrg: false,
+
 				ignoreNodes: [],
 
 				childrenDataSource: "lecm/forms/picker",
@@ -283,7 +285,8 @@ LogicECM.module = LogicECM.module || {};
                 var params = "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                     "&size=" + this.options.maxSearchResults + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                     "&sortProp=" + encodeURIComponent(this.options.sortProp) +
-                    "&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
+                    "&additionalFilter=" + encodeURIComponent(this.options.additionalFilter) +
+                    "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);;
 
                 if (this.options.startLocation && this.options.startLocation.charAt(0) == "/") {
                     params += "&xpath=" + encodeURIComponent(this.options.startLocation);

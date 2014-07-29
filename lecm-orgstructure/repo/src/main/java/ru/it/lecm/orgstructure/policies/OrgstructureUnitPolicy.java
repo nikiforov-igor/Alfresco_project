@@ -284,7 +284,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
         NodeRef parentStore = null;
         if (sharedFolder != null && sharedFolder.size() > 0 && !root.equals(unit)) {
             parentStore = sharedFolder.get(0).getTargetRef();
-        } else if (root.equals(unit)) {
+        } else if (root != null && root.equals(unit)) {
             NodeRef companyHome = repositoryHelper.getCompanyHome();
             parentStore = nodeService.getChildByName(companyHome, ContentModel.ASSOC_CONTAINS, OrgstructureBean.DOCUMENT_ROOT_NAME);
         }
@@ -301,7 +301,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
         props.put(ContentModel.PROP_OWNER, AuthenticationUtil.SYSTEM_USER_NAME);
 
         QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, name);
-        if (nodeService.getChildByName(parentStore, ContentModel.ASSOC_CONTAINS, name) != null) return;
+        if (parentStore == null || nodeService.getChildByName(parentStore, ContentModel.ASSOC_CONTAINS, name) != null) return;
         final ChildAssociationRef ref = nodeService.createNode(parentStore, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props);
 
         //Создаем папку с общими документами
