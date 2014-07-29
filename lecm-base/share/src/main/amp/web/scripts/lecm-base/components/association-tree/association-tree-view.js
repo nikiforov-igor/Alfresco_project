@@ -534,11 +534,12 @@ LogicECM.module = LogicECM.module || {};
             // Update parent form
             this.updateFormFields();
 			if (this.options.fireAction.ok != null) {
-              var fireName = this.options.fireAction.ok.split(",");
-              for (var i in fireName){
-                  YAHOO.Bubbling.fire(fireName[i], this);
-              }
-          }
+                var fireName = this.options.fireAction.ok.split(",");
+                for (var i in fireName) {
+                    YAHOO.Bubbling.fire(fireName[i], this);
+                }
+            }
+            this.backToControl();
         },
 
         onCancel: function(e, p_obj)
@@ -546,17 +547,26 @@ LogicECM.module = LogicECM.module || {};
             Dom.setStyle(Dom.get(this.widgets.dialog.id),"display", "none");
             this.widgets.escapeListener.disable();
             this.widgets.dialog.hide();
-            if( this.widgets.pickerButton )
+            if (this.widgets.pickerButton)
                 this.widgets.pickerButton.set("disabled", false);
             if (e) {
                 Event.preventDefault(e);
             }
 			if (this.options.fireAction.cancel != null) {
-              var fireName = this.options.fireAction.cancel.split(",");
-              for (var i in fireName){
-                  YAHOO.Bubbling.fire(fireName[i], this);
-              }
-          }
+                var fireName = this.options.fireAction.cancel.split(",");
+                for (var i in fireName) {
+                    YAHOO.Bubbling.fire(fireName[i], this);
+                }
+            }
+            this.backToControl();
+        },
+
+        // после закрытия диалога вернуть фокус в исходный контрол
+        backToControl: function() {
+            var controlBtn = Dom.get(this.options.prefixPickerId + "-tree-picker-button-button");
+            if (controlBtn) {
+                controlBtn.focus();
+            }
         },
 
         onSearch: function()
@@ -687,6 +697,7 @@ LogicECM.module = LogicECM.module || {};
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
                                 me.activeElement = rows[0];
+                                e.target.scrollTop = 0;
                             }
                         });
 
@@ -710,6 +721,7 @@ LogicECM.module = LogicECM.module || {};
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
                                 me.activeElement = rows[0];
+                                e.target.scrollTop = 0;
                             }
                         });
 
@@ -776,7 +788,15 @@ LogicECM.module = LogicECM.module || {};
                     this.activeElement = next;
                 }
             }
-            e.preventDefault();
+            // делаем, чтобы скроллинг списка работал, но только когда это нужно
+            var target = args[1].target;
+            activeEl = this.activeElement;
+            var scrollEnded = target.scrollHeight - target.scrollTop <= target.offsetHeight;
+            if ((Dom.getY(activeEl) < Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                e.preventDefault();
+            }
+            e.stopImmediatePropagation();      // убираем скролл браузера
+            e.stopPropagation();
         },
 
         focusToPrevious: function(a, args) {
@@ -790,7 +810,15 @@ LogicECM.module = LogicECM.module || {};
                     this.activeElement = prev;
                 }
             }
-            e.preventDefault();
+            // делаем, чтобы скроллинг списка работал, но только когда это нужно
+            var target = args[1].target;
+            activeEl = this.activeElement;
+            var scrollEnded = target.scrollTop == 0;
+            if ((Dom.getY(activeEl) > Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                e.preventDefault();
+            }
+            e.stopImmediatePropagation();      // убираем скролл браузера
+            e.stopPropagation();
         },
 
         // Fill tree view group selector with node data
