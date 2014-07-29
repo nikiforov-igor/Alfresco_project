@@ -85,8 +85,6 @@ public class EmployeeImport extends AbstractWebScript {
 
 		    inputStream = fields[0].getInputStream();
 
-            nodeService.deleteNode(new NodeRef("workspace://SpacesStore/1f8e61dd-083b-497f-aa27-02d4dc2d03dd"));
-
 		    boolean ignoreErrors = false;
 		    if (req.getParameter("ignoreErrors") != null && req.getParameter("ignoreErrors").equals("true")) {
 			    ignoreErrors = true;
