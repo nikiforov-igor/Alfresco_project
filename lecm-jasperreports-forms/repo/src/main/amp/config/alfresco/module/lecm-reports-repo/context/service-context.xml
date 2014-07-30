@@ -45,7 +45,9 @@
     <!-- Генератор Jasper отчётов (версия v2.x lecm-сервиса) -->
     <bean id="jasperReportGenerator" class="ru.it.lecm.reports.generators.JasperReportGeneratorImpl" parent="baseReportGenerator"/>
 
-    <bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection"/>
+    <bean id="reportOpenOfficeConnection" class="net.sf.jooreports.openoffice.connection.SocketOpenOfficeConnection">
+        <constructor-arg value="${ooo.port}"/>
+    </bean>
 
     <!-- Генератор OOffice отчётов -->
     <bean id="ooReportGenerator" class="ru.it.lecm.reports.generators.OOfficeReportGeneratorImpl" init-method="init" parent="baseReportGenerator">
