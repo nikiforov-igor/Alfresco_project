@@ -104,6 +104,7 @@
 	    </#list>
     </#if>
 
+(function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
             'scripts/lecm-base/components/association-tree/association-tree-view.js'
@@ -145,15 +146,18 @@
 		    <#if params.firstTreeItemType??>
 			    treeItemType: "${params.firstTreeItemType}",
 		    </#if>
-	        <#--<#if params.changeItemsFireAction??>-->
-		        <#--changeItemsFireAction: "${params.changeItemsFireAction}",-->
-		    <#--</#if>-->
+	        <#if params.firstChangeItemsFireAction??>
+		        changeItemsFireAction: "${params.firstChangeItemsFireAction}",
+		    </#if>
 	        <#if params.firstCreateDialogClass??>
 	            createDialogClass: "${params.firstCreateDialogClass}",
 	        </#if>
 	        <#if params.firstPickerButtonLabel??>
 		        pickerButtonLabel: "${params.firstPickerButtonLabel}",
 	        </#if>
+            <#if params.firstUseStrictFilterByOrg??>
+                useStrictFilterByOrg: "${params.firstUseStrictFilterByOrg?string}",
+            </#if>
 	        <#if params.firstPickerButtonTitle??>
 		        pickerButtonTitle: "${params.firstPickerButtonTitle}",
 	        <#elseif params.firstPickerButtonTitleCode??>
@@ -171,6 +175,7 @@
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
 		    showCreateNewLink: false,
+            additionalFilter: "${params.firstAdditionalFilter!''}",
 		    clearFormsOnStart: false
 	    });
 	    fistControl.setMessages(${messages});
@@ -207,15 +212,18 @@
 		    <#if params.secondTreeItemType??>
 			    treeItemType: "${params.secondTreeItemType}",
 		    </#if>
-		    <#--<#if params.changeItemsFireAction??>-->
-		    <#--changeItemsFireAction: "${params.changeItemsFireAction}",-->
-		    <#--</#if>-->
+            <#if params.secondChangeItemsFireAction??>
+                changeItemsFireAction: "${params.secondChangeItemsFireAction}",
+            </#if>
 		    <#if params.secondCreateDialogClass??>
 			    createDialogClass: "${params.secondCreateDialogClass}",
 		    </#if>
 		    <#if params.secondPickerButtonLabel??>
 			    pickerButtonLabel: "${params.secondPickerButtonLabel}",
 		    </#if>
+            <#if params.secondUseStrictFilterByOrg??>
+                useStrictFilterByOrg: "${params.secondUseStrictFilterByOrg?string}",
+            </#if>
 		    <#if params.secondPickerButtonTitle??>
 			    pickerButtonTitle: "${params.secondPickerButtonTitle}",
 		    <#elseif params.secondPickerButtonTitleCode??>
@@ -230,6 +238,7 @@
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
 		    showCreateNewLink: false,
+            additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
 		    multipleSelectMode: ${field.endpointMany?string},
 		    showSearch: ${secondShowSearch?string},
@@ -240,4 +249,5 @@
 	    secondControl.setMessages(${messages});
 	}
 	YAHOO.util.Event.onDOMReady(init);
+})();
 </script>

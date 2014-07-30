@@ -568,7 +568,8 @@ function getFilterParams(filterData, parentXPath)
 
 function addAdditionalFilter(query, additionalPerameters) {
 	if (additionalPerameters !== "") {
-		query += " AND " + "(" + additionalPerameters + " )";
+        var useInject = additionalPerameters.indexOf("NOT") == 0;
+		query += " AND " + "(" + (useInject ? "ISNOTNULL:\"cm:name\" AND " : "") + additionalPerameters + " )";
 	}
 	return query;
 }

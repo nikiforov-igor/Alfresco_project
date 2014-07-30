@@ -45,19 +45,10 @@
 		            <field id="lecm-eds-document:document-type-assoc"/>
 		            <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 
-		            <field id="lecm-incoming:sender-assoc" mandatory="true">
-			            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-				            <control-param name="changeItemsFireAction">lecm-incoming-addressee-assoc</control-param>
-				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-				            <control-param name="nameSubstituteString">{cm:name}</control-param>
-				            <control-param name="showCreateNewLink">true</control-param>
-				            <control-param name="showCreateNewButton">true</control-param>
-							<control-param name="createNewMessageId">label.new-contractor</control-param>
-			            </control>
-		            </field>
+		            <field id="lecm-incoming:sender-assoc" mandatory="true"/>
 		            <field id="lecm-incoming:addressee-assoc">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
-				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
+				            <control-param name="updateOnAction">common.contractor.selected</control-param>
 							<control-param name="createNewMessage">Новый отправитель</control-param>
 							<control-param name="emptyMessage">Без отправителя...</control-param>
 			            </control>
@@ -241,19 +232,10 @@
 		            <field id="lecm-eds-document:document-type-assoc"/>
 		            <field id="lecm-incoming:delivery-method-assoc" mandatory="true"/>
 
-		            <field id="lecm-incoming:sender-assoc" mandatory="true">
-			            <control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-				            <control-param name="changeItemsFireAction">lecm-incoming-addressee-assoc</control-param>
-				            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты</control-param>
-				            <control-param name="nameSubstituteString">{cm:name}</control-param>
-				            <control-param name="showCreateNewLink">true</control-param>
-				            <control-param name="showCreateNewButton">true</control-param>
-							<control-param name="createNewMessageId">label.new-contractor</control-param>
-			            </control>
-		            </field>
+		            <field id="lecm-incoming:sender-assoc" mandatory="true"/>
 		            <field id="lecm-incoming:addressee-assoc">
 			            <control template="/ru/it/lecm/contractors/contractors-select-representative.ftl">
-				            <control-param name="updateOnAction">lecm-incoming-addressee-assoc</control-param>
+				            <control-param name="updateOnAction">common.contractor.selected</control-param>
 							<control-param name="createNewMessage">Новый отправитель</control-param>
 							<control-param name="emptyMessage">Без отправителя...</control-param>
 			            </control>
