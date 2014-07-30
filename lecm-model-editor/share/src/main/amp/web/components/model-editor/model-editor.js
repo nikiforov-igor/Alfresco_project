@@ -513,7 +513,7 @@ IT.component = IT.component || {};
 			var userName = args.options.currentUser;
 			var modelPublished = new Date();
 			//modelObject.model.types.type[0].properties.property
-			if(YAHOO.lang.isObject(args.modelObject.model)) {
+			if(!YAHOO.lang.isObject(args.modelObject.model)) {
 				args.modelObject.model = {};
 			}
 					
@@ -570,9 +570,9 @@ IT.component = IT.component || {};
 			if(!YAHOO.lang.isObject(args.modelObject.model.constraints)) {
 				args.modelObject.model.constraints = {}
 			}
-			if(!YAHOO.lang.isObject(args.modelObject.model.constraints.constraint)) {
+			//if(!YAHOO.lang.isObject(args.modelObject.model.constraints.constraint)) {
 				args.modelObject.model.constraints.constraint = [];
-			}
+			//}
 			//attachment-categories
 			var _val = [];
 			var _cat = args.widgets.categoriesDataTable.getRecordSet().getRecords();
@@ -707,8 +707,12 @@ IT.component = IT.component || {};
 			}
 			
 			//rating
-			args.modelObject.model.types.type["mandatory-aspects"] = {};
-			args.modelObject.model.types.type["mandatory-aspects"].aspect = [];
+			if(!YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])) {
+				args.modelObject.model.types.type["mandatory-aspects"] = {};
+			}
+			if(!YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"].aspect)) {
+				args.modelObject.model.types.type["mandatory-aspects"].aspect = [];
+			}
 			if(args.rating==="true") {
 				if(YAHOO.lang.isObject(args.modelObject.model.types.type["mandatory-aspects"])){
 					args.modelObject.model.types.type["mandatory-aspects"].aspect.push("lecm-document-aspects:rateable");
