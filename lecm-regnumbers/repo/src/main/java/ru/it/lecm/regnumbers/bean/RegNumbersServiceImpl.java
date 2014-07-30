@@ -283,6 +283,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
             String regNumber = null;
             Date regDate = null;
             if (number != null && !DocumentService.DEFAULT_REG_NUM.equals(number.toString())) {
+                regNumber = number.toString();
                 //номер уже есть
                 if (propIsRegistered != null && !onlyReserve) {
                     nodeService.setProperty(documentNode, propIsRegistered, Boolean.TRUE);
@@ -301,11 +302,7 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     }
                 } while (!isNumberUnique(regNumber, documentType));
 
-	            regDate = new Date();
                 nodeService.setProperty(documentNode, propNumber, regNumber);
-                nodeService.setProperty(documentNode, propDate, regDate);
-                documentService.setDocumentActualNumber(documentNode, regNumber);
-                documentService.setDocumentActualDate(documentNode, regDate);
                 if (propIsRegistered != null) {
                     nodeService.setProperty(documentNode, propIsRegistered, !onlyReserve);
                 }
@@ -316,12 +313,15 @@ public class RegNumbersServiceImpl extends BaseBean implements RegNumbersService
                     nodeService.setAssociations(documentNode, DocumentService.ASSOC_REG_DATA_DOC_REGISTRATOR, targetRefs);
                 }
             }
+
+            regDate = new Date();
+            nodeService.setProperty(documentNode, propDate, regDate);
+            documentService.setDocumentActualNumber(documentNode,regNumber);
+            documentService.setDocumentActualDate(documentNode, regDate);
+
             if (!onlyReserve) {
-                String regDateString = "";
-                if (regDate != null) {
-                    DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
-                    regDateString = dFormat.format(regDate);
-                }
+                DateFormat dFormat = new SimpleDateFormat("dd.MM.yyyy");
+                String regDateString = dFormat.format(regDate);
 
                 String text;
                 if (isProjectRegister) {
