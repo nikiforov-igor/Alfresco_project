@@ -259,13 +259,6 @@
         <property name="repositoryWorkflowDefsLocations" ref="customWorkflowDefsRepositoryLocation"/>
     </bean>
 
-	<bean  id="errandsAttachmentsPolicy" class="ru.it.lecm.errands.policy.ErrandsAttachmentsPolicy"
-	       init-method="init" depends-on="documents.LogicEcmModelsBootstrap, errands.dictionaries.LogicEcmModelsBootstrap">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="documentAttachmentsService" ref="documentAttachmentsService"/>
-		<property name="nodeService" ref="nodeService"/>
-	</bean>
-
     <bean id="errandsEveryDayStatusExecutor" class="ru.it.lecm.errands.shedule.EveryDayStatusExecutor" parent="action-executer">
         <property name="ignoreLock" value="false"/>
         <property name="errandsService" ref="errandsService"/>

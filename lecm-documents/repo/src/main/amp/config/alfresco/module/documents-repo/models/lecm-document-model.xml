@@ -13,6 +13,7 @@
 	</imports>
 	<namespaces>
 		<namespace uri="http://www.it.ru/logicECM/document/1.0" prefix="lecm-document"/>
+		<namespace uri="http://www.it.ru/lecm/document/aspects/1.0" prefix="lecm-document-aspects"/>
 	</namespaces>
 
 	<constraints>
@@ -213,6 +214,7 @@
                 <aspect>lecm-subscr-aspects:subscribed</aspect>
                 <aspect>lecm-connect-aspects:connectable</aspect>
                 <aspect>cm:taggable</aspect>
+                <aspect>lecm-document-aspects:temp-attachments</aspect>
             </mandatory-aspects>
 		</type>
         <type name="lecm-document:attachmentsCategory">
@@ -314,5 +316,322 @@
     </types>
     <aspects>
         <aspect name="lecm-document:tableDataAspect"/>
+        <!--Аспект возможности оценивания (рейтинга)-->
+		<aspect name="lecm-document-aspects:rateable">
+			<properties>
+				<property name="lecm-document-aspects:rating">
+					<type>d:text</type> <!-- хранится строкой для упрощения округления -->
+				</property>
+				<property name="lecm-document-aspects:rated-persons-count">
+					<type>d:int</type>
+					<default>0</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-document-aspects:rated-1">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-document-aspects:rated-2">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-document-aspects:rated-3">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-document-aspects:rated-4">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-document-aspects:rated-5">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		<!--аспект для отображения документа на странице document-details для вложения-->
+		<aspect name="lecm-document-aspects:parent-document">
+			<associations>
+				<association name="lecm-document-aspects:parent-document-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		<aspect name="lecm-document-aspects:semanticAssistAspect">
+			<properties>
+				<property name="lecm-document-aspects:indexInBR5">
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+			</properties>
+		</aspect>
+		<!-- аспект архивирования документа для подразделения организации -->
+		<aspect name="lecm-document-aspects:finalize-to-unit">
+			<properties>
+				<property name="lecm-document-aspects:is-shared-folder">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecm-document-aspects:organization-unit-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+				<association name="lecm-document-aspects:additional-organization-unit-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+        <!-- маркер. Отключает перемещение документа при финализации -->
+        <aspect name="lecm-document-aspects:dont-move-to-archive-folder"/>
+
+		<!-- аспект для поля "В ответ на" -->
+		<aspect name="lecm-document-aspects:response-to-aspect">
+			<associations>
+				<association name="lecm-document-aspects:response-to-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+		<!-- аспект  для регистрационных данных документа -->
+		<aspect name="lecm-document-aspects:has-reg-document-data">
+			<properties>
+				<property name="lecm-document-aspects:reg-data-date">
+					<title>Дата регистрации</title>
+					<type>d:date</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Регистрационный номер-->
+				<property name="lecm-document-aspects:reg-data-number">
+					<title>Регистрационный номер</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Зарегистрирован -->
+				<property name="lecm-document-aspects:reg-data-is-registered">
+					<title>Зарегистрирован</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecm-document-aspects:registrator-assoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecm-document-aspects:registrator-assoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<!-- Регистратор -->
+				<association name="lecm-document-aspects:registrator-assoc">
+					<title>Регистратор</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<!-- аспект  для регистрационных данных проекта документа -->
+		<aspect name="lecm-document-aspects:has-reg-project-data">
+			<properties>
+				<property name="lecm-document-aspects:reg-project-data-date">
+					<title>Дата регистрации проекта</title>
+					<type>d:date</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<!-- Регистрационный номер проекта-->
+				<property name="lecm-document-aspects:reg-project-data-number">
+					<title>Номер проекта</title>
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+		</aspect>
+
+		<!-- Временное хранение ссылок на вложения, загружаемые на форме создания -->
+		<aspect name="lecm-document-aspects:temp-attachments">
+			<associations>
+				<association name="lecm-document-aspects:attachments-temp-assoc">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>cm:content</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<!-- аспект  для контрольных документов (если документ может быть на контроле)-->
+		<aspect name="lecm-document-aspects:on-control-aspect">
+			<properties>
+				<!--На контроле-->
+				<property name="lecm-document-aspects:is-on-control">
+					<title>На контроле</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+		</aspect>
+
+		<aspect name="lecm-document-aspects:cancelled">
+			<properties>
+				<property name="lecm-document-aspects:cancel-meanless-field">
+					<title>Бессмысленное поле</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+		</aspect>
+		<aspect name="lecm-document-aspects:in-work">
+			<properties>
+				<property name="lecm-document-aspects:work-meanless-field">
+					<title>Бессмысленное поле</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+		</aspect>
+
+		<!-- аспект, который будет являться признаком, что это вложение в lecm-документ-->
+		<aspect name="lecm-document-aspects:lecm-attachment">
+		</aspect>
+
+		<!-- Аспект обозначающий слушателей целевой сущности для дальнейшего их оповещения при изменении целевой сущности -->
+		<aspect name="lecm-document-aspects:event-listeners-aspect">
+			<associations>
+				<association name="lecm-document-aspects:event-listeners">
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-document:base</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+		</aspect>
+
+		<!-- Аспект обозначающий измененную сущность и вызвавшую событие -->
+		<aspect name="lecm-document-aspects:event-sender-aspect">
+			<properties>
+				<!--На контроле-->
+				<property name="lecm-document-aspects:event-sender">
+					<type>d:text</type>
+				</property>
+			</properties>
+		</aspect>
+
+		<!-- Аспект обозначающий доступность групповой операции "отправить по маршруту" -->
+		<aspect name="lecm-document-aspects:routes-avaliable"/>
+
+		<!-- Аспект обозначающий доступность групповых операций "отозвать с согласования" и "принудительно завершить согласование" -->
+		<aspect name="lecm-document-aspects:approval-avaliable"/>
     </aspects>
 </model>

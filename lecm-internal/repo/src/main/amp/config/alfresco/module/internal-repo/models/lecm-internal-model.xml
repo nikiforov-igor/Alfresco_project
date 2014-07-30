@@ -107,7 +107,6 @@
 			</associations>
 			<mandatory-aspects>
 				<aspect>lecm-document-aspects:response-to-aspect</aspect>
-				<aspect>lecm-document-aspects:temp-attachments</aspect>
 				<aspect>lecm-internal-table-structure:table-answers-aspect</aspect>
 				<aspect>lecm-document-aspects:routes-avaliable</aspect>
 				<aspect>lecm-document-aspects:event-listeners-aspect</aspect>

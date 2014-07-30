@@ -198,10 +198,10 @@
             </form>
             <form id="errands-dnd">
                 <field-visibility>
-                    <show id="lecm-errands:attachments-temp-assoc"/>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-errands:attachments-temp-assoc">
+                    <field id="lecm-document-aspects:attachments-temp-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
@@ -230,7 +230,7 @@
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date"/>
                     <!--  Вложения -->
-	                <show id="lecm-errands:attachments-temp-assoc"/>
+	                <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Инициатор -->
@@ -297,7 +297,7 @@
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
                     </field>
-                    <field id="lecm-errands:attachments-temp-assoc">
+                    <field id="lecm-document-aspects:attachments-temp-assoc">
 		                <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
 			                <control-param name="uploadDirectoryPath">{usertemp}</control-param>
 			                <control-param name="directoryName">label.errands.attachments</control-param>
@@ -444,7 +444,7 @@
                     <!-- Срок исполнения -->
                     <show id="lecm-errands:limitation-date"/>
                     <!--  Вложения -->
-                    <show id="lecm-errands:attachments-temp-assoc"/>
+                    <show id="lecm-document-aspects:attachments-temp-assoc"/>
                     <!-- Тематика -->
                     <show id="lecm-document:subject-assoc"/>
                     <!-- Инициатор -->
@@ -508,7 +508,7 @@
                             <control-param name="maxLimitArg">parentLimitationDate</control-param>
                         </control>
                     </field>
-                    <field id="lecm-errands:attachments-temp-assoc">
+                    <field id="lecm-document-aspects:attachments-temp-assoc">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl">
                             <control-param name="uploadDirectoryPath">{usertemp}</control-param>
                             <control-param name="directoryName">label.errands.attachments</control-param>
