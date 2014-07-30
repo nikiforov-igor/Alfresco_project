@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-   <title>Create Document Model</title>
+   <title>Редактор модели документа</title>
    <description>Create Document Model</description>
    <template-instance>doc-model-create</template-instance>
    <authentication>user</authentication>
