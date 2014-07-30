@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Document forms list</title>
+	<title>Редактор форм документа</title>
 	<description>Document forms list</description>
 	<template-instance>doc-forms-list</template-instance>
 	<authentication>user</authentication>

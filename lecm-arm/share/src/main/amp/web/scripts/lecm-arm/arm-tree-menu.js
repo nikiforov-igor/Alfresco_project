@@ -203,6 +203,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	        root.data.nodeRef  = node.nodeRef;
 	        root.data.armNodeRef  = node.armNodeRef;
 	        root.data.createTypes  = node.createTypes;
+	        root.data.searchQuery  = node.searchQuery;
+	        root.id  = node.id;
             this._loadTree(root);
 
             this.tree.subscribe('clickEvent', function (event) {
@@ -450,16 +452,20 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
         },
 
         _getTextNodeId: function (node, idsArray) {
-            var id = node.id;
-            if (id) {
-                if (!idsArray) {
-                    idsArray = [];
-                }
-                idsArray.push(id);
-                return this._getTextNodeId(node.parent, idsArray);
-            } else {
-                return idsArray.reverse().join(".");
-            }
+	        if (node != null) {
+		        var id = node.id;
+		        if (id) {
+			        if (!idsArray) {
+				        idsArray = [];
+			        }
+			        idsArray.push(id);
+			        return this._getTextNodeId(node.parent, idsArray);
+		        } else {
+			        return idsArray.reverse().join(".");
+		        }
+	        } else {
+		        return idsArray.reverse().join(".");
+	        }
         },
 
         _buildPreferencesValue: function () {

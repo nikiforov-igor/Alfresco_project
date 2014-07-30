@@ -77,7 +77,6 @@
 	            </property>
             </properties>
             <mandatory-aspects>
-                <aspect>lecm-document-aspects:temp-attachments</aspect>
                 <aspect>lecm-document-aspects:finalize-to-unit</aspect>
             </mandatory-aspects>
         </type>

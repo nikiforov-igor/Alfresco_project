@@ -39,7 +39,7 @@
     		</field-type>
 
 		    <field-type id="cm:content" localName="Вложения">
-			    <control id="uploader-with-preview-control" template="/ru/it/lecm/base-share/components/controls/lecm-uploader-with-preview-control.ftl" localName="Загрузчик файлов">
+			    <control id="uploader-with-preview-control" template="/ru/it/lecm/base-share/components/controls/lecm-dnd-uploader-control-with-preview.ftl" localName="Загрузчик файлов">
 				    <param id="uploadDirectoryPath" localName="Директория загрузки" mandatory="true" visible="true">{usertemp}</param>
 				    <param id="directoryName" localName="Название директории" mandatory="true" visible="true"></param>
 			    </control>

@@ -143,7 +143,6 @@
             </associations>
 
             <mandatory-aspects>
-                <aspect>lecm-document-aspects:temp-attachments</aspect>
                 <aspect>lecm-ord-table-structure:table-items-aspect</aspect>
             </mandatory-aspects>
         </type>

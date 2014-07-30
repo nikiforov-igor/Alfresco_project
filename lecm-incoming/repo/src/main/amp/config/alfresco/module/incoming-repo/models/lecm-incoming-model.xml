@@ -214,7 +214,6 @@
 			</associations>
             <mandatory-aspects>
                 <aspect>lecm-document-aspects:response-to-aspect</aspect>
-                <aspect>lecm-document-aspects:temp-attachments</aspect>
                 <aspect>lecm-document-aspects:on-control-aspect</aspect>
             </mandatory-aspects>
 		</type>

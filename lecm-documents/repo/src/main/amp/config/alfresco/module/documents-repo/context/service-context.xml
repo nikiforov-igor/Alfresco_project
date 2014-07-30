@@ -34,7 +34,6 @@
         <property name="models">
             <list>
                 <value>alfresco/module/documents-repo/models/lecm-document-model.xml</value>
-                <value>alfresco/module/documents-repo/models/lecm-document-aspects-model.xml</value>
                 <value>alfresco/module/documents-repo/models/lecm-document-workflow-model.xml</value>
             </list>
         </property>
