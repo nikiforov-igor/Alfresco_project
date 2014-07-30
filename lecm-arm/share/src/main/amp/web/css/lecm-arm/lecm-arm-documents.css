@@ -302,7 +302,7 @@ div.error-item
     vertical-align: text-top;
     padding-left: 8px;
     padding-right: 8px;
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 12px;
     border-left: 1px solid #D6D6D6;
 }
