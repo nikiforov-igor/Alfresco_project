@@ -2632,7 +2632,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var columns = this.datagridColumns;
                 var fields = "";
                 for (var i = 0; i < columns.length; i++) {
-                    if (columns[i].dataType == "text" || column.dataType == "mltext") {
+                    if (columns[i].dataType == "text" || columns[i].dataType == "mltext") {
                         fields += columns[i].name + ",";
                     } else if (columns[i].type == "association") {
                         fields += columns[i].name + "-text-content" + ",";
