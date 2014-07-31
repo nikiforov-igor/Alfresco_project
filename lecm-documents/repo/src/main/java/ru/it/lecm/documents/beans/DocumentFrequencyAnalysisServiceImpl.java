@@ -13,6 +13,7 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.TransactionNeededException;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
@@ -25,10 +26,15 @@ import java.util.*;
 public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements DocumentFrequencyAnalysisService {
 	final protected Logger logger = LoggerFactory.getLogger(DocumentFrequencyAnalysisServiceImpl.class);
     private OrgstructureBean orgstructureService;
+    private LecmPermissionService lecmPermissionService;
     private int maxLastDocumentsToSave;
 
     public void setOrgstructureService(OrgstructureBean orgstructureService) {
         this.orgstructureService = orgstructureService;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     public void setMaxLastDocumentsToSave(int maxLastDocumentsToSave) {
@@ -184,7 +190,7 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
                     String doc = split[0];
                     String date = split.length > 1 ? split[1] : "0";
                     NodeRef nodeRef = new NodeRef(doc);
-                    if (nodeService.exists(nodeRef)) {
+                    if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef)) {
                         Date lastDate = new Date(Long.parseLong(date));
                         docs.put(nodeRef, lastDate);
                     }

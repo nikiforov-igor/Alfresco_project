@@ -101,6 +101,7 @@
     <bean id="frequencyAnalysisService" init-method="init" class="ru.it.lecm.documents.beans.DocumentFrequencyAnalysisServiceImpl" parent="baseBean"
           depends-on="ServiceRegistry,repositoryHelper, serviceOrgstructure, nodeService, transactionService, serviceDictionary">
         <property name="orgstructureService" ref="serviceOrgstructure"/>
+        <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="maxLastDocumentsToSave" value="60"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
