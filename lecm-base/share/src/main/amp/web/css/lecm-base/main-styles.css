@@ -77,7 +77,23 @@ tr.active,
 .calendar-icon {
     background: transparent url('/share/res/components/form/images/calendar.png') no-repeat center center;
 }
-
+i.icon-male,
+i.icon-building {
+    width: 16px;
+    height: 16px;
+    display: block;
+    margin: auto;
+}
+i.icon-male:before,
+i.icon-building:before {
+    content: "";
+}
+i.icon-male {
+    background: url("/share/res/components/images/filetypes/generic-user-16.png") no-repeat;
+}
+i.icon-building {
+    background: url("/share/res/images/lecm-base/components/organisation_16.png") no-repeat;
+}
 
 .control span.help-icon {
     position: inherit;
