@@ -190,7 +190,7 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
                     String doc = split[0];
                     String date = split.length > 1 ? split[1] : "0";
                     NodeRef nodeRef = new NodeRef(doc);
-                    if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef)) {
+                    if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef) && serviceRegistry.getDictionaryService().getType(nodeService.getType(nodeRef)) != null) {
                         Date lastDate = new Date(Long.parseLong(date));
                         docs.put(nodeRef, lastDate);
                     }
