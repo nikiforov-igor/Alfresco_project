@@ -107,13 +107,16 @@
 (function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/association-tree/association-tree-view.js'
-		], createControl);
+            'scripts/lecm-base/components/association-tree/association-tree-view.js',
+            'scripts/lecm-base/components/association-tree/double-association-tree-view.js'
+		], createDoublePicker);
     }
 
-    function createControl() {
+    var doubleAssociationPickerSelectedItems = {};
 
-	    var fistControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
+    function createDoublePicker() {
+
+	    var fistControl = new LogicECM.module.DoubleAssociationTreeViewer("${fieldHtmlId}", doubleAssociationPickerSelectedItems);
 	    fistControl.setOptions({
 	        <#if disabled>
 	            disabled: true,
@@ -180,7 +183,7 @@
 	    });
 	    fistControl.setMessages(${messages});
 
-	    var secondControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
+	    var secondControl = new LogicECM.module.DoubleAssociationTreeViewer("${fieldHtmlId}", doubleAssociationPickerSelectedItems);
 	    secondControl.setOptions({
 		    prefixPickerId: "${secondControlId}",
 		    <#if disabled>
