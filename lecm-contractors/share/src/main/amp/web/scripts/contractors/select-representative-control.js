@@ -19,11 +19,10 @@ LogicECM.module = LogicECM.module || {};
 (function () {
     var Dom = YAHOO.util.Dom;
 
-    LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor(controlId, contractorSelectEvent, organizationSelectEvent) {
+    LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor(controlId, contractorSelectEvent) {
         LogicECM.module.SelectRepresentativeForContractor.superclass.constructor.call(this, "LogicECM.module.SelectRepresentativeForContractor", controlId, []);
 
         YAHOO.Bubbling.on(contractorSelectEvent, this.onUpdateRepresentatives, this);
-        YAHOO.Bubbling.on(organizationSelectEvent, this.onOrganizationSelect, this);
 
         this.previousSelected = null;
         this._firstSelected = null;
@@ -46,8 +45,6 @@ LogicECM.module = LogicECM.module || {};
             representativeSelectId: null,
             createNewMessage: null,
             emptyMessage: null,
-            fieldRepresentativesId: null,
-            fieldEmployeesId: null,
             disabled: false,
             defaultValue: null
         },
@@ -92,11 +89,6 @@ LogicECM.module = LogicECM.module || {};
 
                     currentInputEl.value = control.value;
                 });
-
-                Dom.setStyle(Dom.get(this.options.fieldRepresentativesId), "display", "block");
-
-                Dom.setStyle(Dom.get(this.options.fieldEmployeesId), "display", "none");
-                this._setChildsDisabled(this.options.fieldEmployeesId, true);
             }
         },
 
@@ -246,48 +238,6 @@ LogicECM.module = LogicECM.module || {};
         onUpdateRepresentatives: function (layer, args) {
             var selectedContractors = Object.keys(args[1].selectedItems); // IE 9+
             this.onUpdateRepresentativesList(selectedContractors, false, null);
-
-            Dom.setStyle(Dom.get(this.options.fieldRepresentativesId), "display", "block");
-            this._setChildsDisabled(this.options.fieldRepresentativesId, false);
-            Dom.setStyle(Dom.get(this.options.fieldEmployeesId), "display", "none");
-            this._setChildsDisabled(this.options.fieldEmployeesId, true);
-        },
-
-        onOrganizationSelect: function (layer, args) {
-            Dom.setStyle(Dom.get(this.options.fieldRepresentativesId), "display", "none");
-            this._setChildsDisabled(this.options.fieldRepresentativesId, true);
-            Dom.setStyle(Dom.get(this.options.fieldEmployeesId), "display", "block");
-            this._setChildsDisabled(this.options.fieldEmployeesId, false);
-        },
-
-        _setChildsDisabled: function (elementId, disabled) {
-            var inputs = Dom.getElementsBy(function () {
-                return true;
-            }, "input", Dom.get(elementId));
-            if (inputs) {
-                for (var index = 0; index < inputs.length; ++index) {
-                    if (inputs[index].type == "text" || inputs[index].type == "button") {
-                        if (disabled) {
-                            inputs[index].setAttribute("disabled", "disabled");
-                        } else {
-                            inputs[index].removeAttribute("disabled");
-                        }
-                    }
-                }
-            }
-
-            var buttons = Dom.getElementsBy(function () {
-                return true;
-            }, "button", Dom.get(elementId));
-            if (buttons) {
-                for (var index = 0; index < buttons.length; ++index) {
-                    if (disabled) {
-                        buttons[index].setAttribute("disabled", "disabled");
-                    } else {
-                        buttons[index].removeAttribute("disabled");
-                    }
-                }
-            }
         },
 
         onUpdateRepresentativesList: function (selectedContractors, force, representativeToSelect) {

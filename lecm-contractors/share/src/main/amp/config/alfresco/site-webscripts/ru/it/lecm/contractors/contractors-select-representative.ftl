@@ -6,11 +6,6 @@
     <#assign fieldRepresentativesId = fieldRepresentativesId + "-view-repsesentative">
 </#if>
 
-<#assign fieldEmployeesId = fieldHtmlId + "-fld-emp">
-<#if form.mode == "view">
-    <#assign fieldEmployeesId = fieldEmployeesId + "-view-employee">
-</#if>
-
 <#assign emptyMessageId = field.control.params.emptyMessageId ! "">
 <#assign emptyMessage = (field.control.params.emptyMessage) ! msg(emptyMessageId)>
 <#if emptyMessage?length == 0>
@@ -74,9 +69,6 @@
     </div>
 </div>
 </#if>
-<div id="${fieldEmployeesId}">
-    <#include "/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
-</div>
 <div class="clear"></div>
 
 <script>//<![CDATA[
@@ -85,8 +77,7 @@
 
     function init() {
         LogicECM.module.Base.Util.loadScripts([
-                    'scripts/contractors/select-representative-control.js',
-                    'scripts/lecm-base/components/lecm-association-autocomplete.js'
+                    'scripts/contractors/select-representative-control.js'
                 ],
                 createControls,
                 ['container', 'datasource']);
@@ -94,16 +85,13 @@
 
     function createControls() {
         new LogicECM.module.SelectRepresentativeForContractor("${controlId}",
-                "${field.control.params.updateOnContractorSelect!"contractor.selected"}",
-                "${field.control.params.updateOnOrganizationSelect!"organization.selected"}").setOptions({
+                "${field.control.params.updateOnAction!"contractor.selected"}").setOptions({
                     representativeSelectId: "${selectId}",
                 <#if defaultValue?has_content>
                     defaultValue: "${defaultValue?string}",
                 </#if>
                     emptyMessage: '${emptyMessage}',
                     disabled: ${disabled?string},
-                    fieldRepresentativesId: '${fieldRepresentativesId}',
-                    fieldEmployeesId: '${fieldEmployeesId}',
                 <#if field.control.params.createNewMessage??>
                     createNewMessage: "${field.control.params.createNewMessage}"
                 <#elseif field.control.params.createNewMessageId??>
