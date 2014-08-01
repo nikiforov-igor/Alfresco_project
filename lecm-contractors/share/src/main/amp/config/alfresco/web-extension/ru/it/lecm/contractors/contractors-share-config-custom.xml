@@ -14,7 +14,7 @@
                     <control-param name="firstShowSearch">true</control-param>
                     <control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
                     <control-param name="firstPickerButtonTitleCode">title.contractor.select</control-param>
-                    <control-param name="firstChangeItemsFireAction">common.contractor.selected</control-param>
+                    <control-param name="firstChangeItemsFireAction">contractor.selected</control-param>
                     <control-param name="firstAdditionalFilter">NOT ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
 
                     <control-param name="secondItemType">lecm-contractor:contractor-type</control-param>
@@ -28,6 +28,13 @@
                     <control-param name="secondPickerButtonTitleCode">title.organization.select</control-param>
                     <control-param name="secondChangeItemsFireAction">organization.selected</control-param>
                     <control-param name="secondAdditionalFilter">ASPECT:\"lecm-orgstr-aspects:is-organization-aspect\"</control-param>
+                </type>
+                <type name="association:lecm-representative:representative-type" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
+                    <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Адресанты</control-param>
+                    <control-param name="showCreateNewLink">false</control-param>
+                    <control-param name="showCreateNewButton">false</control-param>
+                    <control-param name="nameSubstituteString">{cm:name}</control-param>
+                    <control-param name="itemType">lecm-representative:representative-type</control-param>
                 </type>
             </default-controls>
         </forms>
