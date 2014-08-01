@@ -643,6 +643,8 @@ LogicECM.module = LogicECM.module || {};
             this.setTabbingOrder();
 
             Event.preventDefault(e);
+            e.stopImmediatePropagation();
+            e.stopPropagation();
         },
 
         // Set properly tabbing order
@@ -663,9 +665,52 @@ LogicECM.module = LogicECM.module || {};
                     this.firstTabbed = input.id;
                 }
 
-                var tables = Selector.query("div.picker-items, div.currentValueDisplay", dialog);
+                // Дерево
+                var tree = Selector.query("div.tree-items", dialog);
+                if (tree) {
+                    Dom.setAttribute(tree, 'tabindex', ++tabindex);
+                    if (!this.firstTabbed) {
+                        this.firstTabbed = tree.id;
+                    }
 
+                    Event.on(tree, "focusin", function (e) {
+                        console.log(e);
+                        if (!Selector.test(e.relatedTarget, "div.tree-items *")) {
+                            console.log("focus in div");
+                            me.rootNode.focus();
+                            me.treeViewClicked(me.rootNode);
+                            me.tree.onEventToggleHighlight(me.rootNode);
+                        }
+                    });
+
+                    this.tree.subscribe('enterKeyPressed', function(node) {
+                        this.treeViewClicked(node);
+                        return false;
+                    }.bind(this));
+
+                    // уходим на следующее поле (tab-ом)
+                    new KeyListener(tree, {keys: KeyListener.KEY.TAB},
+                        {
+                            fn: function(a, args) {
+                                var e = args[1],
+                                    target = args[1].target;
+                                var parent = Dom.getAncestorByClassName(target, "tree");
+                                var next = Dom.getNextSibling(parent);
+                                if (next) {
+                                    var table = Selector.query(".picker-items", next, true);
+                                    table.focus();
+                                }
+                                e.preventDefault();
+                                e.stopPropagation();
+                            },
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
+                }
+
+                var tables = Selector.query("div.picker-items, div.currentValueDisplay", dialog);
                 for (var i = 0; i < tables.length; i++) {
+                    // Для всех
                     var table = tables[i];
                     Dom.setAttribute(table, 'tabindex', ++tabindex);
                     if (!this.firstTabbed) {
@@ -678,6 +723,7 @@ LogicECM.module = LogicECM.module || {};
                             Dom.removeClass(activeEl, me.activeClass);
                         }
                     });
+
                     new KeyListener(table, {keys: KeyListener.KEY.DOWN},
                         {
                             fn: this.focusToNext,
@@ -691,8 +737,9 @@ LogicECM.module = LogicECM.module || {};
                             correctScope: true
                         }, KeyListener.KEYDOWN).enable();
 
-                    if (Dom.hasClass(table, "picker-items")) { // Таблица с элементами для выбора
-                        Event.on(table, "focusin", function(e) {
+                    // Таблица с элементами для выбора
+                    if (Dom.hasClass(table, "picker-items") && !Dom.hasClass(table, "tree-items")) {
+                        Event.on(table, "focusin", function (e) {
                             var rows = Selector.query("tbody tr.yui-dt-rec", e.target);
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
@@ -703,7 +750,7 @@ LogicECM.module = LogicECM.module || {};
 
                         new KeyListener(table, {keys: KeyListener.KEY.ENTER},
                             {
-                                fn: function() {
+                                fn: function () {
                                     var activeEl = this.activeElement;
                                     if (activeEl) {
                                         var addIcon = Selector.query("td a.add-item", activeEl, true);
@@ -715,8 +762,9 @@ LogicECM.module = LogicECM.module || {};
                                 scope: this,
                                 correctScope: true
                             }, KeyListener.KEYDOWN).enable();
-                    } else if (Dom.hasClass(table, "currentValueDisplay")) { // Выбранные элементы
-                        Event.on(table, "focusin", function(e) {
+                    // Выбранные элементы
+                    } else if (Dom.hasClass(table, "currentValueDisplay")) {
+                        Event.on(table, "focusin", function (e) {
                             var rows = Selector.query("div.cropped-item", e.target);
                             if (rows && rows.length > 0) {
                                 Dom.addClass(rows[0], me.activeClass);
@@ -727,7 +775,7 @@ LogicECM.module = LogicECM.module || {};
 
                         new KeyListener(table, {keys: KeyListener.KEY.ENTER},
                             {
-                                fn: function() {
+                                fn: function () {
                                     var activeEl = this.activeElement;
                                     if (activeEl) {
                                         var removeIcon = Selector.query("div a.remove-item", activeEl, true);
@@ -750,9 +798,8 @@ LogicECM.module = LogicECM.module || {};
                                 correctScope: true
                             }, KeyListener.KEYDOWN).enable();
                     }
-
                 }
-
+                // Футер, кнопки
                 var footer = Selector.query("div.bdft", dialog, true);
                 if (footer) {
                     var btns = Selector.query("span.yui-button button", footer);
@@ -778,7 +825,6 @@ LogicECM.module = LogicECM.module || {};
         },
 
         focusToNext: function(a, args) {
-            var e = args[1];
             var activeEl = this.activeElement;
             if (activeEl) {
                 var next = Dom.getNextSibling(activeEl);
@@ -786,21 +832,22 @@ LogicECM.module = LogicECM.module || {};
                     Dom.removeClass(activeEl, this.activeClass);
                     Dom.addClass(next, this.activeClass);
                     this.activeElement = next;
+
+                    // делаем, чтобы скроллинг списка работал, но только когда это нужно
+                    var e = args[1],
+                        target = args[1].target;
+                    activeEl = this.activeElement;
+                    var scrollEnded = target.scrollHeight - target.scrollTop <= target.offsetHeight;
+                    if ((Dom.getY(activeEl) < Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                        e.preventDefault();
+                    }
                 }
+                e.stopImmediatePropagation();      // убираем скролл браузера
+                e.stopPropagation();
             }
-            // делаем, чтобы скроллинг списка работал, но только когда это нужно
-            var target = args[1].target;
-            activeEl = this.activeElement;
-            var scrollEnded = target.scrollHeight - target.scrollTop <= target.offsetHeight;
-            if ((Dom.getY(activeEl) < Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
-                e.preventDefault();
-            }
-            e.stopImmediatePropagation();      // убираем скролл браузера
-            e.stopPropagation();
         },
 
         focusToPrevious: function(a, args) {
-            var e = args[1];
             var activeEl = this.activeElement;
             if (activeEl) {
                 var prev = Dom.getPreviousSibling(activeEl);
@@ -808,17 +855,19 @@ LogicECM.module = LogicECM.module || {};
                     Dom.removeClass(activeEl, this.activeClass);
                     Dom.addClass(prev, this.activeClass);
                     this.activeElement = prev;
+
+                    // делаем, чтобы скроллинг списка работал, но только когда это нужно
+                    var e = args[1],
+                        target = args[1].target;
+                    activeEl = this.activeElement;
+                    var scrollEnded = target.scrollTop == 0;
+                    if ((Dom.getY(activeEl) > Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
+                        e.preventDefault();
+                    }
                 }
+                e.stopImmediatePropagation();      // убираем скролл браузера
+                e.stopPropagation();
             }
-            // делаем, чтобы скроллинг списка работал, но только когда это нужно
-            var target = args[1].target;
-            activeEl = this.activeElement;
-            var scrollEnded = target.scrollTop == 0;
-            if ((Dom.getY(activeEl) > Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
-                e.preventDefault();
-            }
-            e.stopImmediatePropagation();      // убираем скролл браузера
-            e.stopPropagation();
         },
 
         // Fill tree view group selector with node data
@@ -830,6 +879,7 @@ LogicECM.module = LogicECM.module || {};
                 this.tree.setDynamicLoad(this._loadNode.bind(this));
 
                 this.tree.subscribe('clickEvent', function(event) {
+                    event.node.focus();
                     this.treeViewClicked(event.node);
                     this.tree.onEventToggleHighlight(event);
                     return false;
@@ -864,7 +914,7 @@ LogicECM.module = LogicECM.module || {};
                                     this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
                                     this.options.rootNodeRef = oResults.nodeRef;
 
-                                    this.tree.render();
+                                    this.tree.draw();
                                     this.treeViewClicked(this.rootNode);
                                     this.tree.onEventToggleHighlight(this.rootNode);
                                 } else {
@@ -963,7 +1013,7 @@ LogicECM.module = LogicECM.module || {};
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
-                        oResponse.argument.tree.render();
+                        oResponse.argument.tree.draw();
                     }
                 },
                 failure:function (oResponse) {
@@ -1251,7 +1301,7 @@ LogicECM.module = LogicECM.module || {};
 					} else {
 						msg = scope.msg("form.control.object-picker.create-new")
 					}
-                    elCell.innerHTML = '<a href="#" title="' + msg + '" class="create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
+                    elCell.innerHTML = '<a href="#" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
                     return;
                 }
 

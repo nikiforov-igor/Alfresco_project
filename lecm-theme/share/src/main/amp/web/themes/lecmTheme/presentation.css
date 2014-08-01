@@ -2009,13 +2009,7 @@ div.orgchart-picker-menu .search-input {
 .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel,
 .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:link,
 .tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:visited,
-.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:hover
-{
-  background-color:white;
-}
-
-.tree .ygtv-highlight .ygtv-highlight1,
-.tree .ygtv-highlight .ygtv-highlight1 .ygtvlabel,
+.tree .ygtv-highlight .ygtv-highlight0 .ygtvfocus .ygtvlabel:hover,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel,
 .tree .ygtv-highlight .ygtv-highlight1 .ygtvfocus .ygtvlabel:link,

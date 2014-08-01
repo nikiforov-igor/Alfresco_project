@@ -22,7 +22,7 @@
             <div>
                 <#if !plane>
                     <div id="${pickerId}-treeSelector" class="yui-u panel-left tree">
-                        <div id="${pickerId}-groups" class="picker-items ygtv-highlight">
+                        <div id="${pickerId}-groups" class="picker-items tree-items ygtv-highlight">
                             <#nested>
                         </div>
                     </div>
