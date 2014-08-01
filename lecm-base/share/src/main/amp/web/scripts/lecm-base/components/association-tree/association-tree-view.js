@@ -674,9 +674,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     Event.on(tree, "focusin", function (e) {
-                        console.log(e);
                         if (!Selector.test(e.relatedTarget, "div.tree-items *")) {
-                            console.log("focus in div");
                             me.rootNode.focus();
                             me.treeViewClicked(me.rootNode);
                             me.tree.onEventToggleHighlight(me.rootNode);
