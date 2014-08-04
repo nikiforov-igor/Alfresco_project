@@ -446,9 +446,9 @@
                 </property>
                 <property name="lecm-orgstr:employee-number">
                     <title>Employee number</title>
-                    <type>d:long</type>
+                    <type>d:text</type>
 	                <constraints>
-		                <constraint ref="lecm-orgstr:int-number-const"/>
+		                <!--<constraint ref="lecm-orgstr:int-number-const"/>-->
                         <constraint ref="lecm-orgstr:unique-property-const"/>
                     </constraints>
                 </property>
