@@ -61,6 +61,8 @@ public interface OrgstructureBean {
 	QName PROP_BUSINESS_ROLE_IS_DYNAMIC = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "business-role-is-dynamic");
 	QName PROP_EMPLOYEE_EMAIL = QName.createQName(ORGSTRUCTURE_NAMESPACE_URI, "employee-email");
 	QName PROP_STAFF_POSITION_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-code");
+	QName PROP_STAFF_POSITION_NAME_D = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-name-d");
+	QName PROP_STAFF_POSITION_NAME_G = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "staffPosition-name-g");
 	QName PROP_UNIT_CODE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "unit-code");
 	QName PROP_EMPLOYEE_NUMBER = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-number");
 	QName PROP_EMPLOYEE_PHONE = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "employee-phone");
