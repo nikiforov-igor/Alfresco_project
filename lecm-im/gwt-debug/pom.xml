@@ -3,7 +3,7 @@
     <parent>
         <artifactId>lecm-im</artifactId>
         <groupId>ru.it.lecm.lecm-im</groupId>
-        <version>1.4.0</version>
+        <version>1.5.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lecm-im-gwt-debug</artifactId>
