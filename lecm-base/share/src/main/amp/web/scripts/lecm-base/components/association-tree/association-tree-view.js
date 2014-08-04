@@ -149,6 +149,8 @@ LogicECM.module = LogicECM.module || {};
 
 			additionalFilter: "",
 
+            useStrictFilterByOrg: false,
+
             defaultValue: null,
 
 	        defaultValueDataSource: null,
@@ -1464,7 +1466,8 @@ LogicECM.module = LogicECM.module || {};
                 "&size=" + this.getMaxSearchResult() + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
                 "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
-				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter);
+				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter) +
+                "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
         },
 
         onSelectedItemAdded: function AssociationTreeViewer_onSelectedItemAdded(layer, args)

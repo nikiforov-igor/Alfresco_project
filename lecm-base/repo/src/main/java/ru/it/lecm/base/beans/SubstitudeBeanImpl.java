@@ -16,6 +16,13 @@ import org.alfresco.service.namespace.RegexQNamePattern;
 import org.alfresco.util.ISO8601DateFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.expression.BeanFactoryResolver;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
+import ru.it.lecm.base.expression.ExpressionNode;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
@@ -24,15 +31,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author dbashmakov
  *         Date: 28.12.12
  *         Time: 11:44
  */
-public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
+public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, ApplicationContextAware {
     enum PseudoProps {
         AUTHOR {
             @Override
@@ -238,6 +243,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     private SimpleCache<NodeRef, String> typeTemplateCache;
     private SimpleCache<NodeRef, String> typeListTemplateCache;
 
+    private ApplicationContext applicationContext;
+
     public void setObjTypeCache(SimpleCache<String, NodeRef> objTypeCache) {
         this.objTypeCache = objTypeCache;
     }
@@ -253,6 +260,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
     public void setTypeListTemplateCache(SimpleCache<NodeRef, String> typeListTemplateCache) {
         this.typeListTemplateCache = typeListTemplateCache;
     }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
     /**
      * Получение заголовка элемента в соответствии с форматной строкой.
      * Выражения в форматной строке должны быть заключены в символы открытия (@see OPEN_SUBSTITUDE_SYMBOL) и закрытия (@see CLOSE_SUBSTITUDE_SYMBOL)
@@ -269,8 +282,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                 if (node == null || formatString == null) {
                     return "";
                 }
-                if (isExtendedSyntax(formatString)) {
-                    return extendedFormatNodeTitle(node, formatString);
+                if (isExpressionSyntax(formatString)) {
+                    return executeExpression(node, formatString).toString();
                 }
 
                 String dFormat = dateFormat;
@@ -336,8 +349,8 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
                     return null;
                 }
 
-                if (isExtendedSyntax(formatString)) {
-                    return extendedFormatNodeTitle(node, formatString);
+                if (isExpressionSyntax(formatString)) {
+                    return executeExpression(node, formatString);
                 }
 
                 String dFormat = dateFormat;
@@ -361,44 +374,31 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean {
         return AuthenticationUtil.runAsSystem(substitudeString);
     }
 
-    private boolean isExtendedSyntax(String fmt) {
+    private boolean isExpressionSyntax(String fmt) {
         return (fmt != null) && fmt.startsWith(OPEN_SUBSTITUDE_SYMBOL + "@");
     }
 
     /**
-     * Функция расширенной обработки. Вызывается когда выражение начинается
-     * с двойной фигурной скобки. Здесь сейчас отрабатывает дополнительно
-     * только @AUTHOR.REF, чтобы выполнить получение автора и применить к
-     * нему отсавшуюся часть выражения.
+     * Функция расширенной обработки. Выражение вида {@текст_выражения} исполняется и возвращается результат TRUE/FALSE
      */
-    private String extendedFormatNodeTitle(final NodeRef node, String fmt) {
-        String begAuthorRef = "\\{@AUTHOR.*?}";
-        Pattern authorPattern = Pattern.compile(begAuthorRef);
-        //создаем Matcher
-        Matcher m = authorPattern.matcher(fmt);
-        NodeRef authorNode = null;
-        while (m.find()) {
-            // замена node на узел Автора
-            if (authorNode == null) {
-                final List<NodeRef> list = getObjectByPseudoProp(node, AUTHOR);
-                authorNode = (list != null && !list.isEmpty()) ? list.get(0) : null;
-            }
-            String groupText = m.group();
-            int startPos = "{@AUTHOR".length();
-            if (groupText.charAt(startPos) == '/') {
-                startPos++; // если после "@AUTHOR" есть символ '/' его тоже убираем
-            }
-            final String shortFmt = "{" + groupText.substring(startPos, groupText.length());
-            if (shortFmt.equals("{}")) {
-                fmt = fmt.replace(groupText, getObjectDescription(authorNode));
-            } else {
-                fmt = fmt.replace(groupText, formatNodeTitle(authorNode, shortFmt));
-            }
-
+    private Boolean executeExpression(final NodeRef node, String expression) {
+        if ("".equals(expression)) {
+            expression = "true";
+        } else {
+            //удаляем лишнее
+            expression = expression.substring("{@".length(), expression.length() - 1);
         }
-        return formatNodeTitle(node, fmt);
-    }
+        try {
+            StandardEvaluationContext context = new StandardEvaluationContext(new ExpressionNode(node, serviceRegistry));
+            context.setBeanResolver(new BeanFactoryResolver(this.applicationContext));
 
+            Boolean result = new SpelExpressionParser().parseExpression(expression).getValue(context, Boolean.class);
+            return result != null && result;
+        } catch (Exception e) {
+            logger.error("Expression: " + expression + " has errors", e);
+            return false;
+        }
+    }
     /**
      * Получение значения выражения для элемента.
      * Элементы в выражениях разделяются специальными символами (@see SPLIT_TRANSITIONS_SYMBOL)

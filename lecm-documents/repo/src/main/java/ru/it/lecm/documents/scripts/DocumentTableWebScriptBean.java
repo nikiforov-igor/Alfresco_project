@@ -4,6 +4,7 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.transaction.TransactionService;
 import org.mozilla.javascript.Scriptable;
 import org.springframework.extensions.surf.util.ParameterCheck;
 import ru.it.lecm.base.beans.BaseWebScript;
@@ -11,7 +12,6 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.alfresco.service.transaction.TransactionService;
 
 /**
  * User: AIvkin

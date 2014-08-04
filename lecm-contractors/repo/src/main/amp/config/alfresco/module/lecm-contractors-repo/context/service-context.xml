@@ -23,7 +23,7 @@
           parent="lecmDictionaryBootstrap"
           depends-on="${groupId}.${artifactId}.contractors-model-bootstrap,
                       businessJournalLogEventsPolicy,
-                      сontractorsContractorPolicy,
+                      contractorsPolicy,
                       сontractorsRepresentativePolicy,
                       contractorsSpecializationPolicy,
                       contractorsLegalFormPolicy,
@@ -64,11 +64,6 @@
     <bean id="contractorsJavascriptExtension" class="ru.it.lecm.contractors.ContractorsJavascriptExtension" parent="baseJavaScriptExtension">
         <property name="extensionName" value="contractorsRootObject"/>
         <property name="contractors" ref="contractorsBean"/>
-    </bean>
-
-    <bean id="сontractorsContractorPolicy" class="ru.it.lecm.contractors.policies.ContractorsContractorPolicy" init-method="init">
-        <property name="policyComponent" ref="policyComponent"/>
-        <property name="nodeService" ref="nodeService"/>
     </bean>
 
     <bean id="сontractorsRepresentativePolicy" class="ru.it.lecm.contractors.policies.ContractorsRepresentativePolicy" init-method="init">
@@ -177,9 +172,10 @@
         </property>
     </bean>
 
-    <bean id="contractorsCreatePolicy" class="ru.it.lecm.contractors.policies.ContractorsCreatePolicy" init-method="init" depends-on="${groupId}.${artifactId}.contractors-dictionary-bootstrap">
+    <bean id="contractorsPolicy" class="ru.it.lecm.contractors.policies.ContractorsPolicy" init-method="init" depends-on="${groupId}.${artifactId}.contractors-model-bootstrap">
         <property name="propertiesService" ref="propertiesService"/>
         <property name="policyComponent" ref="policyComponent"/>
+        <property name="nodeService" ref="nodeService"/>
     </bean>
 
 	<bean id="${groupId}.${artifactId}.serviceContractorsDictionariesPermissions" parent="ServiceFolderPermissionHelper"

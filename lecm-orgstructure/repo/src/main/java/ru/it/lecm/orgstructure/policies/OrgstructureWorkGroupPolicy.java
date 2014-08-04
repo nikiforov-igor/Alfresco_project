@@ -1,20 +1,19 @@
 package ru.it.lecm.orgstructure.policies;
 
-import java.io.Serializable;
-import java.util.Map;
-
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
-
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+
+import java.io.Serializable;
+import java.util.Map;
 
 /**
  * @author dbashmakov
@@ -27,13 +26,13 @@ public class OrgstructureWorkGroupPolicy
 					, NodeServicePolicies.OnUpdatePropertiesPolicy
 					, NodeServicePolicies.OnDeleteNodePolicy
 {
-
+	
 	private LecmBasePropertiesService propertiesService;
 
 	public void setPropertiesService(LecmBasePropertiesService propertiesService) {
         this.propertiesService = propertiesService;
     }
-
+	
 	@Override
 	public void init() {
 		super.init();
@@ -55,7 +54,7 @@ public class OrgstructureWorkGroupPolicy
             } else {
                 enabled = Boolean.valueOf((String) editorEnabled);
             }
-			if (enabled) {
+			if (enabled) { 
 				NodeRef group = childAssocRef.getChildRef();
 				businessJournalService.log(group, EventCategory.ADD, "#initiator добавил(а) новую рабочую группу #mainobject");
 
@@ -80,7 +79,7 @@ public class OrgstructureWorkGroupPolicy
 			businessJournalService.log(nodeRef, EventCategory.DELETE, "#initiator удалил(а) сведения о Рабочей группе #mainobject");
 		}
 	}
-
+	
 	@Override
 	public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
 		try {
@@ -91,7 +90,7 @@ public class OrgstructureWorkGroupPolicy
             } else {
                 enabled = Boolean.valueOf((String) editorEnabled);
             }
-			if (enabled) {
+			if (enabled) { 
 				NodeRef groupRef = childAssocRef.getChildRef();
 				businessJournalService.log(groupRef, EventCategory.ADD, "#initiator удалил(а) рабочую группу #mainobject");
 

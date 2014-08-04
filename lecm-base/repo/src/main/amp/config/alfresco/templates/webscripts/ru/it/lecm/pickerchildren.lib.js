@@ -21,6 +21,7 @@ function getPickerChildrenItems(filter)
 		showNotSelectable = args['showNotSelectableItems'],
 		showFolders = args['showFolders'],
 		docType = args['docType'],
+		useOnlyInSameOrg = args['onlyInSameOrg'],
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'];
 	if (additionalProperties != null) {
@@ -180,9 +181,14 @@ function getPickerChildrenItems(filter)
 			var containerResults = new Array(),
 				contentResults = new Array();
 
+            // Если условие строгое - то принимаем только те, к которым есть доступ. Если не строгое - проверяем есть ли вообще поле
+            var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) == "true");
+
 			for each (var result in childNodes)
 			{
-				if (result.hasPermission("Read") && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])) {
+				if (result.hasPermission("Read")
+                    && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])
+                    && orgstructure.hasAccessToOrgElement(result, useStrictFilterByOrg)) {
 					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
 					{
 						// wrap result and determine if it is selectable in the UI
@@ -562,7 +568,8 @@ function getFilterParams(filterData, parentXPath)
 
 function addAdditionalFilter(query, additionalPerameters) {
 	if (additionalPerameters !== "") {
-		query += " AND " + "(" + additionalPerameters + " )";
+        var useInject = additionalPerameters.indexOf("NOT") == 0;
+		query += " AND " + "(" + (useInject ? "ISNOTNULL:\"cm:name\" AND " : "") + additionalPerameters + " )";
 	}
 	return query;
 }

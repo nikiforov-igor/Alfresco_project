@@ -27,11 +27,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.SubstitudeBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.AuthorPropertyConstraint;
 import ru.it.lecm.documents.constraints.PresentStringConstraint;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.regnumbers.RegNumbersService;
 import ru.it.lecm.security.LecmPermissionService;
@@ -42,7 +44,6 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.*;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -411,30 +412,40 @@ public class DocumentPolicy extends BaseBean
     public void onCreateNode(ChildAssociationRef childAssocRef) {
 	    NodeRef document = childAssocRef.getChildRef();
 
-	    String type = nodeService.getType(document).toPrefixString(namespaceService);
-	    if (!stateMachineService.isStarter(type)) {
+        final QName type = nodeService.getType(document);
+
+	    if (!stateMachineService.isStarter(type.toPrefixString(namespaceService))) {
 		    throw new AlfrescoRuntimeException("User not starter for document type '" + type + "' for node " + document);
 	    }
 
         updatePresentString(document); // при создании onUpdateproperties ещё не срабатывает - заполняем поле с представлением явно
-        final NodeRef employeeRef = orgstructureService.getCurrentEmployee();
-        //TODO замена нескольких setProperty на setProperties.
+
         Map<QName, Serializable> properties = nodeService.getProperties(childAssocRef.getChildRef());
+
         // заполняем тип
-        final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
+        final TypeDefinition typeDef = dictionaryService.getType(type);
         if (typeDef != null) {
             typeDef.getTitle();
             properties.put(DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
         }
 
+        final NodeRef author = orgstructureService.getCurrentEmployee();
 
-        properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(employeeRef));
-        properties.put(DocumentService.PROP_DOCUMENT_CREATOR_REF, employeeRef.toString());
+        properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(author));
+        properties.put(DocumentService.PROP_DOCUMENT_CREATOR_REF, author.toString());
         properties.put(DocumentService.PROP_DOCUMENT_DATE, new Date());
         properties.put(DocumentService.PROP_DOCUMENT_REGNUM, DocumentService.DEFAULT_REG_NUM);
         nodeService.setProperties(childAssocRef.getChildRef(), properties);
+
         //DONE
-        nodeService.createAssociation(childAssocRef.getChildRef(), employeeRef, DocumentService.ASSOC_AUTHOR);
+        nodeService.createAssociation(childAssocRef.getChildRef(), author, DocumentService.ASSOC_AUTHOR);
+
+        // Приписывание документа к организации
+        NodeRef contractor = orgstructureService.getEmployeeOrganization(author);
+        if (contractor != null) {
+            nodeService.addAspect(document, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+            nodeService.createAssociation(document, contractor, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+        }
 
         NodeRef attachmentsRef = nodeService.getChildByName(childAssocRef.getChildRef(), ContentModel.ASSOC_CONTAINS, DocumentAttachmentsService.DOCUMENT_ATTACHMENTS_ROOT_NAME);
         if (attachmentsRef == null) {
@@ -449,13 +460,6 @@ public class DocumentPolicy extends BaseBean
             //не индексируем свойства папки
             disableNodeIndex(attachmentsRef);
         }
-
-        // заполняем тип
-        //final TypeDefinition typeDef = dictionaryService.getType(nodeService.getType(childAssocRef.getChildRef()));
-        //if (typeDef != null) {
-        //    typeDef.getTitle();
-        //    nodeService.setProperty(childAssocRef.getChildRef(), DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
-        //}
 
         NodeRef documentSearchObject = getDocumentSearchObject(childAssocRef.getChildRef());
         if (documentSearchObject != null) {

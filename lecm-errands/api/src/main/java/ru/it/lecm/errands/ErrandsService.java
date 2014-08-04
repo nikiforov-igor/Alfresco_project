@@ -2,9 +2,9 @@ package ru.it.lecm.errands;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 import java.util.List;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin Date: 09.07.13 Time: 12:09

@@ -1,12 +1,12 @@
 package ru.it.lecm.base.scripts;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
-import org.alfresco.service.cmr.dictionary.*;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
+import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.namespace.NamespaceService;
@@ -20,7 +20,8 @@ import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmObjectsService;
 import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
-import ru.it.lecm.documents.beans.DocumentService;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.*;
 
@@ -34,6 +35,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 	private LecmObjectsService lecmObjectsService;
 	private DictionaryService dictionaryService;
 	private NodeService nodeService;
+    private OrgstructureBean orgstructureService;
 
 	final int REQUEST_MAX = 1000;
 
@@ -77,6 +79,11 @@ public class BaseWebScriptBean extends BaseWebScript {
 		if (onlyActive) {
 			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
 		}
+        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS")) {
+            NodeRef empOrganization = orgstructureService.getEmployeeOrganization(currentEmployee);
+            filter.add(new FilterPropLECM(OrgstructureAspectsModel.PROP_LINKED_ORGANIZATION_REF, empOrganization != null ? empOrganization.toString() : "NOT_REF", FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
+        }
 
 		PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
 		pageRequest.setRequestTotalCountMax(REQUEST_MAX);
@@ -185,6 +192,10 @@ public class BaseWebScriptBean extends BaseWebScript {
     public String dateToISOString(Object dateObj) {
         Date date = (Date) Context.jsToJava(dateObj, Date.class);
         return date != null ? DateFormatISO8601.format(date) : null;
+    }
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
     }
 
     public class TypeMapper {

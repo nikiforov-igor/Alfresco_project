@@ -1,5 +1,6 @@
 package ru.it.lecm.orgstructure.beans;
 
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -139,13 +140,6 @@ public interface OrgstructureBean {
 	 * @return NodeRef или NULL
 	 */
 	NodeRef getStructureDirectory();
-
-	/**
-	 * Получение Основного подразделения организации
-	 *
-	 * @return NodeRef или NULL
-	 */
-	NodeRef getMainOrganisationUnit();
 
 	/**
 	 * Получение Директории с Сотрудниками
@@ -405,6 +399,7 @@ public interface OrgstructureBean {
 	 * Получение текущего сотрудника по имени пользователя
 	 */
 	NodeRef getEmployeeByPerson(String personName);
+	NodeRef getEmployeeByPerson(String personName, boolean checkAccess);
 
 	/**
 	 * Получение текущего сотрудника по NodeRef пользователя
@@ -612,6 +607,7 @@ public interface OrgstructureBean {
 	 * @return true если вызов произошел от имени системы
 	 */
 	boolean isCurrentUserTheSystemUser();
+
 	String getEmployeeLogin(NodeRef employee);
 
         public Set<NodeRef> getEmployeeDirectRoles(NodeRef employeeRef);
@@ -725,4 +721,31 @@ public interface OrgstructureBean {
 	public boolean isDynamicBusinessRole(NodeRef roleRef);
 
 	public String getBusinessRoleIdentifier(NodeRef roleRef);
+
+    /**
+     *  Возвращает организацию для сотрудника
+     *
+     */
+    public NodeRef getEmployeeOrganization(NodeRef employee);
+
+    /**
+     *  Возвращает организацию для пользователя
+     *
+     */
+    public NodeRef getUserOrganization(String userName);
+
+    /**
+     *  Возвращает организацию для орг элемента
+     *
+     */
+    public NodeRef getOrganization(NodeRef orgElement);
+
+    public NodeRef getUnitByOrganization(NodeRef organization);
+
+    public SimpleCache<String, NodeRef> getUserOrganizationsCache();
+
+    public boolean hasAccessToOrgElement(String userName, NodeRef orgElement);
+
+    public boolean hasAccessToOrgElement(NodeRef orgElement);
+    public boolean hasAccessToOrgElement(NodeRef orgElement, boolean doNotAccessWithEmpty);
 }

@@ -1,10 +1,10 @@
 package ru.it.lecm.base.beans.getchildren;
 
-import java.io.Serializable;
-
 import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.node.getchildren.FilterType;
 import org.alfresco.service.namespace.QName;
+
+import java.io.Serializable;
 
 /**
  * утилитный класс, использующийся при поиске объектов.
@@ -17,6 +17,7 @@ public class FilterPropLECM implements FilterProp {
 
 	public static enum FilterTypeLECM implements FilterType {
 		NOT_EQUALS,
+        EQUALS_OR_NULL,
 		EQUALS
 	}
 

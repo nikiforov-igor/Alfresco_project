@@ -108,8 +108,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * @return  ноду Подразделения
 	 */
 	
-	public ScriptNode getMainOrganisationUnit() {
-		NodeRef mainOrganizationUnit = orgstructureService.getMainOrganisationUnit();
+	public ScriptNode getRootUnit() {
+		NodeRef mainOrganizationUnit = orgstructureService.getRootUnit();
 		return new ScriptNode(mainOrganizationUnit, serviceRegistry, getScope());
 	}
 
@@ -118,54 +118,53 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 *
 	 * @return Текстовое представление JSONArrray c объектами
 	 */
-	public String getStructure(final String type, final String ref) {
-		List<JSONObject> nodes = new ArrayList<JSONObject>();
-		NodeService nodeService = serviceRegistry.getNodeService();
-		if (ref != null) {
-			final NodeRef currentRef = new NodeRef(ref);
-			if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
-				// получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
-				List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true);
-				for (NodeRef child : childs) {
-						JSONObject unit = new JSONObject();
-						try {
-							unit.put(NODE_REF, child.toString());
-							unit.put(ITEM_TYPE,
-                                    OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService()));
-							unit.put(LABEL, getElementName(
-                                    child, ELEMENT_SHORT_NAME));
-							unit.put(TITLE, getElementName(
-                                    child, ELEMENT_FULL_NAME));
-							unit.put(IS_LEAF, !orgstructureService.hasChild(child, true));
-							nodes.add(unit);
-						} catch (JSONException e) {
-							logger.error(e.getMessage (), e);
-						}
-				}
-				sort(nodes,LABEL,true);
-			} else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION.toPrefixString())) { //Вывести директорию "Структура"
-				NodeRef structure = orgstructureService.getStructureDirectory();
+    public String getStructure(final String type, final String ref) {
+        List<JSONObject> nodes = new ArrayList<JSONObject>();
+        if (ref != null) {
+            final NodeRef currentRef = new NodeRef(ref);
+            if (type.equalsIgnoreCase(TYPE_UNIT)) {// построить дерево подразделений
+                // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
+                List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true);
+                for (NodeRef child : childs) {
+                    JSONObject unit = new JSONObject();
+                    try {
+                        unit.put(NODE_REF, child.toString());
+                        unit.put(ITEM_TYPE,
+                                OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService()));
+                        unit.put(LABEL, getElementName(
+                                child, ELEMENT_SHORT_NAME));
+                        unit.put(TITLE, getElementName(
+                                child, ELEMENT_FULL_NAME));
+                        unit.put(IS_LEAF, !orgstructureService.hasChild(child, true));
+                        nodes.add(unit);
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                sort(nodes, LABEL, true);
+            } else if (type.equalsIgnoreCase(OrgstructureBean.TYPE_ORGANIZATION.toPrefixString())) { //Вывести директорию "Структура"
+                NodeRef structure = orgstructureService.getStructureDirectory();
                 NodeRef organization = orgstructureService.getOrganization();
-				if (structure != null & organization != null) {
-					JSONObject root = new JSONObject();
-					try {
-						root.put(NODE_REF, structure.toString());
-						root.put(ITEM_TYPE, OrgstructureBean.TYPE_STRUCTURE.toPrefixString(serviceRegistry.getNamespaceService()));
-						root.put(LABEL, getElementName(
+                if (structure != null & organization != null) {
+                    JSONObject root = new JSONObject();
+                    try {
+                        root.put(NODE_REF, structure.toString());
+                        root.put(ITEM_TYPE, OrgstructureBean.TYPE_STRUCTURE.toPrefixString(serviceRegistry.getNamespaceService()));
+                        root.put(LABEL, getElementName(
                                 organization, ELEMENT_SHORT_NAME, null, DEFAULT_EMPTY_TEXT));
-						root.put(TITLE, getElementName(
+                        root.put(TITLE, getElementName(
                                 organization, ELEMENT_FULL_NAME, null, DEFAULT_EMPTY_TEXT));
 
-						root.put(IS_LEAF, orgstructureService.getSubUnits(structure,true).isEmpty());
-						nodes.add(root);
-					} catch (JSONException e) {
-						logger.error(e.getMessage (), e);
-					}
-				}
-			}
-		}
-		return nodes.toString();
-	}
+                        root.put(IS_LEAF, !orgstructureService.hasChild(structure, true));
+                        nodes.add(root);
+                    } catch (JSONException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+            }
+        }
+        return nodes.toString();
+    }
 
 	/**
 	 * Сортировка объекта списка JSONObject по значению
@@ -291,11 +290,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      */
 	public ScriptNode getParentUnit(String unitRef, boolean returnSelf) {
         ParameterCheck.mandatory("unitRef", unitRef);
-		NodeRef parent = orgstructureService.getParentUnit(new NodeRef(unitRef));
-		if (parent != null) {
-			return new ScriptNode(parent, serviceRegistry, getScope());
-		} else if (returnSelf) {
-            return new ScriptNode(new NodeRef(unitRef), serviceRegistry, getScope());
+        if (orgstructureService.hasAccessToOrgElement(new NodeRef(unitRef))) {
+            NodeRef parent = orgstructureService.getParentUnit(new NodeRef(unitRef));
+            if (parent != null) {
+                return new ScriptNode(parent, serviceRegistry, getScope());
+            } else if (returnSelf) {
+                return new ScriptNode(new NodeRef(unitRef), serviceRegistry, getScope());
+            }
         }
 		return null;
 	}
@@ -306,7 +307,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public ScriptNode getUnit(String unitRef) {
 		ParameterCheck.mandatory("unitRef", unitRef);
 		NodeRef ref = new NodeRef(unitRef);
-		if (this.serviceRegistry.getNodeService().exists(ref)) {
+		if (this.serviceRegistry.getNodeService().exists(ref) && orgstructureService.hasAccessToOrgElement(ref)) {
 			if (orgstructureService.isUnit(ref)) {
 				return new ScriptNode(ref, this.serviceRegistry, getScope());
 			}
@@ -320,7 +321,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public ScriptNode findUnitBoss(String unitRef) {
 		ParameterCheck.mandatory("unitRef", unitRef);
 		NodeRef unit = new NodeRef(unitRef);
-		if (serviceRegistry.getNodeService().exists(unit)) {
+		if (serviceRegistry.getNodeService().exists(unit) && orgstructureService.hasAccessToOrgElement(unit)) {
 			if (orgstructureService.isUnit(unit)) {
 				NodeRef bossRef = orgstructureService.getUnitBoss(unit);
 				if (bossRef != null) {
@@ -418,7 +419,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public ScriptNode getEmployee(String employeeRef) {
 		ParameterCheck.mandatory("employeeRef", employeeRef);
 		NodeRef ref = new NodeRef(employeeRef);
-		if (serviceRegistry.getNodeService().exists(ref)) {
+		if (serviceRegistry.getNodeService().exists(ref) && orgstructureService.hasAccessToOrgElement(ref)) {
 			if (orgstructureService.isEmployee(ref)) {
 				return new ScriptNode(ref, serviceRegistry, getScope());
 			}
@@ -434,7 +435,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		NodeRef ref = new NodeRef(employeeLinkNodeRef);
 		if (serviceRegistry.getNodeService().exists(ref)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByLink(ref);
-			if (orgstructureService.isEmployee(employeeRef)) {
+			if (orgstructureService.isEmployee(employeeRef) && orgstructureService.hasAccessToOrgElement(employeeRef)) {
 				return new ScriptNode(employeeRef, serviceRegistry, getScope());
 			}
 		}
@@ -462,8 +463,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	 * Получение папки персональных данных сотрудника
 	 */
 	public ScriptNode getPersonDataFolder() {
-		NodeRef personDataRef = null;
-		personDataRef = orgstructureService.getPersonalDataDirectory();
+		NodeRef personDataRef = orgstructureService.getPersonalDataDirectory();
 		if (personDataRef != null) {
 			return new ScriptNode(personDataRef, serviceRegistry, getScope());
 		}
@@ -544,7 +544,11 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      * @return ссылка на сотрудника
      */
     public ScriptNode getEmployeeByPosition(ScriptNode positionRef) {
-        return new ScriptNode(orgstructureService.getEmployeeByPosition(positionRef.getNodeRef()), serviceRegistry, getScope());
+        NodeRef employee = orgstructureService.getEmployeeByPosition(positionRef.getNodeRef());
+        if (employee != null) {
+            return new ScriptNode(employee, serviceRegistry, getScope());
+        }
+        return null;
     }
 
     /**
@@ -662,7 +666,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("linkRef", linkRef);
 		NodeRef ref = new NodeRef(linkRef);
 		NodeRef employee = orgstructureService.getEmployeeByLink(ref);
-		if (employee != null) {
+		if (employee != null && orgstructureService.hasAccessToOrgElement(employee)) {
 			List<NodeRef> links = orgstructureService.getEmployeeLinks(employee);
 			return createScriptable(links);
 		} else {
@@ -1139,4 +1143,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		ParameterCheck.mandatory("obj", obj);
 		return orgstructureService.isUnit(obj.getNodeRef());
 	}
+
+    public boolean hasAccessToOrgElement(ScriptNode obj, boolean useStrictFilterByOrg) {
+        ParameterCheck.mandatory("obj", obj);
+        return orgstructureService.hasAccessToOrgElement(obj.getNodeRef(), useStrictFilterByOrg);
+    }
 }

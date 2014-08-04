@@ -141,6 +141,9 @@
 				<#if field.control.params.additionalFilter?has_content>
 					additionalFilter:"${field.control.params.additionalFilter}",
 				</#if>
+                <#if field.control.params.useStrictFilterByOrg??>
+                    useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
+                </#if>
 				<#if field.control.params.itemType??>
 					itemType: "${field.control.params.itemType}"
 				<#else>

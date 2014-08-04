@@ -2733,6 +2733,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 this.errorMessageDialog.setHeader(msgHeader);
 
+                var customMsg = msgDetails.match("\\[\\[.+\\]\\]");
+                if (customMsg != null) {
+                    msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
+                }
                 var errorDialogBody = '<div style="text-align: center; padding:5px;"><h3>' + msgTitle + '</h3>';
                 errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
                 errorDialogBody += '<div id="' + this.id + '-error-message-show-details" style="display:none; text-align: center; padding:5px; height: 250px; overflow: auto;">' + msgDetails + '</div>';

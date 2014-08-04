@@ -450,11 +450,13 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
                     + (!statusesNotFilter.isEmpty() ? (" AND NOT (" + statusesNotFilter + ")") : "");
         }
 
+        query += (query.length() > 0 ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}");
+
         if (filterQuery != null && filterQuery.length() > 0) {
-            // обработка спец-выражений
-            filterQuery = processorService.processQuery(filterQuery);
             query += (query.length() > 0 ? " AND (" : "(") + filterQuery + ") ";
         }
+
+
 
         if (sortDefinition != null && !sortDefinition.isEmpty()) {
             for (SortDefinition sort : sortDefinition) {
@@ -870,5 +872,15 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     public Date getDocumentLastViewDate(NodeRef document) {
         Map<NodeRef, Date> lastDocuments = frequencyAnalysisService.getLastDocuments();
         return lastDocuments.get(document);
+    }
+
+    @Override
+    public boolean hasOrganization(NodeRef document) {
+        return getOrganization(document) != null;
+    }
+
+    @Override
+    public NodeRef getOrganization(NodeRef document) {
+        return orgstructureService.getOrganization(document);
     }
 }

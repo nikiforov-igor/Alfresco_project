@@ -145,18 +145,8 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
      * @return LucenePreparedQueryHelper
      */
     protected LuceneSearchWrapper buildQuery() {
-        final LuceneSearchWrapper preparedQuery = getQueryHelper().prepareQuery(this.reportDescriptor);
-
-        boolean hasData = !preparedQuery.isEmpty();
-
-        if (!preparedQuery.getQuery().toString().contains("ID:")) { // нет явного задания ID -> исключаем черновики
-            String condition = getQueryHelper().emmitFieldCondition((hasData ? " AND NOT(" : ""), "lecm-statemachine-aspects:is-draft", true);
-            preparedQuery.emmit(condition);
-            preparedQuery.emmit(hasData ? ")" : "");
-        }
-        this.alfrescoQuery = preparedQuery;
-
-        return preparedQuery;
+        alfrescoQuery = getQueryHelper().prepareQuery(this.reportDescriptor);
+        return alfrescoQuery;
     }
 
     protected JRDSConfigXML getConfigXML() {
@@ -190,7 +180,7 @@ public class GenericDSProviderBase implements JRDataSourceProvider, ReportProvid
 
         final SearchParameters search = new SearchParameters();
         search.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
-        search.setLanguage(SearchService.LANGUAGE_LUCENE);
+        search.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
         search.setQuery(preparedQuery.toString());
 
         int skipCountOffset = -1,

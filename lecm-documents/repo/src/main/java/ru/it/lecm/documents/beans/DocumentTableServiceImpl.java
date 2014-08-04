@@ -7,20 +7,20 @@ import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.GUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.TableTotalRowCalculator;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.util.*;
-import org.alfresco.service.namespace.InvalidQNameException;
-import org.alfresco.service.namespace.RegexQNamePattern;
-import org.alfresco.util.GUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin Date: 18.10.13 Time: 13:47

@@ -40,6 +40,10 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
      * Augment prototype with main class implementation, ensuring overwrite is enabled
      */
     YAHOO.lang.augmentObject(LogicECM.module.Dictionary.DataGrid.prototype, {
+        isDeletable: function DataGrid_isDeletable(itemData) {
+            return itemData["prop_deletable"] == undefined || itemData["prop_deletable"].value == "" || itemData["prop_deletable"].value == "true";
+        },
+
         getCustomCellFormatter: function (grid, elCell, oRecord, oColumn, oData) {
             var html = "";
 

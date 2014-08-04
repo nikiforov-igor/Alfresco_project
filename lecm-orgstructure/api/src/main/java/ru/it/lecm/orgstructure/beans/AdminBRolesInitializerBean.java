@@ -79,7 +79,7 @@ public abstract class AdminBRolesInitializerBean {
     }
 
     protected NodeRef getAdminEmployee() {
-        NodeRef adminEmployee = orgstructureBean.getEmployeeByPerson(ADMIN);
+        NodeRef adminEmployee = orgstructureBean.getEmployeeByPerson(ADMIN, false);
         if (adminEmployee == null) {// создаем дефолтного сотрудника
             QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, "adminEmployee");
             HashMap<QName,Serializable> properties = new HashMap<QName, Serializable>(1);

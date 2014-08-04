@@ -14,10 +14,7 @@ import org.alfresco.repo.node.getchildren.GetChildrenCannedQueryParams;
 import org.alfresco.repo.security.permissions.PermissionCheckedValue;
 import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
-import org.alfresco.service.cmr.repository.ContentData;
-import org.alfresco.service.cmr.repository.InvalidNodeRefException;
-import org.alfresco.service.cmr.repository.MLText;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.datatype.DefaultTypeConverter;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
@@ -28,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.text.Collator;
 import java.util.*;
-import org.alfresco.service.cmr.repository.NodeService;
 
 /**
  * Класс, реализующий запрос и фильтрацию для получение списка child элементов ноды
@@ -76,23 +72,25 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 					Serializable filter = filterProp.getPropVal();
 					switch ((FilterPropLECM.FilterTypeLECM) filterProp.getFilterType()) {
 						case EQUALS:
-							if (propVal.equals(filter)) {
-								return true;
+							if (!propVal.equals(filter)) {
+								return false;
 							}
 							break;
 						case NOT_EQUALS:
-							if (!propVal.equals(filter)) {
-								return true;
+							if (propVal.equals(filter)) {
+								return false;
 							}
 							break;
 						default:
 					}
 				}
 			} else {
-				return (((FilterPropLECM)filterProp).getDefaultValue());
+				if (!((FilterPropLECM)filterProp).getDefaultValue()){
+                    return false;
+                }
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override

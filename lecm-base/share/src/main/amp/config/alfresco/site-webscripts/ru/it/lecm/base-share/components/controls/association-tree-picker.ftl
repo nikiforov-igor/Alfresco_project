@@ -209,6 +209,9 @@
         <#if field.control.params.defaultValueDataSource??>
             defaultValueDataSource: "${field.control.params.defaultValueDataSource}",
         </#if>
+        <#if field.control.params.useStrictFilterByOrg??>
+            useStrictFilterByOrg: "${field.control.params.useStrictFilterByOrg?string}",
+        </#if>
         <#if field.control.params.childrenDataSource??>
             childrenDataSource: "${field.control.params.childrenDataSource}",
         </#if>
