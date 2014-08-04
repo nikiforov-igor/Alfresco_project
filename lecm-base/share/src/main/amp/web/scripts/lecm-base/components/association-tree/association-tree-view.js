@@ -666,44 +666,46 @@ LogicECM.module = LogicECM.module || {};
                 }
 
                 // Дерево
-                var tree = Selector.query("div.tree-items", dialog);
-                if (tree) {
-                    Dom.setAttribute(tree, 'tabindex', ++tabindex);
-                    if (!this.firstTabbed) {
-                        this.firstTabbed = tree.id;
-                    }
-
-                    Event.on(tree, "focusin", function (e) {
-                        if (!Selector.test(e.relatedTarget, "div.tree-items *")) {
-                            me.rootNode.focus();
-                            me.treeViewClicked(me.rootNode);
-                            me.tree.onEventToggleHighlight(me.rootNode);
+                if (!this.options.plane) {
+                    var tree = Selector.query("div.tree-items", dialog);
+                    if (tree) {
+                        Dom.setAttribute(tree, 'tabindex', ++tabindex);
+                        if (!this.firstTabbed) {
+                            this.firstTabbed = tree.id;
                         }
-                    });
 
-                    this.tree.subscribe('enterKeyPressed', function(node) {
-                        this.treeViewClicked(node);
-                        return false;
-                    }.bind(this));
+                        Event.on(tree, "focusin", function (e) {
+                            if (!Selector.test(e.relatedTarget, "div.tree-items *")) {
+                                me.rootNode.focus();
+                                me.treeViewClicked(me.rootNode);
+                                me.tree.onEventToggleHighlight(me.rootNode);
+                            }
+                        });
 
-                    // уходим на следующее поле (tab-ом)
-                    new KeyListener(tree, {keys: KeyListener.KEY.TAB},
-                        {
-                            fn: function(a, args) {
-                                var e = args[1],
-                                    target = args[1].target;
-                                var parent = Dom.getAncestorByClassName(target, "tree");
-                                var next = Dom.getNextSibling(parent);
-                                if (next) {
-                                    var table = Selector.query(".picker-items", next, true);
-                                    table.focus();
-                                }
-                                e.preventDefault();
-                                e.stopPropagation();
-                            },
-                            scope: this,
-                            correctScope: true
-                        }, KeyListener.KEYDOWN).enable();
+                        this.tree.subscribe('enterKeyPressed', function (node) {
+                            this.treeViewClicked(node);
+                            return false;
+                        }.bind(this));
+
+                        // уходим на следующее поле (tab-ом)
+                        new KeyListener(tree, {keys: KeyListener.KEY.TAB},
+                            {
+                                fn: function (a, args) {
+                                    var e = args[1],
+                                        target = args[1].target;
+                                    var parent = Dom.getAncestorByClassName(target, "tree");
+                                    var next = Dom.getNextSibling(parent);
+                                    if (next) {
+                                        var table = Selector.query(".picker-items", next, true);
+                                        table.focus();
+                                    }
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
                 }
 
                 var tables = Selector.query("div.picker-items, div.currentValueDisplay", dialog);
