@@ -842,7 +842,7 @@ LogicECM.module = LogicECM.module || {};
                         e.preventDefault();
                     }
                 }
-                e.stopImmediatePropagation();      // убираем скролл браузера
+                e.stopImmediatePropagation();
                 e.stopPropagation();
             }
         },
@@ -865,7 +865,7 @@ LogicECM.module = LogicECM.module || {};
                         e.preventDefault();
                     }
                 }
-                e.stopImmediatePropagation();      // убираем скролл браузера
+                e.stopImmediatePropagation();
                 e.stopPropagation();
             }
         },
