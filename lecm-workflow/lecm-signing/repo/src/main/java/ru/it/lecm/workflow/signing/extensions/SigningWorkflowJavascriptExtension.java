@@ -120,6 +120,17 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 		}
 		return finalDecision;
 	}
+	
+	public String getFinalDecision(final String decisionMap) {
+    	if (decisionMap.contains("REJECTED")) {
+    		return "REJECTED";
+    	} else if (decisionMap.contains("SIGNED")) {
+    		return "SIGNED";
+    	} else if (decisionMap.contains("NO_DECISION")) {
+    		return "NO_DECISION";
+    	}
+    	return "";
+    }
 
 	public void notifySigningFinished(final String decision, final ActivitiScriptNode bpmPackage) {
 		signingWorkflowService.notifyWorkflowFinished(decision, bpmPackage.getNodeRef());
@@ -147,7 +158,7 @@ public class SigningWorkflowJavascriptExtension extends BaseWebScript {
 
 	public void saveRouteApprovalResult(final ActivitiScriptNode bpmPackage, final boolean isApproved) {
 		NodeRef documentRef = Utils.getDocumentFromBpmPackage(bpmPackage.getNodeRef());
-		if (nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE)) {
+		if (documentRef!=null && nodeService.exists(documentRef) && nodeService.hasAspect(documentRef, RouteAspecsModel.ASPECT_ROUTABLE)) {
 			nodeService.setProperty(documentRef, RouteAspecsModel.PROP_IS_SIGNED, isApproved);
 		}
 	}

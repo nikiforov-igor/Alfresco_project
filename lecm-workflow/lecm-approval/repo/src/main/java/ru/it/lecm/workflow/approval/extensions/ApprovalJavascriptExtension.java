@@ -85,6 +85,17 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 		}
 		return finalDecision.name();
 	}
+	
+	public String getFinalDecision(final String decisionMap) {
+    	if (decisionMap.contains(DecisionResult.REJECTED.name())) {
+    		return DecisionResult.REJECTED.name();
+    	} else if (decisionMap.contains(DecisionResult.APPROVED_WITH_REMARK.name())) {
+    		return DecisionResult.APPROVED_WITH_REMARK.name();
+    	} else if (decisionMap.contains(DecisionResult.APPROVED.name())) {
+    		return DecisionResult.APPROVED.name();
+    	}
+    	return DecisionResult.NO_DECISION.name();
+    }
 
 	public boolean isApproved(final String finalDecision) {
 		return DecisionResult.APPROVED_WITH_REMARK.name().equals(finalDecision) ||
