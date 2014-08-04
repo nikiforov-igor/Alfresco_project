@@ -19,7 +19,6 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: pmelnikov
@@ -316,7 +315,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
 	public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {
 		NodeRef person = null;
-        if (personService.personExists(initiator)) {
+        if (initiator != null && personService.personExists(initiator)) {
             person = personService.getPerson(initiator, false);
         }
 		return createBusinessJournalRecord(new Date(), person, mainObject, eventCategory, defaultDescription, null);
@@ -367,7 +366,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void log(Date date, String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
         NodeRef person = null;
-        if (personService.personExists(initiator)) {
+        if (initiator != null && personService.personExists(initiator)) {
             person = personService.getPerson(initiator, false);
         }
         log(date, person, mainObject, eventCategory, defaultDescription, objects);
@@ -379,7 +378,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
 
     public void log(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects) {
         NodeRef person = null;
-        if (personService.personExists(initiator)) {
+        if (initiator != null && personService.personExists(initiator)) {
             person = personService.getPerson(initiator, false);
         }
         log(new Date(), person, mainObject, eventCategory, defaultDescription, objects);
