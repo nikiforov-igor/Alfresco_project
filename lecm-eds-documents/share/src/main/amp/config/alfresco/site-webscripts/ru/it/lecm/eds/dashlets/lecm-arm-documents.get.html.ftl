@@ -11,7 +11,7 @@
 (function () {
     new LogicECM.module.ARM.dashlet.ARMDocuments("${jsid}").setOptions(
             {
-                baseQuery: '${settings.baseQuery}',
+                baseQuery: '${settings.baseQuery?replace("\\", "\\\\")}',
                 isExist: ${settings.isExist?string}
             }).setMessages(${messages});
 
