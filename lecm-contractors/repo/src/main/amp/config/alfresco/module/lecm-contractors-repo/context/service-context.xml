@@ -61,7 +61,7 @@
         <property name="dictionaryService" ref="serviceDictionary"/>
     </bean>
 
-    <bean id="contractorsJavascriptExtension" class="ru.it.lecm.contractors.ContractorsJavascriptExtension" parent="baseJavaScriptExtension">
+    <bean id="contractorsJavascriptExtension" class="ru.it.lecm.contractors.ContractorsJavascriptExtension" parent="baseScript">
         <property name="extensionName" value="contractorsRootObject"/>
         <property name="contractors" ref="contractorsBean"/>
     </bean>

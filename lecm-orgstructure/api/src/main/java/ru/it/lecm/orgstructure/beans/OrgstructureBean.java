@@ -746,4 +746,6 @@ public interface OrgstructureBean {
 
     public boolean hasAccessToOrgElement(NodeRef orgElement);
     public boolean hasAccessToOrgElement(NodeRef orgElement, boolean doNotAccessWithEmpty);
+
+    List<NodeRef> getOrganizationEmployees(NodeRef organizationRef);
 }

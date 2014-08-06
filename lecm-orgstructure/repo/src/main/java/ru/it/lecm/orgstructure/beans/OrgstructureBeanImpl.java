@@ -98,6 +98,17 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         return hasAccessToOrgElement(authService.getCurrentUserName(), orgElement, doNotAccessWithEmpty);
     }
 
+    @Override
+    public List<NodeRef> getOrganizationEmployees(NodeRef organizationRef) {
+        Set<NodeRef> employees = new HashSet<>();
+        for (String userName : userOrganizationsCache.getKeys()) {
+            if (userOrganizationsCache.get(userName) != null && userOrganizationsCache.get(userName).equals(organizationRef)){
+                employees.add(getEmployeeByPerson(userName));
+            }
+        }
+        return new ArrayList<>(employees);
+    }
+
     /**
 	 * Метод инициализвции сервиса Создает рабочую директорию - если она еще не
 	 * создана. Записыывает в свойства сервиса nodeRef директории с Организацией
@@ -171,7 +182,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 			}
 		};
 		organizationRootRef = AuthenticationUtil.runAsSystem(raw);
-	}
+
+        List<NodeRef> employees = getAllEmployees(true);
+        for (NodeRef employee : employees) {
+            String login = getEmployeeLogin(employee);
+            if (login != null) {
+                userOrganizationsCache.put(login, getEmployeeOrganization(employee));
+            }
+        }
+    }
 
 	@Override
 	public NodeRef getOrganization() {
@@ -1916,13 +1935,17 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getAllEmployees() {
+		return getAllEmployees(false);
+	}
+
+    private List<NodeRef> getAllEmployees(boolean doNotCheckAccess) {
 		List<NodeRef> employees = new ArrayList<NodeRef>();
 
 		NodeRef organizationRef = getOrganization();
 		NodeRef employeesRef = nodeService.getChildByName(organizationRef, ContentModel.ASSOC_CONTAINS, EMPLOYEES_ROOT_NAME);
 		if (employeesRef != null) {
 			for (ChildAssociationRef child : nodeService.getChildAssocs(employeesRef)) {
-                if (hasAccessToOrgElement(child.getChildRef())) {
+                if (doNotCheckAccess || hasAccessToOrgElement(child.getChildRef())) {
                     employees.add(child.getChildRef());
                 }
 			}

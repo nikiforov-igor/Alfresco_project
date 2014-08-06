@@ -41,6 +41,8 @@ LogicECM.module = LogicECM.module || {};
             options:{
                 disabled: false,
 
+                lazyLoading: false,
+
 	            mandatory:false,
 
                 startLocation: null,
@@ -112,7 +114,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             onReady:function AssociationAutoComplete_onReady() {
-                if (!this.options.disabled) {
+                if (!this.options.disabled && !this.options.lazyLoading) {
                     this.populateDataWithAllowedScript();
                     this.loadDefaultValue();
 	                if (this.options.useDynamicLoading) {
