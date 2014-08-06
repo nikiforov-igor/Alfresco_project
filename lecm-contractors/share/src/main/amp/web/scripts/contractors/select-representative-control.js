@@ -90,10 +90,6 @@ LogicECM.module = LogicECM.module || {};
 
                     currentInputEl.value = control.value;
                 });
-
-                YAHOO.Bubbling.on("formContainerDestroyed", function(layer, args) {
-                    control.backToControl();
-                });
             }
         },
 
@@ -140,6 +136,16 @@ LogicECM.module = LogicECM.module || {};
                             message = this.msg("dialog.createNew.title");
                         }
                         p_dialog.dialog.setHeader(message);
+                    },
+                    scope: this
+                },
+                doAfterDialogHide: {
+                    // после закрытия диалога вернуть фокус в исходный контрол
+                    fn: function (p_form, p_dialog) {
+                        var controlBtn = this.addRepresentativeButton;
+                        if (controlBtn) {
+                            controlBtn.focus();
+                        }
                     },
                     scope: this
                 },
