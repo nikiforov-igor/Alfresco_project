@@ -414,7 +414,7 @@ public class DocumentPolicy extends BaseBean
 
         final QName type = nodeService.getType(document);
 
-	    if (!stateMachineService.isStarter(type.toPrefixString(namespaceService))) {
+	    if (!AuthenticationUtil.getFullyAuthenticatedUser().equals(AuthenticationUtil.SYSTEM_USER_NAME) && !stateMachineService.isStarter(type.toPrefixString(namespaceService))) {
 		    throw new AlfrescoRuntimeException("User not starter for document type '" + type + "' for node " + document);
 	    }
 
@@ -429,7 +429,8 @@ public class DocumentPolicy extends BaseBean
             properties.put(DocumentService.PROP_DOCUMENT_TYPE, typeDef.getTitle());
         }
 
-        final NodeRef author = orgstructureService.getCurrentEmployee();
+        String creator = nodeService.getProperty(document, ContentModel.PROP_CREATOR).toString();
+        final NodeRef author = orgstructureService.getEmployeeByPerson(creator);
 
         properties.put(DocumentService.PROP_DOCUMENT_CREATOR, substituteService.getObjectDescription(author));
         properties.put(DocumentService.PROP_DOCUMENT_CREATOR_REF, author.toString());
