@@ -43,7 +43,7 @@ public class OrgstructureEmployeeOrganizationPolicy extends SecurityJournalizedP
         NodeRef employee = nodeAssocRef.getSourceRef();
         String userName = orgstructureService.getEmployeeLogin(employee);
         if (userName != null) {
-            if (orgstructureService.getUserOrganizationsCache().contains(userName)) {
+            if (orgstructureService.getUserOrganizationsCache().contains(userName) && orgstructureService.getUserOrganizationsCache().get(userName) != null) {
                 orgstructureService.getUserOrganizationsCache().remove(userName);
             }
         }

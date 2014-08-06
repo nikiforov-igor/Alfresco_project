@@ -1148,4 +1148,9 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         ParameterCheck.mandatory("obj", obj);
         return orgstructureService.hasAccessToOrgElement(obj.getNodeRef(), useStrictFilterByOrg);
     }
+
+    public Scriptable getOrganizationEmployees(final String organizationRef) {
+        List<NodeRef> employees = orgstructureService.getOrganizationEmployees(new NodeRef(organizationRef));
+        return createScriptable(employees);
+    }
 }

@@ -1,4 +1,4 @@
-function getPickerChildrenItems(filter)
+function getPickerChildrenItems(filter, doNotCheckAccess)
 {
 	var argsFilterType = args['filterType'],
 		argsSelectableType = args['selectableType'],
@@ -188,7 +188,7 @@ function getPickerChildrenItems(filter)
 			{
 				if (result.hasPermission("Read")
                     && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])
-                    && orgstructure.hasAccessToOrgElement(result, useStrictFilterByOrg)) {
+                    && ((doNotCheckAccess != null && doNotCheckAccess) || orgstructure.hasAccessToOrgElement(result, useStrictFilterByOrg))) {
 					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
 					{
 						// wrap result and determine if it is selectable in the UI

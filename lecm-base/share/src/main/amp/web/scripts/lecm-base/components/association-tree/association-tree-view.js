@@ -159,6 +159,8 @@ LogicECM.module = LogicECM.module || {};
 
 			childrenDataSource: "lecm/forms/picker",
 
+            pickerItemsScript: "lecm/forms/picker/items",
+
             allowedNodes: null,
 
             allowedNodesScript: null,
@@ -173,16 +175,18 @@ LogicECM.module = LogicECM.module || {};
 
 			showAssocViewForm: false,
 
-			checkType: true
-		},
+			checkType: true,
 
-		onReady: function AssociationTreeViewer_onReady()
-		{
-			if(!this.options.initialized) {
-				this.options.initialized = true;
-				this.init();
-			}
-		},
+            lazyLoading: false
+        },
+
+        onReady: function AssociationTreeViewer_onReady() {
+            if (!this.options.lazyLoading && !this.options.initialized) {
+                this.options.initialized = true;
+                this.eventGroup = (this.options.prefixPickerId == null ?  this.id + '-cntrl' : this.options.prefixPickerId) + Dom.generateId();
+                this.init();
+            }
+        },
 
 		init: function()
 		{
@@ -190,8 +194,6 @@ LogicECM.module = LogicECM.module || {};
 			if (this.options.prefixPickerId == null) {
 				this.options.prefixPickerId = this.options.controlId;
 			}
-			this.eventGroup = this.options.prefixPickerId + Dom.generateId();
-
 			this.options.pickerId = this.options.prefixPickerId + '-picker';
 			Dom.setStyle(this.options.pickerId, "display", "block");
 
@@ -371,14 +373,14 @@ LogicECM.module = LogicECM.module || {};
 
             var onFailure = function AssociationTreeViewer__loadSelectedItems_onFailure(response)
             {
-                this.selectedItems = null;
+                this.selectedItems = {};
             };
 
             if (arrItems !== "")
             {
                 Alfresco.util.Ajax.jsonRequest(
                     {
-                        url: Alfresco.constants.PROXY_URI + "lecm/forms/picker/items",
+                        url: Alfresco.constants.PROXY_URI + this.options.pickerItemsScript,
                         method: "POST",
                         dataObj:
                         {

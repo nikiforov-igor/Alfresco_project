@@ -125,25 +125,19 @@ public class ContractorsBean extends BaseBean implements Contractors {
 
     @Override
     public List<Object> getRepresentatives(NodeRef targetContractor) { // O(n^3)
-
         // Получить список всех ассоциаций на ссылку.
         List<AssociationRef> contractorToLinkAssocs = nodeService.getTargetAssocs(targetContractor, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "contractor-to-link-association"));
 
-        // Получить список всех ссылок через ассоциации.
-        List<NodeRef> linkRefs = new ArrayList<NodeRef>(contractorToLinkAssocs.size());
-        for(AssociationRef contractorToLinkAssoc : contractorToLinkAssocs) {
-            linkRefs.add(contractorToLinkAssoc.getTargetRef());
-        }
-
         // Получить список всех ассоциаций на адресантов.
         List<Object> representativesList = new ArrayList<Object>();
-        List<NodeRef> representativeRefs = new ArrayList<NodeRef>();
-        for(NodeRef linkRef : linkRefs) {
-            List<AssociationRef> linkToRepresentativeAssocs = nodeService.getTargetAssocs(linkRef, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association"));
+
+        for (AssociationRef contractorToLinkAssoc : contractorToLinkAssocs) {
+            NodeRef linkRef = contractorToLinkAssoc.getTargetRef();
+            List<AssociationRef> linkToRepresentativeAssocs =
+                    nodeService.getTargetAssocs(linkRef, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association"));
 
             // Получить список всех адресантов через ассоциации.
             for(AssociationRef linkToRepresentativeAssoc : linkToRepresentativeAssocs) {
-
                 Map<String, Object> representativeMap = new HashMap<String, Object>();
                 NodeRef representativeRef = linkToRepresentativeAssoc.getTargetRef();
 
@@ -151,7 +145,7 @@ public class ContractorsBean extends BaseBean implements Contractors {
                 representativeMap.put("linkRef", linkRef.toString());
 
                 String shortName = String.format("%s %s", nodeService.getProperty(representativeRef, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "surname")),
-                                                          nodeService.getProperty(representativeRef, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "firstname")));
+                        nodeService.getProperty(representativeRef, QName.createQName("http://www.it.ru/lecm/contractors/model/representative/1.0", "firstname")));
 
                 representativeMap.put("shortName", shortName);
                 representativeMap.put("isPrimary", nodeService.getProperty(linkRef, QName.createQName("http://www.it.ru/lecm/contractors/model/contractor/1.0", "link-to-representative-association-is-primary")));

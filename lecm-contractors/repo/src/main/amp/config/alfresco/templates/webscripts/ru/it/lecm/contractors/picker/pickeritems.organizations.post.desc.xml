@@ -1,0 +1,10 @@
+<webscript>
+  <shortname>Возвращает описание списка нодов контагентов(организаций)</shortname>
+  <description>
+  Возвращает описание списка нодов контагентов(организаций), принимает json:
+  </description>
+  <url>/lecm/contractors/organization/picker/items</url>
+  <format default="json"/>
+  <authentication>user</authentication>
+  <transaction allow="readonly">required</transaction>
+</webscript>

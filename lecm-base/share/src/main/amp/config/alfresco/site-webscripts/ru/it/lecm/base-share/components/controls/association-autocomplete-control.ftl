@@ -73,6 +73,12 @@
     <#assign isFieldMandatory = field.endpointMandatory>
 </#if>
 
+<#if field.control.params.checkType?? && field.control.params.checkType == "false">
+    <#assign checkType = false>
+<#else>
+    <#assign checkType = true>
+</#if>
+
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 <#assign allowedScript = ""/>
 <#if (field.control.params.allowedNodesScript?? && field.control.params.allowedNodesScript != "")>
@@ -115,6 +121,9 @@
     LogicECM.CurrentModules["${autoCompleteJsName}"].setOptions({
     <#if disabled>
         disabled: true,
+    </#if>
+    <#if field.control.params.lazyLoading?? && field.control.params.lazyLoading == "true">
+        lazyLoading: ${field.control.params.lazyLoading?string},
     </#if>
     <#if field.control.params.parentNodeRef??>
         parentNodeRef: "${field.control.params.parentNodeRef}",
@@ -167,6 +176,9 @@
     LogicECM.CurrentModules["${treeViewJsName}"].setOptions({
     <#if form.mode == "view" || field.disabled>
         disabled: true,
+    </#if>
+    <#if field.control.params.lazyLoading?? && field.control.params.lazyLoading == "true">
+        lazyLoading: ${field.control.params.lazyLoading?string},
     </#if>
     <#if field.control.params.startLocation??>
         rootLocation: "${field.control.params.startLocation}",
@@ -222,6 +234,7 @@
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
     </#if>
         currentValue: "${field.value!''}",
+        checkType: ${checkType?string},
         itemType:"${field.control.params.itemType!field.endpointType}",
         additionalFilter: "${field.control.params.additionalFilter!''}"
     }).setMessages( ${messages} );

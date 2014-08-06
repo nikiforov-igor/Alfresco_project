@@ -107,8 +107,7 @@
 (function() {
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
-            'scripts/lecm-base/components/association-tree/association-tree-view.js',
-            'scripts/lecm-base/components/association-tree/double-association-tree-view.js'
+            'scripts/lecm-base/components/association-tree/association-tree-view.js'
 		], createDoublePicker);
     }
 
@@ -116,7 +115,7 @@
 
     function createDoublePicker() {
 
-	    var fistControl = new LogicECM.module.DoubleAssociationTreeViewer("${fieldHtmlId}", doubleAssociationPickerSelectedItems);
+	    var fistControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
 	    fistControl.setOptions({
 	        <#if disabled>
 	            disabled: true,
@@ -133,6 +132,9 @@
 
 	        <#if params.firstNameSubstituteString??>
 	            nameSubstituteString: "${params.firstNameSubstituteString}",
+	        </#if>
+            <#if params.firstPickerItemsScript??>
+                pickerItemsScript: "${params.firstPickerItemsScript}",
 	        </#if>
             <#if field.control.params.sortProp??>
                 sortProp: "${field.control.params.sortProp}",
@@ -183,7 +185,7 @@
 	    });
 	    fistControl.setMessages(${messages});
 
-	    var secondControl = new LogicECM.module.DoubleAssociationTreeViewer("${fieldHtmlId}", doubleAssociationPickerSelectedItems);
+	    var secondControl = new LogicECM.module.AssociationTreeViewer("${fieldHtmlId}");
 	    secondControl.setOptions({
 		    prefixPickerId: "${secondControlId}",
 		    <#if disabled>
@@ -200,6 +202,9 @@
 		    <#if params.secondNameSubstituteString??>
 			    nameSubstituteString: "${params.secondNameSubstituteString}",
 		    </#if>
+            <#if params.secondPickerItemsScript??>
+                pickerItemsScript: "${params.secondPickerItemsScript}",
+            </#if>
             <#if field.control.params.sortProp??>
                 sortProp: "${field.control.params.sortProp}",
             </#if>

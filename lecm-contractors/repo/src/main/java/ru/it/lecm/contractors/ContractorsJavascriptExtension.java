@@ -1,18 +1,19 @@
 package ru.it.lecm.contractors;
 
-import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
+import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.extensions.webscripts.WebScriptException;
-
+import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.contractors.api.Contractors;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.json.JSONArray;
 
-public class ContractorsJavascriptExtension extends BaseScopableProcessorExtension {
+public class ContractorsJavascriptExtension extends BaseWebScript {
 
     Contractors contractors;
 
@@ -26,8 +27,7 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
 
         try {
             representativeToAssignAsPrimaryRef = new NodeRef(json.getString("representativeToAssignAsPrimary"));
-        }
-        catch (JSONException ex) {
+        } catch (JSONException ex) {
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
@@ -41,14 +41,13 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
 
         try {
             childContractor = new NodeRef(json.getString("childRef"));
-        }
-        catch (JSONException ex) {
+        } catch (JSONException ex) {
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
         Map<String, String> result = contractors.getParentContractor(childContractor);
 
-        if( result.isEmpty() ) {
+        if (result.isEmpty()) {
             result.put("status", "failure");
         } else {
             result.put("status", "success");
@@ -62,14 +61,13 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
 
         try {
             childContractor = new NodeRef(json.getString("childRef"));
-        }
-        catch (JSONException ex) {
+        } catch (JSONException ex) {
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
         Map<String, String> result = contractors.getContractorForRepresentative(childContractor);
 
-        if( result.isEmpty() ) {
+        if (result.isEmpty()) {
             result.put("status", "failure");
         } else {
             result.put("status", "success");
@@ -83,15 +81,36 @@ public class ContractorsJavascriptExtension extends BaseScopableProcessorExtensi
 
         try {
             targetContractor = new NodeRef(json.getString("targetContractor"));
-        }
-        catch (JSONException ex) {
+        } catch (JSONException ex) {
             throw new WebScriptException(ex.getMessage(), ex);
         }
 
         return contractors.getRepresentatives(targetContractor);
     }
 
-	public JSONArray getBusyRepresentatives() {
-		return contractors.getBusyRepresentatives();
-	}
+    public List<Object> getRepresentatives(final String contractor) {
+        NodeRef targetContractor = NodeRef.isNodeRef(contractor) ? new NodeRef(contractor) : null;
+        return targetContractor != null ? contractors.getRepresentatives(targetContractor) : new ArrayList<>();
+    }
+
+    public JSONArray getBusyRepresentatives() {
+        return contractors.getBusyRepresentatives();
+    }
+
+    public ScriptNode getMainRepresentative(final String contractor) {
+        NodeRef targetContractor = NodeRef.isNodeRef(contractor) ? new NodeRef(contractor) : null;
+        List<Object> representatives = targetContractor != null ? contractors.getRepresentatives(targetContractor) : new ArrayList<>();
+        for (Object representative : representatives) {
+            Map<String, Object> representativeObj = (Map<String, Object>) representative;
+            if (representativeObj != null) {
+                Object isPrimary = representativeObj.get("isPrimary");
+                if (isPrimary != null) {
+                    if ((Boolean) isPrimary) {
+                        return new ScriptNode(new NodeRef(representativeObj.get("nodeRef").toString()), serviceRegistry, getScope());
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

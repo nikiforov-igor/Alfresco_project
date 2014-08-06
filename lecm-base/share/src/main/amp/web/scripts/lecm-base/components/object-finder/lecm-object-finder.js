@@ -1107,7 +1107,7 @@ LogicECM.module = LogicECM.module || {};
                            }
                            else
                            {
-	                          displayValue += Util.getCroppedItem(this.options.objectRenderer.renderItem(item, 16, "{icon} {name}"));
+	                          displayValue += Util.getCroppedItem(this.options.objectRenderer.renderItem(item, 16, "{name}"));
                            }
                         }
                         else if (this.options.displayMode == "list")
