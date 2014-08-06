@@ -8,9 +8,11 @@
 
 <#macro renderDateRange set>
 	<div class="daterange-unlimited">
-		<#assign unlimited = set.children[2]/>
-		<#assign unlimitHtmlId = (htmlid + "_" + unlimited.id)/>
-		<@formLib.renderField field=form.fields[unlimited.id] />
+        <#if set.children[2]??>
+            <#assign unlimited = set.children[2]/>
+            <#assign unlimitHtmlId = (htmlid + "_" + unlimited.id)/>
+            <@formLib.renderField field=form.fields[unlimited.id] />
+        </#if>
 	</div>
 	<div id="${htmlid}" class="daterange-set two-columns">
         <div class="column">
