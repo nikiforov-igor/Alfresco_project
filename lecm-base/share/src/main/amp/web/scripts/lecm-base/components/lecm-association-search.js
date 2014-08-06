@@ -1035,7 +1035,7 @@ LogicECM.module = LogicECM.module || {};
                 var dialog = Dom.get(this.widgets.dialog.id);
 
                 if (dialog && dialog.offsetHeight > 0) {
-                    var tabindex = 1000; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
+                    var tabindex = (++LogicECM.module.Base.Util.tabNum) * 100; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
 
                     var search = Selector.query(".control", dialog, true);
                     if (search) {
