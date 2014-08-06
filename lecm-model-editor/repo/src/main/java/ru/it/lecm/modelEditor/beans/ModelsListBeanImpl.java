@@ -95,7 +95,7 @@ public class ModelsListBeanImpl extends BaseBean {
 		JSONObject result = new JSONObject();
 		try {
 
-			Map<String, JSONObject> models = new HashMap<String, JSONObject>();
+			Map<String, JSONObject> models = new HashMap<>();
 
 			Collection<QName> documentSubTypes = documentService.getDocumentSubTypes();
 			if (documentSubTypes != null) {
@@ -117,7 +117,7 @@ public class ModelsListBeanImpl extends BaseBean {
 						typeObject.put("isDocument", true);
 						typeObject.put("modelName", type.getModel().getName().toPrefixString());
 
-						List<JSONObject> typesList = new ArrayList<JSONObject>();
+						List<JSONObject> typesList = new ArrayList<>();
 						typesList.add(typeObject);
 						modelObject.put("types", typesList);
 
@@ -171,7 +171,7 @@ public class ModelsListBeanImpl extends BaseBean {
 										modelObject.put("modelName", model.getName());
 										modelObject.put("isRestorable", lecmModelsService.isRestorable(model.getName()));
 
-										List<JSONObject> typesList = new ArrayList<JSONObject>();
+										List<JSONObject> typesList = new ArrayList<>();
 										for (M2Type type: model.getTypes()) {
 											JSONObject typeObject = new JSONObject();
 											typeObject.put("typeName", type.getName());
@@ -195,7 +195,32 @@ public class ModelsListBeanImpl extends BaseBean {
 				}
 			}
 
-			result.put("items", models.values());
+			List<JSONObject> items = new ArrayList<>(models.values());
+			Collections.sort(items, new Comparator<JSONObject>() {
+				@Override
+				public int compare(JSONObject o1, JSONObject o2) {
+					String title1 = null;
+					String title2 = null;
+					try {
+						title1 = o1.getString("title");
+						title2 = o2.getString("title");
+					} catch (JSONException e) {
+
+					}
+
+					if (title1 == null && title2 != null) {
+						return -1;
+					} else if (title1 != null && title2 == null) {
+						return 1;
+					} else if (title1 != null) {
+						return title1.compareTo(title2);
+					}
+
+					return 0;
+				}
+			});
+
+			result.put("items", items);
 		} catch (JSONException ex) {
 			throw new WebScriptException("Can not form JSONObject", ex);
 		}

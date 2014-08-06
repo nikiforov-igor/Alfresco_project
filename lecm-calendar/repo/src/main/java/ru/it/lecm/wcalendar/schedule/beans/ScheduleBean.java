@@ -89,7 +89,7 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
                 } else {
                     if (!getScheduleBeginTime(defaultSchedule).equals(defaultScheduleStartTime)
                             || !getScheduleEndTime(defaultSchedule).equals(defaultScheduleEndTime)) {
-                        //TODO DONE замена нескольких setProperty на setProperties. 
+                        //TODO DONE замена нескольких setProperty на setProperties.
                         Map<QName, Serializable> properties = nodeService.getProperties(defaultSchedule);
                         properties.put(PROP_SCHEDULE_STD_BEGIN, defaultScheduleStartTime);
                         properties.put(PROP_SCHEDULE_STD_END, defaultScheduleEndTime);
@@ -502,7 +502,17 @@ public class ScheduleBean extends AbstractCommonWCalendarBean implements ISchedu
 
     @Override
     public NodeRef getDefaultSystemSchedule() {
-        return this.defaultSchedule;
+        if (defaultSchedule == null || !nodeService.exists(defaultSchedule)) {
+            lecmTransactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+
+                @Override
+                public Object execute() throws Throwable {
+                    defaultSchedule = createDefaultSchedule();
+                    return null;
+                }
+            }, false);
+        }
+        return defaultSchedule;
     }
 
     @Override

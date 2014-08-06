@@ -17,7 +17,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 
 (function () {
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
 
     LogicECM.module.SelectRepresentativeForContractor = function LogicECM_module_SelectRepresentativeForContractor(controlId, contractorSelectEvent) {
         LogicECM.module.SelectRepresentativeForContractor.superclass.constructor.call(this, "LogicECM.module.SelectRepresentativeForContractor", controlId, []);
@@ -78,7 +79,7 @@ LogicECM.module = LogicECM.module || {};
                 this._firstSelected = currentInputEl.value;
 
                 var control = this;
-                YAHOO.util.Event.on(this.options.representativeSelectId, "change", function (/*event, that*/) {
+                Event.on(this.options.representativeSelectId, "change", function (/*event, that*/) {
                     if (control._firstSelected === control.value) {
                         addedInputEl.value = "";
                         removedInputEl.value = "";
@@ -89,6 +90,14 @@ LogicECM.module = LogicECM.module || {};
 
                     currentInputEl.value = control.value;
                 });
+            }
+        },
+
+        // после закрытия диалога вернуть фокус в исходный контрол
+        backToControl: function() {
+            var controlBtn = this.addRepresentativeButton;
+            if (controlBtn) {
+                controlBtn.focus();
             }
         },
 
@@ -103,8 +112,9 @@ LogicECM.module = LogicECM.module || {};
                     ignoreNodes: response.json.join(),
                     showCancelButton: "true"
                 },
-            // Создание формы добавления адресанта.
-            addRepresentativeForm = new Alfresco.module.SimpleDialog(this.id + "-add-representative-form");
+                // Создание формы добавления адресанта.
+                addRepresentativeForm = new Alfresco.module.SimpleDialog(this.id + "-add-representative-form"),
+                me = this;
 
             addRepresentativeForm.setOptions({
                 width: "50em",
@@ -113,7 +123,7 @@ LogicECM.module = LogicECM.module || {};
                 destroyOnHide: true,
                 doBeforeFormSubmit: {
                     fn: function () {
-                        isPrimaryCheckboxChecked = Dom.get(this.id + "-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry").checked;
+                        isPrimaryCheckboxChecked = Dom.get(me.id + "-add-representative-form_prop_lecm-contractor_link-to-representative-association-is-primary-entry").checked;
                     },
                     scope: this
                 },
@@ -129,14 +139,24 @@ LogicECM.module = LogicECM.module || {};
                     },
                     scope: this
                 },
+                doAfterDialogHide: {
+                    // после закрытия диалога вернуть фокус в исходный контрол
+                    fn: function (p_form, p_dialog) {
+                        var controlBtn = this.addRepresentativeButton;
+                        if (controlBtn) {
+                            controlBtn.focus();
+                        }
+                    },
+                    scope: this
+                },
 
                 onSuccess: {
                     fn: function (response) {
                         var addedLinkRef = response.json.persistedObject, // persistedObject это [link-representative-and-contractor], НЕ [representative-type]
                             fakeObject = {};
 
-                        fakeObject[this.globCurrentContractor] = null;
-                        YAHOO.util.Dom.get(this.id).value = "";
+                        fakeObject[me.globCurrentContractor] = null;
+                        Dom.get(me.id).value = "";
 
                         if (isPrimaryCheckboxChecked) {
                             Alfresco.util.Ajax.request({
@@ -149,7 +169,7 @@ LogicECM.module = LogicECM.module || {};
                                 responseContentType: "application/json",
                                 successCallback: {
                                     fn: function () {
-                                        this.onUpdateRepresentativesList(fakeObject, /* force */ true, addedLinkRef);
+                                        me.onUpdateRepresentativesList(fakeObject, /* force */ true, addedLinkRef);
                                     },
                                     scope: this
                                 },
@@ -162,7 +182,7 @@ LogicECM.module = LogicECM.module || {};
                                 }
                             });
                         } else {
-                            this.onUpdateRepresentativesList(fakeObject, /* force */ true, addedLinkRef);
+                            me.onUpdateRepresentativesList(fakeObject, /* force */ true, addedLinkRef);
                         }
 
                         Alfresco.util.PopupManager.displayMessage({

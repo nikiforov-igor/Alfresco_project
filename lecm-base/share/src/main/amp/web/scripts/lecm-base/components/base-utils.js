@@ -34,7 +34,10 @@ LogicECM.module.Base.validators = LogicECM.module.Base.validators || {};
  */
 LogicECM.module.Base.Util = {
 
-
+    /**
+     * Коэффициент, используемый для задания разного стартового tabindex в разных диалоговых окнах
+     */
+    tabNum: 0,
 
 	/*
      * Загружает перечисленные скрипты на страницу
@@ -484,7 +487,8 @@ LogicECM.module.Base.Util = {
 	 */
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
-        Selector = YAHOO.util.Selector;
+        Selector = YAHOO.util.Selector,
+        KeyListener = YAHOO.util.KeyListener;
 
 	// Recalculate the vertical size on a browser window resize event
 	Event.on(window, "resize", function(e) {
@@ -549,12 +553,18 @@ LogicECM.module.Base.Util = {
     // Отрабатывает после загрузки формы
 
     function setElementsTabbingOrder(layer, args) {
+//        console.log("base setTabbingOrder");
         var params = args[1];
         var formId = params.eventGroup;
         var form = Dom.get(formId);
         var elements = Selector.query('div.control, .form-buttons span.yui-button, .form-buttons input[type=button]', form);
 
+        var tabbedArray = [];
         var tabindex = 0;
+        // если обрабатывается форма в диалоговом окне:
+        if (Selector.test(form, ".yui-dialog form") ) {
+            tabindex = (++LogicECM.module.Base.Util.tabNum) * 100; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
+        }
         for (var i = 0; i < elements.length; i++) {
             var el = elements[i];
             if (el && el.offsetHeight > 0) {
@@ -564,6 +574,7 @@ LogicECM.module.Base.Util = {
                         var link = Selector.query('.uploader-block img.uploader-button', el, true);
                         if (link) {
                             Dom.setAttribute(link, 'tabindex', ++tabindex);
+                            tabbedArray.push(link);
                         }
                     } else if (Dom.hasClass(el, "")) {
 
@@ -576,6 +587,7 @@ LogicECM.module.Base.Util = {
                             var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
                             if (input) {
                                 Dom.setAttribute(input, 'tabindex', ++tabindex);
+                                tabbedArray.push(input);
                             }
                         }
                         var buttonDiv = Selector.query('div.buttons-div', el, true);
@@ -585,6 +597,7 @@ LogicECM.module.Base.Util = {
                                 var btn = buttons[j];
                                 if (btn.offsetHeight > 0) {
                                     Dom.setAttribute(btn, 'tabindex', ++tabindex);
+                                    tabbedArray.push(btn);
                                 }
                             }
                         }
@@ -592,10 +605,31 @@ LogicECM.module.Base.Util = {
                 } else if (Dom.hasClass(el, "yui-button")) {
                     var button = Selector.query('button', el, true);
                     Dom.setAttribute(button, 'tabindex', ++tabindex);
+                    tabbedArray.push(button);
                 } else {
                     Dom.setAttribute(el, 'tabindex', ++tabindex);
+                    tabbedArray.push(el);
                 }
             }
+        }
+
+        if (!tabbedArray.isEmpty) {
+            var firstEl = tabbedArray[0];
+            var lastEl = tabbedArray[tabbedArray.length - 1];
+
+            new KeyListener(lastEl, {keys: KeyListener.KEY.TAB},
+                {
+                    fn: function(layer, args) {
+                        var e = args[1];
+                        firstEl.focus();
+                        e.preventDefault();
+                        e.stopPropagation();
+                    },
+                    scope: this,
+                    correctScope: true
+                }, KeyListener.KEYDOWN).enable();
+
+            firstEl.focus();
         }
     }
 

@@ -160,7 +160,7 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
                         nodeService.addAspect(employeeLink, ContentModel.ASPECT_TEMPORARY, null);
                         nodeService.deleteNode(employeeLink);
                     }
-                    NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef);
+                    NodeRef schedule = scheduleService.getScheduleByOrgSubject(nodeRef, true);
                     if (schedule != null) {
                         nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
                         nodeService.deleteNode(schedule);

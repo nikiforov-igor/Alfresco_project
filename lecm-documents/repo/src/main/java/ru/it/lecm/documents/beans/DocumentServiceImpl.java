@@ -464,7 +464,7 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
             }
         }
 
-        sp.setQuery(query);
+        sp.setQuery(processorService.processQuery(query));
         return sp;
     }
 
