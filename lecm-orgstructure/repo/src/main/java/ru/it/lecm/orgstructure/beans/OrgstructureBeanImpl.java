@@ -74,16 +74,21 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                         isEmployeeHasBusinessRole(getEmployeeByPerson(userName), "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false, false)) {
                     return true;
                 }
+
+                NodeRef employeeOrganization = getUserOrganization(userName);
                 NodeRef orgElementOrganization = getOrganization(orgElement);
+
+                if (employeeOrganization == null) {
+                    return (orgElementOrganization == null) && !doNotAccessWithEmpty;
+                }
+                // тут сотрудник с организацией
                 if (orgElementOrganization == null) { // доступ к элементам, у которых нет организации разрешен в зависимости от флага
                     return !doNotAccessWithEmpty;
                 }
 
-                NodeRef employeeOrganization = getUserOrganization(userName);
-
                 // Если у сотрудника нет организации - доступ есть только к тем структурам, у которых тоже нет организации
                 // Если у сотрудника есть организация - доступ есть к тем структурам, у которых нет орагниазции + у которых организация == организации сотрудника
-                return employeeOrganization != null && employeeOrganization.equals(orgElementOrganization);
+                return employeeOrganization.equals(orgElementOrganization);
             }
         }
         return false;
