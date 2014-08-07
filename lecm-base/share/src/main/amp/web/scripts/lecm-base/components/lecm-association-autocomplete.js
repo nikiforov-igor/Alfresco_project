@@ -233,59 +233,60 @@ LogicECM.module = LogicECM.module || {};
 		        }
 	        },
 
-            makeAutocomplete: function() {
-	            var me = this;
-	            var oDS;
+            makeAutocomplete: function () {
+                var me = this;
+                var oDS;
+                if (!this.options.lazyLoading) {
+                    if (me.options.useDynamicLoading) {
+                        var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily + this._generateChildrenUrlPath(this.options.parentNodeRef);
+                        oDS = new YAHOO.util.XHRDataSource(url);
+                        oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
+                        oDS.responseSchema = {
+                            resultsList: "items",
+                            fields: ["name", "selectedName", "nodeRef"]
+                        };
+                        oDS.doBeforeParseData = this._doBeforeParseData();
+                    } else {
+                        oDS = new YAHOO.util.LocalDataSource(this.dataArray);
+                        oDS.responseSchema = {fields: ["name", "selectedName", "nodeRef"]};
+                    }
 
-	            if (me.options.useDynamicLoading) {
-		            var url = Alfresco.constants.PROXY_URI + this.options.childrenDataSource + "/" + this.options.itemFamily + this._generateChildrenUrlPath(this.options.parentNodeRef);
-		            oDS = new YAHOO.util.XHRDataSource(url);
-		            oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
-		            oDS.responseSchema = {
-			            resultsList: "items",
-			            fields:["name", "selectedName", "nodeRef"]
-		            };
-		            oDS.doBeforeParseData = this._doBeforeParseData();
-	            } else {
-		            oDS = new YAHOO.util.LocalDataSource(this.dataArray);
-		            oDS.responseSchema = {fields:["name", "selectedName", "nodeRef"]};
-	            }
+                    var oAC = new YAHOO.widget.AutoComplete(this.controlId + "-autocomplete-input", this.controlId + "-autocomplete-container", oDS);
+                    if (me.options.useDynamicLoading) {
+                        oAC.generateRequest = function (sQuery) {
+                            var searchData = "";
+                            for (var column in me.searchProperties) {
+                                searchData += column + ":" + decodeURIComponent(sQuery) + "#";
+                            }
+                            if (searchData != "") {
+                                searchData = searchData.substring(0, (searchData.length) - 1);
+                            } else {
+                                searchData = "cm:name" + ":" + decodeURIComponent(sQuery);
+                            }
 
-                var oAC = new YAHOO.widget.AutoComplete(this.controlId + "-autocomplete-input", this.controlId + "-autocomplete-container", oDS);
-	            if (me.options.useDynamicLoading) {
-		            oAC.generateRequest = function(sQuery) {
-			            var searchData = "";
-			            for(var column in me.searchProperties) {
-				            searchData += column + ":" + decodeURIComponent(sQuery) + "#";
-			            }
-			            if (searchData != "") {
-				            searchData = searchData.substring(0,(searchData.length)-1);
-			            } else {
-                            searchData = "cm:name" +  ":" + decodeURIComponent(sQuery);
-                        }
+                            return me._generateChildrenUrlParams(searchData);
+                        };
+                        oAC.queryDelay = 1;
+                    }
+                    oAC.minQueryLength = 3;
+                    oAC.prehighlightClassName = "yui-ac-prehighlight";
+                    oAC.useShadow = true;
+                    oAC.forceSelection = true;
+                    oAC._bFocused = true;
 
-						return me._generateChildrenUrlParams(searchData);
-					};
-		            oAC.queryDelay = 1;
-	            }
-	            oAC.minQueryLength = 3;
-	            oAC.prehighlightClassName = "yui-ac-prehighlight";
-                oAC.useShadow = true;
-                oAC.forceSelection = true;
-                oAC._bFocused = true;
-
-                var selectItemHandler = function (sType, aArgs) {
-                    var node = {
-                        name: aArgs[2][0],
-	                    selectedName: aArgs[2][1],
-                        nodeRef: aArgs[2][2]
-                    };
-                    this.selectedItems[node.nodeRef] = node;
-                    this.updateSelectedItems();
-                    this.updateFormFields();
-                    this.updateInputUI();
-                }.bind(this);
-                oAC.itemSelectEvent.subscribe(selectItemHandler);
+                    var selectItemHandler = function (sType, aArgs) {
+                        var node = {
+                            name: aArgs[2][0],
+                            selectedName: aArgs[2][1],
+                            nodeRef: aArgs[2][2]
+                        };
+                        this.selectedItems[node.nodeRef] = node;
+                        this.updateSelectedItems();
+                        this.updateFormFields();
+                        this.updateInputUI();
+                    }.bind(this);
+                    oAC.itemSelectEvent.subscribe(selectItemHandler);
+                }
             },
 
             populateData: function AssociationSelectOne_populateSelect() {

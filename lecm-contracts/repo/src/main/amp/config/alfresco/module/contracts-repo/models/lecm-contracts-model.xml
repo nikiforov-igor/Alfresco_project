@@ -223,7 +223,7 @@
                         <many>true</many>
                     </source>
                     <target>
-                        <class>lecm-representative:representative-type</class>
+                        <class>cm:cmobject</class>
                         <mandatory>false</mandatory>
                         <many>false</many>
                     </target>

@@ -181,7 +181,7 @@ LogicECM.module = LogicECM.module || {};
         },
 
         onReady: function AssociationTreeViewer_onReady() {
-            if (!this.options.lazyLoading && !this.options.initialized) {
+            if (!this.options.initialized) {
                 this.options.initialized = true;
                 this.eventGroup = (this.options.prefixPickerId == null ?  this.id + '-cntrl' : this.options.prefixPickerId) + Dom.generateId();
                 this.init();
@@ -215,6 +215,7 @@ LogicECM.module = LogicECM.module || {};
                 // Create picker button
 	            var buttonName = Dom.get(this.options.prefixPickerId + "-tree-picker-button").name;
                 this.widgets.pickerButton =  new YAHOO.widget.Button(this.options.prefixPickerId + "-tree-picker-button", buttonOptions);
+                this.widgets.pickerButton.set('disabled', this.options.lazyLoading);
 
 	            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
 
@@ -229,8 +230,11 @@ LogicECM.module = LogicECM.module || {};
 
                 this.populateDataWithAllowedScript();
                 this.createPickerDialog();
-                this._loadSearchProperties();
-                this.loadDefaultValue();
+
+                if (!this.options.lazyLoading) {
+                    this._loadSearchProperties();
+                    this.loadDefaultValue();
+                }
             } else {
 	            this.updateViewForm();
             }

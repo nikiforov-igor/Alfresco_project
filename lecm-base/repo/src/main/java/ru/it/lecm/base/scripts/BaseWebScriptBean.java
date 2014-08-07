@@ -80,7 +80,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
 		}
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS")) {
+        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
             NodeRef empOrganization = orgstructureService.getEmployeeOrganization(currentEmployee);
             filter.add(new FilterPropLECM(OrgstructureAspectsModel.PROP_LINKED_ORGANIZATION_REF, empOrganization != null ? empOrganization.toString() : "NOT_REF", FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
         }

@@ -127,7 +127,8 @@ LogicECM.module = LogicECM.module || {};
                 }
                 control.setOptions({
                     currentValue: this.options.currentValue,
-                    selectedValueNodeRef: ""
+                    selectedValueNodeRef: "",
+                    lazyLoading: (selectedContractor != null)
                 });
                 if (selectedContractor != null) {
                     control.setOptions(autocompleteConf);

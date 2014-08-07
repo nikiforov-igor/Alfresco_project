@@ -59,7 +59,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
     @Override
     public boolean hasAccessToOrgElement(String userName, NodeRef orgElement) {
-        return hasAccessToOrgElement(userName, orgElement, false);
+        return hasAccessToOrgElement(userName, orgElement, false); //разрешаем доступк к элементам без организации по умолчанию
     }
 
     private boolean hasAccessToOrgElement(String userName, NodeRef orgElement, boolean doNotAccessWithEmpty) {
@@ -103,7 +103,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         Set<NodeRef> employees = new HashSet<>();
         for (String userName : userOrganizationsCache.getKeys()) {
             if (userOrganizationsCache.get(userName) != null && userOrganizationsCache.get(userName).equals(organizationRef)){
-                employees.add(getEmployeeByPerson(userName));
+                NodeRef employee = getEmployeeByPerson(userName);
+                if (employee != null) {
+                    employees.add(getEmployeeByPerson(userName));
+                }
             }
         }
         return new ArrayList<>(employees);
