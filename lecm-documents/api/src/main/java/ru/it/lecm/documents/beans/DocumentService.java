@@ -98,6 +98,8 @@ public interface DocumentService {
 	public static final QName ASPECT_DOC_CANCELLED = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "cancelled");
 	public static final QName ASPECT_DOC_ACCEPT = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "in-work");
 
+	public static final QName ASPECT_WITHOUT_ATTACHMENTS = QName.createQName(DOCUMENT_ASPECTS_NAMESPACE_URI, "without-attachments");
+
     /**
      * Метод для получения рейтинга документа
      * documentNodeRef - document nodeRef
