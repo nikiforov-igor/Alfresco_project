@@ -683,10 +683,13 @@ LogicECM.module = LogicECM.module || {};
                         }
 
                         Event.on(tree, "focusin", function (e) {
-                            if (!Selector.test(e.relatedTarget, "div.tree-items *")) {
+                            if ((e.relatedTarget && !Selector.test(e.relatedTarget, "div.tree-items *"))
+                                || (e.explicitOriginalTarget && !Selector.test(e.explicitOriginalTarget.parentNode, "div.tree-items *"))) {
                                 me.rootNode.focus();
                                 me.treeViewClicked(me.rootNode);
                                 me.tree.onEventToggleHighlight(me.rootNode);
+                                e.preventDefault();
+                                e.stopPropagation();
                             }
                         });
 
@@ -849,9 +852,9 @@ LogicECM.module = LogicECM.module || {};
                     if ((Dom.getY(activeEl) < Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
                         e.preventDefault();
                     }
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
                 }
-                e.stopImmediatePropagation();
-                e.stopPropagation();
             }
         },
 
@@ -872,9 +875,9 @@ LogicECM.module = LogicECM.module || {};
                     if ((Dom.getY(activeEl) > Dom.getY(target) + target.offsetHeight / 2) || scrollEnded) {
                         e.preventDefault();
                     }
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
                 }
-                e.stopImmediatePropagation();
-                e.stopPropagation();
             }
         },
 
