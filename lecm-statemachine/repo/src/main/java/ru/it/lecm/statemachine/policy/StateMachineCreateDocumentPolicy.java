@@ -86,6 +86,7 @@ public class StateMachineCreateDocumentPolicy implements NodeServicePolicies.OnC
         HashMap<QName, Serializable> aspectProps = new HashMap<QName, Serializable>();
         aspectProps.put(StatemachineModel.PROP_STATUS, "Новый");
         nodeService.addAspect(docRef, StatemachineModel.ASPECT_STATUS, aspectProps);
+        serviceRegistry.getPermissionService().setPermission(docRef, "ORGUNIT", "Read", false);
         // Ensure that the transaction listener is bound to the transaction
         AlfrescoTransactionSupport.bindListener(this.transactionListener);
 
