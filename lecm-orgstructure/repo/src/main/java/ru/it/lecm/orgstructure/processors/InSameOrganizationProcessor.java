@@ -1,10 +1,13 @@
 package ru.it.lecm.orgstructure.processors;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: dbashmakov
@@ -17,9 +20,14 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
     public static final String DEFAULT_ORGANIZATION_FIELD = "lecm-orgstr-aspects:linked-organization-assoc-ref";
 
     private OrgstructureBean orgstructureBean;
+    private AuthorityService authorityService;
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
+    }
+    
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
     }
 
     @Override
@@ -35,16 +43,20 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
 
         NodeRef organization;
         NodeRef employee;
+        Set<String> auth;
         if (userName != null) {
+        	auth = authorityService.getAuthoritiesForUser(userName.toString());
             employee = orgstructureBean.getEmployeeByPerson(userName.toString());
         } else {
+        	auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
             employee = orgstructureBean.getCurrentEmployee();
         }
 
         final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         sbQuery.append("@").append(organizationProperty).append(":");
 
-        if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
+//        if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
+        if (!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
             organization = orgstructureBean.getEmployeeOrganization(employee);
             if (organization != null) {
                 sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");

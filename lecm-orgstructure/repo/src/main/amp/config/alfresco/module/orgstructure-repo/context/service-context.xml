@@ -80,6 +80,7 @@
 		<property name="personService" ref="personService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="repositoryHelper" ref="repositoryHelper"/>
+		<property name="authorityService" ref="authorityService" />
 		<property name="userOrganizationsCache" ref="userOrganizationsCache"/>
 		<property name="folders">
 			<map>
@@ -371,6 +372,7 @@
     <bean id="inUserOrganizationProcessor" class="ru.it.lecm.orgstructure.processors.InSameOrganizationProcessor" parent="searchQueryBaseProccesor">
         <property name="id" value="IN_SAME_ORGANIZATION"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="authorityService" ref="authorityService"/>
     </bean>
 
     <bean id="orgstructureOnCreateAssocsPolicy" class="ru.it.lecm.orgstructure.policies.OrgstructureOnCreateAssocPolicy"

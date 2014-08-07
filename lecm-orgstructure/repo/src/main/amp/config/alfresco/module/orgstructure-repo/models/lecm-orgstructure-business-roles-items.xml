@@ -32,12 +32,6 @@
                 <property name="lecm-orgstr:business-role-is-dynamic">true</property>
                 <property name="lecm-orgstr:business-role-description">Другие назначения</property>
             </item>
-            <item name="cm:Глобальный доступ к организациям" type="lecm-orgstr:business-role">
-                <property name="cm:name">Глобальный доступ к организациям</property>
-                <property name="lecm-orgstr:business-role-identifier">BR_GLOBAL_ORGANIZATIONS_ACCESS</property>
-                <property name="lecm-orgstr:business-role-is-dynamic">false</property>
-                <property name="lecm-orgstr:business-role-description">Бизнес роль для доступа к сущностям всех организаций и документам организаций без ограничений</property>
-            </item>
         </items>
     </item>
 </items>

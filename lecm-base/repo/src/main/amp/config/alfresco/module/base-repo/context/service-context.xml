@@ -116,6 +116,7 @@
 	    <property name="nodeService">
 		    <ref bean="nodeService" />
 	    </property>
+	    <property name="authorityService" ref="authorityService" />
         <property name="orgstructureService" ref="serviceOrgstructure"/>
     </bean>
 

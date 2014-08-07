@@ -8,6 +8,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.cmr.security.NoSuchPersonException;
 import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.cmr.security.PersonService;
@@ -34,6 +35,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	private DictionaryBean dictionaryService;
 	private NodeRef organizationRootRef;
 	private Repository repositoryHelper;
+	private AuthorityService authorityService;
     private SimpleCache<String, NodeRef> userOrganizationsCache;
 
     public void setPersonService(PersonService personService) {
@@ -52,6 +54,10 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         this.userOrganizationsCache = userOrganizationsCache;
     }
 
+    
+    public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
     @Override
     public SimpleCache<String, NodeRef> getUserOrganizationsCache() {
         return userOrganizationsCache;
@@ -70,8 +76,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
             NodeRef currentEmployee = getEmployeeByPerson(userName, false);
             if (currentEmployee != null) {
                 // доступ к самому себе или при наличии бизнес-роли - доступ разрешен
-                if (currentEmployee.equals(orgElement) ||
-                        isEmployeeHasBusinessRole(getEmployeeByPerson(userName), "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false, false)) {
+            	Set<String> auth = authorityService.getAuthoritiesForUser(userName);
+                if (currentEmployee.equals(orgElement) || auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
+//                        isEmployeeHasBusinessRole(getEmployeeByPerson(userName), "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false, false)) {
                     return true;
                 }
 

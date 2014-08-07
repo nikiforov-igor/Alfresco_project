@@ -5,10 +5,12 @@ import org.alfresco.query.PagingResults;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptPagingNodes;
 import org.alfresco.repo.node.getchildren.FilterProp;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.AuthorityService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
@@ -36,6 +38,7 @@ public class BaseWebScriptBean extends BaseWebScript {
 	private DictionaryService dictionaryService;
 	private NodeService nodeService;
     private OrgstructureBean orgstructureService;
+    private AuthorityService authorityService;
 
 	final int REQUEST_MAX = 1000;
 
@@ -56,6 +59,10 @@ public class BaseWebScriptBean extends BaseWebScript {
 	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
+	
+	public void setAuthorityService(AuthorityService authorityService) {
+        this.authorityService = authorityService;
+    }
 
 	public ScriptPagingNodes getChilds(ScriptNode node, String childQNameType, int maxItems, int skipCount, String sortProp, Boolean sortAsc, Boolean onlyActive) {
 		return getChilds(node.getNodeRef(), childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive);
@@ -80,7 +87,9 @@ public class BaseWebScriptBean extends BaseWebScript {
 			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
 		}
         NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
+        Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
+//        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
+        if(!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
             NodeRef empOrganization = orgstructureService.getEmployeeOrganization(currentEmployee);
             filter.add(new FilterPropLECM(OrgstructureAspectsModel.PROP_LINKED_ORGANIZATION_REF, empOrganization != null ? empOrganization.toString() : "NOT_REF", FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
         }
