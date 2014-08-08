@@ -18,7 +18,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	/**
 	 * YUI Library aliases
 	 */
-	var Dom = YAHOO.util.Dom;
+	var Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector,
+        KeyListener = YAHOO.util.KeyListener;
 
 	LogicECM.BaseFormTabs = function (htmlId) {
 		LogicECM.BaseFormTabs.superclass.constructor.call(this, "LogicECM.BaseFormTabs", htmlId, ["tabview"]);
@@ -57,7 +59,98 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
 				tabs.addListener('beforeActiveTabChange', onBeforeActive);
 				tabs.addListener('activeTabChange', onActive);
-				LogicECM.module.Base.Util.setHeight();
-			}
+
+                LogicECM.module.Base.Util.setHeight();
+
+                setTabbingOrder(this.options.formId, tabs);
+            }
 		});
+
+    var setTabbingOrder = function(formId, tabs) {
+        var parent = Dom.get(formId + "-fields");
+        var buttons = Selector.query(".form-buttons span.yui-button button", formId);
+        var inDialog = Selector.test(Dom.get(formId), ".yui-dialog form");
+
+        if (parent) {
+            var tabNavs = Selector.query('.yui-nav li a', parent);
+            var tabContents = Selector.query('.yui-content .tab', parent);
+            var elements;
+
+            for (var i = 0; i < tabNavs.length; i++) {
+                var tabNav = tabNavs[i];
+                var tabContent = tabContents[i];
+
+                if (tabContent) {
+                    elements = Selector.query('div.control', tabContent);
+                    elements.unshift(tabNav);
+
+                    if (buttons && !buttons.isEmpty) {
+                        if (i == 0) {
+                            for (var j = 0; j < buttons.length; j++) {
+                                elements.push(buttons[j]);
+                            }
+                        } else {
+                            //из последнего контрола таба переходить на кнопки
+                            var lastControl = elements[elements.length - 1];
+
+                            new KeyListener(lastControl, {keys: KeyListener.KEY.TAB},
+                                {
+                                    fn: function (a, args) {
+                                        var e = args[1];
+
+                                        buttons[0].focus();
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    },
+                                    scope: this,
+                                    correctScope: true
+                                }, KeyListener.KEYDOWN).enable();
+                        }
+
+                        // по табу на последней кнопке уходить на первый таб
+                        new KeyListener(buttons[buttons.length - 1], {keys: KeyListener.KEY.TAB},
+                            {
+                                fn: function (a, args) {
+                                    tabs.selectTab(0);
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
+
+
+                    LogicECM.module.Base.Util.setElementsTabbingOrder(elements, inDialog, i == 0);
+
+                    if (i < tabNavs.length - 1) {
+                        // на следующюю вкладку
+                        new KeyListener(tabNav, {keys: KeyListener.KEY.RIGHT},
+                            {
+                                fn: function (a, args) {
+                                    var ind = tabs.get('activeIndex') + 1;
+
+                                    tabNavs[ind].focus();
+                                    tabs.selectTab(ind);
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
+                    if (i > 0) {
+                        // на предыдущую вкладку
+                        new KeyListener(tabNav, {keys: KeyListener.KEY.LEFT},
+                            {
+                                fn: function (a, args) {
+                                    var ind = tabs.get('activeIndex') - 1;
+
+                                    tabNavs[ind].focus();
+                                    tabs.selectTab(ind);
+                                },
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
+                }
+            }
+        }
+    };
 })();

@@ -280,6 +280,16 @@ LogicECM.module = LogicECM.module || {};
                     fn:this.doBeforeDialogShow,
                     scope:this
                 },
+                doAfterDialogHide: {
+                    // после закрытия диалога вернуть фокус в исходный контрол
+                    fn: function (p_form, p_dialog) {
+                        var controlBtn = this.widgets.createNewButton;
+                        if (controlBtn) {
+                            controlBtn.focus();
+                        }
+                    },
+                    scope: this
+                },
                 onSuccess:{
                     fn:function (response) {
                         this.addSelectedItem(response.json.persistedObject);

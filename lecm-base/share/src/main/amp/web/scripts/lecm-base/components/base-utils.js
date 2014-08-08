@@ -478,7 +478,86 @@ LogicECM.module.Base.Util = {
 			hash |= 0; // Convert to 32bit integer
 		}
 		return hash;
-	}
+	},
+
+    // Скрипт выставляет элементам формы атрибут tabindex, задавая нужный порядок обхода с клавиатуры
+    setElementsTabbingOrder: function (elements, inDialog, setFirstFocus) {
+        var Dom = YAHOO.util.Dom,
+            Selector = YAHOO.util.Selector,
+            KeyListener = YAHOO.util.KeyListener;
+
+        var tabbedArray = [];
+        var tabindex = 0;
+        // если обрабатывается форма в диалоговом окне:
+        if (inDialog) {
+            tabindex = (++LogicECM.module.Base.Util.tabNum) * 100; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
+        }
+        for (var i = 0; i < elements.length; i++) {
+            var el = elements[i];
+            if (el && !Selector.test(el, ".control *")) {
+                if (Dom.hasClass(el, "control")) {
+                    //todo настройки для конкретных контролов
+                    if (Dom.hasClass(el, "dnd-uploader")) {
+                        var link = Selector.query('.uploader-block img.uploader-button', el, true);
+                        if (link) {
+                            Dom.setAttribute(link, 'tabindex', ++tabindex);
+                            tabbedArray.push(link);
+                        }
+                    } else if (Dom.hasClass(el, "")) {
+
+                    } else {
+                        // универсально для большинства контролов
+                        var valueDiv = Selector.query('div.value-div', el, true);
+                        if (valueDiv) {
+                            var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
+                            if (input) {
+                                Dom.setAttribute(input, 'tabindex', ++tabindex);
+                                tabbedArray.push(input);
+                            }
+                        }
+                        var buttonDiv = Selector.query('div.buttons-div', el, true);
+                        if (buttonDiv) {
+                            var buttons = Selector.query('a, input[type=button], span.yui-button button', buttonDiv);
+                            for (var j = 0; j < buttons.length; j++) {
+                                var btn = buttons[j];
+                                if (btn.offsetHeight > 0) {
+                                    Dom.setAttribute(btn, 'tabindex', ++tabindex);
+                                    tabbedArray.push(btn);
+                                }
+                            }
+                        }
+                    }
+                } else if (Dom.hasClass(el, "yui-button")) {
+                    var button = Selector.query('button', el, true);
+                    Dom.setAttribute(button, 'tabindex', ++tabindex);
+                    tabbedArray.push(button);
+                } else {
+                    Dom.setAttribute(el, 'tabindex', ++tabindex);
+                    tabbedArray.push(el);
+                }
+            }
+        }
+
+        if (!tabbedArray.isEmpty) {
+            var firstEl = tabbedArray[0];
+            var lastEl = tabbedArray[tabbedArray.length - 1];
+
+            new KeyListener(lastEl, {keys: KeyListener.KEY.TAB},
+                {
+                    fn: function (layer, args) {
+                        var e = args[1];
+                        firstEl.focus();
+                        e.preventDefault();
+                    },
+                    scope: this,
+                    correctScope: true
+                }, KeyListener.KEYDOWN).enable();
+
+            if (setFirstFocus) {
+                firstEl.focus();
+            }
+        }
+    }
 };
 
 (function() {
@@ -487,8 +566,7 @@ LogicECM.module.Base.Util = {
 	 */
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
-        Selector = YAHOO.util.Selector,
-        KeyListener = YAHOO.util.KeyListener;
+        Selector = YAHOO.util.Selector;
 
 	// Recalculate the vertical size on a browser window resize event
 	Event.on(window, "resize", function(e) {
@@ -551,88 +629,13 @@ LogicECM.module.Base.Util = {
 
     // Скрипт выставляет элементам формы атрибут tabindex, задавая нужный порядок обхода с клавиатуры
     // Отрабатывает после загрузки формы
-
-    function setElementsTabbingOrder(layer, args) {
-//        console.log("base setTabbingOrder");
-        var params = args[1];
-        var formId = params.eventGroup;
-        var form = Dom.get(formId);
+    function setFormElementsTabbingOrder(layer, args) {
+        var form = Dom.get(args[1].eventGroup);
         var elements = Selector.query('div.control, .form-buttons span.yui-button, .form-buttons input[type=button]', form);
 
-        var tabbedArray = [];
-        var tabindex = 0;
-        // если обрабатывается форма в диалоговом окне:
-        if (Selector.test(form, ".yui-dialog form") ) {
-            tabindex = (++LogicECM.module.Base.Util.tabNum) * 100; // подразумеваем, что на основной странице tabindex, равный этому значению, не был достигнут
-        }
-        for (var i = 0; i < elements.length; i++) {
-            var el = elements[i];
-            if (el && el.offsetHeight > 0) {
-                if (Dom.hasClass(el, "control")) {
-                    //todo настройки для конкретных контролов
-                    if (Dom.hasClass(el, "dnd-uploader")) {
-                        var link = Selector.query('.uploader-block img.uploader-button', el, true);
-                        if (link) {
-                            Dom.setAttribute(link, 'tabindex', ++tabindex);
-                            tabbedArray.push(link);
-                        }
-                    } else if (Dom.hasClass(el, "")) {
-
-                    } else if (Dom.hasClass(el, "")) {
-
-                    } else {
-                        // универсально для большинства контролов
-                        var valueDiv = Selector.query('div.value-div', el, true);
-                        if (valueDiv) {
-                            var input = Selector.query('input[type=text], input[type=checkbox], select, textarea', valueDiv, true);
-                            if (input) {
-                                Dom.setAttribute(input, 'tabindex', ++tabindex);
-                                tabbedArray.push(input);
-                            }
-                        }
-                        var buttonDiv = Selector.query('div.buttons-div', el, true);
-                        if (buttonDiv) {
-                            var buttons = Selector.query('a, input[type=button], span.yui-button button', buttonDiv);
-                            for (var j = 0; j < buttons.length; j++) {
-                                var btn = buttons[j];
-                                if (btn.offsetHeight > 0) {
-                                    Dom.setAttribute(btn, 'tabindex', ++tabindex);
-                                    tabbedArray.push(btn);
-                                }
-                            }
-                        }
-                    }
-                } else if (Dom.hasClass(el, "yui-button")) {
-                    var button = Selector.query('button', el, true);
-                    Dom.setAttribute(button, 'tabindex', ++tabindex);
-                    tabbedArray.push(button);
-                } else {
-                    Dom.setAttribute(el, 'tabindex', ++tabindex);
-                    tabbedArray.push(el);
-                }
-            }
-        }
-
-        if (!tabbedArray.isEmpty) {
-            var firstEl = tabbedArray[0];
-            var lastEl = tabbedArray[tabbedArray.length - 1];
-
-            new KeyListener(lastEl, {keys: KeyListener.KEY.TAB},
-                {
-                    fn: function(layer, args) {
-                        var e = args[1];
-                        firstEl.focus();
-                        e.preventDefault();
-                        e.stopPropagation();
-                    },
-                    scope: this,
-                    correctScope: true
-                }, KeyListener.KEYDOWN).enable();
-
-            firstEl.focus();
-        }
+        LogicECM.module.Base.Util.setElementsTabbingOrder(elements, Selector.test(form, ".yui-dialog form"), true);
     }
 
-    YAHOO.Bubbling.on("afterFormRuntimeInit", setElementsTabbingOrder);
+    YAHOO.Bubbling.on("afterFormRuntimeInit", setFormElementsTabbingOrder);
 
 })();
