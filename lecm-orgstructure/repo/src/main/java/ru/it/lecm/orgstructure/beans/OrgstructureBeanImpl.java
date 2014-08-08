@@ -54,7 +54,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         this.userOrganizationsCache = userOrganizationsCache;
     }
 
-    
+
     public void setAuthorityService(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }
@@ -1392,12 +1392,11 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	}
 
 	@Override
-	@Deprecated
 	public NodeRef createStaff(final NodeRef orgElement, final NodeRef staffPosition) {
 //		TODO: Судя по всему, нигде не используется(хотя есть в Integral Test), но транзакцию на всякий случай выпилю.
 		//если переданные параметры это подразделение и должность то заводим штатное расписание
 		NodeRef staffRef = null;
-		if (isUnit(orgElement) && isPosition(orgElement)) {
+		if (isUnit(orgElement) && isPosition(staffPosition)) {
 			QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, UUID.randomUUID().toString());
 			ChildAssociationRef childAssociationRef = nodeService.createNode(orgElement, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_STAFF_LIST);
 			nodeService.createAssociation(childAssociationRef.getChildRef(), staffPosition, ASSOC_ELEMENT_MEMBER_POSITION);
