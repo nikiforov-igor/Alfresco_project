@@ -1,17 +1,33 @@
 <import resource="classpath:/alfresco/templates/org/alfresco/import/alfresco-util.js">
 <import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/permission-utils.js">
+<import resource="classpath:/alfresco/site-webscripts/ru/it/lecm/documents/utils/document-utils.js">
 
-function main()
-{
-    AlfrescoUtil.param("nodeRef");
-    AlfrescoUtil.param("view", "");
+function main() {
+	AlfrescoUtil.param("nodeRef");
+	AlfrescoUtil.param("view", "");
 	var hasPerm = hasPermission(model.nodeRef, PERM_CONTENT_LIST);
 	if (hasPerm) {
-        var atts = getAttachments(model.nodeRef);
-        if (atts != null) {
-            model.attachments = atts;
-        }
-		model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+		var nodeDetails = DocumentUtils.getNodeDetails(model.nodeRef);
+		if (nodeDetails) {
+			var aspects = nodeDetails.item.node.aspects;
+			var withoutAttachments = false;
+			if (aspects != null) {
+				for (var i = 0; i < aspects.length; i++) {
+					if (aspects[i] == "lecm-document-aspects:without-attachments") {
+						withoutAttachments = true;
+						break;
+					}
+				}
+			}
+
+			if (!withoutAttachments) {
+				var atts = getAttachments(model.nodeRef);
+				if (atts != null) {
+					model.attachments = atts;
+				}
+				model.hasViewAttachmentPerm = hasPermission(model.nodeRef, PERM_CONTENT_VIEW);
+			}
+		}
 	}
 }
 
