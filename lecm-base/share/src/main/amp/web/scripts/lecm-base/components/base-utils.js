@@ -503,6 +503,16 @@ LogicECM.module.Base.Util = {
                             Dom.setAttribute(link, 'tabindex', ++tabindex);
                             tabbedArray.push(link);
                         }
+                        var list = Selector.query('.container .attachments-list', el, true);
+                        if (list) {
+                            Dom.setAttribute(list, 'tabindex', ++tabindex);
+                            tabbedArray.push(list);
+                        }
+                        var previewBtn = Selector.query('.container .show-preview-button button, .container .show-preview-button input[type=button]', el, true);
+                        if (previewBtn) {
+                            Dom.setAttribute(previewBtn, 'tabindex', ++tabindex);
+                            tabbedArray.push(previewBtn);
+                        }
                     } else if (Dom.hasClass(el, "")) {
 
                     } else {

@@ -20,6 +20,7 @@ LogicECM.control = LogicECM.control || {};
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		Util = LogicECM.module.Base.Util,
+        Selector = YAHOO.util.Selector,
         KeyListener = YAHOO.util.KeyListener;
 
 	LogicECM.control.DndUploader = function (fieldHtmlId) {
@@ -62,7 +63,8 @@ LogicECM.control = LogicECM.control || {};
 
 			onReady:function () {
 				if (!this.options.disabled) {
-					LogicECM.LecmUploaderInitializer.initLecmUploaders();
+                    var me = this;
+                    LogicECM.LecmUploaderInitializer.initLecmUploaders();
 					this.loadRootNode();
 
                     var uploaderButton = this.id + "-uploader-button";
@@ -76,22 +78,124 @@ LogicECM.control = LogicECM.control || {};
                             scope: this,
                             correctScope: true
                         }, KeyListener.KEYDOWN).enable();
+                    me.widgets.uploaderButton = uploaderButton;
 
-					if (Dom.get(this.id + "-show-preview-button") != null) {
-						this.widgets.showPreviewButton = new YAHOO.widget.Button(
-                            this.id + "-show-preview-button",
-							{
-								type: "checkbox",
-								onclick: {
-									fn: this.updatePreview,
-									obj: null,
-									scope: this
-								},
-								checked: false,
-								disabled: true
-							}
-						);
-					}
+                    var updPreviewBtnId = this.id + "-show-preview-button";
+					if (Dom.get(updPreviewBtnId) != null) {
+                        this.widgets.showPreviewButton = new YAHOO.widget.Button(
+                            updPreviewBtnId,
+                            {
+                                type: "checkbox",
+                                onclick: {
+                                    fn: this.updatePreview,
+                                    obj: null,
+                                    scope: this
+                                },
+                                checked: false,
+                                disabled: true
+                            }
+                        );
+                        new KeyListener(updPreviewBtnId, {keys: KeyListener.KEY.ENTER},
+                            {
+                                fn: function(layer, args) {
+                                    var e = args[1];
+
+                                    me.widgets.showPreviewButton.set("checked", !(me.widgets.showPreviewButton.get("checked")));
+                                    me.updatePreview();
+
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                },
+                                scope: me,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+
+                    }
+
+                    var list = Dom.get(this.id + '-attachments');
+                    if (list) {
+                        Event.on(list, "focusin", function (e) {
+                            var rows = Selector.query("li", e.target);
+                            if (rows && rows.length > 0 && me.selectedPreviewFile == null) {
+                                me.selectPreviewFile(null, rows[0].id.substring("attachment-".length));
+                                e.target.scrollTop = 0;
+                            }
+                        });
+                        new KeyListener(list, {keys: KeyListener.KEY.ENTER},
+                            {
+                                fn: function() {
+                                    me.widgets.showPreviewButton.set("checked", true);
+                                    me.updatePreview();
+                                },
+                                scope: me,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                        new KeyListener(list, {keys: KeyListener.KEY.DELETE},
+                            {
+                                fn: function (layer, args) {
+                                    me.removeSelectedElement(args[1], {nodeRef: this.selectedPreviewFile});
+                                },
+                                scope: me,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                        new KeyListener(list, {keys: KeyListener.KEY.DOWN},
+                            {
+                                fn: function (layer, args) {
+                                    var e = args[1];
+                                    if (me.selectedItems && !me.selectedItems.isEmpty) {
+                                        if (this.selectedPreviewFile != null) {
+                                            var selectedId = "attachment-" + this.selectedPreviewFile;
+                                            var next = Dom.getNextSibling(selectedId);
+                                            if (next) {
+                                                Dom.removeClass(selectedId, "selected");
+                                                Dom.addClass(next.id, "selected");
+                                                this.selectedPreviewFile = next.id.substring("attachment-".length);
+                                            }
+                                        } else {
+                                            var firstRow = Dom.getFirstChild(list);
+                                            Dom.addClass(firstRow, "selected");
+                                            this.selectedPreviewFile = firstRow.id.substring("attachment-".length);
+                                        }
+                                    }
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                },
+                                scope: me,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                        new KeyListener(list, {keys: KeyListener.KEY.UP},
+                            {
+                                fn: function (layer, args) {
+                                    var e = args[1];
+                                    if (me.selectedItems && !me.selectedItems.isEmpty) {
+                                        if (this.selectedPreviewFile != null) {
+                                            var selectedId = "attachment-" + this.selectedPreviewFile;
+                                            var previous = Dom.getPreviousSibling(selectedId);
+                                            if (previous) {
+                                                Dom.removeClass(selectedId, "selected");
+                                                Dom.addClass(previous.id, "selected");
+                                                this.selectedPreviewFile = previous.id.substring("attachment-".length);
+                                            }
+                                        } else {
+                                            var lastRow = Dom.getLastChild(list);
+                                            Dom.addClass(lastRow, "selected");
+                                            this.selectedPreviewFile = lastRow.id.substring("attachment-".length);
+                                        }
+                                    }
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                },
+                                scope: me,
+                                correctScope: true
+                            }, KeyListener.KEYDOWN).enable();
+                    }
+
+                    YAHOO.Bubbling.on("hidePanel", function(layer, args) {
+                        var panel = args[1].panel;
+                        if (panel && panel.id.indexOf("dnd-upload") >= 0 && me.widgets.uploaderButton) {
+                            Dom.get(me.widgets.uploaderButton).focus();
+                        }
+                    });
 				}
 				if (this.options.checkRights) {
 					this.loadPermissions();
@@ -263,8 +367,27 @@ LogicECM.control = LogicECM.control || {};
                         suppressRefreshEvent: this.options.suppressRefreshEvent
 					};
 					this.fileUpload.show(uploadConfig);
+
+                    this.setTabbingInUploader();
 				}
 			},
+
+            setTabbingInUploader: function() {
+                var fileSelectionInput = this.fileUpload.uploader.fileSelectionInput;
+                var fileSelectionButton = Dom.getPreviousSibling(fileSelectionInput);
+                if (fileSelectionButton) {
+                    // по Enter'у на кнопке открывать диалог выбора
+                    new KeyListener(fileSelectionButton, {keys: KeyListener.KEY.ENTER},
+                        {
+                            fn: function(layer, args) {
+                                fileSelectionInput.click();
+                            },
+                            scope: this,
+                            correctScope: true
+                        }, KeyListener.KEYDOWN).enable();
+                    fileSelectionButton.focus();
+                }
+            },
 
 			initUploader: function() {
                 if (!this.options.useDnD) return;
