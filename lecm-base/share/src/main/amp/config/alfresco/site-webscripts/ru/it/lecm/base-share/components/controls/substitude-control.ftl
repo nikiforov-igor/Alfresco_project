@@ -36,7 +36,7 @@ YAHOO.util.Event.onContentReady("${fieldHtmlId}-value", function () {
 	</div>
 	<div class="container">
 		<div class="value-div">
-			<span class="viewmode-value" id="${fieldHtmlId}-value"></span>
+			<span id="${fieldHtmlId}-value"></span>
 		</div>
 	</div>
 </div>
