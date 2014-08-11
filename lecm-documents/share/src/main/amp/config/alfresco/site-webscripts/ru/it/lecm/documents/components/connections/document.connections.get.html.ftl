@@ -12,6 +12,10 @@
 	<#assign el=args.htmlid/>
 	<#if connections??>
 	<!-- Markup -->
+	<script type="text/javascript">
+		//TODO:Переписать
+		var documentConnectionsComponent = null;
+	</script>
 	<div class="widget-bordered-panel">
 	<div class="document-metadata-header document-components-panel">
 	    <h2 id="${el}-heading" class="dark">
@@ -58,13 +62,19 @@
 	
 	    <script type="text/javascript">//<![CDATA[
 		(function(){
-	    	Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
-	    	
-	    	var documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions(
-	            {
-	                nodeRef: "${nodeRef}",
-	                title:"${msg('heading')}"
-	            }).setMessages(${messages});
+			function init() {
+				Alfresco.util.createTwister("${el}-heading", "DocumentConnections");
+
+				if (documentConnectionsComponent == null) {
+					documentConnectionsComponent = new LogicECM.DocumentConnections("${el}").setOptions(
+							{
+								nodeRef: "${nodeRef}",
+								title: "${msg('heading')}"
+							}).setMessages(${messages});
+				}
+			}
+
+			YAHOO.util.Event.onContentReady("${el}", init, true);
 		})();
 	    //]]></script>
 	</div>

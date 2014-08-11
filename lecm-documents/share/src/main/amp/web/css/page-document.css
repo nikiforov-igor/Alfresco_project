@@ -248,6 +248,7 @@ div.metadata-form div.lecm-dashlet-actions + div {
     width: 12px;
     height: 11px;
     cursor: pointer;
+	margin-top: 7px;
 }
 
 .right-tasks-container {
