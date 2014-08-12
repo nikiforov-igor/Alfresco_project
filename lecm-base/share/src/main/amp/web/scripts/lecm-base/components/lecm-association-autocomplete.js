@@ -527,10 +527,6 @@ LogicECM.module = LogicECM.module || {};
             },
 
             canCurrentValuesShow: function() {
-                if (this.options.multipleSelectMode) {
-                    return true;
-                }
-
                 return Object.keys(this.selectedItems).length > 0;
             },
 
