@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 
 /**
  *
@@ -93,12 +94,15 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 	private void removeAssociations(final List<AssociationRef> assocs) {
 		for (AssociationRef assoc : assocs) {
-			NodeRef sourceRef = assoc.getSourceRef(),
-					targetRef = assoc.getTargetRef();
-			behaviourFilter.disableBehaviour(sourceRef);
-			behaviourFilter.disableBehaviour(targetRef);
+			AssociationDefinition assocDef = dictionaryService.getAssociation(assoc.getTypeQName());
+			if (assocDef != null && !assocDef.isTargetMandatory()) {
+				NodeRef sourceRef = assoc.getSourceRef(),
+						targetRef = assoc.getTargetRef();
+				behaviourFilter.disableBehaviour(sourceRef);
+				behaviourFilter.disableBehaviour(targetRef);
 
-			nodeService.removeAssociation(sourceRef, targetRef, assoc.getTypeQName());
+				nodeService.removeAssociation(sourceRef, targetRef, assoc.getTypeQName());
+			}
 		}
 	}
 
@@ -160,7 +164,7 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 		//лишаем участников документа всех прав связанных с этим документом
 		List<NodeRef> members = documentMembersService.getDocumentMembers(documentRef);
-		List<String> users = new ArrayList<String>();
+		List<String> users = new ArrayList<>();
 		for (NodeRef member : members) {
 			behaviourFilter.disableBehaviour(member);
 			List<AssociationRef> assocs = nodeService.getTargetAssocs(member, DocumentMembersService.ASSOC_MEMBER_EMPLOYEE);
@@ -180,13 +184,13 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 		//останавливаем все workflow в которых участвует этот документ
 		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef, true);
-		Set<String> definitions = new HashSet<String>();
-		List<String> activities = new ArrayList<String>();
+		Set<String> definitions = new HashSet<>();
+		List<String> activities = new ArrayList<>();
 		for (WorkflowInstance workflow : workflows) {
 			definitions.add(workflow.getDefinition().getId());
 			activities.add(String.format("%s(%s)", workflow.getId(), workflow.getDefinition().getId()));
 		}
-		stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<String>(definitions), null, null);
+		stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<>(definitions), null, null);
 		logger.debug("All workflows {} for document {} are stopped", activities, documentRef);
 
 		try {
@@ -213,14 +217,14 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 		//уведомления
 		//бизнес журнал
 		//прочие ассоциации
-		List<AssociationRef> allAssocs = new ArrayList<AssociationRef>();
+		List<AssociationRef> allAssocs = new ArrayList<>();
 		allAssocs.addAll(nodeService.getTargetAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
 		allAssocs.addAll(nodeService.getSourceAssocs(documentRef, RegexQNamePattern.MATCH_ALL));
-		List<AssociationRef> connectionAssocs = new ArrayList<AssociationRef>(); //связи
-		List<NodeRef> connections = new ArrayList<NodeRef>();
-		List<AssociationRef> businessJournalAssocs = new ArrayList<AssociationRef>(); //ассоциации на бизнес-журнал
-		List<AssociationRef> notificationAssocs = new ArrayList<AssociationRef>(); //ассоциации на уведомления
-		List<AssociationRef> otherAssocs = new ArrayList<AssociationRef>(); //все остальное
+		List<AssociationRef> connectionAssocs = new ArrayList<>(); //связи
+		List<NodeRef> connections = new ArrayList<>();
+		List<AssociationRef> businessJournalAssocs = new ArrayList<>(); //ассоциации на бизнес-журнал
+		List<AssociationRef> notificationAssocs = new ArrayList<>(); //ассоциации на уведомления
+		List<AssociationRef> otherAssocs = new ArrayList<>(); //все остальное
 		for (AssociationRef assoc : allAssocs) {
 			QName assocType = assoc.getTypeQName();
 			String namespaceURI = assocType.getNamespaceURI();
