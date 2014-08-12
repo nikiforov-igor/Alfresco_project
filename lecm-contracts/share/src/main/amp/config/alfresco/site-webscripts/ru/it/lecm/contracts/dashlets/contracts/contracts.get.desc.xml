@@ -1,6 +1,6 @@
 <webscript>
-   <shortname>Договора</shortname>
-   <description>Дашлет "Договора"</description>
+   <shortname>Договоры</shortname>
+   <description>Дашлет "Договоры"</description>
    <family>user-dashlet</family>
    <url>/lecm/contracts/dashlets/contracts-list</url>
 </webscript>
