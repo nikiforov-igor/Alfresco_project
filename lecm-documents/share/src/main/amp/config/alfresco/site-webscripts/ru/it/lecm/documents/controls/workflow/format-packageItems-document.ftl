@@ -19,12 +19,19 @@
 })();
 //]]></script>
 
-<div class="form-field">
-	<div class="viewmode-field">
-		<label for="${fieldHtmlId}-valueDisplay">${field.label?html}:<#if field.mandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-		<span id="${fieldHtmlId}-valueDisplay" class="viewmode-value">
-
-		</span>
-		<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+<div class="control format-package-items viewmode">
+	<div class="label-div">
+		<#if field.mandatory && !(field.value?is_number) && field.value == "">
+		<span class="incomplete-warning"><img src="${url.context}/res/components/form/images/warning-16.png"
+		                                      title="${msg("form.field.incomplete")}"/><span>
+		</#if>
+		<label>${field.label?html}:</label>
+	</div>
+	<div class="container">
+		<div class="value-div">
+			<span id="${fieldHtmlId}-valueDisplay"></span>
+			<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
+		</div>
 	</div>
 </div>
+<div class="clear"></div>
