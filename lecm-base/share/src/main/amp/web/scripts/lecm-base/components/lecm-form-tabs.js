@@ -48,7 +48,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					var currentHeight = parseFloat(Dom.getStyle(current, 'height'));
 
 					if ((prevTabHeight > 0) && (currentHeight < prevTabHeight)) {
-						Dom.setStyle(current, 'height', prevTabHeight + 'px');
+						Dom.setStyle(current, 'min-height', prevTabHeight + 'px');
 					}
 					setTimeout(function () {
 						LogicECM.module.Base.Util.setHeight();
