@@ -33,6 +33,7 @@
 (function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
+        Selector = YAHOO.util.Selector;
         Bubbling = YAHOO.Bubbling;
     var panelId = "${id}-${set.id}-panel",
         expandButtonId = "${id}-${set.id}-expand-panel",
@@ -45,14 +46,11 @@
             var expandButton = Dom.get(expandButtonId);
             var saveDraftButton = Dom.get(saveDraftButtonId);
             var form = Dom.getAncestorByTagName(panelId, "form");
-            var formButtons = Dom.getElementsByClassName("form-buttons", "div", form);
 
-            okButton = Dom.getElementBy(function(el) {
-                return Dom.hasClass(el, "yui-submit-button");
-            }, "span", formButtons[0]);
+            okButton = Selector.query(".form-buttons .yui-submit-button", form, true);
             expandButton.parentNode.removeChild(expandButton);
-            Bubbling.fire("addSubmitElement", saveDraftYUIButton);
             Dom.insertBefore(saveDraftButton, okButton);
+            Bubbling.fire("addSubmitElement", saveDraftYUIButton);
             Dom.setStyle(panelId, "display", "block");
         };
         var saveDraft = function() {
