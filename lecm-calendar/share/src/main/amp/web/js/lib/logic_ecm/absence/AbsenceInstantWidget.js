@@ -136,7 +136,7 @@ define(["dojo/_base/declare",
             var me = this;
             Alfresco.util.PopupManager.displayPrompt({
                 title: "Отменить отсутствие",
-                text: "Хотите поработать?",
+                text: "В системе отмечено Ваше отсутствие. Вы хотите его отменить? Делегирования в этом случае также будут отменены.",
                 close: false,
                 modal: true,
                 buttons: [{
