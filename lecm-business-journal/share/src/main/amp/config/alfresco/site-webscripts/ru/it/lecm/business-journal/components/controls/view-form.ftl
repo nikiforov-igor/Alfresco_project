@@ -175,7 +175,9 @@
             Selector = YAHOO.util.Selector;
 
     function loadDeps() {
-        LogicECM.module.Base.Util.loadScripts([],init,["tabview"]);
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/object-finder/lecm-object-finder.js'
+        ],init,["tabview"]);
     }
 
     function init() {
