@@ -487,6 +487,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             var columns = args[1].selectedColumns;
             var menu = this;
             if (columns != null) {
+                var ref = this.selectedNode.data.nodeRef;
+                if (!ref) {
+                    ref = this.selectedNode.data.armNodeRef;
+                }
                 Alfresco.util.Ajax.jsonRequest({
                     method: "POST",
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/save/user-columns",
@@ -494,7 +498,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                         columns: YAHOO.lang.JSON.stringify({
                             selected:columns
                         }),
-                        nodeRef: this.selectedNode.data.nodeRef
+                        nodeRef: ref
                     },
                     successCallback: {
                         fn: function (oResponse) {

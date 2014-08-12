@@ -85,12 +85,16 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             _renderColumns: function () {
                 var columnsDiv = Dom.get(this.id + "-columns-dialog-content");
                 var toolbar = this;
+                var ref = this.currentNode.data.nodeRef;
+                if (!ref) {
+                    ref = this.currentNode.data.armNodeRef;
+                }
                 Alfresco.util.Ajax.jsonRequest({
                     method: "GET",
                     url: Alfresco.constants.PROXY_URI + "lecm/arm/draw-select-columns",
                     dataObj: {
                         htmlId: Alfresco.util.generateDomId(),
-                        nodeRef: this.currentNode.data.nodeRef,
+                        nodeRef: ref,
                         columns: this._getNodeColumnsStr(this.currentNode)
                     },
                     successCallback: {
