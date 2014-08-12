@@ -1235,7 +1235,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	private List<NodeRef> getBossSubordinateInternal(final NodeRef employeeRef, final boolean checkAccess) {
 		//получаем список подразделений где этот сотрудник является боссом
-		Collection<NodeRef> units = getEmployeeUnits(employeeRef, true, checkAccess);
+		Collection<NodeRef> units = getEmployeeUnits(employeeRef, true, false, checkAccess);
 		Set<NodeRef> employees = new HashSet<NodeRef>();
 		for (NodeRef unitRef : units) {
 			//берем сотрудников из непосредственно этого подразделения
