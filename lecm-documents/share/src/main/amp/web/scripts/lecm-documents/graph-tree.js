@@ -33,7 +33,7 @@ YAHOO.Bubbling.on("graphContainerReady", function() {
 					},
 					{
 						key: "title",
-						label: "Документ",
+						label: "",
 						resizeable: true,
 						sortable: false,
 						width: '200px',
