@@ -104,10 +104,7 @@ public class SearchCounter extends BaseScopableProcessorExtension {
                     sp.setNamespace(namespace);
                 }
 
-                if (maxResults > 0) {
-                    sp.setLimit(maxResults);
-                    sp.setLimitBy(LimitBy.FINAL_SIZE);
-                }
+                sp.setLimit(Integer.MAX_VALUE);
                 if (skipResults > 0) {
                     sp.setSkipCount(skipResults);
                 }
