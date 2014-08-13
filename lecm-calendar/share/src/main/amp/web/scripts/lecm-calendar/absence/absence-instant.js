@@ -232,7 +232,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		},
 		newInstantAbsence: function() {
 			// если отсутствие каких-либо скриптов будет мешать созданию диалога, их можно добавить сюда
-			if (!Alfresco.module.SimpleDialog) {
+			if (!Alfresco.module.SimpleDialog || !Alfresco.FormUI) {
 				window.location.href = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "instant-absence";
 
 			} else {
