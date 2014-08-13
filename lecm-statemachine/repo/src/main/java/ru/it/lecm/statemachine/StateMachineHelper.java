@@ -43,6 +43,7 @@ import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.lang.StringUtils;
+import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -430,20 +431,30 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds) {
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds, Integer remainingDays) {
         Set<NodeRef> documents = new HashSet<NodeRef>();
         String login = orgstructureBean.getEmployeeLogin(employee);
 
         List<WorkflowTask> tasks = getAssignedAndPooledTasks(login);
         for (WorkflowTask task : tasks) {
             if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(task.getDefinition().getId())) {
-                NodeRef doc = getTaskDocument(task, null);
+	            NodeRef doc = getTaskDocument(task, null);
                 if (doc != null) {
-                    documents.add(doc);
+	                if (remainingDays == null) {
+		                documents.add(doc);
+	                } else {
+		                Date dueDate = (Date) task.getProperties().get(WorkflowModel.PROP_DUE_DATE);
+		                if (dueDate != null) {
+			                int countDays = (int) ((dueDate.getTime() - (new Date()).getTime()) / (1000 * 60 * 60 * 24));
+			                if (countDays < remainingDays) {
+				                documents.add(doc);
+			                }
+		                }
+	                }
                 }
             }
         }
-        return new ArrayList<NodeRef>(documents);
+        return new ArrayList<>(documents);
     }
 
     @Override

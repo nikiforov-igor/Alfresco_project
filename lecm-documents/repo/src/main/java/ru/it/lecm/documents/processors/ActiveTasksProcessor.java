@@ -60,7 +60,13 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
                 }
             }
         }
-        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks);
+
+	    Integer remainingDays = null;
+	    if (params != null && params.get("remainingDays") != null) {
+			remainingDays = (Integer) params.get("remainingDays");
+	    }
+
+        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks, remainingDays);
         for (NodeRef document : documents) {
             sbQuery.append("ID:\"").append(document.toString()).append("\" OR ");
         }

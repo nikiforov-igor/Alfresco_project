@@ -89,7 +89,7 @@ public interface StateMachineServiceBean {
 
     public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
 
-    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds);
+    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds, Integer remainingDays);
 
     public void sendSignal(String executionId);
 
