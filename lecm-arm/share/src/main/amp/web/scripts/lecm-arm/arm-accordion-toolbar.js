@@ -30,15 +30,18 @@ LogicECM.module.ARM = LogicECM.module.ARM || {};
 					}
 			);
             // По комбинации клавиш Ctrl + Y открывать меню создания документа:
-            Event.on(document,'keypress',function(e) {
-                var kc = Event.getCharCode(e);
-                if (e.ctrlKey && kc == 9 /*Y*/) {
-                    newDocumentButton._showMenu(e);
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            },this,true);
-		},
+            new KeyListener(document, {ctrl: true, keys: 89 /*Y*/},
+                {
+                    fn: function (layer, args) {
+                        var e = args[1];
+                        newDocumentButton._showMenu(e);
+                        Event.stopEvent(e);
+                    },
+                    scope: this,
+                    correctScope: true
+                }, KeyListener.KEYDOWN).enable();
+
+        },
 		onNewRow: function(p_sType, p_aArgs, p_oItem) {
 			window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + p_oItem.type + "&" + LogicECM.module.Base.Util.encodeUrlParams("documentType=" + p_oItem.type);
 		},
