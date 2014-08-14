@@ -206,7 +206,7 @@ define(["dojo/_base/declare",
                                 me.setReadNotifications(readNewNotifications);
                             }
                             //Dom.setStyle(this.notificationsWindowId + "-loading", "visibility", "hidden");
-                            me.showNotificationsWindow();
+//                            me.showNotificationsWindow();
                         },
                         scope: this
                     },
