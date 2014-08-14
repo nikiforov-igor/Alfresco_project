@@ -37,13 +37,16 @@ public class EmailRepositoryReceiver extends AbstractReceiver {
                 incomingDocument.setDeliveryType(deliveryType);
             }
 
-            String email = nodeService.getProperty(document, ContentModel.PROP_ORIGINATOR).toString();
-            NodeRef addresser = contractors.getRepresentativeByEmail(email);
-            if (addresser != null) {
-                incomingDocument.setAddresser(addresser);
-                NodeRef contractor = contractors.getContractor(addresser);
-                if (contractor != null) {
-                    incomingDocument.setSenderOrganization(contractor);
+            Object originator = nodeService.getProperty(document, ContentModel.PROP_ORIGINATOR);
+            if (originator != null) {
+                String email = originator.toString();
+                NodeRef addresser = contractors.getRepresentativeByEmail(email);
+                if (addresser != null) {
+                    incomingDocument.setAddresser(addresser);
+                    NodeRef contractor = contractors.getContractor(addresser);
+                    if (contractor != null) {
+                        incomingDocument.setSenderOrganization(contractor);
+                    }
                 }
             }
             store(incomingDocument);
