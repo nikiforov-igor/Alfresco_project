@@ -20,7 +20,13 @@
     background: #f2f2f2;
 }
 #yui-main div.datalist-toolbar div.header-bar div.new-row span.first-child {
-    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
+    background-image: none;
+    padding-left: 0;
+}
+#yui-main div.datalist-toolbar div.header-bar div.new-row span.first-child button {
+    background: url("/share/res/images/lecm-contracts/alf_contract_add.png") no-repeat 5px 5px;
+    padding-right: 10px;
+    padding-left: 25px;
 }
 
 #bd #lecm-menu #menu-buttons.documents-menu-buttons span.menu-button span.first-child {

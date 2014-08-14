@@ -59,8 +59,17 @@
 #yui-main #lecm-content-ft {
     background: #f2f2f2;
 }
+#yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.yui-button {
+    margin-left: 5px;
+}
 #yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.first-child {
-    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
+    background-image: none;
+    padding-left: 0;
+}
+#yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row span.first-child button {
+    background: url("/share/res/images/lecm-contracts/alf_contract_add.png") no-repeat 5px 5px;
+    padding-right: 10px;
+    padding-left: 25px;
 }
 #yui-main #doc-bd div.datalist-toolbar div.header-bar div.new-row button {
     color: #669fc5;
