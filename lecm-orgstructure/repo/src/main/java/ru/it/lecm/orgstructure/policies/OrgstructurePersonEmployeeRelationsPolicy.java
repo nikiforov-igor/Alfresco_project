@@ -5,6 +5,7 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.BehaviourFilter;
 import org.alfresco.repo.policy.JavaBehaviour;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -137,12 +138,16 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
      */
     public void onUpdateEmployeeProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         try {
-            Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
             boolean enabled;
-            if (editorEnabled == null) {
-                enabled = true;
+            if (!AuthenticationUtil.isRunAsUserTheSystemUser()) {
+                Object editorEnabled = propertiesService.getProperty("ru.it.lecm.properties.orgstructure.employee.editor.enabled");
+                if (editorEnabled == null) {
+                    enabled = true;
+                } else {
+                    enabled = Boolean.valueOf((String) editorEnabled);
+                }
             } else {
-                enabled = Boolean.valueOf((String) editorEnabled);
+                enabled = true;
             }
 
             if (enabled) {
