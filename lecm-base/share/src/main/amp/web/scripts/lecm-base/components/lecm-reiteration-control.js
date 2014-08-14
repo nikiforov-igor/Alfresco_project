@@ -107,7 +107,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     }
                 }
             }
-            this.updateValue.bind(this);
+            this.updateValue();
         },
 
         onRadioClicked: function onRadioClicked_function(event) {
