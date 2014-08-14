@@ -6,6 +6,7 @@ import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.SearchQueryProcessor;
+import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
@@ -24,7 +25,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
 
     private StateMachineServiceBean stateMachineService;
     private OrgstructureBean orgstructureBean;
-
+	private NotificationsService notificationsService;
 
     public void setStateMachineService(StateMachineServiceBean stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -34,7 +35,11 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
         this.orgstructureBean = orgstructureBean;
     }
 
-    @Override
+	public void setNotificationsService(NotificationsService notificationsService) {
+		this.notificationsService = notificationsService;
+	}
+
+	@Override
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
         Set<String> filterTasks = null;
@@ -61,8 +66,15 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
             }
         }
 
+	    boolean onlyUrgentAndOverdue = false;
+	    if (params != null && params.get("onlyUrgentAndOverdue") != null) {
+		    onlyUrgentAndOverdue = (boolean) params.get("onlyUrgentAndOverdue");
+	    }
+
 	    Integer remainingDays = null;
-	    if (params != null && params.get("remainingDays") != null) {
+	    if (onlyUrgentAndOverdue) {
+			remainingDays = notificationsService.getSettingsNDays();
+	    } else if (params != null && params.get("remainingDays") != null) {
 			remainingDays = (Integer) params.get("remainingDays");
 	    }
 

@@ -614,6 +614,7 @@
         <property name="id" value="ACTIVE_TASKS_ONLY"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+	    <property name="notificationsService" ref="notificationsService"/>
     </bean>
 
     <bean id="employeesByUnitsProcessor" class="ru.it.lecm.documents.processors.EmployeesByUnitsProcessor" parent="searchQueryBaseProccesor">
