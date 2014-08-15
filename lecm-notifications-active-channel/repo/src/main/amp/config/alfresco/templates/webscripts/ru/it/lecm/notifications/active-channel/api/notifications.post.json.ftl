@@ -1,6 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"hasNext": <#if next?? && (next?size > 0)>"true"<#else>"false"</#if>,
+	"hasNext": "${next}",
 	"items": [
 		<#list notifications as item>
 		{
