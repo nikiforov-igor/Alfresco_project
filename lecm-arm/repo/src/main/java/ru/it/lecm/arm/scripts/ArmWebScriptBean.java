@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.scripts;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.dictionary.*;
@@ -20,12 +21,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import ru.it.lecm.arm.beans.ArmColumn;
 import ru.it.lecm.arm.beans.ArmService;
+import ru.it.lecm.arm.beans.ArmWrapperServiceImpl;
 import ru.it.lecm.arm.beans.filters.ArmDocumentsFilter;
+import ru.it.lecm.arm.beans.node.ArmNode;
 import ru.it.lecm.arm.filters.BaseQueryArmFilter;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
-import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
 import java.io.IOException;
 import java.util.*;
@@ -51,8 +53,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
 	private NamespaceService namespaceService;
 	private NodeService nodeService;
 	private DocumentService documentService;
+    private ArmWrapperServiceImpl armWrapperService;
 
-	public void setArmService(ArmService armService) {
+    public void setArmService(ArmService armService) {
 		this.armService = armService;
 	}
 
@@ -314,6 +317,58 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
         return AuthenticationUtil.runAsSystem(saveColumns);
     }
 
+    public JSONObject convertPathToNodes(String code, String path) {
+        JSONObject result = new JSONObject();
+        try {
+            if (code != null && path != null) {
+                String[] splitPath = path.split("/");
+                NodeRef armRef = armService.getArmByCode(code);
+                if (armRef != null) {
+                    List<NodeRef> accordions = armService.getArmAccordions(armRef);
+                    NodeRef accordion = null;
+                    if (splitPath.length > 0) {
+                        for (NodeRef accordionItem : accordions) {
+                            String name = nodeService.getProperty(accordionItem, ContentModel.PROP_NAME).toString();
+                            if (name.equals(splitPath[0])) {
+                                accordion = accordionItem;
+                                break;
+                            }
+                        }
+                    }
+                    if (accordion != null) {
+                        result.put("accordion", accordion.getId());
+                        String nodePath = accordion.getId();
+                        NodeRef prevNode = accordion;
+                        for (int i = 1; i < splitPath.length; i++) {
+                            boolean isFind = false;
+                            List<ArmNode> nodes =  armWrapperService.getChildNodes(armRef, prevNode, true);
+                            for (ArmNode node : nodes) {
+                                if (node.getNodeType().equals("lecm-arm:node") && node.getTitle().equals(splitPath[i])) {
+                                    isFind = true;
+                                    prevNode = node.getNodeRef();
+                                    if (node.getNodeRef() == null) {
+                                        nodePath += "." + node.getArmNodeRef().getId() + "-" + node.getTitle();
+                                    } else {
+                                        nodePath += "." + node.getNodeRef().getId();
+                                    }
+                                    break;
+                                }
+                            }
+                            if (!isFind) {
+                                break;
+                            }
+                        }
+                        result.put("selected", nodePath);
+                        result.put("pageNum", 1);
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            logger.error("Cannot convert Path to Path Object because:", e);
+        }
+        return result;
+    }
+
     private JSONObject nativeObjectToJSON(NativeObject nativeObject) throws IOException {
         JSONObject result = new JSONObject();
         final Object[] ids = nativeObject.getIds();
@@ -327,5 +382,9 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
             }
         }
         return result;
+    }
+
+    public void setArmWrapperService(ArmWrapperServiceImpl armWrapperService) {
+        this.armWrapperService = armWrapperService;
     }
 }

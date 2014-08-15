@@ -48,6 +48,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             date.setDate(date.getDate() + 30);
             this.expiresDate = date;
 
+            if (LogicECM.module.ARM.SETTINGS.ARM_PATH.hasOwnProperty("accordion")) {
+                LogicECM.module.Base.Util.setCookie(this._buildPreferencesKey(), JSON.stringify(LogicECM.module.ARM.SETTINGS.ARM_PATH), {expires:this.expiresDate});
+            }
+
             var menu = this;
             var menuPref = LogicECM.module.Base.Util.getCookie(this._buildPreferencesKey());
             if (menuPref !== null) {

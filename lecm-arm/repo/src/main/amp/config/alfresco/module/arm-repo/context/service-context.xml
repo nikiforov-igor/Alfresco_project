@@ -75,6 +75,7 @@
 		<property name="namespaceService" ref="namespaceService"/>
 		<property name="nodeService" ref="NodeService"/>
 		<property name="documentService" ref="documentService"/>
+		<property name="armWrapperService" ref="armWrapperService"/>
 	</bean>
 
     <bean id="armWrapperScript" parent="baseScript" class="ru.it.lecm.arm.scripts.ArmWrapperWebScriptBean"

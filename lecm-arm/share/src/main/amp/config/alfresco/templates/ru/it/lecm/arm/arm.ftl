@@ -42,6 +42,7 @@
             </#if>;
 
         LogicECM.module.ARM.SETTINGS.ARM_CODE = "${page.url.args.code!''}";
+        LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
     //]]></script>
 </@>
 
