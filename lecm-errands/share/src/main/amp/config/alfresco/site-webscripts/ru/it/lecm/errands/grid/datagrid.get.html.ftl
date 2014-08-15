@@ -25,7 +25,7 @@
                         {
                             type: "datagrid-action-link-${bubblingLabel!'errands'}",
                             id: "onActionEdit",
-                            permission: "edit",
+                            permission: "",
                             label: "${msg("actions.edit")}"
                         },
                         {
