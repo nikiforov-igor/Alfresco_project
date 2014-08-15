@@ -1,6 +1,6 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
-	"hasNext": "${next}",
+	"hasNext": "${next?string}",
 	"items": [
 		<#list notifications as item>
 		{
