@@ -186,7 +186,7 @@ public abstract class WorkflowServiceAbstract extends BaseBean implements LecmWo
 		notification.setDescription(message);
 		notification.setObjectRef(documentRef);
 		notification.setRecipientEmployeeRefs(recipients);
-		notificationsService.sendNotification(notification);
+		notificationsService.sendNotification(notification, true);
 	}
 
 	protected String getIncompleteAssignees(final String processInstanceId) {
