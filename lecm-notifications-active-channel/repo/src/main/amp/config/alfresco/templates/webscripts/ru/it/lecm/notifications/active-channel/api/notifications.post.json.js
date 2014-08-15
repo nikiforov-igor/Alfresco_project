@@ -9,4 +9,4 @@ if (jsonIgnoreNotifications != null) {
 }
 
 model.notifications = notificationsActiveChannel.getNotifications(skipItemsCount, loadItemsCount, ignoreNotifications);
-model.next = notificationsActiveChannel.getNotifications(skipItemsCount + loadItemsCount, 1, ignoreNotifications);
+model.next = true;

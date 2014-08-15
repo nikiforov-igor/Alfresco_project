@@ -1,28 +1,22 @@
 package ru.it.lecm.notifications.channel.active.beans;
 
 import org.alfresco.model.ContentModel;
-import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.notifications.beans.NotificationChannelBeanBase;
 import ru.it.lecm.notifications.beans.NotificationUnit;
 import ru.it.lecm.notifications.beans.NotificationsService;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Level;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin Date: 17.01.13 Time: 15:19
@@ -161,48 +155,63 @@ public class NotificationsActiveChannel extends NotificationChannelBeanBase {
      * @return список ссылок на уведомления
      */
     public List<NodeRef> getNotifications(int skipCount, int maxItems, List<String> ignoreNotifications) {
-        List<NodeRef> result = new ArrayList<NodeRef>();
+        List<NodeRef> result = new ArrayList<>();
 
         NodeRef currentEmloyeeNodeRef = orgstructureService.getCurrentEmployee();
         if (currentEmloyeeNodeRef != null) {
             List<AssociationRef> lRefs = nodeService.getSourceAssocs(currentEmloyeeNodeRef, NotificationsService.ASSOC_RECIPIENT);
-            List<NodeRef> filteredNotifications = filterNotifications(lRefs, ignoreNotifications);
-            int endIndex = (skipCount + maxItems) < filteredNotifications.size() ? (skipCount + maxItems) : filteredNotifications.size();
-
-            for (int i = skipCount; i < endIndex; i++) {
-                result.add(filteredNotifications.get(i));
-            }
+            result.addAll(filterNotifications(lRefs, ignoreNotifications, skipCount, maxItems));
         }
 
         return result;
     }
 
-    private List<NodeRef> filterNotifications(List<AssociationRef> notifications, List<String> ignoreNotifications) {
-        ArrayList<NodeRef> result = new ArrayList<NodeRef>();
+    private List<NodeRef> filterNotifications(List<AssociationRef> notifications, List<String> ignoreNotifications, int skipCount, int maxItems) {
+        List<NodeRef> result = new ArrayList<>();
+        List<NodeRef> read = new ArrayList<>();
         if (notifications != null) {
             for (AssociationRef ref : notifications) {
                 NodeRef notificationRef = ref.getSourceRef();
                 if (isActiveChannelNotification(notificationRef) && !isArchive(notificationRef) && !ignoreNotifications.contains(notificationRef.toString())) {
-                    result.add(notificationRef);
+                    if (!isRead(notificationRef)) {
+                        result.add(notificationRef);
+                    } else {
+                        read.add(notificationRef);
+                    }
                 }
             }
         }
+        if (result.size() < maxItems + skipCount) {
+            result.addAll(read);            //добавляем прочтенные только если нам не хватает непрочтенных, чтоб не замедляли сортировку
+        }
+
+        if (skipCount > result.size()) {    //не тратимся на сортировку, если нам больше не требуются
+            result.clear();
+            return result;
+        }
+
         Collections.sort(result, new Comparator<NodeRef>() {
             public int compare(NodeRef o1, NodeRef o2) {
-                Boolean isRead1 = (Boolean) nodeService.getProperty(o1, PROP_IS_READ);
-                Boolean isRead2 = (Boolean) nodeService.getProperty(o2, PROP_IS_READ);
+                Boolean isRead1 = isRead(o1);
+                Boolean isRead2 = isRead(o2);
 
                 int result = isRead1.compareTo(isRead2);
                 if (result == 0) {
                     Date formingDate1 = (Date) nodeService.getProperty(o1, NotificationsService.PROP_FORMING_DATE);
                     Date formingDate2 = (Date) nodeService.getProperty(o2, NotificationsService.PROP_FORMING_DATE);
 
-                    return -formingDate1.compareTo(formingDate2);
+                    result = -formingDate1.compareTo(formingDate2);
                 }
                 return result;
             }
         });
-        return result;
+
+        int endIndex = (skipCount + maxItems) < result.size() ? (skipCount + maxItems) : result.size();
+        return result.subList(skipCount, endIndex);
+    }
+
+    private Boolean isRead(NodeRef notificationRef) {
+        return (Boolean) nodeService.getProperty(notificationRef, PROP_IS_READ);
     }
 
     /**
