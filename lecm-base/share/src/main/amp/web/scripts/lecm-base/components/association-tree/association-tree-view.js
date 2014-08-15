@@ -502,41 +502,43 @@ LogicECM.module = LogicECM.module || {};
 
         createPickerDialog: function()
         {
-            var me = this;
+            if (!this.widgets.dialog) {
+                var me = this;
 
-            this.widgets.ok = new YAHOO.widget.Button(this.options.prefixPickerId + "-ok",
-                { onclick: { fn: this.onOk, obj: null, scope: this } });
-            this.widgets.cancel = new YAHOO.widget.Button(this.options.prefixPickerId + "-cancel",
-                { onclick: { fn: this.onCancel, obj: null, scope: this } });
+                this.widgets.ok = new YAHOO.widget.Button(this.options.prefixPickerId + "-ok",
+                    { onclick: { fn: this.onOk, obj: null, scope: this } });
+                this.widgets.cancel = new YAHOO.widget.Button(this.options.prefixPickerId + "-cancel",
+                    { onclick: { fn: this.onCancel, obj: null, scope: this } });
 
-            this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
-                {
-                    width: "500px"
-                });
-            this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
+                this.widgets.dialog = Alfresco.util.createYUIPanel(this.options.pickerId,
+                    {
+                        width: "500px"
+                    });
+                this.widgets.dialog.hideEvent.subscribe(this.onCancel, null, this);
 
-	        if (this.options.showSearch) {
-	            // Setup search button
-	            this.widgets.searchButton = new YAHOO.widget.Button(this.options.pickerId + "-searchButton");
-	            this.widgets.searchButton.on("click", this.onSearch, this.widgets.searchButton, this);
+                if (this.options.showSearch) {
+                    // Setup search button
+                    this.widgets.searchButton = new YAHOO.widget.Button(this.options.pickerId + "-searchButton");
+                    this.widgets.searchButton.on("click", this.onSearch, this.widgets.searchButton, this);
 
-	            // Register the "enter" event on the search text field
-	            var zinput = Dom.get(this.options.pickerId + "-searchText");
-	            new KeyListener(zinput,
-	                {
-	                    keys: 13
-	                },
-	                {
-	                    fn: me.onSearch,
-	                    scope: this,
-	                    correctScope: true
-	                }, "keydown").enable();
-	        }
+                    // Register the "enter" event on the search text field
+                    var zinput = Dom.get(this.options.pickerId + "-searchText");
+                    new KeyListener(zinput,
+                        {
+                            keys: 13
+                        },
+                        {
+                            fn: me.onSearch,
+                            scope: this,
+                            correctScope: true
+                        }, "keydown").enable();
+                }
 
-            // Create tree in the dialog
-            this.fillPickerDialog();
+                // Create tree in the dialog
+                this.fillPickerDialog();
 
-            Dom.addClass(this.options.pickerId, "object-finder");
+                Dom.addClass(this.options.pickerId, "object-finder");
+            }
         },
 
         onOk: function(e, p_obj)
