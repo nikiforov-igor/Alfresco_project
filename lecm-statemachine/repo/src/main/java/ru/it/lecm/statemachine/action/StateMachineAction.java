@@ -10,6 +10,7 @@ import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.workflow.activiti.ActivitiConstants;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
+import org.alfresco.service.cmr.repository.DuplicateChildNodeNameException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.security.PermissionService;
@@ -18,6 +19,9 @@ import org.alfresco.service.namespace.QName;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ru.it.lecm.base.beans.RepositoryStructureHelper;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
@@ -47,6 +51,8 @@ abstract public class StateMachineAction {
     public static final String PROP_OUTPUT_VALUE = "outputValue";
     
     private StateMachineHelper stateMachineHelper;
+    
+    private static final transient Logger logger = LoggerFactory.getLogger(StateMachineAction.class);
 
 	public ServiceRegistry getServiceRegistry() {
 		ProcessEngineConfigurationImpl config = Context.getProcessEngineConfiguration();
@@ -136,19 +142,30 @@ abstract public class StateMachineAction {
 		if (uuid != null) {
 			props.put(ContentModel.PROP_NODE_UUID, uuid);
 		}
-		ChildAssociationRef childAssocRef = getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
-			@Override
-			public ChildAssociationRef execute() throws Throwable {
-				ChildAssociationRef childAssocRef = nodeService.createNode(
-						parent,
-						ContentModel.ASSOC_CONTAINS,
-						QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
-						ContentModel.TYPE_FOLDER,
-						props);
-				return childAssocRef;
-			}
-		}, false, true);
-		return childAssocRef.getChildRef();
+		try {
+			ChildAssociationRef childAssocRef = getServiceRegistry().getTransactionService().getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<ChildAssociationRef>() {
+				@Override
+				public ChildAssociationRef execute() throws Throwable {
+					ChildAssociationRef childAssocRef = nodeService.createNode(
+							parent,
+							ContentModel.ASSOC_CONTAINS,
+							QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, QName.createValidLocalName(name)),
+							ContentModel.TYPE_FOLDER,
+							props);
+					return childAssocRef;
+				}
+			}, false, true);
+			logger.debug("!!!!!!!!!!! Создал ноду для стстуса "+name);
+			return childAssocRef.getChildRef();
+		} catch(DuplicateChildNodeNameException e) {
+			NodeRef subFolder = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
+			logger.debug("!!!!!!!!!!! Получил ноду для стстуса "+name, e);
+			return subFolder;
+		} catch(Exception e) {
+			NodeRef subFolder = nodeService.getChildByName(parent, ContentModel.ASSOC_CONTAINS, name);
+			logger.debug("!!!!!!!!!!! Получил ноду для стстуса "+name, e);
+			return subFolder;
+		}
 	}
 
 }
