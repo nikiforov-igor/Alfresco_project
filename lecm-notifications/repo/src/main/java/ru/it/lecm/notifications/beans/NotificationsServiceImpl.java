@@ -285,27 +285,27 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
      */
     private Set<NotificationUnit> createAtomicNotifications(Notification generalizedNotification) {
         long start = System.currentTimeMillis();
-        logger.warn("createAtomicNotifications start: {}", start);
+        logger.trace("createAtomicNotifications start: {}", start);
         Set<NotificationUnit> result = new HashSet<NotificationUnit>();
         if (generalizedNotification != null) {
             Set<NodeRef> employeeRefs = new HashSet<NodeRef>();
             if (generalizedNotification.getRecipientEmployeeRefs() != null) {
                 employeeRefs.addAll(generalizedNotification.getRecipientEmployeeRefs());
-                logger.warn("Recipients added. Current size: {}", employeeRefs.size());
+                logger.trace("Recipients added. Current size: {}", employeeRefs.size());
             }
 
             if (generalizedNotification.getRecipientOrganizationUnitRefs() != null) {
                 for (NodeRef organizationUnitRef : generalizedNotification.getRecipientOrganizationUnitRefs()) {
                     employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(organizationUnitRef));
                 }
-                logger.warn("Units added. Current size: {}", employeeRefs.size());
+                logger.trace("Units added. Current size: {}", employeeRefs.size());
             }
 
             if (generalizedNotification.getRecipientWorkGroupRefs() != null) {
                 for (NodeRef workGroupRef : generalizedNotification.getRecipientWorkGroupRefs()) {
                     employeeRefs.addAll(orgstructureService.getOrganizationElementEmployees(workGroupRef));
                 }
-                logger.warn("Groups added. Current size: {}", employeeRefs.size());
+                logger.trace("Groups added. Current size: {}", employeeRefs.size());
             }
 
             if (generalizedNotification.getRecipientPositionRefs() != null) {
@@ -314,14 +314,14 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                         employeeRefs.addAll(orgstructureService.getEmployeesByPosition(positionRef));
                     }
                 }
-                logger.warn("Positions added. Current size: {}", employeeRefs.size());
+                logger.trace("Positions added. Current size: {}", employeeRefs.size());
             }
 
             if (generalizedNotification.getRecipientBusinessRoleRefs() != null) {
                 for (NodeRef businessRoleRef : generalizedNotification.getRecipientBusinessRoleRefs()) {
                     employeeRefs.addAll(orgstructureService.getEmployeesByBusinessRole(businessRoleRef, true));
                 }
-                logger.warn("Roles added. Current size: {}", employeeRefs.size());
+                logger.trace("Roles added. Current size: {}", employeeRefs.size());
             }
 
                         //пробегаемся по сотрудникам, смотрим их параметры делегирования и наличие доверенных лиц (в том числе и по доверенностям
@@ -358,9 +358,9 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
                     }
                 }
             }
-            logger.warn("Delegates added. Current size: {}", employeeRefs.size());
+            logger.trace("Delegates added. Current size: {}", employeeRefs.size());
             result.addAll(addNotificationUnits(generalizedNotification, employeeRefs));
-            logger.warn("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
+            logger.debug("Atomic notifications. Current size: {}, time: {}", result.size(), System.currentTimeMillis() - start);
         }
         return result;
     }
