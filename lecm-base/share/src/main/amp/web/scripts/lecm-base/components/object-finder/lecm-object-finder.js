@@ -49,7 +49,7 @@ function _viewLinkAttributes(id, nodeRef, setId){
                     }
                 }
             },
-            failureMessage:"message.failure",
+            failureMessage: "Элемент не найден или был удалён",
             execScripts:true
         });
     return false;
