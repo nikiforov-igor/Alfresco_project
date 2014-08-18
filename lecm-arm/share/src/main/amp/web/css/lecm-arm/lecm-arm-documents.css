@@ -74,10 +74,6 @@
 	color: #E66E00;
 }
 
-#arm-grid .datagrid {
-	padding-top: 10px;
-}
-
 #arm-grid #alf-content {
 	margin-left: 0;
 }
@@ -90,8 +86,9 @@
     padding-left: 25px;
 }
 
+#arm-grid .datagrid,
 div.arm-tree-menu .arm-accordion {
-	padding-top: 10px;
+	padding-top: 0;
 }
 
 div.arm-tree-menu .arm-accordion div.accordion-head {

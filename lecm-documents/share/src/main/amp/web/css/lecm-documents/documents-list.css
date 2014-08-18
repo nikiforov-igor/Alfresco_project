@@ -15,6 +15,7 @@
 }
 #yui-main div.datalist-toolbar div.header-bar {
     background: none;
+    padding: 5px 0;
 }
 #yui-main #lecm-content-ft {
     background: #f2f2f2;
