@@ -75,6 +75,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:limitation-date" mandatory="true">
@@ -101,6 +102,7 @@
 			                <control-param name="showCreateNewButton">false</control-param>
 			                <control-param name="employeeAbsenceMarker">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
                     <field id="lecm-errands:end-date"/>
@@ -117,6 +119,7 @@
 			                <control-param name="showCreateNewButton">false</control-param>
 			                <control-param name="employeeAbsenceMarker">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
                     <field id="lecm-document:creator"/>
@@ -171,6 +174,7 @@
                             <control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="itemType">lecm-orgstr:employee</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -190,6 +194,7 @@
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
                             <control-param name="itemType">lecm-orgstr:employee</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-document:istransmit" label-id="contract.istransmit" />
@@ -273,6 +278,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
 	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important">
@@ -322,6 +328,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:without-initiator-approval" set="collapsable-inner">
@@ -338,6 +345,7 @@
 			                <control-param name="showCreateNewButton">false</control-param>
 			                <control-param name="employeeAbsenceMarker">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
                     <field id="lecm-errands:start-date" set="collapsable-inner"/>
@@ -427,6 +435,7 @@
                         <control-param name="employeeAbsenceMarker">true</control-param>
                         <control-param name="mandatory">false</control-param>
 	                    <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+	                    <control-param name="useStrictFilterByOrg">true</control-param>
                     </control>
                     </field>
                 </appearance>
@@ -481,6 +490,7 @@
                             <!--<control-param name="applyAllowedFilter">true</control-param>-->
                             <control-param name="param_parentDoc">parentDoc</control-param>
 	                        <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:is-important">
@@ -533,6 +543,7 @@
                             <control-param name="showCreateNewButton">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
                             <control-param name="defaultValueDataSource">lecm/errands/getDefaultInitiator</control-param>
+	                        <control-param name="useStrictFilterByOrg">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-errands:without-initiator-approval" set="collapsable-inner">
@@ -549,6 +560,7 @@
 			                <control-param name="showCreateNewButton">false</control-param>
 			                <control-param name="employeeAbsenceMarker">true</control-param>
 			                <control-param name="childrenDataSource">lecm/errands/executors/picker</control-param>
+			                <control-param name="useStrictFilterByOrg">true</control-param>
 		                </control>
 	                </field>
                     <field id="lecm-errands:start-date" set="collapsable-inner"/>
@@ -955,6 +967,7 @@
 							<control-param name="showCreateNewLink">false</control-param>
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>

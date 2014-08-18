@@ -62,6 +62,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="showViewIncompleteWarning">false</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 						<constraint-handlers>
 							<constraint type="MANDATORY" validation-handler="LogicECM.module.Subscriptions.destinationValidation" event="change"/>

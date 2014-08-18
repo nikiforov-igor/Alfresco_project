@@ -26,6 +26,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				<field id="lecm-d8n:delegation-opts-trustee-assoc">
@@ -35,6 +36,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -59,6 +61,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-d8n:delegation-opts-trustee-assoc">
@@ -68,6 +71,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -97,6 +101,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
                 </appearance>
@@ -121,6 +126,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
                             <control-param name="employeeAbsenceMarker">true</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -62,6 +62,7 @@
 							<control-param name="firstShowSearch">true</control-param>
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
 							<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -169,6 +170,7 @@
 							<control-param name="firstShowSearch">true</control-param>
 							<control-param name="firstPickerButtonLabel"><![CDATA[<i class='icon-male'></i>]]></control-param>
 							<control-param name="firstPickerButtonTitleCode">title.employee.select</control-param>
+							<control-param name="firstUseStrictFilterByOrg">true</control-param>
 							<control-param name="secondItemType">lecm-orgstr:organization-unit</control-param>
 							<control-param name="secondRootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
 							<control-param name="secondNameSubstituteString">{lecm-orgstr:element-short-name}</control-param>
@@ -326,6 +328,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -344,6 +347,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -362,6 +366,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -379,6 +384,7 @@
 							<control-param name="nameSubstituteString">{lecm-orgstr:employee-short-name}</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
 							<control-param name="additionalFilter">ISNOTNULL: \"lecm-orgstr:employee-person-login\" AND NOT @lecm-orgstr\\:employee-person-login: \"\"</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>

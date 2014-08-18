@@ -17,6 +17,7 @@
 							<control-param name="treeViewJsName">employeesAssocTreeView</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>

@@ -90,6 +90,7 @@
 					<control-param name="showCreateNewLink">false</control-param>
 					<control-param name="showCreateNewButton">false</control-param>
 					<control-param name="employeeAbsenceMarker">true</control-param>
+					<control-param name="useStrictFilterByOrg">true</control-param>
 				</type>
 				<type name="association:lecm-orgstr:workRole" template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 					<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Роли_x0020_для_x0020_рабочих_x0020_групп</control-param>
@@ -221,6 +222,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				<field id="taskIds" label="Сотрудник" mandatory="false">
