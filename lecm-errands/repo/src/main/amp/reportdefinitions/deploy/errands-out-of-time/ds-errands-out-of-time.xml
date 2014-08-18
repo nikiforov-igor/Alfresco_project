@@ -141,6 +141,12 @@
                 <item key="RU_RU"><![CDATA[Заголовок]]></item>
             </l18>
         </field>
+        <field alfrescoType="d:text" displayName="Статус"
+               javaValueClass="java.lang.String" jrFldName="col_Status" queryFldName="{lecm-statemachine:status}">
+            <l18>
+                <item key="RU_RU"><![CDATA[Статус]]></item>
+            </l18>
+        </field>
         <field alfrescoType="d:boolean" order="40" displayName="Важные"
                javaValueClass="java.lang.Boolean" jrFldName="col_Important" queryFldName="{lecm-errands:is-important}">
             <l18>

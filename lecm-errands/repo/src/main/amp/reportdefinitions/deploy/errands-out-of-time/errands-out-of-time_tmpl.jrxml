@@ -55,6 +55,9 @@
 	<field name="col_Important" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[Важное]]></fieldDescription>
 	</field>
+	<field name="col_Status" class="java.lang.String">
+		<fieldDescription><![CDATA[Статус]]></fieldDescription>
+	</field>
 	<title>
 		<band height="30">
 			<staticText>
@@ -180,7 +183,7 @@
 				<textFieldExpression><![CDATA["Инициатор"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="3a6399ed-736a-4188-a691-2aa1ddd59116" mode="Opaque" x="607" y="0" width="73" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="3a6399ed-736a-4188-a691-2aa1ddd59116" mode="Opaque" x="607" y="0" width="52" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -195,7 +198,7 @@
 				<textFieldExpression><![CDATA["Важное"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="099525fd-2f9c-4cd4-93b0-bbf3f24166c9" mode="Opaque" x="680" y="0" width="122" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="099525fd-2f9c-4cd4-93b0-bbf3f24166c9" mode="Opaque" x="736" y="0" width="66" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -253,6 +256,21 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Исполнитель"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="26e09cbc-46f3-4636-9fbc-2498d14e9845" mode="Opaque" x="659" y="0" width="77" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -319,7 +337,7 @@
 				<textFieldExpression><![CDATA[$F{col_Inititator}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="607" y="0" width="73" height="30"/>
+				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="607" y="0" width="52" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -334,7 +352,7 @@
 				<textFieldExpression><![CDATA[$F{col_Important} ? "Да" : "Нет"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="680" y="0" width="122" height="30"/>
+				<reportElement uuid="d3096f72-7fd9-4347-b26a-ee6c4724a592" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="736" y="0" width="66" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -392,6 +410,21 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Executor}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="93a78aa5-3059-475f-8b09-d813bc3fdffc" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="659" y="0" width="77" height="30"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#78C0D4"/>
+					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
+					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
