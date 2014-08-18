@@ -164,7 +164,7 @@
 				<textFieldExpression><![CDATA["Инициатор"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="3a6399ed-736a-4188-a691-2aa1ddd59116" mode="Opaque" x="556" y="0" width="73" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="3a6399ed-736a-4188-a691-2aa1ddd59116" mode="Opaque" x="645" y="0" width="73" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -209,7 +209,7 @@
 				<textFieldExpression><![CDATA["№"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement uuid="8c343a9a-97d2-481e-a8ef-fdba1da669ff" mode="Opaque" x="425" y="0" width="131" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
+				<reportElement uuid="8c343a9a-97d2-481e-a8ef-fdba1da669ff" mode="Opaque" x="425" y="0" width="220" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -237,21 +237,6 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Исполнитель"]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement uuid="f160a985-d85c-4615-8953-de9dc7f532f0" mode="Opaque" x="629" y="0" width="89" height="30" isPrintWhenDetailOverflows="true" forecolor="#FFFFFF" backcolor="#4BACC6"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="10" isBold="true" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA["Статус"]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
@@ -318,7 +303,7 @@
 				<textFieldExpression><![CDATA[$F{col_Inititator}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="556" y="0" width="73" height="30"/>
+				<reportElement uuid="3a878821-63cb-4b27-8a68-f345e0bc9da0" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="645" y="0" width="73" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -363,7 +348,7 @@
 				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="8864157c-136e-4fad-a718-c719c57a5746" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="425" y="0" width="131" height="30"/>
+				<reportElement uuid="8864157c-136e-4fad-a718-c719c57a5746" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="425" y="0" width="220" height="30"/>
 				<box>
 					<pen lineWidth="0.5" lineColor="#78C0D4"/>
 					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
@@ -391,21 +376,6 @@
 					<paragraph leftIndent="5"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{col_Executor}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement uuid="5d1d7fad-f16e-4345-ac59-16d5061d7b2e" style="styleOdd" stretchType="RelativeToTallestObject" mode="Opaque" x="629" y="0" width="89" height="30"/>
-				<box>
-					<pen lineWidth="0.5" lineColor="#78C0D4"/>
-					<topPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<leftPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<bottomPen lineWidth="0.5" lineColor="#78C0D4"/>
-					<rightPen lineWidth="0.5" lineColor="#78C0D4"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Times New Roman" size="11" isBold="false" pdfEncoding="Cp1251" isPdfEmbedded="true"/>
-					<paragraph leftIndent="5"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{col_Status}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
