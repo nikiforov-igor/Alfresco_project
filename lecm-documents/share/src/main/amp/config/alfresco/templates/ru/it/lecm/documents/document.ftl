@@ -15,7 +15,7 @@
 <#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
     <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>-->
     <#-- Скрипт для валидатора. Было решено вставить сюда, чтобы хотя бы не тащить вообще на все страницы -->
-    <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"></@script>-->
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-regnum-uniqueness-validator.js"></@script>
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/documentlibrary/actions.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/graph-view-control.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/document-details/document-metadata.css" />
