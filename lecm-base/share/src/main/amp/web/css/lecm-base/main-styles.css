@@ -581,3 +581,11 @@ i.icon-building {
 	text-overflow: ellipsis;
 	display: inherit;
 }
+
+/* Репозиторий - меню элемента */
+.doclist div.action-set .more-actions a:active,
+.doclist div.action-set .more-actions a:hover {
+    background-color: #2b6eb5;
+    border: 1px solid #2b6eb5;
+    color: #fff;
+}
