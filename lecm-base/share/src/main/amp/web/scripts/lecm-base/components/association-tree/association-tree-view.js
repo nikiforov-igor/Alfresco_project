@@ -1713,8 +1713,10 @@ LogicECM.module = LogicECM.module || {};
                     //убираем selected из removed
                     if (removedEl != null) {
                         for (var k in Alfresco.util.arrayToObject(el.value.split(","))) {
-                            removedEl.value = removedEl.value.replace(k + ',', '');
-                            removedEl.value = removedEl.value.replace(k, '');
+	                        if (k.length > 0) {
+		                        removedEl.value = removedEl.value.replace(k + ',', '');
+		                        removedEl.value = removedEl.value.replace(k, '');
+	                        }
                         }
                     }
                     if (this.options.setCurrentValue && Dom.get(this.id) != null) {
