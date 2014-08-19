@@ -170,7 +170,8 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta) {
         ArmNode node = new ArmNode();
-        node.setTitle((String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME));
+        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+        node.setTitle((String) properties.get(ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
         node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
         if (!isAccordion) {
@@ -182,12 +183,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         node.setNodeQuery(!isAccordion ? service.getNodeChildRule(nodeRef) : null);
         node.setTypes(getNodeTypes(nodeRef));
 
-        String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+        String searchQuery = (String) properties.get(ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
             node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
-	    node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
-        node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
+	    node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
+        node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
 
         if (!onlyMeta) {
             node.setCounter(service.getNodeCounter(nodeRef));
