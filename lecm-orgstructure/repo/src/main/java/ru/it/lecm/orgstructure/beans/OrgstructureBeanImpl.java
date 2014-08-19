@@ -1114,7 +1114,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getCurrentEmployee() {
 		String fullyAuthenticatedUser = AuthenticationUtil.getFullyAuthenticatedUser();
-		return getEmployeeByPerson(fullyAuthenticatedUser);
+		return getEmployeeByPerson(fullyAuthenticatedUser, false);  //не проверяем права текущего сотрудника к текущему сотруднику - доступен всегда
 	}
 
 	@Override
