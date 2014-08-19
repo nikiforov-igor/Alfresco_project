@@ -75,15 +75,6 @@ var logicECMWidgets = [
 	    }
 	},
 	{
-	    id: "ERRANDS_JOURNAL_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "ERRANDS_JOURNAL_MENU_ITEM",
-	        label: "Поручения",
-	        targetUrl: "errands-list"
-	    }
-	},
-	{
 	    id: "ROUTES_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
@@ -311,24 +302,6 @@ var appItems = [
 			id: "SED_MENU_ITEM",
 			label: "СЭД",
 			targetUrl: "arm?code=SED"
-		}
-	},
-	{
-		id: "CONTRACTS_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuBarItem",
-		config: {
-			id: "CONTRACTS_MENU_ITEM",
-			label: "Договора",
-			targetUrl: "contracts-main"
-		}
-	},
-	{
-		id: "ERRANDS_MENU_ITEM",
-		name: "alfresco/menus/AlfMenuBarItem",
-		config: {
-			id: "CONTRACTS_MENU_ITEM",
-			label: "Поручения",
-			targetUrl: "errands-list"
 		}
 	},
 	{

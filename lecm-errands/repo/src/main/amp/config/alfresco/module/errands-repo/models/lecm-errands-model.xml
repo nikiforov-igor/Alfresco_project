@@ -51,7 +51,7 @@
         </constraint>
 	    <constraint name="lecm-errands:arm-url-constraint" type="ru.it.lecm.documents.constraints.ArmUrlConstraint">
 		    <parameter name="armUrl">
-			    <value>errands-list</value>
+			    <value>arm?code=SED</value>
 		    </parameter>
 	    </constraint>
     </constraints>
