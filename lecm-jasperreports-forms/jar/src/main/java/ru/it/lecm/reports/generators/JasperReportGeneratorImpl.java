@@ -80,7 +80,7 @@ public class JasperReportGeneratorImpl extends ReportGeneratorBase {
             generateReport(target, outputStream, jasperReport, dsProvider, parameters);
 
             result.setMimeType(target.getMimeType());
-            result.setFilename(generateReportResultFileName(reportDesc.getMnem(), target.getExtension()));
+            result.setFilename(generateReportResultFileName(reportDesc.getDefault(), target.getExtension()));
             result.setEncoding("UTF-8");
 
             outputStream.flush();

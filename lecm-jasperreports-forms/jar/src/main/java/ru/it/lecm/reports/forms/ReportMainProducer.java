@@ -9,8 +9,10 @@ import ru.it.lecm.reports.api.ReportsManager;
 import ru.it.lecm.reports.api.model.ReportFileData;
 import ru.it.lecm.reports.utils.Utils;
 
+import javax.mail.internet.MimeUtility;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -85,12 +87,10 @@ public class ReportMainProducer extends AbstractWebScript {
         });
 
         if (result != null) {
-            webScriptResponse.setContentType(
-                    String.format("%s;charset=%s;filename=%s"
-                            , result.getMimeType()
-                            , result.getEncoding()
-                            , result.getFilename()
-                    ));
+	        webScriptResponse.setContentType(result.getMimeType());
+	        webScriptResponse.setContentEncoding(result.getEncoding());
+	        webScriptResponse.addHeader("Content-Disposition", "filename=\"" + MimeUtility.encodeWord(result.getFilename(), "utf-8", "Q") + "\"");
+
             if (result.getData() != null) {
                 final OutputStream out = webScriptResponse.getOutputStream();
                 out.write(result.getData());
