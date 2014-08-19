@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -290,9 +291,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     @Override
     public List<ArmColumn> getUserNodeColumns(NodeRef node) {
         List<ArmColumn> result = new ArrayList<>();
-        NodeRef employee = orgstructureBean.getCurrentEmployee();
+        String currentEmployeeLogin = AuthenticationUtil.getFullyAuthenticatedUser();
+        NodeRef employee = orgstructureBean.getEmployeeByPerson(currentEmployeeLogin, false);
         if (employee != null) {
-            final NodeRef employeeSettingsRef = getNodeUserSettings(node);
+            final NodeRef employeeSettingsRef = getNodeUserSettings(node, currentEmployeeLogin);
             if (employeeSettingsRef != null) { // может быть пусто, так как настройки создаются при изменении списка колонок
                 List<NodeRef> columns = findNodesByAssociationRef(employeeSettingsRef, ASSOC_USER_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
                 if (columns != null) {
@@ -318,6 +320,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         return result;
     }
 
+    private NodeRef getNodeUserSettings(final NodeRef node, String loginName) {
+        return nodeService.getChildByName(node, ContentModel.ASSOC_CONTAINS, loginName);
+    }
+
     @Override
     public NodeRef getNodeUserSettings(final NodeRef node) {
         NodeRef employee = orgstructureBean.getCurrentEmployee();
@@ -326,7 +332,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             return null;
         }
         String loginName = orgstructureBean.getEmployeeLogin(employee);
-        return nodeService.getChildByName(node, ContentModel.ASSOC_CONTAINS, loginName);
+        return getNodeUserSettings(node, loginName);
     }
 
     @Override
