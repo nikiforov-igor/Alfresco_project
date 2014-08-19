@@ -48,7 +48,6 @@
                     <show id="lecm-contract:dateConclusionContracts"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
-                    <show id="lecm-contract:fake-contractor-to-addresser-binder" force="true"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-contract:regNumContractor"/>
@@ -269,7 +268,6 @@
                     <show id="lecm-contract:currency-assoc"/>
                     <show id="lecm-contract:partner-assoc" force="true"/>
                     <show id="lecm-contract:representative-assoc"/>
-                    <show id="lecm-contract:fake-contractor-to-addresser-binder" force="true"/>
                     <show id="lecm-contract:signedCounterparty"/>
                     <show id="lecm-contract:signatoryCounterparty"/>
                     <show id="lecm-contract:startDate"/>
