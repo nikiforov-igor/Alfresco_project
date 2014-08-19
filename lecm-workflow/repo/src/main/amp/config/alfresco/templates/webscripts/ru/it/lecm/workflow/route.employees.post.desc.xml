@@ -1,9 +1,0 @@
-<webscript>
-   <shortname>Route approval employees list</shortname>
-   <description>Route approval employees list</description>
-   <url>/lecm/workflow/ds/route-employees</url>
-   <format default="json">argument</format>
-   <authentication>user</authentication>
-   <transaction allow="readonly">required</transaction>
-   <lifecycle>internal</lifecycle>
-</webscript>

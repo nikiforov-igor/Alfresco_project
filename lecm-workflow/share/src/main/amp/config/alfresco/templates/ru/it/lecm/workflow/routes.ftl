@@ -8,8 +8,6 @@
 
 <@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"/>
 <@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
-<#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-<#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"/>-->
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"/>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-workflow/routes/routes-datagrid.js"/>

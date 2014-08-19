@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-	<shortname>Create new empty route</shortname>
-	<description>Create new empty route for employee or orgstructure unit</description>
-	<url>/lecm/workflow/route/CreateEmptyRouteWebscript?routeType={routeType}</url>
-	<authentication>user</authentication>
-	<format default="json"/>
-    <transaction>required</transaction>
-</webscript>

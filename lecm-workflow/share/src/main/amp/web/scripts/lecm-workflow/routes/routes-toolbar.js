@@ -7,9 +7,6 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 (function() {
 
-	var __datagridId__ = null;
-	var __defferedCenterDialog__ = null;
-
 	LogicECM.module.Routes.Toolbar = function(containerId) {
 		LogicECM.module.Routes.Toolbar.superclass.constructor.call(this, 'LogicECM.module.Routes.Toolbar', containerId, ['button', 'container', 'connection', 'json', 'selector']);
 		this.setOptions({
@@ -21,147 +18,69 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
-		_onNewRouteFormDestroyed: function(event, args) {
-			YAHOO.Bubbling.unsubscribe('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
-			YAHOO.Bubbling.unsubscribe('formContainerDestroyed', this._onNewRouteFormDestroyed, this);
-			__defferedCenterDialog__.expire();
-		},
+		_createNewRoute: function() {
 
-		_onAssigneesListDatagridReady: function(event, args) {
-			var bubblingLabel = args[1].bubblingLabel;
-			if (!__datagridId__) {
-				__datagridId__ = bubblingLabel;
-				__defferedCenterDialog__.fulfil('datagrid1');
-			} else if(__datagridId__ != bubblingLabel) {
-				__datagridId__ = null;
-				__defferedCenterDialog__.fulfil('datagrid2');
-			} else {
-				__datagridId__ = null;
+			// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку создания)
+			if (this.createDialogOpening) {
+				return;
 			}
-		},
+			this.createDialogOpening = true;
 
-		_centerDialog: function() {
-			var newRouteForm = this.newRouteForm;
-			var centerDialogInternal = function() {
-				if (newRouteForm) {
-					newRouteForm.dialog.center();
-				}
-			};
-			setTimeout(centerDialogInternal, 50);
-		},
+			var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.datagridBubblingLabel);
+			var itemType = dataGrid.datagridMeta.itemType;
+			var destination = dataGrid.datagridMeta.nodeRef;
 
-		_createNewPrivateRoute: function() {
-			return this._createNewRoute(false);
-		},
+			var newRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
-		_createNewCommonRoute: function() {
-			return this._createNewRoute(true);
-		},
-
-		_createNewRoute: function(isCommon) {
-			var that = this;
-
-			return function() {
-				function onCreateEmptyRouteWebscriptSuccess(r) {
-					var routeRef = r.json.routeRef;
-
-					var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.datagridBubblingLabel);
-					var itemType = dataGrid.datagridMeta.itemType;
-					var formId = isCommon ? 'createNewCommonRouteForm' : 'createNewPrivateRouteForm';
-
-					var newRouteForm = new Alfresco.module.SimpleDialog(that.id + '-' + formId);
-
-					newRouteForm.setOptions({
-						width: '50em',
-						templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
-						templateRequestParams: {
-							formId: formId,
-							itemId: routeRef,
-							itemKind: 'node',
-							mode: 'edit',
-							showCancelButton: true,
-							submitType: 'json'
-						},
-						destroyOnHide: true,
-						doBeforeDialogShow: {
-							fn: function(form, simpleDialog) {
-								var titleId = isCommon ? 'label.routes.new-common-route.title' : 'label.routes.new-private-route.title';
-								simpleDialog.dialog.setHeader(this.msg(titleId));
-								this.createDialogOpening = false;
-							},
-							scope: that
-						},
-						onSuccess: {
-							fn: function(response) {
-								YAHOO.Bubbling.fire('dataItemCreated', {
-									nodeRef: response.json.persistedObject,
-									bubblingLabel: this.options.datagridBubblingLabel
-								});
-
-								Alfresco.util.PopupManager.displayMessage({
-									text: 'Маршрут успешно создан'
-								});
-							},
-							scope: that
-						},
-						onFailure: {
-							fn: function(r) {
-								Alfresco.util.PopupManager.displayMessage({
-									text: 'Не удалось создать маршрут: ' + r.json.message
-								});
-							},
-							scope: that
-						}
-					});
-
-					newRouteForm.show();
-					this.newRouteForm = newRouteForm;
-				}
-
-				// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку создания)
-				if (this.createDialogOpening) {
-					return;
-				}
-				this.createDialogOpening = true;
-
-				YAHOO.Bubbling.on('assigneesListDatagridReady', this._onAssigneesListDatagridReady, this);
-				YAHOO.Bubbling.on('formContainerDestroyed', this._onNewRouteFormDestroyed, this);
-				__defferedCenterDialog__ = new Alfresco.util.Deferred(['datagrid1', 'datagrid2'], {
-					fn: this._centerDialog,
+			newRouteForm.setOptions({
+				width: '50em',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateRequestParams: {
+					formId: 'createNewRouteForm',
+					itemId: itemType,
+					itemKind: 'type',
+					mode: 'create',
+					destination: destination,
+					showCancelButton: true,
+					submitType: 'json'
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function(form, simpleDialog) {
+						simpleDialog.dialog.setHeader(this.msg('label.routes.new-route.title'));
+						this.createDialogOpening = false;
+					},
 					scope: this
-				});
+				},
+				onSuccess: {
+					fn: function(response) {
+						YAHOO.Bubbling.fire('dataItemCreated', {
+							nodeRef: response.json.persistedObject,
+							bubblingLabel: this.options.datagridBubblingLabel
+						});
 
-				var routeType = isCommon ? 'UNIT' : 'EMPLOYEE';
-
-				Alfresco.util.Ajax.jsonRequest({
-					method: 'GET',
-					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/route/CreateEmptyRouteWebscript',
-					dataObj: {
-						routeType: routeType
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Маршрут успешно создан'
+						});
 					},
-					successCallback: {
-						fn: onCreateEmptyRouteWebscriptSuccess,
-						scope: that
+					scope: this
+				},
+				onFailure: {
+					fn: function(r) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось создать маршрут: ' + r.json.message
+						});
 					},
-					failureCallback: {
-						fn: function(r) {
-							Alfresco.util.PopupManager.displayMessage({
-								text: 'Не удалось создать маршрут: ' + r.json.message
-							});
-						}
-					}
-				});
-			};
-		},
-
-		onReady: function() {
-			Alfresco.util.createYUIButton(this, 'btnCreateNewPrivateRoute', this._createNewPrivateRoute(), {
-				label: this.msg('button.new-private-route')
+					scope: this
+				}
 			});
 
+			newRouteForm.show();
+		},
+		onReady: function() {
 			if (this.options.inEngineer) {
-				Alfresco.util.createYUIButton(this, 'btnCreateNewCommonRoute', this._createNewCommonRoute(), {
-					label: this.msg('button.new-common-route')
+				Alfresco.util.createYUIButton(this, 'btnCreateNewRoute', this._createNewRoute(), {
+					label: this.msg('button.new-route')
 				});
 			}
 

@@ -12,14 +12,13 @@
 		routesToolbar.setMessages(${messages});
 		routesToolbar.setOptions ({
 			pageId: "${pageId}",
-			inEngineer: ${isEngineer?string}
+			inEngineer: LogicECM.module.Routes.isEngineer
 		});
 	})();
 </script>
 
 <@comp.baseToolbar toolbarId true false false>
-	<div id="${toolbarId}-btnCreateNewPrivateRoute"></div>
 	<#if isEngineer>
-		<div id="${toolbarId}-btnCreateNewCommonRoute"></div>
+		<div id="${toolbarId}-btnCreateNewRoute"></div>
 	</#if>
 </@comp.baseToolbar>

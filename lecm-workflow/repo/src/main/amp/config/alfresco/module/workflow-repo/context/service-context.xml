@@ -21,7 +21,6 @@
 	<util:list id="workflow.models">
 		<value>alfresco/module/${artifactId}/models/lecm-workflow-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-workflow-result-model.xml</value>
-		<value>alfresco/module/${artifactId}/models/lecm-route-aspects-model.xml</value>
 	</util:list>
 	<util:list id="workflow.labels">
 		<value>alfresco/module/${artifactId}/messages/lecm-workflow-result</value>

@@ -10,10 +10,6 @@
 		  p:nodeService-ref="nodeService"
 		  p:workflowFoldersService-ref="lecm.workflow.folders.bootstrap" />
 
-	<bean id="webscript.ru.it.lecm.workflow.routes.CreateEmptyRouteWebscript.get"
-		  class="ru.it.lecm.workflow.webscripts.CreateEmptyRouteWebscript" parent="webscript"
-		  p:routeService-ref="routeService"/>
-
 	<bean id="webscript.ru.it.lecm.workflow.SetAssigneesListConcurrencyWebscript.post"
 		  class="ru.it.lecm.workflow.webscripts.SetAssigneesListConcurrencyWebscript" parent="webscript"
 		  p:workflowAssigneesListService-ref="workflowAssigneesListService"/>

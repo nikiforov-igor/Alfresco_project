@@ -38,6 +38,7 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 		return null;
 	}
 
+	@Deprecated
 	private List<NodeRef> getEmptyRoutesByCurrentEmployee() {
 		NodeRef employeeRef = orgstructureBean.getCurrentEmployee();
 		String username = orgstructureBean.getEmployeeLogin(employeeRef);
@@ -56,6 +57,7 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 	}
 
 	@Override
+	@Deprecated
 	public NodeRef createEmptyRoute(final RouteType routeType) {
 		//получение списка маршрутов которые TEMP и у которых creator это currentEmployee
 		List<NodeRef> routes = getEmptyRoutesByCurrentEmployee();
@@ -83,6 +85,7 @@ public class RouteServiceImpl extends BaseBean implements RouteService {
 	}
 
 	@Override
+	@Deprecated
 	public NodeRef getAssigneesListByWorkflowType(final NodeRef routeRef, final String workflowType) {
 		NodeRef assigneesListRef = null;
 		List<ChildAssociationRef> children = nodeService.getChildAssocs(routeRef, LecmWorkflowModel.ASSOC_ROUTE_CONTAINS_WORKFLOW_ASSIGNEES_LIST, RegexQNamePattern.MATCH_ALL);

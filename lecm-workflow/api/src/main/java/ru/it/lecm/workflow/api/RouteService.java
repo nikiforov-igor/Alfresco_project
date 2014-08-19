@@ -9,7 +9,9 @@ import ru.it.lecm.workflow.RouteType;
  */
 public interface RouteService {
 
+	@Deprecated
 	NodeRef createEmptyRoute(final RouteType routeType);
 
+	@Deprecated
 	NodeRef getAssigneesListByWorkflowType(final NodeRef routeRef, final String workflowType);
 }
