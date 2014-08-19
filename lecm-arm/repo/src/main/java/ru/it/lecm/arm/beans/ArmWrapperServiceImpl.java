@@ -184,7 +184,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         String searchQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
         if (searchQuery != null) {
-            node.setSearchQuery(searchQuery);
+            node.setSearchQuery(searchQuery.replaceAll("\\n", " ").replaceAll("\\r", " "));
         }
 	    node.setHtmlUrl((String) nodeService.getProperty(nodeRef, ArmService.PROP_HTML_URL));
         node.setReportCodes((String) nodeService.getProperty(nodeRef, ArmService.PROP_REPORT_CODES));
@@ -222,7 +222,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (realParent != null && !realParent.equals(nodeRef)) {
             Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
             if (searchQuery != null) {
-                String parentQuery = searchQuery.toString();
+                String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
                     sb.append(sb.length() > 0 ? " AND (" : "(");
                     if (parentQuery.startsWith("NOT")) {
@@ -270,7 +270,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         if (realParent != null) {
             Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
             if (searchQuery != null) {
-                String parentQuery = searchQuery.toString();
+                String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
                     sb.append(sb.length() > 0 ? " AND (" : "(");
                     if (parentQuery.startsWith("NOT")) {

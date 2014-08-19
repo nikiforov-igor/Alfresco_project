@@ -75,6 +75,9 @@
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:search-query">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
@@ -127,6 +130,9 @@
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:search-query">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
@@ -174,6 +180,9 @@
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:search-query">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
@@ -222,6 +231,9 @@
 					<show id="lecm-arm:is-aggregation-node" force="true"/>
 				</field-visibility>
 				<appearance>
+					<field id="lecm-arm:search-query">
+						<control template="/ru/it/lecm/base-share/components/controls/textarea.ftl"/>
+					</field>
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
