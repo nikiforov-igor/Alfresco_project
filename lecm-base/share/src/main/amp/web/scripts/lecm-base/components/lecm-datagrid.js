@@ -1083,7 +1083,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
 
                     // Display the bottom paginator bar
-                    Dom.setStyle(this.id + "-datagridBarBottom", "display", "block");
+                    Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
                 }
             },
             /**
@@ -1383,7 +1383,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Обновляем значения totalRecords данными из ответа сервера
                 dTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
-                    me.totalRecords = oResponse.meta.totalRecords;
+	                // Display the bottom paginator bar
+	                Dom.setStyle(me.id + "-datagridBarBottom", "display", "block");
+
+	                me.totalRecords = oResponse.meta.totalRecords;
                     if (oPayload) {
                         oPayload.totalRecords = oResponse.meta.totalRecords;
                         oPayload.pagination.recordOffset = oResponse.meta.startIndex;

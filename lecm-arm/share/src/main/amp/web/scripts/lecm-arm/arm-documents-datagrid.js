@@ -129,7 +129,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
 
                 // Display the bottom paginator bar
-                Dom.setStyle(this.id + "-datagridBarBottom", "display", "block");
+                Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
             }
         },
 
