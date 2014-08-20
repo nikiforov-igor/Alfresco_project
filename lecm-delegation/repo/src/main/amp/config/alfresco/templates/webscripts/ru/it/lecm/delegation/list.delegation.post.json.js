@@ -38,7 +38,7 @@ for (var i = 0; i < employees.length; ++i) {
 	}
 }
 
-
+var employees;
 if (!isEngineer) {
 	// если чувак не технолог, то получаем список его подчиненных.
 	// в результирующую выборку попадут только те сотрудники которые есть в списке подчиненных
@@ -46,9 +46,14 @@ if (!isEngineer) {
 	if (!currentEmployee.nodeRef) {
 		logger.log ("ERROR: there is no nodeRef for currentEmployee");
 	}
-	var employees = orgstructure.getBossSubordinate (currentEmployee.nodeRef);
+	employees = orgstructure.getBossSubordinate (currentEmployee.nodeRef);
 	//добавляем самого себя в список сотрудников
 	employees.push(currentEmployee);
+} else {
+	//Иначе, получаем всех видимых нам сотрудников 
+	var employees = orgstructure.getAllEmployees();
+	logger.log ("current employee " + currentEmployee.name + " is an engineer. An engineer can see delegation options for all employees");
+}
 	//получаем delegation-opts по сотрудникам
 	var delegationOpts = [];
 	for (var i = 0; i < employees.length; ++i) {
@@ -73,7 +78,7 @@ if (!isEngineer) {
 	}
 	model.data.items = actualItems;
 	model.data.paging.totalRecords = actualItems.length;
-} else {
-	//удалим себя из списка, к себе на страницу мы и так можем попасть
-	logger.log ("current employee " + currentEmployee.name + " is an engineer. An engineer can see delegation options for all employees");
-}
+//} else {
+//	//удалим себя из списка, к себе на страницу мы и так можем попасть
+//	logger.log ("current employee " + currentEmployee.name + " is an engineer. An engineer can see delegation options for all employees");
+//}
