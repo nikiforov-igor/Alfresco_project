@@ -1334,7 +1334,18 @@
         </forms>
     </config>
 
-	<config evaluator="string-compare" condition="activiti$createOnBasis">
+    <config evaluator="node-type" condition="lecm-contract:dashlet-settings">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-contract:dashlet-settings-code" force="true"/>
+                    <show id="lecm-contract:dashlet-settings-path" force="true"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="string-compare" condition="activiti$createOnBasis">
 		<forms>
 			<form>
 				<field-visibility>

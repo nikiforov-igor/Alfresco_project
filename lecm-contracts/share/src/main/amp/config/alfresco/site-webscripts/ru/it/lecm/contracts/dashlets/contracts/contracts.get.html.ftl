@@ -14,10 +14,10 @@
 <@markup id="html">
 	<#assign id = args.htmlid>
 	<#assign jsid = args.htmlid?js_string>
-	
+
 	<#assign settingsObj = settings!""/>
 	<#assign CONTRACTS_REF = settingsObj.nodeRef!""/>
-	
+
 	<script type="text/javascript">//<![CDATA[
 	    //TODO: Переделать
 	    var contracts = new LogicECM.module.Contracts.dashlet.Contracts("${jsid}").setOptions(
@@ -25,20 +25,38 @@
 	                regionId: "${args['region-id']?js_string}",
 	                destination: ("${CONTRACTS_REF}" != "") ? "${CONTRACTS_REF}" : null
 	            }).setMessages(${messages});
-	
+
 	    new Alfresco.widget.DashletResizer("${jsid}", "${instance.object.id}");
-	    new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions(
-	            {
-	                actions: [
-	                    {
-	                        cssClass: "arm",
-	                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "contracts-main",
-	                        tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
-	                    }
-	                ]
-	            });
+        Alfresco.util.Ajax.jsonRequest({
+            method: "GET",
+            url: Alfresco.constants.PROXY_URI + "lecm/contracts/dashlet/settings/url",
+            dataObj: {},
+            successCallback: {
+                fn: function (oResponse) {
+                    if (oResponse.json) {
+                        new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions(
+                            {
+                                actions: [
+                                    {
+                                        cssClass: "arm",
+                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "/arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armPath),
+                                        tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
+                                    }
+                                ]
+                            });
+                    }
+                }
+            },
+            failureCallback: {
+                fn: function (oResponse) {
+                }
+            },
+            scope: this,
+            execScripts: true
+        });
+
 	//]]></script>
-	
+
 	<div class="dashlet contracts">
 	    <div class="title">${msg("header")}
 	        <#if isStarter?? && isStarter>
@@ -69,14 +87,14 @@
 	                <option value="${filter.type?html}">${msg("filter." + filter.label)}</option>
 	            </#list>
 	            </select>
-	
+
 	            <div class="clear"></div>
 	        </div>
 	    </div>
 	    <div id="${id}-contractsList" class="body scrollableList"
 	         <#if args.height??>style="height: ${args.height}px;"</#if>></div>
 	</div>
-	
+
 	<#-- Empty results list template -->
 	<div id="${id}-empty" class="hidden1">
 	    <div class="empty"><h3>${msg("empty.title")}</h3><span>${msg("empty.description")}</span></div>

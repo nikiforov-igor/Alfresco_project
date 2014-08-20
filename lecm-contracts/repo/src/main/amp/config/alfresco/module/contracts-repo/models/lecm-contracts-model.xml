@@ -249,6 +249,24 @@
 				<!--<aspect>lecm-document-aspects:approval-avaliable</aspect>-->
 			</mandatory-aspects>
 		</type>
+
+        <!-- Настройки дашлета "Договора"-->
+        <type name="lecm-contract:dashlet-settings">
+            <title>Logic Ecm Contract DashletSettings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!-- код СЭД-->
+                <property name="lecm-contract:dashlet-settings-code">
+                    <type>d:text</type>
+                    <default>SED</default>
+                </property>
+                <!-- Путь в дереве СЭД-->
+                <property name="lecm-contract:dashlet-settings-path">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+            </properties>
+        </type>
 	</types>
 
 </model>

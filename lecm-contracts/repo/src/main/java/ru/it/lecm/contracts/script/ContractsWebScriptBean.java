@@ -339,4 +339,8 @@ public class ContractsWebScriptBean extends BaseWebScript {
         List<NodeRef> additionalDocuments = this.documentService.getDocumentsByFilter(docType, getElements(Context.getCurrentContext().getElements(paths)), statuses, filter, null);
         return createScriptable(additionalDocuments);
     }
+
+    public ScriptNode getDashletSettings() {
+        return new ScriptNode(contractService.getDashletSettings(), serviceRegistry, getScope());
+    }
 }

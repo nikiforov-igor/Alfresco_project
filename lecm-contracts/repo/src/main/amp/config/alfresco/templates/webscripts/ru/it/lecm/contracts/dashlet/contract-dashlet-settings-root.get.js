@@ -1,0 +1,1 @@
+model.result = contracts.getDashletSettings().nodeRef.toString();

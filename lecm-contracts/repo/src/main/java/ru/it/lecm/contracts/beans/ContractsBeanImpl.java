@@ -1,5 +1,9 @@
 package ru.it.lecm.contracts.beans;
 
+import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
@@ -8,6 +12,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.PropertyCheck;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.DocumentService;
@@ -22,14 +27,15 @@ import java.util.*;
  * Time: 14:16
  */
 public class ContractsBeanImpl extends BaseBean {
-	public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
-	public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
-	public static final String CONTRACT_TABLES_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/table-structure/1.0";
-	public static final String CONTRACT_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/dictionaries/1.0";
+    public static final String CONTRACTS_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/1.0";
+    public static final String ADDITIONAL_DOCUMENT_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/additional-document/1.0";
+    public static final String CONTRACT_TABLES_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/table-structure/1.0";
+    public static final String CONTRACT_DIC_NAMESPACE_URI = "http://www.it.ru/logicECM/contract/dictionaries/1.0";
 
-	public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
-	public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
-	public static final QName TYPE_CONTRACT_STAGE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage");
+    public static final QName TYPE_CONTRACTS_DOCUMENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "document");
+    public static final QName TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "additionalDocument");
+    public static final QName TYPE_CONTRACT_STAGE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "stage");
+    public static final QName TYPE_DASHLET_SETTINGS = QName.createQName(CONTRACTS_NAMESPACE_URI, "dashlet-settings");
 
     public static final QName PROP_START_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "startDate");
     public static final QName PROP_END_DATE = QName.createQName(CONTRACTS_NAMESPACE_URI, "endDate");
@@ -41,16 +47,22 @@ public class ContractsBeanImpl extends BaseBean {
     public static final QName PROP_STAGE_END_DATE = QName.createQName(CONTRACT_TABLES_NAMESPACE_URI, "end-date");
 
     public static final QName ASSOC_DOCUMENT = QName.createQName(ADDITIONAL_DOCUMENT_NAMESPACE_URI, "document-assoc");
-	public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
-	public static final QName ASSOC_CONTRACT_SUBJECT = DocumentService.ASSOC_SUBJECT;
-	public static final QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACTS_NAMESPACE_URI, "partner-assoc");
-	public static final QName ASSOC_CONTRACT_REPRESENTATIVE = QName.createQName(CONTRACTS_NAMESPACE_URI, "representative-assoc");
-	public static final QName ASSOC_CONTRACT_CURRENCY = QName.createQName(CONTRACTS_NAMESPACE_URI, "currency-assoc");
+    public static final QName ASSOC_CONTRACT_TYPE = QName.createQName(CONTRACTS_NAMESPACE_URI, "typeContract-assoc");
+    public static final QName ASSOC_CONTRACT_SUBJECT = DocumentService.ASSOC_SUBJECT;
+    public static final QName ASSOC_CONTRACT_PARTNER = QName.createQName(CONTRACTS_NAMESPACE_URI, "partner-assoc");
+    public static final QName ASSOC_CONTRACT_REPRESENTATIVE = QName.createQName(CONTRACTS_NAMESPACE_URI, "representative-assoc");
+    public static final QName ASSOC_CONTRACT_CURRENCY = QName.createQName(CONTRACTS_NAMESPACE_URI, "currency-assoc");
 
-	public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
-	public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
+    public static final QName PROP_SUMMARY_CONTENT = QName.createQName(CONTRACTS_NAMESPACE_URI, "summaryContent");
+    public static final QName PROP_SIGNATORY_COUNTERPARTY = QName.createQName(CONTRACTS_NAMESPACE_URI, "signatoryCounterparty");
 
     public static final QName TYPE_CONTRACTS_TYPE = QName.createQName(CONTRACT_DIC_NAMESPACE_URI, "contract-type");
+
+    public static final String CONTRACTS_ROOT_NAME = "Сервис Договора";
+    public static final String CONTRACTS_ROOT_ID = "CONTRACTS_ROOT_ID";
+    public static final String CONTRACTS_DASHLET_SETTINGS_ID = "Настройки дашлета";
+
+    public NodeRef dashletSettings = null;
 
     private SearchService searchService;
     private DocumentService documentService;
@@ -60,36 +72,66 @@ public class ContractsBeanImpl extends BaseBean {
         this.searchService = searchService;
     }
 
-	public void setDocumentService(DocumentService documentService) {
-		this.documentService = documentService;
-	}
+    public void setDocumentService(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
-	@Override
+    @Override
     public NodeRef getServiceRootFolder() {
         return null;
     }
 
-	public NodeRef getDraftRoot() {
-		return  documentService.getDraftRootByType(TYPE_CONTRACTS_DOCUMENT);
-	}
+    public NodeRef getDraftRoot() {
+        return documentService.getDraftRootByType(TYPE_CONTRACTS_DOCUMENT);
+    }
 
-        
-        //TODO DONE Refactoring in progress...
-	public NodeRef createDraftRoot() throws WriteTransactionNeededException {
-            return  documentService.createDraftRoot(TYPE_CONTRACTS_DOCUMENT);
-	}
 
-	public String getDraftPath() {
-		return  documentService.getDraftPathByType(TYPE_CONTRACTS_DOCUMENT);
-	}
+    //TODO DONE Refactoring in progress...
+    public NodeRef createDraftRoot() throws WriteTransactionNeededException {
+        return documentService.createDraftRoot(TYPE_CONTRACTS_DOCUMENT);
+    }
 
-    public String getDocumentsFolderPath(){
+    public String getDraftPath() {
+        return documentService.getDraftPathByType(TYPE_CONTRACTS_DOCUMENT);
+    }
+
+    public String getDocumentsFolderPath() {
         return documentService.getDocumentsFolderPath();
+    }
+
+    public NodeRef getDashletSettings() {
+        return dashletSettings;
+    }
+
+    public final void init() {
+        PropertyCheck.mandatory(this, "nodeService", nodeService);
+
+        final NodeRef serviceRoot = getFolder(CONTRACTS_ROOT_ID);
+        dashletSettings = nodeService.getChildByName(serviceRoot, ContentModel.ASSOC_CONTAINS, CONTRACTS_DASHLET_SETTINGS_ID);
+        if (dashletSettings == null) {
+            dashletSettings = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<NodeRef>() {
+                @Override
+                public NodeRef doWork() throws Exception {
+                    return transactionService.getRetryingTransactionHelper().doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<NodeRef>() {
+                        @Override
+                        public NodeRef execute() throws Throwable {
+                            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, CONTRACTS_DASHLET_SETTINGS_ID);
+                            Map<QName, Serializable> properties = new HashMap<QName, Serializable>();
+                            properties.put(ContentModel.PROP_NAME, CONTRACTS_DASHLET_SETTINGS_ID);
+                            ChildAssociationRef childAssoc = nodeService.createNode(serviceRoot, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_DASHLET_SETTINGS, properties);
+                            return childAssoc.getChildRef();
+                        }
+
+                    });
+                }
+            });
+        }
     }
 
     /**
      * Поиск договоров
-     * @param path путь где следует искать
+     *
+     * @param path     путь где следует искать
      * @param statuses статусы договоров
      * @return List<NodeRef>
      */
@@ -99,6 +141,7 @@ public class ContractsBeanImpl extends BaseBean {
 
     /**
      * Метод получения всех участников
+     *
      * @return
      */
     public List<NodeRef> getAllMembers() {
@@ -119,13 +162,16 @@ public class ContractsBeanImpl extends BaseBean {
                 return sortAscending ? obj1.compareTo(obj2) : obj2.compareTo(obj1);
             }
         }
-        if (members.size() > 0 && nodeService.getProperties(members.get(0)).containsKey(sortFieldQName)){
+        if (members.size() > 0 && nodeService.getProperties(members.get(0)).containsKey(sortFieldQName)) {
             Collections.sort(members, new NodeRefComparator<String>());
-        };
+        }
+        ;
         return members;
     }
 
-    public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date end, List<String> paths, List<String> statuses, List<NodeRef> initiatorsList, List<NodeRef> docsList, boolean includeAdditional) {
+    public List<NodeRef> getContractsByFilter(QName dateProperty, Date begin, Date
+            end, List<String> paths, List<String> statuses, List<NodeRef> initiatorsList, List<NodeRef> docsList,
+                                              boolean includeAdditional) {
         Map<QName, List<NodeRef>> initList = new HashMap<QName, List<NodeRef>>();
         List<QName> types = new ArrayList<QName>(2);
         types.add(TYPE_CONTRACTS_DOCUMENT);
@@ -158,7 +204,7 @@ public class ContractsBeanImpl extends BaseBean {
             }
 
             if (employeesFilter.length() > 0) {
-                filterQuery +=  employeesFilter;
+                filterQuery += employeesFilter;
             }
         }
 
@@ -185,9 +231,9 @@ public class ContractsBeanImpl extends BaseBean {
         return documentService.getDocumentsByFilter(types, paths, statuses, filterQuery, null);
     }
 
-	public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
-		return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
-	}
+    public List<NodeRef> getAllContractDocuments(NodeRef contractRef) {
+        return findNodesByAssociationRef(contractRef, ASSOC_DOCUMENT, TYPE_CONTRACTS_ADDICTIONAL_DOCUMENT, ASSOCIATION_TYPE.SOURCE);
+    }
 
     public List<NodeRef> getAdditionalDocs(String filter) {
         List<NodeRef> records = new ArrayList<NodeRef>();
@@ -202,7 +248,7 @@ public class ContractsBeanImpl extends BaseBean {
 
 
         if (filter != null && filter.length() > 0) {
-            query +=  " AND (" +  filter + ") ";
+            query += " AND (" + filter + ") ";
         }
 
         query += (query.length() > 0 ? " AND " : "") + "{{IN_SAME_ORGANIZATION}}";
@@ -222,15 +268,15 @@ public class ContractsBeanImpl extends BaseBean {
         return records;
     }
 
-	public boolean isContract(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_CONTRACTS_DOCUMENT);
-		return isProperType(ref, types);
-	}
+    public boolean isContract(NodeRef ref) {
+        Set<QName> types = new HashSet<QName>();
+        types.add(TYPE_CONTRACTS_DOCUMENT);
+        return isProperType(ref, types);
+    }
 
-	public NodeRef dublicateContract(NodeRef nodeRef) {
+    public NodeRef dublicateContract(NodeRef nodeRef) {
         return documentService.duplicateDocument(nodeRef);
-	}
+    }
 
     public String getAuthorProperty() {
         return documentService.getAuthorProperty(TYPE_CONTRACTS_DOCUMENT);

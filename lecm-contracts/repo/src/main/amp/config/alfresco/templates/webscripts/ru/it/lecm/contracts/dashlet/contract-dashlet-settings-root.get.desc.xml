@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Admin Console Contracts Dashlet Settings Node</shortname>
+  <description>Admin Console Contracts Dashlet Settings Node</description>
+  <url>/lecm/contracts/dashlet/settings</url>
+  <format default="html">extension</format>
+  <authentication>user</authentication>
+</webscript>
