@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<model name="lecmWorkflowRoutes:model" xmlns="http://www.alfresco.org/model/dictionary/1.0">
+	<description>Logic ECM workflow routes model</description>
+	<author>Logic ECM</author>
+	<version>1.0</version>
+
+	<imports>
+		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
+		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
+		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+	</imports>
+
+	<namespaces>
+		<namespace uri="http://www.it.ru/logicECM/model/workflow/routes/1.0" prefix="lecmWorkflowRoutes"/>
+	</namespaces>
+
+	<constraints>
+		<!-- TODO: можно будет использовать констрейнты из модели данных бизнес-процесса согласования -->
+		<constraint name="lecmWorkflowRoutes:workflowTypeConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>PARALLEL</value>
+					<value>SEQUENTIAL</value>
+				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecmWorkflowRoutes:stageItemDecisionConstraint" type="LIST">
+			<parameter name="allowedValues">
+				<list>
+					<value>NO_DESISION</value>
+					<value>APPROVED</value>
+					<value>REJECTED</value>
+					<value>APPROVED_WITH_REMARK</value>
+				</list>
+			</parameter>
+		</constraint>
+	</constraints>
+
+	<types>
+		<type name="lecmWorkflowRoutes:route">
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecmWorkflowRoutes:routeAvailabilityCondition">
+					<title>Условие доступности</title>
+					<type>d:text</type>
+				</property>
+				<property name="lecmWorkflowRoutes:routeInterruptAfterReject">
+					<title>Завершать после первой визы «Не согласен»</title>
+					<type>d:boolean</type>
+					<default>true</default>
+				</property>
+				<property name="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
+					<title>Уведомлять о каждой рецензии</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+				<property name="lecmWorkflowRoutes:routeEditable">
+					<title>Разрешить изменять параметры согласования</title>
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmWorkflowRoutes:routeOrganizationUnitAssoc">
+					<title>Доступен для подразделений</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:organization-unit</class>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</target>
+				</association>
+			</associations>
+			<mandatory-aspects>
+				<aspect>cm:titled</aspect>
+			</mandatory-aspects>
+		</type>
+
+		<type name="lecmWorkflowRoutes:stage">
+			<title>Этап</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecmWorkflowRoutes:stageWorkflowType">
+					<title>Тип согласования</title>
+					<type>d:text</type>
+					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecmWorkflowRoutes:workflowTypeConstraint"/>
+					</constraints>
+				</property>
+				<property name="lecmWorkflowRoutes:stageWorkflowTerm">
+					<title>Срок согласования</title>
+					<type>d:int</type>
+					<mandatory>true</mandatory>
+				</property>
+			</properties>
+		</type>
+
+		<type name="lecmWorkflowRoutes:stageItem">
+			<title>Строка этапа</title>
+			<parent>cm:folder</parent>
+			<properties>
+				<property name="lecmWorkflowRoutes:stageItemTerm">
+					<title>Срок</title>
+					<type>d:int</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemUserName">
+					<title>Имя пользователя. Служебный</title>
+					<type>d:text</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemDueDate">
+					<title>Крайний срок выполнения задачи</title>
+					<type>d:datetime</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemStartDate">
+					<title>Дата назначения задачи</title>
+					<type>d:datetime</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemCompleteDate">
+					<title>Дата выполнения задачи</title>
+					<type>d:datetime</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemDecision">
+					<title>Решение</title>
+					<type>d:text</type>
+					<constraints>
+						<constraint ref="lecmWorkflowRoutes:stageItemDecisionConstraint"/>
+					</constraints>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemComment">
+					<title>Замечание</title>
+					<type>d:text</type>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemEmployeeAssoc-ref">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+				<property name="lecmWorkflowRoutes:stageItemEmployeeAssoc-text-content">
+					<type>d:text</type>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
+			</properties>
+			<associations>
+				<association name="lecmWorkflowRoutes:stageItemEmployeeAssoc">
+					<title>Сотрудник</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecm-orgstr:employee</class>
+						<mandatory>true</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+			</associations>
+		</type>
+	</types>
+</model>
