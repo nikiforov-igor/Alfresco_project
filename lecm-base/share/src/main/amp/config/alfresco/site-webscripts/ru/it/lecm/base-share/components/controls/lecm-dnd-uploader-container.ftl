@@ -40,6 +40,9 @@
 				itemNodeRef: "${form.arguments.itemId}",
 				currentValue: "${field.value!""}",
             	suppressRefreshEvent: ${suppressRefreshEvent?string},
+				<#if params.defaultSelectedShowPreviewButton??>
+					defaultSelectedShowPreviewButton: ${params.defaultSelectedShowPreviewButton?string},
+				</#if>
             	showPreview: ${showPreview?string}
 			});
 		}

@@ -47,7 +47,8 @@ LogicECM.control = LogicECM.control || {};
 				itemNodeRef: false,
                 suppressRefreshEvent: false,
                 useDnD: true,
-                showPreview: true
+                showPreview: true,
+	            defaultSelectedShowPreviewButton: false
 			},
 
 			currentValueHtmlId: "",
@@ -91,7 +92,7 @@ LogicECM.control = LogicECM.control || {};
                                     obj: null,
                                     scope: this
                                 },
-                                checked: false,
+                                checked: this.options.defaultSelectedShowPreviewButton,
                                 disabled: true
                             }
                         );
