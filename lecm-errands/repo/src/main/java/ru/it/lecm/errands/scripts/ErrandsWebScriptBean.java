@@ -1,6 +1,7 @@
 package ru.it.lecm.errands.scripts;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -12,6 +13,8 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.LecmTransactionHelper;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.errands.beans.ErrandsServiceImpl;
@@ -19,11 +22,6 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.IWorkCalendar;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.alfresco.repo.transaction.RetryingTransactionHelper;
-import ru.it.lecm.base.beans.LecmTransactionHelper;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -557,4 +555,8 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 		}
 		return null;
 	}
+
+    public ScriptNode getDashletSettings() {
+        return new ScriptNode(errandsService.getDashletSettingsNode(), serviceRegistry, getScope());
+    }
 }

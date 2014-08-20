@@ -16,11 +16,13 @@ public interface ErrandsService {
     public static final String ERRANDS_LINK_FOLDER_NAME = "Ссылки";
 
     public static final String ERRANDS_SETTINGS_NODE_NAME = "Settings";
+    public static final String ERRANDS_DASHLET_SETTINGS_NODE_NAME = "Dashlet Settings";
 
     public static final String ERRANDS_NAMESPACE_URI = "http://www.it.ru/logicECM/errands/1.0";
 
     public static final QName TYPE_ERRANDS = QName.createQName(ERRANDS_NAMESPACE_URI, "document");
     public static final QName TYPE_ERRANDS_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "settings");
+    public static final QName TYPE_ERRANDS_DASHLET_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "dashlet-settings");
     public static final QName TYPE_ERRANDS_USER_SETTINGS = QName.createQName(ERRANDS_NAMESPACE_URI, "user-settings");
     public static final QName PROP_ERRANDS_INITIATOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "initiator-assoc-ref");
     public static final QName PROP_ERRANDS_EXECUTOR_REF = QName.createQName(ERRANDS_NAMESPACE_URI, "executor-assoc-ref");
@@ -74,6 +76,12 @@ public interface ErrandsService {
      * @return ссылка на объект глобальных настроек для поручений
      */
     public NodeRef getSettingsNode();
+
+    /**
+     * Возвращает NodeRef настроек дашлетов для поручений
+     * @return
+     */
+    public NodeRef getDashletSettingsNode();
 
     public NodeRef createSettingsNode() throws WriteTransactionNeededException;
 

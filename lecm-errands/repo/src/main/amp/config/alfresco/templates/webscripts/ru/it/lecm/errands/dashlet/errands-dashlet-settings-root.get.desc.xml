@@ -1,0 +1,7 @@
+<webscript>
+  <shortname>Admin Console Errands Dashlet Settings Node</shortname>
+  <description>Admin Console Errands Dashlet Settings Node</description>
+  <url>/lecm/errands/dashlet/settings</url>
+  <format default="html">extension</format>
+  <authentication>user</authentication>
+</webscript>

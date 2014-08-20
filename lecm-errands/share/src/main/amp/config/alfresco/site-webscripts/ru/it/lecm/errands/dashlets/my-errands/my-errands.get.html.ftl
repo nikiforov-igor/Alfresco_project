@@ -14,25 +14,43 @@
             }).setMessages(${messages});
 
     new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-    new Alfresco.widget.DashletTitleBarActions("${args.htmlid}").setOptions(
-            {
-                actions:
-                        [
-                            {
-                                cssClass: "help",
-                                bubbleOnClick:
-                                {
-                                    message: "${msg("dashlet.help")?js_string}"
-                                },
-                                tooltip: "${msg("dashlet.help.tooltip")?js_string}"
-                            },
-                            {
-                                cssClass: "arm",
-                                linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "errands-list",
-                                tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
-                            }
-                        ]
-            });
+    Alfresco.util.Ajax.jsonRequest({
+        method: "GET",
+        url: Alfresco.constants.PROXY_URI + "lecm/errands/dashlet/settings/url",
+        dataObj: {},
+        successCallback: {
+            fn: function (oResponse) {
+                if (oResponse.json) {
+                    new Alfresco.widget.DashletTitleBarActions("${args.htmlid}").setOptions(
+                    {
+                        actions:
+                                [
+                                    {
+                                        cssClass: "help",
+                                        bubbleOnClick:
+                                        {
+                                            message: "${msg("dashlet.help")?js_string}"
+                                        },
+                                        tooltip: "${msg("dashlet.help.tooltip")?js_string}"
+                                    },
+                                    {
+                                        cssClass: "arm",
+                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armGeneralPath),
+                                        tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
+                                    }
+                                ]
+                    });
+
+                }
+            }
+        },
+        failureCallback: {
+            fn: function (oResponse) {
+            }
+        },
+        scope: this,
+        execScripts: true
+    });
 })();
 //]]></script>
 

@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Errands Module Dashlet Settings</shortname>
+    <description>Errands Module Dashlet Settings</description>
+    <url>/lecm/errands/dashlet/settings/url</url>
+    <format default="json">extension</format>
+    <authentication>user</authentication>
+    <transaction>none</transaction>
+</webscript>

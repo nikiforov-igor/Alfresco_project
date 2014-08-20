@@ -1,15 +1,34 @@
+var dashletSettings = errands.getDashletSettings();
+
 function addToList(list, key) {
     var errandsList = errands.getIssuedErrands(key);
 
     var allCount = errandsList.length;
     var importantCount = getImportantCount(errandsList);
 
+    var armCode = dashletSettings.properties["lecm-errands:dashlet-settings-arm"];
+    var path = "";
+    var importantPath = "";
+    if (key === "issued_errands_all") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-unexecuted"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-unexecuted-important"];
+    } else if (key === "issued_errands_execution") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-await-execution"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-await-execution-important"];
+    } else if (key === "issued_errands_expired") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-expired"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-expired-important"];
+    } else if (key === "issued_errands_deadline") {
+        path = dashletSettings.properties["lecm-errands:dashlet-settings-approaching-deadline"];
+        importantPath = dashletSettings.properties["lecm-errands:dashlet-settings-approaching-deadline-important"];
+    }
     list.push({
         key: key,
         allCount: allCount,
         importantCount: importantCount,
-        filter: errands.getIssuedFilter(key),
-        importantFilter: errands.getIssuedFilter(key + "_important")
+        path: path,
+        importantPath: importantPath,
+        armCode: armCode
     });
 }
 

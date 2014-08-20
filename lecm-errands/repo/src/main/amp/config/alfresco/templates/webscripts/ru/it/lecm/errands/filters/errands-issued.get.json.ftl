@@ -6,8 +6,9 @@
         "key":  "${item.key}",
         "allCount": "${item.allCount}",
         "importantCount": "${item.importantCount}",
-        "filter": "${item.filter}",
-        "importantFilter": "${item.importantFilter}"
+        "path": "${item.path}",
+        "importantPath": "${item.importantPath}",
+        "armCode": "${item.armCode}"
     }
         <#if item_has_next>,</#if>
     </#list>

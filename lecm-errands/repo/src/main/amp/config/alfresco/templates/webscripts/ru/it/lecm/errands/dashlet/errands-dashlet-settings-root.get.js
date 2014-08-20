@@ -1,0 +1,1 @@
+model.result = errands.getDashletSettings().nodeRef.toString();

@@ -383,5 +383,74 @@
 			    </association>
 		    </associations>
 	    </type>
+
+        <type name="lecm-errands:dashlet-settings">
+            <title>Logic Ecm Errands Dashlet Settings</title>
+            <parent>cm:cmobject</parent>
+            <properties>
+                <!-- Код арм  -->
+                <property name="lecm-errands:dashlet-settings-arm">
+                    <type>d:text</type>
+                    <mandatory>true</mandatory>
+                    <default>SED</default>
+                </property>
+
+                <!-- Путь до узла с поручениями -->
+                <property name="lecm-errands:dashlet-settings-path">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с неисполненными поручениями -->
+                <property name="lecm-errands:dashlet-settings-unexecuted">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с выжными неисполненными поручениями -->
+                <property name="lecm-errands:dashlet-settings-unexecuted-important">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с ожидающими исполнения поручениями -->
+                <property name="lecm-errands:dashlet-settings-await-execution">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с важными ожидающими исполнения поручениями -->
+                <property name="lecm-errands:dashlet-settings-await-execution-important">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с просроченными поручениями -->
+                <property name="lecm-errands:dashlet-settings-expired">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с важными просроченными поручениями -->
+                <property name="lecm-errands:dashlet-settings-expired-important">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с поручениями с прибилжающимся сроком -->
+                <property name="lecm-errands:dashlet-settings-approaching-deadline">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+                <!-- Путь до узла с важными поручениями с прибилжающимся сроком -->
+                <property name="lecm-errands:dashlet-settings-approaching-deadline-important">
+                    <type>d:text</type>
+                    <default></default>
+                </property>
+
+            </properties>
+        </type>
+
 	</types>
 </model>

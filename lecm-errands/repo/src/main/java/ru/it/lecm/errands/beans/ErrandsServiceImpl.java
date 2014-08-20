@@ -14,22 +14,22 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.FileFilterMode;
 import org.alfresco.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.documents.DocumentEventCategory;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.errands.ErrandsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.io.Serializable;
 import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.it.lecm.base.beans.TransactionNeededException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.security.LecmPermissionService;
 
 /**
  * User: AIvkin
@@ -103,6 +103,9 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
                         if (null == getSettingsNode()) {
                             createSettingsNode();
                         }
+                        if (null == getDashletSettingsNode()) {
+                            createDashletSettingsNode();
+                        }
                         return null;
                     }
                 });
@@ -130,6 +133,12 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
     }
 
     @Override
+    public NodeRef getDashletSettingsNode() {
+        final NodeRef rootFolder = this.getServiceRootFolder();
+        return nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+    }
+
+    @Override
     public NodeRef createSettingsNode() throws WriteTransactionNeededException {
         try {
             lecmTransactionHelper.checkTransaction();
@@ -146,6 +155,28 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
 
             Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
             properties.put(ContentModel.PROP_NAME, ERRANDS_SETTINGS_NODE_NAME);
+            ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
+            settingsRef = associationRef.getChildRef();
+        }
+        return settingsRef;
+    }
+
+    public NodeRef createDashletSettingsNode() throws WriteTransactionNeededException {
+        try {
+            lecmTransactionHelper.checkTransaction();
+        } catch (TransactionNeededException ex) {
+            throw new WriteTransactionNeededException("Can't create settings node");
+        }
+
+        final NodeRef rootFolder = this.getServiceRootFolder();
+        NodeRef settingsRef = nodeService.getChildByName(rootFolder, ContentModel.ASSOC_CONTAINS, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+        if (settingsRef == null) {
+            QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
+            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
+            QName nodeTypeQName = TYPE_ERRANDS_DASHLET_SETTINGS;
+
+            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
+            properties.put(ContentModel.PROP_NAME, ERRANDS_DASHLET_SETTINGS_NODE_NAME);
             ChildAssociationRef associationRef = nodeService.createNode(rootFolder, assocTypeQName, assocQName, nodeTypeQName, properties);
             settingsRef = associationRef.getChildRef();
         }
