@@ -691,20 +691,34 @@ LogicECM.module = LogicECM.module || {};
                     if (tree) {
                         Dom.setAttribute(tree, 'tabindex', ++tabindex);
                         if (!this.firstTabbed) {
-                            this.firstTabbed = tree.id;
+                            this.firstTabbed = tree[0].id;
                         }
 
-                        Event.on(tree, "focusin", function (e) {
-                            if ((e.relatedTarget && !Selector.test(e.relatedTarget, "div.tree-items *"))
-                                || (e.explicitOriginalTarget && !Selector.test(e.explicitOriginalTarget.parentNode, "div.tree-items *"))) {
-                                me.rootNode.focus();
-                                me.treeViewClicked(me.rootNode);
-                                me.tree.onEventToggleHighlight(me.rootNode);
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
-                        });
+                        // Приходя в дерево клавиатурой с предыдущего или следущего элемента, выставляем фокус
+                        new KeyListener(tree, {keys: KeyListener.KEY.TAB},
+                            {
+                                fn: me.focusToTheTree,
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYUP).enable();
+                        new KeyListener(tree, {shift: true, keys: KeyListener.KEY.TAB},
+                            {
+                                fn: me.focusToTheTree,
+                                scope: this,
+                                correctScope: true
+                            }, KeyListener.KEYUP).enable();
 
+                        // При смене фокуса внутри дерева, запоминаем выбранный элемент,
+                        // чтоб выбрать его при возврате в дерево после ухода
+                        this.tree.subscribe('focusChanged', function (args) {
+                            var newNode = args.newNode;
+                            if (newNode) {
+                                me.selectedTreeNode = newNode;
+                            }
+                            return false;
+                        }.bind(this));
+
+                        // "Кликаем" на элементе при нажатии на нем Enter
                         this.tree.subscribe('enterKeyPressed', function (node) {
                             this.treeViewClicked(node);
                             return false;
@@ -846,6 +860,21 @@ LogicECM.module = LogicECM.module || {};
                 }
             }
         },
+
+        // Когда фокус приходит в дерево, делаем выбранным
+        // либо ранее выбранный элемент, если он был,
+        // либо первый - корневой - элемент
+        focusToTheTree: function (a, args) {
+            var me = this;
+            var e = args[1];
+            var node = me.selectedTreeNode ? me.selectedTreeNode : me.rootNode;
+
+            node.focus();
+            me.treeViewClicked(node);
+            me.tree.onEventToggleHighlight(node);
+            Event.stopPropagation(e);
+        },
+
 
         focusToNext: function(a, args) {
             var activeEl = this.activeElement;
