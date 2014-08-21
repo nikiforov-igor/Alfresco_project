@@ -1383,8 +1383,10 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                 // Обновляем значения totalRecords данными из ответа сервера
                 dTable.handleDataReturnPayload = function DataGrid_handleDataReturnPayload(oRequest, oResponse, oPayload) {
-	                // Display the bottom paginator bar
-	                Dom.setStyle(me.id + "-datagridBarBottom", "display", "block");
+	                if (me.options.usePagination) {
+		                // Display the bottom paginator bar
+		                Dom.setStyle(me.id + "-datagridBarBottom", "display", "block");
+	                }
 
 	                me.totalRecords = oResponse.meta.totalRecords;
                     if (oPayload) {
