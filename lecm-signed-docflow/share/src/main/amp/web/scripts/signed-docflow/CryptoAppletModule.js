@@ -422,6 +422,11 @@ function checkForApplet() {
 					Alfresco.util.PopupManager.displayMessage({text: 'Подпись не действительна, загрузка отменена'});
 				}
 			},
+
+			exportSignAction: function(nodeRef) {
+				document.location.href = Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getZip?nodeRef=' + nodeRef;
+			},
+
 			loadSignFromString: function(nodeRef, signatureContent, options) {
 				var dataObj = {},
 					signature = new SignatureFromContent(nodeRef, signatureContent, null);

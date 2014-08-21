@@ -27,6 +27,7 @@
 			<div><a id="${el}-signDocument" href="javascript:void(0);" class="action-link">${msg("label.sign")}</a></div>
 			<div><a id="${el}-refreshSignatures" href="javascript:void(0);" class="action-link">${msg("label.refresh.signature")}</a></div>
 			<div><a id="${el}-uploadSignature" href="javascript:void(0);" class="action-link">${msg("label.upload.signature")}</a></div>
+			<div><a id="${el}-exportSignature" href="javascript:void(0);" class="action-link">${msg("label.export.signature")}</a></div>
 		</div>
 	</div>
 </div>
@@ -68,6 +69,7 @@
 			YAHOO.util.Event.on("${el}-signDocument", "click", signingComponent.onSignDocument, signingComponent, true);
 			YAHOO.util.Event.on("${el}-refreshSignatures", "click", signingComponent.onRefreshSignatures, signingComponent, true);
 			YAHOO.util.Event.on("${el}-uploadSignature", "click", signingComponent.onUploadSignature, signingComponent, true);
+			YAHOO.util.Event.on("${el}-exportSignature", "click", signingComponent.onExportSignature, signingComponent, true);
 			YAHOO.util.Event.on("${el}-refreshSentDocuments", "click", signingComponent.onRefreshSentDocuments, signingComponent, true);
 			YAHOO.util.Event.on("${el}-sendDocument", "click", signingComponent.onSendDocument, signingComponent, true);
 			YAHOO.util.Event.on("${el}-signaturesReceived", "click", signingComponent.onSignaturesReceived, signingComponent, true);

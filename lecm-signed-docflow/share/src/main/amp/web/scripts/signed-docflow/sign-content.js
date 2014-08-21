@@ -88,6 +88,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 		onUploadSignature: function(event) {
 			CryptoApplet.loadSignAction(this.options.nodeRef);
 		},
+		onExportSignature: function(event) {
+			CryptoApplet.exportSignAction(this.options.nodeRef);
+		},
 		onSendDocument: function() {
 
 			function showForm() {
