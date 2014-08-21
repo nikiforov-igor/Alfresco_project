@@ -4,4 +4,9 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<!-- deprecated context, will be removed in the future release -->
+	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/service-context.xml" />
+	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/extension-context.xml" />
+	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/policy-context.xml" />
+	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/webscript-context.xml" />
 </beans>
