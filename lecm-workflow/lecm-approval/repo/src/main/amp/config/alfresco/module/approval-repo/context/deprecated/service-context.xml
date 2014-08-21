@@ -4,7 +4,8 @@
 	   xmlns:util="http://www.springframework.org/schema/util"
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	   profile="deprecated.approval">
 
 	<util:list id="deprecated.approval2.models">
 		<value>alfresco/module/${artifactId}/models/deprecated/lecm-approval-result-model.xml</value>
