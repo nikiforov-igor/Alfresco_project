@@ -193,4 +193,8 @@ public interface ArmService {
      * @param node узел
      */
     public NodeRef createUserSettingsForNode(final NodeRef node) throws WriteTransactionNeededException;
+
+    void invalidateCache();
+
+    void invalidateCurrentUserCache();
 }

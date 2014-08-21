@@ -1,6 +1,7 @@
 package ru.it.lecm.arm.beans;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
@@ -37,6 +38,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	private NamespaceService namespaceService;
     private OrgstructureBean orgstructureBean;
 
+    private SimpleCache<String, List<ArmColumn>> columnsCache;
+    private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
+    private SimpleCache<NodeRef, List<NodeRef>> childNodesCache;
+
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
         public int compare(NodeRef o1, NodeRef o2) {
@@ -55,6 +60,18 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     };
 
     private StateMachineServiceBean stateMachineService;
+
+    public void setColumnsCache(SimpleCache<String, List<ArmColumn>> columnsCache) {
+        this.columnsCache = columnsCache;
+    }
+
+    public void setFiltersCache(SimpleCache<NodeRef, List<ArmFilter>> filtersCache) {
+        this.filtersCache = filtersCache;
+    }
+
+    public void setChildNodesCache(SimpleCache<NodeRef, List<NodeRef>> childNodesCache) {
+        this.childNodesCache = childNodesCache;
+    }
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
         this.orgstructureBean = orgstructureBean;
@@ -134,6 +151,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
     public List<NodeRef> getChildNodes(NodeRef node) {
+        if (childNodesCache.contains(node)) {
+            return childNodesCache.get(node);
+        }
         List<NodeRef> result = new ArrayList<NodeRef>();
 
         Set<QName> typeSet = new HashSet<QName>(1);
@@ -148,6 +168,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             }
         }
         Collections.sort(result, comparator);
+        childNodesCache.put(node, result);
         return result;
     }
 
@@ -182,7 +203,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public List<ArmFilter> getNodeFilters(NodeRef node) {
-		List<ArmFilter> result = new ArrayList<ArmFilter>();
+        if (filtersCache.contains(node)) {
+            return filtersCache.get(node);
+        }
+		List<ArmFilter> result = new ArrayList<>();
         List<NodeRef> filters = findNodesByAssociationRef(node, ASSOC_NODE_FILTERS, null, ASSOCIATION_TYPE.TARGET);
         if (filters != null) {
             for (NodeRef ref : filters) {
@@ -227,7 +251,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                 }
             }
         }
-
+        filtersCache.put(node, result);
 		return result;
 	}
 
@@ -250,6 +274,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 	public List<ArmColumn> getNodeColumns(NodeRef node) {
 		List<ArmColumn> result = getUserNodeColumns(node); // получаем список колонок из настроек пользователя
         if (result.isEmpty()) { // пусто - тащим из настроек АРМ
+            if (columnsCache.contains(node.toString())) {
+                return columnsCache.get(node.toString());
+            }
+            result = new ArrayList<>();     //сбрасываем, чтобы не спутать кэши
             List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
             if (columns != null) {
                 for (NodeRef ref : columns) {
@@ -271,8 +299,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                     }
                 }
             }
+            columnsCache.put(node.toString(), result);
         }
-
 		return result;
 	}
 
@@ -290,8 +318,12 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     @Override
     public List<ArmColumn> getUserNodeColumns(NodeRef node) {
-        List<ArmColumn> result = new ArrayList<>();
         String currentEmployeeLogin = AuthenticationUtil.getFullyAuthenticatedUser();
+        String key = currentEmployeeLogin + node.toString();
+        if (columnsCache.contains(key)) {
+            return columnsCache.get(key);
+        }
+        List<ArmColumn> result = new ArrayList<>();
         NodeRef employee = orgstructureBean.getEmployeeByPerson(currentEmployeeLogin, false);
         if (employee != null) {
             final NodeRef employeeSettingsRef = getNodeUserSettings(node, currentEmployeeLogin);
@@ -317,6 +349,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                 }
             }
         }
+        columnsCache.put(key, result);
         return result;
     }
 
@@ -458,6 +491,30 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		}
 		return (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
 	}
+
+    @Override
+    public void invalidateCache() {
+        filtersCache.clear();
+        childNodesCache.clear();
+        columnsCache.clear();
+        logger.info("Arm cache cleared!!!");
+    }
+
+    @Override
+    public void invalidateCurrentUserCache() {
+        String user = AuthenticationUtil.getFullyAuthenticatedUser();
+
+        Set<String> removeKeys = new HashSet<>();
+        for (String key : columnsCache.getKeys()) {
+            if (key.startsWith(user)) { //TODO доработать: сейчас возможна дополнительная очистка "чужого" кэша
+                removeKeys.add(key);
+            }
+        }
+        for (String removeKey : removeKeys) {
+            columnsCache.remove(removeKey);
+        }
+        logger.info("Arm cache cleared for '{}'!!!", user);
+    }
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;

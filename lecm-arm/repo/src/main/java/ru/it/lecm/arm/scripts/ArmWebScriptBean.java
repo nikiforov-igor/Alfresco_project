@@ -287,6 +287,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
         final AuthenticationUtil.RunAsWork<Boolean> saveColumns = new AuthenticationUtil.RunAsWork<Boolean>() {
             @Override
             public Boolean doWork() throws Exception {
+                boolean result = false;
                 ScriptNode settingsNode = getNodeUserSettings(armNode);
                 if (settingsNode == null) {
                     settingsNode = createNodeUserSettings(armNode);
@@ -308,9 +309,10 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
 
                     nodeService.setAssociations(settingsNode.getNodeRef(), ArmService.ASSOC_USER_NODE_COLUMNS, targetColumns);
 
-                    return true;
+                    result = true;
                 }
-                return false;
+                armService.invalidateCurrentUserCache();
+                return result;
             }
         };
 

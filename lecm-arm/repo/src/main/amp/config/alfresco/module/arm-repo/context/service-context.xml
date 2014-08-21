@@ -57,6 +57,9 @@
 		<property name="namespaceService" ref="namespaceService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="columnsCache" ref="arm.columns.cache"/>
+        <property name="childNodesCache" ref="arm.nodes.cache"/>
+        <property name="filtersCache" ref="arm.filters.cache"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -121,6 +124,12 @@
 		  init-method="init">
 		<property name="policyComponent" ref="policyComponent"/>
 		<property name="nodeService" ref="nodeService" />
+		<property name="armService" ref="armService" />
+	</bean>
+
+    <bean id="armInvalidateCachePolicy" class="ru.it.lecm.arm.policy.ArmInvalidateCachePolicy"
+		  init-method="init">
+		<property name="policyComponent" ref="policyComponent"/>
 		<property name="armService" ref="armService" />
 	</bean>
 
@@ -237,5 +246,26 @@
                 </entry>
             </map>
         </constructor-arg>
+    </bean>
+
+    <bean name="arm.columns.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.columns.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.columns.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.columns"/>
+    </bean>
+
+    <bean name="arm.nodes.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.nodes.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.nodes.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.nodes"/>
+    </bean>
+
+    <bean name="arm.filters.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.filters.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.filters.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.filters"/>
     </bean>
 </beans>
