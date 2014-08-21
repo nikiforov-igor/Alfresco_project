@@ -9,6 +9,7 @@
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/graph-tree.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-errands.js"></@script>
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-ajax-content.js"></@script>
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-documents/lecm-document-save-last.js"></@script>
     <#-- нужен в base-utils -->
     <@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"></@script>
 
@@ -44,6 +45,13 @@
 		(function() {
 			//var currentExtendedComponent = null;
 			LogicECM.module.Documents.ERRANDS_SETTINGS = LogicECM.module.Documents.ERRANDS_SETTINGS || <#if errandsSettings?? >${errandsSettings}<#else>{}</#if>;
+
+            var viewHistory = new LogicECM.module.Document.ViewHistory("save-view-history").setOptions({
+                nodeRef: "${page.url.args.nodeRef}"
+            });
+
+            viewHistory.save();
+
 		})();
     //]]></script>
 	</@>

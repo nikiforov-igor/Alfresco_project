@@ -33,9 +33,6 @@ function main() {
         }
     }
 
-    //отмечаем просмотр
-    url = '/lecm/documents/saveToLastDocuments?nodeRef=' + page.url.args.nodeRef;
-    remote.connect("alfresco").get(url);
 }
 
 main();

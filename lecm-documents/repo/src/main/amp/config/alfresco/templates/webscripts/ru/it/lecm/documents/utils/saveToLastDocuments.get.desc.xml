@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>Добавить документ в список последних открытых пользователем</shortname>
-    <description>Добавить документ в список последних открытых пользователем</description>
-    <url>/lecm/documents/saveToLastDocuments?nodeRef={nodeRef}</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction>required</transaction>
-</webscript>

@@ -9,6 +9,11 @@
             <script type="text/javascript">//<![CDATA[
 			(function(){
 	            function createDatagrid() {
+                    var activeNodes = LogicECM.module.Base.Util.getCookie("ru.it.lecm.documents.last." + Alfresco.constants.USERNAME);
+                    var searchNodes = [];
+                    if (activeNodes != null) {
+                        activeNodes = JSON.parse(activeNodes);
+                    }
 	                var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions({
 	                    usePagination: true,
 
@@ -26,7 +31,8 @@
                         datagridMeta: {
                             itemType: "lecm-document:base",
                             useChildQuery: false,
-                            datagridFormId: "last-documents-list"
+                            datagridFormId: "last-documents-list",
+                            searchNodes: JSON.stringify(activeNodes)
                         }
 	                }).setMessages(${messages});
                     datagrid.draw();

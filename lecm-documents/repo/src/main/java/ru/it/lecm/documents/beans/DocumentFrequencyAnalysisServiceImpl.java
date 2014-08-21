@@ -6,7 +6,6 @@ import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
-import org.apache.commons.lang.text.StrBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -16,7 +15,10 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: dbashmakov
@@ -166,81 +168,6 @@ public class DocumentFrequencyAnalysisServiceImpl extends BaseBean implements Do
 		properties.put(PROP_UNIT_ACTION_ID, actionId);
 		return nodeService.createNode(root, assocTypeQName, assocQName, TYPE_FREQUENCY_UNIT, properties).getChildRef();
 	}
-
-    private NodeRef getLastDocumentsContainer(NodeRef employee) {
-        List<AssociationRef> lastDocsContainers = nodeService.getSourceAssocs(employee, ASSOC_LAST_DOC_TO_EMPLOYEE);
-        if (lastDocsContainers != null && !lastDocsContainers.isEmpty()) {
-            AssociationRef lastDocContainerAssoc = lastDocsContainers.get(0);
-            return lastDocContainerAssoc.getSourceRef();
-        }
-        return null;
-    }
-
-    @Override
-    public LinkedHashMap<NodeRef, Date> getLastDocuments() {
-        LinkedHashMap<NodeRef, Date> docs = new LinkedHashMap<>();
-        NodeRef employee = orgstructureService.getCurrentEmployee();
-        NodeRef lastDocContainer = getLastDocumentsContainer(employee);
-        if (lastDocContainer != null) {
-            String lastDocs = (String) nodeService.getProperty(lastDocContainer, PROP_LAST_DOCUMENTS);
-            if (lastDocs != null) {
-                String[] strings = lastDocs.split(";");
-                for (String string : strings) {
-                    String[] split = string.split("\\|");
-                    String doc = split[0];
-                    String date = split.length > 1 ? split[1] : "0";
-                    NodeRef nodeRef = new NodeRef(doc);
-                    if (nodeService.exists(nodeRef) && lecmPermissionService.hasReadAccess(nodeRef) && serviceRegistry.getDictionaryService().getType(nodeService.getType(nodeRef)) != null) {
-                        Date lastDate = new Date(Long.parseLong(date));
-                        docs.put(nodeRef, lastDate);
-                    }
-                }
-            }
-        }
-        return docs;
-    }
-
-    @Override
-    public boolean saveToLastDocuments(NodeRef document) throws WriteTransactionNeededException {
-        NodeRef employee = orgstructureService.getCurrentEmployee();
-        //		Проверка на выполнение в транзакции
-        try {
-            lecmTransactionHelper.checkTransaction();
-        } catch (TransactionNeededException ex) {
-            throw new WriteTransactionNeededException("Can't create doc type folder for employee " + employee);
-        }
-        LinkedHashMap<NodeRef, Date> lastDocuments = getLastDocuments();
-        lastDocuments.remove(document);
-        lastDocuments.put(document, new Date());
-        StrBuilder lastDocsStr = new StrBuilder();
-        int i = lastDocuments.size() - maxLastDocumentsToSave;
-        for (Map.Entry<NodeRef, Date> entry : lastDocuments.entrySet()) {
-            if (i-- > 0) {
-                continue;   //пропускаем устаревшие
-            }
-            lastDocsStr.append(entry.getKey())
-                    .append("|")
-                    .append(entry.getValue().getTime())
-                    .append(";");
-        }
-        NodeRef lastDocContainer = getLastDocumentsContainer(employee);
-        if (lastDocContainer != null) {
-            nodeService.setProperty(lastDocContainer, PROP_LAST_DOCUMENTS, lastDocsStr.toString());
-        } else {
-            NodeRef workDirectory = getWorkDirectory(employee);
-            if (workDirectory == null) {
-                //имеем право вызвать, т.к. метод изначально должен вызываться в транзакции
-                workDirectory = createDocTypeFolder(employee);
-            }
-            QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, GUID.generate());
-            Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-            properties.put(PROP_LAST_DOCUMENTS, lastDocsStr.toString());
-            lastDocContainer = nodeService.createNode(workDirectory, ContentModel.ASSOC_CONTAINS, assocQName, TYPE_EMPLOYEE_LAST_DOCUMENTS, properties).getChildRef();
-            nodeService.createAssociation(lastDocContainer, employee, ASSOC_LAST_DOC_TO_EMPLOYEE);
-            return true;
-        }
-        return false;
-    }
 
 	// в данном бине не используется каталог в /app:company_home/cm:Business platform/cm:LECM/
 	@Override

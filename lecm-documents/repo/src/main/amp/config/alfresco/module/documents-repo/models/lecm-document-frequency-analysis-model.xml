@@ -44,6 +44,8 @@
                 </association>
             </associations>
         </type>
+
+        <!-- Модель не используется, существует исключительно для ранних установок (до 21.08.2014) -->
         <type name="lecm-frequency:employeeLastDocuments">
             <title>Logic ECM Employee Last Documents Container</title>
             <parent>cm:cmobject</parent>

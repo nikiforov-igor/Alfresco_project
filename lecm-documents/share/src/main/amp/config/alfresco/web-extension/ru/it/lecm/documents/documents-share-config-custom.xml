@@ -797,7 +797,7 @@
                     <show id="lecm-document:present-string" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="cm:created" substituteString="{~DOC_LAST_VIEW_DATE}" label="Дата просмотра"/>
+                    <field id="cm:created" substituteString="{~EMPTY}" label="Дата просмотра"/>
                 </appearance>
             </form>
         </forms>

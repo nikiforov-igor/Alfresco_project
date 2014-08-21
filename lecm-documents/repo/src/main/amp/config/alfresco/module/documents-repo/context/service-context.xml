@@ -626,11 +626,6 @@
         <property name="id" value="DOCUMENTS_BY_SIGNERS"/>
     </bean>
 
-    <bean id="lastDocumentsProcessor" class="ru.it.lecm.documents.processors.LastDocumentsProcessor" parent="searchQueryBaseProccesor">
-        <property name="id" value="LAST_DOCUMENTS"/>
-        <property name="documentFrequencyAnalysisService" ref="frequencyAnalysisService"/>
-    </bean>
-
     <bean id="webscript.ru.it.lecm.documents.documents.connection.get" class="ru.it.lecm.documents.scripts.DocumentConnectionScript"
           parent="webscript">
         <property name="nodeService" ref="nodeService"/>

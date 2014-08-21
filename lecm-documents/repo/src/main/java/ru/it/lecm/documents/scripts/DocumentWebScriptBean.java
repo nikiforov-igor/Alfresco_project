@@ -24,12 +24,14 @@ import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.LecmTransactionHelper;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: orakovskaya
@@ -587,26 +589,6 @@ public class DocumentWebScriptBean extends BaseWebScript {
 
         List<NodeRef> refs = documentService.getDocumentsByQuery(query, sort, skipCount, loadCount);
         return createScriptable(refs);
-    }
-
-    public boolean saveToLastDocuments(ScriptNode document) {
-        try {
-            return documentFrequencyAnalysisService.saveToLastDocuments(document.getNodeRef());
-        } catch (WriteTransactionNeededException ignored) {
-        //ничего страшного, если не  запомнилось, просто логируем
-            logger.warn("Can not save {} to last documents");
-        }
-        return false;
-    }
-
-    /**
-     * Возвращает список последних просмотренных документов
-     */
-    public Scriptable getLastDocuments() {
-        ArrayList<NodeRef> nodes = new ArrayList<>();
-        nodes.addAll(documentFrequencyAnalysisService.getLastDocuments().keySet());
-        Collections.reverse(nodes);
-        return createScriptable(nodes);
     }
 
     /**
