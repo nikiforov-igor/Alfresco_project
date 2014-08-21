@@ -208,6 +208,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 	        root.data.armNodeRef  = node.armNodeRef;
 	        root.data.createTypes  = node.createTypes;
 	        root.data.searchQuery  = node.searchQuery;
+	        root.data.searchType  = node.searchType;
 	        root.id  = node.id;
             this._loadTree(root);
 
@@ -248,7 +249,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 counterLimit: oResults[nodeIndex].counterLimit,
                                 counterDesc: oResults[nodeIndex].counterDesc,
 	                            htmlUrl: oResults[nodeIndex].htmlUrl,
-                                reportCodes: oResults[nodeIndex].reportCodes
+                                reportCodes: oResults[nodeIndex].reportCodes,
+	                            searchType: oResults[nodeIndex].searchType
                             };
 
                             // добавляем элемент в дерево

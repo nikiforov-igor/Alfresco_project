@@ -28,6 +28,7 @@ public interface ArmService {
 	public static final QName TYPE_ARM_REPORTS_NODE = QName.createQName(ARM_NAMESPACE_URI, "reports-node");
 	public static final QName TYPE_ARM_HTML_NODE = QName.createQName(ARM_NAMESPACE_URI, "html-node");
 	public static final QName PROP_NODE_TYPES = QName.createQName(ARM_NAMESPACE_URI, "types");
+	public static final QName PROP_SEARCH_TYPE = QName.createQName(ARM_NAMESPACE_URI, "search-type");
 	public static final QName PROP_SEARCH_QUERY = QName.createQName(ARM_NAMESPACE_URI, "search-query");
 	public static final QName PROP_COUNTER_ENABLE = QName.createQName(ARM_NAMESPACE_URI, "counter-enable");
 	public static final QName PROP_COUNTER_QUERY = QName.createQName(ARM_NAMESPACE_URI, "counter-limitation");

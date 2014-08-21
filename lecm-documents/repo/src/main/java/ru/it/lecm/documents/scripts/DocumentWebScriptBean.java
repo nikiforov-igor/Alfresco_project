@@ -606,4 +606,22 @@ public class DocumentWebScriptBean extends BaseWebScript {
     public void removeFromFavourites(ScriptNode document) {
         documentService.removeFromFavourites(document.getNodeRef());
     }
+
+	/**
+	 * Получение списка зарегистрированных типов документов
+	 * @return список зарегистрированных типов документов
+	 */
+	@SuppressWarnings("unused")
+	public Map<String, String> getRegisteredTypes() {
+		Map<String, String> results = new HashMap<>();
+
+		Collection<QName> types = documentService.getDocumentSubTypes();
+		if (types != null) {
+			for (QName type : types) {
+				TypeDefinition typeDef = dictionaryService.getType(type);
+				results.put(type.toPrefixString(namespaceService), typeDef.getTitle(dictionaryService));
+			}
+		}
+		return results;
+	}
 }

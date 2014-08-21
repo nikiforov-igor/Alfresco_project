@@ -66,6 +66,7 @@
 					<show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:search-type" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
 					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
@@ -81,6 +82,13 @@
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:search-type">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">lecm/documents/types</control-param>
+							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:fields-assoc">
@@ -122,6 +130,7 @@
                     <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:search-type" force="true"/>
 					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
@@ -136,6 +145,13 @@
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:search-type">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">lecm/documents/types</control-param>
+							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:counter-enable">
@@ -171,6 +187,7 @@
                     <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:search-type" force="true"/>
 					<show id="lecm-arm:fields-assoc" force="true"/>
 					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
@@ -186,6 +203,13 @@
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:search-type">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">lecm/documents/types</control-param>
+							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:fields-assoc">
@@ -224,6 +248,7 @@
                     <show id="lecm-arm:order" force="true"/>
 					<show id="lecm-arm:search-query" force="true"/>
 					<show id="lecm-arm:types" force="true"/>
+					<show id="lecm-arm:search-type" force="true"/>
 					<show id="lecm-arm:filters-assoc" force="true"/>
 					<show id="lecm-arm:counter-enable" force="true"/>
 					<show id="lecm-arm:counter-limitation" force="true"/>
@@ -237,6 +262,13 @@
 					<field id="lecm-arm:types">
 						<control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
 							<control-param name="dataSource">lecm/arm/settings/types</control-param>
+						</control>
+					</field>
+					<field id="lecm-arm:search-type">
+						<control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
+							<control-param name="webscriptType">server</control-param>
+							<control-param name="webscript">lecm/documents/types</control-param>
+							<control-param name="withEmpty">true</control-param>
 						</control>
 					</field>
 					<field id="lecm-arm:counter-enable">

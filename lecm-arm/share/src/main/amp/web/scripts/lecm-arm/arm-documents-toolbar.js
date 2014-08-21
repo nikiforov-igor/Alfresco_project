@@ -657,8 +657,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                     if (currentNode.data.types != null) {
                         types = currentNode.data.types.split(",");
                     }
-                    this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isNotGridNode || types.length != 1);
-                    this.currentType = types[0];
+                    this.toolbarButtons["defaultActive"].extendSearchButton.set("disabled", args[1].isNotGridNode || (types.length != 1 && currentNode.data.searchType == null));
+                    if (types.length == 1) {
+	                    this.currentType = types[0];
+                    } else if (currentNode.data.searchType != null) {
+	                    this.currentType = currentNode.data.searchType;
+                    }
                 }
                 if (!this.deferredListPopulation.fulfil("updateArmFilters")){
                     this.onToolbarUpdate();

@@ -189,6 +189,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         }
 	    node.setHtmlUrl((String) properties.get(ArmService.PROP_HTML_URL));
         node.setReportCodes((String) properties.get(ArmService.PROP_REPORT_CODES));
+        node.setSearchType((String) properties.get(ArmService.PROP_SEARCH_TYPE));
 
         if (!onlyMeta) {
             node.setCounter(service.getNodeCounter(nodeRef));
@@ -238,6 +239,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         node.setHtmlUrl(parentNode.getHtmlUrl());
         node.setReportCodes(parentNode.getReportCodes());
+        node.setSearchType(parentNode.getSearchType());
 
         if (!onlyMeta) {
             node.setColumns(parentNode.getColumns());

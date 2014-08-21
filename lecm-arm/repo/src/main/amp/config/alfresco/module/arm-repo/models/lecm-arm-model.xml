@@ -204,6 +204,16 @@
 						<tokenised>both</tokenised>
 					</index>
 				</property>
+				<!--Тип для аттрибутивного поиска-->
+				<property name="lecm-arm:search-type">
+					<type>d:text</type>
+					<mandatory>false</mandatory>
+					<index enabled="true">
+						<atomic>true</atomic>
+						<stored>false</stored>
+						<tokenised>both</tokenised>
+					</index>
+				</property>
 			</properties>
 			<associations>
 				<!-- Список колонок -->

@@ -54,6 +54,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
     private static final String COUNTER = "counter";
     private static final String COUNTER_LIMIT = "counterLimit";
     private static final String COUNTER_DESC = "counterDesc";
+    private static final String SEARCH_TYPE = "searchType";
 
 	public static final String CREATE_TYPES = "createTypes";
 	public static final String HTML_URL = "htmlUrl";
@@ -165,6 +166,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 	        }
 	        result.put(HTML_URL,node.getHtmlUrl());
 	        result.put(REPORT_CODES,node.getReportCodes());
+	        result.put(SEARCH_TYPE,node.getSearchType());
         } catch (JSONException e) {
             logger.error(e.getMessage(), e);
         }

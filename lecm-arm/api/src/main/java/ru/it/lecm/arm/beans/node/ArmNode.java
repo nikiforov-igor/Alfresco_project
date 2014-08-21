@@ -19,6 +19,7 @@ public class ArmNode {
     private NodeRef armNodeRef;
     private String title;
     private List<String> types;
+    private String searchType;
 	private String searchQuery;
     private List<ArmColumn> columns;
     private List<ArmFilter> avaiableFilters;
@@ -156,4 +157,12 @@ public class ArmNode {
     public void setReportCodes(String reportCodes) {
         this.reportCodes = reportCodes;
     }
+
+	public String getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
 }
