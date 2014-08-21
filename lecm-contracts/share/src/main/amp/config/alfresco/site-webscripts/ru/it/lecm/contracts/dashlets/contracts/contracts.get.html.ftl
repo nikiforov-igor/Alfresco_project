@@ -39,7 +39,7 @@
                                 actions: [
                                     {
                                         cssClass: "arm",
-                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "/arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armPath),
+                                        linkOnClick: window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "arm?code=" + encodeURI(oResponse.json.armCode) + "&path="  + encodeURI(oResponse.json.armPath),
                                         tooltip: "${msg("dashlet.arm.tooltip")?js_string}"
                                     }
                                 ]
