@@ -2547,12 +2547,15 @@ LogicECM.module = LogicECM.module || {};
             if (p_key.toLowerCase() == "icon")
             {
                 var src = '';
+
+	            var onError = "";
                 if (item.type && item.type.indexOf("lecm") >=0 && item.type.indexOf("document") >=0) {
-                     src = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + item.type.replace(":", "_") + ".png";
+                    src = Alfresco.constants.URL_RESCONTEXT + "images/lecm-documents/type-icons/" + item.type.replace(":", "_") + ".png";
+	                onError = "onerror=\"this.src = '/share/res/images/lecm-documents/type-icons/default_document.png';\"";
                 } else {
                     src = me.getIconURL(item, iconSize);
                 }
-                return '<img src="' + src + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(me._deactivateLinks(item.name)) + '" />';
+                return '<img src="' + src + '" width="' + iconSize + '" alt="' + $html(item.description) + '" title="' + $html(me._deactivateLinks(item.name)) + '" ' + onError + '/>';
             }
             return $html(me._deactivateLinks(p_value));
          };
