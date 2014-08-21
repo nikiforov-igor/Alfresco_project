@@ -1,9 +1,10 @@
-package ru.it.lecm.workflow.approval;
+package ru.it.lecm.workflow.approval.deprecated;
 
 /**
  *
  * @author vlevin
  */
+@Deprecated
 public enum DecisionResult {
 
 	APPROVED,

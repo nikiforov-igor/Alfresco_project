@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.api;
+package ru.it.lecm.workflow.approval.api.deprecated;
 
 import org.alfresco.service.namespace.QName;
 
@@ -6,6 +6,7 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vlevin
  */
+@Deprecated
 public final class ApprovalResultModel {
 
 	public final static String APPROVAL_RESULT_NAMESPACE = "http://www.it.ru/logicECM/model/approval/workflow/result/1.0";

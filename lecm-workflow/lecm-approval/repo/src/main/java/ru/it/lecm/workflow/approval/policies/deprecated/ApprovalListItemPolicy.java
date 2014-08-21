@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.policies;
+package ru.it.lecm.workflow.approval.policies.deprecated;
 
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
@@ -9,7 +9,7 @@ import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 
 /**
@@ -18,6 +18,7 @@ import ru.it.lecm.workflow.api.WorkflowResultModel;
  *
  * @author vlevin
  */
+@Deprecated
 public class ApprovalListItemPolicy implements NodeServicePolicies.OnCreateNodePolicy {
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalListItemPolicy.class);

@@ -58,7 +58,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
 
 	@Override
 	public NodeRef getNotificationsRootRef() throws WriteTransactionNeededException {
-		return getFolder(NOTIFICATIONS_ROOT_ID);		
+		return getFolder(NOTIFICATIONS_ROOT_ID);
 	}
 
     public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
@@ -92,11 +92,11 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     }
 
     /**
-     * Метод инициализвции сервиса 
+     * Метод инициализвции сервиса
     */
     public void init() {
         //Проверить наличие и создать ноду с глобальными настройками.
-        //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся? 
+        //TODO Уточнить про права. Нужно ли делать runAsSystem, при том что она и так создаётся?
         lecmTransactionHelper.doInRWTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Void>() {
 
             @Override
@@ -189,25 +189,34 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         Date notificatiDate = notification.getFormingDate();
         Queue<Notification> pool = pendingActions.get(notificatiDate);
         if (null == pool) {
-            pool = new LinkedList<>(); 
+            pool = new LinkedList<>();
             pendingActions.put(notificatiDate, pool);
         }
         pool.add(notification);
     }
 
-    private void sendNotification(NotificationUnit notification, boolean dontCheckAccessToObject) {
-        if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
-            String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
-            if (employeeLogin != null && (dontCheckAccessToObject || this.lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin))) {
-                if (getChannels().containsKey(notification.getTypeRef())) {
-                    NotificationChannelBeanBase channelBean = getChannels().get(notification.getTypeRef());
-                    if (channelBean != null) {
-                        channelBean.sendNotification(notification);
-                    }
-                }
-            }
-        }
-    }
+	private void sendNotification(NotificationUnit notification, boolean dontCheckAccessToObject) {
+		logger.debug("###### sendNotification begin ######");
+		if (notification != null && notification.getRecipientRef() != null && notification.getObjectRef() != null) {
+			String employeeLogin = this.orgstructureService.getEmployeeLogin(notification.getRecipientRef());
+			logger.debug("###### Notification, recipient, object checked successfully. ######");
+			logger.debug("###### {} ######", notification.getDescription());
+			Boolean hasReadAccess = null;
+			logger.debug("###### dontCheckAccessToObject = {} ######", dontCheckAccessToObject);
+			if (employeeLogin != null && (dontCheckAccessToObject || (hasReadAccess = lecmPermissionService.hasReadAccess(notification.getObjectRef(), employeeLogin)))) {
+				logger.debug("###### Employee login = {} ######", employeeLogin);
+				logger.debug("###### hasReadAccess = {} ######", hasReadAccess);
+				if (getChannels().containsKey(notification.getTypeRef())) {
+					NotificationChannelBeanBase channelBean = getChannels().get(notification.getTypeRef());
+					if (channelBean != null) {
+						logger.debug("###### channelBean = {} ######", channelBean.getClass().getName());
+						channelBean.sendNotification(notification);
+					}
+				}
+			}
+		}
+		logger.debug("###### sendNotification end ######");
+	}
 
     /**
      * Создание обобщённого уведомления
@@ -222,7 +231,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         } catch (TransactionNeededException ex) {
             throw new WriteTransactionNeededException("Can't create GeneralizedNotification.");
         }
-        
+
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>(3);
         properties.put(PROP_GENERAL_AUTOR, notification.getAuthor());
         properties.put(PROP_GENERAL_DESCRIPTION, notification.getDescription());
@@ -234,7 +243,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
         if (null == saveDirectoryRef) {
             saveDirectoryRef = createPath(notificationsGenaralizetionRootRef, directoryPaths);
         }
-        
+
         ChildAssociationRef associationRef = nodeService.createNode(saveDirectoryRef, ContentModel.ASSOC_CONTAINS,
                 QName.createQName(NOTIFICATIONS_NAMESPACE_URI, GUID.generate()), TYPE_GENERALIZED_NOTIFICATION, properties);
 
@@ -525,7 +534,7 @@ public class NotificationsServiceImpl extends BaseBean implements NotificationsS
     private NodeRef createGlobalSettingsNode() throws WriteTransactionNeededException {
         return createNode(this.getServiceRootFolder(), TYPE_NOTIFICATIONS_GLOBAL_SETTINGS, NOTIFICATIONS_SETTINGS_NODE_NAME, null);
     }
-    
+
     @Override
     public boolean isEnablePassiveNotifications() {
         NodeRef globalSettingsNode = getGlobalSettingsNode();

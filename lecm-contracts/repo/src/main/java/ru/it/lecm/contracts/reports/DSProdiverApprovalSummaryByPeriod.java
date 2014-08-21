@@ -18,7 +18,7 @@ import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
 
 import java.io.Serializable;
 import java.util.*;
@@ -298,10 +298,10 @@ public class DSProdiverApprovalSummaryByPeriod extends GenericDSProviderBase {
 						/*
                          * из доки "Договорная деятельность ТЗ.docx"
 						 * 10.5.2	Исполнительская дисциплина по согласованиям за период.
-						 * Пусть, X = количество рабочих дней между Датой фактического согласования и Датой получения задачи на Согласование. 
+						 * Пусть, X = количество рабочих дней между Датой фактического согласования и Датой получения задачи на Согласование.
 						 * Это фактический срок согласования.
 						 * Y = значение атрибута «Плановое время согласования»,
-						 * Если X > Y, то считаем такое согласование Просроченным, 
+						 * Если X > Y, то считаем такое согласование Просроченным,
 						 * и  величина, равная X – Y будет составлять Срок просрочки.
 						 */
                         final float fact_duration = Utils.calcDurationInDays(userApprovStartAt, userApprovedAt, 0); // X

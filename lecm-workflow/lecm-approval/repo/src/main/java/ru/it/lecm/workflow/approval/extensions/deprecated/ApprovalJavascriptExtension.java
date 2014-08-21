@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.extensions;
+package ru.it.lecm.workflow.approval.extensions.deprecated;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,15 +20,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.WebScriptException;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.base.beans.WriteTransactionNeededException;
-import ru.it.lecm.workflow.approval.Utils;
-import ru.it.lecm.workflow.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.deprecated.Utils;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.RouteAspecsModel;
-import ru.it.lecm.workflow.approval.DecisionResult;
+import ru.it.lecm.workflow.approval.deprecated.DecisionResult;
 
+@Deprecated
 public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalJavascriptExtension.class);
@@ -85,7 +86,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 		}
 		return finalDecision.name();
 	}
-	
+
 	public String getFinalDecision(final String decisionMap) {
     	if (decisionMap.contains(DecisionResult.REJECTED.name())) {
     		return DecisionResult.REJECTED.name();
@@ -239,7 +240,7 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 //		TODO: Метод assignTask через несколько уровней вызывает getDelegationOpts,
 //		который ранее был getOrCreate, поэтому необходимо сделать проверку на существование
 //		и при необходимости создать
-//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.                
+//              delegationOpts проверяется/создаётся при создании/изменении сотрудника, так что здесь проверять особой необходимости нет.
 //		if(delegationService.getDelegationOpts(employeeRef) == null) {
 //			delegationService.createDelegationOpts(employeeRef);
 //		}

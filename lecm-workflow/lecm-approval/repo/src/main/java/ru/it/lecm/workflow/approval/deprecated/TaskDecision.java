@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval;
+package ru.it.lecm.workflow.approval.deprecated;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.workflow.WorkflowTaskDecision;
@@ -7,6 +7,7 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
  *
  * @author vlevin
  */
+@Deprecated
 class TaskDecision extends WorkflowTaskDecision {
 
 	private String comment;

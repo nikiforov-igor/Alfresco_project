@@ -4,9 +4,8 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="lecm.approval2.ApprovalListItemPolicy"
-		  init-method="init" depends-on="lecm.approval2.model.bootstrap"
-		  class="ru.it.lecm.workflow.approval.policies.ApprovalListItemPolicy"
+	<bean init-method="init" depends-on="deprecated.lecm.approval2.model.bootstrap"
+		  class="ru.it.lecm.workflow.approval.policies.deprecated.ApprovalListItemPolicy"
 		  p:policyComponent-ref="policyComponent"
 		  p:nodeService-ref="nodeService"/>
 

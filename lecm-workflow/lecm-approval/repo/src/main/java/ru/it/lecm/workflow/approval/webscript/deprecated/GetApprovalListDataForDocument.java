@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.webscript;
+package ru.it.lecm.workflow.approval.webscript.deprecated;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +14,14 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
-import ru.it.lecm.workflow.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalService;
 
 /**
  *
  * @author vlevin
  */
+@Deprecated
 public class GetApprovalListDataForDocument extends DeclarativeWebScript {
 
 	private final static Logger logger = LoggerFactory.getLogger(GetApprovalListDataForDocument.class);

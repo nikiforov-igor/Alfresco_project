@@ -4,12 +4,12 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="lecm.approval2.javascriptExtension" parent="baseScript"
-		  class="ru.it.lecm.workflow.approval.extensions.ApprovalJavascriptExtension"
+	<bean parent="baseScript"
+		  class="ru.it.lecm.workflow.approval.extensions.deprecated.ApprovalJavascriptExtension"
 		  p:extensionName="approvalWorkflow"
 		  p:nodeService-ref="nodeService"
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:stateMachineService-ref="stateMachineHelper"
-		  p:approvalService-ref="approvalWorkflowService"
+		  p:approvalService-ref="deprecated.approvalWorkflowService"
         />
 </beans>

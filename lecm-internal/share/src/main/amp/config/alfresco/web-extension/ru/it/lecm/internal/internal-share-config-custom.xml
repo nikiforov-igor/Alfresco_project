@@ -147,7 +147,7 @@
 	                </field>
 
                     <field id="lecm-internal:approval-list" set="approval-and-signing" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl">
+                        <control template="/ru/it/lecm/workflow/approval/controls/deprecated/approval-list-datagrid-control.ftl">
                             <control-param name="approvalItemsDatagridId">internal-datagrid</control-param>
                             <control-param name="permission">~_lecmPerm_InnerAttrList</control-param>
                         </control>

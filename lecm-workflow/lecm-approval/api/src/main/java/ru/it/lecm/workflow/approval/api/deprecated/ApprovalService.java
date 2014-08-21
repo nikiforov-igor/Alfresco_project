@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.api;
+package ru.it.lecm.workflow.approval.api.deprecated;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -14,6 +14,7 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
  *
  * @author vlevin
  */
+@Deprecated
 public interface ApprovalService extends LecmWorkflowService {
 	void logFinalDecision(final NodeRef approvalListRef, final String finalDecision);
 

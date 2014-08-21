@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval.webscript;
+package ru.it.lecm.workflow.approval.webscript.deprecated;
 
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
@@ -13,6 +13,7 @@ import java.util.Map;
  *
  * @author akatamanov
  */
+@Deprecated
 public class OverrideReassign extends DeclarativeWebScript {
 
     private final static Logger logger = LoggerFactory.getLogger(OverrideReassign.class);

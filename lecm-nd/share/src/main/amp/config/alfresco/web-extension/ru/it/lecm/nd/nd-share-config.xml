@@ -236,7 +236,7 @@
 
                     <!-- Вкладка "Согласование/подписание" -->
                     <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+                        <control template="/ru/it/lecm/workflow/approval/controls/deprecated/approval-list-datagrid-control.ftl"/>
                     </field>
                     <field id="lecm-nd:signing-list" set="approval-and-signing" label="Подписание">
                         <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>

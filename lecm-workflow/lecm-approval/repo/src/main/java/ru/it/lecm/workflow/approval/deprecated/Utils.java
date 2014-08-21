@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval;
+package ru.it.lecm.workflow.approval.deprecated;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +29,7 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
  *
  * @author vlevin
  */
+@Deprecated
 public class Utils implements ApplicationContextAware {
 
 	private static DictionaryService dictionaryService;

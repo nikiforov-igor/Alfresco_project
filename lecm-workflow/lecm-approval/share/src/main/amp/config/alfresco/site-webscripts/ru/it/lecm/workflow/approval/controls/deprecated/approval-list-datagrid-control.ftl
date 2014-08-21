@@ -13,10 +13,10 @@
 	function init() {
         LogicECM.module.Base.Util.loadResources([
             'scripts/lecm-base/components/lecm-datagrid.js',
-            'scripts/lecm-approval/approval-list-datagrid-control.js'
+            'scripts/lecm-approval/deprecated/approval-list-datagrid-control.js'
 		],
         [
-	        'css/lecm-approval/approval-list-datagrid-control.css'
+	        'css/lecm-approval/deprecated/approval-list-datagrid-control.css'
         ],checkPermission);
 	}
 

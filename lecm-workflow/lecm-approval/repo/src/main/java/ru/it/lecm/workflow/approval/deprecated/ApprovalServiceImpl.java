@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.approval;
+package ru.it.lecm.workflow.approval.deprecated;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
@@ -26,8 +26,8 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.approval.api.ApprovalResultModel;
-import ru.it.lecm.workflow.approval.api.ApprovalService;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
 
 import java.io.Serializable;
@@ -38,6 +38,7 @@ import java.util.*;
  *
  * @author vlevin
  */
+@Deprecated
 public class ApprovalServiceImpl extends WorkflowServiceAbstract implements ApprovalService {
 
 	private final static Logger logger = LoggerFactory.getLogger(ApprovalServiceImpl.class);
