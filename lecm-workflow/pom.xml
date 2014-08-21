@@ -23,5 +23,6 @@
 		<module>lecm-review</module>
 		<module>lecm-approval</module>
         <module>lecm-reservation</module>
-    </modules>
+		<module>lecm-routes</module>
+	</modules>
 </project>

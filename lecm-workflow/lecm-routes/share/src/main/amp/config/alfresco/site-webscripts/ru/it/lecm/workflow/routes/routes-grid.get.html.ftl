@@ -18,7 +18,7 @@
 			permission:"edit",
 			label:"${msg('actions.edit')}",
 			evaluator: function() {
-				return !LogicECM.module.Routes.isEngineer;
+				return LogicECM.module.Routes.isEngineer;
 			}
 		}, {
 			type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
@@ -26,7 +26,7 @@
 			permission:"delete",
 			label:"${msg('actions.delete-row')}",
 			evaluator: function() {
-				return !LogicECM.module.Routes.isEngineer;
+				return LogicECM.module.Routes.isEngineer;
 			}
 		}]
 	});

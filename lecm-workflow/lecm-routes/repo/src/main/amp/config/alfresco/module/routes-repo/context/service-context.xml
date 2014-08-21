@@ -16,9 +16,14 @@
 		  depends-on="dictionaryBootstrap, ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap"
 		  p:models-ref="routes.models" p:labels-ref="routes.labels"/>
 
-<!--
-	 <bean id="routesService" class="ru.it.lecm.workflow.routes."
-		  parent="BaseBean" depends-on="routes.model.bootstrap"
+	<util:constant id="routesServiceFolderID" static-field="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl.ROUTES_FOLDER_ID"/>
+	<util:map id="routes.folders.map">
+		<entry key="#{routesServiceFolderID}" value="Сервис маршрутов"/>
+	</util:map>
+	<bean id="routes.service" class="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl"
+		  parent="baseBean" depends-on="routes.model.bootstrap"
+		  init-method="init"
+		  p:folders-ref="routes.folders.map"
 	 />
--->
+
 </beans>

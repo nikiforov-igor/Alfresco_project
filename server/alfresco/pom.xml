@@ -334,19 +334,26 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-            <groupId>ru.it.lecm.group-actions</groupId>
-            <artifactId>group-actions-repo</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.model-editor</groupId>
-                    <artifactId>model-editor-repo</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
+			<groupId>ru.it.lecm.group-actions</groupId>
+			<artifactId>group-actions-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.model-editor</groupId>
+			<artifactId>model-editor-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.routes</groupId>
+			<artifactId>routes-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -707,6 +714,11 @@
 							<artifactId>group-actions-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.workflow.routes</groupId>
+							<artifactId>routes-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -1048,6 +1060,11 @@
                                 <overlay>
                                     <groupId>ru.it.lecm.workflow.approval</groupId>
                                     <artifactId>approval-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.routes</groupId>
+                                    <artifactId>routes-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
                                 <overlay>

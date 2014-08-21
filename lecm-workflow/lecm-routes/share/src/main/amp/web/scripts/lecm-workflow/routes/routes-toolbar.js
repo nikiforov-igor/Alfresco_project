@@ -29,6 +29,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.datagridBubblingLabel);
 			var itemType = dataGrid.datagridMeta.itemType;
 			var destination = dataGrid.datagridMeta.nodeRef;
+			var formId = 'createNewRouteForm';
 
 			var newRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
@@ -36,7 +37,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				width: '50em',
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
 				templateRequestParams: {
-					formId: 'createNewRouteForm',
+					formId: formId,
 					itemId: itemType,
 					itemKind: 'type',
 					mode: 'create',
@@ -79,7 +80,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 		},
 		onReady: function() {
 			if (this.options.inEngineer) {
-				Alfresco.util.createYUIButton(this, 'btnCreateNewRoute', this._createNewRoute(), {
+				Alfresco.util.createYUIButton(this, 'btnCreateNewRoute', this._createNewRoute, {
 					label: this.msg('button.new-route')
 				});
 			}

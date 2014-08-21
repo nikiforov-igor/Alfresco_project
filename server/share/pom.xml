@@ -278,24 +278,31 @@
 			<type>amp</type>
 		</dependency>
 		<dependency>
-            <groupId>ru.it.lecm.group-actions</groupId>
-            <artifactId>group-actions-share</artifactId>
-            <version>${platform.version}</version>
-            <scope>runtime</scope>
-            <type>amp</type>
-        </dependency>
-                <dependency>
-                    <groupId>ru.it.lecm.model-editor</groupId>
-                    <artifactId>model-editor-share</artifactId>
-                    <version>${platform.version}</version>
-                    <scope>runtime</scope>
-                    <type>amp</type>
-                </dependency>
-                <!--<dependency>
-                    <groupId>org.freemarker</groupId>
-                    <artifactId>freemarker</artifactId>
-                    <version>2.3.18-alfresco-patched</version>
-                </dependency>-->
+			<groupId>ru.it.lecm.group-actions</groupId>
+			<artifactId>group-actions-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.model-editor</groupId>
+			<artifactId>model-editor-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.workflow.routes</groupId>
+			<artifactId>routes-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
+		<!--<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.18-alfresco-patched</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>
@@ -593,6 +600,11 @@
 							<type>amp</type>
 						</overlay>
 						<overlay>
+							<groupId>ru.it.lecm.workflow.routes</groupId>
+							<artifactId>routes-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
 							<groupId>ru.it.lecm.group-actions</groupId>
 							<artifactId>group-actions-share</artifactId>
 							<type>amp</type>
@@ -848,6 +860,11 @@
                                 <overlay>
                                     <groupId>ru.it.lecm.workflow.approval</groupId>
                                     <artifactId>approval-share</artifactId>
+                                    <type>amp</type>
+                                </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.workflow.routes</groupId>
+                                    <artifactId>routes-share</artifactId>
                                     <type>amp</type>
                                 </overlay>
                                 <overlay>
