@@ -28,10 +28,7 @@ import ru.it.lecm.documents.beans.*;
 import ru.it.lecm.documents.constraints.ArmUrlConstraint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: orakovskaya
