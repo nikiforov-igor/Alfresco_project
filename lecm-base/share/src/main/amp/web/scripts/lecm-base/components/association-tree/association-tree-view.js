@@ -538,6 +538,8 @@ LogicECM.module = LogicECM.module || {};
                 this.fillPickerDialog();
 
                 Dom.addClass(this.options.pickerId, "object-finder");
+            } else {
+	            this.fillPickerDialog();
             }
         },
 
