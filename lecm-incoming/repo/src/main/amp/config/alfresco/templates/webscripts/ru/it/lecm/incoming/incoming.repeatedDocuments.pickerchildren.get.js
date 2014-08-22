@@ -1,7 +1,7 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 
 function main() {
-	var filter = '';
+	var filter = '@lecm-document-aspects\\:reg-data-is-registered:"true"';
 	if (args["searchSimilar"]) {
 		var document = search.findNode(args["documentRef"]);
 		if (document != null) {
@@ -13,16 +13,9 @@ function main() {
 
 	var data = getPickerChildrenItems(filter);
 
-	var filteredResults = [];
-	for (var i = 0; i < data.results.length; i++) {
-		if (regnumbers.isDocumentRegistered(data.results[i].item)) {
-			filteredResults.push(data.results[i]);
-		}
-	}
-
 	model.parent = data.parent;
 	model.rootNode = data.rootNode;
-	model.results = filteredResults;
+	model.results = data.results;
 	model.additionalProperties = data.additionalProperties;
 }
 
