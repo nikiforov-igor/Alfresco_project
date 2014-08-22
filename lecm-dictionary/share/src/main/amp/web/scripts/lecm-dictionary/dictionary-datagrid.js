@@ -93,7 +93,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                 case "text":
                                     var hexColorPattern = /^#[0-9a-f]{6}$/i;
                                     if (hexColorPattern.test(data.displayValue)) {
-                                        content = data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>';
+                                        content = data.displayValue + '<div class="color-block" style="background-color: ' + data.displayValue + ';">&nbsp</div>';
                                     } else {
                                         content = $html(data.displayValue);
                                     }
@@ -107,7 +107,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
 
                                 case "boolean":
                                     if (data.value) {
-                                        html += '<div style="text-align: center;">';
+                                        html += '<div class="centered">';
                                         html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                         html += '</div>';
                                     }

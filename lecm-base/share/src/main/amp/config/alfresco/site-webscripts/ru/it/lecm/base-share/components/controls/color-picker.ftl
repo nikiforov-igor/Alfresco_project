@@ -13,7 +13,7 @@
 				<#if fieldValue == "">
 					${msg("form.control.novalue")}
 				<#else>
-					${fieldValue} <div style="background-color: ${fieldValue}; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>
+					${fieldValue} <div class="color-block" style="background-color: ${fieldValue};">&nbsp</div>
 				</#if>
 			</div>
 		</div>

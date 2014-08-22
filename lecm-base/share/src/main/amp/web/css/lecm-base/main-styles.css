@@ -534,6 +534,15 @@ i.icon-building {
 }
 /* control hidden-association - end */
 
+/* control color-picker - start */
+.control.color-picker.viewmode .value-div .color-block,
+.grid .color-block {
+    display: inline;
+    padding: 0 10px;
+    margin-left: 3px;
+}
+/* control color-picker - end */
+
 /* Datepicker - start */
 .datepicker {
      position: absolute;

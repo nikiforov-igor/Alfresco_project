@@ -5,6 +5,9 @@
 .datagrid .grid table {
     border: none;
 }
+.datagrid .grid table div.centered {
+    text-align: center;
+}
 
 
 .datagrid div.simple a.action-link,
@@ -110,22 +113,30 @@
 
 .datagrid .expand-table-icon {
 	cursor: pointer;
-	/*font-family:Arial;*/
 	font-size:18px;
-	/*font-weight:normal;*/
-	/*font-style:normal;*/
-	/*text-decoration:none;*/
-	/*color:#333333;*/
 }
 
 .datagrid .yui-dt-empty {
     text-align: center;
-    font-family: Arial;
+    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
     font-size: 12px;
     color: #b1b3bf
 }
 
-.datagrid  .datagrid-toolbar {
+.datagrid .datagrid-toolbar {
 	margin-bottom: 3px;
+}
+
+.datagrid .grid-create-error-dialog {
+    text-align: center;
+    padding:5px;
+}
+
+.datagrid .grid-create-error-dialog .error-dialog-details {
+    display:none;
+    height: 250px;
+    padding:5px;
+    text-align: center;
+    overflow: auto;
 }

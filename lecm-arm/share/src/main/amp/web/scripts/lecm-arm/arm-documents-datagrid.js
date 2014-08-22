@@ -375,7 +375,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                         case "text":
                                             var hexColorPattern = /^#[0-9a-f]{6}$/i;
                                             if (hexColorPattern.test(data.displayValue)) {
-                                                columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
+                                                columnContent += $links(data.displayValue + '<div class="color-block" style="background-color: ' + data.displayValue + ';">&nbsp</div>');
                                             } else {
                                                 columnContent += $links($html(data.displayValue));
                                             }
@@ -383,7 +383,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
                                         case "boolean":
                                             if (data.value) {
-                                                columnContent += '<div style="text-align: center;">';
+                                                columnContent += '<div class="centered">';
 //                                                columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
                                                 columnContent += '<span class="boolean-true">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
                                                 columnContent += '</div>';

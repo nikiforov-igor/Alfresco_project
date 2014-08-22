@@ -702,7 +702,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                         var columnContent = "";
                                         switch (datalistColumn.dataType.toLowerCase()) {
                                             case "checkboxtable":
-                                                columnContent += "<div style='text-align: center'><input type='checkbox' " + (data.displayValue == "true" ? "checked='checked'" : "") + " onClick='changeFieldState(this, \"" + data.value + "\")' /></div>"; //data.displayValue;
+                                                columnContent += "<div class='centered'><input type='checkbox'" + (data.displayValue == "true" ? " checked='checked'" : "") + " onClick='changeFieldState(this, \"" + data.value + "\")' /></div>"; //data.displayValue;
                                                 break;
                                             case "lecm-orgstr:employee":
                                                 columnContent += scope.getEmployeeView(data.value, data.displayValue);
@@ -728,7 +728,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                 if (data.displayValue.indexOf("!html ") == 0) {
                                                     columnContent += data.displayValue.substring(6);
                                                 } else if (hexColorPattern.test(data.displayValue)) {
-													columnContent += $links(data.displayValue + '<div style="background-color: ' + data.displayValue + '; display: inline; padding: 0px 10px; margin-left: 3px;">&nbsp</div>');
+													columnContent += $links(data.displayValue + '<div class="color-block" style="background-color: ' + data.displayValue + ';">&nbsp</div>');
 												} else {
 													columnContent += $links($html(data.displayValue));
 												}
@@ -736,7 +736,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 
                                             case "boolean":
                                                 if (data.value) {
-													columnContent += '<div style="text-align: center;">'
+													columnContent += '<div class="centered">';
                                                     columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
 													columnContent += '</div>'
                                                 }
@@ -2742,9 +2742,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (customMsg != null) {
                     msgDetails = customMsg[0].replace("[[", "").replace("]]", "");
                 }
-                var errorDialogBody = '<div style="text-align: center; padding:5px;"><h3>' + msgTitle + '</h3>';
+                var errorDialogBody = '<div class="grid-create-error-dialog"><h3>' + msgTitle + '</h3>';
                 errorDialogBody += '<a href="javascript:void(0);" id="' + this.id + '-error-message-show-details-link">' + this.msg("logicecm.base.error.show.details") + '</a></div>';
-                errorDialogBody += '<div id="' + this.id + '-error-message-show-details" style="display:none; text-align: center; padding:5px; height: 250px; overflow: auto;">' + msgDetails + '</div>';
+                errorDialogBody += '<div id="' + this.id + '-error-message-show-details" class="error-dialog-details">' + msgDetails + '</div>';
 
                 this.errorMessageDialog.setBody(errorDialogBody);
                 this.errorMessageDialog.render(document.body);
