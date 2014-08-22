@@ -6,10 +6,7 @@ function main() {
 		var availableEmployees = orgstructure.getEmployeesByBusinessRoleId(url.templateArgs.role, true);
 		var filter = getFilterForAvailableElement(availableEmployees);
 		data = getPickerChildrenItems(filter);
-	}  else {
-		data = [];
 	}
-
 
 	model.parent = data.parent;
 	model.rootNode = data.rootNode;
