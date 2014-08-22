@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+	<item name="lecm-dic:Макросы участников маршрута" type="lecm-dic:dictionary">
+		<items updateMode="CreateOrUpdate">
+			<item name="cm:Непосредственный руководитель" type="lecmWorkflowRoutesMacros:macros">
+				<property name="cm:name">Непосредственный руководитель</property>
+				<property name="lecmWorkflowRoutesMacros:macrosString">{}</property>
+				<property name="lecmWorkflowRoutesMacros:macrosServiceId">MACRO_DIRECT_SUPERVISOR</property>
+			</item>
+		</items>
+	</item>
+</items>

@@ -8,6 +8,7 @@
 
 	<util:list id="routes.workflow.share.configs">
 		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/routes/routes-share-config.xml</value>
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/routes/routes-macros-share-config.xml</value>
 	</util:list>
 
 	<bean id="routes.workflow.share.bootstrap" init-method="register"
