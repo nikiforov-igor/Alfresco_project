@@ -652,3 +652,13 @@ function checkDocType(item, docType) {
 	}
 	return result;
 }
+
+function getFilterForAvailableElement(availableElements) {
+	var filter = "ID:\"NOT_REF\"";
+	if (availableElements != null && availableElements.length > 0) {
+		for (var i = 0; i < availableElements.length; i++) {
+			filter += " OR ID:\"" + availableElements[i].nodeRef + "\"";
+		}
+	}
+	return filter;
+}
