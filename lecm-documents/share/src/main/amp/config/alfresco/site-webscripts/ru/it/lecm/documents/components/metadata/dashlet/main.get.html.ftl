@@ -66,7 +66,7 @@
     </div>
     <div class="body scrollableList dashlet-body" id="${id}_results">
         <#if hasStatemachine && (mayAdd!false)>
-                <a id="${id}-action-edit" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}" style="z-index: 1000;"></a>
+            <a id="${id}-action-edit" class="edit metadata-edit" title="${msg("dashlet.edit.tooltip")}"></a>
         </#if>
         <div id="${id}_container"></div>
     </div>
