@@ -1,28 +1,24 @@
 <import resource="classpath:/alfresco/templates/webscripts/ru/it/lecm/pickerchildren.lib.js">
 
 function main() {
-	var data = getPickerChildrenItems();
+	var data = [];
 
     // construct the NodeRef from the URL
     var nodeRef = url.templateArgs.contractor_store + "://" + url.templateArgs.contractor_store_id + "/" + url.templateArgs.contractor_id;
-	var filteredResults = [];
-
     var availableRepresentatives = contractorsRootObject.getRepresentatives(nodeRef)
     if (availableRepresentatives != null) {
-        for (var i = 0; i < data.results.length; i++) {
-            for (var j = 0; j < availableRepresentatives.size(); j++) {
-                if (availableRepresentatives.get(j).nodeRef.equals(data.results[i].item.nodeRef)) {
-                    filteredResults.push(data.results[i]);
-                }
-            }
-        }
+		var filter = "ID:\"NOT_REF\"";
+		for (var i = 0; i < availableRepresentatives.size(); i++) {
+			filter += " OR ID:\"" + availableRepresentatives.get(i).nodeRef + "\"";
+		}
+		data = getPickerChildrenItems(filter);
     } else {
-        filteredResults = data.results;
+		data = getPickerChildrenItems();
     }
 
 	model.parent = data.parent;
 	model.rootNode = data.rootNode;
-	model.results = filteredResults;
+	model.results = data.results;
 	model.additionalProperties = data.additionalProperties;
 }
 
