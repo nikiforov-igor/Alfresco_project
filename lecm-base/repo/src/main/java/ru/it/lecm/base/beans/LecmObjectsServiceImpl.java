@@ -1,7 +1,5 @@
 package ru.it.lecm.base.beans;
 
-import java.util.*;
-
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.CannedQueryFactory;
 import org.alfresco.query.CannedQueryResults;
@@ -19,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.getchildren.GetLECMChildrenCannedQueryFactory;
 import ru.it.lecm.base.beans.getchildren.GetLECMChildsCannedQuery;
+
+import java.util.*;
 
 /**
  * Сервис поиска объектов без использования Solr
@@ -64,6 +64,29 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
 		final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, filterProps, sortProps, pagingRequest);
 		return getPagingResults(pagingRequest, results);
 	}
+
+    @Override
+    public PagingResults<NodeRef> list(NodeRef contextNodeRef, QName childType, Set<QName> ignoreTypeQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
+        ParameterCheck.mandatory("contextNodeRef", contextNodeRef);
+        ParameterCheck.mandatory("pagingRequest", pagingRequest);
+
+        Set<QName> searchTypeQNames = new HashSet<QName>();
+        if (childType != null) {
+            searchTypeQNames.add(childType);
+        } else {
+            // ищем все  наши объекты, кроме игнорируемых
+            searchTypeQNames = buildLecmObjectTypes();
+
+            if (ignoreTypeQNames != null && ignoreTypeQNames.size() > 0) {
+                searchTypeQNames.removeAll(ignoreTypeQNames);
+            }
+
+        }
+
+        // execute query
+        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, filterProps, sortProps, pagingRequest);
+        return getPagingResults(pagingRequest, results);
+    }
 
     @Override
     public PagingResults<NodeRef> list(NodeRef contextNodeRef, boolean files, boolean folders, Set<QName> ignoreQNameTypes, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {

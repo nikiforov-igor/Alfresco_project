@@ -140,11 +140,10 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					if (logger.isLoggingEnabled()) {
 						logger.log("ignoring types = " + argsFilterType);
 					}
-					ignoreTypes = argsFilterType.split(',');
+					ignoreTypes = argsFilterType;
 				}
 
-				//childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, sortProp, true, null).getPage();
-                childNodes = base.getChilds(parent, argsSelectableType, maxResults, skipCount, sortProp, true, true).page;
+                childNodes = base.getChilds(parent, argsSelectableType, ignoreTypes, maxResults, skipCount, sortProp, true, true).page;
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
@@ -203,9 +202,6 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 			// Ensure folders and folderlinks appear at the top of the list
 			var containerResults = new Array(),
 				contentResults = new Array();
-
-            // Если условие строгое - то принимаем только те, к которым есть доступ. Если не строгое - проверяем есть ли вообще поле
-            var useStrictFilterByOrg = (useOnlyInSameOrg != null && ("" + useOnlyInSameOrg) == "true");
 
 			for each (var result in childNodes)
 			{

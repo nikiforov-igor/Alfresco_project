@@ -68,12 +68,23 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return getChilds(node.getNodeRef(), childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive);
 	}
 
-    public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
+    public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final String ignoredTypes, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
         Object[] results;
 
         QName childType = null;
         if (childQNameType != null) {
             childType = QName.createQName(childQNameType, namespaceService);
+        }
+
+        Set<QName> ignoreTypeQNames = new HashSet<QName>(5);
+        // Add user defined types to ignore
+        if (ignoredTypes != null) {
+            String[] ignored = ignoredTypes.split(",");
+            for (String ignore : ignored) {
+                if (!ignore.isEmpty()) {
+                    ignoreTypeQNames.add(QName.createQName(ignore, namespaceService));
+                }
+            }
         }
 
         List<Pair<QName, Boolean>> sortProps = null; // note: null sortProps => get all in default sort order
@@ -102,7 +113,7 @@ public class BaseWebScriptBean extends BaseWebScript {
         PagingResults<NodeRef> pageOfNodeInfos = null;
         FileFilterMode.setClient(FileFilterMode.Client.script);
         try {
-            pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, filter, sortProps, pageRequest);
+            pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, ignoreTypeQNames, filter, sortProps, pageRequest);
         } finally {
             FileFilterMode.clearClient();
         }
@@ -126,6 +137,11 @@ public class BaseWebScriptBean extends BaseWebScript {
 
         return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
     }
+
+    public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
+        return getChilds(nodeRef, childQNameType, null, maxItems, skipCount, sortProp, sortAsc, onlyActive, doNotCheckAccess);
+    }
+
 	public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive) {
         return getChilds(nodeRef, childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive, false);
 	}
