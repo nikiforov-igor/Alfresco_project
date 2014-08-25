@@ -9,6 +9,7 @@
 		<import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d"/>
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
+		<import uri="http://www.it.ru/logicECM/model/approval/workflow/decision/1.0" prefix="lecmApproveDecision"/>
 	</imports>
 
 	<namespaces>
@@ -22,16 +23,6 @@
 				<list>
 					<value>PARALLEL</value>
 					<value>SEQUENTIAL</value>
-				</list>
-			</parameter>
-		</constraint>
-		<constraint name="lecmWorkflowRoutes:stageItemDecisionConstraint" type="LIST">
-			<parameter name="allowedValues">
-				<list>
-					<value>NO_DESISION</value>
-					<value>APPROVED</value>
-					<value>REJECTED</value>
-					<value>APPROVED_WITH_REMARK</value>
 				</list>
 			</parameter>
 		</constraint>
@@ -128,7 +119,7 @@
 					<title>Решение</title>
 					<type>d:text</type>
 					<constraints>
-						<constraint ref="lecmWorkflowRoutes:stageItemDecisionConstraint"/>
+						<constraint ref="lecmApproveDecision:decisionConstraint"/>
 					</constraints>
 				</property>
 				<property name="lecmWorkflowRoutes:stageItemComment">
