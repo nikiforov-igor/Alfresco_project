@@ -72,6 +72,12 @@ LogicECM.module = LogicECM.module || {};
 
 		canCreateNew: false,
 
+		searchData: "",
+
+		skipItemsCount: 0,
+
+		alreadyShowCreateNewLink: false,
+
 		options:
 		{
 			// скрывать ли игнорируемые ноды в дереве
@@ -230,6 +236,8 @@ LogicECM.module = LogicECM.module || {};
 
                 this.populateDataWithAllowedScript();
                 this.createPickerDialog();
+
+	            Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
 
                 if (!this.options.lazyLoading) {
                     this._loadSearchProperties();
@@ -612,6 +620,8 @@ LogicECM.module = LogicECM.module || {};
                         searchData = "cm:name" +  ":" + decodeURIComponent(searchTerm);
                     }
 	            }
+		        this.searchData = searchData;
+
 				if (this.option)
 	            this.isSearch = true;
 	            this._updateItems(nodeRef, searchData);
@@ -1146,7 +1156,7 @@ LogicECM.module = LogicECM.module || {};
                     }
 
                     // Add the special "Create new" record if required
-                    if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && me.currentNode.data.hasPermAddChildren && (!me.isSearch || me.options.plane))
+                    if (me.options.showCreateNewLink && me.currentNode != null && me.currentNode.data.isContainer && me.currentNode.data.hasPermAddChildren && (!me.isSearch || me.options.plane) && !me.alreadyShowCreateNewLink)
                     {
                         items = [{ type: IDENT_CREATE_NEW }].concat(items);
                     }
@@ -1451,60 +1461,85 @@ LogicECM.module = LogicECM.module || {};
 	        this.widgets.dataTable.showTableMessage(this.msg("label.loading"), YAHOO.widget.DataTable.CLASS_EMPTY);
             this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
 
-            var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
-            {
-                this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
-                this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
-                if (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane))
-                {
-                    this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-                }
-                else
-                {
-                    this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
-                }
-            };
-
-            var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
-            {
-                if (oResponse.status == 401)
-                {
-                    // Our session has likely timed-out, so refresh to offer the login page
-                    window.location.reload();
-                }
-                else
-                {
-                    try
-                    {
-                        var response = YAHOO.lang.JSON.parse(oResponse.responseText);
-                        this.widgets.dataTable.set("MSG_ERROR", response.message);
-                        this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
-                    }
-                    catch(e)
-                    {
-                    }
-                }
-            };
-
-            // build the url to call the pickerchildren data webscript
-            var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
-
-            if (Alfresco.logger.isDebugEnabled())
-            {
-                Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
-            }
-
-            // call the pickerchildren data webscript
-            this.widgets.dataSource.sendRequest(url,
-                {
-                    success: successHandler,
-                    failure: failureHandler,
-                    scope: this
-                });
+	        this._loadItems(nodeRef, searchTerm, true);
 
             // the start location is now resolved
             this.startLocationResolved = true;
         },
+
+		onPickerItemsContainerScroll: function() {
+			var container = event.currentTarget;
+			if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "visible");
+
+				this._loadItems(this.currentNode.data.nodeRef, this.searchData, false);
+			}
+		},
+
+		_loadItems: function(nodeRef, searchTerm, clearList) {
+			if (clearList) {
+				this.skipItemsCount = 0;
+				Dom.get(this.options.pickerId + "-picker-items").scrollTop = 0;
+				this.alreadyShowCreateNewLink = false;
+			}
+
+			var successHandler = function AssociationTreeViewer__updateItems_successHandler(sRequest, oResponse, oPayload)
+			{
+				this.options.parentNodeRef = oResponse.meta.parent ? oResponse.meta.parent.nodeRef : nodeRef;
+				this.widgets.dataTable.set("MSG_EMPTY", this.msg("form.control.object-picker.items-list.empty"));
+
+				this.skipItemsCount += oResponse.results.length;
+				Dom.setStyle(this.options.pickerId + "-picker-items-loading", "visibility", "hidden");
+
+				if (!clearList || (this.options.showCreateNewLink && this.currentNode != null && this.currentNode.data.isContainer && this.currentNode.data.hasPermAddChildren && (!this.isSearch || this.options.plane) && !this.alreadyShowCreateNewLink))
+				{
+					this.widgets.dataTable.onDataReturnAppendRows.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+				}
+				else
+				{
+					this.widgets.dataTable.onDataReturnInitializeTable.call(this.widgets.dataTable, sRequest, oResponse, oPayload);
+				}
+
+				this.alreadyShowCreateNewLink = true;
+			};
+
+			var failureHandler = function AssociationTreeViewer__updateItems_failureHandler(sRequest, oResponse)
+			{
+				if (oResponse.status == 401)
+				{
+					// Our session has likely timed-out, so refresh to offer the login page
+					window.location.reload();
+				}
+				else
+				{
+					try
+					{
+						var response = YAHOO.lang.JSON.parse(oResponse.responseText);
+						this.widgets.dataTable.set("MSG_ERROR", response.message);
+						this.widgets.dataTable.showTableMessage(response.message, YAHOO.widget.DataTable.CLASS_ERROR);
+					}
+					catch(e)
+					{
+					}
+				}
+			};
+
+			// build the url to call the pickerchildren data webscript
+			var url = this._generateChildrenUrlPath(nodeRef) + this._generateChildrenUrlParams(searchTerm);
+
+			if (Alfresco.logger.isDebugEnabled())
+			{
+				Alfresco.logger.debug("Generated pickerchildren url fragment: " + url);
+			}
+
+			// call the pickerchildren data webscript
+			this.widgets.dataSource.sendRequest(url,
+				{
+					success: successHandler,
+					failure: failureHandler,
+					scope: this
+				});
+		},
 
         _generateChildrenUrlPath: function AssociationTreeViewer__generatePickerChildrenUrlPath(nodeRef)
         {
@@ -1515,8 +1550,9 @@ LogicECM.module = LogicECM.module || {};
         _generateChildrenUrlParams: function AssociationTreeViewer__generatePickerChildrenUrlParams(searchTerm)
         {
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
-                "&size=" + this.getMaxSearchResult() + "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
-                "&sortProp=" + encodeURIComponent(this.options.sortProp) +
+                "&skipCount=" + this.skipItemsCount + "&size=" + this.getMaxSearchResult() +
+	            "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
+	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter) +
                 "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);

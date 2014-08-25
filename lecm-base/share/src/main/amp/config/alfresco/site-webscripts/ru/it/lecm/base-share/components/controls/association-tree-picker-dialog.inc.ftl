@@ -28,7 +28,12 @@
                     </div>
                 </#if>
                 <div id="${pickerId}-dataTable" class="<#if !plane>yui-u panel-right</#if>">
-                    <div id="${pickerId}-group-members" class="picker-items"></div>
+                    <div id="${pickerId}-picker-items" class="picker-items">
+	                    <div id="${pickerId}-group-members"></div>
+	                    <div id="${pickerId}-picker-items-loading" class="loading-image-container">
+		                    <img src="/share/res/components/images/lightbox/loading.gif">
+	                    </div>
+                    </div>
                 </div>
             </div>
         </div>

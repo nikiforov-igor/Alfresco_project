@@ -4,6 +4,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		argsSelectableType = args['selectableType'],
 		argsSearchTerm = args['searchTerm'],
 		argsAdditionalFilter = args['additionalFilter'],
+		argsSkipCount = args['skipCount'],
 		argsMaxResults = args['size'],
 		argsXPath = args['xpath'],
 		argsRootNode = args['rootNode'],
@@ -34,6 +35,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		logger.log("argsSelectableType = " + argsSelectableType);
 		logger.log("argsFilterType = " + argsFilterType);
 		logger.log("argsSearchTerm = " + argsSearchTerm);
+		logger.log("argsSkipCount = " + argsSkipCount);
 		logger.log("argsMaxResults = " + argsMaxResults);
 		logger.log("argsXPath = " + argsXPath);
 		logger.log("nameSubstituteString = " + argsNameSubstituteString);
@@ -75,6 +77,12 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 			}
 		}
 
+		var skipCount = 0;
+		if (argsSkipCount != null)
+		{
+			// force the argsMaxResults var to be treated as a number
+			skipCount = parseInt(argsSkipCount, 10) || skipCount;
+		}
 		// default to max of 100 results
 		var maxResults = 100;
 		if (argsMaxResults != null)
@@ -136,7 +144,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				}
 
 				//childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, sortProp, true, null).getPage();
-                childNodes = base.getChilds(parent, argsSelectableType, maxResults, 0, sortProp, true, true).page;
+                childNodes = base.getChilds(parent, argsSelectableType, maxResults, skipCount, sortProp, true, true).page;
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
@@ -182,6 +190,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 							language: "lucene",
 							page:
 							{
+								skipCount: skipCount,
 								maxItems: (argsMaxResults ? argsMaxResults : 1000)
 							},
 							sort: sort
