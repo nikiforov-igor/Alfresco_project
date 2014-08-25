@@ -322,6 +322,8 @@ LogicECM.module.StatemachineEditorHandler = LogicECM.module.StatemachineEditorHa
 			Alfresco.util.populateHTML(
 				[ p_dialog.id + "-form-container_h", fileSpan]
 			);
+            //Destructor
+            p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
 		},
 		_deleteStatus: function(nodeRef) {
 			var sUrl = Alfresco.constants.PROXY_URI + "/lecm/statemachine/editor/status?nodeRef={nodeRef}";
