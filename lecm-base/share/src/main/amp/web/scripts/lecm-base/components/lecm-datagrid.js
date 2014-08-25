@@ -309,9 +309,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 	            createFormTitleMsg: "label.create-row.title",
 
 	            viewFormTitleMsg: "logicecm.view",
-                    
+
                     createItemBtnMsg: null,
-                    
+
 	            expandable: false,
 
 	            expandDataSource: "components/form",
@@ -1505,13 +1505,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 var columnDefinitions = this.getDataTableColumnDefinitions();
 	            this.restoreSortFromCookie();
                 // DataTable definition
-                var me = this;
                 if (!this.widgets.dataTable || this.datagridMeta.recreate) {
 	                if (this.widgets.dataTable) {
 		                this.destroyDatatable();
 	                }
                     this._setupPaginatior();
-                    this.widgets.dataTable = this._setupDataTable(columnDefinitions, me);
+                    this.widgets.dataTable = this._setupDataTable(columnDefinitions, this);
                     if (!this.search) {
                     // initialize Search
                         this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
