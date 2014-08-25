@@ -158,13 +158,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				// Query the nodes - passing in default sort and result limit parameters
 				if (query !== "")
 				{
-					var sort = [];
-					if (argsSearchTerm == null || argsSearchTerm.length == 0) {
-						sort = [
-							{
-								column: "@" + sortProp,
-								ascending: true
-							}]
+					var sort = [{
+						column: "@" + sortProp,
+						ascending: true
+					}];
+					if (argsSearchTerm != null && argsSearchTerm.length > 0) {
+						sort.splice(0, 0, {
+							column: "score",
+							ascending: false
+						});
 					}
 
 					childNodes = search.query(
