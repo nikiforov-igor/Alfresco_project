@@ -15,6 +15,37 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 	YAHOO.lang.extend(LogicECM.module.Routes.DataGrid, LogicECM.module.Base.DataGrid);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Routes.DataGrid.prototype, {
-		
+		onActionEdit: function (item) {
+				var formId = 'editRouteForm';
+				var editRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+
+				editRouteForm.setOptions({
+					width: '50em',
+					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+					templateRequestParams: {
+						formId: formId,
+						itemId: item.nodeRef,
+						itemKind: 'node',
+						mode: 'edit',
+						showCancelButton: true,
+						submitType: 'json'
+					},
+					destroyOnHide: true,
+					doBeforeDialogShow: {
+						fn: function(form, simpleDialog) {
+							simpleDialog.dialog.setHeader(this.msg('label.routes.edit-route.title'));
+							this.createDialogOpening = false;
+							simpleDialog.dialog.subscribe('destroy', function(event, args, params){
+								LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+								LogicECM.module.Base.Util.formDestructor(event, args, params);
+							}, {moduleId: simpleDialog.id}, this);
+						},
+						scope: this
+					}
+				});
+
+				editRouteForm.show();
+			}
+
 	}, true);
 })();

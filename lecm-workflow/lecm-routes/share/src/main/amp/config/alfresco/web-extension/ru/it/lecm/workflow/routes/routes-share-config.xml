@@ -9,49 +9,6 @@
 				</field-visibility>
 
 			</form>
-			<form id="createNewRouteForm">
-				<field-visibility>
-					<show id="cm:title"/>
-					<show id="cm:description"/>
-					<show id="lecmWorkflowRoutes:routeAvailabilityCondition"/>
-					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
-					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
-					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:routeOrganizationUnitAssoc"/>
-				</field-visibility>
-				<appearance>
-					<field id="cm:title" mandatory="true">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-					</field>
-					<field id="cm:description">
-						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeAvailabilityCondition">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeEditable">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeOrganizationUnitAssoc">
-						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
-							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
-							<control-param name="showCreateNewLink">false</control-param>
-							<control-param name="showCreateNewButton">false</control-param>
-							<control-param name="plane">false</control-param>
-							<control-param name="showSearch">false</control-param>
-							<control-param name="showSelectedItemsPath">false</control-param>
-							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
-							<control-param name="checkType">false</control-param>
-						</control>
-					</field>
-				</appearance>
-			</form>
 		</forms>
 	</config>
 	<config evaluator="node-type" condition="lecmWorkflowRoutes:route">
@@ -65,6 +22,7 @@
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
 					<show id="lecmWorkflowRoutes:routeOrganizationUnitAssoc"/>
+					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true">
@@ -74,7 +32,7 @@
 						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:routeAvailabilityCondition">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
@@ -97,6 +55,121 @@
 							<control-param name="checkType">false</control-param>
 						</control>
 					</field>
+					<field id="lecmWorkflowRoutes:stagesControlFake">
+						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+			<form id="createNewRouteForm">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="cm:description"/>
+					<show id="lecmWorkflowRoutes:routeAvailabilityCondition"/>
+					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
+					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
+					<show id="lecmWorkflowRoutes:routeEditable"/>
+					<show id="lecmWorkflowRoutes:routeOrganizationUnitAssoc"/>
+					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="cm:description">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeAvailabilityCondition">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeEditable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeOrganizationUnitAssoc">
+						<control template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+							<control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Структура_x0020_организации_x0020_и_x0020_сотрудников/cm:Организация/cm:Структура</control-param>
+							<control-param name="showCreateNewLink">false</control-param>
+							<control-param name="showCreateNewButton">false</control-param>
+							<control-param name="plane">false</control-param>
+							<control-param name="showSearch">false</control-param>
+							<control-param name="showSelectedItemsPath">false</control-param>
+							<control-param name="treeItemType">lecm-orgstr:organization-unit</control-param>
+							<control-param name="checkType">false</control-param>
+						</control>
+					</field>
+					<field id="lecmWorkflowRoutes:stagesControlFake">
+						<control template="/ru/it/lecm/workflow/routes/controls/stages-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecmWorkflowRoutes:stage">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="cm:title"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" label="Этап"/>
+				</appearance>
+			</form>
+			<form>
+				<field-visibility>
+					<show id="cm:title" force="true"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true" label="Название этапа">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:stageWorkflowType">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+	<config evaluator="node-type" condition="lecmWorkflowRoutes:stage">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="cm:title" force="true"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
+				</field-visibility>
+				<appearance>
+					<field id="cm:title" mandatory="true" label="Название этапа">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:stageWorkflowType">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+					</field>
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
+	<config evaluator="model-type" condition="lecmWorkflowRoutes:stageItem">
+		<forms>
+			<form id="datagrid">
+				<field-visibility>
+					<show id="lecmWorkflowRoutes:stageItemEmployeeAssoc"/>
+					<show id="lecmWorkflowRoutes:stageItemEmployeePositionFake" force="true"/>
+					<show id="lecmWorkflowRoutes:stageItemTerm"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecmWorkflowRoutes:stageItemEmployeeAssoc" substituteString="{lecm-orgstr:employee-short-name}"/>
+					<field id="lecmWorkflowRoutes:stageItemEmployeePositionFake" label="Должность"
+						   substituteString="{lecm-workflow-result:workflow-result-item-employee-assoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
 				</appearance>
 			</form>
 		</forms>

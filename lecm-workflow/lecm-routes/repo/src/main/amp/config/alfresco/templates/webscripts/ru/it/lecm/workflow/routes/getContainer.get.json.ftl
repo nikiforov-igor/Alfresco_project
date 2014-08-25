@@ -1,6 +1,8 @@
 <#escape x as jsonUtils.encodeJSONString(x)>
 {
 	"nodeRef": "${routesContainer}",
-	"itemType": "${routeType}"
+	"routeType": "${routeType}",
+	"stageType": "${stageType}",
+	"stageItemType": "${stageItemType}"
 }
 </#escape>

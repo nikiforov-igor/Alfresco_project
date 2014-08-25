@@ -35,10 +35,10 @@
 	YAHOO.util.Event.onContentReady("${id}", function () {
 		YAHOO.Bubbling.fire ("activeGridChanged", {
 			datagridMeta:{
-				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.itemType,
+				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType,
 				nodeRef: LogicECM.module.Routes.Const.ROUTES_CONTAINER.nodeRef,
 				searchConfig: {
-					filter: ""
+					filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
 				},
 				actionsConfig: {
 					fullDelete: true,

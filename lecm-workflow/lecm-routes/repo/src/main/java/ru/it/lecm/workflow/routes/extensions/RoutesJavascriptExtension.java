@@ -2,6 +2,7 @@ package ru.it.lecm.workflow.routes.extensions;
 
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.QName;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
@@ -24,6 +25,20 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 	public String getRouteType() {
 		return RoutesModel.TYPE_ROUTE.toPrefixString(serviceRegistry.getNamespaceService());
+	}
+	public String getStageType() {
+		return RoutesModel.TYPE_STAGE.toPrefixString(serviceRegistry.getNamespaceService());
+	}
+	public String getStageItemType() {
+		return RoutesModel.TYPE_STAGE_ITEM.toPrefixString(serviceRegistry.getNamespaceService());
+	}
+
+	public ScriptNode createNewTemporaryNode(String destination, String nodeType) {
+		NodeRef tempNode, destinationNode = new NodeRef(destination);
+		QName nodeTypeQName = QName.createQName(nodeType, serviceRegistry.getNamespaceService());
+		tempNode = routesService.createNewTemporaryNode(destinationNode, nodeTypeQName);
+
+		return new ScriptNode(tempNode, serviceRegistry, getScope());
 	}
 
 }

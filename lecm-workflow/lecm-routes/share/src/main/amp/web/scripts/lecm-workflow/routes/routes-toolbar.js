@@ -19,6 +19,83 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 	YAHOO.lang.extend(LogicECM.module.Routes.Toolbar, Alfresco.component.Base, {
 		_createNewRoute: function() {
+			function onCreateRouteSuccess(r) {
+				var formId = 'createNewRouteForm';
+				var routeRef = r.json.nodeRef;
+				var newRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+
+				newRouteForm.setOptions({
+					width: '50em',
+					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+					templateRequestParams: {
+						formId: formId,
+						itemId: routeRef,
+						itemKind: 'node',
+						mode: 'edit',
+						showCancelButton: true,
+						submitType: 'json'
+					},
+					destroyOnHide: true,
+					doBeforeDialogShow: {
+						fn: function(form, simpleDialog) {
+							simpleDialog.dialog.setHeader(this.msg('label.routes.new-route.title'));
+							this.createDialogOpening = false;
+							simpleDialog.dialog.subscribe('destroy', function(event, args, params){
+								LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+								LogicECM.module.Base.Util.formDestructor(event, args, params);
+							}, {moduleId: simpleDialog.id}, this);
+						},
+						scope: this
+					},
+					onSuccess: {
+						fn: function(r) {
+							var nodeRefObj = new Alfresco.util.NodeRef(routeRef);
+							Alfresco.util.Ajax.jsonRequest({
+								method: 'POST',
+								url: Alfresco.constants.PROXY_URI_RELATIVE + 'slingshot/doclib/action/aspects/node/' + nodeRefObj.uri,
+								dataObj: {
+									added: [],
+									removed: ["sys:temporary"]
+								},
+								successCallback: {
+									fn: function(r) {
+										Alfresco.util.PopupManager.displayMessage({
+											text: 'Маршрут успешно создан'
+										});
+									},
+									scope: this
+								},
+								failureCallback: {
+									fn: function(r) {
+										this.editDialogOpening = false;
+										Alfresco.util.PopupManager.displayMessage({
+											text: 'Не удалось создать маршрут: ' + r.json.message
+										});
+									},
+									scope: this
+								}
+							});
+
+							YAHOO.Bubbling.fire('dataItemCreated', {
+								nodeRef: r.json.persistedObject,
+								bubblingLabel: this.options.datagridBubblingLabel
+							});
+
+						},
+						scope: this
+					},
+					onFailure: {
+						fn: function(r) {
+							Alfresco.util.PopupManager.displayMessage({
+								text: 'Не удалось создать маршрут: ' + r.json.message
+							});
+						},
+						scope: this
+					}
+				});
+
+				newRouteForm.show();
+			}
 
 			// Для предотвращения открытия нескольких карточек (при многократном быстром нажатии на кнопку создания)
 			if (this.createDialogOpening) {
@@ -29,45 +106,23 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			var dataGrid = LogicECM.module.Base.Util.findComponentByBubblingLabel('LogicECM.module.Base.DataGrid', this.options.datagridBubblingLabel);
 			var itemType = dataGrid.datagridMeta.itemType;
 			var destination = dataGrid.datagridMeta.nodeRef;
-			var formId = 'createNewRouteForm';
 
-			var newRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
-
-			newRouteForm.setOptions({
-				width: '50em',
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
-				templateRequestParams: {
-					formId: formId,
-					itemId: itemType,
-					itemKind: 'type',
-					mode: 'create',
+			//делаем ajax-запрос на получение нового пустого маршрута
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createNewTemporaryNode',
+				dataObj: {
 					destination: destination,
-					showCancelButton: true,
-					submitType: 'json'
-				},
-				destroyOnHide: true,
-				doBeforeDialogShow: {
-					fn: function(form, simpleDialog) {
-						simpleDialog.dialog.setHeader(this.msg('label.routes.new-route.title'));
-						this.createDialogOpening = false;
-					},
-					scope: this
-				},
-				onSuccess: {
-					fn: function(response) {
-						YAHOO.Bubbling.fire('dataItemCreated', {
-							nodeRef: response.json.persistedObject,
-							bubblingLabel: this.options.datagridBubblingLabel
-						});
+					nodeType: itemType
 
-						Alfresco.util.PopupManager.displayMessage({
-							text: 'Маршрут успешно создан'
-						});
-					},
+				},
+				successCallback: {
+					fn: onCreateRouteSuccess,
 					scope: this
 				},
-				onFailure: {
+				failureCallback: {
 					fn: function(r) {
+						this.editDialogOpening = false;
 						Alfresco.util.PopupManager.displayMessage({
 							text: 'Не удалось создать маршрут: ' + r.json.message
 						});
@@ -75,8 +130,6 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					scope: this
 				}
 			});
-
-			newRouteForm.show();
 		},
 		onReady: function() {
 			if (this.options.inEngineer) {

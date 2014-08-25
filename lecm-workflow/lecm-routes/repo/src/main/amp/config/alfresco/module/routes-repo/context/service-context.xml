@@ -29,6 +29,26 @@
 		  parent="baseBean" depends-on="routes.model.bootstrap"
 		  init-method="init"
 		  p:folders-ref="routes.folders.map"
-	 />
+	/>
+
+	<bean id="routes.delete.temp.schedule"
+	  class="ru.it.lecm.workflow.routes.schedule.DeleteTempRoutesSchedule"
+	  depends-on="routes.model.bootstrap"
+	  p:transactionMode="ISOLATED_TRANSACTIONS"
+	  p:compensatingActionMode="IGNORE"
+	  p:jobName="routes-delete-temp"
+	  p:jobGroup="routes"
+	  p:triggerName="routes-delete-temp-trigger"
+	  p:triggerGroup="routes-trigger"
+	  p:cronExpression="0 0 4 * * ? *"
+	  p:runAsUser="System"
+	  p:scheduler-ref="schedulerFactory"
+	  p:actionService-ref="ActionService"
+	  p:transactionService-ref="TransactionService"
+	  p:searchService-ref="searchService"
+	  p:namespaceService-ref="namespaceService"
+	  p:nodeService-ref="nodeService"
+	  p:routesService-ref="routes.service"
+	/>
 
 </beans>
