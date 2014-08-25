@@ -41,6 +41,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private SimpleCache<String, List<ArmColumn>> columnsCache;
     private SimpleCache<NodeRef, List<ArmFilter>> filtersCache;
     private SimpleCache<NodeRef, List<NodeRef>> childNodesCache;
+    private SimpleCache<NodeRef, List<String>> nodesTypesCache;
 
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
@@ -71,6 +72,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     public void setChildNodesCache(SimpleCache<NodeRef, List<NodeRef>> childNodesCache) {
         this.childNodesCache = childNodesCache;
+    }
+
+    public void setNodesTypesCache(SimpleCache<NodeRef, List<String>> nodesTypesCache) {
+        this.nodesTypesCache = nodesTypesCache;
     }
 
     public void setOrgstructureBean(OrgstructureBean orgstructureBean) {
@@ -174,12 +179,15 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public List<String> getNodeTypes(NodeRef node) {
+        if (nodesTypesCache.contains(node)) {
+            return nodesTypesCache.get(node);
+        }
 		List<String> result = new ArrayList<String>();
 		String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
 		if (types != null && types.length() > 0) {
 			result.addAll(Arrays.asList(types.split(",")));
 		}
-
+        nodesTypesCache.put(node, result);
 		return result;
 	}
 
@@ -497,6 +505,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         filtersCache.clear();
         childNodesCache.clear();
         columnsCache.clear();
+        nodesTypesCache.clear();
         logger.info("Arm cache cleared!!!");
     }
 

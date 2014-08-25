@@ -59,6 +59,7 @@
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
         <property name="columnsCache" ref="arm.columns.cache"/>
         <property name="childNodesCache" ref="arm.nodes.cache"/>
+        <property name="nodesTypesCache" ref="arm.nodes.types.cache"/>
         <property name="filtersCache" ref="arm.filters.cache"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
@@ -262,6 +263,13 @@
     <bean name="arm.nodes.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.nodes.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.nodes"/>
+    </bean>
+
+    <bean name="arm.nodes.types.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.nodes.types.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.nodes.types.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.nodes.types"/>
     </bean>
 
     <bean name="arm.filters.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
