@@ -300,7 +300,7 @@ var appItems = [
 		name: "alfresco/menus/AlfMenuBarItem",
 		config: {
 			id: "SED_MENU_ITEM",
-			label: "СЭД",
+			label: "Логика СЭД",
 			targetUrl: "arm?code=SED"
 		}
 	},
