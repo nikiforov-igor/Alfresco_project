@@ -599,3 +599,10 @@ i.icon-building {
     border: 1px solid #2b6eb5;
     color: #fff;
 }
+
+/* Предыдущие версии */
+.yui-panel.historic-properties-viewer .historic-properties-header {
+    height: 30px;
+    padding: 0;
+    margin: 0;
+}
