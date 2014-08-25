@@ -12,7 +12,7 @@
                     var activeNodes = LogicECM.module.Base.Util.getCookie("ru.it.lecm.documents.last." + Alfresco.constants.USERNAME);
                     var searchNodes = [];
                     if (activeNodes != null) {
-                        activeNodes = JSON.parse(activeNodes);
+                        searchNodes = JSON.parse(activeNodes);
                     }
 	                var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions({
 	                    usePagination: true,
@@ -32,7 +32,7 @@
                             itemType: "lecm-document:base",
                             useChildQuery: false,
                             datagridFormId: "last-documents-list",
-                            searchNodes: JSON.stringify(activeNodes)
+                            searchNodes: JSON.stringify(searchNodes)
                         }
 	                }).setMessages(${messages});
                     datagrid.draw();
