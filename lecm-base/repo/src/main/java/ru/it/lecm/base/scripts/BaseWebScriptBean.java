@@ -68,63 +68,67 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return getChilds(node.getNodeRef(), childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive);
 	}
 
-	public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive) {
-		Object[] results;
+    public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
+        Object[] results;
 
-		QName childType = null;
-		if (childQNameType != null) {
-			childType = QName.createQName(childQNameType, namespaceService);
-		}
-
-		List<Pair<QName, Boolean>> sortProps = null; // note: null sortProps => get all in default sort order
-		if (sortProp != null) {
-			sortProps = new ArrayList<Pair<QName, Boolean>>(1);
-			sortProps.add(new Pair<QName, Boolean>(QName.createQName(sortProp, namespaceService), sortAsc));
-		}
-
-		List<FilterProp> filter = new ArrayList<FilterProp>();
-		if (onlyActive) {
-			filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
-		}
-        NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-        Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
-//        if (!orgstructureService.isEmployeeHasBusinessRole(currentEmployee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
-        if(!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
-            NodeRef empOrganization = orgstructureService.getEmployeeOrganization(currentEmployee);
-            filter.add(new FilterPropLECM(OrgstructureAspectsModel.PROP_LINKED_ORGANIZATION_REF, empOrganization != null ? empOrganization.toString() : "NOT_REF", FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
+        QName childType = null;
+        if (childQNameType != null) {
+            childType = QName.createQName(childQNameType, namespaceService);
         }
 
-		PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
-		pageRequest.setRequestTotalCountMax(REQUEST_MAX);
+        List<Pair<QName, Boolean>> sortProps = null; // note: null sortProps => get all in default sort order
+        if (sortProp != null) {
+            sortProps = new ArrayList<Pair<QName, Boolean>>(1);
+            sortProps.add(new Pair<QName, Boolean>(QName.createQName(sortProp, namespaceService), sortAsc));
+        }
 
-		PagingResults<NodeRef> pageOfNodeInfos = null;
-		FileFilterMode.setClient(FileFilterMode.Client.script);
-		try {
-			pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, filter, sortProps, pageRequest);
-		} finally {
-			FileFilterMode.clearClient();
-		}
+        List<FilterProp> filter = new ArrayList<FilterProp>();
+        if (onlyActive) {
+            filter.add(new FilterPropLECM(BaseBean.IS_ACTIVE, Boolean.TRUE, FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
+        }
 
-		List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
-		int size = nodeInfos.size();
-		results = new Object[size];
-		for (int i = 0; i < size; i++) {
-			NodeRef ref = nodeInfos.get(i);
-			results[i] = new ScriptNode(ref, serviceRegistry, getScope());
-		}
+        if (!doNotCheckAccess)  {
+            NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
+            Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
+            if(!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
+                NodeRef empOrganization = orgstructureService.getEmployeeOrganization(currentEmployee);
+                filter.add(new FilterPropLECM(OrgstructureAspectsModel.PROP_LINKED_ORGANIZATION_REF, empOrganization != null ? empOrganization.toString() : "NOT_REF", FilterPropLECM.FilterTypeLECM.EQUALS, Boolean.TRUE));
+            }
+        }
 
-		int totalResultCountLower = -1;
-		int totalResultCountUpper = -1;
+        PagingRequest pageRequest = new PagingRequest(skipCount, maxItems, null);
+        pageRequest.setRequestTotalCountMax(REQUEST_MAX);
 
-		Pair<Integer, Integer> totalResultCount = pageOfNodeInfos.getTotalResultCount();
-		if (totalResultCount != null) {
-			totalResultCountLower = (totalResultCount.getFirst() != null ? totalResultCount.getFirst() : -1);
-			totalResultCountUpper = (totalResultCount.getSecond() != null ? totalResultCount.getSecond() : -1);
-		}
+        PagingResults<NodeRef> pageOfNodeInfos = null;
+        FileFilterMode.setClient(FileFilterMode.Client.script);
+        try {
+            pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, filter, sortProps, pageRequest);
+        } finally {
+            FileFilterMode.clearClient();
+        }
 
-		return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
+        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
+        int size = nodeInfos.size();
+        results = new Object[size];
+        for (int i = 0; i < size; i++) {
+            NodeRef ref = nodeInfos.get(i);
+            results[i] = new ScriptNode(ref, serviceRegistry, getScope());
+        }
+
+        int totalResultCountLower = -1;
+        int totalResultCountUpper = -1;
+
+        Pair<Integer, Integer> totalResultCount = pageOfNodeInfos.getTotalResultCount();
+        if (totalResultCount != null) {
+            totalResultCountLower = (totalResultCount.getFirst() != null ? totalResultCount.getFirst() : -1);
+            totalResultCountUpper = (totalResultCount.getSecond() != null ? totalResultCount.getSecond() : -1);
+        }
+
+        return new ScriptPagingNodes(Context.getCurrentContext().newArray(getScope(), results), pageOfNodeInfos.hasMoreItems(), totalResultCountLower, totalResultCountUpper);
+    }
+	public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive) {
+        return getChilds(nodeRef, childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive, false);
 	}
-
 
     public ScriptPagingNodes getNotLecmChilds(ScriptNode node,
                                               boolean files,

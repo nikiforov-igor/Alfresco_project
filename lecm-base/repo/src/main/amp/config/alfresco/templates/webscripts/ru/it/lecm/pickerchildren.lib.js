@@ -135,7 +135,8 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					ignoreTypes = argsFilterType.split(',');
 				}
 
-				childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, sortProp, true, null).getPage();
+				//childNodes = parent.childFileFolders(true, true, ignoreTypes, -1, maxResults, 0, sortProp, true, null).getPage();
+                childNodes = base.getChilds(parent, argsSelectableType, maxResults, 0, sortProp, true, true).page;
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
@@ -155,6 +156,12 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 					query = addAdditionalFilter(query, filter);
 				}
 
+                if (doNotCheckAccess == null || ("" + doNotCheckAccess == "false")) {
+					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION}}");
+				}
+
+                query = (query !== "" ? (query + ' AND ') : '') + "NOT @lecm-dic\\:active:false";
+
 				// Query the nodes - passing in default sort and result limit parameters
 				if (query !== "")
 				{
@@ -171,7 +178,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 
 					childNodes = search.query(
 						{
-							query: query,
+							query: searchQueryProcessor.processQuery(query),
 							language: "lucene",
 							page:
 							{
@@ -193,9 +200,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 
 			for each (var result in childNodes)
 			{
-				if (result.hasPermission("Read")
-                    && (!result.hasAspect("lecm-dic:aspect_active") || result.properties["lecm-dic:active"])
-                    && ((doNotCheckAccess != null && doNotCheckAccess) || orgstructure.hasAccessToOrgElement(result, useStrictFilterByOrg))) {
+				if (result.hasPermission("Read")) {
 					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
 					{
 						// wrap result and determine if it is selectable in the UI

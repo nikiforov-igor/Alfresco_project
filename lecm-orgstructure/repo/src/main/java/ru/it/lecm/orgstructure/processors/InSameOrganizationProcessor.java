@@ -66,7 +66,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         } else {
             sbQuery.append("\"*\"");
         }
-        sbQuery.append(" OR NOT @").append(organizationProperty).append(":\"*\"");
+        sbQuery.append(" OR ISNULL:").append("\"").append(organizationProperty).append("\"");
 
         return sbQuery.toString();
     }
