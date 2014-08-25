@@ -158,6 +158,15 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				// Query the nodes - passing in default sort and result limit parameters
 				if (query !== "")
 				{
+					var sort = [];
+					if (argsSearchTerm == null || argsSearchTerm.length == 0) {
+						sort = [
+							{
+								column: "@" + sortProp,
+								ascending: true
+							}]
+					}
+
 					childNodes = search.query(
 						{
 							query: query,
@@ -166,11 +175,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 							{
 								maxItems: (argsMaxResults ? argsMaxResults : 1000)
 							},
-							sort: [
-								{
-									column: "@" + sortProp,
-									ascending: true
-								}]
+							sort: sort
 						});
 				}
 			}
