@@ -72,12 +72,25 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return getChilds(node.getNodeRef(), childQNameType, ignoredTypes, maxItems, skipCount, sortProp, sortAsc, onlyActive, false);
 	}
 
+    public ScriptPagingNodes getChilds(ScriptNode node, String childQNameType, final String ignoredTypes, int maxItems, int skipCount, String sortProp, Boolean sortAsc, Boolean onlyActive, Boolean dontCheckAccess) {
+		return getChilds(node.getNodeRef(), childQNameType, ignoredTypes, maxItems, skipCount, sortProp, sortAsc, onlyActive, dontCheckAccess);
+	}
+
     public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final String ignoredTypes, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
         Object[] results;
 
         QName childType = null;
+        QName checkAspect = null;
         if (childQNameType != null) {
-            childType = QName.createQName(childQNameType, namespaceService);
+            QName type = QName.createQName(childQNameType, namespaceService);
+            if (dictionaryService.getType(type) != null) {
+                childType = type;
+            } else {
+                //аспект или что-то иное
+                if (dictionaryService.getAspect(type) != null) {
+                    checkAspect = type;
+                }
+            }
         }
 
         Set<QName> ignoreTypeQNames = new HashSet<QName>(5);
@@ -117,7 +130,7 @@ public class BaseWebScriptBean extends BaseWebScript {
         PagingResults<NodeRef> pageOfNodeInfos = null;
         FileFilterMode.setClient(FileFilterMode.Client.script);
         try {
-            pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, ignoreTypeQNames, filter, sortProps, pageRequest);
+            pageOfNodeInfos = lecmObjectsService.list(nodeRef, childType, checkAspect, ignoreTypeQNames, filter, sortProps, pageRequest);
         } finally {
             FileFilterMode.clearClient();
         }

@@ -61,16 +61,22 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
 		}
 
 		// execute query
-		final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, filterProps, sortProps, pagingRequest);
+		final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, null, filterProps, sortProps, pagingRequest);
 		return getPagingResults(pagingRequest, results);
 	}
 
     @Override
     public PagingResults<NodeRef> list(NodeRef contextNodeRef, QName childType, Set<QName> ignoreTypeQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
+        return list(contextNodeRef, childType, null, ignoreTypeQNames, filterProps, sortProps, pagingRequest);
+    }
+
+    @Override
+    public PagingResults<NodeRef> list(NodeRef contextNodeRef, QName childType, QName checkAspect, Set<QName> ignoreTypeQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
         ParameterCheck.mandatory("contextNodeRef", contextNodeRef);
         ParameterCheck.mandatory("pagingRequest", pagingRequest);
 
         Set<QName> searchTypeQNames = new HashSet<QName>();
+        Set<QName> searchAspectsQNames = new HashSet<QName>();
         if (childType != null) {
             searchTypeQNames.add(childType);
         } else {
@@ -82,9 +88,11 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
             }
 
         }
-
+        if (checkAspect != null) {
+            searchAspectsQNames.add(checkAspect);
+        }
         // execute query
-        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, filterProps, sortProps, pagingRequest);
+        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, searchAspectsQNames, filterProps, sortProps, pagingRequest);
         return getPagingResults(pagingRequest, results);
     }
 
@@ -96,7 +104,7 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
         Set<QName> searchTypeQNames = buildTypes(files, folders, ignoreQNameTypes);
 
         // execute query
-        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, null, sortProps, pagingRequest);
+        final CannedQueryResults<NodeRef> results = listImpl(contextNodeRef, searchTypeQNames, null, null, sortProps, pagingRequest);
         return getPagingResults(pagingRequest, results);
     }
 
@@ -111,13 +119,13 @@ public class LecmObjectsServiceImpl extends BaseBean implements LecmObjectsServi
 		return lecmObjectQNames;
 	}
 
-	private CannedQueryResults<NodeRef> listImpl(NodeRef contextNodeRef, Set<QName> searchTypeQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
+	private CannedQueryResults<NodeRef> listImpl(NodeRef contextNodeRef, Set<QName> searchTypeQNames, Set<QName> searchAspectsQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
 		Long start = (logger.isDebugEnabled() ? System.currentTimeMillis() : null);
 
 		// get canned query
 		GetLECMChildrenCannedQueryFactory getChildrenCannedQueryFactory = (GetLECMChildrenCannedQueryFactory) cannedQueryRegistry.getNamedObject(CANNED_QUERY_FILEFOLDER_LIST);
 
-		GetLECMChildsCannedQuery cq = (GetLECMChildsCannedQuery) getChildrenCannedQueryFactory.getCannedQuery(contextNodeRef, null, searchTypeQNames, filterProps, sortProps, pagingRequest);
+		GetLECMChildsCannedQuery cq = (GetLECMChildsCannedQuery) getChildrenCannedQueryFactory.getCannedQuery(contextNodeRef, null, searchTypeQNames, searchAspectsQNames, filterProps, sortProps, pagingRequest);
 
 		// execute canned query
 		CannedQueryResults<NodeRef> results = cq.execute();

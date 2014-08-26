@@ -11,6 +11,7 @@ import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.node.getchildren.FilterSortNodeEntity;
 import org.alfresco.repo.node.getchildren.GetChildrenCannedQuery;
 import org.alfresco.repo.node.getchildren.GetChildrenCannedQueryParams;
+import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.repo.security.permissions.PermissionCheckedValue;
 import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
@@ -45,14 +46,16 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 	private TenantService tenantService;
 	private NodePropertyHelper nodePropertyHelper;
 	private boolean applyPostQueryPermissions = false;
+    private Set<QName> childAspectQNames;
 
-	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params) {
+	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params, Set<QName> childAspectQNames) {
 		super(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, params);
 		this.nodeDAO = nodeDAO;
 		this.qnameDAO = qnameDAO;
 		this.cannedQueryDAO = cannedQueryDAO;
 		this.tenantService = tenantService;
 		this.nodePropertyHelper = nodePropertyHelper;
+        this.childAspectQNames = childAspectQNames;
 
 		if ((params.getSortDetails() != null) && (params.getSortDetails().getSortPairs().size() > 0)) {
 			applyPostQueryPermissions = true;
@@ -180,7 +183,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 			FilterSortChildQueryCallback callback = new FilterSortChildQueryCallback() {
 				public boolean handle(FilterSortNode node) {
 					// filter, if needed
-					if ((!applyFilter) || includeFilter(node.getPropVals(), filterProps)) {
+					if ((!applyFilter) || includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
 						children.add(node);
 					}
 
@@ -231,6 +234,27 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 
 		return result;
 	}
+
+    protected boolean includeAllFilters(boolean ret, NodeRef nodeRef) {
+        try {
+            boolean hasAspect = true;
+            if (childAspectQNames != null) {
+                if (childAspectQNames.size() > 1) {
+                    Set<QName> nodeAspects = nodeService.getAspects(nodeRef);
+                    hasAspect =  nodeAspects.removeAll(childAspectQNames);
+                } else if (childAspectQNames.size() == 1) {
+                    if (nodeService.hasAspect(nodeRef, childAspectQNames.iterator().next())) {
+                        hasAspect = true;
+                    }
+                }
+            }
+
+            return ret && hasAspect;
+        } catch (AccessDeniedException e) {
+            // user may not have permission to determine the visibility of the node
+            return ret;
+        }
+    }
 
 	private void preload(List<NodeRef> nodeRefs) {
 		Long start = (logger.isTraceEnabled() ? System.currentTimeMillis() : null);

@@ -1,11 +1,6 @@
 package ru.it.lecm.base.beans.getchildren;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import org.alfresco.model.ContentModel;
-
 import org.alfresco.query.*;
 import org.alfresco.repo.domain.contentdata.ContentDataDAO;
 import org.alfresco.repo.domain.locale.LocaleDAO;
@@ -25,6 +20,11 @@ import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
 import org.alfresco.util.PropertyCheck;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Класс-фабрика, возвращающая поисковый запрос для поиска объектов
  * @author dbashmakov
@@ -40,6 +40,8 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	private CannedQueryDAO cannedQueryDAO;
 	private TenantService tenantService;
 	private NodeService nodeService;
+
+    private Set<QName> childAspectQNames;
 
 	private MethodSecurityBean<NodeRef> methodSecurity;
 
@@ -78,7 +80,7 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	@Override
 	public CannedQuery<NodeRef> getCannedQuery(CannedQueryParameters parameters) {
 		NodePropertyHelper nodePropertyHelper = new NodePropertyHelper(dictionaryService, qnameDAO, localeDAO, contentDataDAO);
-		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, parameters);
+		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, parameters, childAspectQNames);
 	}
 
 	public void setNodeService(NodeService nodeService) {
@@ -98,14 +100,15 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	 * @param pagingRequest   skipCount, maxItems - optionally queryExecutionId and requestTotalCountMax
 	 * @return an implementation that will execute the query
 	 */
-	public CannedQuery<NodeRef> getCannedQuery(NodeRef parentRef, String pattern, Set<QName> childTypeQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
+	public CannedQuery<NodeRef> getCannedQuery(NodeRef parentRef, String pattern, Set<QName> childTypeQNames, Set<QName> childAspectsQNames, List<FilterProp> filterProps, List<Pair<QName, Boolean>> sortProps, PagingRequest pagingRequest) {
 		ParameterCheck.mandatory("parentRef", parentRef);
 		ParameterCheck.mandatory("pagingRequest", pagingRequest);
+
+        this.childAspectQNames = childAspectsQNames;
 
 		int requestTotalCountMax = pagingRequest.getRequestTotalCountMax();
 
 		// specific query params - context (parent) and inclusive filters (child types, property values)
-		//GetChildrenCannedQueryParams paramBean = new GetChildrenCannedQueryParams(tenantService.getName(parentRef), childTypeQNames, filterProps, pattern);
 		Set<QName> assocTypeQNames = new HashSet<QName>();
 		Set<QName> inclusiveAspects = new HashSet<QName>();
 		//TODO: Снова сотни заглушек
@@ -142,8 +145,8 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	 * @param pagingRequest   skipCount, maxItems - optionally queryExecutionId and requestTotalCountMax
 	 * @return an implementation that will execute the query
 	 */
-	public CannedQuery<NodeRef> getCannedQuery(NodeRef parentRef, String pattern, Set<QName> childTypeQNames, PagingRequest pagingRequest) {
-		return getCannedQuery(parentRef, pattern, childTypeQNames, null, null, pagingRequest);
+	public CannedQuery<NodeRef> getCannedQuery(NodeRef parentRef, String pattern, Set<QName> childTypeQNames, Set<QName> childAspectsQNames, PagingRequest pagingRequest) {
+		return getCannedQuery(parentRef, pattern, childTypeQNames, childAspectsQNames, null, null, pagingRequest);
 	}
 
 	@Override

@@ -31,6 +31,14 @@ public interface LecmObjectsService {
                                        PagingRequest pagingRequest);
 
     public PagingResults<NodeRef> list(NodeRef contextNodeRef,
+                                       QName childType,
+                                       QName checkAspect,
+                                       Set<QName> ignoreTypeQNames,
+                                       List<FilterProp> filterProps,
+                                       List<Pair<QName, Boolean>> sortProps,
+                                       PagingRequest pagingRequest);
+
+    public PagingResults<NodeRef> list(NodeRef contextNodeRef,
                                        boolean files,
                                        boolean folders,
                                        Set<QName> ignoreTypeQNames,

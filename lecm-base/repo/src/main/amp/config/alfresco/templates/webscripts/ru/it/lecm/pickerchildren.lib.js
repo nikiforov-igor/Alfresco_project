@@ -22,7 +22,6 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		showNotSelectable = args['showNotSelectableItems'],
 		showFolders = args['showFolders'],
 		docType = args['docType'],
-		useOnlyInSameOrg = args['onlyInSameOrg'],
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'];
 	if (additionalProperties != null) {
@@ -135,15 +134,20 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 
 			if (parent != null && (argsSearchTerm == null || argsSearchTerm == "") && (argsAdditionalFilter== null || argsAdditionalFilter == "") && (filter== null || filter == ""))  {
 				var ignoreTypes = null;
-				if (argsFilterType != null)
-				{
-					if (logger.isLoggingEnabled()) {
-						logger.log("ignoring types = " + argsFilterType);
-					}
-					ignoreTypes = argsFilterType;
-				}
+                if (argsFilterType != null) {
+                    if (logger.isLoggingEnabled()) {
+                        logger.log("ignoring types = " + argsFilterType);
+                    }
+                    ignoreTypes = argsFilterType;
+                }
 
-                childNodes = base.getChilds(parent, argsSelectableType, ignoreTypes, maxResults, skipCount, sortProp, true, true).page;
+                var doNotCheck = doNotCheckAccess != null && (("" + doNotCheckAccess) == "true");
+                var childType = null;
+                if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
+                    childType = argsSelectableType;
+                }
+                //параметры метода - родитель, тип элементов, игнорируемые типы, макс число результатов, сдвиг, поле для сортировки, направление сортировка, только активные, проверять ли доступ по организации
+                childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck).page;
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
@@ -158,6 +162,16 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				}
 
 				var query = getFilterParams(argsSearchTerm, parentXPath);
+
+                if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
+                    var ctx = Packages.org.springframework.web.context.ContextLoader.getCurrentWebApplicationContext();
+
+                    var selectableQuery = getItemSelectableQuery(argsSelectableType, showFolders, ctx);
+                    if (selectableQuery !== "") {
+                        query = (query !== "" ? (query + ' AND (') : '(') + selectableQuery + ')';
+                    }
+                }
+
 				query = addAdditionalFilter(query, argsAdditionalFilter);
 				if (filter != null) {
 					query = addAdditionalFilter(query, filter);
@@ -208,27 +222,23 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				if (result.hasPermission("Read")) {
 					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
 					{
-						// wrap result and determine if it is selectable in the UI
-						resultObj =
-						{
-							item: result
-						};
-						resultObj.selectable = isItemSelectable(result, argsSelectableType);
-
-						if (resultObj.selectable || showNotSelectable == "true" || showFolders == "true") {
-							containerResults.push(resultObj);
-						}
+                        resultObj =
+                        {
+                            item: result,
+                            selectable: isItemSelectable(result, argsSelectableType)
+                        };
+						containerResults.push(resultObj);
 					}
 					else
 					{
 						// wrap result and determine if it is selectable in the UI
 						resultObj =
 						{
-							item: result
+							item: result,
+                            selectable: isItemSelectable(result, argsSelectableType)
 						};
-						resultObj.selectable = isItemSelectable(result, argsSelectableType);
 
-						if ((resultObj.selectable || showNotSelectable == "true") && checkDocType(result, docType)) {
+						if (checkDocType(result, docType)) {
 							contentResults.push(resultObj);
 						}
 					}
@@ -326,23 +336,38 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 	}
 }
 
-function isItemSelectable(node, selectableType)
-{
-	var selectable = true;
+function getItemSelectableQuery(selectableType, showFolders, ctx) {
+    var selectable = '';
 
-	if (selectableType !== null && selectableType !== "")
-	{
-		selectable = node.isSubType(selectableType);
+    var dictionaryService = ctx.getBean("dictionaryService");
+    var namespaceService = ctx.getBean("namespaceService");
 
-		if (!selectable)
-		{
-			// the selectableType could also be an aspect,
-			// if the node has that aspect it is selectable
-			selectable = node.hasAspect(selectableType);
-		}
-	}
+    var typeQName = Packages.org.alfresco.service.namespace.QName.createQName(selectableType, namespaceService);
 
-	return selectable;
+    var isAspect = (dictionaryService.getAspect(typeQName) != null);
+    if (selectableType !== null && selectableType !== "") {
+        selectable = (isAspect ? "ASPECT:" : "TYPE:") + "\"" + selectableType + "\"";
+    }
+
+    selectable = selectable + (selectable !== "" ? " OR (" : "(")
+        + ("((TYPE:\"cm:folder\" OR TYPE:\"app:folderlink\") AND NOT TYPE:\"cm:systemfolder\") AND " + (showFolders == "true" ? "ISNOTNULL:\"cm:name\"" : "ISNULL:\"cm:name\"")) + ")";
+    return selectable;
+}
+
+function isItemSelectable(node, selectableType) {
+    var selectable = true;
+
+    if (selectableType !== null && selectableType !== "") {
+        selectable = node.isSubType(selectableType);
+
+        if (!selectable) {
+            // the selectableType could also be an aspect,
+            // if the node has that aspect it is selectable
+            selectable = node.hasAspect(selectableType);
+        }
+    }
+
+    return selectable;
 }
 
 /* Sort the results by case-insensitive name */
