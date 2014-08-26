@@ -35,6 +35,7 @@ LogicECM.module = LogicECM.module || {};
 		YAHOO.Bubbling.on("objectFinderReady", module.onObjectFinderReady, module);
 		YAHOO.Bubbling.on("hiddenAssociationFormReady", module.onHiddenAssociationFormReady, module);
 		YAHOO.Bubbling.on("formContentReady", module.onStartWorkflowFormContentReady, module);
+		YAHOO.Bubbling.on("redrawDocumentActions", module.draw, module);
 		return module;
 	};
 
@@ -49,12 +50,22 @@ LogicECM.module = LogicECM.module || {};
 			var callback = {
 				success: function(oResponse) {
 					var oResults = eval("(" + oResponse.responseText + ")");
-					var parent = oResponse.argument.parent
+					var parent = oResponse.argument.parent;
 
 					if (oResults.actions != null && oResults.actions.length > 0) {
+						Dom.setStyle(parent.id, "display", "block");
+
 						parent.taskId = oResults.taskId;
+
 						var container = document.getElementById(parent.id + "-formContainer");
-                        var actionsContainer = document.createElement("div");
+						var actionsContainer = document.getElementById(parent.id + "-formContainer-actions");
+						if (actionsContainer != null) {
+							actionsContainer.innerHTML = "";
+						} else {
+							actionsContainer = document.createElement("div");
+							actionsContainer.id = parent.id + "-formContainer-actions";
+						}
+
 						oResults.actions.forEach(function(action) {
 							var div = document.createElement("div");
                             if (action.dueDate != null) {
@@ -67,14 +78,13 @@ LogicECM.module = LogicECM.module || {};
 							div.innerHTML = action.label;
 							div.onclick = function() {
 								parent.show(action);
-							}
+							};
                             actionsContainer.appendChild(div);
 						});
                         container.insertBefore(actionsContainer, container.firstChild);
 					} else {
                         if (document.getElementById("final-actions-actionSet").innerHTML == "") {
-                            var container = document.getElementById(parent.id);
-                            container.outerHTML = "";
+	                        Dom.setStyle(parent.id, "display", "none");
                         }
 					}
 				},
