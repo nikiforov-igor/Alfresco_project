@@ -3,7 +3,6 @@ package ru.it.lecm.base.scripts;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ValueConverter;
-import org.alfresco.repo.search.impl.lucene.SolrJSONResultSet;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.LimitBy;
@@ -135,18 +134,18 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         ResultSet results = null;
         sp.setLimitBy(LimitBy.FINAL_SIZE);
         try {
-            sp.setMaxItems(0);
-            sp.setSkipCount(0);
-
-            results = this.services.getSearchService().query(sp);
-            if (results instanceof SolrJSONResultSet) {
-                return ((SolrJSONResultSet) results).getNumberFound();
-            } else {
+//            sp.setMaxItems(0);
+//            sp.setSkipCount(0);
+//
+//            results = this.services.getSearchService().query(sp);
+//            if (results instanceof SolrJSONResultSet) {
+//                return ((SolrJSONResultSet) results).getNumberFound();
+//            } else {
                 sp.setMaxItems(maxResults);
                 sp.setSkipCount(skipCount);
                 results = this.services.getSearchService().query(sp);
                 return (long) results.length();
-            }
+//            }
         } catch (Throwable err) {
             if (exceptionOnError) {
                 throw new AlfrescoRuntimeException("Failed to execute search: " + sp.getQuery(), err);
