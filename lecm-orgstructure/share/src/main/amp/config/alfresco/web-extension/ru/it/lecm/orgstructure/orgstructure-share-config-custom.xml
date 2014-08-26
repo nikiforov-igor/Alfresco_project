@@ -31,10 +31,13 @@
                     <set id="fioAndPhoto" parent="common" template="/ru/it/lecm/base-share/components/controls/fio-and-photo.ftl" appearance="" label-id="" />
                     <set id="commonOther" parent="common" appearance="" label-id="" />
                     <set id="personal" appearance="" label-id="info.personal-info" />
+                    <set id="personalInner" parent="personal" appearance="BR_ORGSTRUCTURE_ENGINEER" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
                     <set id="positionsAndGroups" appearance="" label-id="info.personal-positions-and-groups" />
                     <set id="businessRoles" appearance="" label-id="info.business-roles"/>
+                    <set id="businessRolesInner" parent="businessRoles" appearance="BR_ORGSTRUCTURE_ENGINEER" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
                     <set id="busjournalHistory" appearance="" label-id="info.business-journal-history"/>
-					<set id="employeeSchedule" appearance="" label-id="info.employee-schedule"/>
+                    <set id="busjournalHistoryInner" parent="busjournalHistory" appearance="BR_ORGSTRUCTURE_ENGINEER" template="/ru/it/lecm/base-share/components/exist-bussines-role.ftl" />
+                    <set id="employeeSchedule" appearance="" label-id="info.employee-schedule"/>
 
 	                <field id="lecm-orgstr:employee-first-name" set="fioAndPhoto"/>
                     <field id="lecm-orgstr:employee-middle-name" set="fioAndPhoto"/>
@@ -68,7 +71,7 @@
                     <field id="lecm-subscr-aspects" set="commonOther">
                         <control template="/ru/it/lecm/subscriptions/controls/subscribe.ftl"/>
                     </field>
-                    <field id="lecm-orgstr:employee-person-data-assoc" set="personal">
+                    <field id="lecm-orgstr:employee-person-data-assoc" set="personalInner">
                         <control template="/ru/it/lecm/orgstructure/controls/view.personal.data.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-positions" set="positionsAndGroups">
@@ -89,7 +92,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/employee-roles</control-param>
                         </control>
                     </field>
-	                <field id="lecm-orgstr:employee-only-business-roles" set="businessRoles"
+	                <field id="lecm-orgstr:employee-only-business-roles" set="businessRolesInner"
                            label-id="lecm-orgstr_employee-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
@@ -99,7 +102,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeOnlyBusinessRoles</control-param>
                         </control>
                     </field>
-                    <field id="lecm-orgstr:employee-delegated-business-roles" set="businessRoles"
+                    <field id="lecm-orgstr:employee-delegated-business-roles" set="businessRolesInner"
                            label-id="lecm-orgstr_employee-delegated-business-roles">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-orgstr:business-role</control-param>
@@ -109,7 +112,7 @@
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeDelegatedBusinessRoles</control-param>
                         </control>
                     </field>
-                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistory" label-id="label.history-control">
+                    <field id="lecm-busjournal-aspects:history-list" set="busjournalHistoryInner" label-id="label.history-control">
                         <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
                     </field>
 					<field id="employee-schedule" set="employeeSchedule">

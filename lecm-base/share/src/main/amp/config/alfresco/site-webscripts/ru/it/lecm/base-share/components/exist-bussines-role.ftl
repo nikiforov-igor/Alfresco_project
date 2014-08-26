@@ -10,15 +10,40 @@
 
 <div id="${id}-${thisSet.id}-exist-panel" class="exist-panel">
 <#list thisSet.children as unit>
-        <@formLib.renderField field=form.fields[unit.id] />
-    </#list>
+    <@formLib.renderField field=form.fields[unit.id] />
+</#list>
 </div>
 
 <script type="text/javascript">//<![CDATA[
 (function () {
     var Dom = YAHOO.util.Dom,
-            Event = YAHOO.util.Event;
+        Event = YAHOO.util.Event;
     var idPanel = "${id}-${thisSet.id}-exist-panel";
+
+    function hidePanel() {
+        Dom.setStyle(idPanel, "display", "none");
+        Dom.setStyle(idPanel, "position", "absolute");
+
+        var inputs = Dom.getElementsBy(function () {
+            return true;
+        }, "input", Dom.get(idPanel));
+        if (inputs) {
+            for (var index = 0; index < inputs.length; ++index) {
+                if (inputs[index].type == "text" || inputs[index].type == "button") {
+                    inputs[index].setAttribute("disabled", "disabled");
+                }
+            }
+        }
+
+        var buttons = Dom.getElementsBy(function () {
+            return true;
+        }, "button", Dom.get(idPanel));
+        if (buttons) {
+            for (var index = 0; index < buttons.length; ++index) {
+                buttons[index].setAttribute("disabled", "disabled");
+            }
+        }
+    }
 
     function init() {
         var brPermission = "${thisSet.appearance}";
@@ -37,28 +62,28 @@
                     successCallback: {
                         fn: function (response) {
                             if ((notCase && response.json != false) || (!notCase && response.json == false)) {
-                                Dom.setStyle(idPanel, "display", "none");
-                                Dom.setStyle(idPanel, "position", "absolute");
+                                // НЕ УДАЛАЯТЬ!
+                                // Для карточки сотрудника:
+                                // показывать содержимое, если сотрудник просматривает свою карточку, иначе - скрыть
+                                Alfresco.util.Ajax.request(
+                                        {
+                                            url: Alfresco.constants.PROXY_URI + "lecm/orgstructure/api/getCurrentEmployee",
+                                            successCallback: {
+                                                fn: function (response) {
+                                                    var emplNodeRef = response.json.nodeRef;
+                                                    var formNodeRef = "${form.arguments.itemId}";
 
-                                var inputs = Dom.getElementsBy(function () {
-                                    return true;
-                                }, "input", Dom.get(idPanel));
-                                if (inputs) {
-                                    for (var index = 0; index < inputs.length; ++index) {
-                                        if (inputs[index].type == "text" || inputs[index].type == "button") {
-                                            inputs[index].setAttribute("disabled", "disabled");
-                                        }
-                                    }
-                                }
-
-                                var buttons = Dom.getElementsBy(function () {
-                                    return true;
-                                }, "button", Dom.get(idPanel));
-                                if (buttons) {
-                                    for (var index = 0; index < buttons.length; ++index) {
-                                        buttons[index].setAttribute("disabled", "disabled");
-                                    }
-                                }
+                                                    if (emplNodeRef != formNodeRef) {
+                                                          hidePanel();
+                                                    }
+                                                }
+                                            },
+                                            failureMessage: {
+                                                fn: function () {
+                                                    console.log("Failed to load current Employee.");
+                                                }
+                                            }
+                                        });
                             }
                         }
                     },
