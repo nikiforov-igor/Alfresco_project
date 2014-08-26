@@ -5,6 +5,7 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="classpath:alfresco/module/${artifactId}/context/service-context.xml"/>
+	<import resource="classpath:alfresco/module/${artifactId}/context/extension-context.xml"/>
 	<!-- deprecated context, will be removed in the future release -->
 	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/service-context.xml" />
 	<import resource="classpath*:alfresco/module/${artifactId}/context/deprecated/extension-context.xml" />

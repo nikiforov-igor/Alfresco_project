@@ -12,10 +12,12 @@
 		  p:labels="alfresco/module/${artifactId}/messages/lecm-approval-decision-model"/>
 
 	<util:list id="approve3.models">
+		<value>alfresco/module/${artifactId}/models/lecm-approval-global-settings-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-approval-model.xml</value>
 	</util:list>
 
 	<util:list id="approve3.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-approval-global-settings-model</value>
 		<value>alfresco/module/${artifactId}/messages/lecm-approval-model</value>
 	</util:list>
 
@@ -40,4 +42,14 @@
 <!--	<bean id="lecm.approval3.workflow.bootstrap" parent="workflowDeployer"
 		  depends-on="lecm.approve3.model.bootstrap"
 		  p:workflowDefinitions-ref="approval3.workflows"/>-->
+
+	<util:constant id="approvalFolder" static-field="ru.it.lecm.workflow.approval.ApprovalServiceImpl.APPROVAL_FOLDER"/>
+	<util:map id="approval.folders">
+		<entry key="#{approvalFolder}" value="Сервис Согласование документов"/>
+	</util:map>
+	<bean id="approvalWorkflowService" parent="baseBean" init-method="init"
+		  class="ru.it.lecm.workflow.approval.ApprovalServiceImpl"
+		  depends-on="lecm.approve3.model.bootstrap"
+		  p:defaultApprovalTerm="${lecm.approval.defaultTerm}"
+		  p:folders-ref="approval.folders"/>
 </beans>
