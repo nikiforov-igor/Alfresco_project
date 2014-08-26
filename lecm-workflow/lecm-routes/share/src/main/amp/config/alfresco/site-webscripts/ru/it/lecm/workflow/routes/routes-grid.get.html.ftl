@@ -52,3 +52,4 @@
 </script>
 
 <@grid.datagrid id showViewForm/>
+<div class="clear"></div>

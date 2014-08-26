@@ -23,4 +23,8 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	public ScriptNode getSettings() {
 		return new ScriptNode(approvalService.getSettings(), serviceRegistry, getScope());
 	}
+
+	public int getApprovalTerm() {
+		return approvalService.getApprovalTerm();
+	}
 }

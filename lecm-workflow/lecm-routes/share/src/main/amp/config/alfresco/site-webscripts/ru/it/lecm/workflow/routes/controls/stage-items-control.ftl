@@ -13,25 +13,24 @@
 	function init() {
 		LogicECM.module.Base.Util.loadResources([
 			'scripts/lecm-base/components/lecm-datagrid.js',
-			'scripts/lecm-workflow/routes/stages-control.js'
+			'scripts/lecm-workflow/routes/stage-items-control.js'
 		],
 		[], createDatagrid);
 	}
 
 	function createDatagrid() {
 		var controlId = '${controlId}';
-		LogicECM.CurrentModules[controlId] = new LogicECM.module.Routes.StagesControlDatagrid(controlId);
+		LogicECM.CurrentModules[controlId] = new LogicECM.module.Routes.StagesItemsControlDatagrid(controlId);
 		LogicECM.CurrentModules[controlId].setMessages(${messages});
 		LogicECM.CurrentModules[controlId].setOptions({
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
 			bubblingLabel: controlId,
-			expandable: true,
+			expandable: false,
 			showActionColumn: true,
-			allowCreate: true,
+			allowCreate: false,
 			forceSubscribing: true,
-			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
 			actions: [{
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",
@@ -47,10 +46,10 @@
 
 		YAHOO.Bubbling.fire("activeGridChanged", {
 			datagridMeta:{
-				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageType,
+				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
 				nodeRef: '${itemId}',
 				searchConfig: {
-					filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
+					filter: ""
 				},
 				actionsConfig: {
 					fullDelete: true,
@@ -67,6 +66,11 @@
 
 <div class='form-field'>
 	<div id='${controlId}'>
+		<select id="${controlId}-add-item-dropdown">
+			<option value="dafault">-- Добавить участников этапа</option>
+			<option value="employee">Добавить сотрудника</option>
+			<option value="macros">Добавить потенциального участника</option>
+		</select>
 		<@grid.datagrid controlId false />
 	</div>
 </div>

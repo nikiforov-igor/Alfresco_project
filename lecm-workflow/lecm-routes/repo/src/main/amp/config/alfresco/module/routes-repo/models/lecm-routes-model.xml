@@ -10,6 +10,7 @@
 		<import uri="http://www.alfresco.org/model/content/1.0" prefix="cm"/>
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/model/approval/workflow/decision/1.0" prefix="lecmApproveDecision"/>
+		<import uri="http://www.it.ru/logicECM/model/workflow/routes/macros/1.0" prefix="lecmWorkflowRoutesMacros"/>
 	</imports>
 
 	<namespaces>
@@ -155,7 +156,19 @@
 					</source>
 					<target>
 						<class>lecm-orgstr:employee</class>
-						<mandatory>true</mandatory>
+						<mandatory>false</mandatory>
+						<many>false</many>
+					</target>
+				</association>
+				<association name="lecmWorkflowRoutes:stageItemMacrosAssoc">
+					<title>Потенциальный участник</title>
+					<source>
+						<mandatory>false</mandatory>
+						<many>true</many>
+					</source>
+					<target>
+						<class>lecmWorkflowRoutesMacros:macros</class>
+						<mandatory>false</mandatory>
 						<many>false</many>
 					</target>
 				</association>

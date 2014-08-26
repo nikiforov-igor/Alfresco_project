@@ -41,3 +41,4 @@
 <div id="${datagridId}" class="stagesDatagridExpanded">
 	<@grid.datagrid datagridId false />
 </div>
+<div class="clear"></div>

@@ -38,7 +38,7 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 	private String triggerName = "routes-delete-temp-trigger";
 	private String triggerGroup = "routes-trigger";
 	private String cronExpression = "0 0 4 * * ? *"; // каждый день в 04:00
-	private final String searchQueryFormat = "PATH:\"%s//*\" AND TYPE:\"%s\" AND (+ASPECT:\"sys:temporary\" OR +ASPECT:\"lecm-workflow:temp\")";
+	private final String searchQueryFormat = "PATH:\"%s//*\" AND (+TYPE:\"%s\" OR +TYPE:\"%s\") AND (+ASPECT:\"sys:temporary\" OR +ASPECT:\"lecm-workflow:temp\")";
 	private final static Logger logger = LoggerFactory.getLogger(DeleteTempRoutesSchedule.class);
 
 	public void setRoutesService(RoutesService routesService) {
@@ -67,7 +67,7 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		String searchQuery = String.format(searchQueryFormat, nodeService.getPath(parentContainer).toPrefixString(namespaceService),
-				RoutesModel.TYPE_ROUTE);
+				RoutesModel.TYPE_ROUTE, RoutesModel.TYPE_STAGE);
 		logger.trace("Searching temp routes to be activated: " + searchQuery);
 		sp.setQuery(searchQuery);
 		ResultSet results = null;

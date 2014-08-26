@@ -7,8 +7,8 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<util:list id="routes.models">
-		<value>alfresco/module/${artifactId}/models/lecm-routes-model.xml</value>
 		<value>alfresco/module/${artifactId}/models/lecm-routes-macros-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-routes-model.xml</value>
 	</util:list>
 	<util:list id="routes.labels">
 		<!--<value>alfresco/module/${artifactId}/messages/lecm-routes</value>-->

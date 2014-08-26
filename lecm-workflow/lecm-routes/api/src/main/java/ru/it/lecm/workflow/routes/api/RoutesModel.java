@@ -30,9 +30,9 @@ public final class RoutesModel {
 	public final static QName PROP_STAGE_ITEM_DECISION = QName.createQName(ROUTES_URL, "stageItemDecision");
 	public final static QName PROP_STAGE_ITEM_COMMENT = QName.createQName(ROUTES_URL, "stageItemComment");
 	public final static QName ASSOC_STAGE_ITEM_EMPLOYEE = QName.createQName(ROUTES_URL, "stageItemEmployeeAssoc");
+	public final static QName ASSOC_STAGE_ITEM_MACROS = QName.createQName(ROUTES_URL, "stageItemMacrosAssoc");
 
 	private RoutesModel() {
 		throw new IllegalStateException("Class RoutesModel can not be instantiated");
 	}
-
 }

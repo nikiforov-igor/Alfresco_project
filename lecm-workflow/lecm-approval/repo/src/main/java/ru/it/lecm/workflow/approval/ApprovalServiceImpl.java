@@ -61,4 +61,12 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		return nodeService.getChildByName(getApprovalFolder(), ContentModel.ASSOC_CONTAINS, APPROVAL_GLOBAL_SETTINGS_NAME);
 	}
 
+	@Override
+	public int getApprovalTerm() {
+		NodeRef settingsNode = getSettings();
+		Integer approvalTerm = (Integer) nodeService.getProperty(settingsNode, ApprovalGlobalSettingsModel.PROP_DEFAULT_APPROVAL_TERM);
+
+		return approvalTerm != null ? approvalTerm : defaultApprovalTerm;
+	}
+
 }
