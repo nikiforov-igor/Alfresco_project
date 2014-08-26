@@ -68,6 +68,10 @@ public class BaseWebScriptBean extends BaseWebScript {
 		return getChilds(node.getNodeRef(), childQNameType, maxItems, skipCount, sortProp, sortAsc, onlyActive);
 	}
 
+    public ScriptPagingNodes getChilds(ScriptNode node, String childQNameType, final String ignoredTypes, int maxItems, int skipCount, String sortProp, Boolean sortAsc, Boolean onlyActive) {
+		return getChilds(node.getNodeRef(), childQNameType, ignoredTypes, maxItems, skipCount, sortProp, sortAsc, onlyActive, false);
+	}
+
     public ScriptPagingNodes getChilds(final NodeRef nodeRef, final String childQNameType, final String ignoredTypes, final int maxItems, final int skipCount, final String sortProp, final Boolean sortAsc, final Boolean onlyActive, final Boolean doNotCheckAccess) {
         Object[] results;
 
