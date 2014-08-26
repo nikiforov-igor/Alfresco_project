@@ -15,7 +15,8 @@ LogicECM.module = LogicECM.module || {};
 
 	YAHOO.extend(LogicECM.module.TextfieldWithDefaultValue, Alfresco.component.Base, {
 		options: {
-			defaultValueDataSource: null
+			defaultValueDataSource: null,
+			allowInNonCreateMode: false
 		},
 		textField: null,
 		setOptions: function(obj) {
@@ -28,7 +29,7 @@ LogicECM.module = LogicECM.module || {};
 		onReady: function() {
 			this.textField = Dom.get(this.options.fieldId);
 			if (this.textField) {
-				if (!this.options.disabled && this.options.mode === "create") {
+				if (!this.options.disabled && !this.textField.value && (this.options.allowInNonCreateMode || this.options.mode === "create")) {
 					this.loadDefaultValue();
 				}
 			}

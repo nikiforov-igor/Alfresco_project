@@ -13,6 +13,7 @@
 </#if>
 
 <#assign defaultValueDataSource = field.control.params.defaultValueDataSource!''>
+<#assign allowInNonCreateMode = (field.control.params.allowInNonCreateMode!'false') == 'true'>
 
 <#if field.value?is_number>
 	<#assign defaultValue =  field.value?c>
@@ -32,6 +33,7 @@
 						defaultValue: '${defaultValue?string}',
 					</#if>
 					defaultValueDataSource: '${defaultValueDataSource}',
+					allowInNonCreateMode: ${allowInNonCreateMode?string},
 					mode: '${form.mode}',
 					fieldId: '${fieldHtmlId}',
 					disabled: ${field.disabled?string}
@@ -85,6 +87,9 @@
 					 <#if field.control.params.password??>type="password"<#else>type="text"</#if>
 					 <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
 					 <#if field.control.params.style??>style="${field.control.params.style}"</#if>
+					 <#if !hideValue>
+						<#if field.value?is_number>value="${field.value?c}"<#else>value="${field.value?html}"</#if>
+					 </#if>
 					 <#if field.description??>title="${field.description}"</#if>
 					 <#if field.control.params.maxLength??>maxlength="${field.control.params.maxLength}"</#if>
 					 <#if field.control.params.size??>size="${field.control.params.size}"</#if>
