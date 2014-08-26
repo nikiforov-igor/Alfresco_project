@@ -219,33 +219,32 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 
 			for each (var result in childNodes)
 			{
-				if (result.hasPermission("Read")) {
-					if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
-					{
-                        resultObj =
-                        {
-                            item: result,
-                            selectable: isItemSelectable(result, argsSelectableType)
-                        };
-						containerResults.push(resultObj);
-					}
-					else
-					{
-						// wrap result and determine if it is selectable in the UI
-						resultObj =
-						{
-							item: result,
-                            selectable: isItemSelectable(result, argsSelectableType)
-						};
+                if (result.isContainer || result.type == "{http://www.alfresco.org/model/application/1.0}folderlink")
+                {
+                    resultObj =
+                    {
+                        item: result,
+                        selectable: isItemSelectable(result, argsSelectableType)
+                    };
+                    containerResults.push(resultObj);
+                }
+                else
+                {
+                    // wrap result and determine if it is selectable in the UI
+                    resultObj =
+                    {
+                        item: result,
+                        selectable: isItemSelectable(result, argsSelectableType)
+                    };
+                    //проверку можно оставить, так как используется на данный момент в одном месте - при выборе логотипа организации
+                    // и в том месте ограничение по максимальному числу результатов остутсвует (=1000 - то есть все элементы на одном уровне репозитория)
+                    if (checkDocType(result, docType)) {
+                        contentResults.push(resultObj);
+                    }
+                }
 
-						if (checkDocType(result, docType)) {
-							contentResults.push(resultObj);
-						}
-					}
-
-					resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
-					resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
-				}
+                resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
+                resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
 			}
 
 			results = containerResults.concat(contentResults);

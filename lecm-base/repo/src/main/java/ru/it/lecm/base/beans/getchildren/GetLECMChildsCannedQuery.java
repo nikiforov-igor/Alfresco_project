@@ -17,6 +17,8 @@ import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.datatype.DefaultTypeConverter;
+import org.alfresco.service.cmr.security.AccessStatus;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
@@ -47,8 +49,9 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 	private NodePropertyHelper nodePropertyHelper;
 	private boolean applyPostQueryPermissions = false;
     private Set<QName> childAspectQNames;
+    private PermissionService permissionService;
 
-	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params, Set<QName> childAspectQNames) {
+	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, PermissionService permissionService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params, Set<QName> childAspectQNames) {
 		super(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, params);
 		this.nodeDAO = nodeDAO;
 		this.qnameDAO = qnameDAO;
@@ -56,6 +59,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		this.tenantService = tenantService;
 		this.nodePropertyHelper = nodePropertyHelper;
         this.childAspectQNames = childAspectQNames;
+        this.permissionService = permissionService;
 
 		if ((params.getSortDetails() != null) && (params.getSortDetails().getSortPairs().size() > 0)) {
 			applyPostQueryPermissions = true;
@@ -182,11 +186,13 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 
 			FilterSortChildQueryCallback callback = new FilterSortChildQueryCallback() {
 				public boolean handle(FilterSortNode node) {
-					// filter, if needed
-					if ((!applyFilter) || includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
-						children.add(node);
-					}
-
+                    AccessStatus status = permissionService.hasPermission(node.getNodeRef(), "Read");
+                    if (AccessStatus.ALLOWED == status) {
+                        // filter, if needed
+                        if ((!applyFilter) || includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
+                            children.add(node);
+                        }
+                    }
 					// More results
 					return true;
 				}
@@ -347,7 +353,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		private final FilterSortChildQueryCallback resultsCallback;
 		private boolean more = true;
 
-		private FilterSortResultHandler(FilterSortChildQueryCallback resultsCallback) {
+		private FilterSortResultHandler(GetLECMChildsCannedQuery.FilterSortChildQueryCallback resultsCallback) {
 			this.resultsCallback = resultsCallback;
 		}
 
@@ -429,7 +435,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 	}
 
 	private class UnsortedResultHandler implements CannedQueryDAO.ResultHandler<NodeEntity> {
-		private final UnsortedChildQueryCallback resultsCallback;
+		private final GetLECMChildsCannedQuery.UnsortedChildQueryCallback resultsCallback;
 
 		private boolean more = true;
 

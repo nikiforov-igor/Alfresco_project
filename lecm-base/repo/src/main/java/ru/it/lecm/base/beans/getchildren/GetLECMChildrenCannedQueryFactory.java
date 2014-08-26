@@ -15,6 +15,7 @@ import org.alfresco.repo.tenant.TenantService;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.security.PermissionService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import org.alfresco.util.ParameterCheck;
@@ -40,6 +41,7 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	private CannedQueryDAO cannedQueryDAO;
 	private TenantService tenantService;
 	private NodeService nodeService;
+	private PermissionService permissionService;
 
     private Set<QName> childAspectQNames;
 
@@ -77,10 +79,14 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 		this.methodSecurity = methodSecurity;
 	}
 
+    public void setPermissionService(PermissionService permissionService) {
+        this.permissionService = permissionService;
+    }
+
 	@Override
 	public CannedQuery<NodeRef> getCannedQuery(CannedQueryParameters parameters) {
 		NodePropertyHelper nodePropertyHelper = new NodePropertyHelper(dictionaryService, qnameDAO, localeDAO, contentDataDAO);
-		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, parameters, childAspectQNames);
+		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, permissionService, methodSecurity, parameters, childAspectQNames);
 	}
 
 	public void setNodeService(NodeService nodeService) {
