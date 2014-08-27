@@ -366,7 +366,7 @@
 
 	<bean id="propertiesInterceptor" class="ru.it.lecm.base.utils.LecmBasePropertiesInterceptor"/>
 
-    <bean name="objTypeSharedCache" class="org.alfresco.repo.cache.NullCache">
+    <bean name="objTypeSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
         <!-- <property name="cache">
             <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
                 <property name="cacheManager">
@@ -390,7 +390,7 @@
         <property name="mutable" value="true" />
     </bean>
 
-    <bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.NullCache">
+    <bean name="typeTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
         <!-- <property name="cache">
             <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
                 <property name="cacheManager">
@@ -414,7 +414,7 @@
         <property name="mutable" value="true" />
     </bean>
 
-    <bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.NullCache">
+    <bean name="typeListTemplateSharedCache" class="org.alfresco.repo.cache.DefaultSimpleCache">
         <!-- <property name="cache">
             <bean class="org.springframework.cache.ehcache.EhCacheFactoryBean" >
                 <property name="cacheManager">
