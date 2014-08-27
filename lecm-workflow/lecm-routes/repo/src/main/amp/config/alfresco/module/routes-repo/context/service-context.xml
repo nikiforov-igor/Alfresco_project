@@ -29,6 +29,7 @@
 		  parent="baseBean" depends-on="routes.model.bootstrap"
 		  init-method="init"
 		  p:folders-ref="routes.folders.map"
+		  p:approvalService-ref="approvalWorkflowService"
 	/>
 
 	<bean id="routes.delete.temp.schedule"

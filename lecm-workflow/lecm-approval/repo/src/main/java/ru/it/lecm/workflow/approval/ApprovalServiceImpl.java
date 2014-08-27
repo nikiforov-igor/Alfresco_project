@@ -1,11 +1,14 @@
 package ru.it.lecm.workflow.approval;
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceService;
+import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
@@ -18,6 +21,8 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	public final static String APPROVAL_FOLDER = "APPROVAL_FOLDER";
 	private final static String APPROVAL_GLOBAL_SETTINGS_NAME = "Глобальные настройки согласования";
+	private final static String DOCUMENT_APPROVAL_FOLDER = "Согласование";
+	private final static String DOCUMENT_APPROVAL_HISTORY_FOLDER = "История";
 
 	private Integer defaultApprovalTerm;
 
@@ -69,4 +74,37 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		return approvalTerm != null ? approvalTerm : defaultApprovalTerm;
 	}
 
+	@Override
+	public NodeRef getDocumentApprovalFolder(final NodeRef documentRef) {
+		return nodeService.getChildByName(documentRef, ContentModel.ASSOC_CONTAINS, DOCUMENT_APPROVAL_FOLDER);
+	}
+
+	@Override
+	public NodeRef createDocumentApprovalFolder(final NodeRef documentRef) {
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_APPROVAL_FOLDER);
+		PropertyMap props = new PropertyMap();
+		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_FOLDER);
+		return nodeService.createNode(documentRef, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+	}
+
+	@Override
+	public NodeRef getDocumentApprovalHistoryFolder(final NodeRef documentRef) {
+		NodeRef documentApprovalFolder = getDocumentApprovalFolder(documentRef);
+		if (documentApprovalFolder == null) {
+			throw new AlfrescoRuntimeException("can't get approval history folder, because approval folder doesn't exist");
+		}
+		return nodeService.getChildByName(documentApprovalFolder, ContentModel.ASSOC_CONTAINS, DOCUMENT_APPROVAL_HISTORY_FOLDER);
+	}
+
+	@Override
+	public NodeRef createDocumentApprovalHistoryFolder(final NodeRef documentRef) {
+		NodeRef documentApprovalFolder = getDocumentApprovalFolder(documentRef);
+		if (documentApprovalFolder == null) {
+			throw new AlfrescoRuntimeException("can't create approval history folder, because approval folder doesn't exist");
+		}
+		QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, DOCUMENT_APPROVAL_HISTORY_FOLDER);
+		PropertyMap props = new PropertyMap();
+		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_HISTORY_FOLDER);
+		return nodeService.createNode(documentApprovalFolder, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+	}
 }
