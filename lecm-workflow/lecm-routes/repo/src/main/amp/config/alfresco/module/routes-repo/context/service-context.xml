@@ -17,7 +17,7 @@
 	<bean id="routes.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
 					  ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap,
-					  lecm.approval3.decision.model.bootstrap"
+					  lecm.approval3.helper.model.bootstrap"
 		  p:models-ref="routes.models"
 		  p:labels-ref="routes.labels"/>
 

@@ -6,10 +6,20 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<bean id="lecm.approval3.decision.model.bootstrap" parent="dictionaryModelBootstrap"
+	<util:list id="approve3.helper.models">
+		<value>alfresco/module/${artifactId}/models/lecm-approval-decision-model.xml</value>
+		<value>alfresco/module/${artifactId}/models/lecm-approval-aspects-model.xml</value>
+	</util:list>
+
+	<util:list id="approve3.helper.labels">
+		<value>alfresco/module/${artifactId}/messages/lecm-approval-decision-model</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-approval-aspects-model</value>
+	</util:list>
+
+	<bean id="lecm.approval3.helper.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap"
-		  p:models="alfresco/module/${artifactId}/models/lecm-approval-decision-model.xml"
-		  p:labels="alfresco/module/${artifactId}/messages/lecm-approval-decision-model"/>
+		  p:models-ref="approve3.helper.models"
+		  p:labels-ref="approve3.helper.labels"/>
 
 	<util:list id="approve3.models">
 		<value>alfresco/module/${artifactId}/models/lecm-approval-global-settings-model.xml</value>
@@ -22,7 +32,7 @@
 	</util:list>
 
 	<bean id="lecm.approve3.model.bootstrap" parent="dictionaryModelBootstrap"
-		  depends-on="dictionaryBootstrap, lecm.approval3.decision.model.bootstrap"
+		  depends-on="dictionaryBootstrap, lecm.approval3.helper.model.bootstrap"
 		  p:models-ref="approve3.models"
 		  p:labels-ref="approve3.labels"/>
 

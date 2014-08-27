@@ -119,13 +119,6 @@
 					<title>Дата выполнения задачи</title>
 					<type>d:datetime</type>
 				</property>
-				<property name="lecmWorkflowRoutes:stageItemDecision">
-					<title>Решение</title>
-					<type>d:text</type>
-					<constraints>
-						<constraint ref="lecmApproveDecision:decisionConstraint"/>
-					</constraints>
-				</property>
 				<property name="lecmWorkflowRoutes:stageItemComment">
 					<title>Замечание</title>
 					<type>d:text</type>
