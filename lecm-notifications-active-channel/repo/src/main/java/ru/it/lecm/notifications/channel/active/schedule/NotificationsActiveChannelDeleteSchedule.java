@@ -3,7 +3,6 @@ package ru.it.lecm.notifications.channel.active.schedule;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
-import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -17,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,10 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
  * The cron expression
  */
 	private String cronExpression;
+
+	private String firstStartExpression = "0 */15 * * * ?";
+
+	private boolean onServerStart = false;
 
 	/*
 	 * The name of the job
@@ -71,6 +75,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	private NodeService nodeService;
 	private NamespaceService namespaceService;
 	private NotificationsActiveChannel notificationsActiveChannel;
+	private int deleteUnreadOlderThan = -1;
 
 	public NotificationsActiveChannelDeleteSchedule() {
 	}
@@ -108,6 +113,10 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		return cronExpression;
 	}
 
+	public void setFirstStartExpression(String firstStartExpression) {
+		this.firstStartExpression = firstStartExpression;
+	}
+
 	public void setJobName(String jobName) {
 		this.jobName = jobName;
 	}
@@ -140,8 +149,16 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		return this.triggerGroup;
 	}
 
+	public void setDeleteUnreadOlderThan(int deleteUnreadOlderThan) {
+		this.deleteUnreadOlderThan = deleteUnreadOlderThan;
+	}
+
 	public void afterPropertiesSet() throws Exception {
 		register(getScheduler());
+	}
+
+	public void setOnServerStart(boolean onServerStart) {
+		this.onServerStart = onServerStart;
 	}
 
 	/* (non-Javadoc)
@@ -150,7 +167,10 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	@Override
 	public Trigger getTrigger() {
 		try {
-			return new CronTrigger(getTriggerName(), getTriggerGroup(), getCronExpression());
+			CronTrigger trigger = new CronTrigger(getTriggerName(), getTriggerGroup(), onServerStart ? firstStartExpression : cronExpression);
+			trigger.setJobName(getJobName());
+			trigger.setJobGroup(getJobGroup());
+			return trigger;
 		} catch (final ParseException e) {
 			throw new InvalidCronExpression("Invalid chron expression: n" + getCronExpression());
 		}
@@ -162,10 +182,22 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 */
 	@Override
 	public List<NodeRef> getNodes() {
-		Set<NodeRef> nodes = new HashSet<NodeRef>();
-		nodes.addAll(getOldNotifications());
+		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
+			CronTrigger trigger = (CronTrigger) getTrigger();
+			try {
+				trigger.setCronExpression(cronExpression);
+				getScheduler().rescheduleJob(getTriggerName(), getTriggerGroup(), trigger);
+				onServerStart = false; // включаем основной триггер
+			} catch (final ParseException | SchedulerException ex) {
+				logger.error("Error rescheduleJob" + ex);
+			}
+		}
 
-		Set<QName> typeSet = new HashSet<QName>();
+		Set<NodeRef> nodes = new HashSet<>();
+		nodes.addAll(getOldNotifications());
+		nodes.addAll(getOldUnreadedNotifications());
+
+		Set<QName> typeSet = new HashSet<>();
 		typeSet.add(ContentModel.TYPE_FOLDER);
 		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsActiveChannel.getRootRef(), typeSet);
 		if (employeeFolders != null) {
@@ -175,7 +207,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 			}
 		}
 
-		return new ArrayList<NodeRef>(nodes);
+		return new ArrayList<>(nodes);
 	}
 
 	/**
@@ -183,7 +215,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 * @return список ссылок на элементы для удаления
 	 */
 	public List<NodeRef> getOldNotifications() {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> result = new ArrayList<>();
 		String path = nodeService.getPath(notificationsActiveChannel.getRootRef()).toPrefixString(namespaceService);
 		String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
 		String isReadField = "@" + NotificationsActiveChannel.PROP_IS_READ.toPrefixString(namespaceService).replace(":", "\\:");
@@ -207,8 +239,6 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 				NodeRef node = row.getNodeRef();
 				result.add(node);
 			}
-		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting notifications records", e);
 		} catch (Exception e) {
 			logger.error("Error while getting notifications records", e);
 		} finally {
@@ -226,7 +256,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 * @return  список ссылок на элементы для удаления
 	 */
 	public List<NodeRef> getGreaterMaxNotifications(NodeRef folderRef) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> result = new ArrayList<>();
 		String path = nodeService.getPath(folderRef).toPrefixString(namespaceService);
 		String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
 		String isReadField = "@" + NotificationsActiveChannel.PROP_IS_READ.toPrefixString(namespaceService).replace(":", "\\:");
@@ -245,8 +275,6 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 				NodeRef node = row.getNodeRef();
 				result.add(node);
 			}
-		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting notifications records", e);
 		} catch (Exception e) {
 			logger.error("Error while getting notifications records", e);
 		} finally {
@@ -257,7 +285,48 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * Получение непрочитанных уведомлений старше месяца
+	 * @return список ссылок на элементы для удаления
+	 */
+	public List<NodeRef> getOldUnreadedNotifications() {
+		List<NodeRef> result = new ArrayList<>();
+		if (deleteUnreadOlderThan > 0) {
+			String path = nodeService.getPath(notificationsActiveChannel.getRootRef()).toPrefixString(namespaceService);
+			String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
+			String isReadField = "@" + NotificationsActiveChannel.PROP_IS_READ.toPrefixString(namespaceService).replace(":", "\\:");
+			String formingDateField = "@" + NotificationsService.PROP_FORMING_DATE.toPrefixString(namespaceService).replace(":", "\\:");
+
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_YEAR, -deleteUnreadOlderThan);
+			String maxDate = new SimpleDateFormat("yyyy\\-MM\\-dd").format(cal.getTime());
+
+			SearchParameters parameters = new SearchParameters();
+			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
+			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+			parameters.setLimit(Integer.MAX_VALUE);
+			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":false" +
+					" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
+			ResultSet resultSet = null;
+			try {
+				resultSet = searchService.query(parameters);
+				for (ResultSetRow row : resultSet) {
+					NodeRef node = row.getNodeRef();
+					result.add(node);
+				}
+			} catch (Exception e) {
+				logger.error("Error while getting notifications records", e);
+			} finally {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+			}
+		}
+		return result;
+	}
+
+	/* (non-Javadoc)                            ``
  * @see org.alfresco.repo.action.scheduled.AbstractScheduledAction#getAction(org.alfresco.service.cmr.repository.NodeRef)
  */
 	@Override

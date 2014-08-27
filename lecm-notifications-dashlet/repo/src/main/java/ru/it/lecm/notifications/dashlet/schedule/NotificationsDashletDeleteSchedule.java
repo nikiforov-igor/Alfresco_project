@@ -3,7 +3,6 @@ package ru.it.lecm.notifications.dashlet.schedule;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
-import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -17,6 +16,7 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +41,10 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
  * The cron expression
  */
 	private String cronExpression;
+
+	private String firstStartExpression = "0 */15 * * * ?";
+
+	private boolean onServerStart = false;
 
 	/*
 	 * The name of the job
@@ -99,6 +103,14 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 		this.cronExpression = cronExpression;
 	}
 
+	public void setFirstStartExpression(String firstStartExpression) {
+		this.firstStartExpression = firstStartExpression;
+	}
+
+	public void setOnServerStart(boolean onServerStart) {
+		this.onServerStart = onServerStart;
+	}
+
 	public void setNotificationsDashletChannel(NotificationsDashletChannel notificationsDashletChannel) {
 		this.notificationsDashletChannel = notificationsDashletChannel;
 	}
@@ -149,7 +161,10 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	@Override
 	public Trigger getTrigger() {
 		try {
-			return new CronTrigger(getTriggerName(), getTriggerGroup(), getCronExpression());
+			CronTrigger trigger = new CronTrigger(getTriggerName(), getTriggerGroup(), onServerStart ? firstStartExpression : cronExpression);
+			trigger.setJobName(getJobName());
+			trigger.setJobGroup(getJobGroup());
+			return trigger;
 		} catch (final ParseException e) {
 			throw new InvalidCronExpression("Invalid chron expression: n" + getCronExpression());
 		}
@@ -161,10 +176,21 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	 */
 	@Override
 	public List<NodeRef> getNodes() {
-		Set<NodeRef> nodes = new HashSet<NodeRef>();
+		if (onServerStart) { // если был запуск на старте - подменяем триггер на основной
+			CronTrigger trigger = (CronTrigger) getTrigger();
+			try {
+				trigger.setCronExpression(cronExpression);
+				getScheduler().rescheduleJob(getTriggerName(), getTriggerGroup(), trigger);
+				onServerStart = false; // включаем основной триггер
+			} catch (final ParseException | SchedulerException ex) {
+				logger.error("Error rescheduleJob" + ex);
+			}
+		}
+
+		Set<NodeRef> nodes = new HashSet<>();
 		nodes.addAll(getOldNotifications());
 
-		Set<QName> typeSet = new HashSet<QName>();
+		Set<QName> typeSet = new HashSet<>();
 		typeSet.add(ContentModel.TYPE_FOLDER);
 		List<ChildAssociationRef> employeeFolders = nodeService.getChildAssocs(notificationsDashletChannel.getRootRef(), typeSet);
 		if (employeeFolders != null) {
@@ -174,7 +200,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 			}
 		}
 
-		return new ArrayList<NodeRef>(nodes);
+		return new ArrayList<>(nodes);
 	}
 
 	/**
@@ -182,7 +208,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	 * @return список ссылок на элементы для удаления
 	 */
 	public List<NodeRef> getOldNotifications() {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> result = new ArrayList<>();
 		String path = nodeService.getPath(notificationsDashletChannel.getRootRef()).toPrefixString(namespaceService);
 		String type = NotificationsDashletChannel.TYPE_NOTIFICATION_DASHLET.toPrefixString(namespaceService);
 		String formingDateField = "@" + NotificationsService.PROP_FORMING_DATE.toPrefixString(namespaceService).replace(":", "\\:");
@@ -204,8 +230,6 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 				NodeRef node = row.getNodeRef();
 				result.add(node);
 			}
-		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting notifications records", e);
 		} catch (Exception e) {
 			logger.error("Error while getting notifications records", e);
 		} finally {
@@ -223,7 +247,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 	 * @return  список ссылок на элементы для удаления
 	 */
 	public List<NodeRef> getGreaterMaxNotifications(NodeRef folderRef) {
-		List<NodeRef> result = new ArrayList<NodeRef>();
+		List<NodeRef> result = new ArrayList<>();
 		String path = nodeService.getPath(folderRef).toPrefixString(namespaceService);
 		String type = NotificationsDashletChannel.TYPE_NOTIFICATION_DASHLET.toPrefixString(namespaceService);
 
@@ -241,8 +265,6 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 				NodeRef node = row.getNodeRef();
 				result.add(node);
 			}
-		} catch (LuceneQueryParserException e) {
-			logger.error("Error while getting notifications records", e);
 		} catch (Exception e) {
 			logger.error("Error while getting notifications records", e);
 		} finally {

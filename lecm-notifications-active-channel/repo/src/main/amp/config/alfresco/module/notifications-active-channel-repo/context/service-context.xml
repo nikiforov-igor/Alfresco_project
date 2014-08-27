@@ -60,6 +60,12 @@
 		<property name="cronExpression">
 			<value>0 15 3 * * ?</value>
 		</property>
+		<property name="firstStartExpression">
+			<value>0 */20 * * * ?</value>
+		</property>
+		<property name="onServerStart">
+			<value>true</value>
+		</property>
 		<property name="jobName">
 			<value>notificationa-active-channel-cleaner</value>
 		</property>
@@ -95,6 +101,9 @@
 		</property>
 		<property name="notificationsActiveChannel">
 			<ref bean="notificationActiveChannel"/>
+		</property>
+		<property name="deleteUnreadOlderThan">
+			<value>30</value>
 		</property>
 	</bean>
 </beans>

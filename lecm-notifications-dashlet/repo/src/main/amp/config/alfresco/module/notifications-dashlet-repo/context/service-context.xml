@@ -68,6 +68,12 @@
 		<property name="cronExpression">
 			<value>0 30 3 * * ?</value>
 		</property>
+		<property name="firstStartExpression">
+			<value>0 */20 * * * ?</value>
+		</property>
+		<property name="onServerStart">
+			<value>true</value>
+		</property>
 		<property name="jobName">
 			<value>notificationa-dashlet-cleaner</value>
 		</property>
