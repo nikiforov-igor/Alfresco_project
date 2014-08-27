@@ -43,7 +43,6 @@ import org.alfresco.service.cmr.workflow.*;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.Days;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -71,6 +70,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * User: PMelnikov
@@ -804,6 +805,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	private List<String> dinamicRoles = new ArrayList<String>();
     	private List<String> starterRoles = new ArrayList<String>();
 
+        private boolean initialized = false;
+        private Lock lock = new ReentrantLock();
+
     	public StateMacheneSettings(){
 
     	}
@@ -812,10 +816,17 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	}
     	public StateMacheneSettings getSettingsContent() {
     		final StateMacheneSettings self = this;
+            if (initialized) {
+                return self;
+            }
     		return AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<StateMacheneSettings>() {
                 @Override
                 public StateMacheneSettings doWork() throws Exception {
 		    		if(settings==null&&settingsRef!=null) {
+                        lock.lock();
+                        if (initialized) {
+                            return self;
+                        }
 		    			try {
 			    			ContentReader reader = serviceRegistry.getContentService().getReader(settingsRef, ContentModel.PROP_CONTENT);
 			    			DocumentBuilderFactory dbfac = DocumentBuilderFactory.newInstance();
@@ -1351,10 +1362,13 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    					}
 			    				}
 			    			}
+                            initialized = true;
 		    			} catch (Exception e) {
 		    				logger.error(e.getMessage(), e);
-		    			}
-		    		}
+		    			} finally {
+                            lock.unlock();
+                        }
+                    }
 		    		return self;
                 }
     		});
