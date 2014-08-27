@@ -1,4 +1,4 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
+if (typeof LogicECM == 'undefined' || !LogicECM) {
 	var LogicECM = {};
 }
 
@@ -37,12 +37,12 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						fn: function(form, simpleDialog) {
 							var formNode = YAHOO.util.Dom.get(form.formId);
 							var nameInput = YAHOO.util.Dom.getElementsBy(function(a) {
-								return a.name.indexOf("cm_title") >= 0
-							}, "input", formNode)[0];
+								return a.name.indexOf('cm_title') >= 0
+							}, 'input', formNode)[0];
 							var recordsSize = this.widgets.dataTable.getRecordSet().getLength();
 
 							if (nameInput) {
-								nameInput.value = "Этап " + (recordsSize + 1);
+								nameInput.value = 'Этап ' + (recordsSize + 1);
 							}
 
 							simpleDialog.dialog.setHeader(this.msg('label.routes.create-stage.title'));
@@ -62,7 +62,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 								url: Alfresco.constants.PROXY_URI_RELATIVE + 'slingshot/doclib/action/aspects/node/' + nodeRefObj.uri,
 								dataObj: {
 									added: [],
-									removed: ["sys:temporary"]
+									removed: ['sys:temporary']
 								},
 								successCallback: {
 									fn: function(r) {
@@ -83,7 +83,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 								}
 							});
 
-							YAHOO.Bubbling.fire("nodeCreated", {
+							YAHOO.Bubbling.fire('nodeCreated', {
 								nodeRef: r.json.persistedObject,
 								bubblingLabel: this.options.bubblingLabel
 							});
@@ -97,9 +97,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					},
 					onFailure: {
 						fn: function(response) {
-							this.displayErrorMessageWithDetails(this.msg("logicecm.base.error"), this.msg("message.save.failure"), response.json.message);
+							this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
 							this.createDialogOpening = false;
-							this.widgets.cancelButton.set("disabled", false);
+							this.widgets.cancelButton.set('disabled', false);
 						},
 						scope: this
 					}

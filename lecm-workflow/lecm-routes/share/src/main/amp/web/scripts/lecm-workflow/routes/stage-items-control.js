@@ -1,4 +1,4 @@
-if (typeof LogicECM == "undefined" || !LogicECM) {
+if (typeof LogicECM == 'undefined' || !LogicECM) {
 	var LogicECM = {};
 }
 
@@ -54,12 +54,15 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					dialogHeader = 'Добавить потенциального участника в этап';
 					break;
 				default :
+					return;
 					break;
 			}
+
 
 			createStageItemDialog.setOptions({
 				width: '35em',
 				templateUrl: 'lecm/components/form',
+				actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/routes/CreateStageItemInQueue',
 				templateRequestParams: {
 					itemKind: 'type',
 					itemId: itemType,
@@ -82,14 +85,21 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				},
 				onSuccess: {
 					fn: function(r) {
-						YAHOO.Bubbling.fire("nodeCreated", {
-							nodeRef: r.json.persistedObject,
-							bubblingLabel: this.options.bubblingLabel
-						});
-						YAHOO.Bubbling.fire('dataItemCreated', {
-							nodeRef: r.json.persistedObject,
-							bubblingLabel: this.options.bubblingLabel
-						});
+						var persistedObjects = r.json,
+							persistedObjectsLength = persistedObjects.length,
+							i, persistedObject;
+
+						for (i = 0; i < persistedObjectsLength; i++) {
+							persistedObject = persistedObjects[i];
+							YAHOO.Bubbling.fire('nodeCreated', {
+								nodeRef: persistedObject.nodeRef,
+								bubblingLabel: this.options.bubblingLabel
+							});
+							YAHOO.Bubbling.fire('dataItemCreated', {
+								nodeRef: persistedObject.nodeRef,
+								bubblingLabel: this.options.bubblingLabel
+							});
+						}
 
 						Alfresco.util.PopupManager.displayMessage({
 							text: this.msg('message.new-row.success')
