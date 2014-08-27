@@ -19,13 +19,13 @@ a.disabled:hover {
     cursor: not-allowed;
 }
 
-
 /*input, input:focus,*/
 /*textarea, textarea:focus,*/
 /*a, a:focus,*/
 /*button, button:focus {*/
     /*outline: none;*/
 /*}*/
+
 ul, ul li,
 ol, ol li {
     margin: 0;
@@ -78,7 +78,7 @@ span.wrapper-title {
 #alf-ft {
     padding-top: 10px;
     margin-top: -12px;
-    display: none; //скрываем стандартный подвал
+    display: none; /*скрываем стандартный подвал*/
 }
 #bd #lecm-menu {
     width: 66px;
@@ -241,14 +241,6 @@ input[type="file"] > input[type="button"]::-moz-focus-inner
 {
     border: none;
 }
-/*button:focus {outline:none;}*/
-
-.yui-overlay,
-.alfresco-share .sticky-wrapper,
-.login-panel
-{
-  /*font:13px/1.231 Open Sans,arial,helvetica,clean,sans-serif;*/
-}
 
 .alfresco-share .sticky-wrapper select,
 .yui-overlay select,
@@ -390,12 +382,6 @@ h4 .lighter
 }
 
 /* Override YUI Button styles for - flat button style */
-
-.yui-skin-lecmTheme .yui-button,
-.yui-skin-lecmTheme .yui-button .first-child
-{
-   /*background: none repeat scroll 0 0 #fff;*/
-}
 
 .yui-skin-lecmTheme div.flat-button span.yui-button
 {
@@ -656,26 +642,18 @@ span.navigation-separator-alt
 
 .share-toolbar .backLink
 {
-   background-image: url(../../components/images/back-arrow.png);
-   background-position: left center;
-   background-repeat: no-repeat;
-   color: #333333;
-   padding: 0 5px 0 19px;
-   margin-right: 5px;
+    background: url(../../components/images/back-arrow.png) no-repeat left center;
+    color: #333;
+    padding: 0 5px 0 19px;
+    margin-right: 5px;
 }
 
 .share-toolbar .forwardLink
 {
-   background-image: url(../../components/images/forward-arrow-16.png);
-   background-position: right center;
-   background-repeat: no-repeat;
-   color: #333333;
-   padding: 0 21px 0 5px;
-   margin-right: 5px;
-}
-
-.sticky-wrapper strong
-{
+    background: url(../../components/images/forward-arrow-16.png) no-repeat right center;
+    color: #333;
+    padding: 0 21px 0 5px;
+    margin-right: 5px;
 }
 
 .sticky-wrapper em
@@ -800,46 +778,24 @@ span.mce_alfresco-linklibrary
 
 .yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-radio-button-checked,
 .yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-checkbox-button-checked,
-.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-radio-button-checked,
-.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-checkbox-button-checked
+.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-button-hover
 {
    border-color: #ccc;
    background: none;
 }
 
-.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-radio-button-checked span.first-child,
-.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-checkbox-button-checked span.first-child,
 .yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-radio-button-checked span.first-child,
 .yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-checkbox-button-checked span.first-child
 {
    border-color: #ccc;
 }
 
-/* Ensure hover state can be activated */
-
-.yui-skin-lecmTheme .no-check-bg div.flat-button span.yui-button-hover
-{
-   background: none;
-   border-color: #ccc;
-}
-
 /* Override YUI Button styles for - title button style */
 
 .yui-skin-lecmTheme .title-button .yui-button
+.yui-skin-lecmTheme .title-button .yui-button .first-child
 {
    border-color: #ccc;
-}
-
-.yui-skin-lecmTheme .title-button .yui-button .first-child,
-.yui-skin-lecmTheme .title-button .yui-button
-{
-   border-color: #ccc;
-}
-
-.yui-skin-lecmTheme .yui-button,
-.yui-skin-lecmTheme .yui-button .first-child
-{
-   /*background: none repeat scroll 0 0 #fff;*/
 }
 
 /* Override YUI Button styles for - attention button style */
@@ -965,7 +921,10 @@ body.yui-skin-lecmTheme .link-menu-button.link-menu-button-menu-active
    padding: 6px !important;
 }
 
-.topicview .nodeFooter, .postview .nodeFooter, .reply .nodeFooter, .linksview .nodeFooter
+.topicview .nodeFooter,
+.postview .nodeFooter,
+.reply .nodeFooter,
+.linksview .nodeFooter
 {
    border: none !important;
 }
@@ -1004,11 +963,6 @@ body.yui-skin-lecmTheme .yuimenu .bd
    border-bottom-left-radius: 6px;
    border-bottom-right-radius: 6px;
 }
-
-/*body.yui-skin-lecmTheme .yuimenu .bd a:focus*/
-/*{*/
-   /*outline: none;*/
-/*}*/
 
 /*
  * This ensures that the quick share actions can get displayed focus
@@ -1110,11 +1064,7 @@ body.yui-skin-lecmTheme .doclist tr.yui-dt-odd.yui-dt-highlighted,
 body.yui-skin-lecmTheme .doclist tr.yui-dt-even.yui-dt-highlighted,
 body.yui-skin-lecmTheme .links-body tr.links-selected-row,
 body.yui-skin-lecmTheme .over,
-.topicview
-{
-   background-color: #F5F5F5;
-}
-
+.topicview,
 .site-members .search-controls
 {
    background-color: #F5F5F5;
@@ -1538,7 +1488,10 @@ body.alfresco-guest
 
 /** YUI component overrides */
 
-.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover
+.ygtvlabel,
+.ygtvlabel:link,
+.ygtvlabel:visited,
+.ygtvlabel:hover
 {
    background-color: #fff;
    cursor: pointer;
@@ -1652,15 +1605,7 @@ body.alfresco-guest
    color: #333 !important;
 }
 
-.users .header-bar
-{
-   font-family: Open Sans Bold, Arial, sans-serif;
-   font-weight: normal !important;
-   background-color: #eee !important;
-   border-bottom: 1px solid #ccc !important;
-   margin: 1.5em 1em 1em !important;
-}
-
+.users .header-bar,
 .profile .header-bar
 {
    font-family: Open Sans Bold, Arial, sans-serif;
@@ -1670,27 +1615,26 @@ body.alfresco-guest
    margin: 1.5em 1em 1em !important;
 }
 
-.profile .fieldlabelright
+.profile .fieldlabelright,
+.profile .people li a
 {
    font-family: Open Sans Bold, Arial, sans-serif;
    font-weight: normal !important;
 }
 
-.profile .sites li.first, .profile .content li.first, .profile .people li.first
+.profile .sites li.first,
+.profile .content li.first,
+.profile .people li.first
 {
    margin-top: -15px;
    border-top: 0 none !important;
 }
 
-.profile .sites li, .profile .content li, .profile .people li
+.profile .sites li,
+.profile .content li,
+.profile .people li
 {
    border-top: 1px solid #ccc !important;
-}
-
-.profile .people li a
-{
-   font-family: Open Sans Bold, Arial, sans-serif;
-   font-weight: normal !important;
 }
 
 /* only target the user profile toolbar - not others e.g. doclib */
@@ -1880,11 +1824,6 @@ table td.thumbnail img
    border-radius: 0 !important;
 }
 
-div.current-values,
-div.currentValueDisplay {
-    border: solid #ccc;
-}
-
 /* button */
 
 .yui-push-button,
@@ -1920,7 +1859,7 @@ div.currentValueDisplay {
     width: 28em;
     max-width: 100%;
     margin: 0;
-    border-width: 1px;
+    border: 1px solid #ccc;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     position: inherit;
@@ -2024,7 +1963,7 @@ div.orgchart-picker-menu .search-input {
 
 span.person a {
     margin-left: 0;
-  padding-left: 20px;
+    padding-left: 20px;
     background: url(../../components/images/filetypes/generic-user-16.png) no-repeat 0 2px;
 }
 span.person a h3,
@@ -2264,7 +2203,6 @@ span.person a div.description:empty {
   width: 24px;
   height: 24px;
   float: right;
-
   opacity: 0.5;
 
   -webkit-transition: all 0.5s ease-in-out;  /* Chrome 1-25, Safari 3.2+ */
@@ -2466,19 +2404,10 @@ div.currentValueDisplay,
 
 .yui-skin-lecmTheme div.wait {
     width: 18px;
-  height: 18px;
-  display: inline-block;
+    height: 18px;
+    display: inline-block;
     background-image: url(yui/assets/wait.gif);
     background-repeat: no-repeat;
-}
-
-div.control-wrap {
-  width: 100%;
-  clear: both;
-}
-
-div.control-wrap div.current-values {
-  width: 90%;
 }
 
 .yui-skin-lecmTheme .yui-panel .search {
@@ -2504,7 +2433,4 @@ div.object-finder.inlineable {
 
 div#lightbox {
     z-index: 100003 !important; /*Спасаем тонущий лайтбокс. Ибо у всяких там диалогов этот z-index Очень уж большой. FIXME*/
-    /*max-width: 96%;*/
-    /*margin-left: 1%;*/
-    /*overflow: auto;*/
 }

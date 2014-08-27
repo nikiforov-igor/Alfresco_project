@@ -82,7 +82,8 @@ vertical-align: text-bottom;
 .yui-button .first-child {
 display: block;*display:inline-block;
 }
-.yui-button button,.yui-button a {
+.yui-button button,
+.yui-button a {
 display: block;*display:inline-block;
 border: none;
 margin: 0;
@@ -107,7 +108,8 @@ border-color: #ccc;
 margin: 0;
 _margin: 0;
 }
-.yui-skin-lecmTheme .yui-button button,.yui-skin-lecmTheme .yui-button a {
+.yui-skin-lecmTheme .yui-button button,
+.yui-skin-lecmTheme .yui-button a {
 padding: 0 10px;
 -font-size: 93%;
 line-height: 2;*line-height:1.7;
