@@ -21,15 +21,6 @@ public interface RoutesService {
 	NodeRef getDocumentCurrentIteration(final NodeRef documentRef);
 
 	/**
-	 * создание новой пустой итерации согласования в указанном документе
-	 * @param documentRef NodeRef-а на документ
-	 * @return NodeRef на новую пустую итерацию
-	 * @throws AlfrescoRuntimeException если папка "Согласование" не существует, а мы пытаемся создать пустую итерацию согласования
-	 */
-	NodeRef createDocumentCurrentIteration(final NodeRef documentRef);
-
-	//TODO: добавить метод перемещения рабочей итерации в историю
-	/**
 	 * отправить текущую итерацию согласования в архив (папка "Согласование/История")
 	 * @param documentRef NodeRef-а на документ
 	 * @return true если удалось отправить в архив, false если не удалось отправить в архив
