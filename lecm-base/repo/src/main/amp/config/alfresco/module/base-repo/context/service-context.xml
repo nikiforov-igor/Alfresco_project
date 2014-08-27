@@ -314,8 +314,8 @@
         <property name="extensionName">
             <value>searchCounter</value>
         </property>
-        <property name="serviceRegistry">
-            <ref bean="ServiceRegistry"/>
+        <property name="searchService">
+            <ref bean="searchService"/>
         </property>
         <property name="storeUrl">
             <value>${spaces.store}</value>
