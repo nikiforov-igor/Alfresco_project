@@ -27,4 +27,20 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 	public int getApprovalTerm() {
 		return approvalService.getApprovalTerm();
 	}
+
+	public ScriptNode getDocumentApprovalFolder(final ScriptNode document) {
+		return new ScriptNode(approvalService.getDocumentApprovalFolder(document.getNodeRef()), serviceRegistry, getScope());
+	}
+
+	public ScriptNode createDocumentApprovalFolder(final ScriptNode document) {
+		return new ScriptNode(approvalService.createDocumentApprovalFolder(document.getNodeRef()), serviceRegistry, getScope());
+	}
+
+	public ScriptNode getDocumentApprovalHistoryFolder(final ScriptNode document) {
+		return new ScriptNode(approvalService.getDocumentApprovalHistoryFolder(document.getNodeRef()), serviceRegistry, getScope());
+	}
+
+	public ScriptNode createDocumentApprovalHistoryFolder(final ScriptNode document) {
+		return new ScriptNode(approvalService.createDocumentApprovalHistoryFolder(document.getNodeRef()), serviceRegistry, getScope());
+	}
 }

@@ -49,9 +49,9 @@
 		</props>
 	</util:list>
 
-<!--	<bean id="lecm.approval3.workflow.bootstrap" parent="workflowDeployer"
+	<bean id="lecm.approval3.workflow.bootstrap" parent="workflowDeployer"
 		  depends-on="lecm.approve3.model.bootstrap"
-		  p:workflowDefinitions-ref="approval3.workflows"/>-->
+		  p:workflowDefinitions-ref="approval3.workflows"/>
 
 	<util:constant id="approvalFolder" static-field="ru.it.lecm.workflow.approval.ApprovalServiceImpl.APPROVAL_FOLDER"/>
 	<util:map id="approval.folders">
