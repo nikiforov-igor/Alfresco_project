@@ -437,7 +437,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                                 if (oResponse != null) {
                                     if (labelElement) {
 	                                    var counterSpan = "<span title=\"" + data.counterDesc + "\" class=\"accordion-counter-label\">";
-	                                    counterSpan += "(" + (oResponse.json ? oResponse.json : "-" )+ ")";
+	                                    counterSpan += "(" + (oResponse.json !== null ? oResponse.json : "-" )+ ")";
 	                                    counterSpan += "</span>";
 
                                         labelElement.innerHTML = labelElement.innerHTML + counterSpan;
