@@ -86,7 +86,7 @@ public class GetLECMChildrenCannedQueryFactory extends AbstractCannedQueryFactor
 	@Override
 	public CannedQuery<NodeRef> getCannedQuery(CannedQueryParameters parameters) {
 		NodePropertyHelper nodePropertyHelper = new NodePropertyHelper(dictionaryService, qnameDAO, localeDAO, contentDataDAO);
-		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, permissionService, methodSecurity, parameters, childAspectQNames);
+		return new GetLECMChildsCannedQuery(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, permissionService, dictionaryService, methodSecurity, parameters, childAspectQNames);
 	}
 
 	public void setNodeService(NodeService nodeService) {

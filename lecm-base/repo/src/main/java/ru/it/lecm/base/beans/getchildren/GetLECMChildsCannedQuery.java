@@ -15,6 +15,7 @@ import org.alfresco.repo.security.permissions.AccessDeniedException;
 import org.alfresco.repo.security.permissions.PermissionCheckedValue;
 import org.alfresco.repo.security.permissions.impl.acegi.MethodSecurityBean;
 import org.alfresco.repo.tenant.TenantService;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.repository.datatype.DefaultTypeConverter;
 import org.alfresco.service.cmr.security.AccessStatus;
@@ -50,8 +51,9 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 	private boolean applyPostQueryPermissions = false;
     private Set<QName> childAspectQNames;
     private PermissionService permissionService;
+    private DictionaryService dictionaryService;
 
-	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, PermissionService permissionService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params, Set<QName> childAspectQNames) {
+	public GetLECMChildsCannedQuery(NodeDAO nodeDAO, QNameDAO qnameDAO, CannedQueryDAO cannedQueryDAO, NodePropertyHelper nodePropertyHelper, TenantService tenantService, NodeService nodeService, PermissionService permissionService, DictionaryService dictionaryService, MethodSecurityBean<NodeRef> methodSecurity, CannedQueryParameters params, Set<QName> childAspectQNames) {
 		super(nodeDAO, qnameDAO, cannedQueryDAO, nodePropertyHelper, tenantService, nodeService, methodSecurity, params);
 		this.nodeDAO = nodeDAO;
 		this.qnameDAO = qnameDAO;
@@ -60,6 +62,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		this.nodePropertyHelper = nodePropertyHelper;
         this.childAspectQNames = childAspectQNames;
         this.permissionService = permissionService;
+        this.dictionaryService = dictionaryService;
 
 		if ((params.getSortDetails() != null) && (params.getSortDetails().getSortPairs().size() > 0)) {
 			applyPostQueryPermissions = true;
@@ -123,7 +126,7 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		params.setParentNodeId(parentNodeId);
 
 		// Get filter details
-		Set<QName> childNodeTypeQNames = paramBean.getChildTypeQNames();
+		final Set<QName> childNodeTypeQNames = paramBean.getChildTypeQNames();
 		final List<FilterProp> filterProps = paramBean.getFilterProps();
 		String pattern = paramBean.getPattern();
 
@@ -182,18 +185,16 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 			// filtered and/or sorted - note: permissions will be applied post query
 			final List<FilterSortNode> children = new ArrayList<FilterSortNode>(100);
 
-			final boolean applyFilter = (filterProps.size() > 0);
-
 			FilterSortChildQueryCallback callback = new FilterSortChildQueryCallback() {
 				public boolean handle(FilterSortNode node) {
                     AccessStatus status = permissionService.hasPermission(node.getNodeRef(), "Read");
                     if (AccessStatus.ALLOWED == status) {
                         // filter, if needed
-                        if ((!applyFilter) || includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
+                        if (checkType(childNodeTypeQNames, node.getNodeRef()) && includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
                             children.add(node);
                         }
                     }
-					// More results
+                    // More results
 					return true;
 				}
 			};
@@ -259,6 +260,33 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
         } catch (AccessDeniedException e) {
             // user may not have permission to determine the visibility of the node
             return ret;
+        }
+    }
+
+    protected boolean checkType(Set<QName> mustBeTypes, NodeRef nodeRef) {
+        try {
+            boolean hasType = true;
+            if (mustBeTypes != null) {
+                hasType = false;
+                QName nodeType = nodeService.getType(nodeRef);
+                if (mustBeTypes.size() > 1) {
+                    for (QName type : mustBeTypes) {
+                        if (dictionaryService.isSubClass(nodeType, type)) {
+                            hasType = true;
+                            break;
+                        }
+                    }
+                } else if (mustBeTypes.size() == 1) {
+                    if (dictionaryService.isSubClass(nodeType, mustBeTypes.iterator().next())) {
+                        hasType = true;
+                    }
+                }
+            }
+
+            return hasType;
+        } catch (AccessDeniedException e) {
+            // user may not have permission to determine the visibility of the node
+            return false;
         }
     }
 

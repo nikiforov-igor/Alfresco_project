@@ -136,6 +136,7 @@
         <property name="registry" ref="fileFolderCannedQueryRegistry"/>
         <property name="dictionaryService" ref="dictionaryService"/>
         <property name="permissionService" ref="permissionService"/>
+        <property name="nodeService" ref="nodeService"/>
         <property name="tenantService" ref="tenantService"/>
         <property name="nodeDAO" ref="nodeDAO"/>
         <property name="qnameDAO" ref="qnameDAO"/>
