@@ -197,9 +197,11 @@ var Evaluator = {
          * PERMISSIONS
          */
         var deletePermission = node.hasPermission("Delete");
-        if (statemachine.hasStatemachine(node)) {
-            deletePermission = deletePermission && statemachine.isDraft(node);
-        }
+//        т.к. удаление из грида для документов больше не используем - дополнительные проверки не требуются
+//        if (statemachine.hasStatemachine(node)) {
+//            deletePermission = deletePermission && statemachine.isDraft(node);
+//        }
+
         permissions = {
             "create": node.hasPermission("CreateChildren"),
             "edit": node.hasPermission("Write"),
