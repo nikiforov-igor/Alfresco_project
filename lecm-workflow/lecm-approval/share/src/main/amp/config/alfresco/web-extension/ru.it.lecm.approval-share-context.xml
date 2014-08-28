@@ -9,6 +9,7 @@
 		<property name="configs">
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-settings-share-config.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-workflow-share-config.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -17,6 +18,7 @@
 		<property name="resourceBundles">
 			<list>
 				<value>alfresco.web-extension.ru.it.lecm.workflow.approval.approval-settings</value>
+				<value>alfresco.web-extension.ru.it.lecm.workflow.approval.approval-workflow</value>
 			</list>
 		</property>
 	</bean>
