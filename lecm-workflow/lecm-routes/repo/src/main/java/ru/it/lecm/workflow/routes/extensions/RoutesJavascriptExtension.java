@@ -41,4 +41,9 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return new ScriptNode(tempNode, serviceRegistry, getScope());
 	}
 
+	public ScriptNode getDocumentCurrentIteration(ScriptNode documentNode) {
+		NodeRef iterationNode = routesService.getDocumentCurrentIteration(documentNode.getNodeRef());
+		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+	}
+
 }

@@ -61,7 +61,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	public NodeRef getDocumentCurrentIteration(final NodeRef documentRef) {
 		NodeRef documentApprovalFolder = approvalService.getDocumentApprovalFolder(documentRef);
 		if (documentApprovalFolder == null) {
-			throw new AlfrescoRuntimeException("can't get document current iteration, because approval folder doesn't exist");
+			return null;
 		}
 		Set<QName> types = new HashSet<>();
 		types.add(RoutesModel.TYPE_ROUTE);
