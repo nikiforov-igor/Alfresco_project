@@ -194,8 +194,11 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		}
 
 		Set<NodeRef> nodes = new HashSet<>();
+		logger.info("Active channel notification count1=" + nodes.size());
 		nodes.addAll(getOldNotifications());
+		logger.info("Active channel notification count2=" + nodes.size());
 		nodes.addAll(getOldUnreadedNotifications());
+		logger.info("Active channel notification count3=" + nodes.size());
 
 		Set<QName> typeSet = new HashSet<>();
 		typeSet.add(ContentModel.TYPE_FOLDER);
@@ -207,7 +210,10 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 			}
 		}
 
-		return new ArrayList<>(nodes);
+		logger.info("Active channel notification count4=" + nodes.size());
+		ArrayList<NodeRef> result = new ArrayList<>(nodes);
+		logger.info("Active channel notification count5=" + result.size());
+		return result;
 	}
 
 	/**
@@ -229,7 +235,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-        parameters.setLimit(Integer.MAX_VALUE);
+		parameters.setLimit(Integer.MAX_VALUE);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true" +
 				" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
 		ResultSet resultSet = null;
@@ -291,6 +297,9 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 	 */
 	public List<NodeRef> getOldUnreadedNotifications() {
 		List<NodeRef> result = new ArrayList<>();
+
+		logger.info("deleteUnreadOlderThan=" + deleteUnreadOlderThan);
+
 		if (deleteUnreadOlderThan > 0) {
 			String path = nodeService.getPath(notificationsActiveChannel.getRootRef()).toPrefixString(namespaceService);
 			String type = NotificationsActiveChannel.TYPE_NOTIFICATION_ACTIVE_CHANNEL.toPrefixString(namespaceService);
@@ -308,6 +317,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 			parameters.setLimit(Integer.MAX_VALUE);
 			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":false" +
 					" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
+			logger.info("Unreaded active channel notification query=" + parameters.getQuery());
 			ResultSet resultSet = null;
 			try {
 				resultSet = searchService.query(parameters);
@@ -323,6 +333,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 				}
 			}
 		}
+		logger.info("Unreaded active channel notification count=" + result.size());
 		return result;
 	}
 
