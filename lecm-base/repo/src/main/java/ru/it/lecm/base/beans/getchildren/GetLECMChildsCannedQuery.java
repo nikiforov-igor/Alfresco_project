@@ -160,13 +160,15 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
 		filterSortPropCnt = setFilterSortParams(sortFilterProps, params);
 
 		// Set child node type qnames (additional filter - performed by DB query)
-
+        Set<Long> childNodeTypeQNameIds = new HashSet<>();
 		if (childNodeTypeQNames != null) {
-			Set<Long> childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, false);
+			childNodeTypeQNameIds = qnameDAO.convertQNamesToIds(childNodeTypeQNames, false);
 			if (childNodeTypeQNameIds.size() > 0) {
 				params.setChildNodeTypeQNameIds(new ArrayList<Long>(childNodeTypeQNameIds));
 			}
 		}
+
+        final boolean checkByIds = childNodeTypeQNameIds.size()  > 0;
 
 		if (pattern != null) {
 			// TODO, check that we should be tied to the content model in this way. Perhaps a configurable property
@@ -190,7 +192,8 @@ public class GetLECMChildsCannedQuery extends GetChildrenCannedQuery {
                     AccessStatus status = permissionService.hasPermission(node.getNodeRef(), "Read");
                     if (AccessStatus.ALLOWED == status) {
                         // filter, if needed
-                        if (checkType(childNodeTypeQNames, node.getNodeRef()) && includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
+                        if ((checkByIds || checkType(childNodeTypeQNames, node.getNodeRef()))
+                                && includeAllFilters(includeFilter(node.getPropVals(), filterProps), node.getNodeRef())) {
                             children.add(node);
                         }
                     }
