@@ -4,34 +4,126 @@
     <extensionElements>
       <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
         <activiti:field name="script">
-          <activiti:string><![CDATA[(function(){
-})();
-]]></activiti:string>
+          <activiti:string><![CDATA[(function(){ /* happy end */
+  /* пометка итерации как активной */
+  var currentIteration = execution.getVariableLocal('currentIteration');
+  currentIteration.properties.lecmApproveAspects_approvalState = 'COMPLETE';
+  currentIteration.save();
+})();]]></activiti:string>
         </activiti:field>
       </activiti:executionListener>
     </extensionElements>
-    <startEvent id="startevent1" name="Start"></startEvent>
+    <startEvent id="startevent1" name="Start" activiti:formKey="lecmApprove3:startTask"></startEvent>
     <serviceTask id="alfrescoScripttask1" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
       <extensionElements>
         <activiti:field name="runAs">
           <activiti:string><![CDATA[workflow]]></activiti:string>
         </activiti:field>
         <activiti:field name="script">
-          <activiti:string><![CDATA[(function(){
-/*
-	получение nodeRef-ы на текущую итерацию
-	пометка итерации как активной
-	получение параметров из текущей итерации (Завершать после первой визы «Не согласен», Уведомлять о каждой рецензии)
-	получение коллекции этапов
-	выбор первого неактивного этапа
-	пометка этапа как активного
-	передача этапа в подпроцесс (currentStage|activeStage|nextStage)
-*/
+          <activiti:string><![CDATA[(function(){ /*старт БП, подготовка переменных */
+  var document = bpm_package.children[0];
+  /* получение nodeRef-ы на текущую итерацию */
+  var currentIteration = approval.getDocumentCurrentIteration(document);
+  var routeInterruptAfterReject;
+  var routeNotifyAboutEveryDecision;
+  if (currentIteration) {
+    /* пометка итерации как активной */
+    currentIteration.addAspect('lecmApproveAspects:approvalDetailsAspect', {
+      lecmApproveAspects_approvalState: 'ACTIVE'
+    });
+    execution.setVariableLocal('currentIteration', currentIteration);
+    /* получение параметров из текущей итерации */
+    routeInterruptAfterReject = currentIteration.properties.lecmWorkflowRoutes_routeInterruptAfterReject;
+    routeNotifyAboutEveryDecision = currentIteration.properties.lecmWorkflowRoutes_routeNotifyAboutEveryDecision;
+    execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
+    execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
+  } else {
+    logger.error('The is no current iteration in document.');
+  }
 })();]]></activiti:string>
         </activiti:field>
       </extensionElements>
     </serviceTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="alfrescoScripttask1"></sequenceFlow>
+    <serviceTask id="alfrescoScripttask2" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+      <extensionElements>
+        <activiti:field name="script">
+          <activiti:string><![CDATA[(function(){ /* итератор по этапам */
+  /* получение коллекции этапов */
+  var currentIteration = execution.getVariableLocal('currentIteration');
+  var stages = currentIteration.assocs.getChildAssocsByType('lecmWorkflowRoutes:stage');
+  var stage, i, size, approvalState;
+  for (i = 0, size = stages.length; i < size; ++i) {
+    stage = stages[i];
+    approvalState = stage.properties.lecmApproveAspects_approvalState;
+    /* выбор первого неактивного этапа */
+    if (!approvalState || 'NEW' == approvalState) {
+      break;
+    }
+  }
+  if (stage) {
+    /* пометка этапа как активного */
+    stage.addAspect('lecmApproveAspects:approvalDetailsAspect', {
+      lecmApproveAspects_approvalState: 'ACTIVE'
+    });
+    /* передача этапа в подпроцесс */
+    execution.setVariable('currentStage', stage);
+  } else {
+    logger.error('The is no any stage in current iteration');
+  }
+})();]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="runAs">
+          <activiti:string><![CDATA[workflow]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow2" sourceRef="alfrescoScripttask1" targetRef="alfrescoScripttask2"></sequenceFlow>
+    <subProcess id="subprocess1" name="Sub Process"></subProcess>
+    <sequenceFlow id="flow3" sourceRef="alfrescoScripttask2" targetRef="subprocess1"></sequenceFlow>
+    <serviceTask id="alfrescoScripttask3" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+      <extensionElements>
+        <activiti:field name="script">
+          <activiti:string><![CDATA[(function(){ /* поиск еще незапущенных этапов */
+/*
+  установка флага hasNextStage, с учетом флага "завершать после первой визы "не согласен"
+*/
+  var stage = execution.getVariable('currentStage');
+  var stageDecision = stage.properties.lecmApproveAspects_approvalDecision;
+  execution.setVariableLocal('stageDecision', stageDecision);
+  /* пометка этапа как завершенного */
+  stage.properties.lecmApproveAspects_approvalState = 'COMPLETE';
+  stage.save();
+  /* получение коллекции этапов */
+  var currentIteration = execution.getVariableLocal('currentIteration');
+  var stages = currentIteration.assocs.getChildAssocsByType('lecmWorkflowRoutes:stage');
+  var i, size, approvalState, hasNextStage;
+  for (i = 0, size = stages.length; i < size; ++i) {
+    approvalState = stages[i].properties.lecmApproveAspects_approvalState;
+    /* поиск неактивных этапов */
+    if (!approvalState || 'NEW' == approvalState) {
+      hasNextStage = true;
+      break;
+    }
+  }
+  execution.setVariableLocal('hasNextStage', hasNextStage);
+})();]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="runAs">
+          <activiti:string><![CDATA[workflow]]></activiti:string>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow5" sourceRef="subprocess1" targetRef="alfrescoScripttask3"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow6" sourceRef="alfrescoScripttask3" targetRef="exclusivegateway2"></sequenceFlow>
+    <sequenceFlow id="flow7" sourceRef="exclusivegateway2" targetRef="alfrescoScripttask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${execution.getVariableLocal('hasNextStage') == true && execution.getVariableLocal('routeInterruptAfterReject') == false}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow8" sourceRef="exclusivegateway2" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${execution.getVariableLocal('hasNextStage') == false || (execution.getVariableLocal('routeInterruptAfterReject') == true && execution.getVariableLocal('stageDecision') == 'REJECTED')}]]></conditionExpression>
+    </sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_lecmApprovementWorkflow">
     <bpmndi:BPMNPlane bpmnElement="lecmApprovementWorkflow" id="BPMNPlane_lecmApprovementWorkflow">
@@ -41,9 +133,50 @@
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask1" id="BPMNShape_alfrescoScripttask1">
         <omgdc:Bounds height="55.0" width="105.0" x="160.0" y="90.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask2" id="BPMNShape_alfrescoScripttask2">
+        <omgdc:Bounds height="55.0" width="105.0" x="310.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="subprocess1" id="BPMNShape_subprocess1">
+        <omgdc:Bounds height="205.0" width="205.0" x="500.0" y="15.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask3" id="BPMNShape_alfrescoScripttask3">
+        <omgdc:Bounds height="55.0" width="105.0" x="760.0" y="90.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
+        <omgdc:Bounds height="40.0" width="40.0" x="920.0" y="97.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="1010.0" y="100.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="95.0" y="117.0"></omgdi:waypoint>
         <omgdi:waypoint x="160.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="265.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="310.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="415.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="500.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="705.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="760.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="865.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="920.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="940.0" y="137.0"></omgdi:waypoint>
+        <omgdi:waypoint x="941.0" y="283.0"></omgdi:waypoint>
+        <omgdi:waypoint x="362.0" y="283.0"></omgdi:waypoint>
+        <omgdi:waypoint x="362.0" y="145.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow8" id="BPMNEdge_flow8">
+        <omgdi:waypoint x="960.0" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="1010.0" y="117.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
