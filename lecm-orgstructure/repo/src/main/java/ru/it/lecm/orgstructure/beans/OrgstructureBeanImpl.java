@@ -82,7 +82,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                     return true;
                 }
 
-                NodeRef employeeOrganization = getUserOrganization(userName);
+                NodeRef employeeOrganization = getUserOrganization(userName, currentEmployee);
                 NodeRef orgElementOrganization = getOrganization(orgElement);
 
                 if (employeeOrganization == null) {
@@ -2027,6 +2027,33 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
                 organization = getUserOrganizationsCache().get(userName);
             } else {
                 NodeRef employee = getEmployeeByPerson(userName);
+                if (employee != null) {
+                    if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
+                        List<AssociationRef> orgAssoc = nodeService.getTargetAssocs(employee, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+                        if (orgAssoc != null && orgAssoc.size() > 0) {
+                            organization = orgAssoc.get(0).getTargetRef();
+                        }
+                    }
+                    getUserOrganizationsCache().put(userName, organization);
+                }
+            }
+        }
+        return organization;
+    }
+
+    /**
+     * Копия предыдущего метода, но для внутреннего использования - когда сотрудник заранее известен,
+     * чтобы не вызывать повторно ru.it.lecm.orgstructure.beans.OrgstructureBeanImpl#getEmployeeByPerson(java.lang.String, boolean)
+     * @param userName логин
+     * @param employee сотрудник (должен соответствовать переданному логину)
+     * @return организация
+     */
+    private NodeRef getUserOrganization(String userName, NodeRef employee) {
+        NodeRef organization = null;
+        if (userName != null) {
+            if (getUserOrganizationsCache().contains(userName)) {
+                organization = getUserOrganizationsCache().get(userName);
+            } else {
                 if (employee != null) {
                     if (nodeService.hasAspect(employee, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION)) {
                         List<AssociationRef> orgAssoc = nodeService.getTargetAssocs(employee, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
