@@ -7,5 +7,6 @@
 	<bean parent="baseScript"
 		  class="ru.it.lecm.workflow.approval.extensions.ApprovalJavascriptExtension"
 		  p:extensionName="approval"
-		  p:approvalService-ref="approvalWorkflowService"/>
+		  p:approvalService-ref="approvalWorkflowService"
+		  p:converter-ref="activitiNodeConverter"/>
 </beans>

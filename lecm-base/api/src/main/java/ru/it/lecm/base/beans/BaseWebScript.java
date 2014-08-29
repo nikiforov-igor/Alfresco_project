@@ -1,21 +1,21 @@
 package ru.it.lecm.base.beans;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptVersion;
+import org.alfresco.repo.workflow.WorkflowNodeConverter;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.version.Version;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.NativeJavaObject;
 import org.mozilla.javascript.Scriptable;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * User: mshafeev
@@ -29,10 +29,19 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      * Service registry
      */
     protected ServiceRegistry serviceRegistry;
+	private WorkflowNodeConverter converter;
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
     }
+
+	public WorkflowNodeConverter getConverter() {
+		return converter;
+	}
+
+	public void setConverter(WorkflowNodeConverter converter) {
+		this.converter = converter;
+	}
 
     /**
      * Возвращает массив, пригодный для использования в веб-скриптах

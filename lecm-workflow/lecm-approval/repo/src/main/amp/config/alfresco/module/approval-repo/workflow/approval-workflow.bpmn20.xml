@@ -27,12 +27,12 @@
           <activiti:string><![CDATA[(function(){ /*старт БП, подготовка переменных */
   var document = bpm_package.children[0];
   /* получение nodeRef-ы на текущую итерацию */
-  var currentIteration = approval.getDocumentCurrentIteration(document);
+  var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
   currentIteration.addAspect('lecmApproveAspects:approvalDetailsAspect', {
     lecmApproveAspects_approvalState: 'ACTIVE'
   });
-  execution.setVariableLocal('currentIteration', currentIteration);
+  execution.setVariableLocal('currentIteration', approval.getConverter().convertNode(currentIteration.nodeRef));
   var routeInterruptAfterReject = currentIteration.properties.lecmWorkflowRoutes_routeInterruptAfterReject;
   var routeNotifyAboutEveryDecision = currentIteration.properties.lecmWorkflowRoutes_routeNotifyAboutEveryDecision;
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
