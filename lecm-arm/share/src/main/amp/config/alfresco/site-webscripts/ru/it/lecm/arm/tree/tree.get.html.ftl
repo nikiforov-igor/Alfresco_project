@@ -9,7 +9,9 @@
 
 (function() {
 	function init() {
-		new LogicECM.module.ARM.Tree("${id}").setMessages(${messages});
+		new LogicECM.module.ARM.Tree("${id}").setOptions({
+            dictionaryURL: "lecm/arm/dictionary/dictionary-tree"
+        }).setMessages(${messages});
 	}
 
 	//once the DOM has loaded, we can go ahead and set up our tree:

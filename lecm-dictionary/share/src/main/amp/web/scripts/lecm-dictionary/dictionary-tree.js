@@ -72,7 +72,8 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                 fn:null,
                 obj:null,
                 scope:window
-            }
+            },
+            dictionaryURL: "lecm/dictionary/dictionary-tree"
         },
 
         onReady:function () {
@@ -99,7 +100,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
         _createTree:function () {
             tree = new YAHOO.widget.TreeView(this.treeContainer);
             tree.singleNodeHighlight = true;
-            tree.setDynamicLoad(this._loadTree);
+            tree.setDynamicLoad(this._loadTree.bind(this));
 
             var root = tree.getRoot();
             var newRootNode = null;
@@ -240,7 +241,7 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
          */
         _loadTree:function loadNodeData(node, fnLoadComplete) {
 
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/dictionary/dictionary-tree";
+            var sUrl = Alfresco.constants.PROXY_URI + this.options.dictionaryURL;
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }

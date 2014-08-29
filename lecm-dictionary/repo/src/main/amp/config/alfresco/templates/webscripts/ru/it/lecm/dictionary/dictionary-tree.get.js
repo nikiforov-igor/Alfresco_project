@@ -47,7 +47,8 @@ function addItems(branch, items) {
 				type: item.typeShort,
 				childType: getHierarchicalDictionaryChildType(item),
 				nodeRef: nodeRef,
-				isLeaf: "" + isLeaf
+				isLeaf: "" + isLeaf,
+                node: item
 			});
 		}
 	}
