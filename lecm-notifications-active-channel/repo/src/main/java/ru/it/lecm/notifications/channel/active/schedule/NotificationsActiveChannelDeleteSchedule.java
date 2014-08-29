@@ -197,7 +197,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		logger.info("Active channel notification count1=" + nodes.size());
 		nodes.addAll(getOldNotifications());
 		logger.info("Active channel notification count2=" + nodes.size());
-		getOldUnreadedNotifications();
+		nodes.addAll(getOldUnreadedNotifications());
 		logger.info("Active channel notification count3=" + nodes.size());
 
 		Set<QName> typeSet = new HashSet<>();
@@ -273,7 +273,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true");
 		parameters.setSkipCount(MAX_COUNT_RECORDS);
-		parameters.setMaxItems(Integer.MAX_VALUE);
+		parameters.setMaxItems(10000);
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);

@@ -258,7 +258,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
 		parameters.setSkipCount(MAX_COUNT_RECORDS);
-		parameters.setMaxItems(Integer.MAX_VALUE);
+		parameters.setMaxItems(10000);
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
