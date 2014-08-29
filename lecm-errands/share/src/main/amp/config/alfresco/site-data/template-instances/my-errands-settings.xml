@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<template-instance>
+	<template-type>ru/it/lecm/errands/my-errands-settings</template-type>
+	<components>
+		<component>
+			<region-id>content</region-id>
+			<url>/lecm/errands-user-settings/content</url>
+		</component>
+	</components>
+</template-instance>
+
