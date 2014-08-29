@@ -30,6 +30,9 @@
 		  init-method="init"
 		  p:folders-ref="routes.folders.map"
 		  p:approvalService-ref="approvalWorkflowService"
+		  p:orgstructureService-ref="serviceOrgstructure"
+		  p:searchService-ref="searchService"
+		  p:copyService-ref="copyService"
 	/>
 
 	<bean id="routes.delete.temp.schedule"

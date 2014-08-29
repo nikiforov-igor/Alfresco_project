@@ -31,6 +31,7 @@
 			showActionColumn: true,
 			allowCreate: false,
 			forceSubscribing: true,
+			excludeColumns: ['lecmWorkflowRoutes:stageItemEmployeeAssoc', 'lecmWorkflowRoutes:stageItemMacrosAssoc'],
 			actions: [{
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",

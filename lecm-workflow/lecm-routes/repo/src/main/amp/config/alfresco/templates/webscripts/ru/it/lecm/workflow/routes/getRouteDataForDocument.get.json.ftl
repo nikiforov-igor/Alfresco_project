@@ -3,6 +3,7 @@
 	"routeType": "${routeType}",
 	"stageType": "${stageType}",
 	"stageItemType": "${stageItemType}",
-	"currentIterationNode": "${currentIterationNode}"
+	"currentIterationNode": "${currentIterationNode}",
+	"approvalState": "${approvalState}"
 }
 </#escape>

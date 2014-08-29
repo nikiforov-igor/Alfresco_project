@@ -15,6 +15,11 @@
 	<#if !editable>
 	<div class="clear"></div>
 	</#if>
+	<select id="${controlId}-add-item-dropdown">
+		<option value="dafault">-- Создать лист согласования</option>
+		<option value="route">Из маршрута</option>
+		<option value="empty">Пустой</option>
+	</select>
 	<@grid.datagrid controlId false />
 </div>
 
@@ -35,6 +40,7 @@
 			expandable: true,
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
 			useChildQuery: true,
+			excludeColumns: ['lecmApproveAspects:approvalState'],
 			datagridMeta: {
 				actionsConfig: {
 					fullDelete: true,

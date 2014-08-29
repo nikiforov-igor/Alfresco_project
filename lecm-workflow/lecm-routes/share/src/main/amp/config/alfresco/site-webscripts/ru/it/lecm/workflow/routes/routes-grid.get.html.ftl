@@ -12,6 +12,7 @@
 		showExtendSearchBlock: false,
 		showCheckboxColumn: false,
 		bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+		excludeColumns: ['lecmApproveAspects:approvalState'],
 		actions: [{
 			type:"datagrid-action-link-" + LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
 			id:"onActionEdit",

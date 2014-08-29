@@ -15,7 +15,8 @@
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		expandable: false,
-		showActionColumn: false
+		showActionColumn: false,
+		excludeColumns: ['lecmWorkflowRoutes:stageItemEmployeeAssoc', 'lecmWorkflowRoutes:stageItemMacrosAssoc']
 	});
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {
@@ -23,6 +24,7 @@
 			datagridMeta:{
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
 				nodeRef: '${itemId}',
+				useChildQuery: true,
 				searchConfig: {
 					filter: ""
 				},

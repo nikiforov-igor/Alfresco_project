@@ -31,6 +31,7 @@
 			showActionColumn: true,
 			allowCreate: true,
 			forceSubscribing: true,
+			excludeColumns: ['lecmApproveAspects:approvalState'],
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
 			actions: [{
 				type:"datagrid-action-link-" + controlId,

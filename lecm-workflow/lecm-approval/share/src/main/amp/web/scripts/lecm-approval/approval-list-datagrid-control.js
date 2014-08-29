@@ -8,7 +8,12 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 (function() {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
+		var addItemDropdown = YAHOO.util.Dom.get(containerId + '-add-item-dropdown');
+
 		this.documentNodeRef = documentNodeRef;
+		if (addItemDropdown) {
+			YAHOO.util.Event.on(addItemDropdown, 'change', this.onAddItemDropdownChange, this, true);
+		}
 
 		this.getApprovalData();
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
@@ -21,8 +26,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 	YAHOO.lang.augmentObject(LogicECM.module.Approval.ApprovalListDataGridControl.prototype, {
 		stageType: null,
 		stageItemType: null,
+		routeType: null,
 		currentIterationNode: null,
-		doubleClickLock: false,
 		getApprovalData: function(callback, callbackArg) {
 			Alfresco.util.Ajax.request({
 				method: 'GET',
@@ -36,6 +41,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 						if (response) {
 							this.stageType = response.json.stageType;
 							this.stageItemType = response.json.stageItemType;
+							this.routeType = response.json.routeType;
 							this.currentIterationNode = response.json.currentIterationNode ? response.json.currentIterationNode : null;
 
 							LogicECM.module.Routes = LogicECM.module.Routes || {};
@@ -74,7 +80,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				}
 			}
 
-			if (!(this.stageType && this.stageItemType)) {
+			if (!(this.stageType && this.stageItemType && this.routeType)) {
 				this.getApprovalData(this.fireGridChanged);
 			} else {
 				this.fireGridChanged();
@@ -98,12 +104,87 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			var expandedRow = YAHOO.util.Dom.get(this.getExpandedRecordId(record));
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
-		}
+		},
+		onAddItemDropdownChange: function(event) {
+			var dropdownMenu = event.target,
+				dropdownMenuValue = dropdownMenu.value;
 
-//		getExpandedFormId: function(record) {
-//			var nodeRef = record.getData('nodeRef');
-//			return nodeRef.replace(/:|\//g, '_') + '-dtgrd';
-//		}
+			switch (dropdownMenuValue) {
+				case 'route' :
+					this._createApprovalListFromRoute();
+					break;
+				case 'empty' :
+					this._createEmptyApprovalLst();
+					break;
+				default :
+					break;
+			}
+			dropdownMenu.selectedIndex = 0;
+		},
+		_createApprovalListFromRoute: function() {
+			console.log('_createApprovalListFromRoute');
+			var formId = 'selectRouteForm';
+			var selectRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+
+			selectRouteForm.setOptions({
+				width: '35em',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/convertRouteToIteration',
+				templateRequestParams: {
+					formId: formId,
+					itemId: this.routeType,
+					destination: this.documentNodeRef,
+					itemKind: 'type',
+					mode: 'create',
+					showCancelButton: true,
+					submitType: 'json'
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function(form, simpleDialog) {
+						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+							LogicECM.module.Base.Util.formDestructor(event, args, params);
+						}, {moduleId: simpleDialog.id}, this);
+					},
+					scope: this
+				},
+				onSuccess: {
+					fn: function(r) {
+						this.currentIterationNode = r.json.nodeRef;
+						this.fireGridChanged();
+					},
+					scope: this
+				},
+				onFailure: {
+					fn: function(response) {
+						this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
+					},
+					scope: this
+				}
+			});
+
+			selectRouteForm.show();
+		},
+		_createEmptyApprovalLst: function() {
+			Alfresco.util.Ajax.request({
+				method: 'GET',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createEmptyIteration',
+				dataObj: {
+					documentNodeRef: this.documentNodeRef
+				},
+				successCallback: {
+					scope: this,
+					fn: function(r) {
+						this.currentIterationNode = r.json.nodeRef;
+						this.fireGridChanged();
+					}
+				},
+				failureMessage: 'message.failure',
+				execScripts: true,
+				scope: this
+			});
+		}
 	}, true);
 
 

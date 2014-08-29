@@ -3,6 +3,7 @@ package ru.it.lecm.workflow.routes.extensions;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
+import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
@@ -44,6 +45,16 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 	public ScriptNode getDocumentCurrentIteration(ScriptNode documentNode) {
 		NodeRef iterationNode = routesService.getDocumentCurrentIteration(documentNode.getNodeRef());
 		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+	}
+
+	public Scriptable getAllowedRoutesForCurrentUser() {
+		return createScriptable(routesService.getAllowedRoutesForCurrentUser());
+	}
+
+	public ScriptNode convertRouteToIteration(ScriptNode documentNode, ScriptNode routeNode) {
+		NodeRef iterationNode = routesService.convertRouteToIteration(documentNode.getNodeRef(), routeNode.getNodeRef());
+		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+
 	}
 
 }

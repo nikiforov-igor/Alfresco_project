@@ -37,7 +37,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						fn: function(form, simpleDialog) {
 							var formNode = YAHOO.util.Dom.get(form.formId);
 							var nameInput = YAHOO.util.Dom.getElementsBy(function(a) {
-								return a.name.indexOf('cm_title') >= 0
+								return a.name.indexOf('cm_title') >= 0;
 							}, 'input', formNode)[0];
 							var recordsSize = this.widgets.dataTable.getRecordSet().getLength();
 
@@ -66,6 +66,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 								},
 								successCallback: {
 									fn: function(r) {
+										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: 'Этап успешно создан'
 										});
@@ -74,7 +75,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 								},
 								failureCallback: {
 									fn: function(r) {
-										this.editDialogOpening = false;
+										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: 'Не удалось создать этап: ' + r.json.message
 										});

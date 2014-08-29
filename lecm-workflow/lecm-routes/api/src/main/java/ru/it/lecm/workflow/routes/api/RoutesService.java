@@ -1,5 +1,6 @@
 package ru.it.lecm.workflow.routes.api;
 
+import java.util.List;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
@@ -27,4 +28,9 @@ public interface RoutesService {
 	 * @throws AlfrescoRuntimeException если папка "Согласование" или "Согласование/История" не существует, а мы пытаемся отправить итерацию в архив
 	 */
 	boolean archiveDocumentCurrentIteration(final NodeRef documentRef);
+
+	List<NodeRef> getAllowedRoutesForCurrentUser();
+	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef);
+
+	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
 }

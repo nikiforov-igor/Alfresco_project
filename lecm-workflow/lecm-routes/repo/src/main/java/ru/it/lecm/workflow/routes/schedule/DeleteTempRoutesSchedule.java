@@ -68,7 +68,7 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 		String searchQuery = String.format(searchQueryFormat, nodeService.getPath(parentContainer).toPrefixString(namespaceService),
 				RoutesModel.TYPE_ROUTE, RoutesModel.TYPE_STAGE);
-		logger.trace("Searching temp routes to be activated: " + searchQuery);
+		logger.trace("Searching temp routes to be deleted: " + searchQuery);
 		sp.setQuery(searchQuery);
 		ResultSet results = null;
 		try {
