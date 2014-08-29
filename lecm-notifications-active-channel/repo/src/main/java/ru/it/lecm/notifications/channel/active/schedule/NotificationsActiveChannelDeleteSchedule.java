@@ -197,7 +197,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		logger.info("Active channel notification count1=" + nodes.size());
 		nodes.addAll(getOldNotifications());
 		logger.info("Active channel notification count2=" + nodes.size());
-		nodes.addAll(getOldUnreadedNotifications());
+		getOldUnreadedNotifications();
 		logger.info("Active channel notification count3=" + nodes.size());
 
 		Set<QName> typeSet = new HashSet<>();
@@ -235,7 +235,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-		parameters.setLimit(Integer.MAX_VALUE);
+		parameters.setMaxItems(Integer.MAX_VALUE);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true" +
 				" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
 		ResultSet resultSet = null;
@@ -273,7 +273,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":true");
 		parameters.setSkipCount(MAX_COUNT_RECORDS);
-		parameters.setMaxItems(10000);
+		parameters.setMaxItems(Integer.MAX_VALUE);
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
@@ -314,7 +314,7 @@ public class NotificationsActiveChannelDeleteSchedule extends AbstractScheduledA
 			parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 			parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 			parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
-			parameters.setLimit(Integer.MAX_VALUE);
+			parameters.setMaxItems(Integer.MAX_VALUE);
 			parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " + isReadField + ":false" +
 					" AND " + formingDateField + ":[MIN TO " + maxDate + "]");
 			logger.info("Unreaded active channel notification query=" + parameters.getQuery());

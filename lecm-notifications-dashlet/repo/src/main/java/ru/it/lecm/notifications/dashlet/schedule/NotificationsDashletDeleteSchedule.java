@@ -221,6 +221,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 		parameters.setLanguage(SearchService.LANGUAGE_LUCENE);
 		parameters.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
+		parameters.setMaxItems(Integer.MAX_VALUE);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\" AND " +
 				formingDateField + ":[MIN TO " + maxDate + "]");
 		ResultSet resultSet = null;
@@ -257,7 +258,7 @@ public class NotificationsDashletDeleteSchedule extends AbstractScheduledAction 
 		parameters.addSort("@" + NotificationsService.PROP_FORMING_DATE, false);
 		parameters.setQuery(" +PATH:\"" + path + "//*\" AND TYPE:\"" + type + "\"");
 		parameters.setSkipCount(MAX_COUNT_RECORDS);
-		parameters.setMaxItems(10000);
+		parameters.setMaxItems(Integer.MAX_VALUE);
 		ResultSet resultSet = null;
 		try {
 			resultSet = searchService.query(parameters);
