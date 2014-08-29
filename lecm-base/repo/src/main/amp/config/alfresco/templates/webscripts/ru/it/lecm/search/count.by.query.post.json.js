@@ -5,7 +5,7 @@ if (typeof json !== "undefined" && json.has("query")) {
         onerror:"no-results"
     };
 
-    model.count = searchCounter.query(queryDef);
+    model.count = "" + searchCounter.query(queryDef);
 } else {
-    model.count = 0;
+    model.count = "0";
 }
