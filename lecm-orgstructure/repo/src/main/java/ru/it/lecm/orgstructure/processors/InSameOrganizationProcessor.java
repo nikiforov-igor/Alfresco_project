@@ -34,7 +34,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
     public String getQuery(Map<String, Object> params) {
         StringBuilder sbQuery = new StringBuilder();
 
-        Object userName = params != null && params.get(USERNAME_PARAM) != null ? params.get(USERNAME_PARAM) != null : null;
+        String userName = params != null && params.get(USERNAME_PARAM) != null ? params.get(USERNAME_PARAM).toString() : AuthenticationUtil.getFullyAuthenticatedUser();
 
         Object orgFieldShort = params != null && params.get(ORGANIZATION_FIELD_PARAM) != null ? params.get(ORGANIZATION_FIELD_PARAM) : DEFAULT_ORGANIZATION_FIELD;
         if (orgFieldShort.toString().trim().isEmpty()) {
@@ -42,22 +42,14 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         }
 
         NodeRef organization;
-        NodeRef employee;
-        Set<String> auth;
-        if (userName != null) {
-        	auth = authorityService.getAuthoritiesForUser(userName.toString());
-            employee = orgstructureBean.getEmployeeByPerson(userName.toString());
-        } else {
-        	auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
-            employee = orgstructureBean.getCurrentEmployee();
-        }
+        Set<String> auth = authorityService.getAuthoritiesForUser(userName);
 
         final String organizationProperty = orgFieldShort.toString().replaceAll(":", "\\\\:").replaceAll("-", "\\\\-");
         sbQuery.append("@").append(organizationProperty).append(":");
 
 //        if (!orgstructureBean.isEmployeeHasBusinessRole(employee, "BR_GLOBAL_ORGANIZATIONS_ACCESS", false, false)) {
         if (!auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS")) {
-            organization = orgstructureBean.getEmployeeOrganization(employee);
+            organization = orgstructureBean.getUserOrganization(userName);
             if (organization != null) {
                 sbQuery.append("\"").append(organization.toString().replace(":", "\\:")).append("\"");
             } else {
