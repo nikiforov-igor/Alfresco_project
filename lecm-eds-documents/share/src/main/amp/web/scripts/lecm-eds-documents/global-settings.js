@@ -95,7 +95,10 @@ LogicECM.module = LogicECM.module || {};
 				YAHOO.Bubbling.fire("formSubmit", this);
 
 				if (response && response.json) {
-					window.location.reload(true);
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: Alfresco.util.message("message.save.success")
+                        });
 				} else {
 					Alfresco.util.PopupManager.displayPrompt(
 						{

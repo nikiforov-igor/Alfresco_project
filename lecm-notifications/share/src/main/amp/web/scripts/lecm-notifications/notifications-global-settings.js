@@ -92,7 +92,10 @@ LogicECM.module = LogicECM.module || {};
 			onSuccess: function (response)
 			{
 				if (response && response.json) {
-					window.location.reload(true);
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: Alfresco.util.message("message.save.success")
+                        });
 				} else {
 					Alfresco.util.PopupManager.displayPrompt(
 						{

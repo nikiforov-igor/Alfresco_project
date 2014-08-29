@@ -1,22 +1,31 @@
 <#include "/org/alfresco/components/component.head.inc">
 
-<!-- Controls dependencies -->
-<@script type="text/javascript" src="${url.context}/res/components/form/form.js" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/association-tree/association-tree-view.js" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-eds-documents/components/global-settings/potential-role-tree-picker.js" />
-
-<@script type="text/javascript" src="${url.context}/res/components/console/consoletool.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-eds-documents/global-settings.js"></@script>
-
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-eds-documents/global-settings.css" />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css"/>
+<@markup id="js">
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" />
+</@>
 
 <#assign el=args.htmlid?html>
 <script type="text/javascript">//<![CDATA[
-	(function() {
-		new LogicECM.module.EdsGlobalSettings("${el}-body").setMessages(${messages});
-	})();
+(function(){
+    function createPage() {
+        new LogicECM.module.EdsGlobalSettings("${el}-body").setMessages(${messages});
+    }
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/association-tree/association-tree-view.js',
+            'scripts/lecm-eds-documents/components/global-settings/potential-role-tree-picker.js',
+            'components/form/form.js',
+            'components/console/consoletool.js',
+            'scripts/lecm-eds-documents/global-settings.js'
+        ], [
+            'css/lecm-eds-documents/global-settings.css',
+            'yui/treeview/assets/skins/sam/treeview.css'
+        ], createPage);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
 //]]></script>
 
 <div id="${el}-body" class="eds-global-settings">

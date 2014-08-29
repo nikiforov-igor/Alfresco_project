@@ -1,30 +1,35 @@
 <#assign el=args.htmlid?html>
 
-<@markup id="css" >
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-delegation/delegation-global-settings.css" group="delegation-settings"/>
-</@>
-
 <@markup id="js">
-	<@script type="text/javascript" src="${url.context}/res/components/console/consoletool.js" group="delegation-settings"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-delegation/delegation-global-settings.js" group="delegation-settings"/>
-	<@script type="text/javascript" src="${url.context}/res/components/form/form.js" group="delegation-settings"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" group="delegation-settings"/>
+	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"/>
 </@>
 
-<@markup id="widgets">
-	<@createWidgets group="delegation-settings"/>
-</@>
+<script type="text/javascript">//<![CDATA[
+(function(){
+    function createPage() {
+        new LogicECM.DelegationGlobalSettings("${el}").setMessages(${messages});
+    }
 
-<@markup id="html">
-	<@uniqueIdDiv>
-		<div id="${el}-body" class="delegation-settings">
-			<div class="yui-g">
-				<div class="yui-u first">
-					<div class="title">${msg("label.title")}</div>
-				</div>
-			</div>
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'components/console/consoletool.js',
+            'scripts/lecm-delegation/delegation-global-settings.js',
+            'components/form/form.js'
+        ], [
+            'css/lecm-delegation/delegation-global-settings.css'
+        ], createPage);
+    }
 
-			<div id="${el}-settings"></div>
-		</div>
-	</@>
-</@>
+    YAHOO.util.Event.onDOMReady(init);
+})();
+//]]></script>
+
+<div id="${el}-body" class="delegation-settings">
+    <div class="yui-g">
+        <div class="yui-u first">
+            <div class="title">${msg("label.title")}</div>
+        </div>
+    </div>
+
+    <div id="${el}-settings"></div>
+</div>

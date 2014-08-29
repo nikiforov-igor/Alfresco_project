@@ -51,3 +51,27 @@ showTitle - рисовать блок title
 		</@>
 	</@>
 </#macro>
+
+<#macro basePageSimple>
+    <@templateBody>
+        <@markup id="bd">
+            <@region id="html-upload" scope="global" chromeless="true" />
+            <@region id="flash-upload" scope="global" chromeless="true" />
+            <@region id="file-upload" scope="global" chromeless="true" />
+            <@region id="dnd-upload" scope="global" chromeless="true"/>
+            <@region id="lecm-dnd-upload" scope="global" chromeless="true"/>
+            <div class="yui-skin-lecmTheme">
+                <div class="yui-t1">
+                    <div id="yui-main">
+                        <div class="" id="lecm-content">
+                            <@region id="toolbar" scope="template"/>
+                            <div id="lecm-content-main">
+                                <#nested>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </@>
+    </@>
+</#macro>

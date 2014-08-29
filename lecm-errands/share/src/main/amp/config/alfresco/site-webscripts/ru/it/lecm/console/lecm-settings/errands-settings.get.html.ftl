@@ -1,14 +1,27 @@
-<!-- Admin Console Application Tool -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-errands/errands-settings.css" />
-<@script type="text/javascript" src="${url.context}/res/components/form/form.js" />
-<@script type="text/javascript" src="${url.context}/res/components/console/consoletool.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-errands/errands-settings.js"></@script>
+<@markup id="js">
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" />
+</@>
 
 <#assign el=args.htmlid?html>
+
 <script type="text/javascript">//<![CDATA[
-	(function(){
-		new LogicECM.module.ErrandsSettings("${el}-body").setMessages(${messages});
-	})();
+(function(){
+    function createPage() {
+        new LogicECM.module.ErrandsSettings("${el}-body").setMessages(${messages});
+    }
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'components/console/consoletool.js',
+            'scripts/lecm-errands/errands-settings.js',
+            'components/form/form.js'
+        ], [
+            'css/lecm-errands/errands-settings.css'
+        ], createPage);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
 //]]></script>
 
 <div id="${el}-body" class="errands-settings">

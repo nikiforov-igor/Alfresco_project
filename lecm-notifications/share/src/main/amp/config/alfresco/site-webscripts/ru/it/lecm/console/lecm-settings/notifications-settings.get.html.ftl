@@ -1,11 +1,27 @@
-<@script type="text/javascript" src="/res/components/form/form.js" />
-<@script type="text/javascript" src="/res/scripts/lecm-notifications/notifications-global-settings.js"></@script>
-
 <#assign el=args.htmlid?html>
+
+<@markup id="js">
+    <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"/>
+</@>
+
 <script type="text/javascript">//<![CDATA[
-	(function(){
-		new LogicECM.module.NotificationsGlobalSettings("${el}-body").setMessages(${messages});
-	})();
+(function(){
+    function createPage() {
+        new LogicECM.module.NotificationsGlobalSettings("${el}-body").setMessages(${messages});
+    }
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'components/console/consoletool.js',
+            'scripts/lecm-notifications/notifications-global-settings.js',
+            'components/form/form.js'
+        ], [
+            'css/lecm-notifications/notifications-global-settings.css'
+        ], createPage);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
 //]]></script>
 
 <div id="${el}-body" class="notifications-settings">

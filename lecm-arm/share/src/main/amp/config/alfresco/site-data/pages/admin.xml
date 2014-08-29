@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<page>
+    <title>Admin Panel</title>
+    <description>Administrative Panel</description>
+    <template-instance>admin</template-instance>
+    <authentication>user</authentication>
+</page>

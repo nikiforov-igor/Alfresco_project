@@ -41,9 +41,9 @@
             {}
             </#if>;
 
-        LogicECM.module.ARM.SETTINGS.ARM_CODE = "${page.url.args.code!''}";
-        LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
-        LogicECM.module.ARM.SETTINGS.ARM_TYPE = "USER";
+        LogicECM.module.ARM.SETTINGS.ARM_CODE = "ADMIN";
+        LogicECM.module.ARM.SETTINGS.ARM_PATH = {};
+        LogicECM.module.ARM.SETTINGS.ARM_TYPE = "ADMIN";
     //]]></script>
 </@>
 
@@ -54,15 +54,14 @@
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
         <div class="yui-t1" id="arm-with-tree">
             <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
-                    <@region id="toolbar" scope="template" />
                     <div id="arm-documents-grid">
-                    <@region id="documents-grid" scope="template" />
+                        <@region id="documents-grid" scope="template" />
                     </div>
                     <div id="arm-documents-reports" class="hidden1">
-                    <@region id="reports" scope="template" />
+                        <@region id="reports" scope="template" />
                     </div>
                     <div id="arm-documents-html" class="hidden1">
-                    <@region id="arm-html-node" scope="template" />
+                        <@region id="arm-html-node" scope="template" />
                     </div>
             </@panels.twoPanels>
         </div>
