@@ -85,7 +85,7 @@
 			<ref bean="ActionService"/>
 		</property>
 		<property name="searchService">
-			<ref bean="SearchService"/>
+			<ref bean="searchService"/>
 		</property>
 		<property name="nodeService">
 			<ref bean="nodeService"/>
