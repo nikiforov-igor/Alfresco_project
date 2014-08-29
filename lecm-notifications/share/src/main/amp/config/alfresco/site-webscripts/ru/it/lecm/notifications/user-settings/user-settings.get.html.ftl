@@ -1,10 +1,22 @@
-<!-- Admin Console Application Tool -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-notifications/notifications-user-settings.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-notifications/notifications-user-settings.js"></@script>
-
 <#assign el=args.htmlid?html>
+
 <script type="text/javascript">//<![CDATA[
-	new LogicECM.NotificationsUserSettings("${el}").setMessages(${messages});
+(function () {
+	function init() {
+		LogicECM.module.Base.Util.loadResources([
+					'/scripts/lecm-notifications/notifications-user-settings.js'
+				],
+				[
+					'css/lecm-notifications/notifications-user-settings.css'
+				], createObject);
+	}
+
+	function createObject() {
+		new LogicECM.NotificationsUserSettings("${el}").setMessages(${messages});
+	}
+
+	YAHOO.util.Event.onDOMReady(init);
+})();
 //]]></script>
 
 <div id="${el}-body" class="notifications-user-settings">
