@@ -18,8 +18,12 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	YAHOO.extend(LogicECM.module.ARM.EditNode, Alfresco.component.Base,
 		{
+			currentArgs: null,
+
 			onSelectTreeNode: function(layer, args) {
 				if (args[1].datagridMeta != null && args[1].datagridMeta.nodeRef != null && args[1].datagridMeta.itemType != "lecm-arm:arm") {
+					this.currentArgs = args;
+
 					var nodeRef = args[1].datagridMeta.nodeRef;
 					var me = this;
 
@@ -67,6 +71,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 			onSuccess: function (response) {
 				if (response && response.json) {
 					YAHOO.Bubbling.fire("refreshTreeParentNode");
+					this.onSelectTreeNode(null, this.currentArgs);
 					Alfresco.util.PopupManager.displayMessage(
 						{
 							text: this.msg( "message.save.success")
