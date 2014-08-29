@@ -58,10 +58,12 @@
 		<property name="namespaceService" ref="namespaceService"/>
         <property name="stateMachineService" ref="stateMachineHelper"/>
         <property name="orgstructureBean" ref="serviceOrgstructure"/>
+        <property name="authorityService" ref="authorityService" />
         <property name="columnsCache" ref="arm.columns.cache"/>
         <property name="childNodesCache" ref="arm.nodes.cache"/>
         <property name="nodesTypesCache" ref="arm.nodes.types.cache"/>
         <property name="filtersCache" ref="arm.filters.cache"/>
+        <property name="accordionsCache" ref="arm.accordions.cache"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -112,14 +114,6 @@
 		<property name="substitudeService" ref="substitudeService"/>
 		<property name="dictionaryService" ref="serviceDictionary"/>
 		<property name="namespaceService" ref="namespaceService"/>
-	</bean>
-
-	<bean id="armAccordionPolicy" class="ru.it.lecm.arm.policy.ArmAccordionPolicy"
-		  init-method="init">
-		<property name="policyComponent" ref="policyComponent"/>
-		<property name="permissionService" ref="permissionService"/>
-		<property name="authorityService" ref="authorityService"/>
-		<property name="nodeService" ref="nodeService" />
 	</bean>
 
 	<bean id="armAggregateQueryPolicy" class="ru.it.lecm.arm.policy.ArmAggregateQueryPolicy"
@@ -278,5 +272,12 @@
     <bean name="arm.filters.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.filters.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.filters"/>
+    </bean>
+
+    <bean name="arm.accordions.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.accordions.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.accordions.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.accordions"/>
     </bean>
 </beans>
