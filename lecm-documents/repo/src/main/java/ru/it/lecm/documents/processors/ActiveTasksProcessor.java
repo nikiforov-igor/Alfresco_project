@@ -1,5 +1,6 @@
 package ru.it.lecm.documents.processors;
 
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +79,7 @@ public class ActiveTasksProcessor extends SearchQueryProcessor{
 			remainingDays = (Integer) params.get("remainingDays");
 	    }
 
-        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(orgstructureBean.getCurrentEmployee(), filterTasks, remainingDays);
+        List<NodeRef> documents = stateMachineService.getDocumentsWithActiveTasks(AuthenticationUtil.getFullyAuthenticatedUser(), filterTasks, remainingDays);
         for (NodeRef document : documents) {
             sbQuery.append("ID:\"").append(document.toString()).append("\" OR ");
         }

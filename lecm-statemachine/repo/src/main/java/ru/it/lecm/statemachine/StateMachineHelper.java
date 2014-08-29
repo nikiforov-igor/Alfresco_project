@@ -432,11 +432,10 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     }
 
     @Override
-    public List<NodeRef> getDocumentsWithActiveTasks(NodeRef employee, Set<String> workflowIds, Integer remainingDays) {
+    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays) {
         Set<NodeRef> documents = new HashSet<NodeRef>();
-        String login = orgstructureBean.getEmployeeLogin(employee);
 
-        List<WorkflowTask> tasks = getAssignedAndPooledTasks(login);
+        List<WorkflowTask> tasks = getAssignedAndPooledTasks(employeeLogin);
         for (WorkflowTask task : tasks) {
             if (workflowIds == null || workflowIds.isEmpty() || workflowIds.contains(task.getDefinition().getId())) {
 	            NodeRef doc = getTaskDocument(task, null);
