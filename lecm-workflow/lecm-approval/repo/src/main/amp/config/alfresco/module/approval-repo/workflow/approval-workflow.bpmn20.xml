@@ -7,7 +7,7 @@
           <activiti:string><![CDATA[(function(){ /* happy end */
   /* пометка итерации как завершенной */
   var currentIteration = execution.getVariableLocal('currentIteration');
-  currentIteration.properties.lecmApproveAspects_approvalState = 'COMPLETE';
+  currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentIteration.save();
   /* установка итерации решения о согласовании */
 })();]]></activiti:string>
@@ -30,11 +30,11 @@
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
   currentIteration.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    lecmApproveAspects_approvalState: 'ACTIVE'
+    'lecmApproveAspects:approvalState': 'ACTIVE'
   });
   execution.setVariableLocal('currentIteration', approval.getConverter().convertNode(currentIteration.nodeRef));
-  var routeInterruptAfterReject = currentIteration.properties.lecmWorkflowRoutes_routeInterruptAfterReject;
-  var routeNotifyAboutEveryDecision = currentIteration.properties.lecmWorkflowRoutes_routeNotifyAboutEveryDecision;
+  var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
+  var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
   execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
 })();]]></activiti:string>
@@ -52,7 +52,7 @@
   var stage, i, size, approvalState;
   for (i = 0, size = stages.length; i < size; ++i) {
     stage = stages[i];
-    approvalState = stage.properties.lecmApproveAspects_approvalState;
+    approvalState = stage.properties['lecmApproveAspects:approvalState'];
     /* выбор первого неактивного этапа */
     if (!approvalState || 'NEW' == approvalState) {
       break;
@@ -60,10 +60,10 @@
   }
   /* пометка этапа как активного */
   stage.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    lecmApproveAspects_approvalState: 'ACTIVE'
+    'lecmApproveAspects:approvalState': 'ACTIVE'
   });
   /* передача этапа в подпроцесс */
-  execution.setVariable('currentStage', stage);
+  execution.setVariable('currentStage', approval.getConverter().convertNode(stage.nodeRef));
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -79,7 +79,7 @@
             <activiti:string><![CDATA[(function(){ /* happy end */
   /* пометка этапа как завершенного */
   var stage = execution.getVariable('currentStage');
-  stage.properties.lecmApproveAspects_approvalState = 'COMPLETE';
+  stage.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stage.save();
   /* установка этапу решения о согласовании */
 })();]]></activiti:string>
@@ -95,8 +95,11 @@
           <activiti:field name="script">
             <activiti:string><![CDATA[(function(){ /* старт подпроцесса, подготовка переменных */
   var currentStage = execution.getVariable('currentStage');
-  var stageWorkflowType = currentStage.properties.lecmWorkflowRoutes_stageWorkflowType;
-  var stageWorkflowTerm = currentStage.properties.lecmWorkflowRoutes_stageWorkflowTerm;
+  for (var prop in currentStage.properties) {
+    logger.log(prop + ' = ' + currentStage.properties[prop]);
+  }
+  var stageWorkflowType = currentStage.properties['lecmWorkflowRoutes:stageWorkflowType'];
+  var stageWorkflowTerm = currentStage.properties['lecmWorkflowRoutes:stageWorkflowTerm'];
   execution.setVariableLocal('stageWorkflowType', stageWorkflowType);
   execution.setVariableLocal('stageWorkflowTerm', stageWorkflowTerm);
 })();]]></activiti:string>
@@ -117,9 +120,10 @@
   var currentStage = execution.getVariable('currentStage');
   var stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var stageItem, i, size, approvalState;
+  var employees;
   for (i = 0, size = stageItems.length; i < size; ++i) {
     stageItem = stageItems[i];
-    approvalState = stageItem.properties.lecmApproveAspects_approvalState;
+    approvalState = stageItem.properties['lecmApproveAspects:approvalState'];
     /* выбор первого неактивного */
     if (!approvalState || 'NEW' == approvalState) {
       break;
@@ -127,10 +131,16 @@
   }
   /* пометка как активного */
   stageItem.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    lecmApproveAspects_approvalState: 'ACTIVE'
+    'lecmApproveAspects:approvalState': 'ACTIVE'
   });
+  /* вычисление userName */
+  employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
+  if (employees && employees.length) {
+    stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = orgstructure.getEmployeeLogin(employees[0]);
+    stageItem.save();
+  }
   /* передача в подпроцесс */
-  execution.setVariableLocal('currentStageItem', stageItem);
+  execution.setVariableLocal('currentStageItem', approval.getConverter().convertNode(stageItem.nodeRef));
 })();]]></activiti:string>
           </activiti:field>
           <activiti:field name="runAs">
@@ -141,7 +151,7 @@
       <sequenceFlow id="flow11" sourceRef="exclusivegateway3" targetRef="alfrescoScripttask5">
         <conditionExpression xsi:type="tFormalExpression"><![CDATA[${execution.getVariableLocal('stageWorkflowType') == 'SEQUENTIAL'}]]></conditionExpression>
       </sequenceFlow>
-      <userTask id="usertask1" name="User Task" activiti:assignee="${currentStageItem.properties.lecmWorkflowRoutes_stageItemUserName}" activiti:formKey="lecmApprove3:approveTask">
+      <userTask id="usertask1" name="User Task" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
         <extensionElements>
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
@@ -158,6 +168,13 @@
           <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* complete */
+  /* получаем настоящий execution */
+  var realExecution = (execution.parent) ? execution.parent : execution;
+  var decision = task.getVariableLocal('lecmApprove3_decision');
+  var stageItem = realExecution.getVariableLocal('currentStageItem');
+  stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
+  stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  stageItem.save();
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -169,12 +186,12 @@
           <activiti:field name="script">
             <activiti:string><![CDATA[(function(){ /* has next */
   var stageItem = execution.getVariableLocal('currentStageItem');
-  var stageItemDecision = stageItem.properties.lecmApproveAspects_approvalDecision;
+  var stageItemDecision = stageItem.properties['lecmApproveAspects:approvalDecision'];
   var currentStage = execution.getVariable('currentStage');
   var stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var i, size, approvalState, hasNextStageItem;
   for (i = 0, size = stageItems.length; i < size; ++i) {
-    approvalState = stageItems[i].properties.lecmApproveAspects_approvalState;
+    approvalState = stageItems[i].properties['lecmApproveAspects:approvalState'];
     /* поиск неактивных этапов */
     if (!approvalState || 'NEW' == approvalState) {
       hasNextStageItem = true;
@@ -200,7 +217,7 @@
       <sequenceFlow id="flow16" sourceRef="exclusivegateway4" targetRef="exclusivegateway5">
         <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!execution.getVariableLocal('hasNextStageItem')}]]></conditionExpression>
       </sequenceFlow>
-      <userTask id="usertask2" name="User Task" activiti:assignee="${currentStageItem.properties.lecmWorkflowRoutes_stageItemUserName}" activiti:formKey="lecmApprove3:approveTask">
+      <userTask id="usertask2" name="User Task" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
         <extensionElements>
           <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
             <activiti:field name="script">
@@ -251,13 +268,13 @@
   установка флага hasNextStage, с учетом флага "завершать после первой визы "не согласен"
 */
   var stage = execution.getVariable('currentStage');
-  var stageDecision = stage.properties.lecmApproveAspects_approvalDecision;
+  var stageDecision = stage.properties['lecmApproveAspects:approvalDecision'];
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.assocs.getChildAssocsByType('lecmWorkflowRoutes:stage');
   var i, size, approvalState, hasNextStage;
   for (i = 0, size = stages.length; i < size; ++i) {
-    approvalState = stages[i].properties.lecmApproveAspects_approvalState;
+    approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
     /* поиск неактивных этапов */
     if (!approvalState || 'NEW' == approvalState) {
       hasNextStage = true;
