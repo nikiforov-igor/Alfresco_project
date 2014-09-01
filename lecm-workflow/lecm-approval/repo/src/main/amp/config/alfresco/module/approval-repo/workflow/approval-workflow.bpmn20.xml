@@ -162,6 +162,11 @@
           <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create */
+  var document = bpm_package.children[0];
+  var stageItem = execution.getVariableLocal('currentStageItem');
+  var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
+  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
+  lecmPermission.grantDynamicRole(document, employees[0], 'DA_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -169,9 +174,9 @@
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* complete */
   /* получаем настоящий execution */
-  var realExecution = (execution.parent) ? execution.parent : execution;
+  /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
-  var stageItem = realExecution.getVariableLocal('currentStageItem');
+  var stageItem = execution.getVariableLocal('currentStageItem');
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.save();
@@ -198,7 +203,7 @@
       break;
     }
   }
-  hasNextStageItem = hasNextStageItem && (!execution.getVariable('routeInterruptAfterReject') || stageItemDecision != 'REJECTED');
+  hasNextStageItem = !!(hasNextStageItem && (!execution.getVariable('routeInterruptAfterReject') || stageItemDecision != 'REJECTED'));
   execution.setVariableLocal('hasNextStageItem', hasNextStageItem);
 })();]]></activiti:string>
           </activiti:field>
@@ -231,20 +236,23 @@
           </activiti:executionListener>
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
-              <activiti:string><![CDATA[(function(){ /* assign */
-})();]]></activiti:string>
+              <activiti:string><![CDATA[(function(){ /* assign multi */
+})();
+]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
           <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
-              <activiti:string><![CDATA[(function(){ /* create */
-})();]]></activiti:string>
+              <activiti:string><![CDATA[(function(){ /* create multi */
+})();
+]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
           <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
-              <activiti:string><![CDATA[(function(){ /* complete */
-})();]]></activiti:string>
+              <activiti:string><![CDATA[(function(){ /* complete multi */
+})();
+]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
         </extensionElements>
@@ -271,7 +279,7 @@
   var stageDecision = stage.properties['lecmApproveAspects:approvalDecision'];
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
-  var stages = currentIteration.assocs.getChildAssocsByType('lecmWorkflowRoutes:stage');
+  var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
   var i, size, approvalState, hasNextStage;
   for (i = 0, size = stages.length; i < size; ++i) {
     approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
@@ -281,7 +289,7 @@
       break;
     }
   }
-  hasNextStage = hasNextStage && (!execution.getVariable('routeInterruptAfterReject') || stageDecision != 'REJECTED');
+  hasNextStage = !!(hasNextStage && (!execution.getVariable('routeInterruptAfterReject') || stageDecision != 'REJECTED'));
   execution.setVariableLocal('hasNextStage', hasNextStage);
 })();]]></activiti:string>
         </activiti:field>
