@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
@@ -16,11 +17,13 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.workflow.approval.api.ApprovalAspectsModel;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
@@ -99,7 +102,20 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean archiveDocumentCurrentIteration(final NodeRef documentRef) {
-		return true;
+		NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentRef);
+		if (documentCurrentIteration != null) {
+			NodeRef documentApprovalHistoryFolder = approvalService.getDocumentApprovalHistoryFolder(documentRef);
+			if (documentApprovalHistoryFolder == null) {
+				documentApprovalHistoryFolder = approvalService.createDocumentApprovalHistoryFolder(documentRef);
+			}
+			int archiveSize = nodeService.getChildAssocs(documentApprovalHistoryFolder).size();
+			NodeRef archivedIteration = nodeService.moveNode(documentCurrentIteration, documentApprovalHistoryFolder, ContentModel.ASSOC_CONTAINS, getRandomQName()).getChildRef();
+			nodeService.setProperty(archivedIteration, ContentModel.PROP_TITLE, "Итерация " + (archiveSize + 1));
+
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -142,8 +158,12 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		} else {
 			NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentNode);
 			if (documentCurrentIteration != null) {
-				logger.warn("Iteration for {} exists", documentNode);
-				archiveDocumentCurrentIteration(documentNode);
+				if (isIterationAvailableForArchiving(documentCurrentIteration)) {
+					logger.info("Iteration for {} exists", documentNode);
+					archiveDocumentCurrentIteration(documentNode);
+				} else {
+					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
+				}
 			}
 		}
 		iteration = copyService.copy(routeNode, approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
@@ -184,6 +204,39 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 
 		return stageItems;
+	}
+
+	@Override
+	public NodeRef createEmptyIteration(NodeRef documentNode) {
+		NodeRef iterationNode;
+		NodeRef approvalFolder = approvalService.getDocumentApprovalFolder(documentNode);
+		if (approvalFolder == null) {
+			approvalFolder = approvalService.createDocumentApprovalFolder(documentNode);
+		} else {
+			NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentNode);
+			if (documentCurrentIteration != null) {
+				if (isIterationAvailableForArchiving(documentCurrentIteration)) {
+					logger.info("Iteration for {} exists", documentNode);
+					archiveDocumentCurrentIteration(documentNode);
+				} else {
+					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
+				}
+			}
+		}
+
+		iterationNode = nodeService.createNode(approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), RoutesModel.TYPE_ROUTE).getChildRef();
+
+		return iterationNode;
+	}
+
+	private boolean isIterationAvailableForArchiving(NodeRef iterationNode) {
+		boolean result;
+		String approvalState = (String) nodeService.getProperty(iterationNode, ApprovalAspectsModel.PROP_APPROVAL_STATE);
+
+		// можно архивировать, если не определено или не активно
+		result = approvalState == null || !"ACTIVE".equals(approvalState);
+
+		return result;
 	}
 
 }

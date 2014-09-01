@@ -33,4 +33,7 @@ public interface RoutesService {
 	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef);
 
 	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
+
+	public NodeRef createEmptyIteration(NodeRef documentNode);
+
 }

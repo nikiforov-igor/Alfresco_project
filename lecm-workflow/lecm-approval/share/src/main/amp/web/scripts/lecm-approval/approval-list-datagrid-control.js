@@ -28,6 +28,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		stageItemType: null,
 		routeType: null,
 		currentIterationNode: null,
+		approvalState: null,
 		getApprovalData: function(callback, callbackArg) {
 			Alfresco.util.Ajax.request({
 				method: 'GET',
@@ -43,6 +44,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 							this.stageItemType = response.json.stageItemType;
 							this.routeType = response.json.routeType;
 							this.currentIterationNode = response.json.currentIterationNode ? response.json.currentIterationNode : null;
+							this.approvalState = response.json.approvalState;
 
 							LogicECM.module.Routes = LogicECM.module.Routes || {};
 							LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};
@@ -109,6 +111,16 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			var dropdownMenu = event.target,
 				dropdownMenuValue = dropdownMenu.value;
 
+			dropdownMenu.selectedIndex = 0;
+
+			if (this.approvalState === "ACTIVE") {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: 'Итерация активна',
+					text: 'Нельзя создать новый лист согласования, так как итерация активна'
+				});
+				return false;
+			}
+
 			switch (dropdownMenuValue) {
 				case 'route' :
 					this._createApprovalListFromRoute();
@@ -119,7 +131,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				default :
 					break;
 			}
-			dropdownMenu.selectedIndex = 0;
 		},
 		_createApprovalListFromRoute: function() {
 			console.log('_createApprovalListFromRoute');
@@ -167,8 +178,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			selectRouteForm.show();
 		},
 		_createEmptyApprovalLst: function() {
-			Alfresco.util.Ajax.request({
-				method: 'GET',
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createEmptyIteration',
 				dataObj: {
 					documentNodeRef: this.documentNodeRef

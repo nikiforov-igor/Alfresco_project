@@ -13,6 +13,7 @@ import ru.it.lecm.workflow.routes.api.RoutesService;
  * @author vlevin
  */
 public class RoutesJavascriptExtension extends BaseWebScript {
+
 	private RoutesService routesService;
 
 	public void setRoutesService(RoutesService routesService) {
@@ -21,15 +22,18 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 	public ScriptNode getRoutesFolder() {
 		NodeRef routesFolderNode = routesService.getRoutesFolder();
+
 		return new ScriptNode(routesFolderNode, serviceRegistry, getScope());
 	}
 
 	public String getRouteType() {
 		return RoutesModel.TYPE_ROUTE.toPrefixString(serviceRegistry.getNamespaceService());
 	}
+
 	public String getStageType() {
 		return RoutesModel.TYPE_STAGE.toPrefixString(serviceRegistry.getNamespaceService());
 	}
+
 	public String getStageItemType() {
 		return RoutesModel.TYPE_STAGE_ITEM.toPrefixString(serviceRegistry.getNamespaceService());
 	}
@@ -44,6 +48,7 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 	public ScriptNode getDocumentCurrentIteration(ScriptNode documentNode) {
 		NodeRef iterationNode = routesService.getDocumentCurrentIteration(documentNode.getNodeRef());
+
 		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 	}
 
@@ -53,8 +58,14 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 	public ScriptNode convertRouteToIteration(ScriptNode documentNode, ScriptNode routeNode) {
 		NodeRef iterationNode = routesService.convertRouteToIteration(documentNode.getNodeRef(), routeNode.getNodeRef());
-		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 
+		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+	}
+
+	public ScriptNode createEmptyIteration(ScriptNode documentNode) {
+		NodeRef iterationNode = routesService.createEmptyIteration(documentNode.getNodeRef());
+
+		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 	}
 
 }

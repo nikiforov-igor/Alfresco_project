@@ -13,5 +13,5 @@
 	model.routeType = routesService.getRouteType();
 	model.stageType = routesService.getStageType();
 	model.stageItemType = routesService.getStageItemType();
-	model.approvalState = approvalState ? approvalState : 'NOT_STARTED';
+	model.approvalState = approvalState ? approvalState : 'NOT_EXITS';
 })();

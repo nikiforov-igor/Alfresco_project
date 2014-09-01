@@ -1,6 +1,4 @@
 (function() {
-	var UUID = Packages.java.util.UUID;
-
 	var documentNodeStr = json.getString('alf_destination');
 	var documentNode = search.findNode(documentNodeStr);
 	var routeAssocName = 'lecmWorkflowRoutes_selectRouteAssocFake';
