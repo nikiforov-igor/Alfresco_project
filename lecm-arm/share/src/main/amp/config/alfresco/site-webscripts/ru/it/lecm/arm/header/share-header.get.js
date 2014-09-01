@@ -18,6 +18,8 @@ if (headerTitle != null) {
     if (page.url.args) {
         if (page.id == "arm" && page.url.args.code) {
             headerTitle.config.label = getArmName(page.url.args.code) || headerTitle.config.label;
-        }
+        } else if (page.id == "my-profile") {
+	        headerTitle.config.label = getArmName("lecm_my_profile") || headerTitle.config.label;
+		}
     }
 }
