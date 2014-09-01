@@ -58,7 +58,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public List<ArmNode> getAccordionsByArmCode(String armCode, boolean onlyMeta) {
-        List<ArmNode> result = new ArrayList<ArmNode>();
+        List<ArmNode> result = new ArrayList<>();
 
         NodeRef arm = service.getArmByCode(armCode);
         if (arm != null) {
@@ -77,12 +77,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
     @Override
     public List<ArmNode> getChildNodes(NodeRef node, NodeRef parentRef, boolean onlyMeta) {
-        List<ArmNode> result = new ArrayList<ArmNode>();
+        List<ArmNode> result = new ArrayList<>();
 
         ArmNode parent = wrapArmNodeAsObject(parentRef, false, onlyMeta);
 
         // 1. Дочерние статические элементы из настроек ARM
-        NodeRef parentFromArm = null;
+        NodeRef parentFromArm;
         if (isArmElement(node)) {
             parentFromArm = node;
         } else { // узел справочника или какой-нить другой объект, то реальный родитель - берется последний узел из ARM
@@ -170,12 +170,12 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     @Override
     public ArmNode wrapArmNodeAsObject(NodeRef nodeRef, boolean isAccordion, boolean onlyMeta) {
         ArmNode node = new ArmNode();
-        Map<QName, Serializable> properties = nodeService.getProperties(nodeRef);
+        Map<QName, Serializable> properties = service.getCachedProperties(nodeRef);
         node.setTitle((String) properties.get(ContentModel.PROP_NAME));
         node.setNodeRef(nodeRef);
-        node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
+        node.setNodeType(service.getCachedType(nodeRef).toPrefixString(namespaceService));
         if (!isAccordion) {
-            node.setArmNodeRef(nodeService.getPrimaryParent(nodeRef).getParentRef()); // для узла Арм - данное поле дублируется. как так узел Арм - реален
+            node.setArmNodeRef(service.getCachedParent(nodeRef)); // для узла Арм - данное поле дублируется. как так узел Арм - реален
         } else {
             node.setArmNodeRef(nodeRef);
         }
@@ -211,7 +211,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         ArmNode node = new ArmNode();
         node.setTitle(substitudeService.getObjectDescription(nodeRef));
         node.setNodeRef(nodeRef);
-        node.setNodeType(nodeService.getType(nodeRef).toPrefixString(namespaceService));
+        node.setNodeType(service.getCachedType(nodeRef).toPrefixString(namespaceService));
         node.setArmNodeRef(parentNode.getNodeRef());
         node.setTypes(parentNode.getTypes());
 
@@ -222,7 +222,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null && !realParent.equals(nodeRef)) {
-            Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
+            Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
@@ -271,7 +271,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
 
         NodeRef realParent = parentNode.getArmNodeRef();
         if (realParent != null) {
-            Object searchQuery = nodeService.getProperty(realParent, ArmService.PROP_SEARCH_QUERY);
+            Object searchQuery = service.getCachedProperties(realParent).get(ArmService.PROP_SEARCH_QUERY);
             if (searchQuery != null) {
                 String parentQuery = searchQuery.toString().replaceAll("\\n", " ").replaceAll("\\r", " ");
                 if (!parentQuery.isEmpty()) {
@@ -312,15 +312,15 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
         List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(nodeRef, ArmService.ASSOC_NODE_CHILD_RULE);
         if (queryAssoc != null && queryAssoc.size() > 0) {
             NodeRef query = queryAssoc.get(0).getTargetRef();
-            QName queryType = nodeService.getType(query);
-            Map<QName, Serializable> props = nodeService.getProperties(query);
+            QName queryType = service.getCachedType(query);
+            Map<QName, Serializable> props = service.getCachedProperties(query);
 
             if (ArmService.TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
                 ArmStatusesChildRule node = new ArmStatusesChildRule();
                 node.setRule((String) props.get(ArmService.PROP_STATUSES_RULE));
                 String selectedStatuses = (String) props.get(ArmService.PROP_SELECTED_STATUSES);
                 if (selectedStatuses != null) {
-                    List<String> selectedStatusesList = new ArrayList<String>();
+                    List<String> selectedStatusesList = new ArrayList<>();
                     for (String str: selectedStatuses.split(",")) {
                         String status = str.trim();
                         if (status.length() > 0) {
@@ -334,7 +334,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
                 return node.getQuery();
             }
         }
-        return (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+        return (String) service.getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);
     }
 
     public String formatQuery(String templateQuery, String value) {
@@ -351,7 +351,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private List<ArmColumn> getNodeColumns(NodeRef node) {
         List<ArmColumn> nodeColumns = service.getNodeColumns(node);
         if (nodeColumns.isEmpty()) {
-            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            NodeRef parent = service.getCachedParent(node);
             if (isArmElement(parent)) {
                 return getNodeColumns(parent);
             }
@@ -362,7 +362,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private List<ArmFilter> getNodeFilters(NodeRef node) {
         List<ArmFilter> nodeFilters = service.getNodeFilters(node);
         if (nodeFilters.isEmpty()) {
-            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            NodeRef parent = service.getCachedParent(node);
             if (isArmElement(parent)) {
                 return getNodeFilters(parent);
             }
@@ -373,7 +373,7 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     private List<String> getNodeTypes(NodeRef node) {
         List<String> nodeTypes = service.getNodeTypes(node);
         if (nodeTypes.isEmpty()) {
-            NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+            NodeRef parent = service.getCachedParent(node);
             if (isArmElement(parent)) {
                 return getNodeTypes(parent);
             }
@@ -382,10 +382,10 @@ public class ArmWrapperServiceImpl implements ArmWrapperService {
     }
 
 	private List<String> getNodeCreateTypes(NodeRef node) {
-        List<String> results = new ArrayList<String>();
+        List<String> results = new ArrayList<>();
         results.addAll(service.getNodeTypes(node));
 
-        NodeRef parent = nodeService.getPrimaryParent(node).getParentRef();
+        NodeRef parent = service.getCachedParent(node);
         if (isArmElement(parent)) {
 	        List<String> parentTypes = getNodeCreateTypes(parent);
 	        if (parentTypes != null) {

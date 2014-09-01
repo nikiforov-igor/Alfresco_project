@@ -47,12 +47,16 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private SimpleCache<NodeRef, List<NodeRef>> childNodesCache;
     private SimpleCache<NodeRef, List<String>> nodesTypesCache;
     private SimpleCache<NodeRef, Map<NodeRef, Set<String>>> accordionsCache;
+    private SimpleCache<NodeRef, Map<QName, Serializable>> propertiesCache;
+    private SimpleCache<NodeRef, NodeRef> parentsCache;
+    private SimpleCache<String, NodeRef> armsCache;
+    private SimpleCache<NodeRef, QName> typesCache;
 
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
         public int compare(NodeRef o1, NodeRef o2) {
-            Integer order1 = (Integer) nodeService.getProperty(o1, ArmService.PROP_ARM_ORDER);
-            Integer order2 = (Integer) nodeService.getProperty(o2, ArmService.PROP_ARM_ORDER);
+            Integer order1 = (Integer) getCachedProperties(o1).get(ArmService.PROP_ARM_ORDER);
+            Integer order2 = (Integer) getCachedProperties(o2).get(ArmService.PROP_ARM_ORDER);
             if (order1 == null && order2 != null) {
                 return -1;
             } else if (order1 != null && order2 == null) {
@@ -95,6 +99,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         this.accordionsCache = accordionsCache;
     }
 
+    public void setPropertiesCache(SimpleCache<NodeRef, Map<QName, Serializable>> propertiesCache) {
+        this.propertiesCache = propertiesCache;
+    }
+
+    public void setParentsCache(SimpleCache<NodeRef, NodeRef> parentsCache) {
+        this.parentsCache = parentsCache;
+    }
+
+    public void setArmsCache(SimpleCache<String, NodeRef> armsCache) {
+        this.armsCache = armsCache;
+    }
+
+    public void setTypesCache(SimpleCache<NodeRef, QName> typesCache) {
+        this.typesCache = typesCache;
+    }
+
     @Override
 	public NodeRef getServiceRootFolder() {
             return getFolder(ARM_ROOT_ID);
@@ -102,33 +122,22 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public boolean isArmAccordion(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_ARM_ACCORDION);
-		return isProperType(ref, types);
+		return isProperType(ref, TYPE_ARM_ACCORDION);
 	}
 
 	@Override
 	public boolean isArmNode(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_ARM_NODE);
-		return isProperType(ref, types);
+		return isProperType(ref, TYPE_ARM_NODE);
 	}
 
 	@Override
 	public boolean isArmReportsNode(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-		types.add(TYPE_ARM_REPORTS_NODE);
-		return isProperType(ref, types);
+		return isProperType(ref, TYPE_ARM_REPORTS_NODE);
 	}
 
 	@Override
 	public boolean isArmElement(NodeRef ref) {
-		Set<QName> types = new HashSet<QName>();
-        types.add(TYPE_ARM_ACCORDION);
-        types.add(TYPE_ARM_NODE);
-		types.add(TYPE_ARM_REPORTS_NODE);
-		types.add(TYPE_ARM_HTML_NODE);
-		return isProperType(ref, types);
+		return isProperType(ref, TYPE_ARM_ACCORDION, TYPE_ARM_NODE, TYPE_ARM_REPORTS_NODE, TYPE_ARM_HTML_NODE);
 	}
 
 	public NodeRef getDictionaryArmSettings() {
@@ -137,18 +146,20 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public NodeRef getArmByCode(String code) {
-		Set<QName> armTypeSet = new HashSet<QName>(1);
-		armTypeSet.add(TYPE_ARM);
+        if (!armsCache.contains(code)) {
+            Set<QName> armTypeSet = new HashSet<>(1);
+            armTypeSet.add(TYPE_ARM);
 
-		List<ChildAssociationRef> arms = nodeService.getChildAssocs(getDictionaryArmSettings(), armTypeSet);
-		if (arms != null) {
-			for (ChildAssociationRef armAssoc : arms) {
-				if (nodeService.getProperty(armAssoc.getChildRef(), PROP_ARM_CODE).equals(code)) {
-					return armAssoc.getChildRef();
-				}
-			}
-		}
-		return null;
+            List<ChildAssociationRef> arms = nodeService.getChildAssocs(getDictionaryArmSettings(), armTypeSet);
+            if (arms != null) {
+                for (ChildAssociationRef armAssoc : arms) {
+                    if (getCachedProperties(armAssoc.getChildRef()).get(PROP_ARM_CODE).equals(code)) {
+                        armsCache.put(code, armAssoc.getChildRef());
+                    }
+                }
+            }
+        }
+        return armsCache.get(code);
 	}
 
     @Override
@@ -192,7 +203,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     }
 
     private String getAutorityByBusinessRole(NodeRef businessRole) {
-        String roleIdentifier = (String) nodeService.getProperty(businessRole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+        String roleIdentifier = (String) getCachedProperties(businessRole).get(OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
         String roleName = Types.SGKind.SG_BR.getSGPos(roleIdentifier).getAlfrescoSuffix();
         return authorityService.getName(AuthorityType.GROUP, roleName);
     }
@@ -202,9 +213,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         if (childNodesCache.contains(node)) {
             return childNodesCache.get(node);
         }
-        List<NodeRef> result = new ArrayList<NodeRef>();
+        List<NodeRef> result = new ArrayList<>();
 
-        Set<QName> typeSet = new HashSet<QName>(1);
+        Set<QName> typeSet = new HashSet<>(1);
         typeSet.add(TYPE_ARM_ACCORDION);
         typeSet.add(TYPE_ARM_NODE);
         typeSet.add(TYPE_ARM_REPORTS_NODE);
@@ -225,8 +236,8 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         if (nodesTypesCache.contains(node)) {
             return nodesTypesCache.get(node);
         }
-		List<String> result = new ArrayList<String>();
-		String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
+		List<String> result = new ArrayList<>();
+		String types = (String) getCachedProperties(node).get(PROP_NODE_TYPES);
 		if (types != null && types.length() > 0) {
 			result.addAll(Arrays.asList(types.split(",")));
 		}
@@ -236,9 +247,9 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public Collection<QName> getNodeTypesIncludeInherit(NodeRef node) {
-		Collection<QName> results = new ArrayList<QName>();
+		Collection<QName> results = new ArrayList<>();
 		if (isArmElement(node)) {
-			String types = (String) nodeService.getProperty(node, PROP_NODE_TYPES);
+			String types = (String) getCachedProperties(node).get(PROP_NODE_TYPES);
 			if (types != null && types.length() > 0) {
 				List<String> stringTypes = Arrays.asList(types.split(","));
 				for (String type: stringTypes) {
@@ -263,7 +274,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             for (NodeRef ref : filters) {
                 if (!isArchive(ref)) {
                     ArmFilter filter = new ArmFilter();
-                    Map<QName, Serializable> props = nodeService.getProperties(ref);
+                    Map<QName, Serializable> props = getCachedProperties(ref);
                     filter.setTitle((String) props.get(ContentModel.PROP_NAME));
                     filter.setCode((String) props.get(PROP_FILTER_CODE));
 
@@ -272,7 +283,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                         filter.setMultipleSelect((Boolean) multipleValue);
                     }
 
-                    List<ArmFilterValue> valueList = new ArrayList<ArmFilterValue>();
+                    List<ArmFilterValue> valueList = new ArrayList<>();
                     String valuesStr = (String) props.get(PROP_FILTER_VALUES);
                     if (!valuesStr.isEmpty())  {
                         String[] valuesArray = valuesStr.split(",");
@@ -308,7 +319,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	@Override
 	public ArmCounter getNodeCounter(NodeRef node) {
-        Map<QName, Serializable> props = nodeService.getProperties(node);
+        Map<QName, Serializable> props = getCachedProperties(node);
 		Boolean counterEnable = (Boolean) props.get(PROP_COUNTER_ENABLE);
 		if (counterEnable != null && counterEnable) {
 			ArmCounter result = new ArmCounter();
@@ -332,7 +343,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
             List<NodeRef> columns = findNodesByAssociationRef(node, ASSOC_NODE_COLUMNS, null, ASSOCIATION_TYPE.TARGET);
             if (columns != null) {
                 for (NodeRef ref : columns) {
-                    Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
+                    Map<QName, Serializable> columnProps = getCachedProperties(ref);
 
                     Object byDefaultValue = columnProps.get(PROP_COLUMN_BY_DEFAULT);
                     if (byDefaultValue == null || (Boolean)byDefaultValue) {
@@ -383,7 +394,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
                 if (columns != null) {
                     for (NodeRef ref : columns) {
                         ArmColumn column = new ArmColumn(ref);
-                        Map<QName, Serializable> columnProps = nodeService.getProperties(ref);
+                        Map<QName, Serializable> columnProps = getCachedProperties(ref);
                         column.setTitle((String) columnProps.get(PROP_COLUMN_TITLE));
                         column.setField((String) columnProps.get(PROP_COLUMN_FIELD_NAME));
                         column.setFormatString((String) columnProps.get(PROP_COLUMN_FORMAT_STRING));
@@ -448,7 +459,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				ArmBaseChildRule result = null;
 				NodeRef query = queryAssoc.get(0).getTargetRef();
 				QName queryType = nodeService.getType(query);
-                Map<QName, Serializable> props = nodeService.getProperties(query);
+                Map<QName, Serializable> props = getCachedProperties(query);
                 if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
 					result = new ArmQueryChildRule();
 					((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
@@ -465,7 +476,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 					String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
 					if (selectedStatuses != null) {
-						List<String> selectedStatusesList = new ArrayList<String>();
+						List<String> selectedStatusesList = new ArrayList<>();
 						for (String str: selectedStatuses.split(",")) {
 							String status = str.trim();
 							if (status.length() > 0) {
@@ -484,10 +495,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
 	public void aggregateNode(NodeRef nodeRef) {
 		if (isArmAccordion(nodeRef) || isArmNode(nodeRef)) {
-			Boolean isAggregationNode = (Boolean) nodeService.getProperty(nodeRef, ArmService.PROP_IS_AGGREGATION_NODE);
+			Boolean isAggregationNode = (Boolean) getCachedProperties(nodeRef).get(ArmService.PROP_IS_AGGREGATION_NODE);
 
 			if (Boolean.TRUE.equals(isAggregationNode)) {
-				Set<QName> typeSet = new HashSet<QName>();
+				Set<QName> typeSet = new HashSet<>();
 				typeSet.add(ArmService.TYPE_ARM_NODE);
 				List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(nodeRef, typeSet);
 				if (childAssocs != null) {
@@ -505,7 +516,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 							query.append(searchQuery).append(")");
 						}
 					}
-					String oldQuery = (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+					String oldQuery = (String) getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);
 					if (!query.toString().equals(oldQuery)) {
 						nodeService.setProperty(nodeRef, ArmService.PROP_SEARCH_QUERY, query.toString());
 					}
@@ -519,14 +530,14 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 		if (queryAssoc != null && queryAssoc.size() > 0) {
 			NodeRef query = queryAssoc.get(0).getTargetRef();
 			QName queryType = nodeService.getType(query);
-			Map<QName, Serializable> props = nodeService.getProperties(query);
+			Map<QName, Serializable> props = getCachedProperties(query);
 
 			if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
 				ArmStatusesChildRule node = new ArmStatusesChildRule();
 				node.setRule((String) props.get(PROP_STATUSES_RULE));
 				String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
 				if (selectedStatuses != null) {
-					List<String> selectedStatusesList = new ArrayList<String>();
+					List<String> selectedStatusesList = new ArrayList<>();
 					for (String str: selectedStatuses.split(",")) {
 						String status = str.trim();
 						if (status.length() > 0) {
@@ -540,7 +551,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 				return node.getQuery();
 			}
 		}
-		return (String) nodeService.getProperty(nodeRef, ArmService.PROP_SEARCH_QUERY);
+		return (String) getCachedProperties(nodeRef).get(ArmService.PROP_SEARCH_QUERY);
 	}
 
     @Override
@@ -550,6 +561,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         columnsCache.clear();
         nodesTypesCache.clear();
         accordionsCache.clear();
+        propertiesCache.clear();
+        parentsCache.clear();
+        armsCache.clear();
+        typesCache.clear();
         logger.info("Arm cache cleared!!!");
     }
 
@@ -568,6 +583,49 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         }
         logger.info("Arm cache cleared for '{}'!!!", user);
     }
+
+    /*package*/ Map<QName, Serializable> getCachedProperties(NodeRef nodeRef) {
+        if (!propertiesCache.contains(nodeRef)) {
+            propertiesCache.put(nodeRef, nodeService.getProperties(nodeRef));
+        }
+        return propertiesCache.get(nodeRef);
+    }
+
+    /*package*/ NodeRef getCachedParent(NodeRef nodeRef) {
+        if(!parentsCache.contains(nodeRef)) {
+            parentsCache.put(nodeRef, nodeService.getPrimaryParent(nodeRef).getParentRef());
+        }
+        return parentsCache.get(nodeRef);
+    }
+
+    /*package*/ QName getCachedType(NodeRef ref) {
+        if (!typesCache.contains(ref)) {
+            typesCache.put(ref, nodeService.getType(ref));
+        }
+        return typesCache.get(ref);
+    }
+
+    /**
+     * Проверка типа ноды. Использует кэш. Наследование не учитывается.
+     * @param ref нода
+     * @param types проверяемые типы
+     * @return true, если тип совпал с одном из переданных
+     */
+    @Override
+    public boolean isProperType(NodeRef ref, QName... types) {
+        if (ref == null || types == null || types.length == 0) {
+            return false;
+        }
+        QName type = getCachedType(ref);
+        for (QName name : types) {
+            if (name.equals(type)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;

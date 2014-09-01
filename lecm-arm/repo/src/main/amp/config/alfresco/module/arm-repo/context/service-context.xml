@@ -65,6 +65,10 @@
         <property name="nodesTypesCache" ref="arm.nodes.types.cache"/>
         <property name="filtersCache" ref="arm.filters.cache"/>
         <property name="accordionsCache" ref="arm.accordions.cache"/>
+        <property name="propertiesCache" ref="arm.properties.cache"/>
+        <property name="parentsCache" ref="arm.parents.cache"/>
+        <property name="armsCache" ref="arm.arms.cache"/>
+        <property name="typesCache" ref="arm.types.cache"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -280,5 +284,33 @@
     <bean name="arm.accordions.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.accordions.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.accordions"/>
+    </bean>
+
+    <bean name="arm.properties.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.properties.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.properties.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.properties"/>
+    </bean>
+
+    <bean name="arm.parents.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.parents.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.parents.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.parents"/>
+    </bean>
+
+    <bean name="arm.arms.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.arms.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.arms.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.arms"/>
+    </bean>
+
+    <bean name="arm.types.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.types.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.types.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.types"/>
     </bean>
 </beans>
