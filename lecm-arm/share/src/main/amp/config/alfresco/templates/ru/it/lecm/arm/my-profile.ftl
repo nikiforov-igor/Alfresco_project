@@ -2,18 +2,10 @@
 <@templateHeader "transitional">
 	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-filters.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"></@script>
-<#-- нужен в base-utils -->
-	<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"></@script>
-<#--загрузка base-utils.js вынесена в base-share-config-custom.xml-->
-<#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js"></@script>-->
 
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css"/>
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/documents-list.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-arm/lecm-arm-documents.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/title-with-filter-label/title-with-filter-label.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
 
 	<#include "/org/alfresco/components/form/form.dependencies.inc">

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+	<item name="cm:Распределение задач" type="lecm-arm:html-node">
+		<property name="cm:name"><![CDATA[Распределение задач]]></property>
+		<property name="lecm-arm:order"><![CDATA[1]]></property>
+		<property name="lecm-arm:html-url"><![CDATA[page/distribution-tasks]]></property>
+	</item>
+</items>
