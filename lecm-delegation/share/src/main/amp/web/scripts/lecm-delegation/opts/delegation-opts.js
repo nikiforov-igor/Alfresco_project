@@ -27,6 +27,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 	 * Augment prototype with main class implementation, ensuring overwrite is enabled
 	 */
 	YAHOO.lang.augmentObject (LogicECM.module.Delegation.DelegationOpts.prototype, {
+		datagridId: "",
 
 		options: {
 			delegator: null, //nodeRef на делегирующее лицо
@@ -35,7 +36,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 
 		onDelegationOptsPart1: function (result) {
 			var contentEl = YAHOO.util.Dom.get(this.id + "-content-part1");
-			contentEl.innerHTML = result.serverResponse.responseText;
+			contentEl.innerHTML = '<div id="' + this.datagridId + '">' + result.serverResponse.responseText + "<div>";
 			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
 			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
 			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
@@ -49,7 +50,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 								text:"Данные обновлены"
 							});
 							YAHOO.Bubbling.fire("datagridRefresh", {
-								bubblingLabel: "procuracy-datagrid"
+								bubblingLabel: this.datagridId
 							});
 						},
 						scope: this
@@ -71,6 +72,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 		},
 
 		onReady: function () {
+			this.datagridId = this.id + YAHOO.util.Dom.generateId();
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 
@@ -80,7 +82,7 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 
 				var argsPart1 = {
 					htmlid: "delegation-opts-part1",
-					datagridId: this.id,
+					datagridId: this.datagridId,
 					itemKind: "node",
 					itemId: this.options.delegator,
 					formId: "delegation-opts-part1",

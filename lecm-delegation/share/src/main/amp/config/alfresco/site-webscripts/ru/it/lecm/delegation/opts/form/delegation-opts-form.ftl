@@ -52,7 +52,7 @@
 				(function(){
 					"use strict";
 					var datagrid = new LogicECM.module.Delegation.Procuracy.Grid("${args.datagridId}").setOptions({
-						bubblingLabel: "procuracy-datagrid",
+						bubblingLabel: "${args.datagridId}",
 						usePagination:false,
 						showExtendSearchBlock:false,
 						showCheckboxColumn: false,
@@ -63,7 +63,7 @@
 						showActionColumn: true,
 						actions: [
 							{
-								type: "datagrid-action-link-procuracy-datagrid",
+								type: "datagrid-action-link-${args.datagridId}",
 								id: "onActionEdit",
 								permission: "edit",
 								label: "редактировать доверенность"
@@ -75,7 +75,7 @@
 //								label: "передавать права руководителя"
 //							},
 							{
-								type: "datagrid-action-link-procuracy-datagrid",
+								type: "datagrid-action-link-${args.datagridId}",
 								id: "onActionDelete",
 								permission: "delete",
 								label: "удалить доверенность"
@@ -90,13 +90,14 @@
 							datagridMeta:{
 								itemType: "lecm-d8n:procuracy",
 								nodeRef: "${args.itemId}"
-							}
+							},
+							bubblingLabel: datagrid.id
 						});
 					});
 				})();
 			//]]>
 			</script>
-			<@grid.datagrid args.datagridId/>
+			<@grid.datagrid args.datagridId false/>
 		</div>
 	</fieldset>
 	<#-- "царапина" -->
