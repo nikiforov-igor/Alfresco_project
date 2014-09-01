@@ -69,6 +69,7 @@
         <property name="parentsCache" ref="arm.parents.cache"/>
         <property name="armsCache" ref="arm.arms.cache"/>
         <property name="typesCache" ref="arm.types.cache"/>
+        <property name="childRulesCache" ref="arm.rules.cache"/>
 		<!-- Автоматическое создание каталогов. -->
 		<property name="folders">
 			<map>
@@ -312,5 +313,12 @@
     <bean name="arm.types.cache" class="org.alfresco.repo.cache.TransactionalCache">
         <property name="sharedCache" ref="arm.types.shared.cache"/>
         <property name="name" value="ru.it.lecm.cache.arm.types"/>
+    </bean>
+
+    <bean name="arm.rules.shared.cache" class="org.alfresco.repo.cache.DefaultSimpleCache"/>
+
+    <bean name="arm.rules.cache" class="org.alfresco.repo.cache.TransactionalCache">
+        <property name="sharedCache" ref="arm.rules.shared.cache"/>
+        <property name="name" value="ru.it.lecm.cache.arm.rules"/>
     </bean>
 </beans>

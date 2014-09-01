@@ -51,6 +51,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     private SimpleCache<NodeRef, NodeRef> parentsCache;
     private SimpleCache<String, NodeRef> armsCache;
     private SimpleCache<NodeRef, QName> typesCache;
+    private SimpleCache<NodeRef, ArmBaseChildRule> childRulesCache;
 
     private Comparator<NodeRef> comparator = new Comparator<NodeRef>() {
         @Override
@@ -113,6 +114,10 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
 
     public void setTypesCache(SimpleCache<NodeRef, QName> typesCache) {
         this.typesCache = typesCache;
+    }
+
+    public void setChildRulesCache(SimpleCache<NodeRef, ArmBaseChildRule> childRulesCache) {
+        this.childRulesCache = childRulesCache;
     }
 
     @Override
@@ -454,43 +459,48 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
     @Override
 	public ArmBaseChildRule getNodeChildRule(NodeRef node) {
 		if (isArmNode(node)) {
-			List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_CHILD_RULE);
-			if (queryAssoc != null && queryAssoc.size() > 0) {
-				ArmBaseChildRule result = null;
-				NodeRef query = queryAssoc.get(0).getTargetRef();
-				QName queryType = nodeService.getType(query);
-                Map<QName, Serializable> props = getCachedProperties(query);
-                if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
-					result = new ArmQueryChildRule();
-					((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
-                    ((ArmQueryChildRule) result).setSearchService(searchService);
-				} else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
-					result = new ArmDictionaryChildRule();
-					NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);
-					((ArmDictionaryChildRule) result).setDictionary(dictionary);
-                    ((ArmDictionaryChildRule) result).setDictionaryService(dictionaryService);
-				} else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
-					result = new ArmStatusesChildRule();
-					((ArmStatusesChildRule) result).setRule((String) props.get(PROP_STATUSES_RULE));
-                    ((ArmStatusesChildRule) result).setStateMachineService(stateMachineService);
+            if (!childRulesCache.contains(node)) {
+                List<AssociationRef> queryAssoc = nodeService.getTargetAssocs(node, ASSOC_NODE_CHILD_RULE);
+                ArmBaseChildRule result = null;
+                if (queryAssoc != null && queryAssoc.size() > 0) {
+                    result = null;
+                    NodeRef query = queryAssoc.get(0).getTargetRef();
+                    QName queryType = getCachedType(query);
+                    Map<QName, Serializable> props = getCachedProperties(query);
+                    if (TYPE_QUERY_CHILD_RULE.equals(queryType)) {
+                        result = new ArmQueryChildRule();
+                        ((ArmQueryChildRule) result).setListQuery((String) props.get(PROP_LIST_QUERY_CHILD_RULE));
+                        ((ArmQueryChildRule) result).setSearchService(searchService);
+                    } else if (TYPE_DICTIONARY_CHILD_RULE.equals(queryType)) {
+                        result = new ArmDictionaryChildRule();
+                        NodeRef dictionary = findNodeByAssociationRef(query, ASSOC_DICTIONARY_CHILD_RULE, null, ASSOCIATION_TYPE.TARGET);
+                        ((ArmDictionaryChildRule) result).setDictionary(dictionary);
+                        ((ArmDictionaryChildRule) result).setDictionaryService(dictionaryService);
+                    } else if (TYPE_STATUSES_CHILD_RULE.equals(queryType)) {
+                        result = new ArmStatusesChildRule();
+                        ((ArmStatusesChildRule) result).setRule((String) props.get(PROP_STATUSES_RULE));
+                        ((ArmStatusesChildRule) result).setStateMachineService(stateMachineService);
 
-					String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
-					if (selectedStatuses != null) {
-						List<String> selectedStatusesList = new ArrayList<>();
-						for (String str: selectedStatuses.split(",")) {
-							String status = str.trim();
-							if (status.length() > 0) {
-								selectedStatusesList.add(status);
-							}
-						}
+                        String selectedStatuses = (String) props.get(PROP_SELECTED_STATUSES);
+                        if (selectedStatuses != null) {
+                            List<String> selectedStatusesList = new ArrayList<>();
+                            for (String str : selectedStatuses.split(",")) {
+                                String status = str.trim();
+                                if (status.length() > 0) {
+                                    selectedStatusesList.add(status);
+                                }
+                            }
 
-						((ArmStatusesChildRule) result).setSelectedStatuses(selectedStatusesList);
-					}
-				}
-				return result;
-			}
-		}
-		return null;
+                            ((ArmStatusesChildRule) result).setSelectedStatuses(selectedStatusesList);
+                        }
+                    }
+                }
+                childRulesCache.put(node, result == null ? ArmBaseChildRule.NULL_RULE : result);
+            }
+            ArmBaseChildRule rule = childRulesCache.get(node);
+            return ArmBaseChildRule.NULL_RULE == rule ? null : rule;
+        }
+        return null;
 	}
 
 	public void aggregateNode(NodeRef nodeRef) {
@@ -565,6 +575,7 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         parentsCache.clear();
         armsCache.clear();
         typesCache.clear();
+        childRulesCache.clear();
         logger.info("Arm cache cleared!!!");
     }
 

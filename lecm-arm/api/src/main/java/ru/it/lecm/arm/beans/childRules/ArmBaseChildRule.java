@@ -11,5 +11,14 @@ import java.util.List;
  * Time: 9:57
  */
 public abstract class ArmBaseChildRule {
+
+    //заглушка для кэширования пустых значений
+    public static final ArmBaseChildRule NULL_RULE = new ArmBaseChildRule() {
+        @Override
+        public List<ArmNode> build(ArmWrapperService service, ArmNode node) {
+            return null;
+        }
+    };
+
     abstract public List<ArmNode> build(ArmWrapperService service, ArmNode node);
 }

@@ -744,14 +744,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         NodeRef typeRef = objTypeCache.get(type);
         if (typeRef == null) {
             typeRef = dictionaryService.getRecordByParamValue(DICTIONARY_TYPE_OBJECT_NAME, PROP_OBJ_TYPE_CLASS, type);
-            if (typeRef != null) {
-                objTypeCache.put(type, typeRef);
-            } else {
+            if (typeRef == null) {
                 boolean isDocument = dictionary.isSubClass(qnameType, DocumentService.TYPE_BASE_DOCUMENT);
                 if (isDocument && !qnameType.equals(DocumentService.TYPE_BASE_DOCUMENT)) {
-                    return getObjectTypeByClass(DocumentService.TYPE_BASE_DOCUMENT, DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService));
+                    typeRef = getObjectTypeByClass(DocumentService.TYPE_BASE_DOCUMENT, DocumentService.TYPE_BASE_DOCUMENT.toPrefixString(namespaceService));
                 }
             }
+            objTypeCache.put(type, typeRef);
         }
         return typeRef;
     }
