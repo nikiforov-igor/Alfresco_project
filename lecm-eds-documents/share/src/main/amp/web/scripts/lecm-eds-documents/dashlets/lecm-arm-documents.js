@@ -134,8 +134,8 @@ LogicECM.module.ARM.dashlet = LogicECM.module.ARM.dashlet || {};
                             dataObj: {
                                 skipCount: me.skipItemsCount,
                                 loadCount: me.loadItemsCount,
-                                query: (me.options.baseQuery + (me.widgets.filters.value.length > 0 ? " AND (" : "") + me.widgets.filters.value +
-                                    (me.widgets.filters.value.length > 0 ? ")" : ""))
+                                query: (me.options.baseQuery + (me.options.baseQuery.length > 0  && me.widgets.filters.value.length > 0 ? " AND (" : "") + me.widgets.filters.value +
+                                    (me.options.baseQuery.length > 0 && me.widgets.filters.value.length > 0 ? ")" : ""))
                             },
                             successCallback: {
                                 fn: function (response) {
