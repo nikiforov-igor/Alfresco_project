@@ -1,10 +1,17 @@
-<!-- Admin Console Application Tool -->
-<@script type="text/javascript" src="${url.context}/res/scripts/signed-docflow/applet-user-settings.js"></@script>
-
 <#assign el=args.htmlid?html>
-<script type="text/javascript">
-(function() {
-	new LogicECM.AppletUserSettings("${el}").setMessages(${messages});
+<script type="text/javascript">//<![CDATA[
+(function () {
+	function init() {
+		LogicECM.module.Base.Util.loadScripts([
+					'/scripts/signed-docflow/applet-user-settings.js'
+				], createObject);
+	}
+
+	function createObject() {
+		new LogicECM.AppletUserSettings("${el}").setMessages(${messages});
+	}
+
+	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 
