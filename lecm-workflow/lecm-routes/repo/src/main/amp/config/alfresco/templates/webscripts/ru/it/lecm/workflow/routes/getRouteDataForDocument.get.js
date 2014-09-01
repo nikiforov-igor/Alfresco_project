@@ -2,7 +2,7 @@
 	var documentNodeRef = args['documentNodeRef'];
 	var documentNode = search.findNode(documentNodeRef);
 	var documentCurrentIterationNode = routesService.getDocumentCurrentIteration(documentNode);
-	var approvalState = '';
+	var approvalState;
 
 	if (documentCurrentIterationNode) {
 		model.currentIterationNode = documentCurrentIterationNode.nodeRef.toString();
@@ -13,5 +13,5 @@
 	model.routeType = routesService.getRouteType();
 	model.stageType = routesService.getStageType();
 	model.stageItemType = routesService.getStageItemType();
-	model.approvalState = approvalState;
+	model.approvalState = approvalState ? approvalState : 'NOT_STARTED';
 })();
