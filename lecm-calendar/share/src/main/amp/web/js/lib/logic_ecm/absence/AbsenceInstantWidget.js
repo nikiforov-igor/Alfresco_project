@@ -76,6 +76,7 @@ define(["dojo/_base/declare",
         isAbsent: null,
 
         onCurrentEmployeeAbsenceChanged: function(layer, args) {
+	        this.isAbsent = args[1].isAbsent;
             if (this.isAbsent) {
                 this.textDirNode.innerHTML = "Отменить отсутствие";
                 this.onClick = this.showCancelAbsenceDialog;
