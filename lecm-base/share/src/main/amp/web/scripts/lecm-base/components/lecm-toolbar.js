@@ -87,7 +87,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 newRowDialogTitle: 'label.create-row.title',
                 searchButtonsType: 'defaultActive',
                 newRowButtonType: 'defaultActive',
-	            showImportXml: false
+	            showImportXml: false,
+                minSTermLength: -1
             },
 
             toolbarButtons: {
@@ -220,47 +221,59 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onSearchClick: function BaseToolbar_onSearch(e, obj) {
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
-                var dataGrid = this.modules.dataGrid;
-                var datagridMeta = dataGrid.datagridMeta;
-
-                if (searchTerm.length > 0) {
-                    var fields = dataGrid.getTextFields();
-                    var fullTextSearch = {
-                        parentNodeRef: datagridMeta.nodeRef,
-                        fields: fields,
-                        searchTerm: searchTerm
-                    };
-                    if (!datagridMeta.searchConfig) {
-                        datagridMeta.searchConfig = {};
-                    }
-                    datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
-                    datagridMeta.sort = datagridMeta.sort ? datagridMeta.sort : "cm:modified|false";
-                    if (datagridMeta.searchConfig.formData) {
-                        if (typeof datagridMeta.searchConfig.formData == "string") {
-                            datagridMeta.searchConfig.formData = YAHOO.lang.JSON.parse(datagridMeta.searchConfig.formData);
-
-                        }
-                        datagridMeta.searchConfig.formData.datatype = datagridMeta.itemType;
-                    } else {
-                        datagridMeta.searchConfig.formData = {
-                            datatype: datagridMeta.itemType
-                        };
-                    }
-                    this.modules.dataGrid.search.performSearch({
-                        searchConfig: datagridMeta.searchConfig,
-	                    searchNodes: datagridMeta.searchNodes,
-                        searchShowInactive: dataGrid.options.searchShowInactive,
-                        sort: datagridMeta.sort
-                    });
-                    YAHOO.Bubbling.fire("showFilteredLabel");
-                    YAHOO.Bubbling.fire("showFullTextSearchLabel");
-                } else {
-                    this.onClearSearch();
+                var maySearch = this.options.minSTermLength <= 0 || searchTerm.length == 0;
+                if (!maySearch) {// проверяем длину терма
+                    maySearch = (searchTerm.length >= this.options.minSTermLength);
                 }
+                if (maySearch){
+                    var dataGrid = this.modules.dataGrid;
+                    var datagridMeta = dataGrid.datagridMeta;
 
-	            if (obj && obj[1]) {
-		            obj[1].preventDefault();
-	            }
+                    if (searchTerm.length > 0) {
+                        var fields = dataGrid.getTextFields();
+                        var fullTextSearch = {
+                            parentNodeRef: datagridMeta.nodeRef,
+                            fields: fields,
+                            searchTerm: searchTerm
+                        };
+                        if (!datagridMeta.searchConfig) {
+                            datagridMeta.searchConfig = {};
+                        }
+                        datagridMeta.searchConfig.fullTextSearch = fullTextSearch;
+                        datagridMeta.sort = datagridMeta.sort ? datagridMeta.sort : "cm:modified|false";
+                        if (datagridMeta.searchConfig.formData) {
+                            if (typeof datagridMeta.searchConfig.formData == "string") {
+                                datagridMeta.searchConfig.formData = YAHOO.lang.JSON.parse(datagridMeta.searchConfig.formData);
+
+                            }
+                            datagridMeta.searchConfig.formData.datatype = datagridMeta.itemType;
+                        } else {
+                            datagridMeta.searchConfig.formData = {
+                                datatype: datagridMeta.itemType
+                            };
+                        }
+                        this.modules.dataGrid.search.performSearch({
+                            searchConfig: datagridMeta.searchConfig,
+                            searchNodes: datagridMeta.searchNodes,
+                            searchShowInactive: dataGrid.options.searchShowInactive,
+                            sort: datagridMeta.sort
+                        });
+                        YAHOO.Bubbling.fire("showFilteredLabel");
+                        YAHOO.Bubbling.fire("showFullTextSearchLabel");
+                    } else {
+                        this.onClearSearch();
+                    }
+
+                    if (obj && obj[1]) {
+                        obj[1].preventDefault();
+                    }
+                } else {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            displayTime: 3,
+                            text: this.msg("label.need_more_symbols_for_search")
+                        });
+                }
             },
 
             // клик на Атрибутивном Поиске

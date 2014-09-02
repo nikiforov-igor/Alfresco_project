@@ -78,6 +78,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              */
             options:{
                 maxSearchResults:1000,
+                loopSize:50,
+                unlimited:false, // флаг, что грид не ограничен в вовзвращаемых записях (выключен paging)
                 showExtendSearchBlock: false,  // По умолчанию аттрибутивный поиск скрыт
                 searchFormId: "searchBlock-forms"
             },
@@ -257,8 +259,12 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 this.currentSearchArgs = args;
 
-                this.dataTable.getRecordSet().reset();
-                this.dataTable.render();
+                var notReplaceRS = args.notReplaceRS ;
+
+                if (!notReplaceRS) {
+                    this.dataTable.getRecordSet().reset();
+                    this.dataTable.render();
+                }
 
                 var me = this;
 
@@ -287,14 +293,22 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     };
 
                     var sotredBy = me.dataTable.get("sortedBy");
-                    me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
+
+                    if (!notReplaceRS) {//по старому пути
+                        me.dataTable.onDataReturnInitializeTable.call(me.dataTable, sRequest, oResponse, oResponse.meta);
+                    } else {
+                        if (args.offset != null && args.offset < oResponse.meta.totalRecords) { // проверка на случай возможных ошибок в гриде - исключаем их
+                            me.dataTable.addRows(oResponse.results, me.dataTable.getRecordSet().getRecords().length);
+                        }
+                    }
+
                     me.dataTable.set("sortedBy", sotredBy);
                     YAHOO.Bubbling.fire("onSearchSuccess", {
                         bubblingLabel: this.bubblingLabel
                     });
 
-                    //выводим предупреждающее сообщение, если достигли лимита
-                    if (oResponse.results && oResponse.results.length >= me.options.maxSearchResults) {
+                    //выводим предупреждающее сообщение, если достигли лимита и у нас не безграничный грид
+                    if (!me.options.unlimited && (oResponse.results && oResponse.results.length >= me.options.maxSearchResults)) {
                         Alfresco.util.PopupManager.displayMessage(
                             {
                                 displayTime: 3,
@@ -303,6 +317,35 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     }
 
                     me.dataGrid.addFooter();
+
+                    if (me.options.unlimited) {
+                        var ROW_HEIGHT = 25;
+                        var ROW_HEIGHT_WITH_BORDER = 26;
+                        var firstRowId = me.dataTable.getRecordSet().getRecords().length > 0 ? me.dataTable.getRecordSet().getRecords()[0].getId() : null;
+                        var rowHeight = 0;
+                        if (firstRowId != null) {
+                            var rowStyle = Dom.getStyle(firstRowId, "height");
+                            rowHeight = rowStyle ? rowStyle.replace("px", "") : ROW_HEIGHT_WITH_BORDER;
+                        } else {
+                            rowHeight = ROW_HEIGHT_WITH_BORDER; //(высота 25 + граница 1) - хедер + пустая строка
+                        }
+
+
+                        var newHeight = (me.dataTable.getRecordSet().getRecords().length) * (rowHeight);
+
+                        // проверим, достигли ли лимита
+                        if (me.dataTable.getRecordSet().getRecords().length >= oResponse.meta.totalRecords) {
+                            me.dataGrid.loadComplete = true; // грид полностью загружен
+                            newHeight = (oResponse.meta.totalRecords > 0 ? oResponse.meta.totalRecords : 1)*rowHeight + ROW_HEIGHT_WITH_BORDER;
+                        } else {
+                            me.dataGrid.loadComplete = false;
+                        }
+                        YAHOO.util.Dom.setStyle(this.id + "-grid", "height", newHeight + "px"); // фиксируем новую высоту
+                        if (!me.dataGrid.loadComplete) { // свдвигаем скролл вверх - для удобства работы с ним
+                            YAHOO.util.Dom.get(this.id + "-grid").scrollTop = YAHOO.util.Dom.get(this.id + "-grid").scrollTop - ROW_HEIGHT;
+                        }
+
+                    }
                 }
 
                 // Обработчик на неудачу
@@ -310,6 +353,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     loadingMessage.hide();
 
                     me.searchStarted = false;
+                    me.dataGrid.loadComplete = false;
                     if (oResponse.status == 401) {
                         // Our session has likely timed-out, so refresh to offer the login page
                         window.location.reload();
@@ -440,7 +484,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                     searchConfig.fullTextSearch = YAHOO.lang.JSON.stringify(searchConfig.fullTextSearch);
                 }
                 var startIndex = 0;
-                if (offset >= 0 && this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) {
+                if (offset >= 0 && ((this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) || this.dataGrid.options.unlimited)) {
                     startIndex = offset;
                 }
 
@@ -454,7 +498,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 	                    searchNodes: searchNodes != null ? searchNodes.toString() : "",
                         itemType: itemType != null ? itemType : "",
                         searchConfig: searchConfig != null ? YAHOO.lang.JSON.stringify(searchConfig) : "",
-                        maxResults: (this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) ? this.dataGrid.options.pageSize : this.dataGrid.options.maxResults,
+                        maxResults: (this.dataGrid.options.usePagination && !this.dataGrid.options.disableDynamicPagination) ?
+                            this.dataGrid.options.pageSize : (this.options.unlimited && this.dataTable.getRecordSet().getRecords().length > 0 ? this.options.loopSize : this.dataGrid.options.maxResults),
                         fields: searchFields != null ? searchFields : "",
                         nameSubstituteStrings: dataRequestNameSubstituteStrings,
                         showInactive: searchShowInactive != null ? searchShowInactive : "false",

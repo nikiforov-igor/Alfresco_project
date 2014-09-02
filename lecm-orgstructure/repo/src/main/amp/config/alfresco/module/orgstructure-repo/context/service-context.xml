@@ -379,4 +379,15 @@
           parent="logicEcmAssociationPolicy" init-method="init">
         <property name="substitute" ref="substitudeService"/>
     </bean>
+
+    <bean id="orgstructure.arm.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/dictionary/arm-orgstructure.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

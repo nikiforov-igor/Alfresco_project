@@ -134,6 +134,6 @@
                     this.hideImportDialog();
                     Connect.asyncRequest(Alfresco.util.Ajax.POST, url, callback);
                 }
-            },
+            }
         }, true);
 })();

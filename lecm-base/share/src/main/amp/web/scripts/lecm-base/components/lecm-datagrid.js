@@ -246,6 +246,12 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  */
                 maxResults: 1000,
 
+                /**
+                 * Число элементов для подгрузки при скроллинге
+                 * Используется при отключенном paging при создании объекта AdvancedSearch
+                 */
+                loopSize: 50,
+
 				/**
 				 * идентификатор формы редактирования из share-config-custom
 				 * по-умолчанию он не задан и при редактировании записи таблицы будет использоваться форма по-умолчанию
@@ -1481,7 +1487,34 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
                 }
 
+                if (!this.options.usePagination) {
+                    YAHOO.util.Event.addListener(this.id + "-grid", "scroll", this.onContainerScroll, this);
+                }
+
                 return dTable;
+            },
+
+            onContainerScroll: function (event, scope) {
+                var container = event.currentTarget;
+                if (container.scrollTop + container.clientHeight == container.scrollHeight) {
+                    if (!scope.loadComplete) {
+                        // Update the DataSource
+                        var offset = scope.widgets.dataTable.getRecordSet().getRecords().length;
+
+                        scope.search.performSearch({
+                            searchConfig: scope.datagridMeta.searchConfig,
+                            searchShowInactive: scope.options.searchShowInactive,
+                            parent: scope.datagridMeta.nodeRef,
+                            searchNodes: scope.datagridMeta.searchNodes,
+                            itemType: scope.datagridMeta.itemType,
+                            sort: scope.datagridMeta.sort,
+                            offset: offset,
+                            notReplaceRS: true,
+                            useChildQuery:scope.datagridMeta.useChildQuery,
+                            filter: null
+                        });
+                    }
+                }
             },
 
             onRenderEvent: function () {
@@ -1516,6 +1549,8 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         this.search = new LogicECM.AdvancedSearch(this.id, this).setOptions({
                             showExtendSearchBlock:this.options.showExtendSearchBlock,
                             maxSearchResults: this.options.maxResults,
+                            loopSize: this.options.loopSize,
+                            unlimited:!this.options.usePagination,
 	                        searchFormId: this.options.advSearchFormId
                         });
 

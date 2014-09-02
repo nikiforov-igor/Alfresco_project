@@ -3,7 +3,6 @@
 
 <#include "/org/alfresco/components/component.head.inc">
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/object-finder/lecm-object-finder.js"/>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-association-search.js"/>
 <@script type="text/javascript" src="${url.context}/res/scripts/lecm-arm/arm-documents-datagrid.js"></@script>
