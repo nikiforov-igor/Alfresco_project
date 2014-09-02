@@ -82,6 +82,24 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="editIterationProperties">
+				<field-visibility>
+					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
+					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
+					<show id="lecmWorkflowRoutes:routeEditable"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+					<field id="lecmWorkflowRoutes:routeEditable">
+						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
+					</field>
+				</appearance>
+			</form>
 			<form id="createNewRouteForm">
 				<field-visibility>
 					<show id="cm:title"/>

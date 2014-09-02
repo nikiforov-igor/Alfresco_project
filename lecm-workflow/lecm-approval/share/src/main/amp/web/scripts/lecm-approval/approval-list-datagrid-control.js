@@ -15,6 +15,14 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			YAHOO.util.Event.on(addItemDropdown, 'change', this.onAddItemDropdownChange, this, true);
 		}
 
+		YAHOO.util.Event.delegate('Share', 'click', function() {
+			LogicECM.module.Base.Util.printReport(this.documentNodeRef, this.options.reportId);
+		}, '#printApprovalReport', this, true);
+
+		YAHOO.util.Event.delegate('Share', 'click', function() {
+			this.editIteration();
+		}, '#editIteration', this, true);
+
 		this.getApprovalData();
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 
@@ -29,6 +37,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		routeType: null,
 		currentIterationNode: null,
 		approvalState: null,
+		editItreationFormOpened: false,
 		getApprovalData: function(callback, callbackArg) {
 			Alfresco.util.Ajax.request({
 				method: 'GET',
@@ -133,7 +142,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 		},
 		_createApprovalListFromRoute: function() {
-			console.log('_createApprovalListFromRoute');
 			var formId = 'selectRouteForm';
 			var selectRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
@@ -163,6 +171,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				onSuccess: {
 					fn: function(r) {
 						this.currentIterationNode = r.json.nodeRef;
+						this.approvalState = 'NEW';
 						this.fireGridChanged();
 					},
 					scope: this
@@ -188,6 +197,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					scope: this,
 					fn: function(r) {
 						this.currentIterationNode = r.json.nodeRef;
+						this.approvalState = 'NEW';
 						this.fireGridChanged();
 					}
 				},
@@ -195,6 +205,81 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				execScripts: true,
 				scope: this
 			});
+		},
+		editIteration: function() {
+			var errorText,
+				formId = 'editIterationProperties';
+
+			if (this.editItreationFormOpened) {
+				return;
+			}
+
+
+			switch (this.approvalState) {
+				case 'ACTIVE':
+					errorText = 'Редактирование параметров запущенной итерации невозможно';
+					break;
+				case 'COMPLETE':
+					errorText = 'Редактирвоание параметров завершенной итерации невозможно';
+					break;
+				case 'NOT_EXITS':
+					errorText = 'Список согласования отсутствует';
+					break;
+			}
+
+			if (errorText) {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: 'Редактирование невозможно',
+					text: errorText
+				});
+				return;
+			}
+
+			this.editItreationFormOpened = true;
+
+			var editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+
+			editIterationForm.setOptions({
+				width: '50em',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateRequestParams: {
+					formId: formId,
+					itemId: this.currentIterationNode,
+					itemKind: 'node',
+					mode: 'edit',
+					showCancelButton: true,
+					submitType: 'json'
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function(form, simpleDialog) {
+						simpleDialog.dialog.setHeader(this.msg('label.routes.edit-route.title'));
+						this.editItreationFormOpened = false;
+						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+							LogicECM.module.Base.Util.formDestructor(event, args, params);
+						}, {moduleId: simpleDialog.id}, this);
+					},
+					scope: this
+				},
+				onSuccess: {
+					fn: function(r) {
+
+					},
+					scope: this
+				},
+				onFailure: {
+					fn: function(r) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: 'Не удалось отредактировать паратеры итерации: ' + r.json.message
+						});
+					},
+					scope: this
+				}
+			});
+
+			editIterationForm.show();
+
 		}
 	}, true);
 

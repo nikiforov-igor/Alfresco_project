@@ -9,7 +9,8 @@
 
 <div id='${controlId}'>
 
-	<div class="printApprovalReportContainer">
+	<div class="approvalControlsContainer">
+		<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
 		<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
 	</div>
 	<#if !editable>
@@ -32,6 +33,7 @@
 		LogicECM.CurrentModules[controlId] = new LogicECM.module.Approval.ApprovalListDataGridControl(controlId, '${itemId}');
 		LogicECM.CurrentModules[controlId].setMessages(${messages});
 		LogicECM.CurrentModules[controlId].setOptions({
+			reportId: '${reportId}',
 			usePagination: false,
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
@@ -64,13 +66,9 @@
 
 	YAHOO.util.Event.onDOMReady(function() {
 
-		YAHOO.util.Event.delegate('Share', 'click', function() {
-			LogicECM.module.Base.Util.printReport('${itemId}', '${reportId}');
-		}, '#printApprovalReport', this, true);
-
 		var js = ['scripts/lecm-base/components/lecm-datagrid.js',
 				  'scripts/lecm-approval/approval-list-datagrid-control.js'];
-		var css = [];
+		var css = ['css/lecm-approval/approval-list-datagrid-control.css'];
 		LogicECM.module.Base.Util.loadResources(js, css, createDatagrid);
 	});
 })();

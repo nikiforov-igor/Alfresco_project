@@ -35,5 +35,6 @@ public interface RoutesService {
 	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
 
 	public NodeRef createEmptyIteration(NodeRef documentNode);
+	void deleteDocumentCurrentIteration(final NodeRef documentRef);
 
 }

@@ -2,16 +2,25 @@
 	var documentNodeRef = args['documentNodeRef'];
 	var documentNode = search.findNode(documentNodeRef);
 	var documentCurrentIterationNode = routesService.getDocumentCurrentIteration(documentNode);
-	var approvalState;
+	var approvalState, approvalStateProp, currentIterationNode;
 
 	if (documentCurrentIterationNode) {
-		model.currentIterationNode = documentCurrentIterationNode.nodeRef.toString();
-		approvalState = documentCurrentIterationNode.properties['lecmApproveAspects:approvalState'];
+		currentIterationNode = documentCurrentIterationNode.nodeRef.toString();
+		approvalStateProp = documentCurrentIterationNode.properties['lecmApproveAspects:approvalState'];
 	} else {
-		model.currentIterationNode = '';
+		currentIterationNode = '';
+	}
+
+	if (approvalStateProp) {
+		approvalState = approvalStateProp;
+	} else if (currentIterationNode) {
+		approvalState = 'NEW';
+	} else {
+		approvalState = 'NOT_EXITS';
 	}
 	model.routeType = routesService.getRouteType();
 	model.stageType = routesService.getStageType();
 	model.stageItemType = routesService.getStageItemType();
-	model.approvalState = approvalState ? approvalState : 'NOT_EXITS';
+	model.currentIterationNode = currentIterationNode;
+	model.approvalState = approvalState;
 })();

@@ -17,7 +17,6 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.PropertyCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,6 +101,9 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	@Override
 	public boolean archiveDocumentCurrentIteration(final NodeRef documentRef) {
+		logger.debug("Archiving iteration for document {}", documentRef);
+
+		boolean result;
 		NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentRef);
 		if (documentCurrentIteration != null) {
 			NodeRef documentApprovalHistoryFolder = approvalService.getDocumentApprovalHistoryFolder(documentRef);
@@ -112,10 +114,12 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			NodeRef archivedIteration = nodeService.moveNode(documentCurrentIteration, documentApprovalHistoryFolder, ContentModel.ASSOC_CONTAINS, getRandomQName()).getChildRef();
 			nodeService.setProperty(archivedIteration, ContentModel.PROP_TITLE, "Итерация " + (archiveSize + 1));
 
-			return true;
+			result = true;
 		} else {
-			return false;
+			result = false;
 		}
+
+		return result;
 	}
 
 	@Override
@@ -158,8 +162,9 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		} else {
 			NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentNode);
 			if (documentCurrentIteration != null) {
-				if (isIterationAvailableForArchiving(documentCurrentIteration)) {
-					logger.info("Iteration for {} exists", documentNode);
+				if (isIterationAvailableForDeleting(documentCurrentIteration)) {
+					deleteDocumentCurrentIteration(documentNode);
+				} else if (isIterationAvailableForArchiving(documentCurrentIteration)) {
 					archiveDocumentCurrentIteration(documentNode);
 				} else {
 					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
@@ -178,8 +183,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		List<NodeRef> stageItems = getAllStageItemsOfRoute(iterationRef);
 		for (NodeRef stageItem : stageItems) {
 			if (nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS).size() > 0) {
-				nodeService.addAspect(stageItem, ContentModel.ASPECT_TEMPORARY, null);
-				nodeService.deleteNode(stageItem);
+				permDeleteNode(stageItem);
 			}
 		}
 	}
@@ -215,8 +219,9 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		} else {
 			NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentNode);
 			if (documentCurrentIteration != null) {
-				if (isIterationAvailableForArchiving(documentCurrentIteration)) {
-					logger.info("Iteration for {} exists", documentNode);
+				if (isIterationAvailableForDeleting(documentCurrentIteration)) {
+					deleteDocumentCurrentIteration(documentNode);
+				} else if (isIterationAvailableForArchiving(documentCurrentIteration)) {
 					archiveDocumentCurrentIteration(documentNode);
 				} else {
 					throw new AlfrescoRuntimeException("Iteration {} is not available for archiving");
@@ -230,13 +235,32 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	private boolean isIterationAvailableForArchiving(NodeRef iterationNode) {
-		boolean result;
 		String approvalState = (String) nodeService.getProperty(iterationNode, ApprovalAspectsModel.PROP_APPROVAL_STATE);
 
 		// можно архивировать, если не определено или не активно
-		result = approvalState == null || !"ACTIVE".equals(approvalState);
+		return approvalState == null || !"ACTIVE".equalsIgnoreCase(approvalState);
+	}
 
-		return result;
+	private boolean isIterationAvailableForDeleting(NodeRef iterationNode) {
+		String approvalState = (String) nodeService.getProperty(iterationNode, ApprovalAspectsModel.PROP_APPROVAL_STATE);
+
+		// можно удалять, если не определено или новое
+		return approvalState == null || "NEW".equalsIgnoreCase(approvalState);
+	}
+
+	@Override
+	public void deleteDocumentCurrentIteration(final NodeRef documentRef) {
+		logger.debug("Deleting iteration for document {}", documentRef);
+
+		NodeRef documentCurrentIteration = getDocumentCurrentIteration(documentRef);
+		if (documentCurrentIteration != null) {
+			permDeleteNode(documentCurrentIteration);
+		}
+	}
+
+	private void permDeleteNode(NodeRef node) {
+		nodeService.addAspect(node, ContentModel.ASPECT_TEMPORARY, null);
+		nodeService.deleteNode(node);
 	}
 
 }
