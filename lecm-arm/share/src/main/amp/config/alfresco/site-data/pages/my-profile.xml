@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <page>
-	<title>Lecm my profile</title>
-	<description>Lecm my profile</description>
+	<title>Логика ECM.Мой профиль</title>
+	<description>Логика ECM.Мой профиль</description>
 	<template-instance>my-profile</template-instance>
 	<authentication>user</authentication>
 </page>
