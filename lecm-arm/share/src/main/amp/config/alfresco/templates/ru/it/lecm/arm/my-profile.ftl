@@ -33,8 +33,8 @@ LogicECM.module.ARM.SETTINGS =
 	{}
 	</#if>;
 
-LogicECM.module.ARM.SETTINGS.ARM_CODE = "lecm_my_profile";
-LogicECM.module.ARM.SETTINGS.ARM_PATH = {};
+LogicECM.module.ARM.SETTINGS.ARM_CODE = "${code!''}";
+LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
 LogicECM.module.ARM.SETTINGS.ARM_TYPE = "USER";
 //]]></script>
 </@>

@@ -345,7 +345,7 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                             boolean isFind = false;
                             List<ArmNode> nodes =  armWrapperService.getChildNodes(armRef, prevNode, true);
                             for (ArmNode node : nodes) {
-                                if (node.getNodeType().equals("lecm-arm:node") && node.getTitle().equals(splitPath[i])) {
+                                if (!node.getNodeType().equals("lecm-arm:accordion") && node.getTitle().equals(splitPath[i])) {
                                     isFind = true;
                                     prevNode = node.getNodeRef();
                                     if (node.getNodeRef() == null) {

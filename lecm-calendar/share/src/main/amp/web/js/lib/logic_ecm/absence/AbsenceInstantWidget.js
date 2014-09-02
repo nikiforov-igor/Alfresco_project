@@ -226,7 +226,7 @@ define(["dojo/_base/declare",
         newInstantAbsence: function(evt) {
             // если отсутствие каких-либо скриптов будет мешать созданию диалога, их можно добавить сюда
             if (!Alfresco.module.SimpleDialog || !Alfresco.FormUI) {
-                window.location.href = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "instant-absence";
+                window.location.href = window.location.protocol + "//" + window.location.host + Alfresco.constants.URL_PAGECONTEXT + "my-profile?path=" + encodeURI("Мое отсутствие/Меня нет в офисе");
 
             } else {
                 this.instantAbsencePrerequisites = new Deferred(["absenceContainer", "defaultReason"], {
