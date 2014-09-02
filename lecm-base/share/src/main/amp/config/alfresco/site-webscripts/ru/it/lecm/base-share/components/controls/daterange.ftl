@@ -44,7 +44,7 @@
         LogicECM.module.Base.Util.loadScripts([
             'scripts/lecm-base/components/lecm-datarange.js',
 		    'scripts/lecm-base/components/lecm-date-picker.js'
-		], createDateRange);
+		], createDateRange, ["button", "calendar"]);
 	}
 	function createDateRange(){
 		new LogicECM.DateRange("${htmlid}").setOptions({

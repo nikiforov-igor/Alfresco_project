@@ -107,7 +107,7 @@
                 'scripts/lecm-calendar/absence/date-interval-validation.js',
                 'scripts/lecm-base/components/lecm-date-picker.js',
                 'scripts/lecm-calendar/absence/absence-date-picker.js'
-           ], createControl);
+           ], createControl, ["button", "calendar"]);
         }
 
         function createControl() {
