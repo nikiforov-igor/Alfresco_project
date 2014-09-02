@@ -18,6 +18,7 @@ function main() {
     }
     //var hasPerm = hasPermission(model.nodeRef, PERM_ACTION_EXEC);
     model.hasPermission = true; // hasPerm || hasOnlyInDraftPermission(model.nodeRef, "LECM_BASIC_PG_Initiator");
+    model.isAdmin = user.isAdmin;
 }
 
 function isFinalStatus(nodeRef, defaultValue) {

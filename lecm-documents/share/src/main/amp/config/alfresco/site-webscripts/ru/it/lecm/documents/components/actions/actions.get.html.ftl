@@ -27,7 +27,7 @@
     </div>
     <script type="text/javascript">//<![CDATA[
     YAHOO.util.Event.onDOMReady(function (){
-            <#if documentDetailsJSON??>
+            <#if isAdmin && documentDetailsJSON??>
                 new Alfresco.DocumentActions("final-actions").setOptions(
                     {
                         nodeRef: "${nodeRef?js_string}",
