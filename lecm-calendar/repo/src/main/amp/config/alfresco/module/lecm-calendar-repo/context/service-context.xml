@@ -62,6 +62,16 @@
 		</property>
 	</bean>
 
+	<bean id="wcalendar.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Мое отсутствие"/>
+		<property name="dictionaries">
+			<list>
+				<value>alfresco/module/${artifactId}/arm/default-arm-my-profile-items.xml</value>
+			</list>
+		</property>
+	</bean>
+
 	<util:constant id="WORK_CALENDAR_FOLDER_ID" static-field="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean.WORK_CALENDAR_FOLDER_ID"/>
 	<bean id="commonWCalendarBean" class="ru.it.lecm.wcalendar.beans.AbstractCommonWCalendarBean"
 		  abstract="true" parent="baseBean" init-method="initizlize">

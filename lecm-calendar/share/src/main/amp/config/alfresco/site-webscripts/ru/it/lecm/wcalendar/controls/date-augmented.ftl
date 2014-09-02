@@ -124,7 +124,7 @@
            );
            picker.draw();
         }
-        YAHOO.util.Event.onDOMReady(init);
+	     YAHOO.util.Event.onContentReady("${controlId}", init);;
      })();
      //]]></script>
 
