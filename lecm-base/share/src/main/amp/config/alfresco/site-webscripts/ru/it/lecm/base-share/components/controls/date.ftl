@@ -94,7 +94,7 @@
             function init() {
                 LogicECM.module.Base.Util.loadScripts([
                     'scripts/lecm-base/components/lecm-date-picker.js'
-                ], createDatePicker);
+                ], createDatePicker, ["button", "calendar"]);
             }
 
             function createDatePicker() {
