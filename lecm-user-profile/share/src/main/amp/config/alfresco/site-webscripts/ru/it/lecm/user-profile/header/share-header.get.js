@@ -4,7 +4,7 @@ var lecmProfile = {
 	    config: {
 	        id: "LECM_PROFILE_MENU_ITEM",
 	        label: "LECM Профиль",
-	        targetUrl: "my-absence",
+	        targetUrl: "my-profile",
 	        iconImage: "/share/res/components/images/header/user-profile_light.png"
 
 	    }
