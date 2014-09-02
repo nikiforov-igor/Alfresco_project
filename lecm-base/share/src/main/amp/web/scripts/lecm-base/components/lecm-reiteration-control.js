@@ -115,7 +115,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             var weekDays = new YAHOO.util.Element(this.id + '-week-days-mode');
             var shiftWork = new YAHOO.util.Element(this.id + '-shift-work-mode');
 
-            var value = event.toElement.value;
+            var value = event.target.value;
 
             if (value === "week-days") {
                 monthDays.setStyle("display", "none");
@@ -140,11 +140,11 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             var monthDaysInput = YAHOO.util.Dom.get(this.id + "-month-days-input");
 
             var selectedDates = monthDaysInput.value.split(",");
-            dateSelected = event.toElement.textContent;
+            dateSelected = event.target.textContent;
             // Дата, которую только что выбрали, уже есть в списке выбранных
             if (selectedDates.indexOf(dateSelected) > -1) {
                 var newMonthDaysInput = "";
-                event.toElement.removeAttribute("class", 0);
+                event.target.removeAttribute("class", 0);
                 for (var j = 0; j < selectedDates.length; j++) {
                     if (selectedDates[j] === dateSelected) {
                         continue;
@@ -159,9 +159,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                 if (monthDaysInput.value.length > 0) {
                     monthDaysInput.value += "," + dateSelected;
                 } else {
-                    monthDaysInput.value += event.toElement.textContent;
+                    monthDaysInput.value += event.target.textContent;
                 }
-                event.toElement.setAttribute("class", "selected-date");
+                event.target.setAttribute("class", "selected-date");
             }
 
             this.updateValue();
