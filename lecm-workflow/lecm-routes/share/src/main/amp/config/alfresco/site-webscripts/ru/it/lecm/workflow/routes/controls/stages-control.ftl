@@ -53,6 +53,7 @@
 			datagridMeta:{
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageType,
 				nodeRef: '${itemId}',
+				sort: 'cm:title|true',
 				searchConfig: {
 					filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
 				},

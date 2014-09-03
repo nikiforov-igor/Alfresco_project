@@ -22,3 +22,7 @@
 .stagesDatagridExpanded {
 	padding-left: 10px;
 }
+
+.addStageButtonContainer {
+	vertical-align: baseline !important;
+}

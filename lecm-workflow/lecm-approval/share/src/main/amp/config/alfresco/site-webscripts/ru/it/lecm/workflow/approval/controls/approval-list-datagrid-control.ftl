@@ -4,7 +4,6 @@
 <#assign label = field.label?html/>
 <#assign itemId = args.itemId/>
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#assign editable = ((params.editable!"false") == "true") && !(field.disabled)>
 <#assign reportId = "approval-list-main">
 
 
@@ -14,14 +13,17 @@
 		<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
 		<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
 	</div>
-	<#if !editable>
-	<div class="clear"></div>
-	</#if>
-	<select id="${controlId}-add-item-dropdown">
-		<option value="dafault">-- Создать лист согласования</option>
+
+	<select id="${controlId}-create-approval-list">
+		<option value="dуfault">-- Создать лист согласования</option>
 		<option value="route">Из маршрута</option>
 		<option value="empty">Пустой</option>
 	</select>
+	<div class="yui-button yui-push-button addStageButtonContainer">
+		<span class="first-child">
+			<button type="button" id="${controlId}-add-stage">Добавить этап</button>
+		</span>
+	</div>
 	<@grid.datagrid controlId false />
 </div>
 
@@ -68,7 +70,8 @@
 	YAHOO.util.Event.onDOMReady(function() {
 
 		var js = ['scripts/lecm-base/components/lecm-datagrid.js',
-				  'scripts/lecm-approval/approval-list-datagrid-control.js'];
+				  'scripts/lecm-approval/approval-list-datagrid-control.js',
+				  'scripts/lecm-workflow/routes/stages-control.js'];
 		var css = ['css/lecm-approval/approval-list-datagrid-control.css'];
 		LogicECM.module.Base.Util.loadResources(js, css, createDatagrid);
 	});

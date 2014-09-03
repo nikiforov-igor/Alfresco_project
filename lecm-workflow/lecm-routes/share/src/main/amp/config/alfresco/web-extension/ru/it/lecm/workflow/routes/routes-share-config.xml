@@ -161,6 +161,7 @@
 					<show id="cm:title"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
 					<show id="lecmApproveAspects:approvalState"/>
+					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" label="Этап"/>

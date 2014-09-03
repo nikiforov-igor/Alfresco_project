@@ -8,11 +8,17 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 (function() {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
-		var addItemDropdown = YAHOO.util.Dom.get(containerId + '-add-item-dropdown');
+		var createApprovalListDropdown = YAHOO.util.Dom.get(containerId + '-create-approval-list');
+		var addStageButton = YAHOO.util.Dom.get(containerId + '-add-stage');
 
 		this.documentNodeRef = documentNodeRef;
-		if (addItemDropdown) {
-			YAHOO.util.Event.on(addItemDropdown, 'change', this.onAddItemDropdownChange, this, true);
+
+		if (createApprovalListDropdown) {
+			YAHOO.util.Event.on(createApprovalListDropdown, 'change', this.onCreateApprovalListDropdownChange, this, true);
+		}
+
+		if (addStageButton) {
+			YAHOO.util.Event.on(addStageButton, 'click', this.onAddStageButton, this, true);
 		}
 
 		YAHOO.util.Event.delegate('Share', 'click', function() {
@@ -100,14 +106,15 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 		},
-		fireGridChanged: function() {
+		fireGridChanged: function(useChildQuery) {
 			YAHOO.Bubbling.fire('activeGridChanged', {
 				datagridMeta: {
 					itemType: this.stageType,
 					nodeRef: this.currentIterationNode,
-					useChildQuery: true,
+					useChildQuery: !!useChildQuery,
+					sort: 'cm:title|true',
 					searchConfig: {
-						filter: ''
+						filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
 					}
 				},
 				bubblingLabel: this.id
@@ -118,7 +125,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
 		},
-		onAddItemDropdownChange: function(event) {
+		onCreateApprovalListDropdownChange: function(event) {
 			var dropdownMenu = event.target,
 				dropdownMenuValue = dropdownMenu.value;
 
@@ -174,7 +181,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					fn: function(r) {
 						this.currentIterationNode = r.json.nodeRef;
 						this.approvalState = 'NEW';
-						this.fireGridChanged();
+						this.fireGridChanged(true);
 					},
 					scope: this
 				},
@@ -200,7 +207,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					fn: function(r) {
 						this.currentIterationNode = r.json.nodeRef;
 						this.approvalState = 'NEW';
-						this.fireGridChanged();
+						this.fireGridChanged(true);
 					}
 				},
 				failureMessage: 'message.failure',
@@ -282,6 +289,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 			editIterationForm.show();
 
+		},
+		onAddStageButton: function() {
+			LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionCreate.call(this);
 		}
 	}, true);
 
