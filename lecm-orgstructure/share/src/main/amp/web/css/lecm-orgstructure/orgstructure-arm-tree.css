@@ -1,0 +1,33 @@
+.dp-highlighter th, .dp-highlighter td {
+    border:0;
+    padding:0;
+}
+.dp-highlighter .line1, .dp-highlighter  .line2 {
+    padding-left:10px;
+    white-space:nowrap;
+}
+.ft {
+    margin-top:1em;
+}
+
+#orgstructure-tree {
+	min-width: 100%;
+	overflow: auto;
+}
+
+#orgstructure-tree .ygtvlabel:hover {
+    text-decoration: underline; /* Добавляем подчеркивание */
+}
+
+#orgstructure-tree .ygtvfocus,
+#orgstructure-tree .ygtvfocus .ygtvlabel,
+#orgstructure-tree .ygtvfocus .ygtvlabel:link,
+#orgstructure-tree .ygtvfocus .ygtvlabel:visited,
+#orgstructure-tree .ygtvfocus .ygtvlabel:hover
+{
+    background-color:white;
+}
+
+#orgstructure-view-form {
+    display:none;
+}

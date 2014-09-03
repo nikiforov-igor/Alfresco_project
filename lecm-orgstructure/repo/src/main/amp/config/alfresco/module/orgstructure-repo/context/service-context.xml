@@ -67,6 +67,12 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
+        <property name="nodeService">
+			<ref bean="nodeService"/>
+		</property>
+        <property name="substitudeBean">
+			<ref bean="substitudeService"/>
+		</property>
         <property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>

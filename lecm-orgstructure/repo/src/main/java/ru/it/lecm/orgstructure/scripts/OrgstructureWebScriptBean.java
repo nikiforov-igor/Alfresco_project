@@ -12,7 +12,9 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
+import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.absence.IAbsence;
@@ -32,6 +34,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public static final String TITLE = "title";
 	public static final String LABEL = "label";
 	public static final String IS_LEAF = "isLeaf";
+	public static final String EXPAND = "expand";
 
 	public static final QName ELEMENT_FULL_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-full-name");
 	public static final QName ELEMENT_SHORT_NAME = QName.createQName(OrgstructureBean.ORGSTRUCTURE_NAMESPACE_URI, "element-short-name");
@@ -54,6 +57,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     private static final String DEFAULT_EMPTY_TEXT = "<Не указано>";
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
+    private final String EMPLOYEE_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} - {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} (тел. {lecm-orgstr:employee-phone})";
+    private final String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
+    private final String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
+
     public static final String TYPE_UNIT = "organization-unit";
 
     private final Map<String, Integer> ROOTS = new HashMap<String, Integer>() {{
@@ -68,8 +75,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     }};
 
     private DictionaryBean dictionaryService;
+    private NodeService nodeService;
 
 	private OrgstructureBean orgstructureService;
+	private SubstitudeBean substitudeBean;
 
     private IAbsence absenceService;
 
@@ -1152,5 +1161,109 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     public Scriptable getOrganizationEmployees(final String organizationRef) {
         List<NodeRef> employees = orgstructureService.getOrganizationEmployees(new NodeRef(organizationRef));
         return createScriptable(employees);
+    }
+
+    /**
+     * Получаем список Дочерних объектов в формате, используемом в дереве Оргструктуры для АРМ
+     *
+     * @return Текстовое представление JSONArrray c объектами
+     */
+    public String getArmStructure(final String ref) {
+        List<JSONObject> nodes = new ArrayList<>();
+        final String ORG_UNIT_TYPE = OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService());
+        final String ORG_EMPLOYEE_TYPE = OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(serviceRegistry.getNamespaceService());
+
+        if (ref != null) {
+            final NodeRef currentRef = ref.length() > 0 ? new NodeRef(ref) : orgstructureService.getStructureDirectory();
+            final NodeRef rootUnit = orgstructureService.getRootUnit();
+            List<JSONObject> units = new ArrayList<>();
+            // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
+            List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true);
+            for (NodeRef child : childs) {
+                JSONObject unit = new JSONObject();
+                try {
+                    unit.put(NODE_REF, child.toString());
+                    unit.put(ITEM_TYPE, ORG_UNIT_TYPE);
+                    String formattedString = substitudeBean.formatNodeTitle(child, UNIT_FORMAT_STRING);
+                    NodeRef unitBoss = orgstructureService.getUnitBoss(child);
+                    if (unitBoss != null) {
+                        formattedString = formattedString + " (" + substitudeBean.formatNodeTitle(unitBoss, EMPLOYEE_FIO) + ")";
+                    }
+                    unit.put(LABEL, formattedString);
+                    unit.put(TITLE, formattedString);
+                    unit.put(IS_LEAF, !hasOrgChilds(child));
+                    unit.put(EXPAND, child.equals(rootUnit));
+                    units.add(unit);
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            sort(units, LABEL, true);
+
+            // получаем список Сотрудников в данном подразделении
+            List<JSONObject> employees = new ArrayList<>();
+            childs = orgstructureService.getUnitEmployees(currentRef);
+            for (NodeRef child : childs) {
+                JSONObject employee = new JSONObject();
+                try {
+                    employee.put(NODE_REF, child.toString());
+                    employee.put(ITEM_TYPE, ORG_EMPLOYEE_TYPE);
+
+                    String formattedString = substitudeBean.formatNodeTitle(child, EMPLOYEE_FORMAT_STRING);
+                    employee.put(LABEL, formattedString);
+                    employee.put(TITLE, formattedString);
+                    employee.put(IS_LEAF, true);
+                    employee.put(EXPAND, false);
+                    employees.add(employee);
+                } catch (JSONException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
+            sort(employees, LABEL, true);
+
+            nodes.addAll(units);
+            nodes.addAll(employees);
+        }
+        return nodes.toString();
+    }
+
+    /**
+     * Проверка на налиичие в подразделении дочернего подразделения или сотрудников
+     *
+     * @return Текстовое представление JSONArrray c объектами
+     */
+    private boolean hasOrgChilds(NodeRef unit) {
+        Set<QName> units = new HashSet<QName>();
+        units.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
+
+        List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(unit, units);
+        for (ChildAssociationRef uRef : uRefs) {
+            if (!((BaseBean)orgstructureService).isArchive(uRef.getChildRef())) {
+                if (orgstructureService.hasAccessToOrgElement(uRef.getChildRef())){
+                    return true;
+                }
+            }
+        }
+
+        // Получаем список штатных расписаний
+        List<NodeRef> staffs = orgstructureService.getUnitStaffLists(unit);
+        for (NodeRef staff : staffs) {
+            if (!((BaseBean)orgstructureService).isArchive(staff)) {
+                NodeRef employee = orgstructureService.getEmployeeByPosition(staff);
+                if (employee != null && !((BaseBean)orgstructureService).isArchive(employee)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
     }
 }
