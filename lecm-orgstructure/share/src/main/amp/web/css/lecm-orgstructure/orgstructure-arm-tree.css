@@ -15,7 +15,7 @@
 	overflow: auto;
 }
 
-#orgstructure-tree .ygtvlabel:hover {
+#orgstructure-tree .icon-unit:hover, #orgstructure-tree .icon-employee:hover {
     text-decoration: underline; /* Добавляем подчеркивание */
 }
 
@@ -28,6 +28,20 @@
     background-color:white;
 }
 
-#orgstructure-view-form {
+#orgstructure-view-form{
+    visibility:hidden;
     display:none;
+}
+
+#orgstructure-tree .icon-unit {
+    display:block;
+    height: 22px;
+    padding-left: 20px;
+    background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
+}
+#orgstructure-tree .icon-employee {
+    display:block;
+    height: 22px;
+    padding-left: 20px;
+    background: url('/share/res/components/images/filetypes/generic-user-16.png') no-repeat;
 }
