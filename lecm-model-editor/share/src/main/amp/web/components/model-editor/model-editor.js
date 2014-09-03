@@ -24,6 +24,7 @@ IT.component = IT.component || {};
 		associationsArray : [],
 		tablesArray : [],
 		namespaces : [],
+		initSuccess : false,
 		                       
 		options : {
 			nodeRef : null,
@@ -112,7 +113,7 @@ IT.component = IT.component || {};
 				
 				this.prop_namespace_name = (this.modelObject.model._name.substr(0,this.modelObject.model._name.indexOf(":")));
 				
-				this.description = this.modelObject.model.description;
+				this.model_description = this.modelObject.model.description;
 				if(YAHOO.lang.isObject(this.modelObject.model.types)) {
 					if(YAHOO.lang.isArray(this.modelObject.model.types.type)) {
 						this.typeTitle = this.modelObject.model.types.type[0].title
@@ -502,11 +503,12 @@ IT.component = IT.component || {};
 		},//_initObjects
 		//Обработчик событий валидации формы (заполняет скрытое поле для отправки контента вместе с формой)
 		_validate:  function validate_model(field, args, event, form, silent, message) {
+			if(args.initSuccess==false) return true;
 			var month=new Array();
 			month[0]="01";month[1]="02";month[2]="03";month[3]="04";month[4]="05";month[5]="06";month[6]="07";month[7]="08";month[8]="09";month[9]="10";month[10]="11";month[11]="12";
 			var namespace = (YAHOO.lang.isString(args.prop_namespace_name) ? args.prop_namespace_name : args.prop_cm_name+"NS");
 			var modelName = (YAHOO.lang.isString(args.prop_model_name) ? args.prop_model_name : args.prop_cm_name+"Model");
-			var modelDescription = args.description;
+			var modelDescription = args.model_description;
 			var typeName = (YAHOO.lang.isString(args.prop_type_name) ? args.prop_type_name : args.prop_cm_name);
 			var typeTitle = args.typeTitle;
 			var parentRef = args.parentRef;
@@ -517,7 +519,7 @@ IT.component = IT.component || {};
 				args.modelObject.model = {};
 			}
 					
-			if(!YAHOO.lang.isValue(args.modelObject.model._name)) {
+			if(!YAHOO.lang.isValue(args.modelObject.model._name)||(args.modelObject.model._name!=""+namespace+":"+modelName)) {
 				args.modelObject.model = {
 					"_xmlns": "http://www.alfresco.org/model/dictionary/1.0",
 					"_name":""+namespace+":"+modelName,
@@ -566,6 +568,7 @@ IT.component = IT.component || {};
 				}
 				args.modelObject.model.namespaces = {"namespace":{"_uri":_uri,"_prefix":namespace}};
 			}
+			args.modelObject.model.description = modelDescription;
 			//constraints
 			if(!YAHOO.lang.isObject(args.modelObject.model.constraints)) {
 				args.modelObject.model.constraints = {}
@@ -1005,7 +1008,7 @@ IT.component = IT.component || {};
 		    this.tablesDialog.render();
 			//Описание
 			var oSpan = document.createElement("span");
-			var input = new IT.widget.Input({ name: "description", label: "<b>Описание модели</b>", value: (this.description||""), help:"Описание модели"} );
+			var input = new IT.widget.Input({ name: "model_description", label: "<b>Описание модели</b>", value: (this.model_description||""), help:"Описание модели"} );
 			input.render(oSpan);
 			Dom.get(this.id+"_title").appendChild(oSpan);
 			//Заголовок
@@ -1134,6 +1137,7 @@ IT.component = IT.component || {};
 //					};
 //				}("name", "value"), {},
 //			this.id + "_btn");
+			this.initSuccess = true;
 		}//_renderEditor
 	});
 	//Служебные функции
