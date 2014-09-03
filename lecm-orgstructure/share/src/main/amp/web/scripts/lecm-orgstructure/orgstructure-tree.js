@@ -290,7 +290,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 actionUrl:null,
                 destroyOnHide:false,
                 doBeforeDialogShow:{
-                    fn:this._setFormDialogTitle
+                    fn:this._setFormDialogTitle,
+                    scope:this
                 },
                 onSuccess:{
                     fn:function () {
