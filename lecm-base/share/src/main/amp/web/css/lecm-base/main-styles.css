@@ -234,7 +234,10 @@ i.icon-building {
     border: 1px solid #ccc;
     font-size: 13px;
 }
-
+/* Табы */
+.yui-skin-lecmTheme .yui-panel .yui-navset ul.yui-nav {
+    margin-left: 5px;
+}
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li {
     margin: 0 5px 0 0;
 }
@@ -258,15 +261,6 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a {
     background: #fff;
 }
-.yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li:first-of-type.selected a:after {
-    content: "";
-    width: 5px;
-    height: 5px;
-    position: absolute;
-    left: 0;
-    bottom: -5px;
-    background: #fff;
-}
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-nav li.selected a em {
     padding-bottom: 4px;
     color: #076a8d;
@@ -274,8 +268,6 @@ i.icon-building {
 .yui-skin-lecmTheme .yui-panel .yui-navset .yui-content {
     margin: 0;
     border: none;
-    border-left: 1px solid #d2d2d2;
-    border-radius: 0 5px 5px 5px;
     padding: 0;
     background: #eaeaea;
 }
