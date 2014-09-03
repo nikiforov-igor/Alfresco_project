@@ -5,7 +5,8 @@
 
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css"/>
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-arm/lecm-arm-documents.css" />
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-user-profile/lecm-user-profile.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
 	<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
 
 	<#include "/org/alfresco/components/form/form.dependencies.inc">

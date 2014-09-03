@@ -8,9 +8,11 @@
 <script type="text/javascript">//<![CDATA[
 (function () {
 	function init() {
-		LogicECM.module.Base.Util.loadScripts([
-			'/scripts/lecm-calendar/absence/instant-absence-page.js'
-		], createObject);
+		LogicECM.module.Base.Util.loadResources([
+			'scripts/lecm-calendar/absence/instant-absence-page.js'
+		], [
+            'css/lecm-calendar/wcalendar-absence-instant.css'
+        ], createObject);
 	}
 
 	function createObject() {
