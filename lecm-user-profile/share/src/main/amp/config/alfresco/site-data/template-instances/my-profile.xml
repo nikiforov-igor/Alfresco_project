@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-	<template-type>ru/it/lecm/arm/my-profile</template-type>
+	<template-type>ru/it/lecm/user-profile/my-profile</template-type>
 	<properties>
 		<preferenceKey>ru.it.lecm.arm</preferenceKey>
 	</properties>

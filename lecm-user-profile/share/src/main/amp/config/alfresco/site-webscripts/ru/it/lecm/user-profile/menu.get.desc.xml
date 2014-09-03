@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<webscript>
-  <shortname>user-profile-menu</shortname>
-  <description>User Profile: Menu</description>
-  <format default="html"/>
-  <url>/ru/it/lecm/user-profile/menu</url>
-  <authentication>user</authentication>
-</webscript>

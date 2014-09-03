@@ -63,7 +63,7 @@
 	</bean>
 
 	<bean id="wcalendar.arm.myProfile.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="arm.LogicEcmBootstrap, armService, arm.filters.LogicEcmBootstrap">
+	      depends-on="userProfile.arm.LogicEcmBootstrap">
 		<property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Логика ECM. Мой профиль/Мое отсутствие"/>
 		<property name="dictionaries">
 			<list>

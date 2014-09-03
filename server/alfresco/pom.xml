@@ -354,6 +354,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.user-profile</groupId>
+			<artifactId>lecm-user-profile-repo</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -719,6 +726,11 @@
 							<artifactId>routes-repo</artifactId>
 							<type>amp</type>
 						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.user-profile</groupId>
+							<artifactId>lecm-user-profile-repo</artifactId>
+							<type>amp</type>
+						</overlay>
 					</overlays>
 				</configuration>
 				<dependencies>
@@ -1072,6 +1084,11 @@
                                     <artifactId>group-actions-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
+	                            <overlay>
+		                            <groupId>ru.it.lecm.user-profile</groupId>
+		                            <artifactId>lecm-user-profile-repo</artifactId>
+		                            <type>amp</type>
+	                            </overlay>
 
                                 <!-- Дополнительные модули СЭД -->
                                 <overlay>

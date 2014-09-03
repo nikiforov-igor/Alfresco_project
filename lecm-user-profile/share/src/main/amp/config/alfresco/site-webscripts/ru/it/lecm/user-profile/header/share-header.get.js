@@ -8,7 +8,7 @@ var lecmProfile = {
 	        iconImage: "/share/res/components/images/header/user-profile_light.png"
 
 	    }
-}
+};
 
 var menuBar =
     widgetUtils.findObject(model.jsonModel, "id", "HEADER_USER_MENU");
