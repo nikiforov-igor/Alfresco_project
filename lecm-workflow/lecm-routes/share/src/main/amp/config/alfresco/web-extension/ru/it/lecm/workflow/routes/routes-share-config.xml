@@ -24,6 +24,7 @@
 							<control-param name="endpointMany">false</control-param>
 							<control-param name="itemType">lecmWorkflowRoutes:route</control-param>
 							<control-param name="allowedNodesScript">lecm/workflow/routes/getAllowedRoutes</control-param>
+							<control-param name="showAssocViewForm">true</control-param>
 						</control>
 					</field>
 				</appearance>
@@ -36,12 +37,12 @@
 				<field-visibility>
 					<show id="cm:title"/>
 					<show id="cm:description"/>
-					<show id="lecmWorkflowRoutes:routeOrganizationUnitAssoc"/>
-					<show id="lecmWorkflowRoutes:routeAvailabilityCondition"/>
+					<show id="lecmWorkflowRoutes:routeOrganizationUnitAssoc" for-mode="edit"/>
+					<show id="lecmWorkflowRoutes:routeAvailabilityCondition" for-mode="edit"/>
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
 					<show id="lecmWorkflowRoutes:routeEditable"/>
-					<show id="lecmWorkflowRoutes:stagesControlFake" force="true"/>
+					<show id="lecmWorkflowRoutes:stagesControlFake" force="true" />
 				</field-visibility>
 				<appearance>
 					<set id="availability" appearance="bordered-panel" label="Доступность для выбора"/>

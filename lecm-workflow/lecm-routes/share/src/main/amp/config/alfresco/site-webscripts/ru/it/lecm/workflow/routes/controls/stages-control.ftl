@@ -1,6 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign params = field.control.params/>
+<#assign editable = form.mode != "view"/>
 
 <#assign itemId = args.itemId/>
 
@@ -28,11 +29,10 @@
 			showCheckboxColumn: false,
 			bubblingLabel: controlId,
 			expandable: true,
-			showActionColumn: true,
-			allowCreate: true,
 			forceSubscribing: true,
-			excludeColumns: ['lecmApproveAspects:approvalState'],
+			excludeColumns: ["lecmApproveAspects:approvalState"],
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
+			<#if editable>
 			actions: [{
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",
@@ -43,7 +43,10 @@
 				id:"onActionDelete",
 				permission:"delete",
 				label:"${msg('actions.delete-row')}"
-			}]
+			}],
+			</#if>
+			showActionColumn: ${editable?string},
+			allowCreate: ${editable?string}
 		});
 
 		YAHOO.Bubbling.fire("activeGridChanged", {

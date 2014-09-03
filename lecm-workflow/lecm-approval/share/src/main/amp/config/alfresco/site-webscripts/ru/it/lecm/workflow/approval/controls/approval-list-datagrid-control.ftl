@@ -7,6 +7,7 @@
 <#assign editable = ((params.editable!"false") == "true") && !(field.disabled)>
 <#assign reportId = "approval-list-main">
 
+
 <div id='${controlId}'>
 
 	<div class="approvalControlsContainer">

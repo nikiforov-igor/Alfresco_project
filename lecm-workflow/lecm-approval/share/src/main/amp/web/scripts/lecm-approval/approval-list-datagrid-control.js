@@ -59,6 +59,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 							LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};
 							LogicECM.module.Routes.Const.ROUTES_CONTAINER = LogicECM.module.Routes.Const.ROUTES_CONTAINER || {};
 							LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType = this.stageItemType;
+							LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageType = this.stageType;
+							LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType = this.routeType;
 
 							if (YAHOO.lang.isFunction(callback)) {
 								callback.call(this, callbackArg);
