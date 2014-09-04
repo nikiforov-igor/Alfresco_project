@@ -109,6 +109,7 @@ public class StatusChangeAction extends StateMachineAction implements TaskListen
         //Устанавливаем флаг черновика
         nodeService.setProperty(stm_document, StatemachineModel.PROP_IS_DRAFT, forDraft);
 
+	    ((ActivitiScriptNode) delegateTask.getExecution().getVariable("stm_document")).reset();
         //Если стартовый статус, то ничего никуда не перемещаем
         if (forDraft) return;
 
