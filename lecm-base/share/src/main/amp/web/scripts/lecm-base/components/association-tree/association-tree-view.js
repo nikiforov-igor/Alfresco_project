@@ -1177,35 +1177,6 @@ LogicECM.module = LogicECM.module || {};
                         }
                     }
 
-                    var ignoreItems = me.options.ignoreNodes;
-                    if (ignoreItems != null) {
-                        var tempItems = [];
-                        var k = 0;
-                        for (index in items) {
-                            item = items[index];
-                            var ignore = false;
-                            for (var i = 0; i < ignoreItems.length; i++) {
-                                if (ignoreItems[i] == item.nodeRef) {
-                                    ignore = true;
-                                }
-                            }
-                            if (!ignore) {
-                                tempItems[k] = item;
-                                k++;
-                            }
-                        }
-                        items = tempItems;
-                    }
-
-                    var allowedNodes = me.options.allowedNodes;
-                    if(YAHOO.lang.isArray(allowedNodes) && (allowedNodes.length > 0) && allowedNodes[0]) {
-                        for(i = 0; item = items[i]; i++) {
-                            if(allowedNodes.indexOf(item.nodeRef) < 0) {
-                                items.splice(i--, 1);
-                            }
-                        }
-                    }
-
 					if (me.options.employeeAbsenceMarker) {
 						me.getEmployeesAbsenceInformation(items);
 					}
@@ -1549,12 +1520,43 @@ LogicECM.module = LogicECM.module || {};
 
         _generateChildrenUrlParams: function AssociationTreeViewer__generatePickerChildrenUrlParams(searchTerm)
         {
+	        var additionalFilter = this.options.additionalFilter;
+
+	        if (this.options.allowedNodes != null && this.options.allowedNodes.length > 0) {
+		        var allowedNodesFilter = "";
+		        for (var i = 0; i < this.options.allowedNodes.length; i++) {
+			        if (allowedNodesFilter.length > 0) {
+				        allowedNodesFilter += " OR ";
+			        }
+			        allowedNodesFilter += "ID:\"" + this.options.allowedNodes[i] + "\"";
+		        }
+
+		        if (additionalFilter != null && additionalFilter.length > 0) {
+			        additionalFilter = "(" + additionalFilter + ") AND (" + allowedNodesFilter + ")";
+		        } else {
+			        additionalFilter = allowedNodesFilter;
+		        }
+	        }
+
+	        if (this.options.ignoreNodes != null && this.options.ignoreNodes.length > 0) {
+		        var ignoreNodesFilter = "ISNOTNULL:\"cm:name\"";
+		        for (var i = 0; i < this.options.ignoreNodes.length; i++) {
+			        ignoreNodesFilter += " AND NOT ID:\"" + this.options.ignoreNodes[i] + "\"";
+		        }
+
+		        if (additionalFilter != null && additionalFilter.length > 0) {
+			        additionalFilter = "(" + additionalFilter + ") AND (" + ignoreNodesFilter + ")";
+		        } else {
+			        additionalFilter = ignoreNodesFilter;
+		        }
+	        }
+
             return "?selectableType=" + this.options.itemType + "&searchTerm=" + encodeURIComponent(searchTerm) +
                 "&skipCount=" + this.skipItemsCount + "&size=" + this.getMaxSearchResult() +
 	            "&nameSubstituteString=" + encodeURIComponent(this.options.nameSubstituteString) +
 	            "&sortProp=" + encodeURIComponent(this.options.sortProp) +
 	            "&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
-				"&additionalFilter=" + encodeURIComponent(this.options.additionalFilter) +
+				"&additionalFilter=" + encodeURIComponent(additionalFilter) +
                 "&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
         },
 
