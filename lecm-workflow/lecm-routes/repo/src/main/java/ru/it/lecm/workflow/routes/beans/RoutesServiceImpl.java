@@ -171,7 +171,13 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 				}
 			}
 		}
-		iteration = copyService.copy(routeNode, approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
+		iteration = copyService.copy(routeNode, approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), false);
+		List<NodeRef> routeStages = getAllStagesOfRoute(routeNode);
+		for (NodeRef routeStage: routeStages) {
+			if (!nodeService.hasAspect(routeStage, ContentModel.ASPECT_TEMPORARY)) {
+				copyService.copy(routeStage, iteration, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
+			}
+		}
 		resolveIterationMacroses(iteration);
 
 		return iteration;
@@ -188,19 +194,30 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 	}
 
-	private List<NodeRef> getAllStageItemsOfRoute(NodeRef routeNode) {
-		List<NodeRef> stageItems = new ArrayList<>();
-		List<ChildAssociationRef> stageChildren;
+	private List<NodeRef> getAllStagesOfRoute(NodeRef routeNode) {
 		Set<QName> stageType = new HashSet<>();
 		stageType.add(RoutesModel.TYPE_STAGE);
-		Set<QName> stageItemType = new HashSet<>();
-		stageItemType.add(RoutesModel.TYPE_STAGE_ITEM);
-		stageChildren = nodeService.getChildAssocs(routeNode, stageType);
+
+		List<NodeRef> stages = new ArrayList<>();
+		List<ChildAssociationRef> stageChildren = nodeService.getChildAssocs(routeNode, stageType);
 
 		for (ChildAssociationRef stageChild : stageChildren) {
 			NodeRef stageNode = stageChild.getChildRef();
-			List<ChildAssociationRef> stageItemChildren = nodeService.getChildAssocs(stageNode, stageItemType);
+			stages.add(stageNode);
+		}
 
+		return stages;
+	}
+
+	private List<NodeRef> getAllStageItemsOfRoute(NodeRef routeNode) {
+		Set<QName> stageItemType = new HashSet<>();
+		stageItemType.add(RoutesModel.TYPE_STAGE_ITEM);
+
+		List<NodeRef> stageItems = new ArrayList<>();
+		List<NodeRef> stages = getAllStagesOfRoute(routeNode);
+
+		for (NodeRef stageNode : stages) {
+			List<ChildAssociationRef> stageItemChildren = nodeService.getChildAssocs(stageNode, stageItemType);
 			for (ChildAssociationRef stageItemChild : stageItemChildren) {
 				NodeRef stageItemNode = stageItemChild.getChildRef();
 				stageItems.add(stageItemNode);
