@@ -2707,7 +2707,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[DA_APPROVERS]]></value>
+                                                                                <value><![CDATA[LECM_APPROVERS]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2769,7 +2769,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[DA_APPROVER_DYN]]></value>
+                                                                                    <![CDATA[LECM_APPROVER_DYN]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4541,7 +4541,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>DA_APPROVER_DYN</businessRoleName>
+                                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -6305,7 +6305,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[DA_APPROVERS]]></value>
+                                                                                <value><![CDATA[LECM_APPROVERS]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -6367,7 +6367,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[DA_APPROVER_DYN]]></value>
+                                                                                    <![CDATA[LECM_APPROVER_DYN]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -12176,7 +12176,7 @@ additionalDocument.save();
                         <roleAssociations>
                             <roleAssociation>
                                 <type>role-assoc</type>
-                                <businessRoleName>DA_APPROVER_DYN</businessRoleName>
+                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>

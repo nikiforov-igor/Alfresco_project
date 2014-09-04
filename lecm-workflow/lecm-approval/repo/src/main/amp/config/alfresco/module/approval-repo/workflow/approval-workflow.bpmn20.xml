@@ -95,9 +95,6 @@
           <activiti:field name="script">
             <activiti:string><![CDATA[(function(){ /* старт подпроцесса, подготовка переменных */
   var currentStage = execution.getVariable('currentStage');
-  for (var prop in currentStage.properties) {
-    logger.log(prop + ' = ' + currentStage.properties[prop]);
-  }
   var stageWorkflowType = currentStage.properties['lecmWorkflowRoutes:stageWorkflowType'];
   var stageWorkflowTerm = currentStage.properties['lecmWorkflowRoutes:stageWorkflowTerm'];
   execution.setVariableLocal('stageWorkflowType', stageWorkflowType);
@@ -166,7 +163,7 @@
   var stageItem = execution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
   /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
-  lecmPermission.grantDynamicRole(document, employees[0], 'DA_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+  lecmPermission.grantDynamicRole(document, employees[0], 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>

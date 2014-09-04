@@ -1922,7 +1922,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[DA_APPROVERS]]></value>
+                                                                                <value><![CDATA[LECM_APPROVERS]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -1984,7 +1984,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[DA_APPROVER_DYN]]></value>
+                                                                                    <![CDATA[LECM_APPROVER_DYN]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -2499,7 +2499,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>DA_APPROVER_DYN</businessRoleName>
+                                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -3595,7 +3595,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                         <roleAssociations>
                                             <roleAssociation>
                                                 <type>role-assoc</type>
-                                                <businessRoleName>DA_APPROVER_DYN</businessRoleName>
+                                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                                             </roleAssociation>
                                         </roleAssociations>
                                         <subFolders/>
@@ -5143,7 +5143,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             </property>
                                                                             <property>
                                                                                 <name>inputFromValue</name>
-                                                                                <value><![CDATA[DA_APPROVERS]]></value>
+                                                                                <value><![CDATA[LECM_APPROVERS]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -5205,7 +5205,7 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
                                                                             <property>
                                                                                 <name>inputFromValue</name>
                                                                                 <value>
-                                                                                    <![CDATA[DA_APPROVER_DYN]]></value>
+                                                                                    <![CDATA[LECM_APPROVER_DYN]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -12755,7 +12755,7 @@ notifications.sendNotificationFromCurrentUser(executors,notificationText, contra
                         <roleAssociations>
                             <roleAssociation>
                                 <type>role-assoc</type>
-                                <businessRoleName>DA_APPROVER_DYN</businessRoleName>
+                                <businessRoleName>LECM_APPROVER_DYN</businessRoleName>
                             </roleAssociation>
                         </roleAssociations>
                         <subFolders/>
