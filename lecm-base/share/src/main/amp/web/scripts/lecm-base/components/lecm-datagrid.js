@@ -137,6 +137,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @default false
                  */
                 usePagination: false,
+                unlimited: false,
 
                 disableDynamicPagination: false,
 
@@ -1487,7 +1488,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                     YAHOO.util.Dom.setStyle(this.id + "-grid", "height", this.options.height + "px");
                 }
 
-                if (!this.options.usePagination) {
+                if (!this.options.usePagination && this.options.unlimited) {
                     YAHOO.util.Event.addListener(this.id + "-grid", "scroll", this.onContainerScroll, this);
                 }
 
@@ -1550,7 +1551,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                             showExtendSearchBlock:this.options.showExtendSearchBlock,
                             maxSearchResults: this.options.maxResults,
                             loopSize: this.options.loopSize,
-                            unlimited:!this.options.usePagination,
+                            unlimited: !this.options.usePagination && this.options.unlimited,
 	                        searchFormId: this.options.advSearchFormId
                         });
 
