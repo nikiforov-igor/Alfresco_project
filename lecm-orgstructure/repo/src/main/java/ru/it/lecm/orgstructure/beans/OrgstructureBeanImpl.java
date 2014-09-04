@@ -305,7 +305,8 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 		return getSubUnits(parent, onlyActive, includeSubunits, true);
 	}
 
-    private List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess) {
+    @Override
+    public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess) {
         List<NodeRef> results = new ArrayList<NodeRef>();
         Set<QName> units = new HashSet<QName>();
         units.add(TYPE_ORGANIZATION_UNIT);
@@ -487,21 +488,25 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getUnitStaffLists(NodeRef unitRef) {
-		List<NodeRef> results = new ArrayList<NodeRef>();
-		if (isUnit(unitRef) && hasAccessToOrgElement(unitRef)) {
-			Set<QName> staffs = new HashSet<QName>();
-			staffs.add(TYPE_STAFF_LIST);
-
-			List<ChildAssociationRef> sls = nodeService.getChildAssocs(unitRef, staffs);
-			for (ChildAssociationRef sl : sls) {
-				if (!isArchive(sl.getChildRef())) {
-					results.add(sl.getChildRef());
-				}
-			}
-		}
-		return results;
+		return getUnitStaffLists(unitRef, true);
 	}
 
+    @Override
+    public List<NodeRef> getUnitStaffLists(NodeRef unitRef, boolean checkAccess) {
+        List<NodeRef> results = new ArrayList<NodeRef>();
+        if (isUnit(unitRef) && (!checkAccess || hasAccessToOrgElement(unitRef))) {
+            Set<QName> staffs = new HashSet<QName>();
+            staffs.add(TYPE_STAFF_LIST);
+
+            List<ChildAssociationRef> sls = nodeService.getChildAssocs(unitRef, staffs);
+            for (ChildAssociationRef sl : sls) {
+                if (!isArchive(sl.getChildRef())) {
+                    results.add(sl.getChildRef());
+                }
+            }
+        }
+        return results;
+    }
 	@Override
 	public List<NodeRef> getOrgRoleEmployees(NodeRef nodeRef) {
 		if (!isWorkRole(nodeRef)) { // если не роль для рабочей группы
@@ -531,10 +536,15 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public NodeRef getEmployeeByPosition(NodeRef positionRef) {
+        return getEmployeeByPosition(positionRef, true);
+    }
+
+    @Override
+    public NodeRef getEmployeeByPosition(NodeRef positionRef, boolean checkAccess) {
         NodeRef employeeLink = getEmployeeLinkByPosition(positionRef);
         if (employeeLink != null && !isArchive(employeeLink)) {
             NodeRef employee = getEmployeeByLink(employeeLink);
-            return hasAccessToOrgElement(employee) ? employee : null;
+            return (!checkAccess || hasAccessToOrgElement(employee)) ? employee : null;
         }
         return null;
     }
@@ -1080,13 +1090,17 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
 	@Override
 	public List<NodeRef> getUnitEmployees(NodeRef unitRef) {
+		return getUnitEmployees(unitRef, true);
+	}
+    @Override
+	public List<NodeRef> getUnitEmployees(NodeRef unitRef, boolean checkAccess) {
 		List<NodeRef> employees = new ArrayList<NodeRef>();
 		// Получаем список штатных расписаний
-		List<NodeRef> staffs = getUnitStaffLists(unitRef);
+		List<NodeRef> staffs = getUnitStaffLists(unitRef, checkAccess);
 		Set<NodeRef> employessSet = new HashSet<NodeRef>();
 		for (NodeRef staff : staffs) {
 			if (!isArchive(staff)) {
-				NodeRef employee = getEmployeeByPosition(staff);
+				NodeRef employee = getEmployeeByPosition(staff, checkAccess);
 				if (employee != null && !isArchive(employee)) {
 					employessSet.add(employee);
 				}

@@ -9,13 +9,13 @@
                 <bubblingLabel>structure</bubblingLabel>
             </properties>
         </component>
-        <!-- Toolbar -->
+<!--        &lt;!&ndash; Toolbar &ndash;&gt;
         <component>
             <region-id>toolbar</region-id>
             <url>/lecm/orgstructure/arm-toolbar</url>
             <properties>
                 <bubblingLabel>structure</bubblingLabel>
             </properties>
-        </component>
+        </component>-->
     </components>
 </template-instance>

@@ -1168,17 +1168,17 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      *
      * @return Текстовое представление JSONArrray c объектами
      */
-    public String getArmStructure(final String ref) {
+    public String getArmStructure(final String ref, final String searchTerm) {
         List<JSONObject> nodes = new ArrayList<>();
         final String ORG_UNIT_TYPE = OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService());
         final String ORG_EMPLOYEE_TYPE = OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(serviceRegistry.getNamespaceService());
 
-        if (ref != null) {
-            final NodeRef currentRef = ref.length() > 0 ? new NodeRef(ref) : orgstructureService.getStructureDirectory();
+        if (searchTerm == null) {
+            final NodeRef currentRef = ref != null ? new NodeRef(ref) : orgstructureService.getStructureDirectory();
             final NodeRef rootUnit = orgstructureService.getRootUnit();
             List<JSONObject> units = new ArrayList<>();
             // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
-            List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true);
+            List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true, false, false);
             for (NodeRef child : childs) {
                 JSONObject unit = new JSONObject();
                 try {
@@ -1191,7 +1191,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
                     }
                     unit.put(LABEL, formattedString);
                     unit.put(TITLE, formattedString);
-                    unit.put(IS_LEAF, !hasOrgChilds(child));
+                    unit.put(IS_LEAF, !hasOrgChilds(child, false));
                     unit.put(EXPAND, child.equals(rootUnit));
                     units.add(unit);
                 } catch (JSONException e) {
@@ -1223,6 +1223,8 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
             nodes.addAll(units);
             nodes.addAll(employees);
+        } else {
+
         }
         return nodes.toString();
     }
@@ -1232,33 +1234,34 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
      *
      * @return Текстовое представление JSONArrray c объектами
      */
-    private boolean hasOrgChilds(NodeRef unit) {
+    private boolean hasOrgChilds(NodeRef unit, boolean checkAccess) {
         Set<QName> units = new HashSet<QName>();
         units.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
 
         List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(unit, units);
         for (ChildAssociationRef uRef : uRefs) {
             if (!((BaseBean)orgstructureService).isArchive(uRef.getChildRef())) {
-                if (orgstructureService.hasAccessToOrgElement(uRef.getChildRef())){
+                if (!checkAccess || orgstructureService.hasAccessToOrgElement(uRef.getChildRef())){
                     return true;
                 }
             }
         }
 
         // Получаем список штатных расписаний
-        List<NodeRef> staffs = orgstructureService.getUnitStaffLists(unit);
+        List<NodeRef> staffs = orgstructureService.getUnitStaffLists(unit, false);
         for (NodeRef staff : staffs) {
             if (!((BaseBean)orgstructureService).isArchive(staff)) {
-                NodeRef employee = orgstructureService.getEmployeeByPosition(staff);
+                NodeRef employee = orgstructureService.getEmployeeByPosition(staff, false);
                 if (employee != null && !((BaseBean)orgstructureService).isArchive(employee)) {
-                    return true;
+                    if (!checkAccess || orgstructureService.hasAccessToOrgElement(employee)){
+                        return true;
+                    }
                 }
             }
         }
 
         return false;
     }
-
     public void setNodeService(NodeService nodeService) {
         this.nodeService = nodeService;
     }

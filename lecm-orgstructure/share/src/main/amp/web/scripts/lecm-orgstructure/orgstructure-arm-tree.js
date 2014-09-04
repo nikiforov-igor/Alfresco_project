@@ -35,6 +35,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
     var Dom = YAHOO.util.Dom;
     var Bubbling = YAHOO.Bubbling;
+    var Event = YAHOO.util.Event;
 
     LogicECM.module.OrgStructure.ArmTree = function (htmlId) {
         LogicECM.module.OrgStructure.ArmTree.superclass.constructor.call(this, "LogicECM.module.OrgStructure.ArmTree", htmlId);
@@ -46,15 +47,29 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         selectedNode: null,
         doubleClickLock: false,
 
-        onReady: function OT_onReady() {
-            var orgStructure = Dom.get(this.id);
-            //Добавляем дерево структуры организации
-            this._createTree(orgStructure);
+        searchButton : null,
+        searchTerm: null,
+
+        options : {
+            minSTermLength: -1,
+            bubblingLabel: null
         },
 
-        _createTree: function (parent) {
-            this.tree = new YAHOO.widget.TreeView(this.id);
-            //this.tree.singleNodeHighlight = true;
+        onReady: function OT_onReady() {
+            this._initToolbar();
+            //Добавляем дерево структуры организации
+            this.reloadTree();
+        },
+
+        reloadTree: function OT_ReloadTree() {
+            if (this.tree != null) {
+                this.tree.destroy();
+            }
+            this._createTree()
+        },
+
+        _createTree: function () {
+            this.tree = new YAHOO.widget.TreeView("orgstructure-tree");
 
             this.tree.setDynamicLoad(this._loadTree.bind(this));
             var root = this.tree.getRoot();
@@ -68,20 +83,80 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.tree.render();
         },
 
-        _createUrl: function (nodeRef) {
-            var templateUrl = Alfresco.constants.URL_SERVICECONTEXT +
-                "lecm/components/form?itemKind={itemKind}&itemId={itemId}&mode={mode}&showCancelButton=true";
-            return YAHOO.lang.substitute(templateUrl, {
-                itemKind: "node",
-                itemId: nodeRef,
-                mode: "view"
-            })
+        _initToolbar: function () {
+            this.searchButton = Alfresco.util.createYUIButton(this, "searchButton", this._onSearchClick, {});
+
+            var me = this;
+            // Search
+            this.checkShowClearSearch();
+            Event.on(this.id + "-clearSearchInput", "click", this._onClearSearch, null, this);
+            Event.on(this.id + "-full-text-search", "keyup", this.checkShowClearSearch, null, this);
+            var searchInput = Dom.get(this.id + "-full-text-search");
+            new YAHOO.util.KeyListener(searchInput,
+                {
+                    keys: 13
+                },
+                {
+                    fn: me._onSearchClick,
+                    scope: this,
+                    correctScope: true
+                }, "keydown").enable();
+
+
+            // Finally show the component body here to prevent UI artifacts on YUI button decoration
+            Dom.setStyle(this.id + "-body", "visibility", "visible");
+        },
+
+        /**
+         * Скрывает кнопку поиска, если строка ввода пустая
+         * @constructor
+         */
+        checkShowClearSearch: function Toolbar_checkShowClearSearch() {
+            if (Dom.get(this.id + "-full-text-search").value.length > 0) {
+                Dom.setStyle(this.id + "-clearSearchInput", "visibility", "visible");
+            } else {
+                Dom.setStyle(this.id + "-clearSearchInput", "visibility", "hidden");
+            }
+        },
+
+        // по нажатию на кнопку Поиск
+        _onSearchClick: function Tree_onSearch(e, obj) {
+            var searchTerm = Dom.get(this.id + "-full-text-search").value;
+
+            var maySearch = this.options.minSTermLength <= 0 || searchTerm.length == 0;
+            if (!maySearch) {// проверяем длину терма
+                maySearch = (searchTerm.length >= this.options.minSTermLength);
+            }
+            if (maySearch){
+                this.searchTerm = searchTerm;
+                if (searchTerm.length > 0) {
+                    this.reloadTree(searchTerm);
+                } else {
+                    this._onClearSearch();
+                }
+            } else {
+                Alfresco.util.PopupManager.displayMessage(
+                    {
+                        displayTime: 3,
+                        text: this.msg("label.need_more_symbols_for_search")
+                    });
+            }
+        },
+
+        _onClearSearch: function _onClearSearch() {
+            Dom.get(this.id + "-full-text-search").value = "";
+            this.searchTerm = null;
+            this.checkShowClearSearch();
+            this.reloadTree();
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/arm/branch";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
+            }
+            if (this.searchTerm != null && this.searchTerm.length > 0) {
+                sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURI(this.searchTerm));
             }
             var otree = this;
             var callback = {
@@ -110,8 +185,10 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
-                        if (curElement.data.expand) {
-                            curElement.expanded = true;
+                        if (curElement) {
+                            if (curElement.data.expand) {
+                                curElement.expanded = true;
+                            }
                         }
 
                         otree.tree.render();
@@ -141,17 +218,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (this.doubleClickLock) return;
             this.doubleClickLock = true;
 
-            viewAttributes(this.selectedNode.data.nodeRef, null, "", null);
-
-            this.doubleClickLock = false;
-        },
-
-        _setFormDialogTitle: function (p_form, p_dialog) {
-            var message = this.msg("dialog.view.title");
-            var fileSpan = '<span class="light">' + message + '</span>';
-            Alfresco.util.populateHTML(
-                [ p_dialog.id + "-form-container_h", fileSpan]
-            );
+            viewAttributes(this.selectedNode.data.nodeRef, null, "", null); // метод из view.lib.ftl
             this.doubleClickLock = false;
         }
     });

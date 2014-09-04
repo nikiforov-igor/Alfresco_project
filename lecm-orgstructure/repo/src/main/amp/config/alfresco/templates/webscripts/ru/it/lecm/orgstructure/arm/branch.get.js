@@ -1,5 +1,5 @@
 var branch = [];
-var nodes = orgstructure.getArmStructure(args["nodeRef"] != null ? args["nodeRef"] : "");
+var nodes = orgstructure.getArmStructure(args["nodeRef"], args["searchTerm"]);
 //process response
 var oNodes = eval("(" + nodes + ")");
 

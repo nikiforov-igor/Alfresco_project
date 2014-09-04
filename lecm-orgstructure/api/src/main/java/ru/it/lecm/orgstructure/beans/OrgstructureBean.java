@@ -250,10 +250,13 @@ public interface OrgstructureBean {
 	 */
 	List<NodeRef> getUnitStaffLists(NodeRef unitRef);
 
+    List<NodeRef> getUnitStaffLists(NodeRef unitRef, boolean checkAccess);
+
 	/**
 	 * Получение ссылки на сотрудника для объектов "Штатное Расписание и "Участник Рабочей группы"
 	 */
 	NodeRef getEmployeeByPosition(NodeRef positionRef);
+	NodeRef getEmployeeByPosition(NodeRef positionRef, boolean checkAccess);
 
 	/**
 	 * Получение списка сотрудников, занимающих в указанном подразделении указанную должностную позицию
@@ -711,6 +714,7 @@ public interface OrgstructureBean {
     List<NodeRef> getEmployeeLinks(NodeRef employeeRef, boolean includeArchived);
 
     List<NodeRef> getUnitEmployees(NodeRef unitRef);
+    List<NodeRef> getUnitEmployees(NodeRef unitRef, boolean checkAccess);
 
     /**
      *  Возвращает Authority для папки подразделения
@@ -750,4 +754,6 @@ public interface OrgstructureBean {
     public boolean hasAccessToOrgElement(NodeRef orgElement, boolean doNotAccessWithEmpty);
 
     List<NodeRef> getOrganizationEmployees(NodeRef organizationRef);
+
+    public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess);
 }
