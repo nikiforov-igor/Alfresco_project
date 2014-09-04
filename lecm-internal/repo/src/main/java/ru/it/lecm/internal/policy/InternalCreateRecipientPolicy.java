@@ -56,22 +56,22 @@ public class InternalCreateRecipientPolicy implements NodeServicePolicies.OnCrea
 
     @Override
     public void onDeleteAssociation(AssociationRef nodeAssocRef) {
-//        NodeRef targetRef = nodeAssocRef.getTargetRef();
-//        NodeRef internalRef = nodeAssocRef.getSourceRef();
-//        try {
-//            if (orgstructureService.isEmployee(targetRef)) {
-//                nodeService.removeAssociation(internalRef, targetRef, EDSDocumentService.ASSOC_RECIPIENTS);
-//            } else {
-//                if (orgstructureService.isUnit(targetRef)) {
-//                    NodeRef employee = orgstructureService.getUnitBoss(targetRef);
-//                    if (employee != null) {
-//                        nodeService.removeAssociation(internalRef, employee, EDSDocumentService.ASSOC_RECIPIENTS);
-//                    }
-//                }
-//            }
-//        } catch (Exception ex) {
-//            logger.error(ex.getMessage(), ex);
-//        }
+        NodeRef targetRef = nodeAssocRef.getTargetRef();
+        NodeRef internalRef = nodeAssocRef.getSourceRef();
+        try {
+            if (orgstructureService.isEmployee(targetRef)) {
+                nodeService.removeAssociation(internalRef, targetRef, EDSDocumentService.ASSOC_RECIPIENTS);
+            } else {
+                if (orgstructureService.isUnit(targetRef)) {
+                    NodeRef employee = orgstructureService.getUnitBoss(targetRef);
+                    if (employee != null) {
+                        nodeService.removeAssociation(internalRef, employee, EDSDocumentService.ASSOC_RECIPIENTS);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
     }
 
     public void setPolicyComponent(PolicyComponent policyComponent) {
