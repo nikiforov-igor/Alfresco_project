@@ -342,7 +342,10 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         }
                         YAHOO.util.Dom.setStyle(this.id + "-grid", "height", newHeight + "px"); // фиксируем новую высоту
                         if (!me.dataGrid.loadComplete) { // свдвигаем скролл вверх - для удобства работы с ним
-                            YAHOO.util.Dom.get(this.id + "-grid").scrollTop = YAHOO.util.Dom.get(this.id + "-grid").scrollTop - ROW_HEIGHT;
+                            var gridContainer = YAHOO.util.Dom.get(this.id + "-grid");
+                            if (gridContainer) {
+                                gridContainer.scrollTop = YAHOO.util.Dom.get(this.id + "-grid").scrollTop - ROW_HEIGHT;
+                            }
                         }
 
                     }

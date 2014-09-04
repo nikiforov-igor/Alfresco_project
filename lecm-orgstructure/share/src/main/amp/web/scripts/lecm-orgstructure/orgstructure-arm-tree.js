@@ -161,6 +161,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var otree = this;
             var callback = {
                 success: function (oResponse) {
+                    otree.searchTerm = null;
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
                         node.children = [];
@@ -195,6 +196,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     }
                 },
                 failure: function (oResponse) {
+                    otree.searchTerm = null;
                     YAHOO.log("Failed to process XHR transaction.", "info", "example");
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
@@ -203,8 +205,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 argument: {
                     node: node,
                     fnLoadComplete: fnLoadComplete
-                },
-                timeout: 10000
+                }
             };
             YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
         },

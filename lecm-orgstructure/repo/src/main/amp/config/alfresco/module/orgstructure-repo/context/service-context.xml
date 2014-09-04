@@ -73,6 +73,9 @@
         <property name="substitudeBean">
 			<ref bean="substitudeService"/>
 		</property>
+        <property name="searchService">
+			<ref bean="searchService"/>
+		</property>
         <property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>

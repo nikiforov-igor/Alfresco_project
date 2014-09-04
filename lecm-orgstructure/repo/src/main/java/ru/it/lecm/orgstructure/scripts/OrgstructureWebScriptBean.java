@@ -5,6 +5,12 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
+import org.alfresco.service.cmr.repository.StoreRef;
+import org.alfresco.service.cmr.search.ResultSet;
+import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.cmr.search.SearchParameters;
+import org.alfresco.service.cmr.search.SearchService;
+import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +67,14 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     private final String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
     private final String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
 
+    private final String UNITS_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:organization-unit\" " +
+            "AND ( @lecm\\-orgstr\\:element\\-full\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:element\\-short\\-name:\"*{searchTerm}*\") " +
+            "AND @lecm\\-dic\\:active:true";
+
+    private final String EMPLOYEES_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:employee\" " +
+            "AND (@lecm\\-orgstr\\:employee\\-last\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-middle\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-email:\"*{searchTerm}*\" " +
+            "@lecm\\-orgstr\\:employee\\-first\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-person\\-login:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-phone:\"*{searchTerm}*\") AND @lecm\\-dic\\:active:true";
+
     public static final String TYPE_UNIT = "organization-unit";
 
     private final Map<String, Integer> ROOTS = new HashMap<String, Integer>() {{
@@ -79,6 +93,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
 	private OrgstructureBean orgstructureService;
 	private SubstitudeBean substitudeBean;
+	private SearchService searchService;
 
     private IAbsence absenceService;
 
@@ -93,6 +108,18 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public void setDictionaryService(DictionaryBean dictionaryService) {
 		this.dictionaryService = dictionaryService;
 	}
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+
+    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
+        this.substitudeBean = substitudeBean;
+    }
+
+    public void setSearchService(SearchService searchService) {
+        this.searchService = searchService;
+    }
 
 	/**
 	 * Возвращает ноду Организация
@@ -1173,59 +1200,90 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
         final String ORG_UNIT_TYPE = OrgstructureBean.TYPE_ORGANIZATION_UNIT.toPrefixString(serviceRegistry.getNamespaceService());
         final String ORG_EMPLOYEE_TYPE = OrgstructureBean.TYPE_EMPLOYEE.toPrefixString(serviceRegistry.getNamespaceService());
 
+        final NodeRef currentRef = ref != null ? new NodeRef(ref) : orgstructureService.getStructureDirectory();
+        final NodeRef rootUnit = orgstructureService.getRootUnit();
+
+        List<JSONObject> units = new ArrayList<>();
+        // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
+        List<NodeRef> childs;
         if (searchTerm == null) {
-            final NodeRef currentRef = ref != null ? new NodeRef(ref) : orgstructureService.getStructureDirectory();
-            final NodeRef rootUnit = orgstructureService.getRootUnit();
-            List<JSONObject> units = new ArrayList<>();
-            // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
-            List<NodeRef> childs = orgstructureService.getSubUnits(currentRef, true, false, false);
-            for (NodeRef child : childs) {
-                JSONObject unit = new JSONObject();
-                try {
-                    unit.put(NODE_REF, child.toString());
-                    unit.put(ITEM_TYPE, ORG_UNIT_TYPE);
-                    String formattedString = substitudeBean.formatNodeTitle(child, UNIT_FORMAT_STRING);
-                    NodeRef unitBoss = orgstructureService.getUnitBoss(child);
-                    if (unitBoss != null) {
-                        formattedString = formattedString + " (" + substitudeBean.formatNodeTitle(unitBoss, EMPLOYEE_FIO) + ")";
-                    }
-                    unit.put(LABEL, formattedString);
-                    unit.put(TITLE, formattedString);
-                    unit.put(IS_LEAF, !hasOrgChilds(child, false));
-                    unit.put(EXPAND, child.equals(rootUnit));
-                    units.add(unit);
-                } catch (JSONException e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            sort(units, LABEL, true);
-
-            // получаем список Сотрудников в данном подразделении
-            List<JSONObject> employees = new ArrayList<>();
-            childs = orgstructureService.getUnitEmployees(currentRef);
-            for (NodeRef child : childs) {
-                JSONObject employee = new JSONObject();
-                try {
-                    employee.put(NODE_REF, child.toString());
-                    employee.put(ITEM_TYPE, ORG_EMPLOYEE_TYPE);
-
-                    String formattedString = substitudeBean.formatNodeTitle(child, EMPLOYEE_FORMAT_STRING);
-                    employee.put(LABEL, formattedString);
-                    employee.put(TITLE, formattedString);
-                    employee.put(IS_LEAF, true);
-                    employee.put(EXPAND, false);
-                    employees.add(employee);
-                } catch (JSONException e) {
-                    logger.error(e.getMessage(), e);
-                }
-            }
-            sort(employees, LABEL, true);
-
-            nodes.addAll(units);
-            nodes.addAll(employees);
+            childs = orgstructureService.getSubUnits(currentRef, true, false, false);
         } else {
-
+            SearchParameters sp = buildOrgArmSearchParameters(UNITS_BY_TERM_QUERY, searchTerm);
+            ResultSet results = null;
+            childs = new ArrayList<>();
+            try {
+                results = searchService.query(sp);
+                for (ResultSetRow row : results) {
+                    childs.add(row.getNodeRef());
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
+                }
+            }
         }
+
+        for (NodeRef child : childs) {
+            JSONObject unit = new JSONObject();
+            try {
+                unit.put(NODE_REF, child.toString());
+                unit.put(ITEM_TYPE, ORG_UNIT_TYPE);
+                String formattedString = substitudeBean.formatNodeTitle(child, UNIT_FORMAT_STRING);
+                NodeRef unitBoss = orgstructureService.getUnitBoss(child);
+                if (unitBoss != null) {
+                    formattedString = formattedString + " (" + substitudeBean.formatNodeTitle(unitBoss, EMPLOYEE_FIO) + ")";
+                }
+                unit.put(LABEL, formattedString);
+                unit.put(TITLE, formattedString);
+                unit.put(IS_LEAF, !hasOrgChilds(child, false));
+                unit.put(EXPAND, child.equals(rootUnit));
+                units.add(unit);
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+
+        // получаем список Сотрудников
+        List<JSONObject> employees = new ArrayList<>();
+        if (searchTerm == null) {
+            childs = orgstructureService.getUnitEmployees(currentRef, false);
+        } else {
+            SearchParameters sp = buildOrgArmSearchParameters(EMPLOYEES_BY_TERM_QUERY, searchTerm);
+            ResultSet results = null;
+            childs = new ArrayList<>();
+            try {
+                results = searchService.query(sp);
+                for (ResultSetRow row : results) {
+                    childs.add(row.getNodeRef());
+                }
+            } finally {
+                if (results != null) {
+                    results.close();
+                }
+            }
+        }
+
+        for (NodeRef child : childs) {
+            JSONObject employee = new JSONObject();
+            try {
+                employee.put(NODE_REF, child.toString());
+                employee.put(ITEM_TYPE, ORG_EMPLOYEE_TYPE);
+
+                String formattedString = substitudeBean.formatNodeTitle(child, EMPLOYEE_FORMAT_STRING);
+                employee.put(LABEL, formattedString);
+                employee.put(TITLE, formattedString);
+                employee.put(IS_LEAF, true);
+                employee.put(EXPAND, false);
+                employees.add(employee);
+            } catch (JSONException e) {
+                logger.error(e.getMessage(), e);
+            }
+        }
+
+        nodes.addAll(units);
+        nodes.addAll(employees);
+
         return nodes.toString();
     }
 
@@ -1262,11 +1320,13 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 
         return false;
     }
-    public void setNodeService(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
 
-    public void setSubstitudeBean(SubstitudeBean substitudeBean) {
-        this.substitudeBean = substitudeBean;
+    private SearchParameters buildOrgArmSearchParameters(final String patternQuery, final String searchTerm) {
+        SearchParameters sp = new SearchParameters();
+        sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
+        sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
+
+        sp.setQuery(patternQuery.replace("{searchTerm}", searchTerm));
+        return sp;
     }
 }
