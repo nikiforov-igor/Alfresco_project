@@ -179,7 +179,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             var ref = curElement.data.nodeRef;
                             curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
                             curElement.id = curElement.labelElId;
-                            curElement.labelStyle = curElement.data.type == "lecm-orgstr:organization-unit" ? "icon-unit" : "icon-employee";
+                            curElement.labelStyle = curElement.data.type == "lecm-orgstr:organization-unit" ? "unit-icon" : "employee-icon";
                         }
                     }
 

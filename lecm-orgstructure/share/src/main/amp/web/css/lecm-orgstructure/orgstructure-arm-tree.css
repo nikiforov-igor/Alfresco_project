@@ -33,13 +33,13 @@
     display:none;
 }
 
-#orgstructure-tree .icon-unit {
+#orgstructure-tree .unit-icon {
     display:block;
     height: 22px;
     padding-left: 20px;
     background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
 }
-#orgstructure-tree .icon-employee {
+#orgstructure-tree .employee-icon {
     display:block;
     height: 22px;
     padding-left: 20px;
