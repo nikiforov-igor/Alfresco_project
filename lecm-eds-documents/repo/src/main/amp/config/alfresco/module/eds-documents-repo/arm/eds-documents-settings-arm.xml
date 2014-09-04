@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Настройки СЭД" type="lecm-arm:node">
+        <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
+        <property name="lecm-arm:order"><![CDATA[60]]></property>
+        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+        <property name="lecm-arm:types"><![CDATA[]]></property>
+        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+        <items>
+            <item name="cm:Общие настройки" type="lecm-arm:html-node">
+                <property name="cm:name"><![CDATA[Общие настройки]]></property>
+                <property name="lecm-arm:order"><![CDATA[10]]></property>
+                <property name="lecm-arm:html-url">
+                    <![CDATA[page/components/console/eds-global-settings]]></property>
+            </item>
+        </items>
+    </item>
+</items>

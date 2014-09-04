@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:p="http://www.springframework.org/schema/p"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="routes.routesMacrosDicBootstrap"
 		  parent="lecmDictionaryBootstrap" depends-on="routes.model.bootstrap, businessJournalLogEventsPolicy" >
@@ -23,4 +22,15 @@
 			</list>
 		</property>
 	</bean>
+
+    <bean id="routes.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="eds.documents.arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки/Настройки СЭД"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/routes-settings-arm.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
