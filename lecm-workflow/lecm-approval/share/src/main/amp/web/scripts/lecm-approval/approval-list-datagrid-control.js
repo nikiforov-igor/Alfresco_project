@@ -229,7 +229,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					errorText = 'Редактирование параметров запущенной итерации невозможно';
 					break;
 				case 'COMPLETE':
-					errorText = 'Редактирвоание параметров завершенной итерации невозможно';
+					errorText = 'Редактирование параметров завершенной итерации невозможно';
 					break;
 				case 'NOT_EXITS':
 					errorText = 'Список согласования отсутствует';
@@ -291,6 +291,24 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 		},
 		onAddStageButton: function() {
+			var errorText;
+			switch (this.approvalState) {
+				case 'COMPLETE':
+					errorText = 'Невозможно добавить этап в завершенную итерацию';
+					break;
+				case 'NOT_EXITS':
+					errorText = 'Список согласования отсутствует';
+					break;
+			}
+
+			if (errorText) {
+				Alfresco.util.PopupManager.displayPrompt({
+					title: 'Добавление этапа невозможно',
+					text: errorText
+				});
+				return;
+			}
+
 			LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionCreate.call(this);
 		}
 	}, true);
