@@ -84,6 +84,10 @@
     width: 20px;
     z-index: 1000;
 }
+.body.scrollableList.dashlet-body .datagrid .grid {
+    overflow: visible;
+    border: medium none;
+}
 
 .dashlet .lecm-dashlet-actions-right {
 	float: right;
