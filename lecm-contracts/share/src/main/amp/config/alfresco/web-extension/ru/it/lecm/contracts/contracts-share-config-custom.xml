@@ -62,10 +62,12 @@
                     <show id="lecm-contract:locationContract"/>
                     <show id="lecm-contract-aspect:reasonDelete-assoc"/>
                     <show id="lecm-contract-table-structure:stages-assoc"/>
+					<show id="lecm-contract:approval" force="true"/>
 				</field-visibility>
                 <appearance>
                     <set id="common" appearance="" label-id="label.contracts.main" />
                     <set id="contract-stages" appearance="" label-id="label.contracts.stage" /><!-- tab2 -->
+                    <set id="approvalTab" appearance="" label="Согласование"/>
                     <set id="contract-info" appearance="" parent="common" />
                     <set id="price" parent="contract-info" appearance="" template="/ru/it/lecm/base-share/components/controls/price.ftl" />
                     <set id="date-conclusion" parent="contract-info" appearance="" />
@@ -169,6 +171,10 @@
                             <control-param name="jsDependencies">scripts/lecm-contracts/get-stage-delete-message.js</control-param>
                         </control>
                     </field>
+					<field id="lecm-contract:approval" set="approvalTab">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+					</field>
+
                 </appearance>
 			</form>
             <form id="document">
