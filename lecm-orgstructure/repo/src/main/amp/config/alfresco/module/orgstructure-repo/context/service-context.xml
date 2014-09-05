@@ -399,4 +399,15 @@
         </property>
     </bean>
 
+    <bean id="orgstructure.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/orgstructure-settings-arm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+
 </beans>

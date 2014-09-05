@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div id="${id}-alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=true>
+		<@grid.datagrid id=id showViewForm=false>
 			<script type="text/javascript">//<![CDATA[
 			function createWorkforceDatagrid() {
 				var datagrid = new LogicECM.module.Orgstructure.WorkForceDataGrid('${id}').setOptions(
@@ -69,9 +69,23 @@
                 datagrid.draw();
 			}
 
-			function init() {
-                createWorkforceDatagrid();
-			}
+            function init() {
+                LogicECM.module.Base.Util.loadResources([
+                    'jquery/jquery-1.6.2.js',
+                    'components/form/date-range.js',
+                    'components/form/number-range.js',
+                    'modules/simple-dialog.js',
+                    'scripts/lecm-base/components/advsearch.js',
+                    'scripts/lecm-base/components/lecm-datagrid.js',
+                    'scripts/lecm-orgstructure/workgroup-datagrid.js',
+                    'scripts/lecm-orgstructure/workforce-datagrid.js',
+                    'scripts/lecm-base/components/versions.js'
+                ], [
+                    'components/search/search.css',
+                    'modules/document-details/historic-properties-viewer.css',
+                    'css/lecm-orgstructure/orgstructure-work-groups.css'
+                ], createWorkforceDatagrid);
+            }
 
 			YAHOO.util.Event.onDOMReady(init);
 			//]]></script>

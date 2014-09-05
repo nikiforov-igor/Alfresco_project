@@ -55,10 +55,24 @@
 				}
 	
 				function init() {
-	                createWorkgroupDatagrid();
+                    LogicECM.module.Base.Util.loadResources([
+                        'jquery/jquery-1.6.2.js',
+                        'components/form/date-range.js',
+                        'components/form/number-range.js',
+                        'modules/simple-dialog.js',
+                        'scripts/lecm-base/components/advsearch.js',
+                        'scripts/lecm-base/components/lecm-datagrid.js',
+                        'scripts/lecm-orgstructure/workgroup-datagrid.js',
+                        'scripts/lecm-orgstructure/workforce-datagrid.js',
+                        'scripts/lecm-base/components/versions.js'
+                    ], [
+                        'components/search/search.css',
+                        'modules/document-details/historic-properties-viewer.css',
+                        'css/lecm-orgstructure/orgstructure-work-groups.css'
+                    ], createWorkgroupDatagrid);
 				}
-	
-				YAHOO.util.Event.onDOMReady(init);
+
+                YAHOO.util.Event.onDOMReady(init);
 			})();
 			//]]></script>
 		</@grid.datagrid>

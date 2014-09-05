@@ -1,18 +1,3 @@
-<@script type="text/javascript" src="${url.context}/res/components/form/date-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
-
-<!-- Historic Properties Viewer -->
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/versions.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/modules/document-details/historic-properties-viewer.css" />
-
-<!-- Tree -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css"/>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-orgstructure/orgstructure-tree.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/orgstructure-tree.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/orgstructure-utils.js"></@script>
-
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#import "/ru/it/lecm/orgstructure/components/orgstructure-tree.ftl" as orgTree/>
 <#assign id = args.htmlid>
@@ -24,7 +9,7 @@
 
 
 <!-- include base datagrid markup-->
-<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
+<@grid.datagrid id=id showViewForm=false showArchiveCheckBox=true>
         <script type="text/javascript">//<![CDATA[
         (function () {
                 function createDatagrid() {
@@ -151,10 +136,26 @@
                 }
 
                 function init() {
-                        createDatagrid();
+                    LogicECM.module.Base.Util.loadResources([
+                        'jquery/jquery-1.6.2.js',
+                        'modules/simple-dialog.js',
+                        'scripts/lecm-base/components/advsearch.js',
+                        'scripts/lecm-base/components/lecm-datagrid.js',
+                        'components/form/date-range.js',
+                        'components/form/number-range.js',
+                        'scripts/lecm-base/components/versions.js',
+                        'scripts/lecm-orgstructure/orgstructure-tree.js',
+                        'scripts/lecm-orgstructure/orgstructure-utils.js'
+                    ], [
+                        'components/search/search.css',
+                        'modules/document-details/historic-properties-viewer.css',
+                        'yui/treeview/assets/skins/sam/treeview.css',
+                        'css/lecm-orgstructure/orgstructure-tree.css'
+                    ], createDatagrid);
                 }
 
                 YAHOO.util.Event.onDOMReady(init);
+
         })();
         //]]></script>
 </@grid.datagrid>

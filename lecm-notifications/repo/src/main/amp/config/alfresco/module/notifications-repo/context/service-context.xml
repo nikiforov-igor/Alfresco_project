@@ -140,4 +140,15 @@
             </map>
         </constructor-arg>
     </bean>
+
+    <bean id="notifications.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/notifications-settings-arm.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

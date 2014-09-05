@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Настройки дашлета «Договора»" type="lecm-arm:html-node">
+        <property name="cm:name"><![CDATA[Настройки дашлета «Договора»]]></property>
+        <property name="lecm-arm:order"><![CDATA[30]]></property>
+        <property name="lecm-arm:html-url">
+            <![CDATA[page/components/console/contract-dashlet-settings]]></property>
+    </item>
+</items>

@@ -1,25 +1,12 @@
-<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
-
-<!-- Historic Properties Viewer -->
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/versions.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/modules/document-details/historic-properties-viewer.css" />
-
-
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/employee-validations.js"/>
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#import "/ru/it/lecm/orgstructure/components/orgstructure-tree.ftl" as orgTree/>
 <#assign id = args.htmlid>
 <#assign showSearchBlock = true/>
-
-
-	
-                <!-- include base datagrid markup-->
-		<@grid.datagrid id>
+        <!-- include base datagrid markup-->
+		<@grid.datagrid id false>
 			<script type="text/javascript">//<![CDATA[
 			(function () {
-				function init() {
+				function createDatagrid() {
                     LogicECM.module.Base.DataGrid.prototype.onActionEmployeeAdd = function DataGridActions_onActionEmployeeAdd(p_item, owner, actionsConfig, fnCallback) {
                         var me = this;
                         var metaData = {
@@ -368,7 +355,7 @@
 						}
 					};
 
-					new LogicECM.module.Base.DataGrid('${id}').setOptions(
+					var datagrid = new LogicECM.module.Base.DataGrid('${id}').setOptions(
 							{
 								usePagination:true,
 								showExtendSearchBlock:${showSearchBlock?string},
@@ -430,7 +417,22 @@
 							}).setMessages(${messages});
 				}
 
-				YAHOO.util.Event.onDOMReady(init);
+                function init() {
+                    LogicECM.module.Base.Util.loadResources([
+                        'components/form/number-range.js',
+                        'scripts/lecm-base/components/versions.js',
+                        'scripts/lecm-orgstructure/employee-validations.js',
+                        'modules/simple-dialog.js',
+                        'jquery/jquery-1.6.2.js',
+                        'scripts/lecm-base/components/advsearch.js',
+                        'scripts/lecm-base/components/lecm-datagrid.js'
+                    ], [
+                        'components/search/search.css',
+                        'modules/document-details/historic-properties-viewer.css'
+                    ], createDatagrid);
+                }
+
+                YAHOO.util.Event.onDOMReady(init);
 			})
 					();
 			//]]></script>

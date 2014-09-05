@@ -506,4 +506,15 @@
             </list>
         </property>
     </bean>
+
+    <bean id="contracts.arm.settings.LogicEcmBootstrap" parent="lecmDictionaryBootstrap"
+          depends-on="arm.settings.LogicEcmBootstrap">
+        <property name="rootPath" value="/Business platform/LECM/Сервис АРМ/Настройки АРМ/Администрирование/Другие настройки"/>
+        <property name="dictionaries">
+            <list>
+                <value>alfresco/module/${artifactId}/arm/contracts-settings-arm.xml</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>

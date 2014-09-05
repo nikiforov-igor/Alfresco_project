@@ -1,7 +1,3 @@
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-subscriptions/subscriptions-toolbar.js"></@script>
-
 <#assign id = args.htmlid>
 
 <#assign searchBlock = true/>
@@ -27,13 +23,24 @@
 
 <script type="text/javascript">//<![CDATA[
 (function(){
-	function init() {
+	function createToolbar() {
 	    new LogicECM.module.Subscriptions.Toolbar("${id}").setMessages(${messages}).setOptions({
 		    bubblingLabel: "${bubblingLabel!''}",
 	        searchActive: true
 	    });
 	}
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-subscriptions/subscriptions-toolbar.js'
+        ], [
+            'components/data-lists/toolbar.css'
+        ], createToolbar);
+    }
+
 	YAHOO.util.Event.onDOMReady(init);
+
 })();
 //]]></script>
 <@comp.baseToolbar id buttons searchBlock exSearch>

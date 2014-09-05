@@ -1569,4 +1569,15 @@
             </dependencies>
         </forms>
     </config>
+
+    <config evaluator="node-type" condition="lecm-contract-table-structure:stagesTable">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="cm:name"/>
+                </field-visibility>
+            </form>
+        </forms>
+    </config>
+
 </alfresco-config>

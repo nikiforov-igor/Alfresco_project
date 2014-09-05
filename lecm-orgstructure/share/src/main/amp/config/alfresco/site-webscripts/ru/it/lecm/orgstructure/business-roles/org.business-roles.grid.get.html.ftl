@@ -1,15 +1,3 @@
-<#-- Data Grid javascript-->
-<@script type="text/javascript" src="${url.context}/res/jquery/jquery-1.6.2.js"/>
-<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/business-roles-datagrid.js"/>
-<#-- Advanced search -->
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"/>
-
-<#-- Validation -->
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/noderefs-has-no-absences-validation.js"/>
-
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
@@ -18,7 +6,7 @@
     <div id="yui-main-2">
         <div class="yui-b datagrid-content" id="alf-content">
             <!-- include base datagrid markup-->
-        <@grid.datagrid id true>
+        <@grid.datagrid id false>
             <script type="text/javascript">//<![CDATA[
 			(function(){
 	            function createDatagrid() {
@@ -58,8 +46,16 @@
 	            }
 	
 	            function init() {
-	                createDatagrid();
-	            }
+                    LogicECM.module.Base.Util.loadResources([
+                        'jquery/jquery-1.6.2.js',
+                        'modules/simple-dialog.js',
+                        'scripts/lecm-base/components/advsearch.js',
+                        'scripts/lecm-base/components/lecm-datagrid.js',
+                        'scripts/lecm-orgstructure/business-roles-datagrid.js',
+                        'components/form/form.js'
+                    ], [], createDatagrid);
+
+                }
 	
 	            YAHOO.util.Event.onDOMReady(init);
 			})();

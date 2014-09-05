@@ -69,13 +69,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             fullDelete: false,
             insituEditors: null,
             maxNodesOnTopLevel: -1,
-            markOnCreateAsParent: false
+            markOnCreateAsParent: false,
+            bubblingLabel: ""
         },
 
         onReady:function OT_onReady () {
-            var orgStructure = Dom.get(this.id);
+            //var orgStructure = Dom.get(this.id);
             //Добавляем дерево структуры предприятия
-            this._createTree(orgStructure);
+            //this._createTree(orgStructure);
         },
 
         _createTree:function (parent) {
@@ -404,7 +405,12 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         onInitDataGrid: function OrgstructureTree_onInitDataGrid(layer, args) {
             var datagrid = args[1].datagrid;
-            this.modules.dataGrid = datagrid;
+            if (datagrid.options.bubblingLabel == this.options.bubblingLabel) {
+                this.modules.dataGrid = datagrid;
+                var orgStructure = Dom.get(this.id);
+                //Добавляем дерево структуры предприятия
+                this._createTree(orgStructure);
+            }
         },
 
         onNodeDeleted:function Tree_onNodeDeleted(layer, args) {

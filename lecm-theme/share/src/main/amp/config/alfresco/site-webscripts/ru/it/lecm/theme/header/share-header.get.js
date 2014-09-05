@@ -15,16 +15,6 @@ var logicECMWidgets = [
 	        iconImage: imagesRoot + "dictionary_light.png"
 	    }
 	},
-	{
-	    id: "ORGSTRUCTURE_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "ORGSTRUCTURE_MENU_ITEM",
-	        label: "Оргструктура",
-	        targetUrl: "org-employees",
-	        iconImage: imagesRoot + "orgstructure_light.png"
-	    }
-	},
     {
         id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
         name: "alfresco/header/AlfMenuItem",
@@ -57,25 +47,6 @@ var logicECMWidgets = [
 	    }
 	},
 	{
-	    id: "DOCUMENTS_JOURNAL_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "DOCUMENTS_JOURNAL_MENU_ITEM",
-	        label: "Базовый журнал",
-	        targetUrl: "documents-journal",
-	        iconImage: imagesRoot + "doc-journal_light.png"
-	    }
-	},
-	{
-	    id: "SUBSCRIPTIONS_JOURNAL_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "SUBSCRIPTIONS_JOURNAL_MENU_ITEM",
-	        label: "Подписки",
-	        targetUrl: "subscriptions-to-type"
-	    }
-	},
-	{
 	    id: "BUISNESS_JOURNAL_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
@@ -85,12 +56,12 @@ var logicECMWidgets = [
 	    }
 	},
 	{
-	    id: "ROUTES_MENU_ITEM",
+	    id: "ADMINISTRATION_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
-	        id: "ROUTES_MENU_ITEM",
-	        label: "Маршруты документов",
-	        targetUrl: "routes"
+	        id: "ADMINISTRATION_MENU_ITEM",
+	        label: "Администрирование",
+	        targetUrl: "admin"
 	    }
 	}
 ];
