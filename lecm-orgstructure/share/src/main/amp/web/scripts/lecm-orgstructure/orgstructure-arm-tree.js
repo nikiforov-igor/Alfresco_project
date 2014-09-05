@@ -50,6 +50,8 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         searchButton : null,
         searchTerm: null,
 
+        expandedNodes:[],
+
         options : {
             minSTermLength: -1,
             bubblingLabel: null
@@ -80,7 +82,35 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 return false;
             }.bind(this));
 
+            this.tree.subscribe('expand', function (node) {
+                this._onExpand(node);
+                return true;
+            }.bind(this));
+
+            this.tree.subscribe('collapse', function (node) {
+                this._onCollapse(node);
+                return true;
+            }.bind(this));
+
             this.tree.render();
+        },
+
+        _onExpand: function (node) {
+            this.expandedNodes.push(node.id);
+        },
+
+        _onCollapse: function (node) {
+            this.expandedNodes.splice(node.id);
+        },
+
+        _nodeIsExpanded: function (node) {
+            for (var i = 0; i < this.expandedNodes.length; i++) {
+                var expanded = this.expandedNodes[i];
+                if (node.id == expanded) {
+                    return true;
+                }
+            }
+            return false;
         },
 
         _initToolbar: function () {
@@ -180,18 +210,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
                             curElement.id = curElement.labelElId;
                             curElement.labelStyle = curElement.data.type == "lecm-orgstr:organization-unit" ? "unit-icon" : "employee-icon";
+
+                            curElement.expanded = curElement.data.expand || otree._nodeIsExpanded(curElement);
                         }
                     }
 
                     if (oResponse.argument.fnLoadComplete != null) {
                         oResponse.argument.fnLoadComplete();
                     } else {
-                        if (curElement) {
-                            if (curElement.data.expand) {
-                                curElement.expanded = true;
-                            }
-                        }
-
                         otree.tree.render();
                     }
                 },

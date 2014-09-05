@@ -15,7 +15,7 @@
 	overflow: auto;
 }
 
-#orgstructure-tree .icon-unit:hover, #orgstructure-tree .icon-employee:hover {
+#orgstructure-tree .unit-icon:hover, #orgstructure-tree .employee-icon:hover {
     text-decoration: underline; /* Добавляем подчеркивание */
 }
 
