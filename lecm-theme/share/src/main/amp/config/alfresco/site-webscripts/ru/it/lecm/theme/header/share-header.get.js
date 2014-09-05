@@ -25,6 +25,16 @@ var logicECMWidgets = [
 	        iconImage: imagesRoot + "orgstructure_light.png"
 	    }
 	},
+    {
+        id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
+        name: "alfresco/header/AlfMenuItem",
+        config: {
+        id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
+        label: "Справочник организации",
+        targetUrl: "orgstructure-dictionary",
+        iconImage: imagesRoot + "orgstructure_light.png"
+        }
+    },
 	{
 	    id: "WCALENDAR_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",

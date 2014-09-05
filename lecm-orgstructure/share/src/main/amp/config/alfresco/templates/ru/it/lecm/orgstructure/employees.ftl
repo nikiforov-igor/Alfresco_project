@@ -7,7 +7,6 @@
 
     var response = ${response};
     LogicECM.module.OrgStructure.EMPLOYEES_SETTINGS = response;
-    LogicECM.module.OrgStructure.IS_ENGINEER = ${isOrgEngineer?string};
 //]]>
 </script>
 

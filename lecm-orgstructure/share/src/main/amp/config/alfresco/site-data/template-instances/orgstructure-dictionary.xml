@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <template-instance>
-    <template-type>ru/it/lecm/orgstructure/orgstructure</template-type>
+    <template-type>ru/it/lecm/orgstructure/orgstructure-dictionary</template-type>
     <properties>
-        <preferenceKey>ru.it.lecm.orgstructure</preferenceKey>
+        <preferenceKey>ru.it.lecm.orgstructure-dictionary</preferenceKey>
     </properties>
     <components>
         <!-- Title -->

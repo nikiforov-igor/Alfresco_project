@@ -19,7 +19,9 @@ if (headerTitle != null) {
         if (page.id == "arm" && page.url.args.code) {
             headerTitle.config.label = getArmName(page.url.args.code) || headerTitle.config.label;
         } else if (page.id == "my-profile") {
-	        headerTitle.config.label = getArmName("lecm_my_profile") || headerTitle.config.label;
-		}
+            headerTitle.config.label = getArmName("lecm_my_profile") || headerTitle.config.label;
+        } else if (page.id == "orgstructure-dictionary") {
+            headerTitle.config.label = getArmName("orgstructure") || headerTitle.config.label;
+        }
     }
 }
