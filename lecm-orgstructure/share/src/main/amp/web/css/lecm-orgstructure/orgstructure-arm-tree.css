@@ -35,13 +35,13 @@
 
 #orgstructure-tree .unit-icon {
     display:block;
-    height: 22px;
+    height: 16px;
     padding-left: 20px;
     background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
 }
 #orgstructure-tree .employee-icon {
     display:block;
-    height: 22px;
+    height: 16px;
     padding-left: 20px;
     background: url('/share/res/components/images/filetypes/generic-user-16.png') no-repeat;
 }
