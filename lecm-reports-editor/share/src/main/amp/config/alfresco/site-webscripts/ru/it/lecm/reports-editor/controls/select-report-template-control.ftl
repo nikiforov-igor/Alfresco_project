@@ -58,26 +58,38 @@
 })();
 //]]></script>
 
-<div class="form-field">
-    <label for="${fieldHtmlId}-added">${field.label?html}:<#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-    <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
-    <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-    <div id="${fieldHtmlId}-controls" class="selectone-control">
-        <select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
-                <#if field.description??>title="${field.description}"</#if>
-                <#if field.control.params.size??>size="${field.control.params.size}"</#if>
-                <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-                <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-                <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
-            <#if field.control.params.notSelectedOption?? && (field.control.params.notSelectedOption  == "true")>
-                <option value="">
-                    <#if field.control.params.notSelectedOptionLabel??>
-                            ${field.control.params.notSelectedOptionLabel}
-                        <#elseif field.control.params.notSelectedOptionLabelCode??>
-                    ${msg(field.control.params.notSelectedOptionLabelCode)}
+<div class="control select-report-template-control editmode">
+    <div class="label-div">
+        <label for="${fieldHtmlId}">${field.label?html}:
+        <#if field.mandatory>
+            <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
+        </#if>
+        </label>
+    </div>
+    <div class="container">
+        <div class="buttons-div">
+            <@formLib.renderFieldHelp field=field />
+        </div>
+        <div class="value-div">
+            <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
+            <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
+            <select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
+                    <#if field.description??>title="${field.description}"</#if>
+                    <#if field.control.params.size??>size="${field.control.params.size}"</#if>
+                    <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
+                    <#if field.control.params.style??>style="${field.control.params.style}"</#if>
+                    <#if field.disabled  && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>
+                    <#if field.control.params.notSelectedOption?? && (field.control.params.notSelectedOption  == "true")>
+                        <option value="">
+                            <#if field.control.params.notSelectedOptionLabel??>
+                                    ${field.control.params.notSelectedOptionLabel}
+                                <#elseif field.control.params.notSelectedOptionLabelCode??>
+                            ${msg(field.control.params.notSelectedOptionLabelCode)}
+                            </#if>
+                        </option>
                     </#if>
-                </option>
-            </#if>
-        </select>
+            </select>
+        </div>
     </div>
 </div>
+<div class="clear"></div>
