@@ -28,7 +28,7 @@
     background-color:white;
 }
 
-#orgstructure-view-form{
+#orgstructure-arm-view-form{
     visibility:hidden;
     display:none;
 }
@@ -38,10 +38,12 @@
     height: 16px;
     padding-left: 20px;
     background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
+    white-space: nowrap;
 }
 #orgstructure-tree .employee-icon {
     display:block;
     height: 16px;
     padding-left: 20px;
     background: url('/share/res/components/images/filetypes/generic-user-16.png') no-repeat;
+    white-space: nowrap;
 }

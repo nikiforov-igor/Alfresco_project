@@ -44,16 +44,12 @@
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
 
+<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
 <div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
+    <@view.viewForm formId="orgstructure-arm-view-form"/>
     <div class="yui-t1" id="arm-with-tree">
         <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
-            <div id="arm-documents-grid">
-                <@region id="documents-grid" scope="template" />
-            </div>
-            <div id="arm-documents-reports" class="hidden1">
-                <@region id="reports" scope="template" />
-            </div>
             <div id="arm-documents-html" class="hidden1">
                 <@region id="arm-html-node" scope="template" />
             </div>

@@ -32,9 +32,6 @@
 
 <@comp.baseToolbar id false true false/>
 
-<#import "/ru/it/lecm/base-share/components/view.lib.ftl" as view/>
-
-<@view.viewForm formId="orgstructure-view-form"/>
 <div id="orgstructure-tree"></div>
 
 

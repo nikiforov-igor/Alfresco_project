@@ -151,7 +151,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
 
         // по нажатию на кнопку Поиск
         _onSearchClick: function Tree_onSearch(e, obj) {
-            var searchTerm = Dom.get(this.id + "-full-text-search").value;
+            var searchTerm = Dom.get(this.id + "-full-text-search").value.trim();
 
             var maySearch = this.options.minSTermLength <= 0 || searchTerm.length == 0;
             if (!maySearch) {// проверяем длину терма
@@ -186,7 +186,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }
             if (this.searchTerm != null && this.searchTerm.length > 0) {
-                sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURI(this.searchTerm));
+                sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURI(this.searchTerm.trim()));
             }
             var otree = this;
             var callback = {
