@@ -14,16 +14,16 @@
 		<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
 	</div>
 
-	<select id="${controlId}-create-approval-list">
-		<option value="dуfault">-- Создать лист согласования</option>
-		<option value="route">Из маршрута</option>
-		<option value="empty">Пустой</option>
-	</select>
-	<div class="yui-button yui-push-button controlButtonContainer">
+	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button controlButtonContainer">
+		<span class="first-child">
+			<button type="button">Создать</button>
+		</span>
+	</span>
+	<span class="yui-button yui-push-button controlButtonContainer">
 		<span class="first-child">
 			<button type="button" id="${controlId}-add-stage">Добавить этап</button>
 		</span>
-	</div>
+	</span>
 	<@grid.datagrid controlId false />
 </div>
 

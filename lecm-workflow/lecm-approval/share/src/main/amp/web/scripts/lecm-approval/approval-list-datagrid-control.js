@@ -8,14 +8,32 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 (function() {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
-		var createApprovalListDropdown = YAHOO.util.Dom.get(containerId + '-create-approval-list');
-		var addStageButton = YAHOO.util.Dom.get(containerId + '-add-stage');
+		var addStageButton = YAHOO.util.Dom.get(containerId + '-add-stage'),
+			createApprovalListButton;
 
 		this.documentNodeRef = documentNodeRef;
 
-		if (createApprovalListDropdown) {
-			YAHOO.util.Event.on(createApprovalListDropdown, 'change', this.onCreateApprovalListDropdownChange, this, true);
-		}
+		createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
+			type: 'menu',
+			menu: [{
+					text: 'Список из маршрута',
+					value: 'route',
+					disabled: false,
+					onclick: {
+						fn: this.onCreateApprovalListButtonClick,
+						scope: this
+					}
+				}, {
+					text: 'Пустой список',
+					value: 'empty',
+					disabled: false,
+					onclick: {
+						fn: this.onCreateApprovalListButtonClick,
+						scope: this
+					}
+				}],
+			disabled: false
+		});
 
 		if (addStageButton) {
 			YAHOO.util.Event.on(addStageButton, 'click', this.onAddStageButton, this, true);
@@ -125,11 +143,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
 		},
-		onCreateApprovalListDropdownChange: function(event) {
-			var dropdownMenu = event.target,
-				dropdownMenuValue = dropdownMenu.value;
-
-			dropdownMenu.selectedIndex = 0;
+		onCreateApprovalListButtonClick: function(event, eventArgs, menuItem) {
+			var menuItemValue = menuItem.value;
 
 			if (this.approvalState === "ACTIVE") {
 				Alfresco.util.PopupManager.displayPrompt({
@@ -139,7 +154,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				return false;
 			}
 
-			switch (dropdownMenuValue) {
+			switch (menuItemValue) {
 				case 'route' :
 					this._createApprovalListFromRoute();
 					break;
@@ -319,6 +334,5 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
 		}
 	}, true);
-
 
 })();
