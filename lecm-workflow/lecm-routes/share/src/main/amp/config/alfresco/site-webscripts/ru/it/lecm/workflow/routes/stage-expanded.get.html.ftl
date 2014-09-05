@@ -15,7 +15,13 @@
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		expandable: false,
-		showActionColumn: false,
+		showActionColumn: true,
+		actions: [{
+			type:"datagrid-action-link-${datagridId}",
+			id:"onActionDelete",
+			permission:"delete",
+			label:"${msg('actions.delete-row')}"
+		}],
 		excludeColumns: ['lecmWorkflowRoutes:stageItemEmployeeAssoc', 'lecmWorkflowRoutes:stageItemMacrosAssoc']
 	});
 

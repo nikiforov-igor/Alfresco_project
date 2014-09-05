@@ -85,7 +85,7 @@
 					</constraints>
 				</property>
 				<property name="lecmWorkflowRoutes:stageWorkflowTerm">
-					<title>Срок согласования</title>
+					<title>Срок (рабочих дней)</title>
 					<type>d:int</type>
 					<mandatory>true</mandatory>
 				</property>

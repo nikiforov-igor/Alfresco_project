@@ -144,7 +144,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					this._createApprovalListFromRoute();
 					break;
 				case 'empty' :
-					this._createEmptyApprovalLst();
+					this._createEmptyApprovalLst(this.editIteration);
 					break;
 				default :
 					break;
@@ -170,6 +170,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function(form, simpleDialog) {
+						simpleDialog.dialog.setHeader('Создать лист согласования из маршрута');
 						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
@@ -195,7 +196,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 			selectRouteForm.show();
 		},
-		_createEmptyApprovalLst: function() {
+		_createEmptyApprovalLst: function(callback, callbackArgsArr) {
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'POST',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createEmptyIteration',
@@ -208,6 +209,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 						this.currentIterationNode = r.json.nodeRef;
 						this.approvalState = 'NEW';
 						this.fireGridChanged(true);
+						if (YAHOO.lang.isFunction(callback)) {
+							callback.apply(this, callbackArgsArr);
+						}
 					}
 				},
 				failureMessage: 'message.failure',
@@ -216,13 +220,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			});
 		},
 		editIteration: function() {
-			var errorText,
-				formId = 'editIterationProperties';
+			var errorText;
 
 			if (this.editItreationFormOpened) {
 				return;
 			}
-
 
 			switch (this.approvalState) {
 				case 'ACTIVE':
@@ -232,8 +234,10 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					errorText = 'Редактирование параметров завершенной итерации невозможно';
 					break;
 				case 'NOT_EXITS':
-					errorText = 'Список согласования отсутствует';
+					this._createEmptyApprovalLst(this._showEditIterationDialog);
 					break;
+				default:
+					this._showEditIterationDialog();
 			}
 
 			if (errorText) {
@@ -244,9 +248,12 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				return;
 			}
 
-			this.editItreationFormOpened = true;
+		},
+		_showEditIterationDialog: function() {
+			var formId = 'editIterationProperties',
+				editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
-			var editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+			this.editItreationFormOpened = true;
 
 			editIterationForm.setOptions({
 				width: '50em',
@@ -288,28 +295,28 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			});
 
 			editIterationForm.show();
-
 		},
 		onAddStageButton: function() {
-			var errorText;
+			var createStageFunction = LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionCreate;
 			switch (this.approvalState) {
 				case 'COMPLETE':
-					errorText = 'Невозможно добавить этап в завершенную итерацию';
+					Alfresco.util.PopupManager.displayPrompt({
+						title: 'Добавление этапа невозможно',
+						text: 'Невозможно добавить этап в завершенную итерацию'
+					});
 					break;
 				case 'NOT_EXITS':
-					errorText = 'Список согласования отсутствует';
+					this._createEmptyApprovalLst(createStageFunction, [null, null, true]);
 					break;
+				default:
+					createStageFunction.call(this, null, null, true);
 			}
-
-			if (errorText) {
-				Alfresco.util.PopupManager.displayPrompt({
-					title: 'Добавление этапа невозможно',
-					text: errorText
-				});
-				return;
-			}
-
-			LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionCreate.call(this);
+		},
+		onActionAddEmployee: function(item) {
+			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'employee', item.nodeRef);
+		},
+		onActionAddMacros: function(item) {
+			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
 		}
 	}, true);
 

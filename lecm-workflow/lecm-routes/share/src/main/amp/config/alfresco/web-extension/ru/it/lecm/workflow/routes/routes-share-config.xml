@@ -14,7 +14,7 @@
 					<show id="lecmWorkflowRoutes:selectRouteAssocFake" force="true"/>
 				</field-visibility>
 				<appearance>
-					<field id="lecmWorkflowRoutes:selectRouteAssocFake" label="Выбрать маршрут">
+					<field id="lecmWorkflowRoutes:selectRouteAssocFake" label="Маршрут">
 						<control template="/ru/it/lecm/base-share/components/controls/association-autocomplete-control.ftl">
 							<control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_маршрутов</control-param>
 							<control-param name="nameSubstituteString">{cm:title}</control-param>
@@ -87,16 +87,12 @@
 				<field-visibility>
 					<show id="lecmWorkflowRoutes:routeInterruptAfterReject"/>
 					<show id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision"/>
-					<show id="lecmWorkflowRoutes:routeEditable"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:routeInterruptAfterReject">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 					<field id="lecmWorkflowRoutes:routeNotifyAboutEveryDecision">
-						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
-					</field>
-					<field id="lecmWorkflowRoutes:routeEditable">
 						<control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
 					</field>
 				</appearance>
@@ -176,7 +172,6 @@
 					<show id="cm:title" force="true"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowType"/>
 					<show id="lecmWorkflowRoutes:stageWorkflowTerm"/>
-					<show id="lecmWorkflowRoutes:stageItemsControlFake" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="cm:title" mandatory="true" label="Название этапа">
@@ -190,9 +185,6 @@
 							<control-param name="defaultValueDataSource">/lecm/approval/defaultTerm</control-param>
 							<control-param name="allowInNonCreateMode">true</control-param>
 						</control>
-					</field>
-					<field id="lecmWorkflowRoutes:stageItemsControlFake">
-						<control template="/ru/it/lecm/workflow/routes/controls/stage-items-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
@@ -211,7 +203,7 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" label="Участник"
-						   substituteString="{lecmWorkflowRoutes:stageItemEmployeeAssoc/lecm-orgstr:employee-short-name}{lecmWorkflowRoutes:stageItemMacrosAssoc/cm:name}"/>
+						   substituteString="{lecmWorkflowRoutes:stageItemEmployeeAssoc/lecm-orgstr:employee-short-name} {lecmWorkflowRoutes:stageItemMacrosAssoc/cm:name}"/>
 					<field id="lecmWorkflowRoutes:stageItemEmployeePositionFake" label="Должность"
 						   substituteString="{lecmWorkflowRoutes:stageItemEmployeeAssoc/..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name}"/>
 				</appearance>
@@ -259,7 +251,6 @@
 		<forms>
 			<form>
 				<field-visibility>
-
 					<show id="lecmWorkflowRoutes:stageItemEmployeeOrMacrosAssocFake" force="true"/>
 					<show id="lecmWorkflowRoutes:stageItemTerm"/>
 				</field-visibility>

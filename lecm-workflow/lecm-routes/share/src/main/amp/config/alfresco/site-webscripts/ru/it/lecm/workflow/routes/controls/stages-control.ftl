@@ -35,6 +35,16 @@
 			<#if editable>
 			actions: [{
 				type:"datagrid-action-link-" + controlId,
+				id:"onActionAddEmployee",
+				permission:"edit",
+				label:"${msg('actions.add.employee')}"
+			}, {
+				type:"datagrid-action-link-" + controlId,
+				id:"onActionAddMacros",
+				permission:"edit",
+				label:"${msg('actions.add.macros')}"
+			}, {
+				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",
 				permission:"edit",
 				label:"${msg('actions.edit')}"

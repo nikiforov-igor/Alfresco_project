@@ -15,7 +15,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 	YAHOO.lang.extend(LogicECM.module.Routes.StagesControlDatagrid, LogicECM.module.Base.DataGrid);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Routes.StagesControlDatagrid.prototype, {
-		onActionCreate: function() {
+		onActionCreate: function(event, obj, isApprovalListContextProp) {
 			function onCreateStageSuccess(r) {
 				var formId = 'createStageForm';
 				var createStageForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
@@ -30,7 +30,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						itemKind: 'node',
 						mode: 'edit',
 						showCancelButton: true,
-						submitType: 'json'
+						submitType: 'json',
+						isApprovalListContext: isApprovalListContext
 					},
 					destroyOnHide: true,
 					doBeforeDialogShow: {
@@ -111,6 +112,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 			var itemType = this.datagridMeta.itemType;
 			var destination = this.datagridMeta.nodeRef;
+			var isApprovalListContext = !!isApprovalListContextProp;
+
 
 			if (this.createDialogOpening) {
 				return;
@@ -175,6 +178,92 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			var expandedRow = YAHOO.util.Dom.get(this.getExpandedRecordId(record));
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
+		},
+		_createNewStageItem: function(dialogType, destination) {
+			var itemType = LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
+				createStageItemDialog = new Alfresco.module.SimpleDialog(this.id + '-createStageItemDialog'),
+				formID, dialogHeader,
+				actionUrl = Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/routes/CreateStageItemInQueue?interpolateMacros=' + this.options.isApprovalListContext,
+				expandedBubblingLabel = destination.replace(/:|\//g, "_") + "-dtgrd"; // см. datagridId в stage-expanded.get.html.ftl
+
+			switch (dialogType) {
+				case 'employee' :
+					formID = 'createNewStageItemForEmployee';
+					dialogHeader = 'Добавить сотрудника в этап';
+					break;
+				case 'macros' :
+					formID = 'createNewStageItemForMacros';
+					dialogHeader = 'Добавить потенциального участника в этап';
+					break;
+				default :
+					return;
+					break;
+			}
+
+			createStageItemDialog.setOptions({
+				width: '35em',
+				templateUrl: 'lecm/components/form',
+				actionUrl: actionUrl,
+				templateRequestParams: {
+					itemKind: 'type',
+					itemId: itemType,
+					destination: destination,
+					formId: formID,
+					mode: 'create',
+					submitType: 'json',
+					showCancelButton: true
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function(p_form, simpleDialog) {
+						simpleDialog.dialog.setHeader(dialogHeader);
+						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+							LogicECM.module.Base.Util.formDestructor(event, args, params);
+						}, {moduleId: simpleDialog.id}, this);
+					},
+					scope: this
+				},
+				onSuccess: {
+					fn: function(r) {
+						var persistedObjects = r.json,
+							persistedObjectsLength = persistedObjects.length,
+							i, persistedObject;
+
+						for (i = 0; i < persistedObjectsLength; i++) {
+							persistedObject = persistedObjects[i];
+							YAHOO.Bubbling.fire('nodeCreated', {
+								nodeRef: persistedObject.nodeRef,
+								bubblingLabel: expandedBubblingLabel
+							});
+							YAHOO.Bubbling.fire('dataItemCreated', {
+								nodeRef: persistedObject.nodeRef,
+								bubblingLabel: expandedBubblingLabel
+							});
+						}
+
+						Alfresco.util.PopupManager.displayMessage({
+							text: this.msg('message.new-row.success')
+						});
+					},
+					scope: this
+				},
+				onFailure: {
+					fn: function(response) {
+						Alfresco.util.PopupManager.displayMessage({
+							text: this.msg('message.new-row.failure')
+						});
+					},
+					scope: this
+				}
+			});
+			createStageItemDialog.show();
+		},
+		onActionAddEmployee: function(item) {
+			this._createNewStageItem('employee', item.nodeRef);
+		},
+		onActionAddMacros: function(item) {
+			this._createNewStageItem('macros', item.nodeRef);
 		}
 
 	}, true);

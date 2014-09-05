@@ -19,7 +19,7 @@
 		<option value="route">Из маршрута</option>
 		<option value="empty">Пустой</option>
 	</select>
-	<div class="yui-button yui-push-button addStageButtonContainer">
+	<div class="yui-button yui-push-button controlButtonContainer">
 		<span class="first-child">
 			<button type="button" id="${controlId}-add-stage">Добавить этап</button>
 		</span>
@@ -54,12 +54,22 @@
 			},
 			showActionColumn: true,
 			actions: [{
-				type:"datagrid-action-link-${controlId}",
+				type:"datagrid-action-link-" + controlId,
+				id:"onActionAddEmployee",
+				permission:"edit",
+				label:"${msg('actions.add.employee')}"
+			}, {
+				type:"datagrid-action-link-" + controlId,
+				id:"onActionAddMacros",
+				permission:"edit",
+				label:"${msg('actions.add.macros')}"
+			}, {
+				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",
 				permission:"edit",
 				label:"${msg('actions.edit')}"
-			},{
-				type:"datagrid-action-link-${controlId}",
+			}, {
+				type:"datagrid-action-link-" + controlId,
 				id:"onActionDelete",
 				permission:"delete",
 				label:"${msg('actions.delete-row')}"

@@ -36,5 +36,6 @@ public interface RoutesService {
 
 	public NodeRef createEmptyIteration(NodeRef documentNode);
 	void deleteDocumentCurrentIteration(final NodeRef documentRef);
+	void resolveStageItemMacros(NodeRef stageItemNode);
 
 }

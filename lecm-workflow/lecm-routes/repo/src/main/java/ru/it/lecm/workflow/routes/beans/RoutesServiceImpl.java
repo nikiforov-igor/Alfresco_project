@@ -184,14 +184,19 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	private void resolveIterationMacroses(NodeRef iterationRef) {
-		// TODO здесь мы будем резолвить макросы из маршрута в сотрудников.
-		// пока просто удалим участников этапа с макросами
 		List<NodeRef> stageItems = getAllStageItemsOfRoute(iterationRef);
 		for (NodeRef stageItem : stageItems) {
 			if (nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS).size() > 0) {
-				permDeleteNode(stageItem);
+				resolveStageItemMacros(stageItem);
 			}
 		}
+	}
+
+	@Override
+	public void resolveStageItemMacros(NodeRef stageItemNode) {
+		// TODO здесь мы будем резолвить макросы из маршрута в сотрудников.
+		// пока просто подставим текущего пользователя
+		nodeService.createAssociation(stageItemNode, orgstructureService.getCurrentEmployee(), RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
 	}
 
 	private List<NodeRef> getAllStagesOfRoute(NodeRef routeNode) {
