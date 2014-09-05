@@ -54,8 +54,8 @@
 	                </#list>
 	                <#if attachments.hasNext == "true">
 	                <li>
-	                    <div class="right-more-link-arrow attachments-expand-bind"></div>
-	                    <div class="right-more-link attachments-expand-bind">${msg('label.attachments.more')}</div>
+	                    <div class="right-more-link-arrow attachments-expand"></div>
+	                    <div class="right-more-link attachments-expand">${msg('label.attachments.more')}</div>
 	                    <div class="clear"></div>
 	                </li>
 	                </#if>

@@ -53,11 +53,6 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
              * @method onReady
              */
             onReady: function DocumentAttachments_onReady() {
-                function clickHandler(el) {
-                    if(YAHOO.util.Dom.hasClass(el, 'attachments-expand')) {
-                        this.onExpand();
-                    }
-                }
                 var id = this.newId ? this.newId : this.id;
 
                 //Делегируем все нажатия на элементы с классом attachments-expand
