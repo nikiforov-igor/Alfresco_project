@@ -5,16 +5,6 @@
 var imagesRoot = "/share/components/images/header/"
 
 var logicECMWidgets = [
-	{
-	    id: "DICTIONARY_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "DICTIONARY_MENU_ITEM",
-	        label: "Справочники",
-	        targetUrl: "allDictionary",
-	        iconImage: imagesRoot + "dictionary_light.png"
-	    }
-	},
     {
         id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
         name: "alfresco/header/AlfMenuItem",
@@ -25,16 +15,6 @@ var logicECMWidgets = [
         iconImage: imagesRoot + "orgstructure_light.png"
         }
     },
-	{
-	    id: "DELEGATION_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "DELEGATION_MENU_ITEM",
-	        label: "Делегирование",
-	        targetUrl: "delegation-list",
-	        iconImage: imagesRoot + "delegation_light.png"
-	    }
-	},
 	{
 	    id: "ADMINISTRATION_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",

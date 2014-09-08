@@ -28,29 +28,34 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 	 */
 	YAHOO.lang.augmentObject (LogicECM.module.Delegation.DelegationOpts.prototype, {
 		datagridId: "",
+        viewDialog: null,
 
 		options: {
 			delegator: null, //nodeRef на делегирующее лицо
-			isActive: false //флаг показывающий активно ли делегирование
+			isActive: false, //флаг показывающий активно ли делегирование
+            bubblingLabel: ""
 		},
 
 		onDelegationOptsPart1: function (result) {
-			var contentEl = YAHOO.util.Dom.get(this.id + "-content-part1");
+			var contentEl = YAHOO.util.Dom.get(this.id + "-form-content");
 			contentEl.innerHTML = '<div id="' + this.datagridId + '">' + result.serverResponse.responseText + "<div>";
 			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
 			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
 			YAHOO.util.Dom.setAttribute ("delegation-opts-part1-form", "action", submissionUrl);
 			var formEl = YAHOO.util.Dom.get ("delegation-opts-part1-form");
+            var me = this;
 			if (formEl) {
 				var form = new Alfresco.forms.Form ("delegation-opts-part1-form");
 				form.setAJAXSubmit (true, {
 					successCallback: {
 						fn: function () {
+                            me.viewDialog.hide();
+                            me.viewDialog.destroy();
 							Alfresco.util.PopupManager.displayMessage ({
 								text:"Данные обновлены"
 							});
 							YAHOO.Bubbling.fire("datagridRefresh", {
-								bubblingLabel: this.datagridId
+								bubblingLabel: me.options.bubblingLabel
 							});
 						},
 						scope: this
@@ -69,10 +74,17 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				// Initialise the form
 				form.init ();
 			}
+            YAHOO.util.Dom.removeClass(this.id + "-form", "hidden1");
+            this.viewDialog.show();
 		},
 
 		onReady: function () {
 			this.datagridId = this.id + YAHOO.util.Dom.generateId();
+            this.viewDialog = Alfresco.util.createYUIPanel(this.id + "-form",
+                {
+                    width: "50em"
+                });
+            this.viewDialog.hide();
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 

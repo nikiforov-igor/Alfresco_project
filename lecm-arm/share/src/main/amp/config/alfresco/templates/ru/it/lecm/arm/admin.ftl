@@ -42,7 +42,7 @@
             </#if>;
 
         LogicECM.module.ARM.SETTINGS.ARM_CODE = "ADMIN";
-        LogicECM.module.ARM.SETTINGS.ARM_PATH = {};
+        LogicECM.module.ARM.SETTINGS.ARM_PATH = ${path!'{}'};
         LogicECM.module.ARM.SETTINGS.ARM_TYPE = "ADMIN";
     //]]></script>
 </@>

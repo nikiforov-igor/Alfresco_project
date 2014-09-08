@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<items>
+    <item name="cm:Делегирование" type="lecm-arm:accordion">
+        <property name="cm:name"><![CDATA[Делегирование]]></property>
+        <property name="lecm-arm:order"><![CDATA[40]]></property>
+        <property name="lecm-arm:search-type"><![CDATA[]]></property>
+        <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
+        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
+        <property name="lecm-arm:search-query"><![CDATA[]]></property>
+        <items>
+            <item name="cm:Перечень делегирования" type="lecm-arm:html-node">
+                <property name="cm:name"><![CDATA[Перечень делегирования]]></property>
+                <property name="lecm-arm:order"><![CDATA[0]]></property>
+                <property name="lecm-arm:html-url"><![CDATA[page/delegation-list]]></property>
+            </item>
+        </items>
+    </item>
+</items>

@@ -52,7 +52,7 @@ showTitle - рисовать блок title
 	</@>
 </#macro>
 
-<#macro basePageSimple>
+<#macro basePageSimple showToolbar=true>
     <@templateBody>
         <@markup id="bd">
             <@region id="html-upload" scope="global" chromeless="true" />
@@ -64,7 +64,9 @@ showTitle - рисовать блок title
                 <div class="yui-t1">
                     <div id="yui-main">
                         <div class="" id="lecm-content">
-                            <@region id="toolbar" scope="template"/>
+                            <#if showToolbar>
+                                <@region id="toolbar" scope="template"/>
+                            </#if>
                             <div id="lecm-content-main">
                                 <#nested>
                             </div>

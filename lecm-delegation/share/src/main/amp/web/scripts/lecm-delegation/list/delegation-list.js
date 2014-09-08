@@ -27,11 +27,23 @@ LogicECM.module.Delegation.DelegationList = LogicECM.module.Delegation.Delegatio
 		onActionEdit: function (item) {
 			var baseUrl = window.location.protocol + "//" + window.location.host;
 			//delegator - доверенное лицо, тот кто создает доверенность
-			var template = "delegation-opts?delegator={delegator}";
+			var template = "delegation-opts?delegator={delegator}&bubbling=" + this.options.bubblingLabel;
 			var url = YAHOO.lang.substitute (baseUrl + Alfresco.constants.URL_PAGECONTEXT + template, {
 				delegator: item.nodeRef // доверенное лицо, тот кто создает доверенность
 			});
-			window.location.href = url;
+            var me = this;
+            Alfresco.util.Ajax.request(
+                {
+                    url: url,
+                    successCallback:{
+                        fn:function(response){
+                            var formEl = Dom.get(me.id + "-delegation-settings");
+                            formEl.innerHTML = response.serverResponse.responseText;
+                        }
+                    },
+                    failureMessage:"message.failure",
+                    execScripts:true
+                });
 		}
 	}, true);
 })();

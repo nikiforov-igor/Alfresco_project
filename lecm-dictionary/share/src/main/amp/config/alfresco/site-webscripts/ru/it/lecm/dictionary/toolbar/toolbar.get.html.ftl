@@ -1,18 +1,23 @@
-<!-- Data List Toolbar -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-dictionary/dictionary-toolbar.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-dictionary/dictionary-toolbar.js"></@script>
-
 <#assign id = args.htmlid>
 <script type="text/javascript">//<![CDATA[
 (function(){
-	function init() {
+	function createToolbar() {
 	    new LogicECM.module.Dictionary.Toolbar("${id}").setOptions({
 		    dictionaryName: "${args.dictionaryName}"
 	    }).setMessages(${messages});
 	}
-	YAHOO.util.Event.onDOMReady(init);
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-dictionary/dictionary-toolbar.js'
+        ], [
+            'components/data-lists/toolbar.css',
+            'css/lecm-dictionary/dictionary-toolbar.css'
+        ], createToolbar);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 

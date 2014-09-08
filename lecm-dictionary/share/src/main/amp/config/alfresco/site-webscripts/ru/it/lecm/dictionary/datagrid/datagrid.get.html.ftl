@@ -1,30 +1,9 @@
-<@markup id="css">
-	<!-- Advanced Search -->
-	<#--<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />-->
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/modules/document-details/historic-properties-viewer.css" />
-</@>
-<@markup id="js">
-	<@script type="text/javascript" src="${url.context}/res/modules/simple-dialog.js"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/advsearch.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-datagrid.js"/>
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-dictionary/dictionary-datagrid.js"/>
-	<@script type="text/javascript" src="${url.context}/res/components/form/date-range.js"></@script>
-	<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-	<!-- Historic Properties Viewer -->
-	<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/versions.js"></@script>
-</@>
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
 <#assign bubblingLabel = "dictionaries-datagrid">
 
-<#assign plane = false/>
-<#if args.plane?? && args.plane == "true">
-    <#assign plane = true/>
-</#if>
-
-<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
+<@grid.datagrid id=id showViewForm=false showArchiveCheckBox=true>
 <script type="text/javascript">//<![CDATA[
 (function(){
 	function createDatagrid(rootNode) {
@@ -97,7 +76,21 @@
 	    YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
 	}
 
-	YAHOO.util.Event.onDOMReady(loadDictionary);
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'modules/simple-dialog.js',
+            'scripts/lecm-base/components/advsearch.js',
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/lecm-dictionary/dictionary-datagrid.js',
+            'components/form/date-range.js',
+            'components/form/number-range.js',
+            'scripts/lecm-base/components/versions.js'
+        ], [
+            'modules/document-details/historic-properties-viewer.css'
+        ], loadDictionary);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 </@grid.datagrid>

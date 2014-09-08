@@ -11,4 +11,13 @@ for (var i = 0; i < rolesList.length; i++) {
         break;
     }
 }
+
+var planeRequest = remote.connect("alfresco").get("/lecm/dictionary/api/getDictionary?dicName=" + encodeURI(page.url.args["dic"]));
+var plane = true;
+
+if (planeRequest.status ==200) {
+    planeObject = eval("(" + planeRequest + ")");
+    plane = planeObject.plane.toLowerCase() == "true";
+}
+model.plane = plane;
 model.isEngineer = hasRole;

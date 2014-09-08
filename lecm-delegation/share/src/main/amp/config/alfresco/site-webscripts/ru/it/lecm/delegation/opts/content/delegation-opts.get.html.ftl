@@ -16,13 +16,14 @@
 				], createObject);
 	}
 
-	function createObject() {
+    function createObject() {
 		"use strict";
 		var delegationOpts = new LogicECM.module.Delegation.DelegationOpts('${id}');
 		delegationOpts.setMessages (${messages});
 		delegationOpts.setOptions ({
 			delegator: "${delegator}",
-			isActive: ${isActive?string}
+			isActive: ${isActive?string},
+            bubblingLabel: "${page.url.args["bubbling"]!""}"
 		});
 	}
 
@@ -30,7 +31,14 @@
 })();
 //]]></script>
 
-<div id="${id}-content-part1" class="delegation-content"></div>
+<#assign formId = args.htmlid + "-form"/>
+<div id="${formId}" class="yui-panel hidden1">
+    <div id="${formId}-head" class="hd">${msg("logicecm.view")}</div>
+    <div id="${formId}-body" class="bd">
+        <div id="${formId}-content"></div>
+    </div>
+</div>
+
 <#else>
 <div class="not-fount-procuracy">
 	<h1 class="theme-color-3">

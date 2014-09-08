@@ -349,7 +349,13 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             this.menuState.selected = this._getTextNodeId(node);
 
             if (node) {
-	            var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
+
+                if (node.data.nodeType == "lecm-dic:dictionary") {
+                    node.data.nodeType = "lecm-arm:html-node";
+                    node.data.htmlUrl = "page/dictionary?dic=" + encodeURI(node.label);
+                }
+
+                var isReportNode = node.data.nodeType == "lecm-arm:reports-node";
 	            var isHtmlNode = node.data.nodeType == "lecm-arm:html-node";
 	            var isNotGridNode = isReportNode || isHtmlNode;
 
