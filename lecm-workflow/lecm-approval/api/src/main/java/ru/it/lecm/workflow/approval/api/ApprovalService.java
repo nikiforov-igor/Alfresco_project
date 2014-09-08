@@ -55,4 +55,12 @@ public interface ApprovalService {
 	 * @throws AlfrescoRuntimeException если папка "Согласование" не существует, а мы попытались создать папку "Согласование/История"
 	 */
 	NodeRef createDocumentApprovalHistoryFolder(final NodeRef documentRef);
+
+	/**
+	 * получение актуального исполнителя по задаче, с учетом делегирования полномочий
+	 * @param employeeRef предполагаемый сотрудник-исполнитель задачи
+	 * @param workflowDynRole идентификатор динамической бизнес роли через которую осуществляется делегирование
+	 * @return актуальный сотрудник или тотже самый сотрудник
+	 */
+	NodeRef getEffectiveEmployee(final NodeRef employeeRef, final String workflowDynRole);
 }

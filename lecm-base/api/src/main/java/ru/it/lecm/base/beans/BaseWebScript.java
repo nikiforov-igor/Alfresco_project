@@ -9,6 +9,7 @@ import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.jscript.BaseScopableProcessorExtension;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ScriptVersion;
+import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.repo.workflow.WorkflowNodeConverter;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -29,20 +30,24 @@ public abstract class BaseWebScript extends BaseScopableProcessorExtension {
      * Service registry
      */
     protected ServiceRegistry serviceRegistry;
-	private WorkflowNodeConverter converter;
+	private WorkflowNodeConverter workflowNodeConverter;
+	private final ValueConverter valueConverter = new ValueConverter();
 
     public void setServiceRegistry(ServiceRegistry serviceRegistry) {
         this.serviceRegistry = serviceRegistry;
     }
 
-	public WorkflowNodeConverter getConverter() {
-		return converter;
+	public WorkflowNodeConverter getWorkflowNodeConverter() {
+		return workflowNodeConverter;
 	}
 
-	public void setConverter(WorkflowNodeConverter converter) {
-		this.converter = converter;
+	public void setWorkflowNodeConverter(WorkflowNodeConverter workflowNodeConverter) {
+		this.workflowNodeConverter = workflowNodeConverter;
 	}
 
+	public ValueConverter getValueConverter() {
+		return valueConverter;
+	}
     /**
      * Возвращает массив, пригодный для использования в веб-скриптах
      *

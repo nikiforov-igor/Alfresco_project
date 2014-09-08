@@ -23,8 +23,9 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private final static String APPROVAL_GLOBAL_SETTINGS_NAME = "Глобальные настройки согласования";
 	private final static String DOCUMENT_APPROVAL_FOLDER = "Согласование";
 	private final static String DOCUMENT_APPROVAL_HISTORY_FOLDER = "История";
+	private final static int DEFAULT_DEFAULT_APROVAL_TERM = 1;
 
-	private Integer defaultApprovalTerm;
+	private Integer defaultApprovalTerm = DEFAULT_DEFAULT_APROVAL_TERM;
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
 		this.defaultApprovalTerm = defaultApprovalTerm;
@@ -106,5 +107,11 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 		PropertyMap props = new PropertyMap();
 		props.put(ContentModel.PROP_NAME, DOCUMENT_APPROVAL_HISTORY_FOLDER);
 		return nodeService.createNode(documentApprovalFolder, ContentModel.ASSOC_CONTAINS, assocQName, ContentModel.TYPE_FOLDER, props).getChildRef();
+	}
+
+	@Override
+	public NodeRef getEffectiveEmployee(final NodeRef employeeRef, final String workflowDynRole) {
+		//TODO: спереть реализацию метода WorkflowServiceAbstract::actualizeTaskAssignee
+		return employeeRef;
 	}
 }

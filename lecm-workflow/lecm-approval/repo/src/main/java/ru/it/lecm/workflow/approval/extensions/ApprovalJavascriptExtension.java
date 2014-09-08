@@ -1,6 +1,7 @@
 package ru.it.lecm.workflow.approval.extensions;
 
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.service.cmr.repository.NodeRef;
 import ru.it.lecm.base.beans.BaseWebScript;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 
@@ -42,5 +43,9 @@ public class ApprovalJavascriptExtension extends BaseWebScript {
 
 	public ScriptNode createDocumentApprovalHistoryFolder(final ScriptNode document) {
 		return new ScriptNode(approvalService.createDocumentApprovalHistoryFolder(document.getNodeRef()), serviceRegistry, getScope());
+	}
+
+	public ScriptNode getEffectiveEmployee(final ScriptNode employee, final String workflowDynRole) {
+		return new ScriptNode(approvalService.getEffectiveEmployee(employee.getNodeRef(), workflowDynRole), serviceRegistry, getScope());
 	}
 }

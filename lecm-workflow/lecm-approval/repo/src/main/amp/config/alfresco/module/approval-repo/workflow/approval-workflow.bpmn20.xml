@@ -4,7 +4,7 @@
     <extensionElements>
       <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
         <activiti:field name="script">
-          <activiti:string><![CDATA[(function(){ /* happy end */
+          <activiti:string><![CDATA[(function(){ /* process happy end */
   /* пометка итерации как завершенной */
   var currentIteration = execution.getVariableLocal('currentIteration');
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
@@ -32,7 +32,7 @@
   currentIteration.addAspect('lecmApproveAspects:approvalDetailsAspect', {
     'lecmApproveAspects:approvalState': 'ACTIVE'
   });
-  execution.setVariableLocal('currentIteration', approval.getConverter().convertNode(currentIteration.nodeRef));
+  execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
@@ -63,7 +63,7 @@
     'lecmApproveAspects:approvalState': 'ACTIVE'
   });
   /* передача этапа в подпроцесс */
-  execution.setVariable('currentStage', approval.getConverter().convertNode(stage.nodeRef));
+  execution.setVariable('currentStage', approval.getWorkflowNodeConverter().convertNode(stage.nodeRef));
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -76,7 +76,7 @@
       <extensionElements>
         <activiti:executionListener event="end" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
           <activiti:field name="script">
-            <activiti:string><![CDATA[(function(){ /* happy end */
+            <activiti:string><![CDATA[(function(){ /* subProcess happy end */
   /* пометка этапа как завершенного */
   var stage = execution.getVariable('currentStage');
   stage.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
@@ -130,14 +130,7 @@
   stageItem.addAspect('lecmApproveAspects:approvalDetailsAspect', {
     'lecmApproveAspects:approvalState': 'ACTIVE'
   });
-  /* вычисление userName */
-  employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  if (employees && employees.length) {
-    stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = orgstructure.getEmployeeLogin(employees[0]);
-    stageItem.save();
-  }
-  /* передача в подпроцесс */
-  execution.setVariableLocal('currentStageItem', approval.getConverter().convertNode(stageItem.nodeRef));
+  execution.setVariableLocal('currentStageItem', approval.getWorkflowNodeConverter().convertNode(stageItem.nodeRef));
 })();]]></activiti:string>
           </activiti:field>
           <activiti:field name="runAs">
@@ -153,6 +146,10 @@
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign */
+  var document = bpm_package.children[0];
+  var employee = task.getVariableLocal('effectiveEmployee');
+  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
+  lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -162,8 +159,23 @@
   var document = bpm_package.children[0];
   var stageItem = execution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
-  lecmPermission.grantDynamicRole(document, employees[0], 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+  var effectiveEmployee, userName, dueDate;
+  /* вычисление userName */
+  if (employees && employees.length) {
+    effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
+    task.setVariableLocal('originalEmployee', approval.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
+    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    userName = orgstructure.getEmployeeLogin(effectiveEmployee);
+
+    stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
+    stageItem.save();
+    stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    /* вычисление dueDate */
+    /* уведомление актуальному исполнителю */
+    task.setAssignee(userName);
+    /* task.setDueDate(dueDate); */
+  }
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -177,6 +189,7 @@
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.save();
+  /* возможно будет добавление в участники */
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -221,48 +234,94 @@
       </sequenceFlow>
       <userTask id="usertask2" name="User Task" activiti:assignee="${currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName']}" activiti:formKey="lecmApprove3:approveTask">
         <extensionElements>
-          <activiti:executionListener event="start" class="org.alfresco.repo.workflow.activiti.listener.ScriptExecutionListener">
-            <activiti:field name="script">
-              <activiti:string><![CDATA[(function(){ /* start */
-  /* create ActivitiScriptNodeList from execution.getVariable('currentStage').getChildAssocsByType('lecmWorkflowRoutes:stageItem'); */
-})();]]></activiti:string>
-            </activiti:field>
-            <activiti:field name="runAs">
-              <activiti:string><![CDATA[workflow]]></activiti:string>
-            </activiti:field>
-          </activiti:executionListener>
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign multi */
-})();
-]]></activiti:string>
+  var document = bpm_package.children[0];
+  var employee = task.getVariableLocal('effectiveEmployee');
+  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
+  lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+})();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
           <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create multi */
-})();
-]]></activiti:string>
+  var document = bpm_package.children[0];
+  var employees = currentStageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
+  var effectiveEmployee, userName, dueDate;
+  /* пометка как активного */
+  currentStageItem.addAspect('lecmApproveAspects:approvalDetailsAspect', {
+    'lecmApproveAspects:approvalState': 'ACTIVE'
+  });
+  if (employees && employees.length) {
+    effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
+    task.setVariableLocal('originalEmployee', approval.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
+    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    userName = orgstructure.getEmployeeLogin(effectiveEmployee);
+
+    currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
+    currentStageItem.save();
+    currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
+    /* вычисление dueDate */
+    /* уведомление актуальному исполнителю */
+    task.setAssignee(userName);
+    /* task.setDueDate(dueDate); */
+  }
+})();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
           <activiti:taskListener event="complete" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* complete multi */
-})();
-]]></activiti:string>
+  /* получаем настоящий execution */
+  /* var realExecution = (execution.parent) ? execution.parent : execution; */
+  var decision = task.getVariableLocal('lecmApprove3_decision');
+  currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
+  currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  currentStageItem.save();
+  /* возможно будет добавление в участники */
+})();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
         </extensionElements>
         <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${stageItems}" activiti:elementVariable="currentStageItem">
-          <completionCondition>${execution.getVariable('routeInterruptAfterReject') &amp;&amp; 'REJECTED' == 'REJECTED'}</completionCondition>
+          <completionCondition>${execution.getVariable('routeInterruptAfterReject') &amp;&amp; currentStageItem.properties['lecmApproveAspects:approvalState'] == 'REJECTED'}</completionCondition>
         </multiInstanceLoopCharacteristics>
       </userTask>
-      <sequenceFlow id="flow17" sourceRef="exclusivegateway3" targetRef="usertask2">
+      <sequenceFlow id="flow17" sourceRef="exclusivegateway3" targetRef="alfrescoScripttask7">
         <conditionExpression xsi:type="tFormalExpression"><![CDATA[${execution.getVariableLocal('stageWorkflowType') == 'PARALLEL'}]]></conditionExpression>
       </sequenceFlow>
-      <sequenceFlow id="flow18" sourceRef="usertask2" targetRef="exclusivegateway5"></sequenceFlow>
+      <sequenceFlow id="flow18" sourceRef="usertask2" targetRef="alfrescoScripttask8"></sequenceFlow>
       <endEvent id="endevent2" name="End"></endEvent>
       <sequenceFlow id="flow19" sourceRef="exclusivegateway5" targetRef="endevent2"></sequenceFlow>
+      <serviceTask id="alfrescoScripttask7" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+        <extensionElements>
+          <activiti:field name="runAs">
+            <activiti:string><![CDATA[workflow]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="script">
+            <activiti:string><![CDATA[(function(){ /* start */
+  var currentStage = execution.getVariable('currentStage');
+  var activitiStageItems, stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+  activitiStageItems = approval.getWorkflowNodeConverter().convertNodes(approval.getValueConverter().convertValueForJava(stageItems), true);
+  execution.setVariableLocal('stageItems', activitiStageItems);
+})();]]></activiti:string>
+          </activiti:field>
+        </extensionElements>
+      </serviceTask>
+      <sequenceFlow id="flow20" sourceRef="alfrescoScripttask7" targetRef="usertask2"></sequenceFlow>
+      <serviceTask id="alfrescoScripttask8" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+        <extensionElements>
+          <activiti:field name="script">
+            <activiti:string><![CDATA[(function(){
+})();
+]]></activiti:string>
+          </activiti:field>
+        </extensionElements>
+      </serviceTask>
+      <sequenceFlow id="flow21" sourceRef="alfrescoScripttask8" targetRef="exclusivegateway5"></sequenceFlow>
     </subProcess>
     <sequenceFlow id="flow3" sourceRef="alfrescoScripttask2" targetRef="subprocess1"></sequenceFlow>
     <serviceTask id="alfrescoScripttask3" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
@@ -345,10 +404,16 @@
         <omgdc:Bounds height="40.0" width="40.0" x="852.0" y="336.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
-        <omgdc:Bounds height="55.0" width="105.0" x="522.0" y="249.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="522.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
         <omgdc:Bounds height="35.0" width="35.0" x="932.0" y="339.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask7" id="BPMNShape_alfrescoScripttask7">
+        <omgdc:Bounds height="55.0" width="105.0" x="382.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask8" id="BPMNShape_alfrescoScripttask8">
+        <omgdc:Bounds height="55.0" width="105.0" x="652.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask3" id="BPMNShape_alfrescoScripttask3">
         <omgdc:Bounds height="55.0" width="105.0" x="760.0" y="90.0"></omgdc:Bounds>
@@ -407,16 +472,24 @@
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
         <omgdi:waypoint x="342.0" y="336.0"></omgdi:waypoint>
         <omgdi:waypoint x="341.0" y="276.0"></omgdi:waypoint>
-        <omgdi:waypoint x="522.0" y="276.0"></omgdi:waypoint>
+        <omgdi:waypoint x="382.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
-        <omgdi:waypoint x="627.0" y="276.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="276.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="336.0"></omgdi:waypoint>
+        <omgdi:waypoint x="627.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="652.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
         <omgdi:waypoint x="892.0" y="356.0"></omgdi:waypoint>
         <omgdi:waypoint x="932.0" y="356.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
+        <omgdi:waypoint x="487.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="522.0" y="277.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
+        <omgdi:waypoint x="757.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="872.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="872.0" y="336.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="415.0" y="117.0"></omgdi:waypoint>
