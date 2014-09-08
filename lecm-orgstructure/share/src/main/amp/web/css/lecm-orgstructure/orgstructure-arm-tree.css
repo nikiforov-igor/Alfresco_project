@@ -47,3 +47,19 @@
     background: url('/share/res/components/images/filetypes/generic-user-16.png') no-repeat;
     white-space: nowrap;
 }
+
+.dashlet .titleBarActions .dictionary {
+    background-image: url('/share/res/images/lecm-eds-documents/arm.png');
+}
+
+.orgstructure-dictionary .body .empty {
+    margin: 8px;
+    padding-left: 10px;
+}
+
+.orgstructure-dictionary .search-input {
+    float:left;
+
+}.orgstructure-dictionary .toolbar {
+     margin-top: -4px;
+}
