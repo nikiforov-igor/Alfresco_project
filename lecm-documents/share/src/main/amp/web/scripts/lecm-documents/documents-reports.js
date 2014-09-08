@@ -9,6 +9,8 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
     LogicECM.module.Documents.Reports.reportLinkClicked = function(element, param) {
         var reportCode = param.reportCode;
         var documentRef = param.nodeRef;
+
+        var actionUrl = null;
         var doBeforeDialogShow = function (p_form, p_dialog) {
             var defaultMsg = Alfresco.component.Base.prototype.msg("documents.report." + reportCode + ".title");
             if (defaultMsg == "documents.report." + reportCode + ".title"){
@@ -20,41 +22,19 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
 
             var formElement = Dom.get(p_form.formId);
             if (formElement) {
-                var actionUrl = formElement.action;
+                actionUrl = formElement.action;
                 if (actionUrl && actionUrl.indexOf("autoSubmit") > 0) {
                     var data = {};
                     if (documentRef) { // добавляем к параметрам ID - если задано
                         data["ID"] = documentRef;
                     }
-	                YAHOO.util.Dom.setStyle(p_dialog.dialog.id, "display", "none");
-                    Alfresco.util.Ajax.request({
-                        method: "GET",
-                        url: actionUrl,
-                        dataObj: data,
-                        responseContentType: "text/html",
-                        successCallback: {
-                            fn: function _onSuccess(response) {
-                                p_dialog.dialog.hide();
-                                window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-                                Alfresco.util.PopupManager.displayMessage({
-                                    text: Alfresco.component.Base.prototype.msg("documents.report.success")
-                                });
-                            },
-                            scope: this
-                        },
-                        failureCallback: {
-                            fn: function _onFailure(response) {
-                                p_dialog.dialog.hide();
-                                Alfresco.util.PopupManager.displayMessage({
-                                    text: Alfresco.component.Base.prototype.msg("documents.report.failure")
-                                });
-                            }
-                        }
-                    });
+                    p_dialog.dialog.subscribe('show', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
+                    var paramsStr = Alfresco.util.Ajax.jsonToParamString(data, true);
+                    window.open(actionUrl + (actionUrl.indexOf("?") == -1 ? "?" : "&") + paramsStr, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                } else {
+                    p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
                 }
             }
-	        p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-            //YAHOO.util.Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
         };
 
         var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "/lecm/components/form/report";
@@ -70,7 +50,6 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
         var printReportForm = new Alfresco.module.SimpleDialog(reportCode + "-reportForm");
 
         printReportForm.setOptions({
-            //actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportCode,
             width: "50em",
             templateUrl: templateUrl,
 	        templateRequestParams: templateRequestParams,
@@ -102,28 +81,13 @@ LogicECM.module.Documents.Reports = LogicECM.module.Documents.Reports || {};
                         form.dataObj["ID"] = documentRef;
                     }
                     form.method = "GET";
-                    return true;
+                    var paramsStr = Alfresco.util.Ajax.jsonToParamString(form.dataObj, true);
+                    window.open(actionUrl + (actionUrl.indexOf("?") == -1 ? "?" : "&") + paramsStr, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                    printReportForm.hide();
+                    return false;
                 }
-            },
-            onSuccess: {
-                fn: function _onSuccess(response) {
-                    window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText, "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-                    Alfresco.util.PopupManager.displayMessage({
-                        text: Alfresco.component.Base.prototype.msg("documents.report.success")
-                    });
-                },
-                scope: this
-            },
-            onFailure: {
-                fn: function _onFailure(response) {
-                    Alfresco.util.PopupManager.displayMessage({
-                        text: Alfresco.component.Base.prototype.msg("documents.report.failure")
-                    });
-                },
-                scope: this
             }
         });
         printReportForm.show();
-
     };
 })();

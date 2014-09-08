@@ -563,7 +563,7 @@ LogicECM.module.Base.Util = {
                     correctScope: true
                 }, KeyListener.KEYDOWN).enable();
 
-            if (setFirstFocus) {
+            if (setFirstFocus && firstEl) {
                 firstEl.focus();
             }
         }

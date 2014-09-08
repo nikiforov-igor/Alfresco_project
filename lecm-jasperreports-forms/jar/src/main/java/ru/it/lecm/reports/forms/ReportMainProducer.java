@@ -63,12 +63,6 @@ public class ReportMainProducer extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-        // проверка надо ли выполнять запрос или только сформировать в ответ URL ...
-        if (!FLAG_EXEC.equals(webScriptRequest.getParameter(PARAM_EXEC))) {
-            prepareExecURL(webScriptRequest, webScriptResponse);
-            return;
-        }
-
         PropertyCheck.mandatory(this, "reportsManager", getReportsManager());
         PropertyCheck.mandatory(this, "reportGenerators", getReportsManager().getReportGenerators());
 
@@ -98,19 +92,5 @@ public class ReportMainProducer extends AbstractWebScript {
                 out.close();
             }
         }
-    }
-
-    /**
-     * Отправить в ответе текст с URL, по-которому будет формироваться отчёт.
-     *
-     * @param request WebScriptRequest
-     * @param response WebScriptResponse
-     * @throws IOException
-     */
-    private void prepareExecURL(WebScriptRequest request, WebScriptResponse response) throws IOException {
-        // добавление аргумента "exec=1"
-        final String answerURL = request.getURL() + "&" + PARAM_EXEC + "=" + FLAG_EXEC;
-        response.setContentType(CONTENT_TEXT_HTML_CHARSET_UTF_8);
-        response.getWriter().write(answerURL);
     }
 }
