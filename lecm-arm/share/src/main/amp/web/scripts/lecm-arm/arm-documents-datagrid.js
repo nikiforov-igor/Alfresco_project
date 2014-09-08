@@ -44,6 +44,10 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
                 Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + item.nodeRef;
         },
 
+        onActionViewDocument: function (item){
+            this.onActionEdit(item);
+        },
+
         onArmNodeSelected: function (layer, args) {
             if (args[1].armNode) {
                 var datagridMeta = this.datagridMeta;

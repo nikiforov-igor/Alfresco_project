@@ -47,7 +47,7 @@ YAHOO.util.Event.onContentReady("${filtersId}", initFilters);
                         actions: [
                             {
                             type: "datagrid-action-link-documents-arm",
-                                id: "onActionEdit",
+                                id: "onActionViewDocument",
                                 permission: "",
                                 label: "${msg("actions.edit")}"
                             }

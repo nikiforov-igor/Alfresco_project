@@ -34,6 +34,9 @@
 .datagrid .onActionMakePrimary a {
     background-image: url("../../../images/lecm-base/components/base/alf_base_osnovnaya_16.png");
 }
+.datagrid .onActionViewDocument a {
+    background-image: url("../../../images/lecm-base/components/preview-16.png");
+}
 .datagrid .show-archive-cb-div {
     padding: 5px;
     text-align: right;
