@@ -1,45 +1,58 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
-<@markup id="css">
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-calendar/wcalendar-absence.css" />
-</@>
-
 <#assign id = args.htmlid/>
-<#assign showViewForm = true/>
+<#assign showViewForm = false/>
 
 <script type="text/javascript">//<![CDATA[
+    function createGrid() {
+        var datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
+        datagrid.setOptions({
+            usePagination:true,
+            disableDynamicPagination:true,
+            showExtendSearchBlock: false,
+            showCheckboxColumn: false,
+            bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL,
+            dataSource: "/lecm/wcalendar/absence/get/list/admin",
+            datagridMeta: {
+                itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
+                nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
+                datagridFormId: "absenceAdminDatagrid",
+                searchConfig: {
+                    filter: ""
+                }
+            },
+            actions: [
+               {
+                type:"datagrid-action-link-${bubblingLabel!"absenceDatagrid"}",
+                id:"onActionDelete",
+                permission:"delete",
+                label:"${msg("actions.delete-row")}"
+                }
+            ]
+        });
+        datagrid.setMessages(${messages});
+        datagrid.draw();
+    }
 
-var datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
-datagrid.setOptions({
-	usePagination:true,
-    disableDynamicPagination:true,
-	showExtendSearchBlock: false,
-	showCheckboxColumn: false,
-    bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL,
-	dataSource: "/lecm/wcalendar/absence/get/list/admin",
-	actions: [
-       {
-		type:"datagrid-action-link-${bubblingLabel!"absenceDatagrid"}",
-		id:"onActionDelete",
-		permission:"delete",
-		label:"${msg("actions.delete-row")}"
-        }
-	]
-});
-datagrid.setMessages(${messages});
-YAHOO.util.Event.onContentReady('${id}', function () {
-	YAHOO.Bubbling.fire ("activeGridChanged", {
-		datagridMeta:{
-			itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
-			nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
-			datagridFormId: "absenceAdminDatagrid",
-			searchConfig: {
-				filter: ""
-			}
-		},
-		bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_LABEL
-	});
-});
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'jquery/jquery-1.6.2.js',
+            'modules/simple-dialog.js',
+            'scripts/lecm-base/components/advsearch.js',
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/lecm-calendar/absence/absence-datagrid.js',
+            'scripts/lecm-calendar/absence/absence-toolbar.js',
+            'scripts/lecm-calendar/menu.js',
+            'scripts/lecm-calendar/absence/date-interval-validation.js'
+        ], [
+            'css/lecm-base/components/base-menu/base-menu.css',
+            'css/lecm-calendar/wcalendar-menu.css',
+            'css/lecm-calendar/absence-summary-table.css',
+            'css/lecm-calendar/wcalendar-absence.css'
+        ], createGrid);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 
 function onShowOnlyActiveChanged() {
 	var cbShowOnlyConfigured = YAHOO.util.Dom.get("cbShowOnlyActive");

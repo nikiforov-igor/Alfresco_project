@@ -1,8 +1,24 @@
 <#assign employees = result?keys>
 
-<@markup id="css">
-	<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-calendar/wcalendar-summary.css" />
-</@>
+<script type="text/javascript">//<![CDATA[
+
+(function() {
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-calendar/menu.js'
+        ], [
+            'css/lecm-base/components/base-menu/base-menu.css',
+            'css/lecm-calendar/wcalendar-menu.css',
+            'css/lecm-calendar/absence-summary-table.css',
+            'css/lecm-calendar/wcalendar-summary.css'
+        ], null);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
+
+//]]></script>
 
 
 <#if (employees?size > 0)>

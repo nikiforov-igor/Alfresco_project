@@ -21,12 +21,24 @@
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
 <script type="text/javascript">//<![CDATA[
-function init() {
-	new LogicECM.module.BusinessJournal.LoggerToolbar("${id}").setMessages(${messages}).setOptions({
-		bubblingLabel:"${bubblingLabel!''}"
-	});
-}
-YAHOO.util.Event.onDOMReady(init);
+(function() {
+    function createToolbar() {
+        var toolbar = new LogicECM.module.BusinessJournal.LoggerToolbar("${id}").setMessages(${messages}).setOptions({
+            bubblingLabel:"${bubblingLabel!''}"
+        });
+    }
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-business-journal/business-journal-loggertoolbar.js'
+        ], [
+            'components/data-lists/toolbar.css'
+        ], createToolbar);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
+})();
 //]]></script>
 
 <@comp.baseToolbar id buttons searchBlock exSearch>

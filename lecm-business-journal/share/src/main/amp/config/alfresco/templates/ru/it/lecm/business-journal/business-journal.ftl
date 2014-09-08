@@ -1,5 +1,4 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
-<@templateHeader>
 	<script type="text/javascript">//<![CDATA[
 		var bjContainer = ${bjContainer};
 
@@ -14,14 +13,13 @@
 		//]]>
 	</script>
 	<#include "/org/alfresco/components/form/form.dependencies.inc">
-</@>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#assign hasPermission = isEngineer/>
-<@bpage.basePage>
+<@bpage.basePageSimple>
 	<#if hasPermission>
 		<@region id="records-grid" scope="template" />
 	<#else>
 		<@region id="forbidden" scope="template"/>
 	</#if>
-</@bpage.basePage>
+</@bpage.basePageSimple>

@@ -1,3 +1,4 @@
+<#if allowEdit >
 <#include "/org/alfresco/components/component.head.inc">
 
 <@markup id="js">
@@ -37,3 +38,6 @@
 
 	<div id="${el}-body-settings"></div>
 </div>
+<#else>
+    <#include "/ru/it/lecm/base-share/components/forbidden.get.html.ftl">
+</#if>

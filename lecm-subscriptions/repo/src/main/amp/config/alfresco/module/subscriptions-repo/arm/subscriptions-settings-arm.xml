@@ -2,7 +2,7 @@
 <items>
     <item name="cm:Подписки" type="lecm-arm:accordion">
         <property name="cm:name"><![CDATA[Подписки]]></property>
-        <property name="lecm-arm:order"><![CDATA[50]]></property>
+        <property name="lecm-arm:order"><![CDATA[60]]></property>
         <property name="lecm-arm:search-type"><![CDATA[]]></property>
         <property name="lecm-arm:types"><![CDATA[lecm-contract:document]]></property>
         <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>

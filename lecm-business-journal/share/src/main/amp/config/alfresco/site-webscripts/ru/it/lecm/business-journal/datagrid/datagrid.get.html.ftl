@@ -1,12 +1,3 @@
-<@script type="text/javascript" src="${url.context}/res/components/form/date-range.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/components/form/number-range.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
-
-<!-- Historic Properties Viewer -->
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/versions.js"></@script>
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/modules/document-details/historic-properties-viewer.css" />
-
-
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid>
@@ -15,7 +6,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b datagrid-content" id="alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=true showArchiveCheckBox=true>
+		<@grid.datagrid id=id showViewForm=false showArchiveCheckBox=true>
 			<script type="text/javascript">//<![CDATA[
 			(function() {
 				function createDatagrid() {
@@ -42,20 +33,15 @@
 	                            dataSource: "/lecm/business-journal/ds/main",
 	                            bubblingLabel: "${bubblingLabel!"bj-records"}",
 								showCheckboxColumn: true,
-								attributeForShow:"lecm-busjournal:bjRecord-date"
+								attributeForShow:"lecm-busjournal:bjRecord-date",
+                                datagridMeta: {
+                                    itemType: "lecm-busjournal:bjRecord",
+                                    nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
+                                    sort:"lecm-busjournal:bjRecord-date|false"
+
+                                }
 							}).setMessages(${messages});
-	
-	                YAHOO.util.Event.onContentReady ('${id}', function () {
-	                    YAHOO.Bubbling.fire ("activeGridChanged", {
-	                        datagridMeta: {
-	                            itemType: "lecm-busjournal:bjRecord",
-		                        nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
-	                            sort:"lecm-busjournal:bjRecord-date|false"
-	
-	                        },
-	                        bubblingLabel: "bj-records"
-	                    });
-	                });
+                            datagrid.draw();
 				}
 	
 				function init() {

@@ -26,17 +26,6 @@ var logicECMWidgets = [
         }
     },
 	{
-	    id: "WCALENDAR_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "WCALENDAR_MENU_ITEM",
-	        label: "Рабочий календарь",
-	        targetUrl: "wcalendar-calendar",
-	        iconImage: imagesRoot + "wcalendar_light.png"
-
-	    }
-	},
-	{
 	    id: "DELEGATION_MENU_ITEM",
 	    name: "alfresco/header/AlfMenuItem",
 	    config: {
@@ -44,15 +33,6 @@ var logicECMWidgets = [
 	        label: "Делегирование",
 	        targetUrl: "delegation-list",
 	        iconImage: imagesRoot + "delegation_light.png"
-	    }
-	},
-	{
-	    id: "BUISNESS_JOURNAL_MENU_ITEM",
-	    name: "alfresco/header/AlfMenuItem",
-	    config: {
-	        id: "BUISNESS_JOURNAL_MENU_ITEM",
-	        label: "Бизнес журнал",
-	        targetUrl: "business-journal"
 	    }
 	},
 	{

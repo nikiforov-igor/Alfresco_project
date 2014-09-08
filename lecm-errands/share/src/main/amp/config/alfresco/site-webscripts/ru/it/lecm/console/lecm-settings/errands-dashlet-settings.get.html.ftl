@@ -1,3 +1,4 @@
+<#if allowEdit >
 <#assign el=args.htmlid?html>
 
 <@markup id="js">
@@ -33,3 +34,7 @@
 
     <div id="${el}-settings"></div>
 </div>
+
+<#else>
+    <#include "/ru/it/lecm/base-share/components/forbidden.get.html.ftl">
+</#if>

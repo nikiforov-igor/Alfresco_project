@@ -1,3 +1,4 @@
+<#if allowEdit >
 <@markup id="js">
     <@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/base-utils.js" />
 </@>
@@ -33,3 +34,7 @@
 
 	<div id="${el}-body-settings"></div>
 </div>
+
+<#else>
+    <#include "/ru/it/lecm/base-share/components/forbidden.get.html.ftl">
+</#if>

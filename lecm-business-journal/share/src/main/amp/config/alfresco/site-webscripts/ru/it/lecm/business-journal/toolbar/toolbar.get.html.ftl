@@ -1,8 +1,3 @@
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-business-journal/business-journal-toolbar.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"/>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-business-journal/business-journal-toolbar.js"></@script>
-
 <#assign id = args.htmlid>
 
 <#assign buttons = true/>
@@ -27,12 +22,23 @@
 
 <script type="text/javascript">//<![CDATA[
 (function(){
-	function init() {
+	function createToolbar() {
 		new LogicECM.module.BusinessJournal.Toolbar("${id}").setMessages(${messages}).setOptions({
 			bubblingLabel:"${bubblingLabel!''}"
 		});
 	}
-	YAHOO.util.Event.onDOMReady(init);
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-business-journal/business-journal-toolbar.js'
+        ], [
+            'components/data-lists/toolbar.css',
+            'css/lecm-business-journal/business-journal-toolbar.css'
+        ], createToolbar);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 

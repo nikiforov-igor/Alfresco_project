@@ -1,7 +1,7 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 
 <#assign id = args.htmlid/>
-<#assign showViewForm = true/>
+<#assign showViewForm = false/>
 
 <script type="text/javascript">//<![CDATA[
 if (typeof LogicECM == "undefined" || !LogicECM) {
@@ -23,38 +23,65 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 	    }
 	    return true;
 	};
-	
-	var datagrid = new LogicECM.module.WCalendar.Schedule.DataGrid("${id}");
-	datagrid.setOptions({
-		usePagination:true,
-    disableDynamicPagination: true,
-		showExtendSearchBlock: false,
-		showCheckboxColumn: false,
-	    bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL,
-		dataSource: "/lecm/wcalendar/schedule/get/list",
-		actions: [
-	       {
-			type:"datagrid-action-link-${bubblingLabel!"scheduleDatagrid"}",
-			id:"onActionDelete",
-			permission:"delete",
-			label:"${msg("actions.delete-row")}",
-			evaluator: notDefaultSchedule
-	        }
-		]
-	});
-	datagrid.setMessages(${messages});
-	YAHOO.util.Event.onContentReady('${id}', function () {
-		YAHOO.Bubbling.fire ("activeGridChanged", {
-			datagridMeta:{
-				itemType: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.itemType,
-				nodeRef: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.nodeRef
-				//searchConfig: {
-				//	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
-				//}
-			},
-			bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL
-		});
-	});
+
+    function createDatagrid() {
+        var datagrid = new LogicECM.module.WCalendar.Schedule.DataGrid("${id}");
+        datagrid.setOptions({
+            usePagination:true,
+        disableDynamicPagination: true,
+            showExtendSearchBlock: false,
+            showCheckboxColumn: false,
+            bubblingLabel: LogicECM.module.WCalendar.Schedule.SCHEDULE_LABEL,
+            dataSource: "/lecm/wcalendar/schedule/get/list",
+            datagridMeta: {
+                itemType: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.itemType,
+                nodeRef: LogicECM.module.WCalendar.Schedule.SCHEDULE_CONTAINER.nodeRef
+                //searchConfig: {
+                //	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
+                //}
+            },
+            actions: [
+               {
+                type:"datagrid-action-link-${bubblingLabel!"scheduleDatagrid"}",
+                id:"onActionDelete",
+                permission:"delete",
+                label:"${msg("actions.delete-row")}",
+                evaluator: notDefaultSchedule
+                }
+            ]
+        });
+        datagrid.setMessages(${messages});
+        datagrid.draw()
+    }
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'jquery/jquery-1.6.2.js',
+            'modules/simple-dialog.js',
+            'scripts/lecm-base/components/advsearch.js',
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/lecm-calendar/schedule/schedule-datagrid.js',
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-calendar/schedule/schedule-toolbar.js',
+            'scripts/lecm-calendar/menu.js',
+            'scripts/lecm-calendar/schedule/schedule-limit-validation.js',
+            'scripts/lecm-calendar/schedule/reiteration-rules-validation.js',
+            'scripts/lecm-calendar/schedule/time-validation.js',
+            'scripts/lecm-calendar/schedule/jquery-ui-1.10.3.custom.js',
+            'scripts/lecm-calendar/schedule/jquery-ui-timepicker-addon.js',
+            'scripts/lecm-calendar/schedule/jquery-ui-sliderAccess.js'
+        ], [
+            'components/data-lists/toolbar.css',
+            'css/lecm-calendar/wcalendar-toolbar.css',
+            'css/lecm-base/components/base-menu/base-menu.css',
+            'css/lecm-calendar/wcalendar-menu.css',
+            'css/lecm-calendar/reiteration-control.css',
+            'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
+            'css/lecm-calendar/jquery-ui-timepicker-addon.css'
+        ], createDatagrid);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 

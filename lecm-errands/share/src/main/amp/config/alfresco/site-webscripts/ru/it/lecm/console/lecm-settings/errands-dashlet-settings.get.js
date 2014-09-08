@@ -4,6 +4,7 @@ function main() {
 	};
 
 	model.widgets = [ErrandsDashletSettings];
+    model.allowEdit = user.id === "admin"
 }
 
 main();

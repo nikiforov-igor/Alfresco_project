@@ -4,6 +4,7 @@ function main() {
 	};
 
 	model.widgets = [delegationGlobalSettings];
+    model.allowEdit = user.id === "admin"
 }
 
 main();

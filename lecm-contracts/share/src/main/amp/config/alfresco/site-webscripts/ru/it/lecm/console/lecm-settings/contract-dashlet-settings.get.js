@@ -4,6 +4,7 @@ function main() {
 	};
 
 	model.widgets = [ContractDashletSettings];
+    model.allowEdit = user.id === "admin"
 }
 
 main();
