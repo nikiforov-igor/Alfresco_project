@@ -29,9 +29,8 @@
   /* получение nodeRef-ы на текущую итерацию */
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
-  currentIteration.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    'lecmApproveAspects:approvalState': 'ACTIVE'
-  });
+  currentIteration.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
+  currentIteration.save();
   execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
@@ -59,9 +58,8 @@
     }
   }
   /* пометка этапа как активного */
-  stage.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    'lecmApproveAspects:approvalState': 'ACTIVE'
-  });
+  stage.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
+  stage.save();
   /* передача этапа в подпроцесс */
   execution.setVariable('currentStage', approval.getWorkflowNodeConverter().convertNode(stage.nodeRef));
 })();]]></activiti:string>
@@ -127,9 +125,8 @@
     }
   }
   /* пометка как активного */
-  stageItem.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    'lecmApproveAspects:approvalState': 'ACTIVE'
-  });
+  stageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
+  stageItem.save();
   execution.setVariableLocal('currentStageItem', approval.getWorkflowNodeConverter().convertNode(stageItem.nodeRef));
 })();]]></activiti:string>
           </activiti:field>
@@ -150,6 +147,7 @@
   var employee = task.getVariableLocal('effectiveEmployee');
   /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
   lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+  /* уведомление актуальному исполнителю */
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -157,9 +155,10 @@
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create */
   var document = bpm_package.children[0];
+  var currentStage = execution.getVariable('currentStage');
   var stageItem = execution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, dueDate;
+  var effectiveEmployee, userName, term, dueDate;
   /* вычисление userName */
   if (employees && employees.length) {
     effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
@@ -167,14 +166,20 @@
     task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     userName = orgstructure.getEmployeeLogin(effectiveEmployee);
 
+    /* вычисление dueDate */
+    term = stageItem.properties['lecmWorkflowRoutes:stageItemTerm'];
+    term = (term) ? term : currentStage.properties['lecmWorkflowRoutes:stageWorkflowTerm'];
+    dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
+
     stageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
+    stageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
+    stageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     stageItem.save();
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    /* вычисление dueDate */
-    /* уведомление актуальному исполнителю */
+
+    task.setDueDate(dueDate);
     task.setAssignee(userName);
-    /* task.setDueDate(dueDate); */
   }
 })();]]></activiti:string>
             </activiti:field>
@@ -186,6 +191,7 @@
   /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
   var stageItem = execution.getVariableLocal('currentStageItem');
+  stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.save();
@@ -241,6 +247,7 @@
   var employee = task.getVariableLocal('effectiveEmployee');
   /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
   lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+  /* уведомление актуальному исполнителю */
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -248,26 +255,32 @@
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create multi */
   var document = bpm_package.children[0];
+  var currentStage = execution.getVariable('currentStage');
   var employees = currentStageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
-  var effectiveEmployee, userName, dueDate;
+  var effectiveEmployee, userName, term, dueDate;
   /* пометка как активного */
-  currentStageItem.addAspect('lecmApproveAspects:approvalDetailsAspect', {
-    'lecmApproveAspects:approvalState': 'ACTIVE'
-  });
+  currentStageItem.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
+  currentStageItem.save();
   if (employees && employees.length) {
     effectiveEmployee = approval.getEffectiveEmployee(employees[0], 'LECM_APPROVER_DYN');
     task.setVariableLocal('originalEmployee', approval.getWorkflowNodeConverter().convertNode(employees[0].nodeRef));
     task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
     userName = orgstructure.getEmployeeLogin(effectiveEmployee);
 
+    /* вычисление dueDate */
+    term = currentStageItem.properties['lecmWorkflowRoutes:stageItemTerm'];
+    term = (term) ? term : currentStage.properties['lecmWorkflowRoutes:stageWorkflowTerm'];
+    dueDate = workCalendar.getNextWorkingDateByDays(new Date(), term);
+
     currentStageItem.properties['lecmWorkflowRoutes:stageItemUserName'] = userName;
+    currentStageItem.properties['lecmWorkflowRoutes:stageItemStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
+    currentStageItem.properties['lecmWorkflowRoutes:stageItemDueDate'] = dueDate;
     currentStageItem.save();
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
-    /* вычисление dueDate */
-    /* уведомление актуальному исполнителю */
+
+    task.setDueDate(dueDate);
     task.setAssignee(userName);
-    /* task.setDueDate(dueDate); */
   }
 })();]]></activiti:string>
             </activiti:field>
@@ -278,6 +291,7 @@
   /* получаем настоящий execution */
   /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
+  currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentStageItem.save();
