@@ -11,6 +11,8 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.delegation.IDelegation;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 
 /**
@@ -26,9 +28,14 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private final static int DEFAULT_DEFAULT_APROVAL_TERM = 1;
 
 	private Integer defaultApprovalTerm = DEFAULT_DEFAULT_APROVAL_TERM;
+	private IDelegation delegationService;
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
 		this.defaultApprovalTerm = defaultApprovalTerm;
+	}
+
+	public void setDelegationService(IDelegation delegationService) {
+		this.delegationService = delegationService;
 	}
 
 	public void init() {
@@ -111,7 +118,21 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	@Override
 	public NodeRef getEffectiveEmployee(final NodeRef employeeRef, final String workflowDynRole) {
-		//TODO: спереть реализацию метода WorkflowServiceAbstract::actualizeTaskAssignee
-		return employeeRef;
+		boolean delegateAll = workflowDynRole == null;
+		NodeRef delegationOpts = delegationService.getDelegationOpts(employeeRef);
+		boolean isDelegationActive = delegationService.isDelegationActive(delegationOpts);
+		NodeRef effectiveEmployeeRef = employeeRef;
+		if (isDelegationActive) {
+			if (delegateAll) {
+				effectiveEmployeeRef = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+			} else {
+				effectiveEmployeeRef = delegationService.getEffectiveExecutor(employeeRef, workflowDynRole);
+				//если эффективного исполнителя не нашли по бизнес-ролям, то поискать его через параметры делегирования
+				if (employeeRef.equals(effectiveEmployeeRef)) {
+					effectiveEmployeeRef = findNodeByAssociationRef(delegationOpts, IDelegation.ASSOC_DELEGATION_OPTS_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
+				}
+			}
+		}
+		return effectiveEmployeeRef;
 	}
 }
