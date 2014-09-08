@@ -58,15 +58,18 @@ public class ArmServiceImpl extends BaseBean implements ArmService {
         public int compare(NodeRef o1, NodeRef o2) {
             Integer order1 = (Integer) getCachedProperties(o1).get(ArmService.PROP_ARM_ORDER);
             Integer order2 = (Integer) getCachedProperties(o2).get(ArmService.PROP_ARM_ORDER);
+            int result = 0;
             if (order1 == null && order2 != null) {
                 return -1;
             } else if (order1 != null && order2 == null) {
                 return 1;
             } else if (order1 != null) {
-                return order1.compareTo(order2);
+                result = order1.compareTo(order2);
             }
-
-            return 0;
+            if (result == 0) {
+                result = o1.getId().compareTo(o2.getId());  //позволяет иметь ноды с одинаковым порядком
+            }
+            return result;
         }
     };
 
