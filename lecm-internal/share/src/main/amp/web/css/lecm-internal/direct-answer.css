@@ -1,12 +1,30 @@
-.root-table {
-	width: 100%;
+.direct-answer > div {
+    line-height: 28px;
 }
-
-.create-internal-button-td {
-	width: 100%;
+.direct-answer > div input[type=radio],
+.direct-answer > div label {
+    display: inline;
+    vertical-align: middle;
 }
-
-.form-container textarea.answer-text {
-	width: 100%;
-	margin-top:10px;
+.direct-answer > div span.yui-button {
+    vertical-align: middle;
+}
+.direct-answer .answer-comment {
+    margin-left: 18px;
+}
+.direct-answer .answer-comment textarea {
+    width: 100%;
+    resize: vertical;
+    box-sizing: border-box;
+}
+.direct-answer .answer-comment .control.dnd-uploader,
+.direct-answer .answer-comment .control.dnd-uploader img.uploader-button {
+    margin: 0;
+}
+.direct-answer .answer-comment .attachments-list .ci-value-div > span {
+    height: 20px;
+    line-height: 20px;
+}
+.direct-answer .answer-comment .attachments-list .ci-value-div > span span {
+    vertical-align: text-bottom;
 }

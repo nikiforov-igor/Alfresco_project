@@ -7,7 +7,7 @@
 <#assign uploaderId = fieldHtmlId + "-upload-control">
 <#assign fieldId=field.id!"">
 
-<div class="form-field">
+<div class="direct-answer">
 
 <script type="text/javascript">//<![CDATA[
 
@@ -237,45 +237,35 @@
 })();
 //]]></script>
 
-<input type="hidden" id="${fieldHtmlId}" name="${field.name}" tabindex="0"/>
+    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" tabindex="0"/>
 
-<table class="root-table">
-    <tr>
-        <td valign="middle"><input type="radio" name="direct-type" id="${fieldHtmlId}-first-selector"/></td>
-        <td valign="middle">Принять к сведению</td>
-    </tr>
-    <tr>
-        <td valign="middle"><input type="radio" name="direct-type" id="${fieldHtmlId}-second-selector"/></td>
-        <td valign="middle">
-            <table cellpadding="0">
-                <tr>
-                    <td nowrap="nowrap" valign="middle">Создать ответный документ</td>
-                    <td valign="middle" class="create-internal-button-td">
-                        <span id="${fieldHtmlId}-addDocument" class="yui-button yui-push-button">
-                            <span class="first-child">
-                                <button type="button"
-                                        title="Создать внутренний документ">+
-                                </button>
-                            </span>
-                        </span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td valign="top"><input type="radio" name="direct-type" id="${fieldHtmlId}-third-selector"/></td>
-        <td>Создать ответ комментарий
-            <input type="hidden" id="${typicalId}-removed" name="${field.name}_typical_removed"/>
-            <input type="hidden" id="${typicalId}-added" name="${field.name}_typical_added"/>
+    <div>
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-first-selector"/>
+        <label for="${fieldHtmlId}-first-selector">Принять к сведению</label>
+    </div>
+    <div>
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-second-selector"/>
+        <label for="${fieldHtmlId}-second-selector">Создать ответный документ</label>
+        <span id="${fieldHtmlId}-addDocument" class="yui-button yui-push-button">
+            <span class="first-child">
+                <button type="button" title="Создать внутренний документ"> + </button>
+            </span>
+        </span>
+    </div>
+    <div>
+        <input type="radio" name="direct-type" id="${fieldHtmlId}-third-selector"/>
+        <label for="${fieldHtmlId}-third-selector">Создать ответ-комментарий</label>
 
+        <input type="hidden" id="${typicalId}-removed" name="${field.name}_typical_removed"/>
+        <input type="hidden" id="${typicalId}-added" name="${field.name}_typical_added"/>
+
+        <div class="answer-comment">
             <div id="${typicalId}-controls" class="selectone-control">
                 <select id="${typicalId}" name="${field.name}_typical" tabindex="0" disabled="true">
                     <option value="">Типовой ответ</option>
                 </select>
             </div>
             <textarea id="${fieldHtmlId}-answer-text" class="answer-text" rows="20" disabled="true"></textarea>
-
 
             <div class="control dnd-uploader editmode">
                 <input id="${uploaderId}" type="hidden" class="autocomplete-input" name="${field.name}_uploader" value="${field.value?html}"/>
@@ -287,7 +277,7 @@
                         <div id="${uploaderId}-uploader-block" class="uploader-block">
                             <fieldset>
                                 <legend>${msg("label.add-file")}</legend>
-                                <img id="${uploaderId}-uploader-button" src="/share/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">  <br/>
+                                <img id="${uploaderId}-uploader-button" src="/share/res/images/lecm-base/components/plus.png" alt="" class="uploader-button">
                                 <span class="drag-tip">${msg("label.drag-file")}</span>
                             </fieldset>
                         </div>
@@ -297,7 +287,7 @@
                     </div>
                 </div>
             </div>
-        </td>
-    </tr>
-</table>
+            <div class="clear"></div>
+        </div>
+    </div>
 </div>
