@@ -11,8 +11,8 @@
 		<value>alfresco/module/${artifactId}/models/lecm-routes-model.xml</value>
 	</util:list>
 	<util:list id="routes.labels">
-		<!--<value>alfresco/module/${artifactId}/messages/lecm-routes</value>-->
-		<value>alfresco/module/${artifactId}/messages/routes-macros</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-routes</value>
+		<value>alfresco/module/${artifactId}/messages/lecm-routes-macros</value>
 	</util:list>
 	<bean id="routes.model.bootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="dictionaryBootstrap,
