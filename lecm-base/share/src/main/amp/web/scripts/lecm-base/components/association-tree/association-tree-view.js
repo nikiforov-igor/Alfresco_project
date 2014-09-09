@@ -318,7 +318,7 @@ LogicECM.module = LogicECM.module || {};
         _loadSearchProperties: function AssociationTreeViewer__loadSearchProperties() {
             Alfresco.util.Ajax.jsonGet(
                 {
-                    url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "components/data-lists/config/columns?itemType=" + encodeURIComponent(this.options.itemType)),
+                    url: $combine(Alfresco.constants.URL_SERVICECONTEXT, "/lecm/components/datagrid/config/columns?formId=searchColumns&itemType=" + encodeURIComponent(this.options.itemType)),
                     successCallback:
                     {
                         fn: function (response) {
