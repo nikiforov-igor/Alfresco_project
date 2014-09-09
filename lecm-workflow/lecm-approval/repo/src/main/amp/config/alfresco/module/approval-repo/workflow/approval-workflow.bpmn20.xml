@@ -325,17 +325,21 @@
   /* получаем настоящий execution */
   /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
+  var routeInterruptAfterReject = execution.getVariable('routeInterruptAfterReject');
+  var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
+  task.setVariable('isCompleted', isCompleted);
   currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentStageItem.save();
+
   /* возможно будет добавление в участники */
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
         </extensionElements>
         <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${stageItems}" activiti:elementVariable="currentStageItem">
-          <completionCondition>${execution.getVariable('routeInterruptAfterReject') &amp;&amp; currentStageItem.properties['lecmApproveAspects:approvalState'] == 'REJECTED'}</completionCondition>
+          <completionCondition>${isCompleted == true}</completionCondition>
         </multiInstanceLoopCharacteristics>
       </userTask>
       <sequenceFlow id="flow17" sourceRef="exclusivegateway3" targetRef="alfrescoScripttask7">
