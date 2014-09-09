@@ -559,23 +559,27 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     result = !returnRealTypes ? showNode.toString() : showNode;
                 } else {
                     if (result == null || result.toString().isEmpty()) {
-                        Object property = !fieldName.isEmpty() ? nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService)) : null;
-                        if (property != null) {
-                            List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
-                            //ищем привязанный LIST_CONSTRAINT
-                            if (constraintDefinitionList != null) {
-                                for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
-                                    Constraint constraint = constraintDefinition.getConstraint();
-                                    if (constraint instanceof ListOfValuesConstraint) {
-                                        //получаем локализованное значение для LIST_CONSTRAINT
-                                        String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(property.toString(), dictionary);
-                                        if (constraintProperty != null) {
-                                            property = constraintProperty;
+                        if (!fieldName.isEmpty()) {
+                            Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
+                            if (property != null) {
+                                List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
+                                //ищем привязанный LIST_CONSTRAINT
+                                if (constraintDefinitionList != null) {
+                                    for (ConstraintDefinition constraintDefinition : constraintDefinitionList) {
+                                        Constraint constraint = constraintDefinition.getConstraint();
+                                        if (constraint instanceof ListOfValuesConstraint) {
+                                            //получаем локализованное значение для LIST_CONSTRAINT
+                                            String constraintProperty = ((ListOfValuesConstraint) constraint).getDisplayLabel(property.toString(), dictionary);
+                                            if (constraintProperty != null) {
+                                                property = constraintProperty;
+                                            }
                                         }
                                     }
                                 }
+                                result = property;
+                            } else {
+                                result = !returnRealTypes ? "" : null;
                             }
-                            result = property;
                         } else {
                             result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
                         }
