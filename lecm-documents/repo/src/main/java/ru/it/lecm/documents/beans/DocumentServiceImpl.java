@@ -17,6 +17,7 @@ import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
+import org.alfresco.util.FileNameValidator;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -293,7 +294,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     @Override
     public NodeRef getDraftRootByType(QName docType) {
         final NodeRef draftRef = getDraftRoot();
-        final String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
+        String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
+	    rootName = FileNameValidator.getValidFileName(rootName);
         NodeRef nodeRef = nodeService.getChildByName(draftRef, ContentModel.ASSOC_CONTAINS, rootName);
 
 //		TODO: DONE Разделение метода
@@ -320,7 +322,8 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
     //TODO DONE Refactoring in progress...
     public NodeRef createDraftRoot(QName docType) throws WriteTransactionNeededException {
         final NodeRef draftRef = getDraftRoot();
-        final String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
+        String rootName = !DocumentService.TYPE_BASE_DOCUMENT.equals(docType) ? getDraftRootLabel(docType) : (String) nodeService.getProperty(draftRef, ContentModel.PROP_NAME);
+	    final String rootNameFinal = FileNameValidator.getValidFileName(rootName);
 
         try {
             lecmTransactionHelper.checkTransaction();
@@ -329,11 +332,11 @@ public class DocumentServiceImpl extends BaseBean implements DocumentService, Ap
         }
 
         QName assocTypeQName = ContentModel.ASSOC_CONTAINS;
-        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootName);
+        QName assocQName = QName.createQName(NamespaceService.CONTENT_MODEL_1_0_URI, rootNameFinal);
         QName nodeTypeQName = ContentModel.TYPE_FOLDER;
 
         Map<QName, Serializable> properties = new HashMap<QName, Serializable>(1);
-        properties.put(ContentModel.PROP_NAME, rootName);
+        properties.put(ContentModel.PROP_NAME, rootNameFinal);
         ChildAssociationRef childAssoc = nodeService.createNode(draftRef, assocTypeQName, assocQName, nodeTypeQName, properties);
         return childAssoc.getChildRef();
     }
