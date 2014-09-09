@@ -224,9 +224,14 @@
   /* получаем настоящий execution */
   /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
+  var comment = task.getVariableLocal('bpm_comment');
+  var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var stageItem = execution.getVariableLocal('currentStageItem');
+  /* внутрь stageItem перемещаем загруженный файл с комментарием */
+  attachment.move(stageItem);
   stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
+  stageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.save();
   /* возможно будет добавление в участники */
@@ -325,11 +330,16 @@
   /* получаем настоящий execution */
   /* var realExecution = (execution.parent) ? execution.parent : execution; */
   var decision = task.getVariableLocal('lecmApprove3_decision');
+  var comment = task.getVariableLocal('bpm_comment');
+  var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var routeInterruptAfterReject = execution.getVariable('routeInterruptAfterReject');
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
   task.setVariable('isCompleted', isCompleted);
+  /* внутрь stageItem перемещаем загруженный файл с комментарием */
+  attachment.move(currentStageItem);
   currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
+  currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentStageItem.save();
 
