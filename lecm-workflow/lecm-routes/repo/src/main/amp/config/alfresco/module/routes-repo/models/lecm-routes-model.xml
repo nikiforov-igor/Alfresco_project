@@ -11,6 +11,7 @@
 		<import uri="http://www.it.ru/lecm/org/structure/1.0" prefix="lecm-orgstr"/>
 		<import uri="http://www.it.ru/logicECM/model/approval/workflow/decision/1.0" prefix="lecmApproveDecision"/>
 		<import uri="http://www.it.ru/logicECM/model/workflow/routes/macros/1.0" prefix="lecmWorkflowRoutesMacros"/>
+		<import uri="http://www.it.ru/logicECM/model/approval/aspects/1.0" prefix="lecmApproveAspects"/>
 	</imports>
 
 	<namespaces>
@@ -69,6 +70,7 @@
 			</associations>
 			<mandatory-aspects>
 				<aspect>cm:titled</aspect>
+				<aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -92,6 +94,7 @@
 			</properties>
 			<mandatory-aspects>
 				<aspect>cm:titled</aspect>
+				<aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
 			</mandatory-aspects>
 		</type>
 
@@ -100,7 +103,7 @@
 			<parent>cm:folder</parent>
 			<properties>
 				<property name="lecmWorkflowRoutes:stageItemTerm">
-					<title>Срок</title>
+					<title>Срок (рабочих дней)</title>
 					<type>d:int</type>
 				</property>
 				<property name="lecmWorkflowRoutes:stageItemUserName">
@@ -166,6 +169,9 @@
 					</target>
 				</association>
 			</associations>
+			<mandatory-aspects>
+				<aspect>lecmApproveAspects:approvalDetailsAspect</aspect>
+			</mandatory-aspects>
 		</type>
 	</types>
 </model>

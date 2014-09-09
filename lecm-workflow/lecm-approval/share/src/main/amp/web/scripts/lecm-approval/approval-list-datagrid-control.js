@@ -8,12 +8,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 (function() {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
-		var addStageButton = YAHOO.util.Dom.get(containerId + '-add-stage'),
-			createApprovalListButton;
-
 		this.documentNodeRef = documentNodeRef;
 
-		createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
+		this.createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
 			type: 'menu',
 			menu: [{
 					text: 'Список из маршрута',
@@ -35,9 +32,26 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			disabled: false
 		});
 
-		if (addStageButton) {
-			YAHOO.util.Event.on(addStageButton, 'click', this.onAddStageButton, this, true);
+		this.addStageButton = new YAHOO.widget.Button(containerId + '-add-stage');
+
+		if (this.addStageButton) {
+			this.addStageButton.on('click', this.onAddStageButton, this, true);
 		}
+
+		this.clearButton = new YAHOO.widget.Button(containerId + '-clear-button');
+		if (this.clearButton) {
+			this.clearButton.on('click', this.onClearButton, this, true);
+		}
+
+		this.approvalContainer = YAHOO.util.Dom.get(containerId + '-approval-container');
+		this.completedApprovalsCountContainer = YAHOO.util.Dom.get(containerId + '-approval-completed-count');
+		this.showHistoryLink = YAHOO.util.Dom.get(containerId + '-show-history-link');
+		if (this.showHistoryLink) {
+			YAHOO.util.Event.on(this.showHistoryLink, 'click', this.onShowHistoryButton, this, true);
+		}
+
+		this.sourceRouteInfoContainer = YAHOO.util.Dom.get(containerId + '-source-route-info');
+		this.currentApprovalInfoContainer = YAHOO.util.Dom.get(containerId + '-current-approval-info');
 
 		YAHOO.util.Event.delegate('Share', 'click', function() {
 			LogicECM.module.Base.Util.printReport(this.documentNodeRef, this.options.reportId);
@@ -47,7 +61,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			this.editIteration();
 		}, '#editIteration', this, true);
 
-		this.getApprovalData();
+		this.getApprovalData(function() {
+			this.fillCurrentApprovalState();
+			this.manageControlsVisibility();
+		});
+
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 
 		return LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
@@ -62,7 +80,65 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		currentIterationNode: null,
 		approvalState: null,
 		editItreationFormOpened: false,
-		getApprovalData: function(callback, callbackArg) {
+		clearButton: null,
+		approvalContainer: null,
+		createApprovalListButton: null,
+		addStageButton: null,
+		completedApprovalsCountContainer: null,
+		showHistoryLink: null,
+		sourceRouteInfoContainer: null,
+		currentApprovalInfoContainer: null,
+		completedApprovalsCount: 0,
+		sourceRouteInfo: null,
+		approvalIsEditable: true,
+		approvalStateMessages: {
+			NOT_EXISTS: 'Не существует',
+			NEW: 'Не начато',
+			ACTIVE: 'Выполнятеся',
+			COMPLETE: 'Завершено'
+		},
+		createButtonHandlers: {
+			ACTIVE: {
+				fn: function() {
+					Alfresco.util.PopupManager.displayPrompt({
+						title: 'Итерация активна',
+						text: 'Нельзя создать новый лист согласования, так как итерация активна'
+					});
+				}
+			},
+			NOT_EXITS: {
+				fn: function(menuItemValue) {
+					this._createApprovalList(menuItemValue);
+				}
+			},
+			COMPLETE: {
+				fn: function(menuItemValue) {
+					var that = this;
+					Alfresco.util.PopupManager.displayPrompt({
+						title: 'Создание нового листа согласования',
+						text: 'Вы действительно хотите создать новый лист согласования?',
+						close: false,
+						modal: true,
+						buttons: [
+							{
+								text: this.msg("button.yes"),
+								handler: function() {
+									that._createApprovalList(menuItemValue);
+									this.destroy();
+								}
+							}, {
+								text: this.msg("button.no"),
+								handler: function() {
+									this.destroy();
+								},
+								isDefault: true
+							}]
+					});
+				}
+
+			}
+		},
+		getApprovalData: function(callback, callbackArgsArr) {
 			Alfresco.util.Ajax.request({
 				method: 'GET',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/getRouteDataForDocument',
@@ -78,6 +154,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 							this.routeType = response.json.routeType;
 							this.currentIterationNode = response.json.currentIterationNode ? response.json.currentIterationNode : null;
 							this.approvalState = response.json.approvalState;
+							this.completedApprovalsCount = response.json.completedApprovalsCount;
+							this.sourceRouteInfo = response.json.sourceRouteInfo;
+							this.approvalIsEditable = response.json.approvalIsEditable;
 
 							LogicECM.module.Routes = LogicECM.module.Routes || {};
 							LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};
@@ -87,12 +166,12 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 							LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType = this.routeType;
 
 							if (YAHOO.lang.isFunction(callback)) {
-								callback.call(this, callbackArg);
+								callback.apply(this, callbackArgsArr);
 							}
 						}
 					}
 				},
-				failureMessage: 'message.failure',
+				failureMessage: this.msg('message.failure'),
 				execScripts: true,
 				scope: this
 			});
@@ -118,7 +197,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 			if (!(this.stageType && this.stageItemType && this.routeType)) {
-				this.getApprovalData(this.fireGridChanged);
+				this.getApprovalData(function() {
+					this.fillCurrentApprovalState();
+					this.manageControlsVisibility();
+					this.fireGridChanged();
+				});
 			} else {
 				this.fireGridChanged();
 			}
@@ -146,14 +229,10 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		onCreateApprovalListButtonClick: function(event, eventArgs, menuItem) {
 			var menuItemValue = menuItem.value;
 
-			if (this.approvalState === "ACTIVE") {
-				Alfresco.util.PopupManager.displayPrompt({
-					title: 'Итерация активна',
-					text: 'Нельзя создать новый лист согласования, так как итерация активна'
-				});
-				return false;
-			}
+			this.createButtonHandlers[this.approvalState].fn.call(this, menuItemValue);
 
+		},
+		_createApprovalList: function(menuItemValue) {
 			switch (menuItemValue) {
 				case 'route' :
 					this._createApprovalListFromRoute();
@@ -165,10 +244,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					break;
 			}
 		},
-		_createApprovalListFromRoute: function() {
+		_createApprovalListFromRoute: function(callback, callbackArgsArr) {
 			var formId = 'selectRouteForm';
 			var selectRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
-
 			selectRouteForm.setOptions({
 				width: '35em',
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
@@ -195,9 +273,14 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				},
 				onSuccess: {
 					fn: function(r) {
-						this.currentIterationNode = r.json.nodeRef;
-						this.approvalState = 'NEW';
-						this.fireGridChanged(true);
+						this.getApprovalData(function() {
+							this.fillCurrentApprovalState();
+							this.manageControlsVisibility();
+							this.fireGridChanged(true);
+							if (YAHOO.lang.isFunction(callback)) {
+								callback.apply(this, callbackArgsArr);
+							}
+						});
 					},
 					scope: this
 				},
@@ -221,15 +304,17 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				successCallback: {
 					scope: this,
 					fn: function(r) {
-						this.currentIterationNode = r.json.nodeRef;
-						this.approvalState = 'NEW';
-						this.fireGridChanged(true);
-						if (YAHOO.lang.isFunction(callback)) {
-							callback.apply(this, callbackArgsArr);
-						}
+						this.getApprovalData(function() {
+							this.fillCurrentApprovalState();
+							this.manageControlsVisibility();
+							this.fireGridChanged(true);
+							if (YAHOO.lang.isFunction(callback)) {
+								callback.apply(this, callbackArgsArr);
+							}
+						});
 					}
 				},
-				failureMessage: 'message.failure',
+				failureMessage: this.msg('message.failure'),
 				execScripts: true,
 				scope: this
 			});
@@ -332,7 +417,128 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		},
 		onActionAddMacros: function(item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
+		},
+		onClearButton: function() {
+			var that = this;
+			Alfresco.util.PopupManager.displayPrompt({
+				title: 'Очистка листа согласования',
+				text: 'Вы действительно хотите очистить лист согласования?',
+				close: false,
+				modal: true,
+				buttons: [
+					{
+						text: this.msg("button.yes"),
+						handler: function() {
+							that._deleteApprovalList();
+							this.destroy();
+						}
+					}, {
+						text: this.msg("button.no"),
+						handler: function() {
+							this.destroy();
+						},
+						isDefault: true
+					}]
+			});
+		},
+		fillCurrentApprovalState: function() {
+			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
+			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo;
+			this.currentApprovalInfoContainer.innerHTML = this.approvalStateMessages[this.approvalState];
+		},
+		manageControlsVisibility: function() {
+			function hide(element) {
+				YAHOO.util.Dom.setStyle(element, 'display', 'none');
+			}
+
+			function revealButton(element) {
+				YAHOO.util.Dom.setStyle(element, 'display', 'inline-block');
+			}
+
+			function revealBlock(element) {
+				YAHOO.util.Dom.setStyle(element, 'display', 'block');
+			}
+
+			function revealInline(element) {
+				YAHOO.util.Dom.setStyle(element, 'display', 'inline');
+			}
+
+			if (this.completedApprovalsCount > 0) {
+				revealInline(this.showHistoryLink);
+			} else {
+				hide(this.showHistoryLink);
+			}
+
+			switch (this.approvalState) {
+				case 'NOT_EXITS':
+					hide(this.clearButton);
+					hide(this.approvalContainer);
+					revealButton(this.createApprovalListButton);
+					revealButton(this.addStageButton);
+					break;
+				case 'NEW':
+					revealButton(this.clearButton);
+					revealBlock(this.approvalContainer);
+					hide(this.createApprovalListButton);
+					revealButton(this.addStageButton);
+					break;
+				case 'ACTIVE':
+					hide(this.clearButton);
+					revealBlock(this.approvalContainer);
+					hide(this.createApprovalListButton);
+					revealButton(this.addStageButton);
+					break;
+				case 'COMPLETE':
+					hide(this.clearButton);
+					revealBlock(this.approvalContainer);
+					revealButton(this.createApprovalListButton);
+					hide(this.addStageButton);
+			}
+
+		},
+		_deleteApprovalList: function(callback, callbackArgsArr) {
+			var nodeRefObj;
+
+			if (!this.currentIterationNode) {
+				return;
+			}
+
+			nodeRefObj = new Alfresco.util.NodeRef(this.currentIterationNode);
+			Alfresco.util.Ajax.jsonRequest({
+				method: 'POST',
+				url: Alfresco.constants.PROXY_URI_RELATIVE + 'slingshot/doclib/action/aspects/node/' + nodeRefObj.uri,
+				dataObj: {
+					added: ['sys:temporary'],
+					removed: []
+				},
+				successCallback: {
+					fn: function(r) {
+						Alfresco.util.Ajax.jsonRequest({
+							method: 'DELETE',
+							url: Alfresco.constants.PROXY_URI_RELATIVE + 'slingshot/doclib/action/folder/node/' + nodeRefObj.uri,
+							successCallback: {
+								fn: function(r) {
+									this.getApprovalData(function() {
+										this.fillCurrentApprovalState();
+										this.manageControlsVisibility();
+										if (YAHOO.lang.isFunction(callback)) {
+											callback.apply(this, callbackArgsArr);
+										}
+									});
+								},
+								scope: this
+							},
+							failureMessage: this.msg('message.failure')
+						});
+					},
+					scope: this
+				},
+				failureMessage: this.msg('message.failure')
+			});
+		},
+		onShowHistoryButton: function() {
+			// TODO Добавить диалог отображения истории
+			console.log('onShowHistoryButton');
 		}
 	}, true);
-
 })();

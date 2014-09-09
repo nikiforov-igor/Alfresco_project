@@ -3,6 +3,8 @@
 <#assign itemId = args["itemId"]>
 <#assign id = itemId?replace(":|/", "_", "r")>
 <#assign datagridId = id + "-dtgrd">
+<#assign editable = args["editable"] == "true"/>
+<#assign isApproval = args["isApproval"] == "true"/>
 
 <script>
 (function(){
@@ -15,14 +17,30 @@
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		expandable: false,
-		showActionColumn: true,
+		showActionColumn: ${editable?string},
+		<#if editable>
 		actions: [{
 			type:"datagrid-action-link-${datagridId}",
 			id:"onActionDelete",
 			permission:"delete",
-			label:"${msg('actions.delete-row')}"
+			label:"${msg('actions.delete-row')}",
+			evaluator: LogicECM.module.Routes.Evaluators.stageItemEdit
+		}, {
+			type:"datagrid-action-link-${datagridId}",
+			id:"onActionEdit",
+			permission:"edit",
+			label:"${msg('actions.edit')}",
+			evaluator: LogicECM.module.Routes.Evaluators.stageItemDelete
 		}],
-		excludeColumns: ['lecmWorkflowRoutes:stageItemEmployeeAssoc', 'lecmWorkflowRoutes:stageItemMacrosAssoc']
+		</#if>
+		excludeColumns: [
+			<#if !isApproval>
+			'lecmApproveAspects:approvalState',
+			</#if>
+			'lecmApproveAspects:approvalDecision',
+			'lecmWorkflowRoutes:stageItemEmployeeAssoc',
+			'lecmWorkflowRoutes:stageItemMacrosAssoc'
+		]
 	});
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {

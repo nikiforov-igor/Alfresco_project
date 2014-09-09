@@ -15,6 +15,7 @@
                 showExtendSearchBlock: false,
                 showCheckboxColumn: false,
                 bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
+                excludeColumns: ['lecmApproveAspects:approvalState'],
                 datagridMeta:{
                     itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType,
                     nodeRef: LogicECM.module.Routes.Const.ROUTES_CONTAINER.nodeRef,
@@ -54,7 +55,8 @@
             LogicECM.module.Base.Util.loadResources([
                 'scripts/lecm-base/components/advsearch.js',
                 'scripts/lecm-base/components/lecm-datagrid.js',
-                'scripts/lecm-workflow/routes/routes-datagrid.js'
+                'scripts/lecm-workflow/routes/routes-datagrid.js',
+                'scripts/lecm-workflow/routes/evaluators.js'
             ], [], createPage);
         }
 

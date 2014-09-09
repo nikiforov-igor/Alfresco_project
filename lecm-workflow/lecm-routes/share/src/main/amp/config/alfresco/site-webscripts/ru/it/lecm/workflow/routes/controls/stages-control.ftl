@@ -32,6 +32,10 @@
 			forceSubscribing: true,
 			excludeColumns: ["lecmApproveAspects:approvalState"],
 			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
+			expandDataObj: {
+				editable: ${editable?string},
+				isApproval: false
+			},
 			<#if editable>
 			actions: [{
 				type:"datagrid-action-link-" + controlId,

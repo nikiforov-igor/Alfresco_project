@@ -173,7 +173,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 		iteration = copyService.copy(routeNode, approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), false);
 		List<NodeRef> routeStages = getAllStagesOfRoute(routeNode);
-		for (NodeRef routeStage: routeStages) {
+		for (NodeRef routeStage : routeStages) {
 			if (!nodeService.hasAspect(routeStage, ContentModel.ASPECT_TEMPORARY)) {
 				copyService.copy(routeStage, iteration, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
 			}

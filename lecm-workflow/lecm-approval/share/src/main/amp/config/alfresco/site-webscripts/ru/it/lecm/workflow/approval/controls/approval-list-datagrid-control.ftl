@@ -6,25 +6,49 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "approval-list-main">
 
-
 <div id='${controlId}'>
 
-	<div class="approvalControlsContainer">
-		<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
-		<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
+	<div class="approvalFinishedContainer">
+		Завершено согласований: <span id="${controlId}-approval-completed-count"></span>
+		<a id="${controlId}-show-history-link" href="javascript:void(0)">Смотреть историю</a>
 	</div>
 
-	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button controlButtonContainer">
+	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button">
 		<span class="first-child">
-			<button type="button">Создать</button>
+			<button type="button">Создать новое согласование</button>
 		</span>
 	</span>
-	<span class="yui-button yui-push-button controlButtonContainer">
+	<span id="${controlId}-clear-button" class="yui-button yui-push-button">
 		<span class="first-child">
-			<button type="button" id="${controlId}-add-stage">Добавить этап</button>
+			<button type="button">Очистить данные согласования</button>
 		</span>
 	</span>
-	<@grid.datagrid controlId false />
+
+	<div id="${controlId}-approval-container" class="approvalContainer">
+		<div class="approvalControlsContainer">
+			<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
+			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
+		</div>
+
+		<div class="approvalDescriptionContainer">
+			<div class="approvalRouteDataContainer">
+				<strong>Маршрут</strong>
+				<span id="${controlId}-source-route-info"></span>
+			</div>
+			<div class="approvalStatusContainer">
+				<strong>Статус текущего согласования</strong>
+				<span id="${controlId}-current-approval-info"></span>
+			</div>
+		</div>
+
+		<span id="${controlId}-add-stage" class="yui-button yui-push-button">
+			<span class="first-child">
+				<button type="button">Добавить этап</button>
+			</span>
+		</span>
+		<div></div>
+		<@grid.datagrid controlId false />
+	</div>
 </div>
 
 <script type='text/javascript'>
@@ -43,9 +67,11 @@
 			forceSubscribing: true,
 			bubblingLabel: '${controlId}',
 			expandable: true,
-			expandDataSource: "ru/it/lecm/workflow/routes/stages/stageExpanded",
-			useChildQuery: true,
-			excludeColumns: ['lecmApproveAspects:approvalState'],
+			expandDataSource: 'ru/it/lecm/workflow/routes/stages/stageExpanded',
+			expandDataObj: {
+				editable: true,
+				isApproval: true
+			},
 			datagridMeta: {
 				actionsConfig: {
 					fullDelete: true,
@@ -57,22 +83,26 @@
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionAddEmployee",
 				permission:"edit",
-				label:"${msg('actions.add.employee')}"
+				label:"${msg('actions.add.employee')}",
+				evaluator: LogicECM.module.Routes.Evaluators.iterationAdd
 			}, {
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionAddMacros",
 				permission:"edit",
-				label:"${msg('actions.add.macros')}"
+				label:"${msg('actions.add.macros')}",
+				evaluator: LogicECM.module.Routes.Evaluators.iterationAdd
 			}, {
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionEdit",
 				permission:"edit",
-				label:"${msg('actions.edit')}"
+				label:"${msg('actions.edit')}",
+				evaluator: LogicECM.module.Routes.Evaluators.iterationEdit
 			}, {
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionDelete",
 				permission:"delete",
-				label:"${msg('actions.delete-row')}"
+				label:"${msg('actions.delete-row')}",
+				evaluator: LogicECM.module.Routes.Evaluators.iterationDelete
 			}]
 		});
 	}
@@ -81,6 +111,7 @@
 
 		var js = ['scripts/lecm-base/components/lecm-datagrid.js',
 				  'scripts/lecm-approval/approval-list-datagrid-control.js',
+				  'scripts/lecm-approval/evaluators.js',
 				  'scripts/lecm-workflow/routes/stages-control.js'];
 		var css = ['css/lecm-approval/approval-list-datagrid-control.css'];
 		LogicECM.module.Base.Util.loadResources(js, css, createDatagrid);

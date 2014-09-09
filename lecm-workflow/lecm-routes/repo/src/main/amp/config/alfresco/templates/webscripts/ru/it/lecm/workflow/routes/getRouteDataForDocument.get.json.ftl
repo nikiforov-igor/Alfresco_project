@@ -4,6 +4,9 @@
 	"stageType": "${stageType}",
 	"stageItemType": "${stageItemType}",
 	"currentIterationNode": "${currentIterationNode}",
-	"approvalState": "${approvalState}"
+	"approvalState": "${approvalState}",
+	"completedApprovalsCount": ${completedApprovalsCount},
+	"sourceRouteInfo": "${sourceRouteInfo}",
+	"approvalIsEditable": ${approvalIsEditable?string}
 }
 </#escape>
