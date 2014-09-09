@@ -52,14 +52,20 @@
     background-image: url('/share/res/images/lecm-eds-documents/arm.png');
 }
 
-.orgstructure-dictionary .body .empty {
+.orgstructure-dictionary .body .default-text,.orgstructure-dictionary .body .empty {
     margin: 8px;
     padding-left: 10px;
 }
 
 .orgstructure-dictionary .search-input {
     float:left;
+}
 
-}.orgstructure-dictionary .toolbar {
+.orgstructure-dictionary .toolbar {
      margin-top: -4px;
+}
+
+.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvln,
+.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvtn {
+    visibility:hidden;
 }

@@ -160,7 +160,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (maySearch){
                 this.searchTerm = searchTerm;
                 if (searchTerm.length > 0) {
-                    this.reloadTree(searchTerm);
+                    this.reloadTree(true);
                 } else {
                     this._onClearSearch();
                 }

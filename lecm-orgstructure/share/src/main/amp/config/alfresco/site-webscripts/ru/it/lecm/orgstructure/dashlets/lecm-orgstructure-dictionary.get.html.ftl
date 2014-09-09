@@ -5,9 +5,7 @@
 <#assign jsid = args.htmlid?js_string>
 
 <@markup id="css">
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/data-lists/toolbar.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/yui/treeview/assets/skins/sam/treeview.css" />
-    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-orgstructure/orgstructure-dictionary-dashlet.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-orgstructure/orgstructure-arm-tree.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/main-styles.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/toolbar.css" />
@@ -61,12 +59,15 @@
     <div class="title">${msg("header")}</div>
     <div class="body scrollableList" id="${id}-paginator" <#if args.height??>style="height: ${args.height}px;"</#if>>
         <@comp.baseToolbar jsid false true false/>
+        <#-- Empty results list template -->
+            <div id="${id}-default">
+                <div class="default-text"><span>${msg("dashlet.default.text")}</span></div>
+            </div>
+            <div id="${id}-empty">
+                <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
+            </div>
         <div id="orgstructure-tree"/>
         <@view.viewForm formId="org-dashlet-view-form"/>
-        <#-- Empty results list template -->
-        <div id="${id}-empty">
-            <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
-        </div>
     </div>
 </div>
 
