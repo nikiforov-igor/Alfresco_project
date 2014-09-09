@@ -177,11 +177,11 @@
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign */
-  var assignee = task.getAssignee();
-  var previousAssignee = task.getVariable('previousAssignee');
+  var assignee = '' + task.getAssignee();
+  var previousAssignee = '' + task.getVariableLocal('previousAssignee');
   var document, documentLink, msg, employee;
   if (previousAssignee != assignee) {
-    task.setVariable('previousAssignee', assignee);
+    task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
@@ -293,11 +293,11 @@
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign multi */
-  var assignee = task.getAssignee();
-  var previousAssignee = task.getVariable('previousAssignee');
+  var assignee = '' + task.getAssignee();
+  var previousAssignee = '' + task.getVariableLocal('previousAssignee');
   var document, documentLink, msg, employee;
   if (previousAssignee != assignee) {
-    task.setVariable('previousAssignee', assignee);
+    task.setVariableLocal('previousAssignee', assignee);
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
