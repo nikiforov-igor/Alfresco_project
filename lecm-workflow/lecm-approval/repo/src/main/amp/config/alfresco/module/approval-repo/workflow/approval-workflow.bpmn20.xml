@@ -7,9 +7,26 @@
           <activiti:string><![CDATA[(function(){ /* process happy end */
   /* пометка итерации как завершенной */
   var currentIteration = execution.getVariableLocal('currentIteration');
-  currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
-  currentIteration.save();
+  var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
+  var decisions = ['REJECTED', 'APPROVED_WITH_REMARK', 'APPROVED'];
+  var approvalDecision = 'NO_DECISION';
+  var i = 0, size = decisions.length;
+
+  function someDecision(element, index, array) {
+    return element.properties['lecmApproveAspects:approvalDecision'] == this;
+  }
+
   /* установка итерации решения о согласовании */
+  for (; i < size; ++i) {
+    if (stages.some(someDecision, decisions[i])) {
+      approvalDecision = decisions[i];
+      break;
+    }
+  }
+  currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  currentIteration.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
+  currentIteration.save();
+  /* учет принудительного прерывания процесса */
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -77,9 +94,26 @@
             <activiti:string><![CDATA[(function(){ /* subProcess happy end */
   /* пометка этапа как завершенного */
   var stage = execution.getVariable('currentStage');
-  stage.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
-  stage.save();
+  var stageItems = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+  var decisions = ['REJECTED', 'APPROVED_WITH_REMARK', 'APPROVED'];
+  var approvalDecision = 'NO_DECISION';
+  var i = 0, size = decisions.length;
+
+  function someDecision(element, index, array) {
+    return element.properties['lecmApproveAspects:approvalDecision'] == this;
+  }
+
   /* установка этапу решения о согласовании */
+  for (; i < size; ++i) {
+    if (stageItems.some(someDecision, decisions[i])) {
+      approvalDecision = decisions[i];
+      break;
+    }
+  }
+
+  stage.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  stage.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
+  stage.save();
 })();]]></activiti:string>
           </activiti:field>
           <activiti:field name="runAs">
