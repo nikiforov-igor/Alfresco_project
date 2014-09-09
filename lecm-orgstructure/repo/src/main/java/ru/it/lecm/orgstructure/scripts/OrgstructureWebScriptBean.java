@@ -63,7 +63,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     private static final String DEFAULT_EMPTY_TEXT = "<Не указано>";
 	private static final QName IS_ACTIVE = QName.createQName("http://www.it.ru/lecm/dictionary/1.0", "active");
 
-    private final String EMPLOYEE_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} - {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/cm:name} (тел. {lecm-orgstr:employee-phone})";
+    private final String EMPLOYEE_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} - {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/} (тел. {lecm-orgstr:employee-phone})";
     private final String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
     private final String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
 

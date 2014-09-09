@@ -414,7 +414,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         String fieldFormat = null;
         List<String> transitions = new ArrayList<String>();
 
-        Object result = "";
+        Object result = null;
 
         boolean wrapAsLink = false;
 
@@ -556,11 +556,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         if (showNode != null) {
             if (!fieldName.contains("~")) {
                 if (fieldName.equals("nodeRef")) {
-                    result = returnRealTypes ? showNode : showNode.toString();
+                    result = !returnRealTypes ? showNode.toString() : showNode;
                 } else {
-                    Object property = nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService));
-                    if (property != null && result != null) {
-                        if (result.toString().isEmpty()) {
+                    if (result == null || result.toString().isEmpty()) {
+                        Object property = !fieldName.isEmpty() ? nodeService.getProperty(showNode, QName.createQName(fieldName, namespaceService)) : null;
+                        if (property != null) {
                             List<ConstraintDefinition> constraintDefinitionList = dictionary.getProperty(QName.createQName(fieldName, namespaceService)).getConstraints();
                             //ищем привязанный LIST_CONSTRAINT
                             if (constraintDefinitionList != null) {
@@ -576,7 +576,11 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                                 }
                             }
                             result = property;
+                        } else {
+                            result = !returnRealTypes ? getObjectDescription(showNode) : showNode;
                         }
+                    }
+                    if (result != null) {
                         if (result instanceof Date) {
                             if (timeZoneOffset != null) {
                                 Calendar cal = Calendar.getInstance();
@@ -590,8 +594,6 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                                 result = dFormat.format(result);
                             }
                         }
-                    } else {
-                        result = !returnRealTypes ? "" : null;
                     }
                 }
             }
