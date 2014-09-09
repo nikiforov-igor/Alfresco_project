@@ -20,7 +20,7 @@
                     <item name="cm:94eb9df3-95a1-4cea-adb0-fcbade3678b3" type="lecm-arm:query-child-rule">
                         <property name="cm:name"><![CDATA[94eb9df3-95a1-4cea-adb0-fcbade3678b3]]></property>
                         <property name="lecm-arm:list-query-child-rule">
-                            <![CDATA[TYPE: "lecm-dic:dictionary" PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*"]]></property>
+                            <![CDATA[TYPE: "lecm-dic:dictionary" AND PATH:"/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/*"]]></property>
                     </item>
                 </items>
                 <assocs>
