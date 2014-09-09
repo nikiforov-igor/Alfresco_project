@@ -79,7 +79,7 @@
                 </field-visibility>
                 <appearance>
                     <set id="common" appearance="" label="Атрибуты" /> <!-- tab1 -->
-                    <set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
+                    <set id="approval-and-signing" appearance="" label="Согласование/Подписание" /> <!-- tab2 -->
                     <set id="answers" appearance="" label="Ответы" />
 
                     <field id="lecm-document:regnum" set="common"/>

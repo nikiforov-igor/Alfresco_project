@@ -25,7 +25,7 @@
 				</field-visibility>
 				<appearance>
 					<set id="common" appearance="" label="Сведения" /> <!-- tab1 -->
-					<set id="approval-and-signing" appearance="" label="Согласование/подписание" /> <!-- tab2 -->
+					<set id="approval-and-signing" appearance="" label="Согласование/Подписание" /> <!-- tab2 -->
 
 					<field id="lecm-document:regnum" set="common" mandatory="true">
 						<constraint-handlers>
