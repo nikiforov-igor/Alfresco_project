@@ -238,46 +238,49 @@ function main()
 			}
 		}
 	}
+    if (visibleFields != null) {
+        // pass form ui model to FTL
+        model.columns = [];
+        //проходим все поля, включая фиктивные
+        for (var k = 0; k < visibleFields.length; k++) {
+            var obj = visibleFields[k];
 
-	// pass form ui model to FTL
-	model.columns = [];
-	//проходим все поля, включая фиктивные
-	for (var k = 0; k < visibleFields.length; k++) {
-		var obj = visibleFields[k];
+            var colDef = columnDefs[obj];
 
-		var colDef = columnDefs[obj];
+            if (colDef == null) {   //поле фиктивное, создаем колонку
+                colDef = {
+                    type: "",
+                    name: obj,
+                    label: "",
+                    dataType: "",
+                    sortable: false
+                }
+            }
 
-		if (colDef == null) {   //поле фиктивное, создаем колонку
-			colDef = {
-				type:"",
-				name:obj,
-				label:"",
-				dataType:"",
-				sortable: false
-			}
-		}
-
-		var formField = formConfig.fields[obj];
-		if (formField != null) {
-			var label = null;
-			//забираем подпись из конфига
-			if (formField.labelId != null && formField.labelId != "") {
-				label = msg.get(formField.labelId);
-			}else if (formField.label != null && formField.label != "") {
-				label = formField.label;
-			}
-			if (label != null) {
-				colDef.label = label;
-			}
-			if (formField.attributes) {
-				//забираем форматную строку
-				if (formField.attributes.substituteString != null && formField.attributes.substituteString != "") {
-					colDef.nameSubstituteString = formField.attributes.substituteString;
-				}
-			}
-		}
-		model.columns.push(colDef);
-	}
+            var formField = formConfig.fields[obj];
+            if (formField != null) {
+                var label = null;
+                //забираем подпись из конфига
+                if (formField.labelId != null && formField.labelId != "") {
+                    label = msg.get(formField.labelId);
+                } else if (formField.label != null && formField.label != "") {
+                    label = formField.label;
+                }
+                if (label != null) {
+                    colDef.label = label;
+                }
+                if (formField.attributes) {
+                    //забираем форматную строку
+                    if (formField.attributes.substituteString != null && formField.attributes.substituteString != "") {
+                        colDef.nameSubstituteString = formField.attributes.substituteString;
+                    }
+                }
+            }
+            model.columns.push(colDef);
+        }
+    } else {
+        model.columns = columns;
+    }
 }
 
 main();
