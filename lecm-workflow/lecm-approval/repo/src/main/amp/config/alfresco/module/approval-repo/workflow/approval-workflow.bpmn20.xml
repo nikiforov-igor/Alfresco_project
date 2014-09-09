@@ -177,11 +177,20 @@
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign */
-  var document = bpm_package.children[0];
-  var employee = task.getVariableLocal('effectiveEmployee');
-  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
-  lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
-  /* уведомление актуальному исполнителю */
+  var assignee = task.getAssignee();
+  var previousAssignee = task.getVariable('previousAssignee');
+  var document, documentLink, msg, employee;
+  if (previousAssignee != assignee) {
+    task.setVariable('previousAssignee', assignee);
+    document = bpm_package.children[0];
+    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+    msg = documentLink + ' направлен Вам на согласование.';
+    employee = task.getVariableLocal('effectiveEmployee');
+    /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
+    lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+    /* уведомление актуальному исполнителю */
+    notifications.sendNotification([employee.nodeRef.toString()], msg, document);
+  }
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -228,7 +237,9 @@
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var stageItem = execution.getVariableLocal('currentStageItem');
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
-  attachment.move(stageItem);
+  if (attachment) {
+    attachment.move(stageItem);
+  }
   stageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
@@ -282,11 +293,20 @@
           <activiti:taskListener event="assignment" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* assign multi */
-  var document = bpm_package.children[0];
-  var employee = task.getVariableLocal('effectiveEmployee');
-  /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
-  lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
-  /* уведомление актуальному исполнителю */
+  var assignee = task.getAssignee();
+  var previousAssignee = task.getVariable('previousAssignee');
+  var document, documentLink, msg, employee;
+  if (previousAssignee != assignee) {
+    task.setVariable('previousAssignee', assignee);
+    document = bpm_package.children[0];
+    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+    msg = documentLink + ' направлен Вам на согласование.';
+    employee = task.getVariableLocal('effectiveEmployee');
+    /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
+    lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
+    /* уведомление актуальному исполнителю */
+    notifications.sendNotification([employee.nodeRef.toString()], msg, document);
+  }
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -336,7 +356,9 @@
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
   task.setVariable('isCompleted', isCompleted);
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
-  attachment.move(currentStageItem);
+  if (attachment) {
+    attachment.move(currentStageItem);
+  }
   currentStageItem.properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
