@@ -248,26 +248,11 @@ LogicECM.module.Base.Util = {
 		return null;
 	},
 	printReport: function(nodeRef, reportId) {
-		Alfresco.util.Ajax.jsonGet({
-			url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportId + "?ID=" + encodeURI(nodeRef),
-			successCallback: {
-				fn: function(response) {
-					window.open(window.location.protocol + "//" + window.location.host + response.serverResponse.responseText,
-							"report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
-
-					Alfresco.util.PopupManager.displayMessage({
-						text: Alfresco.component.Base.prototype.msg("message.report.success")
-					});
-				}
-			},
-			failureCallback: {
-				fn: function(response) {
-					Alfresco.util.PopupManager.displayMessage({
-						text: Alfresco.component.Base.prototype.msg("message.report.failure")
-					});
-				}
-			}
-		});
+        window.open(window.location.protocol + "//" + window.location.host + Alfresco.constants.PROXY_URI_RELATIVE + "lecm/report/" + reportId + "?ID=" + encodeURI(nodeRef),
+            "report", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+        Alfresco.util.PopupManager.displayMessage({
+            text: Alfresco.component.Base.prototype.msg("message.report.success")
+        });
 	},
 	/**
 	 * Деструктор для форм
