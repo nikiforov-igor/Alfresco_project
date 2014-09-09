@@ -414,7 +414,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         String fieldFormat = null;
         List<String> transitions = new ArrayList<String>();
 
-        Object result = null;
+        Object result = "";
 
         boolean wrapAsLink = false;
 
