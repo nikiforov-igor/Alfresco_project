@@ -11,6 +11,7 @@ import ru.it.lecm.base.beans.LecmBaseException;
 import ru.it.lecm.base.beans.LecmBasePropertiesService;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
+import ru.it.lecm.orgstructure.beans.OrgstructureAspectsModel;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.Types;
 
@@ -70,6 +71,12 @@ public class OrgstructureStaffListPolicy
 
 		// оповещение по должности для создания SG_DP ...
 		this.orgSGNotifier.notifyChangeDP( staff);
+
+        NodeRef unitOrganization = orgstructureService.getOrganization(unit);
+        if (unitOrganization != null) {
+            nodeService.addAspect(staff, OrgstructureAspectsModel.ASPECT_HAS_LINKED_ORGANIZATION, null);
+            nodeService.createAssociation(staff, unitOrganization, OrgstructureAspectsModel.ASSOC_LINKED_ORGANIZATION);
+        }
 	}
 
 	public void onUpdateStaffListLog(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
