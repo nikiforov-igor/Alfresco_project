@@ -13,7 +13,7 @@ import org.alfresco.service.cmr.dictionary.AspectDefinition;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
-import org.alfresco.service.cmr.dictionary.TypeDefinition;
+import org.alfresco.service.cmr.dictionary.ClassDefinition;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.NamespacePrefixResolver;
 import org.alfresco.service.namespace.QName;
@@ -41,7 +41,7 @@ public class TypesViewBeanImpl extends BaseBean {
 		Collection<QName> types = dictionaryService.getAllTypes();
 		for (QName type : types){
 			Map<String, String> typeProps = new HashMap<>();
-			TypeDefinition typeDef = dictionaryService.getType(type);
+			ClassDefinition typeDef = dictionaryService.getType(type);
 			typeProps.put("name", typeDef.getName().getPrefixString());
 			typeProps.put("desc", typeDef.getTitle(dictionaryService));
 			typeList.add(typeProps);
@@ -49,16 +49,28 @@ public class TypesViewBeanImpl extends BaseBean {
 		return typeList;
 	}
 
+	public List<Map<String, String>> getAllAspectNames(){
+		List<Map<String, String>> aspectList = new ArrayList<>();
+		Collection<QName> aspects = dictionaryService.getAllAspects();
+		for (QName aspect : aspects){
+			Map<String, String> aspectProps = new HashMap<>();
+			ClassDefinition aspectDef = dictionaryService.getAspect(aspect);
+			aspectProps.put("name", aspectDef.getName().getPrefixString());
+			aspectProps.put("desc", aspectDef.getTitle(dictionaryService));
+			aspectList.add(aspectProps);
+		}
+		return aspectList;
+	}
 
 	private void fillTypePropsMap(QName type, Map<String, Map<String, List<Map<String, String>>>> mapResult, Integer order){
 		List<Map<String, String>> properties = new ArrayList<>(); //список пропертей
 		Set<QName> aspectNames = new HashSet<>(); //аспекты типа
 		Set<QName> parentAspectNames = new HashSet<>(); //аспекты родительского типа
-		TypeDefinition typeDef = dictionaryService.getType(type);
+		ClassDefinition typeDef = dictionaryService.getClass(type);
 		QName parentType = typeDef.getParentName();
-		TypeDefinition parentTypeDef = null;
+		ClassDefinition parentTypeDef = null;
 		if (null != parentType){
-			parentTypeDef = dictionaryService.getType(parentType);
+			parentTypeDef = dictionaryService.getClass(parentType);
 		}
 
 		//свойства типа (вместе с родительскими)
@@ -121,6 +133,11 @@ public class TypesViewBeanImpl extends BaseBean {
 		}
 	}
 
+	/**
+     * Получает иерархию свойств  начиная с исходного типа и заканчивая его первым родителем
+     * @param typeName - тип документа
+     * @return
+     */
 	public Map<String, Map<String, List<Map<String, String>>>> getTypePropsInfoHierarchy(String typeName){
 		Map<String, Map<String, List<Map<String, String>>>> hierarchy = new HashMap<>();
 		NamespacePrefixResolver namespacePrefixResolver = serviceRegistry.getNamespaceService();
@@ -133,11 +150,11 @@ public class TypesViewBeanImpl extends BaseBean {
 		List<Map<String, String>> associations = new ArrayList<>(); //список пропертей
 		Set<QName> aspectNames = new HashSet<>(); //аспекты типа
 		Set<QName> parentAspectNames = new HashSet<>(); //аспекты родительского типа
-		TypeDefinition typeDef = dictionaryService.getType(type);
+		ClassDefinition typeDef = dictionaryService.getClass(type);
 		QName parentType = typeDef.getParentName();
-		TypeDefinition parentTypeDef = null;
+		ClassDefinition parentTypeDef = null;
 		if (null != parentType){
-			parentTypeDef = dictionaryService.getType(parentType);
+			parentTypeDef = dictionaryService.getClass(parentType);
 		}
 
 		//свойства типа (вместе с родительскими)
@@ -213,11 +230,11 @@ public class TypesViewBeanImpl extends BaseBean {
 	private void fillTypeAspectsMap(QName type, Map<String, Map<String, List<Map<String, String>>>> mapResult, Integer order){
 		List<Map<String, String>> aspects = new ArrayList<>();
 
-		TypeDefinition typeDef = dictionaryService.getType(type);
+		ClassDefinition typeDef = dictionaryService.getClass(type);
 		QName parentType = typeDef.getParentName();
-		TypeDefinition parentTypeDef = null;
+		ClassDefinition parentTypeDef = null;
 		if (null != parentType){
-			parentTypeDef = dictionaryService.getType(parentType);
+			parentTypeDef = dictionaryService.getClass(parentType);
 		}
 
 		Set<QName> aspectNames = typeDef.getDefaultAspectNames();

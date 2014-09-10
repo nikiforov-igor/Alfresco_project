@@ -16,12 +16,6 @@
    a.atype{
 	color:#FA881E;
    }
-   a.atype:hover{
-	font-weight: bold;
-   }
-   a.assoctype:hover{
-	font-weight: bold;
-   }
    a.assoctype {
 	font-size: 16px;
 	color:#8B795E;
@@ -44,7 +38,10 @@
 			<tr>
 				<td colspan="6" align="center">
 					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
-						${typeMeta['desc']!typeMeta['name']}
+						${typeMeta['name']}
+						<#if typeMeta['desc']??>
+							(${typeMeta['desc']!""})
+						</#if>
 					</a>
 				</td>
 			</tr>
@@ -81,7 +78,10 @@
 			<tr>
 				<td colspan="6" align="center">
 					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
-						${typeMeta['desc']!typeMeta['name']}
+						${typeMeta['name']}
+						<#if typeMeta['desc']??>
+							(${typeMeta['desc']!""})
+						</#if>
 					</a>
 				</td>
 			</tr>
@@ -94,7 +94,10 @@
 				<td>
 					<#if assoc["target"]??>
 						<a class="assoctype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${assoc['target']}" target="_blank">
-							${assoc['targetDesc']!assoc['target']}
+							${assoc['target']}
+							<#if assoc['targetDesc']??>
+								(${assoc['targetDesc']!""})
+							</#if>
 						</a>
 					</#if>
 				</td>
@@ -120,7 +123,10 @@
 			<tr>
 				<td colspan="2" align="center">
 					<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeMeta['name']}" target="_blank">
-						${typeMeta['desc']!typeMeta['name']}
+						${typeMeta['name']}
+						<#if typeMeta['desc']??>
+							(${typeMeta['desc']!""})
+						</#if>
 					</a>
 				</td>
 			</tr>
@@ -128,7 +134,11 @@
 		<#assign aspects = types["content"]>
 		<#list aspects as aspect>
 			<tr>
-				<td>${aspect["name"]!"none"}</td>
+				<td>
+					<a class="assoctype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${aspect['name']}" target="_blank">
+						${aspect["name"]}
+					</a>
+				</td>
 				<td>${aspect["desc"]!""}</td>
 			</tr>
 		</#list>

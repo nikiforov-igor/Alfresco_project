@@ -16,9 +16,6 @@
    a.atype{
 	color:#FA881E;
    }
-   a.atype:hover{
-	font-weight: bold;
-   }
    </style>
 <table>
 	<caption><h3>Типы</h3></caption>
@@ -34,11 +31,35 @@
 				${it}
 				<#assign it = it + 1>
 			</td>
-			<td align="center">
+			<td>
 				<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${typeName['name']}" target="_blank">${typeName['name']}</a>
 			</td>
-			<td align="center">
+			<td>
 				${typeName['desc']!""}
+			</td>
+		</tr>
+	</#list>
+</table>
+</br>
+<table>
+	<caption><h3>Аспекты</h3></caption>
+	<tr>
+		<th>Номер</th>
+		<th>Имя</th>
+		<th>Описание</th>
+	</tr>
+	<#assign it = 1>
+	<#list aspectNames as aspectName>
+		<tr>
+			<td align="center">
+				${it}
+				<#assign it = it + 1>
+			</td>
+			<td>
+				<a class="atype" href="/share/proxy/alfresco/lecm/typesView/info?typeName=${aspectName['name']}" target="_blank">${aspectName['name']}</a>
+			</td>
+			<td>
+				${aspectName['desc']!""}
 			</td>
 		</tr>
 	</#list>

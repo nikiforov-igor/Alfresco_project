@@ -21,6 +21,10 @@ public class TypesViewWebScriptBean extends BaseWebScript{
 		return typesViewService.getAllTypeNames();
 	}
 
+	public List<Map<String, String>> getAllAspectNames(){
+		return typesViewService.getAllAspectNames();
+	}
+
 	public Map<String, Map<String, List<Map<String, String>>>> getTypePropsInfoHierarchy(String typeName){
 		return typesViewService.getTypePropsInfoHierarchy(typeName);
 	}
