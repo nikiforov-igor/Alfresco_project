@@ -187,7 +187,7 @@ public class ErrandsServiceImpl extends BaseBean implements ErrandsService {
         NodeRef settings = getSettingsNode();
         if (settings != null) {
             String modeChoosingExecutors = (String) nodeService.getProperty(settings, SETTINGS_PROP_MODE_CHOOSING_EXECUTORS);
-            if (modeChoosingExecutors.equals(SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION)) {
+            if (SETTINGS_PROP_MODE_CHOOSING_EXECUTORS_ORGANIZATION.equals(modeChoosingExecutors)) {
                 return ModeChoosingExecutors.ORGANIZATION;
             }
         }
