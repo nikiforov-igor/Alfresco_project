@@ -63,7 +63,8 @@
 			</#if>
 				fireMandatoryByChange: "${fireMandatoryByChange?string}",
 				mode: "${form.mode}",
-				fieldId: "${fieldId}"
+				fieldId: "${field.configName}",
+				formId: "${args.htmlid}"
 			});
 	}
 	YAHOO.util.Event.onDOMReady(init);

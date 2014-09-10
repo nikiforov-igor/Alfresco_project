@@ -575,7 +575,23 @@ LogicECM.module.Base.Util = {
                 firstEl.focus();
             }
         }
-    }
+    },
+
+	getComponentReadyElementId: function(formId, fieldId) {
+		return formId + "_" + fieldId + "_" + "componentReady";
+	},
+
+	createComponentReadyElementId: function(fieldHtmlId, formId, fieldId) {
+		var parent = YAHOO.util.Dom.get(fieldHtmlId);
+		if (parent != null) {
+			parent = parent.parentNode;
+			if (parent != null) {
+				var element = document.createElement('div');
+				element.id = this.getComponentReadyElementId(formId, fieldId);
+				parent.appendChild(element);
+			}
+		}
+	}
 };
 
 (function() {

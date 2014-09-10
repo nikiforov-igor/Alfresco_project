@@ -109,7 +109,9 @@
                             showTime: ${showTime?string},
                             mandatory: ${field.mandatory?string},
                             minLimit: "${minLimit?string}",
-                            maxLimit: "${maxLimit?string}"
+                            maxLimit: "${maxLimit?string}",
+	                        fieldId: "${field.configName}",
+	                        formId: "${args.htmlid}"
                         }).setMessages(
                 ${messages}
                 );

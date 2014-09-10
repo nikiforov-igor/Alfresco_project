@@ -32,6 +32,7 @@ LogicECM.module = LogicECM.module || {};
                 options:
                         {
                             fieldId: null,
+	                        formId: false,
                             disabled: false,
                             mode: false,
                             defaultValue: null,
@@ -86,12 +87,27 @@ LogicECM.module = LogicECM.module || {};
                 },
                 onChange: function() {
                     var el = Dom.get(this.id);
+	                var me = this;
                     var selected = this.checkbox.checked;
                     if (this.options.disabledFieldsIfNotSelect != null) {
                         for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
                             var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];
                             if (field != null) {
                                 field.disabled = !selected;
+
+	                            YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(this.options.formId, this.options.disabledFieldsIfNotSelect[i]), function(fieldId) {
+		                            if (!selected) {
+			                            YAHOO.Bubbling.fire("disableControl", {
+				                            formId: me.options.formId,
+				                            fieldId: fieldId
+			                            });
+		                            } else {
+			                            YAHOO.Bubbling.fire("enableControl", {
+				                            formId: me.options.formId,
+				                            fieldId: fieldId
+			                            });
+		                            }
+	                            }, me.options.disabledFieldsIfNotSelect[i]);
                             }
                         }
                     }
@@ -100,6 +116,20 @@ LogicECM.module = LogicECM.module || {};
                             field = el.form["prop_" + this.options.disabledFieldsIfSelect[i].replace(":", "_")];
                             if (field != null) {
                                 field.disabled = selected;
+
+	                            YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(this.options.formId, this.options.disabledFieldsIfNotSelect[i]), function(fieldId) {
+		                            if (selected) {
+			                            YAHOO.Bubbling.fire("disableControl", {
+				                            formId: me.options.formId,
+				                            fieldId: fieldId
+			                            });
+		                            } else {
+			                            YAHOO.Bubbling.fire("enableControl", {
+				                            formId: me.options.formId,
+				                            fieldId: fieldId
+			                            });
+		                            }
+	                            }, me.options.disabledFieldsIfNotSelect[i]);
                             }
                         }
                     }

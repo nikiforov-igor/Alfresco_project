@@ -61,6 +61,9 @@
         // Initialise prototype properties
         me.widgets = {};
 
+	    YAHOO.Bubbling.on("disableControl", me.onDisableControl, this);
+	    YAHOO.Bubbling.on("enableControl", me.onEnableControl, this);
+
         return me;
     };
 
@@ -110,8 +113,13 @@
                      * Ограничения по мин/макс значению
                      */
                     minLimit: null,
-                    maxLimit: null
+                    maxLimit: null,
+	                fieldId: null,
+	                formId: false
                 },
+
+	            tempDisabled: false,
+
                 /**
                  * Object container for storing YUI widget instances.
                  *
@@ -284,6 +292,8 @@
                     if (me.options.currentValue !== "") {
                         me._handleFieldChange(null);
                     }
+
+	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 },
                 /**
                  * Handles the date picker icon being clicked.
@@ -295,29 +305,31 @@
                  * мы выносим его в body и позиционируем по кнопке его вызова
                  */
                 _showPicker: function DatePicker__showPicker(event) {
-                    var me = this;
-                    var element = Dom.get(me.id);
-                    var parent = element.parentNode;
-                    var icon = Dom.get(me.id + "-icon");
-                    var d = 10;                                                         // величина наложения календаря на кнопку
+	                if (!this.tempDisabled) {
+		                var me = this;
+		                var element = Dom.get(me.id);
+		                var parent = element.parentNode;
+		                var icon = Dom.get(me.id + "-icon");
+		                var d = 10;                                                         // величина наложения календаря на кнопку
 
-                    if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
-                        var body = Selector.query('body')[0];
-                        body.appendChild(element);
-                    }
+		                if (!Dom.hasClass(parent, "alfresco-share")) {                      // если календарь лежит не в body, нужно перенести
+			                var body = Selector.query('body')[0];
+			                body.appendChild(element);
+		                }
 
-                    Dom.setX(element, Dom.getX(icon) - element.offsetWidth + d);       // смещаем влево от кнопки на ширину календаря
+		                Dom.setX(element, Dom.getX(icon) - element.offsetWidth + d);       // смещаем влево от кнопки на ширину календаря
 
-                    var y = Dom.getY(icon) + d;                                        // смещаем немного вниз относительно кнопки
-                    var height = element.offsetHeight;
+		                var y = Dom.getY(icon) + d;                                        // смещаем немного вниз относительно кнопки
+		                var height = element.offsetHeight;
 
-                    if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
-                        y -= height;                                                   // откроем его вверх
-                    }
-                    Dom.setY(element, y);
+		                if (y + height > Dom.getViewportHeight()) {                        // если календарь не помещается до низа окна
+			                y -= height;                                                   // откроем его вверх
+		                }
+		                Dom.setY(element, y);
 
-                    // show the popup calendar widget
-                    me.widgets.calendar.show();
+		                // show the popup calendar widget
+		                me.widgets.calendar.show();
+	                }
                 },
                 /**
                  * Handles the date being changed in the date picker YUI control.
@@ -444,6 +456,23 @@
                 _msg: function DatePicker__msg(messageId) {
                     var me = this;
                     return Alfresco.util.message.call(me, messageId, "LogicECM.DatePicker", Array.prototype.slice.call(arguments).slice(1));
-                }
+                },
+
+	            onDisableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this.widgets.calendar.hide();
+			            this.tempDisabled = true;
+			            Dom.get(this.id + "-date").disabled = true;
+		            }
+	            },
+
+	            onEnableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            this.tempDisabled = false;
+			            if (!this.options.disabled) {
+				            Dom.get(this.id + "-date").disabled = false;
+			            }
+		            }
+	            }
             };
 })();
