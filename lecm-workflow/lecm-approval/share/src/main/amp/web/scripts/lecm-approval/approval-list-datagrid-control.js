@@ -104,7 +104,11 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 
-		return LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
+		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
+
+		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
+
+		return this;
 	};
 
 	YAHOO.lang.extend(LogicECM.module.Approval.ApprovalListDataGridControl, LogicECM.module.Base.DataGrid);
