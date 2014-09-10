@@ -131,12 +131,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		completedApprovalsCount: 0,
 		sourceRouteInfo: null,
 		approvalIsEditable: true,
-		approvalStateMessages: {
-			NOT_EXISTS: 'Не существует',
-			NEW: 'Не начато',
-			ACTIVE: 'Выполнятеся',
-			COMPLETE: 'Завершено'
-		},
 		approvalStateSettings: {
 			NOT_EXITS: {
 				stateMsg: 'Не существует',
