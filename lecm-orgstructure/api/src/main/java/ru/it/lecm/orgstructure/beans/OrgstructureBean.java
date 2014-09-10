@@ -756,4 +756,6 @@ public interface OrgstructureBean {
     List<NodeRef> getOrganizationEmployees(NodeRef organizationRef);
 
     public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess);
+
+    public boolean hasOrgChilds(NodeRef unit, boolean checkAccess);
 }

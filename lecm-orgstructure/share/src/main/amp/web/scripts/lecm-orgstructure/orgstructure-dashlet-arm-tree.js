@@ -98,13 +98,14 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             _loadTree: function loadNodeData(node, fnLoadComplete) {
-                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/arm/branch";
+                var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/dictionary/branch";
                 if (node.data.nodeRef != null) {
                     sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
                 }
                 if (this.searchTerm != null && this.searchTerm.length > 0) {
                     sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURI(this.searchTerm.trim()));
                 }
+                sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "dashletFormat=true");
                 var otree = this;
                 var callback = {
                     success: function (oResponse) {

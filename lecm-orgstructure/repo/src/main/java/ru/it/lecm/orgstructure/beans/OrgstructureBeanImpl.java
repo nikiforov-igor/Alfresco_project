@@ -2114,4 +2114,34 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
         }
         return null;
     }
+
+    @Override
+    public boolean hasOrgChilds(NodeRef unit, boolean checkAccess) {
+        Set<QName> units = new HashSet<QName>();
+        units.add(OrgstructureBean.TYPE_ORGANIZATION_UNIT);
+
+        List<ChildAssociationRef> uRefs = nodeService.getChildAssocs(unit, units);
+        for (ChildAssociationRef uRef : uRefs) {
+            if (!isArchive(uRef.getChildRef())) {
+                if (!checkAccess || hasAccessToOrgElement(uRef.getChildRef())) {
+                    return true;
+                }
+            }
+        }
+
+        // Получаем список штатных расписаний
+        List<NodeRef> staffs = getUnitStaffLists(unit, false);
+        for (NodeRef staff : staffs) {
+            if (!isArchive(staff)) {
+                NodeRef employee = getEmployeeByPosition(staff, false);
+                if (employee != null && !isArchive(employee)) {
+                    if (!checkAccess || hasAccessToOrgElement(employee)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

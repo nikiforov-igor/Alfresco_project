@@ -1,8 +1,0 @@
-<webscript>
-    <shortname>ARM Branch</shortname>
-    <description>Returns branch of organization strucuture for ARM</description>
-    <url>/lecm/orgstructure/arm/branch</url>
-    <format default="json">extension</format>
-    <authentication>user</authentication>
-    <transaction>none</transaction>
-</webscript>

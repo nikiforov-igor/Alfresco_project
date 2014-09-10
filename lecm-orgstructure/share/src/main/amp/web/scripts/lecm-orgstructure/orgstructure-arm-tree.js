@@ -181,7 +181,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         },
 
         _loadTree: function loadNodeData(node, fnLoadComplete) {
-            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/arm/branch";
+            var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/dictionary/branch";
             if (node.data.nodeRef != null) {
                 sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
             }

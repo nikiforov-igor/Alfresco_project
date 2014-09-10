@@ -67,15 +67,6 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
-        <property name="nodeService">
-			<ref bean="nodeService"/>
-		</property>
-        <property name="substitudeBean">
-			<ref bean="substitudeService"/>
-		</property>
-        <property name="searchService">
-			<ref bean="searchService"/>
-		</property>
         <property name="absenceService">
 			<ref bean="AbsenceService"/>
 		</property>
@@ -409,5 +400,20 @@
         </property>
     </bean>
 
-
+    <bean id="webscript.ru.it.lecm.orgstructure.arm.org-tree.get"
+          class="ru.it.lecm.orgstructure.scripts.OrgstrDicWebScriptBean"
+          parent="webscript">
+        <property name="orgstructureService">
+            <ref bean="serviceOrgstructure"/>
+        </property>
+        <property name="substitudeBean">
+            <ref bean="substitudeService"/>
+        </property>
+        <property name="searchService">
+            <ref bean="searchService"/>
+        </property>
+        <property name="namespaceService">
+            <ref bean="namespaceService"/>
+        </property>
+    </bean>
 </beans>

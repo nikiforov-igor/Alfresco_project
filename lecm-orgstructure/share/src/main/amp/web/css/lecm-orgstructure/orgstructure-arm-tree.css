@@ -69,3 +69,10 @@
 .orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvtn {
     visibility:hidden;
 }
+
+.orgstructure-dictionary #orgstructure-tree {
+    white-space: nowrap;
+    overflow-x: hidden;
+    overflow-y: auto;
+    text-overflow: ellipsis;
+}
