@@ -50,9 +50,6 @@
 	  p:actionService-ref="ActionService"
 	  p:transactionService-ref="TransactionService"
 	  p:searchService-ref="searchService"
-	  p:namespaceService-ref="namespaceService"
-	  p:nodeService-ref="nodeService"
-	  p:routesService-ref="routes.service"
 	/>
 
 </beans>

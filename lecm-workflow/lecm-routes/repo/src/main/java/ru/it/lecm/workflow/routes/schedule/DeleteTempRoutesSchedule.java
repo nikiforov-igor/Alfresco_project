@@ -7,20 +7,17 @@ import org.alfresco.repo.action.scheduled.AbstractScheduledAction;
 import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
 import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.quartz.CronTrigger;
 import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
-import ru.it.lecm.workflow.routes.api.RoutesService;
 
 /**
  *
@@ -28,9 +25,6 @@ import ru.it.lecm.workflow.routes.api.RoutesService;
  */
 public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 
-	private RoutesService routesService;
-	private NodeService nodeService;
-	private NamespaceService namespaceService;
 	private Scheduler scheduler;
 	private SearchService searchService;
 	private String jobName = "routes-delete-temp";
@@ -38,20 +32,8 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 	private String triggerName = "routes-delete-temp-trigger";
 	private String triggerGroup = "routes-trigger";
 	private String cronExpression = "0 0 4 * * ? *"; // каждый день в 04:00
-	private final String searchQueryFormat = "PATH:\"%s//*\" AND (+TYPE:\"%s\" OR +TYPE:\"%s\") AND (+ASPECT:\"sys:temporary\" OR +ASPECT:\"lecm-workflow:temp\")";
+	private final String searchQueryFormat = "(+TYPE:\"%s\" OR +TYPE:\"%s\") AND (+ASPECT:\"sys:temporary\" OR +ASPECT:\"lecm-workflow:temp\")";
 	private final static Logger logger = LoggerFactory.getLogger(DeleteTempRoutesSchedule.class);
-
-	public void setRoutesService(RoutesService routesService) {
-		this.routesService = routesService;
-	}
-
-	public void setNodeService(NodeService nodeService) {
-		this.nodeService = nodeService;
-	}
-
-	public void setNamespaceService(NamespaceService namespaceService) {
-		this.namespaceService = namespaceService;
-	}
 
 	@Override
 	public Action getAction(NodeRef nodeRef) {
@@ -61,13 +43,11 @@ public class DeleteTempRoutesSchedule extends AbstractScheduledAction {
 	@Override
 	public List<NodeRef> getNodes() {
 		List<NodeRef> nodes = new ArrayList<>();
-		NodeRef parentContainer = routesService.getRoutesFolder();
 
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(searchQueryFormat, nodeService.getPath(parentContainer).toPrefixString(namespaceService),
-				RoutesModel.TYPE_ROUTE, RoutesModel.TYPE_STAGE);
+		String searchQuery = String.format(searchQueryFormat, RoutesModel.TYPE_ROUTE, RoutesModel.TYPE_STAGE);
 		logger.trace("Searching temp routes to be deleted: " + searchQuery);
 		sp.setQuery(searchQuery);
 		ResultSet results = null;

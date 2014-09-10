@@ -66,6 +66,42 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			this.manageControlsVisibility();
 		});
 
+		this.approvalStateSettings.NOT_EXITS.hideElements = [
+			this.clearButton,
+			this.approvalContainer
+		];
+		this.approvalStateSettings.NOT_EXITS.revealElements = [
+			this.createApprovalListButton,
+			this.addStageButton
+		];
+
+		this.approvalStateSettings.NEW.hideElements = [
+			this.createApprovalListButton
+		];
+		this.approvalStateSettings.NEW.revealElements = [
+			this.clearButton,
+			this.approvalContainer,
+			this.addStageButton
+		];
+
+		this.approvalStateSettings.ACTIVE.hideElements = [
+			this.clearButton,
+			this.createApprovalListButton
+		];
+		this.approvalStateSettings.ACTIVE.revealElements = [
+			this.approvalContainer,
+			this.addStageButton
+		];
+
+		this.approvalStateSettings.COMPLETE.hideElements = [
+			this.clearButton,
+			this.addStageButton
+		];
+		this.approvalStateSettings.COMPLETE.revealElements = [
+			this.approvalContainer,
+			this.createApprovalListButton
+		];
+
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 
 		return LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
@@ -97,22 +133,28 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			ACTIVE: 'Выполнятеся',
 			COMPLETE: 'Завершено'
 		},
-		createButtonHandlers: {
+		approvalStateSettings: {
+			NOT_EXITS: {
+				stateMsg: 'Не существует',
+				createButtonHandler: function(menuItemValue) {
+					this._createApprovalList(menuItemValue);
+				}
+			},
+			NEW: {
+				stateMsg: 'Не начато'
+			},
 			ACTIVE: {
-				fn: function() {
+				stateMsg: 'Выполнятеся',
+				createButtonHandler: function() {
 					Alfresco.util.PopupManager.displayPrompt({
 						title: 'Итерация активна',
 						text: 'Нельзя создать новый лист согласования, так как итерация активна'
 					});
 				}
 			},
-			NOT_EXITS: {
-				fn: function(menuItemValue) {
-					this._createApprovalList(menuItemValue);
-				}
-			},
 			COMPLETE: {
-				fn: function(menuItemValue) {
+				stateMsg: 'Завершено',
+				createButtonHandler: function(menuItemValue) {
 					var that = this;
 					Alfresco.util.PopupManager.displayPrompt({
 						title: 'Создание нового листа согласования',
@@ -229,7 +271,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		onCreateApprovalListButtonClick: function(event, eventArgs, menuItem) {
 			var menuItemValue = menuItem.value;
 
-			this.createButtonHandlers[this.approvalState].fn.call(this, menuItemValue);
+			this.approvalStateSettings[this.approvalState].createButtonHandler.call(this, menuItemValue);
 
 		},
 		_createApprovalList: function(menuItemValue) {
@@ -444,56 +486,25 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		fillCurrentApprovalState: function() {
 			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
 			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo;
-			this.currentApprovalInfoContainer.innerHTML = this.approvalStateMessages[this.approvalState];
+			this.currentApprovalInfoContainer.innerHTML = this.approvalStateSettings[this.approvalState].stateMsg;
 		},
 		manageControlsVisibility: function() {
 			function hide(element) {
-				YAHOO.util.Dom.setStyle(element, 'display', 'none');
+				YAHOO.util.Dom.addClass(element, 'hidden');
 			}
 
-			function revealButton(element) {
-				YAHOO.util.Dom.setStyle(element, 'display', 'inline-block');
-			}
-
-			function revealBlock(element) {
-				YAHOO.util.Dom.setStyle(element, 'display', 'block');
-			}
-
-			function revealInline(element) {
-				YAHOO.util.Dom.setStyle(element, 'display', 'inline');
+			function reveal(element) {
+				YAHOO.util.Dom.removeClass(element, 'hidden');
 			}
 
 			if (this.completedApprovalsCount > 0) {
-				revealInline(this.showHistoryLink);
+				reveal(this.showHistoryLink);
 			} else {
 				hide(this.showHistoryLink);
 			}
 
-			switch (this.approvalState) {
-				case 'NOT_EXITS':
-					hide(this.clearButton);
-					hide(this.approvalContainer);
-					revealButton(this.createApprovalListButton);
-					revealButton(this.addStageButton);
-					break;
-				case 'NEW':
-					revealButton(this.clearButton);
-					revealBlock(this.approvalContainer);
-					hide(this.createApprovalListButton);
-					revealButton(this.addStageButton);
-					break;
-				case 'ACTIVE':
-					hide(this.clearButton);
-					revealBlock(this.approvalContainer);
-					hide(this.createApprovalListButton);
-					revealButton(this.addStageButton);
-					break;
-				case 'COMPLETE':
-					hide(this.clearButton);
-					revealBlock(this.approvalContainer);
-					revealButton(this.createApprovalListButton);
-					hide(this.addStageButton);
-			}
+			this.approvalStateSettings[this.approvalState].hideElements.forEach(hide);
+			this.approvalStateSettings[this.approvalState].revealElements.forEach(reveal);
 
 		},
 		_deleteApprovalList: function(callback, callbackArgsArr) {

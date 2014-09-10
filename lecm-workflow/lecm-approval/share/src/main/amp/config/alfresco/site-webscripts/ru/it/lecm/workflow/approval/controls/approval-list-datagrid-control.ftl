@@ -10,21 +10,21 @@
 
 	<div class="approvalFinishedContainer">
 		Завершено согласований: <span id="${controlId}-approval-completed-count"></span>
-		<a id="${controlId}-show-history-link" href="javascript:void(0)">Смотреть историю</a>
+		<a id="${controlId}-show-history-link" href="javascript:void(0)" class="hidden">Смотреть историю</a>
 	</div>
 
-	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button">
+	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button hidden">
 		<span class="first-child">
 			<button type="button">Создать новое согласование</button>
 		</span>
 	</span>
-	<span id="${controlId}-clear-button" class="yui-button yui-push-button">
+	<span id="${controlId}-clear-button" class="yui-button yui-push-button hidden">
 		<span class="first-child">
 			<button type="button">Очистить данные согласования</button>
 		</span>
 	</span>
 
-	<div id="${controlId}-approval-container" class="approvalContainer">
+	<div id="${controlId}-approval-container" class="approvalContainer hidden">
 		<div class="approvalControlsContainer">
 			<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
 			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
@@ -41,7 +41,7 @@
 			</div>
 		</div>
 
-		<span id="${controlId}-add-stage" class="yui-button yui-push-button">
+		<span id="${controlId}-add-stage" class="yui-button yui-push-button hidden">
 			<span class="first-child">
 				<button type="button">Добавить этап</button>
 			</span>
