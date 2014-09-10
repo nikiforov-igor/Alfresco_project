@@ -38,10 +38,15 @@
 			'lecmApproveAspects:approvalState',
 			</#if>
 			'lecmApproveAspects:approvalDecision',
+			'lecmApproveAspects:hasComment',
 			'lecmWorkflowRoutes:stageItemEmployeeAssoc',
 			'lecmWorkflowRoutes:stageItemMacrosAssoc'
 		]
 	});
+
+	<#if isApproval>
+	LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
+	</#if>
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {
 		YAHOO.Bubbling.fire("activeGridChanged", {

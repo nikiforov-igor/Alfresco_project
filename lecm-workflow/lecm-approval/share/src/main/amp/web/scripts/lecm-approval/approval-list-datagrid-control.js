@@ -5,9 +5,11 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Approval = LogicECM.module.Approval || {};
 
-(function() {
+LogicECM.module.Approval.StageExpanded = {};
 
-	LogicECM.module.Approval.ApprovalListDataGridControl = function(containerId, documentNodeRef) {
+(function () {
+
+	LogicECM.module.Approval.ApprovalListDataGridControl = function (containerId, documentNodeRef) {
 		this.documentNodeRef = documentNodeRef;
 
 		this.createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
@@ -53,15 +55,15 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		this.sourceRouteInfoContainer = YAHOO.util.Dom.get(containerId + '-source-route-info');
 		this.currentApprovalInfoContainer = YAHOO.util.Dom.get(containerId + '-current-approval-info');
 
-		YAHOO.util.Event.delegate('Share', 'click', function() {
+		YAHOO.util.Event.delegate('Share', 'click', function () {
 			LogicECM.module.Base.Util.printReport(this.documentNodeRef, this.options.reportId);
 		}, '#printApprovalReport', this, true);
 
-		YAHOO.util.Event.delegate('Share', 'click', function() {
+		YAHOO.util.Event.delegate('Share', 'click', function () {
 			this.editIteration();
 		}, '#editIteration', this, true);
 
-		this.getApprovalData(function() {
+		this.getApprovalData(function () {
 			this.fillCurrentApprovalState();
 			this.manageControlsVisibility();
 		});
@@ -134,7 +136,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 		approvalStateSettings: {
 			NOT_EXITS: {
 				stateMsg: 'Не существует',
-				createButtonHandler: function(menuItemValue) {
+				createButtonHandler: function (menuItemValue) {
 					this._createApprovalList(menuItemValue);
 				}
 			},
@@ -143,7 +145,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			},
 			ACTIVE: {
 				stateMsg: 'Выполнятеся',
-				createButtonHandler: function() {
+				createButtonHandler: function () {
 					Alfresco.util.PopupManager.displayPrompt({
 						title: 'Итерация активна',
 						text: 'Нельзя создать новый лист согласования, так как итерация активна'
@@ -152,7 +154,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			},
 			COMPLETE: {
 				stateMsg: 'Завершено',
-				createButtonHandler: function(menuItemValue) {
+				createButtonHandler: function (menuItemValue) {
 					var that = this;
 					Alfresco.util.PopupManager.displayPrompt({
 						title: 'Создание нового листа согласования',
@@ -162,13 +164,13 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 						buttons: [
 							{
 								text: this.msg("button.yes"),
-								handler: function() {
+								handler: function () {
 									that._createApprovalList(menuItemValue);
 									this.destroy();
 								}
 							}, {
 								text: this.msg("button.no"),
-								handler: function() {
+								handler: function () {
 									this.destroy();
 								},
 								isDefault: true
@@ -178,7 +180,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 			}
 		},
-		getApprovalData: function(callback, callbackArgsArr) {
+		getApprovalData: function (callback, callbackArgsArr) {
 			Alfresco.util.Ajax.request({
 				method: 'GET',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/getRouteDataForDocument',
@@ -187,7 +189,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				},
 				successCallback: {
 					scope: this,
-					fn: function(response) {
+					fn: function (response) {
 						if (response) {
 							this.stageType = response.json.stageType;
 							this.stageItemType = response.json.stageItemType;
@@ -216,7 +218,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				scope: this
 			});
 		},
-		renewDatagrid: function(event, args) {
+		renewDatagrid: function (event, args) {
 			function isDescendant(parent, child) {
 				var node = child.parentNode;
 				while (node !== null) {
@@ -237,7 +239,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 			if (!(this.stageType && this.stageItemType && this.routeType)) {
-				this.getApprovalData(function() {
+				this.getApprovalData(function () {
 					this.fillCurrentApprovalState();
 					this.manageControlsVisibility();
 					this.fireGridChanged();
@@ -247,7 +249,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 		},
-		fireGridChanged: function(useChildQuery) {
+		fireGridChanged: function (useChildQuery) {
 			YAHOO.Bubbling.fire('activeGridChanged', {
 				datagridMeta: {
 					itemType: this.stageType,
@@ -261,18 +263,18 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				bubblingLabel: this.id
 			});
 		},
-		onCollapse: function(record) {
+		onCollapse: function (record) {
 			var expandedRow = YAHOO.util.Dom.get(this.getExpandedRecordId(record));
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
 		},
-		onCreateApprovalListButtonClick: function(event, eventArgs, menuItem) {
+		onCreateApprovalListButtonClick: function (event, eventArgs, menuItem) {
 			var menuItemValue = menuItem.value;
 
 			this.approvalStateSettings[this.approvalState].createButtonHandler.call(this, menuItemValue);
 
 		},
-		_createApprovalList: function(menuItemValue) {
+		_createApprovalList: function (menuItemValue) {
 			switch (menuItemValue) {
 				case 'route' :
 					this._createApprovalListFromRoute();
@@ -284,7 +286,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					break;
 			}
 		},
-		_createApprovalListFromRoute: function(callback, callbackArgsArr) {
+		_createApprovalListFromRoute: function (callback, callbackArgsArr) {
 			var formId = 'selectRouteForm';
 			var selectRouteForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 			selectRouteForm.setOptions({
@@ -302,9 +304,9 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
-					fn: function(form, simpleDialog) {
+					fn: function (form, simpleDialog) {
 						simpleDialog.dialog.setHeader('Создать лист согласования из маршрута');
-						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
 						}, {moduleId: simpleDialog.id}, this);
@@ -312,8 +314,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					scope: this
 				},
 				onSuccess: {
-					fn: function(r) {
-						this.getApprovalData(function() {
+					fn: function (r) {
+						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
 							this.manageControlsVisibility();
 							this.fireGridChanged(true);
@@ -325,7 +327,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					scope: this
 				},
 				onFailure: {
-					fn: function(response) {
+					fn: function (response) {
 						this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
 					},
 					scope: this
@@ -334,7 +336,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 			selectRouteForm.show();
 		},
-		_createEmptyApprovalLst: function(callback, callbackArgsArr) {
+		_createEmptyApprovalLst: function (callback, callbackArgsArr) {
 			Alfresco.util.Ajax.jsonRequest({
 				method: 'POST',
 				url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/createEmptyIteration',
@@ -343,8 +345,8 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				},
 				successCallback: {
 					scope: this,
-					fn: function(r) {
-						this.getApprovalData(function() {
+					fn: function (r) {
+						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
 							this.manageControlsVisibility();
 							this.fireGridChanged(true);
@@ -359,7 +361,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				scope: this
 			});
 		},
-		editIteration: function() {
+		editIteration: function () {
 			var errorText;
 
 			if (this.editItreationFormOpened) {
@@ -389,7 +391,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			}
 
 		},
-		_showEditIterationDialog: function() {
+		_showEditIterationDialog: function () {
 			var formId = 'editIterationProperties',
 				editIterationForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
@@ -408,10 +410,10 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
-					fn: function(form, simpleDialog) {
+					fn: function (form, simpleDialog) {
 						simpleDialog.dialog.setHeader(this.msg('label.routes.edit-route.title'));
 						this.editItreationFormOpened = false;
-						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
 						}, {moduleId: simpleDialog.id}, this);
@@ -419,13 +421,13 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					scope: this
 				},
 				onSuccess: {
-					fn: function(r) {
+					fn: function (r) {
 
 					},
 					scope: this
 				},
 				onFailure: {
-					fn: function(r) {
+					fn: function (r) {
 						Alfresco.util.PopupManager.displayMessage({
 							text: 'Не удалось отредактировать паратеры итерации: ' + r.json.message
 						});
@@ -436,7 +438,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 
 			editIterationForm.show();
 		},
-		onAddStageButton: function() {
+		onAddStageButton: function () {
 			var createStageFunction = LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionCreate;
 			switch (this.approvalState) {
 				case 'COMPLETE':
@@ -452,13 +454,13 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					createStageFunction.call(this, null, null, true);
 			}
 		},
-		onActionAddEmployee: function(item) {
+		onActionAddEmployee: function (item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'employee', item.nodeRef);
 		},
-		onActionAddMacros: function(item) {
+		onActionAddMacros: function (item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
 		},
-		onClearButton: function() {
+		onClearButton: function () {
 			var that = this;
 			Alfresco.util.PopupManager.displayPrompt({
 				title: 'Очистка листа согласования',
@@ -468,25 +470,25 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				buttons: [
 					{
 						text: this.msg("button.yes"),
-						handler: function() {
+						handler: function () {
 							that._deleteApprovalList();
 							this.destroy();
 						}
 					}, {
 						text: this.msg("button.no"),
-						handler: function() {
+						handler: function () {
 							this.destroy();
 						},
 						isDefault: true
 					}]
 			});
 		},
-		fillCurrentApprovalState: function() {
+		fillCurrentApprovalState: function () {
 			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
 			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo;
 			this.currentApprovalInfoContainer.innerHTML = this.approvalStateSettings[this.approvalState].stateMsg;
 		},
-		manageControlsVisibility: function() {
+		manageControlsVisibility: function () {
 			function hide(element) {
 				YAHOO.util.Dom.addClass(element, 'hidden');
 			}
@@ -505,7 +507,7 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 			this.approvalStateSettings[this.approvalState].revealElements.forEach(reveal);
 
 		},
-		_deleteApprovalList: function(callback, callbackArgsArr) {
+		_deleteApprovalList: function (callback, callbackArgsArr) {
 			var nodeRefObj;
 
 			if (!this.currentIterationNode) {
@@ -521,13 +523,13 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 					removed: []
 				},
 				successCallback: {
-					fn: function(r) {
+					fn: function (r) {
 						Alfresco.util.Ajax.jsonRequest({
 							method: 'DELETE',
 							url: Alfresco.constants.PROXY_URI_RELATIVE + 'slingshot/doclib/action/folder/node/' + nodeRefObj.uri,
 							successCallback: {
-								fn: function(r) {
-									this.getApprovalData(function() {
+								fn: function (r) {
+									this.getApprovalData(function () {
 										this.fillCurrentApprovalState();
 										this.manageControlsVisibility();
 										if (YAHOO.lang.isFunction(callback)) {
@@ -545,9 +547,63 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 				failureMessage: this.msg('message.failure')
 			});
 		},
-		onShowHistoryButton: function() {
+		onShowHistoryButton: function () {
 			// TODO Добавить диалог отображения истории
 			console.log('onShowHistoryButton');
 		}
 	}, true);
+
+	LogicECM.module.Approval.StageExpanded.getCustomCellFormatter = function (grid, elCell, oRecord, oColumn, oData) {
+		function formatState(nodeRef, decisionData, hasComment) {
+			var result,
+				commentIcon = '<img alt="Комментарий" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
+				messageTemplate = '<a href="javascript:void(0)" onclick="LogicECM.module.Approval.StageExpanded.openApprovalInfoDialog(\'{nodeRef}\')">{value} {icon}</a>';
+
+			if (decisionData.value === 'NO_DECISION') {
+				return null;
+			}
+
+			result = YAHOO.lang.substitute(messageTemplate, {
+				nodeRef: nodeRef,
+				value: decisionData.displayValue,
+				icon: hasComment ? commentIcon : ''
+			});
+
+			return result;
+		}
+		var html = '', i, oDataLength, datalistColumn, data, decision, hasComment, nodeRef;
+
+		if (oRecord && oColumn) {
+			if (!oData) {
+				oData = oRecord.getData('itemData')[oColumn.field];
+			}
+
+			if (oData) {
+				datalistColumn = grid.datagridColumns[oColumn.key];
+				if (datalistColumn) {
+					oData = YAHOO.lang.isArray(oData) ? oData : [oData];
+					for (i = 0, oDataLength = oData.length, data; i < oDataLength; i++) {
+						data = oData[i];
+
+						switch (datalistColumn.name) { //  меняем отрисовку для конкретных колонок
+							case 'lecmApproveAspects:approvalState':
+								decision = oRecord.getData('itemData')['prop_lecmApproveAspects_approvalDecision'];
+								hasComment = !!(oRecord.getData('itemData')['prop_lecmApproveAspects_hasComment'] && oRecord.getData('itemData')['prop_lecmApproveAspects_hasComment'].value);
+								nodeRef = oRecord.getData("nodeRef");
+								html = formatState(nodeRef, decision, hasComment);
+								break;
+							default:
+								break;
+						}
+					}
+				}
+			}
+		}
+		return html ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
+	};
+
+	LogicECM.module.Approval.StageExpanded.openApprovalInfoDialog = function (nodeRef) {
+		// TODO Добавить диалог отображения согласования
+		console.log('openApprovalInfoDialog');
+	};
 })();

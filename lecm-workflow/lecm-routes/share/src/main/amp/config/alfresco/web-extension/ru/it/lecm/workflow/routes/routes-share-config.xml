@@ -201,6 +201,7 @@
 					<show id="lecmWorkflowRoutes:stageItemTerm"/>
 					<show id="lecmApproveAspects:approvalState"/>
 					<show id="lecmApproveAspects:approvalDecision"/>
+					<show id="lecmApproveAspects:hasComment"/>
 					<show id="lecmWorkflowRoutes:stageItemEmployeeAssoc"/>
 					<show id="lecmWorkflowRoutes:stageItemMacrosAssoc"/>
 				</field-visibility>
