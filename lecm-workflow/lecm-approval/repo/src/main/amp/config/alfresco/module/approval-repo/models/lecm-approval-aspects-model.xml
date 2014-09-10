@@ -38,6 +38,10 @@
 						<constraint ref="lecmApproveDecision:decisionConstraint"/>
 					</constraints>
 				</property>
+				<property name="lecmApproveAspects:hasComment">
+					<type>d:boolean</type>
+					<default>false</default>
+				</property>
 			</properties>
 		</aspect>
 	</aspects>

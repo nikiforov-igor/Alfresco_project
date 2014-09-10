@@ -204,9 +204,11 @@
           <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create */
+  /* получаем настоящий execution */
+  var realExecution = (execution.parent) ? execution.parent : execution;
   var document = bpm_package.children[0];
-  var currentStage = execution.getVariable('currentStage');
-  var stageItem = execution.getVariableLocal('currentStageItem');
+  var currentStage = realExecution.getVariable('currentStage');
+  var stageItem = realExecution.getVariableLocal('currentStageItem');
   var employees = stageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
   var effectiveEmployee, userName, term, dueDate;
   /* вычисление userName */
@@ -228,6 +230,10 @@
     stageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     stageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 
+    /* подготовка переменных для таймера */
+    realExecution.setVariableLocal('localAssignee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localDueDate', dueDate);
+
     task.setDueDate(dueDate);
     task.setAssignee(userName);
   }
@@ -238,12 +244,12 @@
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* complete */
   /* получаем настоящий execution */
-  /* var realExecution = (execution.parent) ? execution.parent : execution; */
+  var realExecution = (execution.parent) ? execution.parent : execution;
   var decision = task.getVariableLocal('lecmApprove3_decision');
   var comment = task.getVariableLocal('bpm_comment');
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
-  var stageItem = execution.getVariableLocal('currentStageItem');
-  var notifyAboutEveryDecision = execution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
+  var stageItem = realExecution.getVariableLocal('currentStageItem');
+  var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
   var document, documentLink, msg, employee, initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
@@ -253,6 +259,7 @@
   stageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   stageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  stageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
   stageItem.save();
   /* возможно будетдобавление в участники */
   /* уведомление о согласовании */
@@ -260,7 +267,7 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     employee = task.getVariableLocal('effectiveEmployee');
-    initiator = execution.getVariable('initiator');
+    initiator = realExecution.getVariable('initiator');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
   }
@@ -331,8 +338,10 @@
           <activiti:taskListener event="create" class="org.alfresco.repo.workflow.activiti.tasklistener.ScriptTaskListener">
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* create multi */
+  /* получаем настоящий execution */
+  var realExecution = (execution.parent) ? execution.parent : execution;
   var document = bpm_package.children[0];
-  var currentStage = execution.getVariable('currentStage');
+  var currentStage = realExecution.getVariable('currentStage');
   var employees = currentStageItem.assocs['lecmWorkflowRoutes:stageItemEmployeeAssoc'];
   var effectiveEmployee, userName, term, dueDate;
   /* пометка как активного */
@@ -356,6 +365,10 @@
     currentStageItem.removeAssociation(employees[0], 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
     currentStageItem.createAssociation(effectiveEmployee, 'lecmWorkflowRoutes:stageItemEmployeeAssoc');
 
+    /* подготовка переменных для таймера */
+    realExecution.setVariableLocal('localAssignee', approval.getWorkflowNodeConverter().convertNode(effectiveEmployee.nodeRef));
+    realExecution.setVariableLocal('localDueDate', dueDate);
+
     task.setDueDate(dueDate);
     task.setAssignee(userName);
   }
@@ -366,13 +379,13 @@
             <activiti:field name="script">
               <activiti:string><![CDATA[(function(){ /* complete multi */
   /* получаем настоящий execution */
-  /* var realExecution = (execution.parent) ? execution.parent : execution; */
+  var realExecution = (execution.parent) ? execution.parent : execution;
   var decision = task.getVariableLocal('lecmApprove3_decision');
   var comment = task.getVariableLocal('bpm_comment');
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
-  var routeInterruptAfterReject = execution.getVariable('routeInterruptAfterReject').booleanValue();
+  var routeInterruptAfterReject = realExecution.getVariable('routeInterruptAfterReject').booleanValue();
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
-  var notifyAboutEveryDecision = execution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
+  var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
   var document, documentLink, msg, employee, initiator;
   task.setVariable('isCompleted', isCompleted);
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
@@ -383,6 +396,7 @@
   currentStageItem.properties['lecmApproveAspects:approvalDecision'] = decision;
   currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
+  currentStageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
   currentStageItem.save();
   /* возможно будет добавление в участники */
   /* уведомление о согласовании */
@@ -390,7 +404,7 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     employee = task.getVariableLocal('effectiveEmployee');
-    initiator = execution.getVariable('initiator');
+    initiator = realExecution.getVariable('initiator');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
   }
@@ -434,6 +448,45 @@
         </extensionElements>
       </serviceTask>
       <sequenceFlow id="flow21" sourceRef="alfrescoScripttask8" targetRef="exclusivegateway5"></sequenceFlow>
+      <serviceTask id="alfrescoScripttask9" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
+        <extensionElements>
+          <activiti:field name="script">
+            <activiti:string><![CDATA[(function(){ /* рассылаем уведомление об истечении срока согласования */
+  /* получаем настоящий execution */
+  var realExecution = (execution.parent) ? execution.parent : execution;
+
+  var document, documentLink, msg;
+  var localAssignee = realExecution.getVariableLocal('localAssignee');
+  var localDueDate = realExecution.getVariableLocal('localDueDate');
+  var isSameDay;
+  if (localAssignee && localDueDate) {
+    isSameDay = Packages.org.apache.commons.lang.time.DateUtils.isSameDay(localDueDate, approval.getValueConverter().convertValueForJava(new Date()));
+    if (isSameDay) {
+      document = bpm_package.children[0];
+      documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+      var msg = 'Истек срок согласования Вами документа ' + documentLink + '.';
+      notifications.sendNotification([localAssignee.nodeRef.toString()], msg, document);
+    }
+  }
+})();]]></activiti:string>
+          </activiti:field>
+          <activiti:field name="runAs">
+            <activiti:string><![CDATA[workflow]]></activiti:string>
+          </activiti:field>
+        </extensionElements>
+      </serviceTask>
+      <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="usertask2" cancelActivity="false">
+        <timerEventDefinition>
+          <timeCycle>0 0 2 * * ?</timeCycle>
+        </timerEventDefinition>
+      </boundaryEvent>
+      <boundaryEvent id="boundarytimer2" name="Timer" attachedToRef="usertask1" cancelActivity="false">
+        <timerEventDefinition>
+          <timeCycle>0 0 2 * * ?</timeCycle>
+        </timerEventDefinition>
+      </boundaryEvent>
+      <sequenceFlow id="flow22" sourceRef="boundarytimer1" targetRef="alfrescoScripttask9"></sequenceFlow>
+      <sequenceFlow id="flow23" sourceRef="boundarytimer2" targetRef="alfrescoScripttask9"></sequenceFlow>
     </subProcess>
     <sequenceFlow id="flow3" sourceRef="alfrescoScripttask2" targetRef="subprocess1"></sequenceFlow>
     <serviceTask id="alfrescoScripttask3" name="Alfresco Script Task" activiti:class="org.alfresco.repo.workflow.activiti.script.AlfrescoScriptDelegate">
@@ -489,43 +542,52 @@
         <omgdc:Bounds height="55.0" width="105.0" x="310.0" y="90.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="subprocess1" id="BPMNShape_subprocess1">
-        <omgdc:Bounds height="331.0" width="901.0" x="92.0" y="199.0"></omgdc:Bounds>
+        <omgdc:Bounds height="442.0" width="901.0" x="120.0" y="199.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="startevent2" id="BPMNShape_startevent2">
-        <omgdc:Bounds height="35.0" width="35.0" x="112.0" y="339.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="138.0" y="386.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask4" id="BPMNShape_alfrescoScripttask4">
-        <omgdc:Bounds height="55.0" width="105.0" x="182.0" y="329.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="208.0" y="376.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway3" id="BPMNShape_exclusivegateway3">
-        <omgdc:Bounds height="40.0" width="40.0" x="322.0" y="336.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="348.0" y="383.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask5" id="BPMNShape_alfrescoScripttask5">
-        <omgdc:Bounds height="55.0" width="105.0" x="382.0" y="399.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="500.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask1" id="BPMNShape_usertask1">
-        <omgdc:Bounds height="55.0" width="105.0" x="522.0" y="399.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="500.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer2" id="BPMNShape_boundarytimer2">
+        <omgdc:Bounds height="30.0" width="30.0" x="588.0" y="489.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask6" id="BPMNShape_alfrescoScripttask6">
-        <omgdc:Bounds height="55.0" width="105.0" x="652.0" y="399.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="500.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
-        <omgdc:Bounds height="40.0" width="40.0" x="792.0" y="406.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="818.0" y="507.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway5" id="BPMNShape_exclusivegateway5">
-        <omgdc:Bounds height="40.0" width="40.0" x="852.0" y="336.0"></omgdc:Bounds>
+        <omgdc:Bounds height="40.0" width="40.0" x="878.0" y="383.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
-        <omgdc:Bounds height="55.0" width="105.0" x="522.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+        <omgdc:Bounds height="30.0" width="30.0" x="588.0" y="291.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent2" id="BPMNShape_endevent2">
-        <omgdc:Bounds height="35.0" width="35.0" x="932.0" y="339.0"></omgdc:Bounds>
+        <omgdc:Bounds height="35.0" width="35.0" x="958.0" y="386.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask7" id="BPMNShape_alfrescoScripttask7">
-        <omgdc:Bounds height="55.0" width="105.0" x="382.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="410.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask8" id="BPMNShape_alfrescoScripttask8">
-        <omgdc:Bounds height="55.0" width="105.0" x="652.0" y="250.0"></omgdc:Bounds>
+        <omgdc:Bounds height="55.0" width="105.0" x="680.0" y="250.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="alfrescoScripttask9" id="BPMNShape_alfrescoScripttask9">
+        <omgdc:Bounds height="55.0" width="105.0" x="550.0" y="376.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="alfrescoScripttask3" id="BPMNShape_alfrescoScripttask3">
         <omgdc:Bounds height="55.0" width="105.0" x="760.0" y="90.0"></omgdc:Bounds>
@@ -545,71 +607,79 @@
         <omgdi:waypoint x="310.0" y="117.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
-        <omgdi:waypoint x="147.0" y="356.0"></omgdi:waypoint>
-        <omgdi:waypoint x="182.0" y="356.0"></omgdi:waypoint>
+        <omgdi:waypoint x="173.0" y="403.0"></omgdi:waypoint>
+        <omgdi:waypoint x="208.0" y="403.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
-        <omgdi:waypoint x="287.0" y="356.0"></omgdi:waypoint>
-        <omgdi:waypoint x="322.0" y="356.0"></omgdi:waypoint>
+        <omgdi:waypoint x="313.0" y="403.0"></omgdi:waypoint>
+        <omgdi:waypoint x="348.0" y="403.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
-        <omgdi:waypoint x="342.0" y="376.0"></omgdi:waypoint>
-        <omgdi:waypoint x="342.0" y="425.0"></omgdi:waypoint>
-        <omgdi:waypoint x="382.0" y="426.0"></omgdi:waypoint>
+        <omgdi:waypoint x="368.0" y="423.0"></omgdi:waypoint>
+        <omgdi:waypoint x="367.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="527.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
-        <omgdi:waypoint x="487.0" y="426.0"></omgdi:waypoint>
-        <omgdi:waypoint x="522.0" y="426.0"></omgdi:waypoint>
+        <omgdi:waypoint x="515.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="527.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow13" id="BPMNEdge_flow13">
-        <omgdi:waypoint x="627.0" y="426.0"></omgdi:waypoint>
-        <omgdi:waypoint x="652.0" y="426.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="527.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow14" id="BPMNEdge_flow14">
-        <omgdi:waypoint x="757.0" y="426.0"></omgdi:waypoint>
-        <omgdi:waypoint x="792.0" y="426.0"></omgdi:waypoint>
+        <omgdi:waypoint x="785.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="818.0" y="527.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow15" id="BPMNEdge_flow15">
-        <omgdi:waypoint x="812.0" y="446.0"></omgdi:waypoint>
-        <omgdi:waypoint x="812.0" y="495.0"></omgdi:waypoint>
-        <omgdi:waypoint x="629.0" y="495.0"></omgdi:waypoint>
-        <omgdi:waypoint x="434.0" y="495.0"></omgdi:waypoint>
-        <omgdi:waypoint x="434.0" y="454.0"></omgdi:waypoint>
+        <omgdi:waypoint x="838.0" y="547.0"></omgdi:waypoint>
+        <omgdi:waypoint x="838.0" y="581.0"></omgdi:waypoint>
+        <omgdi:waypoint x="653.0" y="581.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="581.0"></omgdi:waypoint>
+        <omgdi:waypoint x="462.0" y="555.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow16" id="BPMNEdge_flow16">
-        <omgdi:waypoint x="832.0" y="426.0"></omgdi:waypoint>
-        <omgdi:waypoint x="871.0" y="425.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="376.0"></omgdi:waypoint>
+        <omgdi:waypoint x="858.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="898.0" y="527.0"></omgdi:waypoint>
+        <omgdi:waypoint x="898.0" y="423.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow17" id="BPMNEdge_flow17">
-        <omgdi:waypoint x="342.0" y="336.0"></omgdi:waypoint>
-        <omgdi:waypoint x="341.0" y="276.0"></omgdi:waypoint>
-        <omgdi:waypoint x="382.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="368.0" y="383.0"></omgdi:waypoint>
+        <omgdi:waypoint x="367.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="410.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow18" id="BPMNEdge_flow18">
-        <omgdi:waypoint x="627.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="652.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="655.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="680.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow19" id="BPMNEdge_flow19">
-        <omgdi:waypoint x="892.0" y="356.0"></omgdi:waypoint>
-        <omgdi:waypoint x="932.0" y="356.0"></omgdi:waypoint>
+        <omgdi:waypoint x="918.0" y="403.0"></omgdi:waypoint>
+        <omgdi:waypoint x="958.0" y="403.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow20" id="BPMNEdge_flow20">
-        <omgdi:waypoint x="487.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="522.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="515.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="277.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow21" id="BPMNEdge_flow21">
-        <omgdi:waypoint x="757.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="277.0"></omgdi:waypoint>
-        <omgdi:waypoint x="872.0" y="336.0"></omgdi:waypoint>
+        <omgdi:waypoint x="785.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="898.0" y="277.0"></omgdi:waypoint>
+        <omgdi:waypoint x="898.0" y="383.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow22" id="BPMNEdge_flow22">
+        <omgdi:waypoint x="603.0" y="321.0"></omgdi:waypoint>
+        <omgdi:waypoint x="602.0" y="376.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow23" id="BPMNEdge_flow23">
+        <omgdi:waypoint x="603.0" y="489.0"></omgdi:waypoint>
+        <omgdi:waypoint x="602.0" y="431.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
         <omgdi:waypoint x="415.0" y="117.0"></omgdi:waypoint>
         <omgdi:waypoint x="459.0" y="117.0"></omgdi:waypoint>
-        <omgdi:waypoint x="542.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="199.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
-        <omgdi:waypoint x="542.0" y="199.0"></omgdi:waypoint>
+        <omgdi:waypoint x="570.0" y="199.0"></omgdi:waypoint>
         <omgdi:waypoint x="699.0" y="117.0"></omgdi:waypoint>
         <omgdi:waypoint x="760.0" y="117.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
