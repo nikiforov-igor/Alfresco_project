@@ -283,7 +283,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                  * @type boolean
                  * @default false
                  */
-                forceSubscribing: false,
+                forceSubscribing: true,
 
                 /**
                  * Переопределить сортировку с указанным значением
