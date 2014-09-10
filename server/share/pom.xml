@@ -298,6 +298,13 @@
 			<scope>runtime</scope>
 			<type>amp</type>
 		</dependency>
+		<dependency>
+			<groupId>ru.it.lecm.types-view</groupId>
+			<artifactId>types-view-share</artifactId>
+			<version>${platform.version}</version>
+			<scope>runtime</scope>
+			<type>amp</type>
+		</dependency>
 		<!--<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -607,6 +614,11 @@
 						<overlay>
 							<groupId>ru.it.lecm.group-actions</groupId>
 							<artifactId>group-actions-share</artifactId>
+							<type>amp</type>
+						</overlay>
+						<overlay>
+							<groupId>ru.it.lecm.types-view</groupId>
+							<artifactId>types-view-share</artifactId>
 							<type>amp</type>
 						</overlay>
 					</overlays>

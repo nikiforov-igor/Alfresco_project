@@ -117,6 +117,7 @@
 		<module>lecm-arm</module>
 		<module>lecm-workflow</module>
 		<module>lecm-group-actions</module>
+		<module>lecm-types-view</module>
     </modules>
     <scm>
         <connection>scm:svn:https://svn.datateh.ru/alfrescoecm/Business Platform/trunk/</connection>
