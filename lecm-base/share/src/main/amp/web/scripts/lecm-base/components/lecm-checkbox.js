@@ -24,6 +24,8 @@ LogicECM.module = LogicECM.module || {};
     {
         LogicECM.module.Checkbox.superclass.constructor.call(this, "LogicECM.module.Checkbox", fieldHtmlId, ["container", "datasource"]);
         this.checkboxId = fieldHtmlId + "-entry";
+	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
+	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
         return this;
     };
 
@@ -62,6 +64,7 @@ LogicECM.module = LogicECM.module || {};
                         YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
                     }
                     this.onChange();
+	                LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
                 },
                 loadDefaultValue: function AssociationSelectOne__loadDefaultValue() {
                     if (this.options.defaultValue != null) {
@@ -76,6 +79,7 @@ LogicECM.module = LogicECM.module || {};
                                             fn: function(response) {
                                                 var oResults = eval("(" + response.serverResponse.responseText + ")");
                                                 if (oResults != null && oResults.checked != null) {
+	                                                me.options.defaultValue = oResults.checked;
                                                     me.checkbox.checked = oResults.checked == "true";
                                                 }
                                             }
@@ -143,6 +147,22 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.fireMandatoryByChange) {
 		                YAHOO.Bubbling.fire("mandatoryControlValueUpdated", this);
 	                }
-                }
+                },
+
+	            onDisableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            if (this.checkbox != null) {
+				            this.checkbox.disabled = true;
+			            }
+		            }
+	            },
+
+	            onEnableControl: function (layer, args) {
+		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			            if (!this.options.disabled && this.checkbox != null) {
+				            this.checkbox.disabled = false;
+			            }
+		            }
+	            }
             });
 })();
