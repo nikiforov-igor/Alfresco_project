@@ -4,23 +4,26 @@
      */
     var Event = YAHOO.util.Event,
         Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector,
         Bubbling = YAHOO.Bubbling;
 
     //Set block height
     function setTreeHeight() {
-
+        var wrapper = Selector.query('div.sticky-wrapper', null, true);
         var bd = Dom.get('bd');
         var block = Dom.get('lecm-page');
-        var wrapper = Dom.getElementsByClassName('sticky-wrapper', 'div');
 
         var h = parseInt(Dom.getStyle(wrapper, 'height')) - Dom.getY(block)
-            - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'));
+            - parseInt(Dom.getStyle(block, 'margin-bottom')) - parseInt(Dom.getStyle(bd, 'margin-bottom'))
+            - (parseInt(Dom.getStyle(Selector.query('div.sticky-footer', wrapper, true), 'height')) || 0);
         // Высота header-а
-        var headerDivTopHeight = parseInt(Dom.getStyle(Dom.getElementsByClassName('header-bar toolbar flat-button theme-bg-2', 'div'), 'height'));
+        var headerDiv = Selector.query('div.header-bar.toolbar.flat-button.theme-bg-2', block, true);
+        var headerDivTopHeight = headerDiv ? (parseInt(Dom.getStyle(headerDiv, 'height'))
+            + parseInt(Dom.getStyle(headerDiv, 'border-top')) + parseInt(Dom.getStyle(headerDiv, 'border-bottom'))) : 0;
         // Высота footer-a
-        var footerDivBottomHeight = parseInt(Dom.getStyle(Dom.get('lecm-content-ft'), 'height'));
+        var footerDivBottomHeight = parseInt(Dom.getStyle('lecm-content-ft', 'height')) || 0;
         block = Dom.get('dictionary');
-        var height = h - headerDivTopHeight - footerDivBottomHeight - 16;
+        var height = h - headerDivTopHeight - footerDivBottomHeight - 20;
         // Выставляем высоту, чтобы scrollbar был внизу перед footer-ом
         Dom.setStyle(block, 'height', height +'px');
         Dom.setStyle(block, "position", "inherit");
@@ -38,10 +41,11 @@
     }
 
     Event.onDOMReady(function() {
+        LogicECM.module.Base.Util.removeAllBubbles(this);
         Bubbling.on("GridRendered", setTreeHeight, this);
         Bubbling.on("HeightSetted", setTreeHeight, this);
         Bubbling.on("SetHeaderWidth",setHeaderWidth, this);
-        // Собитие на перемещение ползунка scrollbar-а
+        // Событие на перемещение ползунка scrollbar-а
         Event.on(Dom.getElementsByClassName("datalists tree"),"scroll",function(e){
             var treeWidth = Dom.getElementsByClassName('datalists tree')[0].scrollWidth;
             var header = Dom.getElementsByClassName('header-bar toolbar flat-button theme-bg-2')[0];

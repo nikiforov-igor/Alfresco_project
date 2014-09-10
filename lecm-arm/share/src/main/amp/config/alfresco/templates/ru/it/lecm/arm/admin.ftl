@@ -15,6 +15,7 @@
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/title-with-filter-label/title-with-filter-label.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-arm/lecm-arm-admin-page.css" />
 
     <#include "/org/alfresco/components/form/form.dependencies.inc">
 
@@ -52,7 +53,7 @@
 
 <div id="no_menu_page" class="sticky-wrapper">
 <@bpage.basePage showHeader=true showTitle=true showToolbar=false showMenu=false>
-        <div class="yui-t1" id="arm-with-tree">
+        <div class="yui-t1 admin-page" id="arm-with-tree">
             <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
                     <div id="arm-documents-grid">
                         <@region id="documents-grid" scope="template" />

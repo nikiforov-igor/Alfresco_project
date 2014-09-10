@@ -1,0 +1,27 @@
+.admin-page {
+
+}
+.admin-page #doc3 {
+    margin: auto;
+}
+#bd .admin-page #lecm-content-main {
+    padding-bottom: 0;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar {
+    margin: 0;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 #right-panel-workgroup {
+    padding-left: 10px;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 #left-panel-workgroups {
+    padding-right: 10px;
+}
+.yui-skin-lecmTheme .admin-page .form-container .form-buttons{
+    padding: 1em 1em 1em 200px;
+}
+.admin-page {
+
+}
+.admin-page {
+
+}
