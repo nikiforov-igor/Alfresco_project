@@ -6,6 +6,10 @@
         <activiti:field name="script">
           <activiti:string><![CDATA[(function(){ /* process happy end */
   /* пометка итерации как завершенной */
+  var document = bpm_package.children[0];
+  var documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+  var msg = 'Принято решение по согласованию документа ' + documentLink;
+  var initiator = execution.getVariable('initiator');
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
   var decisions = ['REJECTED', 'APPROVED_WITH_REMARK', 'APPROVED'];
@@ -27,6 +31,8 @@
   currentIteration.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
   currentIteration.save();
   /* учет принудительного прерывания процесса */
+  /* уведомление о завершении согласования */
+  notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -48,11 +54,12 @@
   /* пометка итерации как активной */
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   currentIteration.save();
-  execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
+  execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
   execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
+  execution.setVariable('initiator', approval.getWorkflowNodeConverter().convertNode(orgstructure.getCurrentEmployee().nodeRef));
 })();]]></activiti:string>
         </activiti:field>
       </extensionElements>
@@ -236,6 +243,8 @@
   var comment = task.getVariableLocal('bpm_comment');
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var stageItem = execution.getVariableLocal('currentStageItem');
+  var notifyAboutEveryDecision = execution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
+  var document, documentLink, msg, employee, initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
     attachment.move(stageItem);
@@ -245,7 +254,16 @@
   stageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.save();
-  /* возможно будет добавление в участники */
+  /* возможно будетдобавление в участники */
+  /* уведомление о согласовании */
+  if (notifyAboutEveryDecision) {
+    document = bpm_package.children[0];
+    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+    employee = task.getVariableLocal('effectiveEmployee');
+    initiator = execution.getVariable('initiator');
+    msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
+    notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+  }
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
@@ -352,8 +370,10 @@
   var decision = task.getVariableLocal('lecmApprove3_decision');
   var comment = task.getVariableLocal('bpm_comment');
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
-  var routeInterruptAfterReject = execution.getVariable('routeInterruptAfterReject');
+  var routeInterruptAfterReject = execution.getVariable('routeInterruptAfterReject').booleanValue();
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
+  var notifyAboutEveryDecision = execution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
+  var document, documentLink, msg, employee, initiator;
   task.setVariable('isCompleted', isCompleted);
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
@@ -364,8 +384,16 @@
   currentStageItem.properties['lecmWorkflowRoutes:stageItemComment'] = comment;
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentStageItem.save();
-
   /* возможно будет добавление в участники */
+  /* уведомление о согласовании */
+  if (notifyAboutEveryDecision) {
+    document = bpm_package.children[0];
+    documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
+    employee = task.getVariableLocal('effectiveEmployee');
+    initiator = execution.getVariable('initiator');
+    msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
+    notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+  }
 })();]]></activiti:string>
             </activiti:field>
           </activiti:taskListener>
