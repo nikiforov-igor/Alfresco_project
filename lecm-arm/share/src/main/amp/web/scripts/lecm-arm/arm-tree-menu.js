@@ -350,6 +350,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
             if (node) {
 
+                LogicECM.module.Base.Util.resetAdditionalObjects();
+
                 if (node.data.nodeType == "lecm-dic:dictionary") {
                     node.data.nodeType = "lecm-arm:html-node";
                     node.data.htmlUrl = "page/dictionary?dic=" + encodeURI(node.label);
@@ -370,6 +372,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 		            });
 	            }
 	            if (isHtmlNode) {
+                    LogicECM.module.Base.Util.saveAdditionalObjects();
 		            YAHOO.Bubbling.fire ("updateArmHtmlNode", {
 			            url: node.data.htmlUrl
 		            });

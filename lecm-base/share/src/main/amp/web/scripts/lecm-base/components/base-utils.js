@@ -326,6 +326,29 @@ LogicECM.module.Base.Util = {
 		})).remove();
 	},
 
+    componentsLength: -1,
+
+    saveAdditionalObjects: function saveAdditionalObjects_function() {
+        this.componentsLength = Alfresco.util.ComponentManager.list().length;
+    },
+
+    resetAdditionalObjects: function resetAdditionalObjects_function() {
+        if (this.componentsLength == -1) return;
+        var manager = Alfresco.util.ComponentManager;
+        var components = manager.list();
+        var delta = components.slice(this.componentsLength);
+        var isFn = YAHOO.lang.isFunction;
+        for (var index in delta) {
+            var component = delta[index];
+            if (isFn(component.destroy)) {
+                component.destroy();
+            }
+            LogicECM.module.Base.Util.removeAllBubbles(component);
+            Alfresco.util.ComponentManager.unregister(component);
+        }
+        this.componentsLength = -1;
+    },
+
 	removeAllBubbles: function (obj) {
 		var event;
 		var bubble = YAHOO.Bubbling.bubble;
