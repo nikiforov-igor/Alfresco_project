@@ -30,7 +30,7 @@ var DocumentUtils = {
 		return null;
 	},
 	getNodeAccess: function getNodeAccess(nodeRef, login) {
-		var url = "/lecm/document/utils/access?nodeRef=" + nodeRef + "&user=" + login;
+		var url = "/lecm/document/utils/access?nodeRef=" + nodeRef + "&user=" + encodeURI(login);
 		if (!nodeRef) {
 			return null;
 		}
