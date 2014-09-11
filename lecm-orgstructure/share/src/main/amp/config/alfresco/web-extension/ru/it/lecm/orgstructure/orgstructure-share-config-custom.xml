@@ -311,7 +311,9 @@
                 </field-visibility>
                 <appearance>
                     <field id="lecm-orgstr:employee-sex">
-                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl"/>
+                        <control template="/ru/it/lecm/base-share/components/controls/select-one-with-empty.ftl">
+                            <control-param name="nameSuffix">-strong-constant</control-param>
+                        </control>
                     </field>
                 </appearance>
             </form>
