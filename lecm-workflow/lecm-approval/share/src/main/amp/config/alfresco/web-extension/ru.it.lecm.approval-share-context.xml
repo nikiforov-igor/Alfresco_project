@@ -19,6 +19,7 @@
 			<list>
 				<value>alfresco.web-extension.ru.it.lecm.workflow.approval.approval-settings</value>
 				<value>alfresco.web-extension.ru.it.lecm.workflow.approval.approval-workflow</value>
+				<value>alfresco.web-extension.ru.it.lecm.workflow.approval.approval-forms</value>
 			</list>
 		</property>
 	</bean>

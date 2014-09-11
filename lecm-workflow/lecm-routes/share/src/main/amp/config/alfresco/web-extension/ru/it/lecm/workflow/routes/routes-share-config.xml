@@ -267,6 +267,27 @@
 					</field>
 				</appearance>
 			</form>
+			<form id="viewApprovalResult">
+				<field-visibility>
+					<show id="lecmWorkflowRoutes:stageItemEmployeeAssoc"/>
+					<show id="lecmWorkflowRoutes:stageItemCompleteDate"/>
+					<show id="lecmApproveAspects:approvalDecision"/>
+					<show id="lecmWorkflowRoutes:stageItemComment"/>
+					<show id="cm:contains" force="true"/>
+				</field-visibility>
+				<appearance>
+					<field id="lecmApproveAspects:approvalDecision">
+						<control template="/ru/it/lecm/base-share/components/controls/selectone.ftl"/>
+
+					</field>
+					<field id="lecmWorkflowRoutes:stageItemComment">
+						<control template="/ru/it/lecm/base-share/components/controls/textfield.ftl"/>
+					</field>
+					<field id="cm:contains" label="Файл с примечаниями">
+						<control template="/ru/it/lecm/base-share/components/controls/view-file-link.ftl"/>
+					</field>
+				</appearance>
+			</form>
 		</forms>
 	</config>
 </alfresco-config>

@@ -15,7 +15,7 @@ LogicECM.module.Approval.StageExpanded = {};
 		this.createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
 			type: 'menu',
 			menu: [{
-					text: 'Список из маршрута',
+					text: this.msg('label.button.create.approval.from.route'),
 					value: 'route',
 					disabled: false,
 					onclick: {
@@ -23,7 +23,7 @@ LogicECM.module.Approval.StageExpanded = {};
 						scope: this
 					}
 				}, {
-					text: 'Пустой список',
+					text: this.msg('label.button.create.approval.empty'),
 					value: 'empty',
 					disabled: false,
 					onclick: {
@@ -147,8 +147,8 @@ LogicECM.module.Approval.StageExpanded = {};
 				stateMsg: 'Выполнятеся',
 				createButtonHandler: function () {
 					Alfresco.util.PopupManager.displayPrompt({
-						title: 'Итерация активна',
-						text: 'Нельзя создать новый лист согласования, так как итерация активна'
+						title: this.msg('title.iteration.active'),
+						text: this.msg('message.unable.to.create.list.active')
 					});
 				}
 			},
@@ -157,19 +157,19 @@ LogicECM.module.Approval.StageExpanded = {};
 				createButtonHandler: function (menuItemValue) {
 					var that = this;
 					Alfresco.util.PopupManager.displayPrompt({
-						title: 'Создание нового листа согласования',
-						text: 'Вы действительно хотите создать новый лист согласования?',
+						title: this.msg('title.new.approval.list'),
+						text: this.msg('message.new.approval.list.confirmation'),
 						close: false,
 						modal: true,
 						buttons: [
 							{
-								text: this.msg("button.yes"),
+								text: this.msg('button.yes'),
 								handler: function () {
 									that._createApprovalList(menuItemValue);
 									this.destroy();
 								}
 							}, {
-								text: this.msg("button.no"),
+								text: this.msg('button.no'),
 								handler: function () {
 									this.destroy();
 								},
@@ -305,7 +305,7 @@ LogicECM.module.Approval.StageExpanded = {};
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					fn: function (form, simpleDialog) {
-						simpleDialog.dialog.setHeader('Создать лист согласования из маршрута');
+						simpleDialog.dialog.setHeader(this.msg('title.new.approval.list.from.route'));
 						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
@@ -370,10 +370,10 @@ LogicECM.module.Approval.StageExpanded = {};
 
 			switch (this.approvalState) {
 				case 'ACTIVE':
-					errorText = 'Редактирование параметров запущенной итерации невозможно';
+					errorText = this.msg('message.unable.to.edit.running.iteration');
 					break;
 				case 'COMPLETE':
-					errorText = 'Редактирование параметров завершенной итерации невозможно';
+					errorText = this.msg('message.unable.to.edit.complete.iteration');
 					break;
 				case 'NOT_EXITS':
 					this._createEmptyApprovalLst(this._showEditIterationDialog);
@@ -384,7 +384,7 @@ LogicECM.module.Approval.StageExpanded = {};
 
 			if (errorText) {
 				Alfresco.util.PopupManager.displayPrompt({
-					title: 'Редактирование невозможно',
+					title: this.msg('title.unable.to.edit'),
 					text: errorText
 				});
 				return;
@@ -443,8 +443,8 @@ LogicECM.module.Approval.StageExpanded = {};
 			switch (this.approvalState) {
 				case 'COMPLETE':
 					Alfresco.util.PopupManager.displayPrompt({
-						title: 'Добавление этапа невозможно',
-						text: 'Невозможно добавить этап в завершенную итерацию'
+						title: this.msg('title.unable.to.add.stage'),
+						text: this.msg('message.unable.to.add.stage.iteration.completed')
 					});
 					break;
 				case 'NOT_EXITS':
@@ -463,19 +463,19 @@ LogicECM.module.Approval.StageExpanded = {};
 		onClearButton: function () {
 			var that = this;
 			Alfresco.util.PopupManager.displayPrompt({
-				title: 'Очистка листа согласования',
-				text: 'Вы действительно хотите очистить лист согласования?',
+				title: this.msg('title.approval.list.clear'),
+				text: this.msg('message.clear.approval.list'),
 				close: false,
 				modal: true,
 				buttons: [
 					{
-						text: this.msg("button.yes"),
+						text: this.msg('button.yes'),
 						handler: function () {
 							that._deleteApprovalList();
 							this.destroy();
 						}
 					}, {
-						text: this.msg("button.no"),
+						text: this.msg('button.no'),
 						handler: function () {
 							this.destroy();
 						},
@@ -557,7 +557,7 @@ LogicECM.module.Approval.StageExpanded = {};
 		function formatState(nodeRef, decisionData, hasComment) {
 			var result,
 				commentIcon = '<img alt="Комментарий" src="' + Alfresco.constants.URL_RESCONTEXT + 'themes/lecmTheme/images/create-new-button.png">',
-				messageTemplate = '<a href="javascript:void(0)" onclick="LogicECM.module.Approval.StageExpanded.openApprovalInfoDialog(\'{nodeRef}\')">{value} {icon}</a>';
+				messageTemplate = '<a href="javascript:void(0)" onclick="viewAttributes(\'{nodeRef}\', null, \'label.view.approval.details\', \'viewApprovalResult\')">{value} {icon}</a>';
 
 			if (decisionData.value === 'NO_DECISION') {
 				return null;
@@ -602,8 +602,4 @@ LogicECM.module.Approval.StageExpanded = {};
 		return html ? html : null;  // возвращаем NULL чтобы выызвался основной метод отрисовки
 	};
 
-	LogicECM.module.Approval.StageExpanded.openApprovalInfoDialog = function (nodeRef) {
-		// TODO Добавить диалог отображения согласования
-		console.log('openApprovalInfoDialog');
-	};
 })();
