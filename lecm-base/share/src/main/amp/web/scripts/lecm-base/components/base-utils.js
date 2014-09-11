@@ -580,7 +580,6 @@ LogicECM.module.Base.Util = {
 	getComponentReadyElementId: function(formId, fieldId) {
 		return formId + "_" + fieldId + "_" + "componentReady";
 	},
-
 	createComponentReadyElementId: function(fieldHtmlId, formId, fieldId) {
 		var parent = YAHOO.util.Dom.get(fieldHtmlId);
 		if (parent != null) {
@@ -591,6 +590,22 @@ LogicECM.module.Base.Util = {
 				parent.appendChild(element);
 			}
 		}
+	},
+	disableControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("disableControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
+	},
+	enableControl: function(formId, fieldId) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("enableControl", {
+				formId: formId,
+				fieldId: fieldId
+			});
+		});
 	}
 };
 

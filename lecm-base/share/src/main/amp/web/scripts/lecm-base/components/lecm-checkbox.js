@@ -99,19 +99,12 @@ LogicECM.module = LogicECM.module || {};
                             if (field != null) {
                                 field.disabled = !selected;
 
-	                            YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(this.options.formId, this.options.disabledFieldsIfNotSelect[i]), function(fieldId) {
-		                            if (!selected) {
-			                            YAHOO.Bubbling.fire("disableControl", {
-				                            formId: me.options.formId,
-				                            fieldId: fieldId
-			                            });
-		                            } else {
-			                            YAHOO.Bubbling.fire("enableControl", {
-				                            formId: me.options.formId,
-				                            fieldId: fieldId
-			                            });
-		                            }
-	                            }, me.options.disabledFieldsIfNotSelect[i]);
+	                            var fieldId = this.options.disabledFieldsIfNotSelect[i];
+	                            if (!selected) {
+		                            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+	                            } else {
+		                            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+	                            }
                             }
                         }
                     }
@@ -121,19 +114,12 @@ LogicECM.module = LogicECM.module || {};
                             if (field != null) {
                                 field.disabled = selected;
 
-	                            YAHOO.util.Event.onAvailable(LogicECM.module.Base.Util.getComponentReadyElementId(this.options.formId, this.options.disabledFieldsIfNotSelect[i]), function(fieldId) {
-		                            if (selected) {
-			                            YAHOO.Bubbling.fire("disableControl", {
-				                            formId: me.options.formId,
-				                            fieldId: fieldId
-			                            });
-		                            } else {
-			                            YAHOO.Bubbling.fire("enableControl", {
-				                            formId: me.options.formId,
-				                            fieldId: fieldId
-			                            });
-		                            }
-	                            }, me.options.disabledFieldsIfNotSelect[i]);
+	                            fieldId = this.options.disabledFieldsIfNotSelect[i];
+	                            if (selected) {
+		                            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
+	                            } else {
+		                            LogicECM.module.Base.Util.enableControl(me.options.formId, fieldId);
+	                            }
                             }
                         }
                     }
