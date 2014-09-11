@@ -659,7 +659,10 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 	public Scriptable getEmployeesByBusinessRoleId(String businessRoleId, boolean withDelegation) {
 		ParameterCheck.mandatory("businessRoleId", businessRoleId);
 		List<NodeRef> results = orgstructureService.getEmployeesByBusinessRole(businessRoleId, withDelegation);
-		return createScriptable(results);
+		if (results != null) {
+			return createScriptable(results);
+		}
+		return null;
 	}
 
 	/**
