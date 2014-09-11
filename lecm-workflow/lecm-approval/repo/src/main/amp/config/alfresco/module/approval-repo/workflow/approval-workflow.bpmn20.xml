@@ -27,10 +27,16 @@
       break;
     }
   }
+  /* учет принудительного прерывания процесса */
+  if (execution.getVariable('forcedDecision')) {
+    approvalDecision = execution.getVariable('forcedDecision');
+    logger.debug('********************************************************************************');
+    logger.debug('lecmApprovementWorkflow was forced with decision ' + approvalDecision);
+    logger.debug('********************************************************************************');
+  }
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentIteration.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
   currentIteration.save();
-  /* учет принудительного прерывания процесса */
   /* уведомление о завершении согласования */
   notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
   /* запись в БЖ о завершении согласования */

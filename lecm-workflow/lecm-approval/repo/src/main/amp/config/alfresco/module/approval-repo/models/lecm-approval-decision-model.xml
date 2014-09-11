@@ -20,6 +20,8 @@
 					<value>APPROVED</value>
 					<value>REJECTED</value>
 					<value>APPROVED_WITH_REMARK</value>
+					<value>APPROVED_FORCED</value>
+					<value>REJECTED_FORCED</value>
 				</list>
 			</parameter>
 		</constraint>

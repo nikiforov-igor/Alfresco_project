@@ -601,8 +601,6 @@
 	</bean>
 
 	<util:list id="documents.groupOperations">
-		<value>alfresco/module/${artifactId}/actions/approval-force.xml</value>
-		<value>alfresco/module/${artifactId}/actions/approval-termination.xml</value>
 		<value>alfresco/module/${artifactId}/actions/ga-favourites.xml</value>
 	</util:list>
 	<bean parent="lecmDictionaryBootstrap" depends-on="groupActionsService">
