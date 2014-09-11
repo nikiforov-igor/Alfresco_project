@@ -341,7 +341,6 @@ LogicECM.module.Base.Util = {
         for (var index in delta) {
             var component = delta[index];
             if (component.name.indexOf("LogicECM") == 0) {
-                var widgets = component.widgets;
                 LogicECM.module.Base.Util.removeAllBubbles(component);
                 Alfresco.util.ComponentManager.unregister(component);
             }
