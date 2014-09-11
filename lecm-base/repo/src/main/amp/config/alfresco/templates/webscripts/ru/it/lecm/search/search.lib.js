@@ -233,7 +233,12 @@ function getSearchResults(params) {
                                     }
                                 }
                                 else {
-                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"*' + propValue + '*"';
+                                    if (propName.match("-strong-constant$") == "-strong-constant") {
+                                        propName = propName.substr(0, propName.length - "-strong-constant".length);
+                                    } else {
+                                        propValue = '*' + propValue + '*';
+                                    }
+                                    formQuery += (first ? '' : ' AND ') + escapeQName(propName) + ':"' + propValue + '"';
                                     first = false;
                                 }
                             }

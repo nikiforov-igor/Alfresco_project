@@ -10,6 +10,11 @@
 <#else>
     <#assign labelSeparator="|">
 </#if>
+<#if field.control.params.nameSuffix??>
+    <#assign nameSuffix=field.control.params.nameSuffix>
+<#else>
+    <#assign nameSuffix="">
+</#if>
 
 <#assign fieldValue=field.value>
 
@@ -72,7 +77,7 @@
             </div>
 			<div class="value-div">
 				<#if field.control.params.options?? && field.control.params.options != "">
-					<select id="${fieldHtmlId}" name="${field.name}" tabindex="0"
+					<select id="${fieldHtmlId}" name="${field.name}${nameSuffix}" tabindex="0"
 					        <#if field.description??>title="${field.description}"</#if>
 					        <#if field.control.params.size??>size="${field.control.params.size}"</#if>
 					        <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
