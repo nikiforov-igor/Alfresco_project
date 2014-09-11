@@ -33,6 +33,8 @@
   /* учет принудительного прерывания процесса */
   /* уведомление о завершении согласования */
   notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+  /* запись в БЖ о завершении согласования */
+  businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Принято решение по согласованию документа #mainobject', []);
 })();]]></activiti:string>
         </activiti:field>
         <activiti:field name="runAs">
@@ -270,6 +272,8 @@
     initiator = realExecution.getVariable('initiator');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+    /* запись в БЖ о согласовании конкретным участником */
+    businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
   }
 })();]]></activiti:string>
             </activiti:field>
@@ -407,6 +411,8 @@
     initiator = realExecution.getVariable('initiator');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
+    /* запись в БЖ о согласовании конкретным участником */
+    businessJournal.log(document.nodeRef.toString(), 'APPROVAL', 'Сотрудник #object1 принял решение по согласованию документа #mainobject', [employee.nodeRef.toString()]);
   }
 })();]]></activiti:string>
             </activiti:field>
