@@ -169,7 +169,9 @@
     <#if field.control.params.showAssocViewForm??>
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
     </#if>
-	    useDynamicLoading: ${useDynamicLoading?string}
+	    useDynamicLoading: ${useDynamicLoading?string},
+	    fieldId: "${field.configName}",
+	    formId: "${args.htmlid}"
     });
 
     LogicECM.CurrentModules["${treeViewJsName}"] = new LogicECM.module.AssociationTreeViewer( "${fieldHtmlId}" );

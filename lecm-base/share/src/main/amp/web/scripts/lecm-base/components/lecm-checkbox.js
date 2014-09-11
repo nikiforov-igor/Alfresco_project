@@ -114,7 +114,7 @@ LogicECM.module = LogicECM.module || {};
                             if (field != null) {
                                 field.disabled = selected;
 
-	                            fieldId = this.options.disabledFieldsIfNotSelect[i];
+	                            fieldId = this.options.disabledFieldsIfSelect[i];
 	                            if (selected) {
 		                            LogicECM.module.Base.Util.disableControl(me.options.formId, fieldId);
 	                            } else {
@@ -139,6 +139,7 @@ LogicECM.module = LogicECM.module || {};
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 			            if (this.checkbox != null) {
 				            this.checkbox.disabled = true;
+				            Dom.get(this.id).disabled = true;
 			            }
 		            }
 	            },
@@ -147,6 +148,7 @@ LogicECM.module = LogicECM.module || {};
 		            if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
 			            if (!this.options.disabled && this.checkbox != null) {
 				            this.checkbox.disabled = false;
+				            Dom.get(this.id).disabled = false;
 			            }
 		            }
 	            }

@@ -25,6 +25,8 @@ LogicECM.module = LogicECM.module || {};
     LogicECM.module.AssociationAutoComplete = function LogicECM_module_AssociationAutoComplete(fieldHtmlId) {
         LogicECM.module.AssociationAutoComplete.superclass.constructor.call(this, "LogicECM.module.AssociationAutoComplete", fieldHtmlId);
         YAHOO.Bubbling.on("refreshAutocompleteItemList_" + fieldHtmlId, this.onRefreshAutocompleteItemList, this);
+	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
+	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 
         this.controlId = fieldHtmlId + "-cntrl";
 	    this.currentValueHtmlId = fieldHtmlId;
@@ -85,7 +87,11 @@ LogicECM.module = LogicECM.module || {};
 
 	            useDynamicLoading: false,
 
-                showAssocViewForm: false
+                showAssocViewForm: false,
+
+	            fieldId: null,
+
+	            formId: false
             },
 
             selectedItems: null,
@@ -108,6 +114,8 @@ LogicECM.module = LogicECM.module || {};
 
 	        searchProperties: null,
 
+	        tempDisabled: false,
+
             setMessages:function AssociationAutoComplete_setMessages(obj) {
                 LogicECM.module.AssociationAutoComplete.superclass.setMessages.call(this, obj);
                 return this;
@@ -121,6 +129,7 @@ LogicECM.module = LogicECM.module || {};
 	                    this._loadSearchProperties();
 	                }
                 }
+	            LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)
@@ -517,11 +526,13 @@ LogicECM.module = LogicECM.module || {};
 
             removeSelectedElement: function AssociationAutoComplete_removeSelectedElement(event, node)
             {
-                delete this.selectedItems[node.nodeRef];
-                this.singleSelectedItem = null;
-                this.updateSelectedItems();
-                this.updateFormFields();
-                this.updateInputUI();
+	            if (!this.tempDisabled) {
+		            delete this.selectedItems[node.nodeRef];
+		            this.singleSelectedItem = null;
+		            this.updateSelectedItems();
+		            this.updateFormFields();
+		            this.updateInputUI();
+	            }
             },
 
             canInputShow: function() {
@@ -728,6 +739,32 @@ LogicECM.module = LogicECM.module || {};
 					        scope: this
 				        }
 			        });
+	        },
+
+	        onDisableControl: function (layer, args) {
+		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			        var input = Dom.get(this.controlId + "-autocomplete-input");
+			        if (input != null) {
+				        input.disabled = true;
+			        }
+			        this.tempDisabled = true;
+			        Dom.get(this.controlId + "-added").disabled = true;
+			        Dom.get(this.controlId + "-removed").disabled = true;
+		        }
+	        },
+
+	        onEnableControl: function (layer, args) {
+		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			        if (!this.options.disabled) {
+				        var input = Dom.get(this.controlId + "-autocomplete-input");
+				        if (input != null) {
+					        input.disabled = false;
+				        }
+				        Dom.get(this.controlId + "-added").disabled = false;
+				        Dom.get(this.controlId + "-removed").disabled = false;
+			        }
+			        this.tempDisabled = false;
+		        }
 	        }
         });
 })();

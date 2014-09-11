@@ -581,13 +581,16 @@ LogicECM.module.Base.Util = {
 		return formId + "_" + fieldId + "_" + "componentReady";
 	},
 	createComponentReadyElementId: function(fieldHtmlId, formId, fieldId) {
-		var parent = YAHOO.util.Dom.get(fieldHtmlId);
-		if (parent != null) {
-			parent = parent.parentNode;
+		var elementId = this.getComponentReadyElementId(formId, fieldId);
+		if (YAHOO.util.Dom.get(elementId) == null) {
+			var parent = YAHOO.util.Dom.get(fieldHtmlId);
 			if (parent != null) {
-				var element = document.createElement('div');
-				element.id = this.getComponentReadyElementId(formId, fieldId);
-				parent.appendChild(element);
+				parent = parent.parentNode;
+				if (parent != null) {
+					var element = document.createElement('div');
+					element.id = elementId;
+					parent.appendChild(element);
+				}
 			}
 		}
 	},
