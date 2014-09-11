@@ -65,7 +65,10 @@ public class TypesViewBeanImpl extends BaseBean {
 	private void fillTypePropsMap(QName type, Map<String, Map<String, List<Map<String, String>>>> mapResult, Integer order){
 		List<Map<String, String>> properties = new ArrayList<>(); //список пропертей
 		Set<QName> aspectNames = new HashSet<>(); //аспекты типа
+		List<AspectDefinition> aspectNameDefs = new ArrayList<>(); //аспекты типа (через другой метод)
+																  //, так как каждый метод может возвращать не все аспекты
 		Set<QName> parentAspectNames = new HashSet<>(); //аспекты родительского типа
+		List<AspectDefinition> parentAspectNameDefs = new ArrayList<>(); //аспекты родительского типа (через другой метод)
 		ClassDefinition typeDef = dictionaryService.getClass(type);
 		QName parentType = typeDef.getParentName();
 		ClassDefinition parentTypeDef = null;
@@ -76,11 +79,19 @@ public class TypesViewBeanImpl extends BaseBean {
 		//свойства типа (вместе с родительскими)
 		Map<QName, PropertyDefinition> propertyMap = typeDef.getProperties();
 		aspectNames = typeDef.getDefaultAspectNames();
+		aspectNameDefs = typeDef.getDefaultAspects(true);
+		for (AspectDefinition aspectNameDef : aspectNameDefs){
+			aspectNames.add(aspectNameDef.getName());
+		}
 		//свойства родительского типа
 		Map<QName, PropertyDefinition> parentPropertyMap = null;
 		if (null != parentTypeDef){
 			parentPropertyMap = parentTypeDef.getProperties();
 			parentAspectNames = parentTypeDef.getDefaultAspectNames();
+			parentAspectNameDefs = parentTypeDef.getDefaultAspects(true);
+			for (AspectDefinition parentAspectNameDef : parentAspectNameDefs){
+				parentAspectNames.add(parentAspectNameDef.getName());
+			}
 		}
 
 		//определим свойства относящиеся только в текущему типу
@@ -149,7 +160,10 @@ public class TypesViewBeanImpl extends BaseBean {
 	private void fillTypeAssocsMap(QName type, Map<String, Map<String, List<Map<String, String>>>> mapResult, Integer order){
 		List<Map<String, String>> associations = new ArrayList<>(); //список пропертей
 		Set<QName> aspectNames = new HashSet<>(); //аспекты типа
+		List<AspectDefinition> aspectNameDefs = new ArrayList<>(); //аспекты типа (через другой метод)
+														  //, так как каждый метод может возвращать не все аспекты
 		Set<QName> parentAspectNames = new HashSet<>(); //аспекты родительского типа
+		List<AspectDefinition> parentAspectNameDefs = new ArrayList<>(); //аспекты родительского типа (через другой метод)
 		ClassDefinition typeDef = dictionaryService.getClass(type);
 		QName parentType = typeDef.getParentName();
 		ClassDefinition parentTypeDef = null;
@@ -160,11 +174,19 @@ public class TypesViewBeanImpl extends BaseBean {
 		//свойства типа (вместе с родительскими)
 		Map<QName, AssociationDefinition> assocMap = typeDef.getAssociations();
 		aspectNames = typeDef.getDefaultAspectNames();
+		aspectNameDefs = typeDef.getDefaultAspects(true);
+		for (AspectDefinition aspectNameDef : aspectNameDefs){
+			aspectNames.add(aspectNameDef.getName());
+		}
 		//свойства родительского типа
 		Map<QName, AssociationDefinition> parentAssocMap = null;
 		if (null != parentTypeDef){
 			parentAssocMap = parentTypeDef.getAssociations();
 			parentAspectNames = parentTypeDef.getDefaultAspectNames();
+			parentAspectNameDefs = parentTypeDef.getDefaultAspects(true);
+			for (AspectDefinition parentAspectNameDef : parentAspectNameDefs){
+				parentAspectNames.add(parentAspectNameDef.getName());
+			}
 		}
 
 		//определим свойства относящиеся только в текущему типу
@@ -238,9 +260,18 @@ public class TypesViewBeanImpl extends BaseBean {
 		}
 
 		Set<QName> aspectNames = typeDef.getDefaultAspectNames();
+		List<AspectDefinition> aspectNameDefs = typeDef.getDefaultAspects(true); //аспекты типа (через другой метод)
+														  //, так как каждый метод может возвращать не все аспекты
+		for (AspectDefinition aspectNameDef : aspectNameDefs){
+			aspectNames.add(aspectNameDef.getName());
+		}
 		Set<QName> parentAspectNames = new HashSet<>();
 		if (null != parentTypeDef){
 			parentAspectNames = parentTypeDef.getDefaultAspectNames();
+			List<AspectDefinition> parentAspectNameDefs = parentTypeDef.getDefaultAspects(true);
+			for (AspectDefinition parentAspectNameDef : parentAspectNameDefs){
+				parentAspectNames.add(parentAspectNameDef.getName());
+			}
 		}
 		aspectNames.removeAll(parentAspectNames);
 		for (QName aspectName : aspectNames){
