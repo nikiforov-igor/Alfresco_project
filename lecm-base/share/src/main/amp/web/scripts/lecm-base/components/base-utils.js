@@ -337,14 +337,14 @@ LogicECM.module.Base.Util = {
         var manager = Alfresco.util.ComponentManager;
         var components = manager.list();
         var delta = components.slice(this.componentsLength);
-        var isFn = YAHOO.lang.isFunction;
+
         for (var index in delta) {
             var component = delta[index];
-            if (isFn(component.destroy)) {
-                component.destroy();
+            if (component.name.indexOf("LogicECM") == 0) {
+                var widgets = component.widgets;
+                LogicECM.module.Base.Util.removeAllBubbles(component);
+                Alfresco.util.ComponentManager.unregister(component);
             }
-            LogicECM.module.Base.Util.removeAllBubbles(component);
-            Alfresco.util.ComponentManager.unregister(component);
         }
         this.componentsLength = -1;
     },
