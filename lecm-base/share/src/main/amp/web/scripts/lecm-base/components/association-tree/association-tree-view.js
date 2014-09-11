@@ -183,7 +183,11 @@ LogicECM.module = LogicECM.module || {};
 
 			checkType: true,
 
-            lazyLoading: false
+            lazyLoading: false,
+
+			fieldId: null,
+
+			formId: false
         },
 
         onReady: function AssociationTreeViewer_onReady() {
@@ -1809,7 +1813,9 @@ LogicECM.module = LogicECM.module || {};
             }
             if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
                 YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
-                    selectedItems: this.selectedItems
+                    selectedItems: this.selectedItems,
+	                formId: this.options.formId,
+	                fieldId: this.options.fieldId
                 });
             }
         },

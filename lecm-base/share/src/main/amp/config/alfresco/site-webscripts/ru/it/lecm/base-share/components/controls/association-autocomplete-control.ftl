@@ -228,7 +228,11 @@
         showCreateNewLink: ${showCreateNewLink?string},
 		showCreateNewButton: ${showCreateNewButton?string},
         showSearch: ${showSearch?string},
-        changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
+	    <#if field.control.params.changeItemsFireAction??>
+		    changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
+	    <#else>
+		    changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
+	    </#if>
         plane: true,
     <#if field.control.params.showAssocViewForm??>
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
@@ -236,7 +240,9 @@
         currentValue: "${field.value!''}",
         checkType: ${checkType?string},
         itemType:"${field.control.params.itemType!field.endpointType}",
-        additionalFilter: "${field.control.params.additionalFilter!''}"
+        additionalFilter: "${field.control.params.additionalFilter!''}",
+	    fieldId: "${field.configName}",
+	    formId: "${args.htmlid}"
     }).setMessages( ${messages} );
 	}
 	YAHOO.util.Event.onDOMReady(init);
