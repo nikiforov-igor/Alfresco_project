@@ -5,7 +5,7 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Approval = LogicECM.module.Approval || {};
 
-LogicECM.module.Approval.StageExpanded = {};
+LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded || {};
 
 (function () {
 
@@ -133,6 +133,7 @@ LogicECM.module.Approval.StageExpanded = {};
 		completedApprovalsCount: 0,
 		sourceRouteInfo: null,
 		approvalIsEditable: true,
+		approvalHistoryFolder: null,
 		approvalStateSettings: {
 			NOT_EXITS: {
 				stateMsg: 'Не существует',
@@ -199,6 +200,7 @@ LogicECM.module.Approval.StageExpanded = {};
 							this.completedApprovalsCount = response.json.completedApprovalsCount;
 							this.sourceRouteInfo = response.json.sourceRouteInfo;
 							this.approvalIsEditable = response.json.approvalIsEditable;
+							this.approvalHistoryFolder = response.json.approvalHistoryFolder;
 
 							LogicECM.module.Routes = LogicECM.module.Routes || {};
 							LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};
@@ -548,8 +550,42 @@ LogicECM.module.Approval.StageExpanded = {};
 			});
 		},
 		onShowHistoryButton: function () {
-			// TODO Добавить диалог отображения истории
-			console.log('onShowHistoryButton');
+			var formId = 'showApprovalHistoryForm';
+			var showApprovalHistoryForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+			showApprovalHistoryForm.setOptions({
+				width: '80em',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateRequestParams: {
+					formId: formId,
+					itemId: this.approvalHistoryFolder,
+					mode: 'edit',
+					itemKind: 'node',
+					showCancelButton: true,
+					documentNodeRef: this.documentNodeRef
+				},
+				destroyOnHide: true,
+				doBeforeDialogShow: {
+					fn: function (form, simpleDialog) {
+						simpleDialog.dialog.setHeader(this.msg('title.approval.history'));
+						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
+							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
+							LogicECM.module.Base.Util.formDestructor(event, args, params);
+						}, {moduleId: simpleDialog.id}, this);
+						form.setAJAXSubmit(false);
+						simpleDialog.widgets.cancelButton.set('label', this.msg('button.close'));
+						simpleDialog.widgets.okButton.addClass('hidden');
+					},
+					scope: this
+				},
+				onFailure: {
+					fn: function (response) {
+						this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
+					},
+					scope: this
+				}
+			});
+
+			showApprovalHistoryForm.show();
 		}
 	}, true);
 

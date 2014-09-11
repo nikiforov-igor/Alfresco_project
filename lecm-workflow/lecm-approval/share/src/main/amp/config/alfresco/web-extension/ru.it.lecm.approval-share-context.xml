@@ -10,6 +10,7 @@
 			<list>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-settings-share-config.xml</value>
 				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-workflow-share-config.xml</value>
+				<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/approval/approval-forms-share-config.xml</value>
 			</list>
 		</property>
 	</bean>

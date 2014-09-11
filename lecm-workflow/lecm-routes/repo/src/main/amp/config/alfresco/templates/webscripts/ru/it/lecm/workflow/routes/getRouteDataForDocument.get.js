@@ -2,7 +2,7 @@
 	var documentNodeRef = args['documentNodeRef'];
 	var documentNode = search.findNode(documentNodeRef);
 	var currentIterationNode = routesService.getDocumentCurrentIteration(documentNode);
-	var approvalState, approvalStateProp, currentIterationNodeStr, approvalHistoryFolder;
+	var approvalState, approvalStateProp, currentIterationNodeStr, approvalHistoryFolder, approvalHistoryFolderStr = '';
 	var completedApprovalsCount = 0, sourceRouteInfo = 'UNKNOWN', approvalIsEditable = true;
 
 	if (currentIterationNode) {
@@ -20,10 +20,15 @@
 		approvalState = 'NOT_EXITS';
 	}
 
-	approvalHistoryFolder = approval.getDocumentApprovalHistoryFolder(documentNode);
+	try {
+		approvalHistoryFolder = approval.getDocumentApprovalHistoryFolder(documentNode);
+	} catch (ex) {
+		logger.warn(ex.javaException.getMessage());
+	}
 
 	if (approvalHistoryFolder) {
 		completedApprovalsCount = approvalHistoryFolder.children.length;
+		approvalHistoryFolderStr = approvalHistoryFolder.nodeRef.toString();
 	}
 
 	model.routeType = routesService.getRouteType();
@@ -34,4 +39,5 @@
 	model.completedApprovalsCount = completedApprovalsCount;
 	model.sourceRouteInfo = sourceRouteInfo;
 	model.approvalIsEditable = approvalIsEditable;
+	model.approvalHistoryFolder = approvalHistoryFolderStr;
 })();

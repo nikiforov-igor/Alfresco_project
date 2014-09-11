@@ -7,6 +7,7 @@
 	"approvalState": "${approvalState}",
 	"completedApprovalsCount": ${completedApprovalsCount},
 	"sourceRouteInfo": "${sourceRouteInfo}",
-	"approvalIsEditable": ${approvalIsEditable?string}
+	"approvalIsEditable": ${approvalIsEditable?string},
+	"approvalHistoryFolder": "${approvalHistoryFolder}"
 }
 </#escape>
