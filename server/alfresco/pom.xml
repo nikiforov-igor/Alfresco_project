@@ -1128,6 +1128,11 @@
                                     <artifactId>ord-repo</artifactId>
                                     <type>amp</type>
                                 </overlay>
+                                <overlay>
+                                    <groupId>ru.it.lecm.types-view</groupId>
+                                    <artifactId>types-view-repo</artifactId>
+                                    <type>amp</type>
+                                </overlay>
                             </overlays>
                         </configuration>
                         <dependencies>
