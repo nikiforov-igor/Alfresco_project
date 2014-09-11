@@ -37,10 +37,13 @@
 
 /* Data Table */
 
-.attachment-list .documents table
-{
+.attachment-list .documents table {
 	border: medium none;
 	width: 100%;
+}
+
+.attachment-list .documents table td.yui-dt-col-fileName {
+    word-break: break-all;
 }
 
 .attachment-list .documents thead
