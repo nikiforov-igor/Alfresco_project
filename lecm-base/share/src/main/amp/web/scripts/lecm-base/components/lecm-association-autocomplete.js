@@ -27,6 +27,7 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("refreshAutocompleteItemList_" + fieldHtmlId, this.onRefreshAutocompleteItemList, this);
 	    YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 	    YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+	    YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
         this.controlId = fieldHtmlId + "-cntrl";
 	    this.currentValueHtmlId = fieldHtmlId;
@@ -128,7 +129,15 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.useDynamicLoading) {
 	                    this._loadSearchProperties();
 	                }
+                } else {
+	                this.updateSelectedItems();
+	                this.updateFormFields();
+	                this.updateInputUI();
                 }
+	            var input = Dom.get(this.controlId + "-autocomplete-input");
+	            if (input != null) {
+		            input.disabled = this.options.disabled || this.options.lazyLoading;
+	            }
 	            LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
             },
 
@@ -764,6 +773,23 @@ LogicECM.module = LogicECM.module || {};
 				        Dom.get(this.controlId + "-removed").disabled = false;
 			        }
 			        this.tempDisabled = false;
+		        }
+	        },
+
+	        onReInitializeControl: function (layer, args) {
+		        if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+			        var options = args[1].options;
+			        if (options != null) {
+				        this.setOptions(options);
+			        }
+
+			        this.dataArray = [];
+			        this.selectedItems = {};
+			        this.allowedNodes = null;
+			        this.allowedNodesScript = null;
+			        this.searchProperties = {};
+
+			        this.onReady();
 		        }
 	        }
         });

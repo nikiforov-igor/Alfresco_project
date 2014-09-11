@@ -608,6 +608,15 @@ LogicECM.module.Base.Util = {
 				fieldId: fieldId
 			});
 		});
+	},
+	reInitializeControl: function(formId, fieldId, options) {
+		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
+			YAHOO.Bubbling.fire("reInitializeControl", {
+				formId: formId,
+				fieldId: fieldId,
+				options: options
+			});
+		});
 	}
 };
 

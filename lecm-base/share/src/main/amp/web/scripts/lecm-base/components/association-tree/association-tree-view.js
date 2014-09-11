@@ -37,6 +37,7 @@ LogicECM.module = LogicECM.module || {};
         YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
+		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
 
         this.selectedItems = {};
         this.addItemButtons = {};
@@ -209,29 +210,34 @@ LogicECM.module = LogicECM.module || {};
 			this.options.pickerId = this.options.prefixPickerId + '-picker';
 			Dom.setStyle(this.options.pickerId, "display", "block");
 
+			if (this.widgets.pickerButton != null) {
+				this.widgets.pickerButton.set('disabled', this.options.disabled);
+			}
+
             // Create button if control is enabled
             if(!this.options.disabled)
             {
-	            var buttonOptions = {
-		            onclick: {
-			            fn: this.showTreePicker,
-			            obj: null,
-			            scope: this
-		            },
-		            title: this.options.pickerButtonTitle
-	            };
-	            if (this.options.pickerButtonLabel != null) {
-		            buttonOptions.label = this.options.pickerButtonLabel;
+	            if (this.widgets.pickerButton == null) {
+		            var buttonOptions = {
+			            onclick: {
+				            fn: this.showTreePicker,
+				            obj: null,
+				            scope: this
+			            },
+			            title: this.options.pickerButtonTitle
+		            };
+		            if (this.options.pickerButtonLabel != null) {
+			            buttonOptions.label = this.options.pickerButtonLabel;
+		            }
+
+		            // Create picker button
+		            var buttonName = Dom.get(this.options.prefixPickerId + "-tree-picker-button").name;
+		            this.widgets.pickerButton =  new YAHOO.widget.Button(this.options.prefixPickerId + "-tree-picker-button", buttonOptions);
+
+		            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
 	            }
 
-                // Create picker button
-	            var buttonName = Dom.get(this.options.prefixPickerId + "-tree-picker-button").name;
-                this.widgets.pickerButton =  new YAHOO.widget.Button(this.options.prefixPickerId + "-tree-picker-button", buttonOptions);
-                this.widgets.pickerButton.set('disabled', this.options.lazyLoading);
-
-	            Dom.get(this.options.prefixPickerId + "-tree-picker-button-button").name = buttonName;
-
-                if (this.options.showCreateNewButton) {
+                if (this.options.showCreateNewButton && this.widgets.createNewButton == null) {
                     this.widgets.createNewButton =  new YAHOO.widget.Button(
 	                    this.options.prefixPickerId + "-tree-picker-create-new-button",
                         {
@@ -2060,6 +2066,27 @@ LogicECM.module = LogicECM.module || {};
 						this.widgets.dialog.hide();
 					}
 				}
+			}
+		},
+
+		onReInitializeControl: function (layer, args) {
+			if (this.options.formId == args[1].formId && this.options.fieldId == args[1].fieldId) {
+				var options = args[1].options;
+				if (options != null) {
+					this.setOptions(options);
+				}
+
+				this.selectedItems = {};
+				this.addItemButtons = {};
+				this.searchProperties = {};
+				this.currentNode = null;
+				this.rootNode = null;
+				this.tree = null;
+				this.isSearch = false;
+				this.allowedNodes = null;
+				this.allowedNodesScript = null;
+
+				this.init();
 			}
 		}
 	});
