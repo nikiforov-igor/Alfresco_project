@@ -18,6 +18,7 @@ import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
+import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
@@ -215,18 +216,26 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	private List<NodeRef> getAllStageItemsOfRoute(NodeRef routeNode) {
-		Set<QName> stageItemType = new HashSet<>();
-		stageItemType.add(RoutesModel.TYPE_STAGE_ITEM);
-
 		List<NodeRef> stageItems = new ArrayList<>();
 		List<NodeRef> stages = getAllStagesOfRoute(routeNode);
 
 		for (NodeRef stageNode : stages) {
-			List<ChildAssociationRef> stageItemChildren = nodeService.getChildAssocs(stageNode, stageItemType);
-			for (ChildAssociationRef stageItemChild : stageItemChildren) {
-				NodeRef stageItemNode = stageItemChild.getChildRef();
-				stageItems.add(stageItemNode);
-			}
+			stageItems.addAll(getAllStageItemsOfStage(stageNode));
+		}
+
+		return stageItems;
+	}
+
+	private List<NodeRef> getAllStageItemsOfStage(NodeRef stageNode) {
+		Set<QName> stageItemType = new HashSet<>();
+		stageItemType.add(RoutesModel.TYPE_STAGE_ITEM);
+
+		List<NodeRef> stageItems = new ArrayList<>();
+
+		List<ChildAssociationRef> stageItemChildren = nodeService.getChildAssocs(stageNode, stageItemType);
+		for (ChildAssociationRef stageItemChild : stageItemChildren) {
+			NodeRef stageItemNode = stageItemChild.getChildRef();
+			stageItems.add(stageItemNode);
 		}
 
 		return stageItems;
@@ -236,6 +245,10 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	public NodeRef createEmptyIteration(NodeRef documentNode) {
 		NodeRef iterationNode;
 		NodeRef approvalFolder = approvalService.getDocumentApprovalFolder(documentNode);
+
+		PropertyMap props = new PropertyMap();
+		props.put(RoutesModel.PROP_ROUTE_EDITABLE, true);
+
 		if (approvalFolder == null) {
 			approvalFolder = approvalService.createDocumentApprovalFolder(documentNode);
 		} else {
@@ -251,7 +264,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			}
 		}
 
-		iterationNode = nodeService.createNode(approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), RoutesModel.TYPE_ROUTE).getChildRef();
+		iterationNode = nodeService.createNode(approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), RoutesModel.TYPE_ROUTE, props).getChildRef();
 
 		return iterationNode;
 	}
@@ -283,6 +296,78 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	private void permDeleteNode(NodeRef node) {
 		nodeService.addAspect(node, ContentModel.ASPECT_TEMPORARY, null);
 		nodeService.deleteNode(node);
+	}
+
+	@Override
+	public NodeRef getSourceRouteForIteration(NodeRef iterationNode) {
+		NodeRef result = null;
+		// итерацию откуда-то скопировали?
+		if (nodeService.hasAspect(iterationNode, ContentModel.ASPECT_COPIEDFROM)) {
+			NodeRef sourceRoute = findNodeByAssociationRef(iterationNode, ContentModel.ASSOC_ORIGINAL, RoutesModel.TYPE_ROUTE, ASSOCIATION_TYPE.TARGET);
+			if (sourceRoute != null && nodeService.exists(sourceRoute)) {
+				boolean routeEditable = (Boolean) nodeService.getProperty(sourceRoute, RoutesModel.PROP_ROUTE_EDITABLE);
+				// если маршрут можно изменять, то проверяем дальше. иначе считаем его исходным.
+				if (routeEditable) {
+					// так как в итерацию могут быть добавлены новые этапы и согласующие, надо идти со стороны исходного маршрута
+					boolean sourceRouteFound = true;
+					List<NodeRef> sourceStages = getAllStagesOfRoute(sourceRoute);
+					// бежим по этапам маршрута
+					for (NodeRef sourceStage : sourceStages) {
+						NodeRef iterationStage = null;
+						List<NodeRef> copiedStages = findNodesByAssociationRef(sourceStage, ContentModel.ASSOC_ORIGINAL, RoutesModel.TYPE_STAGE, ASSOCIATION_TYPE.SOURCE);
+						// бежим по всем копиям этапа маршрута (они будут находиться в итерациях)
+						for (NodeRef copiedStage : copiedStages) {
+							// проверяем, является ли родитель копии этапа нашей итерацией
+							NodeRef copiedStageIteration = nodeService.getPrimaryParent(copiedStage).getParentRef();
+							if (iterationNode.equals(copiedStageIteration)) {
+								// если да, то запомнили этап итерации, он пригодится позже
+								iterationStage = copiedStage;
+								break;
+							}
+						}
+
+						// запомненный этап итерации присутствует - пока ничего не разъехалось
+						if (iterationStage != null) {
+							List<NodeRef> sourceStageItems = getAllStageItemsOfStage(sourceStage);
+							// бежим по всем согласующим этапа маршрута
+							for (NodeRef sourceStageItem : sourceStageItems) {
+								boolean stageItemFound = false;
+								// все копии каждого согласующего этапа маршрута (согласующие итерации)
+								List<NodeRef> copiedStageItems = findNodesByAssociationRef(sourceStageItem, ContentModel.ASSOC_ORIGINAL, RoutesModel.TYPE_STAGE_ITEM, ASSOCIATION_TYPE.SOURCE);
+								for (NodeRef copiedStageItem : copiedStageItems) {
+									// сопадает ли родитель согласующего итерации с запомненным ранее этапом итерации
+									NodeRef copiedStageItemStage = nodeService.getPrimaryParent(copiedStageItem).getParentRef();
+									if (iterationStage.equals(copiedStageItemStage)) {
+										stageItemFound = true;
+										break;
+									}
+								}
+
+								// не нашли подходящего согласующего итерации. все плохо
+								if (!stageItemFound) {
+									sourceRouteFound = false;
+									break;
+								}
+							}
+
+						} else {
+							// не нашли подходящего этапа итерации. все плохо
+							sourceRouteFound = false;
+							break;
+						}
+					}
+
+					// нашли маршрут. все хорошо
+					if (sourceRouteFound) {
+						result = sourceRoute;
+					}
+				} else {
+					result = sourceRoute;
+				}
+			}
+		}
+
+		return result;
 	}
 
 }

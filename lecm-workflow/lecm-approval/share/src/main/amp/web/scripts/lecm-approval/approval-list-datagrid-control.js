@@ -486,8 +486,12 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			});
 		},
 		fillCurrentApprovalState: function () {
+			var typicalApprovalTemplate = '{msg} ({routeName})';
 			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
-			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo;
+			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo ? YAHOO.lang.substitute(typicalApprovalTemplate, {
+				msg: this.msg('label.approval.typical'),
+				routeName: this.sourceRouteInfo
+			}) : this.msg('label.approval.individual');
 			this.currentApprovalInfoContainer.innerHTML = this.approvalStateSettings[this.approvalState].stateMsg;
 		},
 		manageControlsVisibility: function () {
