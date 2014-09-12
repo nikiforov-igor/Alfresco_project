@@ -448,6 +448,9 @@ LogicECM.module = LogicECM.module || {};
 	            } else if (Dom.get(this.options.controlId + "-currentValueDisplay") != null && Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML.trim() === "") {
                     Dom.get(this.options.controlId + "-currentValueDisplay").innerHTML = this.msg("form.control.novalue");
                 }
+	            if (updateForms) {
+		            this.updateFormFields(clearCurrentDisplayValue);
+	            }
             }
         },
 

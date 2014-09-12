@@ -90,6 +90,8 @@ LogicECM.module = LogicECM.module || {};
 
                 showAssocViewForm: false,
 
+	            changeItemsFireAction: null,
+
 	            fieldId: null,
 
 	            formId: false
@@ -129,10 +131,6 @@ LogicECM.module = LogicECM.module || {};
 	                if (this.options.useDynamicLoading) {
 	                    this._loadSearchProperties();
 	                }
-                } else {
-	                this.updateSelectedItems();
-	                this.updateFormFields();
-	                this.updateInputUI();
                 }
 	            var input = Dom.get(this.controlId + "-autocomplete-input");
 	            if (input != null) {
@@ -151,6 +149,14 @@ LogicECM.module = LogicECM.module || {};
                 } else {
                     this.updateCurrentDisplayValue();
                 }
+
+	            if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+		            YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+			            selectedItems: this.selectedItems,
+			            formId: this.options.formId,
+			            fieldId: this.options.fieldId
+		            });
+	            }
             },
 
             loadSelectedItems: function AssociationAutoComplete__loadSelectedItems()
@@ -185,7 +191,7 @@ LogicECM.module = LogicECM.module || {};
 
                     if (!this.options.disabled) {
                         this.updateSelectedItems();
-                        this.updateFormFields();
+                        this.updateFormFields(true);
                         this.updateInputUI();
                     } else {
                         this.updateCurrentDisplayValue()
@@ -577,7 +583,7 @@ LogicECM.module = LogicECM.module || {};
             },
 
             // Updates all form fields
-            updateFormFields: function AssociationAutoComplete_updateFormFields()
+            updateFormFields: function AssociationAutoComplete_updateFormFields(first)
             {
                 // Just element
                 var el;
@@ -629,6 +635,15 @@ LogicECM.module = LogicECM.module || {};
 			            selectedItems:selectedItems,
 			            selectedItemsMetaData:Alfresco.util.deepCopy(this.selectedItems)
 		            });
+	            if (first == null || !first) {
+		            if (this.options.changeItemsFireAction != null && this.options.changeItemsFireAction != "") {
+			            YAHOO.Bubbling.fire(this.options.changeItemsFireAction, {
+				            selectedItems: this.selectedItems,
+				            formId: this.options.formId,
+				            fieldId: this.options.fieldId
+			            });
+		            }
+	            }
             },
 
             getAddedItems: function AssociationAutoComplete_getAddedItems()
@@ -765,8 +780,15 @@ LogicECM.module = LogicECM.module || {};
 				        input.disabled = true;
 			        }
 			        this.tempDisabled = true;
-			        Dom.get(this.controlId + "-added").disabled = true;
-			        Dom.get(this.controlId + "-removed").disabled = true;
+
+			        var added = Dom.get(this.controlId + "-added");
+			        if (added != null) {
+				        added.disabled = true;
+			        }
+			        var removed = Dom.get(this.controlId + "-removed");
+			        if (removed != null) {
+				        removed.disabled = true;
+			        }
 		        }
 	        },
 
@@ -777,8 +799,14 @@ LogicECM.module = LogicECM.module || {};
 				        if (input != null) {
 					        input.disabled = false;
 				        }
-				        Dom.get(this.controlId + "-added").disabled = false;
-				        Dom.get(this.controlId + "-removed").disabled = false;
+				        var added = Dom.get(this.controlId + "-added");
+				        if (added != null) {
+					        added.disabled = false;
+				        }
+				        var removed = Dom.get(this.controlId + "-removed");
+				        if (removed != null) {
+					        removed.disabled = false;
+				        }
 			        }
 			        this.tempDisabled = false;
 		        }

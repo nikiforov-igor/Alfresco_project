@@ -170,6 +170,9 @@
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
     </#if>
 	    useDynamicLoading: ${useDynamicLoading?string},
+    <#if field.control.params.changeItemsFireAction??>
+	    changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
+    </#if>
 	    fieldId: "${field.configName}",
 	    formId: "${args.htmlid}"
     });
@@ -230,11 +233,7 @@
         showCreateNewLink: ${showCreateNewLink?string},
 		showCreateNewButton: ${showCreateNewButton?string},
         showSearch: ${showSearch?string},
-	    <#if field.control.params.changeItemsFireAction??>
-		    changeItemsFireAction: "${field.control.params.changeItemsFireAction}",
-	    <#else>
-		    changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
-	    </#if>
+	    changeItemsFireAction: "refreshAutocompleteItemList_${fieldHtmlId}",
         plane: true,
     <#if field.control.params.showAssocViewForm??>
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
