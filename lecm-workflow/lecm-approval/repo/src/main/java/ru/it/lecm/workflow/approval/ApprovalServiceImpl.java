@@ -13,6 +13,9 @@ import org.alfresco.util.PropertyMap;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.delegation.IDelegation;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.statemachine.StateMachineServiceBean;
+import ru.it.lecm.statemachine.WorkflowDescriptor;
+import ru.it.lecm.statemachine.util.DocumentWorkflowUtil;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
 
 /**
@@ -22,6 +25,7 @@ import ru.it.lecm.workflow.approval.api.ApprovalService;
 public class ApprovalServiceImpl extends BaseBean implements ApprovalService, RunAsWork<NodeRef>, RetryingTransactionCallback<NodeRef> {
 
 	public final static String APPROVAL_FOLDER = "APPROVAL_FOLDER";
+	final static String ACTIVITI_PREFIX = "activiti$";
 	private final static String APPROVAL_GLOBAL_SETTINGS_NAME = "Глобальные настройки согласования";
 	private final static String DOCUMENT_APPROVAL_FOLDER = "Согласование";
 	private final static String DOCUMENT_APPROVAL_HISTORY_FOLDER = "История";
@@ -29,6 +33,7 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	private Integer defaultApprovalTerm = DEFAULT_DEFAULT_APROVAL_TERM;
 	private IDelegation delegationService;
+	private StateMachineServiceBean stateMachineService;
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
 		this.defaultApprovalTerm = defaultApprovalTerm;
@@ -36,6 +41,10 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 
 	public void setDelegationService(IDelegation delegationService) {
 		this.delegationService = delegationService;
+	}
+
+	public void setStateMachineService(StateMachineServiceBean stateMachineService) {
+		this.stateMachineService = stateMachineService;
 	}
 
 	public void init() {
@@ -134,5 +143,18 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 			}
 		}
 		return effectiveEmployeeRef;
+	}
+
+	@Override
+	public void connectToStatemachine(final NodeRef documentRef, final String processInstanceID, final String processDefinitionID) {
+		String stateMachineExecutionId = ACTIVITI_PREFIX + stateMachineService.getStatemachineId(documentRef);
+		String currentTaskId = stateMachineService.getCurrentTaskId(stateMachineExecutionId);
+		WorkflowDescriptor descriptor = new WorkflowDescriptor(processInstanceID, stateMachineExecutionId, processDefinitionID, currentTaskId, "", "", "");
+		new DocumentWorkflowUtil().addWorkflow(documentRef, processInstanceID, descriptor);
+	}
+
+	@Override
+	public void disconnectFromStatemachine(final NodeRef documentRef, final String processInstanceID) {
+		new DocumentWorkflowUtil().removeWorkflow(documentRef, processInstanceID);
 	}
 }
