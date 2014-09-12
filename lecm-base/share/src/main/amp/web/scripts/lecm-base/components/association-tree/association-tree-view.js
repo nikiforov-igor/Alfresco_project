@@ -1444,9 +1444,11 @@ LogicECM.module = LogicECM.module || {};
         _updateItems: function AssociationTreeViewer__updateItems(nodeRef, searchTerm)
         {
             // Empty results table - leave tag entry if it's been rendered
-            this.widgets.dataTable.set("MSG_EMPTY", this.msg("label.loading"));
-	        this.widgets.dataTable.showTableMessage(this.msg("label.loading"), YAHOO.widget.DataTable.CLASS_EMPTY);
-            this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
+	        if (this.widgets.dataTable != null) {
+		        this.widgets.dataTable.set("MSG_EMPTY", this.msg("label.loading"));
+		        this.widgets.dataTable.showTableMessage(this.msg("label.loading"), YAHOO.widget.DataTable.CLASS_EMPTY);
+		        this.widgets.dataTable.deleteRows(0, this.widgets.dataTable.getRecordSet().getLength());
+	        }
 
 	        this._loadItems(nodeRef, searchTerm, true);
 
