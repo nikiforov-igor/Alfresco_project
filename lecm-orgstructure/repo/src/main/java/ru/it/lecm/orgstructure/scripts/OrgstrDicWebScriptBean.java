@@ -38,7 +38,7 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
             "- {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/} (тел. {lecm-orgstr:employee-phone})";
     private final String EMPLOYEE_DASHLET_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}, " +
             "{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/}, " +
-            "{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-full-name}";
+            "{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-full-name} (тел. {lecm-orgstr:employee-phone})";
 
     private final String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
     private final String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
