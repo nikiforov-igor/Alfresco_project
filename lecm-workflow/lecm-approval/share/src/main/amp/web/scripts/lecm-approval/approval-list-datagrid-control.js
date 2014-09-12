@@ -105,6 +105,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		];
 
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
+		YAHOO.Bubbling.on('stageItemDeleted', function () {
+			this.getApprovalData(this.fillCurrentApprovalState);
+		}, this);
 
 		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 
@@ -590,6 +593,11 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			});
 
 			showApprovalHistoryForm.show();
+		},
+		onActionDelete: function (p_items, owner, actionsConfig, fnDeleteComplete) {
+			this.onDelete(p_items, owner, actionsConfig, function () {
+				this.getApprovalData(this.fillCurrentApprovalState);
+			}, null);
 		}
 	}, true);
 

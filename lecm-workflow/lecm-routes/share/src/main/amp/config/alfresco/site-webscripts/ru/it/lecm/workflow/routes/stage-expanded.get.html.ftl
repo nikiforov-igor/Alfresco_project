@@ -47,6 +47,13 @@
 	<#if isApproval>
 	LogicECM.CurrentModules["${id}"].getCustomCellFormatter = LogicECM.module.Approval.StageExpanded.getCustomCellFormatter;
 	</#if>
+	<#if isApproval && editable>
+	LogicECM.CurrentModules["${id}"].onActionDelete = function (p_items, owner, actionsConfig, fnDeleteComplete) {
+		this.onDelete(p_items, owner, actionsConfig, function() {
+			YAHOO.Bubbling.fire('stageItemDeleted');
+		}, null);
+	};
+	</#if>
 
 	YAHOO.util.Event.onContentReady("${datagridId}", function () {
 		YAHOO.Bubbling.fire("activeGridChanged", {
