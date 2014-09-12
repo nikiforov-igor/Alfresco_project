@@ -221,7 +221,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
             onSearchClick: function BaseToolbar_onSearch(e, obj) {
                 var searchTerm = Dom.get(this.id + "-full-text-search").value;
 
-                var maySearch = this.options.minSTermLength <= 0 || searchTerm.length == 0;
+                var maySearch = this.options.minSTermLength == null || this.options.minSTermLength <= 0 || searchTerm.length == 0;
                 if (!maySearch) {// проверяем длину терма
                     maySearch = (searchTerm.length >= this.options.minSTermLength);
                 }
