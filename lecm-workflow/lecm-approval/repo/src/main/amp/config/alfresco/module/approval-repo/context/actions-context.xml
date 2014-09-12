@@ -7,6 +7,7 @@
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<util:list id="approve3.actions">
+		<value>alfresco/module/approval-repo/actions/lecm-approval-start.xml</value>
 		<value>alfresco/module/approval-repo/actions/lecm-approval-force.xml</value>
 		<value>alfresco/module/approval-repo/actions/lecm-approval-termination.xml</value>
 	</util:list>
