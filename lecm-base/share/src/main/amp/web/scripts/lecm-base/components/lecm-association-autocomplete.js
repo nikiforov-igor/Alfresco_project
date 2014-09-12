@@ -553,8 +553,10 @@ LogicECM.module = LogicECM.module || {};
             },
 
             updateInputUI: function() {
-                Dom.get(this.controlId + "-autocomplete-input").value = "";
-                Dom.setStyle(Dom.get(this.controlId + "-autocomplete-input"), "display", this.canInputShow() ? "block" : "none");
+	            if (Dom.get(this.controlId + "-autocomplete-input") != null) {
+		            Dom.get(this.controlId + "-autocomplete-input").value = "";
+		            Dom.setStyle(Dom.get(this.controlId + "-autocomplete-input"), "display", this.canInputShow() ? "block" : "none");
+	            }
                 Dom.setStyle(Dom.get(this.controlId + "-currentValueDisplay"), "display", this.canCurrentValuesShow() ? "block" : "none");
             },
 
@@ -584,28 +586,34 @@ LogicECM.module = LogicECM.module || {};
 
                 // Update added fields in main form to be submitted
                 el = Dom.get(this.controlId + "-added");
-                el.value = '';
-                for (var i in addItems) {
-                    el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
-                }
+	            if (el != null) {
+		            el.value = '';
+		            for (var i in addItems) {
+			            el.value += ( i < addItems.length-1 ? addItems[i] + ',' : addItems[i] );
+		            }
+	            }
 
                 var removedItems = this.getRemovedItems();
 
                 // Update removed fields in main form to be submitted
                 el = Dom.get(this.controlId + "-removed");
-                el.value = '';
-                for (i in removedItems) {
-                    el.value += (i < removedItems.length-1 ? removedItems[i] + ',' : removedItems[i]);
-                }
+	            if (el != null) {
+		            el.value = '';
+		            for (i in removedItems) {
+			            el.value += (i < removedItems.length - 1 ? removedItems[i] + ',' : removedItems[i]);
+		            }
+	            }
 
                 var selectedItems = this.getSelectedItems();
 
                 // Update selectedItems fields in main form to pass them between popup and form
                 el = Dom.get(this.controlId + "-selectedItems");
-                el.value = '';
-                for (i in selectedItems) {
-                    el.value += (i < selectedItems.length-1 ? selectedItems[i] + ',' : selectedItems[i]);
-                }
+	            if (el != null) {
+		            el.value = '';
+		            for (i in selectedItems) {
+			            el.value += (i < selectedItems.length - 1 ? selectedItems[i] + ',' : selectedItems[i]);
+		            }
+	            }
 
 	            Dom.get(this.currentValueHtmlId).value = selectedItems.toString();
 
