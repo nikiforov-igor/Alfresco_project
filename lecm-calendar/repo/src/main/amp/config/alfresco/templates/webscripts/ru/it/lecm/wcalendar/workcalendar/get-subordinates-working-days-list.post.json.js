@@ -12,15 +12,21 @@
 	} else {
 		var isEngineer = orgstructure.isCalendarEngineer(currentEmployee.nodeRef.toString());
 		var isBoss = orgstructure.isBoss(currentEmployee.nodeRef.toString(), true);
-
+        var employees = null;
 		if (!isEngineer && isBoss) {
-			var employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef, true);
-			result = getEmployeesWorkingDaysList(employees, startDate, endDate);
+			employees = orgstructure.getBossSubordinate(currentEmployee.nodeRef, true);
 		} else if (isEngineer) {
-			var employees = search.luceneSearch("TYPE:\"lecm-orgstr:employee\" AND NOT (@lecm-dic\\:active:false)");
-			result = getEmployeesWorkingDaysList(employees, startDate, endDate);
+            if (orgstructure.hasGlobalOrganizationsAccess()) {
+                employees = search.luceneSearch("TYPE:\"lecm-orgstr:employee\" AND NOT (@lecm-dic\\:active:false)");
+            } else {
+                var organizationRef = orgstructure.getEmployeeOrganization(currentEmployee);
+                employees = orgstructure.getOrganizationEmployees(organizationRef);
+            }
 		}
-	}
+        if (employees != null) {
+            result = getEmployeesWorkingDaysList(employees, startDate, endDate);
+        }
+    }
 
 	model.result = result;
 

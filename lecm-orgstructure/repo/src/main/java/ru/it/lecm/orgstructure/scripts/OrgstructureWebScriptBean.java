@@ -5,12 +5,6 @@ import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
-import org.alfresco.service.cmr.repository.StoreRef;
-import org.alfresco.service.cmr.search.ResultSet;
-import org.alfresco.service.cmr.search.ResultSetRow;
-import org.alfresco.service.cmr.search.SearchParameters;
-import org.alfresco.service.cmr.search.SearchService;
-import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,9 +12,7 @@ import org.mozilla.javascript.Scriptable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.extensions.surf.util.ParameterCheck;
-import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.BaseWebScript;
-import ru.it.lecm.base.beans.SubstitudeBean;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.absence.IAbsence;
@@ -1158,5 +1150,22 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
     public Scriptable getOrganizationEmployees(final String organizationRef) {
         List<NodeRef> employees = orgstructureService.getOrganizationEmployees(new NodeRef(organizationRef));
         return createScriptable(employees);
+    }
+
+    public Scriptable getOrganizationEmployees(final ScriptNode organizationRef) {
+        List<NodeRef> employees = orgstructureService.getOrganizationEmployees(organizationRef.getNodeRef());
+        return createScriptable(employees);
+    }
+
+    public boolean hasGlobalOrganizationsAccess() {
+        return orgstructureService.hasGlobalOrganizationsAccess();
+    }
+
+    public ScriptNode getEmployeeOrganization(ScriptNode employee) {
+        return new ScriptNode(orgstructureService.getEmployeeOrganization(employee.getNodeRef()), serviceRegistry, getScope());
+    }
+
+    public ScriptNode getUnitByOrganization(ScriptNode organization) {
+        return new ScriptNode(orgstructureService.getUnitByOrganization(organization.getNodeRef()), serviceRegistry, getScope());
     }
 }

@@ -758,4 +758,6 @@ public interface OrgstructureBean {
     public List<NodeRef> getSubUnits(NodeRef parent, boolean onlyActive, boolean includeSubunits, boolean checkAccess);
 
     public boolean hasOrgChilds(NodeRef unit, boolean checkAccess);
+
+    boolean hasGlobalOrganizationsAccess();
 }

@@ -2144,4 +2144,9 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 
         return false;
     }
+
+    public boolean hasGlobalOrganizationsAccess() {
+        Set<String> auth = authorityService.getAuthoritiesForUser(AuthenticationUtil.getFullyAuthenticatedUser());
+        return auth.contains("GROUP_LECM_GLOBAL_ORGANIZATIONS_ACCESS");
+    }
 }
