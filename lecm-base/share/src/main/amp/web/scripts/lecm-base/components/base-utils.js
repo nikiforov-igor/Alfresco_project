@@ -625,15 +625,46 @@ LogicECM.module.Base.Util = {
 			});
 		});
 	},
-	reInitializeControl: function(formId, fieldId, options) {
-		YAHOO.util.Event.onAvailable(this.getComponentReadyElementId(formId, fieldId), function() {
-			YAHOO.Bubbling.fire("reInitializeControl", {
-				formId: formId,
-				fieldId: fieldId,
-				options: options
-			});
-		});
-	}
+
+    loadXMLDoc: function loadXMLDoc_function(url) {
+        if (window.ActiveXObject)
+        {
+            xhttp = new ActiveXObject("Msxml2.XMLHTTP");
+        }
+        else
+        {
+            xhttp = new XMLHttpRequest();
+        }
+        xhttp.open("GET", url, false);
+        try {xhttp.responseType = "msxml-document"} catch(err) {} // Helping IE11
+        xhttp.send("");
+        return xhttp.responseXML;
+    },
+
+    getTransformHTML: function getTransformHTML(parentElement, xmlNode, xslNode) {
+        var xmlURL = Alfresco.constants.PROXY_URI + "api/node/content/" + this.covertNodeRef(xmlNode);
+        var xml = this.loadXMLDoc(xmlURL);
+        var xslURL = Alfresco.constants.PROXY_URI + "api/node/content/" + this.covertNodeRef(xslNode);
+        var xsl = this.loadXMLDoc(xslURL);
+        // code for IE
+        if (window.ActiveXObject || xhttp.responseType == "msxml-document")
+        {
+            parentElement.innerHTML = xml.transformNode(xsl);
+        }
+        // code for Chrome, Firefox, Opera, etc.
+        else if (document.implementation && document.implementation.createDocument)
+        {
+            xsltProcessor = new XSLTProcessor();
+            xsltProcessor.importStylesheet(xsl);
+            resultDocument = xsltProcessor.transformToFragment(xml, document);
+            parentElement.appendChild(resultDocument);
+        }
+    },
+
+    covertNodeRef: function convertNodeRef_function(nodeRef) {
+        return nodeRef.replace("://", "/");
+    }
+
 };
 
 (function() {
