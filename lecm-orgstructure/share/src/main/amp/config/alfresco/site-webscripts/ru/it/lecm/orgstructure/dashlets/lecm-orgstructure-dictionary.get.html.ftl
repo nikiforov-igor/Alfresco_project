@@ -60,13 +60,13 @@
     <div class="body scrollableList" id="${id}-paginator" <#if args.height??>style="height: ${args.height}px;"</#if>>
         <@comp.baseToolbar jsid false true false/>
         <#-- Empty results list template -->
-            <div id="${id}-default">
-                <div class="default-text"><span>${msg("dashlet.default.text")}</span></div>
-            </div>
-            <div id="${id}-empty">
-                <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
-            </div>
-        <div id="orgstructure-tree"/>
+        <div id="${id}-default">
+            <div class="default-text"><span>${msg("dashlet.default.text")}</span></div>
+        </div>
+        <div id="${id}-empty">
+            <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
+        </div>
+        <div id="orgstructure-tree"></div>
         <@view.viewForm formId="org-dashlet-view-form"/>
     </div>
 </div>
