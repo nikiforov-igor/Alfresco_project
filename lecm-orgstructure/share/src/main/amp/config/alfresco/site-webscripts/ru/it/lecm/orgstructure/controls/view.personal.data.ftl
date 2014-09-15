@@ -36,6 +36,10 @@
             Alfresco.util.populateHTML(
                     [ "${id}-dialogTitle", "Personal Data" ]
             );
+            var contId = p_dialog.id + "-form-container";
+            Alfresco.util.populateHTML(
+                    [contId + "_h", "Персональная информация" ]
+            );
             p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
         };
 
@@ -110,6 +114,11 @@
             Alfresco.util.populateHTML(
                     [ "${id}-dialogTitle", "Personal Data" ]
             );
+            var contId = p_dialog.id + "-form-container";
+            Alfresco.util.populateHTML(
+                    [contId + "_h", "Персональная информация" ]
+            );
+
             p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
         };
 
