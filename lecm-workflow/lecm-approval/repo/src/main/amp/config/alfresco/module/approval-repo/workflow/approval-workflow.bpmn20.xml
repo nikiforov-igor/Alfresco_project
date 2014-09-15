@@ -7,7 +7,7 @@
           <activiti:string><![CDATA[(function(){ /* process happy end */
   /* пометка итерации как завершенной */
   var isEnded = execution.isEnded();
-  var deleteReason = '' + execution.getDeleteReason();
+  var deleteReason = (execution.getDeleteReason() != null) ? '' + execution.getDeleteReason() : null;
   var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
