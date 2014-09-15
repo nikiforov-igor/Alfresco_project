@@ -1,5 +1,6 @@
 package ru.it.lecm.arm.beans.childRules;
 
+import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -39,6 +40,7 @@ public class ArmQueryChildRule extends ArmBaseChildRule {
             sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
             sp.setQuery(listQuery);
+            sp.addSort("@" + ContentModel.PROP_NAME, true);
 
             ResultSet results = null;
             try {
