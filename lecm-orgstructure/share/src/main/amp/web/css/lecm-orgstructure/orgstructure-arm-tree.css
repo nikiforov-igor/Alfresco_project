@@ -1,8 +1,10 @@
-.dp-highlighter th, .dp-highlighter td {
+.dp-highlighter th,
+.dp-highlighter td {
     border:0;
     padding:0;
 }
-.dp-highlighter .line1, .dp-highlighter  .line2 {
+.dp-highlighter .line1,
+.dp-highlighter  .line2 {
     padding-left:10px;
     white-space:nowrap;
 }
@@ -15,8 +17,9 @@
 	overflow: auto;
 }
 
-#orgstructure-tree .unit-icon:hover, #orgstructure-tree .employee-icon:hover {
-    text-decoration: underline; /* Добавляем подчеркивание */
+#orgstructure-tree .unit-icon:hover,
+#orgstructure-tree .employee-icon:hover {
+    text-decoration: underline;
 }
 
 #orgstructure-tree .ygtvfocus,
@@ -52,9 +55,9 @@
     background-image: url('/share/res/images/lecm-eds-documents/arm.png');
 }
 
-.orgstructure-dictionary .body .default-text,.orgstructure-dictionary .body .empty {
-    margin: 8px;
-    padding-left: 10px;
+.orgstructure-dictionary .body .default-text,
+.orgstructure-dictionary .body .empty {
+    margin: 10px;
 }
 
 .orgstructure-dictionary .search-input {
@@ -62,12 +65,7 @@
 }
 
 .orgstructure-dictionary .toolbar {
-     margin-top: -4px;
-}
-
-.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvln,
-.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvtn {
-    visibility:hidden;
+    margin-top: -4px;
 }
 
 .orgstructure-dictionary #orgstructure-tree {
@@ -75,4 +73,11 @@
     overflow-x: hidden;
     overflow-y: auto;
     text-overflow: ellipsis;
+}
+
+.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvln,
+.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvtn {
+    width: 10px;
+    max-width: 10px;
+    visibility:hidden;
 }
