@@ -137,6 +137,11 @@ LogicECM.module = LogicECM.module || {};
 		            input.disabled = this.options.disabled || this.options.lazyLoading;
 	            }
 	            LogicECM.module.Base.Util.createComponentReadyElementId(this.id, this.options.formId, this.options.fieldId);
+                YAHOO.Bubbling.fire("associationAutoCompleteControlReady", {
+                    formId: this.options.formId,
+                    fieldId: this.options.fieldId,
+                    itemType: this.options.itemType
+                });
             },
 
             onRefreshAutocompleteItemList: function AssociationAutoComplete_onRefreshItemList(layer, args)
@@ -234,7 +239,7 @@ LogicECM.module = LogicECM.module || {};
 		        if (this.options.defaultValue != null) {
                      this.defaultValue = this.options.defaultValue;
                      this.loadSelectedItems();
-                } else 
+                } else
                 if (this.options.defaultValueDataSource != null) {
 			        var me = this;
 
