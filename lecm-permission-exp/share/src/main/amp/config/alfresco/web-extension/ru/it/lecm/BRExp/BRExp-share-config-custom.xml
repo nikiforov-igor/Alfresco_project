@@ -49,7 +49,7 @@
                     <field id="lecm-orgstr:employee-sex" set="commonOther"/>
                     <field id="lecm-orgstr:employee-email" set="commonOther"/>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
-                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
@@ -139,7 +139,7 @@
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
@@ -180,7 +180,7 @@
                         <control template="/ru/it/lecm/orgstructure/controls/show.image.ctrl.ftl"/>
                     </field>
                     <field id="lecm-orgstr:employee-phone" set="common"/>
-                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-number" set="common" help-id="lecm-validation-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
@@ -230,7 +230,7 @@
                     <field id="lecm-orgstr:employee-sex" set="commonOther"/>
                     <field id="lecm-orgstr:employee-email" set="commonOther"/>
                     <field id="lecm-orgstr:employee-phone" set="commonOther"/>
-                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-number-uniqueness-help-id">
+                    <field id="lecm-orgstr:employee-number" set="commonOther" help-id="lecm-validation-uniqueness-help-id">
                         <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
                         <constraint-handlers>
                             <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
