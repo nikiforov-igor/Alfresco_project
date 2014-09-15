@@ -9,7 +9,7 @@
 	<bean id="routes.javascriptExtension" parent="baseScript"
 		  class="ru.it.lecm.workflow.routes.extensions.RoutesJavascriptExtension"
 		  p:extensionName="routesService"
-		  p:routesService-ref="routes.service"
+		  p:routesService-ref="routesService"
 	/>
 
 </beans>

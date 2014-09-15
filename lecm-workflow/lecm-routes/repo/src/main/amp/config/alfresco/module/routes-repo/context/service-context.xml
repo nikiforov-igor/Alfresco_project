@@ -25,7 +25,7 @@
 	<util:map id="routes.folders.map">
 		<entry key="#{routesServiceFolderID}" value="Сервис маршрутов"/>
 	</util:map>
-	<bean id="routes.service" class="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl"
+	<bean id="routesService" class="ru.it.lecm.workflow.routes.beans.RoutesServiceImpl"
 		  parent="baseBean" depends-on="routes.model.bootstrap"
 		  init-method="init"
 		  p:folders-ref="routes.folders.map"
