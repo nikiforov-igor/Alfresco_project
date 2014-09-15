@@ -41,8 +41,7 @@
     Event.onDOMReady(function() {
         LogicECM.module.Base.Util.removeAllBubbles(this);
         Bubbling.on("GridRendered", setTreeHeight, this);
-        Bubbling.on("HeightSetted", setTreeHeight, this);                                          ALF-3318
-        Администрирование. Штатное расписание - Границы на странице обрываются.
+        Bubbling.on("HeightSetted", setTreeHeight, this);
         Bubbling.on("HeightSetting",clearHeight, this)
     });
 
