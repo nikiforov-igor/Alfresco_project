@@ -323,6 +323,7 @@
     <config evaluator="node-type" condition="lecm-orgstr:organization">
         <forms>
             <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
@@ -380,6 +381,7 @@
     <config evaluator="model-type" condition="lecm-orgstr:organization">
         <forms>
             <form>
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-orgstr:element-full-name"/>
