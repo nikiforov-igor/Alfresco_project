@@ -623,9 +623,13 @@ span.navigation-separator-alt
 /* Standard toolbars */
 
 .share-toolbar,
-.toolbar
-{
+.toolbar {
    border-bottom: 1px solid #ccc;
+}
+
+.share-toolbar:empty,
+.toolbar:empty {
+   border: none;
 }
 
 .share-toolbar .action-bar,
