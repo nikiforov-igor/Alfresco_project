@@ -113,3 +113,4 @@
 		</div>
 	</div>
 </#if>
+<div class="clear"></div>
