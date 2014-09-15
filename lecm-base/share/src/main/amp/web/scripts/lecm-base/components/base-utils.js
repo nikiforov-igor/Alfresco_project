@@ -718,7 +718,11 @@ LogicECM.module.Base.Util = {
 			Dom.setStyle(this.options.divLeft, "height", "auto");
 			Dom.setStyle(handle, "height", "");
 
-			var h = Dom.getY("lecm-content-ft") - Dom.getY("lecm-content-main");
+            var contentMainDiv = Dom.getAncestorBy(handle,
+                function(node) {
+                    return YAHOO.util.Selector.test(node, "#lecm-content-main");
+                });  // вернуть contentMainDiv именно для этого ресайзера (в разделе администрирования их может быть два единовременно)
+			var h = Dom.getY("lecm-content-ft") - Dom.getY(contentMainDiv);
 
 			if (h < this.MIN_FILTER_PANEL_HEIGHT) {
 				h = this.MIN_FILTER_PANEL_HEIGHT;

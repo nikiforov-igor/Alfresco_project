@@ -8,9 +8,16 @@
 
     //Set block height
     function setTreeHeight() {
-        var treeHeight = Dom.getY("lecm-content-ft") - Dom.getY("lecm-content-main");
         var block = Dom.get('orgstructure-tree');
         if (block) {
+            var contentMainDiv = Dom.getAncestorBy(block,
+                function(node) {
+                    return YAHOO.util.Selector.test(node, "#lecm-content-main");
+                });
+            // Для произвольных страниц в администрировании надо учесть, что таких элемента в разметке может быть два,
+            // и нам нужен именно второй - вложенный,
+            // а при обращении по id вернется первый - внешний.
+            var treeHeight = Dom.getY("lecm-content-ft") - Dom.getY(contentMainDiv);
             Dom.setStyle(block, "position", "inherit");
             Dom.setStyle(block, 'height', treeHeight +'px');
             Dom.setStyle(block, 'width', 'auto');
@@ -32,8 +39,10 @@
     }
 
     Event.onDOMReady(function() {
+        LogicECM.module.Base.Util.removeAllBubbles(this);
         Bubbling.on("GridRendered", setTreeHeight, this);
-        Bubbling.on("HeightSetted", setTreeHeight, this);
+        Bubbling.on("HeightSetted", setTreeHeight, this);                                          ALF-3318
+        Администрирование. Штатное расписание - Границы на странице обрываются.
         Bubbling.on("HeightSetting",clearHeight, this)
     });
 
