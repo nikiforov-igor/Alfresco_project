@@ -51,6 +51,11 @@
     <#assign showActions = params.showActions/>
 </#if>
 
+<#assign usePagination = "true"/>
+<#if params.usePagination??>
+    <#assign usePagination = params.usePagination/>
+</#if>
+
 <#assign showCreateButton = true/>
 <#if field.control.params.showCreateBtn??>
     <#assign showCreateButton = field.control.params.showCreateBtn/>
@@ -73,6 +78,7 @@
 		control.setOptions(
 			{
 				currentValue: "${field.value!""}",
+                usePagination: ${usePagination?string},
 				messages: ${messages},
 				bubblingLabel: "${bubblingId}",
                 <#if toolbar == "true">
@@ -108,6 +114,7 @@
 	function init() {
         LogicECM.module.Base.Util.loadScripts([
 	        'scripts/lecm-base/components/advsearch.js',
+            'modules/simple-dialog.js',
 	        'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/documents/tables/lecm-document-table.js',

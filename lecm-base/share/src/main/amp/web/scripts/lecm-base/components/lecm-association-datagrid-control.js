@@ -61,6 +61,11 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
 
 (function () {
 
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        Selector = YAHOO.util.Selector,
+        Bubbling = YAHOO.Bubbling;
+
     LogicECM.module.Base.AssociationDataGrid = function (htmlId) {
         return LogicECM.module.Base.AssociationDataGrid.superclass.constructor.call(this, htmlId);
     };
@@ -140,8 +145,6 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
         },
 
 	    getRowFormater: function () {
-		    var scope = this;
-
 		    return function (elTr, oRecord) {
 	            if (oRecord.getData("type") == "total") {
 	                YAHOO.util.Dom.addClass(elTr, 'total-row');
@@ -188,7 +191,9 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                         this.widgets.dataTable.deleteRow(recordTag);
                                         //В selectItems добавляем только что добавленую запись,
                                         //это нужно для поиска по только что добавленному значению
-                                        me.selectItemsTag.value = item.nodeRef;
+                                        if (me.selectItemsTag != null) {
+                                            me.selectItemsTag.value = item.nodeRef;
+                                        }
                                     }
                                     if (formMode == "create") {
                                         // форма создания
@@ -215,9 +220,11 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                     }
                                     //В selectItemsTag добавляем только что добавленые записи и которые были,
                                     //это нужно для поиска по только что добавленным значениям
-                                    me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
+                                    if (me.selectItemsTag != null) {
+                                        me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
+                                        me.filterValues = me.selectItemsTag != null ? me.selectItemsTag.value : null;
+                                    }
                                 }
-                                me.filterValues = me.selectItemsTag.value;
                                 me._setSearchConfigFilter();
                                 Bubbling.fire("initDatagrid",
                                     {
@@ -259,8 +266,10 @@ LogicECM.module.Base.AssociationDataGrid= LogicECM.module.Base.AssociationDataGr
                                         }
                                         //В selectItems добавляем только что добавленые записи и которые были,
                                         //это нужно для поиска по только что добавленным значениям
-                                        me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
-                                        me.filterValues = me.selectItemsTag.value;
+                                        if (me.selectItemsTag != null) {
+                                            me.selectItemsTag.value = me.inputAdded.value + "," + me.input.value;
+                                            me.filterValues = me.selectItemsTag.value;
+                                        }
                                         me._setSearchConfigFilter();
                                         Bubbling.fire("initDatagrid",
                                             {

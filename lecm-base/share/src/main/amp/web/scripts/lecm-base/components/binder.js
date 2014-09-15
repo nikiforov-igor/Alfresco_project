@@ -115,14 +115,16 @@ Binder.prototype._hookDialog = function() {
 		var query = { id: binder.dialogId, name: 'Alfresco.module.SimpleDialog' };
 		var queryResult = ComponentManager.find(query);
 
-		// В коллекции ComponentManager может сущестсовать несколько компонентов с одним и тем же id, так как они
-		// добавляются последовательно, то берём последний.
-		queryResult = queryResult[queryResult.length - 1];
+        if (queryResult != null && queryResult.lenght > 0) {
+            // В коллекции ComponentManager может сущестсовать несколько компонентов с одним и тем же id, так как они
+            // добавляются последовательно, то берём последний.
+            queryResult = queryResult[queryResult.length - 1];
 
-		YAHOO.Bubbling.unsubscribe(bubbLayer, onAfterFormRuntimeInit); // Once Event
+            YAHOO.Bubbling.unsubscribe(bubbLayer, onAfterFormRuntimeInit); // Once Event
 
-		binder.dialog = dialog = queryResult.dialog;
-		dialog.beforeHideEvent.subscribe(binder._bubbUnsubscribe, binder, true);
+            binder.dialog = dialog = queryResult.dialog;
+            dialog.beforeHideEvent.subscribe(binder._bubbUnsubscribe, binder, true);
+        }
 	}
 
 	var binder = this; // The Closure vs...

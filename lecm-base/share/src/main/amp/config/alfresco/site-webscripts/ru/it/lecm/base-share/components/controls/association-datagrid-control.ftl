@@ -60,12 +60,12 @@
 <#-- Toolbar -->
 <#assign showSearchControl = true/>
 <#if field.control.params.showSearch??>
-    <#assign showSearchControl = field.control.params.showSearch/>
+    <#assign showSearchControl = (field.control.params.showSearch == "true")/>
 </#if>
 
 <#assign exSearch = false/>
 <#if field.control.params.showExSearchBtn??>
-    <#assign exSearch = field.control.params.showExSearchBtn/>
+    <#assign exSearch = (field.control.params.showExSearchBtn == "true")/>
 </#if>
 
 <#assign showCreateButton = true/>
@@ -76,6 +76,10 @@
 <#assign newRowTitle = "label.create-row.title"/>
 <#if field.control.params.newRowDialogTitle??>
     <#assign newRowTitle = field.control.params.newRowDialogTitle/>
+</#if>
+<#assign editRowTitle = "label.edit-row.title"/>
+<#if field.control.params.editRowDialogTitle??>
+    <#assign editRowTitle = field.control.params.editRowDialogTitle/>
 </#if>
 
 <#assign createBtnLabel = msg("label.create-row.title")/>
@@ -88,6 +92,8 @@
 
 <script type="text/javascript">//<![CDATA[
 (function () {
+    var Dom = YAHOO.util.Dom;
+
     function createToolabar(nodeRef) {
         new LogicECM.module.Base.Toolbar(null, "${controlIdToolbar}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingId}",
@@ -98,9 +104,20 @@
     }
 
     function createDataGrid(nodeRef) {
+        LogicECM.module.Base.DataGridControl_${objectId} = function (htmlId) {
+            LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
+            return this;
+        };
+
+        YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.AssociationDataGrid, {
+        ${field.control.params.actionsHandler!""}
+        });
+
         var datagrid = new LogicECM.module.Base.DataGridControl_${objectId}('${containerId}').setOptions({
             usePagination: ${usePagination?string},
             showExtendSearchBlock: false,
+            createFormTitleMsg: "${newRowTitle}",
+            editFormTitleMsg: "${editRowTitle}",
             formMode: "${form.mode?string}",
             actions: [
             <#if allowExpand = "true">
@@ -133,7 +150,7 @@
             datagridMeta: {
                 itemType: "${field.control.params.itemType!""}",
                 datagridFormId: "${field.control.params.datagridFormId!"datagrid"}",
-                useChildQuery: true,
+                useChildQuery: false,
                 createFormId: "${field.control.params.createFormId!""}",
                 nodeRef: nodeRef,
                 actionsConfig: {
@@ -161,9 +178,9 @@
             repeating: ${field.repeating?string}
         }).setMessages(${messages});
 
-        var inputTag = Dom.get("${fieldHtmlId}");
-        var inputAddedTag = Dom.get("${fieldHtmlId}-added");
-        var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
+        var inputTag = Dom.get("${controlId}");
+        var inputAddedTag = Dom.get("${controlId}-added");
+        var inputRemovedTag = Dom.get("${controlId}-removed");
         var selectItemsTag = Dom.get("${controlId}-selectedItems");
         var filter = "";
         if (inputTag != null && inputTag.value != "") {
@@ -181,17 +198,41 @@
         datagrid.input = inputTag;
         datagrid.inputAdded = inputAddedTag;
         datagrid.inputRemoved = inputRemovedTag;
-        datagrid.selectItems = selectItemsTag;
+        datagrid.selectItemsTag = selectItemsTag;
         datagrid.itemType = "${field.endpointType}";
         datagrid.assocType = "${field.configName}";
-        datagrid.documentRef = "${form.arguments.itemId}";
+        <#if form.mode != "create">
+            datagrid.documentRef = "${form.arguments.itemId}";
+        </#if>
         datagrid.draw();
+    }
+
+    function getRootUrlParams(directoryPath) {
+        if (directoryPath) {
+            if (directoryPath.charAt(0) == "{") {
+                var location = directoryPath;
+                if (directoryPath == "{companyhome}") {
+                    location = "alfresco://company/home";
+                } else if (directoryPath == "{userhome}") {
+                    location = "alfresco://user/home";
+                } else if (directoryPath == "{siteshome}") {
+                    location = "alfresco://sites/home";
+                } else if (directoryPath == "{usertemp}") {
+                    location = "alfresco://user/temp";
+                }
+                return location;
+            }
+        }
+
+        return directoryPath;
     }
 
     function loadRootNode() {
         var sUrl = "";
-    <#if field.control.params.startLocation??>
-        sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") + "&xpath=" + encodeURIComponent("${field.control.params.startLocation}");
+    <#if field.control.params.startLocation?? || field.control.params.rootNode??>
+                sUrl = Alfresco.constants.PROXY_URI + "/lecm/forms/node/search" + "?titleProperty=" + encodeURIComponent("cm:name") +
+                    <#if field.control.params.startLocation??>"&xpath=" + encodeURIComponent("${field.control.params.startLocation}")<#else>""</#if> +
+            <#if field.control.params.rootNode??>"&rootNode=" + encodeURIComponent(getRootUrlParams("${field.control.params.rootNode}"))<#else>""</#if>;
     <#elseif (field.control.params.startLocationScriptUrl?? && (form.mode != "create"))>
         var nodeRef = "${form.arguments.itemId}";
         sUrl = Alfresco.constants.PROXY_URI + "${field.control.params.startLocationScriptUrl}?nodeRef=" + nodeRef;
@@ -222,54 +263,43 @@
         }
     }
     function init() {
-        loadRootNode();
+        LogicECM.module.Base.Util.loadScripts([
+            'scripts/lecm-base/components/advsearch.js',
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'modules/simple-dialog.js',
+            'scripts/lecm-base/components/lecm-datagrid.js',
+            'scripts/lecm-base/components/lecm-association-datagrid-control.js'
+        ], loadRootNode);
     }
 
-    YAHOO.util.Event.onContentReady("${fieldHtmlId}", init, true);
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 
+<div class="control association-datagrid with-grid">
+<#if showLabel>
+    <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
+        <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
+</#if>
+
+<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
+<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
+<input type="hidden" id="${controlId}" name="${field.name}" value="${field.value?html}"/>
+<input type="hidden" id="${controlId}-selectedItems"/>
+
 <@comp.baseToolbar controlIdToolbar true showSearchControl exSearch>
     <#if showCreateButton>
-    <div class="new-row">
+        <div class="new-row">
         <span id="${controlIdToolbar}-newRowButton" class="yui-button yui-push-button">
            <span class="first-child">
               <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
            </span>
         </span>
-    </div>
+        </div>
     </#if>
 </@comp.baseToolbar>
 
-<div class="form-field with-grid" id="${controlId}">
-<#if showLabel>
-    <label for="${controlId}">${field.label?html}:
-        <#if field.endpointMandatory!false || field.mandatory!false>
-            <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span>
-        </#if>
-    </label>
-</#if>
-
-<@grid.datagrid containerId false>
-    <script type="text/javascript">//<![CDATA[
-    (function () {
-        var Dom = YAHOO.util.Dom;
-        LogicECM.module.Base.DataGridControl_${objectId} = function (htmlId) {
-            LogicECM.module.Base.DataGridControl_${objectId}.superclass.constructor.call(this, htmlId, ["button", "container", "datasource", "datatable", "paginator", "animation"]);
-            return this;
-        };
-
-        YAHOO.extend(LogicECM.module.Base.DataGridControl_${objectId}, LogicECM.module.Base.AssociationDataGrid, {
-        ${field.control.params.actionsHandler!""}
-        });
-    })();
-    //]]></script>
-</@grid.datagrid>
-    <div id="${controlId}-container">
-        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
-        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
-        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
-        <input type="hidden" id="${controlId}-selectedItems"/>
-    </div>
-
+<@grid.datagrid containerId false/>
 </div>
+
+<div class="clear"></div>
