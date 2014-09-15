@@ -348,22 +348,6 @@ LogicECM.module.Base.Util = {
         this.componentsLength = -1;
     },
 
-    removeDomObjects: function(objectsIds) {
-        if (objectsIds && !objectsIds.isEmpty) {
-            var array = [].concat(objectsIds);
-            for (var i in array) {
-                var els = YAHOO.util.Selector.query("#" + array[i]);
-                // Используем Selector.query(), а не Dom.get(),
-                // потому что может быть несколько элементов с одним id,
-                // и .get() возьмет только первый из них, а нам нужны все
-                for (var j in els) {
-                    var el = els[j];
-                    el.parentNode.removeChild(el);
-                }
-            }
-        }
-    },
-
 	removeAllBubbles: function (obj) {
 		var event;
 		var bubble = YAHOO.Bubbling.bubble;

@@ -29,7 +29,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
     /**
      * YUI Library aliases
      */
-    var Dom = YAHOO.util.Dom;
+    var Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector;
     var $html = Alfresco.util.encodeHTML;
     /**
      * Advanced Search constructor.
@@ -533,7 +534,14 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                 defaultForm.type = metaData.itemType;
 
                 if (this.options.showExtendSearchBlock) { // если заданы соответствующая опция
-                    if(this.searchDialog == null){
+                    if (this.searchDialog == null){
+                        // Если SearchBlock уже есть в разметке в body (остался с предыдущей "страницы")
+                        // удаляем его
+                        // Это актуально для раздела "Администрирование"
+                        var searchBlockInBody = Selector.query("body > div > #searchBlock", null, true);
+                        if (searchBlockInBody) {
+                            searchBlockInBody.parentNode.removeChild(searchBlockInBody);
+                        }
                         // создаем диалог
                         this.searchDialog = Alfresco.util.createYUIPanel("searchBlock",
                             {

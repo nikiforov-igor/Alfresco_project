@@ -351,7 +351,6 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
             if (node) {
 
                 LogicECM.module.Base.Util.resetAdditionalObjects();
-                LogicECM.module.Base.Util.removeDomObjects("searchBlock");
 
                 if (node.data.nodeType == "lecm-dic:dictionary") {
                     node.data.nodeType = "lecm-arm:html-node";
