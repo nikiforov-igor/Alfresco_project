@@ -36,9 +36,9 @@ public interface RoutesService {
 	 */
 	boolean archiveDocumentCurrentIteration(final NodeRef documentRef);
 
-	List<NodeRef> getAllowedRoutesForCurrentUser();
+	List<NodeRef> getAllowedRoutesForCurrentUser(NodeRef documentRef);
 
-	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef);
+	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef, NodeRef documentRef);
 
 	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
 

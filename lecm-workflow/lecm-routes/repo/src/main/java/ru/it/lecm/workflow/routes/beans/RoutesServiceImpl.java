@@ -22,6 +22,7 @@ import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.approval.api.ApprovalAspectsModel;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
@@ -42,6 +43,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	private OrgstructureBean orgstructureService;
 	private SearchService searchService;
 	private CopyService copyService;
+	private DocumentService documentService;
 
 	public void setApprovalService(ApprovalService approvalService) {
 		this.approvalService = approvalService;
@@ -59,6 +61,10 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		this.copyService = copyService;
 	}
 
+	public void setDocumentService(DocumentService documentService) {
+		this.documentService = documentService;
+	}
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ROUTES_FOLDER_ID);
@@ -70,6 +76,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		PropertyCheck.mandatory(this, "orgstructureService", orgstructureService);
 		PropertyCheck.mandatory(this, "searchService", searchService);
 		PropertyCheck.mandatory(this, "copyService", copyService);
+		PropertyCheck.mandatory(this, "documentService", documentService);
 	}
 
 	@Override
@@ -124,13 +131,12 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	@Override
-	public List<NodeRef> getAllowedRoutesForCurrentUser() {
-		return getAllowedRoutesForEmployee(orgstructureService.getCurrentEmployee());
+	public List<NodeRef> getAllowedRoutesForCurrentUser(NodeRef documentRef) {
+		return getAllowedRoutesForEmployee(orgstructureService.getCurrentEmployee(), documentRef);
 	}
 
 	@Override
-	public List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef) {
-		// TODO Добавить непосредственно фильтрацию
+	public List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef, NodeRef documentRef) {
 		List<NodeRef> nodes = new ArrayList<>();
 		NodeRef parentContainer = getRoutesFolder();
 
@@ -144,7 +150,9 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			results = searchService.query(sp);
 			for (ResultSetRow row : results) {
 				NodeRef currentNodeRef = row.getNodeRef();
-				nodes.add(currentNodeRef);
+				if (isRouteAllowedForEmployee(currentNodeRef, employeeRef, documentRef)) {
+					nodes.add(currentNodeRef);
+				}
 			}
 		} finally {
 			if (results != null) {
@@ -152,6 +160,32 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			}
 		}
 		return nodes;
+	}
+
+	private boolean isRouteAllowedForEmployee(NodeRef routeRef, NodeRef employeeRef, NodeRef documentRef) {
+		boolean result = false;
+		List<NodeRef> routeUnits = findNodesByAssociationRef(routeRef, RoutesModel.ASSOC_ROUTE_ORGANIZATION_UNIT, OrgstructureBean.TYPE_ORGANIZATION_UNIT, ASSOCIATION_TYPE.TARGET);
+		List<NodeRef> employeeUnits = orgstructureService.getEmployeeUnits(employeeRef, false);
+		boolean unitMatched = routeUnits.isEmpty();
+
+		for (NodeRef routeUnit : routeUnits) {
+			if (employeeUnits.contains(routeUnit)) {
+				unitMatched = true;
+				break;
+			}
+		}
+
+		if (unitMatched) {
+			String routeExpression = (String) nodeService.getProperty(routeRef, RoutesModel.PROP_ROUTE_AVAILABILITY_CONDITION);
+			if (routeExpression != null && !routeExpression.isEmpty()) {
+				boolean expressionResult = documentService.execExpression(documentRef, routeExpression);
+				result = expressionResult;
+			} else {
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
 	@Override

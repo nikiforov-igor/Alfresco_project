@@ -52,8 +52,8 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 	}
 
-	public Scriptable getAllowedRoutesForCurrentUser() {
-		return createScriptable(routesService.getAllowedRoutesForCurrentUser());
+	public Scriptable getAllowedRoutesForCurrentUser(ScriptNode documentNode) {
+		return createScriptable(routesService.getAllowedRoutesForCurrentUser(documentNode.getNodeRef()));
 	}
 
 	public ScriptNode convertRouteToIteration(ScriptNode documentNode, ScriptNode routeNode) {

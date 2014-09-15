@@ -33,6 +33,7 @@
 		  p:orgstructureService-ref="serviceOrgstructure"
 		  p:searchService-ref="searchService"
 		  p:copyService-ref="copyService"
+		  p:documentService-ref="documentService"
 	/>
 
 	<bean id="routes.delete.temp.schedule"

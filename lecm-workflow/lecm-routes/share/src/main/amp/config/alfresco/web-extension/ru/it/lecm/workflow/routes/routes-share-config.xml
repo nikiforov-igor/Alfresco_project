@@ -12,6 +12,7 @@
 			<form id="selectRouteForm">
 				<field-visibility>
 					<show id="lecmWorkflowRoutes:selectRouteAssocFake" force="true"/>
+					<show id="lecmWorkflowRoutes:hackSelectRouteAssocFake" force="true"/>
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutes:selectRouteAssocFake" label="Маршрут">
@@ -23,9 +24,12 @@
 							<control-param name="employeeAbsenceMarker">false</control-param>
 							<control-param name="endpointMany">false</control-param>
 							<control-param name="itemType">lecmWorkflowRoutes:route</control-param>
-							<control-param name="allowedNodesScript">lecm/workflow/routes/getAllowedRoutes</control-param>
 							<control-param name="showAssocViewForm">true</control-param>
+							<control-param name="lazyLoading">true</control-param>
 						</control>
+					</field>
+					<field id="lecmWorkflowRoutes:hackSelectRouteAssocFake">
+						<control template="/ru/it/lecm/workflow/routes/controls/hack-routes-select-control.ftl"/>
 					</field>
 				</appearance>
 			</form>
