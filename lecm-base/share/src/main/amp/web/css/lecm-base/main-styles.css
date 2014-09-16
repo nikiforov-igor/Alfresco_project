@@ -234,6 +234,13 @@ i.icon-building {
     border: 1px solid #ccc;
     font-size: 13px;
 }
+
+/* Для грида в диалоговом окне: всегда наследовать свойство visibility
+ Чтоб при закрытии окна грид также скрывался, а не оставался на странице */
+.yui-skin-lecmTheme .yui-panel .datagrid {
+    visibility: inherit !important;
+}
+
 /* Табы */
 .yui-skin-lecmTheme .yui-panel .yui-navset ul.yui-nav {
     margin-left: 5px;

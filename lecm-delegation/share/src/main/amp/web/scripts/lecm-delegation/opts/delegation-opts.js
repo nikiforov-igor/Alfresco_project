@@ -80,10 +80,19 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 
 		onReady: function () {
 			this.datagridId = this.id + YAHOO.util.Dom.generateId();
-            this.viewDialog = Alfresco.util.createYUIPanel(this.id + "-form",
-                {
-                    width: "50em"
-                });
+            if (!this.viewDialog) {
+                var viewDialogId = this.id + "-form";
+                // Если viewDialog уже есть в разметке в body (остался с предыдущего открытия этого раздела)
+                // удаляем его
+                var viewDialogInBody = YAHOO.util.Selector.query("body > div > #" + viewDialogId, null, true);
+                if (viewDialogInBody) {
+                    viewDialogInBody.parentNode.removeChild(viewDialogInBody);
+                }
+                this.viewDialog = Alfresco.util.createYUIPanel(viewDialogId,
+                    {
+                        width: "50em"
+                    });
+            }
             this.viewDialog.hide();
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
