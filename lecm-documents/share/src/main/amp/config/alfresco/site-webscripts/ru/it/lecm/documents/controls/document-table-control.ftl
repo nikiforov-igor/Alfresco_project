@@ -71,6 +71,17 @@
     <#assign jsObjectName = field.control.params.jsObjectName/>
 </#if>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign isFieldMandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+    <#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <script type="text/javascript">//<![CDATA[
 (function() {
 	function drawForm(){
@@ -128,35 +139,42 @@
 	YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
-<#if toolbar == "true" && form.mode?string=="edit">
-<div id="${toolbarId}">
-	<@comp.baseToolbar toolbarId true showSearch false>
-        <#if showCreateButton>
-	    <div class="new-row">
-	        <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
-	           <span class="first-child">
-	              <button type="button" title="${msg("label.table.row.create.title")}">${msg("label.table.row.create.title")}</button>
-	           </span>
-	        </span>
-	    </div>
+
+<div class="control document-table-control with-grid">
+    <div class="container">
+        <div class="value-div">
+        <#if toolbar == "true" && form.mode?string=="edit">
+            <div id="${toolbarId}">
+                <@comp.baseToolbar toolbarId true showSearch false>
+                    <#if showCreateButton>
+                        <div class="new-row">
+                                    <span id="${toolbarId}-newRowButton" class="yui-button yui-push-button">
+                                       <span class="first-child">
+                                          <button type="button"
+                                                  title="${msg("label.table.row.create.title")}">${msg("label.table.row.create.title")}</button>
+                                       </span>
+                                    </span>
+                        </div>
+                    </#if>
+                </@comp.baseToolbar>
+            </div>
         </#if>
-	</@comp.baseToolbar>
+            <div id="${controlId}">
+                <@grid.datagrid containerId false>
+                    <div class="hidden1">
+                        <!-- Action Set "More..." container -->
+                        <div id="${containerId}-otherMoreActions">
+                            <div class="onActionShowMore"><a href="#" class="show-more"
+                                                             title="${msg("actions.more")}"><span></span></a>
+                            </div>
+                            <div class="more-actions hidden"></div>
+                        </div>
+                        <div id="${containerId}-otherActionSet" class="action-set simple"></div>
+                    </div>
+                </@grid.datagrid>
+                 <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+            </div>
+        </div>
+    </div>
 </div>
-</#if>
-
-<div class="form-field with-grid" id="${controlId}">
-	<@grid.datagrid containerId false>
-	    <div class="hidden1">
-	        <!-- Action Set "More..." container -->
-	        <div id="${containerId}-otherMoreActions">
-	            <div class="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"><span></span></a></div>
-	            <div class="more-actions hidden"></div>
-	        </div>
-	        <div id="${containerId}-otherActionSet" class="action-set simple"></div>
-	    </div>
-	</@grid.datagrid>
-
-	<div id="${controlId}-container">
-	    <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
-	</div>
-</div>
+<div class="clear"></div>
