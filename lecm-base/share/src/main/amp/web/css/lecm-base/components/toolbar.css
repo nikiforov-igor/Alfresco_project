@@ -11,6 +11,7 @@
 }
 .datalist-toolbar .search span.first-child button,
 .datalist-toolbar .ex-search span.first-child button {
+    width: 0;
     padding: 0 13px;
 }
 
