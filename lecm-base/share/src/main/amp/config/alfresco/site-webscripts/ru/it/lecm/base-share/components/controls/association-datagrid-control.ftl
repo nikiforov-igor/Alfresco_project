@@ -1,10 +1,6 @@
 <#import "/ru/it/lecm/base-share/components/lecm-datagrid.ftl" as grid/>
 <#import "/ru/it/lecm/base-share/components/base-components.ftl" as comp/>
 
-<#assign controlId = fieldHtmlId + "-cntrl">
-<#--todo: здесь у toolbar-а должен быть свой id, но с другим пока не работает-->
-<#assign controlIdToolbar = fieldHtmlId + "-cntrl">
-
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
 <#assign aDateTime = .now>
@@ -84,6 +80,17 @@
 
 <#assign createBtnLabel = msg("label.create-row.title")/>
 
+<#assign isFieldMandatory = false>
+<#if field.control.params.mandatory??>
+    <#if field.control.params.mandatory == "true">
+        <#assign isFieldMandatory = true>
+    </#if>
+<#elseif field.mandatory??>
+    <#assign isFieldMandatory = field.mandatory>
+<#elseif field.endpointMandatory??>
+    <#assign isFieldMandatory = field.endpointMandatory>
+</#if>
+
 <#if field.control.params.newRowButtonLabel??>
     <#if msg(field.control.params.newRowButtonLabel) != field.control.params.newRowButtonLabel>
         <#assign createBtnLabel = msg(field.control.params.newRowButtonLabel)/>
@@ -95,7 +102,7 @@
     var Dom = YAHOO.util.Dom;
 
     function createToolabar(nodeRef) {
-        new LogicECM.module.Base.Toolbar(null, "${controlIdToolbar}").setMessages(${messages}).setOptions({
+        new LogicECM.module.Base.Toolbar(null, "${fieldHtmlId}").setMessages(${messages}).setOptions({
             bubblingLabel: "${bubblingId}",
             itemType: "${field.control.params.itemType!""}",
             destination: nodeRef,
@@ -178,10 +185,10 @@
             repeating: ${field.repeating?string}
         }).setMessages(${messages});
 
-        var inputTag = Dom.get("${controlId}");
-        var inputAddedTag = Dom.get("${controlId}-added");
-        var inputRemovedTag = Dom.get("${controlId}-removed");
-        var selectItemsTag = Dom.get("${controlId}-selectedItems");
+        var inputTag = Dom.get("${fieldHtmlId}");
+        var inputAddedTag = Dom.get("${fieldHtmlId}-added");
+        var inputRemovedTag = Dom.get("${fieldHtmlId}-removed");
+        var selectItemsTag = Dom.get("${fieldHtmlId}-selectedItems");
         var filter = "";
         if (inputTag != null && inputTag.value != "") {
             var items = inputTag.value.split(",");
@@ -277,29 +284,36 @@
 //]]></script>
 
 <div class="control association-datagrid with-grid">
-<#if showLabel>
-    <label for="${controlId}">${field.label?html}:<#if field.endpointMandatory!false || field.mandatory!false>
-        <span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if></label>
-</#if>
-
-<input type="hidden" id="${controlId}-removed" name="${field.name}_removed"/>
-<input type="hidden" id="${controlId}-added" name="${field.name}_added"/>
-<input type="hidden" id="${controlId}" name="${field.name}" value="${field.value?html}"/>
-<input type="hidden" id="${controlId}-selectedItems"/>
-
-<@comp.baseToolbar controlIdToolbar true showSearchControl exSearch>
-    <#if showCreateButton>
-        <div class="new-row">
-        <span id="${controlIdToolbar}-newRowButton" class="yui-button yui-push-button">
-           <span class="first-child">
-              <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
-           </span>
-        </span>
-        </div>
+    <div class="label-div">
+    <#if showLabel>
+        <label for="${fieldHtmlId}">
+        ${field.label?html}:
+            <#if isFieldMandatory><span class="mandatory-indicator">${msg("form.required.fields.marker")}</span></#if>
+        </label>
     </#if>
-</@comp.baseToolbar>
+        <input type="hidden" id="${fieldHtmlId}-removed" name="${field.name}_removed"/>
+        <input type="hidden" id="${fieldHtmlId}-added" name="${field.name}_added"/>
+        <input type="hidden" id="${fieldHtmlId}-selectedItems"/>
+    </div>
 
-<@grid.datagrid containerId false/>
+    <div class="container">
+        <div class="value-div">
+        <@comp.baseToolbar fieldHtmlId true showSearchControl exSearch>
+            <#if showCreateButton>
+                <div class="new-row">
+                <span id="${fieldHtmlId}-newRowButton" class="yui-button yui-push-button">
+                   <span class="first-child">
+                      <button type="button" title="${createBtnLabel}">${createBtnLabel}</button>
+                   </span>
+                </span>
+                </div>
+            </#if>
+        </@comp.baseToolbar>
+
+        <@grid.datagrid containerId false/>
+        <input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}"/>
+        </div>
+    </div>
 </div>
 
 <div class="clear"></div>
