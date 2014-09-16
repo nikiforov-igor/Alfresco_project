@@ -4,8 +4,9 @@
 <#assign showViewForm = false/>
 
 <script type="text/javascript">//<![CDATA[
+    var datagrid = null;
     function createGrid() {
-        var datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
+        datagrid = new LogicECM.module.WCalendar.Absence.DataGrid("${id}");
         datagrid.setOptions({
             usePagination:true,
             disableDynamicPagination:true,
