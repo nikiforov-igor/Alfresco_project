@@ -3,6 +3,11 @@
     <#assign hideValue = true>
 </#if>
 
+<#assign nameSuffix = "">
+<#if field.control.params.nameSuffix??>
+    <#assign nameSuffix = field.control.params.nameSuffix>
+</#if>
+
 <#assign mandatory = false>
 <#if field.control.params.mandatory??>
     <#if field.control.params.mandatory == "true">
@@ -48,7 +53,7 @@
         <div class="container">
             <div class="buttons-div"><@formLib.renderFieldHelp field=field /></div>
             <div class="value-div">
-                <input id="${fieldHtmlId}" name="${field.name}" tabindex="0"
+                <input id="${fieldHtmlId}" name="${field.name}${nameSuffix}" tabindex="0"
                        <#if field.control.params.password??>type="password"<#else>type="text"</#if>
                        <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
                        <#if field.control.params.style??>style="${field.control.params.style}"</#if>

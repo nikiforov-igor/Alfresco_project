@@ -118,6 +118,13 @@
 					<show id="lecm-currency:alphabetic-code" force="true"/>
 					<show id="lecm-currency:digital-code" force="true"/>
 				</field-visibility>
+                <appearance>
+                    <field id="lecm-currency:digital-code">
+                        <control template="/ru/it/lecm/base-share/components/controls/textfield.ftl">
+                            <control-param name="nameSuffix">-strong-constant</control-param>
+                        </control>
+                    </field>
+                </appearance>
 			</form>
 			<form id="datagrid">
 				<field-visibility>
