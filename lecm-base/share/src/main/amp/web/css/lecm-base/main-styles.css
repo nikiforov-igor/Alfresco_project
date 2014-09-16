@@ -605,3 +605,8 @@ i.icon-building {
     padding: 0;
     margin: 0;
 }
+
+/* Вложение - скопировать в */
+.global-folder .wrapper .mode span.yui-button button {
+    white-space: nowrap;
+}
