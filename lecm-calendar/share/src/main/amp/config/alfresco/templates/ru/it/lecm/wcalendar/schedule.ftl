@@ -28,7 +28,7 @@ LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};
 <#assign showContent = isEngineer || isBoss>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-<@bpage.basePageSimple >
+<@bpage.basePageSimple showToolbar=showContent>
 	<#if showContent>
 		<@region id="schedule" scope="template"/>
 	<#else/>
