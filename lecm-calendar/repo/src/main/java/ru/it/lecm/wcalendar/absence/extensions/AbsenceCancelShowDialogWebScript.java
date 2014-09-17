@@ -1,9 +1,5 @@
 package ru.it.lecm.wcalendar.absence.extensions;
 
-import java.util.HashMap;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +10,11 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.servlet.WebScriptServletRuntime;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.wcalendar.absence.IAbsence;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -45,7 +46,11 @@ public class AbsenceCancelShowDialogWebScript extends DeclarativeWebScript {
 			result = false;
 		} else {
 			NodeRef currentEmployee = orgstructureService.getCurrentEmployee();
-			result = absenceService.isEmployeeAbsentToday(currentEmployee);
+            if (currentEmployee == null) {
+                result = false;
+            } else {
+			    result = absenceService.isEmployeeAbsentToday(currentEmployee);
+            }
 			session.setAttribute("absence_cancel_denied", true);
 		}
 

@@ -170,6 +170,14 @@ public class OrgstructurePersonEmployeeRelationsPolicy extends SecurityJournaliz
                         nodeService.addAspect(schedule, ContentModel.ASPECT_TEMPORARY, null);
                         nodeService.deleteNode(schedule);
                     }
+
+                    //Отвязвываем пользователя Alfresco от сотрудника
+                    List<AssociationRef> personAssocs = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+                    if (personAssocs.size() == 1) {
+                        NodeRef person = personAssocs.get(0).getTargetRef();
+                        nodeService.removeAssociation(nodeRef, person, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
+                    }
+
                 }
                 //Изменяем логин пользователя в настройках сотрудника
                 List<AssociationRef> personAssocs = nodeService.getTargetAssocs(nodeRef, OrgstructureBean.ASSOC_EMPLOYEE_PERSON);
