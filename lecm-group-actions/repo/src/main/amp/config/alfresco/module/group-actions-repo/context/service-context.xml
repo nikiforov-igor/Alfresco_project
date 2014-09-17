@@ -35,6 +35,9 @@
                 <entry key="#{GA_ROOT_ID}" value="#{GA_ROOT_NAME}"/>
             </map>
         </property>
+        <property name="aspects">
+            <list/>
+        </property>
     </bean>
 
     <bean id="groupActionsScript" parent="baseScript" class="ru.it.lecm.actions.script.GroupActionsScript">
