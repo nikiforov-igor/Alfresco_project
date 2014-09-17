@@ -63,7 +63,6 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
             'scripts/lecm-calendar/schedule/schedule-datagrid.js',
             'scripts/lecm-base/components/lecm-toolbar.js',
             'scripts/lecm-calendar/schedule/schedule-toolbar.js',
-            'scripts/lecm-calendar/menu.js',
             'scripts/lecm-calendar/schedule/schedule-limit-validation.js',
             'scripts/lecm-calendar/schedule/reiteration-rules-validation.js',
             'scripts/lecm-calendar/schedule/time-validation.js',
@@ -74,7 +73,6 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
             'components/data-lists/toolbar.css',
             'css/lecm-calendar/wcalendar-toolbar.css',
             'css/lecm-base/components/base-menu/base-menu.css',
-            'css/lecm-calendar/wcalendar-menu.css',
             'css/lecm-calendar/reiteration-control.css',
             'css/lecm-calendar/jquery-ui-1.10.3.custom.css',
             'css/lecm-calendar/jquery-ui-timepicker-addon.css'

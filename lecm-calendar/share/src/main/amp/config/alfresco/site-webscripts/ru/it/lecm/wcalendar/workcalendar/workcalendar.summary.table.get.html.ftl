@@ -3,19 +3,27 @@
 <script type="text/javascript">//<![CDATA[
 
 (function() {
+    var Event = YAHOO.util.Event,
+        Dom = YAHOO.util.Dom,
+        Selector = YAHOO.util.Selector;
 
     function init() {
-        LogicECM.module.Base.Util.loadResources([
-            'scripts/lecm-calendar/menu.js'
-        ], [
+        LogicECM.module.Base.Util.loadResources([], [
             'css/lecm-base/components/base-menu/base-menu.css',
-            'css/lecm-calendar/wcalendar-menu.css',
             'css/lecm-calendar/absence-summary-table.css',
             'css/lecm-calendar/wcalendar-summary.css'
-        ], null);
+        ], function() {
+            var container = Dom.get("summary-table-container");
+            var tableDiv = Selector.query(".summary-table-body-wrapper", container, true);
+            var footer = Dom.get('lecm-content-ft');
+            var height = Dom.getY(footer) - Dom.getY(tableDiv);
+
+            Dom.setStyle(tableDiv, 'max-height', 'none');
+            Dom.setStyle(tableDiv, 'height', height +'px');
+        });
     }
 
-    YAHOO.util.Event.onDOMReady(init);
+    Event.onDOMReady(init);
 })();
 
 //]]></script>
@@ -27,7 +35,7 @@
 	<#assign curMonth = curMonthConst>
 	<#assign curYear = curYearConst>
 
-	<div id="summary-table-container">
+	<div id="summary-table-container" class="work-calendar">
 
 		<table class="summary-table">
 			 <tr>

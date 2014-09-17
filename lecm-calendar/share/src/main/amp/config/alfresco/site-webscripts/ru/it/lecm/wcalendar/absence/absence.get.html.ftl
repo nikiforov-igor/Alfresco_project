@@ -43,11 +43,9 @@
             'scripts/lecm-base/components/lecm-datagrid.js',
             'scripts/lecm-calendar/absence/absence-datagrid.js',
             'scripts/lecm-calendar/absence/absence-toolbar.js',
-            'scripts/lecm-calendar/menu.js',
             'scripts/lecm-calendar/absence/date-interval-validation.js'
         ], [
             'css/lecm-base/components/base-menu/base-menu.css',
-            'css/lecm-calendar/wcalendar-menu.css',
             'css/lecm-calendar/absence-summary-table.css',
             'css/lecm-calendar/wcalendar-absence.css'
         ], createGrid);

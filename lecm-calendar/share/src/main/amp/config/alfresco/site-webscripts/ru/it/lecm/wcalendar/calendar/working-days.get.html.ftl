@@ -52,12 +52,10 @@
             'scripts/lecm-calendar/calendar/years-datagrid.js',
             'scripts/lecm-calendar/calendar/special-days-toolbar.js',
             'scripts/lecm-calendar/calendar/years-toolbar.js',
-            'scripts/lecm-calendar/menu.js',
             'scripts/lecm-calendar/calendar/date-existence-validation.js'
         ], [
             'css/lecm-calendar/wcalendar-calendar.css',
             'css/lecm-base/components/base-menu/base-menu.css',
-            'css/lecm-calendar/wcalendar-menu.css',
             'components/data-lists/toolbar.css',
             'css/lecm-calendar/wcalendar-toolbar.css'
         ], createDatagrid);
