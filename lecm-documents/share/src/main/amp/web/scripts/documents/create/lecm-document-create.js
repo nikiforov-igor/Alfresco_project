@@ -40,6 +40,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				//Параметры для создания связи
 				connectionType: null,
 				connectionIsSystem: null,
+				connectionIsReverse: false,
 				parentDocumentNodeRef: null,
                 //для завершения процесса
                 workflowTask: null,
@@ -133,12 +134,22 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 				var createdDocument = response.json.persistedObject;
 				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
                     var template = "{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
-                    var url = YAHOO.lang.substitute(template, {
+
+					var fromNodeRef, toNodeRef;
+					if (this.options.connectionIsReverse == "true") {
+						fromNodeRef = createdDocument;
+						toNodeRef = this.options.parentDocumentNodeRef;
+					} else {
+						fromNodeRef = this.options.parentDocumentNodeRef;
+						toNodeRef = createdDocument;
+					}
+
+					var url = YAHOO.lang.substitute(template, {
                         proxyUri: Alfresco.constants.PROXY_URI,
                         connectionType: encodeURIComponent(this.options.connectionType),
                         connectionIsSystem: encodeURIComponent(this.options.connectionIsSystem),
-                        fromNodeRef: this.options.parentDocumentNodeRef,
-                        toNodeRef: createdDocument
+                        fromNodeRef: fromNodeRef,
+                        toNodeRef: toNodeRef
                     });
                     this._showSplash();
                     var callback = {

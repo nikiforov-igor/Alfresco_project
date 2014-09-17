@@ -237,6 +237,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                     resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
                                     resultState.put("connectionType", state.getFormConnection());
                                     resultState.put("connectionIsSystem", state.isSystemFormConnection());
+                                    resultState.put("connectionIsReverse", state.isReverseFormConnection());
                                 }
                                 actionsList.add(resultState);
 

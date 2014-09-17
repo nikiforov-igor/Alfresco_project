@@ -98,8 +98,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 //		}
 	}
 	
-	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, String script) {
-		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, script);
+	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, String script) {
+		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, isReverseFormConnection, script);
 		states.add(nextState);
 	}
 
@@ -132,8 +132,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 		private WorkflowVariables variables;
 		private boolean stopSubWorkflows;
 		private boolean isSystemFormConnection;
+		private boolean isReverseFormConnection;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, String script) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, String script) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -146,6 +147,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
             this.formFolder = formFolder;
             this.formConnection = formConnection;
             this.isSystemFormConnection = isSystemFormConnection;
+            this.isReverseFormConnection = isReverseFormConnection;
             this.script = script;
         }
 
@@ -205,5 +207,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
             return isSystemFormConnection;
         }
 
-    }
+		public boolean isReverseFormConnection() {
+			return isReverseFormConnection;
+		}
+	}
 }

@@ -7,6 +7,7 @@ function main() {
 
 	var connectionType = null;
 	var connectionIsSystem = null;
+	var connectionIsReverse = null;
 	var parentDocumentNodeRef = null;
 	var workflowTask = null;
 
@@ -29,6 +30,8 @@ function main() {
 					connectionType = value;
 				} else if (name == "connectionIsSystem") {
 					connectionIsSystem = value;
+				} else if (name == "connectionIsReverse") {
+					connectionIsReverse = value;
 				} else if (name == "parentDocumentNodeRef") {
 					parentDocumentNodeRef = value;
 				} else if (name == "workflowTask") {
@@ -48,6 +51,7 @@ function main() {
 					formId: formId,
 					connectionType: connectionType,
 					connectionIsSystem: connectionIsSystem,
+					connectionIsReverse: connectionIsReverse,
 					parentDocumentNodeRef: parentDocumentNodeRef,
                     workflowTask: workflowTask,
 					args: urlArgs

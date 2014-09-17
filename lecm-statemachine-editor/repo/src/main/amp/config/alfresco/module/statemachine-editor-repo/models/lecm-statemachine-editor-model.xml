@@ -718,6 +718,11 @@
                     <mandatory>false</mandatory>
                     <default>false</default>
                 </property>
+	            <property name="lecm-stmeditor:transitionIsReverseFormConnection">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
             </properties>
         </aspect>
 

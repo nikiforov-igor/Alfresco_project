@@ -1508,6 +1508,7 @@
                     <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
                     <show id="lecm-stmeditor:transitionFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionIsSystemFormConnection" force="true"/>
+                    <show id="lecm-stmeditor:transitionIsReverseFormConnection" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:transitionLabel" />
@@ -1515,6 +1516,7 @@
                     <field id="lecm-stmeditor:transitionFormFolder" />
                     <field id="lecm-stmeditor:transitionFormConnection" />
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
+                    <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                 </appearance>
             </form>
             <form id="datagrid">
@@ -1534,6 +1536,7 @@
                     <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
                     <show id="lecm-stmeditor:transitionFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionIsSystemFormConnection" force="true"/>
+                    <show id="lecm-stmeditor:transitionIsReverseFormConnection" force="true"/>
                     <show id="lecm-stmeditor:conditionAccessField" force="true"/>
                     <show id="lecm-stmeditor:inputWorkflowData" force="true"/>
                     <show id="lecm-stmeditor:outputWorkflowData" force="true"/>
@@ -1544,6 +1547,7 @@
                     <field id="lecm-stmeditor:transitionFormFolder" />
                     <field id="lecm-stmeditor:transitionFormConnection" />
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
+                    <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                     <field id="lecm-stmeditor:conditionAccessField" label-id="statemachine.editor.form.label.conditionAccessField">
                         <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
                             <control-param name="itemType">lecm-stmeditor:conditionAccess</control-param>
@@ -1572,6 +1576,7 @@
                     <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
                     <show id="lecm-stmeditor:transitionFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionIsSystemFormConnection" force="true"/>
+                    <show id="lecm-stmeditor:transitionIsReverseFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
                 </field-visibility>
@@ -1581,6 +1586,7 @@
                     <field id="lecm-stmeditor:transitionFormFolder" />
                     <field id="lecm-stmeditor:transitionFormConnection" />
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
+                    <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                     <field id="lecm-stmeditor:transitionStatus">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>
@@ -1610,6 +1616,7 @@
                     <show id="lecm-stmeditor:transitionFormFolder" force="true"/>
                     <show id="lecm-stmeditor:transitionFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionIsSystemFormConnection" force="true"/>
+                    <show id="lecm-stmeditor:transitionIsReverseFormConnection" force="true"/>
                     <show id="lecm-stmeditor:transitionStatus" force="true"/>
                     <show id="lecm-stmeditor:stopSubWorkflows" force="true"/>
                     <show id="lecm-stmeditor:conditionAccessField" force="true"/>
@@ -1622,6 +1629,7 @@
                     <field id="lecm-stmeditor:transitionFormFolder" />
                     <field id="lecm-stmeditor:transitionFormConnection" />
                     <field id="lecm-stmeditor:transitionIsSystemFormConnection" />
+                    <field id="lecm-stmeditor:transitionIsReverseFormConnection" />
                     <field id="lecm-stmeditor:transitionStatus">
                         <control template="/ru/it/lecm/base-share/components/controls/select-one-with-webscript-values.ftl">
                             <control-param name="webscriptType">server</control-param>

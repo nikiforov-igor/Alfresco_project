@@ -162,6 +162,7 @@ LogicECM.module = LogicECM.module || {};
 				params += "&formId=" + "workflow-form";
 				params += "&connectionType=" + action.connectionType;
 				params += "&connectionIsSystem=" + action.connectionIsSystem;
+				params += "&connectionIsReverse=" + action.connectionIsReverse;
 				params += "&parentDocumentNodeRef=" + this.options.nodeRef;
 
 				if (action.variables != null) {
