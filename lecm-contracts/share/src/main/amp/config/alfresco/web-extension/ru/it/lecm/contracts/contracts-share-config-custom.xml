@@ -1046,11 +1046,15 @@
                     <show id="lecm-additional-document:date"/>
                     <show id="lecm-additional-document:signedCounterparty"/>
                     <show id="lecm-additional-document:summaryContent"/>
+					<show id="lecm-contract:approval" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-additional-document:summaryContent">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
+					<field id="lecm-contract:approval">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+					</field>
                 </appearance>
             </form>
             <form id="datagrid">

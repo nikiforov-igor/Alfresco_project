@@ -165,7 +165,7 @@
                     <show id="lecm-eds-document:document-type-assoc"/>
                     <show id="lecm-document-aspects:additional-organization-unit-assoc" mandatory="true"/>
                     <show id="lecm-document:subject-assoc"/>
-                    <show id="lecm-nd:approval-list" force="true" for-mode="view"/>								<!-- Листы согласования-->
+					<show id="lecm-contract:approval" force="true"/>
                     <show id="lecm-nd:signing-list" force="true" for-mode="view"/>								<!-- Листы подписания-->
                     <show id="lecm-nd:begin-date"/>
                     <show id="lecm-nd:end-date"/>
@@ -179,7 +179,8 @@
                 <appearance>
 
                     <set id="common" appearance="" label="Атрибуты"/>
-                    <set id="approval-and-signing" appearance="" label="Согласование/Подписание"/>
+					<set id="signingTab" appearance="" label="Подписание"/>
+                    <set id="approvalTab" appearance="" label="Согласование"/>
 
                     <set id="dates" parent="common" template="/ru/it/lecm/base-share/components/controls/daterange.ftl"/>
                     <set id="afterDates" parent="common"/>
@@ -233,12 +234,10 @@
                     <field id="lecm-document-aspects:is-shared-folder" set="afterDates">
                         <control template="/ru/it/lecm/base-share/components/controls/lecm-checkbox-control.ftl"/>
                     </field>
-
-                    <!-- Вкладка "Согласование/Подписание" -->
-                    <field id="lecm-nd:approval-list" set="approval-and-signing" label="Согласование">
-                        <control template="/ru/it/lecm/workflow/approval/controls/deprecated/approval-list-datagrid-control.ftl"/>
-                    </field>
-                    <field id="lecm-nd:signing-list" set="approval-and-signing" label="Подписание">
+					<field id="lecm-contract:approval" set="approvalTab">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
+					</field>
+                    <field id="lecm-nd:signing-list" set="signingTab" label="Подписание">
                         <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
                     </field>
                 </appearance>
