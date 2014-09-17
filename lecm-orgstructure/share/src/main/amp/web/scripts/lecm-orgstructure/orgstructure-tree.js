@@ -229,7 +229,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 meta.actionsConfig = {// настройки экшенов. (необязателен)
                     fullDelete: me.options.fullDelete // если true - удаляем ноды, иначе выставляем им флаг "неактивен"
                 };
-                meta.useChildQuery = true;
+                meta.useChildQuery = false;
                 if (meta.searchConfig) {
                     if (meta.searchConfig.fullTextSearch) {
                         if (typeof meta.searchConfig.fullTextSearch == "string") {
