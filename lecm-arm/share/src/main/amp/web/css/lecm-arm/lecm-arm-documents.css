@@ -91,6 +91,10 @@ div.arm-tree-menu .arm-accordion {
 	padding-top: 0;
 }
 
+div.arm-tree-menu ul.arm-accordion > li {
+	margin-right: 4px;
+}
+
 div.arm-tree-menu .arm-accordion div.accordion-head {
 	cursor: pointer;
 	/*background: url('/share/res/images/lecm-arm/accordion_button.png') repeat-x;*/
