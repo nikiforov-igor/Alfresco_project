@@ -58,7 +58,7 @@ LogicECM.module = LogicECM.module || {};
                 {
                     this.checkbox = Dom.get(this.checkboxId);
                     if (this.checkbox) {
-                        if (!this.options.disabled && this.options.mode == "create") {
+                        if (this.options.mode == "create") {
                             this.loadDefaultValue();
                         }
                         YAHOO.util.Event.addListener(this.checkbox, "click", this.onChange, this, true);
@@ -93,6 +93,7 @@ LogicECM.module = LogicECM.module || {};
                     var el = Dom.get(this.id);
 	                var me = this;
                     var selected = this.checkbox.checked;
+	                el.value = selected;
                     if (this.options.disabledFieldsIfNotSelect != null) {
                         for (var i = 0; i < this.options.disabledFieldsIfNotSelect.length; i++) {
                             var field = el.form["prop_" + this.options.disabledFieldsIfNotSelect[i].replace(":", "_")];

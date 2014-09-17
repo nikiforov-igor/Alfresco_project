@@ -101,8 +101,7 @@
 					<#if isTrue> value="true" checked="checked"</#if>
 					   <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>
 					   <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
-					   <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-					   onchange='javascript:YAHOO.util.Dom.get("${fieldHtmlId}").value=YAHOO.util.Dom.get("${fieldHtmlId}-entry").checked;' />
+					   <#if field.control.params.style??>style="${field.control.params.style}"</#if> />
 				<label for="${fieldHtmlId}-entry" class="checkbox">${field.label?html}</label>
 			</div>
 		</div>
