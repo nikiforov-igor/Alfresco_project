@@ -8,7 +8,7 @@
   /* пометка итерации как завершенной */
   var isEnded = execution.isEnded();
   var deleteReason = (execution.getDeleteReason() != null) ? '' + execution.getDeleteReason() : null;
-  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size;
+  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size, currentDecision;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
@@ -20,13 +20,14 @@
     approvalDecision = 'NO_DECISION';
 
     function someDecision(element, index, array) {
-      return element.properties['lecmApproveAspects:approvalDecision'] == this;
+      return ('' + element.properties['lecmApproveAspects:approvalDecision']) == currentDecision;
     }
 
     /* установка итерации решения о согласовании */
     for (i = 0, size = decisions.length; i < size; ++i) {
-      if (stages.some(someDecision, decisions[i])) {
-        approvalDecision = decisions[i];
+      currentDecision = decisions[i];
+      if (stages.some(someDecision)) {
+        approvalDecision = currentDecision;
         break;
       }
     }
@@ -472,16 +473,18 @@
   var stageItems = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var decisions = ['REJECTED', 'APPROVED_WITH_REMARK', 'APPROVED'];
   var approvalDecision = 'NO_DECISION';
+  var currentDecision;
   var i = 0, size = decisions.length;
 
   function someDecision(element, index, array) {
-    return element.properties['lecmApproveAspects:approvalDecision'] == this;
+    return ('' + element.properties['lecmApproveAspects:approvalDecision']) == currentDecision;
   }
 
   /* установка этапу решения о согласовании */
   for (; i < size; ++i) {
-    if (stageItems.some(someDecision, decisions[i])) {
-      approvalDecision = decisions[i];
+    currentDecision = decisions[i];
+    if (stageItems.some(someDecision)) {
+      approvalDecision = currentDecision;
       break;
     }
   }

@@ -2059,7 +2059,38 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>2588dbde-01ca-4e61-8644-9af7cdaeac1c</name>
+														<nodeRef>workspace://SpacesStore/5d324d00-7e91-4a6b-8d3e-e0de834cab2f</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$lecmApprovementWorkflow]]>
+																</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>
+																	<![CDATA[Направить на согласование]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
@@ -3210,6 +3241,77 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 																<reference>workspace://SpacesStore/cfc64d82-5652-438d-b197-fc95e3a56a0f</reference>
 															</association>
 														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>userTransition</type>
+														<name>7988cdf3-ab53-4088-97c7-e68aa7fd9e87</name>
+														<nodeRef>workspace://SpacesStore/b6b836c7-b867-4c6c-97f2-d0f04e9ebf5b</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'APPROVED_FORCED');
+})();
+]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value>
+																	<![CDATA[Принудительно согласовать]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>userTransition</type>
+														<name>4e2d6646-3381-4318-9b1c-5c852d70c2d2</name>
+														<nodeRef>workspace://SpacesStore/3bc88fce-e9e5-40b8-aa6c-7c89363c002d</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'REJECTED_FORCED');
+})();
+
+]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value>
+																	<![CDATA[Отозвать с согласования]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations/>
 														<roleAssociations/>
 														<subFolders/>
 													</node>
@@ -5412,7 +5514,38 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>818e44ed-2888-4552-a50b-49b5fc71fea6</name>
+														<nodeRef>workspace://SpacesStore/5840b6bf-4a26-4503-9fa9-1cce99370e24</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$lecmApprovementWorkflow]]>
+																</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>
+																	<![CDATA[Направить на согласование]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>

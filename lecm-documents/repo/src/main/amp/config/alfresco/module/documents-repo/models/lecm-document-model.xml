@@ -628,12 +628,6 @@
 			</properties>
 		</aspect>
 
-		<!-- Аспект обозначающий доступность групповой операции "отправить по маршруту" -->
-		<aspect name="lecm-document-aspects:routes-avaliable"/>
-
-		<!-- Аспект обозначающий доступность групповых операций "отозвать с согласования" и "принудительно завершить согласование" -->
-		<aspect name="lecm-document-aspects:approval-avaliable"/>
-
 	    <!-- Аспект обозначающий что в документе будут отсутствовать вложения -->
 		<aspect name="lecm-document-aspects:without-attachments"/>
     </aspects>

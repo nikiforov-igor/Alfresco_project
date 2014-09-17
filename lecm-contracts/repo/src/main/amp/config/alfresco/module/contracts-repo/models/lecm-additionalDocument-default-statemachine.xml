@@ -2784,8 +2784,8 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -2835,17 +2835,17 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/08920fc6-a114-4c68-8c5f-2e15cc91beff</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Для совершения этого действия
 																					необходимо добавить вложение в
 																					категорию "Документ".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -2889,7 +2889,38 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>ef5feb87-8f58-46d8-9391-f3b5bda38ff9</name>
+														<nodeRef>workspace://SpacesStore/cc116f4a-309a-4c2d-a96d-9c4ed663eb37</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$lecmApprovementWorkflow]]>
+																</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>
+																	<![CDATA[Направить на согласование]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
@@ -4161,8 +4192,8 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -4170,6 +4201,76 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																<reference>workspace://SpacesStore/22a7de6c-0d71-4164-be71-ec3b96acd6fc</reference>
 															</association>
 														</associations>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>userTransition</type>
+														<name>e038829a-e9cf-44f8-95e0-fbee5be5597c</name>
+														<nodeRef>workspace://SpacesStore/eb688795-f54e-401d-874b-74bc86839914</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'REJECTED_FORCED');
+})();
+]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value>
+																	<![CDATA[Отозвать с согласования]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+													<node>
+														<type>userTransition</type>
+														<name>054cf6e6-c30a-4987-a33a-65724847ace2</name>
+														<nodeRef>workspace://SpacesStore/d0a94b63-818a-4026-a452-22bcd685fdf5</nodeRef>
+														<properties>
+															<property>
+																<name>stopSubWorkflows</name>
+																<value>
+																	<![CDATA[false]]>
+																</value>
+															</property>
+															<property>
+																<name>transition-script</name>
+																<value>
+																	<![CDATA[(function() {
+    statemachine.terminateWorkflowsByDefinition(stm_document, 'lecmApprovementWorkflow', 'forcedDecision', 'APPROVED_FORCED');
+})();
+]]>
+																</value>
+															</property>
+															<property>
+																<name>transitionLabel</name>
+																<value>
+																	<![CDATA[Принудительно согласовать]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<transitionStatusAspect/>
+															<transitionLabelAspect/>
+														</aspects>
+														<associations/>
 														<roleAssociations/>
 														<subFolders/>
 													</node>
@@ -5315,8 +5416,8 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -5366,17 +5467,17 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/129776a4-8796-4f55-a6e2-bc7058855a59</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Для совершения этого действия
 																					необходимо добавить вложение в
 																					категорию "Документ".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -6523,8 +6624,8 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -6574,17 +6675,17 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/97b3b972-cfde-414c-8447-44c622df88f0</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Для совершения этого действия
 																					необходимо добавить вложение в
 																					категорию "Документ".]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -6628,7 +6729,38 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 										<aspects/>
 										<associations/>
 										<roleAssociations/>
-										<subFolders/>
+										<subFolders>
+											<subFolder>
+												<name>transitions</name>
+												<nodes>
+													<node>
+														<type>UserWorkflowEntity</type>
+														<name>ab20dfaa-f5be-4f48-9661-9d0e1473e698</name>
+														<nodeRef>workspace://SpacesStore/9309c1cf-9356-4682-a245-4d9b2ac6c71c</nodeRef>
+														<properties>
+															<property>
+																<name>workflowId</name>
+																<value>
+																	<![CDATA[activiti$lecmApprovementWorkflow]]>
+																</value>
+															</property>
+															<property>
+																<name>workflowLabel</name>
+																<value>
+																	<![CDATA[Направить на согласование]]>
+																</value>
+															</property>
+														</properties>
+														<aspects>
+															<workflowAspect/>
+														</aspects>
+														<associations/>
+														<roleAssociations/>
+														<subFolders/>
+													</node>
+												</nodes>
+											</subFolder>
+										</subFolders>
 									</node>
 									<node>
 										<type>StartWorkflow</type>
@@ -7793,8 +7925,8 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -7844,15 +7976,15 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/4322cf88-2b6d-4f15-9588-7757e4efdb38</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Подписан у контрагента]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -7873,16 +8005,16 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/582dae7a-fb2e-43c1-ae77-5c500c747edd</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Данное действие доступно только
 																					подписанту]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -7940,15 +8072,15 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/31d18843-39df-4353-8731-2348e5b7306c</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Не подписан у контрагента]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -7971,16 +8103,16 @@ if (contractAssocs != null && contractAssocs.length == 1) {
 																		<nodeRef>workspace://SpacesStore/533799f9-f854-43ef-9d61-d8d0a49e9699</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Данное действие доступно только
 																					подписанту]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>
@@ -9169,8 +9301,8 @@ additionalDocument.save();
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -9189,15 +9321,15 @@ additionalDocument.save();
 																		<nodeRef>workspace://SpacesStore/a0300735-aa89-49c1-8852-ee73389cabb8</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Данное действие доступно только куратору и инициатору]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -10332,8 +10464,8 @@ additionalDocument.save();
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -10352,15 +10484,15 @@ additionalDocument.save();
 																		<nodeRef>workspace://SpacesStore/af21e7a9-4802-4940-bf82-b5d9852df5cb</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[true]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Данное действие доступно только куратору и инициатору]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
 																				</value>
 																			</property>
 																			<property>
@@ -12050,8 +12182,8 @@ additionalDocument.save();
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -12088,8 +12220,8 @@ additionalDocument.save();
 														</properties>
 														<aspects>
 															<transitionStatusAspect/>
-															<workflowAspect/>
 															<transitionLabelAspect/>
+															<workflowAspect/>
 														</aspects>
 														<associations>
 															<association>
@@ -12108,16 +12240,16 @@ additionalDocument.save();
 																		<nodeRef>workspace://SpacesStore/2468ad26-77da-4dc3-86d4-eca7bf4d290c</nodeRef>
 																		<properties>
 																			<property>
-																				<name>hideAction</name>
-																				<value>
-																					<![CDATA[false]]>
-																				</value>
-																			</property>
-																			<property>
 																				<name>conditionErrorMessage</name>
 																				<value>
 																					<![CDATA[Данное действие доступно только
 																					исполнителю и куратору]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[false]]>
 																				</value>
 																			</property>
 																			<property>

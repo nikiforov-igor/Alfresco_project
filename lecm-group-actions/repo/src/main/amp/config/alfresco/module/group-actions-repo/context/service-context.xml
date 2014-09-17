@@ -35,12 +35,6 @@
                 <entry key="#{GA_ROOT_ID}" value="#{GA_ROOT_NAME}"/>
             </map>
         </property>
-        <property name="aspects">
-            <list>
-                <value>lecm-document-aspects:routes-avaliable</value>
-				<value>lecm-document-aspects:approval-avaliable</value>
-            </list>
-        </property>
     </bean>
 
     <bean id="groupActionsScript" parent="baseScript" class="ru.it.lecm.actions.script.GroupActionsScript">

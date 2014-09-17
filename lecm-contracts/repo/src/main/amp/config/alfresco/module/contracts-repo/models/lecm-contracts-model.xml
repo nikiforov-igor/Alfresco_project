@@ -246,7 +246,6 @@
 				<aspect>lecm-signed-docflow:docflowable</aspect>
 				<aspect>lecm-document-aspects:semanticAssistAspect</aspect>
 				<aspect>lecm-contract-table-structure:table-stages-aspect</aspect>
-				<aspect>lecm-document-aspects:approval-avaliable</aspect>
 			</mandatory-aspects>
 		</type>
 
