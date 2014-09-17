@@ -11,12 +11,18 @@
 	<#assign fieldValue = field.value>
 </#if>
 
+<#if form.arguments[field.name]?has_content>
+	<#assign defaultValue = form.arguments[field.name]>
+</#if>
+
 <script type="text/javascript">
 	(function()
 	{
 		YAHOO.util.Event.onContentReady("${fieldHtmlId}", function (){
 			<#if field.control.params.addedXpath??>
 				addValue("${field.control.params.addedXpath}");
+			<#elseif defaultValue??>
+				addNodeRef("${defaultValue}");
 			</#if>
 
 			YAHOO.Bubbling.fire("hiddenAssociationFormReady",
@@ -36,11 +42,16 @@
 							fn: function (response) {
 								var oResults = response.json;
 								if (oResults != null && oResults.nodeRef != null) {
-									YAHOO.util.Dom.get("${fieldHtmlId}-added").value = oResults.nodeRef;
+									addNodeRef(oResults.nodeRef);
 								}
 							}
 						}
 					});
+		}
+
+		function addNodeRef(nodeRef) {
+			YAHOO.util.Dom.get("${fieldHtmlId}").setAttribute("value", nodeRef);
+			YAHOO.util.Dom.get("${fieldHtmlId}-added").setAttribute("value", nodeRef);
 		}
 	})();
 </script>
