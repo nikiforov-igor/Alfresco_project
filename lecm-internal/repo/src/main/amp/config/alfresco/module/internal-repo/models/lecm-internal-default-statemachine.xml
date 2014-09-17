@@ -1319,7 +1319,42 @@
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>a3d99f37-3158-47c1-8183-b4e3692b9288</name>
+																		<nodeRef>workspace://SpacesStore/c2b6ad08-6b6e-4301-a777-505c740c978c</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[В документе нет ни одного маршрута для согласования]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
@@ -4772,7 +4807,42 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 														</aspects>
 														<associations/>
 														<roleAssociations/>
-														<subFolders/>
+														<subFolders>
+															<subFolder>
+																<name>variables</name>
+																<nodes>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>87e5212a-9033-47a2-a07f-2664593dec89</name>
+																		<nodeRef>workspace://SpacesStore/098e8f86-6c6c-4490-8833-9d3f29e4d7ae</nodeRef>
+																		<properties>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value>
+																					<![CDATA[В документе нет ни одного маршрута для согласования]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>hideAction</name>
+																				<value>
+																					<![CDATA[true]]>
+																				</value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null]]>
+																				</value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																</nodes>
+															</subFolder>
+														</subFolders>
 													</node>
 												</nodes>
 											</subFolder>
