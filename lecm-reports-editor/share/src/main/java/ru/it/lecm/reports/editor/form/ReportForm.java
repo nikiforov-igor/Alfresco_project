@@ -159,6 +159,7 @@ public class ReportForm extends FormUIGet {
 
                 field.setId(colCode);
                 field.setName(colCode);
+                field.setConfigName(colCode);
                 field.setLabel(colCaption);
                 field.setDescription(colCaption);
 
