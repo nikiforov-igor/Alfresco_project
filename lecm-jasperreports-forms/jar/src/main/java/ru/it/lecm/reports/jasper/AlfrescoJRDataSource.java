@@ -6,6 +6,7 @@ import net.sf.jasperreports.engine.JRField;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
 import org.alfresco.service.cmr.search.ResultSetRow;
+import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.QName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,8 +121,15 @@ public class AlfrescoJRDataSource implements JRDataSource {
         if (realProps != null) {
             for (Map.Entry<QName, Serializable> e : realProps.entrySet()) {
                 // переводим название свойства в краткую форму
-                final String key = e.getKey().toPrefixString(context.getRegistryService().getNamespaceService());
+                final String key;
+                String key1;
+                try {
+                    key1 = e.getKey().toPrefixString(context.getRegistryService().getNamespaceService());
+                } catch (NamespaceException e1) {
+                    key1 = e.getKey().toString();   //просто чтоб не падало на устаревших данных
+                }
                 // если есть мета-описания - добавим всё, что там упоминается
+                key = key1;
                 if (isPropVisibleInReport(key)) {
                     context.getCurNodeProps().put(key, e.getValue());
                 }
