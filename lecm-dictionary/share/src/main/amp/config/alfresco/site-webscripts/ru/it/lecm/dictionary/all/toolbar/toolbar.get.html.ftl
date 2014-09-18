@@ -1,9 +1,4 @@
 <!-- Data List Toolbar -->
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
-<@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-dictionary/all-dictionary-toolbar.css" />
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-base/components/lecm-toolbar.js"></@script>
-<@script type="text/javascript" src="${url.context}/res/scripts/lecm-dictionary/all-dictionary-toolbar.js"></@script>
-
 <#assign id = args.htmlid>
 <#assign importFormId = id + "-import-form">
 <#assign importInfoFormId = id + "-import-info-form">
@@ -11,10 +6,21 @@
 <#if isEngineer>
 <script type="text/javascript">//<![CDATA[
 (function(){
-	function init() {
+	function createToolbar() {
 		new LogicECM.module.AllDictionary.Toolbar("${id}").setMessages(${messages});
 	}
-	YAHOO.util.Event.onDOMReady(init);
+
+    function init() {
+        LogicECM.module.Base.Util.loadResources([
+            'scripts/lecm-base/components/lecm-toolbar.js',
+            'scripts/lecm-dictionary/all-dictionary-toolbar.js'
+        ], [
+            'components/data-lists/toolbar.css',
+            'css/lecm-dictionary/all-dictionary-toolbar.css'
+        ], createToolbar);
+    }
+
+    YAHOO.util.Event.onDOMReady(init);
 })();
 //]]></script>
 <div id="${args.htmlid}-body" class="datalist-toolbar toolbar">
@@ -36,14 +42,14 @@
 		</div>
 	</div>
 
-	<div id="${importInfoFormId}" class="yui-panel">
+	<div id="${importInfoFormId}" class="yui-panel hidden1">
 		<div id="${importInfoFormId}-head" class="hd">${msg("title.import.info")}</div>
 		<div id="${importInfoFormId}-body" class="bd">
 			<div id="${importInfoFormId}-content" class="import-info-content"></div>
 		</div>
 	</div>
 
-	<div id="${importErrorFormId}" class="yui-panel">
+	<div id="${importErrorFormId}" class="yui-panel hidden1">
 		<div id="${importErrorFormId}-head" class="hd">${msg("title.import.info")}</div>
 		<div id="${importErrorFormId}-body" class="bd">
 			<div id="${importErrorFormId}-content" class="import-info-content">
@@ -67,7 +73,7 @@
 		</div>
 	</div>
 
-	<div id="${importFormId}" class="yui-panel">
+	<div id="${importFormId}" class="yui-panel hidden1">
 		<div id="${importFormId}-head" class="hd">${msg("title.import")}</div>
 		<div id="${importFormId}-body" class="bd">
 			<div id="${importFormId}-content">
