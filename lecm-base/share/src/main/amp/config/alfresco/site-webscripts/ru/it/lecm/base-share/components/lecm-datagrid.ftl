@@ -57,7 +57,11 @@ viewFormId(необязательный) - по умолчанию равен vi
 	<div class="hidden1">
 		<!-- Action Set "More..." container -->
 		<div id="${id}-moreActions">
-			<div class="onActionShowMore"><a href="#" class="show-more" title="${msg("actions.more")}"><span></span></a></div>
+			<div class="onActionShowMore">
+				<a href="javascript:void(0)" title="${msg("actions.more")}">
+					<span></span>
+				</a>
+			</div>
 			<div class="more-actions hidden"></div>
 		</div>
 

@@ -929,7 +929,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                         return true;
                     };
                     Bubbling.addDefaultAction("datagrid-action-link" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
-                    Bubbling.addDefaultAction("show-more", fnActionHandler, me.options.forceSubscribing);
+                    Bubbling.addDefaultAction("show-more" + (me.options.bubblingLabel ? "-"+ me.options.bubblingLabel : ""), fnActionHandler, me.options.forceSubscribing);
                 }
 
                 // Actions module
@@ -1689,6 +1689,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 			 * Добавляет меню для колонок
 			 */
 			setupActions: function() {
+
+                var moreActionsDiv = document.getElementById(this.id + '-moreActions');
+                var actionMoreDiv, actionMoreA;
+                if (moreActionsDiv) {
+                    actionMoreDiv = moreActionsDiv.children[0];
+                    if (actionMoreDiv) {
+                        actionMoreA = actionMoreDiv.children[0];
+                        if (actionMoreA) {
+                            actionMoreA.className = 'show-more show-more' + (this.options.bubblingLabel ? "-"+ this.options.bubblingLabel : "");
+                        }
+                    }
+                }
+
 				if (this.options.actions != null) {
 					var actionsDiv = document.getElementById(this.id + "-actionSet");
                     if (actionsDiv && actionsDiv.children.length == 0) {
