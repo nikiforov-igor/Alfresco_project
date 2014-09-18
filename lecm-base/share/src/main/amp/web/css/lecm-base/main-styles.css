@@ -23,6 +23,9 @@
 div:focus {
     outline-offset: -2px;
 }
+/*body.loading *:empty {*/
+    /*border: none;*/
+/*}*/
 .hidden1 {
     display: none;
 }
@@ -196,6 +199,16 @@ i.icon-building {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.yui-skin-lecmTheme .yui-panel .hd {
+    padding-right: 30px;
+}
+.yui-skin-lecmTheme .yui-panel .hd span {
+    max-width: 80%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
 }
 .yui-skin-lecmTheme .dijitDialog .dijitDialogTitleBar .dijitDialogTitle {
     line-height: 30px;
