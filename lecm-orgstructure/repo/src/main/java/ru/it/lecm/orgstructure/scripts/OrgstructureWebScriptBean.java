@@ -95,14 +95,14 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		NodeRef organization = orgstructureService.getOrganization();
 		return new ScriptNode(organization, serviceRegistry, getScope());
 	}
-	
+
 	/**
 	 * Возвращает ноду Основного подразделения организации
-	 * 
+	 *
 	 *
 	 * @return  ноду Подразделения
 	 */
-	
+
 	public ScriptNode getRootUnit() {
 		NodeRef mainOrganizationUnit = orgstructureService.getRootUnit();
 		return new ScriptNode(mainOrganizationUnit, serviceRegistry, getScope());
@@ -476,6 +476,16 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 			return new ScriptNode(bossRef, serviceRegistry, getScope());
 		}
 		return null;
+	}
+
+	/**
+	 * Получение информации о руководителе сотрудника
+	 */
+	public ScriptNode findEmployeeBoss(ScriptNode employeeRef) {
+		ParameterCheck.mandatory("employeeRef", employeeRef);
+		NodeRef bossRef = orgstructureService.findEmployeeBoss(employeeRef.getNodeRef());
+
+		return bossRef != null ? new ScriptNode(bossRef, serviceRegistry, getScope()) : null;
 	}
 
 	/**
