@@ -422,3 +422,39 @@ function getSearchResults(params) {
 
     return processResults(nodes, fields, nameSubstituteStrings, startIndex, total);
 }
+
+/**
+ * Вспомогательный метод для сортировки нод по указанному свойству
+ * @param list список нод для сортировки
+ * @param sortField свойство, по которому сортировать
+ * @param sortAsc направление сортировки
+ * @returns {*}
+ */
+function sortResults(list, sortField, sortAsc) {
+    if (sortField == null) {
+        return list;
+    }
+    list.sort(function (a, b) {
+        var value1 = a.properties[sortField];
+        var value2 = b.properties[sortField];
+        if (value1 == null) {
+            if (value2 != null) {
+                return -1;
+            } else {
+                return 0;
+            }
+        } else if (value2 == null) {
+            return 1;
+        } else if (value1 < value2) {
+            return -1;
+        } else if (value1 > value2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    });
+    if (!sortAsc) {
+        list.reverse();
+    }
+    return list;
+}
