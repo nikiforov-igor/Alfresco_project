@@ -122,9 +122,13 @@ public class ErrandsWebScriptBean extends BaseWebScript {
 	 * исполнителя и соисполнителей
 	 * @return список доступных исполнителей (сотрудников)
 	 */
-	public List<NodeRef> getAvailableExecutors() {
-		return errandsService.getAvailableExecutors();
-	}
+    public Scriptable getAvailableExecutors() {
+        List<NodeRef> results = errandsService.getAvailableExecutors();
+        if (results != null) {
+            return createScriptable(results);
+        }
+        return null;
+    }
 
 	/**
 	 * Проверяет личные настройки "Без утверждения Инициатором"
