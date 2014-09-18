@@ -37,7 +37,12 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 		},
 
 		onDelegationOptsPart1: function (result) {
-			var contentEl = YAHOO.util.Dom.get(this.id + "-form-content");
+            var contentEl = null;
+            if (this.options.myProfile) {
+                contentEl = YAHOO.util.Dom.get(this.id + "-content-part1");
+            } else {
+			    contentEl = YAHOO.util.Dom.get(this.id + "-form-content");
+            }
 			contentEl.innerHTML = '<div id="' + this.datagridId + '">' + result.serverResponse.responseText + "<div>";
 			var nodeRef = new Alfresco.util.NodeRef(this.options.delegator);
 			var submissionUrl = Alfresco.constants.PROXY_URI_RELATIVE + "lecm/delegation/options/save/" + nodeRef.uri;
@@ -49,14 +54,18 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				form.setAJAXSubmit (true, {
 					successCallback: {
 						fn: function () {
-                            me.viewDialog.hide();
-                            me.viewDialog.destroy();
+                            if (!me.options.myProfile) {
+                                me.viewDialog.hide();
+                                me.viewDialog.destroy();
+                            }
 							Alfresco.util.PopupManager.displayMessage ({
 								text:"Данные обновлены"
 							});
-							YAHOO.Bubbling.fire("datagridRefresh", {
-								bubblingLabel: me.options.bubblingLabel
-							});
+                            if (!me.options.myProfile) {
+                                YAHOO.Bubbling.fire("datagridRefresh", {
+                                    bubblingLabel: me.options.bubblingLabel
+                                });
+                            }
 						},
 						scope: this
 					},
@@ -74,13 +83,15 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
 				// Initialise the form
 				form.init ();
 			}
-            YAHOO.util.Dom.removeClass(this.id + "-form", "hidden1");
-            this.viewDialog.show();
+            if (!me.options.myProfile) {
+                YAHOO.util.Dom.removeClass(this.id + "-form", "hidden1");
+                this.viewDialog.show();
+            }
 		},
 
 		onReady: function () {
 			this.datagridId = this.id + YAHOO.util.Dom.generateId();
-            if (!this.viewDialog) {
+            if (!this.viewDialog && !this.options.myProfile) {
                 var viewDialogId = this.id + "-form";
                 // Если viewDialog уже есть в разметке в body (остался с предыдущего открытия этого раздела)
                 // удаляем его
@@ -92,8 +103,9 @@ LogicECM.module.Delegation.DelegationOpts = LogicECM.module.Delegation.Delegatio
                     {
                         width: "50em"
                     });
+                this.viewDialog.hide();
             }
-            this.viewDialog.hide();
+
 
 			Alfresco.logger.info ("A new LogicECM.module.Delegation.DelegationOpts has been created");
 

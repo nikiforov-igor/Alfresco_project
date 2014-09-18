@@ -23,7 +23,8 @@
 		delegationOpts.setOptions ({
 			delegator: "${delegator}",
 			isActive: ${isActive?string},
-            bubblingLabel: "${page.url.args["bubbling"]!""}"
+            bubblingLabel: "${page.url.args["bubbling"]!""}",
+            myProfile: ${myProfile?string}
 		});
 	}
 
@@ -31,14 +32,17 @@
 })();
 //]]></script>
 
-<#assign formId = args.htmlid + "-form"/>
-<div id="${formId}" class="yui-panel hidden1">
-    <div id="${formId}-head" class="hd">${msg("logicecm.view")}</div>
-    <div id="${formId}-body" class="bd">
-        <div id="${formId}-content"></div>
-    </div>
-</div>
-
+    <#if myProfile>
+        <div id="${id}-content-part1" class="delegation-content"></div>
+    <#else>
+        <#assign formId = args.htmlid + "-form"/>
+        <div id="${formId}" class="yui-panel hidden1">
+            <div id="${formId}-head" class="hd">${msg("logicecm.view")}</div>
+            <div id="${formId}-body" class="bd">
+                <div id="${formId}-content"></div>
+            </div>
+        </div>
+    </#if>
 <#else>
 <div class="not-fount-procuracy">
 	<h1 class="theme-color-3">

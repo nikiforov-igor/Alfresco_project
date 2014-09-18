@@ -14,12 +14,14 @@ if ("delegation-opts" == pageId && delegator && delegator.length > 0) {
 	jsonStr = remote.connect ("alfresco").get ("/lecm/delegation/is/active?nodeRef=" + model.delegator);
 	obj = jsonUtils.toObject (jsonStr);
 	model.isActive = obj.isActive;
+    model.myProfile = false;
 } else {
 	//дергание скрипта и получение настоящего делегатора
 	jsonStr = remote.connect ("alfresco").get ("/lecm/delegation/get/options");
 	obj = jsonUtils.toObject (jsonStr);
 	model.delegator = obj.delegationOpts;
 	model.isActive = obj.isActive;
+    model.myProfile = true;
 }
 //актуализируем список доверенностей у делегатора (сотрудник, пользователь, параметры делегирования)
 remote.connect ("alfresco").get ("/lecm/delegation/get/procuracies?nodeRef=" + model.delegator);
