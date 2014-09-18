@@ -343,8 +343,13 @@ LogicECM.module = LogicECM.module || {};
                                             successCallback: {
                                                 fn: function (oResponse) {
                                                     var json = eval("(" + oResponse.responseText + ")");
+                                                    var item =  null;
+                                                    if (json.forCollection) {
+                                                        item = json;
+                                                    } else {
+                                                        item = json.items[0];
+                                                    }
                                                     var message = "";
-                                                    var item = json.items[0];
                                                     if (item.redirect != "") {
                                                         document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
                                                     } else if (item.openWindow) {
