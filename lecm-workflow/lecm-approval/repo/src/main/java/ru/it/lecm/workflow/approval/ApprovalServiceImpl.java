@@ -31,12 +31,12 @@ public class ApprovalServiceImpl extends BaseBean implements ApprovalService, Ru
 	private final static String DOCUMENT_APPROVAL_HISTORY_FOLDER = "История";
 	private final static int DEFAULT_DEFAULT_APROVAL_TERM = 1;
 
-	private Integer defaultApprovalTerm = DEFAULT_DEFAULT_APROVAL_TERM;
+	private Integer defaultApprovalTerm;
 	private IDelegation delegationService;
 	private StateMachineServiceBean stateMachineService;
 
 	public void setDefaultApprovalTerm(Integer defaultApprovalTerm) {
-		this.defaultApprovalTerm = defaultApprovalTerm;
+		this.defaultApprovalTerm = (defaultApprovalTerm != null) ? defaultApprovalTerm : DEFAULT_DEFAULT_APROVAL_TERM;
 	}
 
 	public void setDelegationService(IDelegation delegationService) {
