@@ -169,7 +169,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						}, {moduleId: simpleDialog.id}, this);
 					},
 					scope: this
-				}
+				},
+				successMessage: 'Изменения в этапе сохранены',
+				failureMessage: 'Не удалось сохранить изменения в этапе'
 			});
 
 			editStageForm.show();

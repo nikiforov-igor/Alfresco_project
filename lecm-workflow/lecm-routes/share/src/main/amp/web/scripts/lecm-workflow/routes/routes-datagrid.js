@@ -41,7 +41,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 							}, {moduleId: simpleDialog.id}, this);
 						},
 						scope: this
-					}
+					},
+					successMessage: 'Изменения в маршруте сохранены',
+					failureMessage: 'Не удалось сохранить изменения в маршруте'
 				});
 
 				editRouteForm.show();
