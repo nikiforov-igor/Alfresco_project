@@ -129,8 +129,7 @@ span.wrapper-title {
     border-radius: 3px;
     margin: 5px 5px 5px 70px;
     position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
 }
 #bd #lecm-content .toolbar .header-bar > div {
     margin-top: 1px;
