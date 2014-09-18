@@ -342,7 +342,7 @@ LogicECM.module = LogicECM.module || {};
                                             },
                                             successCallback: {
                                                 fn: function (oResponse) {
-                                                    var json = eval("(" + oResponse.responseText + ")");
+                                                    var json = eval("(" + oResponse.serverResponse.responseText + ")");
                                                     var item =  null;
                                                     if (json.forCollection) {
                                                         item = json;
