@@ -23,9 +23,6 @@
 div:focus {
     outline-offset: -2px;
 }
-/*body.loading *:empty {*/
-    /*border: none;*/
-/*}*/
 .hidden1 {
     display: none;
 }

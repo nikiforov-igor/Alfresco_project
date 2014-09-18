@@ -2,6 +2,9 @@
     overflow: auto;
     border: 1px solid #ccc;
 }
+.datagrid .grid:empty {
+    border: none;
+}
 .datagrid .grid table {
     border: none;
 }
