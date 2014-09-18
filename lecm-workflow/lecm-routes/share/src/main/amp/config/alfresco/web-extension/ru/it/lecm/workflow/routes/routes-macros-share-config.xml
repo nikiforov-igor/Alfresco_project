@@ -9,10 +9,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutesMacros:macrosString">
-						<!-- TODO: validation handler for SPEL macro -->
-<!--						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="" event="change" />
-						</constraint-handlers>-->
+						<control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>
@@ -34,10 +33,9 @@
 				</field-visibility>
 				<appearance>
 					<field id="lecmWorkflowRoutesMacros:macrosString">
-						<!-- TODO: validation handler for SPEL macro -->
-<!--						<constraint-handlers>
-							<constraint type="MANDATORY" validation-handler="" event="change" />
-						</constraint-handlers>-->
+						<control template="/ru/it/lecm/base-share/components/controls/code-mirror-control.ftl">
+							<control-param name="rows">30</control-param>
+						</control>
 					</field>
 				</appearance>
 			</form>

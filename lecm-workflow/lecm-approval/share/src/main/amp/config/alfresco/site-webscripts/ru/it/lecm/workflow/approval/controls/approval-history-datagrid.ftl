@@ -26,6 +26,7 @@
 			reportId: '${reportId}',
 			usePagination: false,
 			showExtendSearchBlock: false,
+			overrideSortingWith: false,
 			showCheckboxColumn: false,
 			forceSubscribing: true,
 			bubblingLabel: controlId,

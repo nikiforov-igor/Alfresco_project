@@ -16,6 +16,7 @@
 		showExtendSearchBlock: false,
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
+		overrideSortingWith: false,
 		expandable: false,
 		showActionColumn: ${editable?string},
 		<#if editable>

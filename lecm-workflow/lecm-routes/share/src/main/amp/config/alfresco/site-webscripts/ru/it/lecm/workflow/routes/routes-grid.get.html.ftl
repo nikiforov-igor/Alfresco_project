@@ -14,6 +14,7 @@
                 disableDynamicPagination: true,
                 showExtendSearchBlock: false,
                 showCheckboxColumn: false,
+                overrideSortingWith: false,
                 bubblingLabel: LogicECM.module.Routes.Const.ROUTES_DATAGRID_LABEL,
                 excludeColumns: ['lecmApproveAspects:approvalState'],
                 datagridMeta:{

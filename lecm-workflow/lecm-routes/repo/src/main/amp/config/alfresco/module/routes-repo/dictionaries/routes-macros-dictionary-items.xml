@@ -4,7 +4,18 @@
 		<items updateMode="CreateOrUpdate">
 			<item name="cm:Непосредственный руководитель" type="lecmWorkflowRoutesMacros:macros">
 				<property name="cm:name">Непосредственный руководитель</property>
-				<property name="lecmWorkflowRoutesMacros:macrosString">{}</property>
+				<property name="lecmWorkflowRoutesMacros:macrosString"><![CDATA[
+(function() {
+  // document - документ, для которого создаем лист согласования
+  // currentEmployee - сотрудник, который создает лист согласования
+  // model.result - сюда положить результирующего сотрудника, который будет добавлен в лист согласования
+  var bossEmployee;
+
+  bossEmployee = orgstructure.findEmployeeBoss(currentEmployee);
+
+  model.result = bossEmployee;
+})();]]>
+				</property>
 				<property name="lecmWorkflowRoutesMacros:macrosServiceId">MACRO_DIRECT_SUPERVISOR</property>
 			</item>
 		</items>

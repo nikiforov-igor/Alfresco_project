@@ -5,9 +5,9 @@ if (typeof LogicECM == 'undefined' || !LogicECM) {
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Routes = LogicECM.module.Routes || {};
 
-(function() {
+(function () {
 
-	LogicECM.module.Routes.StagesControlDatagrid = function(containerId) {
+	LogicECM.module.Routes.StagesControlDatagrid = function (containerId) {
 		LogicECM.module.Routes.StagesControlDatagrid.superclass.constructor.call(this, containerId);
 		return this;
 	};
@@ -15,7 +15,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 	YAHOO.lang.extend(LogicECM.module.Routes.StagesControlDatagrid, LogicECM.module.Base.DataGrid);
 
 	YAHOO.lang.augmentObject(LogicECM.module.Routes.StagesControlDatagrid.prototype, {
-		onActionCreate: function(event, obj, isApprovalListContextProp) {
+		onActionCreate: function (event, obj, isApprovalListContextProp) {
 			function onCreateStageSuccess(r) {
 				var formId = 'createStageForm';
 				var createStageForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
@@ -35,9 +35,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					},
 					destroyOnHide: true,
 					doBeforeDialogShow: {
-						fn: function(form, simpleDialog) {
+						fn: function (form, simpleDialog) {
 							var formNode = YAHOO.util.Dom.get(form.formId);
-							var nameInput = YAHOO.util.Dom.getElementsBy(function(a) {
+							var nameInput = YAHOO.util.Dom.getElementsBy(function (a) {
 								return a.name.indexOf('cm_title') >= 0;
 							}, 'input', formNode)[0];
 							var recordsSize = this.widgets.dataTable.getRecordSet().getLength();
@@ -48,7 +48,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 							simpleDialog.dialog.setHeader(this.msg('label.routes.create-stage.title'));
 							this.createDialogOpening = false;
-							simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+							simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 								LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 								LogicECM.module.Base.Util.formDestructor(event, args, params);
 							}, {moduleId: simpleDialog.id}, this);
@@ -56,7 +56,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						scope: this
 					},
 					onSuccess: {
-						fn: function(r) {
+						fn: function (r) {
 							var nodeRefObj = new Alfresco.util.NodeRef(stageRef);
 							Alfresco.util.Ajax.jsonRequest({
 								method: 'POST',
@@ -66,7 +66,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 									removed: ['sys:temporary']
 								},
 								successCallback: {
-									fn: function(r) {
+									fn: function (r) {
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: 'Этап успешно создан'
@@ -75,7 +75,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 									scope: this
 								},
 								failureCallback: {
-									fn: function(r) {
+									fn: function (r) {
 										this.createDialogOpening = false;
 										Alfresco.util.PopupManager.displayMessage({
 											text: 'Не удалось создать этап: ' + r.json.message
@@ -98,7 +98,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 						scope: this
 					},
 					onFailure: {
-						fn: function(response) {
+						fn: function (response) {
 							this.displayErrorMessageWithDetails(this.msg('logicecm.base.error'), this.msg('message.save.failure'), response.json.message);
 							this.createDialogOpening = false;
 							this.widgets.cancelButton.set('disabled', false);
@@ -133,7 +133,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					scope: this
 				},
 				failureCallback: {
-					fn: function(r) {
+					fn: function (r) {
 						this.editDialogOpening = false;
 						Alfresco.util.PopupManager.displayMessage({
 							text: 'Не удалось создать этап: ' + r.json.message
@@ -144,7 +144,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 			});
 
 		},
-		onActionEdit: function(item) {
+		onActionEdit: function (item) {
 			var formId = 'editStageForm';
 			var editStageForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
 
@@ -160,10 +160,10 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
-					fn: function(form, simpleDialog) {
+					fn: function (form, simpleDialog) {
 						simpleDialog.dialog.setHeader(this.msg('label.routes.edit-stage.title'));
 						this.createDialogOpening = false;
-						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
 						}, {moduleId: simpleDialog.id}, this);
@@ -176,16 +176,16 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 			editStageForm.show();
 		},
-		onCollapse: function(record) {
+		onCollapse: function (record) {
 			var expandedRow = YAHOO.util.Dom.get(this.getExpandedRecordId(record));
 			LogicECM.module.Base.Util.destroyForm(this.getExpandedFormId(record));
 			expandedRow.parentNode.removeChild(expandedRow);
 		},
-		_createNewStageItem: function(dialogType, destination) {
+		_createNewStageItem: function (dialogType, destination) {
 			var itemType = LogicECM.module.Routes.Const.ROUTES_CONTAINER.stageItemType,
 				createStageItemDialog = new Alfresco.module.SimpleDialog(this.id + '-createStageItemDialog'),
 				formID, dialogHeader,
-				actionUrl = Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/routes/CreateStageItemInQueue?interpolateMacros=' + this.options.isApprovalListContext,
+				actionUrl = Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/workflow/routes/CreateStageItemInQueue?resolveMacros=' + !!this.options.isApprovalListContext,
 				expandedBubblingLabel = destination.replace(/:|\//g, "_") + "-dtgrd"; // см. datagridId в stage-expanded.get.html.ftl
 
 			switch (dialogType) {
@@ -217,9 +217,9 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 				},
 				destroyOnHide: true,
 				doBeforeDialogShow: {
-					fn: function(p_form, simpleDialog) {
+					fn: function (p_form, simpleDialog) {
 						simpleDialog.dialog.setHeader(dialogHeader);
-						simpleDialog.dialog.subscribe('destroy', function(event, args, params) {
+						simpleDialog.dialog.subscribe('destroy', function (event, args, params) {
 							LogicECM.module.Base.Util.destroyForm(simpleDialog.id);
 							LogicECM.module.Base.Util.formDestructor(event, args, params);
 						}, {moduleId: simpleDialog.id}, this);
@@ -227,10 +227,10 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					scope: this
 				},
 				onSuccess: {
-					fn: function(r) {
+					fn: function (r) {
 						var persistedObjects = r.json,
 							persistedObjectsLength = persistedObjects.length,
-							i, persistedObject;
+							i, persistedObject, message;
 
 						for (i = 0; i < persistedObjectsLength; i++) {
 							persistedObject = persistedObjects[i];
@@ -244,27 +244,44 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 							});
 						}
 
+						if (persistedObjectsLength) {
+							message = this.msg('message.new-row.success');
+						} else {
+							message = this.msg('message.macros.empty.result');
+						}
 						Alfresco.util.PopupManager.displayMessage({
-							text: this.msg('message.new-row.success')
+							text: message
 						});
 					},
 					scope: this
 				},
 				onFailure: {
-					fn: function(response) {
-						Alfresco.util.PopupManager.displayMessage({
-							text: this.msg('message.new-row.failure')
-						});
+					fn: function (response) {
+						var errorMessage = response.json.message,
+							macrosName, macrosScript, messageSplittedArr, message;
+
+						if (!!this.options.isApprovalListContext) {
+							messageSplittedArr = errorMessage.split(' | ');
+							macrosName = messageSplittedArr.splice(0, 2)[1];
+							macrosScript = messageSplittedArr.join(' | ');
+							message = this.msg('message.error.running.macros') + ' ' + macrosName;
+							this.displayErrorMessageWithDetails(this.msg('title.error.running.macros'), message, macrosScript);
+						} else {
+							Alfresco.util.PopupManager.displayMessage({
+								text: this.msg('message.new-row.failure')
+							});
+						}
+						createStageItemDialog.hide();
 					},
 					scope: this
 				}
 			});
 			createStageItemDialog.show();
 		},
-		onActionAddEmployee: function(item) {
+		onActionAddEmployee: function (item) {
 			this._createNewStageItem('employee', item.nodeRef);
 		},
-		onActionAddMacros: function(item) {
+		onActionAddMacros: function (item) {
 			this._createNewStageItem('macros', item.nodeRef);
 		}
 

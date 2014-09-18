@@ -34,6 +34,7 @@
 		  p:searchService-ref="searchService"
 		  p:copyService-ref="copyService"
 		  p:documentService-ref="documentService"
+		  p:scriptService-ref="scriptService"
 	/>
 
 	<bean id="routes.delete.temp.schedule"

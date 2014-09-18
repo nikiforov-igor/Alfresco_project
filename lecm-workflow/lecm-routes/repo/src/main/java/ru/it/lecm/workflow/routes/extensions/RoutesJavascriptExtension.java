@@ -1,12 +1,16 @@
 package ru.it.lecm.workflow.routes.extensions;
 
+import java.util.ArrayList;
 import org.alfresco.repo.jscript.ScriptNode;
+import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.mozilla.javascript.Scriptable;
 import ru.it.lecm.base.beans.BaseWebScript;
+import ru.it.lecm.workflow.routes.api.ConvertRouteToIterationResult;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
+import ru.it.lecm.workflow.routes.entity.ConvertRouteToIterationResultForScript;
 
 /**
  *
@@ -56,10 +60,16 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return createScriptable(routesService.getAllowedRoutesForCurrentUser(documentNode.getNodeRef()));
 	}
 
-	public ScriptNode convertRouteToIteration(ScriptNode documentNode, ScriptNode routeNode) {
-		NodeRef iterationNode = routesService.convertRouteToIteration(documentNode.getNodeRef(), routeNode.getNodeRef());
+	public ConvertRouteToIterationResultForScript convertRouteToIteration(ScriptNode documentNode, ScriptNode routeNode) {
+		ConvertRouteToIterationResultForScript result = new ConvertRouteToIterationResultForScript();
+		ValueConverter converter = new ValueConverter();
 
-		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
+		ConvertRouteToIterationResult convertResult = routesService.convertRouteToIteration(documentNode.getNodeRef(), routeNode.getNodeRef());
+		result.setIterationNode((ScriptNode) converter.convertValueForScript(serviceRegistry, getScope(), null, convertResult.getIterationNode()));
+		result.setScriptErrors((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (ArrayList) convertResult.getScriptErrors()));
+		result.setStageItems((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (ArrayList) convertResult.getStageItems()));
+
+		return result;
 	}
 
 	public ScriptNode createEmptyIteration(ScriptNode documentNode) {
@@ -68,14 +78,30 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return iterationNode != null ? new ScriptNode(iterationNode, serviceRegistry, getScope()) : null;
 	}
 
-	public void resolveStageItemMacros(ScriptNode stageItem) {
-		routesService.resolveStageItemMacros(stageItem.getNodeRef());
+	public boolean resolveStageItemMacros(ScriptNode stageItem, ScriptNode documentNode) {
+		return routesService.resolveStageItemMacros(stageItem.getNodeRef(), documentNode.getNodeRef());
 	}
 
 	public ScriptNode getSourceRouteForIteration(ScriptNode iterationNode) {
 		NodeRef sourceRouteNode = routesService.getSourceRouteForIteration(iterationNode.getNodeRef());
 
 		return sourceRouteNode != null ? new ScriptNode(sourceRouteNode, serviceRegistry, getScope()) : null;
+	}
+
+	public ScriptNode getDocumentByIteration(ScriptNode iterationNode) {
+		NodeRef documentNode = routesService.getDocumentByIteration(iterationNode.getNodeRef());
+
+		return documentNode != null ? new ScriptNode(documentNode, serviceRegistry, getScope()) : null;
+	}
+	public ScriptNode getDocumentByStage(ScriptNode stageNode) {
+		NodeRef documentNode = routesService.getDocumentByStage(stageNode.getNodeRef());
+
+		return documentNode != null ? new ScriptNode(documentNode, serviceRegistry, getScope()) : null;
+	}
+	public ScriptNode getDocumentByStageItem(ScriptNode stageItemNode) {
+		NodeRef documentNode = routesService.getDocumentByStageItem(stageItemNode.getNodeRef());
+
+		return documentNode != null ? new ScriptNode(documentNode, serviceRegistry, getScope()) : null;
 	}
 
 }

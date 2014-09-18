@@ -2,18 +2,29 @@
 	var documentNodeStr = json.getString('alf_destination');
 	var documentNode = search.findNode(documentNodeStr);
 	var routeAssocName = 'lecmWorkflowRoutes_selectRouteAssocFake';
-	var routeNode, iterationNode, iterationNodeStr = "";
+	var routeNode, result, iterationNodeStr = "";
+	var stageItems = [], scriptErrors = [];
 
 
 	if (json.has(routeAssocName)) {
 		routeNode = search.findNode(json.getString(routeAssocName));
-		iterationNode = routesService.convertRouteToIteration(documentNode, routeNode);
-		if (iterationNode) {
-			iterationNodeStr = iterationNode.nodeRef.toString();
+		result = routesService.convertRouteToIteration(documentNode, routeNode);
+		if (result) {
+			if (result.iterationNode) {
+				iterationNodeStr = result.iterationNode.nodeRef.toString();
+			}
+			if (result.stageItems) {
+				stageItems = result.stageItems;
+			}
+			if (result.scriptErrors) {
+				scriptErrors = result.scriptErrors;
+			}
 		}
 	} else {
 		logger.log('Error processing request');
 	}
 
 	model.iterationNode = iterationNodeStr;
+	model.stageItems = stageItems;
+	model.scriptErrors = scriptErrors;
 })();

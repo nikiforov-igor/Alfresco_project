@@ -13,6 +13,7 @@
 	LogicECM.CurrentModules["${id}"].setOptions({
 		usePagination: false,
 		showExtendSearchBlock: false,
+		overrideSortingWith: false,
 		showCheckboxColumn: false,
 		bubblingLabel: "${datagridId}",
 		showActionColumn: false,

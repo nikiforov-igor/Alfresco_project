@@ -320,6 +320,17 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				},
 				onSuccess: {
 					fn: function (r) {
+						var scriptErrors = r.json.scriptErrors,
+							i, scriptErrorsLength = scriptErrors.length,
+							macrosName, macrosScript, messageSplittedArr, message;
+
+						for (i = 0; i < scriptErrorsLength; i++) {
+							messageSplittedArr = scriptErrors[i].split(' | ');
+							macrosName = messageSplittedArr.splice(0, 2)[1];
+							macrosScript = messageSplittedArr.join(' | ');
+							message = this.msg('message.error.running.macros') + ' ' + macrosName;
+							this.displayErrorMessageWithDetails(this.msg('title.error.running.macros'), message, macrosScript);
+						}
 						this.getApprovalData(function () {
 							this.fillCurrentApprovalState();
 							this.manageControlsVisibility();

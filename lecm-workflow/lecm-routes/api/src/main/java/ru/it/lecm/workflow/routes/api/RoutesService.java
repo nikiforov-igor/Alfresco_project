@@ -40,13 +40,13 @@ public interface RoutesService {
 
 	List<NodeRef> getAllowedRoutesForEmployee(NodeRef employeeRef, NodeRef documentRef);
 
-	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
+	public ConvertRouteToIterationResult convertRouteToIteration(NodeRef documentNode, NodeRef routeNode);
 
 	public NodeRef createEmptyIteration(NodeRef documentNode);
 
 	void deleteDocumentCurrentIteration(final NodeRef documentRef);
 
-	void resolveStageItemMacros(NodeRef stageItemNode);
+	boolean resolveStageItemMacros(NodeRef stageItemNode, NodeRef resolveStageItemMacros);
 
 	/**
 	 * Получить маршрут, на основе которого сформирована итерация.
@@ -57,5 +57,9 @@ public interface RoutesService {
 	 * @return Маршрут, на котором основана итерация. Если такового нет, то null
 	 */
 	NodeRef getSourceRouteForIteration(NodeRef iterationNode);
+
+	NodeRef getDocumentByIteration(NodeRef iterationNode);
+	NodeRef getDocumentByStage(NodeRef stageNode);
+	NodeRef getDocumentByStageItem(NodeRef stageItemNode);
 
 }

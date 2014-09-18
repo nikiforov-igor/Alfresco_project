@@ -1,15 +1,20 @@
 package ru.it.lecm.workflow.routes.beans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.jscript.ValueConverter;
+import org.alfresco.scripts.ScriptException;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.ScriptService;
 import org.alfresco.service.cmr.repository.StoreRef;
 import org.alfresco.service.cmr.search.ResultSet;
 import org.alfresco.service.cmr.search.ResultSetRow;
@@ -17,6 +22,7 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.alfresco.util.PropertyCheck;
 import org.alfresco.util.PropertyMap;
 import org.slf4j.Logger;
@@ -26,6 +32,8 @@ import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.workflow.approval.api.ApprovalAspectsModel;
 import ru.it.lecm.workflow.approval.api.ApprovalService;
+import ru.it.lecm.workflow.routes.api.ConvertRouteToIterationResult;
+import ru.it.lecm.workflow.routes.api.RoutesMacrosModel;
 import ru.it.lecm.workflow.routes.api.RoutesModel;
 import ru.it.lecm.workflow.routes.api.RoutesService;
 
@@ -44,6 +52,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	private SearchService searchService;
 	private CopyService copyService;
 	private DocumentService documentService;
+	private ScriptService scriptService;
 
 	public void setApprovalService(ApprovalService approvalService) {
 		this.approvalService = approvalService;
@@ -65,6 +74,10 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		this.documentService = documentService;
 	}
 
+	public void setScriptService(ScriptService scriptService) {
+		this.scriptService = scriptService;
+	}
+
 	@Override
 	public NodeRef getServiceRootFolder() {
 		return getFolder(ROUTES_FOLDER_ID);
@@ -77,6 +90,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		PropertyCheck.mandatory(this, "searchService", searchService);
 		PropertyCheck.mandatory(this, "copyService", copyService);
 		PropertyCheck.mandatory(this, "documentService", documentService);
+		PropertyCheck.mandatory(this, "scriptService", scriptService);
 	}
 
 	@Override
@@ -189,9 +203,10 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	}
 
 	@Override
-	public NodeRef convertRouteToIteration(NodeRef documentNode, NodeRef routeNode) {
+	public ConvertRouteToIterationResult convertRouteToIteration(NodeRef documentNode, NodeRef routeNode) {
 		NodeRef iteration;
 		NodeRef approvalFolder = approvalService.getDocumentApprovalFolder(documentNode);
+		ConvertRouteToIterationResult result = new ConvertRouteToIterationResult();
 		if (approvalFolder == null) {
 			approvalFolder = approvalService.createDocumentApprovalFolder(documentNode);
 		} else {
@@ -207,31 +222,87 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			}
 		}
 		iteration = copyService.copy(routeNode, approvalFolder, ContentModel.ASSOC_CONTAINS, getRandomQName(), false);
+		result.setIterationNode(iteration);
 		List<NodeRef> routeStages = getAllStagesOfRoute(routeNode);
 		for (NodeRef routeStage : routeStages) {
 			if (!nodeService.hasAspect(routeStage, ContentModel.ASPECT_TEMPORARY)) {
 				copyService.copy(routeStage, iteration, ContentModel.ASSOC_CONTAINS, getRandomQName(), true);
 			}
 		}
-		resolveIterationMacroses(iteration);
+		Pair<List<NodeRef>, List<String>> resolveIterationMacrosesResultPair = resolveIterationMacroses(iteration, documentNode);
+		result.setStageItems(resolveIterationMacrosesResultPair.getFirst());
+		result.setScriptErrors(resolveIterationMacrosesResultPair.getSecond());
 
-		return iteration;
+		return result;
 	}
 
-	private void resolveIterationMacroses(NodeRef iterationRef) {
+	private Pair<List<NodeRef>, List<String>> resolveIterationMacroses(NodeRef iterationRef, NodeRef documentNode) {
 		List<NodeRef> stageItems = getAllStageItemsOfRoute(iterationRef);
+		List<NodeRef> goodStageItems = new ArrayList<>();
+		List<String> failedScripts = new ArrayList<>();
 		for (NodeRef stageItem : stageItems) {
 			if (nodeService.getTargetAssocs(stageItem, RoutesModel.ASSOC_STAGE_ITEM_MACROS).size() > 0) {
-				resolveStageItemMacros(stageItem);
+				try {
+					boolean macrosResolved = resolveStageItemMacros(stageItem, documentNode);
+					if (!macrosResolved) {
+						continue;
+					}
+				} catch (ScriptException ex) {
+					failedScripts.add(ex.getMessage());
+					continue;
+				}
 			}
+			goodStageItems.add(stageItem);
 		}
+
+		return new Pair<>(goodStageItems, failedScripts);
 	}
 
 	@Override
-	public void resolveStageItemMacros(NodeRef stageItemNode) {
-		// TODO здесь мы будем резолвить макросы из маршрута в сотрудников.
-		// пока просто подставим текущего пользователя
-		nodeService.createAssociation(stageItemNode, orgstructureService.getCurrentEmployee(), RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+	public boolean resolveStageItemMacros(NodeRef stageItemNode, NodeRef documentNode) {
+		boolean result = false;
+		NodeRef employeeRef = null;
+		NodeRef macrosNode = findNodeByAssociationRef(stageItemNode, RoutesModel.ASSOC_STAGE_ITEM_MACROS, RoutesMacrosModel.TYPE_MACROS, ASSOCIATION_TYPE.TARGET);
+		if (macrosNode == null || !nodeService.exists(macrosNode)) {
+			// что-то пошло не так
+			permDeleteNode(stageItemNode);
+		} else {
+			String macrosString = (String) nodeService.getProperty(macrosNode, RoutesMacrosModel.PROP_MACROS_STRING);
+			try {
+				employeeRef = evaluateMacrosString(macrosString, documentNode, orgstructureService.getCurrentEmployee());
+			} catch (ScriptException ex) {
+				String macrosName = (String) nodeService.getProperty(macrosNode, ContentModel.PROP_NAME);
+				String exceptionMsg = String.format("| %s | Error executing script:%n%s%n%s", macrosName, macrosString, ex.getMessage());
+				permDeleteNode(stageItemNode);
+				logger.warn("Error executing script {}. Macros node: {}", macrosString, macrosNode);
+				throw new ScriptException(exceptionMsg);
+			}
+			if (employeeRef == null) {
+				logger.warn("Script {} returned no employee. I'll delete stage item, related to macros node {}", macrosString, macrosNode);
+				permDeleteNode(stageItemNode);
+			} else {
+				nodeService.createAssociation(stageItemNode, employeeRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	private NodeRef evaluateMacrosString(String macrosString, NodeRef documentNode, NodeRef currentEmployee) {
+		Map<String, Object> scriptModel = new HashMap<>(),
+				returnModel = new HashMap<>();
+		NodeRef resultEmployee;
+		ValueConverter converter = new ValueConverter();
+
+		scriptModel.put("model", returnModel);
+		scriptModel.put("document", documentNode);
+		scriptModel.put("currentEmployee", currentEmployee);
+
+		scriptService.executeScriptString(macrosString, scriptModel);
+
+		resultEmployee = (NodeRef) converter.convertValueForJava(returnModel.get("result"));
+
+		return resultEmployee;
 	}
 
 	private List<NodeRef> getAllStagesOfRoute(NodeRef routeNode) {
@@ -402,6 +473,28 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		}
 
 		return result;
+	}
+
+	@Override
+	public NodeRef getDocumentByIteration(NodeRef iterationNode) {
+		NodeRef approvalDir = nodeService.getPrimaryParent(iterationNode).getParentRef();
+		NodeRef document = nodeService.getPrimaryParent(approvalDir).getParentRef();
+
+		if (documentService.isDocument(document)) {
+			return document;
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public NodeRef getDocumentByStage(NodeRef stageNode) {
+		return getDocumentByIteration(nodeService.getPrimaryParent(stageNode).getParentRef());
+	}
+
+	@Override
+	public NodeRef getDocumentByStageItem(NodeRef stageItemNode) {
+		return getDocumentByStage(nodeService.getPrimaryParent(stageItemNode).getParentRef());
 	}
 
 }
