@@ -21,7 +21,7 @@ if (parentNode != null) {
 	            title: substitude.formatNodeTitle(item, nodeTitleSubstituteString),
 	            type: item.getTypeShort(),
 	            nodeRef: item.getNodeRef().toString(),
-	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType),
+	            isLeaf: "" + !searchCounter.hasChildren(item.getNodeRef().toString(), selectableType, true),
 	            isContainer: "" + item.isContainer,
 		        hasPermAddChildren: lecmPermission.hasPermission(item.nodeRef, "AddChildren")
 	        });

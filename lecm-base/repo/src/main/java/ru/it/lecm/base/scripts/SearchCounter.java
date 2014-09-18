@@ -162,10 +162,18 @@ public class SearchCounter extends BaseScopableProcessorExtension {
     }
 
     public boolean hasChildren(String parentRef, String childType) {
-        return  hasChildren(parentRef, childType, null);
+        return hasChildren(parentRef, childType, false);
+    }
+
+    public boolean hasChildren(String parentRef, String childType, boolean activeOnly) {
+        return  hasChildren(parentRef, childType, null, activeOnly);
     }
 
     public boolean hasChildren(String parentRef, String childType, Object additionalQueryObj) {
+        return hasChildren(parentRef, childType, additionalQueryObj, false);
+    }
+
+    public boolean hasChildren(String parentRef, String childType, Object additionalQueryObj, boolean activeOnly) {
         StringBuilder queryBuffer = new StringBuilder();
 
         String additionalQuery = null;
@@ -201,7 +209,9 @@ public class SearchCounter extends BaseScopableProcessorExtension {
         if (childType != null && !childType.isEmpty()) {
             queryBuffer.append(" AND TYPE:\"").append(childType).append("\"");
         }
+        queryBuffer.append(" AND NOT @lecm\\-dic\\:active:false");
         queryBuffer.append(")");
+
 
         SearchParameters sp = new SearchParameters();
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
