@@ -131,12 +131,12 @@
 	margin-bottom: 3px;
 }
 
-.datagrid .grid-create-error-dialog {
+.grid-create-error-dialog {
     text-align: center;
     padding:5px;
 }
 
-.datagrid .grid-create-error-dialog .error-dialog-details {
+.grid-create-error-dialog + .error-dialog-details {
     display:none;
     height: 250px;
     padding:5px;
