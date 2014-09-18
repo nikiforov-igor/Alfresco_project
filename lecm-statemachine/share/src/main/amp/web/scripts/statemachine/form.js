@@ -342,9 +342,20 @@ LogicECM.module = LogicECM.module || {};
                                             },
                                             successCallback: {
                                                 fn: function (oResponse) {
-                                                    // document.location.href = document.location.href;
-                                                    // ALF-2803
-                                                    window.location.reload(true);
+                                                    var message = "";
+                                                    var item = json.items[0];
+                                                    if (item.redirect != "") {
+                                                        document.location.href = Alfresco.constants.URL_PAGECONTEXT + item.redirect;
+                                                    } else if (item.openWindow) {
+                                                        window.open(Alfresco.constants.URL_PAGECONTEXT + item.openWindow, "", "toolbar=no,location=no,directories=no,status=no,menubar=no,copyhistory=no");
+                                                    } else if (!item.withErrors){
+                                                        window.location.reload(true);
+                                                    } else {
+                                                        message += "<div class=\"" + (item.withErrors ? "error-item" : "noerror-item") + "\">" + item.message + "</div>";
+                                                    }
+                                                    if (message != "") {
+                                                        this._openMessageWindow(actionId, message, true);
+                                                    }
                                                 }
                                             },
                                             failureCallback: {
