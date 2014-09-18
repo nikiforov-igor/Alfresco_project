@@ -151,6 +151,17 @@
 
 		<!-- аспект для поля "В ответ на" -->
 		<aspect name="lecm-document-aspects:response-to-aspect">
+            <properties>
+                <property name="lecm-document-aspects:response-to-assoc-ref">
+                    <title>В ответ на</title>
+                    <type>d:text</type>
+                    <index enabled="true">
+                        <atomic>true</atomic>
+                        <stored>false</stored>
+                        <tokenised>both</tokenised>
+                    </index>
+                </property>
+            </properties>
 			<associations>
 				<association name="lecm-document-aspects:response-to-assoc">
 					<source>
