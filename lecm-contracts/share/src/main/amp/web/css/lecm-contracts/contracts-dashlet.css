@@ -1,46 +1,38 @@
-.dashlet .titleBarActions .arm {
-    background-image: url('/share/res/images/lecm-contracts/arm.png');
+.dashlet.contracts .title {
+    padding: 5px 9px;
+    overflow: hidden;
 }
-
-.lecm-dashlet-actions {
+.dashlet.contracts .lecm-dashlet-actions {
     margin-left: 1em;
 }
-
-.dashlet .lecm-dashlet-actions .add {
-    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
-}
-
-.dashlet .lecm-dashlet-actions a {
+.dashlet.contracts .lecm-dashlet-actions a {
     background-position: 0 center;
     background-repeat: no-repeat;
     padding: 1.5em;
     text-decoration: none;
 }
+.dashlet.contracts .lecm-dashlet-actions .add {
+    background-image: url("/share/res/images/lecm-contracts/alf_contract_add.png");
+}
 
-.dashlet .datagrid .datagrid-bar
-{
+.dashlet.contracts .toolbar {
+    border-bottom: none;
+}
+.dashlet.contracts .titleBarActions .arm {
+    background-image: url('/share/res/images/lecm-contracts/arm.png');
+}
+.dashlet.contracts .scrollableList {
+    padding: 0;
+}
+.dashlet.contracts .datagrid {
+    padding-top: 0;
+}
+.dashlet.contracts .datagrid .datagrid-bar {
     margin: 0;
     padding: 0;
 }
-
-.contracts .title {
-    padding: 5px 9px 5px 9px;
-    overflow: hidden;
-}
-
-.dashlet .datagrid {
-    padding-top: 0;
-}
-
-.dashlet .scrollableList {
-    padding: 0;
-}
-
-.contracts .datagrid thead{
+.dashlet.contracts .datagrid thead {
     display:none;
 }
 
-.contracts .toolbar {
-    border-bottom: none;
-}
 
