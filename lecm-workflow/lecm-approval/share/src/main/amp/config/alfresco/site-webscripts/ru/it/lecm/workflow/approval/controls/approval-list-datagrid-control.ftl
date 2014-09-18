@@ -32,16 +32,16 @@
 
 		<div class="approvalDescriptionContainer">
 			<div class="approvalRouteDataContainer">
-				<strong>Маршрут</strong>
+				<strong>Маршрут:</strong>
 				<span id="${controlId}-source-route-info"></span>
 			</div>
 			<div class="approvalStatusContainer">
-				<strong>Статус текущего согласования</strong>
+				<strong>Статус текущего согласования:</strong>
 				<span id="${controlId}-current-approval-info"></span>
 			</div>
 		</div>
 
-		<span id="${controlId}-add-stage" class="yui-button yui-push-button hidden">
+		<span id="${controlId}-add-stage" class="yui-button yui-push-button hidden addStageButton">
 			<span class="first-child">
 				<button type="button">Добавить этап</button>
 			</span>
