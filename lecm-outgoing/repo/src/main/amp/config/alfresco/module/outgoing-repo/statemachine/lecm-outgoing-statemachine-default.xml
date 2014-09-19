@@ -1570,7 +1570,7 @@
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null]]>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -5998,7 +5998,7 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null]]>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
 																				</value>
 																			</property>
 																		</properties>
