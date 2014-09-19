@@ -581,6 +581,10 @@ function trimString(str) {
   return str.replace(/^\s+|\s+$/g, '');
 }
 
+function escapeString(str) {
+  return str.replace(/"/g, '\\\"');
+}
+
 function getFilterParams(filterData, parentXPath)
 {
 	var query = " +PATH:\"" + parentXPath + "//*\"";
@@ -599,7 +603,7 @@ function getFilterParams(filterData, parentXPath)
 			ampersand = " @";
 		}
 
-		params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '"*' + trimString(namespace[2]) + '*"' + or;
+		params += ampersand + namespace[0]+"\\:" + namespace[1] + ":"+ '"*' + escapeString(trimString(namespace[2])) + '*"' + or;
 	}
 	if (params !== "") {
 		query += " AND " + "(" + params + " )";
