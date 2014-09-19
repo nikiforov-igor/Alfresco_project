@@ -82,6 +82,8 @@
     <#assign isFieldMandatory = field.endpointMandatory>
 </#if>
 
+<#assign editable = ((params.editable!"true") == "true") && !(field.disabled) && (form.mode?string=="edit") >
+
 <script type="text/javascript">//<![CDATA[
 (function() {
 	function drawForm(){
@@ -119,7 +121,7 @@
                 <#if expandDataSource?has_content>
                     expandDataSource: "${expandDataSource}",
                 </#if>
-                showActions: ${showActions?string}
+                showActions: <#if editable>${showActions?string}<#else>false</#if>
 			});
 	}
 	function init() {
