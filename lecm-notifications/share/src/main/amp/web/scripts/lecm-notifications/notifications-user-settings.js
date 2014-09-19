@@ -84,16 +84,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					});
 			},
 
-			onSuccess: function (response)
-			{
-				if (response && response.json) {
-					window.location.reload(true);
-				} else {
-					Alfresco.util.PopupManager.displayPrompt(
-						{
-							text: Alfresco.util.message("message.failure")
-						});
-				}
-			}
+			onSuccess: function (response) {
+                if (response && response.json) {
+                    Alfresco.util.PopupManager.displayMessage(
+                        {
+                            text: Alfresco.util.message("message.save.success")
+                        });
+                } else {
+                    Alfresco.util.PopupManager.displayPrompt(
+                        {
+                            text: Alfresco.util.message("message.failure")
+                        });
+                }			}
 		});
 })();
