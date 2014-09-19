@@ -23,7 +23,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 				createStageForm.setOptions({
 					width: '50em',
-					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+					templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 					templateRequestParams: {
 						formId: formId,
 						itemId: stageRef,
@@ -150,7 +150,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 			editStageForm.setOptions({
 				width: '50em',
-				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
+				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 				templateRequestParams: {
 					itemId: item.nodeRef,
 					itemKind: 'node',
@@ -204,7 +204,7 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 			createStageItemDialog.setOptions({
 				width: '35em',
-				templateUrl: 'lecm/components/form',
+				templateUrl: 'components/form',
 				actionUrl: actionUrl,
 				templateRequestParams: {
 					itemKind: 'type',

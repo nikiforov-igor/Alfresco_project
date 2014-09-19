@@ -1,7 +1,7 @@
 (function() {
 	var documentNodeStr = json.getString('alf_destination');
 	var documentNode = search.findNode(documentNodeStr);
-	var routeAssocName = 'lecmWorkflowRoutes_selectRouteAssocFake';
+	var routeAssocName = 'assoc_lecmWorkflowRoutes_selectRouteAssoc';
 	var routeNode, result, iterationNodeStr = "";
 	var stageItems = [], scriptErrors = [];
 
