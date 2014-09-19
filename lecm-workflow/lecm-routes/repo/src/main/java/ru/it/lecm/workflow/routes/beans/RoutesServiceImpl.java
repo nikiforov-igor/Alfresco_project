@@ -45,7 +45,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 	private final static Logger logger = LoggerFactory.getLogger(RoutesServiceImpl.class);
 	public final static String ROUTES_FOLDER_ID = "ROUTES_FOLDER";
-	private final String SEARCH_ROUTES_QUERY_FORMAT = "PARENT:\"%s\" AND +TYPE:\"%s\" AND (-ASPECT:\"sys:temporary\" OR -ASPECT:\"lecm-workflow:temp\")";
+	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND (+ISNOTNULL:\"sys:node-dbid\")";
 
 	private ApprovalService approvalService;
 	private OrgstructureBean orgstructureService;
@@ -157,7 +157,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		SearchParameters sp = new SearchParameters();
 		sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
 		sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
-		String searchQuery = String.format(SEARCH_ROUTES_QUERY_FORMAT, parentContainer.toString(), RoutesModel.TYPE_ROUTE);
+		String searchQuery = String.format(SEARCH_ROUTES_QUERY_FORMAT, RoutesModel.TYPE_ROUTE, parentContainer.toString());
 		sp.setQuery(searchQuery);
 		ResultSet results = null;
 		try {
