@@ -386,7 +386,8 @@
                     }
 
                     // Hide calendar if the calendar was open (Unfortunately there is no proper yui api method for me)
-                    if (Dom.getStyle(me.id, "display") != "none") {
+                    if (me.widgets.calendar && me.widgets.calendar.oDomContainer &&
+                        Dom.getStyle(me.widgets.calendar.oDomContainer, "display") != "none") {
                         me.widgets.calendar.hide();
                     }
                 },
