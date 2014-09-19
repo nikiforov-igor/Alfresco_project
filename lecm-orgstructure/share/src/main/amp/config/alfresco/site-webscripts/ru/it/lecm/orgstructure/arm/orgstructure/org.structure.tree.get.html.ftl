@@ -32,6 +32,6 @@
 
 <@comp.baseToolbar id false true false/>
 
-<div id="orgstructure-tree"></div>
+<div id="orgstructure-tree" class="orgstructure-tree"></div>
 
 

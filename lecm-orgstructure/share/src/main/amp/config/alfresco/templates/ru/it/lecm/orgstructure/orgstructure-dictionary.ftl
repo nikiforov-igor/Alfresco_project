@@ -50,7 +50,7 @@
     <@view.viewForm formId="orgstructure-arm-view-form"/>
     <div class="yui-t1" id="arm-with-tree">
         <@panels.twoPanels initialWidth=300 leftRegions=["accordion-toolbar","documents-tree"]>
-            <div id="arm-documents-html" class="hidden1">
+            <div id="arm-documents-html" class="hidden1 orgstructure-dictionary-page">
                 <@region id="arm-html-node" scope="template" />
             </div>
         </@panels.twoPanels>

@@ -31,5 +31,5 @@
 	})();
 	//]]></script>
 
-	<div id="orgstructure-tree" class="ygtv-highlight"></div>
+	<div id="orgstructure-tree" class="ygtv-highlight orgstructure-tree"></div>
 </#macro>
