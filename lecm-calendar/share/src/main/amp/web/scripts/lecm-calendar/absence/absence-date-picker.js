@@ -11,7 +11,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event,
 		KeyListener = YAHOO.util.KeyListener;
-	
+
 	LogicECM.module.WCalendar.Absence.DatePicker = function(htmlId, currentValueHtmlId) {
 		// Mandatory properties
 
@@ -32,7 +32,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 
 	YAHOO.lang.extend(LogicECM.module.WCalendar.Absence.DatePicker, LogicECM.DatePicker);
 
-	LogicECM.module.WCalendar.Absence.DatePicker.prototype.onReady = function AbsenceDatePicker_onReady() {
+	LogicECM.module.WCalendar.Absence.DatePicker.prototype.draw = function () {
 			var theDate = null;
 
 			if (this.options.currentValue == null || this.options.currentValue === "")
@@ -52,7 +52,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
 
 			var page = (theDate.getMonth() + 1) + "/" + theDate.getFullYear();
-			var selected = (theDate.getMonth() + 1) + "/" + theDate.getDate() + "/" + theDate.getFullYear();   
+			var selected = (theDate.getMonth() + 1) + "/" + theDate.getDate() + "/" + theDate.getFullYear();
 			var dateEntry = theDate.toString(this._msg("form.control.date-picker.entry.date.format"));
 			var timeEntry = theDate.toString(this._msg("form.control.date-picker.entry.time.format"));
 
@@ -93,10 +93,10 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			}
 
 
-			// register a validation handler for the date entry field so that the submit 
+			// register a validation handler for the date entry field so that the submit
 			// button disables when an invalid date is entered
 			this.options.validateHandler = this.options.validateHandler || Alfresco.forms.validation.validDateTime;
-			YAHOO.Bubbling.fire("registerValidationHandler", 
+			YAHOO.Bubbling.fire("registerValidationHandler",
 			{
 				fieldId: this.id + "-date",
 				handler: this.options.validateHandler,
@@ -107,10 +107,10 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 			// render the calendar control
 			this.widgets.calendar.render();
 
-			// If value was set in visible fields, make sure they are validated and put in the hidden field as well 
+			// If value was set in visible fields, make sure they are validated and put in the hidden field as well
 			if (this.options.currentValue !== "")
 			{
 			this._handleFieldChange(null);
 			}
-		}
+		};
 })();
