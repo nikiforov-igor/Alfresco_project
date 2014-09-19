@@ -236,7 +236,9 @@ public class CalendarBean extends AbstractCommonWCalendarBean implements ICalend
 			if (childAssociationRefs != null) {
 				for (ChildAssociationRef childAssociationRef : childAssociationRefs) {
 					NodeRef specialDayNodeRef = childAssociationRef.getChildRef();
-					daysList.add(specialDayNodeRef);
+					if (!isArchive(specialDayNodeRef)) {
+						daysList.add(specialDayNodeRef);
+					}
 				}
 			}
 		}
