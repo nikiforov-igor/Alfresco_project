@@ -46,6 +46,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         tree: null,
         selectedNode: null,
         doubleClickLock: false,
+        searchMode: false,
 
         searchButton : null,
         searchTerm: null,
@@ -160,6 +161,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             if (maySearch){
                 this.searchTerm = searchTerm;
                 if (searchTerm.length > 0) {
+                    this.searchMode = true;
                     this.reloadTree(true);
                 } else {
                     this._onClearSearch();
@@ -176,6 +178,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
         _onClearSearch: function _onClearSearch() {
             Dom.get(this.id + "-full-text-search").value = "";
             this.searchTerm = null;
+            this.searchMode = false;
             this.checkShowClearSearch();
             this.reloadTree();
         },
@@ -210,8 +213,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             curElement.labelElId = ref.slice(ref.lastIndexOf('/') + 1);
                             curElement.id = curElement.labelElId;
                             curElement.labelStyle = curElement.data.type == "lecm-orgstr:organization-unit" ? "unit-icon" : "employee-icon";
-
-                            curElement.expanded = curElement.data.expand || otree._nodeIsExpanded(curElement);
+                            if (!otree.searchMode) {
+                                curElement.expanded = curElement.data.expand || otree._nodeIsExpanded(curElement);
+                            }
                         }
                     }
 
