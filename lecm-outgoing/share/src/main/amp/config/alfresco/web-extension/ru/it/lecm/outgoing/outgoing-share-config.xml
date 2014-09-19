@@ -4,6 +4,7 @@
 			<!-- Форма редактирования -->
 			<form>
 				<view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+				<edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
 				<field-visibility>
 					<show id="lecm-document:regnum"/>																	<!-- Рег. номер -->
 					<show id="lecm-document-aspects:reg-data-date"/>													<!-- Дата регистрации -->
