@@ -66,8 +66,8 @@
         <div id="${id}-empty">
             <div class="empty"><span>${msg("dashlet.empty.text")}</span></div>
         </div>
-        <div id="orgstructure-tree"></div>
-        <@view.viewForm formId="org-dashlet-view-form"/>
+        <div id="${id}-orgstructure-tree" class="orgstructure-tree"></div>
+        <@view.viewForm formId="${id}-org-dashlet-view-form"/>
     </div>
 </div>
 

@@ -64,7 +64,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             },
 
             _createTree: function (rootNode) {
-                this.tree = new YAHOO.widget.TreeView("orgstructure-tree");
+                this.tree = new YAHOO.widget.TreeView(this.id + "-orgstructure-tree");
 
                 this.tree.setDynamicLoad(this._loadTree.bind(this));
                 var root = this.tree.getRoot();

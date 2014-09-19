@@ -12,38 +12,37 @@
     margin-top:1em;
 }
 
-#orgstructure-tree {
+.orgstructure-tree {
 	min-width: 100%;
 	overflow: auto;
 }
 
-#orgstructure-tree .unit-icon:hover,
-#orgstructure-tree .employee-icon:hover {
+.orgstructure-tree .unit-icon:hover,
+.orgstructure-tree .employee-icon:hover {
     text-decoration: underline;
 }
 
-#orgstructure-tree .ygtvfocus,
-#orgstructure-tree .ygtvfocus .ygtvlabel,
-#orgstructure-tree .ygtvfocus .ygtvlabel:link,
-#orgstructure-tree .ygtvfocus .ygtvlabel:visited,
-#orgstructure-tree .ygtvfocus .ygtvlabel:hover
-{
+.orgstructure-tree .ygtvfocus,
+.orgstructure-tree .ygtvfocus .ygtvlabel,
+.orgstructure-tree .ygtvfocus .ygtvlabel:link,
+.orgstructure-tree .ygtvfocus .ygtvlabel:visited,
+.orgstructure-tree .ygtvfocus .ygtvlabel:hover {
     background-color:white;
 }
 
-#orgstructure-arm-view-form{
+#orgstructure-arm-view-form {
     visibility:hidden;
     display:none;
 }
 
-#orgstructure-tree .unit-icon {
+.orgstructure-tree .unit-icon {
     display:block;
     height: 16px;
     padding-left: 20px;
     background: url('/share/res/images/lecm-base/components/organisation_16.png') no-repeat;
     white-space: nowrap;
 }
-#orgstructure-tree .employee-icon {
+.orgstructure-tree .employee-icon {
     display:block;
     height: 16px;
     padding-left: 20px;
@@ -68,7 +67,7 @@
     margin-top: -4px;
 }
 
-.orgstructure-dictionary #orgstructure-tree {
+.orgstructure-dictionary .orgstructure-tree {
     white-space: nowrap;
     overflow-x: hidden;
     overflow-y: auto;
@@ -76,7 +75,7 @@
     position: relative;
 }
 
-.orgstructure-dictionary #orgstructure-tree:after {
+.orgstructure-dictionary .orgstructure-tree:after {
     content: "";
     width: 50px;
     height: 100%;
@@ -92,8 +91,8 @@
     background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.6) 20%,rgba(255,255,255,1) 80%,rgba(255,255,255,1) 100%); /* W3C */
 }
 
-.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvln,
-.orgstructure-dictionary #orgstructure-tree .ygtvrow .ygtvtn {
+.orgstructure-dictionary .orgstructure-tree .ygtvrow .ygtvln,
+.orgstructure-dictionary .orgstructure-tree .ygtvrow .ygtvtn {
     width: 10px;
     max-width: 10px;
     visibility:hidden;
