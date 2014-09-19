@@ -552,6 +552,19 @@ LogicECM.module.Base = LogicECM.module.Base || {};
 		        Dom.setStyle(this.getExpandedRecordId(record), "display", "none");
 	        },
 
+            collapseAll: function collapseAll_function() {
+                var records = this.widgets.dataTable.getRecordSet().getRecords();
+                for (var index in records) {
+                    var record = records[index];
+                    var row = this.widgets.dataTable.getRow(record);
+                    if (Dom.hasClass(row, "expanded")) {
+                        Dom.get("expand-" + record.getId()).innerHTML = "+";
+                        Dom.removeClass(row, "expanded");
+                        this.onCollapse(record);
+                    }
+                }
+            },
+
 			onExpand: function(record) {
 				if (this.doubleClickLock) return;
 				this.doubleClickLock = true;
@@ -2152,6 +2165,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                     fn:function DataGrid_onDataItemCreated_refreshSuccess(response) {
                                         this.versionable = response.json.versionable;
                                         var item = response.json.item;
+                                        this.collapseAll();
                                         var fnAfterUpdate = function DataGrid_onDataItemCreated_refreshSuccess_fnAfterUpdate() {
                                             var recordFound = this._findRecordByParameter(item.nodeRef, "nodeRef");
                                             if (recordFound !== null) {
