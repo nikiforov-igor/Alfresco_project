@@ -168,6 +168,9 @@
 	        <#elseif params.firstPickerButtonTitleCode??>
 		        pickerButtonTitle: "${msg(params.firstPickerButtonTitleCode)}",
 	        </#if>
+            <#if args.ignoreNodes??>
+                ignoreNodes: "${args.ignoreNodes}".split(","),
+            </#if>
 		    showSearch: ${firstShowSearch?string},
 	        plane: ${firstPlane?string},
 	        currentValue: "${field.value!''}",
@@ -245,6 +248,9 @@
 		    <#else>
 			    itemType: "${field.endpointType! params.endpointType}",
 		    </#if>
+            <#if args.ignoreNodes??>
+                ignoreNodes: "${args.ignoreNodes}".split(","),
+            </#if>
 		    showCreateNewLink: false,
             additionalFilter: "${params.secondAdditionalFilter!''}",
 		    showSelectedItemsPath: false,
