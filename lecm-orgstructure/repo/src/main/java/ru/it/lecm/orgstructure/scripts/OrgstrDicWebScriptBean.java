@@ -34,22 +34,22 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
     public static final String SEARCH_TERM_PARAM = "searchTerm";
     public static final String DASHLET_FORMAT_PARAM = "dashletFormat";
 
-    private final String EMPLOYEE_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} " +
+    private final static String EMPLOYEE_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name} " +
             "- {..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/} (тел. {lecm-orgstr:employee-phone})";
-    private final String EMPLOYEE_DASHLET_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}, " +
+    private final static String EMPLOYEE_DASHLET_FORMAT_STRING = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}, " +
             "{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../lecm-orgstr:element-member-position-assoc/}, " +
             "{..lecm-orgstr:employee-link-employee-assoc(lecm-orgstr:employee-link-is-primary = true)/../../lecm-orgstr:element-full-name} (тел. {lecm-orgstr:employee-phone})";
 
-    private final String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
-    private final String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
+    private final static String EMPLOYEE_FIO = "{lecm-orgstr:employee-last-name} {lecm-orgstr:employee-first-name} {lecm-orgstr:employee-middle-name}";
+    private final static String UNIT_FORMAT_STRING = "{lecm-orgstr:element-full-name}";
 
-    private final String UNITS_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:organization-unit\" " +
-            "AND ( @lecm\\-orgstr\\:element\\-full\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:element\\-short\\-name:\"*{searchTerm}*\") " +
+    private final static String UNITS_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:organization-unit\" " +
+            "AND ( @lecm\\-orgstr\\:element\\-full\\-name:{searchTerm} @lecm\\-orgstr\\:element\\-short\\-name:{searchTerm}) " +
             "AND @lecm\\-dic\\:active:true";
 
-    private final String EMPLOYEES_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:employee\" " +
-            "AND (@lecm\\-orgstr\\:employee\\-last\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-middle\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-email:\"*{searchTerm}*\" " +
-            "@lecm\\-orgstr\\:employee\\-first\\-name:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-person\\-login:\"*{searchTerm}*\" @lecm\\-orgstr\\:employee\\-phone:\"*{searchTerm}*\") AND @lecm\\-dic\\:active:true";
+    private final static String EMPLOYEES_BY_TERM_QUERY = "TYPE:\"lecm-orgstr:employee\" " +
+            "AND (@lecm\\-orgstr\\:employee\\-last\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-middle\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-email:{searchTerm} " +
+            "@lecm\\-orgstr\\:employee\\-first\\-name:{searchTerm} @lecm\\-orgstr\\:employee\\-person\\-login:{searchTerm} @lecm\\-orgstr\\:employee\\-phone:{searchTerm}) AND @lecm\\-dic\\:active:true";
 
     private static final String TITLE = "title";
     private static final String LABEL = "label";
@@ -190,7 +190,22 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
         sp.addStore(StoreRef.STORE_REF_WORKSPACE_SPACESSTORE);
         sp.setLanguage(SearchService.LANGUAGE_FTS_ALFRESCO);
 
-        sp.setQuery(patternQuery.replace("{searchTerm}", searchTerm));
+        sp.addSort("score", false);
+
+        StringBuilder sb = new StringBuilder("(");
+        String[] strings = searchTerm.split(" ");
+        boolean first = true;
+        for (String string : strings) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append(" OR ");
+            }
+            sb.append("*").append(string.trim()).append("*");
+        }
+        sb.append(")");
+
+        sp.setQuery(patternQuery.replace("{searchTerm}", sb));
         return sp;
     }
 }
