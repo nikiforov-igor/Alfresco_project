@@ -620,3 +620,8 @@ i.icon-building {
 .global-folder .wrapper .mode span.yui-button button {
     white-space: nowrap;
 }
+
+/*Сет с границей*/
+.yui-skin-lecmTheme .form-container fieldset {
+    padding: 1.2em 1.5em 0.5em 1.5em;
+}
