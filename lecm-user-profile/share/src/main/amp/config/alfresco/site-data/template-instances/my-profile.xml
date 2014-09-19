@@ -5,7 +5,14 @@
 		<preferenceKey>ru.it.lecm.arm</preferenceKey>
 	</properties>
 	<components>
-		<component>
+        <component>
+            <region-id>documents-grid</region-id>
+            <url>/lecm/arm/documents-grid</url>
+            <properties>
+                <itemType>lecm-document:base</itemType>
+            </properties>
+        </component>
+        <component>
 			<region-id>arm-html-node</region-id>
 			<url>/lecm/arm/htmlNode</url>
 		</component>
