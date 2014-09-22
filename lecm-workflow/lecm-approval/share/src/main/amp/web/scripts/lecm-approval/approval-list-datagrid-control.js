@@ -148,7 +148,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 				stateMsg: 'Не начато'
 			},
 			ACTIVE: {
-				stateMsg: 'Выполнятеся',
+				stateMsg: 'Выполняется',
 				createButtonHandler: function () {
 					Alfresco.util.PopupManager.displayPrompt({
 						title: this.msg('title.iteration.active'),
