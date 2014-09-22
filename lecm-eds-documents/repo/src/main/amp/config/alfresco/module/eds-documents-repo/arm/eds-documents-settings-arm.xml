@@ -1,13 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <items>
-    <item name="cm:Настройки СЭД" type="lecm-arm:node">
+    <item name="cm:Настройки СЭД" type="lecm-arm:html-node">
         <property name="cm:name"><![CDATA[Настройки СЭД]]></property>
         <property name="lecm-arm:order"><![CDATA[60]]></property>
-        <property name="lecm-arm:search-type"><![CDATA[]]></property>
-        <property name="lecm-arm:types"><![CDATA[]]></property>
-        <property name="lecm-arm:counter-enable"><![CDATA[false]]></property>
-        <property name="lecm-arm:search-query"><![CDATA[]]></property>
-        <property name="lecm-arm:is-select-by-activeTasks"><![CDATA[false]]></property>
+        <property name="lecm-arm:html-url"><![CDATA[page/lecm/arm/blank?title=Настройки СЭД&description=Общие настройки СЭД и настройки маршрутов]]></property>
         <items>
             <item name="cm:Общие настройки" type="lecm-arm:html-node">
                 <property name="cm:name"><![CDATA[Общие настройки]]></property>
@@ -18,3 +14,5 @@
         </items>
     </item>
 </items>
+
+
