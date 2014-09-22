@@ -306,7 +306,10 @@ i.icon-building {
     padding: 0;
     margin-bottom: 10px;
     float: left;
-    /*background: rgba(0, 150, 0, .5); */ /*todo remove*/
+}
+.control.without-label {
+    margin-left: 190px;
+    padding: 2px;
 }
 .control .label-div {
     width: 180px;
@@ -479,7 +482,7 @@ i.icon-building {
     width: 100%;
     min-height: 100px;
 }
-.control.richtext .container .value-div {  /* чтоб не прыгало во время загрузки страницы */
+.control.richtext.editmode .container .value-div {  /* чтоб не прыгало во время загрузки страницы */
     min-height: 155px;
 }
 /* richtext & textarea controls - end */

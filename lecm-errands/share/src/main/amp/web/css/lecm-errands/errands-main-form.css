@@ -19,9 +19,6 @@
 .errands-main-form .form-fields .statuses {
     float: right;
 }
-.errands-main-form .form-fields .statuses > div.form-field {
-    margin-left: 30px;
-}
 .errands-main-form .form-fields .main-info {
     line-height: 2;
 }

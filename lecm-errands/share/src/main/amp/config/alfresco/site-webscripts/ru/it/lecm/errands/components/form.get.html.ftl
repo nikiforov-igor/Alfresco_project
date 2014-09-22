@@ -237,17 +237,13 @@
                 </#if>
             </#if>
             <#if isImportant>
-                <div class="form-field field-important">
-                    <div class="read-only-important">
-                        ${msg("form.control.field-important")}
-                    </div>
+                <div class="control important-control">
+                    ${msg("form.control.field-important")}
                 </div>
             </#if>
 
-            <div class="form-field field-status">
-                <div class="read-only-status">
-                    <a onclick="LogicECM.module.DocumentStatusHistory.showDialog('form-errans-history-status', '${nodeRef}');" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
-                </div>
+            <div class="control status-control">
+                <a onclick="LogicECM.module.DocumentStatusHistory.showDialog('form-errans-history-status', '${nodeRef}');" href="javascript:void(0);">${props["lecm-statemachine:status"]!""}</a>
             </div>
             <@historyStatus.showDialog formId="form-errans-history-status"/>
         </div>

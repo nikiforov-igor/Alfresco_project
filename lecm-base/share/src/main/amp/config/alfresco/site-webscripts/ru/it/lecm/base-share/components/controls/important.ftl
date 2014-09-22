@@ -8,18 +8,16 @@
 </#if>
 
 <#macro readOnly>
-    <div class="read-only-important">
-        <#if isTrue>${msg("form.control.field-important")}</#if>
-    </div>
+    <#if isTrue>${msg("form.control.field-important")}</#if>
 </#macro>
 
-<div class="form-field field-important">
+<div class="control important-control without-label">
     <#if form.mode == "view">
         <@readOnly/>
     <#else>
         <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="<#if isTrue>true<#else>false</#if>" />
         <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>
-            <@readOnly/>
+            <div><@readOnly/></div>
         <#else>
             <input class="formsCheckBox" id="${fieldHtmlId}-entry" type="checkbox" tabindex="0" name="-" <#if field.description??>title="${field.description}"</#if>
                 <#if isTrue> value="true" checked="checked"</#if>
