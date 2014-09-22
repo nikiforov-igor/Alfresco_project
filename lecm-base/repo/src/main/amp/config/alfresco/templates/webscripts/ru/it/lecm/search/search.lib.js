@@ -431,7 +431,7 @@ function getSearchResults(params) {
  * @returns {*}
  */
 function sortResults(list, sortField, sortAsc) {
-    if (sortField == null) {
+    if (list == null || sortField == null) {
         return list;
     }
     list.sort(function (a, b) {
