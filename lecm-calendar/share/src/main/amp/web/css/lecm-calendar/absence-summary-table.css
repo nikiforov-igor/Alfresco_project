@@ -75,4 +75,6 @@ div#summary-table-container > table tr td.employee-name {
 div#summary-table-container {
 	width: 1250px;
 	margin-top: 4px;
+	clear: both;
+	overflow: hidden;
 }
