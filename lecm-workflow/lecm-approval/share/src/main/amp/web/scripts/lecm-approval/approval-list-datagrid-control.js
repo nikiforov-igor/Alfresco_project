@@ -341,6 +341,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							if (YAHOO.lang.isFunction(callback)) {
 								callback.apply(this, callbackArgsArr);
 							}
+							YAHOO.Bubbling.fire('redrawDocumentActions');
 						});
 					},
 					scope: this
@@ -372,6 +373,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							if (YAHOO.lang.isFunction(callback)) {
 								callback.apply(this, callbackArgsArr);
 							}
+							YAHOO.Bubbling.fire('redrawDocumentActions');
 						});
 					}
 				},
@@ -558,6 +560,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 										if (YAHOO.lang.isFunction(callback)) {
 											callback.apply(this, callbackArgsArr);
 										}
+										YAHOO.Bubbling.fire('redrawDocumentActions');
 									});
 								},
 								scope: this
