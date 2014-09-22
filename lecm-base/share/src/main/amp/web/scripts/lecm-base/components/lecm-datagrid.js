@@ -758,7 +758,7 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                 if (data.value) {
 													columnContent += '<div class="centered">';
                                                     columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-													columnContent += '</div>'
+													columnContent += '</div>';
                                                 }
                                                 break;
 
@@ -770,7 +770,9 @@ LogicECM.module.Base = LogicECM.module.Base || {};
                                                         columnContent += $html(data.displayValue);
                                                     } else {
                                                         if (data.displayValue == "true") {
+                                                            columnContent += '<div class="centered">';
                                                             columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                            columnContent += '</div>';
                                                         }
                                                     }
                                                 }

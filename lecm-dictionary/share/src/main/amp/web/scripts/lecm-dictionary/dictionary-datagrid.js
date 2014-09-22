@@ -121,7 +121,9 @@ LogicECM.module.Dictionary = LogicECM.module.Dictionary || {};
                                             html += $html(data.displayValue);
                                         } else {
                                             if (data.displayValue == "true") {
+                                                html += '<div class="centered">';
                                                 html += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                html += '</div>';
                                             }
                                         }
                                     }

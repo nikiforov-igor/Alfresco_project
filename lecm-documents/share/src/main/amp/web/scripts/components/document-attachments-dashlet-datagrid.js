@@ -91,7 +91,7 @@ var $html = Alfresco.util.encodeHTML,
 									if (data.value) {
 										columnContent += '<div class="centered">';
 										columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-										columnContent += '</div>'
+										columnContent += '</div>';
 									}
 									break;
 
@@ -103,8 +103,10 @@ var $html = Alfresco.util.encodeHTML,
 											columnContent += $html(data.displayValue);
 										} else {
 											if (data.displayValue == "true") {
-												columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-											}
+                                                columnContent += '<div class="centered">';
+                                                columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                columnContent += '</div>';
+                                            }
 										}
 									}
 									break;

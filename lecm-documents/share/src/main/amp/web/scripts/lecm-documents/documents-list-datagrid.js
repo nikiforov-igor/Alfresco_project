@@ -74,7 +74,7 @@ var $siteURL = Alfresco.util.siteURL;
                                             if (data.value) {
                                                 columnContent += '<div class="centered">';
                                                 columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
-                                                columnContent += '</div>'
+                                                columnContent += '</div>';
                                             }
                                             break;
 
@@ -86,7 +86,9 @@ var $siteURL = Alfresco.util.siteURL;
                                                     columnContent += $html(data.displayValue);
                                                 } else {
                                                     if (data.displayValue == "true") {
+                                                        columnContent += '<div class="centered">';
                                                         columnContent += '<img src="' + Alfresco.constants.URL_RESCONTEXT + 'components/images/complete-16.png' + '" width="16" alt="' + $html(data.displayValue) + '" title="' + $html(data.displayValue) + '" />';
+                                                        columnContent += '</div>';
                                                     }
                                                 }
                                             }
