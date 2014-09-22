@@ -263,7 +263,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					itemType: this.stageType,
 					nodeRef: this.currentIterationNode,
 					useChildQuery: !!useChildQuery,
-					sort: 'cm:title|true',
+					sort: 'cm:created|true',
 					searchConfig: {
 						filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
 					}

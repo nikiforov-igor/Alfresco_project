@@ -50,6 +50,7 @@
 				itemType: LogicECM.module.Routes.Const.ROUTES_CONTAINER.routeType,
 				nodeRef: '${itemId}',
 				useChildQuery: true,
+				sort: 'cm:created|true',
 				searchConfig: {
 					filter: ''
 				},
