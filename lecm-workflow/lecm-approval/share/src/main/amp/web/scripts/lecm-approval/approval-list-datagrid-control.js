@@ -111,6 +111,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 
+		// Спасаем тонущий popup
+		Alfresco.util.PopupManager.zIndex = 10000000;
+
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
 
 		return this;
