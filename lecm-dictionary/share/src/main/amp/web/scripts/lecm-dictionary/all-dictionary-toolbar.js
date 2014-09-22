@@ -135,6 +135,7 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
 	        showImportDialog: function() {
 		        Dom.get(this.id + "-import-form-chbx-ignore").checked = false;
 		        Dom.get(this.id + "-import-form-import-file").value = "";
+                Dom.removeClass(this.importFromDialog.id, "hidden1");
 		        this.importFromDialog.show();
 	        },
 
@@ -158,11 +159,13 @@ LogicECM.module.AllDictionary = LogicECM.module.AllDictionary || {};
 	                    var oResults = YAHOO.lang.JSON.parse(oResponse.responseText);
 	                    if (oResults[0] != null && oResults[0].text != null) {
 		                    Dom.get(me.id + "-import-info-form-content").innerHTML = oResults[0].text;
+                            Dom.removeClass(this.importInfoDialog.id, "hidden1");
 		                    me.importInfoDialog.show();
 	                    } else if (oResults.exception != null) {
 		  	                Dom.get(me.id + "-import-error-form-exception").innerHTML = oResults.exception.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
 		  	                Dom.get(me.id + "-import-error-form-stack-trace").innerHTML = me.getStackTraceString(oResults.callstack);
 		                    Dom.setStyle(me.id + "-import-error-form-more", "display", "none");
+                            Dom.removeClass(this.importErrorDialog.id, "hidden1");
 		                    me.importErrorDialog.show();
 	                    }
 
