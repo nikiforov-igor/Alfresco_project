@@ -40,6 +40,13 @@ public interface StateMachineServiceBean {
      */
     public boolean isStarter(String type);
 
+	/**
+	 * Возвращает можно ли создавать документ определенного типа из АРМ-а
+	 * @param type - тип документа
+	 * @return true - если нельзя создавать из АРМ-а
+	 */
+    public boolean isNotArmCreate(String type);
+
     /**
      * Возвращает список возможных статусов для определенного типа документа
      * @param documentType - тип документа

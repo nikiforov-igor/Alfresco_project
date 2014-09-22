@@ -66,6 +66,10 @@
                     <type>d:text</type>
                     <mandatory>true</mandatory>
                 </property>
+	            <property name="lecm-stmeditor:notArmCreate">
+		            <type>d:boolean</type>
+		            <default>false</default>
+	            </property>
 			</properties>
 			<associations>
 				<association name="lecm-stmeditor:documentsFolder">

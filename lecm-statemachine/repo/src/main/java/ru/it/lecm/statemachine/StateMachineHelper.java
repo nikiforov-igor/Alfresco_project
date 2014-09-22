@@ -803,6 +803,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	private List<String> staticRoles = new ArrayList<String>();
     	private List<String> dinamicRoles = new ArrayList<String>();
     	private List<String> starterRoles = new ArrayList<String>();
+    	private boolean notArmCreate = false;
 
         private boolean initialized = false;
         private Lock lock = new ReentrantLock();
@@ -849,6 +850,9 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    						}
 			    						if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"archiveFolderAdditional".equals(stateMachineProp.getFirstChild().getTextContent())){
 			    							archiveFolderAdditional = stateMachineProp.getLastChild().getTextContent();
+			    						}
+									    if("name".equals(stateMachineProp.getFirstChild().getLocalName())&&"notArmCreate".equals(stateMachineProp.getFirstChild().getTextContent())){
+										    notArmCreate = Boolean.valueOf(stateMachineProp.getLastChild().getTextContent());
 			    						}
 			    					}
 			    				}
@@ -1396,7 +1400,11 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     	public String  getArchiveFolderAdditional() {
     		return archiveFolderAdditional;
     	}
-    	public StateMachineStatus getStatusByName(String name) {
+        public boolean isNotArmCreate() {
+		    return notArmCreate;
+	    }
+
+	    public StateMachineStatus getStatusByName(String name) {
     		if(statuses.get(name)!=null) return statuses.get(name);
     		if(finalStatuses.get(name)!=null) return finalStatuses.get(name);
     		return null;
@@ -2433,6 +2441,17 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
             }
         }
         return false;
+    }
+
+	/**
+     * Возвращает можно ли создавать документ из АРМ-а
+     * @param type - тип документа
+     * @return true - если нельзя создавать из АРМ-а
+     */
+	@Override
+	public boolean isNotArmCreate(String type) {
+    	String statmachene = type.replace(":", "_");
+        return getStateMecheneByName(statmachene).getLastVersion().getSettings().getSettingsContent().isNotArmCreate();
     }
 
 //    /**

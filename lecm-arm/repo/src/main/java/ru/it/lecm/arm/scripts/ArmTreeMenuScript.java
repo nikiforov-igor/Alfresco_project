@@ -236,7 +236,7 @@ public class ArmTreeMenuScript extends AbstractWebScript {
 			for (String type : allTypes) {
 				final QName typeQName = QName.createQName(type, namespaceService);
 				TypeDefinition typeDefinition = dictionaryService.getType(typeQName);
-				if (typeDefinition != null) {
+				if (typeDefinition != null && !stateMachineService.isNotArmCreate(type)) {
 					try {
 						boolean isStarter;
 						if (isStarterHash.containsKey(type)) {

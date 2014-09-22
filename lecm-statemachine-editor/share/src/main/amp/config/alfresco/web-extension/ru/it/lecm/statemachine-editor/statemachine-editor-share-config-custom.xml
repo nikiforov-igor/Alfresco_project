@@ -912,6 +912,7 @@
 				<field-visibility>
 					<show id="lecm-stmeditor:archiveFolder" force="true"/>
 					<show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
+					<show id="lecm-stmeditor:notArmCreate" force="true"/>
 					<show id="lecm-stmeditor:staticRolesList" force="true"/>
 					<show id="lecm-stmeditor:dynamicRolesList" force="true"/>
 				</field-visibility>
@@ -941,6 +942,7 @@
                 <field-visibility>
                     <show id="lecm-stmeditor:archiveFolder" force="true"/>
                     <show id="lecm-stmeditor:archiveFolderAdditional" force="true"/>
+	                <show id="lecm-stmeditor:notArmCreate" force="true"/>
                     <show id="lecm-stmeditor:staticRolesList" force="true"/>
                     <show id="lecm-stmeditor:dynamicRolesList" force="true"/>
                 </field-visibility>
