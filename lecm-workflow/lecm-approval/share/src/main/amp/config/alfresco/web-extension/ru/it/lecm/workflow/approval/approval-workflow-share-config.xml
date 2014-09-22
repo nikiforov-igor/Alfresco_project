@@ -4,10 +4,16 @@
 		<forms>
 			<form>
 				<field-visibility>
+					<show id="message" force="true"/>
 					<show id="packageItems"/>
 					<show id="bpm:workflowDescription" />
 				</field-visibility>
 				<appearance>
+					<field id="message">
+						<control template="/ru/it/lecm/base-share/components/controls/message-control.ftl">
+							<control-param name="msg">ru.it.approval.workflow.start.message</control-param>
+						</control>
+					</field>
 					<field id="packageItems">
 						<control template="/ru/it/lecm/base-share/components/controls/hidden-association-control.ftl"/>
 					</field>
@@ -56,7 +62,7 @@
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
 					</field>
-<!--					<field id="bpm:reassignable" set="right-set">
+					<!--					<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
 				</appearance>
