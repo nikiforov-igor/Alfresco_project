@@ -40,6 +40,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			rootFolder: null,
+            runtimeForm: null,
 
 			onReady: function () {
 				this.loadForm();
@@ -90,6 +91,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onBeforeFormRuntimeInit: function(layer, args) {
+                this.runtimeForm = args[1].runtime;
+                var submitFunction = this.runtimeForm.submitElements[0].submitForm;
+                var me = this;
+                this.runtimeForm.submitElements[0].submitForm = function() {
+                    if (me.runtimeForm.validate()) {
+                        me._showSplash();
+                    }
+                    submitFunction.bind(me.runtimeForm.submitElements[0])();
+                };
+
 				args[1].runtime.setAJAXSubmit(true,
 					{
 						successCallback:
@@ -110,7 +121,12 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormSubmitFailure: function(response) {
-				var message = Alfresco.util.message("message.failure");
+                for (var index in this.runtimeForm.submitElements) {
+                    var button = this.runtimeForm.submitElements[index];
+                    button.set("disabled", false);
+                }
+                this._hideSplash();
+                var message = Alfresco.util.message("message.failure");
 				var regnumberDuplicateRegex = /REGNUMBER_DUPLICATE_EXCEPTION/;
 
 				if (regnumberDuplicateRegex.test(response.serverResponse.responseText)) {
@@ -125,6 +141,18 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 			onCancelButtonClick: function() {
 				document.location.href = document.referrer;
-			}
+			},
+
+            _showSplash: function() {
+                this.splashScreen = Alfresco.util.PopupManager.displayMessage(
+                    {
+                        text: Alfresco.util.message("label.loading"),
+                        spanClass: "wait",
+                        displayTime: 0
+                    });
+            },
+            _hideSplash: function() {
+                YAHOO.lang.later(2000, this.splashScreen, this.splashScreen.destroy);
+            }
 		});
 })();

@@ -50,6 +50,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 
 			rootFolder: null,
 			splashScreen: null,
+            runtimeForm: null,
 
 			onReady: function () {
 				this.loadDraftRoot();
@@ -115,6 +116,16 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onBeforeFormRuntimeInit: function(layer, args) {
+                this.runtimeForm = args[1].runtime;
+                var submitFunction = this.runtimeForm.submitElements[0].submitForm;
+                var me = this;
+                this.runtimeForm.submitElements[0].submitForm = function() {
+                    if (me.runtimeForm.validate()) {
+                        me._showSplash();
+                    }
+                    submitFunction.bind(me.runtimeForm.submitElements[0])();
+                };
+
 				args[1].runtime.setAJAXSubmit(true,
 					{
 						successCallback:
@@ -131,6 +142,11 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormSubmitSuccess: function (response) {
+                for (var index in this.runtimeForm.submitElements) {
+                    var button = this.runtimeForm.submitElements[index];
+                    button.set("disabled", true);
+                }
+
 				var createdDocument = response.json.persistedObject;
 				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
                     var template = "{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
@@ -151,7 +167,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         fromNodeRef: fromNodeRef,
                         toNodeRef: toNodeRef
                     });
-                    this._showSplash();
                     var callback = {
                         success: function(oResponse) {
                             document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
@@ -170,7 +185,6 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                         "direct-type": "on",
                         "prop_transitions": "Next"
                     }
-                    this._showSplash();
                     Alfresco.util.Ajax.jsonPost(
                         {
                             url: url,
@@ -188,7 +202,12 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			onFormSubmitFailure: function(response) {
-				Alfresco.util.PopupManager.displayPrompt(
+                for (var index in this.runtimeForm.submitElements) {
+                    var button = this.runtimeForm.submitElements[index];
+                    button.set("disabled", false);
+                }
+                this._hideSplash();
+                Alfresco.util.PopupManager.displayPrompt(
 					{
 						text: Alfresco.util.message("message.failure")
 					});
