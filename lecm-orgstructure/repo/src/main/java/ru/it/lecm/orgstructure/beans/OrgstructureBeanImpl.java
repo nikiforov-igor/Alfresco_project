@@ -796,7 +796,7 @@ public class OrgstructureBeanImpl extends BaseBean implements OrgstructureBean {
 	@Override
 	public NodeRef getEmployeePersonalData(NodeRef employeeRef) {
 		NodeRef personRef = null;
-		if (isEmployee(employeeRef) && hasAccessToOrgElement(employeeRef)) {
+		if (isEmployee(employeeRef)) {
 			List<AssociationRef> personData = nodeService.getTargetAssocs(employeeRef, ASSOC_EMPLOYEE_PERSON_DATA);
 			if (personData.size() > 0) {
 				personRef = personData.get(0).getTargetRef();

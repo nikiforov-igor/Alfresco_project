@@ -17,6 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
 import ru.it.lecm.base.beans.LecmObjectsService;
+import ru.it.lecm.base.beans.TransactionNeededException;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
+import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
@@ -24,8 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ru.it.lecm.base.beans.TransactionNeededException;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: dbashmakov
@@ -43,6 +44,11 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
     final protected Logger logger = LoggerFactory.getLogger(DocumentMembersServiceImpl.class);
 
     private DictionaryService dictionaryService;
+    private OrgstructureBean orgstructureService;
+
+    public void setOrgstructureService(OrgstructureBean orgstructureService) {
+        this.orgstructureService = orgstructureService;
+    }
 
     public void setLecmObjectsService(LecmObjectsService lecmObjectsService) {
         this.lecmObjectsService = lecmObjectsService;
@@ -204,7 +210,10 @@ public class DocumentMembersServiceImpl extends BaseBean implements DocumentMemb
 	        if (pageOfNodeInfos != null) {
 		        List<NodeRef> nodeInfos = pageOfNodeInfos.getPage();
 		        for (NodeRef ref : nodeInfos) {
-			        results.add(ref);
+                    List<AssociationRef> employeeRef = nodeService.getTargetAssocs(ref, ASSOC_MEMBER_EMPLOYEE);
+                    if (!employeeRef.isEmpty() && orgstructureService.hasAccessToOrgElement(employeeRef.get(0).getTargetRef())) {
+                        results.add(ref);
+                    }
 		        }
 	        }
         }

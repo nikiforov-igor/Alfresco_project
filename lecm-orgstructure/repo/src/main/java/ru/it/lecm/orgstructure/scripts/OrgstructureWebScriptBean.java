@@ -430,7 +430,7 @@ public class OrgstructureWebScriptBean extends BaseWebScript {
 		NodeRef ref = new NodeRef(employeeLinkNodeRef);
 		if (serviceRegistry.getNodeService().exists(ref)) {
 			NodeRef employeeRef = orgstructureService.getEmployeeByLink(ref);
-			if (orgstructureService.isEmployee(employeeRef) && orgstructureService.hasAccessToOrgElement(employeeRef)) {
+			if (orgstructureService.isEmployee(employeeRef)) {
 				return new ScriptNode(employeeRef, serviceRegistry, getScope());
 			}
 		}

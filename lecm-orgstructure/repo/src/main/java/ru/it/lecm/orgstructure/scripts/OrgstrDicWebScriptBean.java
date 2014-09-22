@@ -97,7 +97,7 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
         // получаем список только Подразделений (внутри могут находиться другие объекты (Рабочие группы))
         List<NodeRef> childs;
         if (searchTerm == null) {
-            childs = orgstructureService.getSubUnits(currentRef, true, false, false);
+            childs = orgstructureService.getSubUnits(currentRef, true, false, true);
         } else {
             SearchParameters sp = buildOrgArmSearchParameters(UNITS_BY_TERM_QUERY, searchTerm);
             ResultSet results = null;
@@ -139,7 +139,7 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
         // получаем список Сотрудников
         List<JSONObject> employees = new ArrayList<>();
         if (searchTerm == null) {
-            childs = orgstructureService.getUnitEmployees(currentRef, false);
+            childs = orgstructureService.getUnitEmployees(currentRef, true);
         } else {
             SearchParameters sp = buildOrgArmSearchParameters(EMPLOYEES_BY_TERM_QUERY, searchTerm);
             ResultSet results = null;

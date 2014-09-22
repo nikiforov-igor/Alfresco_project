@@ -244,6 +244,7 @@
         <property name="lecmPermissionService" ref="lecmPermissionServiceBean"/>
         <property name="namespaceService" ref="namespaceService"/>
         <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="orgstructureService" ref="serviceOrgstructure"/>
         <!-- Автоматическое создание каталогов. -->
         <property name="folders">
             <map>
