@@ -31,7 +31,7 @@
 
 <#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
 
-<div class="form-field">
+<div class="form-field potential-role-control">
     <#if disabled>
         <div id="${controlId}" class="viewmode-field">
             <span class="viewmode-label">${field.label?html}:</span>
