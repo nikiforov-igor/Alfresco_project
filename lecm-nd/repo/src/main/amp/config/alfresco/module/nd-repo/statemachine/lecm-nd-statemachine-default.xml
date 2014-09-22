@@ -1550,7 +1550,7 @@
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
 																				</value>
 																			</property>
 																		</properties>
@@ -5272,7 +5272,7 @@ businessJournal.log(nd.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]>
 																			<property>
 																				<name>condition</name>
 																				<value>
-																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
+																					<![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]>
 																				</value>
 																			</property>
 																		</properties>

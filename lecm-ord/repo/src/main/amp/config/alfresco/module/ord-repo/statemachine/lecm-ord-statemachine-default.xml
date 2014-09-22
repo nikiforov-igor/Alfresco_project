@@ -1327,7 +1327,7 @@
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+                                                                                    <![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
@@ -4416,7 +4416,7 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
                                                                             <property>
                                                                                 <name>condition</name>
                                                                                 <value>
-                                                                                    <![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null && "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+                                                                                    <![CDATA[@routesService.getDocumentCurrentIteration(doc.nodeRef) != null and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
                                                                             </property>
                                                                         </properties>
                                                                         <aspects/>
