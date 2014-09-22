@@ -26,7 +26,7 @@
 	                <set id="dates" appearance="" template="/ru/it/lecm/base-share/components/controls/daterange.ftl" />
 
                     <field id="lecm-document:title" label="Заголовок"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа">
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
@@ -196,7 +196,7 @@
                     <field id="lecm-document-aspects:reg-data-date" set="common"/>
 
                     <field id="lecm-document:title" label="Заголовок" set="common"/>
-                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="common">
+                    <field id="lecm-eds-document:document-type-assoc" label="Вид документа" set="common" mandatory="true">
                         <control template="/ru/it/lecm/base-share/components/controls/association-select-one-control.ftl">
                             <control-param name="startLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_НД</control-param>
                             <control-param name="nameSubstituteString">{cm:name}</control-param>
