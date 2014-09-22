@@ -643,6 +643,7 @@ LogicECM.module = LogicECM.module || {};
 	            this._updateItems(nodeRef, searchData);
 			} else if (searchTerm === "") {
 				this.isSearch = false;
+		        this.searchData = "";
 				this._updateItems(this.currentNode.data.nodeRef, "");
 			} else {
 		        Alfresco.util.PopupManager.displayMessage(
