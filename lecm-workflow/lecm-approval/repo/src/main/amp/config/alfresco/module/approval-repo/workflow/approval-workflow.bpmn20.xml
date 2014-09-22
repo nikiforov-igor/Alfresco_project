@@ -13,7 +13,7 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = 'Принято решение по согласованию документа ' + documentLink;
-    initiator = execution.getVariable('initiator');
+    initiator = execution.getVariable('initiatorEmployee');
     currentIteration = execution.getVariableLocal('currentIteration');
     stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
     decisions = ['REJECTED', 'APPROVED_WITH_REMARK', 'APPROVED'];
@@ -74,7 +74,7 @@
   execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
   execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
-  execution.setVariable('initiator', approval.getWorkflowNodeConverter().convertNode(orgstructure.getCurrentEmployee().nodeRef));
+  execution.setVariable('initiatorEmployee', approval.getWorkflowNodeConverter().convertNode(orgstructure.getCurrentEmployee().nodeRef));
   /* привязывание процесса к машине состояний документа */
   approval.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
 })();]]></activiti:string>
@@ -251,7 +251,7 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     employee = task.getVariableLocal('effectiveEmployee');
-    initiator = realExecution.getVariable('initiator');
+    initiator = realExecution.getVariable('initiatorEmployee');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
     /* запись в БЖ о согласовании конкретным участником */
@@ -390,7 +390,7 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     employee = task.getVariableLocal('effectiveEmployee');
-    initiator = realExecution.getVariable('initiator');
+    initiator = realExecution.getVariable('initiatorEmployee');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
     /* запись в БЖ о согласовании конкретным участником */
