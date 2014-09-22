@@ -34,7 +34,7 @@ showSearchBlock (необязательный) - показывать блок �
 showExSeacrhBtn(необязательный) - добавить(показывать) кнопку атрибутивного поиска.
 -->
 <#macro baseToolbar id showButtons=true showSearchBlock=true showExSeacrhBtn=false>
-<div id="${id}-body" class="datalist-toolbar toolbar">
+<div id="${id}-body" class="datalist-toolbar toolbar <#if !showButtons && !showSearchBlock && !showExSeacrhBtn>hidden1</#if>">
 	<div id="${id}-headerBar" class="header-bar flat-button">
 		<div class="left">
 			<#if showButtons>

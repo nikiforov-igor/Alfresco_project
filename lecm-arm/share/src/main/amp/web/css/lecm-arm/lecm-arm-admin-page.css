@@ -1,6 +1,3 @@
-.admin-page {
-
-}
 .admin-page #doc3 {
     margin: auto;
 }
@@ -8,7 +5,18 @@
     padding-bottom: 0;
 }
 #yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar {
+    border-bottom: 1px solid #ccc;
+    overflow-y: hidden;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar {
+    padding: 2px 0 1px;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar > div {
     margin: 0;
+}
+#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar > div > span {
+    display: inline-block;
+    float: left;
 }
 #yui-main #arm-with-tree.admin-page #yui-main-2 #right-panel-workgroup {
     padding-left: 10px;
@@ -17,11 +25,5 @@
     padding-right: 10px;
 }
 .yui-skin-lecmTheme .admin-page .form-container .form-buttons{
-    padding: 1em 1em 1em 200px;
-}
-.admin-page {
-
-}
-.admin-page {
-
+    padding-top: 1em;
 }
