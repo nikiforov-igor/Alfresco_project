@@ -111,7 +111,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 		},
 		_onToolbarReady: function Absence__onToolbarReady() {
 			var scope = this;
-			Alfresco.util.createYUIButton(this, "btnCreateNewMyAbsence", this._createNewMyAbsence(LogicECM.module.WCalendar.Absence.ABSENCE_LABEL), {
+			Alfresco.util.createYUIButton(this, "btnCreateNewMyAbsence", this._createNewMyAbsence(LogicECM.module.WCalendar.Absence.ABSENCE_PROFILE_LABEL), {
 				label: scope.msg("button.new-my-absence")
 			});
 		},

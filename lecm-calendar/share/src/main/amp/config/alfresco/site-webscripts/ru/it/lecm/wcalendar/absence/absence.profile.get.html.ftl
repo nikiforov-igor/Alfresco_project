@@ -30,22 +30,18 @@
 					permission:"delete",
 					label:"${msg("actions.delete-row")}"
 				}
-			]
+			],
+            datagridMeta:{
+                itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
+                nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
+                datagridFormId: "absenceProfileDatagrid"
+                //searchConfig: {
+                //	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
+                //}
+            }
 		});
 		datagrid.setMessages(${messages});
-		YAHOO.util.Event.onContentReady('${id}', function () {
-			YAHOO.Bubbling.fire ("activeGridChanged", {
-				datagridMeta:{
-					itemType: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.itemType,
-					nodeRef: LogicECM.module.WCalendar.Absence.ABSENCE_CONTAINER.nodeRef,
-					datagridFormId: "absenceProfileDatagrid"
-					//searchConfig: {
-					//	filter: "ISNOTNULL:\"sys:node-uuid\" AND NOT (@lecm\\-d8n:delegation\\-opts\\-status:\"NOT_SET\")"
-					//}
-				},
-				bubblingLabel: LogicECM.module.WCalendar.Absence.ABSENCE_PROFILE_LABEL
-			});
-		});
+        datagrid.draw();
 	}
 
 	YAHOO.util.Event.onDOMReady(init);
