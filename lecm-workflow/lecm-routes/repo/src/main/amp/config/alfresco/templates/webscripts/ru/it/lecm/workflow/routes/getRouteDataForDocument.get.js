@@ -1,7 +1,7 @@
 (function () {
 	var documentNodeRef = args['documentNodeRef'];
 	var documentNode = search.findNode(documentNodeRef);
-	var currentIterationNode = routesService.getDocumentCurrentIteration(documentNode);
+	var currentIterationNode = routesService.getDocumentCurrentIteration(documentNode), tempFolder;
 	var approvalState, approvalStateProp, currentIterationNodeStr, approvalHistoryFolder, approvalHistoryFolderStr = '';
 	var completedApprovalsCount = 0, sourceRouteInfo = '', sourceRouteNode, approvalIsEditable = true;
 
@@ -22,7 +22,11 @@
 
 		approvalIsEditable = currentIterationNode.properties['lecmWorkflowRoutes:routeEditable'];
 	} else {
-		currentIterationNodeStr = userhome.childByNamePath("temp").nodeRef.toString();
+		tempFolder = userhome.childByNamePath("temp");
+		if (!tempFolder) {
+			tempFolder = userhome;
+		}
+		currentIterationNodeStr = tempFolder.nodeRef.toString();
 		approvalState = 'NOT_EXITS';
 	}
 
