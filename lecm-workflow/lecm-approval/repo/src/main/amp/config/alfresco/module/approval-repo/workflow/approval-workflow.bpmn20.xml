@@ -98,14 +98,15 @@
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var stage, i, size, approvalState, items;
+  var stage, i, size, approvalState, items, isTemp;
   for (i = 0, size = stages.length; i < size; ++i) {
     stage = stages[i];
+    isTemp = stage.hasAspect('sys:temporary') || stage.hasAspect('lecm-workflow:temp');
     approvalState = stage.properties['lecmApproveAspects:approvalState'];
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* выбор первого неактивного этапа */
-    if ((!approvalState || 'NEW' == approvalState) && items && items.length) {
+    if (!isTemp && (!approvalState || 'NEW' == approvalState) && items && items.length) {
       break;
     }
   }
@@ -528,13 +529,14 @@
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var i, size, approvalState, hasNextStage, items;
+  var i, size, approvalState, hasNextStage, items, isTemp;
   for (i = 0, size = stages.length; i < size; ++i) {
+    isTemp = stages[i].hasAspect('sys:temporary') || stage.hasAspect('lecm-workflow:temp');
     approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
     approvalState = (approvalState != null) ? '' + approvalState : null;
     items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* поиск неактивных этапов */
-    if ((!approvalState || 'NEW' == approvalState) && items && items.length) {
+    if (!isTemp && (!approvalState || 'NEW' == approvalState) && items && items.length) {
       hasNextStage = true;
       break;
     }
