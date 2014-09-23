@@ -628,7 +628,7 @@ LogicECM.module = LogicECM.module || {};
 
 	            if (searchTerm != undefined && searchTerm != null && searchTerm != ""){
 	                for(var column in this.searchProperties) {
-	                    searchData += column + ":" + searchTerm + "#";
+	                    searchData += column + ":" + searchTerm.replace(/#/g, "") + "#";
 	                }
 	                if (searchData != "") {
 	                    searchData = searchData.substring(0,(searchData.length)-1);
