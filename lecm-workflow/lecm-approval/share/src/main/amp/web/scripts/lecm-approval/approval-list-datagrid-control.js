@@ -127,6 +127,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		routeType: null,
 		currentIterationNode: null,
 		approvalState: null,
+		approvalResult: null,
 		editItreationFormOpened: false,
 		clearButton: null,
 		approvalContainer: null,
@@ -203,6 +204,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							this.routeType = response.json.routeType;
 							this.currentIterationNode = response.json.currentIterationNode ? response.json.currentIterationNode : null;
 							this.approvalState = response.json.approvalState;
+							this.approvalResult = response.json.approvalResult;
 							this.completedApprovalsCount = response.json.completedApprovalsCount;
 							this.sourceRouteInfo = response.json.sourceRouteInfo;
 							this.approvalIsEditable = response.json.approvalIsEditable;
@@ -505,13 +507,16 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			});
 		},
 		fillCurrentApprovalState: function () {
-			var typicalApprovalTemplate = '{msg} ({routeName})';
+			var approvalMsgTemplate = '{msg} ({additionalMsg})';
 			this.completedApprovalsCountContainer.innerHTML = this.completedApprovalsCount;
-			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo ? YAHOO.lang.substitute(typicalApprovalTemplate, {
+			this.sourceRouteInfoContainer.innerHTML = this.sourceRouteInfo ? YAHOO.lang.substitute(approvalMsgTemplate, {
 				msg: this.msg('label.approval.typical'),
-				routeName: this.sourceRouteInfo
+				additionalMsg: this.sourceRouteInfo
 			}) : this.msg('label.approval.individual');
-			this.currentApprovalInfoContainer.innerHTML = this.approvalStateSettings[this.approvalState].stateMsg;
+			this.currentApprovalInfoContainer.innerHTML = this.approvalState === 'COMPLETE' ? YAHOO.lang.substitute(approvalMsgTemplate, {
+				msg: this.approvalStateSettings[this.approvalState].stateMsg,
+				additionalMsg: this.approvalResult.title
+			}) : this.approvalStateSettings[this.approvalState].stateMsg;
 		},
 		manageControlsVisibility: function () {
 			function hide(element) {
