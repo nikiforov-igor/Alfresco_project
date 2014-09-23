@@ -11,7 +11,8 @@ var logicECMWidgets = [
         config: {
             id: "SED_MENU_ITEM_ADDITIONAL",
             label: "Логика СЭД",
-            targetUrl: "arm?code=SED"
+            targetUrl: "arm?code=SED",
+            iconImage: imagesRoot + "docs_16_light.png"
         }
     },
     {
