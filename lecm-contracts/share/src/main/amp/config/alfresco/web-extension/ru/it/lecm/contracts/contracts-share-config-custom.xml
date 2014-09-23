@@ -1040,6 +1040,8 @@
     <config evaluator="node-type" condition="lecm-additional-document:additionalDocument">
         <forms>
             <form>
+                <edit-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
+                <view-form template="/ru/it/lecm/base-share/components/base-form-tabs.ftl" />
                 <field-visibility>
                     <show id="lecm-additional-document:additionalDocumentType"/>
                     <show id="lecm-additional-document:number"/>
@@ -1049,10 +1051,16 @@
 					<show id="lecm-contract:approval" force="true"/>
                 </field-visibility>
                 <appearance>
-                    <field id="lecm-additional-document:summaryContent">
+                    <set id="common" appearance="" label-id="label.contracts.main" />
+                    <set id="approvalTab" appearance="" label="Согласование"/>
+                    <field id="lecm-additional-document:additionalDocumentType" set="common"/>
+                    <field id="lecm-additional-document:number" set="common"/>
+                    <field id="lecm-additional-document:date" set="common"/>
+                    <field id="lecm-additional-document:signedCounterparty" set="common"/>
+                    <field id="lecm-additional-document:summaryContent" set="common">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-					<field id="lecm-contract:approval">
+					<field id="lecm-contract:approval" set="approvalTab">
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
                 </appearance>
