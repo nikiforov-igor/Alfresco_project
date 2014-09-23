@@ -6,6 +6,15 @@ var imagesRoot = "/share/components/images/header/"
 
 var logicECMWidgets = [
     {
+        id: "SED_MENU_ITEM_ADDITIONAL",
+        name: "alfresco/header/AlfMenuItem",
+        config: {
+            id: "SED_MENU_ITEM_ADDITIONAL",
+            label: "Логика СЭД",
+            targetUrl: "arm?code=SED"
+        }
+    },
+    {
         id: "ORGSTRUCTURE_DICTIONARY_MENU_ITEM",
         name: "alfresco/header/AlfMenuItem",
         config: {
@@ -203,7 +212,7 @@ var moreMenu = {
 	            name: "alfresco/menus/AlfMenuGroup",
 	            id: "LOGIC_ECM_WIDGETS",
 	            config: {
-	                label: "Logic ECM",
+	                label: "Логика ECM",
 	                widgets: logicECMWidgets
 	            }
 	        },
