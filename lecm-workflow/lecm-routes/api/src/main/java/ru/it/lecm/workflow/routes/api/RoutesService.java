@@ -62,4 +62,11 @@ public interface RoutesService {
 	NodeRef getDocumentByStage(NodeRef stageNode);
 	NodeRef getDocumentByStageItem(NodeRef stageItemNode);
 
+	/**
+	 * Проверить существует ли привязанном к документу маршруте хотя бы один сотрудник
+	 * @param documentRef NodeRef-а на документ
+	 * @return true если хотя бы в одном этапе маршрута есть хотя бы один сотрудник. false в противном случае, а также
+	 * если маршрута нет
+	 */
+	boolean hasEmployeesInRoute(final NodeRef documentRef);
 }

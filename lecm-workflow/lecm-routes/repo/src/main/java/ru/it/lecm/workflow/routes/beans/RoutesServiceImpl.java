@@ -11,6 +11,7 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.scripts.ScriptException;
+import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.CopyService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -497,4 +498,20 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		return getDocumentByStage(nodeService.getPrimaryParent(stageItemNode).getParentRef());
 	}
 
+	@Override
+	public boolean hasEmployeesInRoute(final NodeRef documentRef) {
+		boolean hasEmployeesInIteration = false;
+		NodeRef currentIterationRef = getDocumentCurrentIteration(documentRef);
+		if (currentIterationRef != null) {
+			List<NodeRef> items = getAllStageItemsOfRoute(currentIterationRef);
+			for (NodeRef stageItemRef : items) {
+				List<AssociationRef> assocs =  nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+				hasEmployeesInIteration = assocs.size() > 0;
+				if (hasEmployeesInIteration) {
+					break;
+				}
+			}
+		}
+		return hasEmployeesInIteration;
+	}
 }

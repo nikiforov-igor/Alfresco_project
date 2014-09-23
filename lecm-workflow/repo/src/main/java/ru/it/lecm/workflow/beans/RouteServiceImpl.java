@@ -20,6 +20,7 @@ import ru.it.lecm.workflow.api.RouteService;
  *
  * @author vmalygin
  */
+@Deprecated
 public class RouteServiceImpl extends BaseBean implements RouteService {
 
 	private WorkflowFoldersServiceImpl workflowFoldersServiceImpl;

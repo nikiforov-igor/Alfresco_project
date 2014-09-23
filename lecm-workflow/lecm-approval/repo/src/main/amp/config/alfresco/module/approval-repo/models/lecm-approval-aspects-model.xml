@@ -26,6 +26,7 @@
 									<value>NEW</value>
 									<value>ACTIVE</value>
 									<value>COMPLETE</value>
+									<value>SKIPPED</value>
 								</list>
 							</parameter>
 						</constraint>

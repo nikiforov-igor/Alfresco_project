@@ -8,7 +8,7 @@
   /* пометка итерации как завершенной */
   var isEnded = execution.isEnded();
   var deleteReason = (execution.getDeleteReason() != null) ? '' + execution.getDeleteReason() : null;
-  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size, currentDecision;
+  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size, currentDecision, items;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
@@ -31,6 +31,15 @@
         break;
       }
     }
+    /* отмечаем пустые этапы как SKIPPED */
+    for (i = 0, size = stages.length; i < size; ++i) {
+      items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
+      if (!(items && items.length)) {
+        stages[i].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
+        stages[i].save();
+      }
+    }
+
     /* учет принудительного прерывания процесса */
     if (execution.getVariableLocal('forcedDecision')) {
       approvalDecision = execution.getVariableLocal('forcedDecision');
@@ -89,12 +98,14 @@
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var stage, i, size, approvalState;
+  var stage, i, size, approvalState, items;
   for (i = 0, size = stages.length; i < size; ++i) {
     stage = stages[i];
     approvalState = stage.properties['lecmApproveAspects:approvalState'];
+    approvalState = (approvalState != null) ? '' + approvalState : null;
+    items = stage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* выбор первого неактивного этапа */
-    if (!approvalState || 'NEW' == approvalState) {
+    if ((!approvalState || 'NEW' == approvalState) && items && items.length) {
       break;
     }
   }
@@ -144,6 +155,7 @@
   for (i = 0, size = stageItems.length; i < size; ++i) {
     stageItem = stageItems[i];
     approvalState = stageItem.properties['lecmApproveAspects:approvalState'];
+    approvalState = (approvalState != null) ? '' + approvalState : null;
     /* выбор первого неактивного */
     if (!approvalState || 'NEW' == approvalState) {
       break;
@@ -230,7 +242,7 @@
   /* получаем настоящий execution */
   var realExecution = (execution.parent) ? execution.parent : execution;
   var decision = task.getVariableLocal('lecmApprove3_decision');
-  var comment = task.getVariableLocal('bpm_comment');
+  var comment = (task.getVariableLocal('bpm_comment') != null) ? '' + task.getVariableLocal('bpm_comment') : null;
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var stageItem = realExecution.getVariableLocal('currentStageItem');
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
@@ -268,19 +280,20 @@
           <activiti:field name="script">
             <activiti:string><![CDATA[(function(){ /* has next */
   var stageItem = execution.getVariableLocal('currentStageItem');
-  var stageItemDecision = stageItem.properties['lecmApproveAspects:approvalDecision'];
+  var stageItemDecision = '' + stageItem.properties['lecmApproveAspects:approvalDecision'];
   var currentStage = execution.getVariable('currentStage');
   var stageItems = currentStage.getChildAssocsByType('lecmWorkflowRoutes:stageItem');
   var i, size, approvalState, hasNextStageItem;
   for (i = 0, size = stageItems.length; i < size; ++i) {
     approvalState = stageItems[i].properties['lecmApproveAspects:approvalState'];
+    approvalState = (approvalState != null) ? '' + approvalState : null;
     /* поиск неактивных этапов */
     if (!approvalState || 'NEW' == approvalState) {
       hasNextStageItem = true;
       break;
     }
   }
-  hasNextStageItem = !!(hasNextStageItem && (!execution.getVariable('routeInterruptAfterReject') || stageItemDecision != 'REJECTED'));
+  hasNextStageItem = !!(hasNextStageItem && (!execution.getVariable('routeInterruptAfterReject').booleanValue() || stageItemDecision != 'REJECTED'));
   execution.setVariableLocal('hasNextStageItem', hasNextStageItem);
 })();]]></activiti:string>
           </activiti:field>
@@ -367,7 +380,7 @@
   /* получаем настоящий execution */
   var realExecution = (execution.parent) ? execution.parent : execution;
   var decision = task.getVariableLocal('lecmApprove3_decision');
-  var comment = task.getVariableLocal('bpm_comment');
+  var comment = (task.getVariableLocal('bpm_comment') != null) ? '' + task.getVariableLocal('bpm_comment') : null;
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var routeInterruptAfterReject = realExecution.getVariable('routeInterruptAfterReject').booleanValue();
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
@@ -511,20 +524,22 @@
   установка флага hasNextStage, с учетом флага "завершать после первой визы "не согласен"
 */
   var stage = execution.getVariable('currentStage');
-  var stageDecision = stage.properties['lecmApproveAspects:approvalDecision'];
+  var stageDecision = '' + stage.properties['lecmApproveAspects:approvalDecision'];
   /* получение коллекции этапов */
   var currentIteration = execution.getVariableLocal('currentIteration');
   var stages = currentIteration.getChildAssocsByType('lecmWorkflowRoutes:stage');
-  var i, size, approvalState, hasNextStage;
+  var i, size, approvalState, hasNextStage, items;
   for (i = 0, size = stages.length; i < size; ++i) {
     approvalState = stages[i].properties['lecmApproveAspects:approvalState'];
+    approvalState = (approvalState != null) ? '' + approvalState : null;
+    items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
     /* поиск неактивных этапов */
-    if (!approvalState || 'NEW' == approvalState) {
+    if ((!approvalState || 'NEW' == approvalState) && items && items.length) {
       hasNextStage = true;
       break;
     }
   }
-  hasNextStage = !!(hasNextStage && (!execution.getVariable('routeInterruptAfterReject') || stageDecision != 'REJECTED'));
+  hasNextStage = !!(hasNextStage && (!execution.getVariable('routeInterruptAfterReject').booleanValue() || stageDecision != 'REJECTED'));
   execution.setVariableLocal('hasNextStage', hasNextStage);
 })();]]></activiti:string>
         </activiti:field>

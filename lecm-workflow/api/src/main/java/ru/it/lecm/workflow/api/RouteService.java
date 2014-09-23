@@ -7,6 +7,7 @@ import ru.it.lecm.workflow.RouteType;
  *
  * @author vmalygin
  */
+@Deprecated
 public interface RouteService {
 
 	@Deprecated

@@ -1,6 +1,6 @@
 package ru.it.lecm.workflow.routes.extensions;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import org.alfresco.repo.jscript.ScriptNode;
 import org.alfresco.repo.jscript.ValueConverter;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -66,8 +66,8 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 
 		ConvertRouteToIterationResult convertResult = routesService.convertRouteToIteration(documentNode.getNodeRef(), routeNode.getNodeRef());
 		result.setIterationNode((ScriptNode) converter.convertValueForScript(serviceRegistry, getScope(), null, convertResult.getIterationNode()));
-		result.setScriptErrors((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (ArrayList) convertResult.getScriptErrors()));
-		result.setStageItems((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (ArrayList) convertResult.getStageItems()));
+		result.setScriptErrors((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (Serializable)convertResult.getScriptErrors()));
+		result.setStageItems((Scriptable) converter.convertValueForScript(serviceRegistry, getScope(), null, (Serializable)convertResult.getStageItems()));
 
 		return result;
 	}
@@ -104,4 +104,7 @@ public class RoutesJavascriptExtension extends BaseWebScript {
 		return documentNode != null ? new ScriptNode(documentNode, serviceRegistry, getScope()) : null;
 	}
 
+	public boolean hasEmployeesInRoute(final ScriptNode document) {
+		return routesService.hasEmployeesInRoute(document.getNodeRef());
+	}
 }
