@@ -235,7 +235,9 @@
 	    </#if>
         itemType: "${field.control.params.endpointType ! field.endpointType}",
 	    showAssocViewForm: ${showAssocViewForm?string},
-	    checkType: ${checkType?string}
+	    checkType: ${checkType?string},
+		fieldId: "${field.configName}",
+		formId: "${args.htmlid}"
     }).setMessages( ${messages} );
  	}
  	YAHOO.util.Event.onDOMReady(init);

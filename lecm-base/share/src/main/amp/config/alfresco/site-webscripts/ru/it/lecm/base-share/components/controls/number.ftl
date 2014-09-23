@@ -20,6 +20,30 @@
 	   </div>
    </div>
 <#else>
+	<script type="text/javascript">//<![CDATA[
+		(function() {
+			LogicECM.CurrentModules = LogicECM.CurrentModules || {};
+			function init() {
+				LogicECM.module.Base.Util.loadScripts([
+							'scripts/lecm-base/components/lecm-number.js',
+						],
+						createLecmNumber,
+						[]);
+			}
+
+			function createLecmNumber(){
+				var control = new LogicECM.module.Number("${fieldHtmlId}").setMessages(${messages});
+				control.setOptions({
+					fieldId: "${field.configName}",
+					formId: "${args.htmlid}"
+				});
+			}
+
+			YAHOO.util.Event.onDOMReady(init);
+		})();
+	//]]></script>
+
+
 	<div class="control number editmode">
 		<div class="label-div">
 			<label for="${fieldHtmlId}">${field.label?html}:
