@@ -19,13 +19,20 @@
 	</namespaces>
 
 	<constraints>
-		<!-- TODO: можно будет использовать констрейнты из модели данных бизнес-процесса согласования -->
 		<constraint name="lecmWorkflowRoutes:workflowTypeConstraint" type="LIST">
 			<parameter name="allowedValues">
 				<list>
 					<value>PARALLEL</value>
 					<value>SEQUENTIAL</value>
 				</list>
+			</parameter>
+		</constraint>
+		<constraint name="lecmWorkflowRoutes:termLimitConstraint" type="MINMAX">
+			<parameter name="minValue">
+				<value>1</value>
+			</parameter>
+			<parameter name="maxValue">
+				<value>2147483647</value>
 			</parameter>
 		</constraint>
 	</constraints>
@@ -102,6 +109,9 @@
 					<title>Срок (рабочих дней)</title>
 					<type>d:int</type>
 					<mandatory>true</mandatory>
+					<constraints>
+						<constraint ref="lecmWorkflowRoutes:termLimitConstraint"/>
+					</constraints>
 				</property>
 			</properties>
 			<mandatory-aspects>
@@ -117,6 +127,9 @@
 				<property name="lecmWorkflowRoutes:stageItemTerm">
 					<title>Срок (рабочих дней)</title>
 					<type>d:int</type>
+					<constraints>
+						<constraint ref="lecmWorkflowRoutes:termLimitConstraint"/>
+					</constraints>
 				</property>
 				<property name="lecmWorkflowRoutes:stageItemUserName">
 					<title>Имя пользователя. Служебный</title>
