@@ -25,6 +25,7 @@
 			<span class="thin">
 				<input type="checkbox" id="${el}-select-all-tasks"/>
 			</span>
+            <span>${msg("label.selectAll")}</span>
 		</div>
 		<div class="yui-u">
 			<div id="${el}-paginator" class="paginator">&nbsp;</div>
