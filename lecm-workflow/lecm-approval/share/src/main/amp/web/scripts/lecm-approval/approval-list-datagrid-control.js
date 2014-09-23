@@ -443,20 +443,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					},
 					scope: this
 				},
-				onSuccess: {
-					fn: function (r) {
-
-					},
-					scope: this
-				},
-				onFailure: {
-					fn: function (r) {
-						Alfresco.util.PopupManager.displayMessage({
-							text: 'Не удалось отредактировать паратеры итерации: ' + r.json.message
-						});
-					},
-					scope: this
-				}
+				failureMessage: 'Не удалось сохранить изменения итерации',
+				successMessage: 'Изменения итерации сохранены'
 			});
 
 			editIterationForm.show();
