@@ -113,6 +113,7 @@
 
 		var js = ['scripts/lecm-base/components/lecm-datagrid.js',
 				  'scripts/lecm-base/components/advsearch.js',
+				  'modules/simple-dialog.js',
 				  'scripts/lecm-approval/approval-list-datagrid-control.js',
 				  'scripts/lecm-approval/evaluators.js',
 				  'scripts/lecm-workflow/routes/stages-control.js'];
