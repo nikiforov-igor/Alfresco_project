@@ -22,6 +22,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		showNotSelectable = args['showNotSelectableItems'],
 		showFolders = args['showFolders'],
 		docType = args['docType'],
+        useOnlyInSameOrg = ("true" == args['onlyInSameOrg']),
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
 		additionalProperties = args['additionalProperties'];
 	if (additionalProperties != null) {
@@ -141,7 +142,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     ignoreTypes = argsFilterType;
                 }
 
-                var doNotCheck = doNotCheckAccess != null && (("" + doNotCheckAccess) == "true");
+                var doNotCheck = (doNotCheckAccess != null && (("" + doNotCheckAccess) == "true")) || !useOnlyInSameOrg;
                 var childType = null;
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     childType = argsSelectableType;
@@ -178,7 +179,7 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 				}
 
                 if (doNotCheckAccess == null || ("" + doNotCheckAccess == "false")) {
-					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION}}");
+					query = addAdditionalFilter(query, "{{IN_SAME_ORGANIZATION({strict:" + useOnlyInSameOrg + "})}}");
 				}
 
                 query = (query !== "" ? (query + ' AND ') : '') + "NOT @lecm-dic\\:active:false";

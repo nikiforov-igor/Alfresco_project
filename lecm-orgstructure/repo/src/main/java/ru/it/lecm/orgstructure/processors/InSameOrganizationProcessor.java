@@ -41,6 +41,7 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
             orgFieldShort = DEFAULT_ORGANIZATION_FIELD;
         }
 
+        Boolean useStrictAccess = params != null && params.get("strict") != null ? Boolean.valueOf(params.get("strict").toString()) : false;
         NodeRef organization;
         Set<String> auth = authorityService.getAuthoritiesForUser(userName);
 
@@ -58,7 +59,9 @@ public class InSameOrganizationProcessor extends SearchQueryProcessor {
         } else {
             sbQuery.append("\"*\"");
         }
-        sbQuery.append(" OR ISNULL:").append("\"").append(organizationProperty).append("\"");
+        if (!useStrictAccess) {
+            sbQuery.append(" OR ISNULL:").append("\"").append(organizationProperty).append("\"");
+        }
 
         return sbQuery.toString();
     }
