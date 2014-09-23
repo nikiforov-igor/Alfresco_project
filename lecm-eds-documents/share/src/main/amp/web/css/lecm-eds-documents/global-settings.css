@@ -40,5 +40,6 @@
 }
 
 .yui-skin-lecmTheme .admin-page .eds-global-settings .form-container .form-buttons {
-    padding-left: 190px;
+    padding-left: 0;
+    margin-left: 10px;
 }

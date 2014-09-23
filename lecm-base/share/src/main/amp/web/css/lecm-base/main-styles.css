@@ -488,10 +488,11 @@ i.icon-building {
 /* richtext & textarea controls - end */
 
 /* checkbox control - start */
-.checkbox-control {
+.control.checkbox-control {
     line-height: 28px;
+    margin-left: -2px;
 }
-.checkbox-control input[type=checkbox] {
+.control.checkbox-control input[type=checkbox] {
     vertical-align: middle;
 }
 /* checkbox control - end*/

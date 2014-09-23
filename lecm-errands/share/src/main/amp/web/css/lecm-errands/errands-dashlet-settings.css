@@ -1,11 +1,19 @@
-.errands-dashlet-settings
-{
-	margin: 16px 10px 10px;
+.errands-dashlet-settings {
+    margin: 16px 10px 10px;
 }
 
-.errands-dashlet-settings .title
-{
-	font-size: 123.1%;
-	font-weight: bold;
-	padding-bottom: 0.75em;
+.errands-dashlet-settings .title {
+    font-size: 123.1%;
+    font-weight: bold;
+    padding-bottom: 0.75em;
+}
+
+.errands-dashlet-settings .control.checkbox-control .label-div {
+    width: 0;
+    padding: 0;
+}
+
+.yui-skin-lecmTheme .admin-page .errands-dashlet-settings .form-container .form-buttons {
+    padding-left: 0;
+    margin-left: 10px;
 }

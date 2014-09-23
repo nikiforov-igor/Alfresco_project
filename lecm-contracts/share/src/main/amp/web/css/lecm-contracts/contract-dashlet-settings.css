@@ -1,11 +1,19 @@
-.contract-dashlet-settings
-{
-	margin: 16px 10px 10px;
+.contract-dashlet-settings {
+    margin: 16px 10px 10px;
 }
 
-.contract-dashlet-settings .title
-{
-	font-size: 123.1%;
-	font-weight: bold;
-	padding-bottom: 0.75em;
+.contract-dashlet-settings .title {
+    font-size: 123.1%;
+    font-weight: bold;
+    padding-bottom: 0.75em;
+}
+
+.contract-dashlet-settings .control.checkbox-control .label-div {
+    width: 0;
+    padding: 0;
+}
+
+.yui-skin-lecmTheme .admin-page .contract-dashlet-settings .form-container .form-buttons {
+    padding-left: 0;
+    margin-left: 10px;
 }

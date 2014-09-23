@@ -30,8 +30,9 @@ var logicECMWidgets = [
 	    config: {
 	        id: "ADMINISTRATION_MENU_ITEM",
 	        label: "Администрирование",
-	        targetUrl: "admin"
-	    }
+	        targetUrl: "admin",
+            iconImage: imagesRoot + "settings_16_light.png"
+        }
 	}
 ];
 
