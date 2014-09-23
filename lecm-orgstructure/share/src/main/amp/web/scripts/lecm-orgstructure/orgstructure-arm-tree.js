@@ -183,6 +183,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             this.reloadTree();
         },
 
+
         _loadTree: function loadNodeData(node, fnLoadComplete) {
             var sUrl = Alfresco.constants.PROXY_URI + "lecm/orgstructure/dictionary/branch";
             if (node.data.nodeRef != null) {
@@ -195,6 +196,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
             var callback = {
                 success: function (oResponse) {
                     otree.searchTerm = null;
+                    Dom.setStyle(otree.id + "-empty", "display", "none");
                     var oResults = eval("(" + oResponse.responseText + ")");
                     if (oResults != null) {
                         node.children = [];
@@ -216,6 +218,9 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                             if (!otree.searchMode) {
                                 curElement.expanded = curElement.data.expand || otree._nodeIsExpanded(curElement);
                             }
+                        }
+                        if (oResults.length == 0) {
+                            Dom.setStyle(otree.id + "-empty", "display", "block");
                         }
                     }
 

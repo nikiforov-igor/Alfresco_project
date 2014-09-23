@@ -31,7 +31,9 @@
 //]]></script>
 
 <@comp.baseToolbar id false true false/>
-
+<div id="${id}-empty">
+    <div class="empty"><span>${msg("tree.empty.text")}</span></div>
+</div>
 <div id="orgstructure-tree" class="orgstructure-tree"></div>
 
 
