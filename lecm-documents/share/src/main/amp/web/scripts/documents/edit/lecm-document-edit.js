@@ -98,7 +98,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     if (me.runtimeForm.validate()) {
                         me._showSplash();
                     }
-                    submitFunction.bind(me.runtimeForm.submitElements[0])();
+                    submitFunction.call(me.runtimeForm.submitElements[0]);
                 };
 
 				args[1].runtime.setAJAXSubmit(true,
@@ -113,7 +113,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 							fn: this.onFormSubmitFailure,
 							scope: this
 						}
-					});
+				});
+				YAHOO.Bubbling.unsubscribe("beforeFormRuntimeInit", this.onBeforeFormRuntimeInit, this);
 			},
 
 			onFormSubmitSuccess: function (response) {
