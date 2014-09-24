@@ -8,7 +8,7 @@
   /* пометка итерации как завершенной */
   var isEnded = execution.isEnded();
   var deleteReason = (execution.getDeleteReason() != null) ? '' + execution.getDeleteReason() : null;
-  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, size, currentDecision, items;
+  var document, documentLink, msg, initiator, currentIteration, stages, decisions, approvalDecision, i, j, size, length, currentDecision, items, state;
   if (isEnded || deleteReason) {
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
@@ -32,11 +32,26 @@
       }
     }
     /* отмечаем пустые этапы как SKIPPED */
+    /* этапы в состоянии NEW или ACTIVE как CANCELLED */
+    /* строки этапов в состоянии NEW или ACTIVE как CANCELLED */
     for (i = 0, size = stages.length; i < size; ++i) {
+      state = '' + stages[i].properties['lecmApproveAspects:approvalState'];
+      if ('NEW' == state || 'ACTIVE' == state) {
+        stages[i].properties['lecmApproveAspects:approvalState'] = 'CANCELLED';
+        stages[i].save();
+      }
       items = stages[i].getChildAssocsByType('lecmWorkflowRoutes:stageItem');
       if (!(items && items.length)) {
         stages[i].properties['lecmApproveAspects:approvalState'] = 'SKIPPED';
         stages[i].save();
+      } else {
+        for (j = 0, length = items.length; j < length; ++j) {
+          state = '' + items[j].properties['lecmApproveAspects:approvalState'];
+          if ('NEW' == state || 'ACTIVE' == state) {
+            items[j].properties['lecmApproveAspects:approvalState'] = 'CANCELLED';
+            items[j].save();
+          }
+        }
       }
     }
 

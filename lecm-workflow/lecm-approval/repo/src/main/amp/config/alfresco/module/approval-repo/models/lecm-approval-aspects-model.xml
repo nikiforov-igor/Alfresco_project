@@ -27,6 +27,7 @@
 									<value>ACTIVE</value>
 									<value>COMPLETE</value>
 									<value>SKIPPED</value>
+									<value>CANCELLED</value>
 								</list>
 							</parameter>
 						</constraint>
