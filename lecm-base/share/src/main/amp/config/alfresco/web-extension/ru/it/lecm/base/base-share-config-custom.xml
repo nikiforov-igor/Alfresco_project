@@ -223,6 +223,7 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">true</control-param>
 							<control-param name="itemType">lecm-orgstr:employee</control-param>
+							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				<field id="taskIds" label="Сотрудник" mandatory="false">
