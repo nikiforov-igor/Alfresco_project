@@ -385,7 +385,15 @@ public class DocumentPolicy extends BaseBean
                 setPropertyAsSystem(nodeRef, DocumentService.PROP_EXT_PRESENT_STRING, typeDef.getTitle() + ": " + presentStringValue);
             }
         }
-        String listPresentString = substituteService.getTemplateStringForObject(nodeRef, true);
+		
+		final AuthenticationUtil.RunAsWork<String> listStringValue = new AuthenticationUtil.RunAsWork<String>() {
+            @Override
+            public String doWork() throws Exception {
+                return substituteService.getTemplateStringForObject(nodeRef, true);
+            }
+        };
+		
+        String listPresentString = AuthenticationUtil.runAsSystem(listStringValue);
 
         String listPresentStringValue = substituteService.formatNodeTitle(nodeRef, listPresentString);
         if (listPresentStringValue != null) {
