@@ -3,6 +3,7 @@ package ru.it.lecm.base.beans;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.cache.SimpleCache;
 import org.alfresco.repo.dictionary.constraint.ListOfValuesConstraint;
+import org.alfresco.repo.node.getchildren.FilterProp;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.dictionary.Constraint;
@@ -10,6 +11,7 @@ import org.alfresco.service.cmr.dictionary.ConstraintDefinition;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.namespace.NamespaceException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.service.namespace.RegexQNamePattern;
@@ -21,11 +23,13 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import ru.it.lecm.base.beans.getchildren.FilterPropLECM;
 import ru.it.lecm.base.expression.ExpressionNode;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -707,7 +711,41 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         return expressions;
     }
 
-    
+    private List<FilterPropLECM> getFilterExpression(String str) {
+        List<FilterPropLECM> expressions = new ArrayList<>();
+        if (str != null) {
+            int openIndex = str.indexOf(OPEN_EXPRESSIONS_SYMBOL);
+            int closeIndex = str.indexOf(CLOSE_EXPRESSIONS_SYMBOL);
+            if (openIndex > -1 && closeIndex > -1) {
+                String expressionsStr = str.substring(openIndex + 1, closeIndex);
+                if (!expressionsStr.isEmpty()) {
+                    String[] expressionsArray = expressionsStr.trim().split(SPLIT_EXPRESSION_SYMBOL);
+                    for (String expr : expressionsArray) {
+                        if (!expr.isEmpty()){
+                            int equalsIndex = expr.indexOf(EQUALS_SYMBOL);
+                            if (equalsIndex > 0) {
+                                boolean isNotCase = expr.charAt(equalsIndex - 1) == '!';
+
+                                String firstTerm = expr.substring(0, !isNotCase ? equalsIndex: equalsIndex - 1).trim();
+                                String secondTerm = expr.substring(equalsIndex + 1).trim();
+                                try {
+                                    QName propName = !firstTerm.isEmpty() ? QName.createQName(firstTerm, namespaceService) : null;
+                                    FilterPropLECM filter =
+                                            new FilterPropLECM(propName, secondTerm,
+                                                    !isNotCase ? FilterPropLECM.FilterTypeLECM.EQUALS : FilterPropLECM.FilterTypeLECM.NOT_EQUALS, Boolean.FALSE);
+                                    expressions.add(filter);
+                                } catch (NamespaceException ex) {
+                                    logger.error(ex.getMessage(), ex);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return expressions;
+    }
+
     public void init() {
         namespaceService = getServiceRegistry().getNamespaceService();
         nodeService = getServiceRegistry().getNodeService();
@@ -828,7 +866,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
         nextTransionNodes.add(node);
 
         for (String el : transitions) {
-            Map<String, String> expressions = getExpression(el);
+            List<FilterPropLECM> expressions = getFilterExpression(el);
             if (!expressions.isEmpty()) {
                 el = el.substring(0, el.indexOf(OPEN_EXPRESSIONS_SYMBOL));
             }
@@ -867,15 +905,33 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     boolean exist = false;
                     for (NodeRef nodeRef : showNodes) {
                         boolean expressionsFalse = false;
-                        for (Map.Entry<String, String> entry : expressions.entrySet()) {
-                            Object currentPropertyValue =
-                                    nodeService.getProperty(nodeRef, QName.createQName(entry.getKey(), namespaceService));
-                            if ((currentPropertyValue == null && !entry.getValue().toLowerCase().equals("null"))
-                                    || !currentPropertyValue.toString().equals(entry.getValue())) {
-                                expressionsFalse = true;
+                        for (FilterProp filterProp : expressions) {
+                            Serializable propVal = nodeService.getProperty(nodeRef, filterProp.getPropName());
+                            if (propVal != null) {
+                                Serializable filter = filterProp.getPropVal();
+                                switch ((FilterPropLECM.FilterTypeLECM) filterProp.getFilterType()) {
+                                    case EQUALS:
+                                        if (!propVal.equals(filter)) {
+                                            expressionsFalse = true;
+                                        }
+                                        break;
+                                    case NOT_EQUALS:
+                                        if (propVal.equals(filter)) {
+                                            expressionsFalse = true;
+                                        }
+                                        break;
+                                    default:
+                                }
+                            } else {
+                                if (!filterProp.getPropVal().toString().toLowerCase().equals("null")) {
+                                    expressionsFalse = true;
+                                }
+                            }
+                            if (expressionsFalse) {
                                 break;
                             }
                         }
+
                         if (!isArchive(nodeRef) && !expressionsFalse) {
                             filteredResults.add(nodeRef);
                             exist = true;
