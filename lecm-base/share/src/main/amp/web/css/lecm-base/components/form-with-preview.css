@@ -1,6 +1,6 @@
 .from-with-preview > .yui-g > .yui-u.first {
 	width: 650px;
-	overflow: hidden;
+	height: auto;
 }
 
 .documents-list-create-dialog-container .from-with-preview > .yui-g > .yui-u.first {
@@ -8,10 +8,12 @@
 }
 
 .from-with-preview > .yui-g > .yui-u {
-	width: 405px;
-	height: 525px;
+	min-width: 590px;
+	min-height: 570px;
+	height: auto;
 	overflow-x: hidden;
 	overflow-y: auto;
+	float: left;
 }
 
 .yui-skin-lecmTheme .yui-panel.metadata-form-edit .from-with-preview div.form-field > label,

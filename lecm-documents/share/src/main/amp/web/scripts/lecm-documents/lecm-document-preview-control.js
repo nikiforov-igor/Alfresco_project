@@ -22,7 +22,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 	var Dom = YAHOO.util.Dom,
 		Event = YAHOO.util.Event;
 
-	LogicECM.module.Documents.DocumentPreviewControl = function (fieldHtmlId) {
+		LogicECM.module.Documents.DocumentPreviewControl = function (fieldHtmlId) {
 		LogicECM.module.Documents.DocumentPreviewControl.superclass.constructor.call(this, "LogicECM.module.Documents.DocumentPreviewControl", fieldHtmlId, [ "container"]);
 
 		return this;
@@ -31,7 +31,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 	YAHOO.extend(LogicECM.module.Documents.DocumentPreviewControl, Alfresco.component.Base,
 		{
 			options:{
-				taskId: ""
+				itemId: "",
+				forTask: true
 			},
 
 			documentNodeRef: null,
@@ -49,26 +50,31 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			},
 
 			loadDocument: function() {
-				if (this.options.taskId != null) {
-					Alfresco.util.Ajax.request({
-						method: "GET",
-						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.taskId,
-						successCallback: {
-							fn: function (response) {
-								var result = response.json;
-								if (result != null && result.nodeRef != null) {
-									this.documentNodeRef = result.nodeRef;
-									this.loadDocumentAttachments();
-								}
-							},
-							scope: this
-						}
-					});
+				if (this.options.itemId != null) {
+					if (this.options.forTask===true){
+						Alfresco.util.Ajax.request({
+							method: "GET",
+							url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/workflow/GetDocumentDataByTaskId?taskID=" + this.options.itemId,
+							successCallback: {
+								fn: function (response) {
+									var result = response.json;
+									if (result != null && result.nodeRef != null) {
+										this.documentNodeRef = result.nodeRef;
+										this.loadDocumentAttachments();
+									}
+								},
+								scope: this
+							}
+						});
+					} else {
+						this.documentNodeRef = this.options.itemId;
+						this.loadDocumentAttachments();
+					}
 				}
 			},
 
 			loadDocumentAttachments: function() {
-				if (this.options.taskId != null) {
+				if (this.options.itemId != null) {
 					Alfresco.util.Ajax.request({
 						method: "GET",
 						url: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/document/attachments/api/get?documentNodeRef=" + this.documentNodeRef + "&showEmptyCategory=true",

@@ -2,6 +2,13 @@
 
 <#assign params = field.control.params/>
 
+
+<#if params.forTask?? && params.forTask == "true">
+    <#assign forTask = true>
+<#else>
+    <#assign forTask = false>
+</#if>
+
 <div class="control document-preview">
 	<script type="text/javascript">//<![CDATA[
 	(function() {
@@ -30,7 +37,8 @@
 		function createControl() {
 			var control = new LogicECM.module.Documents.DocumentPreviewControl("${fieldHtmlId}").setMessages(${messages});
 			control.setOptions({
-				taskId: "${form.arguments.itemId}"
+				itemId: "${form.arguments.itemId}",
+				forTask: ${forTask?string}
 			});
 		}
 		
