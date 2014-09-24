@@ -87,6 +87,10 @@
     display: block;
 }
 
+.datagrid div.action-set div.more-actions {
+    margin-top: 20px;
+}
+
 .datagrid .expandRow a {
     background-image: url("/share/res/images/lecm-base/components/triangle_down.png");
 }
