@@ -1,0 +1,7 @@
+.stages-control .datagrid .grid {
+    overflow: hidden;
+}
+.stagesDatagridExpanded {
+    height: auto;
+    padding: 0 5px 5px 10px;
+}

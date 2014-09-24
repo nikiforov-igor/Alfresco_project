@@ -16,7 +16,9 @@
 			'scripts/lecm-base/components/lecm-datagrid.js',
 			'scripts/lecm-workflow/routes/stages-control.js'
 		],
-		[], createDatagrid);
+		[
+            'css/lecm-workflow/stages-control.css'
+        ], createDatagrid);
 	}
 
 	function createDatagrid() {
@@ -85,7 +87,7 @@
 })();
 </script>
 
-<div class='form-field'>
+<div class='form-field stages-control'>
 	<div id='${controlId}'>
 		<@grid.datagrid controlId false />
 	</div>
