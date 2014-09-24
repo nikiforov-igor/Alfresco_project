@@ -1523,12 +1523,15 @@ LogicECM.module = LogicECM.module || {};
 			}
 
 			// call the pickerchildren data webscript
-			this.widgets.dataSource.sendRequest(url,
-				{
-					success: successHandler,
-					failure: failureHandler,
-					scope: this
-				});
+            //if widget is active and not destroyed!!!
+            if (this.widgets.dataSource) {
+                this.widgets.dataSource.sendRequest(url,
+                    {
+                        success: successHandler,
+                        failure: failureHandler,
+                        scope: this
+                    });
+            }
 		},
 
         _generateChildrenUrlPath: function AssociationTreeViewer__generatePickerChildrenUrlPath(nodeRef)
