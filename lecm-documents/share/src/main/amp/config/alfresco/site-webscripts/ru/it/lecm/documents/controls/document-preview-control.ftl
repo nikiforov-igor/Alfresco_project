@@ -3,10 +3,10 @@
 <#assign params = field.control.params/>
 
 
-<#if params.forTask?? && params.forTask == "true">
-    <#assign forTask = true>
-<#else>
+<#if params.forTask?? && params.forTask == "false">
     <#assign forTask = false>
+<#else>
+    <#assign forTask = true>
 </#if>
 
 <div class="control document-preview">
