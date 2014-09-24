@@ -65,9 +65,16 @@ function init() {
     drawForm(LogicECM.module.BusinessJournal.ARCHIVER_SETTINGS_REF);
 }
 
-Event.onDOMReady(init);
+function loadResources() {
+    LogicECM.module.Base.Util.loadResources([], [
+        'css/lecm-business-journal/bj-archiver-settings.css'
+    ], init);
+}
+
+Event.onDOMReady(loadResources);
+
 //]]></script>
 
-<div id="${id}">
+<div id="${id}" class="bj-archiver-settings">
     <div id="${id}-content"></div>
 </div>
