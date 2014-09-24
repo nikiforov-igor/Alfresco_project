@@ -234,6 +234,7 @@
 	    },
 	    </#if>
         itemType: "${field.control.params.endpointType ! field.endpointType}",
+	    additionalFilter: "${field.control.params.additionalFilter!''}",
 	    showAssocViewForm: ${showAssocViewForm?string},
 	    checkType: ${checkType?string},
 		fieldId: "${field.configName}",
