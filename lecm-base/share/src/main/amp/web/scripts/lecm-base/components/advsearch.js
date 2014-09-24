@@ -362,10 +362,9 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
                         // Our session has likely timed-out, so refresh to offer the login page
                         window.location.reload();
                     } else {
-	                    Alfresco.util.PopupManager.displayMessage(
-		                    {
-			                    text:me.msg("message.datagrid.load-data.failure")
-		                    });
+	                    if (console) {
+                            console.log(oResponse.responseText);
+                        }
                     }
                 }
 
