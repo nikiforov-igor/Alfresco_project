@@ -28,6 +28,7 @@
 			showExtendSearchBlock: false,
 			showCheckboxColumn: false,
 			bubblingLabel: controlId,
+			overrideSortingWith: false,
 			expandable: true,
 			forceSubscribing: true,
 			excludeColumns: ["lecmApproveAspects:approvalState"],
