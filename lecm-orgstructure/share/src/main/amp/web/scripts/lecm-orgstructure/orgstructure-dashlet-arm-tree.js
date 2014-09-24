@@ -103,7 +103,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                     sUrl += "?nodeRef=" + encodeURI(node.data.nodeRef);
                 }
                 if (this.searchTerm != null && this.searchTerm.length > 0) {
-                    sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURI(this.searchTerm.trim()));
+                    sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "searchTerm=" + encodeURIComponent(this.searchTerm.trim()));
                 }
                 sUrl += ((sUrl.indexOf("?") > 0 ? "&" : "?") + "dashletFormat=true");
                 var otree = this;

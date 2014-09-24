@@ -98,6 +98,8 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
         List<NodeRef> childs;
         if (searchTerm == null) {
             childs = orgstructureService.getSubUnits(currentRef, true, false, true);
+        } else if ("".equals(searchTerm.trim())){
+            childs = new ArrayList<>();
         } else {
             SearchParameters sp = buildOrgArmSearchParameters(UNITS_BY_TERM_QUERY, searchTerm);
             ResultSet results = null;
@@ -140,6 +142,8 @@ public class OrgstrDicWebScriptBean extends AbstractWebScript {
         List<JSONObject> employees = new ArrayList<>();
         if (searchTerm == null) {
             childs = orgstructureService.getUnitEmployees(currentRef, true);
+        } else if ("".equals(searchTerm.trim())){
+            childs = new ArrayList<>();
         } else {
             SearchParameters sp = buildOrgArmSearchParameters(EMPLOYEES_BY_TERM_QUERY, searchTerm);
             ResultSet results = null;
