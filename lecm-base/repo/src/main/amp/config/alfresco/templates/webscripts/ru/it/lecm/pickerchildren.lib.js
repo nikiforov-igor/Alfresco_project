@@ -142,13 +142,13 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
                     ignoreTypes = argsFilterType;
                 }
 
-                var doNotCheck = (doNotCheckAccess != null && (("" + doNotCheckAccess) == "true")) || !useOnlyInSameOrg;
+                var doNotCheck = doNotCheckAccess != null && (("" + doNotCheckAccess) == "true");
                 var childType = null;
                 if (showNotSelectable != "true") { //включим фильтрацию по типам/аспектам
                     childType = argsSelectableType;
                 }
                 //параметры метода - родитель, тип элементов, игнорируемые типы, макс число результатов, сдвиг, поле для сортировки, направление сортировка, только активные, проверять ли доступ по организации
-                childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck).page;
+                childNodes = base.getChilds(parent, childType, ignoreTypes, maxResults, skipCount, sortProp, true, true, doNotCheck, useOnlyInSameOrg).page;
 			} else {
 				var parentXPath = null;
 				if (parent != null) {
