@@ -18,6 +18,7 @@ import org.alfresco.util.FileNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.base.beans.BaseBean;
+import ru.it.lecm.base.beans.WriteTransactionNeededException;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
 import ru.it.lecm.businessjournal.beans.EventCategory;
 import ru.it.lecm.documents.beans.DocumentAttachmentsService;
@@ -26,7 +27,6 @@ import ru.it.lecm.documents.beans.DocumentTableService;
 
 import java.io.Serializable;
 import java.util.*;
-import ru.it.lecm.base.beans.WriteTransactionNeededException;
 
 /**
  * User: AIvkin
@@ -196,7 +196,7 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 
 		//Обновление данных для поиска
-		addSearchDescription(tableData, childAssocRef.getChildRef());
+		recalculateSearchDescription(tableData);
 
 		//Логгирование в бизнес-журнал
 		NodeRef document = documentTableService.getDocumentByTableData(tableData);
@@ -428,34 +428,41 @@ public class DocumentTablePolicy extends BaseBean {
 		}
 	}
 
-	private void addSearchDescription(NodeRef tableData, NodeRef tableDataRow) {
-		NodeRef document = documentTableService.getDocumentByTableData(tableData);
-		QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
-		if (documentTableTextContentProperty != null) {
-			Serializable oldValue = nodeService.getProperty(document, documentTableTextContentProperty);
-			StringBuilder strOldValue = new StringBuilder(oldValue != null ? oldValue.toString() : "");
-			String strNewValue = getDataRowContent(tableDataRow);
-			if (!strNewValue.isEmpty() && strOldValue.indexOf(strNewValue) != -1) {
-				strOldValue.append(strNewValue).append(";");
-			}
-			nodeService.setProperty(document, documentTableTextContentProperty, strOldValue.toString());
-		}
-	}
-
 	private void recalculateSearchDescription(NodeRef tableData) {
-		StringBuilder builder = new StringBuilder();
+		StringBuilder textContentBuilder = new StringBuilder();
 		NodeRef document = documentTableService.getDocumentByTableData(tableData);
 		QName documentTableTextContentProperty = getDocumentTableTextContentProperty(tableData);
+        //получаем карту соответствия атрибутов строки и документа
+        Map<String, QName> tableIndexProperties = getDocumentTableIndexProperties(tableData);
+        HashMap<QName, StringBuilder> indexPropertiesBuilders = new HashMap<>();    //здесь будем собирать тексты
 		if (documentTableTextContentProperty != null) {
 			List<NodeRef> tableDataRows = documentTableService.getTableDataRows(tableData);
 			for (NodeRef tableDataRow : tableDataRows) {
 				if (tableDataRow != null) {
-					builder.append(getDataRowContent(tableDataRow)).append(";");
-				}
+					textContentBuilder.append(getDataRowContent(tableDataRow)).append(";"); //свойство с данными всех строк, возможно больше не требуется
+                    Map<QName, Serializable> rowProperties = nodeService.getProperties(tableDataRow);
+                    for (Map.Entry<QName, Serializable> rowProp : rowProperties.entrySet()) {
+                        //ищем подходящие атрибуты
+                        QName docProp = tableIndexProperties.get(rowProp.getKey().getLocalName());
+                        if (docProp != null) {
+                            //дописываем в соответствующие свойства
+                            if (indexPropertiesBuilders.get(docProp) == null) {
+                                indexPropertiesBuilders.put(docProp, new StringBuilder(rowProp.getValue() + ";"));
+                            } else {
+                                indexPropertiesBuilders.get(docProp).append(rowProp.getValue()).append(";");
+                            }
+                        }
+                    }
+                }
 			}
-			nodeService.setProperty(document, documentTableTextContentProperty, builder.toString());
-		}
-	}
+            //сохраняем собраные свойства
+            for (QName qName : tableIndexProperties.values()) {
+                StringBuilder value = indexPropertiesBuilders.get(qName);
+                nodeService.setProperty(document, qName, value == null ? null : value.toString());
+            }
+            nodeService.setProperty(document, documentTableTextContentProperty, textContentBuilder.toString());
+        }
+    }
 
 	private QName getDocumentTableTextContentProperty(NodeRef tableData) {
 		NodeRef document = documentTableService.getDocumentByTableData(tableData);
@@ -476,6 +483,46 @@ public class DocumentTablePolicy extends BaseBean {
 			}
 		}
 		return null;
+	}
+
+    /**
+     * Найти все свойства документа, в которые необходимо "пробрасывать" соответствующие свойства из записей таблицы
+     * Имена этих свойств должны быть вида <имя ассоциации на таблицу>-<имя атрибута в строке>
+     *
+     * @param tableData таблица
+     * @return карта вида <localName свойства записи таблицы, QName свойства документа
+     */
+	private Map<String, QName> getDocumentTableIndexProperties(NodeRef tableData) {
+        Map<String, QName> map = new HashMap<>();
+		NodeRef document = documentTableService.getDocumentByTableData(tableData);
+		QName documentToTableDataAssociation = null;
+		if (document != null) {
+            //получаем название ассоциации на табличные данные
+			for (AssociationRef associationRef : nodeService.getSourceAssocs(tableData, RegexQNamePattern.MATCH_ALL)) {
+				if (document.equals(associationRef.getSourceRef())) {
+					documentToTableDataAssociation = associationRef.getTypeQName();
+					break;
+				}
+			}
+			if (documentToTableDataAssociation != null) {
+                String documentToTableDataAssociationLocalName = documentToTableDataAssociation.getLocalName();
+                int beginIndex = documentToTableDataAssociationLocalName.length() + 1;
+                QName documentType = nodeService.getType(document);
+                Map<QName, PropertyDefinition> allProperties = dictionaryService.getPropertyDefs(documentType);
+                if (allProperties != null) {
+                    //перебираем все свойства документа
+                    for (QName property : allProperties.keySet()) {
+                        String localName = property.getLocalName();
+                        //запоминаем те, которые начинаются с имени ассоциации
+                        if (localName.startsWith(documentToTableDataAssociationLocalName)) {
+                            map.put(localName.substring(beginIndex), property);
+                        }
+                    }
+                }
+			}
+		}
+
+        return map;
 	}
 
 	private String getDataRowContent(NodeRef node) {
