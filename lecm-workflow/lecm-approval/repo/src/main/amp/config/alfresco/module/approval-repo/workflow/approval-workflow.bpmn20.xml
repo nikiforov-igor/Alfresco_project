@@ -247,7 +247,9 @@
   var attachment = task.getVariableLocal('lecmApprove3_commentAssoc');
   var stageItem = realExecution.getVariableLocal('currentStageItem');
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
-  var document, documentLink, msg, employee, initiator;
+  var document = bpm_package.children[0];
+  var employee = task.getVariableLocal('effectiveEmployee');
+  var documentLink, msg, initiator;
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
     attachment.move(stageItem);
@@ -258,12 +260,13 @@
   stageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   stageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
   stageItem.save();
-  /* возможно будетдобавление в участники */
+  /* отбираем ранее нарезанные права */
+  /* lecmPermission.revokeDynamicRole(document, employee, 'LECM_APPROVER_DYN'); */
+  /* добавляем в участники как читателя */
+  documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
   /* уведомление о согласовании */
   if (notifyAboutEveryDecision) {
-    document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    employee = task.getVariableLocal('effectiveEmployee');
     initiator = realExecution.getVariable('initiatorEmployee');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
@@ -386,7 +389,9 @@
   var routeInterruptAfterReject = realExecution.getVariable('routeInterruptAfterReject').booleanValue();
   var isCompleted = routeInterruptAfterReject && decision == 'REJECTED';
   var notifyAboutEveryDecision = realExecution.getVariable('routeNotifyAboutEveryDecision').booleanValue();
-  var document, documentLink, msg, employee, initiator;
+  var document = bpm_package.children[0];
+  var employee = task.getVariableLocal('effectiveEmployee');
+  var documentLink, msg, initiator;
   task.setVariable('isCompleted', isCompleted);
   /* внутрь stageItem перемещаем загруженный файл с комментарием */
   if (attachment) {
@@ -398,12 +403,13 @@
   currentStageItem.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
   currentStageItem.properties['lecmApproveAspects:hasComment'] = !!(comment || attachment);
   currentStageItem.save();
-  /* возможно будет добавление в участники */
+  /* отбираем ранее нарезанные права */
+  /* lecmPermission.revokeDynamicRole(document, employee, 'LECM_APPROVER_DYN'); */
+  /* добавляем в участники как читателя */
+  documentMembers.addMemberWithoutCheckPermission(document, employee, 'LECM_BASIC_PG_Reader', true);
   /* уведомление о согласовании */
   if (notifyAboutEveryDecision) {
-    document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
-    employee = task.getVariableLocal('effectiveEmployee');
     initiator = realExecution.getVariable('initiatorEmployee');
     msg = 'Сотрудник ' + employee.properties['lecm-orgstr:employee-short-name'] + ' принял решение по согласованию документа ' + documentLink;
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);

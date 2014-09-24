@@ -4483,7 +4483,7 @@ if (contractAssocs != null && contractAssocs.length == 1) {
                                         <properties>
                                             <property>
                                                 <name>permissionTypeValue</name>
-                                                <value><![CDATA[LECM_BASIC_PG_ActionPerformer]]></value>
+                                                <value><![CDATA[LECM_BASIC_PG_Reviewer]]></value>
                                             </property>
                                         </properties>
                                         <aspects>
