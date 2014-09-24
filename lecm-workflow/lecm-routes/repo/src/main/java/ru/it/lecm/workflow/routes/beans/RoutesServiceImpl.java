@@ -137,6 +137,14 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			NodeRef archivedIteration = nodeService.moveNode(documentCurrentIteration, documentApprovalHistoryFolder, ContentModel.ASSOC_CONTAINS, getRandomQName()).getChildRef();
 			nodeService.setProperty(archivedIteration, ContentModel.PROP_TITLE, "Итерация " + (archiveSize + 1));
 
+			List<NodeRef> stagesOfArchivedIteration = getAllStagesOfRoute(archivedIteration);
+			for (NodeRef stage : stagesOfArchivedIteration) {
+				boolean stageIsTemp = nodeService.hasAspect(stage, ContentModel.ASPECT_TEMPORARY);
+				if (stageIsTemp) {
+					nodeService.deleteNode(stage);
+				}
+			}
+
 			result = true;
 		} else {
 			result = false;

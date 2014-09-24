@@ -266,6 +266,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					sort: 'cm:created|true',
 					searchConfig: {
 						filter: '-ASPECT:"sys:temporary" AND -ASPECT:"lecm-workflow:temp"'
+					},
+					actionsConfig: {
+						fullDelete: true,
+						trash: false
 					}
 				},
 				bubblingLabel: this.id
