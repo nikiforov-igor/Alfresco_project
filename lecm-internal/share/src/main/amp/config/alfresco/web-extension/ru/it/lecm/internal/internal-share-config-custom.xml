@@ -487,7 +487,11 @@
                     <show id="lecm-document:subject-assoc"/>
                     <show id="lecm-document-aspects:response-to-assoc"/>
                     <show id="lecm-document-aspects:reg-data-number"/>
+					<show id="lecm-contract:approval"/>
                 </field-visibility>
+				<appearance>
+					<field id="lecm-contract:approval" label="Согласование"/>
+				</appearance>
             </form>
         </forms>
     </config>

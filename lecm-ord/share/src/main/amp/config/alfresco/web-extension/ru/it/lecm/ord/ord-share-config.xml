@@ -107,7 +107,11 @@
                     <show id="lecm-ord:accepted-assoc"/>                                                                <!-- Принимаемые документы -->
                     <show id="lecm-ord-table-structure:items-assoc"/>
                     <show id="lecm-document:regnum"/>
+					<show id="lecm-contract:approval"/>
                 </field-visibility>
+				<appearance>
+					<field id="lecm-contract:approval" label="Согласование"/>
+				</appearance>
             </form>
 
             <!-- Форма атрибутивного поиска -->

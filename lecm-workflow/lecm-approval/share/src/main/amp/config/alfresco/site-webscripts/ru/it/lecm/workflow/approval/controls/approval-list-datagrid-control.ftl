@@ -5,6 +5,7 @@
 <#assign itemId = args.itemId/>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "approval-list-main">
+<#assign editable = ((params.editable!"false") == "true") && !(field.disabled)>
 
 <div id='${controlId}' class='hidden'>
 
@@ -13,6 +14,7 @@
 		<a id="${controlId}-show-history-link" href="javascript:void(0)" class="hidden">Смотреть историю</a>
 	</div>
 
+	<#if editable>
 	<span id="${controlId}-create-approval-list-button" class="yui-button yui-push-button hidden">
 		<span class="first-child">
 			<button type="button">Создать новое согласование</button>
@@ -23,10 +25,11 @@
 			<button type="button">Очистить данные согласования</button>
 		</span>
 	</span>
+	</#if>
 
 	<div id="${controlId}-approval-container" class="approvalContainer hidden">
 		<div class="approvalControlsContainer">
-			<a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a>
+			<#if editable><a id="editIteration" class="editIteration" href="javascript:void(0);" title="Редактировать"></a></#if>
 			<a id="printApprovalReport" class="printApprovalReport" href="javascript:void(0);" title="Печать"></a>
 		</div>
 
@@ -41,11 +44,13 @@
 			</div>
 		</div>
 
+		<#if editable>
 		<span id="${controlId}-add-stage" class="yui-button yui-push-button hidden addStageButton">
 			<span class="first-child">
 				<button type="button">Добавить этап</button>
 			</span>
 		</span>
+		</#if>
 		<div></div>
 		<@grid.datagrid controlId false />
 	</div>
@@ -71,7 +76,7 @@
 			expandable: true,
 			expandDataSource: 'ru/it/lecm/workflow/routes/stages/stageExpanded',
 			expandDataObj: {
-				editable: true,
+				editable: ${editable?string},
 				isApproval: true
 			},
 			datagridMeta: {
@@ -80,7 +85,7 @@
 					trash: false
 				}
 			},
-			showActionColumn: true,
+			showActionColumn: ${editable?string},
 			actions: [{
 				type:"datagrid-action-link-" + controlId,
 				id:"onActionAddEmployee",

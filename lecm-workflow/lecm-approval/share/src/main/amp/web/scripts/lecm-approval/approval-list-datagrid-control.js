@@ -10,38 +10,43 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 (function () {
 
 	LogicECM.module.Approval.ApprovalListDataGridControl = function (containerId, documentNodeRef) {
+		var createApprovalListButtonElement, addStageButtonElement, clearButtonElement;
 		this.documentNodeRef = documentNodeRef;
 
-		this.createApprovalListButton = new YAHOO.widget.Button(containerId + '-create-approval-list-button', {
-			type: 'menu',
-			menu: [{
-					text: this.msg('label.button.create.approval.from.route'),
-					value: 'route',
-					disabled: false,
-					onclick: {
-						fn: this.onCreateApprovalListButtonClick,
-						scope: this
-					}
-				}, {
-					text: this.msg('label.button.create.approval.empty'),
-					value: 'empty',
-					disabled: false,
-					onclick: {
-						fn: this.onCreateApprovalListButtonClick,
-						scope: this
-					}
-				}],
-			disabled: false
-		});
+		createApprovalListButtonElement = YAHOO.util.Dom.get(containerId + '-create-approval-list-button');
+		if (createApprovalListButtonElement) {
+			this.createApprovalListButton = new YAHOO.widget.Button(createApprovalListButtonElement, {
+				type: 'menu',
+				menu: [{
+						text: this.msg('label.button.create.approval.from.route'),
+						value: 'route',
+						disabled: false,
+						onclick: {
+							fn: this.onCreateApprovalListButtonClick,
+							scope: this
+						}
+					}, {
+						text: this.msg('label.button.create.approval.empty'),
+						value: 'empty',
+						disabled: false,
+						onclick: {
+							fn: this.onCreateApprovalListButtonClick,
+							scope: this
+						}
+					}],
+				disabled: false
+			});
+		}
 
-		this.addStageButton = new YAHOO.widget.Button(containerId + '-add-stage');
-
-		if (this.addStageButton) {
+		addStageButtonElement = YAHOO.util.Dom.get(containerId + '-add-stage');
+		if (addStageButtonElement) {
+			this.addStageButton = new YAHOO.widget.Button(addStageButtonElement);
 			this.addStageButton.on('click', this.onAddStageButton, this, true);
 		}
 
-		this.clearButton = new YAHOO.widget.Button(containerId + '-clear-button');
-		if (this.clearButton) {
+		clearButtonElement = YAHOO.util.Dom.get(containerId + '-clear-button');
+		if (clearButtonElement) {
+			this.clearButton = new YAHOO.widget.Button(clearButtonElement);
 			this.clearButton.on('click', this.onClearButton, this, true);
 		}
 
