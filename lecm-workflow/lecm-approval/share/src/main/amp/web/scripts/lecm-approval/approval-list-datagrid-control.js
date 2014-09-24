@@ -63,11 +63,6 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.editIteration();
 		}, '#editIteration', this, true);
 
-		this.getApprovalData(function () {
-			this.fillCurrentApprovalState();
-			this.manageControlsVisibility();
-		});
-
 		this.approvalStateSettings.NOT_EXITS.hideElements = [
 			this.clearButton,
 			this.approvalContainer
@@ -103,6 +98,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.approvalContainer,
 			this.createApprovalListButton
 		];
+
+		this.renewDatagrid();
 
 		YAHOO.Bubbling.on('activeTabChange', this.renewDatagrid, this);
 		YAHOO.Bubbling.on('stageItemDeleted', function () {
@@ -253,6 +250,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					this.fillCurrentApprovalState();
 					this.manageControlsVisibility();
 					this.fireGridChanged();
+					YAHOO.util.Dom.removeClass(this.id, 'hidden');
 				});
 			} else {
 				this.fireGridChanged();

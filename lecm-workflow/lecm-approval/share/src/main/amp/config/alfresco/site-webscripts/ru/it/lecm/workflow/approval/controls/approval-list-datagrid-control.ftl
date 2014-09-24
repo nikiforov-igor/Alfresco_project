@@ -6,7 +6,7 @@
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "approval-list-main">
 
-<div id='${controlId}'>
+<div id='${controlId}' class='hidden'>
 
 	<div class="approvalFinishedContainer">
 		Завершено согласований: <span id="${controlId}-approval-completed-count"></span>
