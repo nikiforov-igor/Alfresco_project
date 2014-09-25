@@ -91,7 +91,7 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
                 if(currentContractorParentType.equals(Contractors.TYPE_CONTRACTOR)) {
                     Serializable currentContractorParentINN = nodeService.getProperty(currentContractorParentRef, Contractors.PROP_CONTRACTOR_INN);
                     // Если у материнской компании есть ИНН
-                    if(!currentContractorParentINN.toString().isEmpty()) {
+                    if(currentContractorParentINN != null && !currentContractorParentINN.toString().isEmpty()) {
                         // То "унаследуем" ИНН от материнской компании
                         nodeService.setProperty(contractor, Contractors.PROP_CONTRACTOR_INN, currentContractorParentINN);
                     }
