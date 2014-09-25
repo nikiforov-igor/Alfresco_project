@@ -249,7 +249,6 @@
 							<control-param name="showCreateNewButton">false</control-param>
 							<control-param name="employeeAbsenceMarker">false</control-param>
 							<control-param name="endpointMany">true</control-param>
-							<control-param name="useStrictFilterByOrg">true</control-param>
 						</control>
 					</field>
 				</appearance>
