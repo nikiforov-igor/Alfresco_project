@@ -424,8 +424,8 @@ public class LocalBusinessJournalServiceImpl extends AbstractBusinessJournalServ
         for (NodeRef status : eventStatus) {
             for (int i = 0; i < result.size(); i++) {
                 String strNodeRef = (String) nodeService.getProperty(result.get(i), PROP_BR_RECORD_EVENT_CAT);
-                NodeRef property = new NodeRef(strNodeRef);
-                if (property != null) {
+                if (strNodeRef != null && NodeRef.isNodeRef(strNodeRef)) {
+                    NodeRef property = new NodeRef(strNodeRef);
                     if (status.equals(property)) {
                         resultStatus.add(result.get(i));
 
