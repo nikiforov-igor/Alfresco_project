@@ -60,6 +60,14 @@
 					<type>d:boolean</type>
 					<default>false</default>
 				</property>
+				<property name="lecmWorkflowRoutes:routeStartDate">
+					<title>Дата начала согласования по маршруту</title>
+					<type>d:datetime</type>
+				</property>
+				<property name="lecmWorkflowRoutes:routeCompleteDate">
+					<title>Дата окончания согласования по маршруту</title>
+					<type>d:datetime</type>
+				</property>
 			</properties>
 			<associations>
 				<association name="lecmWorkflowRoutes:routeOrganizationUnitAssoc">

@@ -64,6 +64,7 @@
     }
     currentIteration.properties['lecmApproveAspects:approvalState'] = 'COMPLETE';
     currentIteration.properties['lecmApproveAspects:approvalDecision'] = approvalDecision;
+    currentIteration.properties['lecmWorkflowRoutes:routeCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
     currentIteration.save();
     /* уведомление о завершении согласования */
     notifications.sendNotification([initiator.nodeRef.toString()], msg, document);
@@ -92,6 +93,7 @@
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
+  currentIteration.properties['lecmWorkflowRoutes:routeStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentIteration.save();
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
