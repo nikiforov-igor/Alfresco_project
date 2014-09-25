@@ -938,28 +938,30 @@ LogicECM.module.Workflow = LogicECM.module.Workflow || {};
 		 * Показывает форму создания типа, который отображает датагрид. Destination для формы тот же, что у датагрида.
 		 */
 		_onAddAssigneeButtonClick: function() {
-			var ignoreNodesArray = this._getIgnoreNodes();
-			var ignoreNodesString = ignoreNodesArray.join();
-
-			var allowedNodesArray = this._getAllowedNodes();
-			var allowedNodesString = allowedNodesArray.join();
+			var ignoreNodesString = this._getIgnoreNodes().join();
+			var allowedNodesString = this._getAllowedNodes().join();
+			var templateRequestParams = {
+				itemKind: 'type',
+				itemId: 'lecm-workflow:assignee',
+				destination: this.options.currentListRef,
+				formId: this._getFormId(),
+				mode: 'create',
+				submitType: 'json',
+				showCancelButton: 'true'
+			};
+			if (ignoreNodesString) {
+				templateRequestParams.ignoreNodes = ignoreNodesString;
+			}
+			if (allowedNodesString) {
+				templateRequestParams.allowedNodes = allowedNodesString;
+			}
 
 			this.widgets.formAddAssignee = new Alfresco.module.SimpleDialog(this.options.namespaceId + '-form-add-assignee');
 
 			this.widgets.formAddAssignee.setOptions({
 				width: '50em',
 				templateUrl: Alfresco.constants.URL_SERVICECONTEXT + 'lecm/components/form',
-				templateRequestParams: {
-					itemKind: 'type',
-					itemId: 'lecm-workflow:assignee',
-					destination: this.options.currentListRef,
-					formId: this._getFormId(),
-					mode: 'create',
-					submitType: 'json',
-					showCancelButton: 'true',
-					ignoreNodes: ignoreNodesString,
-					allowedNodes: allowedNodesArray
-				},
+				templateRequestParams: templateRequestParams,
 				destroyOnHide: true,
 				doBeforeDialogShow: {
 					scope: this,
