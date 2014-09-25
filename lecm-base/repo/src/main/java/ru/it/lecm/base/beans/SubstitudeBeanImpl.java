@@ -881,7 +881,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                                 QName.createQName(assocType, namespaceService), null, ASSOCIATION_TYPE.SOURCE);
                         if (showNodes.isEmpty()) {
                             logger.debug("Не удалось получить список Source ассоциаций для [" + nextNode.toString() + "]");
-                            break;
+                            continue;
                         }
                     } else {
                         showNodes.add(nodeService.getPrimaryParent(nextNode).getParentRef());
@@ -890,12 +890,13 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     List<NodeRef> temps = findNodesByAssociationRef(nextNode, QName.createQName(el, namespaceService), null, ASSOCIATION_TYPE.TARGET);
                     if (temps.isEmpty()) {
                         List<ChildAssociationRef> childs = nodeService.getChildAssocs(nextNode, QName.createQName(el, namespaceService), RegexQNamePattern.MATCH_ALL, false);
-                        for (ChildAssociationRef child : childs) {
-                            showNodes.add(child.getChildRef());
-                        }
-                        if (showNodes.isEmpty()) {
+                        if (!childs.isEmpty()) {
+                            for (ChildAssociationRef child : childs) {
+                                showNodes.add(child.getChildRef());
+                            }
+                        } else {
                             logger.debug("Не удалось получить список Child ассоциаций для [" + nextNode.toString() + "]");
-                            break;
+                            continue;
                         }
                     } else {
                         showNodes.addAll(temps);
