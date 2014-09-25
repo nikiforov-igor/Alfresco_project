@@ -89,18 +89,20 @@
         <activiti:field name="script">
           <activiti:string><![CDATA[(function(){ /*старт БП, подготовка переменных */
   var document = bpm_package.children[0];
+  var currentEmployee = orgstructure.getCurrentEmployee();
   /* получение nodeRef-ы на текущую итерацию */
   var currentIteration = routesService.getDocumentCurrentIteration(document);
   /* пометка итерации как активной */
   currentIteration.properties['lecmApproveAspects:approvalState'] = 'ACTIVE';
   currentIteration.properties['lecmWorkflowRoutes:routeStartDate'] = approval.getValueConverter().convertValueForJava(new Date());
   currentIteration.save();
+  currentIteration.createAssociation(currentEmployee, 'lecmWorkflowRoutes:initiatorEmployeeAssoc');
   var routeInterruptAfterReject = currentIteration.properties['lecmWorkflowRoutes:routeInterruptAfterReject'];
   var routeNotifyAboutEveryDecision = currentIteration.properties['lecmWorkflowRoutes:routeNotifyAboutEveryDecision'];
   execution.setVariableLocal('currentIteration', approval.getWorkflowNodeConverter().convertNode(currentIteration.nodeRef));
   execution.setVariable('routeInterruptAfterReject', routeInterruptAfterReject);
   execution.setVariable('routeNotifyAboutEveryDecision', routeNotifyAboutEveryDecision);
-  execution.setVariable('initiatorEmployee', approval.getWorkflowNodeConverter().convertNode(orgstructure.getCurrentEmployee().nodeRef));
+  execution.setVariable('initiatorEmployee', approval.getWorkflowNodeConverter().convertNode(currentEmployee.nodeRef));
   /* привязывание процесса к машине состояний документа */
   approval.connectToStatemachine(document, 'activiti$' + execution.getProcessInstanceId(), 'activiti$' + execution.getProcessDefinition().getKey());
 })();]]></activiti:string>
