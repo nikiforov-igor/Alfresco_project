@@ -5,7 +5,7 @@
 <#assign itemId = args.itemId/>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "approval-list-main">
-<#assign editable = ((params.editable!"false") == "true") && !(field.disabled)>
+<#assign editable = ((params.editable!"true") != "false") && !(field.disabled)>
 
 <div id='${controlId}' class='hidden'>
 
