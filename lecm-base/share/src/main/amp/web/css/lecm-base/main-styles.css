@@ -629,3 +629,22 @@ i.icon-building {
 .yui-skin-lecmTheme .form-container fieldset {
     padding: 1.2em 1.5em 0.5em 1.5em;
 }
+
+/* Переопределяем внешний вид альфресковских контролов в базовой форме */
+.form-fields .form-field.alf-textarea label {
+    float: none;
+}
+.form-fields .form-field.alf-textarea textarea {
+    resize: vertical;
+}
+.form-fields .form-field select {
+    width: 392px;
+}
+.form-fields .form-field.inlineable .current-values {
+    width: 24em;
+    min-height: 24px;
+}
+.form-fields .form-field.inlineable .show-picker.inlineable button {
+    height: 22px;
+    min-height: 22px;
+}

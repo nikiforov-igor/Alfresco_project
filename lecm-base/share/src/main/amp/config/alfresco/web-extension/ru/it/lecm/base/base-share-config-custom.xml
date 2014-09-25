@@ -207,6 +207,30 @@
 		</forms>
 	</config>
 
+    <!-- Переопределяем базовую форму -->
+    <!-- cm:content type (existing nodes) -->
+    <config evaluator="node-type" condition="cm:content">
+        <forms>
+            <!-- Default form configuration for the cm:content type -->
+            <form>
+                <appearance>
+                    <field id="cm:name">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                    <field id="cm:description">
+                        <control template="/org/alfresco/components/form/controls/textarea.ftl" />
+                    </field>
+                    <field id="cm:author">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                    <field id="cm:owner">
+                        <control template="/org/alfresco/components/form/controls/textfield.ftl" />
+                    </field>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 	<config evaluator="model-type" condition="bpm:startTask">
 		<forms>
 			<form id="reassignTask">
