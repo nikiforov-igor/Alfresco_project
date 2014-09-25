@@ -1227,6 +1227,29 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>513d3c3c-455e-432d-8c1a-71b5fbbd5088</name>
+																		<nodeRef>workspace://SpacesStore/c7fe0203-ee22-4617-8b51-79a19c416374</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Внутренний"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4300,6 +4323,29 @@ businessJournal.log(internal.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																			<property>
 																				<name>condition</name>
 																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>27771182-708a-493d-a371-e8dfeb989c78</name>
+																		<nodeRef>workspace://SpacesStore/0ff876c5-81ff-4175-b263-2e02df6e286a</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Внутренний"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Внутренний")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

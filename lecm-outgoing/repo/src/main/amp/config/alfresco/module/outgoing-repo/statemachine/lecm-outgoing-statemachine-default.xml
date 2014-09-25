@@ -1406,6 +1406,29 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>8a480859-e25b-48b6-8075-f5fc12309023</name>
+																		<nodeRef>workspace://SpacesStore/b51e02f0-be11-4ca9-9c57-4742d9aab26c</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -5247,6 +5270,29 @@ businessJournal.log(outgoing.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]
 																			<property>
 																				<name>condition</name>
 																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>14872ec4-ce1c-4bed-bcf3-cdb646221135</name>
+																		<nodeRef>workspace://SpacesStore/51cfac0a-c7a6-426e-92bd-e2e461aaaaf4</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Исходящее"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Исходящее")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

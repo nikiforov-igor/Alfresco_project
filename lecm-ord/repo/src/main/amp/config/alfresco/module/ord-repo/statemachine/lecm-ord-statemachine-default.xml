@@ -1354,6 +1354,29 @@
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>5ee9e527-7bb8-4fac-8c01-2db893c7ae36</name>
+																		<nodeRef>workspace://SpacesStore/312d8b97-a731-41fc-b792-97f4c15730ee</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4368,6 +4391,29 @@ businessJournal.log(ord.nodeRef.toString(), "SEND_DOCUMENT", logText, []);]]></v
 																			<property>
 																				<name>condition</name>
 																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>56683186-d6a7-4f03-8f77-13d994a93d68</name>
+																		<nodeRef>workspace://SpacesStore/2a6f42ad-dd49-49fe-9d72-f8ffebee4c3b</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Документ"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Документ")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>

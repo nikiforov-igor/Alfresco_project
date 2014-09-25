@@ -1909,6 +1909,29 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 																		<roleAssociations/>
 																		<subFolders/>
 																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>c356e0e2-33db-4b7d-83af-a29ea614521f</name>
+																		<nodeRef>workspace://SpacesStore/bbf3ca46-14b7-4b29-bdea-aeae03c48198</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Договор"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Договор")]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
 																</nodes>
 															</subFolder>
 														</subFolders>
@@ -4990,6 +5013,29 @@ notifications.sendNotificationFromCurrentUser(curators, notificationText, contra
 																			<property>
 																				<name>condition</name>
 																				<value><![CDATA[@routesService.hasEmployeesInRoute(doc.nodeRef) and "NEW" == @nodeService.getProperty(@routesService.getDocumentCurrentIteration(doc.nodeRef), T(ru.it.lecm.workflow.approval.api.ApprovalAspectsModel).PROP_APPROVAL_STATE)]]></value>
+																			</property>
+																		</properties>
+																		<aspects/>
+																		<associations/>
+																		<roleAssociations/>
+																		<subFolders/>
+																	</node>
+																	<node>
+																		<type>conditionAccess</type>
+																		<name>08129112-fc87-4fbe-b665-d039ce2dce35</name>
+																		<nodeRef>workspace://SpacesStore/7748efa4-a53c-4dfb-bb72-aa1c2b57d941</nodeRef>
+																		<properties>
+																			<property>
+																				<name>hideAction</name>
+																				<value><![CDATA[false]]></value>
+																			</property>
+																			<property>
+																				<name>conditionErrorMessage</name>
+																				<value><![CDATA[Необходимо добавить вложение в категорию "Договор"]]></value>
+																			</property>
+																			<property>
+																				<name>condition</name>
+																				<value><![CDATA[doc.hasCategoryAttachment("Договор")]]></value>
 																			</property>
 																		</properties>
 																		<aspects/>
