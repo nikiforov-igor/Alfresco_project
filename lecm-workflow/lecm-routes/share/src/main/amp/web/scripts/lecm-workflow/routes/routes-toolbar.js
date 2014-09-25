@@ -140,9 +140,6 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 
 			YAHOO.util.Dom.setStyle(this.id + '-body', 'visibility', 'visible');
 
-			// Спасаем тонущий popup
-			Alfresco.util.PopupManager.zIndex = 10000000;
-
 			Alfresco.logger.info('A new LogicECM.module.Routes.Toolbar has been created');
 		}
 	});

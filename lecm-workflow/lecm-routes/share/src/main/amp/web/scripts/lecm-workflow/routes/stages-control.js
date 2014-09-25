@@ -146,7 +146,8 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 		},
 		onActionEdit: function (item) {
 			var formId = 'editStageForm';
-			var editStageForm = new Alfresco.module.SimpleDialog(this.id + '-' + formId);
+			var editStageFormId = this.id + '-' + formId;
+			var editStageForm = new Alfresco.module.SimpleDialog(editStageFormId);
 
 			editStageForm.setOptions({
 				width: '50em',
@@ -170,8 +171,26 @@ LogicECM.module.Routes = LogicECM.module.Routes || {};
 					},
 					scope: this
 				},
-				successMessage: 'Изменения в этапе сохранены',
-				failureMessage: 'Не удалось сохранить изменения в этапе'
+				onSuccess: {
+					fn: function (response) {
+						// Спасаем тонущий popup
+						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
+						Alfresco.util.PopupManager.displayMessage({
+							text: this.msg('Изменения в этапе сохранены')
+						});
+					},
+					scope: this
+				},
+				onFailure: {
+					fn: function (response) {
+						// Спасаем тонущий popup
+						Alfresco.util.PopupManager.zIndex = YAHOO.util.Dom.get(editStageFormId + '-form-container_c').style['z-index'] + 1;
+						Alfresco.util.PopupManager.displayMessage({
+							text: this.msg('Не удалось сохранить изменения в этапе')
+						});
+					},
+					scope: this
+				}
 			});
 
 			editStageForm.show();

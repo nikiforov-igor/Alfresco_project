@@ -113,9 +113,6 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 
 		LogicECM.module.Approval.ApprovalListDataGridControl.superclass.constructor.call(this, containerId);
 
-		// Спасаем тонущий popup
-		Alfresco.util.PopupManager.zIndex = 10000000;
-
 		this.name = 'LogicECM.module.Approval.ApprovalListDataGridControl';
 
 		return this;
@@ -477,6 +474,9 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		},
 		onActionAddMacros: function (item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
+		},
+		onActionEdit: function(item) {
+			LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionEdit.call(this, item);
 		},
 		onClearButton: function () {
 			var that = this;
