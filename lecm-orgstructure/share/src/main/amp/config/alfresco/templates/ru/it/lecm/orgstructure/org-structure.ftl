@@ -2,9 +2,6 @@
 <#include "/org/alfresco/include/documentlibrary.inc.ftl" />
 <#include "/org/alfresco/components/form/form.dependencies.inc">
     <script type="text/javascript">//<![CDATA[
-    if (typeof LogicECM == "undefined" || !LogicECM) {
-        var LogicECM = {};
-    }
     LogicECM.module = LogicECM.module || {};
     LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
     var response = ${response};

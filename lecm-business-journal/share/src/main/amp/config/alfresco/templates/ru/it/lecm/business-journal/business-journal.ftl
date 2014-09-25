@@ -2,9 +2,6 @@
 	<script type="text/javascript">//<![CDATA[
 		var bjContainer = ${bjContainer};
 
-	    if (typeof LogicECM == "undefined" || !LogicECM) {
-	        var LogicECM = {};
-	    }
 		LogicECM.module = LogicECM.module || {};
 		LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
 		LogicECM.module.BusinessJournal.CONTAINER = LogicECM.module.BusinessJournal.CONTAINER || bjContainer.nodeRef;

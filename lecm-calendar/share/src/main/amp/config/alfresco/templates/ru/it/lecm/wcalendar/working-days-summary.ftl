@@ -5,10 +5,6 @@
 
 var roles = ${roles};
 
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Const = LogicECM.module.WCalendar.Const || {};

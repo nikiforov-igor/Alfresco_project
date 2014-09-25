@@ -1,8 +1,4 @@
 <script type="text/javascript">
-	if (typeof LogicECM == "undefined" || !LogicECM) {
-		var LogicECM = {};
-	}
-
 	LogicECM.module = LogicECM.module || {};
 	LogicECM.module.Routes = LogicECM.module.Routes || {};
 	LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};

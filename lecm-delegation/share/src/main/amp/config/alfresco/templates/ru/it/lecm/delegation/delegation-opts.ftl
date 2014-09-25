@@ -3,9 +3,6 @@
 
 
 <script type="text/javascript">//<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 LogicECM.module.Delegation.Const = LogicECM.module.Delegation.Const || {

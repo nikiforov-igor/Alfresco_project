@@ -6,10 +6,6 @@
 <#-- Далее перечисляются стандартные скрипты из Alfresco -->
 
 <script type="text/javascript">//<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.Delegation = LogicECM.module.Delegation || {};
 

@@ -5,9 +5,6 @@
 <#assign pageId = page.id/>
 
 <script type="text/javascript"> //<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};

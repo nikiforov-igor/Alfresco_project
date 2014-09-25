@@ -3,9 +3,6 @@
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 <#--<@script type="text/javascript" src="${url.context}/res/scripts/lecm-orgstructure/orgstructure-const.js"></@script>-->
 <script type="text/javascript">//<![CDATA[
-    if (typeof LogicECM == "undefined" || !LogicECM) {
-        var LogicECM = {};
-    }
     LogicECM.module = LogicECM.module || {};
     LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};    var response = ${response};
     LogicECM.module.OrgStructure.WORK_ROLES_SETTINGS = response;

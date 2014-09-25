@@ -2,9 +2,6 @@
 <script type="text/javascript">//<![CDATA[
     var bjSettings = ${bjSettings};
 
-    if (typeof LogicECM == "undefined" || !LogicECM) {
-        var LogicECM = {};
-    }
     LogicECM.module = LogicECM.module || {};
     LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
     LogicECM.module.BusinessJournal.ARCHIVER_SETTINGS_REF = LogicECM.module.BusinessJournal.ARCHIVER_SETTINGS_REF || bjSettings.nodeRef;

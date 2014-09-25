@@ -21,6 +21,7 @@
                 'modules/simple-dialog.js',
                 'scripts/lecm-base/components/advsearch.js',
                 'scripts/lecm-base/components/lecm-datagrid.js',
+                'scripts/lecm-calendar/absence/absence-toolbar.js',
                 'scripts/lecm-calendar/calendar/non-working-days-datagrid.js',
                 'scripts/lecm-calendar/calendar/working-days-datagrid.js',
                 'scripts/lecm-calendar/calendar/years-datagrid.js',

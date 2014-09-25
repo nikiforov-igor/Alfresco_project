@@ -2,10 +2,6 @@
 <#-- Скрипты, необходимые для диалоговых форм -->
 <#include "/org/alfresco/components/form/form.dependencies.inc">
 <script type="text/javascript">//<![CDATA[
-if (typeof LogicECM == "undefined" || !LogicECM) {
-	var LogicECM = {};
-}
-
 LogicECM.module = LogicECM.module || {};
 LogicECM.module.WCalendar = LogicECM.module.WCalendar || {};
 LogicECM.module.WCalendar.Calendar = LogicECM.module.WCalendar.Calendar || {};
