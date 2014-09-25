@@ -11,7 +11,7 @@
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-documents/documents-list.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/components/document-metadata-form-edit.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-arm/lecm-arm-documents.css" />
-    <@\link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
+    <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/data-lists/toolbar.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/light-blue-bgr.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/css/lecm-base/components/title-with-filter-label/title-with-filter-label.css" />
     <@link rel="stylesheet" type="text/css" href="${url.context}/res/components/search/search.css" />
