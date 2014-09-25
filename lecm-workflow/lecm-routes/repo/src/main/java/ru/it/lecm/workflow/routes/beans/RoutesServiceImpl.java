@@ -362,6 +362,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 		PropertyMap props = new PropertyMap();
 		props.put(RoutesModel.PROP_ROUTE_EDITABLE, true);
+		props.put(ContentModel.PROP_TITLE, "Индивидуальный маршрут");
 
 		if (approvalFolder == null) {
 			approvalFolder = approvalService.createDocumentApprovalFolder(documentNode);
