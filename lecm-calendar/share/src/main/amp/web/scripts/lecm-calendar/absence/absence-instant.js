@@ -267,7 +267,7 @@ LogicECM.module.WCalendar.Absence = LogicECM.module.WCalendar.Absence || {};
 					});
 
 			instantAbsenceForm.setOptions({
-				width: "50em",
+				width: "60em",
 				templateUrl: templateUrl,
 				destroyOnHide: true,
 				doBeforeDialogShow: {

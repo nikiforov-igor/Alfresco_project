@@ -406,7 +406,7 @@
 				</field-visibility>
 				<appearance>
 					<!--"fieldset", "panel", "bordered-panel", "title" and "whitespace"-->
-					<set id="and-and-unlimited" template="/org/alfresco/components/form/2-column-set.ftl" appearance="" label=""/>
+					<set id="and-and-unlimited" template="/ru/it/lecm/base-share/components/2-columns-set-with-nested.ftl" appearance="" label=""/>
 					<set id="other"/>
 					<field id="lecm-absence:abscent-employee-assoc">
 						<control template="/ru/it/lecm/wcalendar/controls/hidden-current-employee.ftl"/>
