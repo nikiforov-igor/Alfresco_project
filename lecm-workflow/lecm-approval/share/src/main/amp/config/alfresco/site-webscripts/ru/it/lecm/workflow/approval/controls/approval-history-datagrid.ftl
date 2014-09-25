@@ -5,7 +5,7 @@
 <#assign documentNodeRef = args.documentNodeRef/>
 
 <#assign controlId = fieldHtmlId + '-cntrl'>
-<#assign reportId = 'approval-list-history'>
+<#assign reportId = 'lecm-approval-history'>
 
 
 <div id='${controlId}'>

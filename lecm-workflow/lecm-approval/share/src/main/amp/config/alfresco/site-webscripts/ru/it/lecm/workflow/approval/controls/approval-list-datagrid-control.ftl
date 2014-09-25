@@ -4,7 +4,7 @@
 <#assign label = field.label?html/>
 <#assign itemId = args.itemId/>
 <#assign controlId = fieldHtmlId + "-cntrl">
-<#assign reportId = "approval-list-main">
+<#assign reportId = "lecm-approval-list">
 <#assign editable = ((params.editable!"true") != "false") && !(field.disabled)>
 
 <div id='${controlId}' class='hidden'>
