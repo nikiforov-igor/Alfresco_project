@@ -140,7 +140,8 @@
 			setCurrentValue: false,
 			currentValue: "${field.value!''}",
 			itemType:"${field.control.params.itemType!field.endpointType}",
-			additionalFilter: "${field.control.params.additionalFilter!''}"
+			additionalFilter: "${field.control.params.additionalFilter!''}",
+            clearFormsOnStart: false
 		}).setMessages( ${messages} );
 	}
 	YAHOO.util.Event.onDOMReady(init);
@@ -158,7 +159,7 @@
 		<div class="container">
 			<div class="value-div">
 				<input type="hidden" id="${fieldHtmlId}" name="${field.name}" value="${field.value?html}" />
-				<span id="${controlId}-currentValueDisplay" class="mandatory-highlightable">${field.value?html}</span>
+				<span id="${controlId}-Dom.get(this.currentValueHtmlId).value" class="mandatory-highlightable">${field.value?html}</span>
 			</div>
 		</div>
 	</div>
