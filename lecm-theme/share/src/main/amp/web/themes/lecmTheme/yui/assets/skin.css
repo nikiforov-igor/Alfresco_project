@@ -982,26 +982,13 @@ font-size: 100%;
 display: block;
 text-align: right;
 }
-.yui-skin-lecmTheme .yui-dialog .ft button.default {
-font-weight: bold;
-}
-.yui-skin-lecmTheme .yui-dialog .ft span.default {
-border-color: #333;
-background-position: 0 -1400px;
-}
-.yui-skin-lecmTheme .yui-dialog .ft span.default .first-child {
-border-color: #333;
-}
-.yui-skin-lecmTheme .yui-dialog .ft button {
-color: #333;
-background-color: #fff;
-}
+.yui-skin-lecmTheme .yui-dialog .ft button,
 .yui-skin-lecmTheme .yui-dialog .bdft button {
 color: #333;
 background-color: #fff;
 }
 .yui-skin-lecmTheme .yui-dialog .ft span.yui-button-disabled {
-background-position: 0pt -1500px;
+background-position: 0 -1500px;
 border-color: #ccc;
 }
 .yui-skin-lecmTheme .yui-dialog .ft span.yui-button-disabled .first-child {

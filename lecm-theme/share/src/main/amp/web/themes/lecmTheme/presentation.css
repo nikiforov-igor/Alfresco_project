@@ -557,30 +557,6 @@ h4 .lighter
    display: none;
 }
 
-/* Style the default prompt */
-
-.yui-skin-lecmTheme #prompt,
-.yui-skin-lecmTheme #userInput
-{
-   border-top: 1px solid #ccc;
-   border-bottom: 1px solid #ccc;
-   background-color: #fff;
-}
-
-.yui-skin-lecmTheme #prompt .bd,
-.yui-skin-lecmTheme #userInput .bd
-{
-   background-color: #fff;
-}
-
-.yui-skin-lecmTheme #prompt .ft,
-.yui-skin-lecmTheme #userInput .ft
-{
-   border-left: 1px solid #ccc;
-   border-right: 1px solid #ccc;
-   background-color: #eee;
-}
-
 /* Page title and navigation styles */
 
 .page-title
