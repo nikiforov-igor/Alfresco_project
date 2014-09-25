@@ -35,7 +35,7 @@
 					<show id="lecmApprove3:decision"/>
 					<show id="bpm:comment"/>
 					<show id="lecmApprove3:commentAssoc"/>
-					<show id="lecmApprove3:approveTaskBinderFake" force="true"/>
+					<show id="lecmApprove3:approveTaskValidatorFake" force="true"/>
 					<!--<show id="bpm:reassignable"/>-->
 				</field-visibility>
 				<appearance>
@@ -63,10 +63,10 @@
 							<control-param name="uploadDirectoryPath">{usertemp}</control-param>
 						</control>
 					</field>
-					<field id="lecmApprove3:approveTaskBinderFake">
-						<control template="/ru/it/lecm/workflow/approval/controls/approval-task-result-binder.ftl"/>
+					<field id="lecmApprove3:approveTaskValidatorFake">
+						<control template="/ru/it/lecm/workflow/approval/controls/approval-task-result-validator.ftl"/>
 					</field>
-					<!--					<field id="bpm:reassignable" set="right-set">
+					<!--<field id="bpm:reassignable" set="right-set">
 						<control template="/ru/it/lecm/base-share/components/controls/reassign-task-control.ftl"/>
 					</field>-->
 				</appearance>
