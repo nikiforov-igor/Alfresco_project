@@ -188,7 +188,7 @@ LogicECM.module = LogicECM.module || {};
 
 				};
 				LogicECM.CurrentModules = {};
-				LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+				var dialog = LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
 					width: formWidth,
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
@@ -223,7 +223,9 @@ LogicECM.module = LogicECM.module || {};
 							this._chooseState(action.type, this.taskId, response.json.persistedObject, action.actionId);
 						}
 					}
-				}).show();
+				});
+                LogicECM.module.Base.Util.registerDialog(dialog);
+                dialog.show();
 			}
 		},
 		showPromt: function showPromt_action(action) {
@@ -285,7 +287,7 @@ LogicECM.module = LogicECM.module || {};
 
 	                    var me = this;
 	                    LogicECM.CurrentModules = {};
-	                    LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
+	                    var dialog = LogicECM.CurrentModules.WorkflowForm = new Alfresco.module.SimpleDialog("workflow-form").setOptions({
 		                    width: "84em",
 		                    templateUrl: Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form",
 		                    templateRequestParams: templateRequestParams,
@@ -318,7 +320,9 @@ LogicECM.module = LogicECM.module || {};
 			                    scope: this,
 			                    fn: responseHandler
 		                    }
-	                    }).show();
+	                    });
+                        LogicECM.module.Base.Util.registerDialog(dialog);
+                        dialog.show();
                     }
                 } else {
                     var me = this;
@@ -423,7 +427,9 @@ LogicECM.module = LogicECM.module || {};
 						window.location.reload(true);
 					}
 				}
-			}).show();
+			});
+            LogicECM.module.Base.Util.registerDialog(taskDetails);
+            taskDetails.show();
 		},
 		_createScriptForm: function _createScriptFormFunction(action) {
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form/script";
@@ -473,7 +479,9 @@ LogicECM.module = LogicECM.module || {};
 						this.doubleClickLock = false;
 					}
 				}
-			}).show();
+			});
+            LogicECM.module.Base.Util.registerDialog(scriptForm);
+            scriptForm.show();
 		},
 		_chooseState: function(type, taskId, formResponse, actionId) {
 			var template = "{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
@@ -614,7 +622,7 @@ LogicECM.module = LogicECM.module || {};
 					fields: JSON.stringify(fields),
 					showCancelButton: true
 				};
-				new Alfresco.module.SimpleDialog("action-edit-form").setOptions({
+				var dialog = new Alfresco.module.SimpleDialog("action-edit-form").setOptions({
 					width: "70em",
 					templateUrl: templateUrl,
 					templateRequestParams: templateRequestParams,
@@ -637,8 +645,10 @@ LogicECM.module = LogicECM.module || {};
 							window.location.reload(true);
 						}
 					}
-				}).show();
-			}.bind(this);
+				});
+                LogicECM.module.Base.Util.registerDialog(dialog);
+                dialog.show();
+            }.bind(this);
 		}
 
 	});

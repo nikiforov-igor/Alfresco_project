@@ -135,8 +135,11 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 							fn:function(response){
 								Dom.get(this.id + "-preview-container").innerHTML = response.serverResponse.responseText;
                                 var previewId = this.id + "-preview-container-full-window-div";
-
-								Event.onAvailable(previewId, function() {
+                                var dialog = LogicECM.module.Base.Util.getLastDialog();
+                                if (dialog != null) {
+                                    dialog.dialog.center();
+                                }
+                                Event.onAvailable(previewId, function() {
 									var preview = Dom.get(previewId);
 									var container = Dom.get(this.id + "-preview-container-previewer-div");
 

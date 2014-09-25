@@ -657,6 +657,16 @@ LogicECM.module.Base.Util = {
 
     covertNodeRef: function convertNodeRef_function(nodeRef) {
         return nodeRef.replace("://", "/");
+    },
+
+    lastDialog: null,
+
+    registerDialog: function registerDialog_function(dialog) {
+        this.lastDialog = dialog;
+    },
+
+    getLastDialog: function getLastDialog_function() {
+        return this.lastDialog;
     }
 
 };
