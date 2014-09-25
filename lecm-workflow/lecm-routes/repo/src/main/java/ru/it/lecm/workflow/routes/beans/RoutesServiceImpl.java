@@ -47,6 +47,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 	private final static Logger logger = LoggerFactory.getLogger(RoutesServiceImpl.class);
 	public final static String ROUTES_FOLDER_ID = "ROUTES_FOLDER";
 	private final String SEARCH_ROUTES_QUERY_FORMAT = "(+TYPE:\"%s\") AND (-ASPECT:\"sys:temporary\" AND -ASPECT:\"lecm-workflow:temp\") AND (+PARENT:\"%s\") AND (+ISNOTNULL:\"sys:node-dbid\")";
+	private final static String CUSTOM_ITERATION_TITLE = "Индивидуальный маршрут";
 
 	private ApprovalService approvalService;
 	private OrgstructureBean orgstructureService;
@@ -133,9 +134,17 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 			if (documentApprovalHistoryFolder == null) {
 				documentApprovalHistoryFolder = approvalService.createDocumentApprovalHistoryFolder(documentRef);
 			}
-			int archiveSize = nodeService.getChildAssocs(documentApprovalHistoryFolder).size();
+			NodeRef sourceRoute = getSourceRouteForIteration(documentCurrentIteration);
+
 			NodeRef archivedIteration = nodeService.moveNode(documentCurrentIteration, documentApprovalHistoryFolder, ContentModel.ASSOC_CONTAINS, getRandomQName()).getChildRef();
-			nodeService.setProperty(archivedIteration, ContentModel.PROP_TITLE, "Итерация " + (archiveSize + 1));
+			String archivedIterationTitle;
+			if (sourceRoute != null) {
+				archivedIterationTitle = (String) nodeService.getProperty(sourceRoute, ContentModel.PROP_TITLE);
+			} else {
+				archivedIterationTitle = CUSTOM_ITERATION_TITLE;
+			}
+
+			nodeService.setProperty(archivedIteration, ContentModel.PROP_TITLE, archivedIterationTitle);
 
 			List<NodeRef> stagesOfArchivedIteration = getAllStagesOfRoute(archivedIteration);
 			for (NodeRef stage : stagesOfArchivedIteration) {
@@ -362,7 +371,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 
 		PropertyMap props = new PropertyMap();
 		props.put(RoutesModel.PROP_ROUTE_EDITABLE, true);
-		props.put(ContentModel.PROP_TITLE, "Индивидуальный маршрут");
+		props.put(ContentModel.PROP_TITLE, CUSTOM_ITERATION_TITLE);
 
 		if (approvalFolder == null) {
 			approvalFolder = approvalService.createDocumentApprovalFolder(documentNode);
@@ -514,7 +523,7 @@ public class RoutesServiceImpl extends BaseBean implements RoutesService {
 		if (currentIterationRef != null) {
 			List<NodeRef> items = getAllStageItemsOfRoute(currentIterationRef);
 			for (NodeRef stageItemRef : items) {
-				List<AssociationRef> assocs =  nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
+				List<AssociationRef> assocs = nodeService.getTargetAssocs(stageItemRef, RoutesModel.ASSOC_STAGE_ITEM_EMPLOYEE);
 				hasEmployeesInIteration = assocs.size() > 0;
 				if (hasEmployeesInIteration) {
 					break;
