@@ -14,7 +14,6 @@ LogicECM.module.Approval = LogicECM.module.Approval || {};
 	var subscribed = false;
 
 	YAHOO.Bubbling.on('mandatoryControlValueUpdated', function() {
-		debugger;
 		if (!subscribed) {
 			YAHOO.Bubbling.fire('registerValidationHandler', {
 				message: 'Необходимо указать комментарий',
