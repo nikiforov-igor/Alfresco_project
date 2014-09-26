@@ -262,7 +262,7 @@ define(["dojo/_base/declare",
                 });
 
             instantAbsenceForm.setOptions({
-                width: "50em",
+                width: "60em",
                 templateUrl: templateUrl,
                 destroyOnHide: true,
                 doBeforeDialogShow: {
