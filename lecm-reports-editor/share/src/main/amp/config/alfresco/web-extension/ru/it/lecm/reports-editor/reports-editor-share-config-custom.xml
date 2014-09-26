@@ -117,7 +117,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
-                    <field id="lecm-rpeditor:reportCode" help-id="report.code.help"/>
+                    <field id="lecm-rpeditor:reportCode" help-id="report.code.help">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                     <field id="lecm-rpeditor:reportDocType" label-id="label.subReport.type" help-id="report.sub.type.help"/>
                     <field id="lecm-rpeditor:reportObjectsMultiplicity" help-id="report.multiply.help"/>
                     <field id="lecm-rpeditor:reportQuery" label-id="label.subReport.source" help-id="report.sub.source.help">
@@ -164,6 +169,12 @@
                 </field-visibility>
                 <appearance>
                     <field id="cm:name" label-id="label.report.displayName"/>
+                    <field id="lecm-rpeditor:reportCode" help-id="report.code.help">
+                        <control template="/ru/it/lecm/base-share/components/controls/unique.value.ftl"/>
+                        <constraint-handlers>
+                            <constraint type="LECMUNIQUE" validation-handler="LogicECM.validation.uniquenessValidation" event="keyup" />
+                        </constraint-handlers>
+                    </field>
                 </appearance>
             </form>
         </forms>
