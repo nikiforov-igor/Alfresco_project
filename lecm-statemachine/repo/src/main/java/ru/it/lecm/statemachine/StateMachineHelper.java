@@ -1979,6 +1979,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
      * Останавливает процесс по его Id
      * @param processId
      */
+	@Override
     public void terminateProcess(String processId) {
 //        ExecutionEntity process = (ExecutionEntity) activitiProcessEngineConfiguration.getRuntimeService().createProcessInstanceQuery().processInstanceId(processId).singleResult();
 //        //Завершаем процесс

@@ -28,9 +28,7 @@ import ru.it.lecm.security.LecmPermissionService.LecmPermissionGroup;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.alfresco.service.cmr.dictionary.AssociationDefinition;
 
 /**
@@ -184,14 +182,17 @@ public class DocumentsRemovalServiceImpl implements DocumentsRemovalService {
 
 		//останавливаем все workflow в которых участвует этот документ
 		List<WorkflowInstance> workflows = stateMachineService.getDocumentWorkflows(documentRef, true);
-		Set<String> definitions = new HashSet<>();
-		List<String> activities = new ArrayList<>();
 		for (WorkflowInstance workflow : workflows) {
-			definitions.add(workflow.getDefinition().getId());
-			activities.add(String.format("%s(%s)", workflow.getId(), workflow.getDefinition().getId()));
+			try {
+				stateMachineService.terminateProcess(workflow.getId().replace("activiti$", ""));
+				String msg = "Worflow %s(%s) for document %s was stopped";
+				logger.debug(String.format(msg, workflow.getId(), workflow.getDefinition().getId(), documentRef));
+			} catch (Exception ex) {
+				String msg = "Can't stop workflow %s(%s) for document %s. Caused by: %s";
+				logger.warn(String.format(msg, workflow.getId(), workflow.getDefinition().getId(), documentRef, ex.getMessage()));
+				logger.trace("", ex);
+			}
 		}
-		stateMachineService.terminateWorkflowsByDefinitionId(documentRef, new ArrayList<>(definitions), null, null);
-		logger.debug("All workflows {} for document {} are stopped", activities, documentRef);
 
 		try {
 			//получаем все вложения отключаем их policy и удаляем

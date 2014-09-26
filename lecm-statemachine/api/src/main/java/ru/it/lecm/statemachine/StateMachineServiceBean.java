@@ -9,8 +9,8 @@ import java.util.Set;
 
 public interface StateMachineServiceBean {
 
-    public static final String REDIRECT_VARIABLE = "lecm_redirect_url";
-    public static final String ROLE_WITHOUT_PRIVELEGES = "LECM_BASIC_PG_None";
+    String REDIRECT_VARIABLE = "lecm_redirect_url";
+    String ROLE_WITHOUT_PRIVELEGES = "LECM_BASIC_PG_None";
 
     /**
      * Возвращает список категорий для документа с флагами "редактируемый/не редактируемый"
@@ -18,43 +18,43 @@ public interface StateMachineServiceBean {
      * @param document
      * @return
      */
-    public boolean isReadOnlyCategory(NodeRef document, String category);
+    boolean isReadOnlyCategory(NodeRef document, String category);
 
-    public boolean hasActiveStatemachine(NodeRef document);
+    boolean hasActiveStatemachine(NodeRef document);
 
-    public String getCurrentTaskId(String executionId);
+    String getCurrentTaskId(String executionId);
 
     /**
      * Возвращает true, если документ находится в статусе Черновик
      * @param document
      * @return
      */
-    public boolean isDraft(NodeRef document);
+    boolean isDraft(NodeRef document);
 
-    public List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef, boolean isActive);
+    List<WorkflowInstance> getDocumentWorkflows(NodeRef nodeRef, boolean isActive);
 
     /**
      * Возвращает может ли текущий сотрудник создавать документ определенного типа
      * @param type - тип документа
      * @return
      */
-    public boolean isStarter(String type);
+    boolean isStarter(String type);
 
 	/**
 	 * Возвращает можно ли создавать документ определенного типа из АРМ-а
 	 * @param type - тип документа
 	 * @return true - если нельзя создавать из АРМ-а
 	 */
-    public boolean isNotArmCreate(String type);
+    boolean isNotArmCreate(String type);
 
     /**
      * Возвращает список возможных статусов для определенного типа документа
      * @param documentType - тип документа
      * @return
      */
-    public List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
+    List<String> getStatuses(String documentType, boolean includeActive, boolean includeFinal);
 
-    public boolean isFinal(NodeRef document);
+    boolean isFinal(NodeRef document);
 
     /**
      * Выдача сотруднику динамической роли и привелегии согласно текущему статусу документа
@@ -63,44 +63,50 @@ public interface StateMachineServiceBean {
      * @param roleName имя роли
      * @return
      */
-    public boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName);
+    boolean grandDynamicRoleForEmployee(NodeRef document, NodeRef employee, String roleName);
 
     /**
      * @param document - документ
      * @return Имя предыдущего статуса
      */
-    public String getPreviousStatusName(NodeRef document);
+    String getPreviousStatusName(NodeRef document);
 
     /**
      * @param document - документ
      * @return Имя предыдущего статуса для статусов в ожидании
      */
-    public String getPreviousStatusNameOnTake(NodeRef document);
+    String getPreviousStatusNameOnTake(NodeRef document);
 
-    public List<String> getPreviousStatusesNames(NodeRef document);
+    List<String> getPreviousStatusesNames(NodeRef document);
 
-    public String getStatemachineId(NodeRef document);
+    String getStatemachineId(NodeRef document);
 
-    public Map<String, Object> getVariables(String executionId);
+    Map<String, Object> getVariables(String executionId);
 
     /**
      * Возвращает бизнес-роли которые могут создавать документ определенного типа
      * @param documentType - тип документа
      * @return
      */
-    public Set<String> getStarterRoles(String documentType);
+    Set<String> getStarterRoles(String documentType);
 
-    public void checkReadOnlyCategory(NodeRef document, String category);
+    void checkReadOnlyCategory(NodeRef document, String category);
 
-    public boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority);
+    boolean transferRightTask(NodeRef documentRef, String beforeAuthority, String afterAuthority);
 
-    public void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
+	/**
+     * Останавливает процесс по его Id
+     * @param processId
+     */
+    void terminateProcess(String processId);
 
-    public List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays);
+    void terminateWorkflowsByDefinitionId(NodeRef document, List<String> definitionIds, String variable, Object value);
 
-    public void sendSignal(String executionId);
+    List<NodeRef> getDocumentsWithActiveTasks(String employeeLogin, Set<String> workflowIds, Integer remainingDays);
 
-    public boolean isServiceWorkflow(WorkflowInstance workflow);
-    
-    public void resetStateMachene();
+    void sendSignal(String executionId);
+
+    boolean isServiceWorkflow(WorkflowInstance workflow);
+
+    void resetStateMachene();
 }
