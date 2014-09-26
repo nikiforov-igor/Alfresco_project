@@ -53,13 +53,13 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 					width: "50em",
 					templateUrl: "lecm/components/form",
 					templateRequestParams: {
-						/*ignoreNodes: ignoreNodes.join(),*/
-						itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
-						itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
-						formId: "createNewCommonScheduleForm", //The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
-						destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
-						mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
-						submitType: "json", //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
+						ignoreNodes: ignoreNodes.join(), // ignoreNodes нужны!
+						itemKind: "type",
+						itemId: itemType,
+						formId: "createNewCommonScheduleForm",
+						destination: destination,
+						mode: "create",
+						submitType: "json",
 						showCancelButton: true
 					},
 					destroyOnHide: true,
@@ -112,13 +112,13 @@ LogicECM.module.WCalendar.Schedule = LogicECM.module.WCalendar.Schedule || {};
 					width: "50em",
 					templateUrl: "lecm/components/form",
 					templateRequestParams: {
-						ignoreNodes: ignoreNodes.join(),
-						itemKind: "type", //The "kind" of item the form is for, the only supported kind currently is "node".
-						itemId: itemType, //The identifier of the item the form is for, this will be different for each "kind" of item, for "node" it will be a NodeRef.
-						formId: "createNewSpecialScheduleForm", //The form configuration to lookup, refers the id attribute of the form element. If omitted the default form i.e. the form element without an id attribute is used.
-						destination: destination, //Provides a destination for any new items created by the form, when present a hidden field is generated with a name of alf_destination.
-						mode: "create", //The mode the form will be rendered in, valid values are "view", "edit" and "create", the default is "edit".
-						submitType: "json", //The "enctype" to use for the form submission, valid values are "multipart", "json" and "urlencoded", the default is "multipart".
+						ignoreNodes: ignoreNodes.join(), // ignoreNodes нужны!
+						itemKind: "type",
+						itemId: itemType,
+						formId: "createNewSpecialScheduleForm",
+						destination: destination,
+						mode: "create",
+						submitType: "json",
 						showCancelButton: true
 					},
 					actionUrl: Alfresco.constants.PROXY_URI_RELATIVE + "lecm/wcalendar/schedule/set/createSpecialSchedule",
