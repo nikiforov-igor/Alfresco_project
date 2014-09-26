@@ -185,7 +185,7 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 						},
 						onSuccess: {
 							fn: function (response) {
-								window.location.reload();
+                                this.widgets.pagingDataTable.reloadDataTable();
 							},
 							scope: this
 						}
