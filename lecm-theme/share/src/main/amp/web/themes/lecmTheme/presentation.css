@@ -147,6 +147,9 @@ span.wrapper-title {
     margin: 0;
     padding-bottom: 30px;
 }
+#bd #lecm-content-main #lecm-content-main {
+    padding-bottom: 0;
+}
 #bd #lecm-content-ft {
     width: 100%;
     height: 30px;

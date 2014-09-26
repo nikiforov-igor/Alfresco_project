@@ -10,15 +10,8 @@
     function setTreeHeight() {
         var block = Dom.get('orgstructure-tree');
         if (block) {
-            var contentMainDiv = Dom.getAncestorBy(block,
-                function(node) {
-                    return YAHOO.util.Selector.test(node, "#lecm-content-main");
-                });
-            // Для произвольных страниц в администрировании надо учесть, что таких элемента в разметке может быть два,
-            // и нам нужен именно второй - вложенный,
-            // а при обращении по id вернется первый - внешний.
-            var treeHeight = Dom.getY("lecm-content-ft") - Dom.getY(contentMainDiv);
-            Dom.setStyle(block, "position", "inherit");
+            Dom.setStyle(block, "position", "relative");
+            var treeHeight = Dom.getY("lecm-content-ft") - Dom.getY(block);
             Dom.setStyle(block, 'height', treeHeight +'px');
             Dom.setStyle(block, 'width', 'auto');
         }
