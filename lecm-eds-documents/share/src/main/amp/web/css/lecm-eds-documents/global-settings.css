@@ -34,6 +34,10 @@
     padding: 0.5em 0;
 }
 
+.eds-global-settings .control.checkbox-control {
+    margin-left: -2px;
+}
+
 .eds-global-settings .control.checkbox-control .label-div {
     width: 0;
     padding: 0;

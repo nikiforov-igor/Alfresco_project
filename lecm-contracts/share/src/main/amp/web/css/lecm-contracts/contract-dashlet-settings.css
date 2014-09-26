@@ -8,6 +8,10 @@
     padding-bottom: 0.75em;
 }
 
+.contract-dashlet-settings .control.checkbox-control {
+    margin-left: -2px;
+}
+
 .contract-dashlet-settings .control.checkbox-control .label-div {
     width: 0;
     padding: 0;
