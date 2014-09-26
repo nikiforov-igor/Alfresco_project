@@ -20,16 +20,6 @@ TYPE:"lecm-outgoing:document"]]></property>
 			<item name="cm:abfed44e-e1df-412e-9600-38bbf3685451" type="lecm-rpeditor:reportDataSource">
 				<property name="cm:name"><![CDATA[9c5bffce-c412-4d8a-be20-5de67f14ee7c]]></property>
 				<items>
-					<item name="cm:Регистрационный номер" type="lecm-rpeditor:reportDataColumn">
-						<property name="cm:name"><![CDATA[Регистрационный номер]]></property>
-						<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{~REGNUM}]]></property>
-						<property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_reg_number]]></property>
-						<property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
-						<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
-						<assocs>
-							<assoc type="lecm-rpeditor:columnTypeAssoc" path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
-						</assocs>
-					</item>
 					<item name="cm:Название документа" type="lecm-rpeditor:reportDataColumn">
 						<property name="cm:name"><![CDATA[Название документа]]></property>
 						<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecm-document:ext-present-string}]]></property>
@@ -129,7 +119,7 @@ TYPE:"lecm-outgoing:document"]]></property>
 							</item>
 							<item name="cm:Инициатор" type="lecm-rpeditor:reportDataColumn">
 								<property name="cm:name"><![CDATA[Инициатор]]></property>
-								<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecmWorkflowRoutes:initiatorEmployeeAssoc}]]></property>
+								<property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{lecmWorkflowRoutes:initiatorEmployeeAssoc/lecm-orgstr:employee-short-name}]]></property>
 								<property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_initiator]]></property>
 								<property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
 								<property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
@@ -167,7 +157,7 @@ TYPE:"lecm-outgoing:document"]]></property>
 						<property name="lecm-rpeditor:reportQuery"><![CDATA[{cm:contains/cm:contains/}]]></property>
 						<property name="lecm-rpeditor:reportCode"><![CDATA[lecm-approval-list-items]]></property>
 						<property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
-						<property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
+						<property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_stageItemCompleteDate|ASC]]></property>
 						<property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
 						<property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
 						<items>
