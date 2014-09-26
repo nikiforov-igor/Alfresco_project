@@ -21,7 +21,7 @@
 }
 
 .stagesDatagridExpanded {
-    height: auto;
+	height: auto;
 	padding: 0 5px 5px 10px;
 }
 
@@ -36,7 +36,7 @@
 .approvalContainer {
 	margin-top: 15px;
 	padding: 10px 5px;
-    border: 1px solid #ccc;
+	border: 1px solid #ccc;
 }
 
 .approvalDescriptionContainer {
@@ -57,7 +57,7 @@
 }
 
 .addStageButton {
-	margin-left: 0;
+	margin-left: 0 !important;
 }
 
 .datagrid .onActionAddEmployee a {
