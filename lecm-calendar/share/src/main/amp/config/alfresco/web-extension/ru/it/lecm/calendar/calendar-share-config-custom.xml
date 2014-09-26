@@ -151,6 +151,7 @@
 							<control-param name="secondTreeNodeSubstituteString">{lecm-orgstr:element-short-name}</control-param>
 							<control-param name="secondTreeNodeTitleSubstituteString">{cm:name}</control-param>
 							<control-param name="secondPlane">false</control-param>
+							<control-param name="secondIgnoreNodesInTreeView">false</control-param>
 							<control-param name="secondShowSearch">true</control-param>
 							<control-param name="secondPickerButtonLabel"><![CDATA[<i class='icon-building'></i>]]></control-param>
 							<control-param name="secondPickerButtonTitleCode">title.organizationUnit.select</control-param>

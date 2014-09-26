@@ -163,6 +163,9 @@
             <#if params.firstUseStrictFilterByOrg??>
                 useStrictFilterByOrg: "${params.firstUseStrictFilterByOrg?string}",
             </#if>
+            <#if params.firstIgnoreNodesInTreeView??>
+                ignoreNodesInTreeView: ${params.firstIgnoreNodesInTreeView?string},
+            </#if>
 	        <#if params.firstPickerButtonTitle??>
 		        pickerButtonTitle: "${params.firstPickerButtonTitle}",
 	        <#elseif params.firstPickerButtonTitleCode??>
@@ -234,6 +237,9 @@
 		    </#if>
             <#if params.secondUseStrictFilterByOrg??>
                 useStrictFilterByOrg: "${params.secondUseStrictFilterByOrg?string}",
+            </#if>
+            <#if params.secondIgnoreNodesInTreeView??>
+                ignoreNodesInTreeView: ${params.secondIgnoreNodesInTreeView?string},
             </#if>
 		    <#if params.secondPickerButtonTitle??>
 			    pickerButtonTitle: "${params.secondPickerButtonTitle}",
