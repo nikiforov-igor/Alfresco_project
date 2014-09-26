@@ -62,6 +62,8 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 
                 LogicECM.module.Base.Util.setHeight();
 
+                YAHOO.Bubbling.fire("tabsRendered");
+
                 setTabbingOrder(this.options.formId, tabs);
             }
 		});

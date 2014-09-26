@@ -21,6 +21,8 @@
                 resizer.onEndResize = function() {
                     YAHOO.Bubbling.fire("endSplitterMoving");
                 };
+                YAHOO.Bubbling.on("GridRendered", resizer.onResize, resizer);
+                YAHOO.Bubbling.on("tabsRendered", resizer.onResize, resizer);
             }
 
             function init() {
