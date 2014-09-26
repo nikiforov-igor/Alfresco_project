@@ -1,6 +1,5 @@
 package ru.it.lecm.contractors.policies;
 
-import org.alfresco.model.ContentModel;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
@@ -103,11 +102,13 @@ public class ContractorsPolicy implements NodeServicePolicies.OnCreateNodePolicy
         Serializable currentContractorShortName = nodeService.getProperty(contractor, Contractors.PROP_CONTRACTOR_SHORTNAME);
 
         // Если есть такое свойство
+/*
         if(currentContractorShortName != null) {
             String shortname = nodeService.getProperty(contractor, Contractors.PROP_CONTRACTOR_SHORTNAME).toString();
             String filename = shortname.replaceAll("[^_\\-\\dA-Za-zА-Яа-я ]", "");
             nodeService.setProperty(contractor, ContentModel.PROP_NAME, filename);
         }
+*/
     }
 
 

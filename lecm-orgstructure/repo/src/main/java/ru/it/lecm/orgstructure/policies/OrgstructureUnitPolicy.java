@@ -248,7 +248,7 @@ public class OrgstructureUnitPolicy extends SecurityJournalizedPolicyBase implem
             String fullName = nodeService.getProperty(unit, OrgstructureBean.PROP_ORG_ELEMENT_FULL_NAME).toString();
 
             Map<QName, Serializable> props = new HashMap<QName, Serializable>();
-            props.put(ContentModel.PROP_NAME, name);
+            //props.put(ContentModel.PROP_NAME, name);
             props.put(Contractors.PROP_CONTRACTOR_SHORTNAME, name);
             props.put(Contractors.PROP_CONTRACTOR_FULLNAME, fullName);
             props.put(Contractors.PROP_CONTRACTOR_CODE, nodeService.getProperty(unit, OrgstructureBean.PROP_UNIT_CODE));
