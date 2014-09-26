@@ -116,7 +116,7 @@
                             actionsConfig: {
                                 fullDelete: "${field.control.params.fullDelete!"false"}"
                             },
-                            sort: "${field.control.params.sort!""}"
+                            sort: "${field.control.params.sort!"cm:name|true"}"
                         },
                         dataSource:"${field.control.params.ds!"lecm/search"}",
                         <#if bubblingId != "">
