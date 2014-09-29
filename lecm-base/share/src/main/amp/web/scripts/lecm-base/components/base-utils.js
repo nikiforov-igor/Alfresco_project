@@ -691,8 +691,8 @@ LogicECM.module.Base.Util = {
 	/**
 	 * Base resizer
 	 */
-	LogicECM.module.Base.Resizer = function(name) {
-		LogicECM.module.Base.Resizer.superclass.constructor.call(this, name);
+	LogicECM.module.Base.Resizer = function(htmlId) {
+		LogicECM.module.Base.Resizer.superclass.constructor.call(this, "LogicECM.module.Base.Resizer", htmlId);
 		return this;
 	};
 
@@ -714,6 +714,7 @@ LogicECM.module.Base.Util = {
                     this.onEndResize();
                 }
             }, this, true);
+            Alfresco.util.ComponentManager.register(this);
         },
 		onResize: function(width) {
             var divLeft = Dom.get(this.options.divLeft);

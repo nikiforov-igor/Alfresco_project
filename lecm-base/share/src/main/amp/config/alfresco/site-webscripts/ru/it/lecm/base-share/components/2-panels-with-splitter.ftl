@@ -4,10 +4,9 @@
 <#macro twoPanels initialWidth="" leftRegions=["left-panel"] leftPanelId="left-panel" rightPanelId="right-panel" >
 	<script type="text/javascript">//<![CDATA[
         (function(){
-            window.resizerId = 0;
+
             function initResizer() {
-                var resizer = new LogicECM.module.Base.Resizer('resizer' + window.resizerId);
-                window.resizerId++;
+                var resizer = new LogicECM.module.Base.Resizer(Alfresco.util.generateDomId());
                 resizer.setOptions({
                     <#if initialWidth?has_content>
                         initialWidth: ${initialWidth?string},
