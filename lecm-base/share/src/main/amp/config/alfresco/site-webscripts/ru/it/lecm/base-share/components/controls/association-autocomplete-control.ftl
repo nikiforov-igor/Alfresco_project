@@ -3,9 +3,6 @@
 
 
 <#assign defaultValue=field.control.params.defaultValue!"">
-<#if form.arguments[field.name]?has_content>
-    <#assign defaultValue=form.arguments[field.name]>
-</#if>
 
 <#assign fieldValue=field.value!"">
 <#assign controlId = fieldHtmlId + "-cntrl">
@@ -21,16 +18,20 @@
     </#if>
 </#if>
 
-<#if fieldValue?string == "" && field.control.params.selectedItemsFormArgs??>
-	<#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
-	<#list selectedItemsFormArgs as selectedItemsFormArg>
-		<#if form.arguments[selectedItemsFormArg]??>
-			<#if (fieldValue?length > 0)>
-				<#assign fieldValue = fieldValue + ","/>
-			</#if>
-			<#assign fieldValue = fieldValue + form.arguments[selectedItemsFormArg]/>
-		</#if>
-	</#list>
+<#if form.mode == "create" && !field.disabled && fieldValue?string == "">
+    <#if field.control.params.selectedItemsFormArgs??>
+        <#assign selectedItemsFormArgs = field.control.params.selectedItemsFormArgs?split(",")>
+        <#list selectedItemsFormArgs as selectedItemsFormArg>
+            <#if form.arguments[selectedItemsFormArg]??>
+                <#if (fieldValue?length > 0)>
+                    <#assign fieldValue = fieldValue + ","/>
+                </#if>
+                <#assign fieldValue = fieldValue + form.arguments[selectedItemsFormArg]/>
+            </#if>
+        </#list>
+    <#elseif form.arguments[field.name]?has_content>
+        <#assign fieldValue = form.arguments[field.name]/>
+    </#if>
 </#if>
 
 <#if field.control.params.showCreateNewLink?? && field.control.params.showCreateNewLink == "false">
@@ -238,6 +239,7 @@
     <#if field.control.params.showAssocViewForm??>
         showAssocViewForm: ${field.control.params.showAssocViewForm?string},
     </#if>
+        selectedValue: "${fieldValue!''}",
         currentValue: "${field.value!''}",
         checkType: ${checkType?string},
         itemType:"${field.control.params.itemType!field.endpointType}",
