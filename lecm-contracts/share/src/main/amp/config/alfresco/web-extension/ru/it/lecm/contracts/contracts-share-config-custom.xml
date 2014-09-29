@@ -802,7 +802,7 @@
                             <control-param name="startLocation">
                                 /app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Контрагенты
                             </control-param>
-                            <control-param name="nameSubstituteString">{cm:name}</control-param>
+                            <control-param name="nameSubstituteString">{lecm-contractor:shortname}</control-param>
                             <control-param name="notSelectedOptionShow">true</control-param>
                             <control-param name="notSelectedOptionLabelCode"> </control-param>
                             <control-param name="showCreateNewButton">false</control-param>
