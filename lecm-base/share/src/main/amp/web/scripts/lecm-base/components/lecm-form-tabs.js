@@ -50,6 +50,17 @@ if (typeof LogicECM == "undefined" || !LogicECM) {
 					if ((prevTabHeight > 0) && (currentHeight < prevTabHeight)) {
 						Dom.setStyle(current, 'min-height', prevTabHeight + 'px');
 					}
+
+                    // Для таблиц с фиксированным заголовком
+                    // установить ширину ячеек хедера
+                    // т.к. пока таб был неактивен, они схлопнулись (при фиксации заголовка)
+                    var grids = Selector.query(".grid table.fixedHeader", current);
+                    if (grids && grids.length > 0) {
+                        for (var i = 0; i < grids.length; i++) {
+                            LogicECM.module.Base.Util.makeUpForGridHeader(grids[i]);
+                        }
+                    }
+
 					setTimeout(function () {
 						LogicECM.module.Base.Util.setHeight();
 					}, 10);

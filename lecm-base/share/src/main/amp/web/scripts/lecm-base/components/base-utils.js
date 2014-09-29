@@ -667,6 +667,30 @@ LogicECM.module.Base.Util = {
 
     getLastDialog: function getLastDialog_function() {
         return this.lastDialog;
+    },
+
+    // Для таблиц с фиксированным заголовком
+    // задаем ширину ячеек в хедере (по ширине соответствующих столбцов)
+    makeUpForGridHeader: function(table) {
+        if (table) {
+            var Dom = YAHOO.util.Dom,
+                Selector = YAHOO.util.Selector;
+
+            var firstTr = Selector.query("tbody.yui-dt-data > tr", table, true);
+
+            if (firstTr) {
+                var tds = Selector.query(" > td", firstTr);
+                var ths = Selector.query("thead > tr > th", table);
+
+                for (var i = 0; i < tds.length; i++) {
+                    var td = tds[i];
+                    var th = ths[i];
+                    Dom.setStyle(th, "width", parseInt(Dom.getStyle(td, "width")) + "px");
+                }
+            } else {
+                Dom.removeClass(table, "fixedHeader");
+            }
+        }
     }
 
 };
