@@ -36,7 +36,7 @@
 		sourceRouteNode = routesService.getSourceRouteForIteration(currentIterationNode);
 
 		if (sourceRouteNode) {
-			sourceRouteInfo = sourceRouteNode.properties['cm:title'];
+			sourceRouteInfo = currentIterationNode.properties['cm:title'];
 		}
 
 		approvalIsEditable = currentIterationNode.properties['lecmWorkflowRoutes:routeEditable'];
