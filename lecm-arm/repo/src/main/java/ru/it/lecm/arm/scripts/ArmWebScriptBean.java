@@ -341,12 +341,14 @@ public class ArmWebScriptBean extends BaseWebScript implements ApplicationContex
                         result.put("accordion", accordion.getId());
                         String nodePath = accordion.getId();
                         NodeRef prevNode = accordion;
+                        NodeRef parentNode = armRef;
                         for (int i = 1; i < splitPath.length; i++) {
                             boolean isFind = false;
-                            List<ArmNode> nodes =  armWrapperService.getChildNodes(armRef, prevNode, true);
+                            List<ArmNode> nodes =  armWrapperService.getChildNodes(prevNode, parentNode, true);
                             for (ArmNode node : nodes) {
                                 if (!node.getNodeType().equals("lecm-arm:accordion") && node.getTitle().equals(splitPath[i])) {
                                     isFind = true;
+                                    parentNode = prevNode;
                                     prevNode = node.getNodeRef();
                                     if (node.getNodeRef() == null) {
                                         nodePath += "." + node.getArmNodeRef().getId() + "-" + node.getTitle();
