@@ -246,8 +246,36 @@ LogicECM.module = LogicECM.module || {};
                         });
                 }
 
-                this.populateDataWithAllowedScript();
-                this.createPickerDialog();
+                var context = this;
+                if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+                    Alfresco.util.Ajax.request({
+                        method: "GET",
+                        requestContentType: "application/json",
+                        responseContentType: "application/json",
+                        url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+                        successCallback: {
+                            fn: function (response) {
+                                context.options.allowedNodes = response.json.nodes;
+                                context._createSelectedControls();
+                                context.createPickerDialog();
+                            },
+                            scope: this
+                        },
+                        failureCallback: {
+                            fn: function onFailure(response) {
+                                context.options.allowedNodes = null;
+                                context._createSelectedControls();
+                                context.createPickerDialog();
+                            },
+                            scope: this
+                        },
+                        execScripts: true
+                    });
+
+                } else {
+                    this._createSelectedControls();
+                    this.createPickerDialog();
+                }
 
 	            Event.addListener(this.options.pickerId + "-picker-items", "scroll", this.onPickerItemsContainerScroll.bind(this));
 
@@ -2018,36 +2046,6 @@ LogicECM.module = LogicECM.module || {};
 				});
 			}
 		},
-
-        populateDataWithAllowedScript: function AssociationSelectOne_populateSelect() {
-            var context = this;
-            if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
-                Alfresco.util.Ajax.request({
-                    method: "GET",
-                    requestContentType: "application/json",
-                    responseContentType: "application/json",
-                    url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
-                    successCallback: {
-                        fn: function (response) {
-                            context.options.allowedNodes = response.json.nodes;
-                            context._createSelectedControls();
-                        },
-                        scope: this
-                    },
-                    failureCallback: {
-                        fn: function onFailure(response) {
-                            context.options.allowedNodes = null;
-                            context._createSelectedControls();
-                        },
-                        scope: this
-                    },
-                    execScripts: true
-                });
-
-            } else {
-                context._createSelectedControls();
-            }
-        },
 
 		getMaxSearchResult: function() {
 			if (this.options.showSearch && this.options.plane && this.options.maxSearchResultsWithSearch != null) {
