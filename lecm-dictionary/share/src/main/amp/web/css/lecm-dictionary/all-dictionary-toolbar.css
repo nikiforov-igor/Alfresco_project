@@ -26,12 +26,14 @@
 	word-wrap: break-word;
 }
 
-.import-form {
-	margin: 5px 20px;
+.yui-skin-lecmTheme ul.import-form {
+	padding: 5px 20px;
 }
-
-.import-form li{
+.yui-skin-lecmTheme ul.import-form li {
 	padding-bottom: 5px;
+}
+.yui-skin-lecmTheme ul.import-form li input[type="file"] {
+	width: auto;
 }
 
 .import-error-exception,
