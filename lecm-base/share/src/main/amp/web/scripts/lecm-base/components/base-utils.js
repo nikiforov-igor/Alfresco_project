@@ -716,10 +716,14 @@ LogicECM.module.Base.Util = {
             }, this, true);
         },
 		onResize: function(width) {
-			var cn = Dom.get(this.options.divLeft).childNodes,
+            var divLeft = Dom.get(this.options.divLeft);
+            if (!divLeft) {
+                return;
+            }
+			var cn = divLeft.childNodes,
 					handle = cn[cn.length - 1];
 
-			Dom.setStyle(this.options.divLeft, "height", "auto");
+			Dom.setStyle(divLeft, "height", "auto");
 			Dom.setStyle(handle, "height", "");
 
             var contentMainDiv = Dom.getAncestorBy(handle,
