@@ -198,6 +198,8 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 					scope: this,
 					fn: function (response) {
 						if (response) {
+							var prevSourceRouteInfo = this.sourceRouteInfo;
+
 							this.stageType = response.json.stageType;
 							this.stageItemType = response.json.stageItemType;
 							this.routeType = response.json.routeType;
@@ -208,6 +210,10 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 							this.sourceRouteInfo = response.json.sourceRouteInfo;
 							this.approvalIsEditable = response.json.approvalIsEditable;
 							this.approvalHistoryFolder = response.json.approvalHistoryFolder;
+
+							if (prevSourceRouteInfo && prevSourceRouteInfo != this.sourceRouteInfo) {
+								this.refreshSourceRoute();
+							}
 
 							LogicECM.module.Routes = LogicECM.module.Routes || {};
 							LogicECM.module.Routes.Const = LogicECM.module.Routes.Const || {};
@@ -475,7 +481,7 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 		onActionAddMacros: function (item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype._createNewStageItem.call(this, 'macros', item.nodeRef);
 		},
-		onActionEdit: function(item) {
+		onActionEdit: function (item) {
 			LogicECM.module.Routes.StagesControlDatagrid.prototype.onActionEdit.call(this, item);
 		},
 		onClearButton: function () {
@@ -615,6 +621,18 @@ LogicECM.module.Approval.StageExpanded = LogicECM.module.Approval.StageExpanded 
 			this.onDelete(p_items, owner, actionsConfig, function () {
 				this.getApprovalData(this.fillCurrentApprovalState);
 			}, null);
+		},
+		refreshSourceRoute: function () {
+			if (this.currentIterationNode) {
+				Alfresco.util.Ajax.jsonRequest({
+					method: 'POST',
+					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/workflow/routes/refreshSourceRoute',
+					dataObj: {
+						nodeRef: this.currentIterationNode
+					},
+					failureMessage: this.msg('message.failure')
+				});
+			}
 		}
 	}, true);
 
