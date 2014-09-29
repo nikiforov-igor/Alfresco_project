@@ -1381,7 +1381,7 @@ LogicECM.module = LogicECM.module || {};
 					} else {
 						msg = scope.msg("form.control.object-picker.create-new")
 					}
-                    elCell.innerHTML = '<a href="#" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
+                    elCell.innerHTML = '<a href="javascript:void(0);" title="' + msg + '" class="create-new-row create-new-item-' + scope.eventGroup + '" >' + msg + '</a>';
                     return;
                 }
 
@@ -1428,7 +1428,7 @@ LogicECM.module = LogicECM.module || {};
                         style = 'style="display: none"';
                     }
 
-                    elCell.innerHTML = '<a id="' + containerId + '" href="#" ' + style + ' class="add-item add-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.add-item") + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
+                    elCell.innerHTML = '<a id="' + containerId + '" href="javascript:void(0);" ' + style + ' class="add-item add-' + scope.eventGroup + '" title="' + scope.msg("form.control.object-picker.add-item") + '" tabindex="0"><span class="addIcon">&nbsp;</span></a>';
                     scope.addItemButtons[nodeRef] = containerId;
                 }
             };
