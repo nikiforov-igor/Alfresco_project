@@ -38,8 +38,8 @@
     padding-right: 16px;
 }
 .datalist-toolbar .import-xml span.first-child {
-	background: url(/share/images/lecm-dictionary/xml-file-16.png) no-repeat 12px 4px;
-	padding-left: 24px;
+	background: url(/share/images/lecm-dictionary/xml-file-16.png) no-repeat 4px 4px;
+	padding-left: 0;
 }
 .datalist-toolbar .search-input {
     display: inline-block;
