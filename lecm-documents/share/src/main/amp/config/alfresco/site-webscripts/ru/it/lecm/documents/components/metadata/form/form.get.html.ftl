@@ -18,7 +18,10 @@
                             itemKind: "node",
                             itemId:nodeRef,
                             formId: "",
-                            mode:"view"
+                            mode:"view",
+                            hasStatemachine: ${hasStatemachine?string},
+                            mayView: ${(mayView!false)?string},
+                            mayAdd: ${(mayAdd!false)?string}
                             <#if args.setId?? >, setId: "${args.setId}"</#if>
                         },
                         successCallback:{

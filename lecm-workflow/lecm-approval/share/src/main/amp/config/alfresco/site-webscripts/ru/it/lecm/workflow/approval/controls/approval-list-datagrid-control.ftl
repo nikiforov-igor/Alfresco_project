@@ -5,7 +5,11 @@
 <#assign itemId = args.itemId/>
 <#assign controlId = fieldHtmlId + "-cntrl">
 <#assign reportId = "lecm-approval-list">
-<#assign editable = ((params.editable!"true") != "false") && !(field.disabled)>
+<#assign hasStatemachine = (args.hasStatemachine!"false") == "true"/>
+<#assign mayAdd = (args.mayAdd!"false") == "true"/>
+<#assign mayView = (args.mayView!"false") == "true"/>
+
+<#assign editable = ((params.editable!"true") != "false") && !(field.disabled) && hasStatemachine && mayAdd>
 
 <div id='${controlId}' class='hidden'>
 
