@@ -629,6 +629,22 @@ i.icon-building {
     padding: 1.2em 1.5em 0.5em 1.5em;
 }
 
+/*Сет с границей на страницах редактироания/просмотра документа*/
+.yui-skin-lecmTheme div[id*="document-edit"] .set-bordered-panel-heading,
+.yui-skin-lecmTheme div[id*="document-view"] .set-bordered-panel-heading,
+.yui-skin-lecmTheme div[id*="document"] .set-bordered-panel-heading
+{
+    background-color: #ffffff;
+    color: #515d6b;
+    padding: 0.3em 0.6em;
+}
+.yui-skin-lecmTheme  div[id*="document-edit"] .set-bordered-panel-body,
+.yui-skin-lecmTheme div[id*="document-view"] .set-bordered-panel-body,
+.yui-skin-lecmTheme div[id*="document"] .set-bordered-panel-body {
+    padding: 1em 0.2em 0 0.6em;
+    border: 1px solid #aaaaaa;
+}
+
 /* Переопределяем внешний вид альфресковских контролов в базовой форме */
 .form-fields .form-field.alf-textarea label {
     float: none;
