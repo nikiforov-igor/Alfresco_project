@@ -12,5 +12,6 @@
 	}
 
 	iterationNode.properties['cm:title'] = sourceRouteTitle;
+	iterationNode.save();
 
 })();
