@@ -184,7 +184,7 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 
 	    getAccordionHeight: function() {
 		    if (this.accordionHeight == null) {
-			    this.accordionHeight = Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 30 * this.accordionItems.length;
+			    this.accordionHeight = Dom.getY("lecm-content-ft") - Dom.getY(this.id) - 34 * this.accordionItems.length;
 		    }
 		    return this.accordionHeight;
 	    },
