@@ -14,7 +14,7 @@
 #yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar > div {
     margin: 0;
 }
-#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar > div > span {
+#yui-main #arm-with-tree.admin-page #yui-main-2 .datalist-toolbar .header-bar > div > span:not(.hidden1) {
     display: inline-block;
     float: left;
 }
