@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items updateMode="CreateOrUpdate">
+<items>
 	<item name="cm:Лист согласования" type="lecm-rpeditor:reportDescriptor">
 		<property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-approval-list:document-fake]]></property>
 		<property name="cm:name"><![CDATA[Лист согласования]]></property>
