@@ -146,7 +146,7 @@
 
                 <macro.body.field>
                     <textField isBlankWhenNull="true" isStretchWithOverflow="true">
-                        <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT"/>
+                        <reportElement stretchType="RelativeToTallestObject" uuid="@GUID" style="styleOdd" mode="Opaque" x="@CLEFT" y="@CTOP" width="@CWIDTH" height="@CHEIGHT" isPrintWhenDetailOverflows="true" />
                         <box>
                             <pen lineWidth="0.5" lineColor="#78C0D4"/>
                             <topPen lineWidth="0.5" lineColor="#78C0D4"/>
