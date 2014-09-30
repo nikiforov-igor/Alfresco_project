@@ -311,10 +311,7 @@ public class SubreportBuilder {
                     }
 
                     Object property = current.get(columnCode);
-                    if (property == null) {
-                        property = "";
-                    }
-                    sortedObj.addSort((Comparable) property, asc);
+                    sortedObj.addSort(property != null ? (Comparable) property : null, asc);
                 }
 
                 if (treeMap.get(sortedObj) == null) {

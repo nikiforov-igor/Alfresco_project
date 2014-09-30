@@ -36,9 +36,9 @@ public class MultiplySortObject implements Comparable {
             if (value1 == null && value2 == null) {
                 return 0;
             } else if (value1 == null) {
-                return -1;
+                return (sortDir1 ? -1 : 1);
             } else if (value2 == null) {
-                return 1;
+                return (sortDir1 ? 1 : -1);
             }
 
             int comp;
