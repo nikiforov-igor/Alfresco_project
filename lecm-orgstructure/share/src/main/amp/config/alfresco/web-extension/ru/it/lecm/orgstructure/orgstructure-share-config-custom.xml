@@ -110,7 +110,6 @@
                             <control-param name="showActions">false</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeOnlyBusinessRoles</control-param>
-                            <control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-orgstr:employee-delegated-business-roles" set="businessRolesInner"
@@ -121,13 +120,10 @@
                             <control-param name="showActions">false</control-param>
                             <control-param name="datagridFormId">datagrid</control-param>
                             <control-param name="ds">lecm/orgstructure/ds/getEmployeeDelegatedBusinessRoles</control-param>
-                            <control-param name="fixedHeader">true</control-param>
                         </control>
                     </field>
                     <field id="lecm-busjournal-aspects:history-list" set="busjournalHistoryInner" label-id="label.history-control">
-                        <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl">
-                            <control-param name="fixedHeader">true</control-param>
-                        </control>
+                        <control template="/ru/it/lecm/business-journal/components/controls/bjHistory-datagrid-control.ftl"/>
                     </field>
 					<field id="employee-schedule" set="employeeSchedule">
 						<control template="/ru/it/lecm/orgstructure/controls/employee.schedule.ftl"/>

@@ -41,9 +41,6 @@
                         showCheckboxColumn: false,
                         bubblingLabel: "${bubblingLabel!"bj-history-records"}",
                         attributeForShow:"lecm-busjournal:bjRecord-date"
-                        <#if field.control.params.fixedHeader??>
-                            ,fixedHeader: ${field.control.params.fixedHeader}
-                        </#if>
                     }).setMessages(${messages});
 
                     datagrid.draw();
