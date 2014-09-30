@@ -155,8 +155,36 @@ LogicECM.module.Eds.GlobalSettings = LogicECM.module.Eds.GlobalSettings || {};
 
 					bottonGroup.addButtons([onButton, offButton]);
 
-					this.populateDataWithAllowedScript();
-					this.fillPickerDialog();
+                    var context = this;
+                    if (this.options.allowedNodesScript && this.options.allowedNodesScript != "") {
+                        Alfresco.util.Ajax.request({
+                            method: "GET",
+                            requestContentType: "application/json",
+                            responseContentType: "application/json",
+                            url: Alfresco.constants.PROXY_URI_RELATIVE + this.options.allowedNodesScript,
+                            successCallback: {
+                                fn: function (response) {
+                                    context.options.allowedNodes = response.json.nodes;
+                                    context._createSelectedControls();
+                                    context.fillPickerDialog();
+                                },
+                                scope: this
+                            },
+                            failureCallback: {
+                                fn: function onFailure(response) {
+                                    context.options.allowedNodes = null;
+                                    context._createSelectedControls();
+                                    context.fillPickerDialog();
+                                },
+                                scope: this
+                            },
+                            execScripts: true
+                        });
+
+                    } else {
+                        this._createSelectedControls();
+                        this.fillPickerDialog();
+                    }
 					this._loadSearchProperties();
 					this.updateControlValue(this.options.currentValue);
 				} else {
