@@ -208,7 +208,6 @@ LogicECM.module = LogicECM.module || {};
 				this.options.prefixPickerId = this.options.controlId;
 			}
 			this.options.pickerId = this.options.prefixPickerId + '-picker';
-			Dom.setStyle(this.options.pickerId, "display", "block");
 
 			if (this.widgets.pickerButton != null) {
 				this.widgets.pickerButton.set('disabled', this.options.disabled);
