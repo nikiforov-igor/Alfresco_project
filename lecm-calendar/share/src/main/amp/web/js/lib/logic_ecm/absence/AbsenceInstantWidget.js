@@ -341,9 +341,12 @@ define(["dojo/_base/declare",
             this.checkEmployeeAbsence();
             this.checkCancellationPropmt();
             this.setupIconNode();
-            LogicECM.module.Base.Util.loadScripts([
-                'modules/simple-dialog.js'
-            ]);
+
+            if (LogicECM.module.Base) {
+                LogicECM.module.Base.Util.loadScripts([
+                    'modules/simple-dialog.js'
+                ]);
+            }
         }
 
     });
