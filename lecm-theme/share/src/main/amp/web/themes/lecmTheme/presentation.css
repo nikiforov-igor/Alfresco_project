@@ -2246,10 +2246,16 @@ span.person a div.description:empty {
 
 .view-signatures {
    background-image: url(/share/res/themes/lecmTheme/images/document.png);
+   background-repeat: no-repeat;
+   display: inline-block;
+   width: 16px;
 }
 
 .refresh-sent-document {
    background-image: url(/share/res/themes/lecmTheme/images/refresh-16.png);
+   background-repeat: no-repeat;
+   display: inline-block;
+   width: 16px;
 }
 
 .yui-skin-lecmTheme div.grid td.nowrap,
