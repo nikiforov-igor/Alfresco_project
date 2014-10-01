@@ -168,6 +168,7 @@
                         <value>lecm-arm:fields-assoc</value>
                         <value>lecm-arm:filters-assoc</value>
                         <value>lecm-arm:search-type</value>
+	                    <value>lecm-arm:is-aggregation-node</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:node">
@@ -185,6 +186,7 @@
                         <value>lecm-arm:is-select-by-activeTasks</value>
                         <value>lecm-arm:activeTasks-filter</value>
                         <value>lecm-arm:search-type</value>
+                        <value>lecm-arm:is-aggregation-node</value>
                     </list>
                 </entry>
                 <entry key="lecm-arm:reports-node">
