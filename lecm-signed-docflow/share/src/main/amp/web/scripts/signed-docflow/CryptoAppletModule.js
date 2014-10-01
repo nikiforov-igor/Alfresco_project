@@ -532,7 +532,7 @@ function checkForApplet() {
 						badContent += YAHOO.lang.substitute(template, contentFailure[i]);
 					}
 
-					if (!badContent) {
+					if (badContent) {
 						Alfresco.util.PopupManager.displayPrompt({
 							title: 'Подпись файла недействительна',
 							text: 'Следующие файлы не прошли проверку:<br/>' + badContent,
@@ -621,7 +621,7 @@ function checkForApplet() {
 			},
 			authenticateAction: function(options) {
 				this.loadCertsForm({
-					title: 'Аутенфикация',
+					title: 'Аутентификация',
 					actionURL: null,
 					doBeforeAjaxCallback: {
 						scope: this,
@@ -1222,7 +1222,7 @@ function SignatureFromContent(nodeRef, signatureContent, signatureNodeRef) {
 	this.validateDate = null;
 	this.certificate = null;
 
-	if (!nodeRef && !signatureContent) {
+	if (nodeRef && signatureContent) {
 		try {
 			contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
 			result = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent);
@@ -1257,7 +1257,7 @@ function SignatureFromFile(nodeRef) {
 	this.certificate = null;
 	this.signDate = null;
 
-	if (!nodeRef) {
+	if (nodeRef) {
 		try {
 			signatureRaw = signApplet.getService().getCertFromFileUI();
 			this.signatureContent = prepareBase64(signatureRaw);

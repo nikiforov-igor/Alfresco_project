@@ -7,7 +7,8 @@
 <div id="${controlId}" class="signs-wrapper">
 	<div id="${controlId}-refresh" class="signs-refresh"></div>
 
-	<div class="hidden1" data-bind="visible: $root.singsIsEmpty()">
+	<#-- Не убирайте display: none; Это важно для knockout'а! -->
+	<div data-bind="visible: $root.singsIsEmpty()" style="display: none;">
 		<p>Вложения участвующие в юридически значимом документообороте (ЮЗД) отсутствуют.</p>
 		<p>Чтобы добавить документ/вложение в ЮЗД:</p>
 		<div>
@@ -17,7 +18,8 @@
 	</div>
 
 	<!-- ko ifnot: $root.singsIsEmpty() -->
-	<div class="hidden1" data-bind="visible: $root.singsIsNotEmpty(), foreach: signs">
+	<#-- Не убирайте display: none; Это важно для knockout'а! -->
+	<div data-bind="visible: $root.singsIsNotEmpty(), foreach: signs" style="display: none;">
 		<h1 class="signs-category-header" data-bind="text: categoryName, visible: $root.categoryIsNotEmpty($context)"></h1>
 		<div data-bind="foreach: signedContent">
 			<p class="signs-file-header" data-bind="text: fileName"></p>
