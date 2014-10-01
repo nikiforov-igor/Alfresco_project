@@ -1,13 +1,6 @@
 <#assign dialogId = args.htmlid>
 
 <script type='application/javascript'>
-if (typeof LogicECM == 'undefined' || !LogicECM) {
-	var LogicECM = {};
-}
-
-LogicECM.module = LogicECM.module || {};
-LogicECM.module.Approval = LogicECM.module.Approval || {};
-
 (function() {
 
 	var commentControl_id = '${dialogId}_prop_bpm_comment';
