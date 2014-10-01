@@ -1,7 +1,5 @@
 package ru.it.lecm.delegation.beans;
 
-import java.io.Serializable;
-import java.util.*;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
@@ -41,6 +39,9 @@ import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.orgstructure.beans.OrgstructureSGNotifierBean;
 import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.wcalendar.absence.IAbsence;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class DelegationBean extends BaseBean implements IDelegation, IDelegationDescriptor {
 
@@ -971,7 +972,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
                 SysAdminParams params = serviceRegistry.getSysAdminParams();
 
                 String serverUrl = params.getShareProtocol() + "://" + params.getShareHost() + ":" + params.getSharePort();
-                String link = "<a href=\"" + serverUrl + "/share/page/distribution-tasks\">ссылке</a>";
+                String link = "<a href=\"" + serverUrl + "/share/page/my-profile?path=Мое%20делегирование/Распределение%20задач\">ссылке</a>";
 
                 String userName = (String) nodeService.getProperty(sourceEmployeeRef, OrgstructureBean.PROP_EMPLOYEE_SHORT_NAME);
                 String text = "От пользователя " + userName + " вам делегировано " + tasks.size() + " задач. Распределить на других исполнителей можно по " + link;
