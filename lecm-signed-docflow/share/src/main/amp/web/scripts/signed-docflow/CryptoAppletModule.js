@@ -13,36 +13,33 @@ function checkForApplet() {
 }
 
 
-(function() {
-	var Dom = YAHOO.util.Dom,
-		Event = YAHOO.util.Event,
-		Element = YAHOO.util.Element,
-		currentSigningCert = null,
+(function () {
+	var currentSigningCert = null,
 		config = {
-			'tsPolicy': null,
-			'proxyPass': null,
-			'proxyUser': null,
-			'proxyHost': null,
-			'proxyPort': null,
-			'decryptNoDec': null,
-			'tsURL': 'http://www.cryptopro.ru/tsp/tsp.srf',
-			'licKey': 'MIICQzCCAfCgAwIBAgIQaYQDKGqmddWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
-			'password': '123',
-			'signatureType': 'PKCS7DET',
-			'validatorPath': 'https://www.cryptopro.ru/ocsp/ocsp.srf',
-			'provType': 'CSP_CRYPTOPRO',
-			'userName': '1',
-			'enableTS': 'false',
-			'issuerCert': 'MIICQzCCAfCgAwIBAgIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
-			'licCert': 'MIICQzCCAfCgAwIBAgddIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
-			'storeName': '123',
-			'validatorType': 'NONE',
-			'tmpPath': 'c\:\\tmp',
-			'storeType': 'HDImageStore',
-			'certB64': '1'
+			tsPolicy: null,
+			proxyPass: null,
+			proxyUser: null,
+			proxyHost: null,
+			proxyPort: null,
+			decryptNoDec: null,
+			tsURL: 'http://www.cryptopro.ru/tsp/tsp.srf',
+			licKey: 'MIICQzCCAfCgAwIBAgIQaYQDKGqmddWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
+			password: '123',
+			signatureType: 'PKCS7DET',
+			validatorPath: 'https://www.cryptopro.ru/ocsp/ocsp.srf',
+			provType: 'CSP_CRYPTOPRO',
+			userName: '1',
+			enableTS: 'false',
+			issuerCert: 'MIICQzCCAfCgAwIBAgIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
+			licCert: 'MIICQzCCAfCgAwIBAgddIQaYQDKGqmWbpGNWItSd5f0zAKBgYqhQMCAgMFADBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wHhcNMDkwNDA3MTIwMjE1WhcNMTQxMDA0MDcwOTQxWjBlMSAwHgYJKoZIhvcNAQkBFhFpbmZvQGNyeXB0b3Byby5ydTELMAkGA1UEBhMCUlUxEzARBgNVBAoTCkNSWVBUTy1QUk8xHzAdBgNVBAMTFlRlc3QgQ2VudGVyIENSWVBUTy1QUk8wYzAcBgYqhQMCAhMwEgYHKoUDAgIjAQYHKoUDAgIeAQNDAARAAuT/0ab2nICa2ux/SnjBzC3T5Zbqy+0iMnmyAuLGfDXmdGQbCXcRjGc/D9DoI6Z+bTt/xMQo/SscaAEgoFzYeaN4MHYwCwYDVR0PBAQDAgHGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFG2PXgXZX6yRF5QelZoFMDg3ehAqMBIGCSsGAQQBgjcVAQQFAgMCAAIwIwYJKwYBBAGCNxUCBBYEFHrJxwnbIByWlC/8Rq1tk9BeaRIOMAoGBiqFAwICAwUAA0EAWHPSk7xjIbEOc3Lu8XK1G4u7yTsIu0xa8uGlNU+ZxNVSUnAm3a7QqSfptlt9b0T9Jk39oWN0XHTYSXMKd3djTQ==',
+			storeName: '123',
+			validatorType: 'NONE',
+			tmpPath: 'c\:\\tmp',
+			storeType: 'HDImageStore',
+			certB64: '1'
 		};
 
-	LogicECM.CryptoApplet = function(htmlId) {
+	LogicECM.CryptoApplet = function (htmlId) {
 		var component = Alfresco.util.ComponentManager.find({name: 'LogicECM.CryptoApplet'});
 		if (component.length) {
 			return component[0];
@@ -88,7 +85,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			signContent: function(nodeRefList) {
+			signContent: function (nodeRefList) {
 				var i,
 					signatures = [],
 					sign;
@@ -107,7 +104,7 @@ function checkForApplet() {
 				return signatures;
 
 			},
-			signAction: function(nodeRefList, options) {
+			signAction: function (nodeRefList, options) {
 
 				if (!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
@@ -118,7 +115,7 @@ function checkForApplet() {
 					actionURL: Alfresco.constants.PROXY_URI + 'lecm/signed-docflow/signContent',
 					doBeforeAjaxCallback: {
 						scope: this,
-						fn: function(form) {
+						fn: function (form) {
 							var signatures, i;
 
 							form.dataObj = [];
@@ -135,7 +132,7 @@ function checkForApplet() {
 					},
 					successCallback: {
 						scope: this,
-						fn: function(response) {
+						fn: function (response) {
 							var i, cb,
 								badResult = '',
 								message;
@@ -165,7 +162,7 @@ function checkForApplet() {
 					},
 					failureCallback: {
 						scope: this,
-						fn: function() {
+						fn: function () {
 							Alfresco.util.PopupManager.displayMessage({text: 'Ошибка при отправке подписей'});
 						}
 					}
@@ -173,7 +170,7 @@ function checkForApplet() {
 				});
 
 			},
-			signMultAction: function(docNodeRef, options) {
+			signMultAction: function (docNodeRef, options) {
 
 				this.loadMultipleForm({
 					docNodeRef: docNodeRef,
@@ -193,7 +190,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			updateSignsAction: function(nodeRef, options) {
+			updateSignsAction: function (nodeRef, options) {
 
 				function updateRequest(signs) {
 					var i, checkResult = [];
@@ -208,14 +205,14 @@ function checkForApplet() {
 						dataObj: checkResult,
 						successCallback: {
 							scope: this,
-							fn: function(response) {
+							fn: function (response) {
 
 								var resText = '',
 									success = true,
 									cb, i;
 
 								for (i = 0; i < response.json.length; i++) {
-									if (response.json[i].result != 'success')
+									if (response.json[i].result !== 'success')
 										success = false;
 								}
 
@@ -235,7 +232,7 @@ function checkForApplet() {
 						},
 						failureCallback: {
 							scope: this,
-							fn: function() {
+							fn: function () {
 								Alfresco.util.PopupManager.displayMessage({
 									text: 'Не удалось обновить подписи'
 								});
@@ -259,14 +256,14 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			getSignsByNodeRef: function(nodeRef, options) {
+			getSignsByNodeRef: function (nodeRef, options) {
 
 				Alfresco.util.Ajax.jsonRequest({
 					method: 'GET',
 					url: Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getDocumentSignsInfo?nodeRef=' + nodeRef,
 					successCallback: {
 						scope: this,
-						fn: function(response) {
+						fn: function (response) {
 							var signs = [],
 								sign, cb, i, j, k;
 							//[!]
@@ -287,7 +284,7 @@ function checkForApplet() {
 					},
 					failureCallback: {
 						scope: this,
-						fn: function() {
+						fn: function () {
 							var cb;
 
 							Alfresco.util.PopupManager.displayMessage({text: 'Не удалось получить информацию о подписях'});
@@ -306,16 +303,16 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			setCurrentSigningCert: function(cert) {
+			setCurrentSigningCert: function (cert) {
 				currentSigningCert = cert;
 				config.certB64 = cert.getBase64();
 				signApplet.setConfig(config);
 			},
-			getCurrentSigningCert: function() {
+			getCurrentSigningCert: function () {
 				return currentSigningCert;
 			},
 			//[delete?]
-			checkForApplet: function() {
+			checkForApplet: function () {
 				if (!document.getElementsByName('signApplet')) {
 					Alfresco.util.PopupManager.displayMessage({
 						text: 'Не обнаружен крипто-апплет. Дальнейшая работа с ЮЗД невозможна'
@@ -325,16 +322,16 @@ function checkForApplet() {
 				return true;
 			},
 			//[delete?]
-			getConfig: function() {
+			getConfig: function () {
 				return config;
 			},
-			loadConfig: function() {
+			loadConfig: function () {
 				Alfresco.util.Ajax.jsonRequest({
 					method: 'POST',
 					url: Alfresco.constants.PROXY_URI_RELATIVE + '/lecm/signed-docflow/config/applet',
 					dataObj: {action: 'get'},
 					successCallback: {
-						fn: function(response) {
+						fn: function (response) {
 							var configRes = response.json;
 							config.licKey = configRes.licKey;
 							config.storeName = configRes.storeName;
@@ -346,7 +343,7 @@ function checkForApplet() {
 					failureMessage: 'Ошибка при загрузке конфигурации для крипто-апплета'
 				});
 			},
-			getCerts: function() {
+			getCerts: function () {
 				var certs = [],
 					i, cert,
 					containers = signApplet.getService().getKeyStoreList().split('###');
@@ -361,7 +358,7 @@ function checkForApplet() {
 				return certs;
 			},
 			//[delete?]
-			checkSignatures: function(signatures) {
+			checkSignatures: function (signatures) {
 				var result = true;
 				if (!YAHOO.lang.isArray(signatures)) {
 					signatures = [signatures];
@@ -383,7 +380,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			loadSignAction: function(nodeRef, options) {
+			loadSignAction: function (nodeRef, options) {
 				var dataObj = {},
 					signature = new SignatureFromFile(nodeRef);
 				if (signature.getStatus()) {
@@ -395,7 +392,7 @@ function checkForApplet() {
 						dataObj: dataObj,
 						successCallback: {
 							scope: this,
-							fn: function(response) {
+							fn: function (response) {
 								//[!] Взять на заметку
 								var text = (response.json.signResponse === 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
 									cb = (options) ? options.successCallback : null;
@@ -408,7 +405,7 @@ function checkForApplet() {
 						},
 						failureCallback: {
 							scope: this,
-							fn: function() {
+							fn: function () {
 								Alfresco.util.PopupManager.displayMessage({text: 'Загрузка подписи не удалась'});
 
 								var cb = (options) ? options.failureCallback : null;
@@ -422,12 +419,10 @@ function checkForApplet() {
 					Alfresco.util.PopupManager.displayMessage({text: 'Подпись не действительна, загрузка отменена'});
 				}
 			},
-
-			exportSignAction: function(nodeRef) {
+			exportSignAction: function (nodeRef) {
 				document.location.href = Alfresco.constants.PROXY_URI_RELATIVE + 'lecm/signed-docflow/getZip?nodeRef=' + nodeRef;
 			},
-
-			loadSignFromString: function(nodeRef, signatureContent, options) {
+			loadSignFromString: function (nodeRef, signatureContent, options) {
 				var dataObj = {},
 					signature = new SignatureFromContent(nodeRef, signatureContent, null);
 
@@ -440,7 +435,7 @@ function checkForApplet() {
 						dataObj: dataObj,
 						successCallback: {
 							scope: this,
-							fn: function(response) {
+							fn: function (response) {
 								var text = (response.json.signResponse === 'SIGN_OK') ? 'Подпись успешно загружена' : 'Подпись прошла проверку, но загрузка не удалась так как данный документ уже был подписан этой подписью',
 									cb = (options) ? options.successCallback : null;
 								Alfresco.util.PopupManager.displayMessage({text: text});
@@ -452,7 +447,7 @@ function checkForApplet() {
 						},
 						failureCallback: {
 							scope: this,
-							fn: function() {
+							fn: function () {
 								Alfresco.util.PopupManager.displayMessage({text: 'Загрузка подписи не удалась'});
 
 								var cb = (options) ? options.failureCallback : null;
@@ -472,7 +467,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			CheckSignaturesByNodeRefList: function(nodeRefList, options) {
+			CheckSignaturesByNodeRefList: function (nodeRefList, options) {
 
 				if (!(nodeRefList instanceof Array)) {
 					nodeRefList = [nodeRefList];
@@ -570,7 +565,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			unicloudAuth: function(options) {
+			unicloudAuth: function (options) {
 
 				var GUIDsign = signApplet.sign('GUID', 'String');
 				var TS = new Date();
@@ -589,7 +584,7 @@ function checkForApplet() {
 					dataObj: dataObj,
 					successCallback: {
 						scope: this,
-						fn: function(response) {
+						fn: function (response) {
 							var status = response.json.gateResponse.responseType,
 								cb = (options) ? options.successCallback : null;
 
@@ -609,7 +604,7 @@ function checkForApplet() {
 					},
 					failureCallback: {
 						scope: this,
-						fn: function() {
+						fn: function () {
 							loadingPopup.destroy();
 
 							loadingPopup = Alfresco.util.PopupManager.displayMessage({text: 'Не удалось выполнить аутентификацию'});
@@ -619,13 +614,13 @@ function checkForApplet() {
 
 				});
 			},
-			authenticateAction: function(options) {
+			authenticateAction: function (options) {
 				this.loadCertsForm({
 					title: 'Аутентификация',
 					actionURL: null,
 					doBeforeAjaxCallback: {
 						scope: this,
-						fn: function() {
+						fn: function () {
 							this.unicloudAuth(options);
 						}
 					}
@@ -638,7 +633,7 @@ function checkForApplet() {
 			 ==========================================================
 			 */
 
-			sendToPartnerAction: function(nodeRefList) {
+			sendToPartnerAction: function (nodeRefList) {
 
 				if (!YAHOO.lang.isArray(nodeRefList)) {
 					nodeRefList = [nodeRefList];
@@ -653,7 +648,7 @@ function checkForApplet() {
 						},
 						successCallback: {
 							scope: this,
-							fn: function(response) {
+							fn: function (response) {
 								var i,
 									gateResponse,
 									success = true;
@@ -675,7 +670,7 @@ function checkForApplet() {
 						},
 						failureCallback: {
 							scope: this,
-							fn: function() {
+							fn: function () {
 								Alfresco.util.PopupManager.displayMessage({text: 'Произошла ошибка при отправке'});
 							}
 						}
@@ -693,7 +688,7 @@ function checkForApplet() {
 				this.CheckSignaturesByNodeRefList(nodeRefList, opts);
 
 			},
-			sendToPartnerActionMultiple: function(docNodeRef) {
+			sendToPartnerActionMultiple: function (docNodeRef) {
 				this.loadMultipleForm({
 					docNodeRef: docNodeRef,
 					title: 'Отправка контрагенту',
@@ -712,7 +707,7 @@ function checkForApplet() {
 			 */
 
 			//delete?
-			CheckSignatures: function(data) {
+			CheckSignatures: function (data) {
 				var checkResult = [];
 				for (var i = 0; i < data.length; i++) {
 					var finalCheckResult = true;
@@ -744,7 +739,7 @@ function checkForApplet() {
 
 
 
-			loadCertsForm: function(params) {
+			loadCertsForm: function (params) {
 
 				var url = Alfresco.constants.URL_SERVICECONTEXT + 'components/form',
 					form,
@@ -766,12 +761,12 @@ function checkForApplet() {
 					destroyOnHide: true,
 					doBeforeDialogShow: {
 						scope: this,
-						fn: function(p_form, p_dialog) {
+						fn: function (p_form, p_dialog) {
 							p_dialog.dialog.setHeader(params.title);
 						}},
 					doBeforeAjaxRequest: {
 						scope: this,
-						fn: function(form, obj) {
+						fn: function (form, obj) {
 							if (!currentSigningCert) {
 								Alfresco.util.PopupManager.displayMessage({
 									text: 'Необходимо выбрать сертификат!'
@@ -793,7 +788,7 @@ function checkForApplet() {
 					},
 					onSuccess: {
 						scope: this,
-						fn: function(response) {
+						fn: function (response) {
 							var cb = (params) ? params.successCallback : null;
 							if (cb && YAHOO.lang.isFunction(cb.fn)) {
 								cb.fn.apply(cb.scope, [response]);
@@ -802,7 +797,7 @@ function checkForApplet() {
 					},
 					onFailure: {
 						scope: this,
-						fn: function() {
+						fn: function () {
 							var cb = (params) ? params.failureCallback : null;
 							if (cb && YAHOO.lang.isFunction(cb.fn)) {
 								cb.fn.apply(cb.scope);
@@ -811,7 +806,7 @@ function checkForApplet() {
 					}
 				}).show();
 			},
-			loadMultipleForm: function(params) {
+			loadMultipleForm: function (params) {
 
 				function renderForm(response) {
 					var templateRequestParams = {
@@ -833,12 +828,12 @@ function checkForApplet() {
 						destroyOnHide: true,
 						doBeforeDialogShow: {
 							scope: this,
-							fn: function(p_form, p_dialog) {
+							fn: function (p_form, p_dialog) {
 								p_dialog.dialog.setHeader(params.title);
 							}},
 						doBeforeAjaxRequest: {
 							scope: this,
-							fn: function(form, obj) {
+							fn: function (form, obj) {
 								var nodeRefList = [],
 									fields = document.forms[params.htmlId + '-form'].getElementsByTagName('input'),
 									cb = (params) ? params.doBeforeAjaxCallback : null;
@@ -866,7 +861,7 @@ function checkForApplet() {
 						},
 						onSuccess: {
 							scope: this,
-							fn: function(response) {
+							fn: function (response) {
 								var cb = (params) ? params.successCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
 									cb.fn.apply(cb.scope, [response]);
@@ -875,7 +870,7 @@ function checkForApplet() {
 						},
 						onFailure: {
 							scope: this,
-							fn: function() {
+							fn: function () {
 								var cb = (params) ? params.failureCallback : null;
 								if (cb && YAHOO.lang.isFunction(cb.fn)) {
 									cb.fn.apply(cb.scope);
@@ -894,8 +889,7 @@ function checkForApplet() {
 					}
 				});
 			},
-			onReady: function()
-			{
+			onReady: function () {
 				try {
 					signApplet.setConfig(config);
 					this.loadConfig();
@@ -1082,40 +1076,40 @@ function CertificateFromBase64(base64) {
 }
 
 Certificate.prototype = {
-	getCertIssuer: function() {
+	getCertIssuer: function () {
 		return this.certIssuer;
 	},
-	getOrganization: function() {
+	getOrganization: function () {
 		return this.organization;
 	},
-	getOwner: function() {
+	getOwner: function () {
 		return this.owner;
 	},
-	getOrgUnit: function() {
+	getOrgUnit: function () {
 		return this.OrgUnit;
 	},
-	getPosition: function() {
+	getPosition: function () {
 		return this.position;
 	},
-	getCertSN: function() {
+	getCertSN: function () {
 		return this.certSN;
 	},
-	getCertValidBefore: function() {
+	getCertValidBefore: function () {
 		return this.certValidBefore;
 	},
-	getCertValidAfter: function() {
+	getCertValidAfter: function () {
 		return this.certValidAfter;
 	},
-	getFingerprint: function() {
+	getFingerprint: function () {
 		return this.fingerprint;
 	},
-	getBase64: function() {
+	getBase64: function () {
 		return this.base64;
 	},
-	getIssuer: function() {
+	getIssuer: function () {
 		return this.issuer;
 	},
-	getJSON: function() {
+	getJSON: function () {
 		return {
 			'owner-organization': this.getOrganization(),
 			'owner': this.getOwner(),
@@ -1127,17 +1121,17 @@ Certificate.prototype = {
 			'ca': this.getCertIssuer()
 		};
 	},
-	validate: function() {
+	validate: function () {
 		console.log('not implemented yet');
 	},
-	isValid: function() {
+	isValid: function () {
 		this.valid = signApplet.getAPI().certIsValid(this.base64);
 		return this.valid;
 	},
-	getContainer: function() {
+	getContainer: function () {
 		return this.container;
 	},
-	getHumanReadable: function() {
+	getHumanReadable: function () {
 		var dataObj = {
 			owner: this.getOwner(),
 			organization: this.getOrganization(),
@@ -1261,7 +1255,7 @@ function SignatureFromFile(nodeRef) {
 		try {
 			signatureRaw = signApplet.getService().getCertFromFileUI();
 			this.signatureContent = prepareBase64(signatureRaw);
-			if (this.signatureContent != null && this.signatureContent.length != 0) {
+			if (this.signatureContent && this.signatureContent.length) {
 				contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
 				result = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent);
 				this.valid = result.getResult();
@@ -1281,13 +1275,13 @@ function SignatureFromFile(nodeRef) {
 
 
 Signature.prototype = {
-	getSignatureContent: function() {
+	getSignatureContent: function () {
 		return this.signatureContent;
 	},
-	getSignDate: function() {
+	getSignDate: function () {
 		return this.signDate;
 	},
-	getCertificate: function() {
+	getCertificate: function () {
 		return this.certificate;
 	},
 	// validate: function (){
@@ -1301,10 +1295,10 @@ Signature.prototype = {
 	// 	};
 	// },
 
-	getStatus: function() {
+	getStatus: function () {
 		return this.valid;
 	},
-	getJSONInfo: function() {
+	getJSONInfo: function () {
 		var certInfo = this.certificate.getJSON();
 		var signObj = {
 			'sign-to-content-association': this.contentAssociation,
@@ -1318,14 +1312,14 @@ Signature.prototype = {
 SignatureFromContent.prototype = Signature.prototype;
 SignatureFromFile.prototype = Signature.prototype;
 
-SignatureFromContent.prototype.getCheckInfo = function() {
+SignatureFromContent.prototype.getCheckInfo = function () {
 	// var contentURI = new Alfresco.util.NodeRef(this.contentAssociation).uri;
 	// this.valid = signApplet.check(Alfresco.constants.PROXY_URI + 'api/node/content/' + contentURI, 'URL', this.signatureContent).getResult();
 	// this.validateDate = Alfresco.util.toISO8601(new Date());
 	return {
-		'signatureNodeRef': this.signatureNodeRef,
-		'updateDate': this.validateDate,
-		'contentNodeRef': this.contentAssociation,
-		'isValid': this.valid
+		signatureNodeRef: this.signatureNodeRef,
+		updateDate: this.validateDate,
+		contentNodeRef: this.contentAssociation,
+		isValid: this.valid
 	};
 };
