@@ -49,6 +49,7 @@
           state = '' + items[j].properties['lecmApproveAspects:approvalState'];
           if ('NEW' == state || 'ACTIVE' == state) {
             items[j].properties['lecmApproveAspects:approvalState'] = 'CANCELLED';
+            items[j].properties['lecmWorkflowRoutes:stageItemCompleteDate'] = approval.getValueConverter().convertValueForJava(new Date());
             items[j].save();
           }
         }
