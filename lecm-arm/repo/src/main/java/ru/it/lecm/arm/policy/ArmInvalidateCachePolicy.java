@@ -84,6 +84,18 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
                 new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ArmService.TYPE_ARM,
+                new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ArmService.TYPE_ARM_NODE,
+                new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ArmService.TYPE_ARM_BASE_NODE,
+                new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
                 ArmService.TYPE_DICTIONARY_CHILD_RULE,
                 new JavaBehaviour(this, "onDeleteNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
 
@@ -108,6 +120,10 @@ public class ArmInvalidateCachePolicy implements NodeServicePolicies.OnUpdateNod
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteAssociationPolicy.QNAME,
                 ArmService.TYPE_ARM_ACCORDION, ArmService.ASSOC_ACCORDION_BUSINESS_ROLES,
                 new JavaBehaviour(this, "onDeleteAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
+
+        policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnDeleteChildAssociationPolicy.QNAME,
+                ArmService.TYPE_ARM_ACCORDION,
+                new JavaBehaviour(this, "onDeleteChildAssociation", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
     }
 
     @Override
