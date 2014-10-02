@@ -72,7 +72,9 @@
                 showActionColumn: false,
                 showCheckboxColumn: false,
                 bubblingLabel: "${bubblingLabel!"bj-history-records"}",
-                attributeForShow:"lecm-busjournal:bjRecord-date"
+                attributeForShow:"lecm-busjournal:bjRecord-date",
+	            overrideSortingWith: false,
+	            useCookieForSort: false
             }).setMessages(${messages});
 
             datagrid.draw();
