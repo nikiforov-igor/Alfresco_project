@@ -3478,7 +3478,7 @@
                         <property name="cm:name"><![CDATA[Статистические отчеты]]></property>
                         <property name="lecm-arm:order"><![CDATA[20]]></property>
                         <property name="lecm-arm:reportCodes">
-                            <![CDATA[incoming-by-type-stat,incoming-statistics]]></property>
+                            <![CDATA[eds-by-kind-stat,eds-by-subject-stat,eds-by-subject-stat-all-in,eds-by-type-stat]]></property>
                         <property name="lecm-arm:types">
                             <![CDATA[lecm-ord:document,lecm-errands:document,lecm-nd:document,lecm-incoming:document,lecm-internal:document,lecm-outgoing:document]]></property>
                     </item>
