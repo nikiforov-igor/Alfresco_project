@@ -209,7 +209,8 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
-    employee = task.getVariableLocal('effectiveEmployee');
+    employee = orgstructure.getEmployeeByLogin(assignee);
+    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */
@@ -349,7 +350,8 @@
     document = bpm_package.children[0];
     documentLink = documentScript.wrapperDocumentLink(document, '{lecm-document:ext-present-string}');
     msg = documentLink + ' направлен Вам на согласование.';
-    employee = task.getVariableLocal('effectiveEmployee');
+    employee = orgstructure.getEmployeeByLogin(assignee);
+    task.setVariableLocal('effectiveEmployee', approval.getWorkflowNodeConverter().convertNode(employee.nodeRef));
     /* добавляем актуального исполнителя в динамическую бизнес роль из переменной workflowDynRole */
     lecmPermission.grantDynamicRole(document, employee, 'LECM_APPROVER_DYN', 'LECM_BASIC_PG_Reviewer');
     /* уведомление актуальному исполнителю */

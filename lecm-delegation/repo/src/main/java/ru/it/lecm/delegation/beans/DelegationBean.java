@@ -143,7 +143,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
                         return null;
                     }
                 });
-                
+
             }
         });
 
@@ -163,7 +163,7 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
         logger.debug(String.format("container node '%s' created", delegationRoot.toString()));
         return delegationRoot;
     }
-    
+
     @Override
     public NodeRef getDelegationFolder() {
         return getFolder(DELEGATION_FOLDER);
@@ -293,14 +293,14 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
     //TODO Refactoring in progress
     //Вызывается из вебскрипта, выносим управление транзакцией туда. здесь только проверяем.
     public List<NodeRef> createEmptyProcuracies(final NodeRef delegationOptsNodeRef, final List<NodeRef> businessRoleNodeRefs) {
-        
-        try {   
+
+        try {
             lecmTransactionHelper.checkTransaction();
         } catch (TransactionNeededException ex) {
             throw new WebScriptException("Can't create procuracies", ex);
         }
-        
-        
+
+
         List<NodeRef> procuracyNodeRefs = new ArrayList<NodeRef>();
         for (NodeRef businessRoleNodeRef : businessRoleNodeRefs) {
             NodeRef parentRef = delegationOptsNodeRef; //the parent node
@@ -519,10 +519,11 @@ public class DelegationBean extends BaseBean implements IDelegation, IDelegation
         for (NodeRef procuracyRef : procuracies) {
             NodeRef brole = findNodeByAssociationRef(procuracyRef, ASSOC_PROCURACY_BUSINESS_ROLE, OrgstructureBean.TYPE_BUSINESS_ROLE, ASSOCIATION_TYPE.TARGET);
             String broleId = (String) nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IDENTIFIER);
+			boolean isDynamicBrole = Boolean.valueOf(nodeService.getProperty(brole, OrgstructureBean.PROP_BUSINESS_ROLE_IS_DYNAMIC).toString());
             NodeRef destEmployee = findNodeByAssociationRef(procuracyRef, ASSOC_PROCURACY_TRUSTEE, OrgstructureBean.TYPE_EMPLOYEE, ASSOCIATION_TYPE.TARGET);
 			//на всякий случай проверим, что делегирующий все еще имеет эту бизнес роль
             //пока проверим без учета делегирования
-            if (orgstructureService.isEmployeeHasBusinessRole(sourceEmployee, broleId, false)) {
+            if (orgstructureService.isEmployeeHasBusinessRole(sourceEmployee, broleId, false) || isDynamicBrole) {
                 if (destEmployee != null) {
                     sgNotifierService.notifyBRDelegationChanged(brole, sourceEmployee, destEmployee, created);
                 } else {
