@@ -88,6 +88,7 @@
 					YAHOO.util.Event.onContentReady (datagrid.id, function () {
 						YAHOO.Bubbling.fire ("activeGridChanged", {
 							datagridMeta:{
+								useChildQuery: true,
 								itemType: "lecm-d8n:procuracy",
 								nodeRef: "${args.itemId}"
 							},
