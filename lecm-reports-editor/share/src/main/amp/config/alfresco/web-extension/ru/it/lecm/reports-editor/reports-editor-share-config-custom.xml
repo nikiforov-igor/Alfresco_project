@@ -1,9 +1,6 @@
 <alfresco-config>
     <config>
         <forms>
-            <dependencies>
-                <!-- <js src="/scripts/lecm-reports-editor/select-report-template-ctrl.js"/> -->
-            </dependencies>
             <default-controls>
                 <type name="TEMPLATES" template="/ru/it/lecm/reports-editor/controls/select-report-template-control.ftl">
                     <control-param name="ctrlValue">templateCode</control-param>
@@ -30,6 +27,8 @@
                     <show id="lecm-rpeditor:reportCode"/>
                     <show id="lecm-rpeditor:reportDocType"/>
                     <show id="lecm-rpeditor:businessRolesAssoc"/>
+                    <show id="lecm-rpeditor:runAsSystem"/>
+                    <show id="lecm-rpeditor:includeAllOrganizations"/>
                     <show id="lecm-rpeditor:reportProviderAssoc"/>
                     <show id="lecm-rpeditor:reportObjectsMultiplicity"/>
                     <show id="lecm-rpeditor:reportQuery"/>

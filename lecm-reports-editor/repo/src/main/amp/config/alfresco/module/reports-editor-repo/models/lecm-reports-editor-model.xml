@@ -202,6 +202,16 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-rpeditor:runAsSystem">
+                    <title>Run report as System User</title>
+                    <type>d:boolean</type>
+                    <default>true</default>
+                </property>
+                <property name="lecm-rpeditor:includeAllOrganizations">
+                    <title>Include All Organizations in Data Source</title>
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
             <associations>
                 <association name="lecm-rpeditor:reportProviderAssoc">

@@ -57,6 +57,7 @@
     <bean id="substitudeService" init-method="init" class="ru.it.lecm.base.beans.SubstitudeBeanImpl" parent="baseBean"
 		depends-on="ServiceRegistry, nodeService" 
 			p:dictionaryService-ref="serviceDictionary"
+            p:lecmPermissionService-ref="lecmPermissionServiceBean"
 			p:documentService-ref="documentService"
 			p:objTypeCache-ref="objTypeCache"
 			p:typeTemplateCache-ref="typeTemplateCache"

@@ -209,7 +209,10 @@ public class RepositoryReportContentDAOBean extends BaseBean implements ReportCo
         checkWriteable(id, "delete");
         final NodeRef nodeFile = findFileNode(id);
         if (nodeFile != null) {
-            nodeService.deleteNode(nodeFile);
+            if (nodeService.exists(nodeFile) && !nodeService.hasAspect(nodeFile, ContentModel.ASPECT_PENDING_DELETE)) {
+                nodeService.addAspect(nodeFile, ContentModel.ASPECT_TEMPORARY, null);
+                nodeService.deleteNode(nodeFile);
+            }
             logger.info(String.format("File node '%s'\n\t deleted by ref {%s}", id, nodeFile));
         }
     }

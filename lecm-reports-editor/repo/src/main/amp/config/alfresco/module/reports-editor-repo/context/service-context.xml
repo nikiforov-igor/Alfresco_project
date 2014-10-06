@@ -210,6 +210,8 @@
 						<value>lecm-rpeditor:reportCode</value>
 						<value>lecm-rpeditor:reportDocType</value>
 						<value>lecm-rpeditor:reportObjectsMultiplicity</value>
+						<value>lecm-rpeditor:runAsSystem</value>
+						<value>lecm-rpeditor:includeAllOrganizations</value>
 						<value>lecm-rpeditor:reportQuery</value>
 						<value>lecm-rpeditor:reportQueryOffset</value>
 						<value>lecm-rpeditor:reportQueryLimit</value>
@@ -228,6 +230,8 @@
 						<value>lecm-rpeditor:reportCode</value>
 						<value>lecm-rpeditor:reportDocType</value>
 						<value>lecm-rpeditor:reportObjectsMultiplicity</value>
+                        <value>lecm-rpeditor:runAsSystem</value>
+                        <value>lecm-rpeditor:includeAllOrganizations</value>
 						<value>lecm-rpeditor:reportQuery</value>
 						<value>lecm-rpeditor:reportQueryOffset</value>
 						<value>lecm-rpeditor:reportQueryLimit</value>

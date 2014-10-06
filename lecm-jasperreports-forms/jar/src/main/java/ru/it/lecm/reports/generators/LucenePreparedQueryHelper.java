@@ -192,7 +192,9 @@ public class LucenePreparedQueryHelper {
             bquery.emmit(hasData ? ")" : "");
         }
 
-        bquery.emmit((!bquery.isEmpty() ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"));
+        if (!reportDescriptor.getFlags().isIncludeAllOrganizations()) {
+            bquery.emmit((!bquery.isEmpty() ? " AND " : "") + processorService.processQuery("{{IN_SAME_ORGANIZATION}}"));
+        }
 
         if (logger.isDebugEnabled()) {
             logger.debug(String.format("Quering nodes by Lucene conditions:\n%s\n", blog.toString()));

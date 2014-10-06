@@ -21,7 +21,7 @@ import java.util.List;
  * Time: 10:15
  */
 public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePolicy,
-        NodeServicePolicies.OnCreateAssociationPolicy{
+        NodeServicePolicies.OnCreateAssociationPolicy, NodeServicePolicies.OnDeleteNodePolicy {
 
     protected PolicyComponent policyComponent;
     protected NamespaceService namespaceService;
@@ -55,7 +55,8 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
     }
 
     public final void init() {
-        // создаем ассоциацию на шаблон для отчета
+        policyComponent.bindClassBehaviour(NodeServicePolicies.OnDeleteNodePolicy.QNAME,
+                ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onDeleteNode"));
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnCreateNodePolicy.QNAME,
                 ReportsEditorModel.TYPE_REPORT_TEMPLATE, new JavaBehaviour(this, "onCreateNode", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindAssociationBehaviour(NodeServicePolicies.OnCreateAssociationPolicy.QNAME,
@@ -109,9 +110,39 @@ public class ReportTemplatePolicy implements NodeServicePolicies.OnCreateNodePol
                 // если родитель - не шаблон, переносим файл и удаляем из прежнего места
                 NodeRef copiedFile = copyService.copyAndRename(targetFile, report, ContentModel.ASSOC_CONTAINS, null, false);
                 if (copiedFile != null) {
+                    List<AssociationRef> oldFiles = nodeService.getTargetAssocs(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+                    for (AssociationRef oldFile : oldFiles) { // oldTemplate и targetFile
+                        NodeRef oldFileRef = oldFile.getTargetRef();
+                        if (nodeService.exists(oldFileRef) && !nodeService.hasAspect(oldFileRef, ContentModel.ASPECT_PENDING_DELETE)) {
+                            nodeService.addAspect(oldFileRef, ContentModel.ASPECT_TEMPORARY, null);
+                            nodeService.deleteNode(oldFileRef);
+                        }
+                    }
                     nodeService.setAssociations(template, ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE, Arrays.asList(copiedFile));
-                    nodeService.addAspect(targetFile, ContentModel.ASPECT_TEMPORARY, null);
-                    nodeService.deleteNode(targetFile);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDeleteNode(ChildAssociationRef childAssocRef, boolean isNodeArchived) {
+        NodeRef report = childAssocRef.getParentRef();
+
+        if (!nodeService.hasAspect(report, ContentModel.ASPECT_PENDING_DELETE)) {
+            QName parentType = nodeService.getType(report);
+            if (parentType.equals(ReportsEditorModel.TYPE_REPORT_DESCRIPTOR) ||
+                    parentType.equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)){
+                List<ChildAssociationRef> childs = nodeService.getChildAssocs(report);
+                for (ChildAssociationRef child : childs) {
+                    QName childType = nodeService.getType(child.getChildRef());
+                    if (childType.equals(ContentModel.TYPE_CONTENT)) {
+                        List<AssociationRef> templateAssocs =
+                                nodeService.getSourceAssocs(child.getChildRef(), ReportsEditorModel.ASSOC_REPORT_TEMPLATE_FILE);
+                        if (templateAssocs.isEmpty()) {
+                            nodeService.addAspect(child.getChildRef(), ContentModel.ASPECT_TEMPORARY, null);
+                            nodeService.deleteNode(child.getChildRef());
+                        }
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 package ru.it.lecm.reports.api;
 
 import org.alfresco.model.ContentModel;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.service.ServiceRegistry;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.namespace.NamespaceService;
@@ -410,20 +411,34 @@ public class ReportsManager {
         if (reportCode != null && !reportCode.trim().isEmpty()) {
             if (getDescriptors().containsKey(reportCode)) {
                 final ReportDescriptor desc = getDescriptors().get(reportCode);
-                for (ReportTemplate reportTemplate : desc.getReportTemplates()) {
-                    // удаляем из репозитория contentRepositoryDAO
-                    // (!) из файловых не убираем никогда
-                    if (reportTemplate.getReportType() != null) {
-                        this.contentRepositoryDAO.delete(new ReportContentDAO.IdRContent(reportCode,  "*"));
-                    }
-                }
-
-                // убираем из списка активных ...
-                getDescriptors().remove(reportCode);
-
+                unregisterReportDescriptor(desc);
                 logger.debug(String.format("Report descriptor with name '%s' unregistered", reportCode));
             } else {
                 logger.warn(String.format("Report descriptor with code '%s' NOT exists", reportCode));
+            }
+        }
+    }
+
+    public void unregisterReportDescriptor(ReportDescriptor descriptor) {
+        if (descriptor != null && descriptor.getMnem() != null) {
+            final List<ReportDescriptor> subReports = descriptor.getSubreports();
+            if (subReports != null) {
+                for (ReportDescriptor subReport : subReports) {
+                    unregisterReportDescriptor(subReport);
+                }
+            }
+
+            for (ReportTemplate reportTemplate : descriptor.getReportTemplates()) {
+                // удаляем из репозитория contentRepositoryDAO
+                // (!) из файловых не убираем никогда
+                if (reportTemplate.getReportType() != null) {
+                    this.contentRepositoryDAO.delete(new ReportContentDAO.IdRContent(descriptor.getMnem(), "*"));
+                }
+            }
+            if (getDescriptors().containsKey(descriptor.getMnem())) {
+                // убираем из списка активных ...
+                getDescriptors().remove(descriptor.getMnem());
+                logger.debug(String.format("Report descriptor with name '%s' unregistered", descriptor.getMnem()));
             }
         }
     }
@@ -588,12 +603,16 @@ public class ReportsManager {
      * @throws IOException
      */
     public ReportFileData generateReport(String reportName, String templateCode, Map<String, String> args) throws IOException {
-        ReportDescriptor reportDesc = this.getRegisteredReportDescriptor(reportName);
-        if (reportDesc == null) {
-            throw new RuntimeException(String.format("Report descriptor '%s' not accessible (possibly report is not registered !?)", reportName));
+        return generateReport(this.getRegisteredReportDescriptor(reportName), templateCode, args);
+    }
+
+    public ReportFileData generateReport(final ReportDescriptor report, final String templateCode, final Map<String, String> args) throws IOException {
+        if (report == null) {
+            throw new RuntimeException(String.format("Report descriptor not accessible (possibly report is not registered !?)"));
         }
 
-        Set<String> bRoles = reportDesc.getBusinessRoles();
+        final String reportName = report.getMnem();
+        Set<String> bRoles = report.getBusinessRoles();
 
         if (!bRoles.isEmpty()) {
             final HashSet<String> employeeRoles = new HashSet<String>();
@@ -606,21 +625,21 @@ public class ReportsManager {
                     employeeRoles.add(name);
                 }
             }
-            if (!hasPermissionToReport(reportDesc, employeeRoles)) {
+            if (!hasPermissionToReport(report, employeeRoles)) {
                 throw new RuntimeException(String.format("Current Employee has not permission to view report '%s' !!!", reportName));
             }
         }
         // (!) клонирование Дескриптора, чтобы не трогать общий для всех дескриптор ...
-        reportDesc = Utils.clone(reportDesc);
+        final ReportDescriptor reportDesc = Utils.clone(report);
 
         // (1) передача параметров из запроса в ReportDescriptor на основании их типов
         // (2) расширение списка пришедших параметров: для диапазонов - добавление крайних значений, для ID - добавить доп поле node_id (для SQL запросов)
-        Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService);
+        final Map<String, Object> paramsMap = ParameterMapper.assignParameters(reportDesc, args, serviceRegistry, substitudeService);
         if (logger.isInfoEnabled()) {
             logParameters(paramsMap, String.format("Processing report '%s' with args: \n", reportName));
         }
 
-        ReportTemplate rTemplate = getTemplateByCode(reportDesc, templateCode);
+        final ReportTemplate rTemplate = getTemplateByCode(reportDesc, templateCode);
         if (rTemplate == null) {
             throw new RuntimeException(String.format("Report '%s' has not any template !", reportName));
         }
@@ -631,9 +650,21 @@ public class ReportsManager {
             throw new RuntimeException("Unsupported report kind '" + rType + "': no provider registered");
         }
 
-        return reporter.produceReport(this, reportDesc, rTemplate, paramsMap);
-    }
+        final Boolean isRunAsSystem = reportDesc.getFlags().isRunAsSystem();
 
+        final ReportsManager manager = this;
+
+        final AuthenticationUtil.RunAsWork<ReportFileData> runAsWork = new AuthenticationUtil.RunAsWork<ReportFileData>() {
+            @Override
+            public ReportFileData doWork() throws Exception {
+                return reporter.produceReport(manager, reportDesc, rTemplate, paramsMap);
+            }
+        };
+
+        return isRunAsSystem ?
+                AuthenticationUtil.runAsSystem(runAsWork) :
+                AuthenticationUtil.runAs(runAsWork, AuthenticationUtil.getFullyAuthenticatedUser());
+    }
 
     public ReportTemplate getTemplateByCode(ReportDescriptor descriptor, String templateCode) {
         if (descriptor == null) {

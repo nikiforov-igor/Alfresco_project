@@ -71,14 +71,7 @@ public class ReportMainProducer extends AbstractWebScript {
         final String templateCode = webScriptRequest.getParameter("templateCode");
         final Map<String, String> requestParameters = getRequestParameters(webScriptRequest);
 
-		/* Вариант "права побоку": построение от имени системы */
-        //TODO дыра в системе. По какой-то причине было сделано, чтобы документы попадали в отчет без проверки прав
-        final ReportFileData result = AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<ReportFileData>() {
-            @Override
-            public ReportFileData doWork() throws Exception {
-                return getReportsManager().generateReport(reportName, templateCode, requestParameters);
-            }
-        });
+        final ReportFileData result = getReportsManager().generateReport(reportName, templateCode, requestParameters);
 
         if (result != null) {
 	        webScriptResponse.setContentType(result.getMimeType());

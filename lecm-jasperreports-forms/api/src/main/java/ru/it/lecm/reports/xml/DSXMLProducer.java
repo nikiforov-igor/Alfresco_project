@@ -55,6 +55,8 @@ public class DSXMLProducer {
     public static final String XMLNODE_QUERY_SORT = "querySort";
     public static final String XMLNODE_QUERY_ALLVERSIONS = "allVersions";
     public static final String XMLNODE_QUERY_MULTIROW = "isMultiRow";
+    public static final String XMLNODE_RUN_AS_SYSTEM = "isRunAsSystem";
+    public static final String XMLNODE_INCLUDE_ALL_ORGS = "isIncludeAllOrgs";
     public static final String XMLNODE_QUERY_ISCUSTOM = "isCustom";
     public static final String XMLNODE_QUERY_PREFEREDTYPE = "preferedType";
 
@@ -1027,6 +1029,8 @@ public class DSXMLProducer {
 
 
         XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_MULTIROW, flags.isMultiRow());
+        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_RUN_AS_SYSTEM, flags.isRunAsSystem());
+        XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_INCLUDE_ALL_ORGS, flags.isIncludeAllOrganizations());
         XmlHelper.xmlCreatePlainNode(doc, result, XMLNODE_QUERY_ISCUSTOM, (flags.isCustom() || descriptor.isSubReport()));
 
 		/* включение атрибутов */
@@ -1060,6 +1064,8 @@ public class DSXMLProducer {
         );
 
         result.setMultiRow(XmlHelper.getNodeAsBool(curNode, XMLNODE_QUERY_MULTIROW, result.isMultiRow()));
+        result.setRunAsSystem(XmlHelper.getNodeAsBool(curNode, XMLNODE_RUN_AS_SYSTEM, result.isRunAsSystem()));
+        result.setIncludeAllOrganizations(XmlHelper.getNodeAsBool(curNode, XMLNODE_INCLUDE_ALL_ORGS, result.isIncludeAllOrganizations()));
         result.setCustom(XmlHelper.getNodeAsBool(curNode, XMLNODE_QUERY_ISCUSTOM, result.isCustom()));
 
 		/* включение атрибутов */

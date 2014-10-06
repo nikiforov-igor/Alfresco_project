@@ -28,6 +28,7 @@ import ru.it.lecm.base.expression.ExpressionNode;
 import ru.it.lecm.dictionary.beans.DictionaryBean;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
+import ru.it.lecm.security.LecmPermissionService;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -237,6 +238,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
     private SimpleCache<NodeRef, String> typeListTemplateCache;
 
     private ApplicationContext applicationContext;
+    private LecmPermissionService lecmPermissionService;
 
     public void setObjTypeCache(SimpleCache<String, NodeRef> objTypeCache) {
         this.objTypeCache = objTypeCache;
@@ -257,6 +259,10 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
+    }
+
+    public void setLecmPermissionService(LecmPermissionService lecmPermissionService) {
+        this.lecmPermissionService = lecmPermissionService;
     }
 
     /**
@@ -944,7 +950,7 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                     }
                 } else if (!showNodes.isEmpty()) {
                     for (NodeRef nodeRef : showNodes) {
-                        if (!isArchive(nodeRef)) {
+                        if (lecmPermissionService.hasReadAccess(nodeRef) && !isArchive(nodeRef)) {
                             filteredResults.add(nodeRef);
                         }
                     }

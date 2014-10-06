@@ -5,7 +5,6 @@ import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
-import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.ChildAssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -14,6 +13,8 @@ import org.alfresco.service.namespace.QName;
 import org.alfresco.util.GUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.it.lecm.reports.api.ReportsManager;
+import ru.it.lecm.reports.api.model.ReportDescriptor;
 import ru.it.lecm.reports.editor.ReportsEditorModel;
 import ru.it.lecm.reports.editor.ReportsEditorService;
 
@@ -56,7 +57,7 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         policyComponent.bindClassBehaviour(NodeServicePolicies.OnUpdatePropertiesPolicy.QNAME,
                 ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "onUpdateProperties", Behaviour.NotificationFrequency.TRANSACTION_COMMIT));
         policyComponent.bindClassBehaviour(NodeServicePolicies.BeforeDeleteNodePolicy.QNAME,
-                ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR, new JavaBehaviour(this, "beforeDeleteNode"));
+                ReportsEditorModel.TYPE_REPORT_DESCRIPTOR, new JavaBehaviour(this, "beforeDeleteNode"));
     }
 
     @Override
@@ -108,19 +109,6 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
         return column;
     }
 
-    private void removeColumnToDS(NodeRef mainDS, NodeRef subReport) {
-        try {
-            String subReportName = (String) nodeService.getProperty(subReport, ContentModel.PROP_NAME);
-
-            NodeRef columnRef = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, subReportName);
-            if (columnRef != null) {
-                nodeService.deleteNode(columnRef);
-            }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
-        }
-    }
-
     @Override
     public void onUpdateProperties(NodeRef nodeRef, Map<QName, Serializable> before, Map<QName, Serializable> after) {
         NodeRef mainReport = nodeService.getPrimaryParent(nodeRef).getParentRef();
@@ -151,18 +139,49 @@ public class ReportDescriptorPolicy implements NodeServicePolicies.OnCreateNodeP
 
     @Override
     public void beforeDeleteNode(NodeRef report) {
-        NodeRef mainReport = nodeService.getPrimaryParent(report).getParentRef();
+        final ReportsManager reportsManager = reportsEditorService.getReportsManager();
+        final String reportCode = (String) nodeService.getProperty(report, ReportsEditorModel.PROP_REPORT_DESRIPTOR_CODE);
 
-        // получаем набор данных основного отчета
-        NodeRef mainDS = null;
-        Set<QName> source = new HashSet<QName>();
-        source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
-        List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
-        if (sourcesList.size() > 0) { // есть набор данных - получаем его
-            mainDS = sourcesList.get(0).getChildRef();
+        if (!reportCode.trim().isEmpty()) {
+            //есть код -> реальный отчет, подчистим его "следы" в системе
+            nodeService.addAspect(report,ContentModel.ASPECT_TEMPORARY, null);
+
+            ReportDescriptor desc;
+            if (reportsManager.getDescriptors().containsKey(reportCode)) {
+                desc = reportsManager.getDescriptors().get(reportCode);
+            } else {
+                desc = reportsManager.getReportEditorDAO().getReportDescriptor(report);
+            }
+            //удалим задеплоенный отчет и файлы шаблон(-а)-ов (из Директории Сервси построения отчетов)
+            reportsManager.unregisterReportDescriptor(desc);
         }
-        if (mainDS != null) {
-            removeColumnToDS(mainDS, report);
+
+        //для подотчетов - удалим из набора данных родителя, ссылку на него
+        if (nodeService.getType(report).equals(ReportsEditorModel.TYPE_SUB_REPORT_DESCRIPTOR)) {
+            NodeRef mainReport = nodeService.getPrimaryParent(report).getParentRef();
+            // если мы не удаляем родителя - значит удаляется только подотчет
+            if (nodeService.exists(mainReport) && !nodeService.hasAspect(mainReport, ContentModel.ASPECT_PENDING_DELETE)) {
+                // получаем набор данных основного отчета
+                NodeRef mainDS = null;
+                Set<QName> source = new HashSet<>();
+                source.add(ReportsEditorModel.TYPE_REPORT_DATA_SOURCE);
+                List<ChildAssociationRef> sourcesList = nodeService.getChildAssocs(mainReport, source);
+                if (sourcesList.size() > 0) { // есть набор данных - получаем его
+                    mainDS = sourcesList.get(0).getChildRef();
+                }
+                if (mainDS != null) {
+                    try {
+                        String subReportName = (String) nodeService.getProperty(report, ContentModel.PROP_NAME);
+                        NodeRef columnRef = nodeService.getChildByName(mainDS, ContentModel.ASSOC_CONTAINS, subReportName);
+                        if (columnRef != null) {
+                            nodeService.addAspect(columnRef, ContentModel.ASPECT_TEMPORARY, null);
+                            nodeService.deleteNode(columnRef);
+                        }
+                    } catch (Exception ex) {
+                        logger.error(ex.getMessage(), ex);
+                    }
+                }
+            }
         }
     }
 }

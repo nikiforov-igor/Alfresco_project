@@ -14,6 +14,8 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
     private QueryDescriptor queryDesc;
     private boolean isMultiRow = false;
     private boolean custom = false;
+    private boolean runAsSystem = true;
+    private boolean includeAllOrganizations = false;
 
     public ReportFlags() {
         super();
@@ -132,6 +134,22 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         this.custom = flag;
     }
 
+    public boolean isRunAsSystem() {
+        return runAsSystem;
+    }
+
+    public void setRunAsSystem(boolean runAsSystem) {
+        this.runAsSystem = runAsSystem;
+    }
+
+    public boolean isIncludeAllOrganizations() {
+        return includeAllOrganizations;
+    }
+
+    public void setIncludeAllOrganizations(boolean includeAllOrganizations) {
+        this.includeAllOrganizations = includeAllOrganizations;
+    }
+
     public Map<String, String> getFlagsMap() {
         Map<String, String> flagsMap = new HashMap<String, String>();
         Set<NamedValue> flags = flags();
@@ -148,6 +166,8 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         final int prime = 31;
         int result = super.hashCode();
         result = prime * result + (isMultiRow ? 1231 : 1237);
+        result = prime * result + (runAsSystem ? 1231 : 1237);
+        result = prime * result + (includeAllOrganizations ? 1231 : 1237);
         result = prime * result
                 + ((queryDesc == null) ? 0 : queryDesc.hashCode());
         return result;
@@ -164,6 +184,10 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         final ReportFlags other = (ReportFlags) obj;
         if (isMultiRow != other.isMultiRow)
             return false;
+        if (runAsSystem != other.runAsSystem)
+            return false;
+        if (includeAllOrganizations != other.includeAllOrganizations)
+            return false;
         if (queryDesc == null) {
             if (other.queryDesc != null)
                 return false;
@@ -177,10 +201,11 @@ public class ReportFlags extends FlagsExtendableImpl implements FlagsExtendable,
         StringBuilder builder = new StringBuilder();
         builder.append("reportflags [");
         builder.append("isMultiRow ").append(isMultiRow);
+        builder.append("runAsSystem ").append(runAsSystem);
+        builder.append("includeAllOrganizations ").append(includeAllOrganizations);
         builder.append(", ").append(super.toString());
         builder.append(", queryDesc ").append(queryDesc);
         builder.append("]");
         return builder.toString();
     }
-
 }

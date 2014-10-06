@@ -192,7 +192,9 @@ public class XMLImportBeanImpl implements XMLImportBean {
             if (updateMode.isRewriteChildren()) {
                 List<ChildAssociationRef> childAssocs = nodeService.getChildAssocs(current);
                 for (ChildAssociationRef childAssoc : childAssocs) {
-                    nodeService.deleteNode(childAssoc.getChildRef());
+                    if (nodeService.exists(childAssoc.getChildRef()) && !nodeService.hasAspect(childAssoc.getChildRef(), ContentModel.ASPECT_PENDING_DELETE)) {
+                        nodeService.deleteNode(childAssoc.getChildRef());
+                    }
                 }
             }
             readItems(xmlr, current, updateMode);
