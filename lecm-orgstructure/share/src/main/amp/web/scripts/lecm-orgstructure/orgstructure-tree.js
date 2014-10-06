@@ -275,7 +275,7 @@ LogicECM.module.OrgStructure = LogicECM.module.OrgStructure || {};
                 });
             }
             // блокируем/разблокируем панель поиска в зависимости от состояния кнопок
-            YAHOO.Bubbling.fire("changeSearchState",{});
+            YAHOO.Bubbling.fire("changeSearchState",{bubblingLabel:this.options.bubblingLabel});
         },
 
         _editNode:function editNodeByEvent(event) {

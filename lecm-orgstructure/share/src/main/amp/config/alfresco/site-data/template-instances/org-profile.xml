@@ -6,16 +6,6 @@
             <region-id>organization-profile</region-id>
             <url>/lecm/orgstructure/organization</url>
         </component>
-        <!-- Toolbar -->
-        <component>
-            <region-id>toolbar</region-id>
-            <url>/lecm/orgstructure/toolbar</url>
-            <properties>
-                <showSearchBlock>false</showSearchBlock>
-                <showExSearchBtn>false</showExSearchBtn>
-                <showButtons>false</showButtons>
-            </properties>
-        </component>
         <!-- Title -->
         <component>
             <region-id>title</region-id>
