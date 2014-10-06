@@ -1,6 +1,13 @@
 <#if field.control.params.rows??><#assign rows=field.control.params.rows><#else><#assign rows=2></#if>
 <#if field.control.params.columns??><#assign columns=field.control.params.columns><#else><#assign columns=60></#if>
 
+<#assign defaultValue=field.value>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    </#if>
+</#if>
+
 <#if form.mode == "view">
 <div class="control textarea viewmode">
    <div class="label-div">
@@ -45,7 +52,7 @@
                         <#if field.description??>title="${field.description}"</#if>
                         <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
                         <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-                        <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>${field.value?html}</textarea>
+                        <#if field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true")>disabled="true"</#if>>${defaultValue?html}</textarea>
         </div>
     </div>
 </div>

@@ -631,4 +631,18 @@
         <property name="documentConnectionService" ref="documentConnectionService"/>
     </bean>
 
+    <bean id="additionalParametersBean" class="ru.it.lecm.documents.beans.AdditionalParametersBeanImpl">
+        <property name="nodeService" ref="nodeService"/>
+    </bean>
+
+    <bean id="additionalParametersExecutor" class="ru.it.lecm.documents.beans.AdditionalParametersExecutor" init-method="init" abstract="true">
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="parametersBean" ref="additionalParametersBean"/>
+    </bean>
+
+    <bean id="webscript.ru.it.lecm.documents.documents.additionalParameters.get" class="ru.it.lecm.documents.scripts.DocumentAdditionalParametersScript" parent="webscript">
+        <property name="namespaceService" ref="namespaceService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="parametersBean" ref="additionalParametersBean"/>
+    </bean>
 </beans>

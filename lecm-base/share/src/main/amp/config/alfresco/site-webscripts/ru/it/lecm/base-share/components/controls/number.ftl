@@ -1,3 +1,10 @@
+<#assign defaultValue=field.value>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    </#if>
+</#if>
+
 <#if form.mode == "view">
    <div class="control number viewmode">
 	   <div class="label-div">
@@ -25,7 +32,7 @@
 			LogicECM.CurrentModules = LogicECM.CurrentModules || {};
 			function init() {
 				LogicECM.module.Base.Util.loadScripts([
-							'scripts/lecm-base/components/lecm-number.js',
+							'scripts/lecm-base/components/lecm-number.js'
 						],
 						createLecmNumber,
 						[]);
@@ -60,7 +67,7 @@
 				<input id="${fieldHtmlId}" type="text" name="${field.name}" tabindex="0"
 				       class="<#if field.control.params.styleClass??> ${field.control.params.styleClass}</#if>"
 				       <#if field.control.params.style??>style="${field.control.params.style}"</#if>
-				       <#if field.value?is_number>value="${field.value?c}"<#else>value="${field.value?html}"</#if>
+				       <#if defaultValue?is_number>value="${defaultValue?c}"<#else>value="${defaultValue?html}"</#if>
 				       <#if field.description??>title="${field.description}"</#if>
 				       <#if field.control.params.maxLength??>maxlength="${field.control.params.maxLength}"</#if>
 				       <#if field.control.params.size??>size="${field.control.params.size}"</#if>

@@ -12,8 +12,15 @@
 	<#assign hideDateFormat=false>
 </#if>
 
+<#assign defaultValue=field.value>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    </#if>
+</#if>
+
 <#assign multiValued=false>
-<#if field.value != "" && field.value?index_of(",") != -1>
+<#if defaultValue != "" && defaultValue?index_of(",") != -1>
     <#assign multiValued=true>
 </#if>
 
@@ -82,7 +89,7 @@
 <#elseif !multiValued>
         <#assign controlId = fieldHtmlId + "-cntrl">
 
-        <#assign currentValue = field.value?js_string>
+        <#assign currentValue = defaultValue?js_string>
         <#if  !currentValue?has_content && !disabled > 
              <#assign currentValue = field.control.params.defaultValue!""?js_string>
              <#if currentValue == "now"> 
@@ -138,7 +145,7 @@
                     <div id="${controlId}" class="datepicker"></div>
                 </#if>
                 <div class="value-div">
-                    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${field.value?html}"/>
+                    <input id="${fieldHtmlId}" type="hidden" name="${field.name}" value="${defaultValue?html}"/>
                     <input id="${controlId}-date" name="-" type="text" class="mandatory-highlightable"
                            <#if field.description??>title="${field.description}"</#if> <#if disabled>disabled="true"
                            <#else>tabindex="0"</#if> />

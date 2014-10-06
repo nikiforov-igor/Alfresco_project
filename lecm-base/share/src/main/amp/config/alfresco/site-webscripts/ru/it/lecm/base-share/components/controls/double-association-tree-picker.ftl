@@ -102,6 +102,8 @@
 			    <#assign renderPickerJSSelectedValue = renderPickerJSSelectedValue + form.arguments[selectedItemsFormArg]/>
 		    </#if>
 	    </#list>
+    <#elseif form.arguments[field.name]?has_content>
+        <#assign renderPickerJSSelectedValue = form.arguments[field.name]/>
     </#if>
 
 (function() {

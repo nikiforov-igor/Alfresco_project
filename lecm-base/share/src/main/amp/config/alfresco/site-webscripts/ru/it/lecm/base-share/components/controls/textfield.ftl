@@ -17,6 +17,13 @@
     <#assign mandatory = field.mandatory>
 </#if>
 
+<#assign defaultValue=field.value>
+<#if form.mode == "create" && defaultValue?string == "">
+    <#if form.arguments[field.name]?has_content>
+        <#assign defaultValue=form.arguments[field.name]>
+    </#if>
+</#if>
+
 <#if form.mode == "view">
     <div class="control textfield viewmode">
         <div class="label-div">
@@ -58,7 +65,7 @@
                        <#if field.control.params.styleClass??>class="${field.control.params.styleClass}"</#if>
                        <#if field.control.params.style??>style="${field.control.params.style}"</#if>
                        <#if !hideValue>
-                          <#if field.value?is_number>value="${field.value?c}"<#else>value="${field.value?html}"</#if>
+                          <#if defaultValue?is_number>value="${defaultValue?c}"<#else>value="${defaultValue?html}"</#if>
                        </#if>
                        <#if field.description??>title="${field.description}"</#if>
                        <#if field.control.params.maxLength??>maxlength="${field.control.params.maxLength}"</#if>
