@@ -17,6 +17,10 @@
 		<#assign checkRights = true/>
 	</#if>
 
+	<#if form.mode == "create" && fieldValue?string == "" && form.arguments[field.name]?has_content>
+		<#assign defaultValue = form.arguments[field.name]/>
+	</#if>
+
 	<script type="text/javascript">//<![CDATA[
 	(function() {
 		function init() {
@@ -39,6 +43,9 @@
 				checkRights: ${checkRights?string},
 				itemNodeRef: "${form.arguments.itemId}",
 				currentValue: "${field.value!""}",
+				<#if defaultValue?has_content>
+					defaultValue: "${defaultValue?string}",
+				</#if>
             	suppressRefreshEvent: ${suppressRefreshEvent?string},
 				<#if params.defaultSelectedShowPreviewButton??>
 					defaultSelectedShowPreviewButton: ${params.defaultSelectedShowPreviewButton?string},

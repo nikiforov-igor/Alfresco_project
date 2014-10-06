@@ -22,6 +22,8 @@ public interface DocumentAttachmentsService {
 	public static final QName TYPE_CATEGORY = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "attachmentsCategory");
 	public static final QName ASSOC_CATEGORY_ATTACHMENTS = QName.createQName(DocumentService.DOCUMENT_NAMESPACE_URI, "categoryAttachments");
 
+	public static final QName ASPECT_SKIP_ON_CREATE_DOCUMENT = QName.createQName(DocumentService.DOCUMENT_ASPECTS_NAMESPACE_URI, "attachment-skip-on-create-document");
+
     /**
      * Получение папки с вложениями для документа
      * @param documentRef Ссылка на документ

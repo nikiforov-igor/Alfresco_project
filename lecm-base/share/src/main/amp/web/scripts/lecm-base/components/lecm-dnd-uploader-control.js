@@ -42,6 +42,7 @@ LogicECM.control = LogicECM.control || {};
 				directoryName: true,
 				autoSubmit: false,
 				currentValue: "",
+				defaultValue: "",
 				showUploadNewVersion: false,
 				checkRights: false,
 				itemNodeRef: false,
@@ -297,6 +298,10 @@ LogicECM.control = LogicECM.control || {};
 
 			loadSelectedItems: function () {
 				var arrItems = this.options.currentValue;
+
+				if (arrItems == "" && this.options.defaultValue != null) {
+					arrItems += this.options.defaultValue;
+				}
 
 				var onSuccess = function (response)
 				{
@@ -588,7 +593,7 @@ LogicECM.control = LogicECM.control || {};
 							var fileIconHtml = "<img src='" + Alfresco.constants.URL_RESCONTEXT + "components/images/filetypes/" + fileIcon +"' width='16' height='16'/>";
 							fileName = "<span>" + fileName + "</span>";
 							var leftPart = fileIconHtml + fileName;
-							if (!item.justUpload) {
+							if (!item.justUpload && !this.options.showPreview) {
 								leftPart = "<a href='" + Alfresco.constants.URL_PAGECONTEXT + "document-attachment?nodeRef=" + nodeRef + "'>" + leftPart + "</a>";
 							} else {
 								var linkId = "attachment-show-preview-" + nodeRef;

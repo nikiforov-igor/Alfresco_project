@@ -642,6 +642,8 @@
 	    <!-- Аспект обозначающий что в документе будут отсутствовать вложения -->
 		<aspect name="lecm-document-aspects:without-attachments"/>
 
+		<aspect name="lecm-document-aspects:attachment-skip-on-create-document"/>
+
         <!-- Аспект обозначающий доступность групповой операции "отправить по маршруту" -->
         <!-- TODO удалить в следующем релизе -->
         <aspect name="lecm-document-aspects:routes-avaliable"/>

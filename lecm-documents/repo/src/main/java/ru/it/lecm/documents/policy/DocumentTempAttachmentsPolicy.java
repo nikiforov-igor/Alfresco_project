@@ -54,25 +54,27 @@ public class DocumentTempAttachmentsPolicy implements NodeServicePolicies.OnCrea
 		NodeRef documentRef = associationRef.getSourceRef();
 		NodeRef attachmentRef = associationRef.getTargetRef();
 
-		NodeRef categoryRef = null;
+		if (!nodeService.hasAspect(attachmentRef, DocumentAttachmentsService.ASPECT_SKIP_ON_CREATE_DOCUMENT)) {
+			NodeRef categoryRef = null;
 
-		List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
+			List<NodeRef> categories = documentAttachmentsService.getCategories(documentRef);
 
-		if (categories != null) {
-			for (NodeRef category: categories) {
-				if (!documentAttachmentsService.isReadonlyCategory(category)) {
-					categoryRef = category;
-					break;
+			if (categories != null) {
+				for (NodeRef category: categories) {
+					if (!documentAttachmentsService.isReadonlyCategory(category)) {
+						categoryRef = category;
+						break;
+					}
 				}
 			}
-		}
 
-		if (categoryRef != null) {
-			String name = nodeService.getProperty (attachmentRef, ContentModel.PROP_NAME).toString ();
-			QName assocQname = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, name);
-			nodeService.moveNode(attachmentRef, categoryRef, ContentModel.ASSOC_CONTAINS, assocQname);
+			if (categoryRef != null) {
+				String name = nodeService.getProperty (attachmentRef, ContentModel.PROP_NAME).toString ();
+				QName assocQname = QName.createQName (NamespaceService.CONTENT_MODEL_1_0_URI, name);
+				nodeService.moveNode(attachmentRef, categoryRef, ContentModel.ASSOC_CONTAINS, assocQname);
 
-			nodeService.removeAssociation(documentRef, attachmentRef, associationRef.getTypeQName());
+				nodeService.removeAssociation(documentRef, attachmentRef, associationRef.getTypeQName());
+			}
 		}
 	}
 }

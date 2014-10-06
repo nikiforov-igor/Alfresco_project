@@ -13,13 +13,13 @@
     <#if params.showAttsLabel?? && params.showAttsLabel == "false">
         <#assign showAttsLabel = false/>
     </#if>
-    <#assign suppressRefreshEvent = false/>
+    <#assign suppressRefreshEvent = "false"/>
     <#if params.suppressRefreshEvent?? && params.suppressRefreshEvent == "true">
-        <#assign suppressRefreshEvent = true/>
+        <#assign suppressRefreshEvent = "true"/>
     </#if>
-    <#assign showPreview = true/>
-    <#if params.showPreview?? && params.showPreview == "false">
-        <#assign showPreview = false/>
+    <#assign showPreview = "false"/>
+    <#if params.showPreview?? && params.showPreview == "true">
+        <#assign showPreview = "true"/>
     </#if>
     <#if params.showAttsList?? && params.showAttsList == "false">
         <#assign showAttsList = false/>

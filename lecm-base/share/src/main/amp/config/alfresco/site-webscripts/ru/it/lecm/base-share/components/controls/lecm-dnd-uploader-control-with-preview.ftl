@@ -24,9 +24,9 @@
 <#if params.showAttsLabel?? && params.showAttsLabel == "false">
 	<#assign showAttsLabel = false/>
 </#if>
-<#assign suppressRefreshEvent = false/>
+<#assign suppressRefreshEvent = "false"/>
 <#if params.suppressRefreshEvent?? && params.suppressRefreshEvent == "true">
-	<#assign suppressRefreshEvent = true/>
+	<#assign suppressRefreshEvent = "true"/>
 </#if>
 <#if params.showAttsList?? && params.showAttsList == "false">
 	<#assign showAttsList = false/>
@@ -39,7 +39,7 @@
 		</label>
 	</div>
 </#if>
-	<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent/>
+	<@renderDndUploaderContainerHTML fieldHtmlId field form suppressRefreshEvent "true"/>
 	<div class="container">
 		<div class="buttons-div">
             <span class="show-preview-button">
