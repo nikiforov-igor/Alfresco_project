@@ -8,14 +8,12 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	var Dom = YAHOO.util.Dom,
     Connect = YAHOO.util.Connect,
     Event = YAHOO.util.Event;
-	var organizationRef = LogicECM.module.OrgStructure.PROFILE_SETTINGS.nodeRef.replace(/\//g, "_");
-
 	function drawForm(nodeRef){
 	    Alfresco.util.Ajax.request(
 	        {
 	            url:Alfresco.constants.URL_SERVICECONTEXT + "components/form",
 	            dataObj:{
-	                htmlid:"OrganizationMetadata-" + nodeRef.replace(/\//g, "_"),
+	                htmlid:"${id}-OrganizationMetadata",
 	                itemKind:"node",
 	                itemId:nodeRef,
 	                formId:"${id}",
@@ -29,9 +27,9 @@ LogicECM.module.OrgStructure.PROFILE_SETTINGS =  LogicECM.module.OrgStructure.PR
 	                    formEl.innerHTML = response.serverResponse.responseText;
 	                    Dom.setStyle("${id}-footer", "opacity", "1");
 	                    if (LogicECM.module.OrgStructure.IS_ENGINEER) {
-	                        var forms = Dom.get('OrganizationMetadata-' + organizationRef + '-form');
+	                        var forms = Dom.get('${id}-OrganizationMetadata-form');
 	                        // Form definition
-	                        var form = new Alfresco.forms.Form('OrganizationMetadata-' + organizationRef + '-form');
+	                        var form = new Alfresco.forms.Form('${id}-OrganizationMetadata-form');
 	                        form.ajaxSubmit = true;
 	                        form.setAJAXSubmit(true,
 	                                {

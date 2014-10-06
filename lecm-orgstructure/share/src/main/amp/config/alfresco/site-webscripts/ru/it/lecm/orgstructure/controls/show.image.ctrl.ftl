@@ -1,6 +1,7 @@
 <#include "/ru/it/lecm/base-share/components/controls/picker.inc.ftl" />
 
-<#assign controlId = fieldHtmlId + "-cntrl">
+<#assign aDateTime = .now>
+<#assign controlId = fieldHtmlId + "-cntrl-" + aDateTime?iso_utc>
 <#assign optionSeparator="|">
 <#assign labelSeparator=":">
 
