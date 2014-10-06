@@ -12,11 +12,16 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
-<@bpage.basePageSimple>
-	<div class="yui-t1" id="orgstructure-work-groups">
+<#assign hasPermission = isOrgEngineer/>
+<@bpage.basePageSimple showToolbar=hasPermission>
+    <#if hasPermission>
+        <div class="yui-t1" id="orgstructure-work-groups">
             <@panels.twoPanels initialWidth=500 leftRegions=["groups-toolbar","groups-grid"] leftPanelId="left-panel-workgroups" rightPanelId="right-panel-workgroup">
-                <@region id="workforces-toolbar" scope="template" />
-                <@region id="workforces-grid" scope="template" />
-            </@panels.twoPanels>
-	</div>
+                    <@region id="workforces-toolbar" scope="template" />
+                    <@region id="workforces-grid" scope="template" />
+                </@panels.twoPanels>
+        </div>
+    <#else>
+        <@region id="forbidden" scope="template"/>
+    </#if>
 </@bpage.basePageSimple>

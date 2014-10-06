@@ -12,10 +12,15 @@
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
 <#import "/ru/it/lecm/base-share/components/2-panels-with-splitter.ftl" as panels/>
-<@bpage.basePageSimple>
+<#assign hasPermission = isOrgEngineer/>
+<@bpage.basePageSimple showToolbar=hasPermission>
+    <#if hasPermission>
     <div class="yui-t1" id="orgstructure-staff-grid-with-tree">
         <@panels.twoPanels leftPanelId="left-panel-staff" rightPanelId="right-panel-staff">
             <@region id="grid" scope="template" />
         </@panels.twoPanels>
-    </div>    
+    </div>
+    <#else>
+        <@region id="forbidden" scope="template"/>
+    </#if>
 </@bpage.basePageSimple>

@@ -12,7 +12,11 @@
 </script>
 
 <#import "/ru/it/lecm/base/base-page.ftl" as bpage/>
-
-<@bpage.basePageSimple>
-	<@region id="employees-grid" scope="template" />
+<#assign hasPermission = isOrgEngineer/>
+<@bpage.basePageSimple showToolbar=hasPermission>
+    <#if hasPermission>
+        <@region id="employees-grid" scope="template" />
+    <#else>
+        <@region id="forbidden" scope="template"/>
+    </#if>
 </@bpage.basePageSimple>
