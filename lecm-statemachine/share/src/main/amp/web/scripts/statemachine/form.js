@@ -156,24 +156,52 @@ LogicECM.module = LogicECM.module || {};
 			var templateRequestParams;
 			var formWidth = "65em";
 			if (action.isForm) {
-				var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.formType;
+                var me = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        qName: action.formType
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            var json = eval("(" + oResponse.serverResponse.responseText + ")");
+                            var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.formType;
 
-				var params = "documentType=" + action.formType;
-				params += "&formId=" + "workflow-form";
-				params += "&connectionType=" + action.connectionType;
-				params += "&connectionIsSystem=" + action.connectionIsSystem;
-				params += "&connectionIsReverse=" + action.connectionIsReverse;
-				params += "&parentDocumentNodeRef=" + this.options.nodeRef;
+                            var params = "documentType=" + action.formType;
+                            params += "&formId=" + "workflow-form";
+                            params += "&connectionType=" + action.connectionType;
+                            params += "&connectionIsSystem=" + action.connectionIsSystem;
+                            params += "&connectionIsReverse=" + action.connectionIsReverse;
+                            params += "&parentDocumentNodeRef=" + me.options.nodeRef;
 
-				if (action.variables != null) {
-					for (var prop in action.variables) {
-						if (action.variables.hasOwnProperty(prop)) {
-							params += "&" + prop + "=" + action.variables[prop];
-						}
-					}
-				}
+                            if (action.variables != null) {
+                                for (var prop in action.variables) {
+                                    if (action.variables.hasOwnProperty(prop)) {
+                                        params += "&" + prop + "=" + action.variables[prop];
+                                    }
+                                }
+                            }
 
-				window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+                            if (json != null) {
+                                for (var prop in json) {
+                                    if (json.hasOwnProperty(prop)) {
+                                        params += "&" + prop + "=" + json[prop];
+                                    }
+                                }
+                            }
+
+                            window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
 			} else {
 				templateUrl += "lecm/components/form";
 				templateRequestParams = {
@@ -260,15 +288,42 @@ LogicECM.module = LogicECM.module || {};
 			} else {
                 if (action.subtype == "document" || action.subtype == "workflow") {
                     if (action.subtype == "document") {
-	                    var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
+                        var me = this;
+                        Alfresco.util.Ajax.jsonRequest({
+                            method: "GET",
+                            url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
+                            dataObj: {
+                                nodeRef: this.options.nodeRef,
+                                qName: action.formType
+                            },
+                            successCallback: {
+                                fn: function (oResponse) {
+                                    var json = eval("(" + oResponse.serverResponse.responseText + ")");
+                                    var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
 
-	                    var params = "documentType=" + action.documentType;
-	                    params += "&formId=" + "workflow-form";
-	                    params += "&connectionType=" + action.connectionType;
-	                    params += "&connectionIsSystem=" + action.connectionIsSystem;
-	                    params += "&parentDocumentNodeRef=" + this.options.nodeRef;
+                                    var params = "documentType=" + action.documentType;
+                                    params += "&formId=" + "workflow-form";
+                                    params += "&connectionType=" + action.connectionType;
+                                    params += "&connectionIsSystem=" + action.connectionIsSystem;
+                                    params += "&parentDocumentNodeRef=" + me.options.nodeRef;
 
-	                    window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+                                    if (json != null) {
+                                        for (var prop in json) {
+                                            if (json.hasOwnProperty(prop)) {
+                                                params += "&" + prop + "=" + json[prop];
+                                            }
+                                        }
+                                    }
+                                    window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+                                }
+                            },
+                            failureCallback: {
+                                fn: function () {
+                                }
+                            },
+                            scope: this,
+                            execScripts: true
+                        });
                     } else {
                         var templateRequestParams = {
                             itemKind: "workflow",
