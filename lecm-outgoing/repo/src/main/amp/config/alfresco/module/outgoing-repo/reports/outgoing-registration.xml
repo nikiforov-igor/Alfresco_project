@@ -12,6 +12,8 @@
         <property name="lecm-rpeditor:reportQuerySort"><![CDATA[doc-created-date|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <items>
             <item name="cm:Подписанты" type="lecm-rpeditor:subReportDescriptor">
                 <property name="lecm-rpeditor:reportDocType"><![CDATA[]]></property>

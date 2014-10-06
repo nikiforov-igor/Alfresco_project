@@ -63,6 +63,8 @@
 		<isMultiRow>true</isMultiRow>
 		<isCustom>false</isCustom>
 		<queryText><![CDATA[+TYPE:"lecm-contract:document"]]></queryText>
+        <isRunAsSystem>true</isRunAsSystem>
+        <isIncludeAllOrgs>false</isIncludeAllOrgs>
 	</query.descriptor>
 
 	<!--

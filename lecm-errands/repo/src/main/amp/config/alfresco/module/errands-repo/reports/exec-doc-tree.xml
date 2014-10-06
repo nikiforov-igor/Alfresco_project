@@ -1,11 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items updateMode="RewriteChildren">
+<items  updateMode="RewriteChildren">
     <item name="cm:Дерево поручений документа" type="lecm-rpeditor:reportDescriptor">
         <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-errands:document]]></property>
         <property name="cm:name"><![CDATA[Дерево поручений документа]]></property>
         <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[true]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
         <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
         <property name="lecm-rpeditor:reportQuery"><![CDATA[+TYPE:"lecm-document:base"]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <property name="lecm-rpeditor:reportCode"><![CDATA[exec-doc-tree]]></property>
         <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[true]]></property>
         <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
@@ -21,6 +23,7 @@
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[{ID}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[ID]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
@@ -33,6 +36,7 @@
                         <property name="lecm-rpeditor:dataColumnExpression"><![CDATA[lecm-document:base]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[TYPE]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/Boolean"/>
@@ -44,6 +48,7 @@
                             <![CDATA[{lecm-document:present-string}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[Col_DisplayName]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
@@ -55,6 +60,7 @@
                             <![CDATA[{{subreport::Doc_Errands}}]]></property>
                         <property name="lecm-rpeditor:dataColumnCode"><![CDATA[Doc_Errands]]></property>
                         <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                        <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                         <assocs>
                             <assoc type="lecm-rpeditor:columnTypeAssoc"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
@@ -64,11 +70,13 @@
             </item>
             <item name="cm:Дочерние поручения" type="lecm-rpeditor:subReportDescriptor">
                 <property name="lecm-rpeditor:reportDocType"><![CDATA[lecm-errands:document]]></property>
-                <property name="cm:name"><![CDATA[Дочерние поручения]]></property>
                 <property name="lecm-rpeditor:reportIsDeployed"><![CDATA[false]]></property>
+                <property name="cm:name"><![CDATA[Дочерние поручения]]></property>
+                <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportQueryPgSize"><![CDATA[-1]]></property>
                 <property name="lecm-rpeditor:reportQuery">
                     <![CDATA[{..lecm-errands:additional-document-assoc/}]]></property>
+                <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
                 <property name="lecm-rpeditor:reportCode"><![CDATA[Doc_Errands]]></property>
                 <property name="lecm-rpeditor:reportObjectsMultiplicity"><![CDATA[false]]></property>
                 <property name="lecm-rpeditor:reportQuerySort"><![CDATA[]]></property>
@@ -84,6 +92,7 @@
                                     <![CDATA[{lecm-document:present-string}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[col_Name]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                                <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                                 <assocs>
                                     <assoc type="lecm-rpeditor:columnTypeAssoc"
                                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
@@ -95,6 +104,7 @@
                                     <![CDATA[{..lecm-errands:additional-document-assoc/}]]></property>
                                 <property name="lecm-rpeditor:dataColumnCode"><![CDATA[*col_SubErrands]]></property>
                                 <property name="lecm-rpeditor:dataColumnOrder"><![CDATA[0]]></property>
+                                <property name="lecm-rpeditor:dataColumnMandatory"><![CDATA[false]]></property>
                                 <assocs>
                                     <assoc type="lecm-rpeditor:columnTypeAssoc"
                                            path="/Business platform/LECM/Сервис Редактор Отчетов/Справочники/Тип столбцов/String"/>
@@ -111,11 +121,6 @@
                             <assoc type="lecm-rpeditor:reportTemplateFile"
                                    path="/Business platform/LECM/Сервис Редактор Отчетов/Отчеты/Дерево поручений документа/Дочерние поручения/doc_Errands.jrxml"/>
                         </assocs>
-                    </item>
-                    <item name="cm:Doc_Errands_tmpl.jrxml" type="cm:content">
-                        <property name="cm:name"><![CDATA[Doc_Errands_tmpl.jrxml]]></property>
-                        <property name="cm:content">
-                            <![CDATA[PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPGphc3BlclJlcG9ydCB4bWxucz0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhzaTpzY2hlbWFMb2NhdGlvbj0iaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L2phc3BlcnJlcG9ydHMgaHR0cDovL2phc3BlcnJlcG9ydHMuc291cmNlZm9yZ2UubmV0L3hzZC9qYXNwZXJyZXBvcnQueHNkIiBuYW1lPSJzdGFnZXMiIHBhZ2VXaWR0aD0iODAwIiBwYWdlSGVpZ2h0PSI1OTUiIG9yaWVudGF0aW9uPSJMYW5kc2NhcGUiIHdoZW5Ob0RhdGFUeXBlPSJCbGFua1BhZ2UiIGNvbHVtbldpZHRoPSI4MDAiIGxlZnRNYXJnaW49IjAiIHJpZ2h0TWFyZ2luPSIwIiB0b3BNYXJnaW49IjAiIGJvdHRvbU1hcmdpbj0iMCIgdXVpZD0iZDQzYjU0MDctNDczNy00YWMwLWJlZTQtNjEwMDJhYmRiNTQ3Ij4KCTxwcm9wZXJ0eSBuYW1lPSJpcmVwb3J0Lnpvb20iIHZhbHVlPSIxLjAiLz4KCTxwcm9wZXJ0eSBuYW1lPSJpcmVwb3J0LngiIHZhbHVlPSIwIi8+Cgk8cHJvcGVydHkgbmFtZT0iaXJlcG9ydC55IiB2YWx1ZT0iMCIvPgoJPHByb3BlcnR5IG5hbWU9ImRhdGFTb3VyY2UiIHZhbHVlPSJydS5pdC5sZWNtLnJlcG9ydHMuZ2VuZXJhdG9ycy5HZW5lcmljRFNQcm92aWRlckJhc2UiLz4KCTxzdHlsZSBuYW1lPSJzdHlsZU9kZCIgbW9kZT0iT3BhcXVlIiBiYWNrY29sb3I9IiNGRkZGRkYiPgoJCTxjb25kaXRpb25hbFN0eWxlPgoJCQk8Y29uZGl0aW9uRXhwcmVzc2lvbj48IVtDREFUQVskVntSRVBPUlRfQ09VTlR9JTIgPT0gMF1dPjwvY29uZGl0aW9uRXhwcmVzc2lvbj4KCQkJPHN0eWxlIGJhY2tjb2xvcj0iI0QyRUFGMSIvPgoJCTwvY29uZGl0aW9uYWxTdHlsZT4KCTwvc3R5bGU+Cgk8cGFyYW1ldGVyIG5hbWU9IlNVQlJFUE9SVF9ESVIiIGNsYXNzPSJqYXZhLmxhbmcuU3RyaW5nIiBpc0ZvclByb21wdGluZz0iZmFsc2UiPgoJCTxkZWZhdWx0VmFsdWVFeHByZXNzaW9uPjwhW0NEQVRBWyIvcmVwb3J0ZGVmaW5pdGlvbnMvZGVwbG95L2V4ZWMtZG9jLXRyZWUvIl1dPjwvZGVmYXVsdFZhbHVlRXhwcmVzc2lvbj4KCTwvcGFyYW1ldGVyPgoJPHBhcmFtZXRlciBuYW1lPSJsZXZlbEluZGVudCIgY2xhc3M9ImphdmEubGFuZy5TdHJpbmciIGlzRm9yUHJvbXB0aW5nPSJmYWxzZSI+CgkJPGRlZmF1bHRWYWx1ZUV4cHJlc3Npb24+PCFbQ0RBVEFbIiAgICAgIl1dPjwvZGVmYXVsdFZhbHVlRXhwcmVzc2lvbj4KCTwvcGFyYW1ldGVyPgoJPGZpZWxkIG5hbWU9ImNvbF9OYW1lIiBjbGFzcz0iamF2YS5sYW5nLlN0cmluZyI+CgkJPGZpZWxkRGVzY3JpcHRpb24+PCFbQ0RBVEFb0J3QsNC30LLQsNC90LjQtV1dPjwvZmllbGREZXNjcmlwdGlvbj4KCTwvZmllbGQ+Cgk8ZmllbGQgbmFtZT0iY29sX1N1YkVycmFuZHMiIGNsYXNzPSJqYXZhLnV0aWwuTGlzdCIvPgoJPGRldGFpbD4KCQk8YmFuZCBoZWlnaHQ9IjQwIiBzcGxpdFR5cGU9IlN0cmV0Y2giPgoJCQk8dGV4dEZpZWxkIGlzU3RyZXRjaFdpdGhPdmVyZmxvdz0idHJ1ZSIgcGF0dGVybj0iIiBpc0JsYW5rV2hlbk51bGw9InRydWUiPgoJCQkJPHJlcG9ydEVsZW1lbnQgdXVpZD0iYTJmYjZjNDYtMzY5OC00NjdlLThjMTQtOWIwNmUxMmZkMjI4IiBzdHJldGNoVHlwZT0iUmVsYXRpdmVUb1RhbGxlc3RPYmplY3QiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAiIGlzUHJpbnRXaGVuRGV0YWlsT3ZlcmZsb3dzPSJ0cnVlIi8+CgkJCQk8Ym94PgoJCQkJCTxwZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTx0b3BQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJCTxsZWZ0UGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8Ym90dG9tUGVuIGxpbmVXaWR0aD0iMC41IiBsaW5lQ29sb3I9IiM3OEMwRDQiLz4KCQkJCQk8cmlnaHRQZW4gbGluZVdpZHRoPSIwLjUiIGxpbmVDb2xvcj0iIzc4QzBENCIvPgoJCQkJPC9ib3g+CgkJCQk8dGV4dEVsZW1lbnQgdGV4dEFsaWdubWVudD0iTGVmdCIgdmVydGljYWxBbGlnbm1lbnQ9Ik1pZGRsZSI+CgkJCQkJPGZvbnQgZm9udE5hbWU9IlRpbWVzIE5ldyBSb21hbiIgc2l6ZT0iMTIiLz4KCQkJCQk8cGFyYWdyYXBoIGZpcnN0TGluZUluZGVudD0iMTAiLz4KCQkJCTwvdGV4dEVsZW1lbnQ+CgkJCQk8dGV4dEZpZWxkRXhwcmVzc2lvbj48IVtDREFUQVskUHtsZXZlbEluZGVudH0gKyAoJEZ7Y29sX05hbWV9ICE9IG51bGwgPyAkRntjb2xfTmFtZX0gOiAi0J3QtSDQt9Cw0LTQsNC90L4iKV1dPjwvdGV4dEZpZWxkRXhwcmVzc2lvbj4KCQkJPC90ZXh0RmllbGQ+CgkJPC9iYW5kPgoJCTxiYW5kIGhlaWdodD0iNDAiPgoJCQk8c3VicmVwb3J0IGlzVXNpbmdDYWNoZT0idHJ1ZSI+CgkJCQk8cmVwb3J0RWxlbWVudCB1dWlkPSJkNmI4YThhMS1kOGY5LTQ1YWMtYjVjNC1kNGFhZGQ4YTk5NmYiIHN0cmV0Y2hUeXBlPSJSZWxhdGl2ZVRvVGFsbGVzdE9iamVjdCIgbW9kZT0iVHJhbnNwYXJlbnQiIHg9IjAiIHk9IjAiIHdpZHRoPSI4MDAiIGhlaWdodD0iNDAiIGlzUmVtb3ZlTGluZVdoZW5CbGFuaz0idHJ1ZSIvPgoJCQkJPHN1YnJlcG9ydFBhcmFtZXRlciBuYW1lPSJsZXZlbEluZGVudCI+CgkJCQkJPHN1YnJlcG9ydFBhcmFtZXRlckV4cHJlc3Npb24+PCFbQ0RBVEFbJFB7bGV2ZWxJbmRlbnR9ICsgIiAgICAgICAiXV0+PC9zdWJyZXBvcnRQYXJhbWV0ZXJFeHByZXNzaW9uPgoJCQkJPC9zdWJyZXBvcnRQYXJhbWV0ZXI+CgkJCQk8ZGF0YVNvdXJjZUV4cHJlc3Npb24+PCFbQ0RBVEFbbmV3IG5ldC5zZi5qYXNwZXJyZXBvcnRzLmVuZ2luZS5kYXRhLkpSQmVhbkNvbGxlY3Rpb25EYXRhU291cmNlKCRGe2NvbF9TdWJFcnJhbmRzfSxmYWxzZSldXT48L2RhdGFTb3VyY2VFeHByZXNzaW9uPgoJCQkJPHN1YnJlcG9ydEV4cHJlc3Npb24+PCFbQ0RBVEFbJFB7U1VCUkVQT1JUX0RJUn0gKyAiZG9jX0VycmFuZHMuamFzcGVyIl1dPjwvc3VicmVwb3J0RXhwcmVzc2lvbj4KCQkJPC9zdWJyZXBvcnQ+CgkJPC9iYW5kPgoJPC9kZXRhaWw+CjwvamFzcGVyUmVwb3J0Pgo=]]></property>
                     </item>
                     <item name="cm:doc_Errands.jrxml" type="cm:content">
                         <property name="cm:name"><![CDATA[doc_Errands.jrxml]]></property>

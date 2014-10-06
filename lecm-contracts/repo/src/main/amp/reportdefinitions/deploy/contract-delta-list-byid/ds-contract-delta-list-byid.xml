@@ -49,6 +49,8 @@
 		<isMultiRow>false</isMultiRow>
 		<isCustom>false</isCustom>
 		<queryText><![CDATA[]]></queryText>
+        <isRunAsSystem>true</isRunAsSystem>
+        <isIncludeAllOrgs>false</isIncludeAllOrgs>
 		<flags>
 				<!-- соответствия входных параметров (values) свойствам бина провайдера (keys) -->
 				<property.nodeRef> <![CDATA[ID;id]]> </property.nodeRef>

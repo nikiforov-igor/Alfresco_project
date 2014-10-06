@@ -13,6 +13,8 @@
         <property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_DocKind|ASC,col_DocType|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <items>
             <item name="cm:eds-by-kind-stat" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[eds-by-kind-stat]]></property>

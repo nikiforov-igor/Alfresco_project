@@ -36,6 +36,8 @@
 		<allVersions>true</allVersions>
 		<preferedType>lecm-contract:document</preferedType>
 		<isMultiRow>true</isMultiRow>
+		<isRunAsSystem>true</isRunAsSystem>
+		<isIncludeAllOrgs>false</isIncludeAllOrgs>
 		<isCustom>false</isCustom>
 		<queryText><![CDATA[+TYPE:"lecmApprovalResult:approvalResultList"]]></queryText>
 	</query.descriptor>

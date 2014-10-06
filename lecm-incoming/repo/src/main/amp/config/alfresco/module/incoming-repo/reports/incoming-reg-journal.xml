@@ -12,6 +12,8 @@
         <property name="lecm-rpeditor:reportQuerySort"><![CDATA[col_ReceiveDate|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <items>
             <item name="cm:d40723a5-57eb-42bd-907e-4645d48efd27" type="lecm-rpeditor:reportDataSource">
                 <property name="cm:name"><![CDATA[aa9c95c8-e3bf-4e4b-a619-539dc9163288]]></property>

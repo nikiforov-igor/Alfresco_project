@@ -14,6 +14,8 @@
             <![CDATA[col_DocKind|ASC,col_DocSubject|ASC,col_DocType|ASC]]></property>
         <property name="lecm-rpeditor:reportQueryOffset"><![CDATA[0]]></property>
         <property name="lecm-rpeditor:reportQueryLimit"><![CDATA[-1]]></property>
+        <property name="lecm-rpeditor:includeAllOrganizations"><![CDATA[false]]></property>
+        <property name="lecm-rpeditor:runAsSystem"><![CDATA[true]]></property>
         <items>
             <item name="cm:eds-by-subject-stat-all-in" type="lecm-rpeditor:reportTemplate">
                 <property name="cm:name"><![CDATA[eds-by-subject-stat-all-in]]></property>

@@ -26,6 +26,8 @@
         <allVersions>true</allVersions>
         <preferedType>lecm-errands:document</preferedType>
         <isMultiRow>true</isMultiRow>
+        <isRunAsSystem>true</isRunAsSystem>
+        <isIncludeAllOrgs>false</isIncludeAllOrgs>
     </query.descriptor>
     <fields>
         <!--Параметры-->
