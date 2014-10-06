@@ -21,23 +21,6 @@
 	            <newRowLabel>button.new-role</newRowLabel>
             </properties>
         </component>
-        <!-- Title -->
-        <component>
-            <region-id>title</region-id>
-            <url>/lecm/base/title-with-filter-label</url>
-            <properties>
-                <title>page.org-roles</title>
-                <filteredLabel>page.orgstructure.filter.label</filteredLabel>
-            </properties>
-        </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/orgstructure/menu</url>
-            <properties>
-                <selected>roles</selected>
-            </properties>
-        </component>
         <component>
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>

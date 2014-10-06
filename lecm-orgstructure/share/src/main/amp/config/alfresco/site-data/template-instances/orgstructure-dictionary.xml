@@ -5,15 +5,6 @@
         <preferenceKey>ru.it.lecm.orgstructure-dictionary</preferenceKey>
     </properties>
     <components>
-        <!-- Title -->
-        <component>
-            <region-id>title</region-id>
-            <url>/lecm/arm/documents/title</url>
-            <properties>
-                <code>{code}</code>
-                <filteredLabel> </filteredLabel>
-            </properties>
-        </component>
         <!-- Toolbar -->
         <component>
             <region-id>arm-html-node</region-id>

@@ -30,23 +30,6 @@
 	            <newRowLabel>button.new-row-staff</newRowLabel>
             </properties>
         </component>
-        <!-- Title -->
-        <component>
-            <region-id>title</region-id>
-            <url>/lecm/base/title-with-filter-label</url>
-            <properties>
-                <title>page.staff-list</title>
-                <filteredLabel>page.orgstructure.filter.label</filteredLabel>
-            </properties>
-        </component>
-        <!-- Menu -->
-        <component>
-            <region-id>menu</region-id>
-            <url>/lecm/orgstructure/menu</url>
-            <properties>
-                <selected>staff</selected>
-            </properties>
-        </component>
         <component>
             <region-id>forbidden</region-id>
             <url>/lecm/base/forbidden</url>
