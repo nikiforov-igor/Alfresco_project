@@ -89,8 +89,10 @@
 	</bean>
 
 	<bean id="businessJournalService" class="ru.it.lecm.businessjournal.beans.RESTClient" init-method="init" parent="abstaractBusinessJournalService">
-		<!-- По умолчанию используется адрес http://127.0.0.1:8080/businessjournal/rest -->
-		<!--<property name="serviceAddress" value="${businessjournal.serviceURL}"/>-->
+		<property name="globalProps" ref="global-properties"/>
+		<property name="serviceHost" value="#{T(org.apache.commons.lang.StringUtils).isNotEmpty('${businessjournal.host}') ? '${businessjournal.host}' : null}"/>
+		<property name="servicePort" value="#{T(org.apache.commons.lang.math.NumberUtils).isNumber('${businessjournal.port}') ? T(java.lang.Integer).parseInt('${businessjournal.port}') : null}"/>
+		<property name="serviceName" value="#{T(org.apache.commons.lang.StringUtils).isNotEmpty('${businessjournal.name}') ? '${businessjournal.name}' : 'businessjournal'}"/>
 	</bean>
 
 	<bean id="abstaractBusinessJournalService" abstract="true" class="ru.it.lecm.businessjournal.beans.AbstractBusinessJournalService" parent="baseBean">

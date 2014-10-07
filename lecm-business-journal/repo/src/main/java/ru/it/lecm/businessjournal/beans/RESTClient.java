@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringTokenizer;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,11 +37,27 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 
 	private ObjectMapper mapper;
 	private Client client;
-	private String serviceAddress = "http://127.0.0.1:8080/businessjournal/rest";
+	private String serviceAddress;
+	private String serviceHost;
+	private String servicePort;
+	private String serviceName;
 	private SimpleDateFormat dateFormat;
+	private Properties globalProps;
 
-	public void setServiceAddress(String serviceAddress) {
-		this.serviceAddress = serviceAddress;
+	public void setGlobalProps(Properties globalProps) {
+		this.globalProps = globalProps;
+	}
+
+	public void setServiceHost(String serviceHost) {
+		this.serviceHost = serviceHost;
+	}
+
+	public void setServicePort(String servicePort) {
+		this.servicePort = servicePort;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	public void init() {
@@ -53,6 +70,15 @@ public class RESTClient extends AbstractBusinessJournalService implements Busine
 		mapper.setDateFormat(dateFormat);
 		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
 		client = Client.create(clientConfig);
+
+		String serviceAddressTmpl = "http://%s:%s/%s/rest";
+		if(serviceHost == null || servicePort == null) {
+			String host = (String) globalProps.get("alfresco.host");
+			String port = (String) globalProps.get("alfresco.port");
+			serviceAddress = String.format(serviceAddressTmpl, host, port, serviceName);
+		} else {
+			serviceAddress = String.format(serviceAddressTmpl, serviceHost, servicePort, serviceName);
+		}
 	}
 
 	@Override
