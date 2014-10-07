@@ -107,7 +107,7 @@
 	<#assign labelSeparator=":">
 
 	<#assign defaultValue = "">
-	<#if form.mode == "create" && !field.disabled && fieldValue?string == "">
+	<#if form.mode == "create" && !field.disabled>
 		<#if params.selectedItemsFormArgs??>
 			<#assign selectedItemsFormArgs = params.selectedItemsFormArgs?split(",")>
 			<#list selectedItemsFormArgs as selectedItemsFormArg>

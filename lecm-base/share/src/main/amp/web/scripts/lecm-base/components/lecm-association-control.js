@@ -636,9 +636,13 @@ LogicECM.module = LogicECM.module || {};
 						return me._generateChildrenUrlParams(searchData, true);
 					};
 					oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
-						var displayName = me.getSimpleItemPath(oResultData[3]) + sResultMatch;
-						var displayPath = me.getFullItemPath(oResultData[3]) + sResultMatch;
-						return "<div title='" + displayPath + "'>" + displayName + "</div>";
+						if (!me.options.plane) {
+							var displayName = me.getSimpleItemPath(oResultData[3]) + sResultMatch;
+							var displayPath = me.getFullItemPath(oResultData[3]) + sResultMatch;
+							return "<div title='" + displayPath + "'>" + displayName + "</div>";
+						} else {
+							return sResultMatch;
+						}
 					};
 					oAC.queryDelay = 1;
 					oAC.minQueryLength = 3;
@@ -1995,7 +1999,7 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			canCurrentValuesShow: function() {
-				return (Object.keys(this.selectedItems).length > 0) || this.options.disabled;
+				return (Object.keys(this.selectedItems).length > 0) || this.options.disabled || !this.options.showAutocomplete;
 			},
 
 			getAddedItems: function ()
