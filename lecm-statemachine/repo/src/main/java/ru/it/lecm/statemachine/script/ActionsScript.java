@@ -29,6 +29,7 @@ import ru.it.lecm.statemachine.StatemachineModel;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.UserWorkflow;
+import ru.it.lecm.statemachine.action.WorkflowVariables;
 import ru.it.lecm.statemachine.action.finishstate.FinishStateWithTransitionAction;
 import ru.it.lecm.statemachine.bean.StateMachineActionsImpl;
 
@@ -53,6 +54,12 @@ public class ActionsScript extends DeclarativeWebScript {
     private LecmPermissionService lecmPermissionService;
     private StateMachineHelper stateMachineService;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+    private final static String STATEMACHINE_EDITOR_URI = "http://www.it.ru/logicECM/statemachine/editor/1.0";
+    public final static QName PROP_FORM_INPUT_TO_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputToValue");
+    public final static QName PROP_FORM_INPUT_FROM_TYPE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromType");
+    public final static QName PROP_FORM_INPUT_FROM_VALUE = QName.createQName(STATEMACHINE_EDITOR_URI, "formInputFromValue");
+
 
     public void setStateMachineService(StateMachineHelper stateMachineService) {
         this.stateMachineService = stateMachineService;
@@ -233,11 +240,12 @@ public class ActionsScript extends DeclarativeWebScript {
                                 resultState.put("variables", variables);
                                 resultState.put("isForm", state.isForm());
                                 if (state.isForm()) {
-                                    resultState.put("formType", state.getFormType());
+                                    resultState.put("documentType", state.getFormType());
                                     resultState.put("formFolder", getDestinationFolder(state.getFormFolder()).toString());
                                     resultState.put("connectionType", state.getFormConnection());
                                     resultState.put("connectionIsSystem", state.isSystemFormConnection());
                                     resultState.put("connectionIsReverse", state.isReverseFormConnection());
+                                    resultState.put("autoFill", state.isAutoFill());
                                 }
                                 actionsList.add(resultState);
 
@@ -296,19 +304,31 @@ public class ActionsScript extends DeclarativeWebScript {
                 actionStruct.put("type", "group");
                 actionStruct.put("actionId", nodeService.getProperty(action, ContentModel.PROP_NAME));
                 actionStruct.put("label", nodeService.getProperty(action, ContentModel.PROP_NAME));
-                actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
                 QName type = nodeService.getType(action);
                 if (type.equals(GroupActionsService.TYPE_GROUP_DOCUMENT_ACTION)) {
                     actionStruct.put("subtype", "document");
                     actionStruct.put("documentType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_TYPE));
                     actionStruct.put("connectionType", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION));
                     actionStruct.put("connectionIsSystem", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_CONNECTION_SYSTEM));
+                    actionStruct.put("autoFill", nodeService.getProperty(action, GroupActionsService.PROP_DOCUMENT_AUTO_FILL));
                     actionStruct.put("formFolder", documentService.getDraftRoot().toString());
+                    WorkflowVariables variables = new WorkflowVariables();
+                    List<ChildAssociationRef> vars = nodeService.getChildAssocs(action);
+                    for (ChildAssociationRef var : vars) {
+                        String formInputFromType = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_TYPE).toString();
+                        String formInputFromValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_FROM_VALUE).toString();
+                        String formInputToValue = nodeService.getProperty(var.getChildRef(), PROP_FORM_INPUT_TO_VALUE).toString();
+                        variables.addInput(formInputFromType,formInputFromValue,"VARIABLE",formInputToValue);
+                    }
+                    actionStruct.put("variables", stateMachineService.getInputVariablesMap(statemachineId, variables.getInput()));
+                    actionStruct.put("isForm", false);
                 } else if (type.equals(GroupActionsService.TYPE_GROUP_WORKFLOW_ACTION)) {
                     actionStruct.put("subtype", "workflow");
                     actionStruct.put("workflowType", nodeService.getProperty(action, GroupActionsService.PROP_WORKFLOW));
+                    actionStruct.put("isForm", false);
                 } else {
                     actionStruct.put("subtype", "script");
+                    actionStruct.put("isForm", nodeService.getChildAssocs(action).size() > 0);
                 }
                 actionsList.add(actionStruct);
             }

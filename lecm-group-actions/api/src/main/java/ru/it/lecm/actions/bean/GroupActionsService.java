@@ -32,6 +32,7 @@ public interface GroupActionsService {
     QName PROP_DOCUMENT_TYPE = QName.createQName(NAMESPACE_URI, "document-type");
     QName PROP_DOCUMENT_CONNECTION = QName.createQName(NAMESPACE_URI, "document-connection");
     QName PROP_DOCUMENT_CONNECTION_SYSTEM = QName.createQName(NAMESPACE_URI, "document-connection-system");
+    QName PROP_DOCUMENT_AUTO_FILL = QName.createQName(NAMESPACE_URI, "document-autofill-enabled");
     QName PROP_WORKFLOW = QName.createQName(NAMESPACE_URI, "workflow");
 
     NodeRef getHomeRef();

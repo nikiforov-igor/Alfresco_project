@@ -156,52 +156,7 @@ LogicECM.module = LogicECM.module || {};
 			var templateRequestParams;
 			var formWidth = "65em";
 			if (action.isForm) {
-                var me = this;
-                Alfresco.util.Ajax.jsonRequest({
-                    method: "GET",
-                    url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
-                    dataObj: {
-                        nodeRef: this.options.nodeRef,
-                        qName: action.formType
-                    },
-                    successCallback: {
-                        fn: function (oResponse) {
-                            var json = eval("(" + oResponse.serverResponse.responseText + ")");
-                            var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.formType;
-
-                            var params = "documentType=" + action.formType;
-                            params += "&formId=" + "workflow-form";
-                            params += "&connectionType=" + action.connectionType;
-                            params += "&connectionIsSystem=" + action.connectionIsSystem;
-                            params += "&connectionIsReverse=" + action.connectionIsReverse;
-                            params += "&parentDocumentNodeRef=" + me.options.nodeRef;
-
-                            if (action.variables != null) {
-                                for (var prop in action.variables) {
-                                    if (action.variables.hasOwnProperty(prop)) {
-                                        params += "&" + prop + "=" + action.variables[prop];
-                                    }
-                                }
-                            }
-
-                            if (json != null) {
-                                for (var prop in json) {
-                                    if (json.hasOwnProperty(prop)) {
-                                        params += "&" + prop + "=" + json[prop];
-                                    }
-                                }
-                            }
-
-                            window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
-                        }
-                    },
-                    failureCallback: {
-                        fn: function () {
-                        }
-                    },
-                    scope: this,
-                    execScripts: true
-                });
+                this._createDocument(action)
 			} else {
 				templateUrl += "lecm/components/form";
 				templateRequestParams = {
@@ -228,8 +183,8 @@ LogicECM.module = LogicECM.module || {};
 							p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
 							var contId = p_dialog.id + "-form-container";
 							Dom.addClass(contId, "metadata-form-edit");
-							if (action.formType && action.formType != "") {
-								Dom.addClass(contId, action.formType.replace(":", "_"));
+							if (action.documentType && action.documentType != "") {
+								Dom.addClass(contId, action.documentType.replace(":", "_"));
 							} else {
 								Dom.addClass(contId, "no-form-type");
 							}
@@ -288,42 +243,7 @@ LogicECM.module = LogicECM.module || {};
 			} else {
                 if (action.subtype == "document" || action.subtype == "workflow") {
                     if (action.subtype == "document") {
-                        var me = this;
-                        Alfresco.util.Ajax.jsonRequest({
-                            method: "GET",
-                            url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
-                            dataObj: {
-                                nodeRef: this.options.nodeRef,
-                                qName: action.formType
-                            },
-                            successCallback: {
-                                fn: function (oResponse) {
-                                    var json = eval("(" + oResponse.serverResponse.responseText + ")");
-                                    var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
-
-                                    var params = "documentType=" + action.documentType;
-                                    params += "&formId=" + "workflow-form";
-                                    params += "&connectionType=" + action.connectionType;
-                                    params += "&connectionIsSystem=" + action.connectionIsSystem;
-                                    params += "&parentDocumentNodeRef=" + me.options.nodeRef;
-
-                                    if (json != null) {
-                                        for (var prop in json) {
-                                            if (json.hasOwnProperty(prop)) {
-                                                params += "&" + prop + "=" + json[prop];
-                                            }
-                                        }
-                                    }
-                                    window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
-                                }
-                            },
-                            failureCallback: {
-                                fn: function () {
-                                }
-                            },
-                            scope: this,
-                            execScripts: true
-                        });
+                        this._createDocument(action);
                     } else {
                         var templateRequestParams = {
                             itemKind: "workflow",
@@ -354,8 +274,8 @@ LogicECM.module = LogicECM.module || {};
 				                    p_dialog.dialog.setHeader(this.msg("logicecm.workflow.runAction.label", action.label));
 				                    var contId = p_dialog.id + "-form-container";
 				                    Dom.addClass(contId, "metadata-form-edit");
-				                    if (action.formType && action.formType != "") {
-					                    Dom.addClass(contId, action.formType.replace(":", "_"));
+				                    if (action.documentType && action.documentType != "") {
+					                    Dom.addClass(contId, action.documentType.replace(":", "_"));
 				                    } else {
 					                    Dom.addClass(contId, "no-form-type");
 				                    }
@@ -538,6 +458,61 @@ LogicECM.module = LogicECM.module || {};
             LogicECM.module.Base.Util.registerDialog(scriptForm);
             scriptForm.show();
 		},
+        _createDocument: function _createDocumentFunction(action) {
+            if (action.autoFill) {
+                var me = this;
+                Alfresco.util.Ajax.jsonRequest({
+                    method: "GET",
+                    url: Alfresco.constants.PROXY_URI + "lecm/documents/additionalParameters",
+                    dataObj: {
+                        nodeRef: this.options.nodeRef,
+                        qName: action.documentType
+                    },
+                    successCallback: {
+                        fn: function (oResponse) {
+                            var json = eval("(" + oResponse.serverResponse.responseText + ")");
+                            me._redirectToCreateDocument(action, json);
+                        }
+                    },
+                    failureCallback: {
+                        fn: function () {
+                        }
+                    },
+                    scope: this,
+                    execScripts: true
+                });
+            } else {
+                this._redirectToCreateDocument(action, null);
+            }
+        },
+        _redirectToCreateDocument: function _redirectToCreateDocument_function(action, additionalParams) {
+            var url =  Alfresco.constants.URL_PAGECONTEXT + "document-create?documentType=" + action.documentType;
+
+            var params = "documentType=" + action.documentType;
+            params += "&formId=" + "workflow-form";
+            params += "&connectionType=" + action.connectionType;
+            params += "&connectionIsSystem=" + action.connectionIsSystem;
+            params += "&connectionIsReverse=" + action.connectionIsReverse;
+            params += "&parentDocumentNodeRef=" + this.options.nodeRef;
+
+            if (action.variables != null) {
+                for (var prop in action.variables) {
+                    if (action.variables.hasOwnProperty(prop)) {
+                        params += "&" + prop + "=" + action.variables[prop];
+                    }
+                }
+            }
+
+            if (additionalParams != null) {
+                for (var prop in additionalParams) {
+                    if (additionalParams.hasOwnProperty(prop)) {
+                        params += "&" + prop + "=" + additionalParams[prop];
+                    }
+                }
+            }
+
+            window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
+        },
 		_chooseState: function(type, taskId, formResponse, actionId) {
 			var template = "{proxyUri}lecm/statemachine/choosestate?actionType={actionType}&taskId={taskId}&formResponse={formResponse}&actionId={actionId}";
 			var url = YAHOO.lang.substitute(template, {

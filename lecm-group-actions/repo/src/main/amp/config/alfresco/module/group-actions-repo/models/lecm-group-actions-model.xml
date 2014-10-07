@@ -89,6 +89,9 @@
                 <property name="lecm-group-actions:document-connection-system">
                     <type>d:boolean</type>
                 </property>
+                <property name="lecm-group-actions:document-autofill-enabled">
+                    <type>d:boolean</type>
+                </property>
             </properties>
         </type>
 

@@ -1,21 +1,17 @@
 package ru.it.lecm.statemachine.action.finishstate;
 
+import org.activiti.bpmn.model.BaseElement;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.TaskListener;
-import org.activiti.engine.impl.el.Expression;
-import org.activiti.bpmn.model.BaseElement;
-
-import ru.it.lecm.statemachine.StatemachineActionConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.it.lecm.statemachine.action.Conditions;
 import ru.it.lecm.statemachine.action.StateMachineAction;
 import ru.it.lecm.statemachine.action.WorkflowVariables;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * User: PMelnikov
@@ -98,8 +94,8 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 //		}
 	}
 	
-	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, String script) {
-		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, isReverseFormConnection, script);
+	public void addState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script) {
+		NextState nextState = new NextState(actionId, label, workflowId, conditionAccess, outputVariableName, outputVariableValue, variables, stopSubWorkflows, formType, formFolder, formConnection, isSystemFormConnection, isReverseFormConnection, autoFill, script);
 		states.add(nextState);
 	}
 
@@ -133,8 +129,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 		private boolean stopSubWorkflows;
 		private boolean isSystemFormConnection;
 		private boolean isReverseFormConnection;
+		private boolean autoFill;
 
-		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, String script) {
+		NextState(String actionId, String label, String workflowId, Conditions conditionAccess, String outputVariableName, String outputVariableValue, WorkflowVariables variables, boolean stopSubWorkflows, String formType, String formFolder, String formConnection, boolean isSystemFormConnection, boolean isReverseFormConnection, boolean autoFill, String script) {
 			this.actionId = actionId;
 			this.label = label;
 			this.workflowId = workflowId;
@@ -148,6 +145,7 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
             this.formConnection = formConnection;
             this.isSystemFormConnection = isSystemFormConnection;
             this.isReverseFormConnection = isReverseFormConnection;
+            this.autoFill = autoFill;
             this.script = script;
         }
 
@@ -210,5 +208,9 @@ public class FinishStateWithTransitionAction extends StateMachineAction implemen
 		public boolean isReverseFormConnection() {
 			return isReverseFormConnection;
 		}
-	}
+
+        public boolean isAutoFill() {
+            return autoFill;
+        }
+    }
 }

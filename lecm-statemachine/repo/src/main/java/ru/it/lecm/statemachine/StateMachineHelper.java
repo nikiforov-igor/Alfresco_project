@@ -1037,6 +1037,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																		String transitionFormType = null;
 			    																		Boolean transitionIsSystemFormConnection = true;
 			    																		Boolean transitionIsReverseFormConnection = false;
+			    																		Boolean autoFill = false;
 			    																		String transitionFormFolder = null;
 			    																		String transitionFormConnection = null;
 
@@ -1063,6 +1064,8 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																						transitionIsSystemFormConnection = Boolean.parseBoolean(n11.getLastChild().getTextContent());
 																								    } else if("name".equals(n11.getFirstChild().getLocalName())&&"transitionIsReverseFormConnection".equals(n11.getFirstChild().getTextContent())){
 																									    transitionIsReverseFormConnection = Boolean.parseBoolean(n11.getLastChild().getTextContent());
+			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"document-autofill-enabled".equals(n11.getFirstChild().getTextContent())){
+																									    autoFill = Boolean.parseBoolean(n11.getLastChild().getTextContent());
 			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"transitionFormFolder".equals(n11.getFirstChild().getTextContent())){
 			    																						transitionFormFolder = n11.getLastChild().getTextContent();
 			    																					} else if("name".equals(n11.getFirstChild().getLocalName())&&"transitionFormConnection".equals(n11.getFirstChild().getTextContent())){
@@ -1165,7 +1168,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																		if(st.getActions().get("FinishStateWithTransition")==null) {
 			    	    																	st.getActions().put("FinishStateWithTransition",new FinishStateWithTransitionAction());
 			    	    																}
-			    	    																((FinishStateWithTransitionAction)st.getActions().get("FinishStateWithTransition")).addState(actionVar+(q+1), transitionLabel, workflowId, cc, "var"+actionVar, transitionVar, wv, stopSubWorkflows, transitionFormType, transitionFormFolder, transitionFormConnection, transitionIsSystemFormConnection, transitionIsReverseFormConnection, script);
+			    	    																((FinishStateWithTransitionAction)st.getActions().get("FinishStateWithTransition")).addState(actionVar+(q+1), transitionLabel, workflowId, cc, "var"+actionVar, transitionVar, wv, stopSubWorkflows, transitionFormType, transitionFormFolder, transitionFormConnection, transitionIsSystemFormConnection, transitionIsReverseFormConnection, autoFill, script);
 			    																	}
 
 			    																}

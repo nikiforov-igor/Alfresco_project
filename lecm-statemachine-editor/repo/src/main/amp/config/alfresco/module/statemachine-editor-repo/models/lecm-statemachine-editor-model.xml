@@ -727,6 +727,11 @@
                     <mandatory>false</mandatory>
                     <default>false</default>
                 </property>
+                <property name="lecm-stmeditor:document-autofill-enabled">
+                    <type>d:boolean</type>
+                    <mandatory>false</mandatory>
+                    <default>false</default>
+                </property>
             </properties>
         </aspect>
 

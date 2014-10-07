@@ -147,12 +147,22 @@
                     <show id="lecm-group-actions:document-type"/>
                     <show id="lecm-group-actions:document-connection"/>
                     <show id="lecm-group-actions:document-connection-system"/>
+                    <show id="lecm-group-actions:document-connection-system"/>
+                    <show id="lecm-group-actions:document-autofill-enabled"/>
+                    <show id="lecm-group-actions:document-form-data"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-group-actions:type">
                         <control template="/ru/it/lecm/base-share/components/controls/text-checkboxes-control.ftl">
                             <control-param name="dataSource">/lecm/groupActions/types</control-param>
                             <control-param name="singleValue">true</control-param>
+                        </control>
+                    </field>
+                    <field id="lecm-group-actions:document-form-data" label-id="statemachine.editor.form.label.inputFormData">
+                        <control template="/ru/it/lecm/base-share/components/controls/datagrid-control.ftl">
+                            <control-param name="itemType">lecm-stmeditor:inputFormVariable</control-param>
+                            <control-param name="height">100</control-param>
+                            <control-param name="fullDelete">true</control-param>
                         </control>
                     </field>
                 </appearance>
@@ -173,6 +183,7 @@
                     <show id="lecm-group-actions:order"/>
                     <show id="lecm-group-actions:document-type"/>
                     <show id="lecm-group-actions:document-connection"/>
+                    <show id="lecm-group-actions:document-connection-system"/>
                     <show id="lecm-group-actions:document-connection-system"/>
                 </field-visibility>
                 <appearance>
@@ -236,5 +247,44 @@
             </form>
         </forms>
     </config>
+
+    <config evaluator="model-type" condition="lecm-group-actions:form-data">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-group-actions:form-data-value" force="true"/>
+                    <show id="lecm-group-actions:form-data-type" force="true"/>
+                    <show id="lecm-group-actions:form-data-sender" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.form_receive" />
+                    <field id="lecm-group-actions:form-data-value" set="receiver"/>
+                    <field id="lecm-group-actions:form-data-type" set="sender"/>
+                    <field id="lecm-group-actions:form-data-sender" set="sender"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
+    <config evaluator="node-type" condition="lecm-group-actions:form-data">
+        <forms>
+            <form>
+                <field-visibility>
+                    <show id="lecm-group-actions:form-data-value" force="true"/>
+                    <show id="lecm-group-actions:form-data-type" force="true"/>
+                    <show id="lecm-group-actions:form-data-sender" force="true"/>
+                </field-visibility>
+                <appearance>
+                    <set id="sender" appearance="bordered-panel" label-id="statemachine.editor.form.label.statemachine_sender" />
+                    <set id="receiver" appearance="bordered-panel" label-id="statemachine.editor.form.label.form_receive" />
+                    <field id="lecm-group-actions:form-data-value" set="receiver"/>
+                    <field id="lecm-group-actions:form-data-type" set="sender"/>
+                    <field id="lecm-group-actions:form-data-sender" set="sender"/>
+                </appearance>
+            </form>
+        </forms>
+    </config>
+
 
 </alfresco-config>
