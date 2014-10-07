@@ -97,4 +97,19 @@
         <property name="propertiesService" ref="propertiesService"/>
     </bean>
 
+    <bean id="statemachineEditor.exportSettingsInitializer" parent="dictionary.exportSettingsInitializer" class="ru.it.lecm.dictionary.beans.ExportSettingsInitializerBean">
+        <constructor-arg>
+            <map>
+                <entry key="lecm-stmeditor:inputFormVariable">
+                    <list>
+                        <value>cm:name</value>
+                        <value>lecm-stmeditor:formInputFromType</value>
+                        <value>lecm-stmeditor:formInputToValue</value>
+                        <value>lecm-stmeditor:formInputFromValue</value>
+                    </list>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
 </beans>

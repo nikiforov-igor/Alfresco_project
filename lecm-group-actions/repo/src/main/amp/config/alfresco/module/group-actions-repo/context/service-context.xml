@@ -104,6 +104,7 @@
                         <value>lecm-group-actions:document-type</value>
                         <value>lecm-group-actions:document-connection</value>
                         <value>lecm-group-actions:document-connection-system</value>
+                        <value>lecm-group-actions:document-autofill-enabled</value>
                     </list>
                 </entry>
             </map>
