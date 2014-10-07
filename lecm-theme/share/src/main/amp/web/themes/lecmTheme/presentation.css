@@ -2273,7 +2273,7 @@ span.person a div.description:empty {
 }
 .yui-skin-lecmTheme div.grid table.fixedHeader tbody {
     width: 100%;
-    max-height: 80px;
+    max-height: 100px;
     overflow: auto;
     display: block;
 }
