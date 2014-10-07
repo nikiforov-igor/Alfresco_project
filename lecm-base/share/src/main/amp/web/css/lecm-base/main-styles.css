@@ -663,3 +663,15 @@ i.icon-building {
     height: 22px;
     min-height: 22px;
 }
+
+/* Диалог импорта */
+.yui-skin-lecmTheme ul.import-form {
+    padding: 5px 20px;
+}
+.yui-skin-lecmTheme ul.import-form li {
+    padding-bottom: 5px;
+}
+.yui-skin-lecmTheme ul.import-form li input[type="file"] {
+    width: auto;
+}
+

@@ -53,6 +53,8 @@ LogicECM.module.ARM = LogicECM.module.ARM|| {};
 					disabled: true
 				});
 				Alfresco.util.createYUIButton(this, "import-form-cancel", this.hideImportDialog,{});
+				Alfresco.util.createYUIButton(this, "import-form-info-ok", function() {this.importInfoDialog.hide();},{});
+				Alfresco.util.createYUIButton(this, "import-form-error-ok", function() {this.importErrorDialog.hide();},{});
 				YAHOO.util.Event.on(this.id + "-import-form-import-file", "change", this.checkImportFile, null, this);
 				YAHOO.util.Event.on(this.id + "-import-error-form-show-more-link", "click", this.errorFormShowMore, null, this);
 			},

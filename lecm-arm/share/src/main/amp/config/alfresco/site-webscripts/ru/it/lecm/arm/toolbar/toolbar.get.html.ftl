@@ -64,14 +64,17 @@
         </span>
     </div>
 
-	<div id="${importInfoFormId}" class="yui-panel">
+	<div id="${importInfoFormId}" class="yui-panel import-info">
 		<div id="${importInfoFormId}-head" class="hd">${msg("title.import.info")}</div>
 		<div id="${importInfoFormId}-body" class="bd">
 			<div id="${importInfoFormId}-content" class="import-info-content"></div>
-		</div>
+            <div class="bdft">
+                <button id="${importFormId}-info-ok" tabindex="0">${msg("button.ok")}</button>
+            </div>
+        </div>
 	</div>
 
-	<div id="${importErrorFormId}" class="yui-panel">
+	<div id="${importErrorFormId}" class="yui-panel import-error">
 		<div id="${importErrorFormId}-head" class="hd">${msg("title.import.info")}</div>
 		<div id="${importErrorFormId}-body" class="bd">
 			<div id="${importErrorFormId}-content" class="import-info-content">
@@ -92,6 +95,9 @@
 					</div>
 				</div>
 			</div>
+            <div class="bdft">
+                <button id="${importFormId}-error-ok" tabindex="0">${msg("button.ok")}</button>
+            </div>
 		</div>
 	</div>
 
