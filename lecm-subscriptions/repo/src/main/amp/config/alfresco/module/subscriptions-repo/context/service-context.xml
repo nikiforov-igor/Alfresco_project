@@ -11,34 +11,34 @@
 						   http://www.springframework.org/schema/jms
 						   http://www.springframework.org/schema/jms/spring-jms.xsd">
 	<!-- Registration of orgStructure models -->
-	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
+	<bean id="${groupId}.${artifactId}.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/subscriptions-repo/messages/subscriptions</value>
+				<value>alfresco/module/${artifactId}/messages/subscriptions</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsDictionaryBootstrap" parent="lecmDictionaryBootstrap"
+	<bean id="${groupId}.${artifactId}.subscriptionsDictionaryBootstrap" parent="lecmDictionaryBootstrap"
 		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
 		<property name="dictionaries">
 			<list>
-				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-roles-items.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-roles-items.xml</value>
 			</list>
 		</property>
 	</bean>
 
 	<!-- Registration of subscriptions aspects models -->
-	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap" parent="dictionaryModelBootstrap">
+	<bean id="${groupId}.${artifactId}.subscriptionsAspectBootstrap" parent="dictionaryModelBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-aspects-model.xml</value>
+				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-aspects-model.xml</value>
 			</list>
 		</property>
 	</bean>
@@ -174,12 +174,12 @@
 	</bean>
 
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
-	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsServicePermissions" parent="ServiceFolderPermissionHelper"
+	<bean id="${groupId}.${artifactId}.subscriptionsServicePermissions" parent="ServiceFolderPermissionHelper"
 		  depends-on="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsBootstrap, subscriptionsService" >
 		<property name="serviceBean" ref="subscriptionsService"/>
 		<property name="permissionsList">
 			<list>
-				<value>alfresco/module/subscriptions-repo/permissions/directories-permissions.xml</value>
+				<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
 			</list>
 		</property>
 	</bean>
