@@ -38,6 +38,7 @@
     background-repeat: no-repeat;
     padding: 0.3em;
     text-decoration: none;
+    display: inherit;
 }
 
 .dashlet .titleBarActions .expand,
@@ -58,16 +59,27 @@
     opacity: 1;
 }
 
+.metadata-form .lecm-dashlet-actions {
+    cursor: pointer;
+    float: right;
+    height: 16px;
+    margin: 3px;
+    width: 40px;
+    padding-right: 15px;
+}
+
+.metadata-form .lecm-dashlet-actions .edit,
+.metadata-form .lecm-dashlet-actions .collapse {
+    background-repeat: no-repeat;
+    padding-right: 16px;
+    font-size: 16px;
+}
 .metadata-form .lecm-dashlet-actions .edit {
     background-image: url("/share/res/components/profile/images/edit.png");
-    background-repeat: no-repeat;
-    padding-right: 15px;
 }
 
 .metadata-form .lecm-dashlet-actions .collapse {
     background-image: url("/share/res/components/documentlibrary/actions/document-cloud-unsync-16.png");
-    background-repeat: no-repeat;
-    padding-right: 15px;
     margin-left: 10px;
 }
 
@@ -94,18 +106,10 @@
 }
 
 .dashlet select.attachment-categories-select {
-	font-size: 13px;
-	padding: 0;
     width: 12em;
-}
-
-.metadata-form .lecm-dashlet-actions {
-    cursor: pointer;
-    float: right;
-    height: 16px;
-    margin: 3px;
-    width: 40px;
-    padding-right: 15px;
+    font-size: 13px;
+	padding: 0;
+    margin-top: -3px;
 }
 
 .yui-u .dashlet .dashlet-title {
