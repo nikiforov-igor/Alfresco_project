@@ -1,6 +1,5 @@
 <#include "/org/alfresco/include/alfresco-template.ftl" />
 <script type="text/javascript">//<![CDATA[
-    //var bjSettings = ${bjSettings};
 
     LogicECM.module = LogicECM.module || {};
     LogicECM.module.BusinessJournal = LogicECM.module.BusinessJournal || {};
