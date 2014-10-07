@@ -1,9 +1,26 @@
-package ru.it.lecm.subscriptions.schedule;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ru.it.lecm.subscriptions;
 
-import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+import javax.jms.TextMessage;
 import org.alfresco.repo.search.impl.lucene.LuceneQueryParserException;
-import org.alfresco.service.cmr.action.Action;
-import org.alfresco.service.cmr.action.ParameterDefinition;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.service.cmr.repository.AssociationRef;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.repository.NodeService;
@@ -14,47 +31,41 @@ import org.alfresco.service.cmr.search.SearchParameters;
 import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
-import org.slf4j.Logger;
+import org.alfresco.service.transaction.TransactionService;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.LoggerFactory;
-import ru.it.lecm.businessjournal.beans.BusinessJournalService;
+import ru.it.lecm.businessjournal.beans.BusinessJournalRecord;
 import ru.it.lecm.notifications.beans.Notification;
 import ru.it.lecm.notifications.beans.NotificationsService;
 import ru.it.lecm.orgstructure.beans.OrgstructureBean;
 import ru.it.lecm.subscriptions.beans.SubscriptionsService;
 
-import java.util.*;
-
 /**
- * User: PMelnikov
- * Date: 17.01.13
- * Time: 11:09
+ *
+ * @author ikhalikov
  */
-public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase {
+public class RecordsListener implements MessageListener {
 
-	private final static Logger logger = LoggerFactory.getLogger(BusinessJournalScheduleExecutor.class);
-
-	/**
-	 * The node service
-	 */
-	private NodeService nodeService;
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(RecordsListener.class);
 
 	private SearchService searchService;
-
+	private NodeService nodeService;
 	private NamespaceService namespaceService;
-
 	private NotificationsService notificationsService;
-
 	private OrgstructureBean orgstructureService;
-
 	private SubscriptionsService subscriptionsService;
+	private TransactionService transactionService;
 
-	/**
-	 * Set the node service
-	 *
-	 * @param nodeService  the node service
-	 */
-	public void setNodeService(NodeService nodeService)
-	{
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
+
+	public void setSearchService(SearchService searchService) {
+		this.searchService = searchService;
+	}
+
+	public void setNodeService(NodeService nodeService) {
 		this.nodeService = nodeService;
 	}
 
@@ -66,45 +77,60 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 		this.notificationsService = notificationsService;
 	}
 
-	public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
-		this.subscriptionsService = subscriptionsService;
-	}
-
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
-
 	public void setOrgstructureService(OrgstructureBean orgstructureService) {
 		this.orgstructureService = orgstructureService;
 	}
 
+	public void setSubscriptionsService(SubscriptionsService subscriptionsService) {
+		this.subscriptionsService = subscriptionsService;
+	}
+
 	@Override
-	protected void executeImpl(Action action, NodeRef bjRecordRef) {
-		String author = (String) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_INITIATOR);
-		List<AssociationRef> initiatorAssocs = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_INITIATOR);
-		NodeRef initiator = null;
-		if (initiatorAssocs != null && !initiatorAssocs.isEmpty()) {
-			initiator = initiatorAssocs.get(0).getTargetRef();
-		}
-		String description = (String) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_DESC);
-		Date date = (Date) nodeService.getProperty(bjRecordRef, BusinessJournalService.PROP_BR_RECORD_DATE);
-		NodeRef mainObject = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_MAIN_OBJ).get(0).getTargetRef();
+	public void onMessage(final Message message) {
+		final ObjectMapper mapper = new ObjectMapper().disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+		RetryingTransactionHelper transactionHelper = transactionService.getRetryingTransactionHelper();
+		transactionHelper.doInTransaction(new RetryingTransactionHelper.RetryingTransactionCallback<Object>() {
+
+			@Override
+			public Object execute() throws Throwable {
+				AuthenticationUtil.runAsSystem(new AuthenticationUtil.RunAsWork<Object>() {
+
+					@Override
+					public Object doWork() throws Exception {
+						BusinessJournalRecord rec = (BusinessJournalRecord) ((ObjectMessage) message).getObject();
+						executeSubscription(rec);
+						return null;
+					}
+				});
+				return null;
+			}
+		}, false, true);
+
+	}
+
+	protected void executeSubscription(BusinessJournalRecord record) {
+		String author = record.getInitiatorText();
+		NodeRef initiator = record.getInitiator();
+		String description = record.getRecordDescription();
+		Date date = record.getDate();
+		NodeRef mainObject = record.getMainObject();
+
 		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
-		subscriptions.addAll(findSubscriptionsToType(bjRecordRef));
+		subscriptions.addAll(findSubscriptionsToType(record.getObjectType(), record.getEventCategory()));
 		subscriptions.addAll(findSubscriptionsToInitiator(initiator));
 
 		//При подписке на сотрудника и рабочую группу в нее должны попадать не те записи Б-Ж, в которых данный сотрудник является основным объектом, а те, в которых он является инициатором
-		if (!this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
+		if (mainObject != null && nodeService.exists(mainObject) && !this.orgstructureService.isEmployee(mainObject) && !this.orgstructureService.isWorkGroup(mainObject)) {
 			//добавляем подписки на объект
 			subscriptions.addAll(subscriptionsService.getSubscriptionsToObject(mainObject));
 		}
 		sendNotificationsBySubscriptions(subscriptions, author, initiator, description, mainObject, date);
-		nodeService.addAspect(bjRecordRef, SubscriptionsService.ASPECT_SUBSCRIBED, null);
 	}
 
 	//обработка подписок на действия сотрудника/группы/подразделения
 	private Set<NodeRef> findSubscriptionsToInitiator(NodeRef initiator) {
-        Set<NodeRef> subscriptions = new HashSet<NodeRef>();
+		Set<NodeRef> subscriptions = new HashSet<NodeRef>();
 		if (initiator == null || !nodeService.exists(initiator)) {
 			return subscriptions;
 		}
@@ -151,21 +177,11 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			notification.setRecipientOrganizationUnitRefs(units);
 			notification.setRecipientWorkGroupRefs(workgroups);
 			notification.setRecipientBusinessRoleRefs(businessRoles);
-			notificationsService.sendNotification(notification);
+			notificationsService.sendNotification(notification, true);
 		}
 	}
 
-	private Set<NodeRef> findSubscriptionsToType(NodeRef bjRecordRef) {
-		NodeRef byType = null;
-		List<AssociationRef> types = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_OBJ_TYPE);
-		if (types.size() == 1) {
-			byType = types.get(0).getTargetRef();
-		}
-		NodeRef byCategory = null;
-		List<AssociationRef> categories = nodeService.getTargetAssocs(bjRecordRef, BusinessJournalService.ASSOC_BR_RECORD_EVENT_CAT);
-		if (categories.size() == 1) {
-			byCategory = categories.get(0).getTargetRef();
-		}
+	private Set<NodeRef> findSubscriptionsToType(NodeRef byType, NodeRef byCategory) {
 		NodeRef subscriptionsRoot = subscriptionsService.getSubscriptionRootRef();
 		String path = nodeService.getPath(subscriptionsRoot).toPrefixString(namespaceService);
 		String type = SubscriptionsService.TYPE_SUBSCRIPTION_TO_TYPE.toPrefixString(namespaceService);
@@ -206,17 +222,13 @@ public class BusinessJournalScheduleExecutor extends ActionExecuterAbstractBase 
 			}
 		} catch (LuceneQueryParserException ignored) {
 		} catch (Exception e1) {
-			logger.error("Error while send notification for business journal's record " + bjRecordRef.toString(), e1);
+			logger.error("Error while send notification for business journal's record", e1);
 		} finally {
 			if (resultSet != null) {
 				resultSet.close();
 			}
 		}
 		return subscriptions;
-	}
-
-	@Override
-	protected void addParameterDefinitions(List<ParameterDefinition> paramList) {
 	}
 
 	private List<NodeRef> assocsToCollection(NodeRef parent, QName assocName) {

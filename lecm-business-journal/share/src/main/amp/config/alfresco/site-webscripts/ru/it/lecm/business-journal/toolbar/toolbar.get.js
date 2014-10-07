@@ -14,12 +14,12 @@ function main()
         model.showButtons = (args["showButtons"] == 'true');
     }
 
-    var jsonStr= remote.connect("alfresco").get("/lecm/business-journal/api/getArchiverSettings");
+//    var jsonStr= remote.connect("alfresco").get("/lecm/business-journal/api/getArchiverSettings");
     var archDepth = 30;
-    if (jsonStr.status == 200) {
-        var obj = eval("("+ jsonStr + ")");
-        archDepth = obj["archiverDeep"];
-    }
+//    if (jsonStr.status == 200) {
+//        var obj = eval("("+ jsonStr + ")");
+//        archDepth = obj["archiverDeep"];
+//    }
 
     var date = new Date();
     date.setDate(date.getDate() - archDepth);

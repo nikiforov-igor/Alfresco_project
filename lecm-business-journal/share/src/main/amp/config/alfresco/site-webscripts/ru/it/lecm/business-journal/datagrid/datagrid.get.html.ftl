@@ -6,7 +6,7 @@
 	<div id="yui-main-2">
 		<div class="yui-b datagrid-content" id="alf-content">
 			<!-- include base datagrid markup-->
-		<@grid.datagrid id=id showViewForm=false showArchiveCheckBox=true>
+		<@grid.datagrid id=id showViewForm=false>
 			<script type="text/javascript">//<![CDATA[
 			(function() {
 				function createDatagrid() {
@@ -14,22 +14,6 @@
 							{
 								usePagination:true,
 								showExtendSearchBlock:true,
-								actions: [
-									{
-										type:"datagrid-action-link-${bubblingLabel!"bj-records"}",
-										id:"onActionDelete",
-										permission:"delete",
-										label:"${msg("actions.delete-row")}",
-	                                    evaluator: function (rowData) {
-		                                    if (rowData) {
-	                                            var itemData = rowData.itemData;
-	                                            return itemData["prop_lecm-dic_active"] == undefined ||
-	                                                    itemData["prop_lecm-dic_active"].value == true;
-		                                    }
-	                                        return false;
-	                                    }
-									}
-								],
 	                            dataSource: "/lecm/business-journal/ds/main",
 	                            bubblingLabel: "${bubblingLabel!"bj-records"}",
 								showCheckboxColumn: true,
@@ -39,11 +23,12 @@
                                     nodeRef: LogicECM.module.BusinessJournal.CONTAINER,
                                     sort:"lecm-busjournal:bjRecord-date|false"
 
-                                }
+                                },
+								showActionColumn: false
 							}).setMessages(${messages});
                             datagrid.draw();
 				}
-	
+
 				function init() {
                     LogicECM.module.Base.Util.loadScripts([
                         'scripts/lecm-base/components/advsearch.js',
@@ -51,7 +36,7 @@
                         '/scripts/lecm-business-journal/business-journal-datagrid.js'
 					], createDatagrid);
 				}
-	
+
 				YAHOO.util.Event.onDOMReady(init);
 			})();
 			//]]></script>

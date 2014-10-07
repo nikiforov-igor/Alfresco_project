@@ -2,44 +2,50 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:amq="http://activemq.apache.org/schema/core"
+	   xmlns:jms="http://www.springframework.org/schema/jms"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+						   http://activemq.apache.org/schema/core
+						   http://activemq.apache.org/schema/core/activemq-core.xsd
+						   http://www.springframework.org/schema/jms
+						   http://www.springframework.org/schema/jms/spring-jms.xsd">
 	<!-- Registration of orgStructure models -->
-	<bean id="${groupId}.${artifactId}.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
-	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap">
+	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsBootstrap" parent="dictionaryModelBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgStructureBootstrap, ru.it.lecm.notifications.notifications-repo.notificationsDictionaryBootstrap, ru.it.lecm.business-journal.business-journal-repo.businessJournalBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-model.xml</value>
+				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-model.xml</value>
 			</list>
 		</property>
 		<property name="labels">
 			<list>
-				<value>alfresco/module/${artifactId}/messages/subscriptions</value>
+				<value>alfresco/module/subscriptions-repo/messages/subscriptions</value>
 			</list>
 		</property>
 	</bean>
 
-	<bean id="${groupId}.${artifactId}.subscriptionsDictionaryBootstrap" parent="lecmDictionaryBootstrap"
-	      depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
+	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsDictionaryBootstrap" parent="lecmDictionaryBootstrap"
+		  depends-on="ru.it.lecm.orgstructure.orgstructure-repo.orgBootstrap">
 		<property name="dictionaries">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-roles-items.xml</value>
+				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-roles-items.xml</value>
 			</list>
 		</property>
 	</bean>
 
 	<!-- Registration of subscriptions aspects models -->
-	<bean id="${groupId}.${artifactId}.subscriptionsAspectBootstrap" parent="dictionaryModelBootstrap">
+	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsAspectBootstrap" parent="dictionaryModelBootstrap">
 		<property name="models">
 			<list>
-				<value>alfresco/module/${artifactId}/models/lecm-subscriptions-aspects-model.xml</value>
+				<value>alfresco/module/subscriptions-repo/models/lecm-subscriptions-aspects-model.xml</value>
 			</list>
 		</property>
 	</bean>
 
 	<bean id="subscriptionScript" parent="baseScript"
-	      class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
-	      depends-on="subscriptionsService">
+		  class="ru.it.lecm.subscriptions.scripts.SubscriptionsWebScriptBean"
+		  depends-on="subscriptionsService">
 		<property name="extensionName">
 			<value>subscription</value>
 		</property>
@@ -55,7 +61,7 @@
 	<util:constant id="SUBSCRIPTIONS_ROOT_NAME" static-field="ru.it.lecm.subscriptions.beans.SubscriptionsService.SUBSCRIPTIONS_ROOT_NAME"/>
 
 	<bean id="subscriptionsService" class="ru.it.lecm.subscriptions.beans.SubscriptionsServiceImpl" parent="baseBean"
-	      depends-on="nodeService, serviceOrgstructure, businessJournalService">
+		  depends-on="nodeService, serviceOrgstructure, businessJournalService">
 		<property name="orgstructureService" ref="serviceOrgstructure"/>
 		<property name="businessJournalService" ref="businessJournalService"/>
 		<property name="folders">
@@ -65,60 +71,18 @@
 		</property>
 	</bean>
 
-	<bean id="businessJournalSchedule" class="ru.it.lecm.subscriptions.schedule.BusinessJournalSchedule">
-		<property name="transactionMode">
-			<value>ISOLATED_TRANSACTIONS</value>
-		</property>
-		<property name="compensatingActionMode">
-			<value>IGNORE</value>
-		</property>
-		<property name="searchService">
-			<ref bean="SearchService"/>
-		</property>
-		<property name="nodeService">
-			<ref bean="nodeService"/>
-		</property>
-		<property name="namespaceService" ref="namespaceService"/>
-		<property name="cronExpression">
-			<value>0 0/1 * * * ?</value>
-		</property>
-		<property name="jobName">
-			<value>receive-journal</value>
-		</property>
-		<property name="jobGroup">
-			<value>subscribe</value>
-		</property>
-		<property name="triggerName">
-			<value>receive-journal-trigger</value>
-		</property>
-		<property name="triggerGroup">
-			<value>subscribe-trigger</value>
-		</property>
-		<property name="scheduler">
-			<ref bean="schedulerFactory"/>
-		</property>
-		<property name="actionService">
-			<ref bean="ActionService"/>
-		</property>
-		<property name="businessJournalService">
-			<ref bean="businessJournalService"/>
-		</property>
-        <property name="orgstructureService" ref="serviceOrgstructure"/>
-        <property name="subscriptionsService">
-            <ref bean="subscriptionsService"/>
-        </property>
-        <property name="notificationsService">
-            <ref bean="notificationsService"/>
-        </property>
-        <property name="transactionService">
-			<ref bean="TransactionService"/>
-		</property>
-		<property name="runAsUser">
-			<value>System</value>
-		</property>
-	</bean>
+	 <amq:queue id="bjQueueInternal" physicalName="bjQueueInternal" />
 
-	<bean id="businessJournalScheduleExecutor" class="ru.it.lecm.subscriptions.schedule.BusinessJournalScheduleExecutor" parent="action-executer">
+	<amq:connectionFactory id="jmsFactorySub" brokerURL="vm://localhost"/>
+
+	<jms:listener-container container-type="default"
+							connection-factory="jmsFactorySub"
+							acknowledge="auto"
+							concurrency="10-50">
+		<jms:listener destination="bjQueueInternal" ref="listener"/>
+	</jms:listener-container>
+
+	<bean id="listener" class="ru.it.lecm.subscriptions.RecordsListener">
 		<property name="nodeService">
 			<ref bean="NodeService" />
 		</property>
@@ -135,17 +99,16 @@
 		<property name="orgstructureService">
 			<ref bean="serviceOrgstructure"/>
 		</property>
-		<property name="ignoreLock">
-			<value>false</value>
+		<property name="transactionService">
+			<ref bean="transactionService"/>
 		</property>
-	<property name="publicAction" value="false" />
-    </bean>
+	</bean>
 
 	<bean id="subscriptionToTypeOnCreateAssocsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsOnCreateAssocsPolicy"
-	      init-method="init" parent="logicEcmAssociationPolicy"/>
+		  init-method="init" parent="logicEcmAssociationPolicy"/>
 
 	<bean id="subscriptionsToObjectLogEventsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToObjectLogEventsPolicy"
-	      init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -158,7 +121,7 @@
 	</bean>
 
 	<bean id="subscriptionsToTypeLogEventsEmployeePolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventEmployeePolicy"
-	      init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -168,7 +131,7 @@
 	</bean>
 
 	<bean id="subscriptionsToTypeLogEventsWorkGroupPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventWorkGroupPolicy"
-	      init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -178,7 +141,7 @@
 	</bean>
 
 	<bean id="subscriptionsToTypeLogEventBusinessRolePolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventBusinessRolePolicy"
-	      init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -188,7 +151,7 @@
 	</bean>
 
 	<bean id="subscriptionsToTypeLogEventsOrganizationUnitPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventOrganizationUnitPolicy"
-		init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -198,7 +161,7 @@
 	</bean>
 
 	<bean id="subscriptionsToTypeLogEventsPolicy" class="ru.it.lecm.subscriptions.policy.SubscriptionsToTypeLogEventPolicy"
-	      init-method="init">
+		  init-method="init">
 		<property name="policyComponent">
 			<ref bean="policyComponent"/>
 		</property>
@@ -211,12 +174,12 @@
 	</bean>
 
 	<!-- Настройки прав доступа на каталоги в рамках сервиса -->
-	<bean id="${groupId}.${artifactId}.subscriptionsServicePermissions" parent="ServiceFolderPermissionHelper"
-	      depends-on="${groupId}.${artifactId}.subscriptionsBootstrap, subscriptionsService" >
+	<bean id="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsServicePermissions" parent="ServiceFolderPermissionHelper"
+		  depends-on="ru.it.lecm.subscriptions.subscriptions-repo.subscriptionsBootstrap, subscriptionsService" >
 		<property name="serviceBean" ref="subscriptionsService"/>
 		<property name="permissionsList">
 			<list>
-				<value>alfresco/module/${artifactId}/permissions/directories-permissions.xml</value>
+				<value>alfresco/module/subscriptions-repo/permissions/directories-permissions.xml</value>
 			</list>
 		</property>
 	</bean>

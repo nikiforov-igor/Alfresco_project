@@ -151,19 +151,39 @@ function getSearchResults(params) {
             var fullTextSearch = searchConfig.fullTextSearch;
             var fullTextSearchJson = jsonUtils.toObject(fullTextSearch);
             if (fullTextSearchJson.searchTerm != null && fullTextSearchJson.searchTerm != "") {
-                var value = fullTextSearchJson.searchTerm;
-                var filterFields =  fullTextSearchJson.fields.split(",");
-                var filter = [];
-                for (var i in filterFields) {
-                    filter[filterFields[i]] = value;
+//                var value = fullTextSearchJson.searchTerm;
+//                var filterFields =  fullTextSearchJson.fields.split(",");
+//                var filter = [];
+//                for (var i in filterFields) {
+//                    filter[filterFields[i]] = value;
+//                }
+//                filter["lecm-busjournal:bjRecord-secondaryObj1-assoc-text-content"] = value;
+//                filter["lecm-busjournal:bjRecord-secondaryObj2-assoc-text-content"] = value;
+//                filter["lecm-busjournal:bjRecord-secondaryObj3-assoc-text-content"] = value;
+//                filter["lecm-busjournal:bjRecord-secondaryObj4-assoc-text-content"] = value;
+//                filter["lecm-busjournal:bjRecord-secondaryObj5-assoc-text-content"] = value;
+//                total = businessJournal.getRecordsCount(filter, false, showInactive);
+//                nodes = businessJournal.getRecords(sort, startIndex, pageSize, filter, false, showInactive);
+				var filter = [];
+				var value = fullTextSearchJson.searchTerm;
+				filter["lecm-busjournal:bjRecord-description"] = value;
+				if (searchConfig.formData != null && searchConfig.formData.length > 0) {
+                    var formData = searchConfig.formData;
+                    if (formData != null && formData.length > 0) {
+//                        var filter = [];
+                        var formJson = jsonUtils.toObject(formData);
+                        for (var key in formJson) {
+                            if (key.indexOf("prop_") == 0 || key.indexOf("assoc_") == 0) {
+                                var field = key.replace("prop_", "").replace("assoc_", "").replace("_", ":");
+                                if (field != "") {
+                                    filter[field] = formJson[key];
+                                }
+                            }
+                        }
+                        total = -1;
+                        nodes = businessJournal.getRecords(sort, startIndex, pageSize, filter, true, showInactive);
+                    }
                 }
-                filter["lecm-busjournal:bjRecord-secondaryObj1-assoc-text-content"] = value;
-                filter["lecm-busjournal:bjRecord-secondaryObj2-assoc-text-content"] = value;
-                filter["lecm-busjournal:bjRecord-secondaryObj3-assoc-text-content"] = value;
-                filter["lecm-busjournal:bjRecord-secondaryObj4-assoc-text-content"] = value;
-                filter["lecm-busjournal:bjRecord-secondaryObj5-assoc-text-content"] = value;
-                total = businessJournal.getRecordsCount(filter, false, showInactive);
-                nodes = businessJournal.getRecords(sort, startIndex, pageSize, filter, false, showInactive);
             } else {
                 if (searchConfig.formData != null && searchConfig.formData.length > 0) {
                     var formData = searchConfig.formData;
@@ -172,13 +192,13 @@ function getSearchResults(params) {
                         var formJson = jsonUtils.toObject(formData);
                         for (var key in formJson) {
                             if (key.indexOf("prop_") == 0 || key.indexOf("assoc_") == 0) {
-                                var field = key.replace("prop_", "").replace("assoc_").replace("_", ":");
+                                var field = key.replace("prop_", "").replace("assoc_", "").replace("_", ":");
                                 if (field != "") {
                                     filter[field] = formJson[key];
                                 }
                             }
                         }
-                        total = businessJournal.getRecordsCount(filter, true, showInactive);
+                        total = -1;
                         nodes = businessJournal.getRecords(sort, startIndex, pageSize, filter, true, showInactive);
                     }
                 }

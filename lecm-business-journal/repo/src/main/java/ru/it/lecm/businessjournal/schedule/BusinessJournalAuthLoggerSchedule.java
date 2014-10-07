@@ -29,7 +29,7 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
 
     private final static Logger logger = LoggerFactory.getLogger(BusinessJournalAuthLoggerSchedule.class);
 //TODO вынести в настройки
-    private final static String cronExpression = "0 */3 * * * ?";
+    private final static String cronExpression = "0/1 * * * * ?";
     private final static String appName = "AuthAudit";
 //
 
@@ -192,7 +192,7 @@ public class BusinessJournalAuthLoggerSchedule extends AbstractScheduledAction {
                                     }
                                 }
                             }
-                            
+
 
                             //если логин пуст, падает метод personExists в недрах log()
                             if (null == login || login.isEmpty()) {

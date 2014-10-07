@@ -1,22 +1,17 @@
 package ru.it.lecm.businessjournal.policies;
 
 import java.io.Serializable;
-import java.text.ParseException;
 import java.util.Map;
 
-import org.alfresco.repo.action.scheduled.InvalidCronExpression;
 import org.alfresco.repo.node.NodeServicePolicies;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
-import org.quartz.CronTrigger;
-import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.beans.BusinessJournalService;
-import ru.it.lecm.businessjournal.schedule.BusinessJournalArchiveSchedule;
 
 /**
  * @author dbashmakov Date: 24.01.13 Time: 10:47

@@ -13,12 +13,6 @@
                 <property name="lecm-arm:order"><![CDATA[10]]></property>
                 <property name="lecm-arm:html-url"><![CDATA[page/business-journal]]></property>
             </item>
-            <item name="cm:Настройки автоматического архивирования" type="lecm-arm:html-node">
-                <property name="cm:name"><![CDATA[Настройки автоматического архивирования]]></property>
-                <property name="lecm-arm:order"><![CDATA[20]]></property>
-                <property name="lecm-arm:html-url">
-                    <![CDATA[page/business-journal-archiver-settings]]></property>
-            </item>
             <item name="cm:Настройки регистрируемых событий" type="lecm-arm:html-node">
                 <property name="cm:name"><![CDATA[Настройки регистрируемых событий]]></property>
                 <property name="lecm-arm:order"><![CDATA[30]]></property>

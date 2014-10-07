@@ -1,10 +1,10 @@
 //скрипт для получения корневой (корневых) папок
-var jsonStr = remote.connect("alfresco").get("/lecm/business-journal/api/getArchiverSettings");
-if (jsonStr.status == 200) {
-    model.bjSettings = jsonStr;
-} else {
+//var jsonStr = remote.connect("alfresco").get("/lecm/business-journal/api/getArchiverSettings");
+//if (jsonStr.status == 200) {
+//    model.bjSettings = jsonStr;
+//} else {
     model.bjSettings = {};
-}
+//}
 
 var rolesStr = remote.connect("alfresco").get("/lecm/orgstructure/api/getCurrentEmployeeRoles");
 

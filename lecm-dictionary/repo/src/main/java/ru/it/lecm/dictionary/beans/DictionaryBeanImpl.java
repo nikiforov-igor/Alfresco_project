@@ -97,7 +97,7 @@ public class DictionaryBeanImpl extends BaseBean implements DictionaryBean {
     @Override
     public List<NodeRef> getChildren(NodeRef nodeRef) {
         List<NodeRef> activeChildren = new ArrayList<NodeRef>();
-
+		
         if (nodeRef != null) {
             List<ChildAssociationRef> children = nodeService.getChildAssocs(nodeRef);
 

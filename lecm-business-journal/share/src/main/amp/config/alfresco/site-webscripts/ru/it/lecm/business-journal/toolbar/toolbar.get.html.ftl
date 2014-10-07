@@ -89,13 +89,6 @@
     </div>
 </div>
 
-<div class="archive-rows">
-	<span id="${id}-archiveByDateButton" class="yui-button yui-push-button">
-       <span class="first-child">
-          <button type="button" title="${msg("button.archive")}">${msg("button.archive")}</button>
-       </span>
-    </span>
-</div>
 <div class="divider"></div>
 <div class="exportcsv">
     <span id="${id}-exportCsvButton" class="yui-button yui-push-button">

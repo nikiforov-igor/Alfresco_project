@@ -9,6 +9,7 @@
 	    //<![CDATA[
 	    (function() {
 	        var OBJECT_TYPE = "Тип объекта";
+	        var EVENT_CATEGORY = "Категория события";
 	        var SELECT_DAYS = {
 	            defaultIndex: 0,
 	            options: [
@@ -130,6 +131,55 @@
 	                                            };
 	                                        }
 	                                        makeSelect('${id}-types', SELECT_TYPES);
+	                                    }
+	                                },
+	                                scope: this
+	                            },
+	                            failureCallback: {
+	                                fn: function() {console.log("Failed to load Object types list.")},
+	                                scope: this
+	                            }
+	                        });
+	                    },
+	                    scope: this
+	                },
+	                failureCallback: {
+	                    fn: function() {console.log("Failed to load nodeRef of Object type dictionary.")},
+	                    scope: this
+	                }
+	            });
+
+				//получить nodeRef справочника "Категория событий"
+	            Alfresco.util.Ajax.jsonGet({
+	                url: Alfresco.constants.PROXY_URI + "lecm/dictionary/api/getDictionary?dicName=" + encodeURIComponent(EVENT_CATEGORY),
+	                successCallback: {
+	                    fn: function(response){
+	                        //заполнить выпадающий список типов объектов
+	                        Alfresco.util.Ajax.jsonGet({
+	                            url: Alfresco.constants.PROXY_URI + "lecm/dictionary/api/getChildrenItems.json?nodeRef=" + response.json.nodeRef,
+	                            successCallback: {
+	                                fn: function(response){
+	                                    var items = response.json;
+
+	                                    if (items) {
+	                                        var SELECT_TYPES = {
+	                                            defaultIndex: 0,
+	                                            options: []
+	                                        };
+
+	                                        SELECT_TYPES.options[0] = {
+	                                            value: '',
+	                                            text: '${msg("label.select.types.all")}'
+	                                        };
+	                                        for (var i = 0; i < items.length; i++) { // [].forEach() не работает в IE
+	                                            var item = items[i];
+
+	                                            SELECT_TYPES.options[i + 1] = {
+	                                                value: item.nodeRef,
+	                                                text: item.name
+	                                            };
+	                                        }
+	                                        makeSelect('${id}-eventCategories', SELECT_TYPES);
 	                                    }
 	                                },
 	                                scope: this
@@ -286,9 +336,11 @@
 	<#if hasAccess>
 	    <div id="${id}_controls" class="toolbar flat-button">
 	        <input type="button" id="${id}-types">
+	        <input type="button" id="${id}-eventCategories">
 	        <input type="button" id="${id}-days">
 	        <input type="button" id="${id}-whose">
 	        <input type="hidden" id="${id}-types-hidden" name="type">
+	        <input type="hidden" id="${id}-eventCategories-hidden" name="eventCategory">
 	        <input type="hidden" id="${id}-days-hidden" name="days">
 	        <input type="hidden" id="${id}-whose-hidden" name="whose">
 	    </div>

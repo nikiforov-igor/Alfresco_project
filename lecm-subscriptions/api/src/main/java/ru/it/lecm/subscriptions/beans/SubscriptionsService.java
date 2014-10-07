@@ -39,6 +39,7 @@ public interface SubscriptionsService {
 	public static final QName ASPECT_SUBSCRIBED = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "subscribedAspect");
 	public static final QName ASPECT_LAST_RECORD_ID = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "lastRecordIdAspect");
     public static final QName PROP_LAST_RECORD_ID = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "lastRecordId");
+	public static final QName PROP_LAST_RECORD_TIMESTAMP = QName.createQName(SUBSCRIPTIONS_NAMESPACE_URI, "lastRecordTimeStamp");
 
 	QName ASSOC_BUSJOURNAL_LINK_EMPLOYEE = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "lecm-busjournal");
 	QName ASSOC_BUSJOURNAL_EVENT_CATEGORY = QName.createQName(BUSJOURNAL_NAMESPACE_URI, "messageTemplate-evCategory-assoc");

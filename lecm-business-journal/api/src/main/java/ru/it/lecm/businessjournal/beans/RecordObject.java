@@ -18,6 +18,17 @@ public class RecordObject implements Serializable {
         this.description = description;
     }
 
+	public RecordObject() {
+	}
+
+	public void setNodeRef(NodeRef nodeRef) {
+		this.nodeRef = nodeRef;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
     public NodeRef getNodeRef() {
         return nodeRef;
     }

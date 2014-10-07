@@ -299,6 +299,10 @@
                     <title>Last Business Journal Record Id</title>
                     <type>d:long</type>
                 </property>
+				<property name="lecm-subscr:lastRecordTimeStamp">
+                    <title>Last Business Journal Record timestamp</title>
+                    <type>d:date</type>
+                </property>
             </properties>
         </aspect>
 	</aspects>

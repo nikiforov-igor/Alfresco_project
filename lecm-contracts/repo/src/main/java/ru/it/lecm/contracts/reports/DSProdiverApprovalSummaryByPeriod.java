@@ -18,10 +18,10 @@ import ru.it.lecm.reports.jasper.containers.BasicEmployeeInfo;
 import ru.it.lecm.reports.utils.Utils;
 import ru.it.lecm.utils.LuceneSearchWrapper;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
 
 import java.io.Serializable;
 import java.util.*;
+import ru.it.lecm.workflow.approval.api.deprecated.ApprovalResultModel;
 
 /**
  * Отчёт "10.5.2 Исполнительская дисциплина по согласованиям за период."

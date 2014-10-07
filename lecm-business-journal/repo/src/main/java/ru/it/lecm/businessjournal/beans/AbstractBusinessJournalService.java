@@ -1,5 +1,6 @@
 package ru.it.lecm.businessjournal.beans;
 
+import java.io.IOException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.repo.admin.SysAdminParams;
 import org.alfresco.service.cmr.dictionary.DictionaryService;
@@ -19,6 +20,12 @@ import ru.it.lecm.security.LecmPermissionService;
 import ru.it.lecm.statemachine.StateMachineServiceBean;
 
 import java.util.*;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.jms.core.MessageCreator;
 
 /**
  * User: pmelnikov
@@ -37,6 +44,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     private DictionaryService dicService;
     private PersonService personService;
     private JmsTemplate jmsTemplate;
+	private JmsTemplate jmsTemplateInternal;
     final private Map<NodeRef, Boolean> logSettingsCache = Collections.synchronizedMap(new HashMap<NodeRef, Boolean>());
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractBusinessJournalService.class);
@@ -47,6 +55,7 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
             logSettingsCache.clear();
         }
     }
+
 
     public Boolean isEventCategoryOn(NodeRef categoryRef) {
         Boolean result;
@@ -64,6 +73,10 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
     }
 
     public abstract void saveToStore(BusinessJournalRecord record) throws Exception;
+
+	public void setJmsTemplateInternal(JmsTemplate jmsTemplateInternal) {
+		this.jmsTemplateInternal = jmsTemplateInternal;
+	}
 
     public void setSubstituteService(SubstitudeBean substituteService) {
         this.substituteService = substituteService;
@@ -94,6 +107,11 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         }
         return evCategory;
     }
+
+	protected List<NodeRef> getAllEventCategories() {
+		NodeRef root = dictionaryService.getDictionaryByName("Категория события");
+		return dictionaryService.getChildren(root);
+	}
 
     public void setDictionaryService(DictionaryBean dictionaryService) {
         this.dictionaryService = dictionaryService;
@@ -309,8 +327,24 @@ public abstract class AbstractBusinessJournalService extends BaseBean {
         }
     }
 
-    public void sendRecord(BusinessJournalRecord record) {
-        jmsTemplate.convertAndSend(record);
+    public void sendRecord(final BusinessJournalRecord record) {
+		final ObjectMapper mapper = new ObjectMapper();
+
+		jmsTemplate.send(new MessageCreator() {
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				TextMessage message = null;
+				try {
+					message = session.createTextMessage(mapper.writeValueAsString(record));
+				} catch (IOException ex) {
+					logger.error("Failed to convert BJ records to JSON string");
+				}
+				return message;
+			}
+		});
+
+		jmsTemplateInternal.convertAndSend(record);
+
     }
 
 	public BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription) {

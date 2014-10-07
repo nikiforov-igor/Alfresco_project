@@ -338,6 +338,48 @@ LogicECM.module.BusinessJournal.view = function(nodeId) {
                     });
             }
             fnPrompt.call(this, fnActionDeleteConfirm);
+        },
+
+		_setupPaginatior: function DataGrid_setupPaginatior() {
+            if (this.options.usePagination) {
+                var handlePagination = function DataGrid_handlePagination(state, me) {
+                    me.widgets.paginator.setState(state);
+                };
+
+                this.widgets.paginator = new YAHOO.widget.Paginator(
+                    {
+                        containers: [this.id + "-paginatorBottom"],
+                        rowsPerPage: this.options.pageSize,
+                        initialPage: this.options.initialPage,
+                        template: this.msg("pagination.template"),
+                        pageReportTemplate: this.msg("pagination.template.page-report"),
+                        previousPageLinkLabel: this.msg("pagination.previousPageLinkLabel"),
+                        nextPageLinkLabel: this.msg("pagination.nextPageLinkLabel")
+                    });
+
+                this.widgets.paginator.setAttributeConfig('pageReportValueGenerator', {
+                    value : function (paginator) {
+                        var curPage = paginator.getCurrentPage(),
+                            records = paginator.getPageRecords();
+
+                        return {
+                            'currentPage' : records ? curPage : 0,
+                            'totalPages'  : paginator.getTotalPages(),
+                            'startIndex'  : records ? records[0] : 0,
+                            'endIndex'    : records ? records[1] : 0,
+                            'startRecord' : records ? records[0] + 1 : 0,
+                            'endRecord'   : records ? records[1] + 1 : 0,
+                            'totalRecords': paginator.get('totalRecords') == -1 ? 'Неизвестно' : paginator.get('totalRecords')
+                        };
+                    },
+                    validator : YAHOO.lang.isFunction
+                });
+
+                this.widgets.paginator.subscribe("changeRequest" + this.id, handlePagination, this);
+
+                // Display the bottom paginator bar
+                Dom.setStyle(this.id + "-datagridBarBottom", "display", "none");
+            }
         }
     }, true);
 })();

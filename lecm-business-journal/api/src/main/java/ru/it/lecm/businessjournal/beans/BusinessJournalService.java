@@ -244,19 +244,21 @@ public interface BusinessJournalService {
      * сформированные за заданный период с учетом инициатора
      *
      * @param objectTypeRefs  - тип объекта (или типы, разделенные запятой)
+	 * @param eventCategories - категория событий (или категории, разделенные запятой)
      * @param begin           - начальная дата
      * @param end             - конечная дата
      * @param whoseKey        - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
      * @param checkMainObject - проверять ли доступность основного объекта
      * @return список ссылок
      */
-    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject);
+    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, String eventCategories, Date begin, Date end, String whoseKey, Boolean checkMainObject);
 
     /**
      * Метод, возвращающий список ссылок на записи заданного типа(типов),
      * сформированные за заданный период с учетом инициатора
      *
      * @param objectTypeRefs  - тип объекта (или типы, разделенные запятой)
+	 * @param eventCategories - категория событий (или категории, разделенные запятой)
      * @param begin           - начальная дата
      * @param end             - конечная дата
      * @param whoseKey        - дополнительная фильтрация по инициатору  (@link BusinessJournalServiceImpl.WhoseEnum)
@@ -265,7 +267,7 @@ public interface BusinessJournalService {
      * @param maxItems        - ограничить размер выдачи
      * @return список ссылок
      */
-    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems);
+    List<BusinessJournalRecord> getRecordsByParams(String objectTypeRefs, String eventCategories, Date begin, Date end, String whoseKey, Boolean checkMainObject, Integer skipCount, Integer maxItems);
 
     /**
      * Метод, перемещающий заданную запись в архив
@@ -285,7 +287,7 @@ public interface BusinessJournalService {
 
     List<BusinessJournalRecord> getRecords(BusinessJournalRecord.Field sortField, boolean ascending, int startIndex, int maxResults, Map<BusinessJournalRecord.Field, String> filter, boolean andFilter, boolean includeArchived);
 
-    Long getRecordsCount(Map<BusinessJournalRecord.Field, String> filter, boolean andFilter, boolean includeArchived);
+    Integer getRecordsCount(Map<BusinessJournalRecord.Field, String> filter, boolean andFilter, boolean includeArchived);
 
     /**
      * Выбор не обработанных записей бизнес-журнала
@@ -314,6 +316,6 @@ public interface BusinessJournalService {
     BusinessJournalRecord createBusinessJournalRecord(Date date, NodeRef initiator, NodeRef mainObject, String eventCategory, String defaultDescription, List<String> objects);
 
 	BusinessJournalRecord createBusinessJournalRecord(String initiator, NodeRef mainObject, String eventCategory, String defaultDescription);
-    
+
     void dropCache();
 }
