@@ -1374,6 +1374,7 @@
                     <show id="lecm-stmeditor:condition" force="true"/>
                     <show id="lecm-stmeditor:conditionErrorMessage" force="true"/>
                     <show id="lecm-stmeditor:hideAction" force="true"/>
+                    <show id="lecm-stmeditor:does-not-block" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:condition" />
@@ -1391,6 +1392,7 @@
                     <show id="lecm-stmeditor:condition" force="true"/>
                     <show id="lecm-stmeditor:conditionErrorMessage" force="true"/>
                     <show id="lecm-stmeditor:hideAction" force="true"/>
+                    <show id="lecm-stmeditor:lecm-stmeditor:does-not-block" force="true"/>
                 </field-visibility>
                 <appearance>
                     <field id="lecm-stmeditor:condition" />

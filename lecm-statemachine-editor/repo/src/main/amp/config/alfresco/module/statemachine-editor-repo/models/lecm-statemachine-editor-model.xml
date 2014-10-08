@@ -601,6 +601,10 @@
                     <type>d:boolean</type>
                     <default>false</default>
                 </property>
+                <property name="lecm-stmeditor:does-not-block">
+                    <type>d:boolean</type>
+                    <default>false</default>
+                </property>
             </properties>
         </type>
 

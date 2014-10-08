@@ -128,7 +128,7 @@ LogicECM.module = LogicECM.module || {};
 					oResponse.argument.parent._hideSplash();
 					var oResults = eval("(" + oResponse.responseText + ")");
 					var parent = oResponse.argument.parent
-					if (oResults.errors != null && oResults.errors.length > 0) {
+					if (oResults.errors != null && oResults.errors.length > 0 && !oResults.doesNotBlock) {
 						parent.doubleClickLock = false;
 						var viewDialog = new LogicECM.module.EditFieldsConfirm("confirm-edit-fields");
 						viewDialog.show(parent.options.nodeRef, action.label, oResults.errors, oResults.fields);
@@ -139,9 +139,9 @@ LogicECM.module = LogicECM.module || {};
 					} else if (action.type == "group") {
 						parent.onGroupActions(action);
 					} else if ((action.workflowId != null && action.workflowId != 'null') || action.isForm) {
-						parent.showForm(action);
+						parent.showForm(action, oResults.errors);
 					} else {
-						parent.showPromt(action);
+						parent.showPromt(action, oResults.errors);
 					}
 				},
 				argument: {
@@ -151,7 +151,43 @@ LogicECM.module = LogicECM.module || {};
 			};
 			YAHOO.util.Connect.asyncRequest('GET', url, callback);
 		},
-		showForm: function showForm_action(action) {
+        showForm: function showForm_function(action, errors) {
+            if (errors.length > 0) {
+                var message = "";
+                for (var i in errors) {
+                    message += errors[i] + "<br>";
+                }
+                var me = this;
+                Alfresco.util.PopupManager.displayPrompt(
+                    {
+                        title: "Выполнение действия",
+                        text: message + "Подтвердите выполнение для этого документа действия \"" + action.label + "\". ",
+                        noEscape: true,
+                        buttons: [
+                            {
+                                text: "Ок",
+                                handler: function dlA_onAction_action()
+                                {
+                                    this.destroy();
+                                    me._showForm(action);
+                                }
+                            },
+                            {
+                                text: "Отмена",
+                                handler: function dlA_onActionDelete_cancel()
+                                {
+                                    this.destroy();
+                                },
+                                isDefault: true
+                            }]
+                    });
+                this.doubleClickLock = false;
+            } else {
+
+            }
+
+        },
+		_showForm: function showForm_action(action) {
 			var templateUrl = Alfresco.constants.URL_SERVICECONTEXT;
 			var templateRequestParams;
 			var formWidth = "65em";
@@ -211,12 +247,17 @@ LogicECM.module = LogicECM.module || {};
                 dialog.show();
 			}
 		},
-		showPromt: function showPromt_action(action) {
-			var me = this;
+		showPromt: function showPromt_action(action, errors) {
+            var message = "";
+            for (var i in errors) {
+                message += errors[i] + "<br>";
+            }
+            var me = this;
 			Alfresco.util.PopupManager.displayPrompt(
 					{
 						title: "Выполнение действия",
-						text: "Подтвердите выполнение для этого документа действия \"" + action.label + "\"",
+						text: message + "Подтвердите выполнение для этого документа действия \"" + action.label + "\". ",
+                        noEscape: true,
 						buttons: [
 							{
 								text: "Ок",

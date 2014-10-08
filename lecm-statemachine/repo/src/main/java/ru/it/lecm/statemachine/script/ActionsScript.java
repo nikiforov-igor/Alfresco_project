@@ -101,6 +101,7 @@ public class ActionsScript extends DeclarativeWebScript {
             ArrayList<String> errors = new ArrayList<String>();
             errors.add("Статус документа изменился! Обновите страницу документа для получения списка доступных действий.");
             actionResult.put("errors", errors);
+            actionResult.put("doesNotBlock", false);
             actionResult.put("fields", new ArrayList<String>());
             JSONObject jsonResponse = new JSONObject(actionResult);
             HashMap<String, Object> response = new HashMap<String, Object>();
@@ -126,6 +127,7 @@ public class ActionsScript extends DeclarativeWebScript {
                 if (action != null) {
                     HashMap<String, Object> actionResult = new HashMap<String, Object>();
                     actionResult.put("errors", action.get("errors"));
+                    actionResult.put("doesNotBlock", action.get("doesNotBlock"));
                     actionResult.put("fields", action.get("fields"));
                     JSONObject jsonResponse = new JSONObject(actionResult);
                     HashMap<String, Object> response = new HashMap<String, Object>();
@@ -213,11 +215,13 @@ public class ActionsScript extends DeclarativeWebScript {
                             ArrayList<String> messages = new ArrayList<String>();
                             HashSet<String> fields = new HashSet<String>();
                             boolean hideAction = false;
+                            boolean doesNotBlock = true;
                             for (Conditions.Condition condition : state.getConditionAccess().getConditions()) {
                                 if (!documentService.execExpression(documentRef, condition.getExpression())) {
                                     messages.add(condition.getErrorMessage());
                                     fields.addAll(condition.getFields());
                                     hideAction = hideAction || condition.isHideAction();
+                                    doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
                                 }
                             }
 
@@ -235,6 +239,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 resultState.put("label", state.getLabel());
                                 resultState.put("workflowId", state.getWorkflowId());
                                 resultState.put("errors", messages);
+                                resultState.put("doesNotBlock", doesNotBlock);
                                 resultState.put("fields", fields);
                                 resultState.put("count", count);
                                 resultState.put("variables", variables);
@@ -262,11 +267,13 @@ public class ActionsScript extends DeclarativeWebScript {
                             ArrayList<String> messages = new ArrayList<String>();
                             HashSet<String> fields = new HashSet<String>();
                             boolean hideAction = false;
+                            boolean doesNotBlock = true;
                             for (Conditions.Condition condition : entity.getConditionAccess().getConditions()) {
                                 if (!documentService.execExpression(documentRef, condition.getExpression())) {
                                     messages.add(condition.getErrorMessage());
                                     fields.addAll(condition.getFields());
                                     hideAction = hideAction || condition.isHideAction();
+                                    doesNotBlock = doesNotBlock && condition.isDoesNotBlock();
                                 }
                             }
 
@@ -283,6 +290,7 @@ public class ActionsScript extends DeclarativeWebScript {
                                 workflow.put("label", entity.getLabel());
                                 workflow.put("workflowId", entity.getWorkflowId());
                                 workflow.put("errors", messages);
+                                workflow.put("doesNotBlock", doesNotBlock);
                                 workflow.put("fields", fields);
                                 workflow.put("count", count);
                                 workflow.put("variables", variables);

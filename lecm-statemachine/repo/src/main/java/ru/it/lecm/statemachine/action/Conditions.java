@@ -47,8 +47,8 @@ public class Conditions {
         return conditions;
     }
     
-    public void addCondition(String expression, String errorMessage, boolean hideAction) {
-    	this.conditions.add(new Condition(expression, errorMessage, hideAction));
+    public void addCondition(String expression, String errorMessage, boolean hideAction, boolean doesNotBlock) {
+    	this.conditions.add(new Condition(expression, errorMessage, hideAction, doesNotBlock));
     }
 
     public class Condition {
@@ -56,9 +56,10 @@ public class Conditions {
         private String expression;
         private String errorMessage;
         private boolean hideAction;
+        private boolean doesNotBlock;
         private Set<String> fields = new HashSet<String>();
 
-        public Condition(String expression, String errorMessage, boolean hideAction) {
+        public Condition(String expression, String errorMessage, boolean hideAction, boolean doesNotBlock) {
             this.expression = expression;
             this.errorMessage = errorMessage;
             Pattern pattern = Pattern.compile("doc\\.attr\\(\"(.*?)\"\\)");
@@ -67,6 +68,7 @@ public class Conditions {
                 fields.add(matcher.group(1));
             }
             this.hideAction = hideAction;
+            this.doesNotBlock = doesNotBlock;
         }
 
         public String getExpression() {
@@ -83,6 +85,10 @@ public class Conditions {
 
         public boolean isHideAction() {
             return hideAction;
+        }
+
+        public boolean isDoesNotBlock() {
+            return doesNotBlock;
         }
     }
 }

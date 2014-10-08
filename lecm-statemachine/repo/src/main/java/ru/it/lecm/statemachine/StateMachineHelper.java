@@ -1106,6 +1106,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 
 			    																						boolean conditionAccess = false;
 			    																						boolean hideAction = false;
+			    																						boolean doNotBlock = false;
 				    																					boolean inputVariables = false;
 				    																					boolean formInputVariables = false;
 				    																					boolean outputVariables = false;
@@ -1128,6 +1129,8 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																										hideAction = Boolean.parseBoolean(n13.getLastChild().getTextContent());
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"conditionErrorMessage".equals(n13.getFirstChild().getTextContent())) {
 			    																										errorMessage = n13.getLastChild().getTextContent();
+			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"does-not-block".equals(n13.getFirstChild().getTextContent())) {
+			    																										doNotBlock = Boolean.parseBoolean(n13.getLastChild().getTextContent());
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"condition".equals(n13.getFirstChild().getTextContent())) {
 			    																										expression = n13.getLastChild().getTextContent();
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"inputFromType".equals(n13.getFirstChild().getTextContent())) {
@@ -1157,7 +1160,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																								}
 			    																							}
 			    																						}
-			    																						if(conditionAccess)cc.addCondition(expression,errorMessage,hideAction);
+			    																						if(conditionAccess)cc.addCondition(expression,errorMessage,hideAction, doNotBlock);
 			    																						else if(inputVariables)wv.addInput(inputFromType,inputFromValue,inputToType,inputToValue);
 			    																						else if(formInputVariables)wv.addInput(formInputFromType,formInputFromValue,"VARIABLE",formInputToValue);
 			    																						else if(outputVariables)wv.addOutput(outputFromType,outputFromValue,outputToType,outputToValue);
@@ -1304,6 +1307,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 				    																					String outputToType = "";
 				    																					String outputFromValue = "";
 				    																					boolean hideAction = false;
+				    																					boolean doesNotBlock = false;
 			    																						boolean conditionAccess = false;
 			    																						boolean inputVariables = false;
 				    																					boolean outputVariables = false;
@@ -1323,6 +1327,8 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																										hideAction = Boolean.parseBoolean(n13.getLastChild().getTextContent());
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"conditionErrorMessage".equals(n13.getFirstChild().getTextContent())) {
 			    																										errorMessage = n13.getLastChild().getTextContent();
+			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"does-not-block".equals(n13.getFirstChild().getTextContent())) {
+			    																										doesNotBlock = Boolean.parseBoolean(n13.getLastChild().getTextContent());
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"condition".equals(n13.getFirstChild().getTextContent())) {
 			    																										expression = n13.getLastChild().getTextContent();
 			    																									} else if("name".equals(n13.getFirstChild().getLocalName())&&"inputFromType".equals(n13.getFirstChild().getTextContent())) {
@@ -1345,7 +1351,7 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
 			    																								}
 			    																							}
 			    																						}
-			    																						if(conditionAccess)cc.addCondition(expression,errorMessage,hideAction);
+			    																						if(conditionAccess)cc.addCondition(expression,errorMessage,hideAction, doesNotBlock);
 			    																						else if(inputVariables)wv.addInput(inputFromType,inputFromValue,inputToType,inputToValue);
 			    																						else if(outputVariables)wv.addOutput(outputFromType,outputFromValue,outputToType,outputFromValue);
 			    																					}
