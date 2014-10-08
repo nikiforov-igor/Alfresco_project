@@ -183,7 +183,7 @@ LogicECM.module = LogicECM.module || {};
                     });
                 this.doubleClickLock = false;
             } else {
-
+                this._showForm(action);
             }
 
         },
