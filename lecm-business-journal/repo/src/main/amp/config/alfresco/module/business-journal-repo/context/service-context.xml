@@ -130,7 +130,8 @@
 	<amq:queue id="bjQueueInternal" physicalName="bjQueueInternal" />
 
 	<!-- JMS ConnectionFactory to use, configuring the embedded broker using XML -->
-	<amq:connectionFactory id="jmsFactory" brokerURL="vm://localhost" />
+	<bean id="jmsFactory" class="org.apache.activemq.ActiveMQConnectionFactory" depends-on="broker"
+		p:brokerURL="vm://localhost"/>
 
 	<!-- JMS Producer Configuration -->
 	<bean id="jmsProducerConnectionFactory"

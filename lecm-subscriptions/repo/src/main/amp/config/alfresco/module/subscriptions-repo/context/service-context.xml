@@ -73,7 +73,9 @@
 
 	 <amq:queue id="bjQueueInternal" physicalName="bjQueueInternal" />
 
-	<amq:connectionFactory id="jmsFactorySub" brokerURL="vm://localhost"/>
+	<bean id="jmsFactorySub" class="org.apache.activemq.ActiveMQConnectionFactory" depends-on="broker">
+		<property name="brokerURL" value="vm://localhost"/>
+	</bean>
 
 	<jms:listener-container container-type="default"
 							connection-factory="jmsFactorySub"
