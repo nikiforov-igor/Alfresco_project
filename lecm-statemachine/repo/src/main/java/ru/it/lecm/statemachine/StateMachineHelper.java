@@ -695,10 +695,14 @@ public class StateMachineHelper implements StateMachineServiceBean, Initializing
     }
     public List<StateMachene> getStateMechenes() {
     	if(statemachenes.size()==0) {
-    		List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(getVersionsRoot());
-    		for(ChildAssociationRef child:statemacheneRefs) {
-    			statemachenes.add(new StateMachene(child.getChildRef()));
-    		}
+            NodeRef versionsRoot = getVersionsRoot();
+            //Проверяем versionsRoot, если существует, то хотя бы одна машина была развернута в системе
+            if (versionsRoot != null) {
+                List<ChildAssociationRef> statemacheneRefs = serviceRegistry.getNodeService().getChildAssocs(versionsRoot);
+                for(ChildAssociationRef child:statemacheneRefs) {
+                    statemachenes.add(new StateMachene(child.getChildRef()));
+                }
+            }
     	}
     	return statemachenes;
     }
