@@ -298,7 +298,7 @@
                     <field id="lecm-errands:content">
                         <control template="/ru/it/lecm/base-share/components/controls/richtext.ftl"/>
                     </field>
-                    <field id="lecm-errands:limitation-date" set="main" mandatory="true">
+                    <field id="lecm-errands:limitation-date" mandatory="true">
 	                    <constraint-handlers>
 		                    <constraint type="MANDATORY" validation-handler="LogicECM.module.currentDateLimitValidation" event="change"/>
 	                    </constraint-handlers>
