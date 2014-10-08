@@ -147,6 +147,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     button.set("disabled", true);
                 }
 
+				var me = this;
 				var createdDocument = response.json.persistedObject;
 				if (this.options.connectionType != null && this.options.connectionIsSystem != null && this.options.parentDocumentNodeRef != null) {
                     var template = "{proxyUri}lecm/documents/connection?connectionType={connectionType}&connectionIsSystem={connectionIsSystem}&fromNodeRef={fromNodeRef}&toNodeRef={toNodeRef}";
@@ -169,7 +170,7 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                     });
                     var callback = {
                         success: function(oResponse) {
-                            document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+	                        me.onFormSubmitSuccessRedirect(createdDocument);
                         },
                         timeout: 60000
                     };
@@ -191,13 +192,22 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
                             dataObj: params,
                             successCallback: {
                                 fn: function (response) {
-                                    document.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+	                                me.onFormSubmitSuccessRedirect(createdDocument);
                                 },
                                 scope: this
                             }
                         });
                 }else {
-					window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + createdDocument;
+					me.onFormSubmitSuccessRedirect(createdDocument);
+				}
+			},
+
+			onFormSubmitSuccessRedirect: function(nodeRef) {
+				var reloadCheckbox = Dom.get("document-form-close-and-create-new");
+				if (reloadCheckbox != null && reloadCheckbox.checked) {
+					window.location.reload();
+				} else {
+					window.location.href = Alfresco.constants.URL_PAGECONTEXT + "document?nodeRef=" + nodeRef;
 				}
 			},
 
