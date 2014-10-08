@@ -1664,8 +1664,8 @@ LogicECM.module = LogicECM.module || {};
 	                }
 
 		            if (this.options.itemType == "lecm-orgstr:employee") {
-			            var elementName = Util.getControlEmployeeView(items[i].nodeRef, displayName, true) + (this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(items[i].nodeRef) : ' ');
-			            Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
+                        var elementName = this.getEmployeeAbsenceMarkeredHTML(items[i].nodeRef, displayName, true);
+                        Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(items[i]));
 		            } else {
 			            Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, items[i]), this.getRemoveButtonHTML(items[i]));
 		            }
@@ -1691,8 +1691,8 @@ LogicECM.module = LogicECM.module || {};
 			}
 
 			if (this.options.itemType == "lecm-orgstr:employee") {
-				var elementName = Util.getControlEmployeeView(item.nodeRef, displayName, true) + (this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(item.nodeRef) : ' ');
-				Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
+                var elementName = this.getEmployeeAbsenceMarkeredHTML(item.nodeRef, displayName, true);
+                Dom.get(fieldId).innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(item));
 			} else {
 				Dom.get(fieldId).innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, item), this.getRemoveButtonHTML(item));
 			}
@@ -1779,8 +1779,8 @@ LogicECM.module = LogicECM.module || {};
 			            }
 		            } else {
 			            if (this.options.itemType == "lecm-orgstr:employee") {
-				            var elementName = Util.getControlEmployeeView(this.selectedItems[i].nodeRef, displayName) + (this.options.employeeAbsenceMarker ? this.getEmployeeAbsenceMarkerHTML(this.selectedItems[i].nodeRef) : ' ');
-				            el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
+                            var elementName = this.getEmployeeAbsenceMarkeredHTML(this.selectedItems[i].nodeRef, displayName, null);
+                            el.innerHTML += Util.getCroppedItem(elementName, this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 			            } else {
 				            el.innerHTML += Util.getCroppedItem(this.getDefaultView(displayName, this.selectedItems[i]), this.getRemoveButtonHTML(this.selectedItems[i], "_c"));
 			            }
@@ -1954,38 +1954,41 @@ LogicECM.module = LogicECM.module || {};
 					}
 				});
 		},
-		getEmployeeAbsenceMarkerHTML: function AssociationTreeViewer_getEmployeeAbsenceMarkerHTML(nodeRef) {
-			var result = '';
-			if (this.employeesAvailabilityInformation) {
-				var employeeData = this.employeesAvailabilityInformation[nodeRef];
-				if (employeeData) {
-					if (employeeData.isEmployeeAbsent) {
-						var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
-						result += ' <span class="employee-unavailable" title="Будет доступен с ' + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear() + '"';
-					} else {
-						result += ' <span class="employee-available"';
-						var nextAbsenceStr = employeeData.nextAbsenceStart;
-						if (nextAbsenceStr) {
-							nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
-							result += 'title="Будет недоступен с ' + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear() + '"';
-						}
-					}
-					result += ">&nbsp;</span>"
-				}
-			}
-			return result;
 
-			function leadingZero(value) {
-				var valueStr = value + "";
-				if (valueStr.length == 1) {
-					return '0' + valueStr;
-				} else {
-					return valueStr;
-				}
-			}
+        getEmployeeAbsenceMarkeredHTML: function(nodeRef, displayName, showLinkTitle) {
+            var result = '';
+            if (this.options.employeeAbsenceMarker && this.employeesAvailabilityInformation) {
+                var employeeData = this.employeesAvailabilityInformation[nodeRef];
+                if (employeeData) {
+                    if (employeeData.isEmployeeAbsent) {
+                        var absenceEnd = Alfresco.util.fromISO8601(employeeData.currentAbsenceEnd);
+                        result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-unavailable", "Будет доступен с " + leadingZero(absenceEnd.getDate()) + "." + leadingZero(absenceEnd.getMonth() + 1) + "." + absenceEnd.getFullYear());
+                    } else {
+                        var title = "";
+                        var nextAbsenceStr = employeeData.nextAbsenceStart;
+                        if (nextAbsenceStr) {
+                            var nextAbsenceDate = Alfresco.util.fromISO8601(nextAbsenceStr);
+                            title = "Будет недоступен с " + leadingZero(nextAbsenceDate.getDate()) + "." + leadingZero(nextAbsenceDate.getMonth() + 1) + "." + nextAbsenceDate.getFullYear();
+                        }
+                        result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-available", title);
+                    }
+                }
+            } else {
+                result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
+            }
+            return result;
 
-		},
-		getEmployeesAbsenceInformation: function AssociationTreeViewer_getEmployeesAbsenceInformation(items) {
+            function leadingZero(value) {
+                var valueStr = value + "";
+                if (valueStr.length == 1) {
+                    return '0' + valueStr;
+                } else {
+                    return valueStr;
+                }
+            }
+        },
+
+        getEmployeesAbsenceInformation: function AssociationTreeViewer_getEmployeesAbsenceInformation(items) {
 			var requestObj = [];
 			for (var i = 0; i < items.length; i++) {
 				var item = items[i];

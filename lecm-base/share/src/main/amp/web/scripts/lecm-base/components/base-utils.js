@@ -452,12 +452,24 @@ LogicECM.module.Base.Util = {
     },
 
     getControlEmployeeView: function(employeeNodeRef, displayValue, showTitle) {
-	    var title = "";
-	    if (showTitle == null || showTitle) {
-		    title = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
-	    }
-	    return "<span class='person'><a href='javascript:void(0);' " + title + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+	    return this.getControlMarkeredEmployeeView(employeeNodeRef, displayValue, showTitle, null, null);
     },
+
+    getControlMarkeredEmployeeView: function(employeeNodeRef, displayValue, showLinkTitle, personClass, personTitle) {
+        var linkTitle = "";
+        if (showLinkTitle == null || showLinkTitle) {
+            linkTitle = "title='" + Alfresco.component.Base.prototype.msg("title.click.for.extend.info") + "'";
+        }
+        var personSpanTag = "";
+        personTitle = (personTitle && personTitle != "") ? (" title='" + personTitle + "'") : "";
+        if (personClass && personClass != "") {
+            personSpanTag = "<span class='person " + personClass + "'" + personTitle + ">";
+        } else {
+            personSpanTag = "<span class='person'" + personTitle + ">";
+        }
+        return personSpanTag + "<a href='javascript:void(0);' " + linkTitle + " onclick=\"viewAttributes(\'" + employeeNodeRef + "\', null, \'logicecm.employee.view\')\">" + displayValue + "</a></span>";
+    },
+
     getControlDefaultView: function (displayValue) {
         return "<span class='not-person' title='" + displayValue + "'>" + displayValue + "</span>";
     },
