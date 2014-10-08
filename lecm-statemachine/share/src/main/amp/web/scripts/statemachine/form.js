@@ -682,43 +682,12 @@ LogicECM.module = LogicECM.module || {};
 			}.bind(this);
 			button = document.getElementById("confirm-edit-fields-edit-button");
 			button.onclick = function() {
-				this.dialog.hide();
-				var templateUrl = Alfresco.constants.URL_SERVICECONTEXT + "lecm/components/form";
-				var templateRequestParams = {
-					itemKind: "node",
-					itemId: nodeRef,
-					mode: "edit",
-					submitType: "json",
-					formId: "",
-					fields: JSON.stringify(fields),
-					showCancelButton: true
-				};
-				var dialog = new Alfresco.module.SimpleDialog("action-edit-form").setOptions({
-					width: "70em",
-					templateUrl: templateUrl,
-					templateRequestParams: templateRequestParams,
-					actionUrl: null,
-					destroyOnHide: true,
-					doBeforeDialogShow: {
-						scope: this,
-						fn: function(p_form, p_dialog) {
-							p_dialog.dialog.setHeader(this.msg("document.main.form.edit"));
-							Dom.addClass(p_dialog.id + "-form-container", "metadata-form-edit");
+        		this.dialog.hide();
+                var url =  Alfresco.constants.URL_PAGECONTEXT + "document-edit?nodeRef=" + nodeRef;
 
-							p_dialog.dialog.subscribe('destroy', LogicECM.module.Base.Util.formDestructor, {moduleId: p_dialog.id}, this);
-						}
-					},
-					onSuccess: {
-						scope: this,
-						fn: function(response) {
-							// document.location.href = document.location.href;
-							// ALF-2803
-							window.location.reload(true);
-						}
-					}
-				});
-                LogicECM.module.Base.Util.registerDialog(dialog);
-                dialog.show();
+                var params = "highlightedFields=" + JSON.stringify(fields);
+
+                window.location.href = url + "&" + LogicECM.module.Base.Util.encodeUrlParams(params);
             }.bind(this);
 		}
 

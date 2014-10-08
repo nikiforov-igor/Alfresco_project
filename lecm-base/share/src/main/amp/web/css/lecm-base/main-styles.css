@@ -26,6 +26,11 @@ div:focus {
 .hidden1 {
     display: none;
 }
+
+.highlight {
+    background-color: bisque;
+}
+
 .visible-hidden {
 	visibility: hidden;
 }

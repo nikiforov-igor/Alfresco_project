@@ -36,7 +36,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 			options: {
 				nodeRef: null,
 				formId: null,
-				args: {}
+				args: {},
+                higlightedFields: []
 			},
 
 			rootFolder: null,
@@ -61,7 +62,8 @@ LogicECM.module.Documents = LogicECM.module.Documents || {};
 								formId: this.options.formId,
 								showSubmitButton: true,
 								showCancelButton: true,
-								args: JSON.stringify(this.options.args)
+								args: JSON.stringify(this.options.args),
+                                fields: JSON.stringify(this.options.higlightedFields)
 							},
 							successCallback: {
 								fn: function (response) {

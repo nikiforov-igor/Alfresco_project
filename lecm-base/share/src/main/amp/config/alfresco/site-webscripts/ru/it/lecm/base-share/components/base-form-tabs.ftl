@@ -21,6 +21,8 @@
         <#list form.structure as item>
             <#if item.kind == "set">
                 <div class="tab tab-${item.id!""}"><@formLib.renderSet set=item /></div>
+            <#else>
+                <@formLib.renderField field=form.fields[item.id] />
             </#if>
         </#list>
     </div>
