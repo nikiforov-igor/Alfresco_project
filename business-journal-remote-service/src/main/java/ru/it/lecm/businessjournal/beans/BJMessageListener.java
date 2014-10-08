@@ -6,8 +6,6 @@
 package ru.it.lecm.businessjournal.beans;
 
 import com.datastax.driver.core.Session;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.jdo.JDOHelper;
 import javax.jdo.JDOObjectNotFoundException;
@@ -19,6 +17,8 @@ import javax.jms.JMSException;
 import javax.jms.MessageListener;
 import javax.jms.Message;
 import javax.jms.TextMessage;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.it.lecm.businessjournal.remote.BusinessJournalStoreRecord;
@@ -51,7 +51,7 @@ public class BJMessageListener implements MessageListener {
 		Transaction tr = entityManager.currentTransaction();
 		try {
 			tr.begin();
-			ObjectMapper mapper = new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+			ObjectMapper mapper = new ObjectMapper().disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
 			String textMessage = ((TextMessage) message).getText();
 			BusinessJournalStoreRecord rec = mapper.readValue(textMessage, BusinessJournalStoreRecord.class);
 			entityManager.makePersistent(rec);
