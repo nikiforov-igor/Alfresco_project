@@ -3,6 +3,7 @@
     <#include "/org/alfresco/include/alfresco-macros.lib.ftl" />
     <#assign el=args.htmlid/>
 	<#include "/org/alfresco/components/component.head.inc">
+	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-component-base.js"></@script>
 	<@script type="text/javascript" src="${url.context}/res/scripts/components/document-attachment-signing.js"></@script>
 
 <#attempt>
