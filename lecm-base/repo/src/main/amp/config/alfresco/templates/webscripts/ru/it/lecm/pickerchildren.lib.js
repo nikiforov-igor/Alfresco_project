@@ -24,7 +24,9 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 		docType = args['docType'],
         useOnlyInSameOrg = ("true" == args['onlyInSameOrg']),
 		sortProp = args['sortProp'] != null ? args['sortProp'] : "cm:name",
-		additionalProperties = args['additionalProperties'];
+		additionalProperties = args['additionalProperties'],
+		argsPathRoot = args['pathRoot'],
+		argsPathNameSubstituteString = args['pathNameSubstituteString'];
 	if (additionalProperties != null) {
 		additionalProperties = additionalProperties.split(',');
 	}
@@ -246,6 +248,33 @@ function getPickerChildrenItems(filter, doNotCheckAccess)
 
                 resultObj.visibleName = substitude.formatNodeTitle(result, argsNameSubstituteString);
                 resultObj.selectedVisibleName = substitude.formatNodeTitle(result, argsSelectedItemsNameSubstituteString);
+
+				var path = "/";
+				var simplePath = "/";
+
+				if (argsPathRoot != null) {
+					var rootNodes = search.xpathSearch(argsPathRoot);
+					if (rootNodes.length > 0)
+					{
+						var pathRoot = rootNodes[0];
+						var temp = result.parent;
+						while (temp != null && !temp.equals(pathRoot)) {
+							var pathNodeName;
+							if (argsPathNameSubstituteString != null) {
+								pathNodeName = substitude.formatNodeTitle(temp, argsPathNameSubstituteString);
+							} else {
+								pathNodeName = temp.name
+							}
+
+							path = "/" + pathNodeName + path;
+							simplePath = "/_" + simplePath;
+							temp = temp.parent;
+						}
+					}
+				}
+
+				resultObj.path = path;
+				resultObj.simplePath = simplePath;
 			}
 
 			results = containerResults.concat(contentResults);

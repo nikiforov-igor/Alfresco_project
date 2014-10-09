@@ -34,7 +34,6 @@ LogicECM.module = LogicECM.module || {};
 	{
 		LogicECM.module.AssociationControl.superclass.constructor.call(this, "AssociationControl", htmlId);
 		YAHOO.Bubbling.on("refreshItemList", this.onRefreshItemList, this);
-		YAHOO.Bubbling.on("selectedItemAdded", this.onSelectedItemAdded, this);
 		YAHOO.Bubbling.on("disableControl", this.onDisableControl, this);
 		YAHOO.Bubbling.on("enableControl", this.onEnableControl, this);
 		YAHOO.Bubbling.on("reInitializeControl", this.onReInitializeControl, this);
@@ -617,7 +616,7 @@ LogicECM.module = LogicECM.module || {};
 					oDS.responseType = YAHOO.util.XHRDataSource.TYPE_JSON;
 					oDS.responseSchema = {
 						resultsList: "items",
-						fields: ["name", "selectedName", "nodeRef", "displayPath"]
+						fields: ["name", "selectedName", "nodeRef", "path", "simplePath"]
 					};
 					oDS.doBeforeParseData = this._doBeforeParseAutocompleteData();
 
@@ -637,9 +636,9 @@ LogicECM.module = LogicECM.module || {};
 					};
 					oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
 						if (!me.options.plane) {
-							var displayName = me.getSimpleItemPath(oResultData[3]) + sResultMatch;
-							var displayPath = me.getFullItemPath(oResultData[3]) + sResultMatch;
-							return "<div title='" + displayPath + "'>" + displayName + "</div>";
+							var name = oResultData[4] + sResultMatch;
+							var path = oResultData[3] + sResultMatch;
+							return "<div title='" + path + "'>" + name + "</div>";
 						} else {
 							return sResultMatch;
 						}
@@ -656,7 +655,8 @@ LogicECM.module = LogicECM.module || {};
 							name: aArgs[2][0],
 							selectedName: aArgs[2][1],
 							nodeRef: aArgs[2][2],
-							displayPath: aArgs[2][3]
+							path: aArgs[2][3],
+							simplePath: aArgs[2][4]
 						};
 
 						this.selectedItems[node.nodeRef] = node;
@@ -830,7 +830,6 @@ LogicECM.module = LogicECM.module || {};
 				if (Dom.get(this.options.controlId + "-selectedItems") != null) {
 					this.options.selectedValue = Dom.get(this.options.controlId + "-selectedItems").value;
 				}
-				this._loadSelectedItems(true, false);
 
 				this.setTabbingOrder();
 
@@ -1133,6 +1132,8 @@ LogicECM.module = LogicECM.module || {};
 											isContainer: oResults.isContainer,
 											hasPermAddChildren: oResults.hasPermAddChildren,
 											displayPath: oResults.displayPath,
+											path: oResults.path,
+											simplePath: oResults.simplePath,
 											renderHidden:true
 										};
 										this.rootNode = new YAHOO.widget.TextNode(newNode, this.tree.getRoot());
@@ -1371,12 +1372,7 @@ LogicECM.module = LogicECM.module || {};
 						if (record)
 						{
 							var recordData = record.getData();
-							YAHOO.Bubbling.fire("selectedItemAdded",
-								{
-									eventGroup: me,
-									item: recordData,
-									highlight: true
-								});
+							me.selectedItemAdded(recordData);
 							if (me.options.fireAction.addItem != null) {
 								var fireName = me.options.fireAction.addItem.split(",");
 								for (var i in fireName){
@@ -1711,6 +1707,8 @@ LogicECM.module = LogicECM.module || {};
 					"&sortProp=" + encodeURIComponent(this.options.sortProp) +
 					"&selectedItemsNameSubstituteString=" + encodeURIComponent(this.getSelectedItemsNameSubstituteString()) +
 					"&additionalFilter=" + encodeURIComponent(additionalFilter) +
+					"&pathRoot=" + encodeURIComponent(this.options.rootLocation) +
+					"&pathNameSubstituteString=" + encodeURIComponent(this.options.treeNodeSubstituteString) +
 					"&onlyInSameOrg=" + encodeURIComponent("" + this.options.useStrictFilterByOrg);
 
 				if (forAutocomplete) {
@@ -1722,24 +1720,17 @@ LogicECM.module = LogicECM.module || {};
 				return params;
 			},
 
-			onSelectedItemAdded: function (layer, args)
-			{
-				// Check the event is directed towards this instance
-				if ($hasEventInterest(this, args))
-				{
-					var obj = args[1];
-					if (obj && obj.item)
-					{
-						this.selectedItems[obj.item.nodeRef] = obj.item;
-						this.singleSelectedItem = obj.item;
+			selectedItemAdded: function (item) {
+				if (item) {
+					this.selectedItems[item.nodeRef] = item;
+					this.singleSelectedItem = item;
 
-						this.updateAddedSelectedItem(obj.item);
-						if (!this.options.multipleSelectMode) {
-							this.updateAddButtons();
-						} else if (this.addItemButtons.hasOwnProperty(obj.item.nodeRef)) {
-							var button = this.addItemButtons[obj.item.nodeRef];
-							Dom.setStyle(button, "display", this.canItemBeSelected(obj.item.nodeRef) ? "inline" : "none");
-						}
+					this.updateAddedSelectedItem(item);
+					if (!this.options.multipleSelectMode) {
+						this.updateAddButtons();
+					} else if (this.addItemButtons.hasOwnProperty(item.nodeRef)) {
+						var button = this.addItemButtons[item.nodeRef];
+						Dom.setStyle(button, "display", this.canItemBeSelected(item.nodeRef) ? "inline" : "none");
 					}
 				}
 			},
@@ -1755,32 +1746,6 @@ LogicECM.module = LogicECM.module || {};
 				}
 			},
 
-			getFullItemPath: function(displayPath) {
-				var result = "";
-				if (displayPath != null) {
-					if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
-						var rootNodeDisplayPath = this.rootNode.data.displayPath + "/" + this.rootNode.label;
-						result = displayPath.replace(rootNodeDisplayPath, "") + "/";
-					}
-				}
-				return result;
-			},
-
-			getSimpleItemPath: function(displayPath) {
-				var result = "/";
-				if (displayPath != null) {
-					if (this.rootNode !== null && this.rootNode.data.displayPath !== null) {
-						var rootNodeDisplayPath = this.rootNode.data.displayPath + "/" + this.rootNode.label;
-						var path = displayPath.replace(rootNodeDisplayPath, "");
-						var level = (path.match(new RegExp("/", "g")) || []).length;
-						for (var i = 0; i < level; i++) {
-							result += "_/";
-						}
-					}
-				}
-				return result;
-			},
-
 			updateSelectedItems: function () {
 				var items = this.selectedItems;
 				var fieldId = this.options.pickerId + "-selected-elements";
@@ -1792,7 +1757,7 @@ LogicECM.module = LogicECM.module || {};
 						if (this.options.plane) {
 							var displayName = items[i].selectedName;
 						} else {
-							displayName = this.getSimpleItemPath(items[i].displayPath) + items[i].selectedName;
+							displayName = items[i].simplePath + items[i].selectedName;
 						}
 
 						if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1812,7 +1777,7 @@ LogicECM.module = LogicECM.module || {};
 				if (this.options.plane) {
 					var displayName = item.selectedName;
 				} else {
-					displayName = this.getSimpleItemPath(item.displayPath) + item.selectedName;
+					displayName =item.simplePath + item.selectedName;
 				}
 
 				if (this.options.itemType == "lecm-orgstr:employee") {
@@ -1831,7 +1796,8 @@ LogicECM.module = LogicECM.module || {};
 			},
 
 			getDefaultView: function (displayValue, item) {
-				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : (this.getFullItemPath(item.displayPath) + item.selectedName);
+				var titleName = this.options.plane ? item.selectedName : item.path + item.selectedName;
+				var title = (this.options.showAssocViewForm && item.nodeRef != null) ? Alfresco.component.Base.prototype.msg("title.click.for.extend.info") : titleName;
 				var result = "<span class='not-person' title='" + title + "'>";
 				if (this.options.showAssocViewForm && item.nodeRef != null) {
 					result += "<a href='javascript:void(0);' " + " onclick=\"viewAttributes(\'" + item.nodeRef + "\', null, \'logicecm.view\')\">" + displayValue + "</a>";
@@ -1894,7 +1860,7 @@ LogicECM.module = LogicECM.module || {};
 						if (this.options.plane) {
 							var displayName = this.selectedItems[i].selectedName;
 						} else {
-							displayName = this.getSimpleItemPath(this.selectedItems[i].displayPath) + this.selectedItems[i].selectedName;
+							displayName = this.selectedItems[i].simplePath + this.selectedItems[i].selectedName;
 						}
 
 						if(this.options.disabled) {

@@ -34,6 +34,8 @@
 				"isContainer": ${row.item.isContainer?string},
 				"name": "${row.visibleName!row.item.properties.name!""}",
 				"selectedName": "${row.selectedVisibleName!row.item.properties.name!""}",
+				"path": "${row.path!""}",
+				"simplePath": "${row.simplePath!""}",
 				"title": "${row.item.properties.title!""}",
 				"description": "${row.item.properties.description!""}",
 				<#if row.item.properties.modified??>"modified": "${xmldate(row.item.properties.modified)}",</#if>

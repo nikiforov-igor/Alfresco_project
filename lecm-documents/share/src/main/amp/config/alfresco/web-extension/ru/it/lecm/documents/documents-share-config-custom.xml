@@ -534,17 +534,12 @@
 		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Вид_x0020_документа</control-param>
 		            <control-param name="plane">true</control-param>
 	            </type>
-	            <type name="association:lecm-doc-dic-fr:level3" template="/ru/it/lecm/base-share/components/controls/association-tree-picker.ftl">
+	            <type name="association:lecm-doc-dic-fr:level3" template="/ru/it/lecm/base-share/components/controls/association-control.ftl">
 		            <control-param name="rootLocation">/app:company_home/cm:Business_x0020_platform/cm:LECM/cm:Сервис_x0020_Справочники/lecm-dic:Номенклатура_x0020_дел</control-param>
 		            <control-param name="nameSubstituteString">{lecm-doc-dic-fr:index} - {lecm-doc-dic-fr:title}</control-param>
 		            <control-param name="treeNodeSubstituteString">{lecm-doc-dic-fr:year}{lecm-doc-dic-fr:organization-unit-assoc/lecm-orgstr:element-short-name}</control-param>
 		            <control-param name="treeItemType">lecm-dic:hierarchical_dictionary_values</control-param>
-		            <control-param name="plane">false</control-param>
-		            <control-param name="showCreateNewLink">false</control-param>
-		            <control-param name="showCreateNewButton">false</control-param>
-		            <control-param name="showSelectedItemsPath">false</control-param>
-		            <control-param name="showSearch">false</control-param>
-                </type>
+	            </type>
             </default-controls>
         </forms>
     </config>
