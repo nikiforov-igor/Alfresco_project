@@ -463,7 +463,9 @@ LogicECM.module = LogicECM.module || {};
 								itemValueType: "nodeRef",
 								itemNameSubstituteString: this.options.nameSubstituteString,
 								sortProp: this.options.sortProp,
-								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString()
+								selectedItemsNameSubstituteString: this.getSelectedItemsNameSubstituteString(),
+								pathRoot: this.options.rootLocation,
+								pathNameSubstituteString: this.options.treeNodeSubstituteString
 							},
 							successCallback:
 							{
