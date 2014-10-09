@@ -45,6 +45,9 @@
 									addNodeRef(oResults.nodeRef);
 								}
 							}
+						},
+						failureCallback: {
+							fn: function() {}
 						}
 					});
 		}
