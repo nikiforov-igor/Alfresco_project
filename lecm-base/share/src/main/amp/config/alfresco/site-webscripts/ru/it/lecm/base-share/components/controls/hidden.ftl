@@ -12,6 +12,10 @@
     <#assign fieldValue = field.value>
 </#if>
 
+<#if form.arguments[field.name]?has_content>
+    <#assign fieldValue = form.arguments[field.name]>
+</#if>
+
 <#if form.mode == "edit" || form.mode == "create">
 <input type="hidden" name="${field.name}" id="${fieldHtmlId}-added"
        <#if field.value?is_number>value="${fieldValue?c}"<#else>value="${fieldValue?html}"</#if> />
