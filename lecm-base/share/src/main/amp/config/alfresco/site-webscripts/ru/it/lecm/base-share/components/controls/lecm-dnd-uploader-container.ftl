@@ -17,6 +17,7 @@
 		<#assign checkRights = true/>
 	</#if>
 
+	<#assign defaultValue=""/>
 	<#if form.mode == "create" && fieldValue?string == "" && form.arguments[field.name]?has_content>
 		<#assign defaultValue = form.arguments[field.name]/>
 	</#if>
