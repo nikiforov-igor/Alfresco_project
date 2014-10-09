@@ -915,6 +915,12 @@ public class SubstitudeBeanImpl extends BaseBean implements SubstitudeBean, Appl
                         for (FilterProp filterProp : expressions) {
                             Serializable propVal = nodeService.getProperty(nodeRef, filterProp.getPropName());
                             if (propVal != null) {
+                                if (propVal instanceof Date) {
+                                    DateFormat dFormat = new SimpleDateFormat(dateFormat);
+                                    propVal = dFormat.format(propVal);
+                                } else {
+                                    propVal = propVal.toString();
+                                }
                                 Serializable filter = filterProp.getPropVal();
                                 switch ((FilterPropLECM.FilterTypeLECM) filterProp.getFilterType()) {
                                     case EQUALS:
