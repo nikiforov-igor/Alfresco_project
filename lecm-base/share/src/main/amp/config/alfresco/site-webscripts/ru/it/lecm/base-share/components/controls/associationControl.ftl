@@ -53,7 +53,9 @@
 })();
 //]]></script>
 
-<#if form.mode == "view">
+<#assign disabled = form.mode == "view" || (field.disabled && !(field.control.params.forceEditable?? && field.control.params.forceEditable == "true"))>
+
+<#if disabled>
 	<div id="${controlId}" class="control association-control viewmode">
 		<div class="label-div">
 			<#if (field.endpointMandatory!false || field.mandatory!false) && field.value == "">
