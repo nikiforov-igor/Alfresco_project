@@ -2074,6 +2074,8 @@ LogicECM.module = LogicECM.module || {};
 							}
                             result = Util.getControlMarkeredEmployeeView(nodeRef, displayName, showLinkTitle, "employee-available", title);
                         }
+                    } else {
+                        result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
 					}
 				} else {
                     result = Util.getControlEmployeeView(nodeRef, displayName, showLinkTitle);
