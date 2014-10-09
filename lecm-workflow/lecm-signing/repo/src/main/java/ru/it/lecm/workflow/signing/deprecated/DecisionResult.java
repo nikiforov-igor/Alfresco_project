@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing;
+package ru.it.lecm.workflow.signing.deprecated;
 
 /**
  *

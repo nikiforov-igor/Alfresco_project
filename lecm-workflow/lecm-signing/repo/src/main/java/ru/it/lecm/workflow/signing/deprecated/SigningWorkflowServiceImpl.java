@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing;
+package ru.it.lecm.workflow.signing.deprecated;
 
 import org.activiti.engine.delegate.DelegateTask;
 import org.activiti.engine.delegate.VariableScope;
@@ -22,8 +22,8 @@ import ru.it.lecm.workflow.WorkflowTaskDecision;
 import ru.it.lecm.workflow.api.LecmWorkflowModel;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowModel;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowService;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;

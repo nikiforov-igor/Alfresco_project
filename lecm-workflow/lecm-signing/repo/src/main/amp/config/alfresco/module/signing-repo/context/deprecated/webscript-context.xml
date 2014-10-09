@@ -4,9 +4,9 @@
 	   xmlns:p="http://www.springframework.org/schema/p"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="webscript.ru.it.lecm.workflow.signing.GetSigningListDataForDocument.get" parent="webscript"
-		  class="ru.it.lecm.workflow.signing.webscript.GetSigningListDataForDocument"
-		  p:signingWorkflowService-ref="signingWorkflowService"
+	<bean id="webscript.ru.it.lecm.workflow.signing.deprecated.GetSigningListDataForDocument.get" parent="webscript"
+		  class="ru.it.lecm.workflow.signing.webscript.deprecated.GetSigningListDataForDocument"
+		  p:signingWorkflowService-ref="deprecated.signingWorkflowService"
 		  p:namespaceService-ref="namespaceService"
 		  p:nodeService-ref="nodeService"/>
 </beans>

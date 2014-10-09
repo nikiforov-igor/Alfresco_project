@@ -76,7 +76,7 @@
         <property name="policyComponent" ref="policyComponent"/>
         <property name="documentMembersService" ref="documentMembersService"/>
         <property name="nodeService" ref="NodeService"/>
-        <property name="signingWorkflowService" ref="signingWorkflowService"/>
+        <property name="signingWorkflowService" ref="deprecated.signingWorkflowService"/>
     </bean>
 
     <bean id="internalWorkflowBootstrap" parent="workflowDeployer" depends-on="contracts.LogicEcmContractsDictionariesBootstrap, statemachine.aspects.LogicEcmModelsBootstrap">
@@ -105,7 +105,7 @@
     </bean>
 
     <bean id="internalService" class="ru.it.lecm.internal.beans.InternalServiceImpl" parent="baseBean"/>
-    
+
     <bean id="internalNotificationTrigger" class="org.alfresco.util.CronTriggerBean">
         <property name="jobDetail">
             <bean id="internalNotificationJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">

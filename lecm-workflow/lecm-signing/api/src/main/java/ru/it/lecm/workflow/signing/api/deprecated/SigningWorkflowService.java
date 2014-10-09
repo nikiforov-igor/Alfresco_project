@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing.api;
+package ru.it.lecm.workflow.signing.api.deprecated;
 
 import java.util.List;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -9,6 +9,7 @@ import ru.it.lecm.workflow.api.LecmWorkflowService;
  *
  * @author vmalygin
  */
+@Deprecated
 public interface SigningWorkflowService extends LecmWorkflowService {
 	void logFinalDecision(final NodeRef resultListRef, final String finalDecision);
 	void dropSigningResults(final NodeRef resultListRef);

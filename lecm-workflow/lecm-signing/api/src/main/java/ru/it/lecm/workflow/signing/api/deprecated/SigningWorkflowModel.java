@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing.api;
+package ru.it.lecm.workflow.signing.api.deprecated;
 
 import org.alfresco.service.namespace.QName;
 
@@ -6,6 +6,7 @@ import org.alfresco.service.namespace.QName;
  *
  * @author vmalygin
  */
+@Deprecated
 public final class SigningWorkflowModel {
 
 	public final static String SIGN_PREFIX = "lecmSign";

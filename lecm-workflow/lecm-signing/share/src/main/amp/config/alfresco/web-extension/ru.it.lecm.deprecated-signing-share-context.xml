@@ -6,16 +6,15 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						   http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
-	<util:list id="signing.workflow.share.configs">
-		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/signing/signing-share-config.xml</value>
+	<util:list id="deprecated.signing.workflow.share.configs">
+		<value>classpath:alfresco/web-extension/ru/it/lecm/workflow/signing/deprecated/signing-share-config.xml</value>
 	</util:list>
 
-	<bean id="signing.workflow.share.bootstrap" init-method="register"
+	<bean init-method="register"
 		  class="org.springframework.extensions.config.ConfigBootstrap"
 		  p:configService-ref="web.config"
-		  p:configs-ref="signing.workflow.share.configs"/>
+		  p:configs-ref="deprecated.signing.workflow.share.configs"/>
 
-	<bean id="signing.workflow.resource.bundle.bootstrap"
-		  class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
-		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.workflow.signing.signing"/>
+	<bean class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent"
+		  p:resourceBundles="alfresco.web-extension.ru.it.lecm.workflow.signing.deprecated.signing"/>
 </beans>

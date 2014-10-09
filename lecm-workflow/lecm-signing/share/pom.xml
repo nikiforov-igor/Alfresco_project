@@ -3,54 +3,54 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>ru.it.lecm.workflow.signing</groupId>
-        <artifactId>signing</artifactId>
-        <version>1.6.0</version>
-    </parent>
+	<parent>
+		<groupId>ru.it.lecm.workflow.signing</groupId>
+		<artifactId>signing</artifactId>
+		<version>1.6.0</version>
+	</parent>
 
-    <artifactId>signing-share</artifactId>
-    <packaging>amp</packaging>
-    <name>Logic ECM Signing Share</name>
+	<artifactId>signing-share</artifactId>
+	<packaging>amp</packaging>
+	<name>Logic ECM Signing Share</name>
 	<!--
 		need to list these as a provided so that Maven doesn't download them
 		and include them in the AMP, they are provided by Alfresco
 	-->
 	<dependencies>
-        <dependency>
-            <groupId>org.alfresco</groupId>
-            <artifactId>alfresco-share</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.alfresco</groupId>
+			<artifactId>alfresco-share</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
 		<!-- Don't add here amp dependencies as it will break amp packaging -->
 	</dependencies>
 
 	<build>
-        <plugins>
-            <!-- Needed for cross OS compatibility in acp/zip encoding -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
+		<plugins>
+			<!-- Needed for cross OS compatibility in acp/zip encoding -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<artifactId>maven-nosnapshot-plugin</artifactId>
 				<groupId>org.alfresco.maven</groupId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-            </plugin>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>yuicompressor-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>yuicompressor-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.alfresco.maven.plugin</groupId>
 				<artifactId>alfresco-maven-plugin</artifactId>
 				<version>1.1.1</version>
@@ -64,17 +64,9 @@
 		<resources>
 			<resource>
 				<filtering>true</filtering>
-				<directory>src/main/amp</directory>
-				<targetPath>../${project.build.finalName}</targetPath>
-				<excludes>
-					<exclude>**README-*</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
 			</resource>
-            <resource>
+			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/java</directory>
 				<excludes>
@@ -82,5 +74,42 @@
 				</excludes>
 			</resource>
 		</resources>
-    </build>
+	</build>
+	<profiles>
+		<profile>
+			<id>signing</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<filtering>true</filtering>
+						<directory>src/main/amp</directory>
+						<targetPath>../${project.build.finalName}</targetPath>
+						<excludes>
+							<exclude>**/deprecated/*</exclude>
+							<exclude>**/*deprecated*-context.xml</exclude>
+							<exclude>**README-*</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+		<profile>
+			<id>deprecated.signing</id>
+			<build>
+				<resources>
+					<resource>
+						<filtering>true</filtering>
+						<directory>src/main/amp</directory>
+						<targetPath>../${project.build.finalName}</targetPath>
+						<excludes>
+							<exclude>**README-*</exclude>
+						</excludes>
+					</resource>
+				</resources>
+			</build>
+		</profile>
+	</profiles>
 </project>

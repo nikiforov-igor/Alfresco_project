@@ -13,10 +13,10 @@
 	function init() {
         LogicECM.module.Base.Util.loadResources([
             'scripts/lecm-base/components/lecm-datagrid.js',
-            'scripts/lecm-signing/signing-list-datagrid-control.js'
+            'scripts/lecm-signing/deprecated/signing-list-datagrid-control.js'
 		],
         [
-	        'css/lecm-signing/signing-list-datagrid-control.css'
+	        'css/lecm-signing/deprecated/signing-list-datagrid-control.css'
         ], createDatagrid);
 	}
 

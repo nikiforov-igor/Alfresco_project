@@ -99,7 +99,7 @@
 						<control template="/ru/it/lecm/workflow/approval/controls/approval-list-datagrid-control.ftl"/>
 					</field>
 					<field id="lecm-outgoing:signing-list" set="signingTab" label="Подписание">
-						<control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl"/>
+						<control template="/ru/it/lecm/workflow/signing/controls/deprecated/signing-list-datagrid-control.ftl"/>
 					</field>
 				</appearance>
 			</form>

@@ -148,7 +148,7 @@
 	                </field>
 
                     <field id="lecm-internal:signing-list" set="signingTab" label="Подписание">
-                        <control template="/ru/it/lecm/workflow/signing/controls/signing-list-datagrid-control.ftl">
+                        <control template="/ru/it/lecm/workflow/signing/controls/deprecated/signing-list-datagrid-control.ftl">
                             <control-param name="datagridFormId">internal</control-param>
                         </control>
                     </field>

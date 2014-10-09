@@ -15,7 +15,7 @@ import ru.it.lecm.documents.beans.DocumentMembersService;
 import ru.it.lecm.documents.beans.DocumentService;
 import ru.it.lecm.internal.api.InternalService;
 import ru.it.lecm.workflow.api.WorkflowResultModel;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowService;
 
 import java.io.Serializable;
 import java.util.HashMap;

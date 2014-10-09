@@ -28,4 +28,27 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>signing</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/deprecated/*.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>deprecated.signing</id>
+		</profile>
+	</profiles>
 </project>

@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing.webscript;
+package ru.it.lecm.workflow.signing.webscript.deprecated;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +18,8 @@ import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
 import org.springframework.extensions.webscripts.WebScriptRequest;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowModel;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowService;
 
 /**
  *

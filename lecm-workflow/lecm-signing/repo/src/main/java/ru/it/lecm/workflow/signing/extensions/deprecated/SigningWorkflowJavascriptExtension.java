@@ -1,4 +1,4 @@
-package ru.it.lecm.workflow.signing.extensions;
+package ru.it.lecm.workflow.signing.extensions.deprecated;
 
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.delegate.DelegateTask;
@@ -16,8 +16,8 @@ import ru.it.lecm.workflow.api.RouteAspecsModel;
 import ru.it.lecm.workflow.api.WorkflowAssigneesListService;
 import ru.it.lecm.workflow.api.WorkflowResultListService;
 import ru.it.lecm.workflow.beans.WorkflowServiceAbstract;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowModel;
-import ru.it.lecm.workflow.signing.api.SigningWorkflowService;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowModel;
+import ru.it.lecm.workflow.signing.api.deprecated.SigningWorkflowService;
 
 import java.util.ArrayList;
 import java.util.Date;
