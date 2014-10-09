@@ -5,6 +5,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
+import org.springframework.extensions.surf.util.URLEncoder;
 import org.springframework.extensions.webscripts.ScriptRemote;
 import org.springframework.extensions.webscripts.connector.Response;
 import org.springframework.extensions.webscripts.connector.ResponseStatus;
@@ -25,7 +26,7 @@ public class IsAdminEvaluator extends BaseEvaluator {
 	@Override
 	public boolean evaluate(JSONObject jsonObject) {
 		String login = getUserId();
-		String url = "/lecm/security/api/isAdmin?login=" + login;
+		String url = "/lecm/security/api/isAdmin?login=" + URLEncoder.encodeUri(login);
 		Response response = scriptRemote.connect("alfresco").get(url);
 		try {
 			if (response.getStatus().getCode() == ResponseStatus.STATUS_OK) {
